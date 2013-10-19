@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cxActionXML
+        cxActionXML.type="sequence"
+        cxActionXML.onLoad="actionsLoad"
+        cxAction.onAfter="cxLogger('sequence over')"
+        cxAction.onBefore="cxLogger('sequence begin')"
+    >
+        <cxMove id="move"
+            cxAction.speed="1.0"
+            cxAction.time="1.5"
+            cxMove.x="200"
+            cxMove.y="200"
+            cxAction.curve="cxCurveCubeIn" />
+        <cxRotate id="rotate"
+            cxAction.speed="1.0"
+            cxAction.time="1.5"
+            cxRotate.z="360" />
+        <cxScale id="scale2"
+            cxAction.id="123"
+            cxAction.speed="1.0"
+            cxAction.time="1.5"
+            cxScale.x="1.3"
+            cxScale.y="1.3" />
+</cxActionXML>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--TextureKey at *.xml file use-->
+<cxViewXML cxView.w="500" cxView.h="500" cxViewXML.onLoad="viewLoad">
+    <!--
+    <cxButton id="t1"
+        cxView.x="0"
+        cxView.y="0"
+        cxObject.tag="123"
+        cxSprite.texture="candy.xml?red.png"
+        cxView.onEnter="cxLogger('button t1 enter')"
+    />
+    <cxButton id="t2"
+        cxView.color="1,0,0"
+        cxView.alpha="1.0"
+        cxView.x="100"
+        cxView.y="100"
+        cxSprite.shader="cxShaderPositionColor"
+        cxSprite.texture="candy.xml?red.png"
+        cxSprite.flipx="true"
+        cxSprite.flipy="true"
+        cxView.onEnter="cxLogger('button t3 enter')"
+    />
+    <cxButton id="t3"
+        cxView.anchor="1,1"
+        cxView.scale="2,2"
+        cxView.top="15"
+        cxView.left="15"
+        cxButton.enable="true"
+        cxView.border="true"
+        cxSprite.texture="candy.xml?green.png"
+        cxView.onEnter="cxLogger('button t2 enter')"
+        cxView.onExit="cxLogger('button t2 exit')"
+        cxButton.onPress="cxViewRun({'file':'actions.xml','target':'t3'})"
+    />
+    -->
+    <!--
+    <cxAtlas id="t4"
+            cxView.w="100"
+            cxView.h="100"
+            cxView.x="-100"
+            cxView.y="-100"
+            cxSprite.texture="candy.xml">
+                <cxAtlasBox x="0" y="0" w="150" h="150" texture="red.png" />
+                <cxAtlasBox x="-50" y="-50" w="50" h="50" texture="green.png" />
+                <cxAtlasBox x="50" y="50" w="50" h="50" texture="blue.png" />
+    </cxAtlas>
+    -->
+    <cxAtlas id="t5"
+        cxView.w="300"
+        cxView.h="300"
+        cxAtlas.scale9="10,10,10,10"
+        cxSprite.texture="scale9.png">
+    </cxAtlas>
+</cxViewXML>
