@@ -14,7 +14,7 @@
 
 CX_C_BEGIN
 
-#define CX_HASH_MAX_KEY_LENGTH  64
+#define CX_HASH_MAX_KEY_LENGTH  128
 
 #define CX_HASH_FOREACH(hash,ele,tmp)  cxHashElement *ele = NULL,*tmp=NULL;HASH_ITER(hh, hash->hashPtr, ele, tmp)
 

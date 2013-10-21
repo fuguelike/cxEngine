@@ -20,6 +20,8 @@ CX_OBJECT_DEF(cxMemStream, cxStream)
     cxUInt allocSize;
 CX_OBJECT_END(cxMemStream)
 
+cxStream cxMemStreamCreateWithText(cxString txt);
+
 CX_C_END
 
 #endif

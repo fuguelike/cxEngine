@@ -17,6 +17,8 @@
 
 CX_C_BEGIN
 
+typedef cxAny (*cxXMLScriptMakeElementFunc)(cxConstChars name,xmlTextReaderPtr reader);
+
 typedef cxBool (*cxXMLScriptLoadFunc)(cxAny pview);
 
 CX_OBJECT_DEF(cxXMLScript, cxObject)
@@ -28,10 +30,6 @@ cxInt cxXMLReadFloatsAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat *val
 cxEventItem cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader);
 
 #define ELEMENT_IS_TYPE(t)  (temp != NULL && xmlStrcmp(temp, BAD_CAST#t) == 0)
-
-#define ELEMENT_BEGIN_TYPE(t) (ELEMENT_IS_TYPE(t) && (type == XML_READER_TYPE_ELEMENT))
-
-#define ELEMENT_END_TYPE(t) (ELEMENT_IS_TYPE(t) && (type == XML_READER_TYPE_END_ELEMENT))
 
 #define cxXMLAppendEvent(s,o,t,e)                               \
 do{                                                             \

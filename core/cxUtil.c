@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <evhttp.h>
 #include <sys/time.h>
 #include "cxBase.h"
 #include "cxUtil.h"
@@ -13,6 +14,23 @@
 void cxSetRandSeed()
 {
     srand(clock());
+}
+
+cxBool cxParseKeyValue(cxChar *query,cxChar *key,cxChar *value)
+{
+    cxBool ret = false;
+    struct evkeyvalq kv={0};
+    if(evhttp_parse_query_str(query, &kv) != 0){
+        return ret;
+    }
+	struct evkeyval *header;
+	for (header = kv.tqh_first; header != NULL; header = header->next.tqe_next) {
+        memcpy(key, header->key, strlen(header->key));
+        memcpy(value, header->value, strlen(header->value));
+        ret = true;
+	}
+    evhttp_clear_headers(&kv);
+    return ret;
 }
 
 cxInt cxParseURL(cxString url,cxChar *path,cxChar *query)

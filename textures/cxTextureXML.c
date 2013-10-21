@@ -110,8 +110,9 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
 static void cxTextureXMLBind(cxAny this)
 {
     cxTextureXML xml = this;
-    CX_ASSERT(xml->innerTexture != NULL, "texture null");
-    cxTextureBind(xml->innerTexture);
+    if(xml->innerTexture != NULL){
+        cxTextureBind(xml->innerTexture);
+    }
 }
 
 static const cxTextureInterface xmlInterface = {

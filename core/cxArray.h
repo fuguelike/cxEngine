@@ -19,20 +19,20 @@ CX_C_BEGIN
 typedef int (*cxArrayCmpFunc)(cxPointer *lp,cxPointer *rp);
 
 CX_OBJECT_DEF(cxArray, cxObject)
-    UT_array *utAarray;
+    UT_array *utArray;
 CX_OBJECT_END(cxArray)
 
 #define CX_ARRAY_FOREACH(a,e) \
     cxPointer *e = NULL; \
-    while((a) != NULL && (e = (cxPointer)utarray_next((a)->utAarray, e)) != NULL)
+    while((a) != NULL && (e = (cxPointer)utarray_next((a)->utArray, e)) != NULL)
 
 #define CX_ARRAY_REVERSE(a,e) \
     cxPointer *e = NULL; \
-    while((a) != NULL && (e = (cxPointer)utarray_prev((a)->utAarray, e)) != NULL)
+    while((a) != NULL && (e = (cxPointer)utarray_prev((a)->utArray, e)) != NULL)
 
-#define cxArrayLength(a) (((a) == NULL) ? 0 : utarray_len((a)->utAarray))
+#define cxArrayLength(a) (((a) == NULL) ? 0 : utarray_len((a)->utArray))
 
-#define cxArraySort(a,cmp) if((a) != NULL)utarray_sort((a)->utAarray, cmp)
+#define cxArraySort(a,cmp) if((a) != NULL)utarray_sort((a)->utArray, cmp)
 
 #define cxArrayObject(e)   (*e)
 

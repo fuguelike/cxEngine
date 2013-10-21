@@ -21,8 +21,6 @@ typedef enum {
     cxActionXMLTypeSequence,    //sequence
 }cxActionXMLType;
 
-typedef cxAny (*cxActionXMLMakeElementFunc)(cxConstChars name,xmlTextReaderPtr reader);
-
 CX_OBJECT_DEF(cxActionXML, cxAction)
     cxActionXMLType type;
     cxArray items;
@@ -30,7 +28,7 @@ CX_OBJECT_DEF(cxActionXML, cxAction)
     cxBool isError;
     cxHash actions;
     cxHash events;
-    CX_METHOD_DEF(cxActionXMLMakeElementFunc, MakeAction);
+    CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
     CX_EVENT_ALLOC(onLoad);
 CX_OBJECT_END(cxActionXML)
 

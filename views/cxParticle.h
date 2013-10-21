@@ -58,6 +58,8 @@ typedef struct {
 
 cxVec2f cxVec2fValue(cxVec2fRange rv);
 
+typedef void (*cxParticleUpdateBoxFunc)(cxAny pview,cxBoxPoint *box);
+
 CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxInt index;
     cxInt count;
@@ -65,7 +67,7 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxBool isActive;
     cxFloat emitcounter;
     cxFloat elapsed;
-    //
+    cxParticleBlendMode blend;
     cxInt number;
     cxFloat duration;
     cxVec2f gravity;
@@ -83,7 +85,7 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxColorRange endcolor;
     cxFloatRange startspin;
     cxFloatRange endspin;
-    //
+    CX_METHOD_DEF(cxParticleUpdateBoxFunc, UpdateBox);
 CX_OBJECT_END(cxParticle)
 
 void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode);

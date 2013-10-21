@@ -13,6 +13,7 @@
 #include "cxAutoPool.h"
 #include "cxOpenGL.h"
 #include "cxUtil.h"
+#include "cxHashXML.h"
 
 static cxEngine instance = NULL;
 
@@ -119,23 +120,29 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->frameInterval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->contentScaleFactor = 1.0f;
+    this->lang = cxStringAllocChars("zh");
     this->window = CX_ALLOC(cxWindow);
     this->scripts = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
     this->actions = CX_ALLOC(cxHash);
     this->curve = CX_ALLOC(cxCurve);
+    this->datasets = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
+    CX_RELEASE(this->lang);
+    CX_RELEASE(this->datasets);
     CX_RELEASE(this->curve);
     CX_RELEASE(this->actions);
     CX_RELEASE(this->events);
     CX_RELEASE(this->scripts);
+    
     CX_EVENT_RELEASE(this->onFree);
     CX_SIGNAL_RELEASE(this->onUpdate);
     CX_SIGNAL_RELEASE(this->onPause);
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
+    
     CX_RELEASE(this->window);
     cxOpenGLDestroy();
     CX_RELEASE(this->autoStack);
@@ -222,11 +229,49 @@ cxCurveItem cxEngineGetCurve(cxConstChars name)
     return cxHashGet(this->curve->curves, cxHashStrKey(name));
 }
 
+void cxEngineTimeReset()
+{
+    cxEngine this = cxEngineInstance();
+    this->lastTime = cxTimestamp();
+}
+
 void cxEngineRemoveScript(cxConstChars file)
 {
     cxEngine this = cxEngineInstance();
     CX_RETURN(file == NULL);
     cxHashDel(this->scripts, cxHashStrKey(file));
+}
+
+cxTypes cxEngineDataSet(cxConstChars url)
+{
+    cxEngine this = cxEngineInstance();
+    cxString file = cxStringStatic(url);
+    cxChar path[256]={0};
+    cxChar key[64]={0};
+    cxInt ret = cxParseURL(file, path, key);
+    CX_RETURN(ret == 0, NULL);
+    cxHashXML sets = cxHashGet(this->datasets, cxHashStrKey(path));
+    if(sets == NULL){
+        sets = CX_CREATE(cxHashXML);
+        if(!cxHashXMLLoad(sets, path)){
+            return NULL;
+        }
+        cxHashSet(this->datasets, cxHashStrKey(path), sets);
+    }
+    if(ret == 2){
+        return cxHashGet(sets->items, cxHashStrKey(key));
+    }
+    return NULL;
+}
+
+cxString cxEngineLangText(cxConstChars xml,cxConstChars key)
+{
+    cxEngine this = cxEngineInstance();
+    cxChar url[256]={0};
+    snprintf(url, 256, "%s?%s",xml,cxStringBody(this->lang));
+    cxTypes types = cxEngineDataSet(url);
+    CX_RETURN(types == NULL, NULL);
+    return cxTypesValue(types, key);
 }
 
 cxAny cxEngineLoadActionXML(cxConstChars file)
@@ -260,6 +305,7 @@ cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
     this->touch.timestamp = now;
     return cxViewTouch(this->window, &this->touch);
 }
+
 
 
 

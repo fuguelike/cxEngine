@@ -143,10 +143,24 @@ cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt value)
 
 cxBool cxXMLReadBoolAttr(xmlTextReaderPtr reader,cxConstChars name,cxBool value)
 {
+    cxBool ret = value;
     xmlChar *svalue = cxXMLAttr(name);
-    if(svalue != NULL){
-        value = (xmlStrcasecmp(svalue, BAD_CAST"true") == 0);
+    CX_RETURN(svalue == NULL,ret);
+    if(xmlStrcasecmp(svalue, BAD_CAST"true") == 0){
+        ret = true;
+    }else if(xmlStrcasecmp(svalue, BAD_CAST"false") == 0){
+        ret = false;
+    }else{
+        CX_ERROR("bool value is true or false");
     }
     xmlFree(svalue);
-    return value;
+    return ret;
 }
+
+
+
+
+
+
+
+

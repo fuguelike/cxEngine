@@ -11,6 +11,7 @@
 
 #include "cxConfig.h"
 #include "cxString.h"
+#include "cxHash.h"
 
 CX_C_BEGIN
 
@@ -21,6 +22,8 @@ CX_C_BEGIN
 #define CX_RAND_01f() ((cxFloat)rand()/(cxFloat)RAND_MAX)
 
 void cxSetRandSeed();
+
+cxBool cxParseKeyValue(cxChar *query,cxChar *key,cxChar *value);
 
 cxInt cxParseURL(cxString url,cxChar *path,cxChar *query);
 

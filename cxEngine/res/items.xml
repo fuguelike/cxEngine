@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cxHashXML>
+    <cxBoxPoint id="boxs" texture="candy.xml">
+        <item x="0" y="0"  key="red.png" />
+        <item x="50" y="0" w="50" h="50" key="green.png" color="1,1,1,1" />
+        <item x="100" y="0" w="50" h="50" key="yellow.png" color="1,1,1,1" />
+        <item x="150" y="0" w="50" h="50" key="blue.png" color="1,1,1,1" />
+        <item x="200" y="0" key="orange.png" color="1,1,1,1" />
+        <item x="250" y="0" w="50" h="50" key="purple.png" color="1,1,1,1" />
+    </cxBoxPoint>
+    <cxBoxPoint id="boxs2" texture="candy.xml">
+        <item x="0" y="0" w="50" h="50" key="red.png" />
+        <item x="50" y="0" w="50" h="50" key="green.png" color="1,1,1,1" />
+    </cxBoxPoint>
+    <cxString id="zh">
+        <item key="exp">China is Chinese</item>
+    </cxString>
+</cxHashXML>

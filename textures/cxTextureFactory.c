@@ -8,6 +8,7 @@
 
 #include <core/cxEngine.h>
 #include <streams/cxAssetsStream.h>
+#include <streams/cxMemStream.h>
 #include "cxTextureFactory.h"
 
 static cxTextureFactory instance = NULL;
@@ -51,6 +52,16 @@ void cxTextureDelFile(cxConstChars file)
 {
     cxTextureFactory factory = cxTextureFactoryInstance();
     cxHashDel(factory->caches, cxHashStrKey(file));
+}
+
+cxTexture cxTextureLoadText(const cxString txt,const cxString font,cxTextAttr attr)
+{
+    cxTextureTXT texture = CX_CREATE(cxTextureTXT);
+    texture->attr = attr;
+    CX_RETAIN_SWAP(texture->string, txt);
+    CX_RETAIN_SWAP(texture->fontfile, font);
+    cxTextureLoad((cxTexture)texture,NULL);
+    return (cxTexture)texture;
 }
 
 cxTexture cxTextureLoadFile(cxConstChars file)

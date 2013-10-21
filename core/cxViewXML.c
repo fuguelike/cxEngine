@@ -9,9 +9,12 @@
 #include <core/cxEngine.h>
 #include <core/cxStack.h>
 #include <core/cxAutoPool.h>
+#include <views/cxButton.h>
+#include <views/cxAtlas.h>
+#include <views/cxParticle.h>
+#include <views/cxLabel.h>
 #include "cxViewXML.h"
-#include "cxButton.h"
-#include "cxAtlas.h"
+#include "cxHashXML.h"
 
 void cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
@@ -35,13 +38,13 @@ void cxViewXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
 CX_OBJECT_INIT(cxViewXML, cxView)
 {
     cxObjectSetXMLReadFunc(this, cxViewRootXMLReadAttr);
-    this->subviews = CX_ALLOC(cxHash);
+    this->items = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxViewXML, cxView)
 {
     CX_EVENT_RELEASE(this->onLoad);
-    CX_RELEASE(this->subviews);
+    CX_RELEASE(this->items);
     CX_RELEASE(this->events);
 }
 CX_OBJECT_TERM(cxViewXML, cxView)
@@ -51,16 +54,16 @@ cxAny cxViewXMLGet(cxAny pview,cxConstChars key)
     cxAny root = cxObjectRoot(pview);
     CX_RETURN(root == NULL, NULL);
     cxViewXML xml = root;
-    return cxHashGet(xml->subviews, cxHashStrKey(key));
+    return cxHashGet(xml->items, cxHashStrKey(key));
 }
 
 void cxViewXMLRemove(cxAny pview,cxConstChars key)
 {
     cxViewXML this = pview;
-    cxAny view = cxHashGet(this->subviews, cxHashStrKey(key));
+    cxAny view = cxHashGet(this->items, cxHashStrKey(key));
     CX_RETURN(view == NULL);
     cxViewRemoved(view);
-    cxHashDel(this->subviews, cxHashStrKey(key));
+    cxHashDel(this->items, cxHashStrKey(key));
 }
 
 cxViewXML cxViewXMLCreate(cxConstChars xml)
@@ -78,8 +81,8 @@ static void cxViewXMLSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader)
     cxConstChars id = (cxConstChars)cxXMLAttr("id");
     CX_RETURN(id == NULL);
     cxHashKey key = cxHashStrKey(id);
-    CX_ASSERT(cxHashGet(this->subviews, key) == NULL, "reapeat view id");
-    cxHashSet(this->subviews, key, cview);
+    CX_ASSERT(cxHashGet(this->items, key) == NULL, "reapeat view id");
+    cxHashSet(this->items, key, cview);
     cxObjectSetRoot(cview, this);
 }
 
@@ -108,8 +111,12 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
                 cview = CX_CREATE(cxButton);
             }else if(ELEMENT_IS_TYPE(cxAtlas)){
                 cview = CX_CREATE(cxAtlas);
+            }else if(ELEMENT_IS_TYPE(cxParticle)){
+                cview = CX_CREATE(cxParticle);
+            }else if(ELEMENT_IS_TYPE(cxLabel)){
+                cview = CX_CREATE(cxLabel);
             }else{
-                cview = CX_METHOD_GET(NULL, this->MakeView,(cxConstChars)temp,reader);
+                cview = CX_METHOD_GET(NULL, this->Make,(cxConstChars)temp,reader);
             }
             if(cview != NULL){
                 cxViewAppend(parent, cview);

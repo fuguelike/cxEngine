@@ -151,7 +151,7 @@ static void cxActionXMLLoadActions(cxActionXML this,xmlTextReaderPtr reader)
         }else if(ELEMENT_IS_TYPE(cxRotate)){
             action = (cxAction)CX_CREATE(cxRotate);
         }else{
-            action = CX_METHOD_GET(NULL, this->MakeAction,(cxConstChars)temp,reader);
+            action = CX_METHOD_GET(NULL, this->Make,(cxConstChars)temp,reader);
         }
         if(action == NULL){
             CX_ERROR("load actions null");

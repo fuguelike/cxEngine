@@ -10,7 +10,7 @@
 
 CX_OBJECT_INIT(cxString, cxObject)
 {
-    utstring_init(&this->strptr);
+   //
 }
 CX_OBJECT_FREE(cxString, cxObject)
 {

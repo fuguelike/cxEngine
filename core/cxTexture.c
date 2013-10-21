@@ -33,15 +33,18 @@ CX_OBJECT_TERM(cxTexture, cxObject)
 void cxTextureLoad(cxTexture this,cxStream stream)
 {
     CX_RETURN(this->isLoad);
-    CX_ASSERT(this->interface != NULL, "not imp texture");
+    CX_RETURN(this->interface == NULL);
     this->isLoad = this->interface->Load(this,stream);
-    CX_ASSERT(this->isLoad, "texture  can not load");
+    if(!this->isLoad){
+        CX_ERROR("texture  can not load");
+    }
 }
 
 cxBoxTex2f cxTextureBox(cxTexture this,cxConstChars key)
 {
     CX_ASSERT(this != NULL, "texture null");
     cxBoxTex2f rv = cxBoxTex2fDefault();
+    CX_RETURN(key == NULL, rv);
     cxTexCoord texCoord = cxHashGet(this->keys, cxHashStrKey(key));
     if(texCoord == NULL){
         return rv;
@@ -61,6 +64,7 @@ cxRect4f cxTextureRect(cxTexture this,cxConstChars key)
 {
     CX_ASSERT(this != NULL, "texture null");
     cxRect4f rv = cxRect4fv(0.0f, 0.0f, 1.0f, 1.0f);
+    CX_RETURN(key == NULL, rv);
     cxTexCoord texCoord = cxHashGet(this->keys, cxHashStrKey(key));
     if(texCoord == NULL){
         return rv;
@@ -76,6 +80,7 @@ cxSize2f cxTextureSize(cxTexture this,cxConstChars key)
 {
     CX_ASSERT(this != NULL, "texture null");
     cxSize2f rv = this->size;
+    CX_RETURN(key == NULL, rv);
     cxTexCoord texCoord = cxHashGet(this->keys, cxHashStrKey(key));
     if(texCoord == NULL){
         return rv;

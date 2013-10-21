@@ -13,6 +13,36 @@
 void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxAtlasXMLReadAttr(xmlView, mView, reader);
+    cxParticle this = mView;
+    cxInt number = cxXMLReadIntAttr(reader, "cxParticle.number", this->number);
+    CX_ASSERT(number > 0, "cxParticle number must > 0");
+    cxParticleInit(this, number);
+    
+    //mode add multiply
+    xmlChar *smode = cxXMLAttr("cxParticle.blend");
+    if(xmlStrcasecmp(smode, BAD_CAST"add") == 0){
+        this->blend = cxParticleBlendAdd;
+    }else if(xmlStrcasecmp(smode, BAD_CAST"multiple") == 0){
+        this->blend = cxParticleBlendMultiply;
+    }
+    xmlFree(smode);
+    this->todir = cxXMLReadBoolAttr(reader, "cxParticle.todir", this->todir);
+    cxXMLReadFloatsAttr(reader, "cxParticle.duration", &this->duration);
+    cxXMLReadFloatsAttr(reader, "cxParticle.gravity", &this->gravity.x);
+    cxXMLReadFloatsAttr(reader, "cxParticle.rate", &this->rate);
+    cxXMLReadFloatsAttr(reader, "cxParticle.speed", &this->speed.v);
+    cxXMLReadFloatsAttr(reader, "cxParticle.tanaccel", &this->tanaccel.v);
+    cxXMLReadFloatsAttr(reader, "cxParticle.radaccel", &this->radaccel.v);
+    cxXMLReadFloatsAttr(reader, "cxParticle.position", &this->position.v.x);
+    cxXMLReadFloatsAttr(reader, "cxParticle.life", &this->life.v);
+    cxXMLReadFloatsAttr(reader, "cxParticle.angle", &this->angle.v);
+    cxXMLReadFloatsAttr(reader, "cxParticle.startsize", &this->startsize.v);
+    cxXMLReadFloatsAttr(reader, "cxParticle.endsize", &this->endsize.v);
+    cxXMLReadFloatsAttr(reader, "cxParticle.startcolor", &this->startcolor.v.r);
+    cxXMLReadFloatsAttr(reader, "cxParticle.endcolor", &this->endcolor.v.r);
+    cxXMLReadFloatsAttr(reader, "cxParticle.startspin", &this->startspin.v);
+    cxXMLReadFloatsAttr(reader, "cxParticle.endspin", &this->endspin.v);
+    cxParticleSetBlendMode(this, this->blend);
 }
 
 void cxParticleStop(cxAny pview)
@@ -33,6 +63,7 @@ void cxParticleReset(cxAny pview)
         cxParticleUnit *p = &this->units[this->index];
         p->life = 0;
     }
+    
     this->position.r = cxVec2fv(0, 0);
     this->position.v = cxVec2fv(0, 0);
     cxAtlasClean(pview);
@@ -75,20 +106,21 @@ static void cxParticleStep(cxAny pview,cxParticleUnit *particle)
     cxBoxVec3f vq={0};
     cxColor4f color = particle->color;
     cxParticleUnitToBoxVec3f(particle, &vq);
-    cxBoxPoint *quad = &this->super.boxs[this->index];
-    quad->lb.colors = color;
-    quad->rb.colors = color;
-    quad->lt.colors = color;
-    quad->rt.colors = color;
-    quad->lb.texcoords = this->super.super.texCoord.lb;
-    quad->rb.texcoords = this->super.super.texCoord.rb;
-    quad->lt.texcoords = this->super.super.texCoord.lt;
-    quad->rt.texcoords = this->super.super.texCoord.rt;
-    quad->lb.vertices = vq.lb;
-    quad->rb.vertices = vq.rb;
-    quad->lt.vertices = vq.lt;
-    quad->rt.vertices = vq.rt;
-    this->super.number = CX_MAX(this->index + 1, this->super.number);
+    cxBoxPoint *box = &this->super.boxs[this->index];
+    box->lb.colors = color;
+    box->rb.colors = color;
+    box->lt.colors = color;
+    box->rt.colors = color;
+    box->lb.texcoords = this->super.super.texCoord.lb;
+    box->rb.texcoords = this->super.super.texCoord.rb;
+    box->lt.texcoords = this->super.super.texCoord.lt;
+    box->rt.texcoords = this->super.super.texCoord.rt;
+    box->lb.vertices = vq.lb;
+    box->rb.vertices = vq.rb;
+    box->lt.vertices = vq.lt;
+    box->rt.vertices = vq.rt;
+    CX_METHOD_RUN(this->UpdateBox,this,box);
+    this->super.number = CX_MAX(this->index, this->super.number);
 }
 
 static void cxParticleInitUnit(cxAny pview,cxParticleUnit *particle)
@@ -216,6 +248,7 @@ void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode)
 
 CX_OBJECT_INIT(cxParticle, cxAtlas)
 {
+    this->duration = -1;
     this->isActive = true;
     cxViewOnUpdate(this, cxParticleUpdate, NULL);
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE);

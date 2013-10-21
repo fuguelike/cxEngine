@@ -42,9 +42,8 @@ static cxBool cxTexturePNGLoad(cxAny this,cxStream stream)
 
 static void cxTexturePNGBind(cxAny this)
 {
-    cxTexturePNG pvr = this;
-    CX_ASSERT(pvr->super.isLoad, "texture not load");
-    cxOpenGLBindTexture(0, pvr->super.textureId);
+    cxTexturePNG png = this;
+    cxOpenGLBindTexture(0, png->super.textureId);
 }
 
 static const cxTextureInterface pngInterface = {

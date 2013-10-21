@@ -17,6 +17,10 @@ CX_OBJECT_DEF(cxShaderDefault, cxShader)
     
 CX_OBJECT_END(cxShaderDefault)
 
+cxString cxShaderDefaultGetVertexSource(cxAny this);
+
+cxString cxShaderDefaultGetFragmentSource(cxAny this);
+
 CX_C_END
 
 #endif

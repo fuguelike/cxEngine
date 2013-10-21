@@ -16,7 +16,6 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxString, cxObject)
     UT_string strptr;
-    cxString x;
 CX_OBJECT_END(cxString)
 
 //create static cxString
@@ -24,19 +23,19 @@ CX_OBJECT_END(cxString)
 #define cxStringStatic(s)               \
 &(struct cxString){                     \
     .super.cxType=cxStringAutoType,     \
-    .super.cxRefcount=UINT32_MAX,       \
-    .strptr.d=s,                        \
+    .super.cxRefcount=1,                \
+    .strptr.d=(char *)s,                \
     .strptr.n=0,                        \
     .strptr.i=strlen(s)                 \
 }
 
 #define cxStringData(d,l)               \
 &(struct cxString){                     \
-.super.cxType=cxStringAutoType,         \
-.super.cxRefcount=UINT32_MAX,           \
-.strptr.d=d,                            \
-.strptr.n=0,                            \
-.strptr.i=l                             \
+    .super.cxType=cxStringAutoType,     \
+    .super.cxRefcount=1,                \
+    .strptr.d=(char *)d,                \
+    .strptr.n=0,                        \
+    .strptr.i=l                         \
 }
 
 cxString cxStringAttach(cxChar *d,cxInt l);

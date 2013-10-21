@@ -46,6 +46,9 @@
 		830F2D8B17FC1C7700BFCB4A /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 830F2D8A17FC1C7700BFCB4A /* libxml2.dylib */; };
 		830F2D8E17FC377800BFCB4A /* cxWindow.c in Sources */ = {isa = PBXBuildFile; fileRef = 830F2D8C17FC377800BFCB4A /* cxWindow.c */; };
 		830F2D8F17FC377800BFCB4A /* cxWindow.c in Sources */ = {isa = PBXBuildFile; fileRef = 830F2D8C17FC377800BFCB4A /* cxWindow.c */; };
+		8312ABFD181284DD00DD8476 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8312ABFC181284DD00DD8476 /* libevent.a */; };
+		8312AC021812C39800DD8476 /* items.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8312AC011812C39800DD8476 /* items.xml */; };
+		8312AC051812C4DB00DD8476 /* cxHashXML.c in Sources */ = {isa = PBXBuildFile; fileRef = 8312AC031812C4DB00DD8476 /* cxHashXML.c */; };
 		8324910417F2926600D0DF9D /* cxMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324910317F2926600D0DF9D /* cxMain.c */; };
 		8324910E17F2AE9600D0DF9D /* cxArray.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324910C17F2AE9600D0DF9D /* cxArray.c */; };
 		8324911217F2C47500D0DF9D /* cxArrayTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8324911117F2C47500D0DF9D /* cxArrayTests.m */; };
@@ -160,6 +163,7 @@
 		8334045B17F92961000D7237 /* cpVect.c in Sources */ = {isa = PBXBuildFile; fileRef = 8334041F17F92961000D7237 /* cpVect.c */; };
 		8340AC92180E594D00250FCF /* cxActionXML.c in Sources */ = {isa = PBXBuildFile; fileRef = 8340AC8E180E594D00250FCF /* cxActionXML.c */; };
 		8340AC93180E594D00250FCF /* cxViewXML.c in Sources */ = {isa = PBXBuildFile; fileRef = 8340AC90180E594D00250FCF /* cxViewXML.c */; };
+		8351ACD81814BCFE0046E3C7 /* simsun.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351ACD71814BCFE0046E3C7 /* simsun.ttf */; };
 		83891E741808461A00AB4520 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83891E731808461A00AB4520 /* libpng.a */; };
 		83891E7618084A0800AB4520 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 83891E7518084A0800AB4520 /* libz.dylib */; };
 		83891E791808516800AB4520 /* cxTextureXML.c in Sources */ = {isa = PBXBuildFile; fileRef = 83891E771808516800AB4520 /* cxTextureXML.c */; };
@@ -187,6 +191,14 @@
 		83C569AD17F51C840048969F /* cxStreamTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 83C569AC17F51C840048969F /* cxStreamTests.m */; };
 		83C569B917F579320048969F /* cxShader.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C569B717F579320048969F /* cxShader.c */; };
 		83C569BA17F579320048969F /* cxShader.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C569B717F579320048969F /* cxShader.c */; };
+		83E3A16A1813B792006D8388 /* cxLabel.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E3A1681813B792006D8388 /* cxLabel.c */; };
+		83E3A16F1813B7F0006D8388 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83E3A16C1813B7F0006D8388 /* libfreetype.a */; };
+		83E3A1731813BB23006D8388 /* cxIconv.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E3A1711813BB23006D8388 /* cxIconv.c */; };
+		83E3A17A1813CA11006D8388 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 83E3A1741813C4E8006D8388 /* libiconv.dylib */; };
+		83E3A17D1813CD5B006D8388 /* cxFreeType.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E3A17B1813CD5B006D8388 /* cxFreeType.c */; };
+		83E3A17F1813DC95006D8388 /* banana.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83E3A17E1813DC95006D8388 /* banana.ttf */; };
+		83E3A1821813E7FF006D8388 /* cxTextureTXT.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E3A1801813E7FF006D8388 /* cxTextureTXT.c */; };
+		83E3A1851813F6E2006D8388 /* cxShaderAlpha.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E3A1831813F6E2006D8388 /* cxShaderAlpha.c */; };
 		83EB47FA180ACD7D00F4B8B3 /* cxButton.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EB47F8180ACD7D00F4B8B3 /* cxButton.c */; };
 		83EBCE5118118F8E00DFC958 /* cxParticle.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EBCE4F18118F8E00DFC958 /* cxParticle.c */; };
 		83F6CE3617F3B5F00037558A /* cxString.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F6CE3417F3B5F00037558A /* cxString.c */; };
@@ -265,6 +277,10 @@
 		830F2D8A17FC1C7700BFCB4A /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		830F2D8C17FC377800BFCB4A /* cxWindow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxWindow.c; sourceTree = "<group>"; };
 		830F2D8D17FC377800BFCB4A /* cxWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxWindow.h; sourceTree = "<group>"; };
+		8312ABFC181284DD00DD8476 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = libs/ios/lib/libevent.a; sourceTree = "<group>"; };
+		8312AC011812C39800DD8476 /* items.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = items.xml; sourceTree = "<group>"; };
+		8312AC031812C4DB00DD8476 /* cxHashXML.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxHashXML.c; sourceTree = "<group>"; };
+		8312AC041812C4DB00DD8476 /* cxHashXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxHashXML.h; sourceTree = "<group>"; };
 		8324910317F2926600D0DF9D /* cxMain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMain.c; sourceTree = "<group>"; };
 		8324910517F2953300D0DF9D /* cxMain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cxMain.h; sourceTree = "<group>"; };
 		8324910C17F2AE9600D0DF9D /* cxArray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxArray.c; sourceTree = "<group>"; };
@@ -390,6 +406,7 @@
 		8340AC8F180E594D00250FCF /* cxActionXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxActionXML.h; sourceTree = "<group>"; };
 		8340AC90180E594D00250FCF /* cxViewXML.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxViewXML.c; sourceTree = "<group>"; };
 		8340AC91180E594D00250FCF /* cxViewXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxViewXML.h; sourceTree = "<group>"; };
+		8351ACD71814BCFE0046E3C7 /* simsun.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = simsun.ttf; sourceTree = "<group>"; };
 		83891E731808461A00AB4520 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = libs/ios/lib/libpng.a; sourceTree = "<group>"; };
 		83891E7518084A0800AB4520 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		83891E771808516800AB4520 /* cxTextureXML.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureXML.c; sourceTree = "<group>"; };
@@ -428,6 +445,19 @@
 		83C569AC17F51C840048969F /* cxStreamTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cxStreamTests.m; sourceTree = "<group>"; };
 		83C569B717F579320048969F /* cxShader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShader.c; sourceTree = "<group>"; };
 		83C569B817F579320048969F /* cxShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShader.h; sourceTree = "<group>"; };
+		83E3A1681813B792006D8388 /* cxLabel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLabel.c; sourceTree = "<group>"; };
+		83E3A1691813B792006D8388 /* cxLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLabel.h; sourceTree = "<group>"; };
+		83E3A16C1813B7F0006D8388 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = libs/ios/lib/libfreetype.a; sourceTree = "<group>"; };
+		83E3A1711813BB23006D8388 /* cxIconv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxIconv.c; sourceTree = "<group>"; };
+		83E3A1721813BB23006D8388 /* cxIconv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxIconv.h; sourceTree = "<group>"; };
+		83E3A1741813C4E8006D8388 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		83E3A17B1813CD5B006D8388 /* cxFreeType.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxFreeType.c; sourceTree = "<group>"; };
+		83E3A17C1813CD5B006D8388 /* cxFreeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxFreeType.h; sourceTree = "<group>"; };
+		83E3A17E1813DC95006D8388 /* banana.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = banana.ttf; sourceTree = "<group>"; };
+		83E3A1801813E7FF006D8388 /* cxTextureTXT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureTXT.c; sourceTree = "<group>"; };
+		83E3A1811813E7FF006D8388 /* cxTextureTXT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTextureTXT.h; sourceTree = "<group>"; };
+		83E3A1831813F6E2006D8388 /* cxShaderAlpha.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderAlpha.c; sourceTree = "<group>"; };
+		83E3A1841813F6E2006D8388 /* cxShaderAlpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderAlpha.h; sourceTree = "<group>"; };
 		83E7A19E180592AD0095BE74 /* cxInput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cxInput.h; sourceTree = "<group>"; };
 		83EB47F8180ACD7D00F4B8B3 /* cxButton.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxButton.c; sourceTree = "<group>"; };
 		83EB47F9180ACD7D00F4B8B3 /* cxButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxButton.h; sourceTree = "<group>"; };
@@ -453,6 +483,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83E3A17A1813CA11006D8388 /* libiconv.dylib in Frameworks */,
+				83E3A16F1813B7F0006D8388 /* libfreetype.a in Frameworks */,
+				8312ABFD181284DD00DD8476 /* libevent.a in Frameworks */,
 				83891E7618084A0800AB4520 /* libz.dylib in Frameworks */,
 				83891E741808461A00AB4520 /* libpng.a in Frameworks */,
 				830F2D8B17FC1C7700BFCB4A /* libxml2.dylib in Frameworks */,
@@ -499,6 +532,8 @@
 				830C02B117F66416006FAC79 /* cxShaderPositionColor.h */,
 				830C02BA17F6B5A0006FAC79 /* cxShaderDefault.c */,
 				830C02BB17F6B5A0006FAC79 /* cxShaderDefault.h */,
+				83E3A1831813F6E2006D8388 /* cxShaderAlpha.c */,
+				83E3A1841813F6E2006D8388 /* cxShaderAlpha.h */,
 			);
 			path = shaders;
 			sourceTree = "<group>";
@@ -516,6 +551,8 @@
 				83891E781808516800AB4520 /* cxTextureXML.h */,
 				83F86AB01808DF6500BB6C38 /* cxTextureFactory.c */,
 				83F86AB11808DF6500BB6C38 /* cxTextureFactory.h */,
+				83E3A1801813E7FF006D8388 /* cxTextureTXT.c */,
+				83E3A1811813E7FF006D8388 /* cxTextureTXT.h */,
 			);
 			path = textures;
 			sourceTree = "<group>";
@@ -533,6 +570,8 @@
 				830770ED180FD50A001BAEED /* cxAtlas.h */,
 				83EBCE4F18118F8E00DFC958 /* cxParticle.c */,
 				83EBCE5018118F8E00DFC958 /* cxParticle.h */,
+				83E3A1681813B792006D8388 /* cxLabel.c */,
+				83E3A1691813B792006D8388 /* cxLabel.h */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -574,6 +613,9 @@
 		83319AC1180D416A007953BB /* res */ = {
 			isa = PBXGroup;
 			children = (
+				8351ACD71814BCFE0046E3C7 /* simsun.ttf */,
+				83E3A17E1813DC95006D8388 /* banana.ttf */,
+				8312AC011812C39800DD8476 /* items.xml */,
 				83FDF7821810C2A000FD721F /* scale9.png */,
 				83319AC2180D416A007953BB /* 2.pvr */,
 				83319AC3180D416A007953BB /* 4.pvr */,
@@ -723,6 +765,9 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83E3A1741813C4E8006D8388 /* libiconv.dylib */,
+				83E3A16C1813B7F0006D8388 /* libfreetype.a */,
+				8312ABFC181284DD00DD8476 /* libevent.a */,
 				83891E7518084A0800AB4520 /* libz.dylib */,
 				83891E731808461A00AB4520 /* libpng.a */,
 				830F2D8A17FC1C7700BFCB4A /* libxml2.dylib */,
@@ -816,9 +861,13 @@
 				83319AA1180CDCD6007953BB /* cxEventItem.h */,
 				83FF164717F3142000DBFA3A /* cxHash.c */,
 				83FF164817F3142000DBFA3A /* cxHash.h */,
+				8312AC031812C4DB00DD8476 /* cxHashXML.c */,
+				8312AC041812C4DB00DD8476 /* cxHashXML.h */,
 				83E7A19E180592AD0095BE74 /* cxInput.h */,
 				83FF165417F32FCA00DBFA3A /* cxList.c */,
 				83FF165517F32FCA00DBFA3A /* cxList.h */,
+				830770EF180FD738001BAEED /* cxNumber.c */,
+				830770F0180FD738001BAEED /* cxNumber.h */,
 				8331BAB217F47E7500A94AE2 /* cxOpenGL.c */,
 				8331BAB317F47E7500A94AE2 /* cxOpenGL.h */,
 				83C569B717F579320048969F /* cxShader.c */,
@@ -841,8 +890,10 @@
 				8340AC91180E594D00250FCF /* cxViewXML.h */,
 				830AB11E180C3FA900CC5346 /* cxXMLScript.c */,
 				830AB11F180C3FA900CC5346 /* cxXMLScript.h */,
-				830770EF180FD738001BAEED /* cxNumber.c */,
-				830770F0180FD738001BAEED /* cxNumber.h */,
+				83E3A1711813BB23006D8388 /* cxIconv.c */,
+				83E3A1721813BB23006D8388 /* cxIconv.h */,
+				83E3A17B1813CD5B006D8388 /* cxFreeType.c */,
+				83E3A17C1813CD5B006D8388 /* cxFreeType.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -927,6 +978,8 @@
 				83319ACB180D416A007953BB /* 2.pvr in Resources */,
 				83319ACE180D416A007953BB /* candy.png in Resources */,
 				83319ACD180D416A007953BB /* actions.xml in Resources */,
+				8351ACD81814BCFE0046E3C7 /* simsun.ttf in Resources */,
+				8312AC021812C39800DD8476 /* items.xml in Resources */,
 				83319AD3180D416A007953BB /* view2.xml in Resources */,
 				839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */,
 				839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */,
@@ -936,6 +989,7 @@
 				83319AD0180D416A007953BB /* candy.xml in Resources */,
 				83FDF7831810C2A000FD721F /* scale9.png in Resources */,
 				83319AD1180D416A007953BB /* orange.png in Resources */,
+				83E3A17F1813DC95006D8388 /* banana.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -957,6 +1011,7 @@
 				8334042817F92961000D7237 /* cpDampedSpring.c in Sources */,
 				83319ABE180CE7C3007953BB /* strconv.c in Sources */,
 				8334044017F92961000D7237 /* cpBBTree.c in Sources */,
+				83E3A16A1813B792006D8388 /* cxLabel.c in Sources */,
 				8331BAA617F46FB800A94AE2 /* utility.c in Sources */,
 				8331BA9A17F46FB800A94AE2 /* mat4stack.c in Sources */,
 				83EB47FA180ACD7D00F4B8B3 /* cxButton.c in Sources */,
@@ -980,6 +1035,7 @@
 				839E7A6817F1BC7600B0F5EC /* cxViewController.m in Sources */,
 				8331BA9617F46FB800A94AE2 /* mat3.c in Sources */,
 				83319ABB180CE7C3007953BB /* memory.c in Sources */,
+				83E3A1731813BB23006D8388 /* cxIconv.c in Sources */,
 				83FF164917F3142000DBFA3A /* cxHash.c in Sources */,
 				8334043417F92961000D7237 /* cpRotaryLimitJoint.c in Sources */,
 				8331BAA817F46FB800A94AE2 /* vec2.c in Sources */,
@@ -988,10 +1044,12 @@
 				8331BA7717F45EE600A94AE2 /* cxBase.c in Sources */,
 				8301B387180D71380067167A /* cxRotate.c in Sources */,
 				8334043217F92961000D7237 /* cpRatchetJoint.c in Sources */,
+				83E3A17D1813CD5B006D8388 /* cxFreeType.c in Sources */,
 				8334043817F92961000D7237 /* cpSlideJoint.c in Sources */,
 				8334042417F92961000D7237 /* cpConstraint.c in Sources */,
 				83FF165217F32B8F00DBFA3A /* cxStream.c in Sources */,
 				8334044C17F92961000D7237 /* cpSpace.c in Sources */,
+				83E3A1821813E7FF006D8388 /* cxTextureTXT.c in Sources */,
 				8305D304180845BD00AD80F3 /* cxTexturePNG.c in Sources */,
 				8334044417F92961000D7237 /* cpCollision.c in Sources */,
 				83EBCE5118118F8E00DFC958 /* cxParticle.c in Sources */,
@@ -1018,10 +1076,12 @@
 				83319AB8180CE7C3007953BB /* error.c in Sources */,
 				830BD6FC1806885C00DF28E2 /* cxMove.c in Sources */,
 				8334044817F92961000D7237 /* cpPolyShape.c in Sources */,
+				83E3A1851813F6E2006D8388 /* cxShaderAlpha.c in Sources */,
 				8324910E17F2AE9600D0DF9D /* cxArray.c in Sources */,
 				8334044A17F92961000D7237 /* cpShape.c in Sources */,
 				830F2D8E17FC377800BFCB4A /* cxWindow.c in Sources */,
 				8334045017F92961000D7237 /* cpSpaceHash.c in Sources */,
+				8312AC051812C4DB00DD8476 /* cxHashXML.c in Sources */,
 				830C02B217F66416006FAC79 /* cxShaderPositionColor.c in Sources */,
 				8331BAA217F46FB800A94AE2 /* ray2.c in Sources */,
 				830950C617F41A2F0056B72D /* cxAutoPool.c in Sources */,
@@ -1259,10 +1319,7 @@
 				);
 				INFOPLIST_FILE = "cxEngine/cxEngine-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/libs/ios/lib",
-					/Users/xuhua/cxEngine/libs/ios/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/libs/ios/lib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";
@@ -1289,10 +1346,7 @@
 				);
 				INFOPLIST_FILE = "cxEngine/cxEngine-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(SRCROOT)/libs/ios/lib",
-					/Users/xuhua/cxEngine/libs/ios/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/libs/ios/lib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";

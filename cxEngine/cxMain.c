@@ -23,6 +23,9 @@
 #include <json/jansson.h>
 #include <views/cxAtlas.h>
 #include <views/cxParticle.h>
+#include <core/cxIconv.h>
+#include <core/cxFreeType.h>
+#include <views/cxLabel.h>
 
 static void cxEventTest(cxAny view,cxAny arg)
 {
@@ -60,29 +63,9 @@ cxBool cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-//    cxViewXML v = cxViewXMLCreate("view.xml");
-//    cxViewAppend(engine->window, v);
-    
-    cxParticle p = CX_ALLOC(cxParticle);
-    cxTexture texture = cxTextureLoadFile("candy.xml");
-    cxSpriteSetTexture(p, texture);
-    cxSpriteSetTextureKey(p, "green.png", true);
-    cxParticleInit(p, 500);
-    
-    p->duration = -1;
-    p->life = cxFloatRangeValue(5,0);
-    p->speed = cxFloatRangeValue(180,100);
-    p->angle = cxFloatRangeValue(90,45);
-    p->gravity = cxVec2fv(0, -100);
-    p->todir = true;
-    p->startspin = cxFloatRangeValue(2000,0);
-    p->startsize = cxFloatRangeValue(45,0);
-    p->endsize = cxFloatRangeValue(30,0);
-    p->startcolor = cxColorRangeValue(1,1,1,1,0,0,0,0);
-    p->endcolor = cxColorRangeValue(1,1,1,1,0,0,0,0);
-    p->rate = 50;
-    
-    cxViewAppend(engine->window, p);
+    cxEngineDataSet("items.xml");
+    cxViewXML v = cxViewXMLCreate("view.xml");
+    cxWindowPushView(v);
 }
 
 void cxEngineFree(cxEngine engine)

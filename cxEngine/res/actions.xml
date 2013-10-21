@@ -20,6 +20,6 @@
             cxAction.id="123"
             cxAction.speed="1.0"
             cxAction.time="1.5"
-            cxScale.x="1.3"
-            cxScale.y="1.3" />
+            cxScale.x="3.3"
+            cxScale.y="3.3" />
 </cxActionXML>

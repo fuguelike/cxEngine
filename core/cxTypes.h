@@ -9,6 +9,7 @@
 #ifndef cxEngine_cxTypes_h
 #define cxEngine_cxTypes_h
 
+#include <utarray.h>
 #include <kazmath/kazmath.h>
 #include "cxBase.h"
 
@@ -153,6 +154,10 @@ typedef struct {
     cxColor4f rb;
 } cxBoxColor4f;
 
+typedef struct {
+    cxFloat size;
+}cxTextAttr;
+
 CX_C_BEGIN
 
 cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t);
@@ -165,6 +170,38 @@ cxBool cxBox2fContainPoint(const cxBoxVec2f box,const cxVec2f pos);
 
 cxBool cxPolygonContainPoint(const cxPolygon *polygon,const cxVec2f tp);
 
+CX_OBJECT_DEF(cxTypes, cxObject)
+    cxAny kvs;
+    UT_array *utArray;
+    cxAny assist;
+CX_OBJECT_END(cxTypes)
+
+cxTypes cxBoxPointTypesCreate();
+
+#define cxTypesAppend(a,v)  utarray_push_back((a)->utArray,&(v))
+
+void cxTypesAppendKeyValue(cxTypes this,cxConstChars key,cxAny value);
+
+cxAny cxTypesValue(cxTypes this,cxConstChars key);
+
+#define CX_TYPES_FOREACH(a,t,e) \
+t *e = NULL; \
+while((a) != NULL && (e = (t *)utarray_next((a)->utArray, e)) != NULL)
+
 CX_C_END
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -10,6 +10,14 @@
 #include "cxString.h"
 #include "cxShader.h"
 
+void cxShaderInitPosColorTex(cxAny this)
+{
+    cxShader shader = this;
+    glBindAttribLocation(shader->program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
+    glBindAttribLocation(shader->program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
+    glBindAttribLocation(shader->program, cxVertexAttribTexcoord, CX_ATTRIBUTE_NAME_TEXCOORD);
+}
+
 typedef void (*cxOpenGLInfoFunc)(GLuint program, GLenum pname, GLint *params);
 
 typedef void (*cxOpenGLLogFunc)(GLuint program, GLsizei bufsize, GLsizei *length, GLchar *infolog);
@@ -86,7 +94,7 @@ static bool cxShaderCompile(cxShader this,GLuint *shader, GLenum type, cxString 
 
 CX_OBJECT_INIT(cxShader, cxObject)
 {
-    
+    CX_METHOD_SET(this->Init, cxShaderInitPosColorTex);
 }
 CX_OBJECT_FREE(cxShader, cxObject)
 {

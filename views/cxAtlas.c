@@ -6,58 +6,35 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <textures/cxTextureFactory.h>
+#include <core/cxEngine.h>
+#include <core/cxViewXML.h>
 #include "cxAtlas.h"
-
-cxBoxPoint cxAtlasXMLReadBoxPoint(cxAny pview,xmlTextReaderPtr reader)
-{
-    cxSprite this = pview;
-    //pos
-    cxVec2f pos = cxVec2fv(0, 0);
-    pos.x = cxXMLReadFloatAttr(reader, "x", pos.x);
-    pos.y = cxXMLReadFloatAttr(reader, "y", pos.y);
-    //size
-    cxSize2f size = cxSize2fv(0, 0);
-    size.w = cxXMLReadFloatAttr(reader, "w", size.w);
-    size.h = cxXMLReadFloatAttr(reader, "h", size.h);
-    //texbox
-    cxBoxTex2f texbox = cxBoxTex2fDefault();
-    xmlChar *tkey = cxXMLAttr("texture");
-    if(tkey != NULL && this->texture != NULL){
-        texbox = cxTextureBox(this->texture, (cxConstChars)tkey);
-    }
-    xmlFree(tkey);
-    //color
-    cxColor4f color = cxXMLReadColorAttr(reader, "color", this->super.color);
-    return cxAtlasCreateBoxPoint(pos, size, texbox, color);
-}
 
 void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxSpriteXMLReadAttr(xmlView, mView, reader);
     cxAtlas this = mView;
-    CX_RETURN(this->super.texture == NULL);
-    //read atlas attr
-    
-    //support scale9
+    //support scale9 mode
     if(cxXMLReadFloatsAttr(reader, "cxAtlas.scale9", &this->scale9.box.l) == 4){
+        CX_ASSERT(this->super.texture != NULL, "scale must set texture");
         this->scale9.enable = true;
         cxAtlasUpdateScale9(this);
-        return;
     }
-    //read sub element
-    CX_RETURN(xmlTextReaderIsEmptyElement(reader));
-    //<cxAtlasPoint x="0" y="0" w="50" h="50" texture="red.png" color="1,1,1,1" />
-    while(xmlTextReaderRead(reader)){
-        int type = xmlTextReaderNodeType(reader);
-        const xmlChar *temp = xmlTextReaderConstName(reader);
-        if(ELEMENT_END_TYPE(cxAtlas)){
-            break;
-        }
-        if(ELEMENT_BEGIN_TYPE(cxAtlasBox)){
-            cxBoxPoint bp = cxAtlasXMLReadBoxPoint(this,reader);
-            cxAtlasAppend(this, bp);
+    //support boxes mode
+    xmlChar *sitems = cxXMLAttr("cxAtlas.boxes");
+    CX_RETURN(sitems == NULL);
+    cxTypes types = NULL;
+    if(sitems != NULL && (types = cxEngineDataSet((cxConstChars)sitems)) != NULL){
+        CX_ASSERT(types->assist, "boxes assist null");
+        cxTexture texture = cxTextureLoadFile(cxStringBody(types->assist));
+        CX_ASSERT(texture != NULL, "texture load null");
+        cxSpriteSetTexture(this, texture);
+        CX_TYPES_FOREACH(types, cxBoxPoint, box){
+            cxAtlasAppend(this, *box);
         }
     }
+    xmlFree(sitems);
     //
 }
 

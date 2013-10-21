@@ -10,11 +10,19 @@
 #define cxEngine_cxWindow_h
 
 #include <core/cxView.h>
+#include <core/cxStack.h>
 
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxWindow, cxView)
+    cxStack views;
 CX_OBJECT_END(cxWindow)
+
+void cxWindowPushView(cxAny pview);
+
+void cxWindowPopView();
+
+void cxWindowReplaceView(cxAny pview);
 
 CX_C_END
 

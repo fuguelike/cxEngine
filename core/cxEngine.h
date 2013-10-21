@@ -28,6 +28,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash events;
     cxHash scripts;
     cxHash actions;
+    cxHash datasets;
     cxCurve curve;
     cxStack autoStack;
     cxFloat frameInterval;
@@ -44,6 +45,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onUpdate);
     cxTouch touch;
     CX_EVENT_ALLOC(onFree);
+    cxString lang;
 CX_OBJECT_END(cxEngine)
 
 cxEngine cxEngineInstance();
@@ -56,11 +58,17 @@ cxEventItem cxEngineGetEvent(cxConstChars name);
 
 void cxEngineRemoveScript(cxConstChars file);
 
+void cxEngineTimeReset();
+
 cxXMLScript cxEngineGetXMLScript(cxConstChars file);
 
 cxCurveItem cxEngineGetCurve(cxConstChars name);
 
 cxAny cxEngineLoadActionXML(cxConstChars file);
+
+cxTypes cxEngineDataSet(cxConstChars url);
+
+cxString cxEngineLangText(cxConstChars xml,cxConstChars key);
 
 void cxEngineRegisteSystemEvent();
 

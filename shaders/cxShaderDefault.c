@@ -8,15 +8,7 @@
 
 #include "cxShaderDefault.h"
 
-static void cxShaderDefaultInit(cxAny this)
-{
-    cxShaderDefault shader = this;
-    glBindAttribLocation(shader->super.program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
-    glBindAttribLocation(shader->super.program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
-    glBindAttribLocation(shader->super.program, cxVertexAttribTexcoord, CX_ATTRIBUTE_NAME_TEXCOORD);
-}
-
-static cxString cxShaderDefaultGetVertexSource(cxAny this)
+cxString cxShaderDefaultGetVertexSource(cxAny this)
 {
     static cxConstChars vertex =
     "                                                                                               \n\
@@ -43,7 +35,7 @@ static cxString cxShaderDefaultGetVertexSource(cxAny this)
     return cxStringConstChars(vertex);
 }
 
-static cxString cxShaderDefaultGetFragmentSource(cxAny this)
+cxString cxShaderDefaultGetFragmentSource(cxAny this)
 {
     static cxConstChars fragment =
     "                                                                                               \n\
@@ -67,7 +59,6 @@ static cxString cxShaderDefaultGetFragmentSource(cxAny this)
 
 CX_OBJECT_INIT(cxShaderDefault, cxShader)
 {
-    CX_METHOD_SET(this->super.Init, cxShaderDefaultInit);
     CX_METHOD_SET(this->super.GetVertexSource, cxShaderDefaultGetVertexSource);
     CX_METHOD_SET(this->super.GetFragmentSource, cxShaderDefaultGetFragmentSource);
 }

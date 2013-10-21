@@ -29,6 +29,7 @@ typedef enum {
     cxViewAutoResizeRight       = 1 << 1,
     cxViewAutoResizeTop         = 1 << 2,
     cxViewAutoResizeBottom      = 1 << 3,
+    cxViewAutoResizeFill        = cxViewAutoResizeLeft|cxViewAutoResizeRight|cxViewAutoResizeTop|cxViewAutoResizeBottom,
 }cxViewAutoResizeMask;
 
 typedef struct {
@@ -51,6 +52,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool isDirty;
     cxBool isVisible;
     cxBool isBorder;        //if draw border
+    cxBool isTop;           //=true hide prev view
+    cxBool isSort;
     cxSize2f size;
     cxVec2f position;
     cxVec2f scale;
@@ -77,6 +80,8 @@ cxVec2f cxViewPosition(cxAny pview);
 cxSize2f cxViewSize(cxAny pview);
 
 cxColor4f cxViewColor(cxAny pview);
+
+void cxViewSetTop(cxAny pview,cxBool top);
 
 void cxViewOnUpdate(cxAny pview,cxEventFunc func,cxAny args);
 
@@ -130,7 +135,7 @@ void cxViewSetAnchor(cxAny pview,const cxVec2f anchor);
 
 void cxViewSetScale(cxAny pview,const cxVec2f scale);
 
-void cxViewSetRaxis(cxAny pview,cxVec3f rasix);
+void cxViewSetRaxis(cxAny pview,cxVec3f raxis);
 
 void cxViewSetRadians(cxAny pview,const cxFloat radians);
 

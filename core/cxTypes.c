@@ -6,7 +6,40 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxHash.h"
 #include "cxTypes.h"
+
+static const UT_icd cxBoxPointICD = {sizeof(cxBoxPoint),NULL,NULL,NULL};
+
+CX_OBJECT_INIT(cxTypes, cxObject)
+{
+    this->kvs = CX_ALLOC(cxHash);
+}
+CX_OBJECT_FREE(cxTypes, cxObject)
+{
+    CX_RELEASE(this->assist);
+    CX_RELEASE(this->kvs);
+    utarray_free(this->utArray);
+}
+CX_OBJECT_TERM(cxType, cxObject)
+
+cxTypes cxBoxPointTypesCreate()
+{
+    cxTypes this = CX_CREATE(cxTypes);
+    utarray_new(this->utArray, &cxBoxPointICD);
+    return this;
+}
+
+cxAny cxTypesValue(cxTypes this,cxConstChars key)
+{
+    return cxHashGet(this->kvs, cxHashStrKey(key));
+}
+
+void cxTypesAppendKeyValue(cxTypes this,cxConstChars key,cxAny value)
+{
+    CX_ASSERT(key != NULL && value != NULL, "key value null");
+    cxHashSet(this->kvs, cxHashStrKey(key), value);
+}
 
 cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t)
 {

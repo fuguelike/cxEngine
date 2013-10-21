@@ -36,8 +36,6 @@ void cxAtlasDrawInit(cxAny pview);
 
 void cxAtlasResize(cxAny pview,cxAny arg);
 
-cxBoxPoint cxAtlasXMLReadBoxPoint(cxAny pview,xmlTextReaderPtr reader);
-
 cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color);
 
 void cxAtlasSetNumber(cxAny pview,cxInt boxNumber);

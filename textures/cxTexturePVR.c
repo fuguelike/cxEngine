@@ -136,7 +136,6 @@ completed:
 static void cxTexturePVRBind(cxAny this)
 {
     cxTexturePVR pvr = this;
-    CX_ASSERT(pvr->super.isLoad, "texture not load");
     cxOpenGLBindTexture(0, pvr->super.textureId);
 }
 

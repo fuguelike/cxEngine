@@ -91,8 +91,8 @@ void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     //texture
     xmlChar *surl = cxXMLAttr("cxSprite.texture");
     CX_RETURN(surl == NULL);
-    cxChar file[CX_HASH_MAX_KEY_LENGTH];
-    cxChar key[CX_HASH_MAX_KEY_LENGTH];
+    cxChar file[128];
+    cxChar key[64];
     cxString url = cxStringCreate("%s",(cxConstChars)surl);
     cxInt rv = cxParseURL(url, file, key);
     CX_RETURN(rv <= 0);
@@ -109,8 +109,8 @@ void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }
     xmlFree(surl);
     //flipx flipy
-    cxSpriteSetFlipX(this, cxXMLReadBoolAttr(reader, "cxSprite.flipx", this->isFlipX));
-    cxSpriteSetFlipY(this, cxXMLReadBoolAttr(reader, "cxSprite.flipy", this->isFlipY));
+    cxSpriteSetFlipX(this, cxXMLReadBoolAttr(reader, "cxSprite.flipX", this->isFlipX));
+    cxSpriteSetFlipY(this, cxXMLReadBoolAttr(reader, "cxSprite.flipY", this->isFlipY));
     //shader
     xmlChar *shader = cxXMLAttr("cxSprite.shader");
     if(shader != NULL){
@@ -142,6 +142,12 @@ cxSprite cxSpriteCreateWithXML(cxConstChars xml,cxConstChars key)
     cxSpriteSetTexture(this, texture);
     cxSpriteSetTextureKey(this, key, true);
     return this;
+}
+
+cxBoxTex2f cxSpriteBoxTex(cxAny pview)
+{
+    cxSprite this = pview;
+    return this->texCoord;
 }
 
 void cxSpriteSetTextureKey(cxAny pview,cxConstChars key,cxBool equSize)

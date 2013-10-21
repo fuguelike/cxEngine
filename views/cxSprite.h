@@ -30,6 +30,8 @@ CX_OBJECT_END(cxSprite)
 
 void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
+cxBoxTex2f cxSpriteBoxTex(cxAny pview);
+
 cxSprite cxSpriteCreateWithXML(cxConstChars xml,cxConstChars key);
 
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor);

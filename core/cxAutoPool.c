@@ -41,6 +41,7 @@ cxAny cxAutoPoolAppend(cxAny any)
     cxAutoPool pool = cxAutoPoolInstance();
     cxArrayAppend(pool->objects, any);
     CX_ASSERT(object->cxRefcount > 1, "apped to auto pool object,refcount > 1");
+    CX_UNUSED_PARAM(object);
     CX_RELEASE(any);
     return any;
 }

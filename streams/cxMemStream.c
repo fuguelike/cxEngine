@@ -13,7 +13,7 @@ static cxBool cxMemStreamOpen(cxAny this)
     cxMemStream stream = this;
     CX_ASSERT(stream->super.isOpen == false,"stream repeat open");
     stream->allocSize = 128;
-    stream->data = allocator->malloc(128);
+    stream->data = allocator->malloc(stream->allocSize);
     stream->super.canRead = true;
     stream->super.canWrite = true;
     stream->super.canSeek = true;
@@ -54,7 +54,7 @@ static cxInt cxMemStreamWrite(cxAny this,cxPointer buffer,cxInt size)
     memcpy(stream->data + stream->position, buffer, size);
     stream->position += size;
     stream->super.length += size;
-    return 0;
+    return size;
 }
 
 static cxOff cxMemStreamPosition(cxAny this)
@@ -120,11 +120,20 @@ CX_OBJECT_INIT(cxMemStream, cxStream)
 }
 CX_OBJECT_FREE(cxMemStream, cxStream)
 {
-    
+    allocator->free(this->data);
+    this->data = NULL;
 }
 CX_OBJECT_TERM(cxMemStream, cxStream)
 
-
+cxStream cxMemStreamCreateWithText(cxString txt)
+{
+    cxStream stream = CX_CREATE(cxMemStream);
+    if(!stream->interface->Open(stream)){
+        return NULL;
+    }
+    stream->interface->Write(stream,(cxPointer)cxStringBody(txt),cxStringLength(txt));
+    return stream;
+}
 
 
 

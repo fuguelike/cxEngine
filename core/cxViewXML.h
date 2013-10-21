@@ -18,13 +18,11 @@
 
 CX_C_BEGIN
 
-typedef cxAny (*cxViewXMLMakeElementFunc)(cxConstChars name,xmlTextReaderPtr reader);
-
 CX_OBJECT_DEF(cxViewXML, cxView)
     cxBool isError;
-    cxHash subviews;
+    cxHash items;
     cxHash events;
-    CX_METHOD_DEF(cxViewXMLMakeElementFunc, MakeView);
+    CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
     CX_EVENT_ALLOC(onLoad);
 CX_OBJECT_END(cxViewXML)
 

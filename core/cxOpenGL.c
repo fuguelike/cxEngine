@@ -6,6 +6,10 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <shaders/cxShaderPositionColor.h>
+#include <shaders/cxShaderDefault.h>
+#include <shaders/cxShaderAlpha.h>
+
 #include "cxUtil.h"
 #include "cxOpenGL.h"
 
@@ -20,14 +24,12 @@ do{                                                                 \
     CX_RELEASE(shader);                                             \
 }while(0)
 
-#include <shaders/cxShaderPositionColor.h>
-#include <shaders/cxShaderDefault.h>
-
 static void cxOpenGLLoadDefaultShaders()
 {
     cxOpenGL this = cxOpenGLInstance();
     CX_OPENGL_LOAD_SHADER(cxShaderPositionColor);
     CX_OPENGL_LOAD_SHADER(cxShaderDefault);
+    CX_OPENGL_LOAD_SHADER(cxShaderAlpha);
 }
 
 void cxDrawLineBox(const cxBoxVec2f *box,const cxColor3f color)
