@@ -54,6 +54,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool isBorder;        //if draw border
     cxBool isTop;           //=true hide prev view
     cxBool isSort;
+    cxBool isCropping;
     cxSize2f size;
     cxVec2f position;
     cxVec2f scale;
@@ -73,7 +74,10 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
+    CX_EVENT_ALLOC(onLayout);
 CX_OBJECT_END(cxView)
+
+void cxViewSetCropping(cxAny pview,cxBool cropping);
 
 cxVec2f cxViewPosition(cxAny pview);
 
@@ -81,7 +85,11 @@ cxSize2f cxViewSize(cxAny pview);
 
 cxColor4f cxViewColor(cxAny pview);
 
+cxRect4f cxViewGLRect(cxAny pview);
+
 void cxViewSetTop(cxAny pview,cxBool top);
+
+void cxViewSetDirty(cxAny pview,cxBool dirty);
 
 void cxViewOnUpdate(cxAny pview,cxEventFunc func,cxAny args);
 

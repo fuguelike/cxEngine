@@ -44,6 +44,10 @@ CX_OBJECT_DEF(cxTexture, cxObject)
     const cxTextureInterface *interface;
 CX_OBJECT_END(cxTexture)
 
+void cxDrawClippingTexture(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey);
+
+void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey,cxConstChars skey);
+
 cxBoxTex2f cxTextureBox(cxTexture this,cxConstChars key);
 
 cxRect4f cxTextureRect(cxTexture this,cxConstChars key);

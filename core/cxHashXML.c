@@ -12,9 +12,9 @@
 #include "cxStack.h"
 #include "cxHashXML.h"
 
-cxTypes cxHashXMLReadBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
+cxTypes cxHashXMLReadAtlasBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
 {
-    cxTypes types = cxBoxPointTypesCreate();
+    cxTypes types = cxAtlasBoxPointTypesCreate();
     cxTexture texture = cxTextureLoadFile(texfile);
     if(texture == NULL){
         CX_ERROR("boxPoint must set textfile at cxBoxPoint node");
@@ -30,32 +30,71 @@ cxTypes cxHashXMLReadBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
         if(!ELEMENT_IS_TYPE(item)){
             continue;
         }
-        cxVec2f pos;
-        pos.x = cxXMLReadFloatAttr(reader, "x", 0);
-        pos.y = cxXMLReadFloatAttr(reader, "y", 0);
         
-        cxSize2f size;
-        size.w = cxXMLReadFloatAttr(reader, "w", 0);
-        size.h = cxXMLReadFloatAttr(reader, "h", 0);
-        cxColor4f color = cxColor4fv(1, 1, 1, 1);
-        cxXMLReadFloatsAttr(reader, "color", &color.r);
+        cxAtlasBoxPointType item = {0};
         
-        xmlChar *skey = cxXMLAttr("key");
-        if(skey != NULL && (size.w ==0 || size.h == 0)){
-            size = cxTextureSize(texture, (cxConstChars)skey);
+        cxChar *top = cxXMLAttr("top");
+        if(top != NULL){
+            item.mask |= cxViewAutoResizeTop;
+            item.box.t = atof(top);
         }
-        cxBoxTex2f texBox = cxTextureBox(texture, (cxConstChars)skey);
+        xmlFree(top);
+        
+        cxChar *left = cxXMLAttr("left");
+        if(left != NULL){
+            item.mask |= cxViewAutoResizeLeft;
+            item.box.l = atof(left);
+        }
+        xmlFree(left);
+        
+        cxChar *right = cxXMLAttr("right");
+        if(right != NULL){
+            item.mask |= cxViewAutoResizeRight;
+            item.box.r = atof(right);
+        }
+        xmlFree(right);
+        
+        cxChar *bottom = cxXMLAttr("bottom");
+        if(bottom != NULL){
+            item.mask |= cxViewAutoResizeBottom;
+            item.box.b = atof(bottom);
+        }
+        xmlFree(bottom);
+        
+        cxChar *fill = cxXMLAttr("fill");
+        if(fill != NULL && strcasecmp(fill, "true") == 0){
+            item.box = cxBox4fv(0, 0, 0, 0);
+            item.mask = cxViewAutoResizeFill;
+        }
+        xmlFree(fill);
+        
+        item.pos.x = cxXMLReadFloatAttr(reader, "x", 0);
+        item.pos.y = cxXMLReadFloatAttr(reader, "y", 0);
+        
+        item.size.w = cxXMLReadFloatAttr(reader, "w", 0);
+        item.size.h = cxXMLReadFloatAttr(reader, "h", 0);
+        
+        item.color = cxColor4fv(1, 1, 1, 1);
+        cxXMLReadFloatsAttr(reader, "color", &item.color.r);
+        
+        item.texbox = cxBoxTex2fDefault();
+        cxChar *skey = cxXMLAttr("key");
+        if(skey != NULL){
+            item.texbox = cxTextureBox(texture, skey);
+        }
+        if(skey != NULL && cxSize2Zero(item.size)){
+            item.size = cxTextureSize(texture, skey);
+        }
         xmlFree(skey);
         
-        cxBoxPoint box = cxAtlasCreateBoxPoint(pos, size, texBox, color);
-        cxTypesAppend(types, box);
+        cxTypesAppend(types, item);
     }
     return types;
 }
 
-cxTypes cxHashXMLReadString(xmlTextReaderPtr reader)
+cxTypes cxHashXMLReadLangString(xmlTextReaderPtr reader)
 {
-    cxTypes types = CX_CREATE(cxTypes);
+    cxTypes types = cxLangStringTypesCreate();
     int depth = xmlTextReaderDepth(reader);
     while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
@@ -65,9 +104,9 @@ cxTypes cxHashXMLReadString(xmlTextReaderPtr reader)
         if(!ELEMENT_IS_TYPE(item)){
             continue;
         }
-        xmlChar *skey = cxXMLAttr("key");
-        xmlChar *svalue = xmlTextReaderReadString(reader);
-        cxTypesAppendKeyValue(types, (cxConstChars)skey, cxStringConstChars((cxConstChars)svalue));
+        cxChar *skey = cxXMLAttr("key");
+        cxChar *svalue = cxXMLReadString(reader);
+        cxTypesSet(types, skey, svalue);
         xmlFree(svalue);
         xmlFree(skey);
     }
@@ -138,22 +177,22 @@ cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader)
     while(xmlTextReaderRead(reader)){
         int type = xmlTextReaderNodeType(reader);
         if(type == XML_READER_TYPE_ELEMENT){
-            xmlChar *sid = cxXMLAttr("id");
+            cxChar *sid = cxXMLAttr("id");
             if(sid == NULL){
                 CX_ERROR("must set id");
                 continue;
             }
             const xmlChar *temp = xmlTextReaderConstName(reader);
             cxAny object = NULL;
-            if(ELEMENT_IS_TYPE(cxBoxPoint)){
-                xmlChar *stexture = cxXMLAttr("texture");
-                object = cxHashXMLReadBoxPoint((cxConstChars)stexture,reader);
+            if(ELEMENT_IS_TYPE(cxAtlasBoxPoint)){
+                cxChar *stexture = cxXMLAttr("texture");
+                object = cxHashXMLReadAtlasBoxPoint(stexture,reader);
                 xmlFree(stexture);
-            }else if(ELEMENT_IS_TYPE(cxString)){
-                object = cxHashXMLReadString(reader);
+            }else if(ELEMENT_IS_TYPE(cxLangString)){
+                object = cxHashXMLReadLangString(reader);
             }
             if(object != NULL){
-                cxHashSet(xml->items, cxHashStrKey((cxConstChars)sid), object);
+                cxHashSet(xml->items, cxHashStrKey(sid), object);
             }
             xmlFree(sid);
         }

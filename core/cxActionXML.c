@@ -20,10 +20,10 @@ static void cxActionRootXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReader
     cxActionXML xml = xmlAction;
     cxActionXML this = mAction;
     //type multiple sequence
-    xmlChar *stype = cxXMLAttr("cxActionXML.type");
-    if(xmlStrcasecmp(stype, BAD_CAST"multiple") == 0){
+    cxChar *stype = cxXMLAttr("cxActionXML.type");
+    if(strcasecmp(stype, "multiple") == 0){
         xml->type = cxActionXMLTypeMultiple;
-    }else if(xmlStrcasecmp(stype, BAD_CAST"sequence") == 0){
+    }else if(strcasecmp(stype, "sequence") == 0){
         xml->type = cxActionXMLTypeSequence;
     }else{
         xml->type = cxActionXMLTypeNone;
@@ -206,8 +206,8 @@ void cxViewRunActionEvent(cxAny pview,cxAny arg)
     CX_RETURN(arg == NULL);
     cxString url = cxEventArgString(arg,"file");
     CX_RETURN(url == NULL);
-    cxChar file[CX_HASH_MAX_KEY_LENGTH];
-    cxChar key[CX_HASH_MAX_KEY_LENGTH];
+    cxChar file[128];
+    cxChar key[128];
     cxInt rv = cxParseURL(url, file, key);
     CX_RETURN(rv == 0);
     cxAny target = pview;

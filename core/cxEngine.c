@@ -9,6 +9,7 @@
 #include <kazmath/matrix.h>
 #include <streams/cxAssetsStream.h>
 #include <core/cxActionXML.h>
+#include "cxViewXML.h"
 #include "cxEngine.h"
 #include "cxAutoPool.h"
 #include "cxOpenGL.h"
@@ -197,6 +198,9 @@ void cxEngineRegisteSystemEvent()
     cxEngineRegisteEvent("cxPlay", cxPlaySoundEvent);
     cxEngineRegisteEvent("cxLogger", cxPrintMessageEvent);
     cxEngineRegisteEvent("cxActionRemoveView", cxActionRemoveViewEvent);
+    cxEngineRegisteEvent("cxPushView", cxViewPushViewEvent);
+    cxEngineRegisteEvent("cxPopView", cxViewPopViewEvent);
+    cxEngineRegisteEvent("cxReplaceView", cxViewReplaceViewEvent);
 }
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file)
@@ -244,10 +248,11 @@ void cxEngineRemoveScript(cxConstChars file)
 
 cxTypes cxEngineDataSet(cxConstChars url)
 {
+    CX_RETURN(url == NULL, NULL);
     cxEngine this = cxEngineInstance();
     cxString file = cxStringStatic(url);
-    cxChar path[256]={0};
-    cxChar key[64]={0};
+    cxChar path[128]={0};
+    cxChar key[128]={0};
     cxInt ret = cxParseURL(file, path, key);
     CX_RETURN(ret == 0, NULL);
     cxHashXML sets = cxHashGet(this->datasets, cxHashStrKey(path));
@@ -267,11 +272,10 @@ cxTypes cxEngineDataSet(cxConstChars url)
 cxString cxEngineLangText(cxConstChars xml,cxConstChars key)
 {
     cxEngine this = cxEngineInstance();
-    cxChar url[256]={0};
-    snprintf(url, 256, "%s?%s",xml,cxStringBody(this->lang));
+    CX_CONST_STRING(url,"%s?%s",xml,cxStringBody(this->lang));
     cxTypes types = cxEngineDataSet(url);
-    CX_RETURN(types == NULL, NULL);
-    return cxTypesValue(types, key);
+    CX_RETURN(types == NULL || types->type != cxTypesLangString, NULL);
+    return cxTypesGet(types, key);
 }
 
 cxAny cxEngineLoadActionXML(cxConstChars file)

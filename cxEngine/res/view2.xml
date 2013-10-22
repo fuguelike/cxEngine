@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
-<cxViewXML w="100" h="100">
-    
+<cxViewXML cxView.fill="true">
+    <cxParticle
+    cxSprite.texture="candy.xml?blue.png"
+    cxView.cropping="false"
+    cxView.w = "200"
+    cxView.h = "100"
+    cxParticle.number = "100"
+    cxParticle.blend = "multiple"
+    cxParticle.duration = "-1"
+    cxParticle.life = "5,5"
+    cxParticle.speed = "200,200"
+    cxParticle.angle = "90,45"
+    cxParticle.gravity = "0,-100"
+    cxParticle.todir = "true"
+    cxParticle.startspin="2000"
+    cxParticle.startsize = "30"
+    cxParticle.endsize = "30"
+    cxParticle.startcolor="1,1,1,1"
+    cxParticle.endcolor="1,1,1,0"
+    cxParticle.rate = "100" />
+    <cxButton
+        cxView.w = "200"
+        cxView.h = "90"
+        cxView.right="0"
+        cxView.bottom="0"
+        cxButton.onPress="cxPopView">
+        <cxAtlas cxView.fill="true" cxAtlas.scale9="10,10,10,10" cxSprite.texture="scale9.png" />
+        <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Pop" cxLabel.size="70"/>
+    </cxButton>
 </cxViewXML>

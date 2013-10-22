@@ -17,28 +17,29 @@
 static void cxViewXMLReadAutoResize(cxAny view,xmlTextReaderPtr reader)
 {
     cxView pv = view;
-    xmlChar *sal = cxXMLAttr("cxView.left");
-    xmlChar *sar = cxXMLAttr("cxView.right");
-    xmlChar *sat = cxXMLAttr("cxView.top");
-    xmlChar *sab = cxXMLAttr("cxView.bottom");
+    cxChar *sal = cxXMLAttr("cxView.left");
+    cxChar *sar = cxXMLAttr("cxView.right");
+    cxChar *sat = cxXMLAttr("cxView.top");
+    cxChar *sab = cxXMLAttr("cxView.bottom");
     cxBool fill = cxXMLReadBoolAttr(reader, "cxView.fill", false);
     if(sal != NULL){
         pv->resizeVar.mask |= cxViewAutoResizeLeft;
-        pv->resizeVar.box.l = atof((cxConstChars)sal);
+        pv->resizeVar.box.l = atof(sal);
     }
     if(sar != NULL){
         pv->resizeVar.mask |= cxViewAutoResizeRight;
-        pv->resizeVar.box.r = atof((cxConstChars)sar);
+        pv->resizeVar.box.r = atof(sar);
     }
     if(sat != NULL){
         pv->resizeVar.mask |= cxViewAutoResizeTop;
-        pv->resizeVar.box.t = atof((cxConstChars)sat);
+        pv->resizeVar.box.t = atof(sat);
     }
     if(sab != NULL){
         pv->resizeVar.mask |= cxViewAutoResizeBottom;
-        pv->resizeVar.box.b = atof((cxConstChars)sab);
+        pv->resizeVar.box.b = atof(sab);
     }
     if(fill){
+        //scale -> {1,1}
         pv->resizeVar.mask = cxViewAutoResizeFill;
         pv->resizeVar.box = cxBox4fv(0, 0, 0, 0);
     }
@@ -51,28 +52,28 @@ static void cxViewXMLReadAutoResize(cxAny view,xmlTextReaderPtr reader)
 static void cxViewXMLReadRectToView(cxAny view,xmlTextReaderPtr reader)
 {
     cxView pv = view;
-    xmlChar *sx = cxXMLAttr("cxView.x");
-    xmlChar *sy = cxXMLAttr("cxView.y");
-    xmlChar *sz = cxXMLAttr("cxView.z");
-    xmlChar *sw = cxXMLAttr("cxView.w");
-    xmlChar *sh = cxXMLAttr("cxView.h");
+    cxChar *sx = cxXMLAttr("cxView.x");
+    cxChar *sy = cxXMLAttr("cxView.y");
+    cxChar *sz = cxXMLAttr("cxView.z");
+    cxChar *sw = cxXMLAttr("cxView.w");
+    cxChar *sh = cxXMLAttr("cxView.h");
     cxVec2f pos = pv->position;
     if(sx != NULL){
-        pos.x = atof((cxConstChars)sx);
+        pos.x = atof(sx);
     }
     if(sy != NULL){
-        pos.y = atof((cxConstChars)sy);
+        pos.y = atof(sy);
     }
     cxViewSetPosition(view, pos);
     if(sz != NULL){
-        cxViewSetOrder(view, atoi((cxConstChars)sz));
+        cxViewSetOrder(view, atoi(sz));
     }
     cxSize2f size = pv->size;
     if(sw != NULL){
-        size.w = atof((cxConstChars)sw);
+        size.w = atof(sw);
     }
     if(sh != NULL){
-        size.h = atof((cxConstChars)sh);
+        size.h = atof(sh);
     }
     cxViewSetSize(view, size);
     xmlFree(sx);
@@ -85,32 +86,34 @@ static void cxViewXMLReadRectToView(cxAny view,xmlTextReaderPtr reader)
 cxBool cxViewZeroSize(cxAny pview)
 {
     cxView this = pview;
-    return (kmAlmostEqual(this->size.w, 0) && kmAlmostEqual(this->size.h, 0));
+    return cxSize2Zero(this->size);
 }
 
 void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
     cxObjectXMLReadAttr(pxml, view, reader);
     cxViewXML xml = pxml;
-    cxView pv = view;
+    cxView this = view;
     //rect
     cxViewXMLReadRectToView(view,reader);
     //resize
     cxViewXMLReadAutoResize(view, reader);
+    //cropping
+    cxViewSetCropping(view,cxXMLReadBoolAttr(reader, "cxView.cropping", this->isCropping));
     //top
-    cxViewSetTop(view, cxXMLReadBoolAttr(reader, "cxView.isTop", pv->isTop));
+    cxViewSetTop(view, cxXMLReadBoolAttr(reader, "cxView.istop", this->isTop));
     //anchor
-    cxViewSetAnchor(view, cxXMLReadVec2fAttr(reader, "cxView.anchor", pv->anchor));
+    cxViewSetAnchor(view, cxXMLReadVec2fAttr(reader, "cxView.anchor", this->anchor));
     //scale
-    cxViewSetScale(view, cxXMLReadVec2fAttr(reader, "cxView.scale", pv->scale));
+    cxViewSetScale(view, cxXMLReadVec2fAttr(reader, "cxView.scale", this->scale));
     //color
-    cxColor4f color = cxXMLReadColorAttr(reader,"cxView.color",pv->color);
+    cxColor4f color = cxXMLReadColorAttr(reader,"cxView.color",this->color);
     cxViewSetColor(view, cxColor3fv(color.r, color.g, color.b));
     cxViewSetAlpha(view, cxXMLReadFloatAttr(reader, "cxView.alpha", color.a));
     //visible
-    cxViewSetVisible(view, cxXMLReadBoolAttr(reader, "cxView.visible", pv->isVisible));
+    cxViewSetVisible(view, cxXMLReadBoolAttr(reader, "cxView.visible", this->isVisible));
     //border
-    cxViewSetBorder(view, cxXMLReadBoolAttr(reader, "cxView.border", pv->isBorder));
+    cxViewSetBorder(view, cxXMLReadBoolAttr(reader, "cxView.border", this->isBorder));
     //rotate
     cxVec3f raxis;
     if(cxXMLReadFloatsAttr(reader, "cxView.raxis", &raxis.x) == 3){
@@ -122,10 +125,17 @@ void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
         cxViewSetDegrees(view, degrees);
     }
     //event
-    cxXMLAppendEvent(xml->events, pv, cxView, onEnter);
-    cxXMLAppendEvent(xml->events, pv, cxView, onExit);
-    cxXMLAppendEvent(xml->events, pv, cxView, onUpdate);
-    cxXMLAppendEvent(xml->events, pv, cxView, onResize);
+    cxXMLAppendEvent(xml->events, this, cxView, onEnter);
+    cxXMLAppendEvent(xml->events, this, cxView, onExit);
+    cxXMLAppendEvent(xml->events, this, cxView, onUpdate);
+    cxXMLAppendEvent(xml->events, this, cxView, onResize);
+    cxXMLAppendEvent(xml->events, this, cxView, onLayout);
+}
+
+void cxViewSetCropping(cxAny pview,cxBool cropping)
+{
+    cxView this = pview;
+    this->isCropping = cropping;
 }
 
 CX_OBJECT_INIT(cxView, cxObject)
@@ -150,6 +160,7 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_EVENT_RELEASE(this->onExit);
     CX_EVENT_RELEASE(this->onUpdate);
     CX_EVENT_RELEASE(this->onResize);
+    CX_EVENT_RELEASE(this->onLayout);
     CX_RELEASE(this->subViews);
     CX_RELEASE(this->actions);
 }
@@ -173,10 +184,30 @@ cxColor4f cxViewColor(cxAny pview)
     return this->color;
 }
 
+cxRect4f cxViewGLRect(cxAny pview)
+{
+    cxView this = pview;
+    cxFloat wh = this->size.w/2.0f;
+    cxFloat hh = this->size.h/2.0f;
+    cxVec2f p1 = cxVec2fv(-wh, hh);
+    cxVec2f p2 = cxVec2fv(wh, -hh);
+    p1 = cxViewPointToWindowPoint(pview, p1);
+    p2 = cxViewPointToWindowPoint(pview, p2);
+    p1 = cxWindowPointToGLPoint(p1);
+    p2 = cxWindowPointToGLPoint(p2);
+    return cxRect4fv(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
+}
+
 void cxViewSetTop(cxAny pview,cxBool top)
 {
     cxView this = pview;
     this->isTop = top;
+}
+
+void cxViewSetDirty(cxAny pview,cxBool dirty)
+{
+    cxView this = pview;
+    this->isDirty = dirty;
 }
 
 void cxViewOnUpdate(cxAny pview,cxEventFunc func,cxAny args)
@@ -461,21 +492,31 @@ void cxViewAutoResizing(cxAny pview)
     cxViewAutoResizeMask mask = this->resizeVar.mask;
     if((mask & cxViewAutoResizeLeft) && (mask & cxViewAutoResizeRight)){
         size.w = parent->size.w - this->resizeVar.box.l - this->resizeVar.box.r;
+        this->scale.x = 1.0f;
     }
     if(mask & cxViewAutoResizeLeft){
-        pos.x = -parent->size.w/2.0f + size.w * this->anchor.x *this->scale.x + this->resizeVar.box.l;
+        pos.x = -parent->size.w/2.0f;
+        pos.x += size.w * this->anchor.x * this->scale.x;
+        pos.x += this->resizeVar.box.l;
     }
     if(mask & cxViewAutoResizeRight){
-        pos.x = parent->size.w/2.0f - size.w * (1.0f - this->anchor.x) *this->scale.x - this->resizeVar.box.r;
+        pos.x = parent->size.w/2.0f;
+        pos.x -= size.w * (1.0f - this->anchor.x) *this->scale.x;
+        pos.x -= this->resizeVar.box.r;
     }
     if((mask & cxViewAutoResizeTop) && (mask & cxViewAutoResizeBottom)){
         size.h = parent->size.h - this->resizeVar.box.t - this->resizeVar.box.b;
+        this->scale.y = 1.0f;
     }
     if(mask & cxViewAutoResizeTop){
-        pos.y = parent->size.h/2.0f - size.h * (1.0f - this->anchor.y) *this->scale.y - this->resizeVar.box.t;
+        pos.y = parent->size.h/2.0f;
+        pos.y -= size.h * (1.0f - this->anchor.y) *this->scale.y;
+        pos.y -= this->resizeVar.box.t;
     }
     if(mask & cxViewAutoResizeBottom){
-        pos.y = -parent->size.h/2.0f + size.h * this->anchor.y *this->scale.y + this->resizeVar.box.b;
+        pos.y = -parent->size.h/2.0f;
+        pos.y += size.h * this->anchor.y *this->scale.y;
+        pos.y += this->resizeVar.box.b;
     }
     cxViewSetPosition(this, pos);
     cxViewSetSize(this, size);
@@ -485,6 +526,7 @@ void cxViewLayout(cxAny pview)
 {
     cxView this = pview;
     cxViewAutoResizing(this);
+    CX_EVENT_FIRE(this, onLayout);
     CX_LIST_FOREACH(this->subViews, ele){
         cxView view = ele->object;
         cxViewLayout(view);
@@ -583,11 +625,12 @@ void cxViewDraw(cxAny pview)
     CX_RETURN(!this->isVisible);
     cxViewUpdateActions(this);
     cxViewTransform(this);
-    
     kmGLPushMatrix();
-
     kmGLMultMatrix(&this->normalMatrix);
     kmGLMultMatrix(&this->anchorMatrix);
+    if(this->isCropping){
+        cxOpenGLEnableScissor(cxViewGLRect(this));
+    }
     CX_METHOD_RUN(this->DrawBefore,this);
     CX_METHOD_RUN(this->Draw,this);
     if(this->isSort){
@@ -598,8 +641,10 @@ void cxViewDraw(cxAny pview)
         cxViewDraw(view);
     }
     CX_METHOD_RUN(this->DrawAfter,this);
+    if(this->isCropping){
+        cxOpenGLDisableScissor();
+    }
     cxViewDrawBorder(this);
-
     kmGLPopMatrix();
 }
 

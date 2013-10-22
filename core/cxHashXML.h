@@ -21,9 +21,9 @@ CX_OBJECT_DEF(cxHashXML, cxObject)
     CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
 CX_OBJECT_END(cxHashXML)
 
-cxTypes cxHashXMLReadBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader);
+cxTypes cxHashXMLReadAtlasBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader);
 
-cxTypes cxHashXMLReadString(xmlTextReaderPtr reader);
+cxTypes cxHashXMLReadLangString(xmlTextReaderPtr reader);
 
 cxBool cxHashXMLLoad(cxAny hash,cxConstChars xml);
 

@@ -13,29 +13,63 @@
 
 void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
-    cxSpriteXMLReadAttr(xmlView, mView, reader);
     cxAtlas this = mView;
-    //support scale9 mode
-    if(cxXMLReadFloatsAttr(reader, "cxAtlas.scale9", &this->scale9.box.l) == 4){
-        CX_ASSERT(this->super.texture != NULL, "scale must set texture");
-        this->scale9.enable = true;
-        cxAtlasUpdateScale9(this);
-    }
     //support boxes mode
-    xmlChar *sitems = cxXMLAttr("cxAtlas.boxes");
-    CX_RETURN(sitems == NULL);
-    cxTypes types = NULL;
-    if(sitems != NULL && (types = cxEngineDataSet((cxConstChars)sitems)) != NULL){
-        CX_ASSERT(types->assist, "boxes assist null");
-        cxTexture texture = cxTextureLoadFile(cxStringBody(types->assist));
-        CX_ASSERT(texture != NULL, "texture load null");
-        cxSpriteSetTexture(this, texture);
-        CX_TYPES_FOREACH(types, cxBoxPoint, box){
-            cxAtlasAppend(this, *box);
-        }
+    cxChar *sitems = cxXMLAttr("cxAtlas.boxes");
+    if(sitems != NULL){
+        CX_RETAIN_SWAP(this->boxesKey, cxStringAllocChars(sitems));
     }
     xmlFree(sitems);
+    //support scale9 mode
+    if(cxXMLReadFloatsAttr(reader, "cxAtlas.scale9", &this->scale9.box.l) == 4){
+        this->scale9.enable = true;
+        cxAtlasSetNumber(this, 9);
+    }
     //
+    cxSpriteXMLReadAttr(xmlView, mView, reader);
+}
+
+//on resize load
+void cxAtlasLoadBoxes(cxAny pview)
+{
+    cxAtlas this = pview;
+    CX_RETURN(this->boxesKey == NULL);
+    cxTypes types = cxEngineDataSet(cxStringBody(this->boxesKey));
+    CX_RETURN(types == NULL || types->type != cxTypesAtlasBoxPoint);
+    
+    CX_ASSERT(types->assist, "boxes assist null");
+    cxTexture texture = cxTextureLoadFile(cxStringBody(types->assist));
+    
+    CX_ASSERT(texture != NULL, "texture load failed");
+    cxSpriteSetTexture(this, texture);
+    
+    cxAtlasClean(this);
+    cxSize2f size = cxViewSize(pview);
+    CX_TYPES_FOREACH(types, cxAtlasBoxPointType, tmp){
+        cxAtlasBoxPointType box = *tmp;
+        cxSize2f boxsize = box.size;
+        cxVec2f boxpos = box.pos;
+        if((box.mask & cxViewAutoResizeLeft) && (box.mask & cxViewAutoResizeRight)){
+            boxsize.w = size.w - box.box.l - box.box.r;
+        }
+        if(box.mask & cxViewAutoResizeLeft){
+            boxpos.x = boxsize.w * 0.5f + box.box.l - size.w/2.0f;
+        }
+        if(box.mask & cxViewAutoResizeRight){
+            boxpos.x = size.w/2.0f - boxsize.w * 0.5f - box.box.r;
+        }
+        if((box.mask & cxViewAutoResizeTop) && (box.mask & cxViewAutoResizeBottom)){
+            boxsize.h = size.h - box.box.t - box.box.b;
+        }
+        if(box.mask & cxViewAutoResizeTop){
+            boxpos.y = size.h/2.0f - boxsize.h * 0.5f - box.box.t;
+        }
+        if(box.mask & cxViewAutoResizeBottom){
+            boxpos.y = boxsize.h * 0.5f -size.h/2.0f + box.box.b;
+        }
+        cxBoxPoint bp = cxAtlasCreateBoxPoint(boxpos, boxsize, box.texbox, box.color);
+        cxAtlasAppend(this, bp);
+    }
 }
 
 static void cxAtlasVAODraw(void *pview)
@@ -83,8 +117,7 @@ void cxAtlasUpdateScale9(cxAny pview)
     cxAtlas this = pview;
     CX_RETURN(!this->scale9.enable);
     CX_ASSERT(!cxViewZeroSize(pview) && this->super.texture != NULL, "must set texture and size");
-    cxAtlasSetNumber(pview, 9);
-    this->number = 0;
+    cxAtlasClean(pview);
     
     cxSize2f size = cxViewSize(this);
     cxRect4f tr = cxBoxTex2fToRect4f(this->super.texCoord);
@@ -140,6 +173,7 @@ void cxAtlasUpdateScale9(cxAny pview)
 void cxAtlasResize(cxAny pview,cxAny arg)
 {
     cxAtlasUpdateScale9(pview);
+    cxAtlasLoadBoxes(pview);
 }
 
 CX_OBJECT_INIT(cxAtlas, cxSprite)
@@ -151,6 +185,7 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
 }
 CX_OBJECT_FREE(cxAtlas, cxSprite)
 {
+    CX_RELEASE(this->boxesKey);
     allocator->free(this->boxs);
     allocator->free(this->indices);
     glDeleteBuffers(2, this->vboid);

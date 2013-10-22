@@ -39,9 +39,10 @@ do{                                                             \
     }                                                           \
 }while(0)
 
-
-xmlChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name);
+cxChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name);
 #define cxXMLAttr(n)    cxXMLAttrAuto(reader,n)
+
+cxChar *cxXMLReadString(xmlTextReaderPtr reader);
 
 cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat value);
 

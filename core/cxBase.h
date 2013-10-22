@@ -125,7 +125,8 @@ do{                                                             \
     DL_APPEND(_event_, _newptr_);                               \
 }while(0)
 
-#define CX_EVENT_QUICK(_event_,_func_)  CX_EVENT_APPEND(_event_,_func_,NULL)
+#define CX_EVENT_QUICK(_event_,_func_)                          \
+    CX_EVENT_APPEND(_event_,_func_,NULL)
 
 #define CX_EVENT_PREPEND(_event_,_func_,_args_)                 \
 do{                                                             \

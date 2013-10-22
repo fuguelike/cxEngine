@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
-<cxViewXML cxView.w="500" cxView.h="500" cxViewXML.onLoad="viewLoad">
-    <!--
+<cxViewXML cxView.fill="true" cxViewXML.onLoad="viewLoad">
+
     <cxButton id="t3"
-        cxView.top="15"
-        cxView.left="15"
-        cxButton.enable="true"
-        cxView.border="true"
-        cxView.w = "150"
-        cxView.h = "150"
+        cxView.w = "200"
+        cxView.h = "90"
+        cxView.right="0"
+        cxView.bottom="0"
         cxView.onEnter="cxLogger('button t2 enter')"
         cxView.onExit="cxLogger('button t2 exit')"
-        cxButton.onPress="cxViewRun({'file':'actions.xml','target':'t3'})"
-    >
-        <cxAtlas id="t5" cxView.fill="true" cxAtlas.scale9="10,10,10,10" cxSprite.texture="scale9.png" />
+        cxButton.onPress="cxPushView('view2.xml')" >
+        <cxAtlas cxView.fill="true" cxAtlas.scale9="10,10,10,10" cxSprite.texture="scale9.png" />
+        <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Push" cxLabel.size="70"/>
     </cxButton>
-    <cxParticle id="t6"
+    
+    <!--
+    <cxParticle
             cxSprite.texture="candy.xml?green.png"
             cxView.w = "40"
             cxView.h = "40"
-            cxParticle.number = "500"
+            cxParticle.number = "100"
             cxParticle.blend = "multiple"
             cxParticle.duration = "-1"
-            cxParticle.life = "5,0"
+            cxParticle.life = "5,5"
             cxParticle.speed = "200,200"
             cxParticle.angle = "90,45"
             cxParticle.gravity = "0,-100"
@@ -33,30 +33,15 @@
             cxParticle.endsize = "30,0"
             cxParticle.startcolor="1,1,1,1,0,0,0,0"
             cxParticle.endcolor="1,1,1,1,0,0,0,0"
-            cxParticle.rate = "100"
-    />
+            cxParticle.rate = "100" />
      -->
-    <!--
-    <cxAtlas id="t5"
-        cxView.w="100"
-        cxView.h="100"
-        cxView.degrees=""
-        cxAtlas.boxes= "items.xml?boxs">
-    </cxAtlas>
-    
-    <cxAtlas id="t6"
-        cxView.x="100"
-        cxView.y="150"
-        cxView.w="100"
-        cxView.h="100"
-        cxView.degrees="0"
-        cxAtlas.boxes= "items.xml?boxs2">
-    </cxAtlas>
-    -->
-    <cxLabel id="t9"
-    cxView.color="1,1,0"
-    cxLabel.cohere="true"
-    cxLabel.font="banana.ttf"
-    cxLabel.text="items.xml?exp"
-    cxLabel.size="80"/>
+    <cxClipping cxView.w="400" cxView.h="400" cxClipping.inverse="false">
+        <cxAtlas
+            cxView.cropping="false"
+            cxView.w="400"
+            cxView.h="400"
+            cxView.degrees="0"
+            cxAtlas.boxes= "items.xml?boxs">
+        </cxAtlas>
+    </cxClipping>
 </cxViewXML>

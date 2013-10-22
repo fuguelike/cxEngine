@@ -71,14 +71,14 @@ void cxSpriteSetFlipX(cxAny pview,cxBool flipx)
 {
     cxSprite this = pview;
     this->isFlipX = flipx;
-    this->super.isDirty = true;
+    cxViewSetDirty(pview, true);
 }
 
 void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
 {
     cxSprite this = pview;
     this->isFlipY = flipy;
-    this->super.isDirty = true;
+    cxViewSetDirty(pview, true);
 }
 
 //texture="res/a.xml?green.png"
@@ -89,11 +89,11 @@ void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     
     cxSprite this = mView;
     //texture
-    xmlChar *surl = cxXMLAttr("cxSprite.texture");
+    cxChar *surl = cxXMLAttr("cxSprite.texture");
     CX_RETURN(surl == NULL);
     cxChar file[128];
     cxChar key[64];
-    cxString url = cxStringCreate("%s",(cxConstChars)surl);
+    cxString url = cxStringCreate("%s",surl);
     cxInt rv = cxParseURL(url, file, key);
     CX_RETURN(rv <= 0);
     cxTexture texture = cxTextureLoadFile(file);
@@ -112,9 +112,9 @@ void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxSpriteSetFlipX(this, cxXMLReadBoolAttr(reader, "cxSprite.flipX", this->isFlipX));
     cxSpriteSetFlipY(this, cxXMLReadBoolAttr(reader, "cxSprite.flipY", this->isFlipY));
     //shader
-    xmlChar *shader = cxXMLAttr("cxSprite.shader");
+    cxChar *shader = cxXMLAttr("cxSprite.shader");
     if(shader != NULL){
-        cxSpriteSetShader(this, (cxConstChars)shader);
+        cxSpriteSetShader(this, shader);
     }
     xmlFree(shader);
 }

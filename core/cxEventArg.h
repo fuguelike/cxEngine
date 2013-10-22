@@ -12,13 +12,17 @@
 #include <json/jansson.h>
 #include "cxBase.h"
 #include "cxString.h"
+#include "cxNumber.h"
 
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxEventArg, cxObject)
     cxAny weakRef;
     json_t *json;
+    cxNumber number;
 CX_OBJECT_END(cxEventArg)
+
+cxEventArg cxEventArgNumber(cxNumber number);
 
 cxEventArg cxEventArgCreate(cxConstChars str);
 

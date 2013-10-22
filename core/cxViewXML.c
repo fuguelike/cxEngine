@@ -13,6 +13,7 @@
 #include <views/cxAtlas.h>
 #include <views/cxParticle.h>
 #include <views/cxLabel.h>
+#include <views/cxClipping.h>
 #include "cxViewXML.h"
 #include "cxHashXML.h"
 
@@ -66,6 +67,33 @@ void cxViewXMLRemove(cxAny pview,cxConstChars key)
     cxHashDel(this->items, cxHashStrKey(key));
 }
 
+void cxViewReplaceViewEvent(cxAny pview,cxAny arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxString url = cxEventArgToString(arg);
+    CX_ASSERT(url != NULL, "args error");
+    cxConstChars file = cxStringBody(url);
+    cxViewXML view = cxViewXMLCreate(file);
+    CX_ASSERT(view != NULL, "create xml view %s falied ",file);
+    cxWindowReplaceView(view);
+}
+
+void cxViewPushViewEvent(cxAny pview,cxAny arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxString url = cxEventArgToString(arg);
+    CX_ASSERT(url != NULL, "args error");
+    cxConstChars file = cxStringBody(url);
+    cxViewXML view = cxViewXMLCreate(file);
+    CX_ASSERT(view != NULL, "create xml view %s falied ",file);
+    cxWindowPushView(view);
+}
+
+void cxViewPopViewEvent(cxAny pview,cxAny arg)
+{
+    cxWindowPopView();
+}
+
 cxViewXML cxViewXMLCreate(cxConstChars xml)
 {
     cxViewXML this = CX_CREATE(cxViewXML);
@@ -81,7 +109,7 @@ static void cxViewXMLSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader)
     cxConstChars id = (cxConstChars)cxXMLAttr("id");
     CX_RETURN(id == NULL);
     cxHashKey key = cxHashStrKey(id);
-    CX_ASSERT(cxHashGet(this->items, key) == NULL, "reapeat view id");
+    CX_ASSERT(cxHashGet(this->items, key) == NULL, "reapeat view id %s",id);
     cxHashSet(this->items, key, cview);
     cxObjectSetRoot(cview, this);
 }
@@ -115,6 +143,8 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
                 cview = CX_CREATE(cxParticle);
             }else if(ELEMENT_IS_TYPE(cxLabel)){
                 cview = CX_CREATE(cxLabel);
+            }else if(ELEMENT_IS_TYPE(cxClipping)){
+                cview = CX_CREATE(cxClipping);
             }else{
                 cview = CX_METHOD_GET(NULL, this->Make,(cxConstChars)temp,reader);
             }
@@ -163,6 +193,7 @@ cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
         cxObjectSetXMLReadRun(xmlView, xmlView, xmlView, reader);
         cxStackPush(stack, xmlView);
         CX_EVENT_FIRE(xmlView, onLoad);
+        
         cxViewXMLLoadSubviews(xmlView,reader, stack);
         cxStackPop(stack);
         cxAutoPoolPop();

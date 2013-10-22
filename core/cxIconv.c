@@ -79,8 +79,7 @@ CX_OBJECT_TERM(cxIconv, cxObject)
 cxString cxIconvConvert(const cxString string,cxConstChars from,cxConstChars to)
 {
     cxIconv this = cxIconvInstance();
-    cxChar key[128]={0};
-    snprintf(key, 128, "%s->%s",from,to);
+    CX_CONST_STRING(key, "%s->%s",from,to);
     cxIconvItem item = cxHashGet(this->caches, cxHashStrKey(key));
     if(item == NULL){
         item = cxIconvItemCreate(from,to);

@@ -95,11 +95,17 @@ void cxOpenGLSetBlendFactor(GLenum sfactor, GLenum dfactor);
 
 void cxOpenGLActiveAttribs(cxUInt flags);
 
-void cxOpenGLSetScissor(const cxBox4f box);
+void cxOpenGLEnableScissor(const cxRect4f rect);
 
 void cxOpenGLDisableScissor();
 
 void cxOpenGLClear();
+
+void cxDrawClippingRect(const cxVec2f pos,cxSize2f size);
+
+void cxDrawSolidRect(const cxRect4f rect,const cxColor4f color,cxConstChars skey);
+
+void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars skey);
 
 void cxDrawLineBox(const cxBoxVec2f *box,const cxColor3f color);
 

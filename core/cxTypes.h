@@ -75,6 +75,7 @@ typedef struct {
 } cxSize2f;
 #define cxSize2fv(w,h)          (cxSize2f){w,h}
 #define cxSize2fEqu(s1,s2)      (cxFloatEqu((s1).w,(s2).w) &&  cxFloatEqu((s1).h,(s2).h))
+#define cxSize2Zero(v)          (kmAlmostEqual((v).w, 0) && kmAlmostEqual((v).h, 0))
 
 typedef struct {
     kmScalar u;
@@ -108,7 +109,7 @@ typedef struct {
 typedef struct {
     cxVec2f *vs;
     cxInt num;
-}cxPolygon;
+} cxPolygon;
 
 typedef struct {
     cxVec3f lt;
@@ -170,19 +171,38 @@ cxBool cxBox2fContainPoint(const cxBoxVec2f box,const cxVec2f pos);
 
 cxBool cxPolygonContainPoint(const cxPolygon *polygon,const cxVec2f tp);
 
+typedef struct {
+    cxUInt mask;
+    cxBox4f box;
+    cxVec2f pos;
+    cxSize2f size;
+    cxBoxTex2f texbox;
+    cxColor4f color;
+} cxAtlasBoxPointType;
+
+typedef enum {
+    cxTypesAtlasBoxPoint,
+    cxTypesLangString,
+}cxTypesType;
+
 CX_OBJECT_DEF(cxTypes, cxObject)
-    cxAny kvs;
+    cxTypesType type;
+    cxAny kvs;          //cxHash
     UT_array *utArray;
     cxAny assist;
 CX_OBJECT_END(cxTypes)
 
-cxTypes cxBoxPointTypesCreate();
+cxTypes cxAtlasBoxPointTypesCreate();
+
+cxTypes cxLangStringTypesCreate();
+
+#define cxTypesLength(a)    utarray_len((a)->utArray)
 
 #define cxTypesAppend(a,v)  utarray_push_back((a)->utArray,&(v))
 
-void cxTypesAppendKeyValue(cxTypes this,cxConstChars key,cxAny value);
+cxAny cxTypesGet(cxTypes this,cxConstChars key);
 
-cxAny cxTypesValue(cxTypes this,cxConstChars key);
+void cxTypesSet(cxTypes this,cxConstChars key,cxAny value);
 
 #define CX_TYPES_FOREACH(a,t,e) \
 t *e = NULL; \

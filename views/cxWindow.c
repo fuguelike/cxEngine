@@ -59,6 +59,7 @@ void cxWindowReplaceView(cxAny pview)
     cxView top = cxStackTop(engine->window->views);
     if(top != NULL){
         cxViewRemoved(top);
+        cxStackPop(engine->window->views);
     }
     cxStackPush(engine->window->views, pview);
     cxViewAppend(engine->window, pview);

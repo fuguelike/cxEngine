@@ -46,6 +46,13 @@ cxEventArg cxEventArgCreate(cxConstChars str)
     return this;
 }
 
+cxEventArg cxEventArgNumber(cxNumber number)
+{
+    cxEventArg this = CX_CREATE(cxEventArg);
+    CX_RETAIN_SWAP(this->number, number);
+    return this;
+}
+
 cxBool cxEventArgToBool(cxEventArg this)
 {
     CX_ASSERT(this->json != NULL, "args error");

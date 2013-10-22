@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxShader.h"
 #include "cxTexture.h"
 
 CX_OBJECT_INIT(cxTexCoord, cxObject)
@@ -88,6 +89,40 @@ cxSize2f cxTextureSize(cxTexture this,cxConstChars key)
     rv.w = texCoord->w;
     rv.h = texCoord->h;
     return rv;
+}
+
+void cxDrawClippingTexture(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey)
+{
+    cxTextureDraw(this, pos, size, tkey, "cxShaderClipping");
+}
+
+void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey,cxConstChars skey)
+{
+    cxBoxVec3f vbox;
+    cxFloat wh = size.w / 2.0f;
+    cxFloat hh = size.h / 2.0f;
+    vbox.lb = cxVec3fv(pos.x - wh, pos.y - hh, 0);
+    vbox.lt = cxVec3fv(pos.x - wh, pos.y + hh, 0);
+    vbox.rb = cxVec3fv(pos.x + wh, pos.y - hh, 0);
+    vbox.rt = cxVec3fv(pos.x + wh, pos.y + hh, 0);
+    cxBoxColor4f cbox = {
+        cxColor4fv(1, 1, 1, 1),
+        cxColor4fv(1, 1, 1, 1),
+        cxColor4fv(1, 1, 1, 1),
+        cxColor4fv(1, 1, 1, 1)
+    };
+    cxBoxTex2f tbox = cxBoxTex2fDefault();
+    if(tkey != NULL){
+        tbox = cxTextureBox(this, tkey);
+    }
+    cxTextureBind(this);
+    cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    cxOpenGLUsingShader(skey);
+    cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
+    glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), &vbox);
+    glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTexCoord2f), &tbox);
+    glVertexAttribPointer(cxVertexAttribColor,    4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), &cbox);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 void cxTextureBind(cxTexture this)

@@ -36,6 +36,12 @@ void cxViewXMLRemove(cxAny pview,cxConstChars key);
 
 cxAny cxViewXMLGet(cxAny pview,cxConstChars key);
 
+void cxViewReplaceViewEvent(cxAny pview,cxAny arg);
+
+void cxViewPushViewEvent(cxAny pview,cxAny arg);
+
+void cxViewPopViewEvent(cxAny pview,cxAny arg);
+
 cxBool cxViewXMLLoad(cxAny pview,cxConstChars xml);
 
 cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader);

@@ -37,18 +37,18 @@ static void cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr 
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxRotate this = mAction;
-    xmlChar *sx = cxXMLAttr("cxRotate.x");
-    xmlChar *sy = cxXMLAttr("cxRotate.y");
-    xmlChar *sz = cxXMLAttr("cxRotate.z");
+    cxChar *sx = cxXMLAttr("cxRotate.x");
+    cxChar *sy = cxXMLAttr("cxRotate.y");
+    cxChar *sz = cxXMLAttr("cxRotate.z");
     if(sx != NULL){
         this->raxis = cxVec3fv(1.0f, 0.0f, 0.0f);
-        this->newRadians = kmDegreesToRadians(atof((cxConstChars)sx));
+        this->newRadians = kmDegreesToRadians(atof(sx));
     }else if(sy != NULL){
         this->raxis = cxVec3fv(0.0f, 1.0f, 0.0f);
-        this->newRadians = kmDegreesToRadians(atof((cxConstChars)sy));
+        this->newRadians = kmDegreesToRadians(atof(sy));
     }else if(sz != NULL){
         this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
-        this->newRadians = kmDegreesToRadians(atof((cxConstChars)sz));
+        this->newRadians = kmDegreesToRadians(atof(sz));
     }
     xmlFree(sx);
     xmlFree(sy);

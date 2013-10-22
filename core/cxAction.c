@@ -29,6 +29,8 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     if(curve != NULL){
         CX_METHOD_SET(this->Curve, curve->func);
     }
+    //
+    cxActionSetScale(this, cxXMLReadFloatAttr(reader, "cxAction.scale", this->scale));
     //actionId
     cxActionSetId(this, cxXMLReadIntAttr(reader, "cxAction.id", this->actionId));
     //event
@@ -38,6 +40,12 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     if(cxXMLReadBoolAttr(reader, "cxAction.forever", false)){
         CX_METHOD_SET(this->Exit, cxActionForever);
     }
+}
+
+cxAny cxActionInverse(cxAny pav)
+{
+    cxAction this = pav;
+    return CX_METHOD_GET(NULL, this->Inverse, pav);
 }
 
 CX_OBJECT_INIT(cxAction, cxObject)
@@ -79,6 +87,12 @@ void cxActionSetDuration(cxAny pav,cxFloat time)
 {
     cxAction this = pav;
     this->duration = time;
+}
+
+void cxActionSetScale(cxAny pav,cxFloat scale)
+{
+    cxAction this = pav;
+    this->scale = scale;
 }
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)

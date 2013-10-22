@@ -21,11 +21,11 @@ CX_OBJECT_FREE(cxXMLScript, cxObject)
 }
 CX_OBJECT_TERM(cxXMLScript, cxObject)
 
-xmlChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name)
+cxChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name)
 {
     xmlChar *txt = xmlTextReaderGetAttribute(reader, BAD_CAST(name));
     if(txt != NULL && xmlStrlen(txt) > 0){
-        return txt;
+        return (cxChar *)txt;
     }
     xmlFree(txt);
     return NULL;
@@ -36,9 +36,9 @@ xmlChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name)
 cxEventItem cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader)
 {
     //xml view event event(arg)
-    xmlChar *eventName = cxXMLAttr(name);
+    cxChar *eventName = cxXMLAttr(name);
     CX_RETURN(eventName == NULL,NULL);
-    cxConstChars ptr = (cxConstChars)eventName;
+    cxConstChars ptr = eventName;
     cxInt len = (cxInt)strlen(ptr) + 1;
     cxInt lpos = 0;
     cxInt rpos = 0;
@@ -92,9 +92,9 @@ cxVec2f cxXMLReadVec2fAttr(xmlTextReaderPtr reader,cxConstChars name,cxVec2f val
 
 cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat value)
 {
-    xmlChar *svalue = cxXMLAttr(name);
+    cxChar *svalue = cxXMLAttr(name);
     if(svalue != NULL){
-        value = atof((cxConstChars)svalue);
+        value = atof(svalue);
         xmlFree(svalue);
     }
     return value;
@@ -102,9 +102,9 @@ cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat val
 
 cxInt cxXMLReadFloatsAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat *values)
 {
-    xmlChar *svalue = cxXMLAttr(name);
+    cxChar *svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL,0);
-    cxConstChars ptr = (cxConstChars)svalue;
+    cxConstChars ptr = svalue;
     cxInt len = (cxInt)strlen(ptr) + 1;
     cxInt argLen = 0;
     cxChar arg[16]={0};
@@ -131,11 +131,16 @@ cxColor4f cxXMLReadColorAttr(xmlTextReaderPtr reader,cxConstChars name,cxColor4f
     return color;
 }
 
+cxChar *cxXMLReadString(xmlTextReaderPtr reader)
+{
+    return (cxChar *)xmlTextReaderReadString(reader);
+}
+
 cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt value)
 {
-    xmlChar *svalue = cxXMLAttr(name);
+    cxChar *svalue = cxXMLAttr(name);
     if(svalue != NULL){
-        value = atoi((cxConstChars)svalue);
+        value = atoi(svalue);
     }
     xmlFree(svalue);
     return value;
@@ -144,11 +149,11 @@ cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt value)
 cxBool cxXMLReadBoolAttr(xmlTextReaderPtr reader,cxConstChars name,cxBool value)
 {
     cxBool ret = value;
-    xmlChar *svalue = cxXMLAttr(name);
+    cxChar *svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL,ret);
-    if(xmlStrcasecmp(svalue, BAD_CAST"true") == 0){
+    if(strcasecmp(svalue, "true") == 0){
         ret = true;
-    }else if(xmlStrcasecmp(svalue, BAD_CAST"false") == 0){
+    }else if(strcasecmp(svalue, "false") == 0){
         ret = false;
     }else{
         CX_ERROR("bool value is true or false");

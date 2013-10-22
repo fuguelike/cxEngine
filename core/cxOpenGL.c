@@ -9,7 +9,7 @@
 #include <shaders/cxShaderPositionColor.h>
 #include <shaders/cxShaderDefault.h>
 #include <shaders/cxShaderAlpha.h>
-
+#include <shaders/cxShaderClipping.h>
 #include "cxUtil.h"
 #include "cxOpenGL.h"
 
@@ -30,6 +30,7 @@ static void cxOpenGLLoadDefaultShaders()
     CX_OPENGL_LOAD_SHADER(cxShaderPositionColor);
     CX_OPENGL_LOAD_SHADER(cxShaderDefault);
     CX_OPENGL_LOAD_SHADER(cxShaderAlpha);
+    CX_OPENGL_LOAD_SHADER(cxShaderClipping);
 }
 
 void cxDrawLineBox(const cxBoxVec2f *box,const cxColor3f color)
@@ -49,6 +50,34 @@ void cxDrawLineLoop(const cxVec2f *vertices,int num,const cxColor3f color)
     cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 2, 0, vertices);
     cxOpenGLVertexAttribPointer(cxVertexAttribColor, 3, 0, colors);
     cxOpenGLDrawArrays(GL_LINE_LOOP, 0, num);
+}
+
+void cxDrawClippingRect(const cxVec2f pos,cxSize2f size)
+{
+    cxDrawSolidRect(cxRect4fv(pos.x, pos.y, size.w, size.h), cxColor4fv(1, 1, 1, 1), "cxShaderDefault");
+}
+
+void cxDrawSolidRect(const cxRect4f rect,const cxColor4f color,cxConstChars skey)
+{
+    cxBoxVec3f box;
+    cxFloat wh = rect.w / 2.0f;
+    cxFloat hh = rect.h / 2.0f;
+    box.lb = cxVec3fv(rect.x - wh, rect.y - hh, 0);
+    box.lt = cxVec3fv(rect.x - wh, rect.y + hh, 0);
+    box.rb = cxVec3fv(rect.x + wh, rect.y - hh, 0);
+    box.rt = cxVec3fv(rect.x + wh, rect.y + hh, 0);
+    cxDrawSolidBox(&box, color, skey);
+}
+
+void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars skey)
+{
+    cxColor4f colors[4] = {color,color,color,color};
+    cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    cxOpenGLUsingShader(skey);
+    cxOpenGLActiveAttribs(cxVertexAttribFlagPosition|cxVertexAttribFlagColor);
+    glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), box);
+    glVertexAttribPointer(cxVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), colors);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 void cxOpenGLUsingShader(cxConstChars key)
@@ -80,10 +109,10 @@ void cxOpenGLViewport(const cxBox4f box)
     glViewport(box.l, box.t, box.r - box.l, box.b - box.t);
 }
 
-void cxOpenGLSetScissor(const cxBox4f box)
+void cxOpenGLEnableScissor(const cxRect4f rect)
 {
     glEnable(GL_SCISSOR_TEST);
-    glScissor(box.l, box.t, box.r - box.l, box.b - box.t);
+    glScissor(rect.x, rect.y, rect.w, rect.h);
 }
 
 void cxOpenGLSetTexParameter(GLuint type,GLuint value)

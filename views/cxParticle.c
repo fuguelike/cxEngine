@@ -19,10 +19,10 @@ void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxParticleInit(this, number);
     
     //mode add multiply
-    xmlChar *smode = cxXMLAttr("cxParticle.blend");
-    if(xmlStrcasecmp(smode, BAD_CAST"add") == 0){
+    cxChar *smode = cxXMLAttr("cxParticle.blend");
+    if(strcasecmp(smode, "add") == 0){
         this->blend = cxParticleBlendAdd;
-    }else if(xmlStrcasecmp(smode, BAD_CAST"multiple") == 0){
+    }else if(strcasecmp(smode, "multiple") == 0){
         this->blend = cxParticleBlendMultiply;
     }
     xmlFree(smode);

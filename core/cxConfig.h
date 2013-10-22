@@ -234,6 +234,8 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_BREAK(cond)            if(cond)break
 
+#define CX_CONST_STRING(n,...)            cxChar n[128]={0};snprintf(n, 128, ##__VA_ARGS__)
+
 //define with extend
 #define CX_OBJECT_DEF(_t_,_b_)    CX_OBJECT_BEG(_t_) struct _b_ super;
 
