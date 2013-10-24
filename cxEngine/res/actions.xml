@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<cxActionXML
-        cxActionXML.type="sequence"
-        cxActionXML.onLoad="actionsLoad"
-        cxAction.onAfter="cxLogger('sequence over')"
-        cxAction.onBefore="cxLogger('sequence begin')">
+<cxActionXML cxActionXML.type="sequence">
         <cxMove id="move"
             cxAction.speed="1.0"
             cxAction.time="1.5"
@@ -16,15 +12,14 @@
             cxAction.time="1.5"
             cxRotate.z="360"/>
         <cxScale id="scale2"
-            cxAction.id="123"
+            cxAction.id="t1"
             cxAction.speed="1.0"
-            cxAction.time="1.5"
-            cxScale.x="3.3"
-            cxScale.y="3.3"/>
+            cxAction.time="0.1"
+            cxScale.x="1.3"
+            cxScale.y="1.3"/>
         <cxScale id="scale3"
-            cxAction.id="123"
             cxAction.speed="1.0"
-            cxAction.time="1.5"
-            cxScale.x="1.1"
+            cxAction.time="0.1"
+            cxScale.x="1.0"
             cxScale.y="1.0"/>
 </cxActionXML>

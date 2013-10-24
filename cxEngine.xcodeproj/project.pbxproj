@@ -75,7 +75,7 @@
 		83319AD0180D416A007953BB /* candy.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83319AC7180D416A007953BB /* candy.xml */; };
 		83319AD1180D416A007953BB /* orange.png in Resources */ = {isa = PBXBuildFile; fileRef = 83319AC8180D416A007953BB /* orange.png */; };
 		83319AD2180D416A007953BB /* main.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83319AC9180D416A007953BB /* main.xml */; };
-		83319AD3180D416A007953BB /* view2.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83319ACA180D416A007953BB /* view2.xml */; };
+		83319AD3180D416A007953BB /* particle.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83319ACA180D416A007953BB /* particle.xml */; };
 		8331BA7717F45EE600A94AE2 /* cxBase.c in Sources */ = {isa = PBXBuildFile; fileRef = 8331BA7617F45EE600A94AE2 /* cxBase.c */; };
 		8331BA9417F46FB800A94AE2 /* aabb.c in Sources */ = {isa = PBXBuildFile; fileRef = 8331BA7917F46FB800A94AE2 /* aabb.c */; };
 		8331BA9517F46FB800A94AE2 /* aabb.c in Sources */ = {isa = PBXBuildFile; fileRef = 8331BA7917F46FB800A94AE2 /* aabb.c */; };
@@ -163,7 +163,6 @@
 		8334045917F92961000D7237 /* cpSweep1D.c in Sources */ = {isa = PBXBuildFile; fileRef = 8334041E17F92961000D7237 /* cpSweep1D.c */; };
 		8334045A17F92961000D7237 /* cpVect.c in Sources */ = {isa = PBXBuildFile; fileRef = 8334041F17F92961000D7237 /* cpVect.c */; };
 		8334045B17F92961000D7237 /* cpVect.c in Sources */ = {isa = PBXBuildFile; fileRef = 8334041F17F92961000D7237 /* cpVect.c */; };
-		833B5981181904A40018557A /* cxItem.c in Sources */ = {isa = PBXBuildFile; fileRef = 833B597F181904A40018557A /* cxItem.c */; };
 		8340AC92180E594D00250FCF /* cxActionXML.c in Sources */ = {isa = PBXBuildFile; fileRef = 8340AC8E180E594D00250FCF /* cxActionXML.c */; };
 		8340AC93180E594D00250FCF /* cxViewXML.c in Sources */ = {isa = PBXBuildFile; fileRef = 8340AC90180E594D00250FCF /* cxViewXML.c */; };
 		8351ACD81814BCFE0046E3C7 /* simsun.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351ACD71814BCFE0046E3C7 /* simsun.ttf */; };
@@ -205,6 +204,7 @@
 		83E3A1851813F6E2006D8388 /* cxShaderAlpha.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E3A1831813F6E2006D8388 /* cxShaderAlpha.c */; };
 		83EB47FA180ACD7D00F4B8B3 /* cxButton.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EB47F8180ACD7D00F4B8B3 /* cxButton.c */; };
 		83EBCE5118118F8E00DFC958 /* cxParticle.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EBCE4F18118F8E00DFC958 /* cxParticle.c */; };
+		83F5565E181941FD009B9589 /* action.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83F5565D181941FD009B9589 /* action.xml */; };
 		83F6CE3617F3B5F00037558A /* cxString.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F6CE3417F3B5F00037558A /* cxString.c */; };
 		83F72FAF1817FC3500734ED1 /* button.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83F72FAE1817FC3500734ED1 /* button.xml */; };
 		83F86AB21808DF6500BB6C38 /* cxTextureFactory.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F86AB01808DF6500BB6C38 /* cxTextureFactory.c */; };
@@ -326,7 +326,7 @@
 		83319AC7180D416A007953BB /* candy.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = candy.xml; sourceTree = "<group>"; };
 		83319AC8180D416A007953BB /* orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = orange.png; sourceTree = "<group>"; };
 		83319AC9180D416A007953BB /* main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = main.xml; sourceTree = "<group>"; };
-		83319ACA180D416A007953BB /* view2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = view2.xml; sourceTree = "<group>"; };
+		83319ACA180D416A007953BB /* particle.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = particle.xml; sourceTree = "<group>"; };
 		8331BA7617F45EE600A94AE2 /* cxBase.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxBase.c; sourceTree = "<group>"; };
 		8331BA7917F46FB800A94AE2 /* aabb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aabb.c; sourceTree = "<group>"; };
 		8331BA7A17F46FB800A94AE2 /* aabb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aabb.h; sourceTree = "<group>"; };
@@ -412,8 +412,6 @@
 		8334041F17F92961000D7237 /* cpVect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cpVect.c; sourceTree = "<group>"; };
 		8334042017F92961000D7237 /* cpVect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpVect.h; sourceTree = "<group>"; };
 		8334042117F92961000D7237 /* prime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = prime.h; sourceTree = "<group>"; };
-		833B597F181904A40018557A /* cxItem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxItem.c; sourceTree = "<group>"; };
-		833B5980181904A40018557A /* cxItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxItem.h; sourceTree = "<group>"; };
 		8340AC8E180E594D00250FCF /* cxActionXML.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxActionXML.c; sourceTree = "<group>"; };
 		8340AC8F180E594D00250FCF /* cxActionXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxActionXML.h; sourceTree = "<group>"; };
 		8340AC90180E594D00250FCF /* cxViewXML.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxViewXML.c; sourceTree = "<group>"; };
@@ -477,6 +475,7 @@
 		83EB47F9180ACD7D00F4B8B3 /* cxButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxButton.h; sourceTree = "<group>"; };
 		83EBCE4F18118F8E00DFC958 /* cxParticle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxParticle.c; sourceTree = "<group>"; };
 		83EBCE5018118F8E00DFC958 /* cxParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxParticle.h; sourceTree = "<group>"; };
+		83F5565D181941FD009B9589 /* action.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = action.xml; sourceTree = "<group>"; };
 		83F6CE3417F3B5F00037558A /* cxString.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxString.c; sourceTree = "<group>"; };
 		83F6CE3517F3B5F00037558A /* cxString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxString.h; sourceTree = "<group>"; };
 		83F72FAE1817FC3500734ED1 /* button.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = button.xml; sourceTree = "<group>"; };
@@ -593,8 +592,6 @@
 				83E3A1691813B792006D8388 /* cxLabel.h */,
 				83FAB5801816054800458BD9 /* cxTable.c */,
 				83FAB5811816054800458BD9 /* cxTable.h */,
-				833B597F181904A40018557A /* cxItem.c */,
-				833B5980181904A40018557A /* cxItem.h */,
 				830BED041816B5390077A049 /* cxClipping.c */,
 				830BED051816B5390077A049 /* cxClipping.h */,
 			);
@@ -640,6 +637,7 @@
 		83319AC1180D416A007953BB /* res */ = {
 			isa = PBXGroup;
 			children = (
+				83F5565D181941FD009B9589 /* action.xml */,
 				83F72FAE1817FC3500734ED1 /* button.xml */,
 				8351ACD71814BCFE0046E3C7 /* simsun.ttf */,
 				83E3A17E1813DC95006D8388 /* banana.ttf */,
@@ -653,7 +651,7 @@
 				83319AC7180D416A007953BB /* candy.xml */,
 				83319AC8180D416A007953BB /* orange.png */,
 				83319AC9180D416A007953BB /* main.xml */,
-				83319ACA180D416A007953BB /* view2.xml */,
+				83319ACA180D416A007953BB /* particle.xml */,
 			);
 			path = res;
 			sourceTree = "<group>";
@@ -1009,9 +1007,10 @@
 				8351ACD81814BCFE0046E3C7 /* simsun.ttf in Resources */,
 				8312AC021812C39800DD8476 /* items.xml in Resources */,
 				83F72FAF1817FC3500734ED1 /* button.xml in Resources */,
-				83319AD3180D416A007953BB /* view2.xml in Resources */,
+				83319AD3180D416A007953BB /* particle.xml in Resources */,
 				839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */,
 				839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */,
+				83F5565E181941FD009B9589 /* action.xml in Resources */,
 				83319ACF180D416A007953BB /* candy.pvr in Resources */,
 				83319AD2180D416A007953BB /* main.xml in Resources */,
 				83319ACC180D416A007953BB /* 4.pvr in Resources */,
@@ -1127,7 +1126,6 @@
 				83FF165A17F331F400DBFA3A /* cxStack.c in Sources */,
 				830AB120180C3FA900CC5346 /* cxXMLScript.c in Sources */,
 				8340AC93180E594D00250FCF /* cxViewXML.c in Sources */,
-				833B5981181904A40018557A /* cxItem.c in Sources */,
 				8334043E17F92961000D7237 /* cpBB.c in Sources */,
 				8334045417F92961000D7237 /* cpSpaceStep.c in Sources */,
 				830770F1180FD738001BAEED /* cxNumber.c in Sources */,

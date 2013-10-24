@@ -115,9 +115,7 @@ static void cxViewXMLSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader)
     cxViewXML this = pview;
     cxChar *id = cxXMLAttr("id");
     CX_RETURN(id == NULL);
-    cxHashKey key = cxHashStrKey(id);
-    CX_ASSERT(cxHashGet(this->items, key) == NULL, "reapeat view id %s",id);
-    cxHashSet(this->items, key, cview);
+    cxHashSet(this->items, cxHashStrKey(id), cview);
     xmlFree(id);
 }
 

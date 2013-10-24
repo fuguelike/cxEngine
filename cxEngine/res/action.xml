@@ -2,22 +2,26 @@
 
 <!--TextureKey at *.xml file use-->
 <cxViewXML cxView.fill="true">
+    
+    <cxSprite id="sprite" cxSprite.texture="candy.xml?green.png"/>
+    
     <cxButton
         cxView.w = "230"
         cxView.h = "130"
         cxView.left="10"
         cxView.bottom="10"
-        cxButton.onPress="cxPushView('particle.xml')">
+        cxButton.onPress="cxActionRun({'src':'actions.xml','target':'sprite'})">
         <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-        <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="items.xml?exp" cxLabel.size="50"/>
+        <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Action" cxLabel.size="50"/>
     </cxButton>
+    
     <cxButton
         cxView.w = "230"
         cxView.h = "130"
         cxView.right="10"
         cxView.bottom="10"
-        cxButton.onPress="cxPushView('action.xml')">
+        cxButton.onPress="cxPopView">
         <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-        <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Action" cxLabel.size="50"/>
+        <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="50"/>
     </cxButton>
 </cxViewXML>
