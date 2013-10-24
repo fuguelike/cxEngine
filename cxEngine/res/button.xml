@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--TextureKey at *.xml file use-->
+<cxViewXML cxView.w="250" cxView.h="120">
+    <cxButton id="btn"
+        cxView.fill="true"
+        cxButton.onPress="cxPopView">
+        <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+        <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Push" cxLabel.size="60"/>
+    </cxButton>
+</cxViewXML>

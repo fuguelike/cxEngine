@@ -32,6 +32,8 @@ CX_OBJECT_DEF(cxActionXML, cxAction)
     CX_EVENT_ALLOC(onLoad);
 CX_OBJECT_END(cxActionXML)
 
+cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader);
+
 void cxActionXMLRunNext(cxAny pav);
 
 void cxActionXMLRunAll(cxAny pav);
@@ -42,15 +44,13 @@ cxBool cxActionXMLLoadWithReader(cxAny pav,xmlTextReaderPtr reader);
 
 cxBool cxActionXMLLoad(cxAny pav,cxConstChars xml);
 
-cxAny cxActionXMLClone(cxConstChars xml,cxConstChars name);
+cxAny cxActionXMLGet(cxConstChars xml,cxConstChars name);
 
 cxAny cxActionXMLCreate(cxConstChars xml);
 
 void cxActionXMLSet(cxAny xmlAction,cxAny mAction,xmlTextReaderPtr reader);
 
 void cxViewRunActionEvent(cxAny pview,cxAny arg);
-
-void cxActionRunActionEvent(cxAny pav,cxAny arg);
 
 void cxActionRemoveViewEvent(cxAny pav,cxAny arg);
 

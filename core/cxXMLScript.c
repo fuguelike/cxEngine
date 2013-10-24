@@ -146,6 +146,23 @@ cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt value)
     return value;
 }
 
+cxString cxXMLReadLangStringAttr(xmlTextReaderPtr reader,cxConstChars name)
+{
+    cxString rv = NULL;
+    cxChar *value = cxXMLAttr(name);
+    if(value != NULL){
+        cxChar src[128]={0};
+        cxChar key[128]={0};
+        if(cxParseURL(cxStringConstChars(value), src, key) == 2){
+            rv = cxEngineLangText(src, key);
+        }else{
+            rv = cxStringConstChars(value);
+        }
+    }
+    xmlFree(value);
+    return rv;
+}
+
 cxBool cxXMLReadBoolAttr(xmlTextReaderPtr reader,cxConstChars name,cxBool value)
 {
     cxBool ret = value;

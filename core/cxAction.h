@@ -21,8 +21,6 @@ typedef cxBool (*cxActionIsExitFunc)(cxAny pav);
 
 typedef void (*cxActionFunc)(cxAny pav);
 
-typedef cxAny (*cxActionCloneFunc)(cxAny pav);
-
 CX_OBJECT_DEF(cxAction, cxObject)
     cxUInt actionId;
     cxFloat scale;
@@ -41,13 +39,9 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_METHOD_DEF(cxActionFunc,         Over);
     CX_METHOD_DEF(cxActionStepFunc,     Step);
     CX_METHOD_DEF(cxActionIsExitFunc,   Exit);
-    CX_METHOD_DEF(cxActionCloneFunc,    Clone);
-    CX_METHOD_DEF(cxActionCloneFunc,    Inverse);
     CX_EVENT_ALLOC(onBefore);
     CX_EVENT_ALLOC(onAfter);
 CX_OBJECT_END(cxAction)
-
-cxAny cxActionInverse(cxAny pav);
 
 cxBool cxActionForever(cxAny pav);
 
@@ -56,8 +50,6 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 void cxActionSetDuration(cxAny pav,cxFloat time);
 
 void cxActionSetScale(cxAny pav,cxFloat scale);
-
-cxAny cxActionClone(cxAny pav);
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve);
 

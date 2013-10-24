@@ -14,25 +14,13 @@ void cxLabelXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxSpriteXMLReadAttr(xmlView, mView, reader);
     cxLabel this = mView;
-    //
-    cxChar *font = cxXMLAttr("cxLabel.font");
-    if(font != NULL){
-        cxLabelSetFont(mView, cxStringConstChars(font));
-    }
-    xmlFree(font);
-    //
-    cxChar *text = cxXMLAttr("cxLabel.text");
-    if(text != NULL){
-        cxChar file[128]={0};
-        cxChar key[128]={0};
-        if(cxParseURL(cxStringConstChars(text), file, key) == 2){
-            cxLabelSetText(mView, cxEngineLangText(file, key));
-        }else{
-            cxLabelSetText(mView, cxStringConstChars(text));
-        }
-    }
-    xmlFree(text);
-    //
+    //set font
+    cxString font = cxXMLReadLangStringAttr(reader, "cxLabel.font");
+    cxLabelSetFont(mView, font);
+    //set text
+    cxString text = cxXMLReadLangStringAttr(reader, "cxLabel.text");
+    cxLabelSetText(mView, text);
+    //set fontsize
     cxLabelSetFontSize(mView, cxXMLReadFloatAttr(reader, "cxLabel.size", this->attr.size));
 }
 

@@ -121,11 +121,9 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->frameInterval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->contentScaleFactor = 1.0f;
-    this->lang = cxStringAllocChars("zh");
     this->window = CX_ALLOC(cxWindow);
     this->scripts = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
-    this->actions = CX_ALLOC(cxHash);
     this->curve = CX_ALLOC(cxCurve);
     this->datasets = CX_ALLOC(cxHash);
 }
@@ -134,7 +132,6 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->lang);
     CX_RELEASE(this->datasets);
     CX_RELEASE(this->curve);
-    CX_RELEASE(this->actions);
     CX_RELEASE(this->events);
     CX_RELEASE(this->scripts);
     
@@ -156,11 +153,17 @@ cxStack cxEngineAutoStack()
     return cxEngineInstance()->autoStack;
 }
 
+void cxEngineSetLocalLang(cxString lang)
+{
+    cxEngine this = cxEngineInstance();
+    CX_RETAIN_SWAP(this->lang, lang);
+}
+
 cxEngine cxEngineInstance()
 {
     if(instance == NULL) {
         instance = CX_ALLOC(cxEngine);
-        cxEngineRegisteSystemEvent();
+        cxEngineSystemInit();
     }
     return instance;
 }
@@ -177,12 +180,16 @@ void cxEngineDestroy()
 void cxEngineRegisteEvent(cxConstChars name,cxEventFunc func)
 {
     cxEngine this = cxEngineInstance();
-    cxEventItem event = cxHashGet(this->events, cxHashStrKey(name));
-    CX_ASSERT(event == NULL, "name %s event registered",name);
-    event = CX_ALLOC(cxEventItem);
-    event->func = func;
-    cxHashSet(this->events, cxHashStrKey(name), event);
-    CX_RELEASE(event);
+    if(func == NULL){
+        cxHashDel(this->events, cxHashStrKey(name));
+    }else{
+        cxEventItem event = cxHashGet(this->events, cxHashStrKey(name));
+        CX_ASSERT(event == NULL, "name %s event registered",name);
+        event = CX_ALLOC(cxEventItem);
+        event->func = func;
+        cxHashSet(this->events, cxHashStrKey(name), event);
+        CX_RELEASE(event);
+    }
 }
 
 cxEventItem cxEngineGetEvent(cxConstChars name)
@@ -191,10 +198,12 @@ cxEventItem cxEngineGetEvent(cxConstChars name)
     return cxHashGet(this->events, cxHashStrKey(name));
 }
 
-void cxEngineRegisteSystemEvent()
+void cxEngineSystemInit()
 {
-    cxEngineRegisteEvent("cxViewRun", cxViewRunActionEvent);
-    cxEngineRegisteEvent("cxActionRun", cxActionRunActionEvent);
+    //set locate lang
+    cxEngineSetLocalLang(cxStringConstChars("en"));//cxLocaleLang());
+    //register global event
+    cxEngineRegisteEvent("cxActionRun", cxViewRunActionEvent);
     cxEngineRegisteEvent("cxPlay", cxPlaySoundEvent);
     cxEngineRegisteEvent("cxLogger", cxPrintMessageEvent);
     cxEngineRegisteEvent("cxActionRemoveView", cxActionRemoveViewEvent);
@@ -272,41 +281,33 @@ cxTypes cxEngineDataSet(cxConstChars url)
 cxString cxEngineLangText(cxConstChars xml,cxConstChars key)
 {
     cxEngine this = cxEngineInstance();
+    CX_ASSERT(this->lang != NULL, "system not set locate lang");
     CX_CONST_STRING(url,"%s?%s",xml,cxStringBody(this->lang));
     cxTypes types = cxEngineDataSet(url);
     CX_RETURN(types == NULL || types->type != cxTypesLangString, NULL);
     return cxTypesGet(types, key);
 }
 
-cxAny cxEngineLoadActionXML(cxConstChars file)
-{
-    cxEngine this = cxEngineInstance();
-    cxActionXML action = cxHashGet(this->actions, cxHashStrKey(file));
-    CX_RETURN(action != NULL,action);
-    //
-    action = CX_ALLOC(cxActionXML);
-    if(cxActionXMLLoad(action, file)){
-        cxHashSet(this->actions, cxHashStrKey(file), action);
-    }
-    CX_RELEASE(action);
-    return action;
-}
-
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
 {
     cxEngine this = cxEngineInstance();
-    double now = cxTimestamp();
+    cxDouble time = cxTimestamp();
     cxVec2f cpos = cxGLPointToWindowPoint(pos);
     if(type == cxTouchTypeDown){
+        this->touch.movement = cxVec2fv(0, 0);
         this->touch.delta = cxVec2fv(0, 0);
         this->touch.previous = cpos;
+        this->touch.dtime = time;
     }else if(type == cxTouchTypeMove){
         this->touch.delta = cxVec2fv(cpos.x - this->touch.previous.x, cpos.y - this->touch.previous.y);
         this->touch.previous = cpos;
+        this->touch.movement.x += this->touch.delta.x;
+        this->touch.movement.y += this->touch.delta.y;
+    }else{
+        this->touch.utime = time;
     }
     this->touch.current = cpos;
     this->touch.type = type;
-    this->touch.timestamp = now;
     return cxViewTouch(this->window, &this->touch);
 }
 

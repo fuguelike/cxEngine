@@ -42,6 +42,7 @@ typedef void (*cxViewFunc)(cxAny pview);
 typedef cxBool (*cxViewTouchFunc)(cxAny pview,const cxTouch *touch);
 
 CX_OBJECT_DEF(cxView, cxObject)
+    cxAny args;
     cxViewAutoResizeVar resizeVar;
     cxHash actions;
     cxInt zorder;
@@ -80,6 +81,10 @@ CX_OBJECT_END(cxView)
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 
 cxVec2f cxViewPosition(cxAny pview);
+
+void cxViewSetArgs(cxAny pview,cxAny args);
+
+cxAny cxViewArgs(cxAny pview);
 
 cxSize2f cxViewSize(cxAny pview);
 
@@ -125,11 +130,19 @@ cxVec2f cxWindowPointToGLPoint(const cxVec2f wPoint);
 
 cxVec2f cxGLPointToWindowPoint(const cxVec2f glPoint);
 
+cxVec2f cxViewPointToGLPoint(cxAny pview,const cxVec2f pos);
+
+cxVec2f cxGLPointToViewPoint(cxAny pview,const cxVec2f pos);
+
 cxVec2f cxViewPointToWindowPoint(cxAny pview,const cxVec2f vPoint);
 
 cxVec2f cxWindowPointToViewPoint(cxAny pview,const cxVec2f glPoint);
 
 void cxViewSetBox(cxAny pview, const cxBoxVec2f box);
+
+void cxViewSetAutoResizeBox(cxAny pview,const cxBox4f box);
+
+void cxViewSetAutoResizeMask(cxAny pview,cxViewAutoResizeMask mask);
 
 void cxViewSetSize(cxAny pview,const cxSize2f size);
 

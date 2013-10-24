@@ -29,6 +29,7 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
     cxInt height = font->face->size->metrics.height >> 6;
     cxInt width = 0;
     cxArray list = CX_CREATE(cxArray);
+    //get texture width and height
     cxFreeFontChar slast = NULL;
     cxFreeFontChar sfirst = NULL;
     for(int i=0; i < cxStringLength(unicode);i += 2){
@@ -44,29 +45,29 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
         cxArrayAppend(list, slast);
         width += (slast->ax >> 16);
     }
-    if(slast != NULL){
-        width += slast->left;
-    }
     cxInt x = 0;
     cxInt y = 0;
+    if(sfirst != NULL && sfirst->left < 0){
+        width -= sfirst->left;
+        x -= sfirst->left;
+    }
+    if(slast != NULL && slast->left > 0){
+        width += slast->left;
+    }
+    //merage text
     cxInt bytes = width * height;
     cxChar *buffer = allocator->calloc(1,bytes);
-    sfirst = NULL;
-    slast = NULL;
     CX_ARRAY_FOREACH(list, element){
-        slast = cxArrayObject(element);
-        y = height - slast->top + des;
-        for(register int i=0;i<slast->height;i++){
-            for(register int j=0; j < slast->width;j++){
-                cxChar *src = slast->data + i * slast->width + j;
-                cxChar *dst = buffer + (i + y) * width + x + slast->left + j;
+        cxFreeFontChar pchar = cxArrayObject(element);
+        y = height - pchar->top + des;
+        for(register int i=0;i<pchar->height;i++){
+            for(register int j=0; j < pchar->width;j++){
+                cxChar *src = pchar->data + i * pchar->width + j;
+                cxChar *dst = buffer + (i + y) * width + x + pchar->left + j;
                 if(*src)*dst = *src;
             }
         }
-        if(sfirst == NULL){
-            sfirst = slast;
-        }
-        x += (slast->ax >> 16);
+        x += (pchar->ax >> 16);
     }
     texture->super.hasAlpha = true;
     texture->super.size = cxSize2fv(width, height);

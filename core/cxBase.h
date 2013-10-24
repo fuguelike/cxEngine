@@ -172,15 +172,6 @@ do{                                                             \
     }                                                           \
 }while(0)
 
-
-#define CX_EVENT_CLONE(_src_,_event_,_dst_)                     \
-do{                                                             \
-    cxEvent *_ele_ = NULL;                                      \
-    DL_FOREACH(_src_->_event_, _ele_){                          \
-        CX_EVENT_APPEND(_dst_->_event_,_ele_->func,_ele_->arg); \
-    }                                                           \
-}while(0)
-
 void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars format,va_list ap);
 
 //调试信息输出

@@ -27,7 +27,6 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash events;
     cxHash scripts;
-    cxHash actions;
     cxHash datasets;
     cxCurve curve;
     cxStack autoStack;
@@ -64,13 +63,13 @@ cxXMLScript cxEngineGetXMLScript(cxConstChars file);
 
 cxCurveItem cxEngineGetCurve(cxConstChars name);
 
-cxAny cxEngineLoadActionXML(cxConstChars file);
+void cxEngineSetLocalLang(cxString lang);
 
 cxTypes cxEngineDataSet(cxConstChars url);
 
 cxString cxEngineLangText(cxConstChars xml,cxConstChars key);
 
-void cxEngineRegisteSystemEvent();
+void cxEngineSystemInit();
 
 //
 extern cxBool cxEngineInit(cxEngine engine);

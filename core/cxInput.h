@@ -27,7 +27,9 @@ typedef struct {
     cxVec2f delta;
     cxVec2f current;
     cxTouchType type;
-    cxDouble timestamp;
+    cxVec2f movement;
+    cxDouble dtime;
+    cxDouble utime;
 }cxTouch;
 
 CX_C_END

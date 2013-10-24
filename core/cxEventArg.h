@@ -18,13 +18,18 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxEventArg, cxObject)
     cxAny weakRef;
+    cxAny strongRef;
     json_t *json;
     cxNumber number;
 CX_OBJECT_END(cxEventArg)
 
 cxEventArg cxEventArgNumber(cxNumber number);
 
-cxEventArg cxEventArgCreate(cxConstChars str);
+cxEventArg cxEventArgCreate(cxConstChars json);
+
+cxEventArg cxEventArgStrongRef(cxAny strongRef);
+
+cxAny cxEventArgToStrongRef(cxEventArg this);
 
 cxEventArg cxEventArgWeakRef(cxAny weakRef);
 

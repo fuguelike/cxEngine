@@ -2,12 +2,13 @@
 
 <!--TextureKey at *.xml file use-->
 <cxViewXML cxView.fill="true">
+    
     <cxParticle
     cxSprite.texture="candy.xml?blue.png"
     cxView.cropping="false"
     cxView.w = "200"
     cxView.h = "100"
-    cxParticle.number = "100"
+    cxParticle.number = "500"
     cxParticle.blend = "multiple"
     cxParticle.duration = "-1"
     cxParticle.life = "5,5"
@@ -20,14 +21,15 @@
     cxParticle.endsize = "30"
     cxParticle.startcolor="1,1,1,1"
     cxParticle.endcolor="1,1,1,0"
-    cxParticle.rate = "100" />
+    cxParticle.rate = "200" />
+    
     <cxButton
-        cxView.w = "200"
-        cxView.h = "90"
-        cxView.right="0"
-        cxView.bottom="0"
+        cxView.w = "230"
+        cxView.h = "130"
+        cxView.right="10"
+        cxView.bottom="10"
         cxButton.onPress="cxPopView">
-        <cxAtlas cxView.fill="true" cxAtlas.scale9="10,10,10,10" cxSprite.texture="scale9.png" />
-        <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Pop" cxLabel.size="70"/>
+        <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+        <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="50"/>
     </cxButton>
 </cxViewXML>

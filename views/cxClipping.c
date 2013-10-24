@@ -7,6 +7,7 @@
 //
 
 #include <core/cxOpenGL.h>
+#include <core/cxViewXML.h>
 #include "cxClipping.h"
 
 static GLuint cxUseLayer = 0;
@@ -51,8 +52,10 @@ void cxClippingSetInverse(cxAny pview,cxBool inverse)
 void cxClippingXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxViewXMLReadAttr(xmlView, mView, reader);
+    cxViewXML xml = xmlView;
     cxClipping this = mView;
     cxClippingSetInverse(this, cxXMLReadBoolAttr(reader, "cxClipping.inverse", this->inverse));
+    cxXMLAppendEvent(xml->events, this, cxClipping, onClipping);
 }
 
 static void cxClippingDrawAfter(cxAny pview)

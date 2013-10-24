@@ -13,7 +13,7 @@ static void cxRotateInit(cxAny pav)
     cxRotate this = pav;
     CX_ASSERT(this->super.view != NULL, "view not set");
     this->oldRadians = this->super.view->radians;
-    this->delta = this->newRadians;
+    this->delta = this->newRadians - this->oldRadians;
     cxViewSetRaxis(this->super.view, this->raxis);
 }
 
@@ -22,15 +22,6 @@ static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
     cxRotate this = pav;
     cxFloat radians = this->oldRadians + this->delta * time;
     cxViewSetRadians(this->super.view, radians);
-}
-
-static cxAny cxRotateClone(cxAny pav)
-{
-    cxRotate this = pav;
-    cxRotate rv = CX_CREATE(cxRotate);
-    rv->raxis = this->raxis;
-    rv->newRadians = this->newRadians;
-    return rv;
 }
 
 static void cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
@@ -61,7 +52,6 @@ CX_OBJECT_INIT(cxRotate, cxAction)
     cxObjectSetXMLReadFunc(this, cxRotateXMLReadAttr);
     CX_METHOD_SET(this->super.Init, cxRotateInit);
     CX_METHOD_SET(this->super.Step, cxRotateStep);
-    CX_METHOD_SET(this->super.Clone, cxRotateClone);
 }
 CX_OBJECT_FREE(cxRotate, cxAction)
 {

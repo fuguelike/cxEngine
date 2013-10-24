@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
-<cxViewXML cxView.fill="true" cxViewXML.onLoad="viewLoad">
+<cxViewXML cxView.fill="true">
 
     <cxButton id="t3"
-        cxView.w = "200"
-        cxView.h = "90"
-        cxView.right="0"
-        cxView.bottom="0"
-        cxView.onEnter="cxLogger('button t2 enter')"
-        cxView.onExit="cxLogger('button t2 exit')"
-        cxButton.onPress="cxPushView('view2.xml')" >
-        <cxAtlas cxView.fill="true" cxAtlas.scale9="10,10,10,10" cxSprite.texture="scale9.png" />
-        <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Push" cxLabel.size="70"/>
+        cxView.w = "230"
+        cxView.h = "130"
+        cxView.right="10"
+        cxView.bottom="10"
+        cxButton.onPress="cxPushView('view2.xml')">
+        <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+        <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="items.xml?exp" cxLabel.size="50"/>
     </cxButton>
-    
+
     <!--
     <cxParticle
             cxSprite.texture="candy.xml?green.png"
@@ -35,7 +33,7 @@
             cxParticle.endcolor="1,1,1,1,0,0,0,0"
             cxParticle.rate = "100" />
      -->
-    <cxClipping cxView.w="400" cxView.h="400" cxClipping.inverse="false">
+    <cxClipping cxView.w="400" cxView.h="400" cxClipping.inverse="true">
         <cxAtlas
             cxView.cropping="false"
             cxView.w="400"

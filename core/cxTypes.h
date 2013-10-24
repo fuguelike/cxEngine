@@ -34,6 +34,7 @@ typedef kmVec2 cxVec2f;
 #define cxVec2fv(x,y)           (cxVec2f){x,y}
 #define cxVec2fEqu(p1,p2)       (cxFloatEqu((p1).x,(p2).x) && cxFloatEqu((p1).y,(p2).y))
 #define cxVec2fAngle(a)         atan2f((a).y, (a).x)
+#define cxVec2fMagnitude(a)     sqrtf((a).x*(a).x + (a).y*(a).y)
 
 typedef kmVec3 cxVec3f;
 #define cxVec3fv(x,y,z)         (cxVec3f){x,y,z}
@@ -196,9 +197,11 @@ cxTypes cxAtlasBoxPointTypesCreate();
 
 cxTypes cxLangStringTypesCreate();
 
-#define cxTypesLength(a)    utarray_len((a)->utArray)
+#define cxTypesLength(a)        utarray_len((a)->utArray)
 
-#define cxTypesAppend(a,v)  utarray_push_back((a)->utArray,&(v))
+#define cxTypesAppend(a,v)      utarray_push_back((a)->utArray,&(v))
+
+#define cxTypesIndex(a,t,i)     (*((t *)utarray_eltptr((a)->utArray,i)))
 
 cxAny cxTypesGet(cxTypes this,cxConstChars key);
 

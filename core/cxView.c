@@ -163,8 +163,15 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_EVENT_RELEASE(this->onLayout);
     CX_RELEASE(this->subViews);
     CX_RELEASE(this->actions);
+    CX_RELEASE(this->args);
 }
 CX_OBJECT_TERM(cxView, cxObject)
+
+void cxViewSetArgs(cxAny pview,cxAny args)
+{
+    cxView this = pview;
+    CX_RETAIN_SWAP(this->args, args);
+}
 
 cxVec2f cxViewPosition(cxAny pview)
 {
@@ -176,6 +183,12 @@ cxSize2f cxViewSize(cxAny pview)
 {
     cxView this = pview;
     return this->size;
+}
+
+cxAny cxViewArgs(cxAny pview)
+{
+    cxView this = pview;
+    return this->args;
 }
 
 cxColor4f cxViewColor(cxAny pview)
@@ -191,10 +204,8 @@ cxRect4f cxViewGLRect(cxAny pview)
     cxFloat hh = this->size.h/2.0f;
     cxVec2f p1 = cxVec2fv(-wh, hh);
     cxVec2f p2 = cxVec2fv(wh, -hh);
-    p1 = cxViewPointToWindowPoint(pview, p1);
-    p2 = cxViewPointToWindowPoint(pview, p2);
-    p1 = cxWindowPointToGLPoint(p1);
-    p2 = cxWindowPointToGLPoint(p2);
+    p1 = cxViewPointToGLPoint(pview, p1);
+    p2 = cxViewPointToGLPoint(pview, p2);
     return cxRect4fv(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 }
 
@@ -202,6 +213,18 @@ void cxViewSetTop(cxAny pview,cxBool top)
 {
     cxView this = pview;
     this->isTop = top;
+}
+
+void cxViewSetAutoResizeBox(cxAny pview,const cxBox4f box)
+{
+    cxView this = pview;
+    this->resizeVar.box = box;
+}
+
+void cxViewSetAutoResizeMask(cxAny pview,cxViewAutoResizeMask mask)
+{
+    cxView this = pview;
+    this->resizeVar.mask = mask;
 }
 
 void cxViewSetDirty(cxAny pview,cxBool dirty)
@@ -236,6 +259,18 @@ cxVec2f cxGLPointToWindowPoint(const cxVec2f glPoint)
     cxFloat x = glPoint.x - engine->winsize.w / 2.0f;
     cxFloat y = engine->winsize.h / 2.0f - glPoint.y;
     return cxVec2fv(x, y);
+}
+
+cxVec2f cxViewPointToGLPoint(cxAny pview,const cxVec2f pos)
+{
+    cxVec2f ret = cxViewPointToWindowPoint(pview, pos);
+    return cxWindowPointToGLPoint(ret);
+}
+
+cxVec2f cxGLPointToViewPoint(cxAny pview,const cxVec2f pos)
+{
+    cxVec2f ret = cxGLPointToWindowPoint(pos);
+    return cxWindowPointToViewPoint(pview,ret);
 }
 
 cxVec2f cxViewPointToWindowPoint(cxAny pview,const cxVec2f vPoint)

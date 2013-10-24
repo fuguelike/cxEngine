@@ -17,7 +17,7 @@
 
 CX_C_BEGIN
 
-typedef cxAny (*cxXMLScriptMakeElementFunc)(cxConstChars name,xmlTextReaderPtr reader);
+typedef cxAny (*cxXMLScriptMakeElementFunc)(const xmlChar *temp,xmlTextReaderPtr reader);
 
 typedef cxBool (*cxXMLScriptLoadFunc)(cxAny pview);
 
@@ -47,6 +47,8 @@ cxChar *cxXMLReadString(xmlTextReaderPtr reader);
 cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat value);
 
 cxColor4f cxXMLReadColorAttr(xmlTextReaderPtr reader,cxConstChars name,cxColor4f color);
+
+cxString cxXMLReadLangStringAttr(xmlTextReaderPtr reader,cxConstChars name);
 
 cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt value);
 

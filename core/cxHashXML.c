@@ -20,6 +20,7 @@ cxTypes cxHashXMLReadAtlasBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
         CX_ERROR("boxPoint must set textfile at cxBoxPoint node");
         return NULL;
     }
+    cxInt index = 0;
     types->assist = cxStringAllocChars(texfile);
     int depth = xmlTextReaderDepth(reader);
     while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
@@ -81,12 +82,13 @@ cxTypes cxHashXMLReadAtlasBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
         cxChar *skey = cxXMLAttr("key");
         if(skey != NULL){
             item.texbox = cxTextureBox(texture, skey);
+            cxTypesSet(types, skey, cxNumberInt(index));
         }
         if(skey != NULL && cxSize2Zero(item.size)){
             item.size = cxTextureSize(texture, skey);
         }
         xmlFree(skey);
-        
+        index ++;
         cxTypesAppend(types, item);
     }
     return types;
@@ -104,9 +106,13 @@ cxTypes cxHashXMLReadLangString(xmlTextReaderPtr reader)
         if(!ELEMENT_IS_TYPE(item)){
             continue;
         }
-        cxChar *skey = cxXMLAttr("key");
+        cxChar *skey = cxXMLAttr("name");
         cxChar *svalue = cxXMLReadString(reader);
-        cxTypesSet(types, skey, svalue);
+        if(skey != NULL && svalue != NULL){
+            cxString string = cxStringAllocChars(svalue);
+            cxTypesSet(types, skey, string);
+            CX_RELEASE(string);
+        }
         xmlFree(svalue);
         xmlFree(skey);
     }

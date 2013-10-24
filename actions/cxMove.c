@@ -27,14 +27,6 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPosition(this->super.view, npos);
 }
 
-static cxAny cxMoveClone(cxAny pav)
-{
-    cxMove this = pav;
-    cxMove rv = CX_CREATE(cxMove);
-    rv->newPos = this->newPos;
-    return rv;
-}
-
 static void cxMoveXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
@@ -48,7 +40,6 @@ CX_OBJECT_INIT(cxMove, cxAction)
     cxObjectSetXMLReadFunc(this, cxMoveXMLReadAttr);
     CX_METHOD_SET(this->super.Init, cxMoveInit);
     CX_METHOD_SET(this->super.Step, cxMoveStep);
-    CX_METHOD_SET(this->super.Clone, cxMoveClone);
 }
 CX_OBJECT_FREE(cxMove, cxAction)
 {

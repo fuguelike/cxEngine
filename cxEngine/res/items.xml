@@ -14,6 +14,11 @@
         <item top="0" left="0" w="50" h="50" key="green.png" color="1,1,1,1" />
     </cxAtlasBoxPoint>
     <cxLangString id="zh">
-        <item key="exp">China is Chinese</item>
+        <item name="font">simsun.ttf</item>
+        <item name="exp">粒子系统</item>
+    </cxLangString>
+    <cxLangString id="en">
+        <item name="font">banana.ttf</item>
+        <item name="exp">Particle</item>
     </cxLangString>
 </cxHashXML>

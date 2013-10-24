@@ -42,12 +42,6 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     }
 }
 
-cxAny cxActionInverse(cxAny pav)
-{
-    cxAction this = pav;
-    return CX_METHOD_GET(NULL, this->Inverse, pav);
-}
-
 CX_OBJECT_INIT(cxAction, cxObject)
 {
     cxObjectSetXMLReadFunc(this, cxActionXMLReadAttr);
@@ -60,28 +54,6 @@ CX_OBJECT_FREE(cxAction, cxObject)
     CX_EVENT_RELEASE(this->onBefore);
 }
 CX_OBJECT_TERM(cxAction, cxObject)
-
-cxAny cxActionClone(cxAny pav)
-{
-    CX_ASSERT(pav != NULL, "pav arg null");
-    cxAction this = pav;
-    cxAction rv = CX_METHOD_GET(NULL, this->Clone, pav);
-    CX_ASSERT(rv != NULL, "action clone failed");
-    //clone event
-    CX_EVENT_CLONE(this, onBefore, rv);
-    CX_EVENT_CLONE(this, onAfter, rv);
-    //clone method
-    rv->scale = this->scale;
-    rv->duration = this->duration;
-    rv->actionId = this->actionId;
-    rv->Init = this->Init;
-    rv->Over = this->Over;
-    rv->Step = this->Step;
-    rv->Curve = this->Curve;
-    rv->Clone = this->Clone;
-    rv->Exit = this->Exit;
-    return rv;
-}
 
 void cxActionSetDuration(cxAny pav,cxFloat time)
 {

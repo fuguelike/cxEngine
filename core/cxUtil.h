@@ -33,6 +33,8 @@ cxDouble cxTimestamp();
 
 cxULong cxNextPot(cxULong x);
 
+cxString cxLocaleLang();
+
 CX_C_END
 
 #endif

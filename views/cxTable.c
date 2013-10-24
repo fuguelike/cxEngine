@@ -7,13 +7,14 @@
 //
 
 #include "cxTable.h"
+#include "cxItem.h"
 
-CX_OBJECT_INIT(cxTable, cxObject)
+CX_OBJECT_INIT(cxTable, cxView)
+{
+    this->super.isCropping = true;
+}
+CX_OBJECT_FREE(cxTable, cxView)
 {
     
 }
-CX_OBJECT_FREE(cxTable, cxObject)
-{
-
-}
-CX_OBJECT_TERM(cxTable, cxObject)
+CX_OBJECT_TERM(cxTable, cxView)

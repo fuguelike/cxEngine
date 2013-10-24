@@ -105,6 +105,7 @@ CX_OBJECT_INIT(cxActionXML, cxAction)
     CX_METHOD_SET(this->super.Step, cxActionXMLStep);
     cxObjectSetXMLReadFunc(this, cxActionRootXMLReadAttr);
     CX_METHOD_SET(this->super.Exit, cxActionXMLExit);
+    CX_METHOD_SET(this->Make, cxActionXMLMakeElement);
     this->actions = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
     this->items = CX_ALLOC(cxArray);
@@ -136,23 +137,33 @@ void cxActionXMLSet(cxAny xmlAction,cxAny mAction,xmlTextReaderPtr reader)
     cxObjectSetRoot(mAction,this);
 }
 
+cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
+{
+    cxAction action = NULL;
+    if(ELEMENT_IS_TYPE(cxMove)){
+        action = (cxAction)CX_CREATE(cxMove);
+    }else if(ELEMENT_IS_TYPE(cxScale)){
+        action = (cxAction)CX_CREATE(cxScale);
+    }else if(ELEMENT_IS_TYPE(cxRotate)){
+        action = (cxAction)CX_CREATE(cxRotate);
+    }else{
+        CX_ERROR("action xml can't create type %s",temp);
+    }
+    return action;
+}
+
 static void cxActionXMLLoadActions(cxActionXML this,xmlTextReaderPtr reader)
 {
     while(xmlTextReaderRead(reader)){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
+        //
         const xmlChar *temp = xmlTextReaderConstName(reader);
-        cxAction action = NULL;
-        if(ELEMENT_IS_TYPE(cxMove)){
-            action = (cxAction)CX_CREATE(cxMove);
-        }else if(ELEMENT_IS_TYPE(cxScale)){
-            action = (cxAction)CX_CREATE(cxScale);
-        }else if(ELEMENT_IS_TYPE(cxRotate)){
-            action = (cxAction)CX_CREATE(cxRotate);
-        }else{
-            action = CX_METHOD_GET(NULL, this->Make,(cxConstChars)temp,reader);
+        if(temp == NULL){
+            continue;
         }
+        cxAction action = CX_METHOD_GET(NULL, this->Make,temp,reader);
         if(action == NULL){
             CX_ERROR("load actions null");
             continue;
@@ -192,19 +203,12 @@ void cxActionRemoveViewEvent(cxAny pav,cxAny arg)
     cxViewRemoved(this->view);
 }
 
-void cxActionRunActionEvent(cxAny pav,cxAny arg)
-{
-    cxAction this = pav;
-    cxViewRunActionEvent(this->view, arg);
-}
-
-
 //need register
 void cxViewRunActionEvent(cxAny pview,cxAny arg)
 {
     cxView this = pview;
     CX_RETURN(arg == NULL);
-    cxString url = cxEventArgString(arg,"file");
+    cxString url = cxEventArgString(arg,"src");
     CX_RETURN(url == NULL);
     cxChar file[128];
     cxChar key[128];
@@ -221,12 +225,7 @@ void cxViewRunActionEvent(cxAny pview,cxAny arg)
 
 cxAction cxActionXMLAttachView(cxAny pview,cxConstChars xml,cxConstChars key)
 {
-    cxAny action = NULL;
-    if(key == NULL){
-        action = cxActionXMLCreate(xml);
-    }else{
-        action = cxActionXMLClone(xml, key);
-    }
+    cxAny action = cxActionXMLGet(xml, key);
     CX_RETURN(action == NULL, NULL);
     cxViewAppendAction(pview, action);
     return action;
@@ -292,13 +291,11 @@ cxAny cxActionXMLCreate(cxConstChars xml)
     return this;
 }
 
-cxAny cxActionXMLClone(cxConstChars xml,cxConstChars name)
+cxAny cxActionXMLGet(cxConstChars xml,cxConstChars name)
 {
-    cxActionXML xmlAction = cxEngineLoadActionXML(xml);
-    CX_RETURN(xmlAction == NULL,NULL);
-    cxAction acton = cxHashGet(xmlAction->actions, cxHashStrKey(name));
-    CX_RETURN(acton == NULL,NULL);
-    return cxActionClone(acton);
+    cxActionXML this = cxActionXMLCreate(xml);
+    CX_RETURN(name == NULL, this);
+    return cxHashGet(this->actions, cxHashStrKey(name));
 }
 
 

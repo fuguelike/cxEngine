@@ -14,6 +14,9 @@ CX_OBJECT_INIT(cxEventArg, cxObject)
 }
 CX_OBJECT_FREE(cxEventArg, cxObject)
 {
+    if(this->strongRef != NULL){
+        CX_RELEASE(this->strongRef);
+    }
     if(this->json != NULL){
         json_decref(this->json);
     }
@@ -33,12 +36,25 @@ cxEventArg cxEventArgWeakRef(cxAny weakRef)
     return this;
 }
 
-cxEventArg cxEventArgCreate(cxConstChars str)
+cxAny cxEventArgToStrongRef(cxEventArg this)
 {
-    CX_RETURN(str == NULL,NULL);
+    CX_RETURN(this == NULL,NULL);
+    return this->strongRef;
+}
+
+cxEventArg cxEventArgStrongRef(cxAny strongRef)
+{
+    cxEventArg this = CX_CREATE(cxEventArg);
+    CX_RETAIN_SWAP(this->strongRef, strongRef);
+    return this;
+}
+
+cxEventArg cxEventArgCreate(cxConstChars json)
+{
+    CX_RETURN(json == NULL,NULL);
     cxEventArg this = CX_CREATE(cxEventArg);
     json_error_t error = {0};
-    this->json = json_loadb(str, strlen(str), JSON_DECODE_ANY, &error);
+    this->json = json_loadb(json, strlen(json), JSON_DECODE_ANY, &error);
     if(this->json == NULL){
         CX_ERROR("event json arg decode error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
         return NULL;

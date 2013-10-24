@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <libxml/xmlreader.h>
+#include <core/cxXMLScript.h>
 #include <streams/cxAssetsStream.h>
 #include "cxTextureXML.h"
 #include "cxTextureFactory.h"
@@ -34,15 +34,15 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         if(xmlStrcmp(temp, BAD_CAST"TextureAtlas") != 0){
             continue;
         }
-        xmlChar *swidth = xmlTextReaderGetAttribute(reader, BAD_CAST"width");
-        xmlChar *sheight = xmlTextReaderGetAttribute(reader, BAD_CAST"height");
-        xmlChar *simagePath = xmlTextReaderGetAttribute(reader, BAD_CAST"imagePath");
+        cxChar *swidth = cxXMLAttr("width");
+        cxChar *sheight = cxXMLAttr("height");
+        cxChar *simagePath = cxXMLAttr("imagePath");
         if(swidth != NULL && sheight != NULL && simagePath != NULL){
             xml->innerTexture = cxTextureLoadFile((cxConstChars)simagePath);
             ret = (xml->innerTexture != NULL);
             CX_RETAIN(xml->innerTexture);
-            xml->super.size.w = atof((cxConstChars)swidth);
-            xml->super.size.h = atof((cxConstChars)sheight);
+            xml->super.size.w = atof(swidth);
+            xml->super.size.h = atof(sheight);
         }
         xmlFree(swidth);
         xmlFree(sheight);
@@ -61,36 +61,36 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
                 continue;
             }
             cxTexCoord e = CX_ALLOC(cxTexCoord);
-            xmlChar *sn = xmlTextReaderGetAttribute(reader, BAD_CAST"n");
-            xmlChar *sr = xmlTextReaderGetAttribute(reader, BAD_CAST"r");
+            cxChar *sn = cxXMLAttr("n");
+            cxChar *sr = cxXMLAttr("r");
             e->isRotation = sr != NULL;
             
-            xmlChar *sx = xmlTextReaderGetAttribute(reader, BAD_CAST"x");
-            e->x = sx != NULL ? atof((cxConstChars)sx) : 0;
+            cxChar *sx = cxXMLAttr("x");
+            e->x = sx != NULL ? atof(sx) : 0;
             
-            xmlChar *sox = xmlTextReaderGetAttribute(reader, BAD_CAST"oX");
-            e->oX = sox != NULL ? atof((cxConstChars)sox) : 0;
+            cxChar *sox = cxXMLAttr("oX");
+            e->oX = sox != NULL ? atof(sox) : 0;
             
-            xmlChar *sy = xmlTextReaderGetAttribute(reader, BAD_CAST"y");
-            e->y = sy != NULL ? atof((cxConstChars)sy) : 0;
+            cxChar *sy = cxXMLAttr("y");
+            e->y = sy != NULL ? atof(sy) : 0;
             
-            xmlChar *soy = xmlTextReaderGetAttribute(reader, BAD_CAST"oY");
-            e->oY = soy != NULL ? atof((cxConstChars)soy) : 0;
+            cxChar *soy = cxXMLAttr("oY");
+            e->oY = soy != NULL ? atof(soy) : 0;
             
-            xmlChar *sw = xmlTextReaderGetAttribute(reader, BAD_CAST"w");
-            e->w = sw != NULL ? atof((cxConstChars)sw) : 0;
+            cxChar *sw = cxXMLAttr("w");
+            e->w = sw != NULL ? atof(sw) : 0;
             
-            xmlChar *sow = xmlTextReaderGetAttribute(reader, BAD_CAST"oW");
-            e->oW = sow != NULL ? atof((cxConstChars)sow) : 0;
+            cxChar *sow = cxXMLAttr("oW");
+            e->oW = sow != NULL ? atof(sow) : 0;
             
-            xmlChar *sh = xmlTextReaderGetAttribute(reader, BAD_CAST"h");
-            e->h = sh != NULL ? atof((cxConstChars)sh) : 0;
+            cxChar *sh = cxXMLAttr("h");
+            e->h = sh != NULL ? atof(sh) : 0;
             
-            xmlChar *soh = xmlTextReaderGetAttribute(reader, BAD_CAST"oH");
-            e->oH = soh != NULL ? atof((cxConstChars)soh) : 0;
+            cxChar *soh = cxXMLAttr("oH");
+            e->oH = soh != NULL ? atof(soh) : 0;
             
             if(sn != NULL && sx != NULL && sy != NULL && sw != NULL && sh != NULL){
-                cxHashSet(xml->super.keys, cxHashStrKey((cxConstChars)sn), e);
+                cxHashSet(xml->super.keys, cxHashStrKey(sn), e);
             }
             CX_RELEASE(e);
             xmlFree(sn);

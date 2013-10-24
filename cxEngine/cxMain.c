@@ -23,6 +23,7 @@
 #include <json/jansson.h>
 #include <views/cxAtlas.h>
 #include <views/cxParticle.h>
+#include <views/cxTable.h>
 #include <core/cxIconv.h>
 #include <core/cxFreeType.h>
 #include <views/cxLabel.h>
@@ -64,8 +65,8 @@ cxBool cxEngineInit(cxEngine engine)
 void cxEngineMain(cxEngine engine)
 {
     cxEngineDataSet("items.xml");
-    cxViewXML v = cxViewXMLCreate("view.xml");
-    cxWindowPushView(v);
+    cxViewXML v = cxViewXMLCreate("main.xml");
+    cxWindowPushView(v, NULL);
 }
 
 void cxEngineFree(cxEngine engine)

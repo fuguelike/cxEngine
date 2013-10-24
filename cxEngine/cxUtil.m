@@ -24,3 +24,13 @@ cxString cxAssetsPath(cxConstChars file)
         return cxStringCreate("%s",[path UTF8String]);
     }
 }
+
+cxString cxLocaleLang()
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
+    NSString *current = [languages objectAtIndex:0];
+    NSDictionary* temp = [NSLocale componentsFromLocaleIdentifier:current];
+    NSString * lngcode = [temp objectForKey:NSLocaleLanguageCode];
+    return cxStringCreate("%s",[lngcode UTF8String]);
+}

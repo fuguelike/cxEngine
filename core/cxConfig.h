@@ -122,7 +122,6 @@
 #include <libxml/xmlreader.h>
 
 typedef int             cxOff;
-
 typedef char            cxChar;
 typedef int             cxInt;
 typedef int             cxIndex;
@@ -134,7 +133,7 @@ typedef int64_t         cxInt64;
 
 typedef void *          cxPointer;
 typedef cxPointer       cxAny;
-typedef int          cxSize;
+typedef int             cxSize;
 
 typedef unsigned char   cxUChar;
 typedef unsigned int    cxUInt;
@@ -215,6 +214,8 @@ CX_OBJECT_BEG(cxObject)
     CX_METHOD_DEF(cxXMLReadAttrFunc,XMLReadAttr);
     cxAny cxRoot;
 CX_OBJECT_END(cxObject)
+
+cxBool cxObjectIsType(cxAny pobj,cxConstType type);
 
 void cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader);
 
