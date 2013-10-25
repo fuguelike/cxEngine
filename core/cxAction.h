@@ -34,9 +34,11 @@ CX_OBJECT_DEF(cxAction, cxObject)
     cxBool isExit;
     cxBool isPause;
     cxBool isFirst;
+    cxBool isActive;
     cxView view;
     CX_METHOD_DEF(cxActionCurveFunc,    Curve);
     CX_METHOD_DEF(cxActionFunc,         Init);
+    CX_METHOD_DEF(cxActionFunc,         Active);
     CX_METHOD_DEF(cxActionFunc,         Over);
     CX_METHOD_DEF(cxActionStepFunc,     Step);
     CX_METHOD_DEF(cxActionIsExitFunc,   Exit);

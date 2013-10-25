@@ -204,8 +204,8 @@ cxRect4f cxViewGLRect(cxAny pview)
     cxView this = pview;
     cxFloat wh = this->size.w/2.0f;
     cxFloat hh = this->size.h/2.0f;
-    cxVec2f p1 = cxVec2fv(-wh, hh);
-    cxVec2f p2 = cxVec2fv(wh, -hh);
+    cxVec2f p1 = cxVec2fv(-wh, -hh);
+    cxVec2f p2 = cxVec2fv(wh, hh);
     p1 = cxViewPointToGLPoint(pview, p1);
     p2 = cxViewPointToGLPoint(pview, p2);
     return cxRect4fv(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
@@ -251,15 +251,15 @@ cxVec2f cxWindowPointToGLPoint(const cxVec2f wPoint)
 {
     cxEngine engine = cxEngineInstance();
     cxFloat x = wPoint.x + engine->winsize.w/2.0f;
-    cxFloat y = engine->winsize.h / 2.0f - wPoint.y;
+    cxFloat y = wPoint.y + engine->winsize.h/2.0f;
     return cxVec2fv(x, y);
 }
 
 cxVec2f cxGLPointToWindowPoint(const cxVec2f glPoint)
 {
     cxEngine engine = cxEngineInstance();
-    cxFloat x = glPoint.x - engine->winsize.w / 2.0f;
-    cxFloat y = engine->winsize.h / 2.0f - glPoint.y;
+    cxFloat x = glPoint.x - engine->winsize.w/2.0f;
+    cxFloat y = glPoint.y - engine->winsize.h/2.0f;
     return cxVec2fv(x, y);
 }
 
@@ -453,6 +453,9 @@ void cxViewTransform(cxAny pview)
     kmMat4Translation(&this->anchorMatrix, x, y, 0);
     
     CX_METHOD_RUN(this->Transform,this);
+    if(this->isCropping){
+        this->scissor = cxViewGLRect(pview);
+    }
     this->isDirty = false;
 }
 
@@ -668,7 +671,7 @@ void cxViewDraw(cxAny pview)
     kmGLMultMatrix(&this->normalMatrix);
     kmGLMultMatrix(&this->anchorMatrix);
     if(this->isCropping){
-        cxOpenGLEnableScissor(cxViewGLRect(this));
+        cxOpenGLEnableScissor(this->scissor);
     }
     CX_METHOD_RUN(this->DrawBefore,this);
     CX_METHOD_RUN(this->Draw,this);

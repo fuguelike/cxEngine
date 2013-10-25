@@ -3,9 +3,9 @@
 <!--TextureKey at *.xml file use-->
 <cxViewXML cxView.fill="true">
     
-    <cxSprite id="sprite" cxView.x ="-300" cxView.y="350" cxSprite.texture="candy.xml?green.png"/>
+    <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="candy.xml?green.png"/>
     
-    <cxTable cxView.right="1" cxView.left="1" cxView.top="380" cxView.bottom="1" cxTable.space="10,10" cxTable.col="4">
+    <cxTable cxView.cropping="true" cxView.right="10" cxView.left="10" cxView.top="260" cxView.bottom="10" cxTable.space="10,10" cxTable.col="4">
         <cxButton
             cxView.w = "180"
             cxView.h = "120"

@@ -12,6 +12,7 @@
 #include <shaders/cxShaderClipping.h>
 #include "cxUtil.h"
 #include "cxOpenGL.h"
+#include "cxEngine.h"
 
 static cxOpenGL instance = NULL;
 

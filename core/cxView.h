@@ -62,6 +62,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxVec2f anchor;
     cxVec3f raxis;
     cxFloat radians;
+    cxRect4f scissor;
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
     cxColor4f color;

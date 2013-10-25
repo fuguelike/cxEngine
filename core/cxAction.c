@@ -96,6 +96,10 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         CX_METHOD_RUN(this->Init,this);
         CX_EVENT_FIRE(this, onBefore);
     }
+    if(!this->isActive){
+        this->isActive = true;
+        CX_METHOD_RUN(this->Active,this);
+    }
     this->durationElapsed += dt;
     cxFloat value = this->durationElapsed/CX_MAX(this->duration, FLT_EPSILON);
     cxFloat time = kmClamp(value, 0.0f, 1.0f);
@@ -115,6 +119,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->delayElapsed = 0.0f;
         CX_METHOD_RUN(this->Step,this,dt,1.0f);
         isExit = CX_METHOD_GET(true, this->Exit,pav);
+        this->isActive = false;
     }
 finished:
     if(this->isExit || isExit){
