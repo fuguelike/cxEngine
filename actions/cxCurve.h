@@ -26,16 +26,49 @@ CX_OBJECT_END(cxCurve)
 
 void cxCurveRegister(cxCurve this,cxConstChars name,cxActionCurveFunc func);
 
-cxFloat cxCurveCubeIn(void *pav,cxFloat time);
+cxFloat cxCurveBackIn(cxAny pav,cxFloat time);
 
-cxFloat cxCurveCubeOut(void *pav,cxFloat time);
+cxFloat cxCurveBackOut(cxAny pav,cxFloat time);
 
-cxFloat cxCurveEaseIn(void *pav,cxFloat time);
+cxFloat cxCurveBackInOut(cxAny pav,cxFloat time);
 
-cxFloat cxCurveEaseOut(void *pav,cxFloat time);
+cxFloat cxCurveBounceIn(cxAny pav,cxFloat time);
 
-cxFloat cxCurveCubeInverse(void *pav,cxFloat time);
+cxFloat cxCurveBounceOut(cxAny pav,cxFloat time);
 
+cxFloat cxCurveBounceInOut(cxAny pav,cxFloat time);
+
+cxFloat cxCurveElasticIn(cxAny pav,cxFloat time);
+
+cxFloat cxCurveElasticOut(cxAny pav,cxFloat time);
+
+cxFloat cxCurveElasticInOut(cxAny pav,cxFloat time);
+
+cxFloat cxCurveSineIn(cxAny pav,cxFloat time);
+
+cxFloat cxCurveSineOut(cxAny pav,cxFloat time);
+
+cxFloat cxCurveSineInOut(cxAny pav,cxFloat time);
+
+cxFloat cxCurveCubeIn(cxAny pav,cxFloat time);
+
+cxFloat cxCurveCubeInOut(cxAny pav,cxFloat time);
+
+cxFloat cxCurveCubeOut(cxAny pav,cxFloat time);
+
+cxFloat cxCurveEaseIn(cxAny pav,cxFloat time);
+
+cxFloat cxCurveEaseInOut(cxAny pav,cxFloat time);
+
+cxFloat cxCurveEaseOut(cxAny pav,cxFloat time);
+
+cxFloat cxCurveCubeInverse(cxAny pav,cxFloat time);
+
+cxFloat cxCurveExpIn(cxAny pav,cxFloat time);
+
+cxFloat cxCurveExpOut(cxAny pav,cxFloat time);
+
+cxFloat cxCurveExpInOut(cxAny pav,cxFloat time);
 CX_C_END
 
 #endif

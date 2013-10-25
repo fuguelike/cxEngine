@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
+
 <cxViewXML cxView.fill="true">
-    <cxButton
-        cxView.w = "230"
-        cxView.h = "130"
-        cxView.left="10"
-        cxView.bottom="10"
-        cxButton.onPress="cxPushView('particle.xml')">
-        <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-        <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="items.xml?exp" cxLabel.size="50"/>
-    </cxButton>
-    <cxButton
-        cxView.w = "230"
-        cxView.h = "130"
-        cxView.right="10"
-        cxView.bottom="10"
-        cxButton.onPress="cxPushView('action.xml')">
-        <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-        <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Action" cxLabel.size="50"/>
-    </cxButton>
+    <cxTable cxView.right="30" cxView.left="30" cxView.top="30" cxView.bottom="30" cxTable.space="10,10" cxTable.col="4">
+        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('particle.xml')">
+            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="items.xml?exp" cxLabel.size="30"/>
+        </cxButton>
+        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('action.xml')">
+            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Action" cxLabel.size="30"/>
+        </cxButton>
+    </cxTable>
 </cxViewXML>

@@ -51,9 +51,10 @@ cxEventItem cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr read
         }
     }
     //parse simple json object arg
+    cxBool hasArgs = (lpos > 0 && rpos > 0);
     cxChar eName[len];
     cxChar eArg[len];
-    if(lpos > 0 && rpos > 0){
+    if(hasArgs){
         int len = rpos - lpos - 1;
         memcpy(eArg, ptr + lpos + 1, len);
         eArg[len] = '\0';
@@ -70,15 +71,14 @@ cxEventItem cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr read
     }else{
         memcpy(eName, ptr, len);
     }
+    //get event item or from global events
     cxEventItem event = cxHashGet(events, cxHashStrKey(eName));
-    //global engine event
     if(event == NULL){
         event = cxEngineGetEvent(eName);
     }
     //set event arg
-    if(event != NULL && lpos > 0 && rpos > 0){
-        cxAny arg = cxEventArgCreate(eArg);
-        CX_RETAIN_SWAP(event->arg, arg);
+    if(event != NULL && hasArgs){
+        CX_RETAIN_SWAP(event->arg, cxEventArgCreate(eArg));
     }
     xmlFree(eventName);
     return event;
@@ -113,6 +113,30 @@ cxInt cxXMLReadFloatsAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat *val
         if(ptr[i] == ',' || ptr[i] == '\0'){
             arg[argLen] = '\0';
             cxFloat v = atof(arg);
+            c++;
+            (*values++) = v;
+            argLen = 0;
+        }else{
+            arg[argLen++] = ptr[i];
+        }
+    }
+    xmlFree(svalue);
+    return c;
+}
+
+cxInt cxXMLReadIntsAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt *values)
+{
+    cxChar *svalue = cxXMLAttr(name);
+    CX_RETURN(svalue == NULL,0);
+    cxConstChars ptr = svalue;
+    cxInt len = (cxInt)strlen(ptr) + 1;
+    cxInt argLen = 0;
+    cxChar arg[16]={0};
+    cxInt c = 0;
+    for(int i=0; i < len; i++){
+        if(ptr[i] == ',' || ptr[i] == '\0'){
+            arg[argLen] = '\0';
+            cxFloat v = atoi(arg);
             c++;
             (*values++) = v;
             argLen = 0;

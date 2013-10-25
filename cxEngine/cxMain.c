@@ -55,7 +55,7 @@ static void actionsLoad(cxAny pav,cxAny arg)
 
 cxBool cxEngineInit(cxEngine engine)
 {
-//    engine->isShowBorder = false;
+    engine->isShowBorder = false;
     cxEngineRegisteEvent("viewLoad", viewLoad);
     cxEngineRegisteEvent("view2Load", view2Load);
     cxEngineRegisteEvent("actionsLoad", actionsLoad);

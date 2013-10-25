@@ -22,6 +22,7 @@ typedef cxBool (*cxActionIsExitFunc)(cxAny pav);
 typedef void (*cxActionFunc)(cxAny pav);
 
 CX_OBJECT_DEF(cxAction, cxObject)
+    cxAssist4f assist;
     cxUInt actionId;
     cxFloat scale;
     cxFloat delay;

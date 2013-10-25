@@ -76,6 +76,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
+    CX_EVENT_ALLOC(onChanged);//subviews changed
 CX_OBJECT_END(cxView)
 
 void cxViewSetCropping(cxAny pview,cxBool cropping);

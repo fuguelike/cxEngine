@@ -130,6 +130,7 @@ void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
     cxXMLAppendEvent(xml->events, this, cxView, onUpdate);
     cxXMLAppendEvent(xml->events, this, cxView, onResize);
     cxXMLAppendEvent(xml->events, this, cxView, onLayout);
+    cxXMLAppendEvent(xml->events, this, cxView, onChanged);
 }
 
 void cxViewSetCropping(cxAny pview,cxBool cropping)
@@ -156,6 +157,7 @@ CX_OBJECT_INIT(cxView, cxObject)
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
+    CX_EVENT_RELEASE(this->onChanged);
     CX_EVENT_RELEASE(this->onEnter);
     CX_EVENT_RELEASE(this->onExit);
     CX_EVENT_RELEASE(this->onUpdate);
@@ -515,6 +517,7 @@ void cxViewAppend(cxAny pview,cxAny newview)
         cxViewEnter(new);
         cxViewLayout(new);
     }
+    CX_EVENT_FIRE(this, onChanged);
 }
 
 void cxViewAutoResizing(cxAny pview)
@@ -578,6 +581,7 @@ void cxViewRemoved(cxAny pview)
     }
     cxView parent = this->parentView;
     cxListRemove(parent->subViews, this->subElement);
+    CX_EVENT_FIRE(parent, onChanged);
     this->subElement = NULL;
     this->parentView = NULL;
 }

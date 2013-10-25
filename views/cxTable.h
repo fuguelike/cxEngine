@@ -13,9 +13,25 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxTable, cxView)
+typedef enum {
+    cxTableArrayNone,
+    cxTableArrayVertical,   //vertical
+    cxTableArrayHorizon,    //horizon
+    cxTableArrayGrid,
+}cxTableArrayType;
 
+CX_OBJECT_DEF(cxTable, cxView)
+    cxTableArrayType type;
+    cxVec2f space;
+    cxBool isArray;
+    cxVec2i grid;
 CX_OBJECT_END(cxTable)
+
+void cxTableArraySubViews(cxAny pview);
+
+void cxTableSetType(cxAny pview,cxTableArrayType type);
+
+void cxTableSetSpace(cxAny pview,cxVec2f space);
 
 CX_C_END
 

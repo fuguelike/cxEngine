@@ -30,7 +30,7 @@ static void cxFree(cxPointer ptr)
     free(ptr);
 }
 
-const cxAllocator *allocator=&(cxAllocator) {
+const cxAllocator *allocator = &(cxAllocator){
     .malloc     = cxMalloc,
     .realloc    = cxRealloc,
     .calloc     = cxCalloc,
@@ -41,7 +41,6 @@ static void cxObjectDestroy(cxAny ptr)
 {
     CX_ASSERT(ptr != NULL, "point null");
     cxObject object = (cxObject)ptr;
-    CX_ASSERT(object->cxFree != NULL, "object not need free");
     object->cxFree(object);
     cxFree(ptr);
 }
@@ -79,15 +78,12 @@ cxAny cxObjectCreate(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFun
 cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
 {
     cxAny ptr = cxCalloc(1, size);
-    CX_ASSERT(ptr != NULL, "alloc memory error");
-    
+    CX_ASSERT(ptr != NULL, "alloc memory error size=%d",size);
     cxObject object = (cxObject)ptr;
     object->cxRefcount = 1;
     object->cxType = type;
     object->cxFree = freeFunc;
-    
     initFunc(object);
-    
     return ptr;
 }
 

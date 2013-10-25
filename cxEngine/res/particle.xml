@@ -25,10 +25,10 @@
     
     <cxButton
         cxView.w = "230"
-        cxView.h = "130"
+        cxView.h = "110"
         cxView.right="10"
         cxView.bottom="10"
-        cxButton.onPress="cxPopView">
+        cxButton.onRelease="cxPopView">
         <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="50"/>
     </cxButton>

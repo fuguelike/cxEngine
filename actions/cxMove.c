@@ -13,17 +13,20 @@ static void cxMoveInit(cxAny pav)
 {
     cxMove this = pav;
     CX_ASSERT(this->super.view != NULL, "view not set");
-    this->oldPos = this->super.view->position;
-    this->delta.x = this->newPos.x - this->oldPos.x;
-    this->delta.y = this->newPos.y - this->oldPos.y;
+    this->prevPos = this->begPos = this->super.view->position;
+    kmVec2Subtract(&this->posDelta, &this->endPos, &this->begPos);
 }
 
 static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxMove this = pav;
     cxVec2f npos;
-    npos.x = this->oldPos.x + this->delta.x * time;
-    npos.y = this->oldPos.y + this->delta.y * time;
+    cxVec2f diff;
+    kmVec2Subtract(&diff, &this->super.view->position, &this->prevPos);
+    kmVec2Add(&this->begPos, &this->begPos, &diff);
+    kmVec2Scale(&npos, &this->posDelta, time);
+    kmVec2Add(&npos, &this->begPos, &npos);
+    this->prevPos = npos;
     cxViewSetPosition(this->super.view, npos);
 }
 
@@ -31,8 +34,8 @@ static void cxMoveXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr re
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxMove this = mAction;
-    this->newPos.x = cxXMLReadFloatAttr(reader, "cxMove.x", this->newPos.x);
-    this->newPos.y = cxXMLReadFloatAttr(reader, "cxMove.y", this->newPos.y);
+    this->endPos.x = cxXMLReadFloatAttr(reader, "cxMove.x", this->endPos.x);
+    this->endPos.y = cxXMLReadFloatAttr(reader, "cxMove.y", this->endPos.y);
 }
 
 CX_OBJECT_INIT(cxMove, cxAction)
@@ -47,10 +50,10 @@ CX_OBJECT_FREE(cxMove, cxAction)
 }
 CX_OBJECT_TERM(cxMove, cxAction)
 
-cxMove cxMoveCreate(cxFloat dutation, cxVec2f newpos)
+cxMove cxMoveCreate(cxFloat dutation, cxVec2f endpos)
 {
     cxMove this = CX_CREATE(cxMove);
     this->super.duration = dutation;
-    this->newPos = newpos;
+    this->endPos = endpos;
     return this;
 }

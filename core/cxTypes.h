@@ -41,6 +41,13 @@ typedef kmVec3 cxVec3f;
 #define cxVec3fEqu(p1,p2)       (cxFloatEqu((p1).x,(p2).x) && cxFloatEqu((p1).y,(p2).y) && cxFloatEqu((p1).z,(p2).z))
 
 typedef struct {
+    kmScalar v1;
+    kmScalar v2;
+    kmScalar v3;
+    kmScalar v4;
+} cxAssist4f;
+
+typedef struct {
     kmScalar r;
     kmScalar g;
     kmScalar b;

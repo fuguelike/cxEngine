@@ -40,6 +40,8 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     if(cxXMLReadBoolAttr(reader, "cxAction.forever", false)){
         CX_METHOD_SET(this->Exit, cxActionForever);
     }
+    //assist
+    cxXMLReadFloatsAttr(reader, "cxAction.assist", &this->assist.v1);
 }
 
 CX_OBJECT_INIT(cxAction, cxObject)

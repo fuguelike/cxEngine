@@ -35,15 +35,16 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
     for(int i=0; i < cxStringLength(unicode);i += 2){
         uint16_t code = *(uint16_t *)&unicode->strptr.d[i];
         cxFreeFontCharKey key = cxFontChar(code, fontsize);
-        slast = cxFreeFontLoadChar(font, key);
-        if(slast == NULL){
+        cxFreeFontChar pchar = cxFreeFontLoadChar(font, key);
+        if(pchar == NULL){
             continue;
         }
         if(sfirst == NULL){
-            sfirst = slast;
+            sfirst = pchar;
         }
-        cxArrayAppend(list, slast);
-        width += (slast->ax >> 16);
+        cxArrayAppend(list, pchar);
+        width += (pchar->ax >> 16);
+        slast = pchar;
     }
     cxInt x = 0;
     cxInt y = 0;
@@ -64,7 +65,7 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
             for(register int j=0; j < pchar->width;j++){
                 cxChar *src = pchar->data + i * pchar->width + j;
                 cxChar *dst = buffer + (i + y) * width + x + pchar->left + j;
-                if(*src)*dst = *src;
+                if(*src != 0)*dst = *src;
             }
         }
         x += (pchar->ax >> 16);

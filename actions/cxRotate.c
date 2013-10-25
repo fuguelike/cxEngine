@@ -8,12 +8,31 @@
 
 #include "cxRotate.h"
 
+static void cxRotateFixRadians(cxAny pav)
+{
+    cxRotate this = pav;
+    cxFloat start = kmRadiansToDegrees(this->oldRadians);
+    if (start > 0){
+        start = fmodf(start, 360.0f);
+    }else{
+        start = fmodf(start, -360.0f);
+    }
+    cxFloat delta = kmRadiansToDegrees(this->newRadians) - start;
+    if (delta > 180){
+        delta -= 360;
+    }
+    if (delta < -180){
+        delta += 360;
+    }
+    this->delta = kmDegreesToRadians(delta);
+}
+
 static void cxRotateInit(cxAny pav)
 {
     cxRotate this = pav;
     CX_ASSERT(this->super.view != NULL, "view not set");
     this->oldRadians = this->super.view->radians;
-    this->delta = this->newRadians - this->oldRadians;
+    cxRotateFixRadians(pav);
     cxViewSetRaxis(this->super.view, this->raxis);
 }
 

@@ -8,11 +8,14 @@
 
 #include <core/cxEngine.h>
 #include <core/cxAutoPool.h>
+#include <actions/cxMove.h>
+#include <actions/cxScale.h>
+#include <actions/cxRotate.h>
+#include <actions/cxJump.h>
+#include <actions/cxFade.h>
+#include <actions/cxTint.h>
 #include "cxViewXML.h"
 #include "cxActionXML.h"
-#include "cxMove.h"
-#include "cxScale.h"
-#include "cxRotate.h"
 
 static void cxActionRootXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
@@ -146,6 +149,12 @@ cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
         action = (cxAction)CX_CREATE(cxScale);
     }else if(ELEMENT_IS_TYPE(cxRotate)){
         action = (cxAction)CX_CREATE(cxRotate);
+    }else if(ELEMENT_IS_TYPE(cxJump)){
+        action = (cxAction)CX_CREATE(cxJump);
+    }else if(ELEMENT_IS_TYPE(cxFade)){
+        action = (cxAction)CX_CREATE(cxFade);
+    }else if(ELEMENT_IS_TYPE(cxTint)){
+        action = (cxAction)CX_CREATE(cxTint);
     }else{
         CX_ERROR("action xml can't create type %s",temp);
     }
@@ -214,13 +223,23 @@ void cxViewRunActionEvent(cxAny pview,cxAny arg)
     cxChar key[128];
     cxInt rv = cxParseURL(url, file, key);
     CX_RETURN(rv == 0);
-    cxAny target = pview;
-    cxString starget = cxEventArgString(arg,"target");
-    if(starget != NULL){
-        target = cxViewXMLGet(this, cxStringBody(starget));
+    //get view by id
+    cxAny view = pview;
+    cxString sview = cxEventArgString(arg,"view");
+    if(sview != NULL){
+        view = cxViewXMLGet(this, cxStringBody(sview));
     }
-    CX_RETURN(target == NULL);
-    cxActionXMLAttachView(target, file, rv == 2 ? key : NULL);
+    CX_RETURN(view == NULL);
+    //get action
+    cxAny action = cxActionXMLGet(file, rv == 2 ? key : NULL);
+    CX_RETURN(action == NULL);
+    //get corve
+    cxString scurve = cxEventArgString(arg, "curve");
+    if(scurve != NULL){
+        cxCurveItem curve = cxEngineGetCurve(cxStringBody(scurve));
+        if(curve != NULL)cxActionSetCurve(action, curve->func);
+    }
+    cxViewAppendAction(view, action);
 }
 
 cxAction cxActionXMLAttachView(cxAny pview,cxConstChars xml,cxConstChars key)
