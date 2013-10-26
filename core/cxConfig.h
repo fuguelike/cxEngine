@@ -133,7 +133,7 @@ typedef int64_t         cxInt64;
 
 typedef void *          cxPointer;
 typedef cxPointer       cxAny;
-typedef int             cxSize;
+typedef size_t          cxSize;
 
 typedef unsigned char   cxUChar;
 typedef unsigned int    cxUInt;

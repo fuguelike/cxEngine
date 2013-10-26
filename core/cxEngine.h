@@ -19,6 +19,7 @@
 #include "cxEventItem.h"
 #include "cxEventArg.h"
 #include "cxUtil.h"
+#include "cxMessage.h"
 
 CX_C_BEGIN
 
@@ -42,8 +43,8 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onResume);
     CX_SIGNAL_ALLOC(onMemory);
     CX_SIGNAL_ALLOC(onUpdate);
-    cxTouch touch;
     CX_EVENT_ALLOC(onFree);
+    cxTouch touch;
     cxString lang;
 CX_OBJECT_END(cxEngine)
 
@@ -71,11 +72,15 @@ cxString cxEngineLangText(cxConstChars xml,cxConstChars key);
 
 void cxEngineSystemInit();
 
+//extern
+void cxEngineInit(cxEngine engine);
+void cxEngineMain(cxEngine engine);
+void cxEngineFree(cxEngine engine);
 //
-extern cxBool cxEngineInit(cxEngine engine);
-extern void cxEngineMain(cxEngine engine);
-extern void cxEngineFree(cxEngine engine);
-//
+
+cxVec2f cxEngineTouchToWindow(cxVec2f pos);
+
+cxVec2f cxEngineWindowToTouch(cxVec2f pos);
 
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos);
 

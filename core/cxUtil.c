@@ -33,12 +33,31 @@ cxBool cxParseKeyValue(cxChar *query,cxChar *key,cxChar *value)
     return ret;
 }
 
+cxInt cxParseQuery(cxConstChars query,cxChar *key,cxChar *value)
+{
+    CX_ASSERT(query != NULL, "query args error");
+    cxInt rv = 0;
+    cxInt len = strlen(query);
+    cxChar *sq = strrchr(query, '=');
+    if(sq != NULL){
+        cxInt cl = len - (cxInt)strlen(sq);
+        memcpy(key, query, cl);
+        key[cl]='\0';
+        memcpy(value, sq + 1, strlen(sq));
+        rv = 2;
+    }else{
+        memcpy(key, query, len + 1);
+        rv = 1;
+    }
+    return rv;
+}
+
 cxInt cxParseURL(cxString url,cxChar *path,cxChar *query)
 {
     CX_ASSERT(url != NULL && path != NULL && query != NULL, "args error");
     cxInt rv = 0;
     cxConstChars ptr = cxStringBody(url);
-    cxInt len = cxStringLength(url);
+    cxInt len = strlen(ptr);
     cxChar *sq = strrchr(ptr, '?');
     if(sq != NULL){
         cxInt cl = len - (cxInt)strlen(sq);

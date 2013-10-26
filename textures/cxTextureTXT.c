@@ -18,6 +18,10 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
         CX_ERROR("convert to unicode error");
         return false;
     }
+    if(texture->fontfile == NULL){
+        CX_ERROR("font file not set");
+        return false;
+    }
     cxFreeFont font = cxFreeTypeCreateFont(cxStringBody(texture->fontfile));
     if(font == NULL){
         CX_ERROR("open font file error");

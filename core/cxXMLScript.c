@@ -174,14 +174,13 @@ cxString cxXMLReadLangStringAttr(xmlTextReaderPtr reader,cxConstChars name)
 {
     cxString rv = NULL;
     cxChar *value = cxXMLAttr(name);
-    if(value != NULL){
-        cxChar src[128]={0};
-        cxChar key[128]={0};
-        if(cxParseURL(cxStringConstChars(value), src, key) == 2){
-            rv = cxEngineLangText(src, key);
-        }else{
-            rv = cxStringConstChars(value);
-        }
+    CX_RETURN(value == NULL, NULL);
+    cxChar src[128]={0};
+    cxChar key[128]={0};
+    if(cxParseURL(cxStringConstChars(value), src, key) == 2){
+        rv = cxEngineLangText(src, key);
+    }else{
+        rv = cxStringConstChars(value);
     }
     xmlFree(value);
     return rv;

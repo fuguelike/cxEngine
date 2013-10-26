@@ -15,6 +15,7 @@
 #include "cxOpenGL.h"
 #include "cxUtil.h"
 #include "cxHashXML.h"
+#include "cxDB.h"
 
 static cxEngine instance = NULL;
 
@@ -134,17 +135,17 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->curve);
     CX_RELEASE(this->events);
     CX_RELEASE(this->scripts);
-    
     CX_EVENT_RELEASE(this->onFree);
     CX_SIGNAL_RELEASE(this->onUpdate);
     CX_SIGNAL_RELEASE(this->onPause);
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
-    
     CX_RELEASE(this->window);
     cxOpenGLDestroy();
-    CX_RELEASE(this->autoStack);
+    cxMessageDestroy();
     kmGLFreeAll();
+    cxDBEnvDestroy();
+    CX_RELEASE(this->autoStack);
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
 
@@ -206,10 +207,10 @@ void cxEngineSystemInit()
     cxEngineRegisteEvent("cxActionRun", cxViewRunActionEvent);
     cxEngineRegisteEvent("cxPlay", cxPlaySoundEvent);
     cxEngineRegisteEvent("cxLogger", cxPrintMessageEvent);
-    cxEngineRegisteEvent("cxActionRemoveView", cxActionRemoveViewEvent);
     cxEngineRegisteEvent("cxPushView", cxViewPushViewEvent);
     cxEngineRegisteEvent("cxPopView", cxViewPopViewEvent);
     cxEngineRegisteEvent("cxReplaceView", cxViewReplaceViewEvent);
+    cxEngineRegisteEvent("cxPost", cxMessagePostEvent);
 }
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file)
@@ -283,16 +284,49 @@ cxString cxEngineLangText(cxConstChars xml,cxConstChars key)
     cxEngine this = cxEngineInstance();
     CX_ASSERT(this->lang != NULL, "system not set locate lang");
     CX_CONST_STRING(url,"%s?%s",xml,cxStringBody(this->lang));
+    cxString ret = NULL;
     cxTypes types = cxEngineDataSet(url);
-    CX_RETURN(types == NULL || types->type != cxTypesLangString, NULL);
-    return cxTypesGet(types, key);
+    if(types != NULL && types->type == cxTypesLangString){
+        ret = cxTypesGet(types, key);
+    }
+    CX_RETURN(ret != NULL,ret);
+    //
+    cxChar dbKey[128]={0};
+    cxChar rowKey[128]={0};
+    if(cxParseQuery(key, dbKey, rowKey) != 2){
+        return NULL;
+    }
+    CX_CONST_STRING(dburl,"%s?%s",xml,dbKey);
+    types = cxEngineDataSet(dburl);
+    if(types != NULL && types->type == cxTypesDB){
+        ret = cxDBGet(types->assist, cxStringStatic(rowKey));
+    }
+    return ret;
+}
+
+cxVec2f cxEngineTouchToWindow(cxVec2f pos)
+{
+    cxEngine this = cxEngineInstance();
+    cxVec2f rv;
+    rv.x = pos.x - this->winsize.w/2.0f;
+    rv.y = this->winsize.h/2.0f - pos.y;
+    return rv;
+}
+
+cxVec2f cxEngineWindowToTouch(cxVec2f pos)
+{
+    cxEngine this = cxEngineInstance();
+    cxVec2f rv;
+    rv.x = this->winsize.w/2.0f - pos.x;
+    rv.y = pos.y - this->winsize.h/2.0f;
+    return rv;
 }
 
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
 {
     cxEngine this = cxEngineInstance();
     cxDouble time = cxTimestamp();
-    cxVec2f cpos = cxGLPointToWindowPoint(pos);
+    cxVec2f cpos = cxEngineTouchToWindow(pos);
     if(type == cxTouchTypeDown){
         this->touch.movement = cxVec2fv(0, 0);
         this->touch.delta = cxVec2fv(0, 0);

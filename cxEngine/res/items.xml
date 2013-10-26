@@ -21,4 +21,5 @@
         <item name="font">banana.ttf</item>
         <item name="exp">Particle</item>
     </cxLangString>
+    <cxDB id="db" type="btree" file="test.db" table="list"/>
 </cxHashXML>

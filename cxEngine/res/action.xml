@@ -11,168 +11,168 @@
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'EaseIn'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="EaseIn" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="EaseIn" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'EaseOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="EaseOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="EaseOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'EaseInOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="EaseInOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="EaseInOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'CubeInverse'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="CubeInverse" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="CubeInverse" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'ExpIn'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="ExpIn" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="ExpIn" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'ExpOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="ExpOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="ExpOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'SineIn'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="SineIn" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="SineIn" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'SineOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="SineOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="SineOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'SineInOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="SineInOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="SineInOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'ElasticIn'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="ElasticIn" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="ElasticIn" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'ElasticOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="ElasticOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="ElasticOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'ElasticInOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="ElasticInOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="ElasticInOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'BounceIn'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BounceIn" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BounceIn" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'BounceOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BounceOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BounceOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'BounceInOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BounceInOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BounceInOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'BackIn'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BackIn" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BackIn" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'BackOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BackOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BackOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'BackInOut'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BackInOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="BackInOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?reset','view':'sprite'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Reset" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Reset" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?jump','view':'sprite'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Jump" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Jump" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?fade1','view':'sprite'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="FadeIn" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="FadeIn" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxActionRun({'src':'actions.xml?fade2','view':'sprite'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="FadeOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="FadeOut" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
-            cxButton.onRelease="cxActionRun({'src':'actions.xml?tint1','view':'sprite'})">
+            cxButton.onRelease="cxActionRun({'src':'actions.xml?timer','view':'sprite'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Tint" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Timer" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
             cxButton.onRelease="cxPopView">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="25"/>
         </cxButton>
     </cxTable>
 </cxViewXML>

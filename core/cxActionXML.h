@@ -52,8 +52,6 @@ void cxActionXMLSet(cxAny xmlAction,cxAny mAction,xmlTextReaderPtr reader);
 
 void cxViewRunActionEvent(cxAny pview,cxAny arg);
 
-void cxActionRemoveViewEvent(cxAny pav,cxAny arg);
-
 void cxPlaySoundEvent(cxAny object,cxAny arg);
 
 void cxPrintMessageEvent(cxAny pview,cxAny arg);

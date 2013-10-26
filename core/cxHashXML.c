@@ -11,6 +11,7 @@
 #include "cxAutoPool.h"
 #include "cxStack.h"
 #include "cxHashXML.h"
+#include "cxDB.h"
 
 cxTypes cxHashXMLReadAtlasBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
 {
@@ -119,6 +120,30 @@ cxTypes cxHashXMLReadLangString(xmlTextReaderPtr reader)
     return types;
 }
 
+cxTypes cxHashXMLReadDB(xmlTextReaderPtr reader)
+{
+    cxChar *file = cxXMLAttr("file");
+    cxChar *table = cxXMLAttr("table");
+    cxChar *type = cxXMLAttr("type");
+    cxAny db = NULL;
+    if(file == NULL || table == NULL || type == NULL){
+        CX_ERROR("cxDB must set file table type");
+        return NULL;
+    }
+    if(strcasecmp(type, "btree") == 0){
+        db = cxDBTreeCreate(cxStringConstChars(file), cxStringConstChars(table));
+    }else if(strcasecmp(type, "hash") ==0){
+        db = cxDBHashCreate(cxStringConstChars(file), cxStringConstChars(table));
+    }else{
+        CX_ERROR("type is btree or hash");
+    }
+    xmlFree(file);
+    xmlFree(table);
+    xmlFree(type);
+    CX_RETURN(db == NULL, NULL);
+    return cxDBTypesCreate(db);
+}
+
 CX_OBJECT_INIT(cxHashXML, cxObject)
 {
     this->items = CX_ALLOC(cxHash);
@@ -181,8 +206,7 @@ cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader)
     }
     cxAutoPoolPush();
     while(xmlTextReaderRead(reader)){
-        int type = xmlTextReaderNodeType(reader);
-        if(type == XML_READER_TYPE_ELEMENT){
+        if(xmlTextReaderNodeType(reader) == XML_READER_TYPE_ELEMENT){
             cxChar *sid = cxXMLAttr("id");
             if(sid == NULL){
                 CX_ERROR("must set id");
@@ -196,6 +220,8 @@ cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader)
                 xmlFree(stexture);
             }else if(ELEMENT_IS_TYPE(cxLangString)){
                 object = cxHashXMLReadLangString(reader);
+            }else if(ELEMENT_IS_TYPE(cxDB)){
+                object = cxHashXMLReadDB(reader);
             }
             if(object != NULL){
                 cxHashSet(xml->items, cxHashStrKey(sid), object);

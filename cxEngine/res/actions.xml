@@ -45,4 +45,8 @@
         <cxTint id="tint1"
             cxAction.time="3"
             cxTint.color="1,0,0"/>
+        <cxTimer id="timer"
+            cxAction.time="2"
+            cxTimer.repeat="5"
+            cxTimer.onArrive="cxLogger('timer')" />
 </cxActionXML>

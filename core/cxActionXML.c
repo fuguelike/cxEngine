@@ -14,6 +14,7 @@
 #include <actions/cxJump.h>
 #include <actions/cxFade.h>
 #include <actions/cxTint.h>
+#include <actions/cxTimer.h>
 #include "cxViewXML.h"
 #include "cxActionXML.h"
 
@@ -155,6 +156,8 @@ cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
         action = (cxAction)CX_CREATE(cxFade);
     }else if(ELEMENT_IS_TYPE(cxTint)){
         action = (cxAction)CX_CREATE(cxTint);
+    }else if(ELEMENT_IS_TYPE(cxTimer)){
+        action = (cxAction)CX_CREATE(cxTimer);
     }else{
         CX_ERROR("action xml can't create type %s",temp);
     }
@@ -205,13 +208,6 @@ void cxPlaySoundEvent(cxAny object,cxAny arg)
     CX_LOGGER("file=%s loop=%d",path,loop);
 }
 
-void cxActionRemoveViewEvent(cxAny pav,cxAny arg)
-{
-    cxAction this = pav;
-    CX_RETURN(this->view == NULL);
-    cxViewRemoved(this->view);
-}
-
 //need register
 void cxViewRunActionEvent(cxAny pview,cxAny arg)
 {
@@ -239,6 +235,7 @@ void cxViewRunActionEvent(cxAny pview,cxAny arg)
         cxCurveItem curve = cxEngineGetCurve(cxStringBody(scurve));
         if(curve != NULL)cxActionSetCurve(action, curve->func);
     }
+    //append
     cxViewAppendAction(view, action);
 }
 

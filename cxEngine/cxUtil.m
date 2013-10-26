@@ -25,6 +25,17 @@ cxString cxAssetsPath(cxConstChars file)
     }
 }
 
+cxString cxDocumentPath(cxConstChars file)
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [paths objectAtIndex:0];
+    if(file != NULL){
+        return cxStringConstChars([[path stringByAppendingFormat:@"/%s",file] UTF8String]);
+    }else{
+        return cxStringConstChars([path UTF8String]);
+    }
+}
+
 cxString cxLocaleLang()
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

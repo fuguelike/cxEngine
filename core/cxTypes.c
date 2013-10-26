@@ -38,6 +38,14 @@ cxTypes cxLangStringTypesCreate()
     return this;
 }
 
+cxTypes cxDBTypesCreate(cxAny db)
+{
+    cxTypes this = CX_CREATE(cxTypes);
+    this->type = cxTypesDB;
+    CX_RETAIN_SWAP(this->assist, db);
+    return this;
+}
+
 void cxTypesSet(cxTypes this,cxConstChars key,cxAny value)
 {
     cxHashSet(this->kvs, cxHashStrKey(key), value);

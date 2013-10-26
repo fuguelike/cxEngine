@@ -24,12 +24,12 @@
     cxParticle.rate = "200" />
     
     <cxButton
-        cxView.w = "230"
-        cxView.h = "110"
+        cxView.w = "180"
+        cxView.h = "120"
         cxView.right="10"
         cxView.bottom="10"
         cxButton.onRelease="cxPopView">
         <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-        <cxLabel cxView.fill="true" cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="50"/>
+        <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="30"/>
     </cxButton>
 </cxViewXML>

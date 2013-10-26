@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--TextureKey at *.xml file use-->
-
 <cxViewXML cxView.fill="true">
     <cxTable cxView.right="30" cxView.left="30" cxView.top="30" cxView.bottom="30" cxTable.space="10,10" cxTable.col="4">
         <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('particle.xml')">
@@ -14,3 +12,4 @@
         </cxButton>
     </cxTable>
 </cxViewXML>
+

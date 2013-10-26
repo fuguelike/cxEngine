@@ -39,10 +39,7 @@
 
 -(void)initMainLoop
 {
-    if(!cxEngineInit(cxEngineInstance())){
-        CX_ERROR("cxEngineInit return false,app exit");
-        exit(-1);
-    }
+    cxEngineInit(cxEngineInstance());
 }
 
 -(void)freeMainLoop

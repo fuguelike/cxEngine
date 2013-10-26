@@ -27,6 +27,8 @@ cxBool cxParseKeyValue(cxChar *query,cxChar *key,cxChar *value);
 
 cxInt cxParseURL(cxString url,cxChar *path,cxChar *query);
 
+cxInt cxParseQuery(cxConstChars query,cxChar *key,cxChar *value);
+
 cxString cxAssetsPath(cxConstChars file);
 
 cxDouble cxTimestamp();
@@ -34,6 +36,8 @@ cxDouble cxTimestamp();
 cxULong cxNextPot(cxULong x);
 
 cxString cxLocaleLang();
+
+cxString cxDocumentPath(cxConstChars file);
 
 CX_C_END
 

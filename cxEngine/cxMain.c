@@ -12,6 +12,7 @@
 #include <textures/cxTexturePNG.h>
 #include <textures/cxTextureFactory.h>
 #include "cxMain.h"
+#include <core/cxDB.h>
 
 
 #include <actions/cxMove.h>
@@ -27,6 +28,7 @@
 #include <core/cxIconv.h>
 #include <core/cxFreeType.h>
 #include <views/cxLabel.h>
+#include <core/cxDB.h>
 
 static void cxEventTest(cxAny view,cxAny arg)
 {
@@ -53,18 +55,20 @@ static void actionsLoad(cxAny pav,cxAny arg)
     //add action custom event
 }
 
-cxBool cxEngineInit(cxEngine engine)
+void cxEngineInit(cxEngine engine)
 {
-//    engine->isShowBorder = false;
+    engine->isShowBorder = false;
     cxEngineRegisteEvent("viewLoad", viewLoad);
     cxEngineRegisteEvent("view2Load", view2Load);
     cxEngineRegisteEvent("actionsLoad", actionsLoad);
-    return true;
 }
 
 void cxEngineMain(cxEngine engine)
 {
+    cxBool ret = cxDBEnvOpen();
+    CX_ASSERT(ret, "cxDBEnv open error");
     cxEngineDataSet("items.xml");
+    
     cxViewXML v = cxViewXMLCreate("main.xml");
     cxWindowPushView(v, NULL);
 }
