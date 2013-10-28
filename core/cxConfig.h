@@ -221,7 +221,7 @@ void cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader);
 
 void cxObjectSetXMLReadFunc(cxAny obj,cxXMLReadAttrFunc func);
 
-void cxObjectSetXMLReadRun(cxAny obj,cxAny pobj,cxAny newobj,xmlTextReaderPtr reader);
+void cxObjectXMLReadRun(cxAny obj,cxAny pobj,cxAny newobj,xmlTextReaderPtr reader);
 
 cxAny cxObjectRoot(cxAny obj);
 

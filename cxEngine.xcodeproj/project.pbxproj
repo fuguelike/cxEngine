@@ -165,6 +165,9 @@
 		8334045B17F92961000D7237 /* cpVect.c in Sources */ = {isa = PBXBuildFile; fileRef = 8334041F17F92961000D7237 /* cpVect.c */; };
 		8340AC92180E594D00250FCF /* cxActionXML.c in Sources */ = {isa = PBXBuildFile; fileRef = 8340AC8E180E594D00250FCF /* cxActionXML.c */; };
 		8340AC93180E594D00250FCF /* cxViewXML.c in Sources */ = {isa = PBXBuildFile; fileRef = 8340AC90180E594D00250FCF /* cxViewXML.c */; };
+		83427B90181D233F001EB4AF /* cxPlayer.c in Sources */ = {isa = PBXBuildFile; fileRef = 83427B8E181D233F001EB4AF /* cxPlayer.c */; };
+		83427B92181D238E001EB4AF /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83427B91181D238E001EB4AF /* OpenAL.framework */; };
+		83427B94181D2508001EB4AF /* effect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 83427B93181D2508001EB4AF /* effect.wav */; };
 		8351ACD81814BCFE0046E3C7 /* simsun.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351ACD71814BCFE0046E3C7 /* simsun.ttf */; };
 		836A06A1181A8D0E002962C6 /* libdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 836A06A0181A8D0E002962C6 /* libdb.a */; };
 		836A06A4181A8DD4002962C6 /* cxDB.c in Sources */ = {isa = PBXBuildFile; fileRef = 836A06A2181A8DD4002962C6 /* cxDB.c */; };
@@ -424,6 +427,10 @@
 		8340AC8F180E594D00250FCF /* cxActionXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxActionXML.h; sourceTree = "<group>"; };
 		8340AC90180E594D00250FCF /* cxViewXML.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxViewXML.c; sourceTree = "<group>"; };
 		8340AC91180E594D00250FCF /* cxViewXML.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxViewXML.h; sourceTree = "<group>"; };
+		83427B8E181D233F001EB4AF /* cxPlayer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxPlayer.c; sourceTree = "<group>"; };
+		83427B8F181D233F001EB4AF /* cxPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxPlayer.h; sourceTree = "<group>"; };
+		83427B91181D238E001EB4AF /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		83427B93181D2508001EB4AF /* effect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = effect.wav; sourceTree = "<group>"; };
 		8351ACD71814BCFE0046E3C7 /* simsun.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = simsun.ttf; sourceTree = "<group>"; };
 		836A06A0181A8D0E002962C6 /* libdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdb.a; path = libs/ios/lib/libdb.a; sourceTree = "<group>"; };
 		836A06A2181A8DD4002962C6 /* cxDB.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxDB.c; sourceTree = "<group>"; };
@@ -522,12 +529,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				836A06A1181A8D0E002962C6 /* libdb.a in Frameworks */,
-				83E3A17A1813CA11006D8388 /* libiconv.dylib in Frameworks */,
+				83891E741808461A00AB4520 /* libpng.a in Frameworks */,
 				83E3A16F1813B7F0006D8388 /* libfreetype.a in Frameworks */,
 				8312ABFD181284DD00DD8476 /* libevent.a in Frameworks */,
+				83E3A17A1813CA11006D8388 /* libiconv.dylib in Frameworks */,
 				83891E7618084A0800AB4520 /* libz.dylib in Frameworks */,
-				83891E741808461A00AB4520 /* libpng.a in Frameworks */,
 				830F2D8B17FC1C7700BFCB4A /* libxml2.dylib in Frameworks */,
+				83427B92181D238E001EB4AF /* OpenAL.framework in Frameworks */,
 				839E7A5217F1BC7600B0F5EC /* OpenGLES.framework in Frameworks */,
 				839E7A4C17F1BC7600B0F5EC /* CoreGraphics.framework in Frameworks */,
 				839E7A4E17F1BC7600B0F5EC /* UIKit.framework in Frameworks */,
@@ -668,6 +676,7 @@
 		83319AC1180D416A007953BB /* res */ = {
 			isa = PBXGroup;
 			children = (
+				83427B93181D2508001EB4AF /* effect.wav */,
 				837574B2181C105600F53377 /* songti.ttf */,
 				83F5565D181941FD009B9589 /* action.xml */,
 				83F72FAE1817FC3500734ED1 /* button.xml */,
@@ -823,6 +832,7 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83427B91181D238E001EB4AF /* OpenAL.framework */,
 				836A06A0181A8D0E002962C6 /* libdb.a */,
 				83E3A1741813C4E8006D8388 /* libiconv.dylib */,
 				83E3A16C1813B7F0006D8388 /* libfreetype.a */,
@@ -912,19 +922,27 @@
 				830950C817F4228E0056B72D /* cxBase.h */,
 				839E7AA117F1BD2000B0F5EC /* cxConfig.c */,
 				839E7AA217F1BD2000B0F5EC /* cxConfig.h */,
+				836A06A2181A8DD4002962C6 /* cxDB.c */,
+				836A06A3181A8DD4002962C6 /* cxDB.h */,
 				839E7AA317F1BD2000B0F5EC /* cxEngine.c */,
 				839E7AA417F1BD2000B0F5EC /* cxEngine.h */,
 				83319AA3180CDCE4007953BB /* cxEventArg.c */,
 				83319AA4180CDCE4007953BB /* cxEventArg.h */,
 				83319AA0180CDCD6007953BB /* cxEventItem.c */,
 				83319AA1180CDCD6007953BB /* cxEventItem.h */,
+				83E3A17B1813CD5B006D8388 /* cxFreeType.c */,
+				83E3A17C1813CD5B006D8388 /* cxFreeType.h */,
 				83FF164717F3142000DBFA3A /* cxHash.c */,
 				83FF164817F3142000DBFA3A /* cxHash.h */,
 				8312AC031812C4DB00DD8476 /* cxHashXML.c */,
 				8312AC041812C4DB00DD8476 /* cxHashXML.h */,
+				83E3A1711813BB23006D8388 /* cxIconv.c */,
+				83E3A1721813BB23006D8388 /* cxIconv.h */,
 				83E7A19E180592AD0095BE74 /* cxInput.h */,
 				83FF165417F32FCA00DBFA3A /* cxList.c */,
 				83FF165517F32FCA00DBFA3A /* cxList.h */,
+				83AD9371181A6F790023750E /* cxMessage.c */,
+				83AD9372181A6F790023750E /* cxMessage.h */,
 				830770EF180FD738001BAEED /* cxNumber.c */,
 				830770F0180FD738001BAEED /* cxNumber.h */,
 				8331BAB217F47E7500A94AE2 /* cxOpenGL.c */,
@@ -949,14 +967,8 @@
 				8340AC91180E594D00250FCF /* cxViewXML.h */,
 				830AB11E180C3FA900CC5346 /* cxXMLScript.c */,
 				830AB11F180C3FA900CC5346 /* cxXMLScript.h */,
-				83E3A1711813BB23006D8388 /* cxIconv.c */,
-				83E3A1721813BB23006D8388 /* cxIconv.h */,
-				83E3A17B1813CD5B006D8388 /* cxFreeType.c */,
-				83E3A17C1813CD5B006D8388 /* cxFreeType.h */,
-				83AD9371181A6F790023750E /* cxMessage.c */,
-				83AD9372181A6F790023750E /* cxMessage.h */,
-				836A06A2181A8DD4002962C6 /* cxDB.c */,
-				836A06A3181A8DD4002962C6 /* cxDB.h */,
+				83427B8E181D233F001EB4AF /* cxPlayer.c */,
+				83427B8F181D233F001EB4AF /* cxPlayer.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -1044,6 +1056,7 @@
 				83319ACD180D416A007953BB /* actions.xml in Resources */,
 				8351ACD81814BCFE0046E3C7 /* simsun.ttf in Resources */,
 				8312AC021812C39800DD8476 /* items.xml in Resources */,
+				83427B94181D2508001EB4AF /* effect.wav in Resources */,
 				83F72FAF1817FC3500734ED1 /* button.xml in Resources */,
 				83319AD3180D416A007953BB /* particle.xml in Resources */,
 				839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */,
@@ -1096,6 +1109,7 @@
 				830770EE180FD50A001BAEED /* cxAtlas.c in Sources */,
 				839E7A5A17F1BC7600B0F5EC /* main.m in Sources */,
 				830F2D7F17FC106D00BFCB4A /* cxAction.c in Sources */,
+				83427B90181D233F001EB4AF /* cxPlayer.c in Sources */,
 				83319ABD180CE7C3007953BB /* strbuffer.c in Sources */,
 				83319AB7180CE7C3007953BB /* dump.c in Sources */,
 				8334044E17F92961000D7237 /* cpSpaceComponent.c in Sources */,

@@ -5,8 +5,33 @@
 //  Created by xuhua on 9/24/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
-
+#import <AudioToolbox/AudioToolbox.h>
+#import <AudioToolbox/ExtendedAudioFile.h>
 #include <core/cxUtil.h>
+#include <core/cxPlayer.h>
+
+cxString cxWAVSamples(cxConstChars file)
+{
+    cxString cxPath = cxAssetsPath(file);
+    NSString *path = [NSString stringWithUTF8String:cxStringBody(cxPath)];
+    CFURLRef fileURL = (__bridge CFURLRef)[NSURL fileURLWithPath:path];
+    UInt64 fileDataSize = 0;
+    UInt32 thePropertySize = sizeof(UInt64);
+    AudioFileID afid = 0;
+    void *theData = NULL;
+    if(AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, &afid)){
+        return NULL;
+    }
+    if(!AudioFileGetProperty(afid, kAudioFilePropertyAudioDataByteCount, &thePropertySize, &fileDataSize)){
+        theData = allocator->calloc(1,(cxInt)fileDataSize);
+        AudioFileReadBytes(afid, false, 0, (UInt32 *)&fileDataSize, theData);
+    }
+    AudioFileClose(afid);
+    if(theData == NULL){
+        return NULL;
+    }
+    return cxStringAttach(theData, (UInt32)fileDataSize);
+}
 
 void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars format,va_list ap)
 {

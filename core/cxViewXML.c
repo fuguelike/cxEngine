@@ -125,9 +125,9 @@ cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
     if(ELEMENT_IS_TYPE(cxSprite)){
         cview = CX_CREATE(cxSprite);
     }else if(ELEMENT_IS_TYPE(cxViewXML)){
-        cxChar *xml = cxXMLAttr("src");
-        cview = (cxView)cxViewXMLCreate(xml);
-        xmlFree(xml);
+        cxChar *src = cxXMLAttr("src");
+        cview = (cxView)cxViewXMLCreate(src);
+        xmlFree(src);
     }else if(ELEMENT_IS_TYPE(cxView)){
         cview = CX_CREATE(cxView);
     }else if(ELEMENT_IS_TYPE(cxButton)){
@@ -170,7 +170,7 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
                 //set root xmlview
                 cxObjectSetRoot(cview, this);
                 //read attr
-                cxObjectSetXMLReadRun(cview, this, cview, reader);
+                cxObjectXMLReadRun(cview, this, cview, reader);
                 //save to hash
                 cxViewXMLSet(this, cview, reader);
             }
@@ -211,7 +211,7 @@ cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
     }
     if(ret){
         cxAutoPoolPush();
-        cxObjectSetXMLReadRun(xmlView, xmlView, xmlView, reader);
+        cxObjectXMLReadRun(xmlView, xmlView, xmlView, reader);
         cxStackPush(stack, xmlView);
         CX_EVENT_FIRE(xmlView, onLoad);
         

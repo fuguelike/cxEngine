@@ -57,7 +57,7 @@ static void actionsLoad(cxAny pav,cxAny arg)
 
 void cxEngineInit(cxEngine engine)
 {
-    engine->isShowBorder = false;
+//    engine->isShowBorder = false;
     cxEngineRegisteEvent("viewLoad", viewLoad);
     cxEngineRegisteEvent("view2Load", view2Load);
     cxEngineRegisteEvent("actionsLoad", actionsLoad);
@@ -67,6 +67,7 @@ void cxEngineMain(cxEngine engine)
 {
     cxBool ret = cxDBEnvOpen();
     CX_ASSERT(ret, "cxDBEnv open error");
+    CX_UNUSED_PARAM(ret);
     cxEngineDataSet("items.xml");
     
     cxViewXML v = cxViewXMLCreate("main.xml");

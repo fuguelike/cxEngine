@@ -25,10 +25,14 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     cxFloat time = cxXMLReadFloatAttr(reader, "cxAction.time", this->duration);
     cxActionSetDuration(mAction, time/speed);
     //curve
-    cxCurveItem curve = cxEngineGetCurve((cxConstChars)cxXMLAttr("cxAction.curve"));
+    cxChar *scurve = cxXMLAttr("cxAction.curve");
+    cxCurveItem curve = cxEngineGetCurve(scurve);
     if(curve != NULL){
         CX_METHOD_SET(this->Curve, curve->func);
     }
+    xmlFree(scurve);
+    //
+    cxActionSetSplit(this, cxXMLReadIntAttr(reader, "cxAction.split", this->split));
     //
     cxActionSetScale(this, cxXMLReadFloatAttr(reader, "cxAction.scale", this->scale));
     //actionId
@@ -36,6 +40,7 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     //event
     cxXMLAppendEvent(xml->events, this, cxAction, onBefore);
     cxXMLAppendEvent(xml->events, this, cxAction, onAfter);
+    cxXMLAppendEvent(xml->events, this, cxAction, onSplit);
     //forever
     if(cxXMLReadBoolAttr(reader, "cxAction.forever", false)){
         CX_METHOD_SET(this->Exit, cxActionForever);
@@ -44,14 +49,25 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     cxXMLReadFloatsAttr(reader, "cxAction.assist", &this->assist.v1);
 }
 
+void cxActionSetSplit(cxAny pav,cxInt split)
+{
+    cxAction this = pav;
+    CX_RETURN(this->split == split);
+    this->split = split;
+    this->splitDelta = 1.0f / (cxFloat)(split - 1);
+}
+
 CX_OBJECT_INIT(cxAction, cxObject)
 {
     cxObjectSetXMLReadFunc(this, cxActionXMLReadAttr);
     this->isExit = false;
     this->scale = 1.0f;
+    this->index = -1;
+    this->split = -1;
 }
 CX_OBJECT_FREE(cxAction, cxObject)
 {
+    CX_EVENT_RELEASE(this->onSplit);
     CX_EVENT_RELEASE(this->onAfter);
     CX_EVENT_RELEASE(this->onBefore);
 }
@@ -82,11 +98,13 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     if(this->isPause || this->isExit){
         goto finished;
     }
+    //action delay
     dt = dt * this->scale;
     this->delayElapsed += dt;
     if(this->delay > 0 && this->delayElapsed < this->delay){
         goto finished;
     }
+    //init event
     if(!this->isFirst){
         this->isFirst = true;
         CX_ASSERT(this->view != NULL, "action viewptr null");
@@ -96,6 +114,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         CX_METHOD_RUN(this->Init,this);
         CX_EVENT_FIRE(this, onBefore);
     }
+    //for active
     if(!this->isActive){
         this->isActive = true;
         CX_METHOD_RUN(this->Active,this);
@@ -103,7 +122,18 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     this->durationElapsed += dt;
     cxFloat value = this->durationElapsed/CX_MAX(this->duration, FLT_EPSILON);
     cxFloat time = kmClamp(value, 0.0f, 1.0f);
-    //wait exit for driver sub action
+    //split index event fire
+    cxInt index = -1;
+    if(time >= 1.0f){
+        index = this->split - 1;
+    }else if(this->splitDelta > 0){
+        index = time / this->splitDelta;
+    }
+    if(this->index != index && index >= 0){
+        this->index = index;
+        CX_EVENT_FIRE(this,onSplit);
+    }
+    //wait exit
     if(this->duration == 0){
         isExit = CX_METHOD_GET(true, this->Exit,pav);
     }else if(this->durationElapsed < this->duration){
@@ -121,6 +151,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         isExit = CX_METHOD_GET(true, this->Exit,pav);
         this->isActive = false;
     }
+    //check action exit
 finished:
     if(this->isExit || isExit){
         CX_EVENT_FIRE(this, onAfter);

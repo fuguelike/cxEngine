@@ -26,6 +26,7 @@ void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
         this->blend = cxParticleBlendMultiply;
     }
     xmlFree(smode);
+    //
     this->todir = cxXMLReadBoolAttr(reader, "cxParticle.todir", this->todir);
     cxXMLReadFloatsAttr(reader, "cxParticle.duration", &this->duration);
     cxXMLReadFloatsAttr(reader, "cxParticle.gravity", &this->gravity.x);

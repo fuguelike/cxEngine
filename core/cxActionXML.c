@@ -17,6 +17,7 @@
 #include <actions/cxTimer.h>
 #include "cxViewXML.h"
 #include "cxActionXML.h"
+#include "cxPlayer.h"
 
 static void cxActionRootXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
@@ -107,9 +108,9 @@ CX_OBJECT_INIT(cxActionXML, cxAction)
 {
     CX_METHOD_SET(this->super.Init, cxActionXMLInit);
     CX_METHOD_SET(this->super.Step, cxActionXMLStep);
-    cxObjectSetXMLReadFunc(this, cxActionRootXMLReadAttr);
     CX_METHOD_SET(this->super.Exit, cxActionXMLExit);
     CX_METHOD_SET(this->Make, cxActionXMLMakeElement);
+    cxObjectSetXMLReadFunc(this, cxActionRootXMLReadAttr);
     this->actions = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
     this->items = CX_ALLOC(cxArray);
@@ -117,9 +118,9 @@ CX_OBJECT_INIT(cxActionXML, cxAction)
 CX_OBJECT_FREE(cxActionXML, cxAction)
 {
     CX_RELEASE(this->items);
-    CX_EVENT_RELEASE(this->onLoad);
     CX_RELEASE(this->actions);
     CX_RELEASE(this->events);
+    CX_EVENT_RELEASE(this->onLoad);
 }
 CX_OBJECT_TERM(cxActionXML, cxAction)
 
@@ -133,12 +134,11 @@ static void cxActionXMLReaderError(void *arg,const char *msg,xmlParserSeverities
 void cxActionXMLSet(cxAny xmlAction,cxAny mAction,xmlTextReaderPtr reader)
 {
     cxActionXML this = xmlAction;
-    cxConstChars id = (cxConstChars)cxXMLAttr("id");
+    cxChar *id = cxXMLAttr("id");
     CX_RETURN(id == NULL);
-    cxHashKey key = cxHashStrKey(id);
-    CX_ASSERT(cxHashGet(this->actions, key) == NULL, "reapeat action id");
-    cxHashSet(this->actions, key, mAction);
+    cxHashSet(this->actions, cxHashStrKey(id), mAction);
     cxObjectSetRoot(mAction,this);
+    xmlFree(id);
 }
 
 cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
@@ -170,7 +170,6 @@ static void cxActionXMLLoadActions(cxActionXML this,xmlTextReaderPtr reader)
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        //
         const xmlChar *temp = xmlTextReaderConstName(reader);
         if(temp == NULL){
             continue;
@@ -180,7 +179,7 @@ static void cxActionXMLLoadActions(cxActionXML this,xmlTextReaderPtr reader)
             CX_ERROR("load actions null");
             continue;
         }
-        cxObjectSetXMLReadRun(action, this, action, reader);
+        cxObjectXMLReadRun(action, this, action, reader);
         cxActionXMLSet(this, action, reader);
     }
 }
@@ -196,16 +195,11 @@ void cxPrintMessageEvent(cxAny pview,cxAny arg)
 void cxPlaySoundEvent(cxAny object,cxAny arg)
 {
     CX_RETURN(arg == NULL);
-    //wav effect
-    //mp3 ogg music
-    cxString file = cxEventArgString(arg, "file");
-    if(file == NULL){
-        CX_ERROR("cxPlay file null");
-        return;
-    }
-    cxConstChars path = cxStringBody(file);
+    cxString src = cxEventArgString(arg, "src");
+    CX_RETURN(src == NULL);
+    cxConstChars path = cxStringBody(src);
     cxBool loop = cxEventArgBool(arg, "loop");
-    CX_LOGGER("file=%s loop=%d",path,loop);
+    cxPlayFile(path,loop);
 }
 
 //need register
@@ -233,7 +227,7 @@ void cxViewRunActionEvent(cxAny pview,cxAny arg)
     cxString scurve = cxEventArgString(arg, "curve");
     if(scurve != NULL){
         cxCurveItem curve = cxEngineGetCurve(cxStringBody(scurve));
-        if(curve != NULL)cxActionSetCurve(action, curve->func);
+        cxActionSetCurve(action, curve != NULL ? curve->func : NULL);
     }
     //append
     cxViewAppendAction(view, action);
@@ -266,7 +260,7 @@ cxBool cxActionXMLLoadWithReader(cxAny pav,xmlTextReaderPtr reader)
     }
     if(ret){
         cxAutoPoolPush();
-        cxObjectSetXMLReadRun(this, this, this, reader);
+        cxObjectXMLReadRun(this, this, this, reader);
         CX_EVENT_FIRE(this, onLoad);
         cxActionXMLLoadActions(this, reader);
         cxAutoPoolPop();

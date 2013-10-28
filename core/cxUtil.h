@@ -23,6 +23,8 @@ CX_C_BEGIN
 
 void cxSetRandSeed();
 
+cxString cxWAVSamples(cxConstChars file);
+
 cxBool cxParseKeyValue(cxChar *query,cxChar *key,cxChar *value);
 
 cxInt cxParseURL(cxString url,cxChar *path,cxChar *query);

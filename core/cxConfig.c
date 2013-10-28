@@ -31,7 +31,7 @@ void cxObjectSetXMLReadFunc(cxAny obj,cxXMLReadAttrFunc func)
     this->XMLReadAttr = func;
 }
 
-void cxObjectSetXMLReadRun(cxAny obj,cxAny pobj,cxAny newobj,xmlTextReaderPtr reader)
+void cxObjectXMLReadRun(cxAny obj,cxAny pobj,cxAny newobj,xmlTextReaderPtr reader)
 {
     cxObject this = obj;
     CX_RETURN(this->XMLReadAttr == NULL);

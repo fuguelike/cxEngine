@@ -36,6 +36,7 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
     //get texture width and height
     cxFreeFontChar slast = NULL;
     cxFreeFontChar sfirst = NULL;
+    cxInt wx = 0;
     for(int i=0; i < cxStringLength(unicode);i += 2){
         uint16_t code = *(uint16_t *)&unicode->strptr.d[i];
         cxFreeFontCharKey key = cxFontChar(code, fontsize);
@@ -49,6 +50,8 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
         cxArrayAppend(list, pchar);
         width += (pchar->ax >> 16);
         slast = pchar;
+        width = pchar->width + wx + pchar->left;
+        wx += (pchar->ax >> 16);
     }
     cxInt x = 0;
     cxInt y = 0;
@@ -65,12 +68,11 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
     CX_ARRAY_FOREACH(list, element){
         cxFreeFontChar pchar = cxArrayObject(element);
         y = height - pchar->top + des;
-        for(register int i=0;i<pchar->height;i++){
-            for(register int j=0; j < pchar->width;j++){
-                cxChar *src = pchar->data + i * pchar->width + j;
-                cxChar *dst = buffer + (i + y) * width + x + pchar->left + j;
-                if(*src != 0)*dst = *src;
-            }
+        for(int i=0;i<pchar->height;i++)
+        for(int j=0;j<pchar->width;j++){
+            cxChar *src = pchar->data + i * pchar->width + j;
+            cxChar *dst = buffer + (i + y) * width + x + pchar->left + j;
+            if(*src != 0)*dst = *src;
         }
         x += (pchar->ax >> 16);
     }
