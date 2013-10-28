@@ -25,8 +25,8 @@ static cxString cxShaderClippingGetFragmentSource(cxAny this)
     void main()                                                                                     \n\
     {                                                                                               \n\
         vec4 texColor = texture2D(uTexture0, vTexCoord);                                            \n\
-        if(texColor.a == 0.0)discard;                                                               \n\
-        gl_FragColor = vec4(0.0,0.0,0.0,0.0);                                                       \n\
+        if(texColor.a <= 0.0)discard;                                                               \n\
+        gl_FragColor = vFragmentColor * texColor;                                                   \n\
     }                                                                                               \n\
     ";
     return cxStringConstChars(fragment);

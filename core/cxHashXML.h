@@ -25,6 +25,8 @@ cxTypes cxHashXMLReadAtlasBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
 
 cxTypes cxHashXMLReadLangString(xmlTextReaderPtr reader);
 
+cxTypes cxHashXMLReadString(xmlTextReaderPtr reader);
+
 cxBool cxHashXMLLoad(cxAny hash,cxConstChars xml);
 
 cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader);

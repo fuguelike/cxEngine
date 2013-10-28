@@ -22,6 +22,7 @@ CX_OBJECT_DEF(cxViewXML, cxView)
     cxBool isError;
     cxHash items;
     cxHash events;
+    cxHash actions;
     CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
     CX_EVENT_ALLOC(onLoad);
 CX_OBJECT_END(cxViewXML)

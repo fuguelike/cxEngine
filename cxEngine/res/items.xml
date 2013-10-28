@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <cxHashXML>
+    
     <cxAtlasBoxPoint id="boxs" texture="candy.xml">
         <item top="1" left="2" right="3" bottom="4" key="red.png" />
         <item x="50" y="0" w="50" h="50" key="green.png" color="1,1,1,1" />
@@ -9,17 +10,30 @@
         <item x="200" y="0" key="orange.png" color="1,1,1,1" />
         <item x="250" y="0" w="50" h="50" key="purple.png" color="1,1,1,1" />
     </cxAtlasBoxPoint>
+    
     <cxAtlasBoxPoint id="boxs2" texture="candy.xml">
         <item right="20" bottom="30" w="50" h="50" key="red.png" />
         <item top="0" left="0" w="50" h="50" key="green.png" color="1,1,1,1" />
     </cxAtlasBoxPoint>
+    
+    <cxAtlasBoxPoint id="cboxes">
+        <item x="0" y="0" w="150" h="150" />
+    </cxAtlasBoxPoint>
+    
     <cxLangString id="zh">
         <item name="font">simsun.ttf</item>
         <item name="exp">粒子系统</item>
     </cxLangString>
+    
     <cxLangString id="en">
         <item name="font">banana.ttf</item>
         <item name="exp">Particle</item>
     </cxLangString>
+    
     <cxDB id="db" type="btree" file="test.db" table="list"/>
+    
+    <cxString id="wavdata" src="effect.wav" />
+    
+    <cxString id="tex"><![CDATA[Test]]></cxString>
+    
 </cxHashXML>

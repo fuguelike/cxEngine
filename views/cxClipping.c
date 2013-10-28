@@ -8,6 +8,7 @@
 
 #include <core/cxOpenGL.h>
 #include <core/cxViewXML.h>
+#include <core/cxEngine.h>
 #include "cxClipping.h"
 
 static GLuint cxUseLayer = 0;
@@ -38,8 +39,12 @@ static void cxClippingDrawBefore(cxAny pview)
     glEnable(GL_STENCIL_TEST);
     glStencilFunc(GL_ALWAYS, 1 << this->useLayer, 1 << this->useLayer);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    CX_TYPES_FOREACH(this->boxes, cxAtlasBoxPointType, tmp){
+        cxAtlasBoxPointType box = *tmp;
+        cxDrawClippingRect(box.pos, box.size);
+    }
     CX_EVENT_FIRE(this, onClipping);
-    glStencilFunc(this->inverse?GL_NOTEQUAL:GL_EQUAL, 1 << this->useLayer, 1 << this->useLayer);
+    glStencilFunc(this->inverse ? GL_NOTEQUAL : GL_EQUAL, 1 << this->useLayer, 1 << this->useLayer);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 }
 
@@ -55,6 +60,11 @@ void cxClippingXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxViewXML xml = xmlView;
     cxClipping this = mView;
     cxClippingSetInverse(this, cxXMLReadBoolAttr(reader, "cxClipping.inverse", this->inverse));
+    cxChar *sitems = cxXMLAttr("cxClipping.boxes");
+    if(sitems != NULL){
+        CX_RETAIN_SWAP(this->boxes,cxEngineDataSet(sitems));
+    }
+    xmlFree(sitems);
     cxXMLAppendEvent(xml->events, this, cxClipping, onClipping);
 }
 
@@ -72,9 +82,12 @@ CX_OBJECT_INIT(cxClipping, cxView)
 }
 CX_OBJECT_FREE(cxClipping, cxView)
 {
+    CX_RELEASE(this->boxes);
     CX_EVENT_RELEASE(this->onClipping);
     cxUnsetLayerIndex(this->useLayer);
 }
 CX_OBJECT_TERM(cxClipping, cxView)
+
+
 
 

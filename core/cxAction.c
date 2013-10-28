@@ -38,8 +38,8 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     //actionId
     cxActionSetId(this, cxXMLReadIntAttr(reader, "cxAction.id", this->actionId));
     //event
-    cxXMLAppendEvent(xml->events, this, cxAction, onBefore);
-    cxXMLAppendEvent(xml->events, this, cxAction, onAfter);
+    cxXMLAppendEvent(xml->events, this, cxAction, onStart);
+    cxXMLAppendEvent(xml->events, this, cxAction, onStop);
     cxXMLAppendEvent(xml->events, this, cxAction, onSplit);
     //forever
     if(cxXMLReadBoolAttr(reader, "cxAction.forever", false)){
@@ -68,8 +68,8 @@ CX_OBJECT_INIT(cxAction, cxObject)
 CX_OBJECT_FREE(cxAction, cxObject)
 {
     CX_EVENT_RELEASE(this->onSplit);
-    CX_EVENT_RELEASE(this->onAfter);
-    CX_EVENT_RELEASE(this->onBefore);
+    CX_EVENT_RELEASE(this->onStart);
+    CX_EVENT_RELEASE(this->onStop);
 }
 CX_OBJECT_TERM(cxAction, cxObject)
 
@@ -112,7 +112,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->delayElapsed = 0;
         this->durationElapsed = 0;
         CX_METHOD_RUN(this->Init,this);
-        CX_EVENT_FIRE(this, onBefore);
+        CX_EVENT_FIRE(this, onStart);
     }
     //for active
     if(!this->isActive){
@@ -154,7 +154,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //check action exit
 finished:
     if(this->isExit || isExit){
-        CX_EVENT_FIRE(this, onAfter);
+        CX_EVENT_FIRE(this, onStop);
         CX_METHOD_RUN(this->Over,this);
     }
     return (this->isExit || isExit);

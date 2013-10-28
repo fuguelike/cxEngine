@@ -22,19 +22,14 @@ void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor)
 void cxSpriteDraw(cxAny pview)
 {
     cxSprite this = pview;
+    CX_RETURN(this->texture == NULL);
     cxOpenGLSetBlendFactor(this->sfactor, this->dfactor);
     cxShaderUsing(this->shader);
-    if(this->texture != NULL){
-        cxTextureBind(this->texture);
-        cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
-        glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), &this->vbox);
-        glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTexCoord2f), &this->tbox);
-        glVertexAttribPointer(cxVertexAttribColor,    4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), &this->cbox);
-    }else{
-        cxOpenGLActiveAttribs(cxVertexAttribFlagPosition|cxVertexAttribFlagColor);
-        glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), &this->vbox);
-        glVertexAttribPointer(cxVertexAttribColor,    4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), &this->cbox);
-    }
+    cxTextureBind(this->texture);
+    cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
+    glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), &this->vbox);
+    glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTexCoord2f), &this->tbox);
+    glVertexAttribPointer(cxVertexAttribColor,    4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), &this->cbox);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 

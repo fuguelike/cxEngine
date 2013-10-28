@@ -19,16 +19,14 @@ void cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     this->grid.x = cxXMLReadIntAttr(reader, "cxTable.col", 0);
     this->grid.y = cxXMLReadIntAttr(reader, "cxTable.row", 0);
     //set type
-    if(this->grid.x > 0){
-        cxTableSetType(mView, cxTableArrayGrid);
-    }else if(this->grid.y > 0){
-        cxTableSetType(mView, cxTableArrayGrid);
-    }else if(type != NULL && strcasecmp(type, "vertical") == 0){
+    if(type != NULL && strcasecmp(type, "vertical") == 0){
         cxTableSetType(mView, cxTableArrayVertical);
     }else if(type != NULL && strcasecmp(type, "horizon") == 0){
         cxTableSetType(mView, cxTableArrayHorizon);
+    }else if(cxXMLReadIntsAttr(reader, "cxTable.type", &this->grid.x) == 2){
+        cxTableSetType(mView,cxTableArrayGrid);
     }else{
-        cxTableSetType(mView, cxTableArrayNone);
+        this->type = cxTableArrayNone;
     }
     xmlFree(type);
 }
@@ -72,41 +70,43 @@ static void cxTableUpdate(cxAny pview,cxAny args)
     cxFloat y = -this->super.size.h / 2.0f;
     cxFloat dx = 0;
     cxFloat dy = 0;
-    if(this->grid.x > 0){
+    if(this->grid.x > 0 || this->type == cxTableArrayHorizon){
         count = count > this->grid.x ? count : this->grid.x;
-        dx = this->super.size.w / (cxFloat)this->grid.x;
-        dy = this->super.size.h / ((cxFloat)count / (cxFloat)this->grid.x);
+        cxFloat hnum = this->grid.x > 0 ? ceilf((cxFloat)count/(cxFloat)this->grid.x) : 1.0f;
+        cxFloat wnum = this->grid.x > 0 ? (cxFloat)this->grid.x : (cxFloat)count;
+        dx = this->super.size.w / wnum;
+        dy = this->super.size.h / hnum;
     }
-    if(this->grid.y > 0){
+    if(this->grid.y > 0 || this->type == cxTableArrayVertical){
         count = count > this->grid.y ? count : this->grid.y;
-        dy = this->super.size.h / (cxFloat)this->grid.y;
-        dx = this->super.size.w / ((cxFloat)count / (cxFloat)this->grid.y);
+        cxFloat hnum = this->grid.y > 0 ? ceilf((cxFloat)count/(cxFloat)this->grid.y) : 1.0f;
+        cxFloat wnum = this->grid.y > 0 ? (cxFloat)this->grid.y : (cxFloat)count;
+        dy = this->super.size.h / wnum;
+        dx = this->super.size.w / hnum;
     }
     cxInt i = 0;
     CX_LIST_FOREACH(this->super.subViews, ele){
         cxView view = ele->object;
         cxVec2f pos = view->position;
+        cxInt col = 0;
+        cxInt row = 0;
         if(this->type == cxTableArrayVertical){
-            y += view->size.h/2.0f;
-            pos.y = y;
-            y += this->space.y + view->size.h / 2.0f;
+            col = 0;
+            row = i;
         }else if(this->type == cxTableArrayHorizon){
-            x += view->size.w / 2.0f;
-            pos.x = x;
-            x += this->space.x + view->size.w / 2.0f;
+            col = i;
+            row = 0;
         }else if(this->type == cxTableArrayGrid && this->grid.x > 0){
-            cxInt col = i % this->grid.x;
-            cxInt row = i / this->grid.x;
-            pos.x = x + dx/2.0f + col * dx;
-            pos.y = y + dy/2.0f + row * dy;
+            col = i % this->grid.x;
+            row = i / this->grid.x;
         }else if(this->type == cxTableArrayGrid && this->grid.y > 0){
-            cxInt col = i / this->grid.y;
-            cxInt row = i % this->grid.y;
-            pos.x = x + dx/2.0f + col * dx;
-            pos.y = y + dy/2.0f + row * dy;
+            col = i / this->grid.y;
+            row = i % this->grid.y;
         }else{
             continue;
         }
+        pos.x = x + dx/2.0f + col * dx;
+        pos.y = y + dy/2.0f + row * dy;
         cxViewSetPosition(view, pos);
         i++;
     }

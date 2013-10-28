@@ -39,6 +39,8 @@ void cxStreamClose(cxAny this);
 
 cxString cxStreamFileDir(cxAny this);
 
+cxString cxSreamBytes(cxAny this);
+
 CX_C_END
 
 #endif

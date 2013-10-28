@@ -17,6 +17,7 @@
 #include <views/cxTable.h>
 #include "cxViewXML.h"
 #include "cxHashXML.h"
+#include "cxActionXML.h"
 
 void cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
@@ -47,12 +48,14 @@ CX_OBJECT_INIT(cxViewXML, cxView)
     CX_METHOD_SET(this->Make, cxViewXMLMakeElement);
     this->items = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
+    this->actions = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxViewXML, cxView)
 {
     CX_EVENT_RELEASE(this->onLoad);
     CX_RELEASE(this->items);
     CX_RELEASE(this->events);
+    CX_RELEASE(this->actions);
 }
 CX_OBJECT_TERM(cxViewXML, cxView)
 
@@ -143,9 +146,23 @@ cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
     }else if(ELEMENT_IS_TYPE(cxTable)){
         cview = CX_CREATE(cxTable);
     }else{
-        CX_ERROR("xml type %s can't create",(cxConstChars)temp);
+        return NULL;
     }
     return cview;
+}
+
+static void cxViewXMLMakeActionElement(cxViewXML this,cxView pview,const xmlChar *temp,xmlTextReaderPtr reader)
+{
+    cxAny action = cxActionXMLMakeElement(temp, reader);
+    CX_RETURN(action == NULL);
+    cxChar *id = cxXMLAttr("id");
+    //save and wait run
+    if(id != NULL){
+        cxHashSet(this->actions, cxHashStrKey(id), action);
+    }else{
+        cxViewAppendAction(pview, action);
+    }
+    xmlFree(id);
 }
 
 static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack stack)
@@ -164,7 +181,7 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
             if(temp == NULL){
                 continue;
             }
-            cxView cview = CX_METHOD_GET(NULL, this->Make,temp,reader);
+            cxView cview = CX_METHOD_GET(NULL, this->Make, temp, reader);
             if(cview != NULL){
                 cxViewAppend(parent, cview);
                 //set root xmlview
@@ -173,6 +190,8 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
                 cxObjectXMLReadRun(cview, this, cview, reader);
                 //save to hash
                 cxViewXMLSet(this, cview, reader);
+            }else{
+                cxViewXMLMakeActionElement(this, parent, temp, reader);
             }
             if(xmlTextReaderIsEmptyElement(reader)){
                 continue;

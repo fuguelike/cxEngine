@@ -256,7 +256,7 @@ cxBool cxDBEnvOpen()
         return false;
     }
     this->opened = true;
-    if(this->progress != 100){
+    if(this->progress < 100){
         cxDBEnvFeedback(this->env, DB_VERB_RECOVERY, 100);
     }
     return true;

@@ -68,7 +68,7 @@ void cxEngineSetLocalLang(cxString lang);
 
 cxTypes cxEngineDataSet(cxConstChars url);
 
-cxString cxEngineLangText(cxConstChars xml,cxConstChars key);
+cxString cxEngineTypesText(cxConstChars xml,cxConstChars key);
 
 void cxEngineSystemInit();
 

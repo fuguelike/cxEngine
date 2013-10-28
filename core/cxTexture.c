@@ -63,7 +63,6 @@ cxBoxTex2f cxTextureBox(cxTexture this,cxConstChars key)
 
 cxRect4f cxTextureRect(cxTexture this,cxConstChars key)
 {
-    CX_ASSERT(this != NULL, "texture null");
     cxRect4f rv = cxRect4fv(0.0f, 0.0f, 1.0f, 1.0f);
     CX_RETURN(key == NULL, rv);
     cxTexCoord texCoord = cxHashGet(this->keys, cxHashStrKey(key));
@@ -79,9 +78,9 @@ cxRect4f cxTextureRect(cxTexture this,cxConstChars key)
 
 cxSize2f cxTextureSize(cxTexture this,cxConstChars key)
 {
-    CX_ASSERT(this != NULL, "texture null");
-    cxSize2f rv = this->size;
+    cxSize2f rv = cxSize2fv(0, 0);
     CX_RETURN(key == NULL, rv);
+    rv = this->size;
     cxTexCoord texCoord = cxHashGet(this->keys, cxHashStrKey(key));
     if(texCoord == NULL){
         return rv;

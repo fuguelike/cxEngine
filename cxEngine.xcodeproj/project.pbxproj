@@ -171,6 +171,7 @@
 		8351ACD81814BCFE0046E3C7 /* simsun.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351ACD71814BCFE0046E3C7 /* simsun.ttf */; };
 		836A06A1181A8D0E002962C6 /* libdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 836A06A0181A8D0E002962C6 /* libdb.a */; };
 		836A06A4181A8DD4002962C6 /* cxDB.c in Sources */ = {isa = PBXBuildFile; fileRef = 836A06A2181A8DD4002962C6 /* cxDB.c */; };
+		837378FF181E8D460027AABA /* clipping.xml in Resources */ = {isa = PBXBuildFile; fileRef = 837378FE181E8D460027AABA /* clipping.xml */; };
 		837574B1181C0F5E00F53377 /* cxTimer.c in Sources */ = {isa = PBXBuildFile; fileRef = 837574AF181C0F5E00F53377 /* cxTimer.c */; };
 		837574B3181C105600F53377 /* songti.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 837574B2181C105600F53377 /* songti.ttf */; };
 		83891E741808461A00AB4520 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83891E731808461A00AB4520 /* libpng.a */; };
@@ -435,6 +436,7 @@
 		836A06A0181A8D0E002962C6 /* libdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdb.a; path = libs/ios/lib/libdb.a; sourceTree = "<group>"; };
 		836A06A2181A8DD4002962C6 /* cxDB.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxDB.c; sourceTree = "<group>"; };
 		836A06A3181A8DD4002962C6 /* cxDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxDB.h; sourceTree = "<group>"; };
+		837378FE181E8D460027AABA /* clipping.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = clipping.xml; sourceTree = "<group>"; };
 		837574AF181C0F5E00F53377 /* cxTimer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTimer.c; sourceTree = "<group>"; };
 		837574B0181C0F5E00F53377 /* cxTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTimer.h; sourceTree = "<group>"; };
 		837574B2181C105600F53377 /* songti.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = songti.ttf; sourceTree = "<group>"; };
@@ -676,6 +678,7 @@
 		83319AC1180D416A007953BB /* res */ = {
 			isa = PBXGroup;
 			children = (
+				837378FE181E8D460027AABA /* clipping.xml */,
 				83427B93181D2508001EB4AF /* effect.wav */,
 				837574B2181C105600F53377 /* songti.ttf */,
 				83F5565D181941FD009B9589 /* action.xml */,
@@ -1051,6 +1054,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				83319ACB180D416A007953BB /* 2.pvr in Resources */,
+				837378FF181E8D460027AABA /* clipping.xml in Resources */,
 				83319ACE180D416A007953BB /* candy.png in Resources */,
 				837574B3181C105600F53377 /* songti.ttf in Resources */,
 				83319ACD180D416A007953BB /* actions.xml in Resources */,

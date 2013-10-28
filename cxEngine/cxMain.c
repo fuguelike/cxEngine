@@ -29,27 +29,28 @@
 #include <core/cxFreeType.h>
 #include <views/cxLabel.h>
 #include <core/cxDB.h>
+#include <core/cxPlayer.h>
 
 static void cxEventTest(cxAny view,cxAny arg)
 {
     cxActionXMLAttachView(view, "actions.xml", "move");
 }
 
-static void viewLoad(cxAny pview,cxAny arg)
+static void viewLoad(cxAny xmlView,cxAny arg)
 {
     //pview == cxViewXML
     //add view custom event
-    cxViewXMLRegisteEvent(pview, "cxEventTest",cxEventTest);
+    cxViewXMLRegisteEvent(xmlView, "cxEventTest",cxEventTest);
 }
 
-static void view2Load(cxAny pview,cxAny arg)
+static void view2Load(cxAny xmlView,cxAny arg)
 {
     //pview == cxViewXML
     //add view custom event
-//    cxViewXMLRegisteEvent(pview, "cxEventTest",cxEventTest);
+//    cxViewXMLRegisteEvent(xmlView, "cxEventTest",cxEventTest);
 }
 
-static void actionsLoad(cxAny pav,cxAny arg)
+static void actionsLoad(cxAny xmlAction,cxAny arg)
 {
     //pav == cxActionXML
     //add action custom event
@@ -65,13 +66,13 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxBool ret = cxDBEnvOpen();
-    CX_ASSERT(ret, "cxDBEnv open error");
-    CX_UNUSED_PARAM(ret);
+    //prepare load
+    cxPlayerOpen();
+    cxDBEnvOpen();
+    //load items.xml
     cxEngineDataSet("items.xml");
     
-    cxViewXML v = cxViewXMLCreate("main.xml");
-    cxWindowPushView(v, NULL);
+    cxWindowPushXML("main.xml");
 }
 
 void cxEngineFree(cxEngine engine)

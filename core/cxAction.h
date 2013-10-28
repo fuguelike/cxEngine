@@ -45,8 +45,8 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_METHOD_DEF(cxActionFunc,         Over);
     CX_METHOD_DEF(cxActionStepFunc,     Step);
     CX_METHOD_DEF(cxActionIsExitFunc,   Exit);
-    CX_EVENT_ALLOC(onBefore);
-    CX_EVENT_ALLOC(onAfter);
+    CX_EVENT_ALLOC(onStart);
+    CX_EVENT_ALLOC(onStop);
     CX_EVENT_ALLOC(onSplit);
 CX_OBJECT_END(cxAction)
 

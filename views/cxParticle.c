@@ -107,7 +107,7 @@ static void cxParticleStep(cxAny pview,cxParticleUnit *particle)
     cxBoxVec3f vq={0};
     cxColor4f color = particle->color;
     cxParticleUnitToBoxVec3f(particle, &vq);
-    cxBoxPoint *box = &this->super.boxs[this->index];
+    cxBoxPoint *box = &this->super.boxes[this->index];
     box->lb.colors = color;
     box->rb.colors = color;
     box->lt.colors = color;

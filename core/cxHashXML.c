@@ -5,6 +5,7 @@
 //  Created by xuhua on 10/19/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
+#include <streams/cxAssetsStream.h>
 #include <textures/cxTextureFactory.h>
 #include <views/cxAtlas.h>
 #include "cxEngine.h"
@@ -16,13 +17,12 @@
 cxTypes cxHashXMLReadAtlasBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
 {
     cxTypes types = cxAtlasBoxPointTypesCreate();
-    cxTexture texture = cxTextureLoadFile(texfile);
-    if(texture == NULL){
-        CX_ERROR("boxPoint must set textfile at cxBoxPoint node");
-        return NULL;
-    }
+    cxTexture texture = NULL;
     cxInt index = 0;
-    types->assist = cxStringAllocChars(texfile);
+    if(texfile != NULL){
+        types->assist = cxStringAllocChars(texfile);
+        texture = cxTextureLoadFile(texfile);
+    }
     int depth = xmlTextReaderDepth(reader);
     while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
@@ -32,7 +32,6 @@ cxTypes cxHashXMLReadAtlasBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
         if(!ELEMENT_IS_TYPE(item)){
             continue;
         }
-        
         cxAtlasBoxPointType item = {0};
         
         cxChar *top = cxXMLAttr("top");
@@ -144,6 +143,27 @@ cxTypes cxHashXMLReadDB(xmlTextReaderPtr reader)
     return cxDBTypesCreate(db);
 }
 
+cxTypes cxHashXMLReadString(xmlTextReaderPtr reader)
+{
+    cxTypes types = cxStringTypesCreate();
+    cxString bytes = NULL;
+    cxChar *src = cxXMLAttr("src");
+    if(src != NULL){
+        cxStream stream = cxAssetsStreamCreate(src);
+        bytes = cxSreamBytes(stream);
+    }else if(!xmlTextReaderIsEmptyElement(reader)) {
+        bytes = cxStringConstChars(cxXMLReadString(reader));
+    }else{
+        bytes = NULL;
+    }
+    xmlFree(src);
+    if(bytes == NULL){
+        return NULL;
+    }
+    CX_RETAIN_SWAP(types->assist, bytes);
+    return types;
+}
+
 CX_OBJECT_INIT(cxHashXML, cxObject)
 {
     this->items = CX_ALLOC(cxHash);
@@ -222,6 +242,8 @@ cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader)
                 object = cxHashXMLReadLangString(reader);
             }else if(ELEMENT_IS_TYPE(cxDB)){
                 object = cxHashXMLReadDB(reader);
+            }else if(ELEMENT_IS_TYPE(cxString)){
+                object = cxHashXMLReadString(reader);
             }
             if(object != NULL){
                 cxHashSet(xml->items, cxHashStrKey(sid), object);

@@ -38,6 +38,13 @@ cxTypes cxLangStringTypesCreate()
     return this;
 }
 
+cxTypes cxStringTypesCreate()
+{
+    cxTypes this = CX_CREATE(cxTypes);
+    this->type = cxTypesString;
+    return this;
+}
+
 cxTypes cxDBTypesCreate(cxAny db)
 {
     cxTypes this = CX_CREATE(cxTypes);

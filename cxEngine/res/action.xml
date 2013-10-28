@@ -5,11 +5,11 @@
     
     <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="candy.xml?green.png"/>
     
-    <cxTable cxView.cropping="true" cxView.right="10" cxView.left="10" cxView.top="260" cxView.bottom="10" cxTable.space="10,10" cxTable.col="4">
+    <cxTable cxView.cropping="true" cxView.right="10" cxView.left="10" cxView.top="260" cxView.bottom="10" cxTable.space="10,10" cxTable.type="4,0">
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
-            cxButton.onRelease="cxActionRun({'src':'actions.xml?move','view':'sprite','curve':'EaseIn'})">
+            cxButton.onRelease="cxActionRun({'src':'actions.xml','view':'sprite','curve':'EaseIn'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="EaseIn" cxLabel.size="25"/>
         </cxButton>

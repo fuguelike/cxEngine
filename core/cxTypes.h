@@ -191,6 +191,7 @@ typedef struct {
 typedef enum {
     cxTypesAtlasBoxPoint,
     cxTypesLangString,
+    cxTypesString,
     cxTypesDB,
 }cxTypesType;
 
@@ -206,6 +207,8 @@ cxTypes cxAtlasBoxPointTypesCreate();
 cxTypes cxLangStringTypesCreate();
 
 cxTypes cxDBTypesCreate(cxAny db);
+
+cxTypes cxStringTypesCreate();
 
 #define cxTypesLength(a)        utarray_len((a)->utArray)
 

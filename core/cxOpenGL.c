@@ -55,7 +55,7 @@ void cxDrawLineLoop(const cxVec2f *vertices,int num,const cxColor3f color)
 
 void cxDrawClippingRect(const cxVec2f pos,cxSize2f size)
 {
-    cxDrawSolidRect(cxRect4fv(pos.x, pos.y, size.w, size.h), cxColor4fv(1, 1, 1, 1), "cxShaderDefault");
+    cxDrawSolidRect(cxRect4fv(pos.x, pos.y, size.w, size.h), cxColor4fv(0, 0, 0, 0), "cxShaderDefault");
 }
 
 void cxDrawSolidRect(const cxRect4f rect,const cxColor4f color,cxConstChars skey)
@@ -75,7 +75,7 @@ void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars ske
     cxColor4f colors[4] = {color,color,color,color};
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     cxOpenGLUsingShader(skey);
-    cxOpenGLActiveAttribs(cxVertexAttribFlagPosition|cxVertexAttribFlagColor);
+    cxOpenGLActiveAttribs(cxVertexAttribFlagPosition | cxVertexAttribFlagColor);
     glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), box);
     glVertexAttribPointer(cxVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), colors);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

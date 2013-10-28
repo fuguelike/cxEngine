@@ -279,10 +279,12 @@ cxTypes cxEngineDataSet(cxConstChars url)
     return NULL;
 }
 
-cxString cxEngineLangText(cxConstChars xml,cxConstChars key)
+cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)
 {
     cxEngine this = cxEngineInstance();
+    //from cxLangString
     CX_ASSERT(this->lang != NULL, "system not set locate lang");
+    
     CX_CONST_STRING(url,"%s?%s",xml,cxStringBody(this->lang));
     cxString ret = NULL;
     cxTypes types = cxEngineDataSet(url);
@@ -290,11 +292,20 @@ cxString cxEngineLangText(cxConstChars xml,cxConstChars key)
         ret = cxTypesGet(types, key);
     }
     CX_RETURN(ret != NULL,ret);
-    //
+    
+    //from cxString
+    CX_CONST_STRING(surl,"%s?%s",xml,key);
+    types = cxEngineDataSet(surl);
+    if(types != NULL && types->type == cxTypesString){
+        ret = types->assist;
+    }
+    CX_RETURN(ret != NULL,ret);
+    
+    //from cxDB get String
     cxChar dbKey[128]={0};
     cxChar rowKey[128]={0};
     if(cxParseQuery(key, dbKey, rowKey) != 2){
-        return NULL;
+        return ret;
     }
     CX_CONST_STRING(dburl,"%s?%s",xml,dbKey);
     types = cxEngineDataSet(dburl);

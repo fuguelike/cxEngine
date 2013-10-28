@@ -7,6 +7,7 @@
 //
 
 #include <core/cxEngine.h>
+#include <core/cxViewXML.h>
 #include "cxWindow.h"
 
 CX_OBJECT_INIT(cxWindow, cxView)
@@ -18,6 +19,25 @@ CX_OBJECT_FREE(cxWindow, cxView)
     CX_RELEASE(this->views);
 }
 CX_OBJECT_TERM(cxWindow, cxView)
+
+void cxWindowPushXML(cxConstChars xml)
+{
+    cxViewXML xmlView = cxViewXMLCreate(xml);
+    CX_ASSERT(xmlView != NULL, "create xml view error : %s",xml);
+    cxWindowPushView(xmlView, NULL);
+}
+
+void cxWindowReplaceXML(cxConstChars xml)
+{
+    cxViewXML xmlView = cxViewXMLCreate(xml);
+    CX_ASSERT(xmlView != NULL, "create xml view error : %s",xml);
+    cxWindowReplaceView(xmlView, NULL);
+}
+
+void cxWindowPopXML()
+{
+    cxWindowPopView(NULL);
+}
 
 void cxWindowPushView(cxAny pview,cxAny args)
 {

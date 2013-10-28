@@ -21,9 +21,9 @@ typedef struct {
 CX_OBJECT_DEF(cxAtlas, cxSprite)
     GLuint vaoid;
     GLuint vboid[2];
-    cxInt boxNumber;
+    cxInt capacity;
     cxInt number;
-    cxBoxPoint *boxs;
+    cxBoxPoint *boxes;
     GLushort *indices;
     cxBool isDirty;
     cxBool isInit;
@@ -41,7 +41,7 @@ void cxAtlasResize(cxAny pview,cxAny arg);
 
 cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color);
 
-void cxAtlasSetNumber(cxAny pview,cxInt boxNumber);
+void cxAtlasSetNumber(cxAny pview,cxInt capacity);
 
 void cxAtlasSetScale9(cxAny pview,cxBox4f box);
 

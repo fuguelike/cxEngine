@@ -38,7 +38,7 @@ static void cxActionRootXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReader
     cxXMLAppendEvent(xml->events, this, cxActionXML, onLoad);
 }
 
-static void cxActionItemAfter(cxAny pav,cxAny arg)
+static void cxActionItemStop(cxAny pav,cxAny arg)
 {
     cxActionXML xml = cxEventArgToWeakRef(arg);
     CX_ASSERT(xml != NULL, "event arg not set");
@@ -53,7 +53,7 @@ void cxActionXMLRunNext(cxAny pav)
     cxActionXML this = pav;
     if(this->index >= 0 && this->index < cxArrayLength(this->items)){
         cxAction action = cxArrayAtIndex(this->items, this->index);
-        CX_EVENT_APPEND(action->onAfter, cxActionItemAfter, cxEventArgWeakRef(this));
+        CX_EVENT_APPEND(action->onStop, cxActionItemStop, cxEventArgWeakRef(this));
         cxViewAppendAction(this->super.view, action);
     }
 }
@@ -63,7 +63,7 @@ void cxActionXMLRunAll(cxAny pav)
     cxActionXML this = pav;
     CX_ARRAY_FOREACH(this->items, ele){
         cxAction action = cxArrayObject(ele);
-        CX_EVENT_APPEND(action->onAfter, cxActionItemAfter, cxEventArgWeakRef(this));
+        CX_EVENT_APPEND(action->onStop, cxActionItemStop, cxEventArgWeakRef(this));
         cxViewAppendAction(this->super.view, action);
     }
 }
@@ -143,21 +143,21 @@ void cxActionXMLSet(cxAny xmlAction,cxAny mAction,xmlTextReaderPtr reader)
 
 cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
 {
-    cxAction action = NULL;
+    cxAny action = NULL;
     if(ELEMENT_IS_TYPE(cxMove)){
-        action = (cxAction)CX_CREATE(cxMove);
+        action = CX_CREATE(cxMove);
     }else if(ELEMENT_IS_TYPE(cxScale)){
-        action = (cxAction)CX_CREATE(cxScale);
+        action = CX_CREATE(cxScale);
     }else if(ELEMENT_IS_TYPE(cxRotate)){
-        action = (cxAction)CX_CREATE(cxRotate);
+        action = CX_CREATE(cxRotate);
     }else if(ELEMENT_IS_TYPE(cxJump)){
-        action = (cxAction)CX_CREATE(cxJump);
+        action = CX_CREATE(cxJump);
     }else if(ELEMENT_IS_TYPE(cxFade)){
-        action = (cxAction)CX_CREATE(cxFade);
+        action = CX_CREATE(cxFade);
     }else if(ELEMENT_IS_TYPE(cxTint)){
-        action = (cxAction)CX_CREATE(cxTint);
+        action = CX_CREATE(cxTint);
     }else if(ELEMENT_IS_TYPE(cxTimer)){
-        action = (cxAction)CX_CREATE(cxTimer);
+        action = CX_CREATE(cxTimer);
     }else{
         CX_ERROR("action xml can't create type %s",temp);
     }
@@ -194,9 +194,9 @@ void cxPrintMessageEvent(cxAny pview,cxAny arg)
 
 void cxPlaySoundEvent(cxAny object,cxAny arg)
 {
-    CX_RETURN(arg == NULL);
+    CX_ASSERT(arg != NULL, "args error");
     cxString src = cxEventArgString(arg, "src");
-    CX_RETURN(src == NULL);
+    CX_ASSERT(src != NULL, "audio src not set");
     cxConstChars path = cxStringBody(src);
     cxBool loop = cxEventArgBool(arg, "loop");
     cxPlayFile(path,loop);
@@ -212,7 +212,6 @@ void cxViewRunActionEvent(cxAny pview,cxAny arg)
     cxChar file[128];
     cxChar key[128];
     cxInt rv = cxParseURL(url, file, key);
-    CX_RETURN(rv == 0);
     //get view by id
     cxAny view = pview;
     cxString sview = cxEventArgString(arg,"view");
@@ -221,7 +220,12 @@ void cxViewRunActionEvent(cxAny pview,cxAny arg)
     }
     CX_RETURN(view == NULL);
     //get action
-    cxAny action = cxActionXMLGet(file, rv == 2 ? key : NULL);
+    cxAny action = NULL;
+    if(rv == 2){
+        action = cxActionXMLGet(file, key);
+    }else if(rv == 1){
+        action = cxActionXMLGet(file, NULL);
+    }
     CX_RETURN(action == NULL);
     //get corve
     cxString scurve = cxEventArgString(arg, "curve");

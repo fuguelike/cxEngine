@@ -18,6 +18,12 @@ CX_OBJECT_DEF(cxWindow, cxView)
     cxStack views;
 CX_OBJECT_END(cxWindow)
 
+void cxWindowPushXML(cxConstChars xml);
+
+void cxWindowReplaceXML(cxConstChars xml);
+
+void cxWindowPopXML();
+
 void cxWindowPushView(cxAny pview,cxAny args);
 
 void cxWindowPopView(cxAny args);

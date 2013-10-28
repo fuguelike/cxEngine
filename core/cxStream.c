@@ -42,6 +42,13 @@ cxString cxStreamFileDir(cxAny this)
     return cxStringCreate("%s",dir);
 }
 
+cxString cxSreamBytes(cxAny this)
+{
+    cxStream stream = this;
+    CX_RETURN(this == NULL, NULL);
+    return stream->interface->AllBytes(this);
+}
+
 
 
 
