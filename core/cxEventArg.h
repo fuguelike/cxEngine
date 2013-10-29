@@ -43,9 +43,9 @@ cxInt cxEventArgInt(cxEventArg this,cxConstChars key);
 
 cxInt cxEventArgToInt(cxEventArg this);
 
-cxString cxEventArgString(cxEventArg this,cxConstChars key);
+cxConstChars cxEventArgString(cxEventArg this,cxConstChars key);
 
-cxString cxEventArgToString(cxEventArg this);
+cxConstChars cxEventArgToString(cxEventArg this);
 
 cxDouble cxEventArgDouble(cxEventArg this,cxConstChars key);
 

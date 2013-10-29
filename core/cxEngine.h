@@ -30,8 +30,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash scripts;
     cxHash datasets;
     cxHash actions;
-    cxCurve curve;
-    cxStack autoStack;
+    cxStack autopool;
     cxFloat frameInterval;
     cxSize2f winsize;
     cxBool isInit;
@@ -62,8 +61,6 @@ void cxEngineRemoveScript(cxConstChars file);
 void cxEngineTimeReset();
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file);
-
-cxCurveItem cxEngineGetCurve(cxConstChars name);
 
 void cxEngineSetLocalLang(cxString lang);
 

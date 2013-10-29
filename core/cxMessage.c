@@ -48,9 +48,9 @@ CX_OBJECT_TERM(cxMessage, cxObject)
 void cxMessagePostEvent(cxAny any,cxAny arg)
 {
     CX_RETURN(arg == NULL);
-    cxString skey = cxEventArgToString(arg);
+    cxConstChars skey = cxEventArgToString(arg);
     CX_RETURN(skey == NULL);
-    cxMessagePost(cxStringBody(skey), any);
+    cxMessagePost(skey, any);
 }
 
 void cxMessageRemove(cxAny dst)

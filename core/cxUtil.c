@@ -52,21 +52,20 @@ cxInt cxParseQuery(cxConstChars query,cxChar *key,cxChar *value)
     return rv;
 }
 
-cxInt cxParseURL(cxString url,cxChar *path,cxChar *query)
+cxInt cxParseURL(cxConstChars url,cxChar *path,cxChar *query)
 {
     CX_ASSERT(url != NULL && path != NULL && query != NULL, "args error");
     cxInt rv = 0;
-    cxConstChars ptr = cxStringBody(url);
-    cxInt len = strlen(ptr);
-    cxChar *sq = strrchr(ptr, '?');
+    cxInt len = strlen(url);
+    cxChar *sq = strrchr(url, '?');
     if(sq != NULL){
         cxInt cl = len - (cxInt)strlen(sq);
-        memcpy(path, ptr, cl);
+        memcpy(path, url, cl);
         path[cl]='\0';
         memcpy(query, sq + 1, strlen(sq));
         rv = 2;
     }else{
-        memcpy(path, ptr, len + 1);
+        memcpy(path, url, len + 1);
         rv = 1;
     }
     return rv;

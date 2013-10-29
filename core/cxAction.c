@@ -26,7 +26,7 @@ cxBool cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reade
     cxActionSetDuration(mAction, time/speed);
     //curve
     cxChar *scurve = cxXMLAttr("cxAction.curve");
-    cxCurveItem curve = cxEngineGetCurve(scurve);
+    cxCurveItem curve = cxCurveGet(scurve);
     if(curve != NULL){
         CX_METHOD_SET(this->Curve, curve->func);
     }

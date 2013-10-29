@@ -129,17 +129,16 @@ cxDouble cxEventArgDouble(cxEventArg this,cxConstChars key)
     return json_real_value(v);
 }
 
-cxString cxEventArgToString(cxEventArg this)
+cxConstChars cxEventArgToString(cxEventArg this)
 {
     CX_ASSERT(this->json != NULL, "args error");
     if(!json_is_string(this->json)){
         return NULL;
     }
-    cxConstChars str = json_string_value(this->json);
-    return cxStringCreate("%s",str);
+    return json_string_value(this->json);
 }
 
-cxString cxEventArgString(cxEventArg this,cxConstChars key)
+cxConstChars cxEventArgString(cxEventArg this,cxConstChars key)
 {
     CX_ASSERT(this->json != NULL && key != NULL, "args error");
     json_t *v = json_object_get(this->json, key);
@@ -147,8 +146,7 @@ cxString cxEventArgString(cxEventArg this,cxConstChars key)
         return NULL;
     }
     CX_ASSERT(json_is_string(v), "key %s not string type",key);
-    cxConstChars str = json_string_value(v);
-    return cxStringCreate("%s",str);
+    return json_string_value(v);
 }
 
 

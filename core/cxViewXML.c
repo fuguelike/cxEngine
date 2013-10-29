@@ -80,22 +80,20 @@ void cxViewXMLRemove(cxAny pview,cxConstChars key)
 void cxViewReplaceViewEvent(cxAny pview,cxAny arg)
 {
     CX_ASSERT(arg != NULL, "args error");
-    cxString url = cxEventArgToString(arg);
+    cxConstChars url = cxEventArgToString(arg);
     CX_ASSERT(url != NULL, "args error");
-    cxConstChars file = cxStringBody(url);
-    cxViewXML view = cxViewXMLCreate(file);
-    CX_ASSERT(view != NULL, "create xml view %s falied ",file);
+    cxViewXML view = cxViewXMLCreate(url);
+    CX_ASSERT(view != NULL, "create xml view %s falied ",url);
     cxWindowReplaceView(view,arg);
 }
 
 void cxViewPushViewEvent(cxAny pview,cxAny arg)
 {
     CX_ASSERT(arg != NULL, "args error");
-    cxString url = cxEventArgToString(arg);
+    cxConstChars url = cxEventArgToString(arg);
     CX_ASSERT(url != NULL, "args error");
-    cxConstChars file = cxStringBody(url);
-    cxViewXML view = cxViewXMLCreate(file);
-    CX_ASSERT(view != NULL, "create xml view %s falied ",file);
+    cxViewXML view = cxViewXMLCreate(url);
+    CX_ASSERT(view != NULL, "create xml view %s falied ",url);
     cxWindowPushView(view,arg);
 }
 

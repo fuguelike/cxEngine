@@ -88,8 +88,7 @@ cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     CX_RETURN(surl == NULL, true);
     cxChar file[128];
     cxChar key[64];
-    cxString url = cxStringCreate("%s",surl);
-    cxInt rv = cxParseURL(url, file, key);
+    cxInt rv = cxParseURL(surl, file, key);
     CX_RETURN(rv <= 0, true);
     cxTexture texture = cxTextureLoadFile(file);
     CX_ASSERT(texture != NULL, "texture load failed %s",file);

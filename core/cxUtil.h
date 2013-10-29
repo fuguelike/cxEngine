@@ -27,7 +27,7 @@ cxString cxWAVSamples(cxConstChars file);
 
 cxBool cxParseKeyValue(cxChar *query,cxChar *key,cxChar *value);
 
-cxInt cxParseURL(cxString url,cxChar *path,cxChar *query);
+cxInt cxParseURL(cxConstChars url,cxChar *path,cxChar *query);
 
 cxInt cxParseQuery(cxConstChars query,cxChar *key,cxChar *value);
 

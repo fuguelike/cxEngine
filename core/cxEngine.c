@@ -118,14 +118,13 @@ void cxEngineLayout(cxInt width,cxInt height)
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
     kmGLInitialize();
-    this->autoStack = CX_ALLOC(cxStack);
+    this->autopool = CX_ALLOC(cxStack);
     this->frameInterval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->contentScaleFactor = 1.0f;
     this->window = CX_ALLOC(cxWindow);
     this->scripts = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
-    this->curve = CX_ALLOC(cxCurve);
     this->datasets = CX_ALLOC(cxHash);
     this->actions = CX_ALLOC(cxHash);
 }
@@ -134,7 +133,6 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->actions);
     CX_RELEASE(this->lang);
     CX_RELEASE(this->datasets);
-    CX_RELEASE(this->curve);
     CX_RELEASE(this->events);
     CX_RELEASE(this->scripts);
     CX_EVENT_RELEASE(this->onFree);
@@ -143,17 +141,18 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
     CX_RELEASE(this->window);
+    cxCurveDestroy();
     cxOpenGLDestroy();
     cxMessageDestroy();
     kmGLFreeAll();
     cxDBEnvDestroy();
-    CX_RELEASE(this->autoStack);
+    CX_RELEASE(this->autopool);
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
 
 cxStack cxEngineAutoStack()
 {
-    return cxEngineInstance()->autoStack;
+    return cxEngineInstance()->autopool;
 }
 
 void cxEngineSetLocalLang(cxString lang)
@@ -238,13 +237,6 @@ cxXMLScript cxEngineGetXMLScript(cxConstChars file)
     return script;
 }
 
-cxCurveItem cxEngineGetCurve(cxConstChars name)
-{
-    cxEngine this = cxEngineInstance();
-    CX_RETURN(name == NULL,NULL);
-    return cxHashGet(this->curve->curves, cxHashStrKey(name));
-}
-
 void cxEngineTimeReset()
 {
     cxEngine this = cxEngineInstance();
@@ -262,10 +254,9 @@ cxTypes cxEngineDataSet(cxConstChars url)
 {
     CX_RETURN(url == NULL, NULL);
     cxEngine this = cxEngineInstance();
-    cxString file = cxStringStatic(url);
     cxChar path[128]={0};
     cxChar key[128]={0};
-    cxInt ret = cxParseURL(file, path, key);
+    cxInt ret = cxParseURL(url, path, key);
     CX_RETURN(ret == 0, NULL);
     cxHashXML sets = cxHashGet(this->datasets, cxHashStrKey(path));
     if(sets == NULL){

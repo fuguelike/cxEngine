@@ -19,7 +19,9 @@ CX_OBJECT_FREE(cxTypes, cxObject)
 {
     CX_RELEASE(this->assist);
     CX_RELEASE(this->kvs);
-    utarray_free(this->utArray);
+    if(this->utArray != NULL){
+        utarray_free(this->utArray);
+    }
 }
 CX_OBJECT_TERM(cxType, cxObject)
 

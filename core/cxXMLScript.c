@@ -186,7 +186,7 @@ cxString cxXMLReadLangStringAttr(xmlTextReaderPtr reader,cxConstChars name)
     CX_RETURN(value == NULL, NULL);
     cxChar src[128]={0};
     cxChar key[128]={0};
-    if(cxParseURL(cxStringConstChars(value), src, key) == 2){
+    if(cxParseURL(value, src, key) == 2){
         rv = cxEngineTypesText(src, key);
     }else{
         rv = cxStringConstChars(value);

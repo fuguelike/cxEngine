@@ -215,12 +215,35 @@ cxFloat cxCurveExpInOut(cxAny pav,cxFloat time)
     return time;
 }
 
-void cxCurveRegister(cxCurve this,cxConstChars name,cxActionCurveFunc func)
+static void cxCurveRegister(cxCurve this,cxConstChars name,cxActionCurveFunc func)
 {
     cxCurveItem item = CX_ALLOC(cxCurveItem);
     item->func = func;
     cxHashSet(this->curves, cxHashStrKey(name), item);
     CX_RELEASE(item);
+}
+
+static cxCurve instance = NULL;
+
+static cxCurve cxCurveInstance()
+{
+    if(instance == NULL){
+        instance = CX_ALLOC(cxCurve);
+    }
+    return instance;
+}
+
+void cxCurveDestroy()
+{
+    CX_RELEASE(instance);
+    instance = NULL;
+}
+
+cxCurveItem cxCurveGet(cxConstChars key)
+{
+    CX_RETURN(key == NULL, NULL);
+    cxCurve this = cxCurveInstance();
+    return cxHashGet(this->curves, cxHashStrKey(key));
 }
 
 CX_OBJECT_INIT(cxCurve, cxObject)

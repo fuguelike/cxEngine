@@ -24,7 +24,9 @@ CX_OBJECT_DEF(cxCurve, cxObject)
     cxHash curves;
 CX_OBJECT_END(cxCurve)
 
-void cxCurveRegister(cxCurve this,cxConstChars name,cxActionCurveFunc func);
+void cxCurveDestroy();
+
+cxCurveItem cxCurveGet(cxConstChars key);
 
 cxFloat cxCurveBackIn(cxAny pav,cxFloat time);
 
