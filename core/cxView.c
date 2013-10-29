@@ -89,7 +89,7 @@ cxBool cxViewZeroSize(cxAny pview)
     return cxSize2Zero(this->size);
 }
 
-void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
+cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
     cxObjectXMLReadAttr(pxml, view, reader);
     cxViewXML xml = pxml;
@@ -131,6 +131,7 @@ void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
     cxXMLAppendEvent(xml->events, this, cxView, onResize);
     cxXMLAppendEvent(xml->events, this, cxView, onLayout);
     cxXMLAppendEvent(xml->events, this, cxView, onChanged);
+    return true;
 }
 
 void cxViewSetCropping(cxAny pview,cxBool cropping)

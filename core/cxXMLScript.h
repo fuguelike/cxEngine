@@ -25,6 +25,10 @@ CX_OBJECT_DEF(cxXMLScript, cxObject)
     cxString bytes;
 CX_OBJECT_END(cxXMLScript)
 
+xmlTextReaderPtr cxXMLReaderForString(cxString code);
+
+xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this);
+
 cxInt cxXMLReadFloatsAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat *values);
 
 cxEventItem cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader);
@@ -42,11 +46,14 @@ do{                                                             \
 cxChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name);
 #define cxXMLAttr(n)    cxXMLAttrAuto(reader,n)
 
+//return need xmlFree free
 cxChar *cxXMLReadString(xmlTextReaderPtr reader);
 
 cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat value);
 
 cxColor4f cxXMLReadColorAttr(xmlTextReaderPtr reader,cxConstChars name,cxColor4f color);
+
+cxString cxXMLReaderReadOuterXml(xmlTextReaderPtr reader);
 
 cxString cxXMLReadLangStringAttr(xmlTextReaderPtr reader,cxConstChars name);
 

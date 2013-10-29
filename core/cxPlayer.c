@@ -10,10 +10,14 @@
 #include <streams/cxAssetsStream.h>
 #include "cxPlayer.h"
 
+static cxInt cxPlayerFreq = 11025;
+
+static cxInt cxPlayerFormat = AL_FORMAT_MONO16;
+
 CX_OBJECT_INIT(cxTrack, cxObject)
 {
-    this->freq = 11025;
-    this->format = AL_FORMAT_MONO16;
+    this->freq = cxPlayerFreq;
+    this->format = cxPlayerFormat;
     alGenBuffers(1, &this->buffer);
     alGenSources(1, &this->source);
 }
@@ -81,7 +85,7 @@ cxTrack cxPlayFile(cxConstChars file,cxBool loop)
     cxPlayer this = cxPlayerInstance();
     cxString data = cxHashGet(this->caches, cxHashStrKey(file));
     if(data != NULL){
-        goto completed;
+        return cxPlayBuffer(data,loop);
     }
     data = cxWAVSamples(file);
     if(data == NULL){
@@ -89,7 +93,6 @@ cxTrack cxPlayFile(cxConstChars file,cxBool loop)
         return NULL;
     }
     cxHashSet(this->caches, cxHashStrKey(file), data);
-completed:
     return cxPlayBuffer(data,loop);
 }
 
@@ -111,6 +114,7 @@ CX_OBJECT_INIT(cxPlayer, cxObject)
     CX_ASSERT(this->context != NULL, "alc create context failed");
     
     alcMakeContextCurrent(this->context);
+    
     this->tracks = CX_ALLOC(cxArray);
     this->caches = CX_ALLOC(cxHash);
     
@@ -131,8 +135,14 @@ CX_OBJECT_FREE(cxPlayer, cxObject)
 }
 CX_OBJECT_TERM(cxPlayer, cxObject)
 
-void cxPlayerOpen()
+void cxPlayerOpen(cxInt freq,cxInt format)
 {
+    if(freq != 0){
+        cxPlayerFreq = freq;
+    }
+    if(format != 0){
+        cxPlayerFormat = format;
+    }
     cxPlayerInstance();
 }
 

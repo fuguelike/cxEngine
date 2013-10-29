@@ -8,7 +8,7 @@
 
 #include "cxTable.h"
 
-void cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+cxBool cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxTable this = mView;
@@ -29,6 +29,7 @@ void cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
         this->type = cxTableArrayNone;
     }
     xmlFree(type);
+    return true;
 }
 
 void cxTableSetSpace(cxAny pview,cxVec2f space)

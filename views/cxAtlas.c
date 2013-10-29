@@ -11,7 +11,7 @@
 #include <core/cxViewXML.h>
 #include "cxAtlas.h"
 
-void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+cxBool cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxAtlas this = mView;
     //support boxes mode
@@ -27,6 +27,7 @@ void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }
     //
     cxSpriteXMLReadAttr(xmlView, mView, reader);
+    return true;
 }
 
 //on resize load

@@ -29,6 +29,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash events;
     cxHash scripts;
     cxHash datasets;
+    cxHash actions;
     cxCurve curve;
     cxStack autoStack;
     cxFloat frameInterval;

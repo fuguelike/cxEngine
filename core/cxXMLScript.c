@@ -31,6 +31,15 @@ cxChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name)
     return NULL;
 }
 
+xmlTextReaderPtr cxXMLReaderForString(cxString code)
+{
+    return xmlReaderForMemory(cxStringBody(code), cxStringLength(code), NULL, "UTF-8", 0);
+}
+
+xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this)
+{
+    return cxXMLReaderForString(this->bytes);
+}
 
 //method({json}
 cxEventItem cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader)
@@ -183,6 +192,17 @@ cxString cxXMLReadLangStringAttr(xmlTextReaderPtr reader,cxConstChars name)
         rv = cxStringConstChars(value);
     }
     xmlFree(value);
+    return rv;
+}
+
+cxString cxXMLReaderReadOuterXml(xmlTextReaderPtr reader)
+{
+    xmlChar *xml = xmlTextReaderReadOuterXml(reader);
+    cxString rv = NULL;
+    if(xml != NULL){
+        rv = cxStringConstChars((cxConstChars)xml);
+    }
+    xmlFree(xml);
     return rv;
 }
 

@@ -203,7 +203,7 @@ struct _t_ {
 
 typedef void (*cxObjectFunc)(cxPointer this);
 
-typedef void (*cxXMLReadAttrFunc)(cxAny pxml,cxAny pnew, xmlTextReaderPtr reader);
+typedef cxBool (*cxXMLReadAttrFunc)(cxAny pxml,cxAny pnew, xmlTextReaderPtr reader);
 
 //base type define
 CX_OBJECT_BEG(cxObject)
@@ -217,11 +217,11 @@ CX_OBJECT_END(cxObject)
 
 cxBool cxObjectIsType(cxAny pobj,cxConstType type);
 
-void cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader);
+cxBool cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader);
 
 void cxObjectSetXMLReadFunc(cxAny obj,cxXMLReadAttrFunc func);
 
-void cxObjectXMLReadRun(cxAny obj,cxAny pobj,cxAny newobj,xmlTextReaderPtr reader);
+cxBool cxObjectXMLReadRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader);
 
 cxAny cxObjectRoot(cxAny obj);
 

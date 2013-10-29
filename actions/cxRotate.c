@@ -8,31 +8,12 @@
 
 #include "cxRotate.h"
 
-static void cxRotateFixRadians(cxAny pav)
-{
-    cxRotate this = pav;
-    cxFloat start = kmRadiansToDegrees(this->oldRadians);
-    if (start > 0){
-        start = fmodf(start, 360.0f);
-    }else{
-        start = fmodf(start, -360.0f);
-    }
-    cxFloat delta = kmRadiansToDegrees(this->newRadians) - start;
-    if (delta > 180){
-        delta -= 360;
-    }
-    if (delta < -180){
-        delta += 360;
-    }
-    this->delta = kmDegreesToRadians(delta);
-}
-
 static void cxRotateInit(cxAny pav)
 {
     cxRotate this = pav;
     CX_ASSERT(this->super.view != NULL, "view not set");
     this->oldRadians = this->super.view->radians;
-    cxRotateFixRadians(pav);
+    this->delta = this->newRadians - this->oldRadians;
     cxViewSetRaxis(this->super.view, this->raxis);
 }
 
@@ -43,7 +24,7 @@ static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetRadians(this->super.view, radians);
 }
 
-static void cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static cxBool cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxRotate this = mAction;
@@ -63,6 +44,7 @@ static void cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr 
     xmlFree(sx);
     xmlFree(sy);
     xmlFree(sz);
+    return true;
 }
 
 CX_OBJECT_INIT(cxRotate, cxAction)

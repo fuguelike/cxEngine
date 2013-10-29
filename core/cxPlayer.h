@@ -44,7 +44,7 @@ CX_OBJECT_DEF(cxPlayer, cxObject)
     CX_SLOT_ALLOC(onMemory);
 CX_OBJECT_END(cxPlayer)
 
-void cxPlayerOpen();
+void cxPlayerOpen(cxInt freq,cxInt format);
 
 void cxPlayerDestroy();
 

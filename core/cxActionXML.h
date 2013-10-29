@@ -15,40 +15,21 @@
 
 CX_C_BEGIN
 
-typedef enum {
-    cxActionXMLTypeNone,        //none
-    cxActionXMLTypeMultiple,    //multiple
-    cxActionXMLTypeSequence,    //sequence
-}cxActionXMLType;
-
-CX_OBJECT_DEF(cxActionXML, cxAction)
-    cxActionXMLType type;
-    cxArray items;
-    cxInt index;
+CX_OBJECT_DEF(cxActionXML, cxObject)
     cxBool isError;
-    cxHash actions;
     cxHash events;
-    CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
+    cxHash codes;
     CX_EVENT_ALLOC(onLoad);
+    CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
 CX_OBJECT_END(cxActionXML)
 
 cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader);
 
-void cxActionXMLRunNext(cxAny pav);
-
-void cxActionXMLRunAll(cxAny pav);
-
-cxAction cxActionXMLAttachView(cxAny pview,cxConstChars xml,cxConstChars key);
-
-cxBool cxActionXMLLoadWithReader(cxAny pav,xmlTextReaderPtr reader);
-
-cxBool cxActionXMLLoad(cxAny pav,cxConstChars xml);
-
-cxAny cxActionXMLGet(cxConstChars xml,cxConstChars name);
+cxBool cxActionRootXMLReadAttr(cxAny pxml,cxAny newobj, xmlTextReaderPtr reader);
 
 cxAny cxActionXMLCreate(cxConstChars xml);
 
-void cxActionXMLSet(cxAny xmlAction,cxAny mAction,xmlTextReaderPtr reader);
+cxAny cxActionXMLGet(cxConstChars xml,cxConstChars key);
 
 void cxViewRunActionEvent(cxAny pview,cxAny arg);
 

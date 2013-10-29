@@ -54,7 +54,7 @@ void cxClippingSetInverse(cxAny pview,cxBool inverse)
     this->inverse = inverse;
 }
 
-void cxClippingXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+cxBool cxClippingXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxViewXML xml = xmlView;
@@ -66,6 +66,7 @@ void cxClippingXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }
     xmlFree(sitems);
     cxXMLAppendEvent(xml->events, this, cxClipping, onClipping);
+    return true;
 }
 
 static void cxClippingDrawAfter(cxAny pview)

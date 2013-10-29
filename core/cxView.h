@@ -104,7 +104,7 @@ void cxViewSetBorder(cxAny pview,cxBool border);
 
 cxBool cxViewZeroSize(cxAny pview);
 
-void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);
+cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);
 
 cxAny cxViewGetParentView(cxAny pview);
 

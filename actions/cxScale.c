@@ -26,12 +26,13 @@ static void cxScaleStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetScale(this->super.view, nscale);
 }
 
-static void cxScaleXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static cxBool cxScaleXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxScale this = mAction;
     this->newScale.x = cxXMLReadFloatAttr(reader, "cxScale.x", this->newScale.x);
     this->newScale.y = cxXMLReadFloatAttr(reader, "cxScale.y", this->newScale.y);
+    return true;
 }
 
 CX_OBJECT_INIT(cxScale, cxAction)

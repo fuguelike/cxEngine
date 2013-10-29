@@ -9,10 +9,11 @@
 #include "cxConfig.h"
 #include "cxXMLScript.h"
 
-void cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader)
+cxBool cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader)
 {
     cxObject this = newobj;
     cxObjectSetTag(this,cxXMLReadIntAttr(reader, "cxObject.tag", this->cxTag));
+    return true;
 }
 
 void cxObjectAutoInit(cxObject this)
@@ -31,11 +32,10 @@ void cxObjectSetXMLReadFunc(cxAny obj,cxXMLReadAttrFunc func)
     this->XMLReadAttr = func;
 }
 
-void cxObjectXMLReadRun(cxAny obj,cxAny pobj,cxAny newobj,xmlTextReaderPtr reader)
+cxBool cxObjectXMLReadRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader)
 {
     cxObject this = obj;
-    CX_RETURN(this->XMLReadAttr == NULL);
-    this->XMLReadAttr(pobj,newobj,reader);
+    return CX_METHOD_GET(false, this->XMLReadAttr, pobj, obj,reader);
 }
 
 void cxObjectSetRoot(cxAny obj,cxAny root)

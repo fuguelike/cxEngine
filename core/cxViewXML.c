@@ -19,12 +19,13 @@
 #include "cxHashXML.h"
 #include "cxActionXML.h"
 
-void cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
+cxBool cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
     cxViewXMLReadAttr(pxml, view, reader);
     cxViewXML this = view;
     cxViewXML xml = pxml;
     cxXMLAppendEvent(xml->events, this, cxViewXML, onLoad);
+    return true;
 }
 
 void cxViewXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
@@ -146,23 +147,9 @@ cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
     }else if(ELEMENT_IS_TYPE(cxTable)){
         cview = CX_CREATE(cxTable);
     }else{
-        return NULL;
+        CX_ERROR("make elemement %s error",temp);
     }
     return cview;
-}
-
-static void cxViewXMLMakeActionElement(cxViewXML this,cxView pview,const xmlChar *temp,xmlTextReaderPtr reader)
-{
-    cxAny action = cxActionXMLMakeElement(temp, reader);
-    CX_RETURN(action == NULL);
-    cxChar *id = cxXMLAttr("id");
-    //save and wait run
-    if(id != NULL){
-        cxHashSet(this->actions, cxHashStrKey(id), action);
-    }else{
-        cxViewAppendAction(pview, action);
-    }
-    xmlFree(id);
 }
 
 static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack stack)
@@ -176,22 +163,21 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
                 CX_ERROR("parse xml ui parent null");
                 break;
             }
-            //
             const xmlChar *temp = xmlTextReaderConstName(reader);
             if(temp == NULL){
                 continue;
             }
             cxView cview = CX_METHOD_GET(NULL, this->Make, temp, reader);
+            cxBool save = false;
             if(cview != NULL){
                 cxViewAppend(parent, cview);
                 //set root xmlview
                 cxObjectSetRoot(cview, this);
                 //read attr
-                cxObjectXMLReadRun(cview, this, cview, reader);
-                //save to hash
+                save = cxObjectXMLReadRun(cview, this, reader);
+            }
+            if(save){
                 cxViewXMLSet(this, cview, reader);
-            }else{
-                cxViewXMLMakeActionElement(this, parent, temp, reader);
             }
             if(xmlTextReaderIsEmptyElement(reader)){
                 continue;
@@ -215,10 +201,7 @@ cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
     cxBool ret = false;
     cxViewXML xmlView = pview;
     cxStack stack = CX_ALLOC(cxStack);
-    while(xmlTextReaderRead(reader)){
-        if(xmlView->isError){
-            break;
-        }
+    while(xmlTextReaderRead(reader) && !xmlView->isError){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
@@ -230,12 +213,10 @@ cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
     }
     if(ret){
         cxAutoPoolPush();
-        cxObjectXMLReadRun(xmlView, xmlView, xmlView, reader);
+        cxObjectXMLReadRun(xmlView, xmlView, reader);
         cxStackPush(stack, xmlView);
         CX_EVENT_FIRE(xmlView, onLoad);
-        
         cxViewXMLLoadSubviews(xmlView,reader, stack);
-        
         cxStackPop(stack);
         cxAutoPoolPop();
     }
@@ -246,16 +227,12 @@ cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
 cxBool cxViewXMLLoad(cxAny pview,cxConstChars xml)
 {
     cxXMLScript script = cxEngineGetXMLScript(xml);
-    if(script == NULL){
+    if(script == NULL || script->bytes == NULL){
         CX_ERROR("%s script not register",xml);
         return false;
     }
-    if(script->bytes == NULL){
-        CX_ERROR("xml script not load bytes");
-        return false;
-    }
     cxBool ret = false;
-    xmlTextReaderPtr reader = xmlReaderForMemory(cxStringBody(script->bytes), cxStringLength(script->bytes), NULL, "UTF-8", 0);
+    xmlTextReaderPtr reader = cxXMLReaderForScript(script);
     if(reader == NULL){
         CX_ERROR("create xml reader failed");
         return false;

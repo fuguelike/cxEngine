@@ -33,7 +33,7 @@
 
 static void cxEventTest(cxAny view,cxAny arg)
 {
-    cxActionXMLAttachView(view, "actions.xml", "move");
+    //cxActionXMLAttachView(view, "actions.xml", "move");
 }
 
 static void viewLoad(cxAny xmlView,cxAny arg)
@@ -52,13 +52,18 @@ static void view2Load(cxAny xmlView,cxAny arg)
 
 static void actionsLoad(cxAny xmlAction,cxAny arg)
 {
+    CX_LOGGER("load actions.xml");
     //pav == cxActionXML
     //add action custom event
 }
 
 void cxEngineInit(cxEngine engine)
 {
-//    engine->isShowBorder = false;
+    //prepare load
+    cxPlayerOpen(0, 0);
+    //open db
+    cxDBEnvOpen();
+    engine->isShowBorder = false;
     cxEngineRegisteEvent("viewLoad", viewLoad);
     cxEngineRegisteEvent("view2Load", view2Load);
     cxEngineRegisteEvent("actionsLoad", actionsLoad);
@@ -66,9 +71,8 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    //prepare load
-    cxPlayerOpen();
-    cxDBEnvOpen();
+    cxActionXMLGet("actions.xml","move");
+    
     //load items.xml
     cxEngineDataSet("items.xml");
     

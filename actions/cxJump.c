@@ -31,13 +31,14 @@ static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPosition(this->super.view, nPos);
 }
 
-static void cxJumpXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static cxBool cxJumpXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxJump this = mAction;
     cxXMLReadFloatsAttr(reader, "cxJump.position", &this->position.x);
     this->height = cxXMLReadFloatAttr(reader, "cxJump.height", this->height);
     this->jumps  = cxXMLReadIntAttr(reader, "cxJump.jumps", this->jumps);
+    return true;
 }
 
 CX_OBJECT_INIT(cxJump, cxAction)

@@ -77,7 +77,7 @@ void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
 }
 
 //texture="res/a.xml?green.png"
-void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     //invoke base
     cxViewXMLReadAttr(xmlView, mView, reader);
@@ -85,12 +85,12 @@ void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxSprite this = mView;
     //texture
     cxChar *surl = cxXMLAttr("cxSprite.texture");
-    CX_RETURN(surl == NULL);
+    CX_RETURN(surl == NULL, true);
     cxChar file[128];
     cxChar key[64];
     cxString url = cxStringCreate("%s",surl);
     cxInt rv = cxParseURL(url, file, key);
-    CX_RETURN(rv <= 0);
+    CX_RETURN(rv <= 0, true);
     cxTexture texture = cxTextureLoadFile(file);
     CX_ASSERT(texture != NULL, "texture load failed %s",file);
     cxSpriteSetTexture(this, texture);
@@ -112,6 +112,7 @@ void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
         cxSpriteSetShader(this, shader);
     }
     xmlFree(shader);
+    return true;
 }
 
 CX_OBJECT_INIT(cxSprite, cxView)

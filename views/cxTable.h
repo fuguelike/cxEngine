@@ -27,6 +27,8 @@ CX_OBJECT_DEF(cxTable, cxView)
     cxVec2i grid;
 CX_OBJECT_END(cxTable)
 
+cxBool cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+
 void cxTableArraySubViews(cxAny pview);
 
 void cxTableSetType(cxAny pview,cxTableArrayType type);

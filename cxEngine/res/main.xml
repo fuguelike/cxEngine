@@ -4,7 +4,7 @@
     <cxTable cxView.right="30" cxView.left="30" cxView.top="30" cxView.bottom="30" cxTable.space="10,10" cxTable.type="3,0">
         <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('particle.xml')">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="items.xml?tex" cxLabel.size="30"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="items.xml?exp" cxLabel.size="30"/>
         </cxButton>
         <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('action.xml')">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
@@ -12,7 +12,7 @@
         </cxButton>
         <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPlay({'src':'effect.wav','loop':false})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="WAV" cxLabel.size="30"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Wav" cxLabel.size="30"/>
         </cxButton>
         <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('clipping.xml')">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />

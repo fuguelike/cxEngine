@@ -14,7 +14,7 @@ cxBool cxActionForever(cxAny pav)
     return false;
 }
 
-void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+cxBool cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXML xml = xmlAction;
     cxAction this = mAction;
@@ -47,6 +47,7 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     }
     //assist
     cxXMLReadFloatsAttr(reader, "cxAction.assist", &this->assist.v1);
+    return true;
 }
 
 void cxActionSetSplit(cxAny pav,cxInt split)

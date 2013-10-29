@@ -55,7 +55,7 @@ cxString cxDocumentPath(cxConstChars file)
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [paths objectAtIndex:0];
     if(file != NULL){
-        return cxStringConstChars([[path stringByAppendingFormat:@"/%s",file] UTF8String]);
+        return cxStringCreate("%s/%s",[path UTF8String],file);
     }else{
         return cxStringConstChars([path UTF8String]);
     }

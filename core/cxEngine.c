@@ -127,9 +127,11 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->events = CX_ALLOC(cxHash);
     this->curve = CX_ALLOC(cxCurve);
     this->datasets = CX_ALLOC(cxHash);
+    this->actions = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
+    CX_RELEASE(this->actions);
     CX_RELEASE(this->lang);
     CX_RELEASE(this->datasets);
     CX_RELEASE(this->curve);

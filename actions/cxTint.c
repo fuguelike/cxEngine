@@ -28,11 +28,12 @@ static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetColor(this->super.view, color);
 }
 
-static void cxTintXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static cxBool cxTintXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxTint this = mAction;
     cxXMLReadFloatsAttr(reader, "cxTint.color", &this->color.r);
+    return true;
 }
 
 CX_OBJECT_INIT(cxTint, cxAction)

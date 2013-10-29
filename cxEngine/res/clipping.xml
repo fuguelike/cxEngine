@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <cxViewXML cxView.fill="true">
-    <cxButton cxView.w = "280" cxView.h = "120" cxView.right="10" cxView.bottom="10" cxButton.onRelease="cxPopView">
+    <cxSprite cxView.w="300" cxView.h="300" cxSprite.texture="4.pvr"/>
+    <cxButton cxView.w = "180" cxView.h = "120" cxView.right="10" cxView.bottom="10" cxButton.onRelease="cxPopView">
         <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="30"/>
     </cxButton>
-    <cxClipping cxView.top="10" cxView.w="300" cxView.h="300" cxClipping.boxes="items.xml?cboxes" cxClipping.inverse="true">
-        <cxSprite cxView.w="300" cxView.h="300" cxSprite.texture="2.pvr" />
+    <cxClipping cxView.w="300" cxView.h="300" cxClipping.boxes="items.xml?cboxes" cxClipping.inverse="true">
+        <cxSprite cxView.w="300" cxView.h="300" cxSprite.texture="2.pvr" cxView.onEnter="cxActionRun({'src':'actions.xml?rotate'})" />
     </cxClipping>
 </cxViewXML>
 

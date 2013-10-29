@@ -46,7 +46,7 @@ cxBool cxButtonTouch(cxAny pview,const cxTouch *touch)
     return false;
 }
 
-void cxButtonXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+cxBool cxButtonXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxViewXML xml = xmlView;
     cxButton this = mView;
@@ -56,6 +56,7 @@ void cxButtonXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxXMLAppendEvent(xml->events, this, cxButton, onRelease);
     cxXMLAppendEvent(xml->events, this, cxButton, onLeave);
     cxButtonEnable(this, cxXMLReadBoolAttr(reader, "cxButton.enable", this->isEnable));
+    return true;
 }
 
 CX_OBJECT_INIT(cxButton, cxSprite)

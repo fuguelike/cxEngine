@@ -22,7 +22,7 @@ static void cxTimerStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_EVENT_FIRE(this, onStep);
 }
 
-static void cxTimerXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static cxBool cxTimerXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxActionXML xml = xmlAction;
@@ -31,6 +31,7 @@ static void cxTimerXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr r
     cxXMLAppendEvent(xml->events, this, cxTimer, onArrive);
     cxXMLAppendEvent(xml->events, this, cxTimer, onStep);
     cxXMLAppendEvent(xml->events, this, cxTimer, onStart);
+    return true;
 }
 
 static cxBool cxTimerExit(cxAny pav)
