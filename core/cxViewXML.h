@@ -39,11 +39,11 @@ void cxViewXMLRemove(cxAny pview,cxConstChars key);
 
 cxAny cxViewXMLGet(cxAny pview,cxConstChars key);
 
-void cxViewReplaceViewEvent(cxAny pview,cxAny arg);
+void cxViewReplaceViewEvent(cxEvent *event);
 
-void cxViewPushViewEvent(cxAny pview,cxAny arg);
+void cxViewPushViewEvent(cxEvent *event);
 
-void cxViewPopViewEvent(cxAny pview,cxAny arg);
+void cxViewPopViewEvent(cxEvent *event);
 
 cxBool cxViewXMLLoad(cxAny pview,cxConstChars xml);
 

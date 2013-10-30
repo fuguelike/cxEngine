@@ -25,18 +25,18 @@ cxBool cxLabelXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     return true;
 }
 
-static void cxLabelUpdate(cxAny pview,cxAny arg)
+static void cxLabelUpdate(cxEvent *event)
 {
-    cxLabel this = pview;
+    cxLabel this = event->object;
     CX_RETURN(!this->isDirty);
-    cxLabelUpdateText(pview);
+    cxLabelUpdateText(this);
     this->isDirty = false;
 }
 
 CX_OBJECT_INIT(cxLabel, cxSprite)
 {
     cxObjectSetXMLReadFunc(this, cxLabelXMLReadAttr);
-    cxViewOnUpdate(this, cxLabelUpdate, NULL);
+    cxViewOnUpdate(this, cxLabelUpdate);
     this->attr.size = 32;
     cxSpriteSetShader(this, "cxShaderAlpha");
 }

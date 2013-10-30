@@ -236,10 +236,10 @@ void cxViewSetDirty(cxAny pview,cxBool dirty)
     this->isDirty = dirty;
 }
 
-void cxViewOnUpdate(cxAny pview,cxEventFunc func,cxAny args)
+void cxViewOnUpdate(cxAny pview,cxEventFunc func)
 {
     cxView this = pview;
-    CX_EVENT_APPEND(this->onUpdate, func, args);
+    CX_EVENT_APPEND(this->onUpdate, func, NULL);
 }
 
 void cxViewSetBorder(cxAny pview,cxBool border)

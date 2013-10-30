@@ -108,36 +108,36 @@ cxAny cxActionXMLGet(cxConstChars xml,cxConstChars key)
     return action;
 }
 
-void cxPrintMessageEvent(cxAny pview,cxAny arg)
+void cxPrintMessageEvent(cxEvent *event)
 {
-    CX_RETURN(arg == NULL);
-    cxConstChars msg = cxEventArgToString(arg);
+    CX_RETURN(event->args == NULL);
+    cxConstChars msg = cxEventArgToString(event->args);
     CX_RETURN(msg == NULL);
     CX_LOGGER("%s",msg);
 }
 
-void cxPlaySoundEvent(cxAny object,cxAny arg)
+void cxPlaySoundEvent(cxEvent *event)
 {
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars src = cxEventArgString(arg, "src");
+    CX_ASSERT(event->args != NULL, "args error");
+    cxConstChars src = cxEventArgString(event->args, "src");
     CX_ASSERT(src != NULL, "audio src not set");
-    cxBool loop = cxEventArgBool(arg, "loop");
+    cxBool loop = cxEventArgBool(event->args, "loop");
     cxPlayFile(src,loop);
 }
 
 //need register
-void cxViewRunActionEvent(cxAny pview,cxAny arg)
+void cxViewRunActionEvent(cxEvent *event)
 {
-    cxView this = pview;
-    CX_RETURN(arg == NULL);
-    cxConstChars url = cxEventArgString(arg,"src");
+    cxView this = event->object;
+    CX_RETURN(event->args == NULL);
+    cxConstChars url = cxEventArgString(event->args,"src");
     CX_RETURN(url == NULL);
     cxChar file[128]={0};
     cxChar key[128]={0};
     cxInt rv = cxParseURL(url, file, key);
     //get view by id
-    cxAny view = pview;
-    cxConstChars sview = cxEventArgString(arg,"view");
+    cxAny view = this;
+    cxConstChars sview = cxEventArgString(event->args,"view");
     if(sview != NULL){
         view = cxViewXMLGet(this, sview);
     }
@@ -151,7 +151,7 @@ void cxViewRunActionEvent(cxAny pview,cxAny arg)
     }
     CX_RETURN(action == NULL);
     //set action corve
-    cxConstChars scurve = cxEventArgString(arg, "curve");
+    cxConstChars scurve = cxEventArgString(event->args, "curve");
     cxCurveItem curve = cxCurveGet(scurve);
     if(curve != NULL){
         cxActionSetCurve(action, curve->func);

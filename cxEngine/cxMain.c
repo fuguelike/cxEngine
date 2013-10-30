@@ -31,26 +31,26 @@
 #include <core/cxDB.h>
 #include <core/cxPlayer.h>
 
-static void cxEventTest(cxAny view,cxAny arg)
+static void cxEventTest(cxEvent *event)
 {
     //cxActionXMLAttachView(view, "actions.xml", "move");
 }
 
-static void viewLoad(cxAny xmlView,cxAny arg)
+static void viewLoad(cxEvent *event)
 {
     //pview == cxViewXML
     //add view custom event
-    cxViewXMLRegisteEvent(xmlView, "cxEventTest",cxEventTest);
+    cxViewXMLRegisteEvent(event->object, "cxEventTest",cxEventTest);
 }
 
-static void view2Load(cxAny xmlView,cxAny arg)
+static void view2Load(cxEvent *event)
 {
     //pview == cxViewXML
     //add view custom event
 //    cxViewXMLRegisteEvent(xmlView, "cxEventTest",cxEventTest);
 }
 
-static void actionsLoad(cxAny xmlAction,cxAny arg)
+static void actionsLoad(cxEvent *event)
 {
     CX_LOGGER("load actions.xml");
     //pav == cxActionXML

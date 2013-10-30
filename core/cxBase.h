@@ -18,14 +18,12 @@ CX_C_BEGIN
 
 typedef struct cxSignal cxSignal;
 typedef struct cxSlot cxSlot;
-struct cxSignal
-{
-    cxSignal *prev;
-    cxSignal *next;
-    cxSlot *slot;
-    cxAny func;
-    cxAny object;
-    cxInt priority;
+struct cxSignal {
+    cxSignal *prev,*next;
+    cxSlot   *slot;
+    cxAny    func;
+    cxAny    object;
+    cxInt    priority;
 };
 struct cxSlot {
     cxSignal **signal;
@@ -103,15 +101,15 @@ do{                                                             \
 #define CX_SLOT_QUICK(_signal_,_object_,_slot_,_func_)          \
     CX_SLOT_CONNECT(_signal_,_object_,_slot_,_func_,0)
 
-typedef void (*cxEventFunc)(cxAny obj,cxAny arg);
-
 typedef struct cxEvent cxEvent;
-struct cxEvent
-{
+
+typedef void (*cxEventFunc)(cxEvent *event);
+
+struct cxEvent {
     cxEvent *prev,*next;
     cxEventFunc func;
     cxAny object;
-    cxAny arg;
+    cxAny args;
 };
 
 #define CX_EVENT_ALLOC(name) cxEvent *name
@@ -120,8 +118,8 @@ struct cxEvent
 do{                                                             \
     cxEvent *_newptr_ = allocator->malloc(sizeof(cxEvent));     \
     _newptr_->func = _func_;                                    \
-    _newptr_->arg = NULL;                                       \
-    CX_RETAIN_SWAP(_newptr_->arg,_args_);                       \
+    _newptr_->args = NULL;                                      \
+    CX_RETAIN_SWAP(_newptr_->args,_args_);                      \
     DL_APPEND(_event_, _newptr_);                               \
 }while(0)
 
@@ -132,7 +130,7 @@ do{                                                             \
 do{                                                             \
     cxEvent *_newptr_ = allocator->malloc(sizeof(cxEvent));     \
     _newptr_->func = _func_;                                    \
-    _newptr_->arg = NULL;                                       \
+    _newptr_->args = NULL;                                      \
     CX_RETAIN_SWAP(_newptr_->arg,_args_);                       \
     DL_PREPEND(_event_, _newptr_);                              \
 }while(0)
@@ -146,7 +144,7 @@ do{                                                             \
             continue;                                           \
         }                                                       \
         DL_DELETE(_event_, _ele_);                              \
-        CX_RELEASE(_ele_->arg);                                 \
+        CX_RELEASE(_ele_->args);                                \
         allocator->free(_ele_);                                 \
     }                                                           \
 }while(0)
@@ -157,7 +155,7 @@ do{                                                             \
     cxEvent *_ele_ = NULL;                                      \
     DL_FOREACH_SAFE(_event_, _ele_, _tmp_){                     \
         DL_DELETE(_event_, _ele_);                              \
-        CX_RELEASE(_ele_->arg);                                 \
+        CX_RELEASE(_ele_->args);                                \
         allocator->free(_ele_);                                 \
     }                                                           \
 }while(0)
@@ -167,8 +165,8 @@ do{                                                             \
     cxEvent *_ele_ = NULL;                                      \
     cxEvent *_tmp_=NULL;                                        \
     DL_FOREACH_SAFE(_object_->_event_, _ele_,_tmp_){            \
-        cxEventFunc func = _ele_->func;                         \
-        func(_object_,_ele_->arg);                              \
+        _ele_->object = _object_;                               \
+        _ele_->func(_ele_);                                     \
     }                                                           \
 }while(0)
 

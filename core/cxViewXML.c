@@ -77,29 +77,29 @@ void cxViewXMLRemove(cxAny pview,cxConstChars key)
     cxHashDel(this->items, cxHashStrKey(key));
 }
 
-void cxViewReplaceViewEvent(cxAny pview,cxAny arg)
+void cxViewReplaceViewEvent(cxEvent *event)
 {
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars url = cxEventArgToString(arg);
+    CX_ASSERT(event->args != NULL, "args error");
+    cxConstChars url = cxEventArgToString(event->args);
     CX_ASSERT(url != NULL, "args error");
     cxViewXML view = cxViewXMLCreate(url);
     CX_ASSERT(view != NULL, "create xml view %s falied ",url);
-    cxWindowReplaceView(view,arg);
+    cxWindowReplaceView(view,event->args);
 }
 
-void cxViewPushViewEvent(cxAny pview,cxAny arg)
+void cxViewPushViewEvent(cxEvent *event)
 {
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars url = cxEventArgToString(arg);
+    CX_ASSERT(event->args != NULL, "args error");
+    cxConstChars url = cxEventArgToString(event->args);
     CX_ASSERT(url != NULL, "args error");
     cxViewXML view = cxViewXMLCreate(url);
     CX_ASSERT(view != NULL, "create xml view %s falied ",url);
-    cxWindowPushView(view,arg);
+    cxWindowPushView(view,event->args);
 }
 
-void cxViewPopViewEvent(cxAny pview,cxAny arg)
+void cxViewPopViewEvent(cxEvent *event)
 {
-    cxWindowPopView(arg);
+    cxWindowPopView(event->args);
 }
 
 cxViewXML cxViewXMLCreate(cxConstChars xml)

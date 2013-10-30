@@ -45,12 +45,12 @@ CX_OBJECT_FREE(cxMessage, cxObject)
 }
 CX_OBJECT_TERM(cxMessage, cxObject)
 
-void cxMessagePostEvent(cxAny any,cxAny arg)
+void cxMessagePostEvent(cxEvent *event)
 {
-    CX_RETURN(arg == NULL);
-    cxConstChars skey = cxEventArgToString(arg);
+    CX_RETURN(event->args == NULL);
+    cxConstChars skey = cxEventArgToString(event->args);
     CX_RETURN(skey == NULL);
-    cxMessagePost(skey, any);
+    cxMessagePost(skey, event->object);
 }
 
 void cxMessageRemove(cxAny dst)

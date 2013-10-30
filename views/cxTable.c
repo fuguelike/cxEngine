@@ -54,15 +54,15 @@ void cxTableArraySubViews(cxAny pview)
     this->isArray = true;
 }
 
-static void cxTableResize(cxAny pview,cxAny args)
+static void cxTableResize(cxEvent *event)
 {
-    cxTable this = pview;
+    cxTable this = event->object;
     this->isArray = true;
 }
 
-static void cxTableUpdate(cxAny pview,cxAny args)
+static void cxTableUpdate(cxEvent *event)
 {
-    cxTable this = pview;
+    cxTable this = event->object;
     CX_RETURN(!this->isArray || this->type == cxTableArrayNone);
     this->isArray = false;
     cxInt count = cxListLength(this->super.subViews);
@@ -115,9 +115,9 @@ static void cxTableUpdate(cxAny pview,cxAny args)
 
 CX_OBJECT_INIT(cxTable, cxView)
 {
-    CX_EVENT_APPEND(this->super.onResize, cxTableResize, NULL);
-    CX_EVENT_APPEND(this->super.onChanged, cxTableResize, NULL);
-    CX_EVENT_APPEND(this->super.onUpdate, cxTableUpdate, NULL);
+    CX_EVENT_QUICK(this->super.onResize, cxTableResize);
+    CX_EVENT_QUICK(this->super.onChanged, cxTableResize);
+    CX_EVENT_QUICK(this->super.onUpdate, cxTableUpdate);
     this->type = cxTableArrayNone;
     cxObjectSetXMLReadFunc(this, cxTableXMLReadAttr);
 }

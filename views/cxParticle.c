@@ -173,17 +173,17 @@ static cxBool cxParticleAdd(cxAny pview)
     return true;
 }
 
-static void cxParticleUpdate(cxAny pview,cxAny arg)
+static void cxParticleUpdate(cxEvent *event)
 {
     cxEngine engine = cxEngineInstance();
     cxFloat dt = engine->frameDelta;
-    cxParticle this = pview;
+    cxParticle this = event->object;
     if(this->isActive){
         cxFloat rate = 1.0f / this->rate;
         if(this->count < this->number){
             this->emitcounter += dt;
         }
-        while(this->count < this->number && this->emitcounter > rate && cxParticleAdd(pview)){
+        while(this->count < this->number && this->emitcounter > rate && cxParticleAdd(this)){
             this->emitcounter -= rate;
         }
         this->elapsed += dt;
@@ -252,7 +252,7 @@ CX_OBJECT_INIT(cxParticle, cxAtlas)
 {
     this->duration = -1;
     this->isActive = true;
-    cxViewOnUpdate(this, cxParticleUpdate, NULL);
+    cxViewOnUpdate(this, cxParticleUpdate);
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE);
     cxObjectSetXMLReadFunc(this, cxParticleXMLReadAttr);
 }

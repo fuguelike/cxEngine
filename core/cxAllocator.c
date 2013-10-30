@@ -31,11 +31,21 @@ static void cxFree(cxPointer ptr)
 }
 
 const cxAllocator *allocator = &(cxAllocator){
-    .malloc     = cxMalloc,
-    .realloc    = cxRealloc,
-    .calloc     = cxCalloc,
-    .free       = cxFree
+    .malloc         = cxMalloc,
+    .realloc        = cxRealloc,
+    .calloc         = cxCalloc,
+    .free           = cxFree,
 };
+
+void cxAllocatorInit()
+{
+    
+}
+
+void cxAllocatorFree()
+{
+    
+}
 
 static void cxObjectDestroy(cxAny ptr)
 {

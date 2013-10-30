@@ -30,6 +30,10 @@ typedef struct {
 
 extern const cxAllocator *allocator;
 
+void cxAllocatorInit();
+
+void cxAllocatorFree();
+
 cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
 
 cxAny cxObjectCreate(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);

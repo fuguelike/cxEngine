@@ -25,6 +25,7 @@ void cxEngineExit()
     CX_EVENT_FIRE(engine, onFree);
     cxEnginePause();
     cxEngineDestroy();
+    cxAllocatorFree();
     exit(0);
 }
 
@@ -165,6 +166,7 @@ cxEngine cxEngineInstance()
 {
     if(instance == NULL) {
         instance = CX_ALLOC(cxEngine);
+        cxAllocatorInit();
         cxEngineSystemInit();
     }
     return instance;

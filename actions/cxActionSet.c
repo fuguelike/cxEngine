@@ -43,9 +43,9 @@ static cxBool cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReade
     return true;
 }
 
-static void cxActionItemStop(cxAny pav,cxAny arg)
+static void cxActionItemStop(cxEvent *event)
 {
-    cxActionSet this = cxEventArgToWeakRef(arg);
+    cxActionSet this = cxEventArgToWeakRef(event->args);
     CX_ASSERT(this != NULL, "event arg not set");
     this->index ++;
     if(this->type == cxActionSetTypeSequence){

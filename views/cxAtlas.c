@@ -192,10 +192,10 @@ void cxAtlasUpdateScale9(cxAny pview)
     }
 }
 
-void cxAtlasResize(cxAny pview,cxAny arg)
+void cxAtlasResize(cxEvent *event)
 {
-    cxAtlasUpdateScale9(pview);
-    cxAtlasLoadBoxes(pview);
+    cxAtlasUpdateScale9(event->object);
+    cxAtlasLoadBoxes(event->object);
 }
 
 CX_OBJECT_INIT(cxAtlas, cxSprite)
@@ -205,7 +205,7 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
     glGenBuffers(2, this->vboid);
     CX_METHOD_SET(this->super.super.Draw, cxAtlasDraw);
     cxObjectSetXMLReadFunc(this, cxAtlasXMLReadAttr);
-    CX_EVENT_APPEND(this->super.super.onResize, cxAtlasResize, NULL);
+    CX_EVENT_QUICK(this->super.super.onResize, cxAtlasResize);
 }
 CX_OBJECT_FREE(cxAtlas, cxSprite)
 {

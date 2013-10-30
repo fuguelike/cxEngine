@@ -31,11 +31,11 @@ cxAny cxActionXMLCreate(cxConstChars xml);
 
 cxAny cxActionXMLGet(cxConstChars xml,cxConstChars key);
 
-void cxViewRunActionEvent(cxAny pview,cxAny arg);
+void cxViewRunActionEvent(cxEvent *event);
 
-void cxPlaySoundEvent(cxAny object,cxAny arg);
+void cxPlaySoundEvent(cxEvent *event);
 
-void cxPrintMessageEvent(cxAny pview,cxAny arg);
+void cxPrintMessageEvent(cxEvent *event);
 
 CX_C_END
 

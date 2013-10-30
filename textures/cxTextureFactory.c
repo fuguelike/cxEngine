@@ -21,7 +21,7 @@ cxTextureFactory cxTextureFactoryInstance()
     return instance;
 }
 
-static void cxTextureFactoryDestroy(cxAny engine,cxAny arg)
+static void cxTextureFactoryDestroy(cxEvent *event)
 {
     CX_RELEASE(instance);
     instance = NULL;

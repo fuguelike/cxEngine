@@ -38,13 +38,18 @@ static void cxClippingDrawBefore(cxAny pview)
     glEnable(GL_STENCIL_TEST);
     glStencilFunc(GL_ALWAYS, this->useRef, CX_STENCIL_MASK);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    CX_EVENT_FIRE(this, onClipping);
+    glStencilFunc(this->inverse ? GL_NOTEQUAL : GL_EQUAL, this->useRef, CX_STENCIL_MASK);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+}
+
+static void cxClippingBoxes(cxEvent *event)
+{
+    cxClipping this = event->object;
     CX_TYPES_FOREACH(this->boxes, cxAtlasBoxPointType, tmp){
         cxAtlasBoxPointType box = *tmp;
         cxDrawClippingRect(box.pos, box.size);
     }
-    CX_EVENT_FIRE(this, onClipping);
-    glStencilFunc(this->inverse ? GL_NOTEQUAL : GL_EQUAL, this->useRef, CX_STENCIL_MASK);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 }
 
 void cxClippingSetInverse(cxAny pview,cxBool inverse)
@@ -75,6 +80,7 @@ static void cxClippingDrawAfter(cxAny pview)
 
 CX_OBJECT_INIT(cxClipping, cxView)
 {
+    CX_EVENT_APPEND(this->onClipping, cxClippingBoxes, NULL);
     this->useRef = cxStencilRefAlloc();
     cxObjectSetXMLReadFunc(this, cxClippingXMLReadAttr);
     CX_METHOD_SET(this->super.DrawBefore, cxClippingDrawBefore);
