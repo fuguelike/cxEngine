@@ -48,7 +48,6 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
             sfirst = pchar;
         }
         cxArrayAppend(list, pchar);
-        width += (pchar->ax >> 16);
         slast = pchar;
         width = pchar->width + wx + pchar->left;
         wx += (pchar->ax >> 16);

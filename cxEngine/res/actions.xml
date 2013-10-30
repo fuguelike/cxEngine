@@ -44,8 +44,12 @@
         cxAction.time="3"
         cxFade.alpha="1"/>
     <cxTint id="tint1"
-        cxAction.time="3"
-        cxTint.color="1,0,0"/>
+        cxAction.time="0.1"
+        cxTint.color="1.3,1.3,1.3,1.3"
+        cxAction.onStop="cxActionRun({'src':'actions.xml?tint2'})"/>
+    <cxTint id="tint2"
+        cxAction.time="0.1"
+        cxTint.color="1,1,1,1"/>
     <cxTimer id="timer"
         cxAction.time="2"
         cxTimer.repeat="5"

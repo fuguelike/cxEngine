@@ -101,7 +101,7 @@ cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
     //cropping
     cxViewSetCropping(view,cxXMLReadBoolAttr(reader, "cxView.cropping", this->isCropping));
     //top
-    cxViewSetTop(view, cxXMLReadBoolAttr(reader, "cxView.istop", this->isTop));
+    cxViewSetTop(view, cxXMLReadBoolAttr(reader, "cxView.isTop", this->isTop));
     //anchor
     cxViewSetAnchor(view, cxXMLReadVec2fAttr(reader, "cxView.anchor", this->anchor));
     //scale
@@ -142,6 +142,9 @@ void cxViewSetCropping(cxAny pview,cxBool cropping)
 
 CX_OBJECT_INIT(cxView, cxObject)
 {
+    //
+    this->super.cxBase = cxBaseTypeView;
+    
     this->isTop = true;
     this->isBorder = false;
     this->isVisible = true;

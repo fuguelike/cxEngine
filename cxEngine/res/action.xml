@@ -156,9 +156,9 @@
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
-            cxButton.onRelease="cxActionRun({'src':'actions.xml?fade2','view':'sprite'})">
+            cxButton.onRelease="cxActionRun({'src':'actions.xml?tint1','view':'sprite'})">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="FadeOut" cxLabel.size="25"/>
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Tint" cxLabel.size="25"/>
         </cxButton>
         <cxButton
             cxView.w = "180"

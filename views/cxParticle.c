@@ -177,7 +177,7 @@ static void cxParticleUpdate(cxEvent *event)
 {
     cxEngine engine = cxEngineInstance();
     cxFloat dt = engine->frameDelta;
-    cxParticle this = event->object;
+    cxParticle this = event->sender;
     if(this->isActive){
         cxFloat rate = 1.0f / this->rate;
         if(this->count < this->number){

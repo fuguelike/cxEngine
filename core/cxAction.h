@@ -17,14 +17,14 @@ CX_C_BEGIN
 
 typedef void (*cxActionStepFunc)(cxAny pav,cxFloat dt,cxFloat time);
 
-typedef cxBool (*cxActionIsExitFunc)(cxAny pav);
+typedef cxBool (*cxActionExitFunc)(cxAny pav);
 
 typedef void (*cxActionFunc)(cxAny pav);
 
 CX_OBJECT_DEF(cxAction, cxObject)
     cxAssist4f assist;
     cxUInt actionId;
-    cxFloat scale;
+    cxFloat speed;
     cxFloat delay;
     cxFloat prevTime;
     cxFloat delta;
@@ -44,11 +44,13 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_METHOD_DEF(cxActionFunc,         Active);
     CX_METHOD_DEF(cxActionFunc,         Over);
     CX_METHOD_DEF(cxActionStepFunc,     Step);
-    CX_METHOD_DEF(cxActionIsExitFunc,   Exit);
+    CX_METHOD_DEF(cxActionExitFunc,     Exit);
     CX_EVENT_ALLOC(onStart);
     CX_EVENT_ALLOC(onStop);
     CX_EVENT_ALLOC(onSplit);
 CX_OBJECT_END(cxAction)
+
+cxAny cxActionView(cxAny pav);
 
 void cxActionSetSplit(cxAny pav,cxInt split);
 
@@ -58,7 +60,7 @@ cxBool cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reade
 
 void cxActionSetDuration(cxAny pav,cxFloat time);
 
-void cxActionSetScale(cxAny pav,cxFloat scale);
+void cxActionSetSpeed(cxAny pav,cxFloat scale);
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve);
 
@@ -71,6 +73,8 @@ void cxActionSetDuration(cxAny pav,cxFloat duration);
 void cxActionSetDelay(cxAny pav,cxFloat delay);
 
 cxBool cxActionUpdate(cxAny pav,cxFloat dt);
+
+void cxActionReset(cxAny pav);
 
 void cxActionStop(cxAny pav);
 

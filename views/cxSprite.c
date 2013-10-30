@@ -120,7 +120,7 @@ CX_OBJECT_INIT(cxSprite, cxView)
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     CX_METHOD_SET(this->super.Transform, cxSpriteTransform);
     CX_METHOD_SET(this->super.Draw, cxSpriteDraw);
-    cxSpriteSetShader(this, "cxShaderDefault");
+    cxSpriteSetShader(this, cxShaderDefaultKey);
     cxObjectSetXMLReadFunc(this, cxSpriteXMLReadAttr);
 }
 CX_OBJECT_FREE(cxSprite, cxView)

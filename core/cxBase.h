@@ -18,17 +18,8 @@ CX_C_BEGIN
 
 typedef struct cxSignal cxSignal;
 typedef struct cxSlot cxSlot;
-struct cxSignal {
-    cxSignal *prev,*next;
-    cxSlot   *slot;
-    cxAny    func;
-    cxAny    object;
-    cxInt    priority;
-};
-struct cxSlot {
-    cxSignal **signal;
-    cxSignal *slot;
-};
+struct cxSignal{cxSignal *prev,*next;cxSlot *slot;cxAny func;cxAny object;cxInt priority;};
+struct cxSlot{cxSignal **signal;cxSignal *slot;};
 
 #define CX_SIGNAL_ALLOC(_name_) cxSignal *_name_
 
@@ -98,19 +89,11 @@ do{                                                             \
     }                                                           \
 }while(0)
 
-#define CX_SLOT_QUICK(_signal_,_object_,_slot_,_func_)          \
-    CX_SLOT_CONNECT(_signal_,_object_,_slot_,_func_,0)
+#define CX_SLOT_QUICK(_signal_,_object_,_slot_,_func_) CX_SLOT_CONNECT(_signal_,_object_,_slot_,_func_,0)
 
 typedef struct cxEvent cxEvent;
-
 typedef void (*cxEventFunc)(cxEvent *event);
-
-struct cxEvent {
-    cxEvent *prev,*next;
-    cxEventFunc func;
-    cxAny object;
-    cxAny args;
-};
+struct cxEvent{cxEvent *prev,*next;cxEventFunc func;cxAny sender;cxAny args;};
 
 #define CX_EVENT_ALLOC(name) cxEvent *name
 
@@ -123,8 +106,7 @@ do{                                                             \
     DL_APPEND(_event_, _newptr_);                               \
 }while(0)
 
-#define CX_EVENT_QUICK(_event_,_func_)                          \
-    CX_EVENT_APPEND(_event_,_func_,NULL)
+#define CX_EVENT_QUICK(_event_,_func_) CX_EVENT_APPEND(_event_,_func_,NULL)
 
 #define CX_EVENT_PREPEND(_event_,_func_,_args_)                 \
 do{                                                             \
@@ -165,7 +147,7 @@ do{                                                             \
     cxEvent *_ele_ = NULL;                                      \
     cxEvent *_tmp_=NULL;                                        \
     DL_FOREACH_SAFE(_object_->_event_, _ele_,_tmp_){            \
-        _ele_->object = _object_;                               \
+        _ele_->sender = _object_;                               \
         _ele_->func(_ele_);                                     \
     }                                                           \
 }while(0)

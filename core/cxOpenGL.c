@@ -16,6 +16,11 @@
 
 static cxOpenGL instance = NULL;
 
+cxConstChars cxShaderPositionColorKey = "cxShaderPositionColor";
+cxConstChars cxShaderDefaultKey = "cxShaderDefault";
+cxConstChars cxShaderAlphaKey = "cxShaderAlpha";
+cxConstChars cxShaderClippingKey = "cxShaderClipping";
+
 #define CX_OPENGL_LOAD_SHADER(t)                                    \
 do{                                                                 \
     cxShader shader = CX_ALLOC(t);                                  \
@@ -46,7 +51,7 @@ void cxDrawLineLoop(const cxVec2f *vertices,int num,const cxColor3f color)
         colors[i] = color;
     }
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    cxOpenGLUsingShader("cxShaderPositionColor");
+    cxOpenGLUsingShader(cxShaderPositionColorKey);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosition|cxVertexAttribFlagColor);
     cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 2, 0, vertices);
     cxOpenGLVertexAttribPointer(cxVertexAttribColor, 3, 0, colors);
@@ -55,7 +60,7 @@ void cxDrawLineLoop(const cxVec2f *vertices,int num,const cxColor3f color)
 
 void cxDrawClippingRect(const cxVec2f pos,cxSize2f size)
 {
-    cxDrawSolidRect(cxRect4fv(pos.x, pos.y, size.w, size.h), cxColor4fv(0, 0, 0, 0), "cxShaderDefault");
+    cxDrawSolidRect(cxRect4fv(pos.x, pos.y, size.w, size.h), cxColor4fv(0, 0, 0, 0), cxShaderDefaultKey);
 }
 
 void cxDrawSolidRect(const cxRect4f rect,const cxColor4f color,cxConstChars skey)

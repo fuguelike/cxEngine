@@ -20,10 +20,9 @@ cxBool cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reade
     cxAction this = mAction;
     //delay
     cxActionSetDelay(mAction, cxXMLReadFloatAttr(reader, "cxAction.delay", this->delay));
-    //speed
-    cxFloat speed = cxXMLReadFloatAttr(reader, "cxAction.speed", 1.0f);
+    //time
     cxFloat time = cxXMLReadFloatAttr(reader, "cxAction.time", this->duration);
-    cxActionSetDuration(mAction, time/speed);
+    cxActionSetDuration(mAction, time);
     //curve
     cxChar *scurve = cxXMLAttr("cxAction.curve");
     cxCurveItem curve = cxCurveGet(scurve);
@@ -34,19 +33,19 @@ cxBool cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reade
     //
     cxActionSetSplit(this, cxXMLReadIntAttr(reader, "cxAction.split", this->split));
     //
-    cxActionSetScale(this, cxXMLReadFloatAttr(reader, "cxAction.scale", this->scale));
+    cxActionSetSpeed(this, cxXMLReadFloatAttr(reader, "cxAction.speed", this->speed));
     //actionId
     cxActionSetId(this, cxXMLReadIntAttr(reader, "cxAction.id", this->actionId));
-    //event
-    cxXMLAppendEvent(xml->events, this, cxAction, onStart);
-    cxXMLAppendEvent(xml->events, this, cxAction, onStop);
-    cxXMLAppendEvent(xml->events, this, cxAction, onSplit);
     //forever
     if(cxXMLReadBoolAttr(reader, "cxAction.forever", false)){
         CX_METHOD_SET(this->Exit, cxActionForever);
     }
     //assist
     cxXMLReadFloatsAttr(reader, "cxAction.assist", &this->assist.v1);
+    //event
+    cxXMLAppendEvent(xml->events, this, cxAction, onStart);
+    cxXMLAppendEvent(xml->events, this, cxAction, onStop);
+    cxXMLAppendEvent(xml->events, this, cxAction, onSplit);
     return true;
 }
 
@@ -58,11 +57,19 @@ void cxActionSetSplit(cxAny pav,cxInt split)
     this->splitDelta = 1.0f / (cxFloat)(split - 1);
 }
 
+cxAny cxActionView(cxAny pav)
+{
+    cxAction this = pav;
+    return this->view;
+}
+
 CX_OBJECT_INIT(cxAction, cxObject)
 {
+    this->super.cxBase = cxBaseTypeAction;
+    
     cxObjectSetXMLReadFunc(this, cxActionXMLReadAttr);
     this->isExit = false;
-    this->scale = 1.0f;
+    this->speed = 1.0f;
     this->index = -1;
     this->split = -1;
 }
@@ -80,10 +87,10 @@ void cxActionSetDuration(cxAny pav,cxFloat time)
     this->duration = time;
 }
 
-void cxActionSetScale(cxAny pav,cxFloat scale)
+void cxActionSetSpeed(cxAny pav,cxFloat scale)
 {
     cxAction this = pav;
-    this->scale = scale;
+    this->speed = scale;
 }
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
@@ -96,11 +103,11 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
 {
     cxAction this = pav;
     cxBool isExit = false;
+    dt = dt * this->speed;
     if(this->isPause || this->isExit){
         goto finished;
     }
     //action delay
-    dt = dt * this->scale;
     this->delayElapsed += dt;
     if(this->delay > 0 && this->delayElapsed < this->delay){
         goto finished;
@@ -165,6 +172,16 @@ void cxActionPause(cxAny pav)
 {
     cxAction this = pav;
     this->isPause = true;
+}
+
+void cxActionReset(cxAny pav)
+{
+    cxAction this = pav;
+    this->isExit = false;
+    this->index = -1;
+    this->split = -1;
+    this->durationElapsed = 0;
+    this->delayElapsed = 0;
 }
 
 void cxActionResume(cxAny pav)

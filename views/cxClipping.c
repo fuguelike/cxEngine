@@ -45,7 +45,7 @@ static void cxClippingDrawBefore(cxAny pview)
 
 static void cxClippingBoxes(cxEvent *event)
 {
-    cxClipping this = event->object;
+    cxClipping this = event->sender;
     CX_TYPES_FOREACH(this->boxes, cxAtlasBoxPointType, tmp){
         cxAtlasBoxPointType box = *tmp;
         cxDrawClippingRect(box.pos, box.size);

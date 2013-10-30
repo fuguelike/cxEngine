@@ -92,7 +92,7 @@ cxSize2f cxTextureSize(cxTexture this,cxConstChars key)
 
 void cxDrawClippingTexture(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey)
 {
-    cxTextureDraw(this, pos, size, tkey, "cxShaderClipping");
+    cxTextureDraw(this, pos, size, tkey, cxShaderClippingKey);
 }
 
 void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey,cxConstChars skey)

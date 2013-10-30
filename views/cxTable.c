@@ -29,6 +29,8 @@ cxBool cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
         this->type = cxTableArrayNone;
     }
     xmlFree(type);
+    //array hide
+    cxTableArrayHide(mView, cxXMLReadBoolAttr(reader, "cxTable.arrayHide", this->arrayHide));
     return true;
 }
 
@@ -48,6 +50,14 @@ void cxTableSetType(cxAny pview,cxTableArrayType type)
     cxTableArraySubViews(pview);
 }
 
+void cxTableArrayHide(cxAny pview,cxBool arrayHide)
+{
+    cxTable this = pview;
+    CX_RETURN(this->arrayHide == arrayHide);
+    this->arrayHide = arrayHide;
+    this->isArray = true;
+}
+
 void cxTableArraySubViews(cxAny pview)
 {
     cxTable this = pview;
@@ -56,16 +66,29 @@ void cxTableArraySubViews(cxAny pview)
 
 static void cxTableResize(cxEvent *event)
 {
-    cxTable this = event->object;
+    cxTable this = event->sender;
     this->isArray = true;
+}
+
+static cxInt cxTableCount(cxTable this)
+{
+    cxInt count = 0;
+    CX_LIST_FOREACH(this->super.subViews, ele){
+        cxView view = ele->object;
+        if(!view->isVisible && !this->arrayHide){
+            continue;
+        }
+        count ++;
+    }
+    return count;
 }
 
 static void cxTableUpdate(cxEvent *event)
 {
-    cxTable this = event->object;
+    cxTable this = event->sender;
     CX_RETURN(!this->isArray || this->type == cxTableArrayNone);
     this->isArray = false;
-    cxInt count = cxListLength(this->super.subViews);
+    cxInt count = cxTableCount(this);
     CX_RETURN(count == 0);
     cxFloat x = -this->super.size.w / 2.0f;
     cxFloat y = -this->super.size.h / 2.0f;
@@ -88,6 +111,9 @@ static void cxTableUpdate(cxEvent *event)
     cxInt i = 0;
     CX_LIST_FOREACH(this->super.subViews, ele){
         cxView view = ele->object;
+        if(!view->isVisible && !this->arrayHide){
+            continue;
+        }
         cxVec2f pos = view->position;
         cxInt col = 0;
         cxInt row = 0;
@@ -115,6 +141,7 @@ static void cxTableUpdate(cxEvent *event)
 
 CX_OBJECT_INIT(cxTable, cxView)
 {
+    this->arrayHide = true;
     CX_EVENT_QUICK(this->super.onResize, cxTableResize);
     CX_EVENT_QUICK(this->super.onChanged, cxTableResize);
     CX_EVENT_QUICK(this->super.onUpdate, cxTableUpdate);

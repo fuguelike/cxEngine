@@ -126,22 +126,30 @@ void cxPlaySoundEvent(cxEvent *event)
 }
 
 //need register
+//src view curve delay
 void cxViewRunActionEvent(cxEvent *event)
 {
-    cxView this = event->object;
+    cxObject object = event->sender;
     CX_RETURN(event->args == NULL);
     cxConstChars url = cxEventArgString(event->args,"src");
     CX_RETURN(url == NULL);
     cxChar file[128]={0};
     cxChar key[128]={0};
     cxInt rv = cxParseURL(url, file, key);
-    //get view by id
-    cxAny view = this;
+    //get view by id and cxBase
+    cxAny view = NULL;
+    if(object->cxBase == cxBaseTypeAction){
+        view = cxActionView(object);
+    }else if(object->cxBase == cxBaseTypeView){
+        view = object;
+    }
+    CX_ASSERT(view != NULL, "this event's sender must base cxAction and cxView");
+    //
     cxConstChars sview = cxEventArgString(event->args,"view");
     if(sview != NULL){
-        view = cxViewXMLGet(this, sview);
+        view = cxViewXMLGet(view, sview);
+        CX_RETURN(view == NULL);
     }
-    CX_RETURN(view == NULL);
     //get action
     cxAny action = NULL;
     if(rv == 2){
@@ -155,6 +163,11 @@ void cxViewRunActionEvent(cxEvent *event)
     cxCurveItem curve = cxCurveGet(scurve);
     if(curve != NULL){
         cxActionSetCurve(action, curve->func);
+    }
+    //delay
+    cxFloat delay = cxEventArgDouble(event->args, "delay");
+    if(delay > 0){
+        cxActionSetDelay(action, delay);
     }
     //append
     cxViewAppendAction(view, action);

@@ -195,6 +195,12 @@ typedef enum {
     cxTypesDB,
 }cxTypesType;
 
+typedef enum {
+    cxBaseTypeObject,
+    cxBaseTypeView,
+    cxBaseTypeAction,
+}cxBaseType;
+
 CX_OBJECT_DEF(cxTypes, cxObject)
     cxTypesType type;
     cxAny kvs;          //cxHash

@@ -9,8 +9,6 @@
 #ifndef cxEngine_cxOpenGL_h
 #define cxEngine_cxOpenGL_h
 
-
-
 #include "cxBase.h"
 #include "cxHash.h"
 
@@ -45,6 +43,12 @@ enum {
     cxVertexAttribFlagTexcoord    = 1 << 2,
     cxVertexAttribFlagPosColorTex = cxVertexAttribFlagPosition|cxVertexAttribFlagColor|cxVertexAttribFlagTexcoord,
 };
+//shader key define
+
+extern cxConstChars cxShaderPositionColorKey;
+extern cxConstChars cxShaderDefaultKey;
+extern cxConstChars cxShaderAlphaKey;
+extern cxConstChars cxShaderClippingKey;
 
 typedef struct{
     GLuint    minFilter;

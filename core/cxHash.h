@@ -49,6 +49,8 @@ cxInt   cxHashLength(cxHash hash);
 
 void    cxHashDelElement(cxHash hash,cxHashElement *element);
 
+cxBool  cxHashHas(cxHash hash,cxHashKey key);
+
 void    cxHashDel(cxHash hash,cxHashKey key);
 
 void    cxHashSet(cxHash hash,cxHashKey key,cxAny any);

@@ -50,7 +50,7 @@ void cxMessagePostEvent(cxEvent *event)
     CX_RETURN(event->args == NULL);
     cxConstChars skey = cxEventArgToString(event->args);
     CX_RETURN(skey == NULL);
-    cxMessagePost(skey, event->object);
+    cxMessagePost(skey, event->sender);
 }
 
 void cxMessageRemove(cxAny dst)

@@ -36,6 +36,15 @@ void cxHashDelElement(cxHash hash,cxHashElement *element)
     allocator->free(element);
 }
 
+cxBool cxHashHas(cxHash hash,cxHashKey key)
+{
+    CX_ASSERT(key.data != NULL && key.length > 0, "key keySize error");
+    CX_ASSERT(key.length < CX_HASH_MAX_KEY_LENGTH, "keySize too longer");
+    cxHashElement *element = NULL;
+    HASH_FIND(hh, hash->hashPtr, key.data, key.length, element);
+    return element != NULL;
+}
+
 void cxHashDel(cxHash hash,cxHashKey key)
 {
     cxHashElement *element = NULL;

@@ -213,6 +213,7 @@ CX_OBJECT_BEG(cxObject)
     cxInt cxTag;
     CX_METHOD_DEF(cxXMLReadAttrFunc,XMLReadAttr);
     cxAny cxRoot;
+    cxInt cxBase;
 CX_OBJECT_END(cxObject)
 
 cxBool cxObjectIsType(cxAny pobj,cxConstType type);

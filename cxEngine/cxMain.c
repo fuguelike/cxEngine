@@ -40,7 +40,7 @@ static void viewLoad(cxEvent *event)
 {
     //pview == cxViewXML
     //add view custom event
-    cxViewXMLRegisteEvent(event->object, "cxEventTest",cxEventTest);
+    cxViewXMLRegisteEvent(event->sender, "cxEventTest",cxEventTest);
 }
 
 static void view2Load(cxEvent *event)

@@ -12,10 +12,11 @@ static void cxTintInit(cxAny pav)
 {
     cxTint this = pav;
     CX_ASSERT(this->super.view != NULL, "view not set");
-    this->start = cxColor3fv(this->super.view->color.r, this->super.view->color.g, this->super.view->color.b);
+    this->start = this->super.view->color;
     this->delta.r = this->color.r - this->start.r;
     this->delta.g = this->color.g - this->start.g;
     this->delta.b = this->color.b - this->start.b;
+    this->delta.a = this->color.a - this->start.a;
 }
 
 static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
@@ -25,7 +26,9 @@ static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
     color.r = this->start.r + this->delta.r * time;
     color.g = this->start.g + this->delta.g * time;
     color.b = this->start.b + this->delta.b * time;
+    cxFloat alhpa = this->start.a + this->delta.a * time;
     cxViewSetColor(this->super.view, color);
+    cxViewSetAlpha(this->super.view, alhpa);
 }
 
 static cxBool cxTintXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
@@ -48,7 +51,7 @@ CX_OBJECT_FREE(cxTint, cxAction)
 }
 CX_OBJECT_TERM(cxTint, cxAction)
 
-cxTint cxTintCreate(cxFloat duration,cxColor3f color)
+cxTint cxTintCreate(cxFloat duration,cxColor4f color)
 {
     cxTint this = CX_CREATE(cxTint);
     this->color = color;

@@ -54,7 +54,7 @@ void cxTextureFactoryDelFile(cxConstChars file)
     cxHashDel(factory->caches, cxHashStrKey(file));
 }
 
-cxTexture cxTextureLoadText(const cxString txt,const cxString font,cxTextAttr attr)
+cxTexture cxTextureFactoryLoadText(const cxString txt,const cxString font,cxTextAttr attr)
 {
     cxTextureTXT texture = CX_CREATE(cxTextureTXT);
     texture->attr = attr;

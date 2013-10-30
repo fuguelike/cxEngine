@@ -194,8 +194,8 @@ void cxAtlasUpdateScale9(cxAny pview)
 
 void cxAtlasResize(cxEvent *event)
 {
-    cxAtlasUpdateScale9(event->object);
-    cxAtlasLoadBoxes(event->object);
+    cxAtlasUpdateScale9(event->sender);
+    cxAtlasLoadBoxes(event->sender);
 }
 
 CX_OBJECT_INIT(cxAtlas, cxSprite)

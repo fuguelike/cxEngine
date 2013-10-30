@@ -24,10 +24,13 @@ CX_OBJECT_DEF(cxTable, cxView)
     cxTableArrayType type;
     cxVec2f space;
     cxBool isArray;
+    cxBool arrayHide;
     cxVec2i grid;
 CX_OBJECT_END(cxTable)
 
 cxBool cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+
+void cxTableArrayHide(cxAny pview,cxBool arrayHide);
 
 void cxTableArraySubViews(cxAny pview);
 
