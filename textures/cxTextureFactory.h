@@ -23,11 +23,13 @@ CX_OBJECT_END(cxTextureFactory)
 
 cxTextureFactory cxTextureFactoryInstance();
 
-cxTexture cxTextureLoadFile(cxConstChars file);
+cxTexture cxTextureCreate(cxConstChars file);
+
+cxTexture cxTextureFactoryLoadFile(cxConstChars file);
 
 cxTexture cxTextureLoadText(const cxString txt,const cxString font,cxTextAttr attr);
 
-void cxTextureDelFile(cxConstChars file);
+void cxTextureFactoryDelFile(cxConstChars file);
 
 CX_C_END
 

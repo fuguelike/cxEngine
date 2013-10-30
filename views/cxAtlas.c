@@ -39,7 +39,7 @@ void cxAtlasLoadBoxes(cxAny pview)
     CX_RETURN(types == NULL || types->type != cxTypesAtlasBoxPoint);
     
     CX_ASSERT(types->assist, "boxes assist null");
-    cxTexture texture = cxTextureLoadFile(cxStringBody(types->assist));
+    cxTexture texture = cxTextureFactoryLoadFile(cxStringBody(types->assist));
     
     CX_ASSERT(texture != NULL, "texture load failed");
     cxSpriteSetTexture(this, texture);

@@ -36,7 +36,7 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         }
         cxChar *simagePath = cxXMLAttr("imagePath");
         if(simagePath != NULL){
-            xml->innerTexture = cxTextureLoadFile((cxConstChars)simagePath);
+            xml->innerTexture = cxTextureFactoryLoadFile((cxConstChars)simagePath);
             ret = (xml->innerTexture != NULL);
             CX_RETAIN(xml->innerTexture);
             xml->super.size.w = cxXMLReadFloatAttr(reader, "width", 0);

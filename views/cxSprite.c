@@ -90,7 +90,7 @@ cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxChar key[64];
     cxInt rv = cxParseURL(surl, file, key);
     CX_RETURN(rv <= 0, true);
-    cxTexture texture = cxTextureLoadFile(file);
+    cxTexture texture = cxTextureFactoryLoadFile(file);
     CX_ASSERT(texture != NULL, "texture load failed %s",file);
     cxSpriteSetTexture(this, texture);
     //use texture size
@@ -133,7 +133,7 @@ CX_OBJECT_TERM(cxSprite, cxView)
 cxSprite cxSpriteCreateWithXML(cxConstChars xml,cxConstChars key)
 {
     cxSprite this = CX_CREATE(cxSprite);
-    cxTexture texture = cxTextureLoadFile(xml);
+    cxTexture texture = cxTextureFactoryLoadFile(xml);
     cxSpriteSetTexture(this, texture);
     cxSpriteSetTextureKey(this, key, true);
     return this;
@@ -149,7 +149,7 @@ void cxSpriteSetTextureKey(cxAny pview,cxConstChars key,cxBool equSize)
 {
     cxSprite this = pview;
     if(this->texture == NULL){
-        cxTexture texture = cxTextureLoadFile(key);
+        cxTexture texture = cxTextureFactoryLoadFile(key);
         cxSpriteSetTexture(pview, texture);
     }else{
         this->texCoord = cxTextureBox(this->texture, key);

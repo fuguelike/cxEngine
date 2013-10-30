@@ -48,7 +48,7 @@ CX_OBJECT_FREE(cxTextureFactory, cxObject)
 }
 CX_OBJECT_TERM(cxTextureFactory, cxObject)
 
-void cxTextureDelFile(cxConstChars file)
+void cxTextureFactoryDelFile(cxConstChars file)
 {
     cxTextureFactory factory = cxTextureFactoryInstance();
     cxHashDel(factory->caches, cxHashStrKey(file));
@@ -64,19 +64,20 @@ cxTexture cxTextureLoadText(const cxString txt,const cxString font,cxTextAttr at
     return (cxTexture)texture;
 }
 
-cxTexture cxTextureLoadFile(cxConstChars file)
+cxTexture cxTextureCreate(cxConstChars file)
 {
-    cxTextureFactory factory = cxTextureFactoryInstance();
-    cxTexture texture = cxHashGet(factory->caches, cxHashStrKey(file));
-    if(texture != NULL){
-        return texture;
-    }
+    cxTexture texture = NULL;
+    CX_ASSERT(file != NULL, "file args error");
     cxStream stream = cxAssetsStreamCreate(file);
     if(stream == NULL){
         CX_ERROR("create stream from file %s failed",file);
         return NULL;
     }
     char *ext = strrchr(file, '.');
+    if(ext == NULL){
+        CX_ERROR("unknow file ext name");
+        return NULL;
+    }
     if(strcasecmp(ext, ".png") == 0){
         texture = cxTexturePNGLoadStream(stream);
     }else if(strcasecmp(ext, ".pvr") == 0){
@@ -86,7 +87,17 @@ cxTexture cxTextureLoadFile(cxConstChars file)
     }else{
         CX_ERROR("load texture failed %s",file);
     }
-    if(texture != NULL) {
+    return texture;
+}
+
+cxTexture cxTextureFactoryLoadFile(cxConstChars file)
+{
+    cxTextureFactory factory = cxTextureFactoryInstance();
+    cxTexture texture = cxHashGet(factory->caches, cxHashStrKey(file));
+    if(texture != NULL){
+        return texture;
+    }
+    if((texture = cxTextureCreate(file)) != NULL){
         cxHashSet(factory->caches, cxHashStrKey(file), texture);
     }
     return texture;

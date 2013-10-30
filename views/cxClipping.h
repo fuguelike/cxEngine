@@ -15,7 +15,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxClipping, cxView)
     cxTypes boxes;
-    cxUInt useLayer;
+    cxUInt useRef;
     cxBool inverse;
     CX_EVENT_ALLOC(onClipping);
 CX_OBJECT_END(cxClipping)

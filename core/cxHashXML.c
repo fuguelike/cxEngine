@@ -21,7 +21,7 @@ cxTypes cxHashXMLReadAtlasBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
     cxInt index = 0;
     if(texfile != NULL){
         types->assist = cxStringAllocChars(texfile);
-        texture = cxTextureLoadFile(texfile);
+        texture = cxTextureFactoryLoadFile(texfile);
     }
     int depth = xmlTextReaderDepth(reader);
     while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){

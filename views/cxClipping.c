@@ -11,40 +11,39 @@
 #include <core/cxEngine.h>
 #include "cxClipping.h"
 
-static GLuint cxUseLayer = 0;
+#define CX_STENCIL_MASK 0xFF
 
-static GLuint cxLayerIndex()
+static cxBool refs[CX_STENCIL_MASK + 1] = {0};
+
+static cxUInt8 cxStencilRefAlloc()
 {
-    GLuint mask = 0;
-    for(int i=0; i < 32;i++){
-        mask = 1 << i;
-        if(cxUseLayer & mask){
-            continue;
+    for(int i=1; i < CX_STENCIL_MASK; i++){
+        if(!refs[i]){
+            refs[i] = true;
+            return i;
         }
-        cxUseLayer |= mask;
-        return i;
     }
-    return 0;
+    CX_ERROR("cxClipping not stencil ref use,default use CX_STENCIL_MASK");
+    return  CX_STENCIL_MASK;
 }
 
-static void cxUnsetLayerIndex(GLuint index)
+static void cxStencilRefFree(cxInt index)
 {
-    GLuint mask = 1 << index;
-    cxUseLayer &= ~mask;
+    refs[index] = false;
 }
 
 static void cxClippingDrawBefore(cxAny pview)
 {
     cxClipping this = pview;
     glEnable(GL_STENCIL_TEST);
-    glStencilFunc(GL_ALWAYS, 1 << this->useLayer, 1 << this->useLayer);
+    glStencilFunc(GL_ALWAYS, this->useRef, CX_STENCIL_MASK);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     CX_TYPES_FOREACH(this->boxes, cxAtlasBoxPointType, tmp){
         cxAtlasBoxPointType box = *tmp;
         cxDrawClippingRect(box.pos, box.size);
     }
     CX_EVENT_FIRE(this, onClipping);
-    glStencilFunc(this->inverse ? GL_NOTEQUAL : GL_EQUAL, 1 << this->useLayer, 1 << this->useLayer);
+    glStencilFunc(this->inverse ? GL_NOTEQUAL : GL_EQUAL, this->useRef, CX_STENCIL_MASK);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 }
 
@@ -76,16 +75,16 @@ static void cxClippingDrawAfter(cxAny pview)
 
 CX_OBJECT_INIT(cxClipping, cxView)
 {
+    this->useRef = cxStencilRefAlloc();
     cxObjectSetXMLReadFunc(this, cxClippingXMLReadAttr);
-    this->useLayer = cxLayerIndex();
     CX_METHOD_SET(this->super.DrawBefore, cxClippingDrawBefore);
     CX_METHOD_SET(this->super.DrawAfter, cxClippingDrawAfter);
 }
 CX_OBJECT_FREE(cxClipping, cxView)
 {
+    cxStencilRefFree(this->useRef);
     CX_RELEASE(this->boxes);
     CX_EVENT_RELEASE(this->onClipping);
-    cxUnsetLayerIndex(this->useLayer);
 }
 CX_OBJECT_TERM(cxClipping, cxView)
 

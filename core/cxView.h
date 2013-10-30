@@ -32,10 +32,7 @@ typedef enum {
     cxViewAutoResizeFill        = cxViewAutoResizeLeft|cxViewAutoResizeRight|cxViewAutoResizeTop|cxViewAutoResizeBottom,
 }cxViewAutoResizeMask;
 
-typedef struct {
-    cxViewAutoResizeMask mask;
-    cxBox4f box;
-}cxViewAutoResizeVar;
+typedef cxBox4f cxViewAutoResizeBox;
 
 typedef void (*cxViewFunc)(cxAny pview);
 
@@ -43,7 +40,8 @@ typedef cxBool (*cxViewTouchFunc)(cxAny pview,const cxTouch *touch);
 
 CX_OBJECT_DEF(cxView, cxObject)
     cxAny args;
-    cxViewAutoResizeVar resizeVar;
+    cxViewAutoResizeMask autoMask;
+    cxViewAutoResizeBox  autoBox;
     cxHash actions;
     cxInt zorder;
     cxListElement *subElement;
@@ -77,7 +75,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
-    CX_EVENT_ALLOC(onChanged);//subviews changed
+    CX_EVENT_ALLOC(onChanged);//subviews count changed
 CX_OBJECT_END(cxView)
 
 void cxViewSetCropping(cxAny pview,cxBool cropping);

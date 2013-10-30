@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<cxActionSet cxActionSet.type="sequence" cxActionSet.onLoad="actionsLoad">
+<cxActionSet cxActionSet.type="multiple" cxActionSet.onLoad="actionsLoad">
     <cxMove id="move"
         cxAction.speed="1.0"
         cxAction.time="1.5"

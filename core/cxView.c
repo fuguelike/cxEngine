@@ -23,25 +23,25 @@ static void cxViewXMLReadAutoResize(cxAny view,xmlTextReaderPtr reader)
     cxChar *sab = cxXMLAttr("cxView.bottom");
     cxBool fill = cxXMLReadBoolAttr(reader, "cxView.fill", false);
     if(sal != NULL){
-        pv->resizeVar.mask |= cxViewAutoResizeLeft;
-        pv->resizeVar.box.l = atof(sal);
+        pv->autoMask |= cxViewAutoResizeLeft;
+        pv->autoBox.l = atof(sal);
     }
     if(sar != NULL){
-        pv->resizeVar.mask |= cxViewAutoResizeRight;
-        pv->resizeVar.box.r = atof(sar);
+        pv->autoMask |= cxViewAutoResizeRight;
+        pv->autoBox.r = atof(sar);
     }
     if(sat != NULL){
-        pv->resizeVar.mask |= cxViewAutoResizeTop;
-        pv->resizeVar.box.t = atof(sat);
+        pv->autoMask |= cxViewAutoResizeTop;
+        pv->autoBox.t = atof(sat);
     }
     if(sab != NULL){
-        pv->resizeVar.mask |= cxViewAutoResizeBottom;
-        pv->resizeVar.box.b = atof(sab);
+        pv->autoMask |= cxViewAutoResizeBottom;
+        pv->autoBox.b = atof(sab);
     }
     if(fill){
         //scale -> {1,1}
-        pv->resizeVar.mask = cxViewAutoResizeFill;
-        pv->resizeVar.box = cxBox4fv(0, 0, 0, 0);
+        pv->autoMask = cxViewAutoResizeFill;
+        pv->autoBox = cxBox4fv(0, 0, 0, 0);
     }
     xmlFree(sal);
     xmlFree(sar);
@@ -221,13 +221,13 @@ void cxViewSetTop(cxAny pview,cxBool top)
 void cxViewSetAutoResizeBox(cxAny pview,const cxBox4f box)
 {
     cxView this = pview;
-    this->resizeVar.box = box;
+    this->autoBox = box;
 }
 
 void cxViewSetAutoResizeMask(cxAny pview,cxViewAutoResizeMask mask)
 {
     cxView this = pview;
-    this->resizeVar.mask = mask;
+    this->autoMask = mask;
 }
 
 void cxViewSetDirty(cxAny pview,cxBool dirty)
@@ -390,7 +390,10 @@ void cxViewSetBox(cxAny pview, const cxBoxVec2f box)
 {
     cxFloat w = box.rb.x - box.lt.x;
     cxFloat h = box.lt.y - box.rb.y;
+    cxFloat x = box.lb.x + w/2.0f;
+    cxFloat y = box.lb.y + h/2.0f;
     cxViewSetSize(pview, cxSize2fv(w, h));
+    cxViewSetPosition(pview, cxVec2fv(x, y));
 }
 
 void cxViewSetAnchor(cxAny pview,const cxVec2f anchor)
@@ -411,8 +414,7 @@ void cxViewSetScale(cxAny pview,const cxVec2f scale)
 
 void cxViewSetDegrees(cxAny pview,const cxFloat degrees)
 {
-    cxFloat v = fmodf(degrees, 360.0f);
-    cxViewSetRadians(pview,kmDegreesToRadians(v));
+    cxViewSetRadians(pview,kmDegreesToRadians(degrees));
 }
 
 void cxViewSetRaxis(cxAny pview,cxVec3f raxis)
@@ -426,8 +428,7 @@ void cxViewSetRaxis(cxAny pview,cxVec3f raxis)
 void cxViewSetRadians(cxAny pview,const cxFloat radians)
 {
     cxView this = pview;
-    cxFloat v = fmodf(radians, kmPI * 2.0f);
-    CX_RETURN(cxFloatEqu(this->radians,v));
+    CX_RETURN(cxFloatEqu(this->radians,radians));
     this->radians = radians;
     this->isDirty = true;
 }
@@ -454,6 +455,7 @@ void cxViewTransform(cxAny pview)
     kmMat4Translation(&this->anchorMatrix, x, y, 0);
     
     CX_METHOD_RUN(this->Transform,this);
+    
     if(this->isCropping){
         this->scissor = cxViewGLRect(pview);
     }
@@ -527,38 +529,38 @@ void cxViewAppend(cxAny pview,cxAny newview)
 void cxViewAutoResizing(cxAny pview)
 {
     cxView this = pview;
-    CX_RETURN(this->parentView == NULL || this->resizeVar.mask == cxViewAutoResizeNone);
+    CX_RETURN(this->parentView == NULL || this->autoMask == cxViewAutoResizeNone);
     cxView parent = this->parentView;
     cxSize2f size = this->size;
     cxVec2f pos = this->position;
-    cxViewAutoResizeMask mask = this->resizeVar.mask;
+    cxViewAutoResizeMask mask = this->autoMask;
     if((mask & cxViewAutoResizeLeft) && (mask & cxViewAutoResizeRight)){
-        size.w = parent->size.w - this->resizeVar.box.l - this->resizeVar.box.r;
+        size.w = parent->size.w - this->autoBox.l - this->autoBox.r;
         this->scale.x = 1.0f;
     }
     if(mask & cxViewAutoResizeLeft){
         pos.x = -parent->size.w/2.0f;
         pos.x += size.w * this->anchor.x * this->scale.x;
-        pos.x += this->resizeVar.box.l;
+        pos.x += this->autoBox.l;
     }
     if(mask & cxViewAutoResizeRight){
         pos.x = parent->size.w/2.0f;
         pos.x -= size.w * (1.0f - this->anchor.x) *this->scale.x;
-        pos.x -= this->resizeVar.box.r;
+        pos.x -= this->autoBox.r;
     }
     if((mask & cxViewAutoResizeTop) && (mask & cxViewAutoResizeBottom)){
-        size.h = parent->size.h - this->resizeVar.box.t - this->resizeVar.box.b;
+        size.h = parent->size.h - this->autoBox.t - this->autoBox.b;
         this->scale.y = 1.0f;
     }
     if(mask & cxViewAutoResizeTop){
         pos.y = parent->size.h/2.0f;
         pos.y -= size.h * (1.0f - this->anchor.y) *this->scale.y;
-        pos.y -= this->resizeVar.box.t;
+        pos.y -= this->autoBox.t;
     }
     if(mask & cxViewAutoResizeBottom){
         pos.y = -parent->size.h/2.0f;
         pos.y += size.h * this->anchor.y *this->scale.y;
-        pos.y += this->resizeVar.box.b;
+        pos.y += this->autoBox.b;
     }
     cxViewSetPosition(this, pos);
     cxViewSetSize(this, size);

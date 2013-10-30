@@ -89,10 +89,8 @@ cxAny cxActionXMLGet(cxConstChars xml,cxConstChars key)
 {
     cxActionXML this = cxActionXMLCreate(xml);
     CX_RETURN(this == NULL, NULL);
-    
     cxString code = cxHashGet(this->codes, (key == NULL) ? cxHashStrKey(xml) : cxHashStrKey(key));
     CX_RETURN(code == NULL, NULL);
-    
     xmlTextReaderPtr reader = cxXMLReaderForString(code);
     cxAny action = NULL;
     while(xmlTextReaderRead(reader)){
@@ -101,12 +99,12 @@ cxAny cxActionXMLGet(cxConstChars xml,cxConstChars key)
         }
         const xmlChar *temp = xmlTextReaderConstName(reader);
         action = CX_METHOD_GET(NULL, this->Make,temp,reader);
-        if(action != NULL){
-            cxObjectXMLReadRun(action, this, reader);
+        if(action == NULL){
+            continue;
         }
+        cxObjectXMLReadRun(action, this, reader);
     }
     xmlTextReaderClose(reader);
-    
     return action;
 }
 
@@ -134,8 +132,8 @@ void cxViewRunActionEvent(cxAny pview,cxAny arg)
     CX_RETURN(arg == NULL);
     cxConstChars url = cxEventArgString(arg,"src");
     CX_RETURN(url == NULL);
-    cxChar file[128];
-    cxChar key[128];
+    cxChar file[128]={0};
+    cxChar key[128]={0};
     cxInt rv = cxParseURL(url, file, key);
     //get view by id
     cxAny view = pview;
@@ -184,19 +182,19 @@ static void cxActionXMLLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
         }
         cxObjectXMLReadRun(this, this, reader);
         CX_EVENT_FIRE(this, onLoad);
-        while(xmlTextReaderRead(reader)){
-            if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
-                continue;
-            }
-            cxChar *id = cxXMLAttr("id");
-            if(id == NULL){
-                continue;
-            }
-            cxString code = cxXMLReaderReadOuterXml(reader);
-            cxHashSet(this->codes, cxHashStrKey(id), code);
-            xmlFree(id);
-        }
         break;
+    }
+    while(xmlTextReaderRead(reader)){
+        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
+            continue;
+        }
+        cxChar *id = cxXMLAttr("id");
+        if(id == NULL){
+            continue;
+        }
+        cxString code = cxXMLReaderReadOuterXml(reader);
+        cxHashSet(this->codes, cxHashStrKey(id), code);
+        xmlFree(id);
     }
 }
 

@@ -19,6 +19,10 @@
         <item x="0" y="0" w="150" h="150" />
     </cxAtlasBoxPoint>
     
+    <cxAtlasBoxPoint id="cboxes1">
+        <item x="0" y="0" w="50" h="50" />
+    </cxAtlasBoxPoint>
+    
     <cxLangString id="zh">
         <item name="font">simsun.ttf</item>
         <item name="exp">粒子系统</item>
