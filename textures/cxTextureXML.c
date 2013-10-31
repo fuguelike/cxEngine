@@ -21,9 +21,9 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         CX_ERROR("read data failed from stream");
         return ret;
     }
-    xmlTextReaderPtr reader = xmlReaderForMemory(cxStringBody(data), cxStringLength(data), NULL, "UTF-8", 0);
+    xmlTextReaderPtr reader = cxXMLReaderForString(data);
     if(reader == NULL){
-        CX_ERROR("xml reader fro memory failed");
+        CX_ERROR("xml reader from memory failed");
         return ret;
     }
     while(xmlTextReaderRead(reader)){
@@ -31,19 +31,23 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
             continue;
         }
         const xmlChar *temp = xmlTextReaderConstName(reader);
-        if(xmlStrcmp(temp, BAD_CAST"TextureAtlas") != 0){
+        if(!ELEMENT_IS_TYPE(TextureAtlas)){
             continue;
         }
         cxChar *simagePath = cxXMLAttr("imagePath");
-        if(simagePath != NULL){
-            xml->innerTexture = cxTextureFactoryLoadFile((cxConstChars)simagePath);
-            ret = (xml->innerTexture != NULL);
-            CX_RETAIN(xml->innerTexture);
-            xml->super.size.w = cxXMLReadFloatAttr(reader, "width", 0);
-            xml->super.size.h = cxXMLReadFloatAttr(reader, "height", 0);
-        }
+        CX_ASSERT(simagePath != NULL, "xml imagePath element miss");
+        
+        xml->innerTexture = cxTextureFactoryLoadFile((cxConstChars)simagePath);
+        ret = (xml->innerTexture != NULL);
+        CX_RETAIN(xml->innerTexture);
+        
+        xml->super.size.w = cxXMLReadFloatAttr(reader, "width", 0);
+        xml->super.size.h = cxXMLReadFloatAttr(reader, "height", 0);
+        
+        CX_ASSERT(ret && cxSize2fEqu(xml->innerTexture->size, xml->super.size), "xml texture error");
+        
         xmlFree(simagePath);
-        if(xml->innerTexture == NULL){
+        if(!ret){
             CX_ERROR("get xml inner texture failed");
             break;
         }
@@ -53,7 +57,7 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
                 continue;
             }
             const xmlChar *temp = xmlTextReaderConstName(reader);
-            if(xmlStrcmp(temp, BAD_CAST"sprite") != 0){
+            if(!ELEMENT_IS_TYPE(sprite)){
                 continue;
             }
             cxTexCoord e = CX_ALLOC(cxTexCoord);
@@ -61,13 +65,9 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
             cxChar *sr = cxXMLAttr("r");
             e->isRotation = sr != NULL;
             e->x = cxXMLReadFloatAttr(reader, "x", 0);
-            e->oX = cxXMLReadFloatAttr(reader, "oX", 0);
             e->y = cxXMLReadFloatAttr(reader, "y", 0);
-            e->oY = cxXMLReadFloatAttr(reader, "oY", 0);
             e->w = cxXMLReadFloatAttr(reader, "w", 0);
-            e->oW = cxXMLReadFloatAttr(reader, "oW", 0);
             e->h = cxXMLReadFloatAttr(reader, "h", 0);
-            e->oH = cxXMLReadFloatAttr(reader, "oH", 0);
             cxHashSet(xml->super.keys, cxHashStrKey(sn), e);
             CX_RELEASE(e);
             xmlFree(sn);
@@ -75,8 +75,6 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         }
     }
     xmlFreeTextReader(reader);
-    CX_ASSERT(xml->super.size.w == xml->innerTexture->size.w, "xml width != texture width");
-    CX_ASSERT(xml->super.size.h == xml->innerTexture->size.h, "xml height != texture height");
     return ret;
 }
 

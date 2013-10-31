@@ -12,7 +12,7 @@
 #include <event.h>
 #include <core/cxBase.h>
 #include <core/cxHash.h>
-#include "cxHttpConnect.h"
+#include "cxHttpConn.h"
 
 CX_C_BEGIN
 
@@ -26,7 +26,7 @@ cxEventBase cxEventBaseInstance();
 
 void cxEventBaseDestroy();
 
-cxHttpConnect cxEventBaseHttpConnect(cxConstChars host,cxInt port);
+cxHttpConn cxEventBaseHttpConnect(cxConstChars host,cxInt port);
 
 CX_C_END
 

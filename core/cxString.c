@@ -65,6 +65,7 @@ void cxStringConcat(cxString string,cxString str)
 
 cxInt cxStringLength(cxString string)
 {
+    CX_RETURN(string == NULL, 0);
     return utstring_len(&string->strptr);
 }
 

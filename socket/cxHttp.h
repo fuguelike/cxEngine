@@ -12,7 +12,7 @@
 #include <evhttp.h>
 #include <core/cxBase.h>
 #include <core/cxString.h>
-#include "cxHttpConnect.h"
+#include "cxHttpConn.h"
 
 CX_C_BEGIN
 
@@ -29,13 +29,11 @@ CX_OBJECT_DEF(cxHttp, cxObject)
     CX_EVENT_ALLOC(onCompleted);
 CX_OBJECT_END(cxHttp)
 
-cxHttpConnect cxHttpGetConnect(cxAny http);
-
 cxString cxHttpGetData(cxAny http);
 
-cxString cxHttpGetUri(cxAny http);
+cxHttp cxHttpGetRequest(cxConstChars url,cxBool chunked);
 
-cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked);
+cxHttp cxHttpPostRequest(cxConstChars url,cxString data,cxBool chunked);
 
 CX_C_END
 

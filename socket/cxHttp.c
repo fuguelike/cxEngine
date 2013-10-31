@@ -7,7 +7,7 @@
 //
 
 #include "cxEventBase.h"
-#include "cxHttpConnect.h"
+#include "cxHttpConn.h"
 #include "cxHttp.h"
 
 static void cxHttpReadData(cxHttp this)
@@ -64,7 +64,7 @@ CX_OBJECT_FREE(cxHttp, cxObject)
 }
 CX_OBJECT_TERM(cxHttp, cxObject)
 
-cxHttpConnect cxHttpGetConnect(cxAny http)
+static cxHttpConn cxHttpGetConnect(cxAny http)
 {
     cxHttp this = http;
     cxConstChars host = evhttp_uri_get_host(this->uri);
@@ -78,7 +78,7 @@ cxString cxHttpGetData(cxAny http)
     return this->data;
 }
 
-cxString cxHttpGetUri(cxAny http)
+static cxString cxHttpGetUri(cxAny http)
 {
     cxHttp this = http;
     cxConstChars path = evhttp_uri_get_path(this->uri);
@@ -90,7 +90,7 @@ cxString cxHttpGetUri(cxAny http)
     }
 }
 
-cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked)
+static cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked)
 {
     cxHttp this = http;
     
@@ -104,10 +104,61 @@ cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked)
     
     cxConstChars host = evhttp_uri_get_host(this->uri);
     cxInt port = evhttp_uri_get_port(this->uri);
-    cxHttpConnect conn = cxEventBaseHttpConnect(host, port < 0 ? 80 : port);
+    cxHttpConn conn = cxEventBaseHttpConnect(host, port < 0 ? 80 : port);
     if(conn == NULL){
         CX_ERROR("from http conn cache get conn failed");
         return false;
     }
     return true;
+}
+
+cxHttp cxHttpPostRequest(cxConstChars url,cxString data,cxBool chunked)
+{
+    cxHttp this = CX_CREATE(cxHttp);
+    if(!cxHttpInit(this,url,chunked)){
+        CX_ERROR("cx http init error");
+        return NULL;
+    }
+    cxHttpConn conn = cxHttpGetConnect(this);
+    if(conn == NULL){
+        CX_ERROR("get http connection error");
+        return NULL;
+    }
+    cxString suri = cxHttpGetUri(this);
+    if(suri == NULL){
+        CX_ERROR("get uri error");
+        return NULL;
+    }
+    if(cxStringLength(data) > 0){
+        evbuffer_add(this->request->output_buffer, cxStringBody(data), cxStringLength(data));
+    }
+    if(evhttp_make_request(conn->conn, this->request, EVHTTP_REQ_POST, cxStringBody(suri)) != 0){
+        CX_ERROR("make request error");
+        return NULL;
+    }
+    return this;
+}
+
+cxHttp cxHttpGetRequest(cxConstChars url,cxBool chunked)
+{
+    cxHttp this = CX_CREATE(cxHttp);
+    if(!cxHttpInit(this,url,chunked)){
+        CX_ERROR("cx http init error");
+        return NULL;
+    }
+    cxHttpConn conn = cxHttpGetConnect(this);
+    if(conn == NULL){
+        CX_ERROR("get http connection error");
+        return NULL;
+    }
+    cxString suri = cxHttpGetUri(this);
+    if(suri == NULL){
+        CX_ERROR("get uri error");
+        return NULL;
+    }
+    if(evhttp_make_request(conn->conn, this->request, EVHTTP_REQ_GET, cxStringBody(suri)) != 0){
+        CX_ERROR("make request error");
+        return NULL;
+    }
+    return this;
 }

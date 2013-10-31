@@ -47,11 +47,11 @@ CX_OBJECT_FREE(cxEventBase, cxObject)
 }
 CX_OBJECT_TERM(cxEventBase, cxObject)
 
-cxHttpConnect cxEventBaseHttpConnect(cxConstChars host,cxInt port)
+cxHttpConn cxEventBaseHttpConnect(cxConstChars host,cxInt port)
 {
     cxEventBase this = cxEventBaseInstance();
     CX_CONST_STRING(key,"%s:%d",host,port);
-    cxHttpConnect conn = cxHashGet(this->httpconns, cxHashStrKey(key));
+    cxHttpConn conn = cxHashGet(this->httpconns, cxHashStrKey(key));
     if(conn != NULL){
         return conn;
     }

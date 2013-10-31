@@ -30,7 +30,7 @@
 #include <views/cxLabel.h>
 #include <core/cxDB.h>
 #include <core/cxPlayer.h>
-#include <socket/cxHttpGet.h>
+#include <socket/cxHttp.h>
 
 static void cxEventTest(cxEvent *event)
 {
@@ -75,7 +75,7 @@ cxLabel l= NULL;
 static void t1(cxEvent *event)
 {
     cxHttp this = event->sender;
-    cxLabelSetText(l, cxStringCreate("%lld-%lld",this->readBytes,this->bodyBytes));
+    cxLabelSetText(l, this->data);
 }
 
 void cxEngineMain(cxEngine engine)
@@ -83,9 +83,13 @@ void cxEngineMain(cxEngine engine)
 
     cxActionXMLGet("actions.xml","move");
     
-    cxHttp get1 = cxHttpGetCreate("http://s2.remword.cn/mongodb-linux-x86_64-2.4.1.tgz", true);
-    CX_EVENT_QUICK(get1->onChunked, t1);
-    CX_RETAIN(get1);
+//    cxHttp get1 = cxHttpGetRequest("http://s2.remword.cn/mongodb-linux-x86_64-2.4.1.tgz", true);
+//    CX_EVENT_QUICK(get1->onChunked, t1);
+//    CX_RETAIN(get1);
+    
+//    cxHttp post = cxHttpPostRequest("http://s2.remword.cn/p.php", cxStringConstChars("1m010921029"), false);
+//    CX_EVENT_QUICK(post->onCompleted, t1);
+//    CX_RETAIN(post);
     
     //load items.xml
     cxEngineDataSet("items.xml");

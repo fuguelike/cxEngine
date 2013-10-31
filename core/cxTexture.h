@@ -21,10 +21,6 @@ CX_OBJECT_DEF(cxTexCoord, cxObject)
     cxFloat y;
     cxFloat w;
     cxFloat h;
-    cxFloat oX;
-    cxFloat oY;
-    cxFloat oW;
-    cxFloat oH;
 CX_OBJECT_END(cxTexCoord)
 
 typedef struct {
