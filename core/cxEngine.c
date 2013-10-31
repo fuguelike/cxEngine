@@ -9,6 +9,7 @@
 #include <kazmath/matrix.h>
 #include <streams/cxAssetsStream.h>
 #include <core/cxActionXML.h>
+#include <socket/cxEventBase.h>
 #include "cxViewXML.h"
 #include "cxEngine.h"
 #include "cxAutoPool.h"
@@ -142,6 +143,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
     CX_RELEASE(this->window);
+    cxEventBaseDestroy();
     cxCurveDestroy();
     cxOpenGLDestroy();
     cxMessageDestroy();

@@ -47,6 +47,15 @@ CX_OBJECT_FREE(cxLabel, cxSprite)
 }
 CX_OBJECT_TERM(cxLabel, cxSprite)
 
+cxLabel cxLabelCreate(cxString txt,cxString font,cxFloat fontsize)
+{
+    cxLabel this = CX_CREATE(cxLabel);
+    cxLabelSetFont(this, font);
+    cxLabelSetText(this, txt);
+    cxLabelSetFontSize(this, fontsize);
+    return this;
+}
+
 void cxLabelUpdateText(cxAny pview)
 {
     cxLabel this = pview;
@@ -64,7 +73,7 @@ void cxLabelSetFontSize(cxAny pview,cxFloat fontsize)
     this->isDirty = true;
 }
 
-void cxLabelSetFont(cxAny pview,const cxString font)
+void cxLabelSetFont(cxAny pview,cxString font)
 {
     cxLabel this = pview;
     CX_RETURN(cxStringEqu(this->font, font));
@@ -72,7 +81,7 @@ void cxLabelSetFont(cxAny pview,const cxString font)
     this->isDirty = true;
 }
 
-void cxLabelSetText(cxAny pview,const cxString txt)
+void cxLabelSetText(cxAny pview,cxString txt)
 {
     cxLabel this = pview;
     CX_RETURN(cxStringEqu(this->text, txt));

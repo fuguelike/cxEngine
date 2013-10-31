@@ -93,6 +93,7 @@ cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc
     object->cxRefcount = 1;
     object->cxType = type;
     object->cxFree = freeFunc;
+    object->cxSize = size;
     initFunc(object);
     return ptr;
 }

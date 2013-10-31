@@ -24,11 +24,13 @@ cxBool cxLabelXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
 void cxLabelSetFontSize(cxAny pview,cxFloat fontsize);
 
-void cxLabelSetText(cxAny pview,const cxString txt);
+void cxLabelSetText(cxAny pview,cxString txt);
 
-void cxLabelSetFont(cxAny pview,const cxString font);
+void cxLabelSetFont(cxAny pview,cxString font);
 
 void cxLabelUpdateText(cxAny pview);
+
+cxLabel cxLabelCreate(cxString txt,cxString font,cxFloat fontsize);
 
 CX_C_END
 

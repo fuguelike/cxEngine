@@ -33,7 +33,7 @@ CX_OBJECT_END(cxAtlas)
 
 void cxAtlasLoadBoxes(cxAny pview);
 
-void cxAtlasDraw(void *pview);
+void cxAtlasDraw(cxAny pview);
 
 void cxAtlasDrawInit(cxAny pview);
 

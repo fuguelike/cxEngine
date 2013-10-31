@@ -87,7 +87,7 @@ static void cxAtlasVAODraw(void *pview)
     glBindVertexArray(0);
 }
 
-static void cxAtlasVBODraw(void *pview)
+static void cxAtlasVBODraw(cxAny pview)
 {
     cxAtlas this = pview;
     
@@ -108,7 +108,7 @@ static void cxAtlasVBODraw(void *pview)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void cxAtlasDraw(void *pview)
+void cxAtlasDraw(cxAny pview)
 {
     cxAtlas this = pview;
     CX_RETURN(this->number == 0 || this->super.texture == NULL);

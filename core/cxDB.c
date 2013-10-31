@@ -87,7 +87,7 @@ cxBool cxDBDel(cxAny db,cxString key)
     return (this->dbptr->del(this->dbptr,cxDBTxnPtr(txn),&k,0) == 0);
 }
 
-cxBool cxDBPut(cxAny db,cxString key,cxString value)
+cxBool cxDBSet(cxAny db,cxString key,cxString value)
 {
     cxDB this = db;
     cxDBEnv env = cxDBEnvInstance();
@@ -289,7 +289,7 @@ CX_OBJECT_FREE(cxDBEnv, cxObject)
 }
 CX_OBJECT_TERM(cxDBEnv, cxObject)
 
-void cxDBEnvSetPoint(cxBool force)
+void cxDBEnvCheckPoint(cxBool force)
 {
     cxDBEnv this = cxDBEnvInstance();
     cxDBEnvSetPointAuto(this,false);

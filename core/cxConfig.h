@@ -211,9 +211,10 @@ CX_OBJECT_BEG(cxObject)
     cxUInt cxRefcount;
     cxObjectFunc cxFree;
     cxInt cxTag;
-    CX_METHOD_DEF(cxXMLReadAttrFunc,XMLReadAttr);
     cxAny cxRoot;
     cxInt cxBase;
+    cxInt cxSize;
+    CX_METHOD_DEF(cxXMLReadAttrFunc,XMLReadAttr);
 CX_OBJECT_END(cxObject)
 
 cxBool cxObjectIsType(cxAny pobj,cxConstType type);
@@ -236,9 +237,8 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_BREAK(cond)            if(cond)break
 
-#define CX_CONST_STRING(n,...)            cxChar n[128]={0};snprintf(n, 128, ##__VA_ARGS__)
+#define CX_CONST_STRING(n,...)    cxChar n[128]={0};snprintf(n, 128, ##__VA_ARGS__)
 
-//define with extend
 #define CX_OBJECT_DEF(_t_,_b_)    CX_OBJECT_BEG(_t_) struct _b_ super;
 
 #define CX_OBJECT_INIT(_t_,_b_)   void _t_##AutoInit(_t_ this){_b_##AutoInit((_b_)this);do{

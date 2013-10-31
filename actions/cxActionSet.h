@@ -26,8 +26,6 @@ CX_OBJECT_DEF(cxActionSet, cxAction)
     cxInt index;
 CX_OBJECT_END(cxActionSet)
 
-void cxActionSetRunNext(cxAny pav);
-
 CX_C_END
 
 #endif

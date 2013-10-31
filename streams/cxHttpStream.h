@@ -9,11 +9,14 @@
 #ifndef cxEngine_cxHttpStream_h
 #define cxEngine_cxHttpStream_h
 
-#include "cxBase.h"
+#include <core/cxBase.h>
+#include <core/cxString.h>
+#include <core/cxStream.h>
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxHttpStream, cxObject)
+CX_OBJECT_DEF(cxHttpStream, cxStream)
+
 CX_OBJECT_END(cxHttpStream)
 
 CX_C_END

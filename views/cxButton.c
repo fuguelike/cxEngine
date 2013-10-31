@@ -11,7 +11,7 @@
 #include "cxButton.h"
 #include "cxXMLScript.h"
 
-cxBool cxButtonTouch(cxAny pview,const cxTouch *touch)
+cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
 {
     cxButton this = pview;
     if(!this->isEnable){

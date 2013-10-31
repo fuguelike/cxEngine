@@ -36,7 +36,7 @@ typedef cxBox4f cxViewAutoResizeBox;
 
 typedef void (*cxViewFunc)(cxAny pview);
 
-typedef cxBool (*cxViewTouchFunc)(cxAny pview,const cxTouch *touch);
+typedef cxBool (*cxViewTouchFunc)(cxAny pview,cxTouch *touch);
 
 CX_OBJECT_DEF(cxView, cxObject)
     cxAny args;
@@ -114,9 +114,9 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav);
 
 void cxViewSetOrder(cxAny pview,cxInt order);
 
-cxBool cxViewTouch(cxAny pview,const cxTouch *touch);
+cxBool cxViewTouch(cxAny pview,cxTouch *touch);
 
-cxBool cxViewIsTouch(cxAny pview,const cxTouch *touch);
+cxBool cxViewIsTouch(cxAny pview,cxTouch *touch);
 
 void cxViewAppend(cxAny pview,cxAny newview);
 
@@ -124,43 +124,43 @@ void cxViewLayout(cxAny pview);
 
 void cxViewAutoResizing(cxAny pview);
 
-cxBool cxViewHitTest(cxAny pview,const cxTouch *touch,cxVec2f *pos);
+cxBool cxViewHitTest(cxAny pview,cxTouch *touch,cxVec2f *pos);
 
-cxVec2f cxWindowPointToGLPoint(const cxVec2f wPoint);
+cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint);
 
-cxVec2f cxGLPointToWindowPoint(const cxVec2f glPoint);
+cxVec2f cxGLPointToWindowPoint(cxVec2f glPoint);
 
-cxVec2f cxViewPointToGLPoint(cxAny pview,const cxVec2f pos);
+cxVec2f cxViewPointToGLPoint(cxAny pview,cxVec2f pos);
 
-cxVec2f cxGLPointToViewPoint(cxAny pview,const cxVec2f pos);
+cxVec2f cxGLPointToViewPoint(cxAny pview,cxVec2f pos);
 
-cxVec2f cxViewPointToWindowPoint(cxAny pview,const cxVec2f vPoint);
+cxVec2f cxViewPointToWindowPoint(cxAny pview,cxVec2f vPoint);
 
-cxVec2f cxWindowPointToViewPoint(cxAny pview,const cxVec2f glPoint);
+cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f glPoint);
 
-void cxViewSetBox(cxAny pview, const cxBoxVec2f box);
+void cxViewSetBox(cxAny pview, cxBoxVec2f box);
 
-void cxViewSetAutoResizeBox(cxAny pview,const cxBox4f box);
+void cxViewSetAutoResizeBox(cxAny pview,cxBox4f box);
 
 void cxViewSetAutoResizeMask(cxAny pview,cxViewAutoResizeMask mask);
 
-void cxViewSetSize(cxAny pview,const cxSize2f size);
+void cxViewSetSize(cxAny pview,cxSize2f size);
 
 void cxViewSort(cxAny pview);
 
 void cxViewSetVisible(cxAny pview,cxBool visible);
 
-void cxViewSetPosition(cxAny pview,const cxVec2f position);
+void cxViewSetPosition(cxAny pview,cxVec2f position);
 
-void cxViewSetAnchor(cxAny pview,const cxVec2f anchor);
+void cxViewSetAnchor(cxAny pview,cxVec2f anchor);
 
-void cxViewSetScale(cxAny pview,const cxVec2f scale);
+void cxViewSetScale(cxAny pview,cxVec2f scale);
 
 void cxViewSetRaxis(cxAny pview,cxVec3f raxis);
 
-void cxViewSetRadians(cxAny pview,const cxFloat radians);
+void cxViewSetRadians(cxAny pview,cxFloat radians);
 
-void cxViewSetDegrees(cxAny pview,const cxFloat degrees);
+void cxViewSetDegrees(cxAny pview,cxFloat degrees);
 
 void cxViewDraw(cxAny pview);
 

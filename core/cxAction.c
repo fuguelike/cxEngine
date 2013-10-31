@@ -66,7 +66,6 @@ cxAny cxActionView(cxAny pav)
 CX_OBJECT_INIT(cxAction, cxObject)
 {
     this->super.cxBase = cxBaseTypeAction;
-    
     cxObjectSetXMLReadFunc(this, cxActionXMLReadAttr);
     this->isExit = false;
     this->speed = 1.0f;

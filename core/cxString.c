@@ -10,7 +10,7 @@
 
 CX_OBJECT_INIT(cxString, cxObject)
 {
-   //
+    
 }
 CX_OBJECT_FREE(cxString, cxObject)
 {
@@ -20,7 +20,9 @@ CX_OBJECT_TERM(cxString, cxObject)
 
 void cxStringClean(cxString string)
 {
-    utstring_clear(&string->strptr);
+    if(cxStringLength(string) > 0){
+        utstring_clear(&string->strptr);
+    }
 }
 
 cxBool cxStringEqu(cxString s1,cxString s2)

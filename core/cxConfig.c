@@ -18,6 +18,7 @@ cxBool cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader)
 
 void cxObjectAutoInit(cxObject this)
 {
+    this->cxBase = cxBaseTypeObject;
     CX_METHOD_SET(this->XMLReadAttr, cxObjectXMLReadAttr);
 }
 

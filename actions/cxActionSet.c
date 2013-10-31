@@ -43,6 +43,8 @@ static cxBool cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReade
     return true;
 }
 
+static void cxActionSetRunNext(cxAny pav);
+
 static void cxActionItemStop(cxEvent *event)
 {
     cxActionSet this = cxEventArgToWeakRef(event->args);
@@ -53,7 +55,7 @@ static void cxActionItemStop(cxEvent *event)
     }
 }
 
-void cxActionSetRunNext(cxAny pav)
+static void cxActionSetRunNext(cxAny pav)
 {
     cxActionSet this = pav;
     if(this->index >= 0 && this->index < cxArrayLength(this->items)){
@@ -63,7 +65,7 @@ void cxActionSetRunNext(cxAny pav)
     }
 }
 
-void cxActionSetRunAll(cxAny pav)
+static void cxActionSetRunAll(cxAny pav)
 {
     cxActionSet this = pav;
     CX_ARRAY_FOREACH(this->items, ele){

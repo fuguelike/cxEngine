@@ -142,9 +142,7 @@ void cxViewSetCropping(cxAny pview,cxBool cropping)
 
 CX_OBJECT_INIT(cxView, cxObject)
 {
-    //
     this->super.cxBase = cxBaseTypeView;
-    
     this->isTop = true;
     this->isBorder = false;
     this->isVisible = true;
@@ -221,7 +219,7 @@ void cxViewSetTop(cxAny pview,cxBool top)
     this->isTop = top;
 }
 
-void cxViewSetAutoResizeBox(cxAny pview,const cxBox4f box)
+void cxViewSetAutoResizeBox(cxAny pview,cxBox4f box)
 {
     cxView this = pview;
     this->autoBox = box;
@@ -251,7 +249,7 @@ void cxViewSetBorder(cxAny pview,cxBool border)
     this->isBorder = border;
 }
 
-cxVec2f cxWindowPointToGLPoint(const cxVec2f wPoint)
+cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint)
 {
     cxEngine engine = cxEngineInstance();
     cxFloat x = wPoint.x + engine->winsize.w/2.0f;
@@ -259,7 +257,7 @@ cxVec2f cxWindowPointToGLPoint(const cxVec2f wPoint)
     return cxVec2fv(x, y);
 }
 
-cxVec2f cxGLPointToWindowPoint(const cxVec2f glPoint)
+cxVec2f cxGLPointToWindowPoint(cxVec2f glPoint)
 {
     cxEngine engine = cxEngineInstance();
     cxFloat x = glPoint.x - engine->winsize.w/2.0f;
@@ -267,19 +265,19 @@ cxVec2f cxGLPointToWindowPoint(const cxVec2f glPoint)
     return cxVec2fv(x, y);
 }
 
-cxVec2f cxViewPointToGLPoint(cxAny pview,const cxVec2f pos)
+cxVec2f cxViewPointToGLPoint(cxAny pview,cxVec2f pos)
 {
     cxVec2f ret = cxViewPointToWindowPoint(pview, pos);
     return cxWindowPointToGLPoint(ret);
 }
 
-cxVec2f cxGLPointToViewPoint(cxAny pview,const cxVec2f pos)
+cxVec2f cxGLPointToViewPoint(cxAny pview,cxVec2f pos)
 {
     cxVec2f ret = cxGLPointToWindowPoint(pos);
     return cxWindowPointToViewPoint(pview,ret);
 }
 
-cxVec2f cxViewPointToWindowPoint(cxAny pview,const cxVec2f vPoint)
+cxVec2f cxViewPointToWindowPoint(cxAny pview,cxVec2f vPoint)
 {
     cxView this = pview;
     cxView pv = this;
@@ -293,7 +291,7 @@ cxVec2f cxViewPointToWindowPoint(cxAny pview,const cxVec2f vPoint)
     return cxVec2fv(out.x, out.y);
 }
 
-cxVec2f cxWindowPointToViewPoint(cxAny pview,const cxVec2f glPoint)
+cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f glPoint)
 {
     cxView this = pview;
     cxView pv = this;
@@ -310,7 +308,7 @@ cxVec2f cxWindowPointToViewPoint(cxAny pview,const cxVec2f glPoint)
     return cxVec2fv(out.x, out.y);
 }
 
-void cxViewSetSize(cxAny pview,const cxSize2f size)
+void cxViewSetSize(cxAny pview,cxSize2f size)
 {
     cxView this = pview;
     CX_RETURN(cxSize2fEqu(this->size, size));
@@ -381,7 +379,7 @@ void cxViewSetOrder(cxAny pview,cxInt order)
     }
 }
 
-void cxViewSetPosition(cxAny pview,const cxVec2f position)
+void cxViewSetPosition(cxAny pview,cxVec2f position)
 {
     cxView this = pview;
     CX_RETURN(cxVec2fEqu(this->position, position));
@@ -389,7 +387,7 @@ void cxViewSetPosition(cxAny pview,const cxVec2f position)
     this->isDirty = true;
 }
 
-void cxViewSetBox(cxAny pview, const cxBoxVec2f box)
+void cxViewSetBox(cxAny pview, cxBoxVec2f box)
 {
     cxFloat w = box.rb.x - box.lt.x;
     cxFloat h = box.lt.y - box.rb.y;
@@ -399,7 +397,7 @@ void cxViewSetBox(cxAny pview, const cxBoxVec2f box)
     cxViewSetPosition(pview, cxVec2fv(x, y));
 }
 
-void cxViewSetAnchor(cxAny pview,const cxVec2f anchor)
+void cxViewSetAnchor(cxAny pview,cxVec2f anchor)
 {
     cxView this = pview;
     CX_RETURN(cxVec2fEqu(this->anchor, anchor));
@@ -407,7 +405,7 @@ void cxViewSetAnchor(cxAny pview,const cxVec2f anchor)
     this->isDirty = true;
 }
 
-void cxViewSetScale(cxAny pview,const cxVec2f scale)
+void cxViewSetScale(cxAny pview,cxVec2f scale)
 {
     cxView this = pview;
     CX_RETURN(cxVec2fEqu(this->scale, scale));
@@ -415,7 +413,7 @@ void cxViewSetScale(cxAny pview,const cxVec2f scale)
     this->isDirty = true;
 }
 
-void cxViewSetDegrees(cxAny pview,const cxFloat degrees)
+void cxViewSetDegrees(cxAny pview,cxFloat degrees)
 {
     cxViewSetRadians(pview,kmDegreesToRadians(degrees));
 }
@@ -428,7 +426,7 @@ void cxViewSetRaxis(cxAny pview,cxVec3f raxis)
     this->isDirty = true;
 }
 
-void cxViewSetRadians(cxAny pview,const cxFloat radians)
+void cxViewSetRadians(cxAny pview,cxFloat radians)
 {
     cxView this = pview;
     CX_RETURN(cxFloatEqu(this->radians,radians));
@@ -595,14 +593,14 @@ void cxViewRemoved(cxAny pview)
     this->parentView = NULL;
 }
 
-cxBool cxViewHitTest(cxAny pview,const cxTouch *touch,cxVec2f *pos)
+cxBool cxViewHitTest(cxAny pview,cxTouch *touch,cxVec2f *pos)
 {
     cxBoxVec2f box = cxViewLocationBox(pview);
     *pos = cxWindowPointToViewPoint(pview, touch->current);
     return cxBox2fContainPoint(box, *pos);
 }
 
-static cxBool cxViewTouchSubViews(cxAny pview,const cxTouch *touch)
+static cxBool cxViewTouchSubViews(cxAny pview,cxTouch *touch)
 {
     cxView this = pview;
     cxListElement *head = cxListFirst(this->subViews);
@@ -618,7 +616,7 @@ static cxBool cxViewTouchSubViews(cxAny pview,const cxTouch *touch)
     return false;
 }
 
-cxBool cxViewIsTouch(cxAny pview,const cxTouch *touch)
+cxBool cxViewIsTouch(cxAny pview,cxTouch *touch)
 {
     cxView this = pview;
     if(!this->isVisible){
@@ -627,7 +625,7 @@ cxBool cxViewIsTouch(cxAny pview,const cxTouch *touch)
     return true;
 }
 
-cxBool cxViewTouch(cxAny pview,const cxTouch *touch)
+cxBool cxViewTouch(cxAny pview,cxTouch *touch)
 {
     cxView this = pview;
     if(!CX_METHOD_GET(true, this->IsTouch, this, touch)){

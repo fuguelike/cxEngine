@@ -36,13 +36,13 @@ void cxDBEnvAbortTxn();
 
 void cxDBEnvCommitTxn();
 
+void cxDBEnvCheckPoint(cxBool force);
+
+cxBool cxDBEnvOpen();
+
 cxDBEnv cxDBEnvInstance();
 
 void cxDBEnvDestroy();
-
-void cxDBEnvSetPoint(cxBool force);
-
-cxBool cxDBEnvOpen();
 
 typedef cxBool (*cxDBFunc)(cxAny dbptr);
 
@@ -65,7 +65,7 @@ cxBool cxDBHas(cxAny db,cxString key);
 
 cxBool cxDBDel(cxAny db,cxString key);
 
-cxBool cxDBPut(cxAny db,cxString key,cxString value);
+cxBool cxDBSet(cxAny db,cxString key,cxString value);
 
 cxString cxDBGet(cxAny db,cxString key);
 

@@ -113,6 +113,10 @@
 		8351ACD81814BCFE0046E3C7 /* simsun.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8351ACD71814BCFE0046E3C7 /* simsun.ttf */; };
 		836A06A1181A8D0E002962C6 /* libdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 836A06A0181A8D0E002962C6 /* libdb.a */; };
 		836A06A4181A8DD4002962C6 /* cxDB.c in Sources */ = {isa = PBXBuildFile; fileRef = 836A06A2181A8DD4002962C6 /* cxDB.c */; };
+		8370592E1821E8BD0095F4A6 /* cxEventBase.c in Sources */ = {isa = PBXBuildFile; fileRef = 8370592C1821E8BD0095F4A6 /* cxEventBase.c */; };
+		837059311821F2A80095F4A6 /* cxHttpConnect.c in Sources */ = {isa = PBXBuildFile; fileRef = 8370592F1821F2A80095F4A6 /* cxHttpConnect.c */; };
+		837059341821F4DD0095F4A6 /* cxHttpGet.c in Sources */ = {isa = PBXBuildFile; fileRef = 837059321821F4DD0095F4A6 /* cxHttpGet.c */; };
+		837059371821FDD80095F4A6 /* cxHttp.c in Sources */ = {isa = PBXBuildFile; fileRef = 837059351821FDD80095F4A6 /* cxHttp.c */; };
 		83720551181FB39D00F4ED66 /* cxActionSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 8372054F181FB39D00F4ED66 /* cxActionSet.c */; };
 		837378FF181E8D460027AABA /* clipping.xml in Resources */ = {isa = PBXBuildFile; fileRef = 837378FE181E8D460027AABA /* clipping.xml */; };
 		837574B1181C0F5E00F53377 /* cxTimer.c in Sources */ = {isa = PBXBuildFile; fileRef = 837574AF181C0F5E00F53377 /* cxTimer.c */; };
@@ -350,6 +354,14 @@
 		836A06A0181A8D0E002962C6 /* libdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdb.a; path = libs/ios/lib/libdb.a; sourceTree = "<group>"; };
 		836A06A2181A8DD4002962C6 /* cxDB.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxDB.c; sourceTree = "<group>"; };
 		836A06A3181A8DD4002962C6 /* cxDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxDB.h; sourceTree = "<group>"; };
+		8370592C1821E8BD0095F4A6 /* cxEventBase.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxEventBase.c; sourceTree = "<group>"; };
+		8370592D1821E8BD0095F4A6 /* cxEventBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEventBase.h; sourceTree = "<group>"; };
+		8370592F1821F2A80095F4A6 /* cxHttpConnect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxHttpConnect.c; sourceTree = "<group>"; };
+		837059301821F2A80095F4A6 /* cxHttpConnect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxHttpConnect.h; sourceTree = "<group>"; };
+		837059321821F4DD0095F4A6 /* cxHttpGet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxHttpGet.c; sourceTree = "<group>"; };
+		837059331821F4DD0095F4A6 /* cxHttpGet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxHttpGet.h; sourceTree = "<group>"; };
+		837059351821FDD80095F4A6 /* cxHttp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxHttp.c; sourceTree = "<group>"; };
+		837059361821FDD80095F4A6 /* cxHttp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxHttp.h; sourceTree = "<group>"; };
 		8372054F181FB39D00F4ED66 /* cxActionSet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxActionSet.c; sourceTree = "<group>"; };
 		83720550181FB39D00F4ED66 /* cxActionSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxActionSet.h; sourceTree = "<group>"; };
 		837378FE181E8D460027AABA /* clipping.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = clipping.xml; sourceTree = "<group>"; };
@@ -714,9 +726,25 @@
 			path = constraints;
 			sourceTree = "<group>";
 		};
+		8370592B1821E8130095F4A6 /* socket */ = {
+			isa = PBXGroup;
+			children = (
+				8370592C1821E8BD0095F4A6 /* cxEventBase.c */,
+				8370592D1821E8BD0095F4A6 /* cxEventBase.h */,
+				8370592F1821F2A80095F4A6 /* cxHttpConnect.c */,
+				837059301821F2A80095F4A6 /* cxHttpConnect.h */,
+				837059321821F4DD0095F4A6 /* cxHttpGet.c */,
+				837059331821F4DD0095F4A6 /* cxHttpGet.h */,
+				837059351821FDD80095F4A6 /* cxHttp.c */,
+				837059361821FDD80095F4A6 /* cxHttp.h */,
+			);
+			path = socket;
+			sourceTree = "<group>";
+		};
 		839E7A3D17F1BC7600B0F5EC = {
 			isa = PBXGroup;
 			children = (
+				8370592B1821E8130095F4A6 /* socket */,
 				832517A218211D4800A2EB5A /* ios */,
 				830BD6F6180687FD00DF28E2 /* actions */,
 				833403E917F92961000D7237 /* chipmunk */,
@@ -982,6 +1010,7 @@
 				83E3A17D1813CD5B006D8388 /* cxFreeType.c in Sources */,
 				8334043817F92961000D7237 /* cpSlideJoint.c in Sources */,
 				8334042417F92961000D7237 /* cpConstraint.c in Sources */,
+				837059371821FDD80095F4A6 /* cxHttp.c in Sources */,
 				83FF165217F32B8F00DBFA3A /* cxStream.c in Sources */,
 				8334044C17F92961000D7237 /* cpSpace.c in Sources */,
 				83E3A1821813E7FF006D8388 /* cxTextureTXT.c in Sources */,
@@ -1005,6 +1034,7 @@
 				8334042E17F92961000D7237 /* cpPinJoint.c in Sources */,
 				8331BA9417F46FB800A94AE2 /* aabb.c in Sources */,
 				8334044617F92961000D7237 /* cpHashSet.c in Sources */,
+				8370592E1821E8BD0095F4A6 /* cxEventBase.c in Sources */,
 				83FF165617F32FCB00DBFA3A /* cxList.c in Sources */,
 				8331BAAC17F46FB800A94AE2 /* vec4.c in Sources */,
 				8305D30118082BFF00AD80F3 /* cxSprite.c in Sources */,
@@ -1030,12 +1060,14 @@
 				83FAB5821816054800458BD9 /* cxTable.c in Sources */,
 				8340AC92180E594D00250FCF /* cxActionXML.c in Sources */,
 				83319ABF180CE7C3007953BB /* utf.c in Sources */,
+				837059341821F4DD0095F4A6 /* cxHttpGet.c in Sources */,
 				830BD6FF18068F6200DF28E2 /* cxCurve.c in Sources */,
 				83FF165A17F331F400DBFA3A /* cxStack.c in Sources */,
 				830AB120180C3FA900CC5346 /* cxXMLScript.c in Sources */,
 				8340AC93180E594D00250FCF /* cxViewXML.c in Sources */,
 				8334043E17F92961000D7237 /* cpBB.c in Sources */,
 				8334045417F92961000D7237 /* cpSpaceStep.c in Sources */,
+				837059311821F2A80095F4A6 /* cxHttpConnect.c in Sources */,
 				830770F1180FD738001BAEED /* cxNumber.c in Sources */,
 				8334045217F92961000D7237 /* cpSpaceQuery.c in Sources */,
 				8331BAA017F46FB800A94AE2 /* quaternion.c in Sources */,
