@@ -12,22 +12,22 @@
 static cxString cxShaderClippingGetFragmentSource(cxAny this)
 {
     static cxConstChars fragment =
-    "                                                                                               \n\
-    #ifdef GL_ES                                                                                    \n\
-        varying lowp vec4   vFragmentColor;                                                         \n\
-        varying lowp vec2   vTexCoord;                                                              \n\
-        uniform sampler2D   uTexture0;                                                              \n\
-    #else                                                                                           \n\
-        varying vec4   vFragmentColor;                                                              \n\
-        varying vec2   vTexCoord;                                                                   \n\
-        uniform sampler2D   uTexture0;                                                              \n\
-    #endif                                                                                          \n\
-    void main()                                                                                     \n\
-    {                                                                                               \n\
-        vec4 texColor = texture2D(uTexture0, vTexCoord);                                            \n\
-        if(texColor.a <= 0.0)discard;                                                               \n\
-        gl_FragColor = vFragmentColor * texColor;                                                   \n\
-    }                                                                                               \n\
+    "                                                                                                   \n\
+        #ifdef GL_ES                                                                                    \n\
+            varying lowp vec4   vFragmentColor;                                                         \n\
+            varying lowp vec2   vTexCoord;                                                              \n\
+            uniform sampler2D   uTexture0;                                                              \n\
+        #else                                                                                           \n\
+            varying vec4   vFragmentColor;                                                              \n\
+            varying vec2   vTexCoord;                                                                   \n\
+            uniform sampler2D   uTexture0;                                                              \n\
+        #endif                                                                                          \n\
+        void main()                                                                                     \n\
+        {                                                                                               \n\
+            vec4 texColor = texture2D(uTexture0, vTexCoord);                                            \n\
+            if(texColor.a <= 0.0)discard;                                                               \n\
+            gl_FragColor = vFragmentColor * texColor;                                                   \n\
+        }                                                                                               \n\
     ";
     return cxStringConstChars(fragment);
 }

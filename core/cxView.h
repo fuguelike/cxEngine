@@ -57,6 +57,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxSize2f size;
     cxVec2f position;
     cxVec2f scale;
+    cxVec2f fixscale;       //use fit scree size
     cxVec2f anchor;
     cxVec3f raxis;
     cxFloat radians;
@@ -67,7 +68,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_DEF(cxViewTouchFunc, IsTouch);
     CX_METHOD_DEF(cxViewTouchFunc, Touch);
     CX_METHOD_DEF(cxViewFunc, Draw);
-    CX_METHOD_DEF(cxViewFunc, Transform);
     CX_METHOD_DEF(cxViewFunc, DrawAfter);
     CX_METHOD_DEF(cxViewFunc, DrawBefore);
     CX_EVENT_ALLOC(onEnter);
@@ -75,6 +75,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
+    CX_EVENT_ALLOC(onDirty);
     CX_EVENT_ALLOC(onChanged);//subviews count changed
 CX_OBJECT_END(cxView)
 
@@ -86,9 +87,13 @@ void cxViewSetArgs(cxAny pview,cxAny args);
 
 cxAny cxViewArgs(cxAny pview);
 
+cxVec2f cxViewScale(cxAny pview);
+
 cxSize2f cxViewSize(cxAny pview);
 
 cxColor4f cxViewColor(cxAny pview);
+
+cxBool cxViewContainsGLBox(cxAny pview);
 
 cxRect4f cxViewGLRect(cxAny pview);
 
@@ -155,6 +160,8 @@ void cxViewSetPosition(cxAny pview,cxVec2f position);
 void cxViewSetAnchor(cxAny pview,cxVec2f anchor);
 
 void cxViewSetScale(cxAny pview,cxVec2f scale);
+
+void cxViewSetFixScale(cxAny pview,cxVec2f scale);
 
 void cxViewSetRaxis(cxAny pview,cxVec3f raxis);
 

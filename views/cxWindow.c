@@ -20,18 +20,20 @@ CX_OBJECT_FREE(cxWindow, cxView)
 }
 CX_OBJECT_TERM(cxWindow, cxView)
 
-void cxWindowPushXML(cxConstChars xml)
+cxAny cxWindowPushXML(cxConstChars xml)
 {
     cxViewXML xmlView = cxViewXMLCreate(xml);
     CX_ASSERT(xmlView != NULL, "create xml view error : %s",xml);
     cxWindowPushView(xmlView, NULL);
+    return xmlView;
 }
 
-void cxWindowReplaceXML(cxConstChars xml)
+cxAny cxWindowReplaceXML(cxConstChars xml)
 {
     cxViewXML xmlView = cxViewXMLCreate(xml);
     CX_ASSERT(xmlView != NULL, "create xml view error : %s",xml);
     cxWindowReplaceView(xmlView, NULL);
+    return xmlView;
 }
 
 void cxWindowPopXML()

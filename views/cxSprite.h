@@ -40,7 +40,7 @@ void cxSpriteSetFlipX(cxAny pview,cxBool flipx);
 
 void cxSpriteSetFlipY(cxAny pview,cxBool flipy);
 
-void cxSpriteTransform(cxAny pview);
+void cxSpriteDirtyEvent(cxEvent *event);
 
 void cxSpriteDraw(cxAny pview);
 

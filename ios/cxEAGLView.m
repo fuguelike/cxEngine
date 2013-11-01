@@ -6,11 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
-#import <QuartzCore/CAEAGLLayer.h>
-
 #include <core/cxEngine.h>
-
 #import "cxEAGLView.h"
 
 @implementation cxEAGLView

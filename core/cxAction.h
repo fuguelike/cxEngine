@@ -9,9 +9,9 @@
 #ifndef cxEngine_cxAction_h
 #define cxEngine_cxAction_h
 
+#include <actions/cxCurve.h>
 #include "cxBase.h"
 #include "cxView.h"
-#include "cxCurve.h"
 
 CX_C_BEGIN
 

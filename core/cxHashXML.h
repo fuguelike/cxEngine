@@ -31,6 +31,7 @@ cxBool cxHashXMLLoad(cxAny hash,cxConstChars xml);
 
 cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader);
 
+cxTypes cxHashXMLReadHash(xmlTextReaderPtr reader);
 CX_C_END
 
 #endif

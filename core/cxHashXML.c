@@ -63,7 +63,7 @@ cxTypes cxHashXMLReadAtlasBoxPoint(cxConstChars texfile,xmlTextReaderPtr reader)
         xmlFree(bottom);
         
         cxChar *fill = cxXMLAttr("fill");
-        if(fill != NULL && strcasecmp(fill, "true") == 0){
+        if(cxConstCharsEqu(fill, "true")){
             item.box = cxBox4fv(0, 0, 0, 0);
             item.mask = cxViewAutoResizeFill;
         }
@@ -164,6 +164,61 @@ cxTypes cxHashXMLReadString(xmlTextReaderPtr reader)
     return types;
 }
 
+/*
+ <cxHash id="config">
+    <cxString key="name">text</cxString>
+    <cxInt key="int">123</cxInt>
+    <cxFloat key="float">456</cxInt>
+    <cxDouble key="double">789</cxInt>
+    <cxVec2f key="vec2f">12,23</cxVec2f>
+    <cxSize2f key="size2f">100,200</cxSize2f>
+ </cxHash>
+*/
+
+cxTypes cxHashXMLReadHash(xmlTextReaderPtr reader)
+{
+    cxNumberValue vm={0};
+    cxTypes types = cxHashTypesCreate();
+    int depth = xmlTextReaderDepth(reader);
+    while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
+        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
+            continue;
+        }
+        cxChar *key = cxXMLAttr("key");
+        if(key == NULL){
+            continue;
+        }
+        const xmlChar *temp = xmlTextReaderConstName(reader);
+        cxChar *value = cxXMLReadString(reader);
+        if(value == NULL){
+            xmlFree(key);
+            continue;
+        }
+        if(ELEMENT_IS_TYPE(cxString)){
+            cxTypesSet(types, key, cxStringConstChars(value));
+        }else if(ELEMENT_IS_TYPE(cxInt)){
+            cxTypesSet(types, key, cxNumberInt(atoi(value)));
+        }else if(ELEMENT_IS_TYPE(cxFloat)){
+            cxTypesSet(types, key, cxNumberFloat(atof(value)));
+        }else if (ELEMENT_IS_TYPE(cxDouble)){
+            cxTypesSet(types, key, cxNumberDouble(atof(value)));
+        }else if (ELEMENT_IS_TYPE(cxVec2f) && cxReadFloats(value, &vm.vec2f.x) == 2){
+            cxTypesSet(types, key, cxNumberVec2f(vm.vec2f));
+        }else if (ELEMENT_IS_TYPE(cxSize2f) && cxReadFloats(value, &vm.size2f.w) == 2){
+            cxTypesSet(types, key, cxNumberSize2f(vm.size2f));
+        }else if(ELEMENT_IS_TYPE(cxColor4f) && cxReadFloats(value, &vm.color4f.r) == 4){
+            cxTypesSet(types, key, cxNumberColor4f(vm.color4f));
+        }else if(ELEMENT_IS_TYPE(cxHash)){
+            cxTypesSet(types, key, cxHashXMLReadHash(reader));
+        }else{
+            CX_ERROR("%s element key=%s value=%s", temp, key, value);
+        }
+        xmlFree(key);
+        xmlFree(value);
+    }
+    return types;
+}
+
 CX_OBJECT_INIT(cxHashXML, cxObject)
 {
     this->items = CX_ALLOC(cxHash);
@@ -244,6 +299,8 @@ cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader)
                 object = cxHashXMLReadDB(reader);
             }else if(ELEMENT_IS_TYPE(cxString)){
                 object = cxHashXMLReadString(reader);
+            }else if(ELEMENT_IS_TYPE(cxHash)){
+                object = cxHashXMLReadHash(reader);
             }
             if(object != NULL){
                 cxHashSet(xml->items, cxHashStrKey(sid), object);

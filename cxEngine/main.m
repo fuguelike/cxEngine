@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "cxAppDelegate.h"
+#import <ios/cxAppDelegate.h>
 
 int main(int argc, char * argv[])
 {

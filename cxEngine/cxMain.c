@@ -60,45 +60,22 @@ static void actionsLoad(cxEvent *event)
 
 void cxEngineInit(cxEngine engine)
 {
+    //desgin size
+    engine->dessize = cxSize2fv(640, 960);
     //prepare load
     cxPlayerOpen(0, 0);
     //open db
     cxDBEnvOpen();
-    engine->isShowBorder = false;
+//    engine->isShowBorder = false;
     cxEngineRegisteEvent("viewLoad", viewLoad);
     cxEngineRegisteEvent("view2Load", view2Load);
     cxEngineRegisteEvent("actionsLoad", actionsLoad);
 }
 
-cxLabel l= NULL;
-
-static void t1(cxEvent *event)
-{
-    cxHttp this = event->sender;
-    cxLabelSetText(l, this->data);
-}
-
 void cxEngineMain(cxEngine engine)
 {
-
-    cxActionXMLGet("actions.xml","move");
-    
-//    cxHttp get1 = cxHttpGetRequest("http://s2.remword.cn/mongodb-linux-x86_64-2.4.1.tgz", true);
-//    CX_EVENT_QUICK(get1->onChunked, t1);
-//    CX_RETAIN(get1);
-    
-//    cxHttp post = cxHttpPostRequest("http://s2.remword.cn/p.php", cxStringConstChars("1m010921029"), false);
-//    CX_EVENT_QUICK(post->onCompleted, t1);
-//    CX_RETAIN(post);
-    
-    //load items.xml
     cxEngineDataSet("items.xml");
-    
-    l = cxLabelCreate(cxStringConstChars("%"), cxStringConstChars("banana.ttf"), 50);
-    cxViewAppend(engine->window, l);
-    
     cxWindowPushXML("main.xml");
-    
 }
 
 void cxEngineFree(cxEngine engine)

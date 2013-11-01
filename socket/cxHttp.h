@@ -29,6 +29,10 @@ CX_OBJECT_DEF(cxHttp, cxObject)
     CX_EVENT_ALLOC(onCompleted);
 CX_OBJECT_END(cxHttp)
 
+cxString cxHttpUriEncode(cxString uri);
+
+cxString cxHttpUriDecode(cxString uri);
+
 cxString cxHttpGetData(cxAny http);
 
 cxHttp cxHttpGetRequest(cxConstChars url,cxBool chunked);

@@ -33,9 +33,9 @@ void cxSpriteDraw(cxAny pview)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void cxSpriteTransform(cxAny pview)
+void cxSpriteDirtyEvent(cxEvent *event)
 {
-    cxSprite this = pview;
+    cxSprite this = event->sender;
     this->cbox.lb = this->super.color;
     this->cbox.rb = this->super.color;
     this->cbox.lt = this->super.color;
@@ -118,7 +118,7 @@ CX_OBJECT_INIT(cxSprite, cxView)
 {
     this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    CX_METHOD_SET(this->super.Transform, cxSpriteTransform);
+    CX_EVENT_QUICK(this->super.onDirty, cxSpriteDirtyEvent);
     CX_METHOD_SET(this->super.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
     cxObjectSetXMLReadFunc(this, cxSpriteXMLReadAttr);

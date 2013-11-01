@@ -32,7 +32,9 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash actions;
     cxStack autopool;
     cxFloat frameInterval;
-    cxSize2f winsize;
+    cxSize2f winsize;   //screen size
+    cxSize2f dessize;   //design size
+    cxVec2f scale;
     cxBool isInit;
     cxBool isShowBorder;
     cxWindow window;

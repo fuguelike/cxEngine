@@ -50,7 +50,7 @@ CX_OBJECT_TERM(cxEventBase, cxObject)
 cxHttpConn cxEventBaseHttpConnect(cxConstChars host,cxInt port)
 {
     cxEventBase this = cxEventBaseInstance();
-    CX_CONST_STRING(key,"%s:%d",host,port);
+    cxConstChars key = CX_CONST_STRING("%s:%d",host,port);
     cxHttpConn conn = cxHashGet(this->httpconns, cxHashStrKey(key));
     if(conn != NULL){
         return conn;

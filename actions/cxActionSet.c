@@ -16,9 +16,9 @@ static cxBool cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReade
     cxActionSet this = mAction;
     //get type
     cxChar *stype = cxXMLAttr("cxActionSet.type");
-    if(stype != NULL && strcasecmp(stype, "multiple") == 0){
+    if(cxConstCharsEqu(stype, "multiple")){
         this->type = cxActionSetTypeMultiple;
-    }else if(stype != NULL && strcasecmp(stype, "sequence") == 0){
+    }else if(cxConstCharsEqu(stype, "sequence")){
         this->type = cxActionSetTypeSequence;
     }else{
         this->type = cxActionSetTypeNone;

@@ -5,34 +5,34 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>AC039E91-259A-4852-9CE7-7CC768F62E9E</string>
+	<string>ECEF7210-C657-4446-B1FC-A05E87DE3927</string>
 	<key>IDESourceControlProjectName</key>
-	<string>cxEngineMac</string>
+	<string>cxEngineIOS</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>ACFDC8D2-4913-4E9B-8CA3-A15AB0E57E71</key>
-		<string>https://code.csdn.net/iamxuhua/cxengine.git</string>
+		<key>76E6F9C8-0971-47C2-A9DB-B10F58019E13</key>
+		<string>https://github.com/cxuhua/cxEngine.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>cxEngineMac/cxEngineMac.xcodeproj/project.xcworkspace</string>
+	<string>cxEngineIOS.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>ACFDC8D2-4913-4E9B-8CA3-A15AB0E57E71</key>
-		<string>../../..</string>
+		<key>76E6F9C8-0971-47C2-A9DB-B10F58019E13</key>
+		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://code.csdn.net/iamxuhua/cxengine.git</string>
+	<string>https://github.com/cxuhua/cxEngine.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>ACFDC8D2-4913-4E9B-8CA3-A15AB0E57E71</string>
+	<string>76E6F9C8-0971-47C2-A9DB-B10F58019E13</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>ACFDC8D2-4913-4E9B-8CA3-A15AB0E57E71</string>
+			<string>76E6F9C8-0971-47C2-A9DB-B10F58019E13</string>
 			<key>IDESourceControlWCCName</key>
 			<string>cxEngine</string>
 		</dict>

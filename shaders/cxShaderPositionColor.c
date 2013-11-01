@@ -18,21 +18,21 @@ static void cxShaderPositionColorInit(cxAny this)
 static cxString cxShaderPositionColorGetVertexSource(cxAny this)
 {
     static cxConstChars vertex =
-    "                                                               \n\
-    #ifdef GL_ES                                                    \n\
-        attribute highp vec4 aPosition;                             \n\
-        attribute lowp vec4 aColor;                                 \n\
-        varying lowp vec4 v_fcolor;                                 \n\
-    #else                                                           \n\
-        attribute vec4 aPosition;                                   \n\
-        attribute vec4 aColor;                                      \n\
-        varying vec4 v_fcolor;                                      \n\
-    #endif                                                          \n\
-    void main()                                                     \n\
-    {                                                               \n\
-        gl_Position = kxMatrixModelViewProject * aPosition;         \n\
-        v_fcolor = aColor;                                          \n\
-    }                                                               \n\
+    "                                                                   \n\
+        #ifdef GL_ES                                                    \n\
+            attribute highp vec4 aPosition;                             \n\
+            attribute lowp vec4 aColor;                                 \n\
+            varying lowp vec4 vColor;                                   \n\
+        #else                                                           \n\
+            attribute vec4 aPosition;                                   \n\
+            attribute vec4 aColor;                                      \n\
+            varying vec4 vColor;                                        \n\
+        #endif                                                          \n\
+        void main()                                                     \n\
+        {                                                               \n\
+            gl_Position = kxMatrixModelViewProject * aPosition;         \n\
+            vColor = aColor;                                            \n\
+        }                                                               \n\
     ";
     return cxStringConstChars(vertex);
 }
@@ -41,16 +41,16 @@ static cxString cxShaderPositionColorGetVertexSource(cxAny this)
 static cxString cxShaderPositionColorGetFragmentSource(cxAny this)
 {
     static cxConstChars fragment =
-    "                                                               \n\
-    #ifdef GL_ES                                                    \n\
-        varying lowp vec4 v_fcolor;                                 \n\
-    #else                                                           \n\
-        varying vec4 v_fcolor;                                      \n\
-    #endif                                                          \n\
-    void main()                                                     \n\
-    {                                                               \n\
-        gl_FragColor = v_fcolor;                                    \n\
-    }                                                               \n\
+    "                                                                   \n\
+        #ifdef GL_ES                                                    \n\
+            varying lowp vec4 vColor;                                   \n\
+        #else                                                           \n\
+            varying vec4 vColor;                                        \n\
+        #endif                                                          \n\
+        void main()                                                     \n\
+        {                                                               \n\
+            gl_FragColor = vColor;                                      \n\
+        }                                                               \n\
     ";
     return cxStringConstChars(fragment);
 }

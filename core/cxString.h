@@ -38,6 +38,8 @@ CX_OBJECT_END(cxString)
     .strptr.i=l                         \
 }
 
+#define cxConstCharsEqu(s1,s2) ((s1) != NULL && (s2) != NULL && strcmp(s1,s2) == 0)
+
 cxString cxStringAttach(cxChar *d,cxInt l);
 
 void cxStringClean(cxString string);

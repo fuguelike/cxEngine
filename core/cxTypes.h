@@ -179,6 +179,9 @@ cxBool cxBox2fContainPoint(const cxBoxVec2f box,const cxVec2f pos);
 
 cxBool cxPolygonContainPoint(const cxPolygon *polygon,const cxVec2f tp);
 
+//if r1 contains r2 return true
+cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2);
+
 typedef struct {
     cxUInt mask;
     cxBox4f box;
@@ -193,7 +196,10 @@ typedef enum {
     cxTypesLangString,
     cxTypesString,
     cxTypesDB,
+    cxTypesHash,
 }cxTypesType;
+
+#define cxTypesIsType(o,t)  ((o) != NULL && (o)->type == t)
 
 typedef enum {
     cxBaseTypeObject,
@@ -213,6 +219,8 @@ cxTypes cxAtlasBoxPointTypesCreate();
 cxTypes cxLangStringTypesCreate();
 
 cxTypes cxDBTypesCreate(cxAny db);
+
+cxTypes cxHashTypesCreate();
 
 cxTypes cxStringTypesCreate();
 

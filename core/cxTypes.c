@@ -47,6 +47,13 @@ cxTypes cxStringTypesCreate()
     return this;
 }
 
+cxTypes cxHashTypesCreate()
+{
+    cxTypes this = CX_CREATE(cxTypes);
+    this->type = cxTypesHash;
+    return this;
+}
+
 cxTypes cxDBTypesCreate(cxAny db)
 {
     cxTypes this = CX_CREATE(cxTypes);
@@ -86,6 +93,21 @@ cxRect4f cxBoxTex2fToRect4f(cxBoxTex2f box)
     cxFloat w = box.rt.u - box.lt.u;
     cxFloat h = box.rb.v - box.rt.v;
     return cxRect4fv(x, y, w, h);
+}
+
+cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2)
+{
+    cxFloat x1 = r1.x;
+    cxFloat y1 = r1.y;
+    cxFloat x2 = r1.x + r1.w;
+    cxFloat y2 = r1.y + r1.h;
+    cxFloat x3 = r2.x;
+    cxFloat y3 = r2.y;
+    cxFloat x4 = r2.x + r2.w;
+    cxFloat y4 = r2.y + r2.h;
+    bool c1 = (x1 >=x3 && x1 < x4) || (x3 >= x1 && x3 <= x2);
+    bool c2 = (y1 >=y3 && y1 < y4) || (y3 >= y1 && y3 <= y2);
+    return (c1 && c2) ? true : false;
 }
 
 cxBoxTex2f cxRect4fToBoxTex2f(cxRect4f rect)

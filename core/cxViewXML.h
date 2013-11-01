@@ -14,7 +14,7 @@
 #include <core/cxEventArg.h>
 #include <streams/cxAssetsStream.h>
 #include <textures/cxTextureFactory.h>
-#include "cxSprite.h"
+#include <views/cxSprite.h>
 
 CX_C_BEGIN
 

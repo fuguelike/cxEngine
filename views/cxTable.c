@@ -19,9 +19,9 @@ cxBool cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     this->grid.x = cxXMLReadIntAttr(reader, "cxTable.col", 0);
     this->grid.y = cxXMLReadIntAttr(reader, "cxTable.row", 0);
     //set type
-    if(type != NULL && strcasecmp(type, "vertical") == 0){
+    if(cxConstCharsEqu(type, "vertical")){
         cxTableSetType(mView, cxTableArrayVertical);
-    }else if(type != NULL && strcasecmp(type, "horizon") == 0){
+    }else if(cxConstCharsEqu(type, "horizon")){
         cxTableSetType(mView, cxTableArrayHorizon);
     }else if(cxXMLReadIntsAttr(reader, "cxTable.type", &this->grid.x) == 2){
         cxTableSetType(mView,cxTableArrayGrid);

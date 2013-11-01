@@ -6,10 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
-#import <OpenGLES/ES2/gl.h>
-#import <OpenGLES/ES2/glext.h>
-#include <core/cxEngine.h>
+#import <UIKit/UIKit.h>
 
 @interface cxEAGLView : UIView {
     GLuint  frameBuffer;

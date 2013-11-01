@@ -17,9 +17,9 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxHttpConn, cxObject)
-cxString host;
-cxInt port;
-struct evhttp_connection *conn;
+    cxString host;
+    cxInt port;
+    struct evhttp_connection *conn;
 CX_OBJECT_END(cxHttpConn)
 
 cxHttpConn cxHttpConnectOpen(cxConstChars host,cxInt port);

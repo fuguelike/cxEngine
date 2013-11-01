@@ -9,8 +9,8 @@
 #ifndef cxEngine_cxMemStream_h
 #define cxEngine_cxMemStream_h
 
-#include "cxBase.h"
-#include "cxStream.h"
+#include <core/cxBase.h>
+#include <core/cxStream.h>
 
 CX_C_BEGIN
 

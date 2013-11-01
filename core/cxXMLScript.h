@@ -46,6 +46,10 @@ do{                                                             \
 cxChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name);
 #define cxXMLAttr(n)    cxXMLAttrAuto(reader,n)
 
+cxInt cxReadFloats(cxConstChars ptr,cxFloat *values);
+
+cxInt cxReadInts(cxConstChars ptr,cxInt *values);
+
 //return need xmlFree free
 cxChar *cxXMLReadString(xmlTextReaderPtr reader);
 

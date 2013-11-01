@@ -15,7 +15,7 @@ CX_OBJECT_INIT(cxHttpConn, cxObject)
 }
 CX_OBJECT_FREE(cxHttpConn, cxObject)
 {
-    if(this->conn){
+    if(this->conn != NULL){
         evhttp_connection_free(this->conn);
     }
     CX_RELEASE(this->host);

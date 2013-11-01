@@ -78,11 +78,11 @@ cxTexture cxTextureCreate(cxConstChars file)
         CX_ERROR("unknow file ext name");
         return NULL;
     }
-    if(strcasecmp(ext, ".png") == 0){
+    if(cxConstCharsEqu(ext, ".png")){
         texture = cxTexturePNGLoadStream(stream);
-    }else if(strcasecmp(ext, ".pvr") == 0){
+    }else if(cxConstCharsEqu(ext, ".pvr")){
         texture = cxTexturePVRLoadStream(stream);
-    }else if(strcasecmp(ext, ".xml") == 0){
+    }else if(cxConstCharsEqu(ext, ".xml")){
         texture = cxTextureXMLLoadStream(stream);
     }else{
         CX_ERROR("load texture failed %s",file);

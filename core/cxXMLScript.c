@@ -113,23 +113,50 @@ cxInt cxXMLReadFloatsAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat *val
 {
     cxChar *svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL,0);
-    cxConstChars ptr = svalue;
+    cxInt c = cxReadFloats(svalue, values);
+    xmlFree(svalue);
+    return c;
+}
+
+cxInt cxReadFloats(cxConstChars ptr,cxFloat *values)
+{
+    CX_RETURN(ptr == NULL || values == NULL, 0);
     cxInt len = (cxInt)strlen(ptr) + 1;
     cxInt argLen = 0;
     cxChar arg[16]={0};
     cxInt c = 0;
+    CX_RETURN(len < 2, 0);
     for(int i=0; i < len; i++){
         if(ptr[i] == ',' || ptr[i] == '\0'){
             arg[argLen] = '\0';
-            cxFloat v = atof(arg);
             c++;
-            (*values++) = v;
+            (*values++) = atof(arg);
             argLen = 0;
         }else{
             arg[argLen++] = ptr[i];
         }
     }
-    xmlFree(svalue);
+    return c;
+}
+
+cxInt cxReadInts(cxConstChars ptr,cxInt *values)
+{
+    CX_RETURN(ptr == NULL || values == NULL, 0);
+    cxInt len = (cxInt)strlen(ptr) + 1;
+    cxInt argLen = 0;
+    cxChar arg[16]={0};
+    cxInt c = 0;
+    CX_RETURN(len < 2, 0);
+    for(int i=0; i < len; i++){
+        if(ptr[i] == ',' || ptr[i] == '\0'){
+            arg[argLen] = '\0';
+            c++;
+            (*values++) = atoi(arg);
+            argLen = 0;
+        }else{
+            arg[argLen++] = ptr[i];
+        }
+    }
     return c;
 }
 
@@ -137,22 +164,7 @@ cxInt cxXMLReadIntsAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt *values)
 {
     cxChar *svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL,0);
-    cxConstChars ptr = svalue;
-    cxInt len = (cxInt)strlen(ptr) + 1;
-    cxInt argLen = 0;
-    cxChar arg[16]={0};
-    cxInt c = 0;
-    for(int i=0; i < len; i++){
-        if(ptr[i] == ',' || ptr[i] == '\0'){
-            arg[argLen] = '\0';
-            cxFloat v = atoi(arg);
-            c++;
-            (*values++) = v;
-            argLen = 0;
-        }else{
-            arg[argLen++] = ptr[i];
-        }
-    }
+    cxInt c = cxReadInts(svalue, values);
     xmlFree(svalue);
     return c;
 }
@@ -211,9 +223,9 @@ cxBool cxXMLReadBoolAttr(xmlTextReaderPtr reader,cxConstChars name,cxBool value)
     cxBool ret = value;
     cxChar *svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL,ret);
-    if(strcasecmp(svalue, "true") == 0){
+    if(cxConstCharsEqu(svalue, "true")){
         ret = true;
-    }else if(strcasecmp(svalue, "false") == 0){
+    }else if(cxConstCharsEqu(svalue, "false")){
         ret = false;
     }else{
         CX_ERROR("bool value is true or false");

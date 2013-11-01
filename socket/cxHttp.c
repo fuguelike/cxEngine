@@ -10,6 +10,20 @@
 #include "cxHttpConn.h"
 #include "cxHttp.h"
 
+cxString cxHttpUriEncode(cxString uri)
+{
+    CX_RETURN(uri == NULL, NULL);
+    cxChar *data = evhttp_uriencode(cxStringBody(uri), cxStringLength(uri), 0);
+    return cxStringAttach(data, strlen(data));
+}
+
+cxString cxHttpUriDecode(cxString uri)
+{
+    cxInt size = 0;
+    cxChar *data = evhttp_uridecode(cxStringBody(uri), 0, (size_t *)&size);
+    return cxStringAttach(data, size);
+}
+
 static void cxHttpReadData(cxHttp this)
 {
     this->readBytes = this->request->body_size;
@@ -93,7 +107,6 @@ static cxString cxHttpGetUri(cxAny http)
 static cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked)
 {
     cxHttp this = http;
-    
     this->uri = evhttp_uri_parse(uri);
     this->request = evhttp_request_new(cxHttpRequestCompleted, this);
     if(chunked){
@@ -101,14 +114,6 @@ static cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked)
     }
     evhttp_add_header(this->request->output_headers, "Host", evhttp_uri_get_host(this->uri));
     evhttp_add_header(this->request->output_headers, "Referer", ".google.com");
-    
-    cxConstChars host = evhttp_uri_get_host(this->uri);
-    cxInt port = evhttp_uri_get_port(this->uri);
-    cxHttpConn conn = cxEventBaseHttpConnect(host, port < 0 ? 80 : port);
-    if(conn == NULL){
-        CX_ERROR("from http conn cache get conn failed");
-        return false;
-    }
     return true;
 }
 

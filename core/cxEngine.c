@@ -88,6 +88,9 @@ void cxEngineLayout(cxInt width,cxInt height)
     cxEngine engine = cxEngineInstance();
     engine->winsize = cxSize2fv(width, height);
     cxViewSetSize(engine->window, engine->winsize);
+    if(!cxSize2Zero(engine->dessize)){
+        engine->scale = cxVec2fv(engine->winsize.w/engine->dessize.w, engine->winsize.h/engine->dessize.h);
+    }
     //
     if(!engine->isInit){
         cxOpenGLCheckFeature();
@@ -124,6 +127,7 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->frameInterval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->contentScaleFactor = 1.0f;
+    this->scale = cxVec2fv(1.0f, 1.0f);
     this->window = CX_ALLOC(cxWindow);
     this->scripts = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
@@ -281,33 +285,37 @@ cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)
     cxEngine this = cxEngineInstance();
     //from cxLangString
     CX_ASSERT(this->lang != NULL, "system not set locate lang");
-    
-    CX_CONST_STRING(url,"%s?%s",xml,cxStringBody(this->lang));
+    cxConstChars url = CX_CONST_STRING("%s?%s",xml,cxStringBody(this->lang));
     cxString ret = NULL;
     cxTypes types = cxEngineDataSet(url);
-    if(types != NULL && types->type == cxTypesLangString){
+    if(cxTypesIsType(types,cxTypesLangString)){
         ret = cxTypesGet(types, key);
     }
     CX_RETURN(ret != NULL,ret);
-    
     //from cxString
-    CX_CONST_STRING(surl,"%s?%s",xml,key);
+    cxConstChars surl = CX_CONST_STRING("%s?%s",xml,key);
     types = cxEngineDataSet(surl);
-    if(types != NULL && types->type == cxTypesString){
+    if(cxTypesIsType(types,cxTypesString)){
         ret = types->assist;
     }
     CX_RETURN(ret != NULL,ret);
-    
-    //from cxDB get String
-    cxChar dbKey[128]={0};
-    cxChar rowKey[128]={0};
-    if(cxParseQuery(key, dbKey, rowKey) != 2){
+    //parse query?key=?
+    cxChar qk[128]={0};
+    cxChar qv[128]={0};
+    if(cxParseQuery(key, qk, qv) != 2){
         return ret;
     }
-    CX_CONST_STRING(dburl,"%s?%s",xml,dbKey);
+    cxConstChars dburl = CX_CONST_STRING("%s?%s",xml,qk);
+    //from cxHash
     types = cxEngineDataSet(dburl);
-    if(types != NULL && types->type == cxTypesDB){
-        ret = cxDBGet(types->assist, cxStringStatic(rowKey));
+    if(cxTypesIsType(types,cxTypesHash)){
+        cxAny value = cxTypesGet(types, qv);
+        ret = cxObjectIsType(value, cxStringAutoType) ? value : NULL;
+    }
+    CX_RETURN(ret != NULL,ret);
+    //from cxDB get String
+    if(cxTypesIsType(types,cxTypesDB)){
+        ret = cxDBGet(types->assist, cxStringStatic(qv));
     }
     return ret;
 }

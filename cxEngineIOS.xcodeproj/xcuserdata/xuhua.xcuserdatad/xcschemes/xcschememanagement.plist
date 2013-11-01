@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>cxEngineMac.xcscheme</key>
+		<key>cxEngineIOS.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,12 +12,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>8340AD1E180E8D3600250FCF</key>
+		<key>8341C34A18227C310045A66F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8340AD3F180E8D3600250FCF</key>
+		<key>8341C35A18227C310045A66F</key>
 		<dict>
 			<key>primary</key>
 			<true/>

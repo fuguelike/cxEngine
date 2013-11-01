@@ -18,6 +18,24 @@ CX_OBJECT_FREE(cxNumber, cxObject)
 }
 CX_OBJECT_TERM(cxNumber, cxObject)
 
+cxColor4f cxNumberToColor4f(cxNumber this)
+{
+    CX_ASSERT(this->type == cxNumberTypeColor4f, "type error");
+    return this->value.color4f;
+}
+
+cxVec2f cxNumberToVec2f(cxNumber this)
+{
+    CX_ASSERT(this->type == cxNumberTypeVec2f, "type error");
+    return this->value.vec2f;
+}
+
+cxSize2f cxNumberToSize2f(cxNumber this)
+{
+    CX_ASSERT(this->type == cxNumberTypeSize2f, "type error");
+    return this->value.size2f;
+}
+
 cxInt cxNumberToInt(cxNumber this)
 {
     CX_ASSERT(this->type == cxNumberTypeInt, "type error");
@@ -88,6 +106,30 @@ cxDouble cxNumberToDouble(cxNumber this)
 {
     CX_ASSERT(this->type == cxNumberTypeDouble, "type error");
     return this->value.vd;
+}
+
+cxNumber cxNumberVec2f(cxVec2f v)
+{
+    cxNumber rv = CX_CREATE(cxNumber);
+    rv->type = cxNumberTypeVec2f;
+    rv->value.vec2f = v;
+    return rv;
+}
+
+cxNumber cxNumberSize2f(cxSize2f v)
+{
+    cxNumber rv = CX_CREATE(cxNumber);
+    rv->type = cxNumberTypeSize2f;
+    rv->value.size2f = v;
+    return rv;
+}
+
+cxNumber cxNumberColor4f(cxColor4f v)
+{
+    cxNumber rv = CX_CREATE(cxNumber);
+    rv->type = cxNumberTypeColor4f;
+    rv->value.color4f = v;
+    return rv;
 }
 
 cxNumber cxNumberInt(cxInt v)
