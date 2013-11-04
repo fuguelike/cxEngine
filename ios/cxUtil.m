@@ -11,9 +11,11 @@
 #include <core/cxUtil.h>
 #include <core/cxPlayer.h>
 
-cxString cxWAVSamples(cxConstChars file)
+cxString cxWAVSamples(cxConstChars file,cxUInt *format,cxUInt *freq)
 {
     cxString cxPath = cxAssetsPath(file);
+    AudioStreamBasicDescription fileformat;
+    UInt32 formatsize = sizeof(fileformat);
     NSString *path = [NSString stringWithUTF8String:cxStringBody(cxPath)];
     CFURLRef fileURL = (__bridge CFURLRef)[NSURL fileURLWithPath:path];
     UInt64 fileDataSize = 0;
@@ -23,9 +25,19 @@ cxString cxWAVSamples(cxConstChars file)
     if(AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, &afid)){
         return NULL;
     }
+    if(AudioFileGetProperty(afid, kAudioFilePropertyDataFormat, &formatsize, &fileformat)){
+        CX_ERROR("get format error");
+        return NULL;
+    }
     if(!AudioFileGetProperty(afid, kAudioFilePropertyAudioDataByteCount, &thePropertySize, &fileDataSize)){
         theData = allocator->calloc(1,(cxInt)fileDataSize);
         AudioFileReadBytes(afid, false, 0, (UInt32 *)&fileDataSize, theData);
+        *freq = (ALsizei)fileformat.mSampleRate;
+        if(fileformat.mBitsPerChannel == 16){
+            *format = (fileformat.mChannelsPerFrame > 1) ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
+        }else{
+            *format = (fileformat.mChannelsPerFrame > 1) ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8;
+        }
     }
     AudioFileClose(afid);
     if(theData == NULL){

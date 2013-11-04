@@ -31,32 +31,7 @@
 #include <core/cxDB.h>
 #include <core/cxPlayer.h>
 #include <socket/cxHttp.h>
-
-static void cxEventTest(cxEvent *event)
-{
-    //cxActionXMLAttachView(view, "actions.xml", "move");
-}
-
-static void viewLoad(cxEvent *event)
-{
-    //pview == cxViewXML
-    //add view custom event
-    cxViewXMLRegisteEvent(event->sender, "cxEventTest",cxEventTest);
-}
-
-static void view2Load(cxEvent *event)
-{
-    //pview == cxViewXML
-    //add view custom event
-//    cxViewXMLRegisteEvent(xmlView, "cxEventTest",cxEventTest);
-}
-
-static void actionsLoad(cxEvent *event)
-{
-    CX_LOGGER("load actions.xml");
-    //pav == cxActionXML
-    //add action custom event
-}
+#include <streams/cxMp3Stream.h>
 
 void cxEngineInit(cxEngine engine)
 {
@@ -67,9 +42,6 @@ void cxEngineInit(cxEngine engine)
     //open db
     cxDBEnvOpen();
 //    engine->isShowBorder = false;
-    cxEngineRegisteEvent("viewLoad", viewLoad);
-    cxEngineRegisteEvent("view2Load", view2Load);
-    cxEngineRegisteEvent("actionsLoad", actionsLoad);
 }
 
 void cxEngineMain(cxEngine engine)

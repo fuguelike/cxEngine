@@ -17,10 +17,15 @@
 
 CX_C_BEGIN
 
+typedef enum {
+    cxAudioFileTypeNone,
+    cxAudioFileTypeMp3,
+    cxAudioFileTypeWav,
+}cxAudioFileType;
+
 CX_OBJECT_DEF(cxTrack, cxObject)
     ALsizei freq;
     ALuint format;
-    ALuint buffer;
     ALuint source;
 CX_OBJECT_END(cxTrack)
 
@@ -30,7 +35,9 @@ void cxTrackResume(cxTrack this);
 
 void cxTrackStop(cxTrack this);
 
-cxTrack cxPlayBuffer(cxString buffer,cxBool loop);
+cxAudioFileType cxAudioGetType(cxConstChars file);
+
+cxTrack cxPlayBuffer(cxAny buffer,cxBool loop);
 
 cxTrack cxPlayFile(cxConstChars file,cxBool loop);
 

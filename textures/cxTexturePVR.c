@@ -75,10 +75,8 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
     }else{
         pvr->glFormat = pvr->super.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
     }
-    
     cxOpenGLGenTextures(1, &pvr->super.textureId);
     cxOpenGLBindTexture(0, pvr->super.textureId);
-    
     cxUInt dataLen = header.dataLength;
     cxUInt dataOff = 0;
     cxUInt width = header.width;
@@ -88,7 +86,6 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
     cxUInt widthBlocks = 0;
     cxUInt heightBlocks = 0;
     cxInt i = 0;
-    
     while (dataOff< dataLen){
         if (pvr->format == cxFormatPVR4BPP){
             blockSize = 4 * 4;
@@ -107,7 +104,6 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
         if (heightBlocks < 2){
             heightBlocks = 2;
         }
-
         cxUInt bufSize = widthBlocks * heightBlocks * ((blockSize  * bpp) / 8);
         cxPointer buffer = allocator->malloc(bufSize);
         cxInt size = stream->interface->Read(stream,buffer,bufSize);
@@ -156,9 +152,9 @@ CX_OBJECT_TERM(cxTexturePVR, cxTexture)
 
 cxTexture cxTexturePVRLoadStream(cxStream stream)
 {
-    cxTexturePVR pvr = CX_CREATE(cxTexturePVR);
-    cxTextureLoad((cxTexture)pvr,stream);
-    return (cxTexture)pvr;
+    cxTexture pvr = CX_CREATE(cxTexturePVR);
+    cxTextureLoad(pvr,stream);
+    return pvr;
 }
 
 

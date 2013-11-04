@@ -13,15 +13,7 @@
 
 CX_C_BEGIN
 
-typedef enum {
-    cxTableArrayNone,
-    cxTableArrayVertical,   //vertical
-    cxTableArrayHorizon,    //horizon
-    cxTableArrayGrid,
-}cxTableArrayType;
-
 CX_OBJECT_DEF(cxTable, cxView)
-    cxTableArrayType type;
     cxVec2f space;
     cxBool isArray;
     cxBool arrayHide;
@@ -33,8 +25,6 @@ cxBool cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 void cxTableArrayHide(cxAny pview,cxBool arrayHide);
 
 void cxTableArraySubViews(cxAny pview);
-
-void cxTableSetType(cxAny pview,cxTableArrayType type);
 
 void cxTableSetSpace(cxAny pview,cxVec2f space);
 

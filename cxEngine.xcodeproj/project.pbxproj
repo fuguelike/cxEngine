@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8324910417F2926600D0DF9D /* cxMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324910317F2926600D0DF9D /* cxMain.c */; };
+		832B1D4B18264B100038D0EC /* apple.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 832B1D4918264B100038D0EC /* apple.mp3 */; };
+		832B1D4C18264B100038D0EC /* Track02.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 832B1D4A18264B100038D0EC /* Track02.mp3 */; };
 		8341C68D182280400045A66F /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C68A182280320045A66F /* libcxEngineIOS.a */; };
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
 		8341C69F182280E20045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69E182280E20045A66F /* libz.dylib */; };
@@ -36,6 +38,8 @@
 		8341C6CF1822812B0045A66F /* scale9.png in Resources */ = {isa = PBXBuildFile; fileRef = 8341C6BD1822812B0045A66F /* scale9.png */; };
 		8341C6D01822812B0045A66F /* simsun.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8341C6BE1822812B0045A66F /* simsun.ttf */; };
 		8341C6D11822812B0045A66F /* songti.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8341C6BF1822812B0045A66F /* songti.ttf */; };
+		8384E1E81823997700EDA1D6 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8384E1E71823997700EDA1D6 /* libcrypto.a */; };
+		8384E1EF1823ABFB00EDA1D6 /* libmpg123.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */; };
 		839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 839E7A5617F1BC7600B0F5EC /* InfoPlist.strings */; };
 		839E7A5A17F1BC7600B0F5EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 839E7A5917F1BC7600B0F5EC /* main.m */; };
 		839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839E7A6917F1BC7600B0F5EC /* Images.xcassets */; };
@@ -62,6 +66,8 @@
 		8300651F18232BE000AF680D /* cxEngine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cxEngine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8324910317F2926600D0DF9D /* cxMain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMain.c; sourceTree = "<group>"; };
 		8324910517F2953300D0DF9D /* cxMain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cxMain.h; sourceTree = "<group>"; };
+		832B1D4918264B100038D0EC /* apple.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = apple.mp3; path = res/apple.mp3; sourceTree = "<group>"; };
+		832B1D4A18264B100038D0EC /* Track02.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Track02.mp3; path = res/Track02.mp3; sourceTree = "<group>"; };
 		8341C684182280320045A66F /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8341C69E182280E20045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -90,6 +96,8 @@
 		8341C6BD1822812B0045A66F /* scale9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scale9.png; path = res/scale9.png; sourceTree = "<group>"; };
 		8341C6BE1822812B0045A66F /* simsun.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = simsun.ttf; path = res/simsun.ttf; sourceTree = "<group>"; };
 		8341C6BF1822812B0045A66F /* songti.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = songti.ttf; path = res/songti.ttf; sourceTree = "<group>"; };
+		8384E1E71823997700EDA1D6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = libs/ios/lib/libcrypto.a; sourceTree = "<group>"; };
+		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
 		839E7A5517F1BC7600B0F5EC /* cxEngine-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "cxEngine-Info.plist"; sourceTree = "<group>"; };
 		839E7A5717F1BC7600B0F5EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		839E7A5917F1BC7600B0F5EC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -102,6 +110,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8384E1EF1823ABFB00EDA1D6 /* libmpg123.a in Frameworks */,
+				8384E1E81823997700EDA1D6 /* libcrypto.a in Frameworks */,
 				8341C6A91822810D0045A66F /* libdb.a in Frameworks */,
 				8341C6AA1822810D0045A66F /* libevent.a in Frameworks */,
 				8341C6AB1822810D0045A66F /* libfreetype.a in Frameworks */,
@@ -140,6 +150,8 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */,
+				8384E1E71823997700EDA1D6 /* libcrypto.a */,
 				8341C6A41822810D0045A66F /* libdb.a */,
 				8341C6A51822810D0045A66F /* libevent.a */,
 				8341C6A61822810D0045A66F /* libfreetype.a */,
@@ -167,6 +179,8 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				832B1D4918264B100038D0EC /* apple.mp3 */,
+				832B1D4A18264B100038D0EC /* Track02.mp3 */,
 				8341C6AE1822812B0045A66F /* 2.pvr */,
 				8341C6AF1822812B0045A66F /* 4.pvr */,
 				8341C6B01822812B0045A66F /* action.xml */,
@@ -276,8 +290,10 @@
 				8341C6CF1822812B0045A66F /* scale9.png in Resources */,
 				839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */,
 				8341C6C91822812B0045A66F /* clipping.xml in Resources */,
+				832B1D4B18264B100038D0EC /* apple.mp3 in Resources */,
 				8341C6CC1822812B0045A66F /* main.xml in Resources */,
 				839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */,
+				832B1D4C18264B100038D0EC /* Track02.mp3 in Resources */,
 				8341C6C81822812B0045A66F /* candy.xml in Resources */,
 				8341C6D11822812B0045A66F /* songti.ttf in Resources */,
 				8341C6D01822812B0045A66F /* simsun.ttf in Resources */,

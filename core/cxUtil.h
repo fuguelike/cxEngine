@@ -21,9 +21,13 @@ CX_C_BEGIN
 // 0 <-> 1
 #define CX_RAND_01f() ((cxFloat)rand()/(cxFloat)RAND_MAX)
 
+cxString cxMD5(cxString v);
+
 void cxSetRandSeed();
 
-cxString cxWAVSamples(cxConstChars file);
+cxString cxWAVSamples(cxConstChars file,cxUInt *format,cxUInt *freq);
+
+cxString cxMP3Samples(cxConstChars file,cxUInt *format,cxUInt *freq);;
 
 cxBool cxParseKeyValue(cxChar *query,cxChar *key,cxChar *value);
 

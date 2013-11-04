@@ -6,10 +6,46 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <OpenAL/al.h>
+#include <streams/cxMp3Stream.h>
+#include <openssl/md5.h>
 #include <evhttp.h>
 #include <sys/time.h>
 #include "cxBase.h"
 #include "cxUtil.h"
+
+static const char hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+
+cxString cxMP3Samples(cxConstChars file,cxUInt *format,cxUInt *freq)
+{
+    cxMp3Stream this  = (cxMp3Stream)cxMp3StreamCreate(file);
+    cxString bytes = cxSreamBytes(this);
+    if(bytes == NULL){
+        CX_ERROR("get mp3 bytes error");
+        return NULL;
+    }
+    if(this->encoding & MPG123_ENC_16){
+        *format = (this->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
+    }else{
+        *format = (this->channels == 1) ? AL_FORMAT_MONO8 : AL_FORMAT_STEREO8;
+    }
+    *freq = this->freq;
+    return bytes;
+}
+
+cxString cxMD5(cxString v)
+{
+    CX_ASSERT(v != NULL, "args error");
+    cxUChar digest[MD5_DIGEST_LENGTH];
+    cxUChar *md = MD5((const cxUChar *)cxStringBody(v), cxStringLength(v), digest);
+    CX_RETURN(md == NULL, NULL);
+    cxChar md5[MD5_DIGEST_LENGTH*2+1]={0};
+    for(cxInt i=0; i<MD5_DIGEST_LENGTH; i++){
+        md5[2*i] = hex[(digest[i] & 0xf0)>> 4];
+        md5[2*i + 1] = hex[digest[i] & 0x0f];
+    }
+    return cxStringConstChars(md5);
+}
 
 void cxSetRandSeed()
 {

@@ -283,36 +283,41 @@ cxTypes cxEngineDataSet(cxConstChars url)
 cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)
 {
     cxEngine this = cxEngineInstance();
+    cxConstChars url = NULL;
     //from cxLangString
     CX_ASSERT(this->lang != NULL, "system not set locate lang");
-    cxConstChars url = CX_CONST_STRING("%s?%s",xml,cxStringBody(this->lang));
+    
+    url = CX_CONST_STRING("%s?%s",xml,cxStringBody(this->lang));
     cxString ret = NULL;
     cxTypes types = cxEngineDataSet(url);
     if(cxTypesIsType(types,cxTypesLangString)){
         ret = cxTypesGet(types, key);
     }
     CX_RETURN(ret != NULL,ret);
+    
     //from cxString
-    cxConstChars surl = CX_CONST_STRING("%s?%s",xml,key);
-    types = cxEngineDataSet(surl);
+    url = CX_CONST_STRING("%s?%s",xml,key);
+    types = cxEngineDataSet(url);
     if(cxTypesIsType(types,cxTypesString)){
         ret = types->assist;
     }
     CX_RETURN(ret != NULL,ret);
+    
     //parse query?key=?
     cxChar qk[128]={0};
     cxChar qv[128]={0};
     if(cxParseQuery(key, qk, qv) != 2){
         return ret;
     }
-    cxConstChars dburl = CX_CONST_STRING("%s?%s",xml,qk);
+    url = CX_CONST_STRING("%s?%s",xml,qk);
     //from cxHash
-    types = cxEngineDataSet(dburl);
+    types = cxEngineDataSet(url);
     if(cxTypesIsType(types,cxTypesHash)){
         cxAny value = cxTypesGet(types, qv);
         ret = cxObjectIsType(value, cxStringAutoType) ? value : NULL;
     }
     CX_RETURN(ret != NULL,ret);
+    
     //from cxDB get String
     if(cxTypesIsType(types,cxTypesDB)){
         ret = cxDBGet(types->assist, cxStringStatic(qv));

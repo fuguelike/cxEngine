@@ -14,6 +14,10 @@
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Wav" cxLabel.size="30"/>
         </cxButton>
+        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPlay({'src':'apple.mp3','loop':false})">
+            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Mp3" cxLabel.size="30"/>
+        </cxButton>
         <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('clipping.xml')">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Clip" cxLabel.size="30"/>

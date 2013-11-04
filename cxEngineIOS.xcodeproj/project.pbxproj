@@ -141,6 +141,7 @@
 		8341C68118227FA10045A66F /* cxEAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67C18227FA10045A66F /* cxEAGLView.m */; };
 		8341C68218227FA10045A66F /* cxUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67D18227FA10045A66F /* cxUtil.m */; };
 		8341C68318227FA10045A66F /* cxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67F18227FA10045A66F /* cxViewController.m */; };
+		8384E1ED1823ABC700EDA1D6 /* cxMp3Stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -414,6 +415,8 @@
 		8341C67D18227FA10045A66F /* cxUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cxUtil.m; sourceTree = "<group>"; };
 		8341C67E18227FA10045A66F /* cxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxViewController.h; sourceTree = "<group>"; };
 		8341C67F18227FA10045A66F /* cxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cxViewController.m; sourceTree = "<group>"; };
+		8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMp3Stream.c; sourceTree = "<group>"; };
+		8384E1EC1823ABC700EDA1D6 /* cxMp3Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMp3Stream.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -755,6 +758,8 @@
 				8341C5D418227DF20045A66F /* cxMemStream.h */,
 				8341C5D518227DF20045A66F /* cxTcpStream.c */,
 				8341C5D618227DF20045A66F /* cxTcpStream.h */,
+				8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */,
+				8384E1EC1823ABC700EDA1D6 /* cxMp3Stream.h */,
 			);
 			path = streams;
 			sourceTree = "<group>";
@@ -1012,6 +1017,7 @@
 				8341C65C18227DF30045A66F /* cxMemStream.c in Sources */,
 				8341C60818227DF20045A66F /* cpSimpleMotor.c in Sources */,
 				8341C64218227DF20045A66F /* pack_unpack.c in Sources */,
+				8384E1ED1823ABC700EDA1D6 /* cxMp3Stream.c in Sources */,
 				8341C5F518227DF20045A66F /* cxActionSet.c in Sources */,
 				8341C65D18227DF30045A66F /* cxTcpStream.c in Sources */,
 			);

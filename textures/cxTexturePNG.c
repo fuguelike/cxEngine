@@ -63,9 +63,9 @@ CX_OBJECT_TERM(cxTexturePNG, cxTexture)
 
 cxTexture cxTexturePNGLoadStream(cxStream stream)
 {
-    cxTexturePNG png = CX_CREATE(cxTexturePNG);
-    cxTextureLoad((cxTexture)png,stream);
-    return (cxTexture)png;
+    cxTexture png = CX_CREATE(cxTexturePNG);
+    cxTextureLoad(png,stream);
+    return png;
 }
 
 

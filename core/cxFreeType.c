@@ -92,6 +92,7 @@ cxFreeFontChar cxFreeFontLoadChar(cxFreeFont this,cxFreeFontCharKey key)
         schar->data = allocator->malloc(schar->width * schar->height);
         cxFreeFontSetBitmapData(schar, &bitmap->bitmap, schar->width, schar->height);
     }
+    schar->key = key;
     cxHashSet(this->chars, cxHashIntKey(key.key), schar);
     CX_RELEASE(schar);
     FT_Done_Glyph(glyph);

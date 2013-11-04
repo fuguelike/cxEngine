@@ -29,6 +29,7 @@ typedef union{
 #define cxFontChar(c,w) (cxFreeFontCharKey){.wchar=c,.wfont=w}
 
 CX_OBJECT_DEF(cxFreeFontChar, cxObject)
+    cxFreeFontCharKey key;
     cxInt top;
     cxInt left;
     cxInt height;

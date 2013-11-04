@@ -103,9 +103,9 @@ CX_OBJECT_TERM(cxTextureXML, cxTexture)
 
 cxTexture cxTextureXMLLoadStream(cxStream stream)
 {
-    cxTextureXML xml = CX_CREATE(cxTextureXML);
-    cxTextureLoad((cxTexture)xml,stream);
-    return (cxTexture)xml;
+    cxTexture xml = CX_CREATE(cxTextureXML);
+    cxTextureLoad(xml,stream);
+    return xml;
 }
 
 
