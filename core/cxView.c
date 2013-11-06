@@ -211,6 +211,14 @@ cxSize2f cxViewSize(cxAny pview)
     return this->size;
 }
 
+cxBox4f cxViewBox(cxAny pview)
+{
+    cxView this = pview;
+    cxFloat wh = this->size.w/2.0f;
+    cxFloat hh = this->size.h/2.0f;
+    return cxBox4fv(-wh, wh, hh, -hh);
+}
+
 cxAny cxViewArgs(cxAny pview)
 {
     cxView this = pview;
@@ -321,17 +329,17 @@ cxVec2f cxViewPointToWindowPoint(cxAny pview,cxVec2f vPoint)
     return cxVec2fv(out.x, out.y);
 }
 
-cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f glPoint)
+cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
 {
     cxView this = pview;
     cxView pv = this;
     cxVec3f out;
     cxMatrix4f matrix;
-    kmVec3Fill(&out, glPoint.x, glPoint.y, 0);
+    kmVec3Fill(&out, wPoint.x, wPoint.y, 0);
     while (pv != NULL && pv->parentView != NULL) {
-        kmMat4Inverse(&matrix, &pv->anchorMatrix);
-        kmVec3Transform(&out, &out, &matrix);
         kmMat4Inverse(&matrix, &pv->normalMatrix);
+        kmVec3Transform(&out, &out, &matrix);
+        kmMat4Inverse(&matrix, &pv->anchorMatrix);
         kmVec3Transform(&out, &out, &matrix);
         pv = pv->parentView;
     }
@@ -417,16 +425,6 @@ void cxViewSetPosition(cxAny pview,cxVec2f position)
     this->isDirty = true;
 }
 
-void cxViewSetBox(cxAny pview, cxBoxVec2f box)
-{
-    cxFloat w = box.rb.x - box.lt.x;
-    cxFloat h = box.lt.y - box.rb.y;
-    cxFloat x = box.lb.x + w/2.0f;
-    cxFloat y = box.lb.y + h/2.0f;
-    cxViewSetSize(pview, cxSize2fv(w, h));
-    cxViewSetPosition(pview, cxVec2fv(x, y));
-}
-
 void cxViewSetAnchor(cxAny pview,cxVec2f anchor)
 {
     cxView this = pview;
@@ -507,24 +505,12 @@ void cxViewTransform(cxAny pview)
     this->isDirty = false;
 }
 
-cxBoxVec2f cxViewLocationBox(cxAny pview)
-{
-    cxView this = pview;
-    cxBoxVec2f box;
-    cxFloat wh = this->size.w/2.0f;
-    cxFloat hh = this->size.h/2.0f;
-    box.lt = cxVec2fv(-wh, +hh);
-    box.lb = cxVec2fv(-wh, -hh);
-    box.rb = cxVec2fv(+wh, -hh);
-    box.rt = cxVec2fv(+wh, +hh);
-    return box;
-}
-
 static void cxViewDrawBorder(cxAny pview)
 {
     cxView this = pview;
     CX_RETURN(!cxEngineInstance()->isShowBorder && !this->isBorder);
-    cxBoxVec2f box = cxViewLocationBox(this);
+    cxBox4f b = cxViewBox(this);
+    cxBoxVec2f box = cxBoxVec2fFromBox4f(b);
     cxDrawLineBox(&box, cxRED);
 }
 
@@ -640,11 +626,11 @@ void cxViewRemoved(cxAny pview)
     this->parentView = NULL;
 }
 
-cxBool cxViewHitTest(cxAny pview,cxTouch *touch,cxVec2f *pos)
+cxBool cxViewHitTest(cxAny pview,cxTouch *touch)
 {
-    cxBoxVec2f box = cxViewLocationBox(pview);
-    *pos = cxWindowPointToViewPoint(pview, touch->current);
-    return cxBox2fContainPoint(box, *pos);
+    cxVec2f pos = cxWindowPointToViewPoint(pview, touch->current);
+    cxBox4f box = cxViewBox(pview);
+    return cxBox2fContainPoint(box, pos);
 }
 
 static cxBool cxViewTouchSubViews(cxAny pview,cxTouch *touch)

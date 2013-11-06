@@ -98,6 +98,7 @@ typedef struct {
     kmScalar b;
 } cxBox4f;
 #define cxBox4fv(l,r,t,b) (cxBox4f){l,r,t,b}
+#define cxBox4fInit() cxBox4fv(INT32_MAX,INT32_MIN,INT32_MIN,INT32_MAX)
 
 typedef struct {
     kmScalar x;
@@ -113,6 +114,7 @@ typedef struct {
     cxVec2f rb;
     cxVec2f lb;
 } cxBoxVec2f;
+#define cxBoxVec2fFromBox4f(box) (cxBoxVec2f){{(box).l,(box).t},{(box).r,(box).t},{(box).r,(box).b},{(box).l,(box).b}}
 
 typedef struct {
     cxVec2f *vs;
@@ -175,7 +177,7 @@ cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t);
 
 cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t);
 
-cxBool cxBox2fContainPoint(const cxBoxVec2f box,const cxVec2f pos);
+cxBool cxBox2fContainPoint(const cxBox4f box,const cxVec2f pos);
 
 cxBool cxPolygonContainPoint(const cxPolygon *polygon,const cxVec2f tp);
 

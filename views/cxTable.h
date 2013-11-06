@@ -24,7 +24,7 @@ cxBool cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
 void cxTableArrayHide(cxAny pview,cxBool arrayHide);
 
-void cxTableArraySubViews(cxAny pview);
+void cxTableArraySubviews(cxAny pview);
 
 void cxTableSetSpace(cxAny pview,cxVec2f space);
 

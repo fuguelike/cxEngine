@@ -241,11 +241,11 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_OBJECT_DEF(_t_,_b_)    CX_OBJECT_BEG(_t_) struct _b_ super;
 
-#define CX_OBJECT_INIT(_t_,_b_)   void _t_##AutoInit(_t_ this){_b_##AutoInit((_b_)this);do{
+#define CX_OBJECT_INIT(_t_,_b_)   void _t_##AutoInit(_t_ this){_b_##AutoInit((_b_)this);{
 
-#define CX_OBJECT_FREE(_t_,_b_)   }while(0);};void _t_##AutoFree(_t_ this){do{
+#define CX_OBJECT_FREE(_t_,_b_)   }};void _t_##AutoFree(_t_ this){{
 
-#define CX_OBJECT_TERM(_t_,_b_)   }while(0);_b_##AutoFree((_b_)this);}
+#define CX_OBJECT_TERM(_t_,_b_)   }_b_##AutoFree((_b_)this);}
 
 #define CX_ALLOC(_t_)             cxObjectAlloc(_t_##AutoType,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
 

@@ -26,7 +26,7 @@ void cxTableSetSpace(cxAny pview,cxVec2f space)
     cxTable this = pview;
     CX_RETURN(cxVec2fEqu(this->space, space));
     this->space = space;
-    cxTableArraySubViews(pview);
+    cxTableArraySubviews(pview);
 }
 
 void cxTableArrayHide(cxAny pview,cxBool arrayHide)
@@ -34,10 +34,10 @@ void cxTableArrayHide(cxAny pview,cxBool arrayHide)
     cxTable this = pview;
     CX_RETURN(this->arrayHide == arrayHide);
     this->arrayHide = arrayHide;
-    this->isArray = true;
+    cxTableArraySubviews(pview);
 }
 
-void cxTableArraySubViews(cxAny pview)
+void cxTableArraySubviews(cxAny pview)
 {
     cxTable this = pview;
     this->isArray = true;
@@ -46,7 +46,7 @@ void cxTableArraySubViews(cxAny pview)
 static void cxTableResize(cxEvent *event)
 {
     cxTable this = event->sender;
-    this->isArray = true;
+    cxTableArraySubviews(this);
 }
 
 static cxInt cxTableCount(cxTable this)
@@ -102,8 +102,6 @@ static void cxTableUpdate(cxEvent *event)
         }else if(this->grid.y > 0){
             col = i / this->grid.y;
             row = i % this->grid.y;
-        }else{
-            continue;
         }
         pos.x = x + dx/2.0f + col * dx;
         pos.y = y + dy/2.0f + row * dy;

@@ -14,7 +14,6 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxButton, cxSprite)
-    cxVec2f touchPos;
     cxBool isEnable;
     cxBool isDown;
     CX_EVENT_ALLOC(onPress);

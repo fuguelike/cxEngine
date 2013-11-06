@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8330F7C91828E77D00E7E5B1 /* cxScroll.c in Sources */ = {isa = PBXBuildFile; fileRef = 8330F7C71828E77D00E7E5B1 /* cxScroll.c */; };
 		8341C36318227C310045A66F /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C34B18227C310045A66F /* libcxEngineIOS.a */; };
 		8341C37F18227D2D0045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C37E18227D2D0045A66F /* libz.dylib */; };
 		8341C38118227D320045A66F /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C38018227D320045A66F /* libxml2.dylib */; };
@@ -167,6 +168,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8330F7C71828E77D00E7E5B1 /* cxScroll.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxScroll.c; sourceTree = "<group>"; };
+		8330F7C81828E77D00E7E5B1 /* cxScroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxScroll.h; sourceTree = "<group>"; };
 		8341C34B18227C310045A66F /* libcxEngineIOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcxEngineIOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8341C35B18227C310045A66F /* cxEngineIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = cxEngineIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8341C37E18227D2D0045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -802,6 +805,8 @@
 				8341C5F218227DF20045A66F /* cxTable.h */,
 				8341C5F318227DF20045A66F /* cxWindow.c */,
 				8341C5F418227DF20045A66F /* cxWindow.h */,
+				8330F7C71828E77D00E7E5B1 /* cxScroll.c */,
+				8330F7C81828E77D00E7E5B1 /* cxScroll.h */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -917,6 +922,7 @@
 				8341C60D18227DF20045A66F /* cpBBTree.c in Sources */,
 				8341C60918227DF20045A66F /* cpSlideJoint.c in Sources */,
 				8341C60A18227DF20045A66F /* cpArbiter.c in Sources */,
+				8330F7C91828E77D00E7E5B1 /* cxScroll.c in Sources */,
 				8341C64418227DF20045A66F /* strconv.c in Sources */,
 				8341C62F18227DF20045A66F /* cxShader.c in Sources */,
 				8341C63418227DF20045A66F /* cxTypes.c in Sources */,

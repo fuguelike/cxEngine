@@ -93,6 +93,8 @@ cxSize2f cxViewSize(cxAny pview);
 
 cxColor4f cxViewColor(cxAny pview);
 
+cxBox4f cxViewBox(cxAny pview);
+
 cxBool cxViewContainsGLBox(cxAny pview);
 
 cxRect4f cxViewGLRect(cxAny pview);
@@ -129,7 +131,7 @@ void cxViewLayout(cxAny pview);
 
 void cxViewAutoResizing(cxAny pview);
 
-cxBool cxViewHitTest(cxAny pview,cxTouch *touch,cxVec2f *pos);
+cxBool cxViewHitTest(cxAny pview,cxTouch *touch);
 
 cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint);
 
@@ -141,9 +143,7 @@ cxVec2f cxGLPointToViewPoint(cxAny pview,cxVec2f pos);
 
 cxVec2f cxViewPointToWindowPoint(cxAny pview,cxVec2f vPoint);
 
-cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f glPoint);
-
-void cxViewSetBox(cxAny pview, cxBoxVec2f box);
+cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint);
 
 void cxViewSetAutoResizeBox(cxAny pview,cxBox4f box);
 
@@ -176,8 +176,6 @@ void cxViewEnter(cxAny pview);
 void cxViewExit(cxAny pview);
 
 void cxViewRemoved(cxAny pview);
-
-cxBoxVec2f cxViewLocationBox(cxAny pview);
 
 void cxViewTransform(cxAny pview);
 

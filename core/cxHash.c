@@ -23,10 +23,9 @@ void cxHashClean(cxHash hash)
 {
     cxHashElement *ele = NULL, *tmp = NULL;
     HASH_ITER(hh, hash->hashPtr, ele, tmp){
-        HASH_DEL(hash->hashPtr, ele);
         CX_RELEASE(ele->any);
-        allocator->free(ele);
     }
+    HASH_CLEAR(hh, hash->hashPtr);
 }
 
 void cxHashDelElement(cxHash hash,cxHashElement *element)

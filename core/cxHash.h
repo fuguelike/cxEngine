@@ -19,14 +19,14 @@ CX_C_BEGIN
 #define CX_HASH_FOREACH(hash,ele,tmp)  cxHashElement *ele = NULL,*tmp=NULL;HASH_ITER(hh, hash->hashPtr, ele, tmp)
 
 typedef struct {
-    cxAny           any;
-    cxChar          key[CX_HASH_MAX_KEY_LENGTH+1];
-    UT_hash_handle  hh;
+    cxAny any;
+    cxChar key[CX_HASH_MAX_KEY_LENGTH+1];
+    UT_hash_handle hh;
 }cxHashElement;
 
 typedef struct {
-    cxInt   length;
-    cxChar  *data;
+    cxInt length;
+    cxChar *data;
 }cxHashKey;
 
 typedef int (*cxHashCmpFunc)(cxHashElement *lp,cxHashElement *rp);

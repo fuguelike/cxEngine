@@ -250,7 +250,7 @@ cxBool cxDBEnvOpen()
     cxDBEnv this = cxDBEnvInstance();
     cxString home = cxDocumentPath(NULL);
     CX_ASSERT(home != NULL, "document path error");
-    cxUInt flags = DB_CREATE|DB_RECOVER|DB_INIT_MPOOL|DB_INIT_LOCK|DB_INIT_LOG|DB_INIT_TXN|DB_THREAD;
+    cxUInt flags = DB_CREATE|DB_RECOVER|DB_INIT_MPOOL|DB_INIT_LOG|DB_INIT_TXN|DB_THREAD;
     if(this->env->open(this->env,cxStringBody(home),flags,0) != 0){
         CX_ERROR("open db env error");
         return false;

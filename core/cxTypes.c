@@ -120,9 +120,9 @@ cxBoxTex2f cxRect4fToBoxTex2f(cxRect4f rect)
     return box;
 }
 
-cxBool cxBox2fContainPoint(const cxBoxVec2f box,const cxVec2f pos)
+cxBool cxBox2fContainPoint(const cxBox4f box,const cxVec2f pos)
 {
-    return (pos.x >= box.lb.x && pos.x <= box.rt.x && pos.y >= box.lb.y && pos.y <= box.rt.y);
+    return (pos.x >= box.l && pos.x <= box.r && pos.y >= box.b && pos.y <= box.t);
 }
 
 cxBool cxPolygonContainPoint(const cxPolygon *polygon,const cxVec2f tp)

@@ -21,9 +21,9 @@ cxBool cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     //mode add multiply
     cxChar *smode = cxXMLAttr("cxParticle.blend");
     if(cxConstCharsEqu(smode, "add")){
-        this->blend = cxParticleBlendAdd;
+        cxParticleSetBlendMode(this, cxParticleBlendAdd);
     }else if(cxConstCharsEqu(smode, "multiple")){
-        this->blend = cxParticleBlendMultiply;
+        cxParticleSetBlendMode(this, cxParticleBlendMultiply);
     }
     xmlFree(smode);
     //
@@ -43,7 +43,6 @@ cxBool cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxXMLReadFloatsAttr(reader, "cxParticle.endcolor", &this->endcolor.v.r);
     cxXMLReadFloatsAttr(reader, "cxParticle.startspin", &this->startspin.v);
     cxXMLReadFloatsAttr(reader, "cxParticle.endspin", &this->endspin.v);
-    cxParticleSetBlendMode(this, this->blend);
     return true;
 }
 
@@ -241,11 +240,13 @@ static void cxParticleUpdate(cxEvent *event)
 
 void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode)
 {
+    cxParticle this = pview;
     if(mode == cxParticleBlendAdd){
         cxSpriteSetBlendFactor(pview, GL_SRC_ALPHA, GL_ONE);
     }else{
         cxSpriteSetBlendFactor(pview, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
+    this->blend = mode;
 }
 
 CX_OBJECT_INIT(cxParticle, cxAtlas)

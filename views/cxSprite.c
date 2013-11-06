@@ -41,11 +41,11 @@ void cxSpriteDirtyEvent(cxEvent *event)
     this->cbox.lt = this->super.color;
     this->cbox.rt = this->super.color;
     
-    cxBoxVec2f box = cxViewLocationBox(this);
-    this->vbox.lb = cxVec3fv(box.lb.x, box.lb.y, 0.0f);
-    this->vbox.rb = cxVec3fv(box.rb.x, box.rb.y, 0.0f);
-    this->vbox.lt = cxVec3fv(box.lt.x, box.lt.y, 0.0f);
-    this->vbox.rt = cxVec3fv(box.rt.x, box.rt.y, 0.0f);
+    cxBox4f box = cxViewBox(this);
+    this->vbox.lb = cxVec3fv(box.l, box.b, 0.0f);
+    this->vbox.rb = cxVec3fv(box.r, box.b, 0.0f);
+    this->vbox.lt = cxVec3fv(box.l, box.t, 0.0f);
+    this->vbox.rt = cxVec3fv(box.r, box.t, 0.0f);
     
     this->tbox = this->texCoord;
     if(this->isFlipX) {
@@ -81,7 +81,6 @@ cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     //invoke base
     cxViewXMLReadAttr(xmlView, mView, reader);
-    
     cxSprite this = mView;
     //texture
     cxChar *surl = cxXMLAttr("cxSprite.texture");
