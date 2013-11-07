@@ -65,8 +65,10 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
     cxColor4f color;
+    //
     CX_METHOD_DEF(cxViewTouchFunc, IsTouch);
     CX_METHOD_DEF(cxViewTouchFunc, Touch);
+    //
     CX_METHOD_DEF(cxViewFunc, Draw);
     CX_METHOD_DEF(cxViewFunc, DrawAfter);
     CX_METHOD_DEF(cxViewFunc, DrawBefore);
@@ -78,6 +80,10 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onDirty);
     CX_EVENT_ALLOC(onChanged);//subviews count changed
 CX_OBJECT_END(cxView)
+
+#define cxViewOverrideTouch(o,f)   ((cxView)(o))->Touch = f
+
+#define cxViewOverrideGesture(o,f)   ((cxView)(o))->Gesture = f
 
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 
@@ -117,6 +123,8 @@ void cxViewSetColor(cxAny pview,cxColor3f color);
 
 void cxViewSetAlpha(cxAny pview,cxFloat alpha);
 
+void cxViewStopAction(cxAny pview,cxUInt actionId);
+
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav);
 
 void cxViewSetOrder(cxAny pview,cxInt order);
@@ -131,7 +139,7 @@ void cxViewLayout(cxAny pview);
 
 void cxViewAutoResizing(cxAny pview);
 
-cxBool cxViewHitTest(cxAny pview,cxTouch *touch);
+cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint);
 
 cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint);
 

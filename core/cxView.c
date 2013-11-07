@@ -626,9 +626,9 @@ void cxViewRemoved(cxAny pview)
     this->parentView = NULL;
 }
 
-cxBool cxViewHitTest(cxAny pview,cxTouch *touch)
+cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint)
 {
-    cxVec2f pos = cxWindowPointToViewPoint(pview, touch->current);
+    cxVec2f pos = cxWindowPointToViewPoint(pview, wPoint);
     cxBox4f box = cxViewBox(pview);
     return cxBox2fContainPoint(box, pos);
 }
@@ -669,6 +669,17 @@ cxBool cxViewTouch(cxAny pview,cxTouch *touch)
     }
     return CX_METHOD_GET(false, this->Touch, this, touch);
 }
+
+void cxViewStopAction(cxAny pview,cxUInt actionId)
+{
+    cxView this = pview;
+    cxHashKey key = cxHashIntKey(actionId);
+    cxAny ptr = cxHashGet(this->actions, key);
+    if(ptr != NULL){
+        cxActionStop(ptr);
+    }
+}
+
 
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
 {

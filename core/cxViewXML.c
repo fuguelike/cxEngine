@@ -15,6 +15,7 @@
 #include <views/cxLabel.h>
 #include <views/cxClipping.h>
 #include <views/cxTable.h>
+#include <views/cxScroll.h>
 #include "cxViewXML.h"
 #include "cxHashXML.h"
 #include "cxActionXML.h"
@@ -144,6 +145,8 @@ cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
         cview = CX_CREATE(cxClipping);
     }else if(ELEMENT_IS_TYPE(cxTable)){
         cview = CX_CREATE(cxTable);
+    }else if(ELEMENT_IS_TYPE(cxScroll)){
+        cview = CX_CREATE(cxScroll);
     }else{
         CX_ERROR("make elemement %s error",temp);
     }

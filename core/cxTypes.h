@@ -203,12 +203,6 @@ typedef enum {
 
 #define cxTypesIsType(o,t)  ((o) != NULL && (o)->type == t)
 
-typedef enum {
-    cxBaseTypeObject,
-    cxBaseTypeView,
-    cxBaseTypeAction,
-}cxBaseType;
-
 CX_OBJECT_DEF(cxTypes, cxObject)
     cxTypesType type;
     cxAny kvs;          //cxHash

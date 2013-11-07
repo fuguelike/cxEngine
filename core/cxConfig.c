@@ -45,6 +45,13 @@ void cxObjectSetRoot(cxAny obj,cxAny root)
     this->cxRoot = root;
 }
 
+cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type)
+{
+    cxObject this = pobj;
+    CX_RETURN(this == NULL, false);
+    return this->cxBase == type;
+}
+
 cxBool cxObjectIsType(cxAny pobj,cxConstType type)
 {
     cxObject this = pobj;

@@ -23,8 +23,10 @@ static cxBool cxDisableDocumentBackup()
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //
     cxDisableDocumentBackup();
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    //
+    self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.contentScaleFactor = [UIScreen mainScreen].scale;
     //init gl view
     cxEAGLView *glView = [[cxEAGLView alloc] initWithFrame:[self.window bounds]];
@@ -32,9 +34,10 @@ static cxBool cxDisableDocumentBackup()
     [glView setContentScaleFactor:self.window.contentScaleFactor];
     [glView setMultipleTouchEnabled:NO];
     //
-    self.viewController = [[cxViewController alloc] init];
+    self.viewController = [[[cxViewController alloc] init] autorelease];
     self.viewController.view = glView;
     [self.window setRootViewController:self.viewController];
+    [glView release];
     //start run
     [glView startMainLoop];
     [self.window makeKeyAndVisible];

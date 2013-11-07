@@ -16,9 +16,10 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxButton, cxSprite)
     cxBool isEnable;
     cxBool isDown;
+    cxFloat movement;
     CX_EVENT_ALLOC(onPress);
-    CX_EVENT_ALLOC(onMove);
     CX_EVENT_ALLOC(onRelease);
+    CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onLeave);
 CX_OBJECT_END(cxButton)
 

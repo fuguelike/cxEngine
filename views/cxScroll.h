@@ -13,13 +13,23 @@
 
 CX_C_BEGIN
 
+typedef enum {
+    cxScrollMoveTypeNone = 0,
+    cxScrollMoveTypeHorizontal = 1 << 0,
+    cxScrollMoveTypeVertical = 1 << 1,
+}cxScrollMoveType;
+
 CX_OBJECT_DEF(cxScroll, cxView)
-    cxBool enable;
+    cxFloat value;
+    cxBox4f box;
+    cxScrollMoveType type;
 CX_OBJECT_END(cxScroll)
 
-void cxScrollUpdateSubviewsPos(cxAny pview,cxVec2f delta);
+cxBool cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
 cxBool cxScrollTouch(cxAny pview,cxTouch *touch);
+
+cxView cxScrollContainer(cxAny pview);
 
 CX_C_END
 

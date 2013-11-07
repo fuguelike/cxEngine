@@ -10,6 +10,7 @@
 		8324910417F2926600D0DF9D /* cxMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324910317F2926600D0DF9D /* cxMain.c */; };
 		832B1D4B18264B100038D0EC /* apple.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 832B1D4918264B100038D0EC /* apple.mp3 */; };
 		832B1D4C18264B100038D0EC /* Track02.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 832B1D4A18264B100038D0EC /* Track02.mp3 */; };
+		832D2D81182A353200C0AF53 /* scroll.xml in Resources */ = {isa = PBXBuildFile; fileRef = 832D2D80182A353200C0AF53 /* scroll.xml */; };
 		8341C68D182280400045A66F /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C68A182280320045A66F /* libcxEngineIOS.a */; };
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
 		8341C69F182280E20045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69E182280E20045A66F /* libz.dylib */; };
@@ -68,6 +69,7 @@
 		8324910517F2953300D0DF9D /* cxMain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cxMain.h; sourceTree = "<group>"; };
 		832B1D4918264B100038D0EC /* apple.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = apple.mp3; path = res/apple.mp3; sourceTree = "<group>"; };
 		832B1D4A18264B100038D0EC /* Track02.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Track02.mp3; path = res/Track02.mp3; sourceTree = "<group>"; };
+		832D2D80182A353200C0AF53 /* scroll.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = scroll.xml; path = res/scroll.xml; sourceTree = "<group>"; };
 		8341C684182280320045A66F /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8341C69E182280E20045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -194,6 +196,7 @@
 				8341C6B81822812B0045A66F /* effect.wav */,
 				8341C6B91822812B0045A66F /* items.xml */,
 				8341C6BA1822812B0045A66F /* main.xml */,
+				832D2D80182A353200C0AF53 /* scroll.xml */,
 				8341C6BB1822812B0045A66F /* orange.png */,
 				8341C6BC1822812B0045A66F /* particle.xml */,
 				8341C6BD1822812B0045A66F /* scale9.png */,
@@ -303,6 +306,7 @@
 				8341C6C11822812B0045A66F /* 4.pvr in Resources */,
 				8341C6CB1822812B0045A66F /* items.xml in Resources */,
 				8341C6C61822812B0045A66F /* candy.png in Resources */,
+				832D2D81182A353200C0AF53 /* scroll.xml in Resources */,
 				8341C6C41822812B0045A66F /* banana.ttf in Resources */,
 				8341C6CA1822812B0045A66F /* effect.wav in Resources */,
 			);
@@ -412,6 +416,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COMPRESS_PNG_FILES = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cxEngine/cxEngine-Prefix.pch";
@@ -442,6 +447,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				COMPRESS_PNG_FILES = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cxEngine/cxEngine-Prefix.pch";

@@ -14,6 +14,8 @@
 
 CX_C_BEGIN
 
+#define MAX_POINT 10
+
 typedef enum {
     cxTouchTypeNone = 0,
     cxTouchTypeDown,
@@ -30,6 +32,7 @@ typedef struct {
     cxVec2f movement;
     cxDouble dtime;
     cxDouble utime;
+    cxVec2f start;
 }cxTouch;
 
 CX_C_END

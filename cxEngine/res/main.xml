@@ -22,6 +22,19 @@
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Clip" cxLabel.size="30"/>
         </cxButton>
+        <cxButton cxView.w="180" cxView.h="120"
+            cxButton.onRelease="cxPushView('scroll.xml')"
+            cxButton.onEnter="cxActionRun({'src':'actions.xml?btnEnter'})"
+            cxButton.onLeave="cxActionRun({'src':'actions.xml?btnLeave'})">
+            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Scroll" cxLabel.size="30"/>
+        </cxButton>
+        <cxButton cxView.w="180" cxView.h="120"
+            cxButton.onEnter="cxActionRun({'src':'actions.xml?btnEnter'})"
+            cxButton.onLeave="cxActionRun({'src':'actions.xml?btnLeave'})">
+            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Button" cxLabel.size="30"/>
+        </cxButton>
     </cxTable>
 </cxViewXML>
 

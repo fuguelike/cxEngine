@@ -7,7 +7,10 @@
 //
 
 #include <core/cxEngine.h>
+#import "cxAppDelegate.h"
 #import "cxEAGLView.h"
+
+cxEAGLView *instance = nil;
 
 @implementation cxEAGLView
 
@@ -66,6 +69,7 @@
 -(id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    instance = self;
     
     CX_ASSERT(self != nil, "init view frame failed");
     
@@ -100,7 +104,15 @@
     
     [self initMainLoop];
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
+    [displayLink retain];
+    
     return self;
+}
+
++(cxEAGLView *)glView
+{
+    cxAppDelegate *app = [[UIApplication sharedApplication] delegate];
+    return (cxEAGLView *)app.viewController.view;
 }
 
 -(void)resizeFromLayer:(CAEAGLLayer *)layer
@@ -130,13 +142,17 @@
     frameBuffer = 0;
     colorBuffer = 0;
     depthBuffer = 0;
+    [eaglCTX release];
+    [displayLink release];
+    [super dealloc];
 }
 
 -(void)dispatcherMotionEvent:(NSSet *)touches type:(cxTouchType)type event:(UIEvent *)event
 {
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:[touch view]];
-    cxEngineFireTouch(type, cxVec2fv(point.x * self.contentScaleFactor, point.y * self.contentScaleFactor));
+    cxVec2f pos = cxVec2fv(point.x * self.contentScaleFactor, point.y * self.contentScaleFactor);
+    cxEngineFireTouch(type, pos);
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

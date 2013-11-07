@@ -47,19 +47,9 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxScroll p = CX_CREATE(cxScroll);
-    cxViewSetSize(p, cxSize2fv(500, 700));
-    cxViewSetAnchor(p, cxVec2fv(0, 0));
-    cxViewSetScale(p, cxVec2fv(0.5f, 0.5f));
-    
-    cxView c = CX_CREATE(cxView);
-    cxViewSetSize(c, cxSize2fv(400, 1000));
-    cxViewAppend(p, c);
-    
-    cxWindowPushView(p, NULL);
     
     cxEngineDataSet("items.xml");
-//    cxWindowPushXML("main.xml");
+    cxWindowPushXML("main.xml");
 }
 
 void cxEngineFree(cxEngine engine)

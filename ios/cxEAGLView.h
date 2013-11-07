@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface cxEAGLView : UIView {
+@interface cxEAGLView : UIView
+{
     GLuint  frameBuffer;
     GLuint  colorBuffer;
     GLuint  depthBuffer;
@@ -30,5 +31,9 @@
 
 -(void)freeMainLoop;
 
++(cxEAGLView *)glView;
+
 -(id)initWithFrame:(CGRect)frame;
 @end
+
+extern cxEAGLView *instance;

@@ -353,6 +353,7 @@ cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
         this->touch.delta = cxVec2fv(0, 0);
         this->touch.previous = cpos;
         this->touch.dtime = time;
+        this->touch.start = cpos;
     }else if(type == cxTouchTypeMove){
         this->touch.delta = cxVec2fv(cpos.x - this->touch.previous.x, cpos.y - this->touch.previous.y);
         this->touch.previous = cpos;

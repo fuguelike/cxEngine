@@ -201,6 +201,12 @@ struct _t_ {
 
 #define CX_METHOD_GET(_v_,_m_,...)      ((_m_ != NULL)?(_m_(__VA_ARGS__)):(_v_))
 
+typedef enum {
+    cxBaseTypeObject,
+    cxBaseTypeView,
+    cxBaseTypeAction,
+}cxBaseType;
+
 typedef void (*cxObjectFunc)(cxPointer this);
 
 typedef cxBool (*cxXMLReadAttrFunc)(cxAny pxml,cxAny pnew, xmlTextReaderPtr reader);
@@ -208,14 +214,16 @@ typedef cxBool (*cxXMLReadAttrFunc)(cxAny pxml,cxAny pnew, xmlTextReaderPtr read
 //base type define
 CX_OBJECT_BEG(cxObject)
     cxConstType cxType;
+    cxBaseType cxBase;
     cxUInt cxRefcount;
     cxObjectFunc cxFree;
     cxInt cxTag;
     cxAny cxRoot;
-    cxInt cxBase;
     cxInt cxSize;
     CX_METHOD_DEF(cxXMLReadAttrFunc,XMLReadAttr);
 CX_OBJECT_END(cxObject)
+
+cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type);
 
 cxBool cxObjectIsType(cxAny pobj,cxConstType type);
 
