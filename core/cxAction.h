@@ -48,6 +48,7 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_EVENT_ALLOC(onStart);
     CX_EVENT_ALLOC(onStop);
     CX_EVENT_ALLOC(onSplit);
+    CX_EVENT_ALLOC(onStep);
 CX_OBJECT_END(cxAction)
 
 cxAny cxActionView(cxAny pav);
@@ -60,7 +61,7 @@ cxBool cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reade
 
 void cxActionSetDuration(cxAny pav,cxFloat time);
 
-void cxActionSetSpeed(cxAny pav,cxFloat scale);
+void cxActionSetSpeed(cxAny pav,cxFloat speed);
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve);
 

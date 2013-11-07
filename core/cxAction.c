@@ -46,6 +46,7 @@ cxBool cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reade
     cxXMLAppendEvent(xml->events, this, cxAction, onStart);
     cxXMLAppendEvent(xml->events, this, cxAction, onStop);
     cxXMLAppendEvent(xml->events, this, cxAction, onSplit);
+    cxXMLAppendEvent(xml->events, this, cxAction, onStep);
     return true;
 }
 
@@ -77,6 +78,7 @@ CX_OBJECT_FREE(cxAction, cxObject)
     CX_EVENT_RELEASE(this->onSplit);
     CX_EVENT_RELEASE(this->onStart);
     CX_EVENT_RELEASE(this->onStop);
+    CX_EVENT_RELEASE(this->onStep);
 }
 CX_OBJECT_TERM(cxAction, cxObject)
 
@@ -86,10 +88,10 @@ void cxActionSetDuration(cxAny pav,cxFloat time)
     this->duration = time;
 }
 
-void cxActionSetSpeed(cxAny pav,cxFloat scale)
+void cxActionSetSpeed(cxAny pav,cxFloat speed)
 {
     cxAction this = pav;
-    this->speed = scale;
+    this->speed = speed;
 }
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
@@ -148,6 +150,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->delta = time - this->prevTime;
         this->prevTime = time;
         CX_METHOD_RUN(this->Step,this,dt,time);
+        CX_EVENT_FIRE(this, onStep);
     }else{
         time = CX_METHOD_GET(1.0f, this->Curve, this, 1.0f);
         this->delta = time - this->prevTime;
@@ -155,11 +158,13 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->durationElapsed = 0.0f;
         this->delayElapsed = 0.0f;
         CX_METHOD_RUN(this->Step,this,dt,1.0f);
+        CX_EVENT_FIRE(this, onStep);
         isExit = CX_METHOD_GET(true, this->Exit,pav);
         this->isActive = false;
     }
     //check action exit
 finished:
+    //force exit or auto exit
     if(this->isExit || isExit){
         CX_EVENT_FIRE(this, onStop);
         CX_METHOD_RUN(this->Over,this);

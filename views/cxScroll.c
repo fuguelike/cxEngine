@@ -36,6 +36,27 @@ cxView cxScrollContainer(cxAny pview)
     return ele->object;
 }
 
+static void cxScrollActionView(cxScroll this,cxVec2f new)
+{
+    cxView view = cxScrollContainer(this);
+    cxFloat distance = kmVec2DistanceBetween(&new, &view->position);
+    cxMove move = cxMoveCreate(distance/this->value, new);
+    cxActionSetId(move, MOVE_ACTION_ID);
+    cxActionSetCurve(move, cxCurveCubeOut);
+    cxViewAppendAction(view, move);
+}
+
+void cxScrollUpdate(cxEvent *event)
+{
+    cxScroll this = event->sender;
+    cxView view = cxScrollContainer(this);
+    CX_RETURN(view == NULL);
+    this->box.l = (view->size.w-this->super.size.w)/2.0f;
+    this->box.r = -this->box.l;
+    this->box.t = (view->size.h-this->super.size.h)/2.0f;
+    this->box.b = -this->box.t;
+}
+
 cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
 {
     cxScroll this = pview;
@@ -43,17 +64,13 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
     if(!cxViewHitTest(pview, touch->current)){
         return false;
     }
-    this->box.l = (view->size.w-this->super.size.w)/2.0f;
-    this->box.r = -this->box.l;
-    this->box.t = (view->size.h-this->super.size.h)/2.0f;
-    this->box.b = -this->box.t;
     if(touch->type == cxTouchTypeMove){
         cxViewStopAction(view, MOVE_ACTION_ID);
         cxVec2f pos = cxViewPosition(view);
-        cxBool set = false;
+        cxBool setpos = false;
         if(this->type & cxScrollMoveTypeVertical){
             pos.y += touch->delta.y;
-            set = true;
+            setpos = true;
         }
         if(touch->delta.y < 0 && pos.y < this->box.b){
             pos.y = this->box.b;
@@ -63,7 +80,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
         }
         if(this->type & cxScrollMoveTypeHorizontal){
             pos.x += touch->delta.x;
-            set = true;
+            setpos = true;
         }
         if(touch->delta.x < 0 && pos.x < this->box.l){
             pos.x = this->box.l;
@@ -71,17 +88,17 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
         if(touch->delta.x > 0 && pos.x > this->box.r){
             pos.x = this->box.r;
         }
-        if(set){
+        if(setpos){
             cxViewSetPosition(view, pos);
         }
     }else if(touch->type == cxTouchTypeUp){
-        cxBool set = false;
+        cxBool setpos = false;
         cxFloat time = touch->utime - touch->dtime;
         cxVec2f speed = cxVec2fv(touch->movement.x / time, touch->movement.y / time);
         cxVec2f new = cxViewPosition(view);
         if((this->type & cxScrollMoveTypeVertical) && (fabsf(speed.y) >= this->value)){
             new.y += speed.y * this->super.size.h / this->value;
-            set = true;
+            setpos = fabsf(touch->delta.y) > 15;
         }
         if(touch->current.y < touch->start.y && new.y < this->box.b){
             new.y = this->box.b;
@@ -91,7 +108,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
         }
         if((this->type & cxScrollMoveTypeHorizontal) && (fabsf(speed.x) >= this->value)){
             new.x += speed.x * this->super.size.w / this->value;
-            set = true;
+            setpos = fabsf(touch->delta.x) > 15;
         }
         if(touch->current.x < touch->start.x && new.x < this->box.l){
             new.x = this->box.l;
@@ -99,11 +116,8 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
         if(touch->current.x > touch->start.x && new.x > this->box.r){
             new.x = this->box.r;
         }
-        if(set){
-            cxMove move = cxMoveCreate(1.0f, new);
-            cxActionSetId(move, MOVE_ACTION_ID);
-            cxActionSetCurve(move, cxCurveCubeOut);
-            cxViewAppendAction(view, move);
+        if(setpos){
+            cxScrollActionView(this, new);
         }
     }
     return false;
@@ -115,7 +129,8 @@ CX_OBJECT_INIT(cxScroll, cxView)
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
     cxObjectSetXMLReadFunc(this, cxScrollXMLReadAttr);
-    this->value = 1100;
+    this->value = 950;
+    CX_EVENT_QUICK(this->super.onUpdate, cxScrollUpdate);
 }
 CX_OBJECT_FREE(cxScroll, cxView)
 {

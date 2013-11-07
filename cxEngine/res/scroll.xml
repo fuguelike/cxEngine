@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <cxViewXML cxView.fill="true">
-    <cxScroll cxView.w="500" cxView.h="700" cxScroll.type="vertical" cxScroll.paging="true">
+    <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="candy.xml?green.png"/>
+    
+    <cxScroll cxView.w="500" cxView.h="700" cxView.bottom="30" cxScroll.type="vertical" cxScroll.paging="true">
         <cxTable cxView.w="500" cxView.h="3000" cxView.top="0" cxTable.space="10,10" cxTable.type="2,0">
             <cxButton
                 cxView.w = "180"

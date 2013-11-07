@@ -25,6 +25,8 @@ CX_OBJECT_DEF(cxScroll, cxView)
     cxScrollMoveType type;
 CX_OBJECT_END(cxScroll)
 
+void cxScrollUpdate(cxEvent *event);
+
 cxBool cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
 cxBool cxScrollTouch(cxAny pview,cxTouch *touch);
