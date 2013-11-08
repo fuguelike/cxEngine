@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxEngine.h>
 #include <actions/cxMove.h>
 #include "cxScroll.h"
 
@@ -46,17 +47,6 @@ static void cxScrollActionView(cxScroll this,cxVec2f new)
     cxViewAppendAction(view, move);
 }
 
-void cxScrollUpdate(cxEvent *event)
-{
-    cxScroll this = event->sender;
-    cxView view = cxScrollContainer(this);
-    CX_RETURN(view == NULL);
-    this->box.l = (view->size.w-this->super.size.w)/2.0f;
-    this->box.r = -this->box.l;
-    this->box.t = (view->size.h-this->super.size.h)/2.0f;
-    this->box.b = -this->box.t;
-}
-
 cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
 {
     cxScroll this = pview;
@@ -65,7 +55,6 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
         return false;
     }
     if(touch->type == cxTouchTypeMove){
-        cxViewStopAction(view, MOVE_ACTION_ID);
         cxVec2f pos = cxViewPosition(view);
         cxBool setpos = false;
         if(this->type & cxScrollMoveTypeVertical){
@@ -123,18 +112,31 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
+static void cxScrollOnTouch(cxAny pview,cxTouch *touch)
+{
+    cxScroll this = pview;
+    cxView view = cxScrollContainer(this);
+    CX_RETURN(view == NULL);
+    this->box.l = (view->size.w-this->super.size.w)/2.0f;
+    this->box.r = -this->box.l;
+    this->box.t = (view->size.h-this->super.size.h)/2.0f;
+    this->box.b = -this->box.t;
+    cxViewStopAction(view, MOVE_ACTION_ID);
+}
+
 CX_OBJECT_INIT(cxScroll, cxView)
 {
+    cxEngine engine = cxEngineInstance();
     cxViewOverrideTouch(this, cxScrollTouch);
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
     cxObjectSetXMLReadFunc(this, cxScrollXMLReadAttr);
     this->value = 950;
-    CX_EVENT_QUICK(this->super.onUpdate, cxScrollUpdate);
+    CX_SLOT_QUICK(engine->onTouch, this, onTouch, cxScrollOnTouch);
 }
 CX_OBJECT_FREE(cxScroll, cxView)
 {
-    
+    CX_SLOT_RELEASE(this->onTouch);
 }
 CX_OBJECT_TERM(cxScroll, cxView)
 

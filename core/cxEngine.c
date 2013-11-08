@@ -141,6 +141,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->datasets);
     CX_RELEASE(this->events);
     CX_RELEASE(this->scripts);
+    CX_SIGNAL_RELEASE(this->onTouch);
     CX_EVENT_RELEASE(this->onFree);
     CX_SIGNAL_RELEASE(this->onUpdate);
     CX_SIGNAL_RELEASE(this->onPause);
@@ -364,6 +365,7 @@ cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
     }
     this->touch.current = cpos;
     this->touch.type = type;
+    CX_SIGNAL_FIRE(this->onTouch, CX_FUNC_TYPE(cxAny, cxTouch *),CX_SLOT_OBJECT,&this->touch);
     return cxViewTouch(this->window, &this->touch);
 }
 

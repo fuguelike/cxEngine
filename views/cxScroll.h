@@ -23,9 +23,8 @@ CX_OBJECT_DEF(cxScroll, cxView)
     cxFloat value;
     cxBox4f box;
     cxScrollMoveType type;
+    CX_SLOT_ALLOC(onTouch);
 CX_OBJECT_END(cxScroll)
-
-void cxScrollUpdate(cxEvent *event);
 
 cxBool cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 

@@ -65,7 +65,7 @@ cxBool cxButtonXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 CX_OBJECT_INIT(cxButton, cxSprite)
 {
     cxObjectSetXMLReadFunc(this, cxButtonXMLReadAttr);
-    this->movement = 10;
+    this->movement = 15;
     this->isEnable = true;
     cxViewOverrideTouch(this, cxButtonTouch);
 }
