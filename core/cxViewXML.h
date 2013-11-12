@@ -27,6 +27,8 @@ CX_OBJECT_DEF(cxViewXML, cxView)
     CX_EVENT_ALLOC(onLoad);
 CX_OBJECT_END(cxViewXML)
 
+void cxViewXMLSetItem(cxAny pview,cxConstChars key,cxAny item);
+
 cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader);
 
 cxBool cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);

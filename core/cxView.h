@@ -85,6 +85,8 @@ CX_OBJECT_END(cxView)
 
 #define cxViewOverrideGesture(o,f)   ((cxView)(o))->Gesture = f
 
+void cxViewSetViewEvent(cxEvent *event);
+
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 
 cxVec2f cxViewPosition(cxAny pview);

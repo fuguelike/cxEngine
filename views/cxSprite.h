@@ -42,9 +42,13 @@ void cxSpriteSetFlipY(cxAny pview,cxBool flipy);
 
 void cxSpriteDirtyEvent(cxEvent *event);
 
+void cxSpriteSetTextureEvent(cxEvent *event);
+
 void cxSpriteDraw(cxAny pview);
 
 void cxSpriteSetShader(cxAny pview,cxConstChars key);
+
+void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize);
 
 void cxSpriteSetTexture(cxAny pview,cxTexture texture);
 

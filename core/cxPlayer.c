@@ -13,12 +13,6 @@
 #include <streams/cxMp3Stream.h>
 #include "cxPlayer.h"
 
-CX_OBJECT_DEF(cxBuffer, cxObject)
-    ALuint buffer;
-    ALenum format;
-    ALsizei freq;
-CX_OBJECT_END(cxBuffer)
-
 CX_OBJECT_INIT(cxBuffer, cxObject)
 {
     alGenBuffers(1, &this->buffer);
@@ -29,7 +23,7 @@ CX_OBJECT_FREE(cxBuffer, cxObject)
 }
 CX_OBJECT_TERM(cxBuffer, cxObject)
 
-static cxBuffer cxBufferCreate(cxString data,ALenum format,ALsizei freq)
+cxBuffer cxBufferCreate(cxString data,ALenum format,ALsizei freq)
 {
     cxBuffer this = CX_CREATE(cxBuffer);
     this->format = format;
@@ -135,9 +129,9 @@ cxTrack cxPlayFile(cxConstChars file,cxBool loop)
     cxUInt freq = 0;
     cxString bytes = NULL;
     if(type == cxAudioFileTypeWav){
-        bytes = cxWAVSamples(file,&format,&freq);
+        bytes = cxWAVSamplesWithFile(file,&format,&freq);
     }else if(type == cxAudioFileTypeMp3){
-        bytes = cxMP3Samples(file,&format,&freq);
+        bytes = cxMP3SamplesWithFile(file,&format,&freq);
     }
     if(bytes == NULL){
         CX_ERROR("play wav file %s error",file);

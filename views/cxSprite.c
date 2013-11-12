@@ -62,6 +62,21 @@ void cxSpriteDirtyEvent(cxEvent *event)
     }
 }
 
+void cxSpriteSetTextureEvent(cxEvent *event)
+{
+    CX_RETURN(event->args == NULL || event->sender == NULL);
+    cxConstChars url = cxEventArgString(event->args, "url");
+    CX_RETURN(url == NULL);
+    cxConstChars viewid = cxEventArgString(event->args, "view");
+    cxAny pview = event->sender;
+    if(viewid != NULL){
+        pview = cxViewXMLGet(event->sender, viewid);
+    }
+    CX_RETURN(pview == NULL);
+    cxBool uts = cxEventArgBool(event->args, "uts");
+    cxSpriteSetTextureURL(pview, url, uts);
+}
+
 void cxSpriteSetFlipX(cxAny pview,cxBool flipx)
 {
     cxSprite this = pview;
@@ -76,30 +91,37 @@ void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
     cxViewSetDirty(pview, true);
 }
 
+void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
+{
+    CX_RETURN(url == NULL);
+    cxSprite this = pview;
+    cxChar file[128];
+    cxChar key[128];
+    cxInt rv = cxParseURL(url, file, key);
+    CX_RETURN(rv <= 0);
+    cxTexture texture = cxTextureFactoryLoadFile(file);
+    CX_ASSERT(texture != NULL, "texture load failed %s",file);
+    cxSpriteSetTexture(this, texture);
+    //use texture size
+    cxBool uts = cxViewZeroSize(this) || useTexSize;
+    if(uts){
+        cxViewSetSize(this, texture->size);
+    }
+    if(rv > 1){
+        cxSpriteSetTextureKey(this, key, uts);
+    }
+}
+
 //texture="res/a.xml?green.png"
 cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     //invoke base
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxSprite this = mView;
+    cxBool uts = cxXMLReadBoolAttr(reader, "cxSprite.uts", false);
     //texture
     cxChar *surl = cxXMLAttr("cxSprite.texture");
-    CX_RETURN(surl == NULL, true);
-    cxChar file[128];
-    cxChar key[64];
-    cxInt rv = cxParseURL(surl, file, key);
-    CX_RETURN(rv <= 0, true);
-    cxTexture texture = cxTextureFactoryLoadFile(file);
-    CX_ASSERT(texture != NULL, "texture load failed %s",file);
-    cxSpriteSetTexture(this, texture);
-    //use texture size
-    cxBool useTexSize = cxViewZeroSize(this);
-    if(useTexSize){
-        cxViewSetSize(this, texture->size);
-    }
-    if(rv > 1){
-        cxSpriteSetTextureKey(this, key, useTexSize);
-    }
+    cxSpriteSetTextureURL(this, surl, uts);
     xmlFree(surl);
     //flipx flipy
     cxSpriteSetFlipX(this, cxXMLReadBoolAttr(reader, "cxSprite.flipX", this->isFlipX));
@@ -157,6 +179,7 @@ void cxSpriteSetTextureKey(cxAny pview,cxConstChars key,cxBool equSize)
     if(equSize){
         cxViewSetSize(pview, cxTextureSize(this->texture, key));
     }
+    this->super.isDirty = true;
 }
 
 void cxSpriteSetShader(cxAny pview,cxConstChars key)

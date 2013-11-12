@@ -23,11 +23,15 @@ CX_C_BEGIN
 
 cxString cxMD5(cxString v);
 
+cxString cxUUID();
+
 void cxSetRandSeed();
 
-cxString cxWAVSamples(cxConstChars file,cxUInt *format,cxUInt *freq);
+cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
 
-cxString cxMP3Samples(cxConstChars file,cxUInt *format,cxUInt *freq);;
+cxString cxMP3SamplesWithData(cxString data,cxUInt *format,cxUInt *freq);
+
+cxString cxMP3SamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
 
 cxBool cxParseKeyValue(cxChar *query,cxChar *key,cxChar *value);
 
@@ -38,8 +42,6 @@ cxInt cxParseQuery(cxConstChars query,cxChar *key,cxChar *value);
 cxString cxAssetsPath(cxConstChars file);
 
 cxDouble cxTimestamp();
-
-cxULong cxNextPot(cxULong x);
 
 cxString cxLocaleLang();
 

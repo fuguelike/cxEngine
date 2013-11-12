@@ -80,6 +80,7 @@ cxEAGLView *instance = nil;
     [properties setObject:[NSNumber numberWithBool:NO] forKey:kEAGLDrawablePropertyRetainedBacking];
     [properties setObject:kEAGLColorFormatRGBA8 forKey:kEAGLDrawablePropertyColorFormat];
     eaglLayer.drawableProperties = properties;
+    [properties release];
     
     eaglCTX = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     CX_ASSERT(eaglCTX != nil,"alloc EAGL Context error");

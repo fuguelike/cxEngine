@@ -23,6 +23,14 @@ typedef enum {
     cxAudioFileTypeWav,
 }cxAudioFileType;
 
+CX_OBJECT_DEF(cxBuffer, cxObject)
+    ALuint buffer;
+    ALenum format;
+    ALsizei freq;
+CX_OBJECT_END(cxBuffer)
+
+cxBuffer cxBufferCreate(cxString data,ALenum format,ALsizei freq);
+
 CX_OBJECT_DEF(cxTrack, cxObject)
     ALsizei freq;
     ALuint format;

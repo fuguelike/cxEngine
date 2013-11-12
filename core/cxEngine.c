@@ -221,6 +221,10 @@ void cxEngineSystemInit()
     cxEngineRegisteEvent("cxPopView", cxViewPopViewEvent);
     cxEngineRegisteEvent("cxReplaceView", cxViewReplaceViewEvent);
     cxEngineRegisteEvent("cxPost", cxMessagePostEvent);
+    //use in ->cxSprite up
+    cxEngineRegisteEvent("cxSetTexture", cxSpriteSetTextureEvent);
+    //use in ->cxView up
+    cxEngineRegisteEvent("cxSetView", cxViewSetViewEvent);
 }
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file)

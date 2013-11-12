@@ -10,7 +10,7 @@
 #include <actions/cxMove.h>
 #include "cxScroll.h"
 
-#define MOVE_ACTION_ID 100000
+#define CX_SCROLL_MOVE_ACTION_ID 100000
 
 cxBool cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
@@ -42,7 +42,7 @@ static void cxScrollActionView(cxScroll this,cxVec2f new)
     cxView view = cxScrollContainer(this);
     cxFloat distance = kmVec2DistanceBetween(&new, &view->position);
     cxMove move = cxMoveCreate(distance/this->value, new);
-    cxActionSetId(move, MOVE_ACTION_ID);
+    cxActionSetId(move, CX_SCROLL_MOVE_ACTION_ID);
     cxActionSetCurve(move, cxCurveCubeOut);
     cxViewAppendAction(view, move);
 }
@@ -116,12 +116,12 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch)
 {
     cxScroll this = pview;
     cxView view = cxScrollContainer(this);
-    CX_RETURN(view == NULL);
+    CX_RETURN(view == NULL || touch->type != cxTouchTypeDown);
     this->box.l = (view->size.w-this->super.size.w)/2.0f;
     this->box.r = -this->box.l;
     this->box.t = (view->size.h-this->super.size.h)/2.0f;
     this->box.b = -this->box.t;
-    cxViewStopAction(view, MOVE_ACTION_ID);
+    cxViewStopAction(view, CX_SCROLL_MOVE_ACTION_ID);
 }
 
 CX_OBJECT_INIT(cxScroll, cxView)

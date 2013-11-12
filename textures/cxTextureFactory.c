@@ -84,6 +84,8 @@ cxTexture cxTextureCreate(cxConstChars file)
         texture = cxTexturePVRLoadStream(stream);
     }else if(cxConstCharsEqu(ext, ".xml")){
         texture = cxTextureXMLLoadStream(stream);
+    }else if(cxConstCharsEqu(ext, ".jpg") || cxConstCharsEqu(ext, ".jpeg")){
+        texture = cxTextureJPGLoadStream(stream);
     }else{
         CX_ERROR("load texture failed %s",file);
     }

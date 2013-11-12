@@ -10,6 +10,7 @@
 		8324910417F2926600D0DF9D /* cxMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324910317F2926600D0DF9D /* cxMain.c */; };
 		832B1D4B18264B100038D0EC /* apple.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 832B1D4918264B100038D0EC /* apple.mp3 */; };
 		832B1D4C18264B100038D0EC /* Track02.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 832B1D4A18264B100038D0EC /* Track02.mp3 */; };
+		832BEF0D182FBB0900F4BC22 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 832BEF0C182FBB0900F4BC22 /* test.jpg */; };
 		832D2D81182A353200C0AF53 /* scroll.xml in Resources */ = {isa = PBXBuildFile; fileRef = 832D2D80182A353200C0AF53 /* scroll.xml */; };
 		8341C68D182280400045A66F /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C68A182280320045A66F /* libcxEngineIOS.a */; };
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
@@ -54,13 +55,6 @@
 			remoteGlobalIDString = 8341C34B18227C310045A66F;
 			remoteInfo = cxEngineIOS;
 		};
-		8341C68B182280320045A66F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8341C684182280320045A66F /* cxEngineIOS.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8341C35B18227C310045A66F;
-			remoteInfo = cxEngineIOSTests;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +63,7 @@
 		8324910517F2953300D0DF9D /* cxMain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cxMain.h; sourceTree = "<group>"; };
 		832B1D4918264B100038D0EC /* apple.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = apple.mp3; path = res/apple.mp3; sourceTree = "<group>"; };
 		832B1D4A18264B100038D0EC /* Track02.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Track02.mp3; path = res/Track02.mp3; sourceTree = "<group>"; };
+		832BEF0C182FBB0900F4BC22 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = test.jpg; path = res/test.jpg; sourceTree = "<group>"; };
 		832D2D80182A353200C0AF53 /* scroll.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = scroll.xml; path = res/scroll.xml; sourceTree = "<group>"; };
 		8341C684182280320045A66F /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -134,7 +129,6 @@
 			isa = PBXGroup;
 			children = (
 				8341C68A182280320045A66F /* libcxEngineIOS.a */,
-				8341C68C182280320045A66F /* cxEngineIOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -181,6 +175,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				832BEF0C182FBB0900F4BC22 /* test.jpg */,
 				832B1D4918264B100038D0EC /* apple.mp3 */,
 				832B1D4A18264B100038D0EC /* Track02.mp3 */,
 				8341C6AE1822812B0045A66F /* 2.pvr */,
@@ -272,13 +267,6 @@
 			remoteRef = 8341C689182280320045A66F /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		8341C68C182280320045A66F /* cxEngineIOSTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = cxEngineIOSTests.xctest;
-			remoteRef = 8341C68B182280320045A66F /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -293,6 +281,7 @@
 				8341C6CF1822812B0045A66F /* scale9.png in Resources */,
 				839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */,
 				8341C6C91822812B0045A66F /* clipping.xml in Resources */,
+				832BEF0D182FBB0900F4BC22 /* test.jpg in Resources */,
 				832B1D4B18264B100038D0EC /* apple.mp3 in Resources */,
 				8341C6CC1822812B0045A66F /* main.xml in Resources */,
 				839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */,

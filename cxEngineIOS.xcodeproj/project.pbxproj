@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8324963F182FB72000554604 /* cxTextureJPG.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324963D182FB72000554604 /* cxTextureJPG.c */; };
 		8330F7C91828E77D00E7E5B1 /* cxScroll.c in Sources */ = {isa = PBXBuildFile; fileRef = 8330F7C71828E77D00E7E5B1 /* cxScroll.c */; };
-		8341C36318227C310045A66F /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C34B18227C310045A66F /* libcxEngineIOS.a */; };
 		8341C37F18227D2D0045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C37E18227D2D0045A66F /* libz.dylib */; };
 		8341C38118227D320045A66F /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C38018227D320045A66F /* libxml2.dylib */; };
 		8341C38318227D380045A66F /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C38218227D380045A66F /* libiconv.dylib */; };
@@ -145,16 +145,6 @@
 		8384E1ED1823ABC700EDA1D6 /* cxMp3Stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		8341C36118227C310045A66F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 8341C34318227C310045A66F /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 8341C34A18227C310045A66F;
-			remoteInfo = cxEngineIOS;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		8341C34918227C310045A66F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -168,10 +158,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8324963D182FB72000554604 /* cxTextureJPG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureJPG.c; sourceTree = "<group>"; };
+		8324963E182FB72000554604 /* cxTextureJPG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTextureJPG.h; sourceTree = "<group>"; };
 		8330F7C71828E77D00E7E5B1 /* cxScroll.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxScroll.c; sourceTree = "<group>"; };
 		8330F7C81828E77D00E7E5B1 /* cxScroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxScroll.h; sourceTree = "<group>"; };
 		8341C34B18227C310045A66F /* libcxEngineIOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcxEngineIOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		8341C35B18227C310045A66F /* cxEngineIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = cxEngineIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8341C37E18227D2D0045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8341C38018227D320045A66F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		8341C38218227D380045A66F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
@@ -444,14 +435,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8341C35818227C310045A66F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8341C36318227C310045A66F /* libcxEngineIOS.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -478,7 +461,6 @@
 			isa = PBXGroup;
 			children = (
 				8341C34B18227C310045A66F /* libcxEngineIOS.a */,
-				8341C35B18227C310045A66F /* cxEngineIOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -782,6 +764,8 @@
 				8341C5E118227DF20045A66F /* cxTextureTXT.h */,
 				8341C5E218227DF20045A66F /* cxTextureXML.c */,
 				8341C5E318227DF20045A66F /* cxTextureXML.h */,
+				8324963D182FB72000554604 /* cxTextureJPG.c */,
+				8324963E182FB72000554604 /* cxTextureJPG.h */,
 			);
 			path = textures;
 			sourceTree = "<group>";
@@ -845,24 +829,6 @@
 			productReference = 8341C34B18227C310045A66F /* libcxEngineIOS.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		8341C35A18227C310045A66F /* cxEngineIOSTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 8341C37118227C310045A66F /* Build configuration list for PBXNativeTarget "cxEngineIOSTests" */;
-			buildPhases = (
-				8341C35718227C310045A66F /* Sources */,
-				8341C35818227C310045A66F /* Frameworks */,
-				8341C35918227C310045A66F /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				8341C36218227C310045A66F /* PBXTargetDependency */,
-			);
-			name = cxEngineIOSTests;
-			productName = cxEngineIOSTests;
-			productReference = 8341C35B18227C310045A66F /* cxEngineIOSTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -885,20 +851,9 @@
 			projectRoot = "";
 			targets = (
 				8341C34A18227C310045A66F /* cxEngineIOS */,
-				8341C35A18227C310045A66F /* cxEngineIOSTests */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		8341C35918227C310045A66F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8341C34718227C310045A66F /* Sources */ = {
@@ -1023,28 +978,14 @@
 				8341C65C18227DF30045A66F /* cxMemStream.c in Sources */,
 				8341C60818227DF20045A66F /* cpSimpleMotor.c in Sources */,
 				8341C64218227DF20045A66F /* pack_unpack.c in Sources */,
+				8324963F182FB72000554604 /* cxTextureJPG.c in Sources */,
 				8384E1ED1823ABC700EDA1D6 /* cxMp3Stream.c in Sources */,
 				8341C5F518227DF20045A66F /* cxActionSet.c in Sources */,
 				8341C65D18227DF30045A66F /* cxTcpStream.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		8341C35718227C310045A66F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		8341C36218227C310045A66F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 8341C34A18227C310045A66F /* cxEngineIOS */;
-			targetProxy = 8341C36118227C310045A66F /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		8341C36C18227C310045A66F /* Debug */ = {
@@ -1171,44 +1112,6 @@
 			};
 			name = Release;
 		};
-		8341C37218227C310045A66F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "cxEngineIOS/cxEngineIOS-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "cxEngineIOSTests/cxEngineIOSTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Debug;
-		};
-		8341C37318227C310045A66F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "cxEngineIOS/cxEngineIOS-Prefix.pch";
-				INFOPLIST_FILE = "cxEngineIOSTests/cxEngineIOSTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = xctest;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1226,15 +1129,6 @@
 			buildConfigurations = (
 				8341C36F18227C310045A66F /* Debug */,
 				8341C37018227C310045A66F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		8341C37118227C310045A66F /* Build configuration list for PBXNativeTarget "cxEngineIOSTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				8341C37218227C310045A66F /* Debug */,
-				8341C37318227C310045A66F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

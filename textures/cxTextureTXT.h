@@ -19,7 +19,10 @@ CX_OBJECT_DEF(cxTextureTXT, cxTexture)
     cxString fontfile;
     cxString string;
     cxTextAttr attr;
+    cxString sysFont;
 CX_OBJECT_END(cxTextureTXT)
+
+void cxTextureTXTSetSysFont(cxAny texture,cxString font);
 
 CX_C_END
 

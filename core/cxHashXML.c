@@ -129,9 +129,9 @@ cxTypes cxHashXMLReadDB(xmlTextReaderPtr reader)
         CX_ERROR("cxDB must set file table type");
         return NULL;
     }
-    if(strcasecmp(type, "btree") == 0){
+    if(cxConstCharsEqu(type, "btree")){
         db = cxDBTreeCreate(cxStringConstChars(file), cxStringConstChars(table));
-    }else if(strcasecmp(type, "hash") ==0){
+    }else if(cxConstCharsEqu(type, "hash")){
         db = cxDBHashCreate(cxStringConstChars(file), cxStringConstChars(table));
     }else{
         CX_ERROR("type is btree or hash");

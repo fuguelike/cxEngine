@@ -245,13 +245,19 @@ void cxDBEnvCommitTxn()
     cxStackPop(this->txn);
 }
 
-cxBool cxDBEnvOpen()
+cxBool cxDBEnvOpen(cxConstChars path,cxBool isLoggerEnv)
 {
     cxDBEnv this = cxDBEnvInstance();
     cxString home = cxDocumentPath(NULL);
-    CX_ASSERT(home != NULL, "document path error");
-    cxUInt flags = DB_CREATE|DB_RECOVER|DB_INIT_MPOOL|DB_INIT_LOG|DB_INIT_TXN|DB_THREAD;
-    if(this->env->open(this->env,cxStringBody(home),flags,0) != 0){
+    if(path == NULL){
+        path = cxStringBody(home);
+    }
+    CX_ASSERT(path != NULL, "document path error");
+    cxUInt flags = DB_CREATE|DB_INIT_MPOOL;
+    if(!isLoggerEnv){
+        flags |= DB_RECOVER|DB_INIT_LOG|DB_INIT_TXN|DB_THREAD;
+    }
+    if(this->env->open(this->env,path,flags,0) != 0){
         CX_ERROR("open db env error");
         return false;
     }

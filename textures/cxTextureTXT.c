@@ -10,6 +10,12 @@
 #include <core/cxArray.h>
 #include "cxTextureTXT.h"
 
+void cxTextureTXTSetSysFont(cxAny texture,cxString font)
+{
+    cxTextureTXT this = texture;
+    CX_RETAIN_SWAP(this->sysFont, font);
+}
+
 static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
 {
     cxTextureTXT texture = this;
@@ -19,7 +25,7 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
         return false;
     }
     if(texture->fontfile == NULL){
-        CX_ERROR("font file not set");
+        CX_ERROR("not set font name");
         return false;
     }
     cxFreeFont font = cxFreeTypeCreateFont(cxStringBody(texture->fontfile));
@@ -52,6 +58,7 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
         width = pchar->width + wx + pchar->left;
         wx += (pchar->ax >> 16);
     }
+    //append size
     cxInt x = 0;
     cxInt y = 0;
     if(sfirst != NULL && sfirst->left < 0){

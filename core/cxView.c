@@ -154,6 +154,42 @@ cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
     return true;
 }
 
+void cxViewSetViewEvent(cxEvent *event)
+{
+    CX_RETURN(event->args == NULL || event->sender == NULL);
+    cxConstChars viewid = cxEventArgString(event->args, "view");
+    cxView pview = cxViewXMLGet(event->sender, viewid);
+    CX_RETURN(pview == NULL);
+    cxConstChars scale = cxEventArgString(event->args, "scale");
+    if(scale != NULL){
+        cxVec2f vscale = pview->scale;
+        cxReadFloats(scale, &vscale.x);
+        cxViewSetScale(pview, vscale);
+    }
+    cxConstChars size = cxEventArgString(event->args, "size");
+    if(size != NULL){
+        cxSize2f vsize = pview->size;
+        cxReadFloats(size, &vsize.w);
+        cxViewSetSize(pview, vsize);
+    }
+    cxConstChars position = cxEventArgString(event->args, "position");
+    if(position != NULL){
+        cxVec2f vposition = pview->position;
+        cxReadFloats(position, &vposition.x);
+        cxViewSetPosition(pview, vposition);
+    }
+    cxConstChars degress = cxEventArgString(event->args, "degress");
+    if(degress != NULL){
+        cxViewSetDegrees(pview, atof(degress));
+    }
+    cxConstChars anchor = cxEventArgString(event->args, "anchor");
+    if(anchor != NULL){
+        cxVec2f vanchor = pview->anchor;
+        cxReadFloats(scale, &vanchor.x);
+        cxViewSetAnchor(pview, vanchor);
+    }
+}
+
 void cxViewSetCropping(cxAny pview,cxBool cropping)
 {
     cxView this = pview;
@@ -335,14 +371,21 @@ cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
     cxView pv = this;
     cxVec3f out;
     cxMatrix4f matrix;
+    kmMat4Identity(&matrix);
     kmVec3Fill(&out, wPoint.x, wPoint.y, 0);
+    cxArray list = CX_ALLOC(cxArray);
     while (pv != NULL && pv->parentView != NULL) {
+        cxArrayAppend(list, pv);
+        pv = pv->parentView;
+    }
+    CX_ARRAY_REVERSE(list, ele){
+        pv = cxArrayObject(ele);
         kmMat4Inverse(&matrix, &pv->normalMatrix);
         kmVec3Transform(&out, &out, &matrix);
         kmMat4Inverse(&matrix, &pv->anchorMatrix);
         kmVec3Transform(&out, &out, &matrix);
-        pv = pv->parentView;
     }
+    CX_RELEASE(list);
     return cxVec2fv(out.x, out.y);
 }
 
@@ -499,6 +542,7 @@ void cxViewTransform(cxAny pview)
     kmMat4Translation(&this->anchorMatrix, x, y, 0);
     
     CX_EVENT_FIRE(this, onDirty);
+    //
     if(this->isCropping){
         this->scissor = cxViewGLRect(pview);
     }

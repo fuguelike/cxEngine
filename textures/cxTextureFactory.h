@@ -13,6 +13,7 @@
 #include "cxTexturePNG.h"
 #include "cxTextureXML.h"
 #include "cxTextureTXT.h"
+#include "cxTextureJPG.h"
 
 CX_C_BEGIN
 

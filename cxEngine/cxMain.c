@@ -41,13 +41,12 @@ void cxEngineInit(cxEngine engine)
     //prepare load
     cxPlayerOpen(0, 0);
     //open db
-    cxDBEnvOpen();
-//    engine->isShowBorder = false;
+    cxDBEnvOpen(NULL,false);
+    //    engine->isShowBorder = false;
 }
 
 void cxEngineMain(cxEngine engine)
 {
-    
     cxEngineDataSet("items.xml");
     cxWindowPushXML("main.xml");
 }

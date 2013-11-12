@@ -38,7 +38,7 @@ void cxDBEnvCommitTxn();
 
 void cxDBEnvCheckPoint(cxBool force);
 
-cxBool cxDBEnvOpen();
+cxBool cxDBEnvOpen(cxConstChars path,cxBool isLoggerEnv);
 
 cxDBEnv cxDBEnvInstance();
 

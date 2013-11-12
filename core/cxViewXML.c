@@ -44,6 +44,12 @@ void cxViewXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
     }
 }
 
+void cxViewXMLSetItem(cxAny pview,cxConstChars key,cxAny item)
+{
+    cxViewXML this = pview;
+    cxHashSet(this->items, cxHashStrKey(key), item);
+}
+
 CX_OBJECT_INIT(cxViewXML, cxView)
 {
     cxObjectSetXMLReadFunc(this, cxViewRootXMLReadAttr);

@@ -6,12 +6,20 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
 #include <core/cxUtil.h>
 #include <core/cxPlayer.h>
+#include <core/cxOpenGL.h>
 
-cxString cxWAVSamples(cxConstChars file,cxUInt *format,cxUInt *freq)
+cxString cxUUID()
+{
+    NSString *uuid = [[NSUUID UUID] UUIDString];
+    return cxStringConstChars([uuid UTF8String]);
+}
+
+cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
 {
     cxString cxPath = cxAssetsPath(file);
     AudioStreamBasicDescription fileformat;
@@ -23,11 +31,11 @@ cxString cxWAVSamples(cxConstChars file,cxUInt *format,cxUInt *freq)
     AudioFileID afid = 0;
     void *theData = NULL;
     if(AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, &afid)){
-        return NULL;
+        goto completed;
     }
     if(AudioFileGetProperty(afid, kAudioFilePropertyDataFormat, &formatsize, &fileformat)){
         CX_ERROR("get format error");
-        return NULL;
+        goto completed;
     }
     if(!AudioFileGetProperty(afid, kAudioFilePropertyAudioDataByteCount, &thePropertySize, &fileDataSize)){
         theData = allocator->calloc(1,(cxInt)fileDataSize);
@@ -39,6 +47,7 @@ cxString cxWAVSamples(cxConstChars file,cxUInt *format,cxUInt *freq)
             *format = (fileformat.mChannelsPerFrame > 1) ? AL_FORMAT_STEREO8 : AL_FORMAT_MONO8;
         }
     }
+completed:
     AudioFileClose(afid);
     if(theData == NULL){
         return NULL;
