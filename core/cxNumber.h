@@ -28,6 +28,7 @@ typedef enum {
     cxNumberTypeFloat,
     cxNumberTypeDouble,
     cxNumberTypeVec2f,
+    cxNumberTypeVec2i,
     cxNumberTypeSize2f,
     cxNumberTypeColor4f,
 }cxNumberType;
@@ -46,6 +47,7 @@ typedef union {
     cxFloat vf;
     cxDouble vd;
     cxVec2f vec2f;
+    cxVec2i vec2i;
     cxSize2f size2f;
     cxColor4f color4f;
 }cxNumberValue;
@@ -56,6 +58,8 @@ CX_OBJECT_DEF(cxNumber, cxObject)
 CX_OBJECT_END(cxNumber)
 
 cxColor4f cxNumberToColor4f(cxNumber this);
+
+cxVec2i cxNumberToVec2i(cxNumber this);
 
 cxVec2f cxNumberToVec2f(cxNumber this);
 
@@ -84,6 +88,8 @@ cxUInt64 cxNumberToUInt64(cxNumber this);
 cxFloat cxNumberToFloat(cxNumber this);
 
 cxDouble cxNumberToDouble(cxNumber this);
+
+cxNumber cxNumberVec2i(cxVec2i v);
 
 cxNumber cxNumberVec2f(cxVec2f v);
 

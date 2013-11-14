@@ -78,6 +78,12 @@ static const cxColor3f cxGRAY    = cxColor3fv(0.65f, 0.65f, 0.65f);
 static const cxColor3f cxPURPLE  = cxColor3fv(0.63f, 0.13f, 0.94f);
 
 typedef struct {
+    cxInt w;
+    cxInt h;
+} cxSize2i;
+#define cxSize2iv(w,h)          (cxSize2i){w,h}
+
+typedef struct {
     kmScalar w;
     kmScalar h;
 } cxSize2f;
@@ -99,6 +105,13 @@ typedef struct {
 } cxBox4f;
 #define cxBox4fv(l,r,t,b) (cxBox4f){l,r,t,b}
 #define cxBox4fInit() cxBox4fv(INT32_MAX,INT32_MIN,INT32_MIN,INT32_MAX)
+
+typedef struct {
+    cxInt l;
+    cxInt r;
+    cxInt t;
+    cxInt b;
+} cxBox4i;
 
 typedef struct {
     kmScalar x;
@@ -167,6 +180,7 @@ typedef struct {
 
 typedef struct {
     cxFloat size;
+    cxBool bold;
 }cxTextAttr;
 
 CX_C_BEGIN
@@ -199,6 +213,7 @@ typedef enum {
     cxTypesString,
     cxTypesDB,
     cxTypesHash,
+    cxTypesArray,
 }cxTypesType;
 
 #define cxTypesIsType(o,t)  ((o) != NULL && (o)->type == t)
@@ -217,6 +232,8 @@ cxTypes cxLangStringTypesCreate();
 cxTypes cxDBTypesCreate(cxAny db);
 
 cxTypes cxHashTypesCreate();
+
+cxTypes cxArrayTypesCreate();
 
 cxTypes cxStringTypesCreate();
 

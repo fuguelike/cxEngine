@@ -41,10 +41,10 @@ cxAudioFileType cxAudioGetType(cxConstChars file)
     cxConstChars ext = strrchr(file, '.');
     CX_RETURN(ext == NULL,cxAudioFileTypeNone);
     if(cxConstCharsEqu(ext, ".mp3")){
-        return cxAudioFileTypeMp3;
+        return cxAudioFileTypeMP3;
     }
     if(cxConstCharsEqu(ext, ".wav")){
-        return cxAudioFileTypeWav;
+        return cxAudioFileTypeWAV;
     }
     return cxAudioFileTypeNone;
 }
@@ -128,9 +128,9 @@ cxTrack cxPlayFile(cxConstChars file,cxBool loop)
     cxUInt format = 0;
     cxUInt freq = 0;
     cxString bytes = NULL;
-    if(type == cxAudioFileTypeWav){
+    if(type == cxAudioFileTypeWAV){
         bytes = cxWAVSamplesWithFile(file,&format,&freq);
-    }else if(type == cxAudioFileTypeMp3){
+    }else if(type == cxAudioFileTypeMP3){
         bytes = cxMP3SamplesWithFile(file,&format,&freq);
     }
     if(bytes == NULL){

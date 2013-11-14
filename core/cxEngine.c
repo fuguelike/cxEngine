@@ -133,6 +133,7 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->events = CX_ALLOC(cxHash);
     this->datasets = CX_ALLOC(cxHash);
     this->actions = CX_ALLOC(cxHash);
+    this->dbenvs = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
@@ -141,6 +142,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->datasets);
     CX_RELEASE(this->events);
     CX_RELEASE(this->scripts);
+    CX_RELEASE(this->dbenvs);
     CX_SIGNAL_RELEASE(this->onTouch);
     CX_EVENT_RELEASE(this->onFree);
     CX_SIGNAL_RELEASE(this->onUpdate);
@@ -153,7 +155,6 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     cxOpenGLDestroy();
     cxMessageDestroy();
     kmGLFreeAll();
-    cxDBEnvDestroy();
     CX_RELEASE(this->autopool);
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
@@ -279,10 +280,7 @@ cxTypes cxEngineDataSet(cxConstChars url)
         }
         cxHashSet(this->datasets, cxHashStrKey(path), sets);
     }
-    if(ret == 2){
-        return cxHashGet(sets->items, cxHashStrKey(key));
-    }
-    return NULL;
+    return (ret == 2) ? cxHashGet(sets->items, cxHashStrKey(key)) : NULL;
 }
 
 cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)
@@ -291,7 +289,6 @@ cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)
     cxConstChars url = NULL;
     //from cxLangString
     CX_ASSERT(this->lang != NULL, "system not set locate lang");
-    
     url = CX_CONST_STRING("%s?%s",xml,cxStringBody(this->lang));
     cxString ret = NULL;
     cxTypes types = cxEngineDataSet(url);
@@ -299,7 +296,6 @@ cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)
         ret = cxTypesGet(types, key);
     }
     CX_RETURN(ret != NULL,ret);
-    
     //from cxString
     url = CX_CONST_STRING("%s?%s",xml,key);
     types = cxEngineDataSet(url);
@@ -307,7 +303,6 @@ cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)
         ret = types->assist;
     }
     CX_RETURN(ret != NULL,ret);
-    
     //parse query?key=?
     cxChar qk[128]={0};
     cxChar qv[128]={0};
@@ -322,7 +317,6 @@ cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)
         ret = cxObjectIsType(value, cxStringAutoType) ? value : NULL;
     }
     CX_RETURN(ret != NULL,ret);
-    
     //from cxDB get String
     if(cxTypesIsType(types,cxTypesDB)){
         ret = cxDBGet(types->assist, cxStringStatic(qv));
@@ -369,8 +363,9 @@ cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
     }
     this->touch.current = cpos;
     this->touch.type = type;
-    CX_SIGNAL_FIRE(this->onTouch, CX_FUNC_TYPE(cxAny, cxTouch *),CX_SLOT_OBJECT,&this->touch);
-    return cxViewTouch(this->window, &this->touch);
+    cxBool ret = false;
+    CX_SIGNAL_FIRE(this->onTouch, CX_FUNC_TYPE(cxAny, cxTouch *, cxBool *),CX_SLOT_OBJECT, &this->touch, &ret);
+    return (ret || cxViewTouch(this->window, &this->touch));
 }
 
 

@@ -119,7 +119,7 @@ cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
     //cropping
     cxViewSetCropping(view,cxXMLReadBoolAttr(reader, "cxView.cropping", this->isCropping));
     //top
-    cxViewSetTop(view, cxXMLReadBoolAttr(reader, "cxView.isTop", this->isTop));
+    cxViewSetTop(view, cxXMLReadBoolAttr(reader, "cxView.hideTop", this->hideTop));
     //anchor
     cxViewSetAnchor(view, cxXMLReadVec2fAttr(reader, "cxView.anchor", this->anchor));
     //scale
@@ -199,7 +199,7 @@ void cxViewSetCropping(cxAny pview,cxBool cropping)
 CX_OBJECT_INIT(cxView, cxObject)
 {
     this->super.cxBase = cxBaseTypeView;
-    this->isTop = true;
+    this->hideTop = true;
     this->isBorder = false;
     this->isVisible = true;
     this->isDirty = true;
@@ -290,7 +290,7 @@ cxRect4f cxViewGLRect(cxAny pview)
 void cxViewSetTop(cxAny pview,cxBool top)
 {
     cxView this = pview;
-    this->isTop = top;
+    this->hideTop = top;
 }
 
 void cxViewSetAutoResizeBox(cxAny pview,cxBox4f box)
@@ -371,7 +371,6 @@ cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
     cxView pv = this;
     cxVec3f out;
     cxMatrix4f matrix;
-    kmMat4Identity(&matrix);
     kmVec3Fill(&out, wPoint.x, wPoint.y, 0);
     cxArray list = CX_ALLOC(cxArray);
     while (pv != NULL && pv->parentView != NULL) {
@@ -616,12 +615,12 @@ void cxViewAutoResizing(cxAny pview)
         this->fixscale.x = 1.0f;
     }
     if(mask & cxViewAutoResizeLeft){
-        pos.x = -parent->size.w/2.0f;
+        pos.x -= parent->size.w/2.0f;
         pos.x += size.w * this->anchor.x * scale.x;
         pos.x += this->autoBox.l;
     }
     if(mask & cxViewAutoResizeRight){
-        pos.x = parent->size.w/2.0f;
+        pos.x += parent->size.w/2.0f;
         pos.x -= size.w * (1.0f - this->anchor.x) * scale.x;
         pos.x -= this->autoBox.r;
     }
@@ -631,12 +630,12 @@ void cxViewAutoResizing(cxAny pview)
         this->fixscale.y = 1.0f;
     }
     if(mask & cxViewAutoResizeTop){
-        pos.y = parent->size.h/2.0f;
+        pos.y += parent->size.h/2.0f;
         pos.y -= size.h * (1.0f - this->anchor.y) * scale.y;
         pos.y -= this->autoBox.t;
     }
     if(mask & cxViewAutoResizeBottom){
-        pos.y = -parent->size.h/2.0f;
+        pos.y -= parent->size.h/2.0f;
         pos.y += size.h * this->anchor.y * scale.y;
         pos.y += this->autoBox.b;
     }
@@ -670,10 +669,13 @@ void cxViewRemoved(cxAny pview)
     this->parentView = NULL;
 }
 
-cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint)
+cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
 {
     cxVec2f pos = cxWindowPointToViewPoint(pview, wPoint);
     cxBox4f box = cxViewBox(pview);
+    if(vPoint != NULL){
+        *vPoint = pos;
+    }
     return cxBox2fContainPoint(box, pos);
 }
 
@@ -693,25 +695,29 @@ static cxBool cxViewTouchSubViews(cxAny pview,cxTouch *touch)
     return false;
 }
 
-cxBool cxViewIsTouch(cxAny pview,cxTouch *touch)
+cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch)
 {
     cxView this = pview;
     if(!this->isVisible){
-        return false;
+        return cxViewIsTouchTypeNone;
     }
-    return true;
+    return cxViewIsTouchTypeSelf | cxViewIsTouchTypeSubview;
 }
 
 cxBool cxViewTouch(cxAny pview,cxTouch *touch)
 {
     cxView this = pview;
-    if(!CX_METHOD_GET(true, this->IsTouch, this, touch)){
+    cxUInt type = CX_METHOD_GET(cxViewIsTouchTypeNone, this->IsTouch, this, touch);
+    if(type == cxViewIsTouchTypeNone){
         return false;
     }
-    if(cxViewTouchSubViews(pview,touch)){
+    if((type & cxViewIsTouchTypeSubview) && cxViewTouchSubViews(pview,touch)){
         return true;
     }
-    return CX_METHOD_GET(false, this->Touch, this, touch);
+    if(type & cxViewIsTouchTypeSelf){
+        return CX_METHOD_GET(false, this->Touch, this, touch);
+    }
+    return false;
 }
 
 void cxViewStopAction(cxAny pview,cxUInt actionId)

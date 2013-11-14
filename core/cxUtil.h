@@ -25,7 +25,11 @@ cxString cxMD5(cxString v);
 
 cxString cxUUID();
 
+cxInt cxRand(cxInt min,cxInt max);
+
 void cxSetRandSeed();
+
+cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr);
 
 cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
 

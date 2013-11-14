@@ -40,21 +40,19 @@ void cxSpriteDirtyEvent(cxEvent *event)
     this->cbox.rb = this->super.color;
     this->cbox.lt = this->super.color;
     this->cbox.rt = this->super.color;
-    
     cxBox4f box = cxViewBox(this);
     this->vbox.lb = cxVec3fv(box.l, box.b, 0.0f);
     this->vbox.rb = cxVec3fv(box.r, box.b, 0.0f);
     this->vbox.lt = cxVec3fv(box.l, box.t, 0.0f);
     this->vbox.rt = cxVec3fv(box.r, box.t, 0.0f);
-    
     this->tbox = this->texCoord;
-    if(this->isFlipX) {
+    if(this->isFlipX){
         this->tbox.lb.u = this->texCoord.rb.u;
         this->tbox.rb.u = this->texCoord.lb.u;
         this->tbox.lt.u = this->texCoord.rt.u;
         this->tbox.rt.u = this->texCoord.lt.u;
     }
-    if(this->isFlipY) {
+    if(this->isFlipY){
         this->tbox.lb.v = this->texCoord.lt.v;
         this->tbox.rb.v = this->texCoord.rt.v;
         this->tbox.lt.v = this->texCoord.lb.v;
@@ -73,8 +71,9 @@ void cxSpriteSetTextureEvent(cxEvent *event)
         pview = cxViewXMLGet(event->sender, viewid);
     }
     CX_RETURN(pview == NULL);
-    cxBool uts = cxEventArgBool(event->args, "uts");
-    cxSpriteSetTextureURL(pview, url, uts);
+    //use texture size
+    cxBool useTexSize = cxEventArgBool(event->args, "useTexSize");
+    cxSpriteSetTextureURL(pview, url, useTexSize);
 }
 
 void cxSpriteSetFlipX(cxAny pview,cxBool flipx)
@@ -118,10 +117,10 @@ cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     //invoke base
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxSprite this = mView;
-    cxBool uts = cxXMLReadBoolAttr(reader, "cxSprite.uts", false);
+    cxBool useTexSize = cxXMLReadBoolAttr(reader, "cxSprite.useTexSize", false);
     //texture
     cxChar *surl = cxXMLAttr("cxSprite.texture");
-    cxSpriteSetTextureURL(this, surl, uts);
+    cxSpriteSetTextureURL(this, surl, useTexSize);
     xmlFree(surl);
     //flipx flipy
     cxSpriteSetFlipX(this, cxXMLReadBoolAttr(reader, "cxSprite.flipX", this->isFlipX));

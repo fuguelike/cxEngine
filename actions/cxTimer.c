@@ -13,13 +13,13 @@ static void cxTimerInit(cxAny pav)
 {
     cxTimer this = pav;
     CX_ASSERT(this->super.view != NULL, "view not set");
-    CX_EVENT_FIRE(this, onStart);
+    CX_UNUSED_PARAM(this);
 }
 
 static void cxTimerStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxTimer this = pav;
-    CX_EVENT_FIRE(this, onStep);
+    CX_UNUSED_PARAM(this);
 }
 
 static cxBool cxTimerXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
@@ -29,8 +29,6 @@ static cxBool cxTimerXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr
     cxTimer this = mAction;
     this->repeat = cxXMLReadIntAttr(reader, "cxTimer.repeat", this->repeat);
     cxXMLAppendEvent(xml->events, this, cxTimer, onArrive);
-    cxXMLAppendEvent(xml->events, this, cxTimer, onStep);
-    cxXMLAppendEvent(xml->events, this, cxTimer, onStart);
     return true;
 }
 
@@ -51,8 +49,6 @@ CX_OBJECT_INIT(cxTimer, cxAction)
 }
 CX_OBJECT_FREE(cxTimer, cxAction)
 {
-    CX_EVENT_RELEASE(this->onStart);
-    CX_EVENT_RELEASE(this->onStep);
     CX_EVENT_RELEASE(this->onArrive);
 }
 CX_OBJECT_TERM(cxTimer, cxAction)

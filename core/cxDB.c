@@ -35,22 +35,36 @@ CX_OBJECT_FREE(cxDB, cxObject)
     this->dbptr->close(this->dbptr,0);
     CX_RELEASE(this->file);
     CX_RELEASE(this->table);
+    CX_RELEASE(this->env);
 }
 CX_OBJECT_TERM(cxDB, cxObject)
+
+cxDBEnv cxDBGetEnv(cxAny db)
+{
+    cxDB this = db;
+    return this->env;
+}
+
+void cxDBSetEnv(cxAny db,cxDBEnv env)
+{
+    cxDB this = db;
+    CX_RETAIN_SWAP(this->env, env);
+}
 
 cxBool cxDBOpen(cxAny db,cxString file,cxString table)
 {
     CX_ASSERT(file != NULL && table != NULL, "args error");
-    cxDBEnv env = cxDBEnvInstance();
-    
+    cxDBEnv env = cxDBGetEnv(db);
     cxDB this = db;
-    this->flags = DB_CREATE;
+    if(env->rdonly){
+        this->flags = DB_RDONLY;
+    }else{
+        this->flags = DB_CREATE;
+    }
     this->ret = db_create(&this->dbptr, env->env, 0);
     CX_RETURN(this->ret != 0,false);
-    
     this->ret = CX_METHOD_GET(this->ret, this->OpenBefore,db);
     CX_RETURN(this->ret != 0,false);
-    
     cxDBTxn txn = cxStackTop(env->txn);
     this->ret = this->dbptr->open(this->dbptr,cxDBTxnPtr(txn),cxStringBody(file),cxStringBody(table),this->type,this->flags,0);
     if(this->ret != 0){
@@ -66,7 +80,7 @@ cxBool cxDBOpen(cxAny db,cxString file,cxString table)
 cxBool cxDBHas(cxAny db,cxString key)
 {
     cxDB this = db;
-    cxDBEnv env = cxDBEnvInstance();
+    cxDBEnv env = cxDBGetEnv(db);
     cxDBTxn txn = cxStackTop(env->txn);
     DBT k={0};
     k.data = (void *)cxStringBody(key);
@@ -78,7 +92,8 @@ cxBool cxDBHas(cxAny db,cxString key)
 cxBool cxDBDel(cxAny db,cxString key)
 {
     cxDB this = db;
-    cxDBEnv env = cxDBEnvInstance();
+    cxDBEnv env = cxDBGetEnv(db);
+    CX_ASSERT(env->rdonly, "only env ,can't del data");
     cxDBTxn txn = cxStackTop(env->txn);
     DBT k={0};
     k.data = (void *)cxStringBody(key);
@@ -90,7 +105,8 @@ cxBool cxDBDel(cxAny db,cxString key)
 cxBool cxDBSet(cxAny db,cxString key,cxString value)
 {
     cxDB this = db;
-    cxDBEnv env = cxDBEnvInstance();
+    cxDBEnv env = cxDBGetEnv(db);
+    CX_ASSERT(env->rdonly, "only env ,can't set data");
     cxDBTxn txn = cxStackTop(env->txn);
     DBT k={0};
     k.data = (void *)cxStringBody(key);
@@ -106,7 +122,7 @@ cxBool cxDBSet(cxAny db,cxString key,cxString value)
 cxString cxDBGet(cxAny db,cxString key)
 {
     cxDB this = db;
-    cxDBEnv env = cxDBEnvInstance();
+    cxDBEnv env = cxDBGetEnv(db);
     cxDBTxn txn = cxStackTop(env->txn);
     DBT k={0};
     k.data = (void *)cxStringBody(key);
@@ -126,7 +142,7 @@ cxString cxDBGet(cxAny db,cxString key)
 cxInt cxDBCount(cxAny db)
 {
     cxDB this = db;
-    cxDBEnv env = cxDBEnvInstance();
+    cxDBEnv env = cxDBGetEnv(db);
     cxDBTxn txn = cxStackTop(env->txn);
     if(this->type == DB_BTREE){
         DB_BTREE_STAT *stat = NULL;
@@ -153,9 +169,10 @@ CX_OBJECT_FREE(cxDBTree, cxDB)
 }
 CX_OBJECT_TERM(cxDBTree, cxDB)
 
-cxDBTree cxDBTreeCreate(cxString file,cxString table)
+cxDBTree cxDBTreeCreate(cxDBEnv env,cxString file,cxString table)
 {
     cxDBTree this = CX_CREATE(cxDBTree);
+    cxDBSetEnv(this, env);
     if(!cxDBOpen(this, file, table)){
         return NULL;
     }
@@ -174,9 +191,10 @@ CX_OBJECT_FREE(cxDBHash, cxDB)
 }
 CX_OBJECT_TERM(cxDBHash, cxDB)
 
-cxDBHash cxDBHashCreate(cxString file,cxString table)
+cxDBHash cxDBHashCreate(cxDBEnv env,cxString file,cxString table)
 {
     cxDBHash this = CX_CREATE(cxDBHash);
+    cxDBSetEnv(this, env);
     if(!cxDBOpen(this, file, table)){
         return NULL;
     }
@@ -185,12 +203,10 @@ cxDBHash cxDBHashCreate(cxString file,cxString table)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-static cxDBEnv instance = NULL;
-
 static void cxDBEnvFeedback(DB_ENV *env, int flags, int progress)
 {
     cxDBEnv this = env->app_private;
-    CX_LOGGER("dbenv progress=%d",progress);
+    CX_LOGGER("dbenv %s progress=%d",cxStringBody(this->type),progress);
     this->progress = progress;
 }
 
@@ -210,9 +226,8 @@ static void cxDBEnvOnPause(cxAny pobj)
     cxDBEnvSetPointAuto(this, true);
 }
 
-void cxDBEnvBeginTxn()
+void cxDBEnvBeginTxn(cxDBEnv this)
 {
-    cxDBEnv this = cxDBEnvInstance();
     CX_ASSERT(this->opened, "env not open");
     cxDBTxn txn = CX_CREATE(cxDBTxn);
     cxDBTxn top = cxStackTop(this->txn);
@@ -221,9 +236,8 @@ void cxDBEnvBeginTxn()
     }
 }
 
-void cxDBEnvAbortTxn()
+void cxDBEnvAbortTxn(cxDBEnv this)
 {
-    cxDBEnv this = cxDBEnvInstance();
     CX_ASSERT(this->opened, "env not open");
     cxDBTxn top = cxStackTop(this->txn);
     if(top != NULL && top->txn != NULL){
@@ -233,9 +247,8 @@ void cxDBEnvAbortTxn()
     cxStackPop(this->txn);
 }
 
-void cxDBEnvCommitTxn()
+void cxDBEnvCommitTxn(cxDBEnv this)
 {
-    cxDBEnv this = cxDBEnvInstance();
     CX_ASSERT(this->opened, "env not open");
     cxDBTxn top = cxStackTop(this->txn);
     if(top != NULL && top->txn != NULL){
@@ -245,27 +258,41 @@ void cxDBEnvCommitTxn()
     cxStackPop(this->txn);
 }
 
-cxBool cxDBEnvOpen(cxConstChars path,cxBool isLoggerEnv)
+cxDBEnv cxDBEnvCreate(cxConstChars type,cxBool logger)
 {
-    cxDBEnv this = cxDBEnvInstance();
-    cxString home = cxDocumentPath(NULL);
-    if(path == NULL){
-        path = cxStringBody(home);
+    cxEngine engine = cxEngineInstance();
+    cxDBEnv env = cxHashGet(engine->dbenvs, cxHashStrKey(type));
+    if(env != NULL){
+        return env;
     }
-    CX_ASSERT(path != NULL, "document path error");
-    cxUInt flags = DB_CREATE|DB_INIT_MPOOL;
-    if(!isLoggerEnv){
-        flags |= DB_RECOVER|DB_INIT_LOG|DB_INIT_TXN|DB_THREAD;
+    env = CX_CREATE(cxDBEnv);
+    env->type = cxStringAllocChars(type);
+    if(logger){
+        env->env->set_flags(env->env,DB_AUTO_COMMIT, 1);
     }
-    if(this->env->open(this->env,path,flags,0) != 0){
-        CX_ERROR("open db env error");
-        return false;
+    env->flags = DB_CREATE | DB_INIT_MPOOL;
+    cxString home = NULL;
+    if(cxConstCharsEqu(type, "assert")){
+        home = cxAssetsPath(NULL);
+        env->rdonly = true;
+    }else if(cxConstCharsEqu(type, "document")){
+        home = cxDocumentPath(NULL);
+        env->flags |= (logger ? (DB_RECOVER|DB_INIT_LOG|DB_INIT_TXN|DB_THREAD): 0);
     }
-    this->opened = true;
-    if(this->progress < 100){
-        cxDBEnvFeedback(this->env, DB_VERB_RECOVERY, 100);
+    if(home == NULL){
+        CX_ERROR("get home path error");
+        return NULL;
     }
-    return true;
+    if(env->env->open(env->env,cxStringBody(home),env->flags,0) != 0){
+        CX_ERROR("open home db env %s error",cxStringBody(home));
+        return NULL;
+    }
+    env->opened = true;
+    if(env->progress < 100){
+        cxDBEnvFeedback(env->env, DB_VERB_RECOVERY, 100);
+    }
+    cxHashSet(engine->dbenvs, cxHashStrKey(type), env);
+    return env;
 }
 
 CX_OBJECT_INIT(cxDBEnv, cxObject)
@@ -280,7 +307,6 @@ CX_OBJECT_INIT(cxDBEnv, cxObject)
     this->env->set_alloc(this->env,allocator->malloc,allocator->realloc,allocator->free);
     this->env->set_encrypt(this->env,"feelzx*&*1101++0529",DB_ENCRYPT_AES);
     this->env->set_verbose(this->env,DB_VERB_RECOVERY,0);
-    this->env->set_flags(this->env,DB_AUTO_COMMIT, 1);
     this->env->set_feedback(this->env,cxDBEnvFeedback);
     CX_SLOT_QUICK(engine->onPause, this, onPause, cxDBEnvOnPause);
     this->txn = CX_ALLOC(cxStack);
@@ -292,12 +318,12 @@ CX_OBJECT_FREE(cxDBEnv, cxObject)
     cxDBEnvSetPointAuto(this,true);
     this->env->close(this->env,0);
     this->env = NULL;
+    CX_RELEASE(this->type);
 }
 CX_OBJECT_TERM(cxDBEnv, cxObject)
 
-void cxDBEnvCheckPoint(cxBool force)
+void cxDBEnvCheckPoint(cxDBEnv this,cxBool force)
 {
-    cxDBEnv this = cxDBEnvInstance();
     cxDBEnvSetPointAuto(this,false);
 }
 
@@ -307,18 +333,16 @@ cxAny cxDBTypesGet(cxConstChars src)
     return types->assist;
 }
 
-cxDBEnv cxDBEnvInstance()
+cxAny cxDBCreate(cxDBEnv env,cxConstChars file,cxConstChars table,cxConstChars type)
 {
-    if(instance == NULL){
-        instance = CX_ALLOC(cxDBEnv);
+    cxAny db = NULL;
+    CX_ASSERT(env != NULL && file != NULL && table != NULL && type != NULL, "args error");
+    if(cxConstCharsEqu(type, "btree")){
+        db = cxDBTreeCreate(env, cxStringConstChars(file), cxStringConstChars(table));
+    }else if(cxConstCharsEqu(type, "hash")){
+        db = cxDBHashCreate(env, cxStringConstChars(file), cxStringConstChars(table));
     }
-    return instance;
-}
-
-void cxDBEnvDestroy()
-{
-    CX_RELEASE(instance);
-    instance = NULL;
+    return db;
 }
 
 

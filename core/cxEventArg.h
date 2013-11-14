@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxEventArg_h
 #define cxEngine_cxEventArg_h
 
-#include <json/jansson.h>
+#include <jansson.h>
 #include "cxBase.h"
 #include "cxString.h"
 #include "cxNumber.h"

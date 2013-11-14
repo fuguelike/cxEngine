@@ -32,11 +32,19 @@ typedef enum {
     cxViewAutoResizeFill        = cxViewAutoResizeLeft|cxViewAutoResizeRight|cxViewAutoResizeTop|cxViewAutoResizeBottom,
 }cxViewAutoResizeMask;
 
+typedef enum{
+    cxViewIsTouchTypeNone       = 0,
+    cxViewIsTouchTypeSelf       = 1 << 0,
+    cxViewIsTouchTypeSubview    = 1 << 1,
+}cxViewIsTouchType;
+
 typedef cxBox4f cxViewAutoResizeBox;
 
 typedef void (*cxViewFunc)(cxAny pview);
 
 typedef cxBool (*cxViewTouchFunc)(cxAny pview,cxTouch *touch);
+
+typedef cxUInt (*cxViewIsTouchFunc)(cxAny pview,cxTouch *touch);
 
 CX_OBJECT_DEF(cxView, cxObject)
     cxAny args;
@@ -51,7 +59,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool isDirty;
     cxBool isVisible;
     cxBool isBorder;        //if draw border
-    cxBool isTop;           //=true hide prev view
+    cxBool hideTop;         //=true hide prev view
     cxBool isSort;
     cxBool isCropping;
     cxSize2f size;
@@ -66,7 +74,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f anchorMatrix;
     cxColor4f color;
     //
-    CX_METHOD_DEF(cxViewTouchFunc, IsTouch);
+    CX_METHOD_DEF(cxViewIsTouchFunc, IsTouch);
     CX_METHOD_DEF(cxViewTouchFunc, Touch);
     //
     CX_METHOD_DEF(cxViewFunc, Draw);
@@ -133,7 +141,7 @@ void cxViewSetOrder(cxAny pview,cxInt order);
 
 cxBool cxViewTouch(cxAny pview,cxTouch *touch);
 
-cxBool cxViewIsTouch(cxAny pview,cxTouch *touch);
+cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch);
 
 void cxViewAppend(cxAny pview,cxAny newview);
 
@@ -141,7 +149,7 @@ void cxViewLayout(cxAny pview);
 
 void cxViewAutoResizing(cxAny pview);
 
-cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint);
+cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint);
 
 cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint);
 

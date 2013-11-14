@@ -24,6 +24,8 @@ cxBool cxLabelXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
 void cxLabelSetFontSize(cxAny pview,cxFloat fontsize);
 
+void cxLabelSetFontBold(cxAny pview,cxBool bold);
+
 void cxLabelSetText(cxAny pview,cxString txt);
 
 void cxLabelSetFont(cxAny pview,cxString font);

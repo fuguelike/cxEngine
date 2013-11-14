@@ -21,7 +21,7 @@
 #include <views/cxSprite.h>
 #include <core/cxViewXML.h>
 #include <views/cxButton.h>
-#include <json/jansson.h>
+#include <jansson.h>
 #include <views/cxAtlas.h>
 #include <views/cxParticle.h>
 #include <views/cxTable.h>
@@ -40,9 +40,7 @@ void cxEngineInit(cxEngine engine)
     engine->dessize = cxSize2fv(640, 960);
     //prepare load
     cxPlayerOpen(0, 0);
-    //open db
-    cxDBEnvOpen(NULL,false);
-    //    engine->isShowBorder = false;
+//    engine->isShowBorder = false;
 }
 
 void cxEngineMain(cxEngine engine)

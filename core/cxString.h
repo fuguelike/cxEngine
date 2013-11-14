@@ -20,23 +20,25 @@ CX_OBJECT_END(cxString)
 
 //create static cxString
 
-#define cxStringStatic(s)               \
+#define cxStringStatic(_s_)             \
 &(struct cxString){                     \
     .super.cxType=cxStringAutoType,     \
     .super.cxRefcount=1,                \
-    .strptr.d=(char *)s,                \
+    .strptr.d=(char *)(_s_),            \
     .strptr.n=0,                        \
-    .strptr.i=strlen(s)                 \
+    .strptr.i=strlen(_s_)               \
 }
 
-#define cxStringData(d,l)               \
+#define cxStringData(_d_,_l_)           \
 &(struct cxString){                     \
     .super.cxType=cxStringAutoType,     \
     .super.cxRefcount=1,                \
-    .strptr.d=(char *)d,                \
+    .strptr.d=(char *)(_d_),            \
     .strptr.n=0,                        \
-    .strptr.i=l                         \
+    .strptr.i=(_l_)                     \
 }
+
+#define cxStringValue(v,t)     cxStringData(&(t){v},sizeof(t))
 
 #define cxConstCharsEqu(s1,s2) ((s1) != NULL && (s2) != NULL && strcmp(s1,s2) == 0)
 

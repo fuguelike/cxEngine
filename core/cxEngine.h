@@ -30,6 +30,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash scripts;
     cxHash datasets;
     cxHash actions;
+    cxHash dbenvs;
     cxStack autopool;
     cxFloat frameInterval;
     cxSize2f winsize;   //screen size

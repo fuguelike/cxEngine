@@ -181,6 +181,8 @@ do{\
 
 #endif
 
+//object
+
 #define CX_OBJECT_BEG(_t_)                              \
 static CX_UNUSED cxConstType _t_##AutoType = #_t_;      \
 typedef struct _t_ * _t_;                               \

@@ -42,6 +42,7 @@
 		8341C6D11822812B0045A66F /* songti.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8341C6BF1822812B0045A66F /* songti.ttf */; };
 		8384E1E81823997700EDA1D6 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8384E1E71823997700EDA1D6 /* libcrypto.a */; };
 		8384E1EF1823ABFB00EDA1D6 /* libmpg123.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */; };
+		839AC1D21832214D00AEBF8E /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 839AC1D11832214D00AEBF8E /* libjansson.a */; };
 		839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 839E7A5617F1BC7600B0F5EC /* InfoPlist.strings */; };
 		839E7A5A17F1BC7600B0F5EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 839E7A5917F1BC7600B0F5EC /* main.m */; };
 		839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839E7A6917F1BC7600B0F5EC /* Images.xcassets */; };
@@ -95,6 +96,7 @@
 		8341C6BF1822812B0045A66F /* songti.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = songti.ttf; path = res/songti.ttf; sourceTree = "<group>"; };
 		8384E1E71823997700EDA1D6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = libs/ios/lib/libcrypto.a; sourceTree = "<group>"; };
 		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
+		839AC1D11832214D00AEBF8E /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
 		839E7A5517F1BC7600B0F5EC /* cxEngine-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "cxEngine-Info.plist"; sourceTree = "<group>"; };
 		839E7A5717F1BC7600B0F5EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		839E7A5917F1BC7600B0F5EC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				839AC1D21832214D00AEBF8E /* libjansson.a in Frameworks */,
 				8384E1EF1823ABFB00EDA1D6 /* libmpg123.a in Frameworks */,
 				8384E1E81823997700EDA1D6 /* libcrypto.a in Frameworks */,
 				8341C6A91822810D0045A66F /* libdb.a in Frameworks */,
@@ -146,6 +149,7 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				839AC1D11832214D00AEBF8E /* libjansson.a */,
 				8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */,
 				8384E1E71823997700EDA1D6 /* libcrypto.a */,
 				8341C6A41822810D0045A66F /* libdb.a */,

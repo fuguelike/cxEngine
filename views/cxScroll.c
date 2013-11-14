@@ -51,7 +51,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
 {
     cxScroll this = pview;
     cxView view = cxScrollContainer(this);
-    if(!cxViewHitTest(pview, touch->current)){
+    if(!cxViewHitTest(pview, touch->current, NULL)){
         return false;
     }
     if(touch->type == cxTouchTypeMove){
@@ -112,7 +112,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
-static void cxScrollOnTouch(cxAny pview,cxTouch *touch)
+static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
 {
     cxScroll this = pview;
     cxView view = cxScrollContainer(this);
@@ -131,6 +131,7 @@ CX_OBJECT_INIT(cxScroll, cxView)
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
     cxObjectSetXMLReadFunc(this, cxScrollXMLReadAttr);
+    //swip cond value
     this->value = 950;
     CX_SLOT_QUICK(engine->onTouch, this, onTouch, cxScrollOnTouch);
 }

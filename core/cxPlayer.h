@@ -19,8 +19,8 @@ CX_C_BEGIN
 
 typedef enum {
     cxAudioFileTypeNone,
-    cxAudioFileTypeMp3,
-    cxAudioFileTypeWav,
+    cxAudioFileTypeMP3,
+    cxAudioFileTypeWAV,
 }cxAudioFileType;
 
 CX_OBJECT_DEF(cxBuffer, cxObject)

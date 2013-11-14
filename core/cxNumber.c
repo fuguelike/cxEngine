@@ -24,6 +24,12 @@ cxColor4f cxNumberToColor4f(cxNumber this)
     return this->value.color4f;
 }
 
+cxVec2i cxNumberToVec2i(cxNumber this)
+{
+    CX_ASSERT(this->type == cxNumberTypeVec2i, "type error");
+    return this->value.vec2i;
+}
+
 cxVec2f cxNumberToVec2f(cxNumber this)
 {
     CX_ASSERT(this->type == cxNumberTypeVec2f, "type error");
@@ -113,6 +119,14 @@ cxNumber cxNumberVec2f(cxVec2f v)
     cxNumber rv = CX_CREATE(cxNumber);
     rv->type = cxNumberTypeVec2f;
     rv->value.vec2f = v;
+    return rv;
+}
+
+cxNumber cxNumberVec2i(cxVec2i v)
+{
+    cxNumber rv = CX_CREATE(cxNumber);
+    rv->type = cxNumberTypeVec2i;
+    rv->value.vec2i = v;
     return rv;
 }
 

@@ -90,6 +90,12 @@ cxString cxMD5(cxString v)
     return cxStringConstChars(md5);
 }
 
+cxInt cxRand(cxInt min,cxInt max)
+{
+    cxInt x = rand();
+    return (min + x % (max + 1 - min));
+}
+
 void cxSetRandSeed()
 {
     srand(clock());

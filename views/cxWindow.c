@@ -47,7 +47,7 @@ void cxWindowPushView(cxAny pview,cxAny args)
     cxEngine engine = cxEngineInstance();
     cxView new = pview;
     cxView top = cxStackTop(engine->window->views);
-    if(top != NULL && new->isTop){
+    if(top != NULL && new->hideTop){
         cxViewSetVisible(top, false);
         cxViewExit(top);
     }
@@ -60,15 +60,15 @@ void cxWindowPushView(cxAny pview,cxAny args)
 void cxWindowPopView(cxAny args)
 {
     cxEngine engine = cxEngineInstance();
-    cxBool isTop = false;
+    cxBool hideTop = false;
     cxView prev = cxStackTop(engine->window->views);
     cxStackPop(engine->window->views);
     cxView top = cxStackTop(engine->window->views);
     if(prev != NULL){
-        isTop = prev->isTop;
+        hideTop = prev->hideTop;
         cxViewRemoved(prev);
     }
-    if(top != NULL && isTop){
+    if(top != NULL && hideTop){
         cxViewSetArgs(top,args);
         cxViewEnter(top);
         cxViewSetVisible(top, true);

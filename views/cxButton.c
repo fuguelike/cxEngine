@@ -17,7 +17,7 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
     if(!this->isEnable){
         return false;
     }
-    cxBool hit = cxViewHitTest(pview, touch->current);
+    cxBool hit = cxViewHitTest(pview, touch->current, NULL);
     if(!hit && this->isDown){
         CX_EVENT_FIRE(this, onLeave);
         this->isDown = false;

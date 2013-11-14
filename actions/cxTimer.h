@@ -16,8 +16,6 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxTimer, cxAction)
     cxInt repeat;
     CX_EVENT_ALLOC(onArrive);
-    CX_EVENT_ALLOC(onStep);
-    CX_EVENT_ALLOC(onStart);
 CX_OBJECT_END(cxTimer)
 
 cxTimer cxTimerCreate(cxFloat time,cxInt repeat);

@@ -8,6 +8,7 @@
 
 #include "cxHash.h"
 #include "cxTypes.h"
+#include "cxArray.h"
 
 static const UT_icd cxAtlasBoxPointTypeICD = {sizeof(cxAtlasBoxPointType),NULL,NULL,NULL};
 
@@ -51,6 +52,14 @@ cxTypes cxHashTypesCreate()
 {
     cxTypes this = CX_CREATE(cxTypes);
     this->type = cxTypesHash;
+    return this;
+}
+
+cxTypes cxArrayTypesCreate()
+{
+    cxTypes this = CX_CREATE(cxTypes);
+    this->type = cxTypesArray;
+    this->assist = CX_ALLOC(cxArray);
     return this;
 }
 

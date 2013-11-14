@@ -8,12 +8,21 @@
 #include <core/cxIconv.h>
 #include <core/cxFreeType.h>
 #include <core/cxArray.h>
+#include <core/cxUtil.h>
 #include "cxTextureTXT.h"
 
-void cxTextureTXTSetSysFont(cxAny texture,cxString font)
+static cxBool cxTextureTXTUseSystemCreate(cxAny texture)
 {
     cxTextureTXT this = texture;
-    CX_RETAIN_SWAP(this->sysFont, font);
+    cxConstChars font = this->fontfile == NULL ? NULL : cxStringBody(this->fontfile);
+    cxConstChars text = cxStringBody(this->string);
+    cxString data = cxCreateTXTTextureData(text, font, this->attr);
+    CX_RETURN(data == NULL, false);
+    cxPointer buffer = (cxPointer)cxStringBody(data);
+    cxSize2i *psize = (cxSize2i *)buffer;
+    cxPointer tdata = buffer + sizeof(cxSize2i);
+    cxTextureTXTMakeTexture(this, tdata, psize->w, psize->h);
+    return true;
 }
 
 static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
@@ -24,9 +33,12 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
         CX_ERROR("convert to unicode error");
         return false;
     }
+    if(texture->useSystemCreate){
+        return cxTextureTXTUseSystemCreate(this);
+    }
     if(texture->fontfile == NULL){
-        CX_ERROR("not set font name");
-        return false;
+        texture->useSystemCreate = true;
+        return cxTextureTXTUseSystemCreate(this);
     }
     cxFreeFont font = cxFreeTypeCreateFont(cxStringBody(texture->fontfile));
     if(font == NULL){
@@ -90,18 +102,28 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
         CX_RELEASE(e);
         x += (pchar->ax >> 16);
     }
-    texture->super.hasAlpha = true;
-    texture->super.size = cxSize2fv(width, height);
+    cxTextureTXTMakeTexture(texture, buffer, width, height);
+    allocator->free(buffer);
+    return true;
+}
+
+//bind alpha texture data
+void cxTextureTXTMakeTexture(cxTextureTXT texture,cxPointer buffer,cxInt width,cxInt height)
+{
     GLint unpack = 0;
     glGetIntegerv(GL_UNPACK_ALIGNMENT, &unpack);
     cxOpenGLGenTextures(1, &texture->super.textureId);
     cxOpenGLBindTexture(0, texture->super.textureId);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, buffer);
+    if(texture->useSystemCreate){
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    }else{
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, buffer);
+    }
     glPixelStorei(GL_UNPACK_ALIGNMENT, unpack);
     cxOpenGLBindTexture(0, 0);
-    allocator->free(buffer);
-    return true;
+    texture->super.hasAlpha = true;
+    texture->super.size = cxSize2fv(width, height);
 }
 
 static void cxTextureTXTBind(cxAny this)

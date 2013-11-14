@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <cxViewXML cxView.w="640" cxView.h="960" cxView.fixScale="w">
-    <!--
     <cxTable cxView.right="30" cxView.left="30" cxView.top="30" cxView.bottom="30" cxTable.space="10,10" cxTable.type="3,0">
         <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('particle.xml')">
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
@@ -36,19 +35,5 @@
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="Button" cxLabel.size="30"/>
         </cxButton>
-        <cxButton cxView.w="180" cxView.h="120"
-            cxButton.onRelease="tt">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="tt" cxLabel.size="30"/>
-        </cxButton>
     </cxTable>
-     -->
-    <cxView cxView.right="30" cxView.left="30" cxView.top="30" cxView.bottom="30">
-        <cxButton cxView.w="200" cxView.h="120" cxView.x="-200"
-            cxButton.onRelease="cxLogger('load')">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabel cxView.color="0,0,0" cxLabel.font="items.xml?font" cxLabel.text="tt" cxLabel.size="30"/>
-        </cxButton>
-    </cxView>
 </cxViewXML>
-

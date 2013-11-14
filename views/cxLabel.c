@@ -22,6 +22,8 @@ cxBool cxLabelXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxLabelSetText(mView, text);
     //set fontsize
     cxLabelSetFontSize(mView, cxXMLReadFloatAttr(reader, "cxLabel.size", this->attr.size));
+    //set fontbold
+    cxLabelSetFontBold(mView, cxXMLReadBoolAttr(reader, "cxLabel.bold", this->attr.bold));
     return true;
 }
 
@@ -63,6 +65,14 @@ void cxLabelUpdateText(cxAny pview)
     CX_RETURN(texture == NULL);
     cxSpriteSetTexture(this, texture);
     cxViewSetSize(this, texture->size);
+}
+
+void cxLabelSetFontBold(cxAny pview,cxBool bold)
+{
+    cxLabel this = pview;
+    CX_RETURN(this->attr.bold == bold);
+    this->attr.bold = bold;
+    this->isDirty = true;
 }
 
 void cxLabelSetFontSize(cxAny pview,cxFloat fontsize)
