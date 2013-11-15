@@ -21,6 +21,8 @@ CX_OBJECT_DEF(cxMove, cxAction)
     cxVec2f posDelta;
 CX_OBJECT_END(cxMove)
 
+void cxMoveSetPos(cxAny pav,cxVec2f pos);
+
 cxMove cxMoveCreate(cxFloat dutation, cxVec2f endpos);
 
 CX_C_END

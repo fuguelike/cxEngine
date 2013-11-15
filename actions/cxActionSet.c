@@ -17,11 +17,11 @@ static cxBool cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReade
     //get type
     cxChar *stype = cxXMLAttr("cxActionSet.type");
     if(cxConstCharsEqu(stype, "multiple")){
-        this->type = cxActionSetTypeMultiple;
+        cxActionSetSetType(this, cxActionSetTypeMultiple);
     }else if(cxConstCharsEqu(stype, "sequence")){
-        this->type = cxActionSetTypeSequence;
+        cxActionSetSetType(this, cxActionSetTypeSequence);
     }else{
-        this->type = cxActionSetTypeNone;
+        cxActionSetSetType(this, cxActionSetTypeNone);
     }
     xmlFree(stype);
     //get sub action
@@ -38,7 +38,7 @@ static cxBool cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReade
             continue;
         }
         cxObjectXMLReadRun(action, xmlAction, reader);
-        cxArrayAppend(this->items, action);
+        cxActionSetAppend(this, action);
     }
     return true;
 }
@@ -120,4 +120,21 @@ CX_OBJECT_FREE(cxActionSet, cxAction)
     CX_RELEASE(this->items);
 }
 CX_OBJECT_TERM(cxActionSet, cxAction)
+
+void cxActionSetSetType(cxAny pav,cxActionSetType type)
+{
+    cxActionSet this = pav;
+    this->type = type;
+}
+
+void cxActionSetAppend(cxAny pav,cxAny action)
+{
+    cxActionSet this = pav;
+    cxArrayAppend(this->items, action);
+}
+
+
+
+
+
 

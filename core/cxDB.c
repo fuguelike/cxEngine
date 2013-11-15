@@ -51,12 +51,12 @@ void cxDBSetEnv(cxAny db,cxDBEnv env)
     CX_RETAIN_SWAP(this->env, env);
 }
 
-cxBool cxDBOpen(cxAny db,cxString file,cxString table)
+cxBool cxDBOpen(cxAny db,cxString file,cxString table,cxBool rdonly)
 {
     CX_ASSERT(file != NULL && table != NULL, "args error");
     cxDBEnv env = cxDBGetEnv(db);
     cxDB this = db;
-    if(env->rdonly){
+    if(rdonly){
         this->flags = DB_RDONLY;
     }else{
         this->flags = DB_CREATE;
@@ -93,7 +93,7 @@ cxBool cxDBDel(cxAny db,cxString key)
 {
     cxDB this = db;
     cxDBEnv env = cxDBGetEnv(db);
-    CX_ASSERT(env->rdonly, "only env ,can't del data");
+    CX_ASSERT(this->flags & DB_RDONLY, "only env ,can't del data");
     cxDBTxn txn = cxStackTop(env->txn);
     DBT k={0};
     k.data = (void *)cxStringBody(key);
@@ -106,7 +106,7 @@ cxBool cxDBSet(cxAny db,cxString key,cxString value)
 {
     cxDB this = db;
     cxDBEnv env = cxDBGetEnv(db);
-    CX_ASSERT(env->rdonly, "only env ,can't set data");
+    CX_ASSERT(this->flags & DB_RDONLY, "only env ,can't set data");
     cxDBTxn txn = cxStackTop(env->txn);
     DBT k={0};
     k.data = (void *)cxStringBody(key);
@@ -157,45 +157,23 @@ cxInt cxDBCount(cxAny db)
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-CX_OBJECT_INIT(cxDBTree, cxDB)
+cxDB cxDBTreeCreate(cxDBEnv env,cxString file,cxString table,cxBool rdonly)
 {
-    this->super.type = DB_BTREE;
-}
-CX_OBJECT_FREE(cxDBTree, cxDB)
-{
-    
-}
-CX_OBJECT_TERM(cxDBTree, cxDB)
-
-cxDBTree cxDBTreeCreate(cxDBEnv env,cxString file,cxString table)
-{
-    cxDBTree this = CX_CREATE(cxDBTree);
+    cxDB this = CX_CREATE(cxDB);
+    this->type = DB_BTREE;
     cxDBSetEnv(this, env);
-    if(!cxDBOpen(this, file, table)){
+    if(!cxDBOpen(this, file, table, rdonly)){
         return NULL;
     }
     return this;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-
-CX_OBJECT_INIT(cxDBHash, cxDB)
+cxDB cxDBHashCreate(cxDBEnv env,cxString file,cxString table,cxBool rdonly)
 {
-    this->super.type = DB_HASH;
-}
-CX_OBJECT_FREE(cxDBHash, cxDB)
-{
-    
-}
-CX_OBJECT_TERM(cxDBHash, cxDB)
-
-cxDBHash cxDBHashCreate(cxDBEnv env,cxString file,cxString table)
-{
-    cxDBHash this = CX_CREATE(cxDBHash);
+    cxDB this = CX_CREATE(cxDB);
+    this->type = DB_HASH;
     cxDBSetEnv(this, env);
-    if(!cxDBOpen(this, file, table)){
+    if(!cxDBOpen(this, file, table, rdonly)){
         return NULL;
     }
     return this;
@@ -272,10 +250,7 @@ cxDBEnv cxDBEnvCreate(cxConstChars type,cxBool logger)
     }
     env->flags = DB_CREATE | DB_INIT_MPOOL;
     cxString home = NULL;
-    if(cxConstCharsEqu(type, "assert")){
-        home = cxAssetsPath(NULL);
-        env->rdonly = true;
-    }else if(cxConstCharsEqu(type, "document")){
+    if(cxConstCharsEqu(type, "document")){
         home = cxDocumentPath(NULL);
         env->flags |= (logger ? (DB_RECOVER|DB_INIT_LOG|DB_INIT_TXN|DB_THREAD): 0);
     }
@@ -287,6 +262,8 @@ cxDBEnv cxDBEnvCreate(cxConstChars type,cxBool logger)
         CX_ERROR("open home db env %s error",cxStringBody(home));
         return NULL;
     }
+    home = cxAssetsPath(NULL);
+    
     env->opened = true;
     if(env->progress < 100){
         cxDBEnvFeedback(env->env, DB_VERB_RECOVERY, 100);
@@ -333,14 +310,14 @@ cxAny cxDBTypesGet(cxConstChars src)
     return types->assist;
 }
 
-cxAny cxDBCreate(cxDBEnv env,cxConstChars file,cxConstChars table,cxConstChars type)
+cxAny cxDBCreate(cxDBEnv env,cxConstChars file,cxConstChars table,cxConstChars type,cxBool rdonly)
 {
     cxAny db = NULL;
     CX_ASSERT(env != NULL && file != NULL && table != NULL && type != NULL, "args error");
     if(cxConstCharsEqu(type, "btree")){
-        db = cxDBTreeCreate(env, cxStringConstChars(file), cxStringConstChars(table));
+        db = cxDBTreeCreate(env,cxStringConstChars(file),cxStringConstChars(table),rdonly);
     }else if(cxConstCharsEqu(type, "hash")){
-        db = cxDBHashCreate(env, cxStringConstChars(file), cxStringConstChars(table));
+        db = cxDBHashCreate(env,cxStringConstChars(file),cxStringConstChars(table),rdonly);
     }
     return db;
 }

@@ -29,7 +29,7 @@ cxBool cxActionRootXMLReadAttr(cxAny pxml,cxAny newobj, xmlTextReaderPtr reader)
 
 cxAny cxActionXMLCreate(cxConstChars xml);
 
-cxAny cxActionXMLGet(cxConstChars xml,cxConstChars key);
+cxAny cxActionXMLGet(cxConstChars src);
 
 void cxViewRunActionEvent(cxEvent *event);
 

@@ -31,13 +31,13 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash datasets;
     cxHash actions;
     cxHash dbenvs;
-    cxStack autopool;
     cxFloat frameInterval;
     cxSize2f winsize;   //screen size
     cxSize2f dessize;   //design size
     cxVec2f scale;
     cxBool isInit;
     cxBool isShowBorder;
+    cxBool isTouch;
     cxWindow window;
     cxDouble lastTime;
     cxFloat frameDelta;
@@ -53,8 +53,6 @@ CX_OBJECT_DEF(cxEngine, cxObject)
 CX_OBJECT_END(cxEngine)
 
 cxEngine cxEngineInstance();
-
-cxStack cxEngineAutoStack();
 
 void cxEngineRegisteEvent(cxConstChars name,cxEventFunc func);
 
@@ -83,6 +81,8 @@ void cxEngineFree(cxEngine engine);
 cxVec2f cxEngineTouchToWindow(cxVec2f pos);
 
 cxVec2f cxEngineWindowToTouch(cxVec2f pos);
+
+void cxEngineEnableTouch(cxBool enable);
 
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos);
 

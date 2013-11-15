@@ -134,16 +134,31 @@ static void cxHashXMLReadDB(cxDBEnv env,cxHashXML xml,xmlTextReaderPtr reader)
         cxChar *table = cxXMLAttr("table");
         cxChar *type = cxXMLAttr("type");
         cxChar *sid = cxXMLAttr("id");
+        cxChar *path = cxXMLAttr("path");
+        cxBool rdonly = cxXMLReadBoolAttr(reader, "rdonly", false);
         if(sid == NULL){
             CX_WARN("db id not set,will can't add dataset");
         }
+        cxString sfile = NULL;
+        if(cxConstCharsEqu(path, "assert")){
+            sfile = cxAssetsPath(file);
+            //assert must set true
+            rdonly = true;
+        }else if(cxConstCharsEqu(path, "document")){
+            sfile = cxDocumentPath(file);
+        }else{
+            CX_ERROR("must set path assert or document");
+        }
         cxAny db = NULL;
         if(file != NULL && table != NULL && type != NULL){
-            db = cxDBCreate(env, file, table, type);
+            db = cxDBCreate(env, cxStringBody(sfile), table, type, rdonly);
         }
         if(db != NULL && sid != NULL){
             cxHashSet(xml->items, cxHashStrKey(sid), cxDBTypesCreate(db));
+        }else{
+            CX_ERROR("open dbenv type %s,db %s:%s failed",cxStringBody(env->type),file,table);
         }
+        xmlFree(path);
         xmlFree(sid);
         xmlFree(file);
         xmlFree(table);
@@ -327,6 +342,7 @@ cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader)
     while(xmlTextReaderRead(reader)){
         if(xmlTextReaderNodeType(reader) == XML_READER_TYPE_ELEMENT){
             const xmlChar *temp = xmlTextReaderConstName(reader);
+            
             if(ELEMENT_IS_TYPE(cxDBEnv)){
                 cxHashXMLReadDBEnv(xml,reader);
                 continue;

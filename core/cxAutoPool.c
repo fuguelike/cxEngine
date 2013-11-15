@@ -10,6 +10,8 @@
 #include "cxStack.h"
 #include "cxEngine.h"
 
+cxStack autopool = NULL;
+
 CX_OBJECT_INIT(cxAutoPool, cxObject)
 {
     this->objects = CX_ALLOC(cxArray);
@@ -20,10 +22,24 @@ CX_OBJECT_FREE(cxAutoPool, cxObject)
 }
 CX_OBJECT_TERM(cxAutoPool, cxObject)
 
+static cxStack cxAutoPoolStack()
+{
+    if(autopool == NULL){
+        autopool = CX_ALLOC(cxStack);
+    }
+    return autopool;
+}
+
+void cxAutoPoolDestroy()
+{
+    CX_RELEASE(autopool);
+    autopool = NULL;
+}
+
 static cxAutoPool cxAutoPoolInstance()
 {
     cxAutoPool pool = NULL;
-    cxStack stack = cxEngineAutoStack();
+    cxStack stack = cxAutoPoolStack();
     if(cxStackLength(stack) == 0){
         pool = CX_ALLOC(cxAutoPool);
         cxStackPush(stack, pool);
@@ -60,14 +76,14 @@ void cxAutoPoolClean()
 void cxAutoPoolPush()
 {
     cxAutoPool pool = CX_ALLOC(cxAutoPool);
-    cxStack stack = cxEngineAutoStack();
+    cxStack stack = cxAutoPoolStack();
     cxStackPush(stack, pool);
     CX_RELEASE(pool);
 }
 
 void cxAutoPoolPop()
 {
-    cxStack stack = cxEngineAutoStack();
+    cxStack stack = cxAutoPoolStack();
     cxStackPop(stack);
 }
 

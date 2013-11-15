@@ -18,6 +18,8 @@ CX_OBJECT_DEF(cxAutoPool, cxObject)
     cxArray objects;
 CX_OBJECT_END(cxAutoPool)
 
+void cxAutoPoolDestroy();
+
 cxAny cxAutoPoolAppend(cxAny any);
 
 void cxAutoPoolBegin();

@@ -30,7 +30,6 @@ CX_OBJECT_DEF(cxDBEnv, cxObject)
     cxStack txn;
     cxString type;
     cxUInt flags;
-    cxBool rdonly;
 CX_OBJECT_END(cxDBEnv)
 
 cxDBEnv cxDBEnvCreate(cxConstChars type,cxBool logger);
@@ -57,6 +56,8 @@ CX_OBJECT_DEF(cxDB, cxObject)
     CX_METHOD_DEF(cxDBFunc, OpenAfter);
 CX_OBJECT_END(cxDB)
 
+cxBool cxDBOpen(cxAny db,cxString file,cxString table,cxBool rdonly);
+
 cxDBEnv cxDBGetEnv(cxAny db);
 
 void cxDBSetEnv(cxAny db,cxDBEnv env);
@@ -73,19 +74,11 @@ cxBool cxDBSet(cxAny db,cxString key,cxString value);
 
 cxString cxDBGet(cxAny db,cxString key);
 
-CX_OBJECT_DEF(cxDBTree, cxDB)
+cxDB cxDBTreeCreate(cxDBEnv env,cxString file,cxString table,cxBool rdonly);
 
-CX_OBJECT_END(cxDBTree)
+cxDB cxDBHashCreate(cxDBEnv env,cxString file,cxString table,cxBool rdonly);
 
-cxDBTree cxDBTreeCreate(cxDBEnv env,cxString file,cxString table);
-
-CX_OBJECT_DEF(cxDBHash, cxDB)
-
-CX_OBJECT_END(cxDBHash)
-
-cxDBHash cxDBHashCreate(cxDBEnv env,cxString file,cxString table);
-
-cxAny cxDBCreate(cxDBEnv env,cxConstChars file,cxConstChars table,cxConstChars type);
+cxAny cxDBCreate(cxDBEnv env,cxConstChars file,cxConstChars table,cxConstChars type,cxBool rdonly);
 
 CX_C_END
 

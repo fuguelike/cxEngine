@@ -35,7 +35,9 @@ static cxBool cxTimerXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr
 static cxBool cxTimerExit(cxAny pav)
 {
     cxTimer this = pav;
-    this->repeat --;
+    if(this->repeat > 0){
+        this->repeat --;
+    }
     CX_EVENT_FIRE(this, onArrive);
     return this->repeat == 0;
 }

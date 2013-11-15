@@ -85,11 +85,15 @@ cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
     return action;
 }
 
-cxAny cxActionXMLGet(cxConstChars xml,cxConstChars key)
+cxAny cxActionXMLGet(cxConstChars src)
 {
-    cxActionXML this = cxActionXMLCreate(xml);
+    cxChar file[128]={0};
+    cxChar key[128]={0};
+    cxInt rv = cxParseURL(src, file, key);
+    CX_RETURN(rv == 0, NULL);
+    cxActionXML this = cxActionXMLCreate(file);
     CX_RETURN(this == NULL, NULL);
-    cxString code = cxHashGet(this->codes, (key == NULL) ? cxHashStrKey(xml) : cxHashStrKey(key));
+    cxString code = cxHashGet(this->codes, (rv == 1) ? cxHashStrKey(file) : cxHashStrKey(key));
     CX_RETURN(code == NULL, NULL);
     xmlTextReaderPtr reader = cxXMLReaderForString(code);
     cxAny action = NULL;
@@ -131,11 +135,8 @@ void cxViewRunActionEvent(cxEvent *event)
 {
     cxObject object = event->sender;
     CX_RETURN(event->args == NULL);
-    cxConstChars url = cxEventArgString(event->args,"src");
-    CX_RETURN(url == NULL);
-    cxChar file[128]={0};
-    cxChar key[128]={0};
-    cxInt rv = cxParseURL(url, file, key);
+    cxConstChars src = cxEventArgString(event->args,"src");
+    CX_RETURN(src == NULL);
     //get view by id and cxBase
     cxAny view = NULL;
     if(object->cxBase == cxBaseTypeAction){
@@ -151,12 +152,7 @@ void cxViewRunActionEvent(cxEvent *event)
         CX_RETURN(view == NULL);
     }
     //get action
-    cxAny action = NULL;
-    if(rv == 2){
-        action = cxActionXMLGet(file, key);
-    }else if(rv == 1){
-        action = cxActionXMLGet(file, NULL);
-    }
+    cxAny action = cxActionXMLGet(src);
     CX_RETURN(action == NULL);
     //set action corve
     cxConstChars scurve = cxEventArgString(event->args, "curve");
@@ -173,9 +169,9 @@ void cxViewRunActionEvent(cxEvent *event)
     cxViewAppendAction(view, action);
 }
 
-cxAction cxActionXMLAttachView(cxAny pview,cxConstChars xml,cxConstChars key)
+cxAction cxActionXMLAttachView(cxAny pview,cxConstChars url)
 {
-    cxAny action = cxActionXMLGet(xml, key);
+    cxAny action = cxActionXMLGet(url);
     CX_RETURN(action == NULL, NULL);
     cxViewAppendAction(pview, action);
     return action;

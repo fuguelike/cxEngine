@@ -80,13 +80,14 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_DEF(cxViewFunc, Draw);
     CX_METHOD_DEF(cxViewFunc, DrawAfter);
     CX_METHOD_DEF(cxViewFunc, DrawBefore);
+    //
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
-    CX_EVENT_ALLOC(onChanged);//subviews count changed
+    CX_EVENT_ALLOC(onChanged);  //subviews count changed
 CX_OBJECT_END(cxView)
 
 #define cxViewOverrideTouch(o,f)   ((cxView)(o))->Touch = f

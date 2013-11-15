@@ -17,6 +17,12 @@ static void cxMoveInit(cxAny pav)
     kmVec2Subtract(&this->posDelta, &this->endPos, &this->begPos);
 }
 
+void cxMoveSetPos(cxAny pav,cxVec2f pos)
+{
+    cxMove this = pav;
+    this->endPos = pos;
+}
+
 static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxMove this = pav;

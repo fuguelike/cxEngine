@@ -159,6 +159,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->delayElapsed = 0.0f;
         CX_METHOD_RUN(this->Step,this,dt,1.0f);
         CX_EVENT_FIRE(this, onStep);
+        //check exit
         isExit = CX_METHOD_GET(true, this->Exit,pav);
         this->isActive = false;
     }

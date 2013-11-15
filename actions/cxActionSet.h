@@ -26,6 +26,10 @@ CX_OBJECT_DEF(cxActionSet, cxAction)
     cxInt index;
 CX_OBJECT_END(cxActionSet)
 
+void cxActionSetSetType(cxAny pav,cxActionSetType type);
+
+void cxActionSetAppend(cxAny pav,cxAny action);
+
 CX_C_END
 
 #endif

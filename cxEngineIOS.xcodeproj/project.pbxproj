@@ -126,6 +126,7 @@
 		8341C68318227FA10045A66F /* cxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67F18227FA10045A66F /* cxViewController.m */; };
 		83494FA718334B7A0016C3A4 /* cxJson.c in Sources */ = {isa = PBXBuildFile; fileRef = 83494FA518334B7A0016C3A4 /* cxJson.c */; };
 		8384E1ED1823ABC700EDA1D6 /* cxMp3Stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */; };
+		83BAB0731835F578004DAEA6 /* cxRunner.c in Sources */ = {isa = PBXBuildFile; fileRef = 83BAB0711835F578004DAEA6 /* cxRunner.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -380,6 +381,8 @@
 		83494FA618334B7A0016C3A4 /* cxJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxJson.h; sourceTree = "<group>"; };
 		8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMp3Stream.c; sourceTree = "<group>"; };
 		8384E1EC1823ABC700EDA1D6 /* cxMp3Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMp3Stream.h; sourceTree = "<group>"; };
+		83BAB0711835F578004DAEA6 /* cxRunner.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxRunner.c; sourceTree = "<group>"; };
+		83BAB0721835F578004DAEA6 /* cxRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxRunner.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -467,6 +470,8 @@
 				8341C51118227DF20045A66F /* cxTimer.h */,
 				8341C51218227DF20045A66F /* cxTint.c */,
 				8341C51318227DF20045A66F /* cxTint.h */,
+				83BAB0711835F578004DAEA6 /* cxRunner.c */,
+				83BAB0721835F578004DAEA6 /* cxRunner.h */,
 			);
 			path = actions;
 			sourceTree = "<group>";
@@ -827,6 +832,7 @@
 				8341C68018227FA10045A66F /* cxAppDelegate.m in Sources */,
 				8341C62318227DF20045A66F /* cxEngine.c in Sources */,
 				8341C60C18227DF20045A66F /* cpBB.c in Sources */,
+				83BAB0731835F578004DAEA6 /* cxRunner.c in Sources */,
 				8341C65418227DF30045A66F /* cxShaderAlpha.c in Sources */,
 				8341C65F18227DF30045A66F /* cxTexturePKM.c in Sources */,
 				8341C61618227DF20045A66F /* cpSpaceQuery.c in Sources */,

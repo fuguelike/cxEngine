@@ -123,9 +123,9 @@ void cxEngineLayout(cxInt width,cxInt height)
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
     kmGLInitialize();
-    this->autopool = CX_ALLOC(cxStack);
     this->frameInterval = 1.0f/60.0f;
     this->isShowBorder = true;
+    this->isTouch = true;
     this->contentScaleFactor = 1.0f;
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->window = CX_ALLOC(cxWindow);
@@ -155,14 +155,9 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     cxOpenGLDestroy();
     cxMessageDestroy();
     kmGLFreeAll();
-    CX_RELEASE(this->autopool);
+    cxAutoPoolDestroy();
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
-
-cxStack cxEngineAutoStack()
-{
-    return cxEngineInstance()->autopool;
-}
 
 void cxEngineSetLocalLang(cxString lang)
 {
@@ -342,9 +337,18 @@ cxVec2f cxEngineWindowToTouch(cxVec2f pos)
     return rv;
 }
 
+void cxEngineEnableTouch(cxBool enable)
+{
+    cxEngine this = cxEngineInstance();
+    this->isTouch = enable;
+}
+
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
 {
     cxEngine this = cxEngineInstance();
+    if(!this->isTouch){
+        return false;
+    }
     cxDouble time = cxTimestamp();
     cxVec2f cpos = cxEngineTouchToWindow(pos);
     if(type == cxTouchTypeDown){
