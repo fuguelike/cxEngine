@@ -16,7 +16,7 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
     cxBool ret = false;
     cxTextureXML xml = this;
     CX_ASSERT(stream != NULL, "stream not set");
-    cxString data = stream->interface->AllBytes(stream);
+    cxString data = cxStreamAllBytes(stream);
     if(data == NULL){
         CX_ERROR("read data failed from stream");
         return ret;
@@ -86,14 +86,10 @@ static void cxTextureXMLBind(cxAny this)
     }
 }
 
-static const cxTextureInterface xmlInterface = {
-    .Load = cxTextureXMLLoad,
-    .Bind = cxTextureXMLBind,
-};
-
 CX_OBJECT_INIT(cxTextureXML, cxTexture)
 {
-    this->super.interface = &xmlInterface;
+    CX_METHOD_SET(this->super.Bind, cxTextureXMLBind);
+    CX_METHOD_SET(this->super.Load, cxTextureXMLLoad);
 }
 CX_OBJECT_FREE(cxTextureXML, cxTexture)
 {

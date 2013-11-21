@@ -234,7 +234,7 @@ cxXMLScript cxEngineGetXMLScript(cxConstChars file)
     script = CX_ALLOC(cxXMLScript);
     cxStream stream = cxAssetsStreamCreate(file);
     if(stream != NULL){
-        cxString data = stream->interface->AllBytes(stream);
+        cxString data = cxStreamAllBytes(stream);
         CX_RETAIN_SWAP(script->bytes, data);
     }
     if(script->bytes != NULL){

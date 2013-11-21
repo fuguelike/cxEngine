@@ -19,7 +19,9 @@ static cxBool cxRunnerExit(cxAny pav)
 {
     cxRunner this = pav;
     if(this->count == 0){
-       CX_METHOD_RUN(this->Exit,this);
+        //can add action at exit
+        this->step ++;
+        CX_METHOD_RUN(this->Exit,this);
     }
     return this->count == 0;
 }

@@ -13,7 +13,7 @@ static cxBool cxTexturePNGLoad(cxAny this,cxStream stream)
     cxBool ret = false;
     cxTexturePNG png = this;
     CX_ASSERT(stream != NULL, "pvr stream not set");
-    cxString data = stream->interface->AllBytes(stream);
+    cxString data = cxStreamAllBytes(stream);
     if(data == NULL){
         return false;
     }
@@ -46,14 +46,10 @@ static void cxTexturePNGBind(cxAny this)
     cxOpenGLBindTexture(0, png->super.textureId);
 }
 
-static const cxTextureInterface pngInterface = {
-    .Load = cxTexturePNGLoad,
-    .Bind = cxTexturePNGBind,
-};
-
 CX_OBJECT_INIT(cxTexturePNG, cxTexture)
 {
-    this->super.interface = &pngInterface;
+    CX_METHOD_SET(this->super.Bind, cxTexturePNGBind);
+    CX_METHOD_SET(this->super.Load, cxTexturePNGLoad);
 }
 CX_OBJECT_FREE(cxTexturePNG, cxTexture)
 {

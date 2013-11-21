@@ -132,14 +132,10 @@ static void cxTextureTXTBind(cxAny this)
     cxOpenGLBindTexture(0, txt->super.textureId);
 }
 
-static const cxTextureInterface txtInterface = {
-    .Load = cxTextureTXTLoad,
-    .Bind = cxTextureTXTBind,
-};
-
 CX_OBJECT_INIT(cxTextureTXT, cxTexture)
 {
-    this->super.interface = &txtInterface;
+    CX_METHOD_SET(this->super.Bind, cxTextureTXTBind);
+    CX_METHOD_SET(this->super.Load, cxTextureTXTLoad);
 }
 CX_OBJECT_FREE(cxTextureTXT, cxTexture)
 {

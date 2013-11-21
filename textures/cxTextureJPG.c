@@ -34,7 +34,7 @@ static cxBool cxTextureJPGLoad(cxAny this,cxStream stream)
         CX_ERROR("jpg create decompress failed");
         goto finished;
     }
-    cxString bytes = stream->interface->AllBytes(stream);
+    cxString bytes = cxStreamAllBytes(stream);
     if(bytes == NULL){
         CX_ERROR("jpg read stream data error");
         goto finished;
@@ -83,14 +83,10 @@ static void cxTextureJPGBind(cxAny this)
     cxOpenGLBindTexture(0, png->super.textureId);
 }
 
-static const cxTextureInterface jpgInterface = {
-    .Load = cxTextureJPGLoad,
-    .Bind = cxTextureJPGBind,
-};
-
 CX_OBJECT_INIT(cxTextureJPG, cxTexture)
 {
-    this->super.interface = &jpgInterface;
+    CX_METHOD_SET(this->super.Bind, cxTextureJPGBind);
+    CX_METHOD_SET(this->super.Load, cxTextureJPGLoad);
 }
 CX_OBJECT_FREE(cxTextureJPG, cxTexture)
 {

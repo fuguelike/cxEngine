@@ -70,17 +70,17 @@ static cxString cxAssetsStreamAllBytes(cxAny this)
 {
     cxStream asserts = this;
     if(!asserts->canRead){
-        asserts->interface->Open(asserts);
+        cxStreamOpen(asserts);
     }
     if(!asserts->canRead){
         CX_ERROR("file stream can't read");
         return NULL;
     }
-    asserts->interface->Seek(asserts,0,SEEK_SET);
+    cxStreamSeek(asserts,0,SEEK_SET);
     cxChar *bytes = allocator->malloc(asserts->length);
-    asserts->interface->Read(asserts,bytes,asserts->length);
+    cxStreamRead(asserts,bytes,asserts->length);
     cxString data = cxStringAttach(bytes, asserts->length);
-    asserts->interface->Close(asserts);
+    cxStreamClose(asserts);
     return data;
 }
 
@@ -91,23 +91,18 @@ static void cxAssetsStreamClose(cxAny this)
         fclose(asserts->fd);
         asserts->fd = NULL;
     }
-    cxStreamClose(this);
+    cxStreamBaseClose(this);
 }
-
-static const cxStreamInterface assetsInterface = {
-    .Open       = cxAssetsStreamOpen,
-    .Read       = cxAssetsStreamRead,
-    .Write      = cxAssetsStreamWrite,
-    .Seek       = cxAssetsStreamSeek,
-    .Close      = cxAssetsStreamClose,
-    .Position   = cxAssetsStreamPosition,
-    .AllBytes   = cxAssetsStreamAllBytes,
-};
-
 
 CX_OBJECT_INIT(cxAssetsStream, cxStream)
 {
-    this->super.interface = &assetsInterface;
+    CX_METHOD_SET(this->super.Open, cxAssetsStreamOpen);
+    CX_METHOD_SET(this->super.Read, cxAssetsStreamRead);
+    CX_METHOD_SET(this->super.Write, cxAssetsStreamWrite);
+    CX_METHOD_SET(this->super.Seek, cxAssetsStreamSeek);
+    CX_METHOD_SET(this->super.Close, cxAssetsStreamClose);
+    CX_METHOD_SET(this->super.Position,cxAssetsStreamPosition);
+    CX_METHOD_SET(this->super.AllBytes,cxAssetsStreamAllBytes);
 }
 CX_OBJECT_FREE(cxAssetsStream, cxStream)
 {

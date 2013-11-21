@@ -30,14 +30,10 @@ static void cxTexturePKMBind(cxAny this)
     
 }
 
-static const cxTextureInterface pkmInterface = {
-    .Load = cxTexturePKMLoad,
-    .Bind = cxTexturePKMBind,
-};
-
 CX_OBJECT_INIT(cxTexturePKM, cxTexture)
 {
-    this->super.interface = &pkmInterface;
+    CX_METHOD_SET(this->super.Bind, cxTexturePKMBind);
+    CX_METHOD_SET(this->super.Load, cxTexturePKMLoad);
 }
 CX_OBJECT_FREE(cxTexturePKM, cxTexture)
 {

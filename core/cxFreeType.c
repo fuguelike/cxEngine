@@ -112,7 +112,7 @@ cxFreeFont cxFreeTypeCreateFont(cxConstChars file)
         CX_ERROR("create face file %s error",file);
         return NULL;
     }
-    cxString data = stream->interface->AllBytes(stream);
+    cxString data = cxStreamAllBytes(stream);
     if(data == NULL){
         CX_ERROR("read data error from stream");
         return NULL;

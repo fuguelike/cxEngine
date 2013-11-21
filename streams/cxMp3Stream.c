@@ -31,6 +31,7 @@ static cxBool cxMp3StreamOpen(cxAny stream)
         CX_ERROR("open mpg file failed %s",cxStringBody(this->path));
         return false;
     }
+    allocator->free(this->buffer);
     this->bufsiz = mpg123_outblock(this->mh);
     this->buffer = allocator->malloc(this->bufsiz);
     mpg123_getformat(this->mh, &this->freq, &this->channels, &this->encoding);
@@ -78,7 +79,7 @@ static cxString cxMp3StreamAllBytes(cxAny stream)
 {
     cxStream this = stream;
     if(!this->canRead){
-        this->interface->Open(this);
+        cxStreamOpen(this);
     }
     if(!this->canRead){
         CX_ERROR("file stream can't read");
@@ -88,10 +89,10 @@ static cxString cxMp3StreamAllBytes(cxAny stream)
     cxPointer buffer = cxMp3StreamBuffer(this, &bufsiz);
     cxString data = CX_CREATE(cxString);
     cxInt bytes = 0;
-    while((bytes = this->interface->Read(this,buffer,bufsiz)) > 0){
+    while((bytes = cxStreamRead(this,buffer,bufsiz)) > 0){
         cxStringAppend(data, buffer,bytes);
     }
-    this->interface->Close(this);
+    cxStreamClose(this);
     return data;
 }
 
@@ -111,18 +112,8 @@ static void cxMp3StreamClose(cxAny stream)
         allocator->free(this->buffer);
         this->buffer = NULL;
     }
-    cxStreamClose(this);
+    cxStreamBaseClose(this);
 }
-
-static const cxStreamInterface mp3Interface = {
-    .Open       = cxMp3StreamOpen,
-    .Read       = cxMp3StreamRead,
-    .Write      = cxMp3StreamWrite,
-    .Seek       = cxMp3StreamSeek,
-    .Close      = cxMp3StreamClose,
-    .Position   = cxMp3StreamPosition,
-    .AllBytes   = cxMp3StreamAllBytes,
-};
 
 cxPointer cxMp3StreamBuffer(cxAny mp3,cxInt *bytes)
 {
@@ -133,7 +124,13 @@ cxPointer cxMp3StreamBuffer(cxAny mp3,cxInt *bytes)
 
 CX_OBJECT_INIT(cxMp3Stream, cxStream)
 {
-    this->super.interface = &mp3Interface;
+    CX_METHOD_SET(this->super.Open, cxMp3StreamOpen);
+    CX_METHOD_SET(this->super.Read, cxMp3StreamRead);
+    CX_METHOD_SET(this->super.Write, cxMp3StreamWrite);
+    CX_METHOD_SET(this->super.Seek, cxMp3StreamSeek);
+    CX_METHOD_SET(this->super.Close, cxMp3StreamClose);
+    CX_METHOD_SET(this->super.Position,cxMp3StreamPosition);
+    CX_METHOD_SET(this->super.AllBytes,cxMp3StreamAllBytes);
 }
 CX_OBJECT_FREE(cxMp3Stream, cxStream)
 {

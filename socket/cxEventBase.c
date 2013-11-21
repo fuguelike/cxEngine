@@ -8,6 +8,7 @@
 
 #include <core/cxEngine.h>
 #include "cxEventBase.h"
+#include "cxHttpConn.h"
 
 static cxEventBase instance = NULL;
 
@@ -36,22 +37,22 @@ CX_OBJECT_INIT(cxEventBase, cxObject)
     cxEngine engine = cxEngineInstance();
     CX_SLOT_QUICK(engine->onUpdate, this, onUpdate, cxEventUpdate);
     this->base = event_base_new();
-    this->httpconns = CX_ALLOC(cxHash);
+    this->conns = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEventBase, cxObject)
 {
-    CX_RELEASE(this->httpconns);
+    CX_RELEASE(this->conns);
     event_base_loopbreak(this->base);
     event_base_free(this->base);
     CX_SLOT_RELEASE(this->onUpdate);
 }
 CX_OBJECT_TERM(cxEventBase, cxObject)
 
-cxHttpConn cxEventBaseHttpConnect(cxConstChars host,cxInt port)
+cxAny cxEventBaseHttpConnect(cxConstChars host,cxInt port)
 {
     cxEventBase this = cxEventBaseInstance();
     cxConstChars key = CX_CONST_STRING("%s:%d",host,port);
-    cxHttpConn conn = cxHashGet(this->httpconns, cxHashStrKey(key));
+    cxHttpConn conn = cxHashGet(this->conns, cxHashStrKey(key));
     if(conn != NULL){
         return conn;
     }
@@ -60,7 +61,7 @@ cxHttpConn cxEventBaseHttpConnect(cxConstChars host,cxInt port)
         CX_ERROR("http open %s:%d failed",host,port);
         return NULL;
     }
-    cxHashSet(this->httpconns, cxHashStrKey(key), conn);
+    cxHashSet(this->conns, cxHashStrKey(key), conn);
     return conn;
 }
 

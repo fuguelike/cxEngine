@@ -12,12 +12,11 @@
 #include <event.h>
 #include <core/cxBase.h>
 #include <core/cxHash.h>
-#include "cxHttpConn.h"
 
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxEventBase, cxObject)
-    cxHash httpconns;   //host:port key
+    cxHash conns;   //host:port key
     struct event_base *base;
     CX_SLOT_ALLOC(onUpdate);
 CX_OBJECT_END(cxEventBase)
@@ -26,7 +25,7 @@ cxEventBase cxEventBaseInstance();
 
 void cxEventBaseDestroy();
 
-cxHttpConn cxEventBaseHttpConnect(cxConstChars host,cxInt port);
+cxAny cxEventBaseHttpConnect(cxConstChars host,cxInt port);
 
 CX_C_END
 

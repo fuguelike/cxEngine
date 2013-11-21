@@ -62,7 +62,7 @@ static const char hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c'
 cxString cxMP3SamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
 {
     cxMp3Stream this  = (cxMp3Stream)cxMp3StreamCreate(file);
-    cxString bytes = cxSreamBytes(this);
+    cxString bytes = cxStreamAllBytes(this);
     if(bytes == NULL){
         CX_ERROR("get mp3 bytes error");
         return NULL;

@@ -14,15 +14,19 @@
 
 CX_C_BEGIN
 
-typedef struct {
-    cxBool      (*Open)(cxAny this);
-    cxInt       (*Read)(cxAny this,cxPointer buffer,cxInt size);
-    cxInt       (*Write)(cxAny this,cxPointer buffer,cxInt size);
-    cxBool      (*Seek)(cxAny this,cxOff off,cxInt flags);
-    cxOff       (*Position)(cxAny this);
-    void        (*Close)(cxAny this);
-    cxString    (*AllBytes)(cxAny this);
-}cxStreamInterface;
+typedef cxBool (*cxStreamOpenFunc)(cxAny this);
+
+typedef cxInt (*cxStreamReadFunc)(cxAny this,cxPointer buffer,cxInt size);
+
+typedef cxInt (*cxStreamWriteFunc)(cxAny this,cxPointer buffer,cxInt size);
+
+typedef cxBool (*cxStreamSeekFunc)(cxAny this,cxOff off,cxInt flags);
+
+typedef cxOff (*cxStreamPositionFunc)(cxAny this);
+
+typedef void (*cxStreamCloseFunc)(cxAny this);
+
+typedef cxString (*cxStreamAllBytesFunc)(cxAny this);
 
 CX_OBJECT_DEF(cxStream, cxObject)
     cxString path;
@@ -32,14 +36,32 @@ CX_OBJECT_DEF(cxStream, cxObject)
     cxBool canWrite;
     cxBool canSeek;
     cxBool isOpen;
-    const cxStreamInterface *interface;
+    CX_METHOD_DEF(cxStreamOpenFunc, Open);
+    CX_METHOD_DEF(cxStreamReadFunc, Read);
+    CX_METHOD_DEF(cxStreamWriteFunc, Write);
+    CX_METHOD_DEF(cxStreamSeekFunc, Seek);
+    CX_METHOD_DEF(cxStreamPositionFunc, Position);
+    CX_METHOD_DEF(cxStreamCloseFunc, Close);
+    CX_METHOD_DEF(cxStreamAllBytesFunc, AllBytes);
 CX_OBJECT_END(cxStream)
 
-void cxStreamClose(cxAny this);
+void cxStreamBaseClose(cxAny this);
 
 cxString cxStreamFileDir(cxAny this);
 
-cxString cxSreamBytes(cxAny this);
+cxBool cxStreamOpen(cxAny this);
+
+cxInt cxStreamRead(cxAny this,cxPointer buffer,cxInt size);
+
+cxInt cxStreamWrite(cxAny this,cxPointer buffer,cxInt size);
+
+cxBool cxStreamSeek(cxAny this,cxOff off,cxInt flags);
+
+cxOff cxStreamPosition(cxAny this);
+
+void cxStreamClose(cxAny this);
+
+cxString cxStreamAllBytes(cxAny this);
 
 CX_C_END
 

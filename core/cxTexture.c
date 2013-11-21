@@ -34,8 +34,7 @@ CX_OBJECT_TERM(cxTexture, cxObject)
 void cxTextureLoad(cxTexture this,cxStream stream)
 {
     CX_RETURN(this->isLoad);
-    CX_RETURN(this->interface == NULL);
-    this->isLoad = this->interface->Load(this,stream);
+    this->isLoad = CX_METHOD_GET(false, this->Load,this, stream);
     if(!this->isLoad){
         CX_ERROR("texture  can not load");
     }
@@ -127,7 +126,7 @@ void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstC
 void cxTextureBind(cxTexture this)
 {
     CX_ASSERT(this != NULL, "bind texture null");
-    this->interface->Bind(this);
+    CX_METHOD_RUN(this->Bind, this);
     if(!this->isSetParam){
         cxOpenGLSetTexParameters(this->texParam);
         this->isSetParam = true;

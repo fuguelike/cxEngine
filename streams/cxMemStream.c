@@ -101,22 +101,18 @@ static void cxMemStreamClose(cxAny this)
     allocator->free(stream->data);
     stream->data = NULL;
     stream->position = 0;
-    cxStreamClose(this);
+    cxStreamBaseClose(this);
 }
-
-static const cxStreamInterface memInterface = {
-    .Open       = cxMemStreamOpen,
-    .Read       = cxMemStreamRead,
-    .Write      = cxMemStreamWrite,
-    .Seek       = cxMemStreamSeek,
-    .Close      = cxMemStreamClose,
-    .Position   = cxMemStreamPosition,
-    .AllBytes   = cxMemStreamAllBytes,
-};
 
 CX_OBJECT_INIT(cxMemStream, cxStream)
 {
-    this->super.interface = &memInterface;
+    CX_METHOD_SET(this->super.Open, cxMemStreamOpen);
+    CX_METHOD_SET(this->super.Read, cxMemStreamRead);
+    CX_METHOD_SET(this->super.Write, cxMemStreamWrite);
+    CX_METHOD_SET(this->super.Seek, cxMemStreamSeek);
+    CX_METHOD_SET(this->super.Close, cxMemStreamClose);
+    CX_METHOD_SET(this->super.Position,cxMemStreamPosition);
+    CX_METHOD_SET(this->super.AllBytes,cxMemStreamAllBytes);
 }
 CX_OBJECT_FREE(cxMemStream, cxStream)
 {
@@ -128,10 +124,10 @@ CX_OBJECT_TERM(cxMemStream, cxStream)
 cxStream cxMemStreamCreateWithText(cxString txt)
 {
     cxStream stream = CX_CREATE(cxMemStream);
-    if(!stream->interface->Open(stream)){
+    if(!cxStreamOpen(stream)){
         return NULL;
     }
-    stream->interface->Write(stream,(cxPointer)cxStringBody(txt),cxStringLength(txt));
+    cxStreamWrite(stream,(cxPointer)cxStringBody(txt),cxStringLength(txt));
     return stream;
 }
 

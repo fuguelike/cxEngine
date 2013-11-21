@@ -34,6 +34,7 @@
 #include <streams/cxMp3Stream.h>
 #include <views/cxScroll.h>
 #include <actions/cxRunner.h>
+#include <views/cxLoading.h>
 
 void cxEngineInit(cxEngine engine)
 {
@@ -44,10 +45,21 @@ void cxEngineInit(cxEngine engine)
 //    engine->isShowBorder = false;
 }
 
-void cxEngineMain(cxEngine engine)
+static void loading(cxAny pview)
 {
     cxEngineDataSet("items.xml");
-    cxWindowPushXML("main.xml");
+    cxAny obj = cxViewXMLCreate("main.xml");
+    cxLoadingSetObject(pview, obj);
+}
+
+static void finished(cxAny pview)
+{
+    cxWindowPushView(pview, NULL);
+}
+
+void cxEngineMain(cxEngine engine)
+{
+    cxLoadingStart(loading, finished);
 }
 
 void cxEngineFree(cxEngine engine)

@@ -184,7 +184,7 @@ cxTypes cxHashXMLReadString(cxHashXML xml,xmlTextReaderPtr reader)
     cxChar *src = cxXMLAttr("src");
     if(src != NULL){
         cxStream stream = cxAssetsStreamCreate(src);
-        bytes = cxSreamBytes(stream);
+        bytes = cxStreamAllBytes(stream);
     }else if(!xmlTextReaderIsEmptyElement(reader)) {
         bytes = cxStringConstChars(cxXMLReadString(reader));
     }else{

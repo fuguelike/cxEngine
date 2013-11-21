@@ -23,10 +23,9 @@ CX_OBJECT_DEF(cxTexCoord, cxObject)
     cxFloat h;
 CX_OBJECT_END(cxTexCoord)
 
-typedef struct {
-    cxBool (*Load)(cxAny this,cxStream stream);
-    void (*Bind)(cxAny this);
-}cxTextureInterface;
+typedef cxBool (*cxTextureLoadFunc)(cxAny this,cxStream stream);
+
+typedef void (*cxTextureBindFunc)(cxAny this);
 
 CX_OBJECT_DEF(cxTexture, cxObject)
     cxHash keys;    //cxTextureElement
@@ -37,7 +36,8 @@ CX_OBJECT_DEF(cxTexture, cxObject)
     cxBool hasAlpha;
     cxBool hasMipmap;
     cxSize2f size;
-    const cxTextureInterface *interface;
+    CX_METHOD_DEF(cxTextureLoadFunc, Load);
+    CX_METHOD_DEF(cxTextureBindFunc, Bind);
 CX_OBJECT_END(cxTexture)
 
 void cxDrawClippingTexture(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey);

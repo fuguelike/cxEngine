@@ -49,13 +49,13 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
         CX_ERROR("platform not support pvr texture");
         return ret;
     }
-    if(!stream->interface->Open(stream)){
+    if(!cxStreamOpen(stream)){
         CX_ERROR("open prv stream failed");
         return ret;
     }
     //read pvr head
     cxPVRHeader header;
-    cxInt size = stream->interface->Read(stream,&header,sizeof(cxPVRHeader));
+    cxInt size = cxStreamRead(stream,&header,sizeof(cxPVRHeader));
     if(size != sizeof(cxPVRHeader) ||
        header.headerLength != sizeof(cxPVRHeader) ||
        header.pvrTag != CX_PVR_TAG){
@@ -106,7 +106,7 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
         }
         cxUInt bufSize = widthBlocks * heightBlocks * ((blockSize  * bpp) / 8);
         cxPointer buffer = allocator->malloc(bufSize);
-        cxInt size = stream->interface->Read(stream,buffer,bufSize);
+        cxInt size = cxStreamRead(stream,buffer,bufSize);
         if(size == bufSize){
             glCompressedTexImage2D(GL_TEXTURE_2D, i, pvr->glFormat, width, height, 0, bufSize, buffer);
         }else{
@@ -125,7 +125,7 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
     cxOpenGLBindTexture(0, 0);
     ret = true;
 completed:
-    stream->interface->Close(stream);
+    cxStreamClose(stream);
     return ret;
 }
 
@@ -135,14 +135,10 @@ static void cxTexturePVRBind(cxAny this)
     cxOpenGLBindTexture(0, pvr->super.textureId);
 }
 
-static const cxTextureInterface pvrInterface = {
-    .Load = cxTexturePVRLoad,
-    .Bind = cxTexturePVRBind,
-};
-
 CX_OBJECT_INIT(cxTexturePVR, cxTexture)
 {
-    this->super.interface = &pvrInterface;
+    CX_METHOD_SET(this->super.Bind, cxTexturePVRBind);
+    CX_METHOD_SET(this->super.Load, cxTexturePVRLoad);
 }
 CX_OBJECT_FREE(cxTexturePVR, cxTexture)
 {
