@@ -14,7 +14,7 @@ typedef struct {
     int error;
 }cxJPEGError;
 
-static void cxJPEGErrorExit(j_common_ptr cinfo)
+static void cxJPGErrorExit(j_common_ptr cinfo)
 {
     cxJPEGError *error = (cxJPEGError *)cinfo->err;
     error->error = 1;
@@ -28,7 +28,7 @@ static cxBool cxTextureJPGLoad(cxAny this,cxStream stream)
     cxJPEGError error;
     cinfo.err = jpeg_std_error(&error.pub);
     error.error = 0;
-    error.pub.error_exit = cxJPEGErrorExit;
+    error.pub.error_exit = cxJPGErrorExit;
     jpeg_create_decompress(&cinfo);
     if(error.error){
         CX_ERROR("jpg create decompress failed");

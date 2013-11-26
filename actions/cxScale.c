@@ -47,6 +47,12 @@ CX_OBJECT_FREE(cxScale, cxAction)
 }
 CX_OBJECT_TERM(cxScale, cxAction)
 
+void cxScaleSetScale(cxAny pav,cxVec2f scale)
+{
+    cxScale this = pav;
+    this->newScale = scale;
+}
+
 cxScale cxScaleCreate(cxFloat duration,cxVec2f scale)
 {
     cxScale this = CX_CREATE(cxScale);

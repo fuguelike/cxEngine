@@ -21,6 +21,8 @@ CX_OBJECT_END(cxScale)
 
 cxScale cxScaleCreate(cxFloat duration,cxVec2f scale);
 
+void cxScaleSetScale(cxAny pav,cxVec2f scale);
+
 CX_C_END
 
 #endif

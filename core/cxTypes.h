@@ -20,6 +20,7 @@ typedef struct {
     cxInt y;
 }cxVec2i;
 #define cxVec2iv(x,y)   (cxVec2i){x,y}
+#define cxVec2iEqu(p1,p2)   ((p1).x == (p2).x && (p1).y == (p2).y)
 
 typedef struct {
     cxInt x;
@@ -27,6 +28,7 @@ typedef struct {
     cxInt z;
 }cxVec3i;
 #define cxVec3iv(x,y,z)   (cxVec3i){x,y,z}
+#define cxVec3iEqu(p1,p2)   ((p1).x == (p2).x && (p1).y == (p2).y && (p1).z == (p2).z)
 
 typedef kmMat4 cxMatrix4f;
 

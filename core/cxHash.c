@@ -88,7 +88,5 @@ void cxHashSet(cxHash hash,cxHashKey key,cxAny any)
         cxHashSetUnsafe(hash, key, any);
     }else if(element->any != any){
         CX_RETAIN_SWAP(element->any, any);
-    }else{
-        CX_WARN("hash has object element");
     }
 }

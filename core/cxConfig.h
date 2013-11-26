@@ -151,9 +151,17 @@ typedef const char *    cxConstType;
 typedef const char *    cxConstChars;
 
 #ifdef __GNUC__
-#define CX_UNUSED __attribute__ ((__unused__))
+#define CX_UNUSED_ATTRIBUTE  __attribute__ ((__unused__))
 #else
-#define CX_UNUSED
+#define CX_UNUSED_ATTRIBUTE
+#endif
+
+#if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
+#define CX_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
+#elif _MSC_VER >= 1400 //vs 2005 or higher
+#define CX_DEPRECATED_ATTRIBUTE __declspec(deprecated)
+#else
+#define CX_DEPRECATED_ATTRIBUTE
 #endif
 
 #define CX_INVALID_INDEX   -1
@@ -183,11 +191,11 @@ do{\
 
 //object
 
-#define CX_OBJECT_BEG(_t_)                              \
-static CX_UNUSED cxConstType _t_##AutoType = #_t_;      \
-typedef struct _t_ * _t_;                               \
-void _t_##AutoInit(_t_ this);                           \
-void _t_##AutoFree(_t_ this);                           \
+#define CX_OBJECT_BEG(_t_)                                          \
+static CX_UNUSED_ATTRIBUTE cxConstType _t_##AutoType = #_t_;        \
+typedef struct _t_ * _t_;                                           \
+void _t_##AutoInit(_t_ this);                                       \
+void _t_##AutoFree(_t_ this);                                       \
 struct _t_ {
 
 

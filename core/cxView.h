@@ -29,13 +29,15 @@ typedef enum {
     cxViewAutoResizeRight       = 1 << 1,
     cxViewAutoResizeTop         = 1 << 2,
     cxViewAutoResizeBottom      = 1 << 3,
-    cxViewAutoResizeFill        = cxViewAutoResizeLeft|cxViewAutoResizeRight|cxViewAutoResizeTop|cxViewAutoResizeBottom,
+    cxViewAutoResizeWidth       = cxViewAutoResizeLeft|cxViewAutoResizeRight,
+    cxViewAutoResizeHeight      = cxViewAutoResizeTop|cxViewAutoResizeBottom,
+    cxViewAutoResizeFill        = cxViewAutoResizeWidth|cxViewAutoResizeHeight,
 }cxViewAutoResizeMask;
 
 typedef enum{
     cxViewIsTouchTypeNone       = 0,
-    cxViewIsTouchTypeSelf       = 1 << 0,
-    cxViewIsTouchTypeSubview    = 1 << 1,
+    cxViewIsTouchTypeSelf       = 1 << 0,   //only touch self
+    cxViewIsTouchTypeSubview    = 1 << 1,   //touch subviews
 }cxViewIsTouchType;
 
 typedef cxBox4f cxViewAutoResizeBox;
@@ -135,6 +137,8 @@ void cxViewSetColor(cxAny pview,cxColor3f color);
 void cxViewSetAlpha(cxAny pview,cxFloat alpha);
 
 void cxViewStopAction(cxAny pview,cxUInt actionId);
+
+cxBool cxViewHasAction(cxAny pview,cxUInt actionId);
 
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav);
 

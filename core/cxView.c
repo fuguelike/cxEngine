@@ -720,6 +720,13 @@ cxBool cxViewTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
+cxBool cxViewHasAction(cxAny pview,cxUInt actionId)
+{
+    cxView this = pview;
+    cxHashKey key = cxHashIntKey(actionId);
+    return cxHashHas(this->actions, key);
+}
+
 void cxViewStopAction(cxAny pview,cxUInt actionId)
 {
     cxView this = pview;

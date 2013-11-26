@@ -182,11 +182,17 @@ void cxActionPause(cxAny pav)
 void cxActionReset(cxAny pav)
 {
     cxAction this = pav;
+    this->isFirst = false;
     this->isExit = false;
     this->index = -1;
     this->split = -1;
     this->durationElapsed = 0;
     this->delayElapsed = 0;
+    CX_EVENT_RELEASE(this->onSplit);
+    CX_EVENT_RELEASE(this->onStart);
+    CX_EVENT_RELEASE(this->onStop);
+    CX_EVENT_RELEASE(this->onStep);
+    CX_METHOD_RUN(this->Reset,this);
 }
 
 void cxActionResume(cxAny pav)

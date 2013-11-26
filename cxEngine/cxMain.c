@@ -48,6 +48,7 @@ void cxEngineInit(cxEngine engine)
 static void loading(cxAny pview)
 {
     cxEngineDataSet("items.xml");
+    
     cxAny obj = cxViewXMLCreate("main.xml");
     cxLoadingSetObject(pview, obj);
 }
