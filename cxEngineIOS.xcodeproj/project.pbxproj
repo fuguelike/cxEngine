@@ -127,6 +127,7 @@
 		835870EA183DE608007B175E /* cxChipmunk.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870E8183DE608007B175E /* cxChipmunk.c */; };
 		835870F1183DEB02007B175E /* cxListen.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870EF183DEB02007B175E /* cxListen.c */; };
 		835870F4183DEB0F007B175E /* cxClient.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870F2183DEB0F007B175E /* cxClient.c */; };
+		83607AA218444B39005C392B /* cxAnimate.c in Sources */ = {isa = PBXBuildFile; fileRef = 83607AA018444B39005C392B /* cxAnimate.c */; };
 		8384E1ED1823ABC700EDA1D6 /* cxMp3Stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */; };
 		83A5C967183A174500781096 /* cxLoading.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A5C965183A174500781096 /* cxLoading.c */; };
 		83BAB0731835F578004DAEA6 /* cxRunner.c in Sources */ = {isa = PBXBuildFile; fileRef = 83BAB0711835F578004DAEA6 /* cxRunner.c */; };
@@ -386,6 +387,8 @@
 		835870F0183DEB02007B175E /* cxListen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxListen.h; sourceTree = "<group>"; };
 		835870F2183DEB0F007B175E /* cxClient.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxClient.c; sourceTree = "<group>"; };
 		835870F3183DEB0F007B175E /* cxClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxClient.h; sourceTree = "<group>"; };
+		83607AA018444B39005C392B /* cxAnimate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAnimate.c; sourceTree = "<group>"; };
+		83607AA118444B39005C392B /* cxAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAnimate.h; sourceTree = "<group>"; };
 		8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMp3Stream.c; sourceTree = "<group>"; };
 		8384E1EC1823ABC700EDA1D6 /* cxMp3Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMp3Stream.h; sourceTree = "<group>"; };
 		83A5C965183A174500781096 /* cxLoading.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLoading.c; sourceTree = "<group>"; };
@@ -481,6 +484,8 @@
 				8341C51318227DF20045A66F /* cxTint.h */,
 				83BAB0711835F578004DAEA6 /* cxRunner.c */,
 				83BAB0721835F578004DAEA6 /* cxRunner.h */,
+				83607AA018444B39005C392B /* cxAnimate.c */,
+				83607AA118444B39005C392B /* cxAnimate.h */,
 			);
 			path = actions;
 			sourceTree = "<group>";
@@ -829,6 +834,7 @@
 				8341C65218227DF30045A66F /* vec3.c in Sources */,
 				8341C65318227DF30045A66F /* vec4.c in Sources */,
 				8341C61F18227DF20045A66F /* cxAutoPool.c in Sources */,
+				83607AA218444B39005C392B /* cxAnimate.c in Sources */,
 				8341C62A18227DF20045A66F /* cxList.c in Sources */,
 				8341C65018227DF30045A66F /* utility.c in Sources */,
 				8341C66318227DF30045A66F /* cxTextureXML.c in Sources */,

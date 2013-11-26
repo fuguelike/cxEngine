@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#ifndef cxEngineIOS_cxRunner_h
-#define cxEngineIOS_cxRunner_h
+#ifndef cxEngine_cxRunner_h
+#define cxEngine_cxRunner_h
 
 #include <core/cxAction.h>
 

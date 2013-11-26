@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--TextureKey at *.xml file use-->
+<cxViewXML cxView.fill="true">
+    
+    <cxSprite id="sprite" cxView.y="370" cxSprite.texture="animate/1.png"/>
+
+    <cxButton cxView.w = "180" cxView.h = "120" cxView.left="0"
+        cxButton.onRelease="cxActionRun({'src':'actions.xml?animate2','view':'sprite','cache':true})">
+        <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+        <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Animate" cxLabel.size="25"/>
+    </cxButton>
+
+    <cxButton cxView.w = "180" cxView.h = "120" cxView.right="0"
+        cxButton.onRelease="cxPopView">
+        <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+        <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="25"/>
+    </cxButton>
+</cxViewXML>

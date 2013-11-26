@@ -1,6 +1,6 @@
 //
 //  cxRunner.c
-//  cxEngineIOS
+//  cxEngine
 //
 //  Created by xuhua on 11/15/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.

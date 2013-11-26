@@ -52,6 +52,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxAny args;
     cxViewAutoResizeMask autoMask;
     cxViewAutoResizeBox  autoBox;
+    cxHash caches;
     cxHash actions;
     cxInt zorder;
     cxListElement *subElement;
@@ -94,7 +95,9 @@ CX_OBJECT_END(cxView)
 
 #define cxViewOverrideTouch(o,f)   ((cxView)(o))->Touch = f
 
-#define cxViewOverrideGesture(o,f)   ((cxView)(o))->Gesture = f
+void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object);
+
+cxAny cxViewGetCache(cxAny pview,cxConstChars key);
 
 void cxViewSetViewEvent(cxEvent *event);
 

@@ -213,6 +213,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
     cxObjectSetXMLReadFunc(this, cxViewXMLReadAttr);
     this->actions = CX_ALLOC(cxHash);
+    this->caches = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
@@ -225,9 +226,23 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_EVENT_RELEASE(this->onLayout);
     CX_RELEASE(this->subViews);
     CX_RELEASE(this->actions);
+    CX_RELEASE(this->caches);
     CX_RELEASE(this->args);
 }
 CX_OBJECT_TERM(cxView, cxObject)
+
+void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object)
+{
+    cxView this = pview;
+    CX_ASSERT(object != NULL, "args error");
+    cxHashSet(this->caches, cxHashStrKey(key), object);
+}
+
+cxAny cxViewGetCache(cxAny pview,cxConstChars key)
+{
+    cxView this = pview;
+    return cxHashGet(this->caches, cxHashStrKey(key));
+}
 
 void cxViewSetArgs(cxAny pview,cxAny args)
 {

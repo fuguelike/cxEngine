@@ -15,6 +15,7 @@
 #include <actions/cxFade.h>
 #include <actions/cxTint.h>
 #include <actions/cxTimer.h>
+#include <actions/cxAnimate.h>
 #include <actions/cxActionSet.h>
 #include "cxViewXML.h"
 #include "cxActionXML.h"
@@ -79,6 +80,8 @@ cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
         action = CX_CREATE(cxTimer);
     }else if(ELEMENT_IS_TYPE(cxActionSet)){
         action = CX_CREATE(cxActionSet);
+    }else if(ELEMENT_IS_TYPE(cxAnimate)){
+        action = CX_CREATE(cxAnimate);
     }else{
         CX_ERROR("action xml can't create type %s",temp);
     }
@@ -152,8 +155,23 @@ void cxViewRunActionEvent(cxEvent *event)
         CX_RETURN(view == NULL);
     }
     //get action
-    cxAny action = cxActionXMLGet(src);
+    cxAny action = NULL;
+    cxBool fromcache =  false;
+    cxBool cache = cxEventArgBool(event->args, "cache");
+    if(cache){
+        action = cxViewGetCache(view, src);
+        fromcache = (action != NULL);
+    }
+    if(action == NULL){
+        action = cxActionXMLGet(src);
+    }
     CX_RETURN(action == NULL);
+    if(!fromcache && cache){
+        cxViewSetCache(view, src, action);
+    }
+    if(fromcache){
+        cxActionReset(action);
+    }
     //set action corve
     cxConstChars scurve = cxEventArgString(event->args, "curve");
     cxCurveItem curve = cxCurveGet(scurve);

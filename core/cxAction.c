@@ -72,6 +72,7 @@ CX_OBJECT_INIT(cxAction, cxObject)
     this->speed = 1.0f;
     this->index = -1;
     this->split = -1;
+    CX_METHOD_SET(this->Reset, cxActionReset);
 }
 CX_OBJECT_FREE(cxAction, cxObject)
 {
