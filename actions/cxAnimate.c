@@ -30,7 +30,7 @@ CX_OBJECT_FREE(cxAnimateItem, cxObject)
 }
 CX_OBJECT_TERM(cxAnimateItem, cxObject)
 
-static cxAny cxAnimateItemCreate(cxConstChars file, cxConstChars key, cxFloat delay,cxBool cache)
+void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars key,cxFloat delay,cxBool cache)
 {
     cxAnimateItem this = CX_CREATE(cxAnimateItem);
     if(file != NULL){
@@ -42,13 +42,7 @@ static cxAny cxAnimateItemCreate(cxConstChars file, cxConstChars key, cxFloat de
         this->key = cxStringAllocChars(key);
     }
     this->delay = delay;
-    return this;
-}
-
-void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars key,cxFloat delay,cxBool cache)
-{
-    cxAny item = cxAnimateItemCreate(file, key, delay, cache);
-    cxArrayAppend(list, item);
+    cxArrayAppend(list, this);
 }
 
 static void cxAnimateInit(cxAny pav)
@@ -92,6 +86,15 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     }
 }
 
+static void cxAnimateXMLAppend(cxArray list,cxChar *file,cxChar *key,cxInt from,cxInt to,cxBool cache)
+{
+    for(cxInt i = from; i <= to ; i++){
+        cxConstChars sfile = CX_CONST_STRING(file,i);
+        cxConstChars skey = (key != NULL) ? CX_CONST_STRING(key,i) : NULL;
+        cxAnimateItemAppend(list, sfile, skey, 0, cache);
+    }
+}
+
 static cxBool cxAnimateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXML xml = xmlAction;
@@ -108,12 +111,11 @@ static cxBool cxAnimateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderP
         }
         cxBool cache = cxXMLReadBoolAttr(reader, "cache", false);
         cxChar *file = cxXMLAttr("file");
+        cxChar *key = cxXMLAttr("key");
         cxInt from = cxXMLReadIntAttr(reader, "from", 0);
         cxInt to = cxXMLReadIntAttr(reader, "to", 0);
         if(from > 0 && to > 0){
-            for(cxInt i = from; i <= to ; i++){
-                cxAnimateItemAppend(this->list, CX_CONST_STRING(file,i), NULL, 0, cache);
-            }
+            cxAnimateXMLAppend(this->list, file, key, from, to, cache);
         }else{
             cxChar sfile[128]={0};
             cxChar skey[128]={0};
@@ -122,7 +124,7 @@ static cxBool cxAnimateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderP
             cxAnimateItemAppend(this->list, sfile, rv >= 2 ? skey : NULL, delay, cache);
         }
         xmlFree(file);
-        
+        xmlFree(key);
     }
     this->duration = this->super.duration;
     cxXMLAppendEvent(xml->events, this, cxAnimate, onFrame);
