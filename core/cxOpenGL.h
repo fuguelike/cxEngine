@@ -93,7 +93,7 @@ void cxOpenGLUseProgram(GLuint program);
 
 void cxOpenGLDeleteProgram(GLuint program);
 
-void cxOpenGLUsingShader(cxConstChars key);
+void cxOpenGLUsingShader(cxConstChars key,cxBool isAtlas);
 
 void cxOpenGLSetBlendFactor(GLenum sfactor, GLenum dfactor);
 

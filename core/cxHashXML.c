@@ -295,7 +295,16 @@ static void cxHashXMLReaderError(void *arg,const char *msg,xmlParserSeverities s
     this->isError = true;
 }
 
-cxBool cxHashXMLLoad(cxAny hash,cxConstChars xml)
+cxHashXML cxHashXMLCreate(cxConstChars xml)
+{
+    cxHashXML this = CX_CREATE(cxHashXML);
+    if(!cxHashXMLLoad(this, xml)){
+        return NULL;
+    }
+    return this;
+}
+
+cxBool cxHashXMLLoad(cxAny hashxml,cxConstChars xml)
 {
     cxXMLScript script = cxEngineGetXMLScript(xml);
     if(script == NULL){
@@ -312,8 +321,8 @@ cxBool cxHashXMLLoad(cxAny hash,cxConstChars xml)
         CX_ERROR("create xml reader failed");
         return false;
     }
-    xmlTextReaderSetErrorHandler(reader, cxHashXMLReaderError, hash);
-    ret = cxHashXMLLoadWithReader(hash, reader);
+    xmlTextReaderSetErrorHandler(reader, cxHashXMLReaderError, hashxml);
+    ret = cxHashXMLLoadWithReader(hashxml, reader);
     xmlFreeTextReader(reader);
     return ret;
 }

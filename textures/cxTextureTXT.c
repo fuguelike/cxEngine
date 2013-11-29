@@ -92,14 +92,6 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
             cxChar *dst = buffer + (i + y) * width + x + pchar->left + j;
             if(*src != 0)*dst = *src;
         }
-        //save char box
-        cxTexCoord e = CX_ALLOC(cxTexCoord);
-        e->x = x;
-        e->y = y;
-        e->w = pchar->width;
-        e->h = pchar->height;
-        cxHashSet(texture->super.keys, cxHashIntKey(pchar->key.wchar), e);
-        CX_RELEASE(e);
         x += (pchar->ax >> 16);
     }
     cxTextureTXTMakeTexture(texture, buffer, width, height);

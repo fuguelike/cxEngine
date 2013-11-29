@@ -36,21 +36,10 @@
 #include <actions/cxRunner.h>
 #include <views/cxLoading.h>
 
-void cxEngineInit(cxEngine engine)
-{
-    //desgin size
-    engine->dessize = cxSize2fv(640, 960);
-    //prepare load
-    cxPlayerOpen(0, 0);
-//    engine->isShowBorder = false;
-}
-
-static void loading(cxAny pview)
+static cxAny loading(cxAny pview)
 {
     cxEngineDataSet("items.xml");
-    
-    cxAny obj = cxViewXMLCreate("main.xml");
-    cxLoadingSetObject(pview, obj);
+    return cxViewXMLCreate("main.xml");
 }
 
 static void finished(cxAny pview)
@@ -58,9 +47,20 @@ static void finished(cxAny pview)
     cxWindowPushView(pview, NULL);
 }
 
+void cxEngineInit(cxEngine engine)
+{
+    //desgin size
+    engine->dessize = cxSize2fv(640, 960);
+    //prepare load
+    cxPlayerOpen(0, 0);
+    //    engine->isShowBorder = false;
+}
+
 void cxEngineMain(cxEngine engine)
 {
-    cxLoadingStart(loading, finished);
+    cxAny lv = cxLoadingStart(loading, finished);
+    cxLabel txt = cxLabelCreate(UTF8("Loading"), UTF8("banana.ttf"), 60);
+    cxViewAppend(lv, txt);
 }
 
 void cxEngineFree(cxEngine engine)

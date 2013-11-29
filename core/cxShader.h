@@ -22,13 +22,6 @@ enum {
     cxVertexAttribMax,
 };
 
-//enum {
-//	cxUniformMatrixModelviewProject,
-//    cxUniformAmbientColor,
-//    cxUniformBrightness,
-//	cxUniformMax,
-//};
-//
 ////Attribute names
 #define CX_ATTRIBUTE_NAME_COLOR                     "aColor"
 #define CX_ATTRIBUTE_NAME_POSITION                  "aPosition"
@@ -37,8 +30,7 @@ enum {
 //
 ////Uniform names
 #define CX_UNIFORM_MATRIX_MODELVIEW_PROJECT         "kxMatrixModelViewProject"
-//#define CX_UNIFORM_AMBIENT                          "kxAmbientColor"
-//#define CX_UNIFORM_BRIGHTNESS                       "kxBrightness"
+#define CX_UNIFORM_ATLAS_TEXTURE                    "kxAtlasTexture"
 
 typedef void (*cxShaderFunc)(cxAny shader);
 
@@ -52,6 +44,7 @@ CX_OBJECT_DEF(cxShader, cxObject)
     GLuint vertexShader;
     GLuint fragmentShader;
     GLint uniformMatrixModelviewProject;
+    GLint uniformAtlasTexture;
     CX_METHOD_DEF(cxShaderFunc,     Init);
     CX_METHOD_DEF(cxShaderFunc,     Update);
     CX_METHOD_DEF(cxShaderFunc,     GetUniform);
@@ -63,7 +56,7 @@ void cxShaderInitPosColorTex(cxAny this);
 
 bool cxShaderInit(cxShader this);
 
-void cxShaderUsing(cxShader this);
+void cxShaderUsing(cxShader this,cxBool isAtlas);
 
 CX_C_END
 

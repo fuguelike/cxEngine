@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <zlib.h>
 #include <OpenAL/al.h>
 #include <streams/cxMp3Stream.h>
 #include <openssl/md5.h>
@@ -13,6 +14,38 @@
 #include <sys/time.h>
 #include "cxBase.h"
 #include "cxUtil.h"
+
+cxString cxCompressed(cxString data)
+{
+    CX_ASSERT(data != NULL, "args error");
+    cxInt datasiz = cxStringLength(data);
+    uLongf size = compressBound(datasiz);
+    char *cv = allocator->malloc(size);
+    if(compress((Bytef *)cv, &size, (Bytef *)cxStringBody(data), datasiz) == Z_OK){
+        return cxStringAttach(cv, size);
+    }
+    allocator->free(cv);
+    return NULL;
+}
+
+cxString cxDecompress(cxString data)
+{
+    CX_ASSERT(data != NULL, "args error");
+    cxInt datasiz = cxStringLength(data);
+    uLongf size = datasiz * 4;
+    char *cv = allocator->malloc(size);
+    int ret = uncompress((Bytef *)cv, &size, (Bytef *)cxStringBody(data), (uLongf)datasiz);
+    while(ret == Z_BUF_ERROR){
+        size = (size << 1);
+        cv = allocator->realloc(cv,size);
+        ret = uncompress((Bytef *)cv, &size, (Bytef *)cxStringBody(data), (uLongf)datasiz);
+    }
+    if(ret == Z_OK){
+        return cxStringAttach(cv, size);
+    }
+    allocator->free(cv);
+    return NULL;
+}
 
 cxString cxMP3SamplesWithData(cxString data,cxUInt *format,cxUInt *freq)
 {
@@ -41,7 +74,7 @@ cxString cxMP3SamplesWithData(cxString data,cxUInt *format,cxUInt *freq)
     }else{
         *format = (mchannels == 1) ? AL_FORMAT_MONO8 : AL_FORMAT_STEREO8;
     }
-    while (true) {
+    while(true) {
         cxInt ret = mpg123_read(mh, buffer, bufsiz, &done);
         if(done > 0){
             cxStringAppend(rv, buffer, done);
@@ -82,7 +115,7 @@ cxString cxMD5(cxString v)
     cxUChar digest[MD5_DIGEST_LENGTH];
     cxUChar *md = MD5((const cxUChar *)cxStringBody(v), cxStringLength(v), digest);
     CX_RETURN(md == NULL, NULL);
-    cxChar md5[MD5_DIGEST_LENGTH*2+1]={0};
+    cxChar md5[MD5_DIGEST_LENGTH*2 + 1]={0};
     for(cxInt i=0; i<MD5_DIGEST_LENGTH; i++){
         md5[2*i] = hex[(digest[i] & 0xf0)>> 4];
         md5[2*i + 1] = hex[digest[i] & 0x0f];
@@ -101,21 +134,21 @@ void cxSetRandSeed()
     srand(clock());
 }
 
-cxBool cxParseKeyValue(cxChar *query,cxChar *key,cxChar *value)
+cxHash cxParseKeyValue(cxChar *query)
 {
-    cxBool ret = false;
     struct evkeyvalq kv={0};
     if(evhttp_parse_query_str(query, &kv) != 0){
-        return ret;
+        return NULL;
     }
-	struct evkeyval *header;
-	for (header = kv.tqh_first; header != NULL; header = header->next.tqe_next) {
-        memcpy(key, header->key, strlen(header->key));
-        memcpy(value, header->value, strlen(header->value));
-        ret = true;
+    cxHash rv = CX_CREATE(cxHash);
+	struct evkeyval *header = {0};
+	for(header = kv.tqh_first; header != NULL; header = header->next.tqe_next){
+        cxString v = cxStringAllocChars(header->value);
+        cxHashSet(rv, cxHashStrKey(header->key), v);
+        CX_RELEASE(v);
 	}
     evhttp_clear_headers(&kv);
-    return ret;
+    return rv;
 }
 
 cxInt cxParseQuery(cxConstChars query,cxChar *key,cxChar *value)

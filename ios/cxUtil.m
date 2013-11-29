@@ -50,9 +50,8 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr at
     [text drawAtPoint:CGPointMake(0, 0) withAttributes:attributes];
     UIGraphicsPopContext();
     CGContextRelease(context);
-    cxSize2i *psize = (cxSize2i *)buffer;
-    psize->w = width;
-    psize->h = height;
+    ((cxSize2i *)buffer)->w = width;
+    ((cxSize2i *)buffer)->h = height;
     return cxStringAttach(buffer, bufsiz);
 }
 

@@ -13,11 +13,13 @@
 
 CX_C_BEGIN
 
-typedef void (*cxLoadingFunc)(cxAny object);
+typedef cxAny (*cxLoadingFunc)(cxAny object);
+
+typedef void (*cxFinishedFunc)(cxAny pview);
 
 CX_OBJECT_DEF(cxLoading, cxView)
     cxBool isLoading;
-    CX_METHOD_DEF(cxLoadingFunc, Finished);
+    CX_METHOD_DEF(cxFinishedFunc, Finished);
     CX_METHOD_DEF(cxLoadingFunc, Loading);
     cxAny object;
 CX_OBJECT_END(cxLoading)
@@ -30,7 +32,7 @@ void cxLoadingOnUpdate(cxEvent *event);
 
 cxBool cxLoadingTouch(cxAny pview,cxTouch *touch);
 
-cxAny cxLoadingStart(cxLoadingFunc loading,cxLoadingFunc finished);
+cxAny cxLoadingStart(cxLoadingFunc loading,cxFinishedFunc finished);
 
 void cxLoaingFinished(cxAny pview);
 

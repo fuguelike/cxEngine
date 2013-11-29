@@ -31,6 +31,11 @@ CX_OBJECT_FREE(cxTexture, cxObject)
 }
 CX_OBJECT_TERM(cxTexture, cxObject)
 
+void cxTextureSetAtlas(cxTexture this,cxBool isAtlas)
+{
+    this->isAtlas = isAtlas;
+}
+
 void cxTextureLoad(cxTexture this,cxStream stream)
 {
     CX_RETURN(this->isLoad);
@@ -115,7 +120,7 @@ void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstC
     }
     cxTextureBind(this);
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    cxOpenGLUsingShader(skey);
+    cxOpenGLUsingShader(skey,this->isAtlas);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
     glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), &vbox);
     glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTexCoord2f), &tbox);

@@ -113,7 +113,7 @@ void cxAtlasDraw(cxAny pview)
     cxAtlas this = pview;
     CX_RETURN(this->number == 0 || this->super.texture == NULL);
     cxOpenGLSetBlendFactor(this->super.sfactor, this->super.dfactor);
-    cxShaderUsing(this->super.shader);
+    cxShaderUsing(this->super.shader,this->super.texture->isAtlas);
     cxTextureBind(this->super.texture);
     if(!this->isInit){
         this->isInit = true;

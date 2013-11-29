@@ -23,6 +23,32 @@ CX_OBJECT_END(cxJson)
 
 cxJson cxJsonCreate(cxString json);
 
+cxInt cxJsonInt(cxJson json,cxConstChars key);
+
+cxConstChars cxJsonString(cxJson json,cxConstChars key);
+
+cxDouble cxJsonDouble(cxJson json,cxConstChars key);
+
+cxLong cxJsonLong(cxJson json,cxConstChars key);
+
+cxJson cxJsonArray(cxJson json,cxConstChars key);
+
+cxJson cxJsonObject(cxJson json,cxConstChars key);
+
+cxInt cxJsonIntAt(cxJson json,cxInt idx);
+
+cxConstChars cxJsonStringAt(cxJson json,cxInt idx);
+
+cxDouble cxJsonDoubleAt(cxJson json,cxInt idx);
+
+cxLong cxJsonLongAt(cxJson json,cxInt idx);
+
+cxJson cxJsonArrayAt(cxJson json,cxInt idx);
+
+cxJson cxJsonObjectAt(cxJson json,cxInt idx);
+
+cxInt cxJsonArrayLength(cxJson json);
+
 CX_C_END
 
 #endif

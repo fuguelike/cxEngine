@@ -18,13 +18,14 @@ static cxString cxShaderAlphaGetFragmentSource(cxAny this)
             varying lowp vec2   vTexCoord;                                                              \n\
             uniform sampler2D   uTexture0;                                                              \n\
         #else                                                                                           \n\
-            varying vec4   vFragmentColor;                                                              \n\
-            varying vec2   vTexCoord;                                                                   \n\
+            varying vec4        vFragmentColor;                                                         \n\
+            varying vec2        vTexCoord;                                                              \n\
             uniform sampler2D   uTexture0;                                                              \n\
         #endif                                                                                          \n\
         void main()                                                                                     \n\
         {                                                                                               \n\
             vec4 texColor = texture2D(uTexture0, vTexCoord);                                            \n\
+            if(kxAtlasTexture)texColor.a=texture2D(uTexture0,vec2(vTexCoord.x,vTexCoord.y+0.5)).r;      \n\
             gl_FragColor = vec4(vFragmentColor.rgb,vFragmentColor.a * texColor.a);                      \n\
         }                                                                                               \n\
     ";

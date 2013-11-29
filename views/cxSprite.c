@@ -24,7 +24,7 @@ void cxSpriteDraw(cxAny pview)
     cxSprite this = pview;
     CX_RETURN(this->texture == NULL);
     cxOpenGLSetBlendFactor(this->sfactor, this->dfactor);
-    cxShaderUsing(this->shader);
+    cxShaderUsing(this->shader,this->texture->isAtlas);
     cxTextureBind(this->texture);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
     glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), &this->vbox);

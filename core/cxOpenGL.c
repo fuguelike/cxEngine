@@ -16,10 +16,10 @@
 
 static cxOpenGL instance = NULL;
 
-cxConstChars cxShaderPositionColorKey = "cxShaderPositionColor";
-cxConstChars cxShaderDefaultKey = "cxShaderDefault";
-cxConstChars cxShaderAlphaKey = "cxShaderAlpha";
-cxConstChars cxShaderClippingKey = "cxShaderClipping";
+cxConstChars cxShaderPositionColorKey   = "cxShaderPositionColor";
+cxConstChars cxShaderDefaultKey         = "cxShaderDefault";
+cxConstChars cxShaderAlphaKey           = "cxShaderAlpha";
+cxConstChars cxShaderClippingKey        = "cxShaderClipping";
 
 #define CX_OPENGL_LOAD_SHADER(t)                                    \
 do{                                                                 \
@@ -33,8 +33,8 @@ do{                                                                 \
 static void cxOpenGLLoadDefaultShaders()
 {
     cxOpenGL this = cxOpenGLInstance();
-    CX_OPENGL_LOAD_SHADER(cxShaderPositionColor);
     CX_OPENGL_LOAD_SHADER(cxShaderDefault);
+    CX_OPENGL_LOAD_SHADER(cxShaderPositionColor);
     CX_OPENGL_LOAD_SHADER(cxShaderAlpha);
     CX_OPENGL_LOAD_SHADER(cxShaderClipping);
 }
@@ -51,7 +51,7 @@ void cxDrawLineLoop(const cxVec2f *vertices,int num,const cxColor3f color)
         colors[i] = color;
     }
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    cxOpenGLUsingShader(cxShaderPositionColorKey);
+    cxOpenGLUsingShader(cxShaderPositionColorKey, false);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosition|cxVertexAttribFlagColor);
     cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 2, 0, vertices);
     cxOpenGLVertexAttribPointer(cxVertexAttribColor, 3, 0, colors);
@@ -79,19 +79,19 @@ void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars ske
 {
     cxColor4f colors[4] = {color,color,color,color};
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    cxOpenGLUsingShader(skey);
+    cxOpenGLUsingShader(skey, false);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosition | cxVertexAttribFlagColor);
     glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), box);
     glVertexAttribPointer(cxVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), colors);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void cxOpenGLUsingShader(cxConstChars key)
+void cxOpenGLUsingShader(cxConstChars key,cxBool isAtlas)
 {
     cxOpenGL this = cxOpenGLInstance();
     cxShader shader = cxHashGet(this->shaders, cxHashStrKey(key));
     CX_ASSERT(shader != NULL, "shader %s not exists",key);
-    cxShaderUsing(shader);
+    cxShaderUsing(shader, isAtlas);
 }
 
 void cxOpenGLSetBlendFactor(GLenum sfactor, GLenum dfactor)
@@ -284,6 +284,7 @@ void cxOpenGLCheckFeature()
     CX_GL_SUPPORT(GL_OES_compressed_ETC1_RGB8_texture);
     CX_GL_SUPPORT(GL_OES_vertex_array_object);
     CX_GL_SUPPORT(GL_EXT_discard_framebuffer);
+    
     
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &this->max_texture_size);
     CX_LOGGER("GL_MAX_TEXTURE_SIZE: %d",this->max_texture_size);

@@ -29,6 +29,10 @@ cxInt cxRand(cxInt min,cxInt max);
 
 void cxSetRandSeed();
 
+cxString cxCompressed(cxString data);
+
+cxString cxDecompress(cxString data);
+
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr);
 
 cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
@@ -37,7 +41,7 @@ cxString cxMP3SamplesWithData(cxString data,cxUInt *format,cxUInt *freq);
 
 cxString cxMP3SamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
 
-cxBool cxParseKeyValue(cxChar *query,cxChar *key,cxChar *value);
+cxHash cxParseKeyValue(cxChar *query);
 
 cxInt cxParseURL(cxConstChars url,cxChar *path,cxChar *query);
 

@@ -269,13 +269,14 @@ cxTypes cxEngineDataSet(cxConstChars url)
     CX_RETURN(ret == 0, NULL);
     cxHashXML sets = cxHashGet(this->datasets, cxHashStrKey(path));
     if(sets == NULL){
-        sets = CX_CREATE(cxHashXML);
-        if(!cxHashXMLLoad(sets, path)){
-            return NULL;
-        }
+        sets = cxHashXMLCreate(path);
+        CX_ASSERT(sets != NULL, "load data sets %s error",path);
         cxHashSet(this->datasets, cxHashStrKey(path), sets);
     }
-    return (ret == 2) ? cxHashGet(sets->items, cxHashStrKey(key)) : NULL;
+    if(ret != 2){
+        return NULL;
+    }
+    return cxHashGet(sets->items, cxHashStrKey(key));
 }
 
 cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)

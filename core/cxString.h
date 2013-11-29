@@ -62,6 +62,8 @@ void cxStringFormat(cxString string,cxConstChars format,...);
 
 cxString cxStringCreate(cxConstChars format,...);
 
+#define UTF8(f,...)  cxStringCreate(f,##__VA_ARGS__)
+
 void cxStringAppend(cxString string,cxChar *d,cxInt l);
 
 cxString cxStringBinary(cxChar *d,cxInt l);

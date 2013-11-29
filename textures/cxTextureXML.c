@@ -37,20 +37,14 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         cxChar *simagePath = cxXMLAttr("imagePath");
         CX_ASSERT(simagePath != NULL, "xml imagePath element miss");
         
-        xml->innerTexture = cxTextureFactoryLoadFile((cxConstChars)simagePath);
+        xml->innerTexture = cxTextureCreate((cxConstChars)simagePath);
         ret = (xml->innerTexture != NULL);
+        CX_ASSERT(ret, "xml innert texture error");
         CX_RETAIN(xml->innerTexture);
-        
-        xml->super.size.w = cxXMLReadFloatAttr(reader, "width", 0);
-        xml->super.size.h = cxXMLReadFloatAttr(reader, "height", 0);
-        
-        CX_ASSERT(ret && cxSize2fEqu(xml->innerTexture->size, xml->super.size), "xml texture error");
-        
+        //for jpg pkm atlas texture
+        xml->super.isAtlas = cxXMLReadBoolAttr(reader, "atlas", false);
+        xml->super.size = xml->innerTexture->size;
         xmlFree(simagePath);
-        if(!ret){
-            CX_ERROR("get xml inner texture failed");
-            break;
-        }
         //load texcoords
         while(xmlTextReaderRead(reader)){
             if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){

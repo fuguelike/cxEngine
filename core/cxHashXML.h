@@ -29,7 +29,9 @@ cxTypes cxHashXMLReadString(cxHashXML xml,xmlTextReaderPtr reader);
 
 void cxHashXMLReadDBEnv(cxHashXML xml,xmlTextReaderPtr reader);
 
-cxBool cxHashXMLLoad(cxAny hash,cxConstChars xml);
+cxBool cxHashXMLLoad(cxAny hashxml,cxConstChars xml);
+
+cxHashXML cxHashXMLCreate(cxConstChars xml);
 
 cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader);
 
