@@ -9,7 +9,6 @@
 #include <zlib.h>
 #include <OpenAL/al.h>
 #include <streams/cxMp3Stream.h>
-#include <openssl/md5.h>
 #include <evhttp.h>
 #include <sys/time.h>
 #include "cxBase.h"
@@ -90,8 +89,6 @@ completed:
     return cxStringLength(rv) > 0 ? rv : NULL;
 }
 
-static const char hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
-
 cxString cxMP3SamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
 {
     cxMp3Stream this  = (cxMp3Stream)cxMp3StreamCreate(file);
@@ -109,20 +106,6 @@ cxString cxMP3SamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
     return bytes;
 }
 
-cxString cxMD5(cxString v)
-{
-    CX_ASSERT(v != NULL, "args error");
-    cxUChar digest[MD5_DIGEST_LENGTH];
-    cxUChar *md = MD5((const cxUChar *)cxStringBody(v), cxStringLength(v), digest);
-    CX_RETURN(md == NULL, NULL);
-    cxChar md5[MD5_DIGEST_LENGTH*2 + 1]={0};
-    for(cxInt i=0; i<MD5_DIGEST_LENGTH; i++){
-        md5[2*i] = hex[(digest[i] & 0xf0)>> 4];
-        md5[2*i + 1] = hex[digest[i] & 0x0f];
-    }
-    return cxStringConstChars(md5);
-}
-
 cxInt cxRand(cxInt min,cxInt max)
 {
     cxInt x = rand();
@@ -131,7 +114,7 @@ cxInt cxRand(cxInt min,cxInt max)
 
 void cxSetRandSeed()
 {
-    srand(clock());
+    srand((unsigned)clock());
 }
 
 cxHash cxParseKeyValue(cxChar *query)

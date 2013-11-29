@@ -46,6 +46,8 @@ cxString cxStringAttach(cxChar *d,cxInt l);
 
 void cxStringClean(cxString string);
 
+cxString cxMD5(cxString v);
+
 cxBool cxStringEqu(cxString s1,cxString s2);
 
 cxInt cxStringLength(cxString string);

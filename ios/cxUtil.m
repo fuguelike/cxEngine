@@ -13,12 +13,6 @@
 #include <core/cxPlayer.h>
 #include <core/cxOpenGL.h>
 
-cxString cxUUID()
-{
-    NSString *uuid = [[NSUUID UUID] UUIDString];
-    return cxStringConstChars([uuid UTF8String]);
-}
-
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr)
 {
     CX_RETURN(txt == NULL, NULL);

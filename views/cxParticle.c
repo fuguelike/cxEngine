@@ -17,7 +17,6 @@ cxBool cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxInt number = cxXMLReadIntAttr(reader, "cxParticle.number", this->number);
     CX_ASSERT(number > 0, "cxParticle number must > 0");
     cxParticleInit(this, number);
-    
     //mode add multiply
     cxChar *smode = cxXMLAttr("cxParticle.blend");
     if(cxConstCharsEqu(smode, "add")){
@@ -121,7 +120,7 @@ static void cxParticleStep(cxAny pview,cxParticleUnit *particle)
     box->lt.vertices = vq.lt;
     box->rt.vertices = vq.rt;
     CX_METHOD_RUN(this->UpdateBox,this,box);
-    this->super.number = CX_MAX(this->index, this->super.number);
+    this->super.number = CX_MAX(this->index + 1, this->super.number);
 }
 
 static void cxParticleInitUnit(cxAny pview,cxParticleUnit *particle)
@@ -198,19 +197,19 @@ static void cxParticleUpdate(cxEvent *event)
         cxParticleUnit *p = &this->units[this->index];
         p->life -= dt;
         if(p->life > 0){
-            cxVec2f tmp, radial, tangential;
-            radial= cxVec2fv(0, 0);
+            cxVec2f tmp;
+            cxVec2f radial= cxVec2fv(0, 0);
             if(p->position.x || p->position.y){
                 kmVec2Normalize(&radial, &p->position);
             }
-            tangential = radial;
+            cxVec2f tangential = radial;
             kmVec2Scale(&radial, &radial, p->radaccel);
-            //
+            //compute tangential
             float newy = tangential.x;
             tangential.x = -tangential.y;
             tangential.y = newy;
             kmVec2Scale(&tangential,&tangential,p->tanaccel);
-            //
+            //compute position
             kmVec2Add(&tmp, &radial, &tangential);
             kmVec2Add(&tmp, &tmp, &this->gravity);
             kmVec2Scale(&tmp, &tmp, dt);

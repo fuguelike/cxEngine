@@ -21,10 +21,6 @@ CX_C_BEGIN
 // 0 <-> 1
 #define CX_RAND_01f() ((cxFloat)rand()/(cxFloat)RAND_MAX)
 
-cxString cxMD5(cxString v);
-
-cxString cxUUID();
-
 cxInt cxRand(cxInt min,cxInt max);
 
 void cxSetRandSeed();

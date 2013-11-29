@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxMD5.h"
 #include "cxString.h"
 
 CX_OBJECT_INIT(cxString, cxObject)
@@ -17,6 +18,23 @@ CX_OBJECT_FREE(cxString, cxObject)
     utstring_done(&this->strptr);
 }
 CX_OBJECT_TERM(cxString, cxObject)
+
+cxString cxMD5(cxString v)
+{
+    static const char hex[16] = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+    CX_ASSERT(v != NULL, "args error");
+    mongo_md5_state_t state={0};
+    mongo_md5_byte_t digest[MD5_DIGEST_LENGTH];
+    mongo_md5_init(&state);
+    mongo_md5_append(&state, (const mongo_md5_byte_t *)cxStringBody(v), cxStringLength(v));
+    mongo_md5_finish(&state, digest);
+    cxChar md5[MD5_DIGEST_LENGTH*2 + 1]={0};
+    for(cxInt i = 0; i < MD5_DIGEST_LENGTH; i++){
+        md5[2*i] = hex[(digest[i] & 0xf0)>> 4];
+        md5[2*i + 1] = hex[digest[i] & 0x0f];
+    }
+    return cxStringConstChars(md5);
+}
 
 void cxStringClean(cxString string)
 {
