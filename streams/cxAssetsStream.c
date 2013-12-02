@@ -110,13 +110,18 @@ CX_OBJECT_FREE(cxAssetsStream, cxStream)
 }
 CX_OBJECT_TERM(cxAssetsStream, cxStream)
 
+cxString cxAssertsData(cxConstChars file)
+{
+    cxStream stream = cxAssetsStreamCreate(file);
+    return cxStreamAllBytes(stream);
+}
+
 cxStream cxAssetsStreamCreate(cxConstChars file)
 {
     cxString path = cxAssetsPath(file);
     cxAssetsStream rv = CX_CREATE(cxAssetsStream);
     CX_RETAIN_SWAP(rv->super.path, path);
-    rv->super.file = CX_ALLOC(cxString);
-    cxStringFormat(rv->super.file, "%s",file);
+    rv->super.file = cxStringAllocChars(file);
     return (cxStream)rv;
 }
 

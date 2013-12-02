@@ -64,7 +64,8 @@ completed:
 
 static void cxTexturePKMBind(cxAny this)
 {
-    
+    cxTexturePKM pkm = this;
+    cxOpenGLBindTexture(0, pkm->super.textureId);
 }
 
 CX_OBJECT_INIT(cxTexturePKM, cxTexture)

@@ -17,7 +17,7 @@ cxBool cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     //support boxes mode
     cxChar *sitems = cxXMLAttr("cxAtlas.boxes");
     if(sitems != NULL){
-        CX_RETAIN_SWAP(this->boxesKey, cxStringAllocChars(sitems));
+        this->boxesKey = cxStringAllocChars(sitems);
     }
     xmlFree(sitems);
     //support scale9 mode
@@ -140,25 +140,21 @@ void cxAtlasUpdateScale9(cxAny pview)
     CX_RETURN(!this->scale9.enable);
     CX_ASSERT(!cxViewZeroSize(pview) && this->super.texture != NULL, "must set texture and size");
     cxAtlasClean(pview);
-    
     cxSize2f size = cxViewSize(this);
     cxRect4f tr = cxBoxTex2fToRect4f(this->super.texCoord);
     cxSize2f tsize = cxSize2fv(this->super.texture->size.w * tr.w, this->super.texture->size.h * tr.h);
-    
     cxFloat txs[]={0.0f, this->scale9.box.l/tsize.w, (tsize.w - this->scale9.box.r)/tsize.w, 1.0f};
     cxFloat tys[]={0.0f, this->scale9.box.t/tsize.h, (tsize.h - this->scale9.box.b)/tsize.h, 1.0f};
     for(int i=0; i < 4; i++){
         txs[i] = txs[i] * tr.w + tr.x;
         tys[i] = tys[i] * tr.h + tr.y;
     }
-    
     cxFloat bxs[]={0.0f, this->scale9.box.l, size.w - this->scale9.box.r, size.w};
     cxFloat bys[]={0.0f, this->scale9.box.r, size.h - this->scale9.box.b, size.h};
     cxFloat tx1=0,ty1=0,tx2=0,ty2=0;
     cxFloat bx1=0,by1=0,bx2=0,by2=0;
     cxFloat offx=0,offy=0;
     cxColor4f color =cxViewColor(this);
-    
     for(int i=0; i < 9;i++){
         tx1 = txs[i%3];
         tx2 = txs[i%3 + 1];
@@ -203,7 +199,7 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);
-    CX_METHOD_SET(this->super.super.Draw, cxAtlasDraw);
+    cxViewOverrideDraw(this, cxAtlasDraw);
     cxObjectSetXMLReadFunc(this, cxAtlasXMLReadAttr);
     CX_EVENT_QUICK(this->super.super.onResize, cxAtlasResize);
 }
@@ -322,17 +318,14 @@ void cxAtlasSetNumber(cxAny pview,cxInt capacity)
     cxAtlas this = pview;
     CX_RETURN(this->capacity >= capacity);
     this->capacity = capacity;
-    
     cxInt size = this->capacity * sizeof(cxBoxPoint);
     this->boxes = allocator->realloc(this->boxes,size);
     CX_ASSERT(this->boxes != NULL, "out of memory");
     memset(this->boxes, 0, size);
-    
     size = this->capacity * 6 * sizeof(GLushort);
     this->indices = allocator->realloc(this->indices,size);
     CX_ASSERT(this->indices != NULL, "out of memory");
     memset(this->indices, 0, size);
-    
     for(int i=0; i < this->capacity;i++){
         this->indices[i*6+0] = i*4+0;
         this->indices[i*6+1] = i*4+1;

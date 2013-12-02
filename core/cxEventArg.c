@@ -69,61 +69,61 @@ cxEventArg cxEventArgNumber(cxNumber number)
     return this;
 }
 
-cxBool cxEventArgToBool(cxEventArg this)
+cxBool cxEventArgToBool(cxEventArg this,cxBool dv)
 {
     CX_ASSERT(this->json != NULL, "args error");
     if(!json_is_integer(this->json)){
-        return 0;
+        return dv;
     }
     return (this->json->type == JSON_TRUE);
 }
 
-cxBool cxEventArgBool(cxEventArg this,cxConstChars key)
+cxBool cxEventArgBool(cxEventArg this,cxConstChars key,cxBool dv)
 {
     CX_ASSERT(this->json != NULL && key != NULL, "args error");
     json_t *v = json_object_get(this->json, key);
     if(v == NULL){
-        return false;
+        return dv;
     }
     CX_ASSERT(json_is_boolean(v), "key %s not bool type",key);
     return (v->type == JSON_TRUE);
 }
 
-cxInt cxEventArgToInt(cxEventArg this)
+cxInt cxEventArgToInt(cxEventArg this,cxInt dv)
 {
     CX_ASSERT(this->json != NULL, "args error");
     if(!json_is_integer(this->json)){
-        return 0;
+        return dv;
     }
     return (cxInt)json_integer_value(this->json);
 }
 
-cxInt cxEventArgInt(cxEventArg this,cxConstChars key)
+cxInt cxEventArgInt(cxEventArg this,cxConstChars key,cxInt dv)
 {
     CX_ASSERT(this->json != NULL && key != NULL, "args error");
     json_t *v = json_object_get(this->json, key);
     if(v == NULL){
-        return 0;
+        return dv;
     }
     CX_ASSERT(json_is_integer(v), "key %s not int type",key);
     return (cxInt)json_integer_value(v);
 }
 
-cxDouble cxEventArgToDouble(cxEventArg this)
+cxDouble cxEventArgToDouble(cxEventArg this,cxDouble dv)
 {
     CX_ASSERT(this->json != NULL, "args error");
     if(!json_is_real(this->json)){
-        return 0;
+        return dv;
     }
     return json_real_value(this->json);
 }
 
-cxDouble cxEventArgDouble(cxEventArg this,cxConstChars key)
+cxDouble cxEventArgDouble(cxEventArg this,cxConstChars key,cxDouble dv)
 {
     CX_ASSERT(this->json != NULL && key != NULL, "args error");
     json_t *v = json_object_get(this->json, key);
     if(v == NULL){
-        return 0;
+        return dv;
     }
     CX_ASSERT(json_is_number(v), "key %s not real type",key);
     return json_real_value(v);

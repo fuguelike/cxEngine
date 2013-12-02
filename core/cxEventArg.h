@@ -35,21 +35,21 @@ cxEventArg cxEventArgWeakRef(cxAny weakRef);
 
 cxAny cxEventArgToWeakRef(cxEventArg this);
 
-cxBool cxEventArgBool(cxEventArg this,cxConstChars key);
+cxBool cxEventArgBool(cxEventArg this,cxConstChars key,cxBool dv);
 
-cxBool cxEventArgToBool(cxEventArg this);
+cxBool cxEventArgToBool(cxEventArg this,cxBool dv);
 
-cxInt cxEventArgInt(cxEventArg this,cxConstChars key);
+cxInt cxEventArgInt(cxEventArg this,cxConstChars key,cxInt dv);
 
-cxInt cxEventArgToInt(cxEventArg this);
+cxInt cxEventArgToInt(cxEventArg this,cxInt dv);
 
 cxConstChars cxEventArgString(cxEventArg this,cxConstChars key);
 
 cxConstChars cxEventArgToString(cxEventArg this);
 
-cxDouble cxEventArgDouble(cxEventArg this,cxConstChars key);
+cxDouble cxEventArgDouble(cxEventArg this,cxConstChars key,cxDouble dv);
 
-cxDouble cxEventArgToDouble(cxEventArg this);
+cxDouble cxEventArgToDouble(cxEventArg this,cxDouble dv);
 
 CX_C_END
 

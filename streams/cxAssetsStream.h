@@ -20,6 +20,8 @@ CX_OBJECT_END(cxAssetsStream)
 
 cxStream cxAssetsStreamCreate(cxConstChars file);
 
+cxString cxAssertsData(cxConstChars file);
+
 CX_C_END
 
 #endif

@@ -22,6 +22,7 @@ CX_OBJECT_TERM(cxTexCoord, cxObject)
 CX_OBJECT_INIT(cxTexture, cxObject)
 {
     this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE);
+//    this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_REPEAT,GL_REPEAT);
     this->keys = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxTexture, cxObject)

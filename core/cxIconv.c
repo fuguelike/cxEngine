@@ -25,8 +25,8 @@ CX_OBJECT_TERM(cxIconvItem, cxObject)
 static cxIconvItem cxIconvItemCreate(cxConstChars from,cxConstChars to)
 {
     cxIconvItem this = CX_CREATE(cxIconvItem);
-    CX_RETAIN_SWAP(this->from, cxStringAllocChars(from));
-    CX_RETAIN_SWAP(this->to, cxStringAllocChars(to));
+    this->from = cxStringAllocChars(from);
+    this->to = cxStringAllocChars(to);
     this->iconvptr = iconv_open(to,from);
     CX_ASSERT(this->iconvptr != NULL, "from(%s) -> to(%s) failed",from,to);
     return this;

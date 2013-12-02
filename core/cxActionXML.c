@@ -128,7 +128,7 @@ void cxPlaySoundEvent(cxEvent *event)
     CX_ASSERT(event->args != NULL, "args error");
     cxConstChars src = cxEventArgString(event->args, "src");
     CX_ASSERT(src != NULL, "audio src not set");
-    cxBool loop = cxEventArgBool(event->args, "loop");
+    cxBool loop = cxEventArgBool(event->args, "loop", false);
     cxPlayFile(src,loop);
 }
 
@@ -157,7 +157,7 @@ void cxViewRunActionEvent(cxEvent *event)
     //get action
     cxAny action = NULL;
     cxBool fromcache =  false;
-    cxBool cache = cxEventArgBool(event->args, "cache");
+    cxBool cache = cxEventArgBool(event->args, "cache", false);
     if(cache){
         action = cxViewGetCache(view, src);
         fromcache = (action != NULL);
@@ -179,7 +179,7 @@ void cxViewRunActionEvent(cxEvent *event)
         cxActionSetCurve(action, curve->func);
     }
     //delay
-    cxFloat delay = cxEventArgDouble(event->args, "delay");
+    cxFloat delay = cxEventArgDouble(event->args, "delay", 0);
     if(delay > 0){
         cxActionSetDelay(action, delay);
     }

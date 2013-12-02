@@ -4,24 +4,43 @@
 <cxViewXML cxView.fill="true">
     
     <cxParticle
-    cxSprite.texture="candy.xml?blue.png"
+    cxSprite.texture="n.png"
     cxView.cropping="false"
     cxView.w = "200"
     cxView.h = "100"
-    cxParticle.number = "500"
+    cxParticle.number = "2"
     cxParticle.blend = "multiple"
     cxParticle.duration = "-1"
-    cxParticle.life = "5,5"
+    cxParticle.life = "1.5"
     cxParticle.speed = "200,200"
     cxParticle.angle = "90,45"
     cxParticle.gravity = "0,-100"
     cxParticle.todir = "true"
-    cxParticle.startspin="2000"
-    cxParticle.startsize = "30"
-    cxParticle.endsize = "30"
+    cxParticle.startspin="1000"
+    cxParticle.startsize = "60"
+    cxParticle.endsize = "60"
     cxParticle.startcolor="1,1,1,1"
     cxParticle.endcolor="1,1,1,0"
-    cxParticle.rate = "200" />
+    cxParticle.rate = "-1" />
+     
+    <cxParticle
+    cxSprite.texture = "w.png"
+    cxView.cropping = "false"
+    cxView.w = "200"
+    cxView.h = "100"
+    cxParticle.number = "15"
+    cxParticle.blend = "multiple"
+    cxParticle.duration = "-1"
+    cxParticle.life = "1.5"
+    cxParticle.speed = "300,100"
+    cxParticle.angle = "0,360"
+    cxParticle.todir = "true"
+    cxParticle.startspin = "0,1000"
+    cxParticle.startsize = "19,8"
+    cxParticle.endsize = "0"
+    cxParticle.startcolor = "1,1,1,1"
+    cxParticle.endcolor = "1,1,1,0"
+    cxParticle.rate = "-1" />
     
     <cxButton
         cxView.w = "180"
@@ -32,4 +51,5 @@
         <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="30"/>
     </cxButton>
+    
 </cxViewXML>
