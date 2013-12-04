@@ -48,7 +48,7 @@ CX_OBJECT_FREE(cxTextureFactory, cxObject)
 }
 CX_OBJECT_TERM(cxTextureFactory, cxObject)
 
-void cxTextureFactoryDelFile(cxConstChars file)
+void cxTextureFactoryUnloadFile(cxConstChars file)
 {
     cxTextureFactory factory = cxTextureFactoryInstance();
     cxHashDel(factory->caches, cxHashStrKey(file));
@@ -94,6 +94,7 @@ cxTexture cxTextureCreate(cxConstChars file)
     return texture;
 }
 
+//use global cached
 cxTexture cxTextureFactoryLoadFile(cxConstChars file)
 {
     cxTextureFactory factory = cxTextureFactoryInstance();

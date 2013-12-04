@@ -8,6 +8,7 @@
 
 #include "cxArray.h"
 
+
 CX_OBJECT_INIT(cxArray, cxObject)
 {
     utarray_new(this->utArray, &ut_ptr_icd);

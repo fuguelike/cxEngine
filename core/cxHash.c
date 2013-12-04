@@ -8,7 +8,6 @@
 
 #include "cxHash.h"
 
-
 CX_OBJECT_INIT(cxHash, cxObject)
 {
     
@@ -60,11 +59,17 @@ cxInt cxHashLength(cxHash hash)
 
 cxAny cxHashGet(cxHash hash,cxHashKey key)
 {
+    cxHashElement *element = cxHashGetElement(hash, key);
+    return element == NULL ? NULL : element->any;
+}
+
+cxHashElement *cxHashGetElement(cxHash hash,cxHashKey key)
+{
     CX_ASSERT(key.data != NULL && key.length > 0, "key keySize error");
     CX_ASSERT(key.length < CX_HASH_MAX_KEY_LENGTH, "keySize too longer");
     cxHashElement *element = NULL;
     HASH_FIND(hh, hash->hashPtr, key.data, key.length, element);
-    return element == NULL ? NULL : element->any;
+    return element;
 }
 
 static void cxHashSetUnsafe(cxHash hash,cxHashKey key,cxAny any)
@@ -80,13 +85,21 @@ static void cxHashSetUnsafe(cxHash hash,cxHashKey key,cxAny any)
 void cxHashSet(cxHash hash,cxHashKey key,cxAny any)
 {
     CX_ASSERT(any != NULL, "any object error");
-    CX_ASSERT(key.data != NULL && key.length > 0, "key keySize error");
-    CX_ASSERT(key.length < CX_HASH_MAX_KEY_LENGTH, "keySize too longer");
-    cxHashElement *element = NULL;
-    HASH_FIND(hh, hash->hashPtr, key.data, key.length, element);
+    cxHashElement *element = cxHashGetElement(hash, key);
     if(element == NULL){
         cxHashSetUnsafe(hash, key, any);
     }else if(element->any != any){
         CX_RETAIN_SWAP(element->any, any);
     }
 }
+
+
+
+
+
+
+
+
+
+
+

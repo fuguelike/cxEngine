@@ -111,7 +111,7 @@
 		836150FD184838B200EB9173 /* n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = n.png; path = res/n.png; sourceTree = "<group>"; };
 		836150FF184862CD00EB9173 /* w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = w.png; path = res/w.png; sourceTree = "<group>"; };
 		836DBA76184A15B800CCD673 /* libluajit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libluajit.a; path = libs/ios/lib/libluajit.a; sourceTree = "<group>"; };
-		836DBA81184A1EA200CCD673 /* main.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.lua; path = res/main.lua; sourceTree = "<group>"; };
+		836DBA81184A1EA200CCD673 /* main.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.lua; path = res/main.lua; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.lua; };
 		8372777218449156005EDE68 /* animate */ = {isa = PBXFileReference; lastKnownFileType = folder; name = animate; path = res/animate; sourceTree = "<group>"; };
 		837277751844962A005EDE68 /* animate.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = animate.xml; path = res/animate.xml; sourceTree = "<group>"; };
 		837B7C75184C2A2100BB62AD /* pattern1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pattern1.png; path = res/pattern1.png; sourceTree = "<group>"; };

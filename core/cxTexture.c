@@ -159,3 +159,6 @@ void cxTextureSetParam(cxTexture this,GLuint type,GLuint value)
     }
 }
 
+
+
+

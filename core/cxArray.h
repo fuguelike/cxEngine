@@ -58,6 +58,8 @@ void    cxArrayRemoveFirst(cxArray array);
 
 void    cxArrayRemoveLast(cxArray array);
 
+CX_SCRIPT_DEF(cxArray);
+
 CX_C_END
 
 #endif

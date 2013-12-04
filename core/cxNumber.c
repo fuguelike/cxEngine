@@ -14,7 +14,7 @@ CX_OBJECT_INIT(cxNumber, cxObject)
 }
 CX_OBJECT_FREE(cxNumber, cxObject)
 {
-
+    
 }
 CX_OBJECT_TERM(cxNumber, cxObject)
 

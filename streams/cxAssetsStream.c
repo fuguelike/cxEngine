@@ -77,8 +77,9 @@ static cxString cxAssetsStreamAllBytes(cxAny this)
         return NULL;
     }
     cxStreamSeek(asserts,0,SEEK_SET);
-    cxChar *bytes = allocator->malloc(asserts->length);
+    cxChar *bytes = allocator->malloc(asserts->length + 1);
     cxStreamRead(asserts,bytes,asserts->length);
+    bytes[asserts->length] = '\0';
     cxString data = cxStringAttach(bytes, asserts->length);
     cxStreamClose(asserts);
     return data;

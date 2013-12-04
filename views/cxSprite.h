@@ -32,15 +32,13 @@ cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
 cxBoxTex2f cxSpriteBoxTex(cxAny pview);
 
-cxSprite cxSpriteCreateWithXML(cxConstChars xml,cxConstChars key);
+cxSprite cxSpriteCreateWithFile(cxConstChars file,cxConstChars key);
 
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor);
 
 void cxSpriteSetFlipX(cxAny pview,cxBool flipx);
 
 void cxSpriteSetFlipY(cxAny pview,cxBool flipy);
-
-void cxSpriteDirtyEvent(cxEvent *event);
 
 void cxSpriteSetTextureEvent(cxEvent *event);
 

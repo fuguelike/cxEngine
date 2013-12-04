@@ -31,7 +31,7 @@ cxTexture cxTextureFactoryLoadFile(cxConstChars file);
 
 cxTexture cxTextureFactoryLoadText(const cxString txt,const cxString font,cxTextAttr attr);
 
-void cxTextureFactoryDelFile(cxConstChars file);
+void cxTextureFactoryUnloadFile(cxConstChars file);
 
 CX_C_END
 

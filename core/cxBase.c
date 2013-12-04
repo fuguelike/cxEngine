@@ -8,5 +8,18 @@
 
 #include "cxBase.h"
 
+void cxEventFire(cxEvent *event)
+{
+    
+}
 
+void cxEventRelease(cxEvent *event)
+{
+    
+}
+
+void cxEventAppend(cxEvent *event)
+{
+    
+}
 

@@ -125,3 +125,8 @@ void cxStringAppend(cxString string,cxChar *d,cxInt l)
 {
     utstring_bincpy(&string->strptr, d, l);
 }
+
+
+
+
+

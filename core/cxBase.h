@@ -122,6 +122,7 @@ do{                                                             \
     _newptr_->args = NULL;                                      \
     CX_RETAIN_SWAP(_newptr_->args,_args_);                      \
     DL_APPEND(_event_, _newptr_);                               \
+    cxEventAppend(_newptr_);                                    \
 }while(0)
 
 #define CX_EVENT_QUICK(_event_,_func_)                          \
@@ -134,6 +135,7 @@ do{                                                             \
     _newptr_->args = NULL;                                      \
     CX_RETAIN_SWAP(_newptr_->arg,_args_);                       \
     DL_PREPEND(_event_, _newptr_);                              \
+    cxEventAppend(_newptr_);                                    \
 }while(0)
 
 #define CX_EVENT_DEL(_event_,_func_)                            \
@@ -145,6 +147,7 @@ do{                                                             \
             continue;                                           \
         }                                                       \
         DL_DELETE(_event_, _ele_);                              \
+        cxEventRelease(_ele_);                                  \
         CX_RELEASE(_ele_->args);                                \
         allocator->free(_ele_);                                 \
     }                                                           \
@@ -156,6 +159,7 @@ do{                                                             \
     cxEvent *_ele_ = NULL;                                      \
     DL_FOREACH_SAFE(_event_, _ele_, _tmp_){                     \
         DL_DELETE(_event_, _ele_);                              \
+        cxEventRelease(_ele_);                                  \
         CX_RELEASE(_ele_->args);                                \
         allocator->free(_ele_);                                 \
     }                                                           \
@@ -168,8 +172,15 @@ do{                                                             \
     DL_FOREACH_SAFE(_sender_->_event_, _ele_,_tmp_){            \
         _ele_->sender = _sender_;                               \
         _ele_->func(_ele_);                                     \
+        cxEventFire(_ele_);                                     \
     }                                                           \
 }while(0)
+
+void cxEventAppend(cxEvent *event);
+
+void cxEventFire(cxEvent *event);
+
+void cxEventRelease(cxEvent *event);
 
 void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars format,va_list ap);
 
@@ -184,6 +195,8 @@ void cxUtilWarn(cxConstChars file, int line, cxConstChars format, ...);
 
 //断言信息输出
 void cxUtilAssert(cxConstChars file, int line, cxConstChars format, ...);
+
+#define CX_SCRIPT_DEF(n) int n##ScriptOpen(cxAny script)
 
 CX_C_END
 

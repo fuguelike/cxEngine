@@ -168,6 +168,7 @@ typedef struct {
     cxTexCoord2f rb;
 } cxBoxTex2f;
 #define cxBoxTex2fDefault() (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, 1.0f),cxTex2fv(1.0f, 0.0f),cxTex2fv(1.0f, 1.0f)}
+#define cxBoxTex2Scale(v)   (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, v),cxTex2fv(v, 0.0f),cxTex2fv(v, v)}
 
 cxRect4f cxBoxTex2fToRect4f(cxBoxTex2f box);
 

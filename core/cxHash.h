@@ -49,6 +49,8 @@ cxInt   cxHashLength(cxHash hash);
 
 void    cxHashDelElement(cxHash hash,cxHashElement *element);
 
+cxHashElement *cxHashGetElement(cxHash hash,cxHashKey key);
+
 cxBool  cxHashHas(cxHash hash,cxHashKey key);
 
 void    cxHashDel(cxHash hash,cxHashKey key);
@@ -60,3 +62,26 @@ cxAny   cxHashGet(cxHash hash,cxHashKey key);
 CX_C_END
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

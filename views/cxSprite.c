@@ -33,7 +33,7 @@ void cxSpriteDraw(cxAny pview)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void cxSpriteDirtyEvent(cxEvent *event)
+static void cxSpriteDirtyEvent(cxEvent *event)
 {
     cxSprite this = event->sender;
     this->cbox.lb = this->super.color;
@@ -103,7 +103,7 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize,cxBool
     if(cached){
         texture = cxTextureFactoryLoadFile(file);
     }else{
-        texture = cxTextureFactoryLoadFile(file);
+        texture = cxTextureCreate(file);
     }
     CX_ASSERT(texture != NULL, "texture load failed %s",file);
     cxSpriteSetTexture(this, texture);
@@ -123,9 +123,9 @@ cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     //invoke base
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxSprite this = mView;
+    //set texture
     cxBool useTexSize = cxXMLReadBoolAttr(reader, "cxSprite.useTexSize", false);
     cxBool cached = cxXMLReadBoolAttr(reader, "cxSprite.cached", true);
-    //texture
     cxChar *surl = cxXMLAttr("cxSprite.texture");
     cxSpriteSetTextureURL(this, surl, useTexSize, cached);
     xmlFree(surl);
@@ -134,9 +134,7 @@ cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxSpriteSetFlipY(this, cxXMLReadBoolAttr(reader, "cxSprite.flipY", this->isFlipY));
     //shader
     cxChar *shader = cxXMLAttr("cxSprite.shader");
-    if(shader != NULL){
-        cxSpriteSetShader(this, shader);
-    }
+    cxSpriteSetShader(this, shader);
     xmlFree(shader);
     return true;
 }
@@ -157,10 +155,10 @@ CX_OBJECT_FREE(cxSprite, cxView)
 }
 CX_OBJECT_TERM(cxSprite, cxView)
 
-cxSprite cxSpriteCreateWithXML(cxConstChars xml,cxConstChars key)
+cxSprite cxSpriteCreateWithFile(cxConstChars file,cxConstChars key)
 {
     cxSprite this = CX_CREATE(cxSprite);
-    cxTexture texture = cxTextureFactoryLoadFile(xml);
+    cxTexture texture = cxTextureFactoryLoadFile(file);
     cxSpriteSetTexture(this, texture);
     cxSpriteSetTextureKey(this, key, true);
     return this;

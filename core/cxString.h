@@ -70,6 +70,8 @@ void cxStringAppend(cxString string,cxChar *d,cxInt l);
 
 cxString cxStringBinary(cxChar *d,cxInt l);
 
+CX_SCRIPT_DEF(cxString);
+
 CX_C_END
 
 #endif

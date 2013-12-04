@@ -35,7 +35,6 @@
 #include <views/cxScroll.h>
 #include <actions/cxRunner.h>
 #include <views/cxLoading.h>
-#include <script/cxScript.h>
 
 static cxAny loading(cxAny pview)
 {
@@ -50,9 +49,6 @@ static void finished(cxAny pview)
 
 void cxEngineInit(cxEngine engine)
 {
-    cxScript script = CX_ALLOC(cxScript);
-    cxString code = cxAssertsData("main.lua");
-    cxScriptLoad(script, code);
     //desgin size
     engine->dessize = cxSize2fv(640, 960);
     //prepare load
@@ -65,6 +61,7 @@ void cxEngineMain(cxEngine engine)
     cxAny lv = cxLoadingStart(loading, finished);
     cxLabel txt = cxLabelCreate(UTF8("Loading..."), UTF8("banana.ttf"), 60);
     cxViewAppend(lv, txt);
+    
 }
 
 void cxEngineFree(cxEngine engine)

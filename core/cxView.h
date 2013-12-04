@@ -93,9 +93,9 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onChanged);  //subviews count changed
 CX_OBJECT_END(cxView)
 
-#define cxViewOverrideTouch(o,f)    ((cxView)(o))->Touch = f
+#define cxViewOverrideTouch(_o_,_f_)    ((cxView)(_o_))->Touch = _f_
 
-#define cxViewOverrideDraw(o,f)     ((cxView)(o))->Draw = f
+#define cxViewOverrideDraw(_o_,_f_)     ((cxView)(_o_))->Draw = _f_
 
 void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object);
 
@@ -206,6 +206,8 @@ void cxViewExit(cxAny pview);
 void cxViewRemoved(cxAny pview);
 
 void cxViewTransform(cxAny pview);
+
+CX_SCRIPT_DEF(cxView);
 
 CX_C_END
 

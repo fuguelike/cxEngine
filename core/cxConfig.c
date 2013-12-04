@@ -30,7 +30,7 @@ void cxObjectAutoFree(cxObject this)
 void cxObjectSetXMLReadFunc(cxAny obj,cxXMLReadAttrFunc func)
 {
     cxObject this = obj;
-    this->XMLReadAttr = func;
+    CX_METHOD_SET(this->XMLReadAttr, func);
 }
 
 cxBool cxObjectXMLReadRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader)

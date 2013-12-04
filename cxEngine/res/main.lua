@@ -1,13 +1,19 @@
 
 
-function onInit()
-    io.write("init")
+function onInit(engine)
+    local x = cxArray.new()
+    x:append(cxString.create("111"))
+    x:append(cxString.create("222"))
+    local y = x[0]
+    local z = x[1]
+    cxLogger("init")
 end
 
-function onMain()
-    io.write("main")
+function onMain(engine)
+    cxLogger("main");
 end
 
-function onFree()
-    io.write("free")
+function onFree(engine)
+    cxLogger("free")
 end
+

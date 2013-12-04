@@ -112,6 +112,7 @@ void cxEngineLayout(cxInt width,cxInt height)
     cxMatrix4f matrix;
     cxEngineLookAt(&matrix,cxVec2fv(0, 0));
     kmGLMultMatrix(&matrix);
+    //
     engine->lastTime = cxTimestamp();
     if(!engine->isInit){
         cxViewEnter(engine->window);

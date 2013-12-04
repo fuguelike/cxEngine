@@ -129,7 +129,6 @@
 		835870F4183DEB0F007B175E /* cxClient.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870F2183DEB0F007B175E /* cxClient.c */; };
 		83607AA218444B39005C392B /* cxAnimate.c in Sources */ = {isa = PBXBuildFile; fileRef = 83607AA018444B39005C392B /* cxAnimate.c */; };
 		836150FC18482AAF00EB9173 /* cxMD5.c in Sources */ = {isa = PBXBuildFile; fileRef = 836150FA18482AAF00EB9173 /* cxMD5.c */; };
-		836DBA7F184A15FD00CCD673 /* cxScript.c in Sources */ = {isa = PBXBuildFile; fileRef = 836DBA7D184A15FD00CCD673 /* cxScript.c */; };
 		8384E1ED1823ABC700EDA1D6 /* cxMp3Stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */; };
 		83A5C967183A174500781096 /* cxLoading.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A5C965183A174500781096 /* cxLoading.c */; };
 		83BAB0731835F578004DAEA6 /* cxRunner.c in Sources */ = {isa = PBXBuildFile; fileRef = 83BAB0711835F578004DAEA6 /* cxRunner.c */; };
@@ -393,8 +392,6 @@
 		83607AA118444B39005C392B /* cxAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAnimate.h; sourceTree = "<group>"; };
 		836150FA18482AAF00EB9173 /* cxMD5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMD5.c; sourceTree = "<group>"; };
 		836150FB18482AAF00EB9173 /* cxMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMD5.h; sourceTree = "<group>"; };
-		836DBA7D184A15FD00CCD673 /* cxScript.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxScript.c; sourceTree = "<group>"; };
-		836DBA7E184A15FD00CCD673 /* cxScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxScript.h; sourceTree = "<group>"; };
 		8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMp3Stream.c; sourceTree = "<group>"; };
 		8384E1EC1823ABC700EDA1D6 /* cxMp3Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMp3Stream.h; sourceTree = "<group>"; };
 		83A5C965183A174500781096 /* cxLoading.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLoading.c; sourceTree = "<group>"; };
@@ -423,7 +420,6 @@
 		8341C34218227C310045A66F = {
 			isa = PBXGroup;
 			children = (
-				836DBA79184A15E000CCD673 /* script */,
 				8341C67818227FA10045A66F /* ios */,
 				8341C50118227DF20045A66F /* actions */,
 				8341C51418227DF20045A66F /* chipmunk */,
@@ -782,15 +778,6 @@
 			path = ios;
 			sourceTree = "<group>";
 		};
-		836DBA79184A15E000CCD673 /* script */ = {
-			isa = PBXGroup;
-			children = (
-				836DBA7D184A15FD00CCD673 /* cxScript.c */,
-				836DBA7E184A15FD00CCD673 /* cxScript.h */,
-			);
-			path = script;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -861,7 +848,6 @@
 				8341C60918227DF20045A66F /* cpSlideJoint.c in Sources */,
 				8341C60A18227DF20045A66F /* cpArbiter.c in Sources */,
 				8330F7C91828E77D00E7E5B1 /* cxScroll.c in Sources */,
-				836DBA7F184A15FD00CCD673 /* cxScript.c in Sources */,
 				8341C62F18227DF20045A66F /* cxShader.c in Sources */,
 				8341C63418227DF20045A66F /* cxTypes.c in Sources */,
 				8341C5FF18227DF20045A66F /* cpConstraint.c in Sources */,

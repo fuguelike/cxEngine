@@ -41,6 +41,12 @@ void cxWindowPopXML()
     cxWindowPopView(NULL);
 }
 
+cxAny cxWindowTopView()
+{
+    cxEngine engine = cxEngineInstance();
+    return cxStackTop(engine->window->views);
+}
+
 void cxWindowPushView(cxAny pview,cxAny args)
 {
     CX_ASSERT(pview != NULL, "new view null");

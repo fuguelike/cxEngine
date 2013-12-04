@@ -14,6 +14,7 @@ CX_OBJECT_INIT(cxEventArg, cxObject)
 }
 CX_OBJECT_FREE(cxEventArg, cxObject)
 {
+    this->weakRef = NULL;
     if(this->strongRef != NULL){
         CX_RELEASE(this->strongRef);
     }

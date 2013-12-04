@@ -23,6 +23,8 @@ cxBool cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
         cxParticleSetBlendMode(this, cxParticleBlendAdd);
     }else if(cxConstCharsEqu(smode, "multiple")){
         cxParticleSetBlendMode(this, cxParticleBlendMultiply);
+    }else{//default mode
+        cxParticleSetBlendMode(this, cxParticleBlendMultiply);
     }
     xmlFree(smode);
     //
@@ -63,7 +65,6 @@ void cxParticleReset(cxAny pview)
         cxParticleUnit *p = &this->units[this->index];
         p->life = 0;
     }
-    
     this->position.r = cxVec2fv(0, 0);
     this->position.v = cxVec2fv(0, 0);
     cxAtlasClean(pview);
@@ -128,6 +129,7 @@ static void cxParticleInitUnit(cxAny pview,cxParticleUnit *particle)
     cxParticle this = pview;
     particle->life = cxFloatValue(this->life);
     particle->position = cxVec2fValue(this->position);
+    
     cxColor4f startcolor = cxColorValue(this->startcolor);
     cxColor4f endcolor = cxColorValue(this->endcolor);
     
