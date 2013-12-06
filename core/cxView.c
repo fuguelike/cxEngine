@@ -23,19 +23,19 @@ static void cxViewXMLReadAutoResize(cxAny view,xmlTextReaderPtr reader)
     cxChar *sab = cxXMLAttr("cxView.bottom");
     if(sal != NULL){
         this->autoMask |= cxViewAutoResizeLeft;
-        this->autoBox.l = atof(sal) * this->fixscale.x;
+        this->autoBox.l = cxXMLParseFloat(sal, 0) * this->fixscale.x;
     }
     if(sar != NULL){
         this->autoMask |= cxViewAutoResizeRight;
-        this->autoBox.r = atof(sar) * this->fixscale.x;
+        this->autoBox.r = cxXMLParseFloat(sar, 0) * this->fixscale.x;
     }
     if(sat != NULL){
         this->autoMask |= cxViewAutoResizeTop;
-        this->autoBox.t = atof(sat) * this->fixscale.y;
+        this->autoBox.t = cxXMLParseFloat(sat, 0) * this->fixscale.y;
     }
     if(sab != NULL){
         this->autoMask |= cxViewAutoResizeBottom;
-        this->autoBox.b = atof(sab) * this->fixscale.y;
+        this->autoBox.b = cxXMLParseFloat(sab, 0) * this->fixscale.y;
     }
     if(cxXMLReadBoolAttr(reader, "cxView.fill", false)){
         this->autoMask = cxViewAutoResizeFill;
@@ -50,35 +50,18 @@ static void cxViewXMLReadAutoResize(cxAny view,xmlTextReaderPtr reader)
 static void cxViewXMLReadRectToView(cxAny view,xmlTextReaderPtr reader)
 {
     cxView this = view;
-    cxChar *sx = cxXMLAttr("cxView.x");
-    cxChar *sy = cxXMLAttr("cxView.y");
-    cxChar *sz = cxXMLAttr("cxView.z");
-    cxChar *sw = cxXMLAttr("cxView.w");
-    cxChar *sh = cxXMLAttr("cxView.h");
+    
     cxVec2f pos = this->position;
-    if(sx != NULL){
-        pos.x = atof(sx);
-    }
-    if(sy != NULL){
-        pos.y = atof(sy);
-    }
+    pos.x = cxXMLReadFloatAttr(reader, "cxView.x", pos.x);
+    pos.y= cxXMLReadFloatAttr(reader, "cxView.y", pos.y);
     cxViewSetPosition(view, pos);
-    if(sz != NULL){
-        cxViewSetOrder(view, atoi(sz));
-    }
+    
+    cxViewSetOrder(view, cxXMLReadIntAttr(reader, "cxView.z", this->zorder));
+    
     cxSize2f size = this->size;
-    if(sw != NULL){
-        size.w = atof(sw);
-    }
-    if(sh != NULL){
-        size.h = atof(sh);
-    }
+    size.w = cxXMLReadFloatAttr(reader, "cxView.w", size.w);
+    size.h = cxXMLReadFloatAttr(reader, "cxView.h", size.h);
     cxViewSetSize(view, size);
-    xmlFree(sx);
-    xmlFree(sy);
-    xmlFree(sz);
-    xmlFree(sw);
-    xmlFree(sh);
 }
 
 cxBool cxViewZeroSize(cxAny pview)
@@ -103,6 +86,15 @@ static void cxViewFixScaleAttr(cxAny view,xmlTextReaderPtr reader)
         cxViewSetFixScale(view, cxXMLReadVec2fAttr(reader, "cxView.fixScale", this->fixscale));
     }
     xmlFree(fixscale);
+}
+
+static void cxViewSetChipmunkAttr(cxAny view,xmlTextReaderPtr reader)
+{
+    cxView this = view;
+    this->chipmunk.e = cxXMLReadFloatAttr(reader, "cxChipmunk.e", this->chipmunk.e);
+    this->chipmunk.m = cxXMLReadFloatAttr(reader, "cxChipmunk.m", this->chipmunk.m);
+    this->chipmunk.u = cxXMLReadFloatAttr(reader, "cxChipmunk.u", this->chipmunk.u);
+    this->chipmunk.isStatic = cxXMLReadBoolAttr(reader, "cxChipmunk.static", this->chipmunk.isStatic);
 }
 
 cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
@@ -143,13 +135,14 @@ cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
     if(cxXMLReadFloatsAttr(reader, "cxView.degrees", &degrees) == 1){
         cxViewSetDegrees(view, degrees);
     }
+    //set chipmunk attr
+    cxViewSetChipmunkAttr(view, reader);
     //view event
     cxXMLAppendEvent(xml->events, this, cxView, onEnter);
     cxXMLAppendEvent(xml->events, this, cxView, onExit);
     cxXMLAppendEvent(xml->events, this, cxView, onUpdate);
     cxXMLAppendEvent(xml->events, this, cxView, onResize);
     cxXMLAppendEvent(xml->events, this, cxView, onLayout);
-    cxXMLAppendEvent(xml->events, this, cxView, onChanged);
     cxXMLAppendEvent(xml->events, this, cxView, onDirty);
     return true;
 }
@@ -214,11 +207,11 @@ CX_OBJECT_INIT(cxView, cxObject)
     cxObjectSetXMLReadFunc(this, cxViewXMLReadAttr);
     this->actions = CX_ALLOC(cxHash);
     this->caches = CX_ALLOC(cxHash);
+    this->chipmunk.m = 1.0f;
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
     CX_EVENT_RELEASE(this->onDirty);
-    CX_EVENT_RELEASE(this->onChanged);
     CX_EVENT_RELEASE(this->onEnter);
     CX_EVENT_RELEASE(this->onExit);
     CX_EVENT_RELEASE(this->onUpdate);
@@ -519,6 +512,12 @@ void cxViewSetRaxis(cxAny pview,cxVec3f raxis)
     this->isDirty = true;
 }
 
+cxFloat cxViewRadians(cxAny pview)
+{
+    cxView this = pview;
+    return this->radians;
+}
+
 void cxViewSetRadians(cxAny pview,cxFloat radians)
 {
     cxView this = pview;
@@ -612,7 +611,7 @@ void cxViewAppend(cxAny pview,cxAny newview)
         cxViewEnter(new);
         cxViewLayout(new);
     }
-    CX_EVENT_FIRE(this, onChanged);
+    CX_METHOD_RUN(this->AppendAfter,pview,newview);
 }
 
 void cxViewAutoResizing(cxAny pview)
@@ -678,8 +677,8 @@ void cxViewRemoved(cxAny pview)
         cxViewExit(this);
     }
     cxView parent = this->parentView;
+    CX_METHOD_RUN(parent->RemoveBefore,parent,pview);
     cxListRemove(parent->subViews, this->subElement);
-    CX_EVENT_FIRE(parent, onChanged);
     this->subElement = NULL;
     this->parentView = NULL;
 }

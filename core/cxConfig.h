@@ -121,6 +121,8 @@
 #include <pthread.h>
 #include <libxml/xmlreader.h>
 
+#define CX_ENGINE_VERSION   100
+
 typedef int             cxOff;
 typedef char            cxChar;
 typedef int             cxInt;

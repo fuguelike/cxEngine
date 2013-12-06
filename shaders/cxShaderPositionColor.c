@@ -18,40 +18,29 @@ static void cxShaderPositionColorInit(cxAny this)
 static cxString cxShaderPositionColorGetVertexSource(cxAny this)
 {
     static cxConstChars vertex =
-    "                                                                   \n\
-        #ifdef GL_ES                                                    \n\
-            attribute highp vec4 aPosition;                             \n\
-            attribute lowp vec4 aColor;                                 \n\
-            varying lowp vec4 vColor;                                   \n\
-        #else                                                           \n\
-            attribute vec4 aPosition;                                   \n\
-            attribute vec4 aColor;                                      \n\
-            varying vec4 vColor;                                        \n\
-        #endif                                                          \n\
-        void main()                                                     \n\
-        {                                                               \n\
-            gl_Position = kxMatrixModelViewProject * aPosition;         \n\
-            vColor = aColor;                                            \n\
-        }                                                               \n\
-    ";
+    GLSL
+    (
+        attribute highp vec4 aPosition;
+        attribute lowp vec4 aColor;
+        varying lowp vec4 vColor;
+        void main() {
+            gl_Position = kxMatrixModelViewProject * aPosition;
+            vColor = aColor;
+        }
+    );
     return cxStringConstChars(vertex);
 }
-
 
 static cxString cxShaderPositionColorGetFragmentSource(cxAny this)
 {
     static cxConstChars fragment =
-    "                                                                   \n\
-        #ifdef GL_ES                                                    \n\
-            varying lowp vec4 vColor;                                   \n\
-        #else                                                           \n\
-            varying vec4 vColor;                                        \n\
-        #endif                                                          \n\
-        void main()                                                     \n\
-        {                                                               \n\
-            gl_FragColor = vColor;                                      \n\
-        }                                                               \n\
-    ";
+    GLSL
+    (
+        varying lowp vec4 vColor;
+        void main() {
+            gl_FragColor = vColor;
+        }
+    );
     return cxStringConstChars(fragment);
 }
 

@@ -24,7 +24,8 @@ CX_OBJECT_DEF(cxViewXML, cxView)
     cxHash events;
     cxHash actions;
     CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
-    CX_EVENT_ALLOC(onLoad);
+    CX_EVENT_ALLOC(onBegin);
+    CX_EVENT_ALLOC(onEnd);
 CX_OBJECT_END(cxViewXML)
 
 void cxViewXMLSetItem(cxAny pview,cxConstChars key,cxAny item);

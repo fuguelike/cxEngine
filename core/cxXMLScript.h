@@ -48,6 +48,8 @@ cxChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name);
 
 cxInt cxReadFloats(cxConstChars ptr,cxFloat *values);
 
+cxFloat cxXMLParseFloat(const cxChar *txt,cxFloat value);
+
 cxInt cxReadInts(cxConstChars ptr,cxInt *values);
 
 //return need xmlFree free

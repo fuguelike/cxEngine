@@ -21,11 +21,14 @@ typedef cxPointer (*cxCallocFunc)(cxSize num,cxSize size);
 
 typedef void (*cxFreeFunc)(cxPointer ptr);
 
+typedef cxChar *(*cxStrdupFunc)(cxConstChars s);
+
 typedef struct {
     cxMallocFunc    malloc;
     cxReallocFunc   realloc;
     cxCallocFunc    calloc;
     cxFreeFunc      free;
+    cxStrdupFunc    strdup;
 }cxAllocator;
 
 extern const cxAllocator *allocator;

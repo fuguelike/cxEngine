@@ -169,6 +169,7 @@ void cxEngineSetLocalLang(cxString lang)
 cxEngine cxEngineInstance()
 {
     if(instance == NULL) {
+        CX_LOGGER("cxEngine Version:%d",CX_ENGINE_VERSION);
         instance = CX_ALLOC(cxEngine);
         cxAllocatorInit();
         cxEngineSystemInit();

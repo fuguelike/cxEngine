@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--TextureKey at *.xml file use-->
+<cxViewXML cxView.fill="true">
+    <cxChipmunk id="chipmunk" cxView.fill="true">
+        <cxView
+            cxView.x="0" cxView.y="512"
+            cxView.w="768" cxView.h="5"
+            cxChipmunk.e="1.0"
+            cxChipmunk.static="true"/>
+        <cxView
+            cxView.x="0" cxView.y="-512"
+            cxView.w="768" cxView.h="5"
+            cxChipmunk.e="1.0"
+            cxChipmunk.static="true"/>
+        <cxView
+            cxView.x="-384" cxView.y="0"
+            cxView.w="5" cxView.h="1024"
+            cxChipmunk.e="1.0"
+            cxChipmunk.static="true"/>
+        <cxView
+            cxView.x="384" cxView.y="0"
+            cxView.w="5" cxView.h="1024"
+            cxChipmunk.e="1.0"
+            cxChipmunk.static="true"/>
+        <cxSprite
+            cxView.x="-200" cxView.y="200"
+            cxSprite.texture="candy.xml?green.png"
+            cxChipmunk.e="0.1"
+            cxChipmunk.u="0.0"/>
+        <cxSprite
+            cxView.x="-100" cxView.y="200"
+            cxSprite.texture="candy.xml?orange.png"
+            cxChipmunk.e="0.3"
+            cxChipmunk.u="0.0"/>
+        <cxSprite
+            cxView.x="0" cxView.y="400"
+            cxSprite.texture="candy.xml?yellow.png"
+            cxChipmunk.e="1.0"
+            cxChipmunk.u="0.0"/>
+        <cxSprite id="purple"
+            cxView.x="100" cxView.y="200"
+            cxSprite.texture="candy.xml?red.png"
+            cxChipmunk.m="1"
+            cxChipmunk.e="1.0"
+            cxChipmunk.u="0.0"/>
+        <cxSprite
+            cxView.x="0" cxView.y="0"
+            cxSprite.texture="candy.xml?purple.png"
+            cxChipmunk.e="1.0"
+            cxChipmunk.static="true"/>
+        <cxSprite
+            cxView.x="200" cxView.y="200"
+            cxSprite.texture="candy.xml?blue.png"
+            cxChipmunk.static="true"/>
+        <cxButton cxView.w = "180" cxView.h = "120" cxButton.onPress="cxPopView">
+            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="return" cxLabel.size="30"/>
+        </cxButton>
+        <cxButton cxView.w = "180" cxView.h = "120" cxButton.onPress="deleteSprite">
+            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="test" cxLabel.size="30"/>
+        </cxButton>
+    </cxChipmunk>
+</cxViewXML>

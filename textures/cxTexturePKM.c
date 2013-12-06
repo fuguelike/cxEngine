@@ -51,6 +51,7 @@ static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
     cxPointer buffer = allocator->malloc(bufsiz);
     cxInt readbytes = cxStreamRead(stream, buffer, bufsiz);
     CX_ASSERT(readbytes == bufsiz, "read pkm data error");
+    CX_UNUSED_PARAM(readbytes);
 #if defined(GL_OES_compressed_ETC1_RGB8_texture)
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES,header.extWidth, header.extHeight, 0, bufsiz, buffer);
 #endif

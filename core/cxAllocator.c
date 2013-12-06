@@ -30,11 +30,21 @@ static void cxFree(cxPointer ptr)
     free(ptr);
 }
 
+static cxChar *cxStrdup(cxConstChars s)
+{
+    cxInt len = strlen(s);
+    cxChar *ret = cxMalloc(len + 1);
+    memcpy(ret, s, len);
+    ret[len]='\0';
+    return ret;
+}
+
 const cxAllocator *allocator = &(cxAllocator){
     .malloc         = cxMalloc,
     .realloc        = cxRealloc,
     .calloc         = cxCalloc,
     .free           = cxFree,
+    .strdup         = cxStrdup,
 };
 
 void cxAllocatorInit()

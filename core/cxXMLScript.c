@@ -99,13 +99,31 @@ cxVec2f cxXMLReadVec2fAttr(xmlTextReaderPtr reader,cxConstChars name,cxVec2f val
     return value;
 }
 
+cxFloat cxXMLParseFloat(const cxChar *txt,cxFloat value)
+{
+    cxEngine engine = cxEngineInstance();
+    CX_RETURN(txt == NULL, value);
+    cxChar *svalue = allocator->strdup(txt);
+    cxInt len = strlen(svalue);
+    if(svalue[len - 1] == 'w'){
+        svalue[len - 1] = '\0';
+        value = atof(svalue) * engine->winsize.w;
+    }else if(svalue[len -1] == 'h'){
+        svalue[len - 1] = '\0';
+        value = atof(svalue) * engine->winsize.h;
+    }else{
+        value = atof(svalue);
+    }
+    allocator->free(svalue);
+    return value;
+}
+
 cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat value)
 {
     cxChar *svalue = cxXMLAttr(name);
-    if(svalue != NULL){
-        value = atof(svalue);
-        xmlFree(svalue);
-    }
+    CX_RETURN(svalue == NULL, value);
+    value = cxXMLParseFloat(svalue, value);
+    xmlFree(svalue);
     return value;
 }
 
@@ -129,8 +147,9 @@ cxInt cxReadFloats(cxConstChars ptr,cxFloat *values)
     for(int i=0; i < len; i++){
         if(ptr[i] == ',' || ptr[i] == '\0'){
             arg[argLen] = '\0';
+            cxFloat ov = values[c];
+            (*values++) = cxXMLParseFloat(arg,ov);
             c++;
-            (*values++) = atof(arg);
             argLen = 0;
         }else{
             arg[argLen++] = ptr[i];

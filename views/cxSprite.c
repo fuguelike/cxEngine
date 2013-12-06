@@ -109,11 +109,10 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize,cxBool
     cxSpriteSetTexture(this, texture);
     //use texture size
     cxBool uts = cxViewZeroSize(this) || useTexSize;
-    if(uts){
-        cxViewSetSize(this, texture->size);
-    }
     if(rv > 1){
         cxSpriteSetTextureKey(this, key, uts);
+    }else if(uts){
+        cxViewSetSize(this, texture->size);
     }
 }
 

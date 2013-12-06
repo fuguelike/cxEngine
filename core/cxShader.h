@@ -15,6 +15,8 @@
 
 CX_C_BEGIN
 
+#define GLSL(x) #x
+
 enum {
     cxVertexAttribPosition,
     cxVertexAttribColor,

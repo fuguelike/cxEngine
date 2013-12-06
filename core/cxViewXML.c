@@ -16,6 +16,7 @@
 #include <views/cxClipping.h>
 #include <views/cxTable.h>
 #include <views/cxScroll.h>
+#include <views/cxChipmunk.h>
 #include "cxViewXML.h"
 #include "cxHashXML.h"
 #include "cxActionXML.h"
@@ -25,7 +26,8 @@ cxBool cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
     cxViewXMLReadAttr(pxml, view, reader);
     cxViewXML this = view;
     cxViewXML xml = pxml;
-    cxXMLAppendEvent(xml->events, this, cxViewXML, onLoad);
+    cxXMLAppendEvent(xml->events, this, cxViewXML, onBegin);
+    cxXMLAppendEvent(xml->events, this, cxViewXML, onEnd);
     return true;
 }
 
@@ -60,7 +62,8 @@ CX_OBJECT_INIT(cxViewXML, cxView)
 }
 CX_OBJECT_FREE(cxViewXML, cxView)
 {
-    CX_EVENT_RELEASE(this->onLoad);
+    CX_EVENT_RELEASE(this->onBegin);
+    CX_EVENT_RELEASE(this->onEnd);
     CX_RELEASE(this->items);
     CX_RELEASE(this->events);
     CX_RELEASE(this->actions);
@@ -69,10 +72,8 @@ CX_OBJECT_TERM(cxViewXML, cxView)
 
 cxAny cxViewXMLGet(cxAny pview,cxConstChars key)
 {
-    cxAny root = cxObjectRoot(pview);
-    CX_RETURN(root == NULL, NULL);
-    cxViewXML xml = root;
-    return cxHashGet(xml->items, cxHashStrKey(key));
+    cxViewXML xml = cxObjectRoot(pview);
+    return (xml != NULL) ? cxHashGet(xml->items, cxHashStrKey(key)) : NULL;
 }
 
 void cxViewXMLRemove(cxAny pview,cxConstChars key)
@@ -153,6 +154,8 @@ cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
         cview = CX_CREATE(cxTable);
     }else if(ELEMENT_IS_TYPE(cxScroll)){
         cview = CX_CREATE(cxScroll);
+    }else if(ELEMENT_IS_TYPE(cxChipmunk)){
+        cview = CX_CREATE(cxChipmunk);
     }else{
         CX_ERROR("make elemement %s error",temp);
     }
@@ -177,11 +180,9 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
             cxView cview = CX_METHOD_GET(NULL, this->Make, temp, reader);
             cxBool save = false;
             if(cview != NULL){
-                cxViewAppend(parent, cview);
-                //set root xmlview
                 cxObjectSetRoot(cview, this);
-                //read attr
                 save = cxObjectXMLReadRun(cview, this, reader);
+                cxViewAppend(parent, cview);
             }
             if(save){
                 cxViewXMLSet(this, cview, reader);
@@ -222,8 +223,9 @@ cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
         cxAutoPoolPush();
         cxObjectXMLReadRun(xmlView, xmlView, reader);
         cxStackPush(stack, xmlView);
-        CX_EVENT_FIRE(xmlView, onLoad);
+        CX_EVENT_FIRE(xmlView, onBegin);
         cxViewXMLLoadSubviews(xmlView,reader, stack);
+        CX_EVENT_FIRE(xmlView, onEnd);
         cxStackPop(stack);
         cxAutoPoolPop();
     }
