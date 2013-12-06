@@ -28,7 +28,7 @@ static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f nPos;
     kmVec2Add(&nPos, &this->startPos, &cxVec2fv(x, y));
     this->prevPos = nPos;
-    cxViewSetPosition(this->super.view, nPos);
+    cxViewSetPos(this->super.view, nPos);
 }
 
 static cxBool cxJumpXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)

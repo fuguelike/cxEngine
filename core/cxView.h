@@ -46,6 +46,9 @@ typedef struct {
     cxFloat u;  //friction
     cxFloat e;  //elasticity
     cxBool isStatic;
+    cxUInt ctype;
+    cxUInt group;
+    cxUInt layer;
 }cxChipmunkAttr;
 
 typedef cxBox4f cxViewAutoResizeBox;
@@ -57,6 +60,10 @@ typedef void (*cxViewUpdateFunc)(cxAny pview,cxAny nview);
 typedef cxBool (*cxViewTouchFunc)(cxAny pview,cxTouch *touch);
 
 typedef cxUInt (*cxViewIsTouchFunc)(cxAny pview,cxTouch *touch);
+
+typedef void (*cxViewSetPositionFunc)(cxAny pview,cxVec2f position);
+
+typedef void (*cxViewSetRadiansFunc)(cxAny pview,cxFloat radians);
 
 CX_OBJECT_DEF(cxView, cxObject)
     cxChipmunkAttr chipmunk;            //chipmunk attr
@@ -94,6 +101,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_DEF(cxViewFunc, Draw);
     CX_METHOD_DEF(cxViewFunc, DrawAfter);
     CX_METHOD_DEF(cxViewFunc, DrawBefore);
+    CX_METHOD_DEF(cxViewSetPositionFunc, SetPosition);
+    CX_METHOD_DEF(cxViewSetRadiansFunc, SetRadians);
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
@@ -192,7 +201,9 @@ void cxViewSort(cxAny pview);
 
 void cxViewSetVisible(cxAny pview,cxBool visible);
 
-void cxViewSetPosition(cxAny pview,cxVec2f position);
+void cxViewSetPosImp(cxAny pview,cxVec2f pos);
+
+void cxViewSetPos(cxAny pview,cxVec2f pos);
 
 void cxViewSetAnchor(cxAny pview,cxVec2f anchor);
 
@@ -205,6 +216,8 @@ void cxViewSetRaxis(cxAny pview,cxVec3f raxis);
 cxFloat cxViewRadians(cxAny pview);
 
 void cxViewSetRadians(cxAny pview,cxFloat radians);
+
+void cxViewSetRadiansImp(cxAny pview,cxFloat radians);
 
 void cxViewSetDegrees(cxAny pview,cxFloat degrees);
 

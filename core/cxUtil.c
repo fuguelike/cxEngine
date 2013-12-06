@@ -14,6 +14,27 @@
 #include "cxBase.h"
 #include "cxUtil.h"
 
+cxUInt cxBinaryToUInt(const cxChar *bs)
+{
+    CX_ASSERT(bs != NULL, "args error");
+    cxInt len = strlen(bs);
+    cxUInt ret = 0;
+    for(cxInt i=0; i < len; i++){
+        CX_ASSERT(bs[i] == '0' || bs[i] == '1', "str error");
+        if(bs[i] != '1'){
+            continue;
+        }
+        ret |= (1 << (len - i - 1));
+    }
+    return ret;
+}
+
+cxUInt cxHexToUInt(const cxChar *bs)
+{
+    CX_ASSERT(false, "not completed");
+    return 0;
+}
+
 cxString cxCompressed(cxString data)
 {
     CX_ASSERT(data != NULL, "args error");

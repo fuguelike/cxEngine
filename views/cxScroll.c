@@ -78,7 +78,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
             pos.x = this->box.r;
         }
         if(setpos){
-            cxViewSetPosition(view, pos);
+            cxViewSetPos(view, pos);
         }
     }else if(touch->type == cxTouchTypeUp){
         cxBool setpos = false;

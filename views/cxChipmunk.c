@@ -35,8 +35,134 @@ cxBool cxChipmunkXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 static void cxChipmunkUpdatePosition(cpBody *body, cpFloat dt)
 {
     cpBodyUpdatePosition(body, dt);
-    cxViewSetPosition(body->data, cxVec2fv(body->p.x, body->p.y));
-    cxViewSetRadians(body->data, body->a);
+    cxViewSetPosImp(body->data, cxVec2fv(body->p.x, body->p.y));
+    cxViewSetRadiansImp(body->data, body->a);
+}
+
+static void cxChipmunkSetPos(cxAny pview,cxVec2f pos)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
+    cpBody *body = cpShapeGetBody(shape);
+    CX_RETURN(cpBodyIsStatic(body));
+    cpBodySetPos(body, cpv(pos.x, pos.y));
+}
+
+static void cxChipmunkSetRadians(cxAny pview,cxFloat angle)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
+    cpBody *body = cpShapeGetBody(shape);
+    CX_RETURN(cpBodyIsStatic(body));
+    cpBodySetAngle(body, angle);
+}
+
+void cxViewSetElasticity(cxAny pview,cxFloat e)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
+    cpShapeSetElasticity(shape, e);
+}
+
+void cxViewSetFriction(cxAny pview,cxFloat u)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
+    cpShapeSetFriction(shape, u);
+}
+
+void cxViewSetMass(cxAny pview,cxFloat m)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
+    cpBody *body = cpShapeGetBody(shape);
+    cpBodySetMass(body, m);
+}
+
+void cxViewSetMoment(cxAny pview,cxFloat i)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
+    cpBody *body = cpShapeGetBody(shape);
+    cpBodySetMoment(body, i);
+}
+
+void cxViewResetForces(cxAny pview)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
+    cpBody *body = cpShapeGetBody(shape);
+    cpBodyResetForces(body);
+}
+
+void cxViewApplyForce(cxAny pview, cxVec2f force, cxVec2f r)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
+    cpBody *body = cpShapeGetBody(shape);
+    cpBodyApplyForce(body, cpv(force.x, force.y), cpv(r.x, r.y));
+}
+
+void cxViewApplyImpulse(cxAny pview, const cxVec2f j, const cxVec2f r)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
+    cpBody *body = cpShapeGetBody(shape);
+    cpBodyApplyImpulse(body, cpv(j.x, j.y), cpv(r.x, r.y));
+}
+
+void cxViewSetCollisionType(cxAny pview,cxUInt type)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    cpShapeSetCollisionType(shape, type);
+}
+
+void cxViewSetGroup(cxAny pview,cxUInt group)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    cpShapeSetGroup(shape, group);
+}
+
+void cxViewSetLayers(cxAny pview,cxUInt layers)
+{
+    CX_ASSERT(pview != NULL, "view null");
+    cxView this = pview;
+    CX_RETURN(this->chipmunk.shape == NULL);
+    cpShape *shape = this->chipmunk.shape;
+    cpShapeSetLayers(shape, layers);
 }
 
 void cxChipmunkAppendAfter(cxAny pview,cxAny nview)
@@ -62,23 +188,17 @@ void cxChipmunkAppendAfter(cxAny pview,cxAny nview)
     body->position_func = cxChipmunkUpdatePosition;
     
     cpShape *shape = cpBoxShapeNew(body, size.w, size.h);
+    cpShapeSetLayers(shape, view->chipmunk.layer);
+    cpShapeSetGroup(shape, view->chipmunk.group);
+    cpShapeSetCollisionType(shape, view->chipmunk.ctype);
     cpShapeSetElasticity(shape, view->chipmunk.e);
     cpShapeSetFriction(shape, view->chipmunk.u);
     cpShapeSetUserData(shape, nview);
     view->chipmunk.shape = shape;
     cpSpaceAddShape(this->space, shape);
-}
-
-void cxChipmunkSetPosition(cxAny pview,cxVec2f pos)
-{
-    CX_ASSERT(pview != NULL, "view null");
-    cxView this = pview;
-    CX_RETURN(this->chipmunk.shape == NULL);
-    cpShape *shape = this->chipmunk.shape;
-    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
-    cpBody *body = cpShapeGetBody(shape);
-    CX_RETURN(cpBodyIsStatic(body));
-    cpBodySetPos(body, cpv(pos.x, pos.y));
+    //
+    CX_METHOD_SET(view->SetPosition, cxChipmunkSetPos);
+    CX_METHOD_SET(view->SetRadians, cxChipmunkSetRadians);
 }
 
 void cxChipmunkRemoveBefore(cxAny pview,cxAny nview)

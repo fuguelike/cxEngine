@@ -33,7 +33,7 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
     kmVec2Scale(&npos, &this->posDelta, time);
     kmVec2Add(&npos, &this->begPos, &npos);
     this->prevPos = npos;
-    cxViewSetPosition(this->super.view, npos);
+    cxViewSetPos(this->super.view, npos);
 }
 
 static cxBool cxMoveXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)

@@ -210,6 +210,22 @@ cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt value)
     return value;
 }
 
+cxUInt cxXMLReadUIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxUInt value)
+{
+    cxChar *svalue = cxXMLAttr(name);
+    CX_RETURN(svalue == NULL,value);
+    //binary
+    if(svalue[0] == 'b' || svalue[0] == 'B'){
+        value = cxBinaryToUInt(svalue + 1);
+    }else if(svalue[0] == 'x' || svalue[0] == 'X'){
+        value = cxHexToUInt(svalue + 1);
+    }else{
+        value = atoi(svalue);
+    }
+    xmlFree(svalue);
+    return value;
+}
+
 cxString cxXMLReadLangStringAttr(xmlTextReaderPtr reader,cxConstChars name)
 {
     cxString rv = NULL;

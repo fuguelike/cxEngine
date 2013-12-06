@@ -110,7 +110,7 @@ static void cxTableUpdate(cxEvent *event)
         }
         pos.x = x + dx/2.0f + col * dx;
         pos.y = y + dy/2.0f + row * dy;
-        cxViewSetPosition(view, pos);
+        cxViewSetPos(view, pos);
         i++;
     }
 }

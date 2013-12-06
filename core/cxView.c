@@ -54,7 +54,7 @@ static void cxViewXMLReadRectToView(cxAny view,xmlTextReaderPtr reader)
     cxVec2f pos = this->position;
     pos.x = cxXMLReadFloatAttr(reader, "cxView.x", pos.x);
     pos.y= cxXMLReadFloatAttr(reader, "cxView.y", pos.y);
-    cxViewSetPosition(view, pos);
+    cxViewSetPos(view, pos);
     
     cxViewSetOrder(view, cxXMLReadIntAttr(reader, "cxView.z", this->zorder));
     
@@ -95,6 +95,9 @@ static void cxViewSetChipmunkAttr(cxAny view,xmlTextReaderPtr reader)
     this->chipmunk.m = cxXMLReadFloatAttr(reader, "cxChipmunk.m", this->chipmunk.m);
     this->chipmunk.u = cxXMLReadFloatAttr(reader, "cxChipmunk.u", this->chipmunk.u);
     this->chipmunk.isStatic = cxXMLReadBoolAttr(reader, "cxChipmunk.static", this->chipmunk.isStatic);
+    this->chipmunk.ctype = cxXMLReadUIntAttr(reader, "cxChipmunk.ctype", 0);
+    this->chipmunk.group = cxXMLReadUIntAttr(reader, "cxChipmunk.group", 0);
+    this->chipmunk.layer = cxXMLReadUIntAttr(reader, "cxChipmunk.layer", ~0);
 }
 
 cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
@@ -169,7 +172,7 @@ void cxViewSetViewEvent(cxEvent *event)
     if(position != NULL){
         cxVec2f vposition = pview->position;
         cxReadFloats(position, &vposition.x);
-        cxViewSetPosition(pview, vposition);
+        cxViewSetPos(pview, vposition);
     }
     cxConstChars degress = cxEventArgString(event->args, "degress");
     if(degress != NULL){
@@ -189,8 +192,26 @@ void cxViewSetCropping(cxAny pview,cxBool cropping)
     this->isCropping = cropping;
 }
 
+void cxViewSetPosImp(cxAny pview,cxVec2f pos)
+{
+    cxView this = pview;
+    CX_RETURN(cxVec2fEqu(this->position, pos));
+    this->position = pos;
+    this->isDirty = true;
+}
+
+void cxViewSetRadiansImp(cxAny pview,cxFloat radians)
+{
+    cxView this = pview;
+    CX_RETURN(cxFloatEqu(this->radians,radians));
+    this->radians = radians;
+    this->isDirty = true;
+}
+
 CX_OBJECT_INIT(cxView, cxObject)
 {
+    CX_METHOD_SET(this->SetPosition, cxViewSetPosImp);
+    CX_METHOD_SET(this->SetRadians, cxViewSetRadiansImp);
     this->super.cxBase = cxBaseTypeView;
     this->hideTop = true;
     this->isBorder = false;
@@ -467,12 +488,10 @@ void cxViewSetOrder(cxAny pview,cxInt order)
     }
 }
 
-void cxViewSetPosition(cxAny pview,cxVec2f position)
+void cxViewSetPos(cxAny pview,cxVec2f pos)
 {
     cxView this = pview;
-    CX_RETURN(cxVec2fEqu(this->position, position));
-    this->position = position;
-    this->isDirty = true;
+    CX_METHOD_RUN(this->SetPosition, pview, pos);
 }
 
 void cxViewSetAnchor(cxAny pview,cxVec2f anchor)
@@ -521,9 +540,7 @@ cxFloat cxViewRadians(cxAny pview)
 void cxViewSetRadians(cxAny pview,cxFloat radians)
 {
     cxView this = pview;
-    CX_RETURN(cxFloatEqu(this->radians,radians));
-    this->radians = radians;
-    this->isDirty = true;
+    CX_METHOD_RUN(this->SetRadians,pview,radians);
 }
 
 cxVec2f cxViewScale(cxAny pview)
@@ -531,7 +548,6 @@ cxVec2f cxViewScale(cxAny pview)
     cxView this = pview;
     return cxVec2fv(this->fixscale.x * this->scale.x, this->fixscale.y * this->scale.y);
 }
-
 
 void cxViewTransform(cxAny pview)
 {
@@ -653,7 +669,7 @@ void cxViewAutoResizing(cxAny pview)
         pos.y += size.h * this->anchor.y * scale.y;
         pos.y += this->autoBox.b;
     }
-    cxViewSetPosition(this, pos);
+    cxViewSetPos(this, pos);
     cxViewSetSize(this, size);
 }
 

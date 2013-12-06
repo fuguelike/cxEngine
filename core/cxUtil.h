@@ -23,6 +23,10 @@ CX_C_BEGIN
 
 cxInt cxRand(cxInt min,cxInt max);
 
+cxUInt cxHexToUInt(const cxChar *bs);
+
+cxUInt cxBinaryToUInt(const cxChar *bs);
+
 void cxSetRandSeed();
 
 cxString cxCompressed(cxString data);

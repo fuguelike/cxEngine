@@ -65,6 +65,8 @@ cxString cxXMLReadLangStringAttr(xmlTextReaderPtr reader,cxConstChars name);
 
 cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt value);
 
+cxUInt cxXMLReadUIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxUInt value);
+
 cxInt cxXMLReadIntsAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt *values);
 
 cxBool cxXMLReadBoolAttr(xmlTextReaderPtr reader,cxConstChars name,cxBool value);
