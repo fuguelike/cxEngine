@@ -88,19 +88,7 @@ static void cxViewFixScaleAttr(cxAny view,xmlTextReaderPtr reader)
     xmlFree(fixscale);
 }
 
-static void cxViewSetChipmunkAttr(cxAny view,xmlTextReaderPtr reader)
-{
-    cxView this = view;
-    this->chipmunk.e = cxXMLReadFloatAttr(reader, "cxChipmunk.e", this->chipmunk.e);
-    this->chipmunk.m = cxXMLReadFloatAttr(reader, "cxChipmunk.m", this->chipmunk.m);
-    this->chipmunk.u = cxXMLReadFloatAttr(reader, "cxChipmunk.u", this->chipmunk.u);
-    this->chipmunk.isStatic = cxXMLReadBoolAttr(reader, "cxChipmunk.static", this->chipmunk.isStatic);
-    this->chipmunk.ctype = cxXMLReadUIntAttr(reader, "cxChipmunk.ctype", 0);
-    this->chipmunk.group = cxXMLReadUIntAttr(reader, "cxChipmunk.group", 0);
-    this->chipmunk.layer = cxXMLReadUIntAttr(reader, "cxChipmunk.layer", ~0);
-}
-
-cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
+void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
     cxObjectXMLReadAttr(pxml, view, reader);
     cxViewXML xml = pxml;
@@ -138,8 +126,6 @@ cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
     if(cxXMLReadFloatsAttr(reader, "cxView.degrees", &degrees) == 1){
         cxViewSetDegrees(view, degrees);
     }
-    //set chipmunk attr
-    cxViewSetChipmunkAttr(view, reader);
     //view event
     cxXMLAppendEvent(xml->events, this, cxView, onEnter);
     cxXMLAppendEvent(xml->events, this, cxView, onExit);
@@ -147,7 +133,6 @@ cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
     cxXMLAppendEvent(xml->events, this, cxView, onResize);
     cxXMLAppendEvent(xml->events, this, cxView, onLayout);
     cxXMLAppendEvent(xml->events, this, cxView, onDirty);
-    return true;
 }
 
 void cxViewSetViewEvent(cxEvent *event)
@@ -192,26 +177,8 @@ void cxViewSetCropping(cxAny pview,cxBool cropping)
     this->isCropping = cropping;
 }
 
-void cxViewSetPosImp(cxAny pview,cxVec2f pos)
-{
-    cxView this = pview;
-    CX_RETURN(cxVec2fEqu(this->position, pos));
-    this->position = pos;
-    this->isDirty = true;
-}
-
-void cxViewSetRadiansImp(cxAny pview,cxFloat radians)
-{
-    cxView this = pview;
-    CX_RETURN(cxFloatEqu(this->radians,radians));
-    this->radians = radians;
-    this->isDirty = true;
-}
-
 CX_OBJECT_INIT(cxView, cxObject)
 {
-    CX_METHOD_SET(this->SetPosition, cxViewSetPosImp);
-    CX_METHOD_SET(this->SetRadians, cxViewSetRadiansImp);
     this->super.cxBase = cxBaseTypeView;
     this->hideTop = true;
     this->isBorder = false;
@@ -228,7 +195,6 @@ CX_OBJECT_INIT(cxView, cxObject)
     cxObjectSetXMLReadFunc(this, cxViewXMLReadAttr);
     this->actions = CX_ALLOC(cxHash);
     this->caches = CX_ALLOC(cxHash);
-    this->chipmunk.m = 1.0f;
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
@@ -428,8 +394,8 @@ void cxViewSetSize(cxAny pview,cxSize2f size)
 
 static int cxViewSortByZOrder(cxListElement *lp,cxListElement *rp)
 {
-    cxView v1 = (cxView)lp->object;
-    cxView v2 = (cxView)rp->object;
+    cxView v1 = (cxView)lp->any;
+    cxView v2 = (cxView)rp->any;
     return v1->zorder - v2->zorder;
 }
 
@@ -491,7 +457,9 @@ void cxViewSetOrder(cxAny pview,cxInt order)
 void cxViewSetPos(cxAny pview,cxVec2f pos)
 {
     cxView this = pview;
-    CX_METHOD_RUN(this->SetPosition, pview, pos);
+    CX_RETURN(cxVec2fEqu(this->position, pos));
+    this->position = pos;
+    this->isDirty = true;
 }
 
 void cxViewSetAnchor(cxAny pview,cxVec2f anchor)
@@ -540,7 +508,9 @@ cxFloat cxViewRadians(cxAny pview)
 void cxViewSetRadians(cxAny pview,cxFloat radians)
 {
     cxView this = pview;
-    CX_METHOD_RUN(this->SetRadians,pview,radians);
+    CX_RETURN(cxFloatEqu(this->radians,radians));
+    this->radians = radians;
+    this->isDirty = true;
 }
 
 cxVec2f cxViewScale(cxAny pview)
@@ -593,7 +563,7 @@ void cxViewEnter(cxAny pview)
     this->isRunning = true;
     CX_EVENT_FIRE(this, onEnter);
     CX_LIST_FOREACH(this->subViews, ele){
-        cxView view = ele->object;
+        cxView view = ele->any;
         if(view->isRunning){
             continue;
         }
@@ -605,7 +575,7 @@ void cxViewExit(cxAny pview)
 {
     cxView this = pview;
     CX_LIST_FOREACH(this->subViews, ele){
-        cxView view = ele->object;
+        cxView view = ele->any;
         if(!view->isRunning){
             continue;
         }
@@ -620,6 +590,7 @@ void cxViewAppend(cxAny pview,cxAny newview)
     CX_ASSERT(pview != NULL && newview != NULL, "parent view or new view null");
     cxView this = pview;
     cxView new = newview;
+    CX_RETURN(new->parentView == pview);
     CX_ASSERT(newview != NULL && new->subElement == NULL, "newview null or add to view");
     new->subElement = cxListAppend(this->subViews, new);
     new->parentView = this;
@@ -627,7 +598,6 @@ void cxViewAppend(cxAny pview,cxAny newview)
         cxViewEnter(new);
         cxViewLayout(new);
     }
-    CX_METHOD_RUN(this->AppendAfter,pview,newview);
 }
 
 void cxViewAutoResizing(cxAny pview)
@@ -679,7 +649,7 @@ void cxViewLayout(cxAny pview)
     cxViewAutoResizing(this);
     CX_EVENT_FIRE(this, onLayout);
     CX_LIST_FOREACH(this->subViews, ele){
-        cxView view = ele->object;
+        cxView view = ele->any;
         cxViewLayout(view);
     }
 }
@@ -693,7 +663,6 @@ void cxViewRemoved(cxAny pview)
         cxViewExit(this);
     }
     cxView parent = this->parentView;
-    CX_METHOD_RUN(parent->RemoveBefore,parent,pview);
     cxListRemove(parent->subViews, this->subElement);
     this->subElement = NULL;
     this->parentView = NULL;
@@ -714,7 +683,7 @@ static cxBool cxViewTouchSubViews(cxAny pview,cxTouch *touch)
     cxView this = pview;
     cxListElement *head = cxListFirst(this->subViews);
     for(cxListElement *ele = cxListLast(this->subViews);ele != NULL && head != NULL;ele = ele->prev){
-        cxView view = ele->object;
+        cxView view = ele->any;
         if(cxViewTouch(view, touch)){
             return true;
         }
@@ -817,7 +786,7 @@ void cxViewDraw(cxAny pview)
         cxViewSort(this);
     }
     CX_LIST_SAFE_FOREACH(this->subViews, ele, tmp){
-        cxView view = ele->object;
+        cxView view = ele->any;
         cxViewDraw(view);
     }
     CX_METHOD_RUN(this->DrawAfter,this);

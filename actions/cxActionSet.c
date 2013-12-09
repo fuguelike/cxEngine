@@ -10,7 +10,7 @@
 #include <core/cxEventArg.h>
 #include "cxActionSet.h"
 
-static cxBool cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxActionSet this = mAction;
@@ -37,10 +37,9 @@ static cxBool cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReade
         if(action == NULL){
             continue;
         }
-        cxObjectXMLReadRun(action, xmlAction, reader);
+        cxObjectXMLReadAttrRun(action, xmlAction, reader);
         cxActionSetAppend(this, action);
     }
-    return true;
 }
 
 static void cxActionSetRunNext(cxAny pav);

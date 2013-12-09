@@ -95,7 +95,7 @@ static void cxAnimateXMLAppend(cxArray list,cxChar *file,cxChar *key,cxInt from,
     }
 }
 
-static cxBool cxAnimateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxAnimateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXML xml = xmlAction;
     cxAnimate this = mAction;
@@ -128,7 +128,6 @@ static cxBool cxAnimateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderP
     }
     this->duration = this->super.duration;
     cxXMLAppendEvent(xml->events, this, cxAnimate, onFrame);
-    return true;
 }
 
 static void cxAnimateReset(cxAny pav)

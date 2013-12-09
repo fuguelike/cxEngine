@@ -117,7 +117,7 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize,cxBool
 }
 
 //texture="res/a.xml?green.png"
-cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     //invoke base
     cxViewXMLReadAttr(xmlView, mView, reader);
@@ -135,7 +135,6 @@ cxBool cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxChar *shader = cxXMLAttr("cxSprite.shader");
     cxSpriteSetShader(this, shader);
     xmlFree(shader);
-    return true;
 }
 
 CX_OBJECT_INIT(cxSprite, cxView)

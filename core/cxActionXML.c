@@ -21,12 +21,11 @@
 #include "cxActionXML.h"
 #include "cxPlayer.h"
 
-cxBool cxActionRootXMLReadAttr(cxAny pxml,cxAny newobj, xmlTextReaderPtr reader)
+void cxActionRootXMLReadAttr(cxAny pxml,cxAny newobj, xmlTextReaderPtr reader)
 {
     cxObjectXMLReadAttr(pxml, newobj, reader);
     cxActionXML this = pxml;
     cxXMLAppendEvent(this->events, this, cxActionSet, onLoad);
-    return true;
 }
 
 CX_OBJECT_INIT(cxActionXML, cxObject)
@@ -109,7 +108,7 @@ cxAny cxActionXMLGet(cxConstChars src)
         if(action == NULL){
             continue;
         }
-        cxObjectXMLReadRun(action, this, reader);
+        cxObjectXMLReadAttrRun(action, this, reader);
     }
     xmlTextReaderClose(reader);
     return action;
@@ -207,7 +206,7 @@ static void cxActionXMLLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
         if(!ELEMENT_IS_TYPE(cxActionSet)){
             continue;
         }
-        cxObjectXMLReadRun(this, this, reader);
+        cxObjectXMLReadAttrRun(this, this, reader);
         CX_EVENT_FIRE(this, onLoad);
         break;
     }

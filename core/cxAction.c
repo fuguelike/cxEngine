@@ -14,7 +14,7 @@ cxBool cxActionForever(cxAny pav)
     return false;
 }
 
-cxBool cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXML xml = xmlAction;
     cxAction this = mAction;
@@ -47,7 +47,6 @@ cxBool cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reade
     cxXMLAppendEvent(xml->events, this, cxAction, onStop);
     cxXMLAppendEvent(xml->events, this, cxAction, onSplit);
     cxXMLAppendEvent(xml->events, this, cxAction, onStep);
-    return true;
 }
 
 void cxActionSetSplit(cxAny pav,cxInt split)

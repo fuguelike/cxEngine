@@ -48,7 +48,7 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
-cxBool cxButtonXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxButtonXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxViewXML xml = xmlView;
     cxButton this = mView;
@@ -59,7 +59,6 @@ cxBool cxButtonXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxXMLAppendEvent(xml->events, this, cxButton, onEnter);
     cxButtonEnable(this, cxXMLReadBoolAttr(reader, "cxButton.enable", this->isEnable));
     this->movement = cxXMLReadFloatAttr(reader, "cxButton.movement", this->movement);
-    return true;
 }
 
 CX_OBJECT_INIT(cxButton, cxSprite)
@@ -67,7 +66,7 @@ CX_OBJECT_INIT(cxButton, cxSprite)
     cxObjectSetXMLReadFunc(this, cxButtonXMLReadAttr);
     this->movement = 15;
     this->isEnable = true;
-    cxViewOverrideTouch(this, cxButtonTouch);
+    CX_METHOD_SET(this->super.super.Touch, cxButtonTouch);
 }
 CX_OBJECT_FREE(cxButton, cxSprite)
 {

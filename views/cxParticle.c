@@ -10,7 +10,7 @@
 #include <core/cxUtil.h>
 #include "cxParticle.h"
 
-cxBool cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxAtlasXMLReadAttr(xmlView, mView, reader);
     cxParticle this = mView;
@@ -44,7 +44,6 @@ cxBool cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxXMLReadFloatsAttr(reader, "cxParticle.endcolor", &this->endcolor.v.r);
     cxXMLReadFloatsAttr(reader, "cxParticle.startspin", &this->startspin.v);
     cxXMLReadFloatsAttr(reader, "cxParticle.endspin", &this->endspin.v);
-    return true;
 }
 
 void cxParticleStop(cxAny pview)

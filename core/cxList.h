@@ -22,7 +22,7 @@ CX_C_BEGIN
 typedef struct cxListElement cxListElement;
 struct cxListElement {
     cxListElement *prev, *next;
-    cxAny object;
+    cxAny any;
 };
 
 typedef int (*cxListCmpFunc)(cxListElement *lp,cxListElement *rp);

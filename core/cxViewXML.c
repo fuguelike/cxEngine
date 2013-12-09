@@ -21,14 +21,13 @@
 #include "cxHashXML.h"
 #include "cxActionXML.h"
 
-cxBool cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
+void cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
     cxViewXMLReadAttr(pxml, view, reader);
     cxViewXML this = view;
     cxViewXML xml = pxml;
     cxXMLAppendEvent(xml->events, this, cxViewXML, onBegin);
     cxXMLAppendEvent(xml->events, this, cxViewXML, onEnd);
-    return true;
 }
 
 void cxViewXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
@@ -120,7 +119,7 @@ cxViewXML cxViewXMLCreate(cxConstChars xml)
     return this;
 }
 
-static void cxViewXMLSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader)
+void cxViewXMLSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader)
 {
     cxViewXML this = pview;
     cxChar *id = cxXMLAttr("id");
@@ -168,7 +167,7 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
     while(xmlTextReaderRead(reader)){
         int type = xmlTextReaderNodeType(reader);
         if(type == XML_READER_TYPE_ELEMENT){
-            cxAny parent = cxStackTop(stack);
+            cxView parent = cxStackTop(stack);
             if(parent == NULL){
                 CX_ERROR("parse xml ui parent null");
                 break;
@@ -178,15 +177,11 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
                 continue;
             }
             cxView cview = CX_METHOD_GET(NULL, this->Make, temp, reader);
-            cxBool save = false;
-            if(cview != NULL){
-                cxObjectSetRoot(cview, this);
-                save = cxObjectXMLReadRun(cview, this, reader);
-                cxViewAppend(parent, cview);
-            }
-            if(save){
-                cxViewXMLSet(this, cview, reader);
-            }
+            CX_ASSERT(cview != NULL, "make element null");
+            cxObjectSetRoot(cview, this);
+            cxViewAppend(parent, cview);
+            cxObjectXMLReadAttrRun(cview, this, reader);
+            cxViewXMLSet(this, cview, reader);
             if(xmlTextReaderIsEmptyElement(reader)){
                 continue;
             }
@@ -221,7 +216,7 @@ cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
     }
     if(ret){
         cxAutoPoolPush();
-        cxObjectXMLReadRun(xmlView, xmlView, reader);
+        cxObjectXMLReadAttrRun(xmlView, xmlView, reader);
         cxStackPush(stack, xmlView);
         CX_EVENT_FIRE(xmlView, onBegin);
         cxViewXMLLoadSubviews(xmlView,reader, stack);

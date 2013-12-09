@@ -221,7 +221,7 @@ typedef enum {
 
 typedef void (*cxObjectFunc)(cxPointer this);
 
-typedef cxBool (*cxXMLReadAttrFunc)(cxAny pxml,cxAny pnew, xmlTextReaderPtr reader);
+typedef void (*cxXMLReadAttrFunc)(cxAny pxml,cxAny pnew, xmlTextReaderPtr reader);
 
 //base type define
 CX_OBJECT_BEG(cxObject)
@@ -239,11 +239,11 @@ cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type);
 
 cxBool cxObjectIsType(cxAny pobj,cxConstType type);
 
-cxBool cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader);
+void cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader);
 
 void cxObjectSetXMLReadFunc(cxAny obj,cxXMLReadAttrFunc func);
 
-cxBool cxObjectXMLReadRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader);
+void cxObjectXMLReadAttrRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader);
 
 cxAny cxObjectRoot(cxAny obj);
 

@@ -26,7 +26,7 @@ CX_OBJECT_DEF(cxScroll, cxView)
     CX_SLOT_ALLOC(onTouch);
 CX_OBJECT_END(cxScroll)
 
-cxBool cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+void cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
 cxBool cxScrollTouch(cxAny pview,cxTouch *touch);
 

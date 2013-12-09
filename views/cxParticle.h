@@ -90,7 +90,7 @@ CX_OBJECT_END(cxParticle)
 
 void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode);
 
-cxBool cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
 void cxParticleStop(cxAny pview);
 

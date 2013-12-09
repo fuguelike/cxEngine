@@ -11,6 +11,7 @@
 #include <streams/cxMp3Stream.h>
 #include <evhttp.h>
 #include <sys/time.h>
+#include <ctype.h>
 #include "cxBase.h"
 #include "cxUtil.h"
 
@@ -31,8 +32,22 @@ cxUInt cxBinaryToUInt(const cxChar *bs)
 
 cxUInt cxHexToUInt(const cxChar *bs)
 {
-    CX_ASSERT(false, "not completed");
-    return 0;
+    CX_ASSERT(bs != NULL, "args error");
+    cxInt len = strlen(bs);
+    cxUInt ret = 0;
+    for(cxInt i=0; i < len; i++){
+        cxChar v = tolower(bs[i]);
+        cxUInt tmp = 0;
+        if(v >= '0' && v <= '9'){
+            tmp = v - '0';
+        }else if(v >= 'a' && v <= 'f'){
+            tmp = v - 'a' + 0xa;
+        }else{
+            CX_ASSERT(false, "str error");
+        }
+        ret |= (tmp << ((len - i - 1)) * 4);
+    }
+    return ret;
 }
 
 cxString cxCompressed(cxString data)

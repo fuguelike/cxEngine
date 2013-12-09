@@ -22,14 +22,13 @@ static void cxTimerStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_UNUSED_PARAM(this);
 }
 
-static cxBool cxTimerXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxTimerXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxActionXML xml = xmlAction;
     cxTimer this = mAction;
     this->repeat = cxXMLReadIntAttr(reader, "cxTimer.repeat", this->repeat);
     cxXMLAppendEvent(xml->events, this, cxTimer, onArrive);
-    return true;
 }
 
 static cxBool cxTimerExit(cxAny pav)

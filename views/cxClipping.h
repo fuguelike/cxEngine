@@ -20,7 +20,7 @@ CX_OBJECT_DEF(cxClipping, cxView)
     CX_EVENT_ALLOC(onClipping);
 CX_OBJECT_END(cxClipping)
 
-cxBool cxClippingXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+void cxClippingXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
 void cxClippingSetInverse(cxAny pview,cxBool inverse);
 

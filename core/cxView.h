@@ -40,33 +40,15 @@ typedef enum{
     cxViewIsTouchTypeSubview    = 1 << 1,   //touch subviews
 }cxViewIsTouchType;
 
-typedef struct {
-    cxAny shape;
-    cxFloat m;  //mass
-    cxFloat u;  //friction
-    cxFloat e;  //elasticity
-    cxBool isStatic;
-    cxUInt ctype;
-    cxUInt group;
-    cxUInt layer;
-}cxChipmunkAttr;
-
 typedef cxBox4f cxViewAutoResizeBox;
 
 typedef void (*cxViewFunc)(cxAny pview);
-
-typedef void (*cxViewUpdateFunc)(cxAny pview,cxAny nview);
 
 typedef cxBool (*cxViewTouchFunc)(cxAny pview,cxTouch *touch);
 
 typedef cxUInt (*cxViewIsTouchFunc)(cxAny pview,cxTouch *touch);
 
-typedef void (*cxViewSetPositionFunc)(cxAny pview,cxVec2f position);
-
-typedef void (*cxViewSetRadiansFunc)(cxAny pview,cxFloat radians);
-
 CX_OBJECT_DEF(cxView, cxObject)
-    cxChipmunkAttr chipmunk;            //chipmunk attr
     cxAny args;
     cxViewAutoResizeMask autoMask;
     cxViewAutoResizeBox  autoBox;
@@ -96,13 +78,9 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxColor4f color;
     CX_METHOD_DEF(cxViewIsTouchFunc, IsTouch);
     CX_METHOD_DEF(cxViewTouchFunc, Touch);
-    CX_METHOD_DEF(cxViewUpdateFunc, AppendAfter);       //when append new view after
-    CX_METHOD_DEF(cxViewUpdateFunc, RemoveBefore);      //when remove view before
     CX_METHOD_DEF(cxViewFunc, Draw);
     CX_METHOD_DEF(cxViewFunc, DrawAfter);
     CX_METHOD_DEF(cxViewFunc, DrawBefore);
-    CX_METHOD_DEF(cxViewSetPositionFunc, SetPosition);
-    CX_METHOD_DEF(cxViewSetRadiansFunc, SetRadians);
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
@@ -110,10 +88,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
 CX_OBJECT_END(cxView)
-
-#define cxViewOverrideTouch(_o_,_f_)    ((cxView)(_o_))->Touch = _f_
-
-#define cxViewOverrideDraw(_o_,_f_)     ((cxView)(_o_))->Draw = _f_
 
 void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object);
 
@@ -151,7 +125,7 @@ void cxViewSetBorder(cxAny pview,cxBool border);
 
 cxBool cxViewZeroSize(cxAny pview);
 
-cxBool cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);
+void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);
 
 cxAny cxViewGetParentView(cxAny pview);
 
@@ -216,8 +190,6 @@ void cxViewSetRaxis(cxAny pview,cxVec3f raxis);
 cxFloat cxViewRadians(cxAny pview);
 
 void cxViewSetRadians(cxAny pview,cxFloat radians);
-
-void cxViewSetRadiansImp(cxAny pview,cxFloat radians);
 
 void cxViewSetDegrees(cxAny pview,cxFloat degrees);
 

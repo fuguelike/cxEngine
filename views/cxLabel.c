@@ -10,7 +10,7 @@
 #include <textures/cxTextureFactory.h>
 #include "cxLabel.h"
 
-cxBool cxLabelXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxLabelXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxSpriteXMLReadAttr(xmlView, mView, reader);
     cxLabel this = mView;
@@ -24,7 +24,6 @@ cxBool cxLabelXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxLabelSetFontSize(mView, cxXMLReadFloatAttr(reader, "cxLabel.size", this->attr.size));
     //set fontbold
     cxLabelSetFontBold(mView, cxXMLReadBoolAttr(reader, "cxLabel.bold", this->attr.bold));
-    return true;
 }
 
 static void cxLabelUpdate(cxEvent *event)

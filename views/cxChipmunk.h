@@ -14,37 +14,52 @@
 
 CX_C_BEGIN
 
+typedef struct {
+    cxBool isStatic;
+    cxFloat m;
+    cxFloat e;
+    cxFloat u;
+    cpGroup group;
+    cpLayers layer;
+    cpCollisionType ctype;
+}cxChipmunkAttr;
+
+#define cxChipmunkAttrDefault() (cxChipmunkAttr){false,1.0f,0.0f,0.0f,CP_NO_GROUP,CP_ALL_LAYERS,0}
+
 CX_OBJECT_DEF(cxChipmunk, cxView)
     cpSpace *space;
+    cxHash items;
 CX_OBJECT_END(cxChipmunk)
 
-cxBool cxChipmunkXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+void cxChipmunkXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
 void cxChipmunkSetGravity(cxAny pview,cxVec2f gravity);
 
-void cxChipmunkAppendAfter(cxAny pview,cxAny nview);
+cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr);
 
-void cxChipmunkRemoveBefore(cxAny pview,cxAny nview);
+void cxChipmunkRemove(cxAny pview,cxAny nview);
 
-void cxViewSetElasticity(cxAny pview,cxFloat e);
+void cxChipmunkSetPos(cxAny pview,cxVec2f pos);
 
-void cxViewSetFriction(cxAny pview,cxFloat u);
+void cxChipmunkSetRadians(cxAny pview,cxFloat angle);
 
-void cxViewSetMass(cxAny pview,cxFloat m);
+void cxChipmunkSetElasticity(cxAny pview,cxFloat e);
 
-void cxViewSetMoment(cxAny pview,cxFloat i);
+void cxChipmunkSetFriction(cxAny pview,cxFloat u);
 
-void cxViewApplyForce(cxAny pview, cxVec2f force, cxVec2f r);
+void cxChipmunkSetMass(cxAny pview,cxFloat m);
 
-void cxViewResetForces(cxAny pview);
+void cxChipmunkApplyForce(cxAny pview, cxVec2f force, cxVec2f r);
 
-void cxViewApplyImpulse(cxAny pview, const cxVec2f j, const cxVec2f r);
+void cxChipmunkResetForces(cxAny pview);
 
-void cxViewSetCollisionType(cxAny pview,cxUInt type);
+void cxChipmunkApplyImpulse(cxAny pview, const cxVec2f j, const cxVec2f r);
 
-void cxViewSetGroup(cxAny pview,cxUInt group);
+void cxChipmunkSetCollisionType(cxAny pview,cxUInt type);
 
-void cxViewSetLayers(cxAny pview,cxUInt layers);
+void cxChipmunkSetGroup(cxAny pview,cxUInt group);
+
+void cxChipmunkSetLayers(cxAny pview,cxUInt layers);
 
 CX_C_END
 

@@ -23,12 +23,11 @@ static void cxFadeStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAlpha(this->super.view, alpha);
 }
 
-static cxBool cxFadeXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxFadeXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxFade this = mAction;
     this->alpha = cxXMLReadFloatAttr(reader, "cxFade.alpha", this->alpha);
-    return true;
 }
 
 CX_OBJECT_INIT(cxFade, cxAction)

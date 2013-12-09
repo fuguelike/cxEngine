@@ -50,10 +50,8 @@ static void finished(cxAny pview)
 
 static void deleteSprite(cxEvent *event)
 {
-    cxSprite sprite = cxViewXMLGet(event->sender, "purple");
-//    cxViewSetPos(sprite,cxVec2fv(0, 350));
-    cxViewApplyImpulse(sprite, cxVec2fv(0, 2000), cxVec2fv(0, 1));
-//    cxViewXMLRemove(cxWindowTopView(),"purple");
+    cxAny pview = cxViewXMLGet(event->sender, "purple");
+    cxChipmunkApplyImpulse(pview, cxVec2fv(0, 2000), cxVec2fv(0, 1));
 }
 
 void cxEngineInit(cxEngine engine)

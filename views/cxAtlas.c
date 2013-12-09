@@ -11,7 +11,7 @@
 #include <core/cxViewXML.h>
 #include "cxAtlas.h"
 
-cxBool cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxAtlas this = mView;
     //support boxes mode
@@ -27,7 +27,6 @@ cxBool cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }
     //
     cxSpriteXMLReadAttr(xmlView, mView, reader);
-    return true;
 }
 
 //on resize load
@@ -199,7 +198,7 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);
-    cxViewOverrideDraw(this, cxAtlasDraw);
+    CX_METHOD_SET(this->super.super.Draw, cxAtlasDraw);
     cxObjectSetXMLReadFunc(this, cxAtlasXMLReadAttr);
     CX_EVENT_QUICK(this->super.super.onResize, cxAtlasResize);
 }

@@ -21,7 +21,7 @@ CX_OBJECT_TERM(cxList, cxObject)
 cxListElement *cxListAppend(cxList list,cxAny any)
 {
     cxListElement *element = allocator->malloc(sizeof(cxListElement));
-    element->object = any;
+    element->any = any;
     DL_APPEND(list->listptr, element);
     CX_RETAIN(any);
     return element;
@@ -30,7 +30,7 @@ cxListElement *cxListAppend(cxList list,cxAny any)
 cxListElement *cxListPrepend(cxList list,cxAny any)
 {
     cxListElement *element = allocator->malloc(sizeof(cxListElement));
-    element->object = any;
+    element->any = any;
     DL_PREPEND(list->listptr, element);
     CX_RETAIN(any);
     return element;
@@ -57,7 +57,7 @@ cxListElement *cxListLast(cxList list)
 void cxListRemove(cxList list,cxListElement *element)
 {
     DL_DELETE(list->listptr, element);
-    CX_RELEASE(element->object);
+    CX_RELEASE(element->any);
     allocator->free(element);
 }
 

@@ -28,11 +28,13 @@ CX_OBJECT_DEF(cxViewXML, cxView)
     CX_EVENT_ALLOC(onEnd);
 CX_OBJECT_END(cxViewXML)
 
+void cxViewXMLSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader);
+
 void cxViewXMLSetItem(cxAny pview,cxConstChars key,cxAny item);
 
 cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader);
 
-cxBool cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);
+void cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);
 
 void cxViewXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func);
 

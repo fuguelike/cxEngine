@@ -12,7 +12,7 @@
 
 #define CX_SCROLL_MOVE_ACTION_ID 100000
 
-cxBool cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxScroll this = mView;
@@ -26,7 +26,6 @@ cxBool cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }
     xmlFree(type);
     this->value = cxXMLReadFloatAttr(reader, "cxScroll.value", this->value);
-    return true;
 }
 
 cxView cxScrollContainer(cxAny pview)
@@ -34,7 +33,7 @@ cxView cxScrollContainer(cxAny pview)
     cxScroll this = pview;
     cxListElement *ele = cxListFirst(this->super.subViews);
     CX_ASSERT(ele != NULL, "cxScroll not set conatiner,should first subviews");
-    return ele->object;
+    return ele->any;
 }
 
 static void cxScrollActionView(cxScroll this,cxVec2f new)
@@ -127,7 +126,7 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
 CX_OBJECT_INIT(cxScroll, cxView)
 {
     cxEngine engine = cxEngineInstance();
-    cxViewOverrideTouch(this, cxScrollTouch);
+    CX_METHOD_SET(this->super.Touch, cxScrollTouch);
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
     cxObjectSetXMLReadFunc(this, cxScrollXMLReadAttr);

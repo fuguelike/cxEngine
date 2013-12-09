@@ -24,7 +24,7 @@ static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetRadians(this->super.view, radians);
 }
 
-static cxBool cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxRotate this = mAction;
@@ -44,7 +44,6 @@ static cxBool cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPt
     xmlFree(sx);
     xmlFree(sy);
     xmlFree(sz);
-    return true;
 }
 
 CX_OBJECT_INIT(cxRotate, cxAction)

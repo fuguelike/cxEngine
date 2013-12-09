@@ -8,7 +8,7 @@
 
 #include "cxTable.h"
 
-cxBool cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxTable this = mView;
@@ -18,7 +18,6 @@ cxBool cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxXMLReadIntsAttr(reader, "cxTable.type", &this->grid.x);
     //array hide
     cxTableArrayHide(mView, cxXMLReadBoolAttr(reader, "cxTable.arrayHide", this->arrayHide));
-    return true;
 }
 
 void cxTableSetSpace(cxAny pview,cxVec2f space)
@@ -43,12 +42,6 @@ void cxTableArraySubviews(cxAny pview)
     this->isArray = true;
 }
 
-static void cxTableAppendAfter(cxAny pview,cxAny nview)
-{
-    cxTable this = pview;
-    cxTableArraySubviews(this);
-}
-
 static void cxTableResize(cxEvent *event)
 {
     cxTableArraySubviews(event->sender);
@@ -58,7 +51,7 @@ static cxInt cxTableCount(cxTable this)
 {
     cxInt count = 0;
     CX_LIST_FOREACH(this->super.subViews, ele){
-        cxView view = ele->object;
+        cxView view = ele->any;
         if(!view->isVisible && !this->arrayHide){
             continue;
         }
@@ -94,7 +87,7 @@ static void cxTableUpdate(cxEvent *event)
     }
     cxInt i = 0;
     CX_LIST_FOREACH(this->super.subViews, ele){
-        cxView view = ele->object;
+        cxView view = ele->any;
         if(!view->isVisible && !this->arrayHide){
             continue;
         }
@@ -120,8 +113,6 @@ CX_OBJECT_INIT(cxTable, cxView)
     this->arrayHide = true;
     CX_EVENT_QUICK(this->super.onResize, cxTableResize);
     CX_EVENT_QUICK(this->super.onUpdate, cxTableUpdate);
-    CX_METHOD_SET(this->super.AppendAfter, cxTableAppendAfter);
-    CX_METHOD_SET(this->super.RemoveBefore, cxTableAppendAfter);
     cxObjectSetXMLReadFunc(this, cxTableXMLReadAttr);
 }
 CX_OBJECT_FREE(cxTable, cxView)

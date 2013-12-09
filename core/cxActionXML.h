@@ -25,7 +25,7 @@ CX_OBJECT_END(cxActionXML)
 
 cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader);
 
-cxBool cxActionRootXMLReadAttr(cxAny pxml,cxAny newobj, xmlTextReaderPtr reader);
+void cxActionRootXMLReadAttr(cxAny pxml,cxAny newobj, xmlTextReaderPtr reader);
 
 cxAny cxActionXMLCreate(cxConstChars xml);
 
