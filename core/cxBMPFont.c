@@ -42,6 +42,16 @@ static void cxBMPFontReaderError(void *arg,const char *msg,xmlParserSeverities s
     this->isError = true;
 }
 
+cxTexture cxBMPFontTexture(cxBMPFont this,cxUChar page)
+{
+    return cxHashGet(this->textures, cxHashIntKey(page));
+}
+
+cxBMPElement cxBMPFontChar(cxBMPFont this,cxUInt id)
+{
+    return cxHashGet(this->chars, cxHashIntKey(id));
+}
+
 cxBMPFont cxBMPFontCreate(cxConstChars file)
 {
     cxBMPFont font = CX_CREATE(cxBMPFont);
@@ -94,7 +104,7 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
             xmlFree(file);
         }else if(ELEMENT_IS_TYPE(char)){
             cxBMPElement pchar = CX_ALLOC(cxBMPElement);
-            pchar->id = cxXMLReadUIntAttr(reader, "id", 0);
+            cxUInt id = cxXMLReadUIntAttr(reader, "id", 0);
             pchar->box.x = cxXMLReadIntAttr(reader, "x", 0);
             pchar->box.y = cxXMLReadIntAttr(reader, "y", 0);
             pchar->box.w = cxXMLReadIntAttr(reader, "width", 0);
@@ -103,7 +113,7 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
             pchar->yoffset = cxXMLReadIntAttr(reader, "yoffset", 0);
             pchar->xadvance = cxXMLReadIntAttr(reader, "xadvance", 0);
             pchar->page = cxXMLReadIntAttr(reader, "page", 0);
-            cxHashSet(this->chars, cxHashIntKey(pchar->id), pchar);
+            cxHashSet(this->chars, cxHashIntKey(id), pchar);
             CX_RELEASE(pchar);
         }
     }

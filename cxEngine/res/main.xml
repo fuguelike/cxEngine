@@ -43,5 +43,9 @@
             <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="items.xml?font" cxLabelTTF.text="Chipmunk" cxLabelTTF.size="30"/>
         </cxButton>
+        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('bmpfont.xml')">
+            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="items.xml?font" cxLabelTTF.text="bmpFont" cxLabelTTF.size="30"/>
+        </cxButton>
     </cxTable>
 </cxViewXML>

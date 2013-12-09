@@ -36,6 +36,7 @@
 #include <actions/cxRunner.h>
 #include <views/cxLoading.h>
 #include <views/cxChipmunk.h>
+#include <views/cxLabelBMP.h>
 #include <core/cxBMPFont.h>
 
 static cxAny loading(cxAny pview)
@@ -69,6 +70,18 @@ void cxEngineMain(cxEngine engine)
     cxLabelTTF txt = cxLabelTTFCreate(UTF8("Loading..."), UTF8("banana.ttf"), 60);
     cxViewSetColor(txt, cxRED);
     cxViewAppend(lv, txt);
+    
+//    cxSprite sp = cxSpriteCreateWithFile("white.png", NULL);
+//    cxViewSetSize(sp, engine->window->super.size);
+//    cxViewAppend(engine->window, sp);
+//    
+//    cxLabelBMP bmp = CX_CREATE(cxLabelBMP);
+//    cxViewSetColor(bmp, cxRED);
+//    cxViewSetSize(bmp,cxSize2fv(300, 60));
+//    cxLabelBMPSetFont(bmp, "font.fnt");
+//    cxLabelBMPSetSize(bmp, 50);
+//    cxLabelBMPSetText(bmp, UTF8("库"));
+//    cxWindowPushView(bmp, NULL);
 }
 
 void cxEngineFree(cxEngine engine)

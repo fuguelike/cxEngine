@@ -18,7 +18,6 @@ CX_C_BEGIN
 
 //id="124" x="2" y="3" width="14" height="70" xoffset="4" yoffset="-1" xadvance="17" page="0" chnl="0" letter="|"
 CX_OBJECT_DEF(cxBMPElement, cxObject)
-    cxUInt id;
     cxRect4f box;
     cxInt xoffset;
     cxInt yoffset;
@@ -40,13 +39,17 @@ CX_OBJECT_DEF(cxBMPFont, cxObject)
     cxInt unicode;
     cxInt lineHeight;
     cxInt base;
-    cxSize2i scale;
+    cxSize2f scale;
     cxInt pages;
     cxInt packed;
     cxHash textures;
     cxHash chars;
     cxBool isError;
 CX_OBJECT_END(cxBMPFont)
+
+cxTexture cxBMPFontTexture(cxBMPFont this,cxUChar page);
+
+cxBMPElement cxBMPFontChar(cxBMPFont this,cxUInt id);
 
 cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file);
 

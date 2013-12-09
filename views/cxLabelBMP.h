@@ -6,15 +6,28 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#ifndef cxEngineIOS_cxLabelBMP_h
-#define cxEngineIOS_cxLabelBMP_h
+#ifndef cxEngine_cxLabelBMP_h
+#define cxEngine_cxLabelBMP_h
 
-#include "cxBase.h"
+#include <core/cxBMPFont.h>
+#include "cxAtlas.h"
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxLabelBMP, cxObject)
+CX_OBJECT_DEF(cxLabelBMP, cxAtlas)
+    cxBMPFont font;
+    cxString txt;
+    cxBool isDirty;
+    cxFloat size;
 CX_OBJECT_END(cxLabelBMP)
+
+void cxLabelBMPReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+
+void cxLabelBMPSetFont(cxAny pview,cxConstChars font);
+
+void cxLabelBMPSetText(cxAny pview,cxString txt);
+
+void cxLabelBMPSetSize(cxAny pview,cxFloat size);
 
 CX_C_END
 

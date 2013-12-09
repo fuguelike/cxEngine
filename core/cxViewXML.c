@@ -13,6 +13,7 @@
 #include <views/cxAtlas.h>
 #include <views/cxParticle.h>
 #include <views/cxLabelTTF.h>
+#include <views/cxLabelBMP.h>
 #include <views/cxClipping.h>
 #include <views/cxTable.h>
 #include <views/cxScroll.h>
@@ -147,6 +148,8 @@ cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
         cview = CX_CREATE(cxParticle);
     }else if(ELEMENT_IS_TYPE(cxLabelTTF)){
         cview = CX_CREATE(cxLabelTTF);
+    }else if(ELEMENT_IS_TYPE(cxLabelBMP)){
+        cview = CX_CREATE(cxLabelBMP);
     }else if(ELEMENT_IS_TYPE(cxClipping)){
         cview = CX_CREATE(cxClipping);
     }else if(ELEMENT_IS_TYPE(cxTable)){

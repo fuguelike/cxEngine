@@ -70,7 +70,6 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
         width = pchar->width + wx + pchar->left;
         wx += (pchar->ax >> 16);
     }
-    //append size
     cxInt x = 0;
     cxInt y = 0;
     if(sfirst != NULL && sfirst->left < 0){
@@ -80,9 +79,7 @@ static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
     if(slast != NULL && slast->left > 0){
         width += slast->left;
     }
-    //merage text
-    cxInt bytes = width * height;
-    cxChar *buffer = allocator->calloc(1,bytes);
+    cxChar *buffer = allocator->calloc(1, width * height);
     CX_ARRAY_FOREACH(list, element){
         cxFreeFontChar pchar = cxArrayObject(element);
         y = height - pchar->top + des;

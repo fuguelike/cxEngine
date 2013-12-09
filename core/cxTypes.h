@@ -180,7 +180,7 @@ typedef struct {
 
 cxRect4f cxBoxTex2fToRect4f(cxBoxTex2f box);
 
-cxBoxTex2f cxRect4fToBoxTex2f(cxRect4f rect);
+cxBoxTex2f cxRect4fToBoxTex2f(cxRect4f box,cxSize2f texsize);
 
 typedef struct {
     cxColor4f lt;

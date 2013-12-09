@@ -119,14 +119,18 @@ cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2)
     return (c1 && c2) ? true : false;
 }
 
-cxBoxTex2f cxRect4fToBoxTex2f(cxRect4f rect)
+cxBoxTex2f cxRect4fToBoxTex2f(cxRect4f box,cxSize2f texsize)
 {
-    cxBoxTex2f box;
-    box.lb = cxTex2fv(rect.x, rect.y + rect.h);
-    box.lt = cxTex2fv(rect.x, rect.y);
-    box.rb = cxTex2fv(rect.x + rect.w, rect.y + rect.h);
-    box.rt = cxTex2fv(rect.x + rect.w, rect.y);
-    return box;
+    cxBoxTex2f rv = cxBoxTex2fDefault();
+    cxFloat x = box.x / texsize.w;
+    cxFloat y = box.y / texsize.h;
+    cxFloat w = box.w / texsize.w;
+    cxFloat h = box.h / texsize.h;
+    rv.lb = cxTex2fv(x, y + h);
+    rv.rb = cxTex2fv(x + w, y + h);
+    rv.lt = cxTex2fv(x, y);
+    rv.rt = cxTex2fv(x + w, y);
+    return rv;
 }
 
 cxBool cxBox2fContainPoint(const cxBox4f box,const cxVec2f pos)
