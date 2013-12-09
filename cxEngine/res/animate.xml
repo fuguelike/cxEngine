@@ -8,12 +8,12 @@
     <cxButton cxView.w = "180" cxView.h = "120" cxView.left="0"
         cxButton.onRelease="cxActionRun({'src':'actions.xml?animate','view':'sprite','cache':true})">
         <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-        <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Animate" cxLabel.size="25"/>
+        <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Animate" cxLabelTTF.size="25"/>
     </cxButton>
 
     <cxButton cxView.w = "180" cxView.h = "120" cxView.right="0"
         cxButton.onRelease="cxPopView">
         <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-        <cxLabel cxView.color="0,0,0" cxLabel.font="banana.ttf" cxLabel.text="Return" cxLabel.size="25"/>
+        <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Return" cxLabelTTF.size="25"/>
     </cxButton>
 </cxViewXML>

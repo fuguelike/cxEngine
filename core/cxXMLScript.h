@@ -55,6 +55,9 @@ cxInt cxReadInts(cxConstChars ptr,cxInt *values);
 //return need xmlFree free
 cxChar *cxXMLReadString(xmlTextReaderPtr reader);
 
+//return must release
+cxString cxXMLReadAllocAttr(xmlTextReaderPtr reader,cxConstChars name);
+
 cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat value);
 
 cxColor4f cxXMLReadColorAttr(xmlTextReaderPtr reader,cxConstChars name,cxColor4f color);

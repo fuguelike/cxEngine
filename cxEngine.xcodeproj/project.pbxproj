@@ -44,6 +44,8 @@
 		834F2E8118458D310067E220 /* Untitled.xml in Resources */ = {isa = PBXBuildFile; fileRef = 834F2E7F18458D310067E220 /* Untitled.xml */; };
 		834F2E8418459AFE0067E220 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = 834F2E8318459AFE0067E220 /* white.png */; };
 		83515C6C184F63150031B64F /* chipmunk.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83515C6B184F63150031B64F /* chipmunk.xml */; };
+		835A95C3185597600088B413 /* font.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 835A95C1185597600088B413 /* font.fnt */; };
+		835A95C4185597600088B413 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 835A95C2185597600088B413 /* font.png */; };
 		836150FE184838B200EB9173 /* n.png in Resources */ = {isa = PBXBuildFile; fileRef = 836150FD184838B200EB9173 /* n.png */; };
 		83615100184862CD00EB9173 /* w.png in Resources */ = {isa = PBXBuildFile; fileRef = 836150FF184862CD00EB9173 /* w.png */; };
 		836DBA77184A15B800CCD673 /* libluajit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 836DBA76184A15B800CCD673 /* libluajit.a */; };
@@ -109,6 +111,8 @@
 		834F2E7F18458D310067E220 /* Untitled.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Untitled.xml; path = res/Untitled.xml; sourceTree = "<group>"; };
 		834F2E8318459AFE0067E220 /* white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = white.png; path = res/white.png; sourceTree = "<group>"; };
 		83515C6B184F63150031B64F /* chipmunk.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = chipmunk.xml; path = res/chipmunk.xml; sourceTree = "<group>"; };
+		835A95C1185597600088B413 /* font.fnt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = font.fnt; path = res/font.fnt; sourceTree = "<group>"; };
+		835A95C2185597600088B413 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = res/font.png; sourceTree = "<group>"; };
 		836150FD184838B200EB9173 /* n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = n.png; path = res/n.png; sourceTree = "<group>"; };
 		836150FF184862CD00EB9173 /* w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = w.png; path = res/w.png; sourceTree = "<group>"; };
 		836DBA76184A15B800CCD673 /* libluajit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libluajit.a; path = libs/ios/lib/libluajit.a; sourceTree = "<group>"; };
@@ -208,6 +212,8 @@
 				832B1D4918264B100038D0EC /* apple.mp3 */,
 				832B1D4A18264B100038D0EC /* Track02.mp3 */,
 				8341C6AE1822812B0045A66F /* 2.pvr */,
+				835A95C1185597600088B413 /* font.fnt */,
+				835A95C2185597600088B413 /* font.png */,
 				83900BC618471D6D00E702C7 /* atlas.jpg */,
 				83900BC918471DCE00E702C7 /* atlas.xml */,
 				8341C6AF1822812B0045A66F /* 4.pvr */,
@@ -318,6 +324,7 @@
 				8341C6C71822812B0045A66F /* candy.pvr in Resources */,
 				83900BCA18471DCE00E702C7 /* atlas.xml in Resources */,
 				83900BC718471D6D00E702C7 /* atlas.jpg in Resources */,
+				835A95C3185597600088B413 /* font.fnt in Resources */,
 				8341C6C01822812B0045A66F /* 2.pvr in Resources */,
 				834F2E8018458D310067E220 /* Untitled.pvr in Resources */,
 				8341C6C31822812B0045A66F /* actions.xml in Resources */,
@@ -345,6 +352,7 @@
 				8372777318449156005EDE68 /* animate in Resources */,
 				8341C6CB1822812B0045A66F /* items.xml in Resources */,
 				8341C6C61822812B0045A66F /* candy.png in Resources */,
+				835A95C4185597600088B413 /* font.png in Resources */,
 				832D2D81182A353200C0AF53 /* scroll.xml in Resources */,
 				8341C6C41822812B0045A66F /* banana.ttf in Resources */,
 				8341C6CA1822812B0045A66F /* effect.wav in Resources */,

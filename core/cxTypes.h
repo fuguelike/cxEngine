@@ -124,6 +124,14 @@ typedef struct {
 #define cxRect4fv(x,y,w,h)  (cxRect4f){x,y,w,h}
 
 typedef struct {
+    cxInt x;
+    cxInt y;
+    cxInt w;
+    cxInt h;
+} cxRect4i;
+#define cxRect4iv(x,y,w,h)  (cxRect4i){x,y,w,h}
+
+typedef struct {
     cxVec2f lt;
     cxVec2f rt;
     cxVec2f rb;

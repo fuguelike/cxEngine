@@ -135,9 +135,11 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->datasets = CX_ALLOC(cxHash);
     this->actions = CX_ALLOC(cxHash);
     this->dbenvs = CX_ALLOC(cxHash);
+    this->bmpfonts = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
+    CX_RELEASE(this->bmpfonts);
     CX_RELEASE(this->actions);
     CX_RELEASE(this->lang);
     CX_RELEASE(this->datasets);
@@ -159,6 +161,21 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     cxAutoPoolDestroy();
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
+
+cxBMPFont cxEngineLoadBMPFont(cxConstChars file)
+{
+    cxEngine this = cxEngineInstance();
+    cxBMPFont font = cxHashGet(this->bmpfonts, cxHashStrKey(file));
+    if(font != NULL){
+        return font;
+    }
+    font = cxBMPFontCreate(file);
+    if(font == NULL){
+        return NULL;
+    }
+    cxHashSet(this->bmpfonts, cxHashStrKey(file), font);
+    return font;
+}
 
 void cxEngineSetLocalLang(cxString lang)
 {
@@ -312,7 +329,7 @@ cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)
     types = cxEngineDataSet(url);
     if(cxTypesIsType(types,cxTypesHash)){
         cxAny value = cxTypesGet(types, qv);
-        ret = cxObjectIsType(value, cxStringAutoType) ? value : NULL;
+        ret = cxObjectIsType(value, cxStringTypeName) ? value : NULL;
     }
     CX_RETURN(ret != NULL,ret);
     //from cxDB get String

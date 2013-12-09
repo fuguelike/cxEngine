@@ -118,6 +118,17 @@ cxFloat cxXMLParseFloat(const cxChar *txt,cxFloat value)
     return value;
 }
 
+cxString cxXMLReadAllocAttr(xmlTextReaderPtr reader,cxConstChars name)
+{
+    cxChar *txt = cxXMLAttr(name);
+    cxString ret = NULL;
+    if(txt != NULL){
+        ret = cxStringAllocChars(txt);
+    }
+    xmlFree(txt);
+    return ret;
+}
+
 cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat value)
 {
     cxChar *svalue = cxXMLAttr(name);

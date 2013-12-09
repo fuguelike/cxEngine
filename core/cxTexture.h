@@ -28,7 +28,7 @@ typedef cxBool (*cxTextureLoadFunc)(cxAny this,cxStream stream);
 typedef void (*cxTextureBindFunc)(cxAny this);
 
 CX_OBJECT_DEF(cxTexture, cxObject)
-    cxHash keys;    //cxTextureElement
+    cxHash keys;    //cxTexCoord
     GLuint textureId;
     cxTextureParams texParam;
     cxBool isLoad;

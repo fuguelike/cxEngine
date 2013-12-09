@@ -194,7 +194,7 @@ do{\
 //object
 
 #define CX_OBJECT_BEG(_t_)                                          \
-static CX_UNUSED_ATTRIBUTE cxConstType _t_##AutoType = #_t_;        \
+static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;        \
 typedef struct _t_ * _t_;                                           \
 void _t_##AutoInit(_t_ this);                                       \
 void _t_##AutoFree(_t_ this);                                       \
@@ -267,9 +267,9 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_OBJECT_TERM(_t_,_b_)   }_b_##AutoFree((_b_)this);}
 
-#define CX_ALLOC(_t_)             cxObjectAlloc(_t_##AutoType,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
+#define CX_ALLOC(_t_)             cxObjectAlloc(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
 
-#define CX_CREATE(_t_)            cxObjectCreate(_t_##AutoType,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
+#define CX_CREATE(_t_)            cxObjectCreate(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
 
 #define CX_RETAIN(_o_)            cxObjectRetain(_o_)
 

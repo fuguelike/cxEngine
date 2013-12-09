@@ -20,12 +20,14 @@
 #include "cxEventArg.h"
 #include "cxUtil.h"
 #include "cxMessage.h"
+#include "cxBMPFont.h"
 
 CX_C_BEGIN
 
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
 CX_OBJECT_DEF(cxEngine, cxObject)
+    cxHash bmpfonts;
     cxHash events;
     cxHash scripts;
     cxHash datasets;
@@ -69,6 +71,8 @@ void cxEngineSetLocalLang(cxString lang);
 cxTypes cxEngineDataSet(cxConstChars url);
 
 cxString cxEngineTypesText(cxConstChars xml,cxConstChars key);
+
+cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 
 void cxEngineSystemInit();
 

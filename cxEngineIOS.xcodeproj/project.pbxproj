@@ -108,7 +108,7 @@
 		8341C66418227DF30045A66F /* cxAtlas.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5E518227DF20045A66F /* cxAtlas.c */; };
 		8341C66518227DF30045A66F /* cxButton.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5E718227DF20045A66F /* cxButton.c */; };
 		8341C66618227DF30045A66F /* cxClipping.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5E918227DF20045A66F /* cxClipping.c */; };
-		8341C66718227DF30045A66F /* cxLabel.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5EB18227DF20045A66F /* cxLabel.c */; };
+		8341C66718227DF30045A66F /* cxLabelTTF.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5EB18227DF20045A66F /* cxLabelTTF.c */; };
 		8341C66818227DF30045A66F /* cxParticle.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5ED18227DF20045A66F /* cxParticle.c */; };
 		8341C66918227DF30045A66F /* cxSprite.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5EF18227DF20045A66F /* cxSprite.c */; };
 		8341C66A18227DF30045A66F /* cxTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5F118227DF20045A66F /* cxTable.c */; };
@@ -127,6 +127,8 @@
 		835870EA183DE608007B175E /* cxChipmunk.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870E8183DE608007B175E /* cxChipmunk.c */; };
 		835870F1183DEB02007B175E /* cxListen.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870EF183DEB02007B175E /* cxListen.c */; };
 		835870F4183DEB0F007B175E /* cxClient.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870F2183DEB0F007B175E /* cxClient.c */; };
+		835A95C0185592CE0088B413 /* cxBMPFont.c in Sources */ = {isa = PBXBuildFile; fileRef = 835A95BE185592CE0088B413 /* cxBMPFont.c */; };
+		835A95C81855A5190088B413 /* cxLabelBMP.c in Sources */ = {isa = PBXBuildFile; fileRef = 835A95C61855A5190088B413 /* cxLabelBMP.c */; };
 		83607AA218444B39005C392B /* cxAnimate.c in Sources */ = {isa = PBXBuildFile; fileRef = 83607AA018444B39005C392B /* cxAnimate.c */; };
 		836150FC18482AAF00EB9173 /* cxMD5.c in Sources */ = {isa = PBXBuildFile; fileRef = 836150FA18482AAF00EB9173 /* cxMD5.c */; };
 		8384E1ED1823ABC700EDA1D6 /* cxMp3Stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384E1EB1823ABC700EDA1D6 /* cxMp3Stream.c */; };
@@ -357,8 +359,8 @@
 		8341C5E818227DF20045A66F /* cxButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxButton.h; sourceTree = "<group>"; };
 		8341C5E918227DF20045A66F /* cxClipping.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxClipping.c; sourceTree = "<group>"; };
 		8341C5EA18227DF20045A66F /* cxClipping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxClipping.h; sourceTree = "<group>"; };
-		8341C5EB18227DF20045A66F /* cxLabel.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLabel.c; sourceTree = "<group>"; };
-		8341C5EC18227DF20045A66F /* cxLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLabel.h; sourceTree = "<group>"; };
+		8341C5EB18227DF20045A66F /* cxLabelTTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLabelTTF.c; sourceTree = "<group>"; };
+		8341C5EC18227DF20045A66F /* cxLabelTTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLabelTTF.h; sourceTree = "<group>"; };
 		8341C5ED18227DF20045A66F /* cxParticle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxParticle.c; sourceTree = "<group>"; };
 		8341C5EE18227DF20045A66F /* cxParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxParticle.h; sourceTree = "<group>"; };
 		8341C5EF18227DF20045A66F /* cxSprite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxSprite.c; sourceTree = "<group>"; };
@@ -388,6 +390,10 @@
 		835870F0183DEB02007B175E /* cxListen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxListen.h; sourceTree = "<group>"; };
 		835870F2183DEB0F007B175E /* cxClient.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxClient.c; sourceTree = "<group>"; };
 		835870F3183DEB0F007B175E /* cxClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxClient.h; sourceTree = "<group>"; };
+		835A95BE185592CE0088B413 /* cxBMPFont.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxBMPFont.c; sourceTree = "<group>"; };
+		835A95BF185592CE0088B413 /* cxBMPFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxBMPFont.h; sourceTree = "<group>"; };
+		835A95C61855A5190088B413 /* cxLabelBMP.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLabelBMP.c; sourceTree = "<group>"; };
+		835A95C71855A5190088B413 /* cxLabelBMP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLabelBMP.h; sourceTree = "<group>"; };
 		83607AA018444B39005C392B /* cxAnimate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAnimate.c; sourceTree = "<group>"; };
 		83607AA118444B39005C392B /* cxAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAnimate.h; sourceTree = "<group>"; };
 		836150FA18482AAF00EB9173 /* cxMD5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMD5.c; sourceTree = "<group>"; };
@@ -631,6 +637,8 @@
 				8341C58A18227DF20045A66F /* cxXMLScript.h */,
 				83494FA518334B7A0016C3A4 /* cxJson.c */,
 				83494FA618334B7A0016C3A4 /* cxJson.h */,
+				835A95BE185592CE0088B413 /* cxBMPFont.c */,
+				835A95BF185592CE0088B413 /* cxBMPFont.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -744,8 +752,8 @@
 				8341C5E818227DF20045A66F /* cxButton.h */,
 				8341C5E918227DF20045A66F /* cxClipping.c */,
 				8341C5EA18227DF20045A66F /* cxClipping.h */,
-				8341C5EB18227DF20045A66F /* cxLabel.c */,
-				8341C5EC18227DF20045A66F /* cxLabel.h */,
+				8341C5EB18227DF20045A66F /* cxLabelTTF.c */,
+				8341C5EC18227DF20045A66F /* cxLabelTTF.h */,
 				8341C5ED18227DF20045A66F /* cxParticle.c */,
 				8341C5EE18227DF20045A66F /* cxParticle.h */,
 				8341C5EF18227DF20045A66F /* cxSprite.c */,
@@ -760,6 +768,8 @@
 				83A5C966183A174500781096 /* cxLoading.h */,
 				835870E8183DE608007B175E /* cxChipmunk.c */,
 				835870E9183DE608007B175E /* cxChipmunk.h */,
+				835A95C61855A5190088B413 /* cxLabelBMP.c */,
+				835A95C71855A5190088B413 /* cxLabelBMP.h */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -835,6 +845,7 @@
 				8341C60E18227DF20045A66F /* cpBody.c in Sources */,
 				8341C66118227DF30045A66F /* cxTexturePVR.c in Sources */,
 				8341C66918227DF30045A66F /* cxSprite.c in Sources */,
+				835A95C81855A5190088B413 /* cxLabelBMP.c in Sources */,
 				8341C5FB18227DF20045A66F /* cxScale.c in Sources */,
 				8341C65218227DF30045A66F /* vec3.c in Sources */,
 				8341C65318227DF30045A66F /* vec4.c in Sources */,
@@ -842,6 +853,7 @@
 				83607AA218444B39005C392B /* cxAnimate.c in Sources */,
 				8341C62A18227DF20045A66F /* cxList.c in Sources */,
 				8341C65018227DF30045A66F /* utility.c in Sources */,
+				835A95C0185592CE0088B413 /* cxBMPFont.c in Sources */,
 				8341C66318227DF30045A66F /* cxTextureXML.c in Sources */,
 				8341C61718227DF20045A66F /* cpSpaceStep.c in Sources */,
 				8341C60D18227DF20045A66F /* cpBBTree.c in Sources */,
@@ -918,7 +930,7 @@
 				8341C61318227DF20045A66F /* cpSpace.c in Sources */,
 				8341C64D18227DF30045A66F /* quaternion.c in Sources */,
 				8341C60418227DF20045A66F /* cpPinJoint.c in Sources */,
-				8341C66718227DF30045A66F /* cxLabel.c in Sources */,
+				8341C66718227DF30045A66F /* cxLabelTTF.c in Sources */,
 				8341C5FA18227DF20045A66F /* cxRotate.c in Sources */,
 				8341C65618227DF30045A66F /* cxShaderDefault.c in Sources */,
 				8341C65118227DF30045A66F /* vec2.c in Sources */,

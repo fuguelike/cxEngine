@@ -27,7 +27,7 @@
 #include <views/cxTable.h>
 #include <core/cxIconv.h>
 #include <core/cxFreeType.h>
-#include <views/cxLabel.h>
+#include <views/cxLabelTTF.h>
 #include <core/cxDB.h>
 #include <core/cxPlayer.h>
 #include <socket/cxHttp.h>
@@ -36,6 +36,7 @@
 #include <actions/cxRunner.h>
 #include <views/cxLoading.h>
 #include <views/cxChipmunk.h>
+#include <core/cxBMPFont.h>
 
 static cxAny loading(cxAny pview)
 {
@@ -65,7 +66,7 @@ void cxEngineInit(cxEngine engine)
 void cxEngineMain(cxEngine engine)
 {
     cxAny lv = cxLoadingStart(loading, finished);
-    cxLabel txt = cxLabelCreate(UTF8("Loading..."), UTF8("banana.ttf"), 60);
+    cxLabelTTF txt = cxLabelTTFCreate(UTF8("Loading..."), UTF8("banana.ttf"), 60);
     cxViewSetColor(txt, cxRED);
     cxViewAppend(lv, txt);
 }

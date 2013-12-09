@@ -22,7 +22,7 @@ CX_OBJECT_END(cxString)
 
 #define cxStringStatic(_s_)             \
 &(struct cxString){                     \
-    .super.cxType=cxStringAutoType,     \
+    .super.cxType=cxStringTypeName,     \
     .super.cxRefcount=1,                \
     .strptr.d=(char *)(_s_),            \
     .strptr.n=0,                        \
@@ -31,7 +31,7 @@ CX_OBJECT_END(cxString)
 
 #define cxStringData(_d_,_l_)           \
 &(struct cxString){                     \
-    .super.cxType=cxStringAutoType,     \
+    .super.cxType=cxStringTypeName,     \
     .super.cxRefcount=1,                \
     .strptr.d=(char *)(_d_),            \
     .strptr.n=0,                        \
