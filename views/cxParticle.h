@@ -28,9 +28,15 @@ typedef struct {
     cxFloat rotation;
     cxFloat deltarotation;
     cxFloat life;
+    //gravity mode
     cxVec2f dir;
     cxFloat radaccel;
     cxFloat tanaccel;
+    //radial mode
+    cxFloat angle;
+    cxFloat degreespers;
+    cxFloat radius;
+    cxFloat deltaradius;
 }cxParticleUnit;
 
 typedef struct {
@@ -77,12 +83,7 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxParticleBlendMode blend;
     cxInt number;
     cxFloat duration;
-    cxVec2f gravity;
-    cxBool todir;
     cxFloat rate;
-    cxFloatRange speed;
-    cxFloatRange tanaccel;
-    cxFloatRange radaccel;
     cxVec2fRange position;
     cxFloatRange life;
     cxFloatRange angle;
@@ -92,10 +93,22 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxColorRange endcolor;
     cxFloatRange startspin;
     cxFloatRange endspin;
+    //gravity mode
+    cxVec2f gravity;
+    cxBool todir;
+    cxFloatRange speed;
+    cxFloatRange tanaccel;
+    cxFloatRange radaccel;
+    //radial mode
+    cxFloatRange startradius;
+    cxFloatRange endradius;
+    cxFloatRange rotatepers;
     CX_METHOD_DEF(cxParticleUpdateBoxFunc, UpdateBox);
 CX_OBJECT_END(cxParticle)
 
 void cxParticleInitFromFile(cxAny pview,cxConstChars file);
+
+void cxParticleSetType(cxAny pview,cxParticleEmitterType type);
 
 void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode);
 

@@ -1,5 +1,5 @@
 <particleEmitterConfig>
-  <texture name="texture.png"/>
+  <texture name="star.png"/>
   <sourcePosition x="300.00" y="300.00"/>
   <sourcePositionVariance x="0.00" y="0.00"/>
   <speed value="100.00"/>
@@ -31,10 +31,8 @@
   <rotatePerSecondVariance value="322.94"/>
   <blendFuncSource value="770"/>
   <blendFuncDestination value="1"/>
-
   <rotationStart value="0.00"/>
   <rotationStartVariance value="0.00"/>
   <rotationEnd value="0.00"/>
   <rotationEndVariance value="0.00"/>
-  
 </particleEmitterConfig>

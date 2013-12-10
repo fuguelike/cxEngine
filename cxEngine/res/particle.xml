@@ -23,7 +23,10 @@
         cxParticle.endcolor="1,1,1,0"
         cxParticle.rate = "-1" />
      -->
+    <!--
     <cxParticle cxParticle.src = "particle.pex" />
+    -->
+    <cxParticle cxParticle.src = "star.pex" />
     <cxButton
         cxView.w = "180"
         cxView.h = "120"

@@ -78,8 +78,8 @@ void cxParticleInitFromFile(cxAny pview,cxConstChars file)
             cxSpriteSetTextureURL(this, name, true, true);
             xmlFree(name);
         }else if(ELEMENT_IS_TYPE(sourcePosition)){
-            //this->position.v.x = cxXMLReadFloatAttr(reader, "x", 0);
-            //this->position.v.y = cxXMLReadFloatAttr(reader, "y", 0);
+            this->position.v.x = 0;//cxXMLReadFloatAttr(reader, "x", 0);
+            this->position.v.y = 0;//cxXMLReadFloatAttr(reader, "y", 0);
         }else if(ELEMENT_IS_TYPE(sourcePositionVariance)){
             this->position.r.x = cxXMLReadFloatAttr(reader, "x", 0);
             this->position.r.y = cxXMLReadFloatAttr(reader, "y", 0);
@@ -92,9 +92,9 @@ void cxParticleInitFromFile(cxAny pview,cxConstChars file)
         }else if(ELEMENT_IS_TYPE(particleLifespanVariance)){
             this->life.r = cxXMLReadFloatAttr(reader, "value", 0);
         }else if(ELEMENT_IS_TYPE(angle)){
-            this->angle.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->angle.v = -cxXMLReadFloatAttr(reader, "value", 0);
         }else if(ELEMENT_IS_TYPE(angleVariance)){
-            this->angle.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->angle.r = -cxXMLReadFloatAttr(reader, "value", 0);
         }else if(ELEMENT_IS_TYPE(gravity)){
             this->gravity.x = cxXMLReadFloatAttr(reader, "x", 0);
             this->gravity.y = cxXMLReadFloatAttr(reader, "y", 0);
@@ -150,6 +150,26 @@ void cxParticleInitFromFile(cxAny pview,cxConstChars file)
             this->rate = cxXMLReadFloatAttr(reader, "value", this->rate);
         }else if (ELEMENT_IS_TYPE(particleToDir)){
             this->todir = cxXMLReadBoolAttr(reader, "value", this->todir);
+        }else if (ELEMENT_IS_TYPE(rotatePerSecond)){
+            this->rotatepers.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if(ELEMENT_IS_TYPE(rotatePerSecondVariance)){
+            this->rotatepers.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(rotationStart)){
+            this->startspin.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(rotationStartVariance)){
+            this->startspin.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(rotationEnd)){
+            this->endspin.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(rotationEndVariance)){
+            this->endspin.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(maxRadius)){
+            this->startradius.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(maxRadiusVariance)){
+            this->startradius.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(minRadius)){
+            this->endradius.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(minRadiusVariance)){
+            this->endradius.r = cxXMLReadFloatAttr(reader, "value", 0);
         }
     }
     xmlTextReaderClose(reader);
@@ -179,6 +199,16 @@ void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }
     xmlFree(smode);
     //
+    cxChar *type = cxXMLAttr("cxParticle.type");
+    if(cxConstCharsEqu(type, "gravity")){
+        cxParticleSetType(this,cxParticleEmitterGravity);
+    }else if(cxConstCharsEqu(type, "radial")){
+        cxParticleSetType(this,cxParticleEmitterRadial);
+    }else{
+        cxParticleSetType(this,cxParticleEmitterGravity);
+    }
+    xmlFree(type);
+    //gravity
     this->todir = cxXMLReadBoolAttr(reader, "cxParticle.todir", this->todir);
     cxXMLReadFloatsAttr(reader, "cxParticle.duration", &this->duration);
     cxXMLReadFloatsAttr(reader, "cxParticle.gravity", &this->gravity.x);
@@ -195,6 +225,10 @@ void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxXMLReadFloatsAttr(reader, "cxParticle.endcolor", &this->endcolor.v.r);
     cxXMLReadFloatsAttr(reader, "cxParticle.startspin", &this->startspin.v);
     cxXMLReadFloatsAttr(reader, "cxParticle.endspin", &this->endspin.v);
+    //radial
+    cxXMLReadFloatsAttr(reader, "cxParticle.startradius", &this->startradius.v);
+    cxXMLReadFloatsAttr(reader, "cxParticle.endradius", &this->endradius.v);
+    cxXMLReadFloatsAttr(reader, "cxParticle.rotatepers", &this->rotatepers.v);
 }
 
 void cxParticleStop(cxAny pview)
@@ -300,13 +334,27 @@ static void cxParticleInitUnit(cxAny pview,cxParticleUnit *particle)
     particle->deltarotation = (endspin - startspin) / particle->life;
     
     cxFloat angle = kmDegreesToRadians(cxFloatValue(this->angle));
-    cxVec2f v = cxVec2fv(cosf(angle), sinf(angle));
-    cxFloat speed = cxFloatValue(this->speed);
-    kmVec2Scale(&particle->dir, &v, speed);
-    particle->radaccel = cxFloatValue(this->radaccel);
-    particle->tanaccel = cxFloatValue(this->tanaccel);
-    if(this->todir){
-        particle->rotation = -kmRadiansToDegrees(cxVec2fAngle(particle->dir));
+    
+    if(this->type == cxParticleEmitterGravity){
+        cxVec2f v = cxVec2fv(cosf(angle), sinf(angle));
+        cxFloat speed = cxFloatValue(this->speed);
+        kmVec2Scale(&particle->dir, &v, speed);
+        particle->radaccel = cxFloatValue(this->radaccel);
+        particle->tanaccel = cxFloatValue(this->tanaccel);
+        if(this->todir){
+            particle->rotation = -kmRadiansToDegrees(cxVec2fAngle(particle->dir));
+        }
+    }else{
+        cxFloat startradius = cxFloatValue(this->startradius);
+        cxFloat endradius = cxFloatValue(this->endradius);
+        particle->radius = startradius;
+        if(endradius == -1){
+            particle->deltaradius = 0;
+        }else{
+            particle->deltaradius = (endradius - startradius) / particle->life;
+        }
+        particle->angle = angle;
+        particle->degreespers = kmDegreesToRadians(cxFloatValue(this->rotatepers));
     }
 }
 
@@ -349,25 +397,32 @@ static void cxParticleUpdate(cxEvent *event)
         cxParticleUnit *p = &this->units[this->index];
         p->life -= dt;
         if(p->life > 0){
-            cxVec2f tmp;
-            cxVec2f radial= cxVec2fv(0, 0);
-            if(p->position.x || p->position.y){
-                kmVec2Normalize(&radial, &p->position);
+            if(this->type == cxParticleEmitterGravity){
+                cxVec2f tmp;
+                cxVec2f radial= cxVec2fv(0, 0);
+                if(p->position.x || p->position.y){
+                    kmVec2Normalize(&radial, &p->position);
+                }
+                cxVec2f tangential = radial;
+                kmVec2Scale(&radial, &radial, p->radaccel);
+                //compute tangential
+                float newy = tangential.x;
+                tangential.x = -tangential.y;
+                tangential.y = newy;
+                kmVec2Scale(&tangential,&tangential,p->tanaccel);
+                //compute position
+                kmVec2Add(&tmp, &radial, &tangential);
+                kmVec2Add(&tmp, &tmp, &this->gravity);
+                kmVec2Scale(&tmp, &tmp, dt);
+                kmVec2Add(&p->dir, &p->dir, &tmp);
+                kmVec2Scale(&tmp, &p->dir, dt);
+                kmVec2Add(&p->position, &p->position, &tmp);
+            }else{
+                p->angle += p->degreespers * dt;
+                p->radius += p->deltaradius * dt;
+                p->position.x = -cosf(p->angle) * p->radius;
+                p->position.y = -sinf(p->angle) * p->radius;
             }
-            cxVec2f tangential = radial;
-            kmVec2Scale(&radial, &radial, p->radaccel);
-            //compute tangential
-            float newy = tangential.x;
-            tangential.x = -tangential.y;
-            tangential.y = newy;
-            kmVec2Scale(&tangential,&tangential,p->tanaccel);
-            //compute position
-            kmVec2Add(&tmp, &radial, &tangential);
-            kmVec2Add(&tmp, &tmp, &this->gravity);
-            kmVec2Scale(&tmp, &tmp, dt);
-            kmVec2Add(&p->dir, &p->dir, &tmp);
-            kmVec2Scale(&tmp, &p->dir, dt);
-            kmVec2Add(&p->position, &p->position, &tmp);
             // color
             p->color.r += (p->deltacolor.r * dt);
             p->color.g += (p->deltacolor.g * dt);
@@ -398,6 +453,12 @@ void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode)
         cxSpriteSetBlendFactor(pview, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
     this->blend = mode;
+}
+
+void cxParticleSetType(cxAny pview,cxParticleEmitterType type)
+{
+    cxParticle this = pview;
+    this->type = type;
 }
 
 CX_OBJECT_INIT(cxParticle, cxAtlas)
