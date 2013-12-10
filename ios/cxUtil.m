@@ -26,8 +26,9 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr at
     if(pfont == nil){
         pfont = attr.bold?[UIFont boldSystemFontOfSize:attr.size]:[UIFont systemFontOfSize:attr.size];
     }
-    NSDictionary * attributes = [NSDictionary dictionaryWithObject:pfont forKey:NSFontAttributeName];
-    CGSize size = [text sizeWithAttributes:attributes];
+    NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
+    [attrs setObject:pfont forKey:NSFontAttributeName];
+    CGSize size = [text sizeWithAttributes:attrs];
     cxInt width = (cxInt)floorf(size.width);
     cxInt height = (cxInt)floorf(size.height);
     cxInt bufsiz = width * height * 4 + sizeof(cxSize2i);
@@ -41,11 +42,12 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr at
     CGContextTranslateCTM(context, 0.0f, height);
     CGContextScaleCTM(context, 1.0f, -1.0f);
     UIGraphicsPushContext(context);
-    [text drawAtPoint:CGPointMake(0, 0) withAttributes:attributes];
+    [text drawAtPoint:CGPointMake(0, 0) withAttributes:attrs];
     UIGraphicsPopContext();
     CGContextRelease(context);
     ((cxSize2i *)buffer)->w = width;
     ((cxSize2i *)buffer)->h = height;
+    [attrs release];
     return cxStringAttach(buffer, bufsiz);
 }
 

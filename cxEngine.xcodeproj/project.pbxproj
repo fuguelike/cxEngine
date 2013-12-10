@@ -45,6 +45,8 @@
 		834F2E8118458D310067E220 /* Untitled.xml in Resources */ = {isa = PBXBuildFile; fileRef = 834F2E7F18458D310067E220 /* Untitled.xml */; };
 		834F2E8418459AFE0067E220 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = 834F2E8318459AFE0067E220 /* white.png */; };
 		83515C6C184F63150031B64F /* chipmunk.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83515C6B184F63150031B64F /* chipmunk.xml */; };
+		8359F7A21856C4600072D047 /* particle.pex in Resources */ = {isa = PBXBuildFile; fileRef = 8359F7A01856C4600072D047 /* particle.pex */; };
+		8359F7A31856C4600072D047 /* texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 8359F7A11856C4600072D047 /* texture.png */; };
 		835A95C3185597600088B413 /* font.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 835A95C1185597600088B413 /* font.fnt */; };
 		835A95C4185597600088B413 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 835A95C2185597600088B413 /* font.png */; };
 		836150FE184838B200EB9173 /* n.png in Resources */ = {isa = PBXBuildFile; fileRef = 836150FD184838B200EB9173 /* n.png */; };
@@ -113,6 +115,8 @@
 		834F2E7F18458D310067E220 /* Untitled.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Untitled.xml; path = res/Untitled.xml; sourceTree = "<group>"; };
 		834F2E8318459AFE0067E220 /* white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = white.png; path = res/white.png; sourceTree = "<group>"; };
 		83515C6B184F63150031B64F /* chipmunk.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = chipmunk.xml; path = res/chipmunk.xml; sourceTree = "<group>"; };
+		8359F7A01856C4600072D047 /* particle.pex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = particle.pex; path = res/particle.pex; sourceTree = "<group>"; };
+		8359F7A11856C4600072D047 /* texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = texture.png; path = res/texture.png; sourceTree = "<group>"; };
 		835A95C1185597600088B413 /* font.fnt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = font.fnt; path = res/font.fnt; sourceTree = "<group>"; };
 		835A95C2185597600088B413 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = res/font.png; sourceTree = "<group>"; };
 		836150FD184838B200EB9173 /* n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = n.png; path = res/n.png; sourceTree = "<group>"; };
@@ -222,6 +226,8 @@
 				834F2E7E18458D310067E220 /* Untitled.pvr */,
 				837B7C75184C2A2100BB62AD /* pattern1.png */,
 				836150FD184838B200EB9173 /* n.png */,
+				8359F7A01856C4600072D047 /* particle.pex */,
+				8359F7A11856C4600072D047 /* texture.png */,
 				834F2E7F18458D310067E220 /* Untitled.xml */,
 				834F2E8318459AFE0067E220 /* white.png */,
 				8341C6B01822812B0045A66F /* action.xml */,
@@ -337,6 +343,7 @@
 				83515C6C184F63150031B64F /* chipmunk.xml in Resources */,
 				839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */,
 				8341C6C91822812B0045A66F /* clipping.xml in Resources */,
+				8359F7A31856C4600072D047 /* texture.png in Resources */,
 				834F2E8418459AFE0067E220 /* white.png in Resources */,
 				832BEF0D182FBB0900F4BC22 /* test.jpg in Resources */,
 				832B1D4B18264B100038D0EC /* apple.mp3 in Resources */,
@@ -352,6 +359,7 @@
 				8341C6C51822812B0045A66F /* button.xml in Resources */,
 				8341C6CE1822812B0045A66F /* particle.xml in Resources */,
 				8341C6C11822812B0045A66F /* 4.pvr in Resources */,
+				8359F7A21856C4600072D047 /* particle.pex in Resources */,
 				8372777318449156005EDE68 /* animate in Resources */,
 				8341C6CB1822812B0045A66F /* items.xml in Resources */,
 				832A3EF31855F9DF00047C64 /* bmpfont.xml in Resources */,

@@ -6,14 +6,165 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <streams/cxAssetsStream.h>
 #include <core/cxEngine.h>
 #include <core/cxUtil.h>
 #include "cxParticle.h"
+
+/*
+ <particleEmitterConfig>
+     <texture name="texture.png"/>
+     <sourcePosition x="300.00" y="300.00"/>
+     <sourcePositionVariance x="0.00" y="0.00"/>
+     <speed value="100.00"/>
+     <speedVariance value="30.00"/>
+     <particleLifeSpan value="2.0000"/>
+     <particleLifespanVariance value="1.9000"/>
+     <angle value="270.00"/>
+     <angleVariance value="2.00"/>
+     <gravity x="0.00" y="0.00"/>
+     <radialAcceleration value="0.00"/>
+     <tangentialAcceleration value="0.00"/>
+     <radialAccelVariance value="0.00"/>
+     <tangentialAccelVariance value="0.00"/>
+     <startColor red="1.00" green="0.31" blue="0.00" alpha="0.62"/>
+     <startColorVariance red="0.00" green="0.00" blue="0.00" alpha="0.00"/>
+     <finishColor red="1.00" green="0.31" blue="0.00" alpha="0.00"/>
+     <finishColorVariance red="0.00" green="0.00" blue="0.00" alpha="0.00"/>
+     <maxParticles value="500"/>
+     <startParticleSize value="70.00"/>
+     <startParticleSizeVariance value="49.53"/>
+     <finishParticleSize value="10.00"/>
+     <FinishParticleSizeVariance value="5.00"/>
+     <particleToDir value="false" />
+     <duration value="-1.00"/>
+     <emitterType value="0"/>
+     <emitterRate value="-1"/>
+     <maxRadius value="100.00"/>
+     <maxRadiusVariance value="0.00"/>
+     <minRadius value="0.00"/>
+     <rotatePerSecond value="0.00"/>
+     <rotatePerSecondVariance value="0.00"/>
+     <blendFuncSource value="770"/>
+     <blendFuncDestination value="1"/>
+     <rotationStart value="0.00"/>
+     <rotationStartVariance value="0.00"/>
+     <rotationEnd value="0.00"/>
+     <rotationEndVariance value="0.00"/>
+ </particleEmitterConfig>
+ */
+
+static void cxParticleXMLReaderError(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
+{
+    cxParticle this = arg;
+    CX_ERROR("%s",msg);
+    this->isError = true;
+}
+
+void cxParticleInitFromFile(cxAny pview,cxConstChars file)
+{
+    cxParticle this = pview;
+    cxString data = cxAssertsData(file);
+    CX_RETURN(data == NULL);
+    xmlTextReaderPtr reader = cxXMLReaderForString(data);
+    xmlTextReaderSetErrorHandler(reader, cxParticleXMLReaderError, this);
+    while(xmlTextReaderRead(reader) && !this->isError){
+        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
+            continue;
+        }
+        const xmlChar *temp = xmlTextReaderConstName(reader);
+        if(ELEMENT_IS_TYPE(texture)){
+            cxChar *name = cxXMLAttr("name");
+            cxSpriteSetTextureURL(this, name, true, true);
+            xmlFree(name);
+        }else if(ELEMENT_IS_TYPE(sourcePosition)){
+            //this->position.v.x = cxXMLReadFloatAttr(reader, "x", 0);
+            //this->position.v.y = cxXMLReadFloatAttr(reader, "y", 0);
+        }else if(ELEMENT_IS_TYPE(sourcePositionVariance)){
+            this->position.r.x = cxXMLReadFloatAttr(reader, "x", 0);
+            this->position.r.y = cxXMLReadFloatAttr(reader, "y", 0);
+        }else if(ELEMENT_IS_TYPE(speed)){
+            this->speed.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if(ELEMENT_IS_TYPE(speedVariance)){
+            this->speed.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if(ELEMENT_IS_TYPE(particleLifeSpan)){
+            this->life.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if(ELEMENT_IS_TYPE(particleLifespanVariance)){
+            this->life.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if(ELEMENT_IS_TYPE(angle)){
+            this->angle.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if(ELEMENT_IS_TYPE(angleVariance)){
+            this->angle.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if(ELEMENT_IS_TYPE(gravity)){
+            this->gravity.x = cxXMLReadFloatAttr(reader, "x", 0);
+            this->gravity.y = cxXMLReadFloatAttr(reader, "y", 0);
+        }else if (ELEMENT_IS_TYPE(radialAcceleration)){
+            this->radaccel.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(radialAccelVariance)){
+            this->radaccel.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(tangentialAcceleration)){
+            this->tanaccel.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(tangentialAccelVariance)){
+            this->tanaccel.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(startColor)){
+            this->startcolor.v.r = cxXMLReadFloatAttr(reader, "red", 0);
+            this->startcolor.v.g = cxXMLReadFloatAttr(reader, "green", 0);
+            this->startcolor.v.b = cxXMLReadFloatAttr(reader, "blue", 0);
+            this->startcolor.v.a = cxXMLReadFloatAttr(reader, "alpha", 0);
+        }else if (ELEMENT_IS_TYPE(startColorVariance)){
+            this->startcolor.r.r = cxXMLReadFloatAttr(reader, "red", 0);
+            this->startcolor.r.g = cxXMLReadFloatAttr(reader, "green", 0);
+            this->startcolor.r.b = cxXMLReadFloatAttr(reader, "blue", 0);
+            this->startcolor.r.a = cxXMLReadFloatAttr(reader, "alpha", 0);
+        }else if (ELEMENT_IS_TYPE(finishColor)){
+            this->endcolor.v.r = cxXMLReadFloatAttr(reader, "red", 0);
+            this->endcolor.v.g = cxXMLReadFloatAttr(reader, "green", 0);
+            this->endcolor.v.b = cxXMLReadFloatAttr(reader, "blue", 0);
+            this->endcolor.v.a = cxXMLReadFloatAttr(reader, "alpha", 0);
+        }else if (ELEMENT_IS_TYPE(finishColorVariance)){
+            this->endcolor.r.r = cxXMLReadFloatAttr(reader, "red", 0);
+            this->endcolor.r.g = cxXMLReadFloatAttr(reader, "green", 0);
+            this->endcolor.r.b = cxXMLReadFloatAttr(reader, "blue", 0);
+            this->endcolor.r.a = cxXMLReadFloatAttr(reader, "alpha", 0);
+        }else if (ELEMENT_IS_TYPE(maxParticles)){
+            cxInt number = cxXMLReadIntAttr(reader, "value", 0);
+            CX_ASSERT(number > 0, "particle number must > 0");
+            cxParticleInit(this, number);
+        }else if (ELEMENT_IS_TYPE(startParticleSize)){
+            this->startsize.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(startParticleSizeVariance)){
+            this->startsize.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(finishParticleSize)){
+            this->endsize.v = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(FinishParticleSizeVariance)){
+            this->endsize.r = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(duration)){
+            this->duration = cxXMLReadFloatAttr(reader, "value", 0);
+        }else if (ELEMENT_IS_TYPE(emitterType)){
+            this->type = cxXMLReadIntAttr(reader, "value", cxParticleEmitterGravity);
+        }else if (ELEMENT_IS_TYPE(blendFuncSource)){
+            this->super.super.sfactor = cxXMLReadIntAttr(reader, "value", GL_SRC_ALPHA);
+        }else if (ELEMENT_IS_TYPE(blendFuncDestination)){
+            this->super.super.dfactor = cxXMLReadIntAttr(reader, "value", GL_ONE_MINUS_SRC_ALPHA);
+        }else if (ELEMENT_IS_TYPE(emitterRate)){
+            this->rate = cxXMLReadFloatAttr(reader, "value", this->rate);
+        }else if (ELEMENT_IS_TYPE(particleToDir)){
+            this->todir = cxXMLReadBoolAttr(reader, "value", this->todir);
+        }
+    }
+    xmlTextReaderClose(reader);
+}
 
 void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxAtlasXMLReadAttr(xmlView, mView, reader);
     cxParticle this = mView;
+    cxChar *src = cxXMLAttr("cxParticle.src");
+    if(src != NULL){
+        cxParticleInitFromFile(mView, src);
+        xmlFree(src);
+        return;
+    }
     cxInt number = cxXMLReadIntAttr(reader, "cxParticle.number", this->number);
     CX_ASSERT(number > 0, "cxParticle number must > 0");
     cxParticleInit(this, number);
@@ -251,8 +402,10 @@ void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode)
 
 CX_OBJECT_INIT(cxParticle, cxAtlas)
 {
+    this->rate = -1;
     this->duration = -1;
     this->isActive = true;
+    this->type = cxParticleEmitterGravity;
     cxViewOnUpdate(this, cxParticleUpdate);
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE);
     cxObjectSetXMLReadFunc(this, cxParticleXMLReadAttr);

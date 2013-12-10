@@ -2,7 +2,7 @@
 
 <!--TextureKey at *.xml file use-->
 <cxViewXML cxView.fill="true">
-    
+    <!--
     <cxParticle
         cxSprite.texture="n.png"
         cxView.cropping="false"
@@ -22,28 +22,8 @@
         cxParticle.startcolor="1,1,1,1"
         cxParticle.endcolor="1,1,1,0"
         cxParticle.rate = "-1" />
-    
-    <cxParticle
-        cxSprite.cached="false"
-        cxSprite.texture = "w.png"
-        cxView.cropping = "false"
-        cxView.w = "200"
-        cxView.h = "100"
-        cxParticle.number = "30"
-        cxParticle.blend = "multiple"
-        cxParticle.gravity = "0,-200"
-        cxParticle.duration = "-1"
-        cxParticle.life = "1.5"
-        cxParticle.speed = "200,200"
-        cxParticle.angle = "0,360"
-        cxParticle.todir = "true"
-        cxParticle.startspin = "0,1000"
-        cxParticle.startsize = "10,10"
-        cxParticle.endsize = "10,10"
-        cxParticle.startcolor = "1,1,1,1"
-        cxParticle.endcolor = "1,1,1,0"
-        cxParticle.rate = "-1" />
-    
+     -->
+    <cxParticle cxParticle.src = "particle.pex" />
     <cxButton
         cxView.w = "180"
         cxView.h = "120"
@@ -53,5 +33,4 @@
         <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Return" cxLabelTTF.size="30"/>
     </cxButton>
-    
 </cxViewXML>

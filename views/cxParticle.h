@@ -13,6 +13,11 @@
 
 CX_C_BEGIN
 
+typedef enum {
+    cxParticleEmitterGravity,
+    cxParticleEmitterRadial,
+}cxParticleEmitterType;
+
 typedef struct {
     cxInt index;
     cxVec2f position;
@@ -61,6 +66,8 @@ cxVec2f cxVec2fValue(cxVec2fRange rv);
 typedef void (*cxParticleUpdateBoxFunc)(cxAny pview,cxBoxPoint *box);
 
 CX_OBJECT_DEF(cxParticle, cxAtlas)
+    cxBool isError;
+    cxParticleEmitterType type;
     cxInt index;
     cxInt count;
     cxParticleUnit *units;
@@ -87,6 +94,8 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxFloatRange endspin;
     CX_METHOD_DEF(cxParticleUpdateBoxFunc, UpdateBox);
 CX_OBJECT_END(cxParticle)
+
+void cxParticleInitFromFile(cxAny pview,cxConstChars file);
 
 void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode);
 

@@ -23,7 +23,7 @@ CX_OBJECT_END(cxLabelBMP)
 
 void cxLabelBMPReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
-void cxLabelBMPSetFont(cxAny pview,cxConstChars font);
+void cxLabelBMPSetFont(cxAny pview,cxString font);
 
 void cxLabelBMPSetText(cxAny pview,cxString txt);
 

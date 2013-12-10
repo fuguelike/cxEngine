@@ -45,6 +45,7 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
     //
     cxInt x = -size.w/2.0f;
     cxInt y = 0;
+    cxVec2f fontpos = cxVec2fv(0, 0);
     for(cxInt i=0; i < cxStringLength(unicode);i += 2){
         uint16_t code = *(uint16_t *)&unicode->strptr.d[i];
         cxBMPElement pchar = cxBMPFontChar(this->font, code);
@@ -52,11 +53,10 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
             CX_WARN("bmp font char %d not exists",code);
             continue;
         }
-        cxInt yoff = this->font->lineHeight/2.0f - pchar->yoffset;
-        cxVec2f fontpos;
+        cxInt yoff = this->font->lineHeight / 2.0f - pchar->yoffset;
         fontpos.x = x + pchar->xoffset + pchar->box.w / 2.0f;
         fontpos.y = y + yoff - pchar->box.h / 2.0f;
-        cxSize2f size = cxSize2fv(pchar->box.w,pchar->box.h);
+        cxSize2f size = cxSize2fv(pchar->box.w, pchar->box.h);
         cxBoxTex2f tex = cxRect4fToBoxTex2f(pchar->box, this->font->scale);
         cxColor4f color = cxViewColor(this);
         cxBoxPoint bp = cxAtlasCreateBoxPoint(fontpos, size, tex, color);
@@ -78,7 +78,7 @@ void cxLabelBMPReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxSpriteXMLReadAttr(xmlView, mView, reader);
     cxLabelBMP this = mView;
     //set font
-    cxChar *font = cxXMLAttr("cxLabelBMP.font");
+    cxString font = cxXMLReadLangStringAttr(reader, "cxLabelBMP.font");
     cxLabelBMPSetFont(this, font);
     xmlFree(font);
     //set text
@@ -109,10 +109,10 @@ void cxLabelBMPSetSize(cxAny pview,cxFloat size)
     this->isDirty = true;
 }
 
-void cxLabelBMPSetFont(cxAny pview,cxConstChars font)
+void cxLabelBMPSetFont(cxAny pview,cxString font)
 {
     cxLabelBMP this = pview;
-    cxBMPFont bmpfont = cxEngineLoadBMPFont(font);
+    cxBMPFont bmpfont = cxEngineLoadBMPFont(cxStringBody(font));
     CX_ASSERT(bmpfont != NULL, "%s font not load",font);
     CX_RETURN(bmpfont == this->font);
     CX_RETAIN_SWAP(this->font, bmpfont);
