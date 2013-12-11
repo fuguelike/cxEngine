@@ -63,7 +63,7 @@ void cxClippingXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxViewXML xml = xmlView;
     cxClipping this = mView;
-    cxClippingSetInverse(this, cxXMLReadBoolAttr(reader, "cxClipping.inverse", this->inverse));
+    cxClippingSetInverse(this, cxXMLReadBoolAttr(reader,xml->functions, "cxClipping.inverse", this->inverse));
     cxChar *sitems = cxXMLAttr("cxClipping.boxes");
     if(sitems != NULL){
         CX_RETAIN_SWAP(this->boxes,cxEngineDataSet(sitems));

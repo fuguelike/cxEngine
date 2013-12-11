@@ -6,18 +6,20 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxViewXML.h>
 #include "cxTable.h"
 
 void cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
+    cxViewXML xml = xmlView;
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxTable this = mView;
     //set space
-    cxTableSetSpace(mView, cxXMLReadVec2fAttr(reader, "cxTable.space", this->space));
+    cxTableSetSpace(mView, cxXMLReadVec2fAttr(reader, xml->functions, "cxTable.space", this->space));
     //set type
-    cxXMLReadIntsAttr(reader, "cxTable.type", &this->grid.x);
+    this->grid = cxXMLReadVec2iAttr(reader, xml->functions, "cxTable.type", this->grid);
     //array hide
-    cxTableArrayHide(mView, cxXMLReadBoolAttr(reader, "cxTable.arrayHide", this->arrayHide));
+    cxTableArrayHide(mView, cxXMLReadBoolAttr(reader, xml->functions, "cxTable.arrayHide", this->arrayHide));
 }
 
 void cxTableSetSpace(cxAny pview,cxVec2f space)

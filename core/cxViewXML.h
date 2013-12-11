@@ -22,6 +22,7 @@ CX_OBJECT_DEF(cxViewXML, cxView)
     cxBool isError;
     cxHash items;
     cxHash events;
+    cxHash functions;
     cxHash actions;
     CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
     CX_EVENT_ALLOC(onBegin);
@@ -37,6 +38,8 @@ cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader);
 void cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);
 
 void cxViewXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func);
+
+void cxViewXMLRegisteFunc(cxAny pview,cxConstChars name,cxAny func);
 
 cxViewXML cxViewXMLCreate(cxConstChars xml);
 

@@ -6,8 +6,11 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxEngine.h"
 #include "cxMD5.h"
 #include "cxString.h"
+#include "cxTypes.h"
+#include "cxUtil.h"
 
 CX_OBJECT_INIT(cxString, cxObject)
 {
@@ -60,6 +63,12 @@ cxString cxStringAllocChars(cxConstChars str)
     cxString rv = CX_ALLOC(cxString);
     cxStringAppend(rv, (void *)str, (cxInt)strlen(str));
     return rv;
+}
+
+cxString cxStringAttachChars(cxChar *str)
+{
+    CX_ASSERT(str != NULL, "str null");
+    return cxStringAttach(str, strlen(str));
 }
 
 cxString cxStringConstChars(cxConstChars str)

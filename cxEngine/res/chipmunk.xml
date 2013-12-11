@@ -39,14 +39,14 @@
             cxChipmunk.e="1.0"
             cxChipmunk.u="0.0"/>
         <cxSprite id="purple"
-            cxChipmunk.layer="b01"
+            cxChipmunk.layer="cxBinNumber('01')"
             cxView.x="100" cxView.y="200"
             cxSprite.texture="candy.xml?red.png"
             cxChipmunk.m="1"
             cxChipmunk.e="1.0"
             cxChipmunk.u="0.0"/>
         <cxSprite
-            cxChipmunk.layer="b10"
+            cxChipmunk.layer="cxBinNumber('10')"
             cxView.x="0" cxView.y="0"
             cxSprite.texture="candy.xml?purple.png"
             cxChipmunk.e="1.0"

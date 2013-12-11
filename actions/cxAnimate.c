@@ -11,6 +11,7 @@
 #include <core/cxTexture.h>
 #include <core/cxActionXML.h>
 #include <core/cxUtil.h>
+#include <core/cxUrlPath.h>
 #include "cxAnimate.h"
 
 CX_OBJECT_DEF(cxAnimateItem, cxObject)
@@ -109,19 +110,17 @@ static void cxAnimateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr
         if(!ELEMENT_IS_TYPE(cxFrame)){
             continue;
         }
-        cxBool cache = cxXMLReadBoolAttr(reader, "cache", false);
+        cxBool cache = cxXMLReadBoolAttr(reader, xml->functions, "cache", false);
         cxChar *file = cxXMLAttr("file");
         cxChar *key = cxXMLAttr("key");
-        cxInt from = cxXMLReadIntAttr(reader, "from", 0);
-        cxInt to = cxXMLReadIntAttr(reader, "to", 0);
+        cxInt from = cxXMLReadIntAttr(reader, xml->functions, "from", 0);
+        cxInt to = cxXMLReadIntAttr(reader, xml->functions, "to", 0);
         if(from > 0 && to > 0){
             cxAnimateXMLAppend(this->list, file, key, from, to, cache);
-        }else{
-            cxChar sfile[128]={0};
-            cxChar skey[128]={0};
-            cxInt rv = cxParseURL(file, sfile, skey);
-            cxFloat delay = cxXMLReadFloatAttr(reader, "delay", 0);
-            cxAnimateItemAppend(this->list, sfile, rv >= 2 ? skey : NULL, delay, cache);
+        }else if(file != NULL){
+            cxUrlPath path = cxUrlPathParse(file);
+            cxFloat delay = cxXMLReadFloatAttr(reader, xml->functions, "delay", 0);
+            cxAnimateItemAppend(this->list, path->path, path->count >= 2 ? path->key : NULL, delay, cache);
         }
         xmlFree(file);
         xmlFree(key);

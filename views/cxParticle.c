@@ -9,6 +9,7 @@
 #include <streams/cxAssetsStream.h>
 #include <core/cxEngine.h>
 #include <core/cxUtil.h>
+#include <core/cxViewXML.h>
 #include "cxParticle.h"
 
 /*
@@ -78,98 +79,98 @@ void cxParticleInitFromFile(cxAny pview,cxConstChars file)
             cxSpriteSetTextureURL(this, name, true, true);
             xmlFree(name);
         }else if(ELEMENT_IS_TYPE(sourcePosition)){
-            this->position.v.x = 0;//cxXMLReadFloatAttr(reader, "x", 0);
-            this->position.v.y = 0;//cxXMLReadFloatAttr(reader, "y", 0);
+            this->position.v.x = 0;//cxXMLReadFloatAttr(reader,NULL, "x", 0);
+            this->position.v.y = 0;//cxXMLReadFloatAttr(reader,NULL, "y", 0);
         }else if(ELEMENT_IS_TYPE(sourcePositionVariance)){
-            this->position.r.x = cxXMLReadFloatAttr(reader, "x", 0);
-            this->position.r.y = cxXMLReadFloatAttr(reader, "y", 0);
+            this->position.r.x = cxXMLReadFloatAttr(reader, NULL, "x", 0);
+            this->position.r.y = cxXMLReadFloatAttr(reader, NULL,  "y", 0);
         }else if(ELEMENT_IS_TYPE(speed)){
-            this->speed.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->speed.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if(ELEMENT_IS_TYPE(speedVariance)){
-            this->speed.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->speed.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if(ELEMENT_IS_TYPE(particleLifeSpan)){
-            this->life.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->life.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if(ELEMENT_IS_TYPE(particleLifespanVariance)){
-            this->life.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->life.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if(ELEMENT_IS_TYPE(angle)){
-            this->angle.v = -cxXMLReadFloatAttr(reader, "value", 0);
+            this->angle.v = -cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if(ELEMENT_IS_TYPE(angleVariance)){
-            this->angle.r = -cxXMLReadFloatAttr(reader, "value", 0);
+            this->angle.r = -cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if(ELEMENT_IS_TYPE(gravity)){
-            this->gravity.x = cxXMLReadFloatAttr(reader, "x", 0);
-            this->gravity.y = cxXMLReadFloatAttr(reader, "y", 0);
+            this->gravity.x = cxXMLReadFloatAttr(reader, NULL,  "x", 0);
+            this->gravity.y = cxXMLReadFloatAttr(reader, NULL,  "y", 0);
         }else if (ELEMENT_IS_TYPE(radialAcceleration)){
-            this->radaccel.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->radaccel.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(radialAccelVariance)){
-            this->radaccel.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->radaccel.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(tangentialAcceleration)){
-            this->tanaccel.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->tanaccel.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(tangentialAccelVariance)){
-            this->tanaccel.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->tanaccel.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(startColor)){
-            this->startcolor.v.r = cxXMLReadFloatAttr(reader, "red", 0);
-            this->startcolor.v.g = cxXMLReadFloatAttr(reader, "green", 0);
-            this->startcolor.v.b = cxXMLReadFloatAttr(reader, "blue", 0);
-            this->startcolor.v.a = cxXMLReadFloatAttr(reader, "alpha", 0);
+            this->startcolor.v.r = cxXMLReadFloatAttr(reader, NULL,  "red", 0);
+            this->startcolor.v.g = cxXMLReadFloatAttr(reader, NULL,  "green", 0);
+            this->startcolor.v.b = cxXMLReadFloatAttr(reader, NULL,  "blue", 0);
+            this->startcolor.v.a = cxXMLReadFloatAttr(reader, NULL,  "alpha", 0);
         }else if (ELEMENT_IS_TYPE(startColorVariance)){
-            this->startcolor.r.r = cxXMLReadFloatAttr(reader, "red", 0);
-            this->startcolor.r.g = cxXMLReadFloatAttr(reader, "green", 0);
-            this->startcolor.r.b = cxXMLReadFloatAttr(reader, "blue", 0);
-            this->startcolor.r.a = cxXMLReadFloatAttr(reader, "alpha", 0);
+            this->startcolor.r.r = cxXMLReadFloatAttr(reader, NULL,  "red", 0);
+            this->startcolor.r.g = cxXMLReadFloatAttr(reader, NULL,  "green", 0);
+            this->startcolor.r.b = cxXMLReadFloatAttr(reader, NULL,  "blue", 0);
+            this->startcolor.r.a = cxXMLReadFloatAttr(reader, NULL,  "alpha", 0);
         }else if (ELEMENT_IS_TYPE(finishColor)){
-            this->endcolor.v.r = cxXMLReadFloatAttr(reader, "red", 0);
-            this->endcolor.v.g = cxXMLReadFloatAttr(reader, "green", 0);
-            this->endcolor.v.b = cxXMLReadFloatAttr(reader, "blue", 0);
-            this->endcolor.v.a = cxXMLReadFloatAttr(reader, "alpha", 0);
+            this->endcolor.v.r = cxXMLReadFloatAttr(reader, NULL,  "red", 0);
+            this->endcolor.v.g = cxXMLReadFloatAttr(reader, NULL,  "green", 0);
+            this->endcolor.v.b = cxXMLReadFloatAttr(reader, NULL,  "blue", 0);
+            this->endcolor.v.a = cxXMLReadFloatAttr(reader, NULL,  "alpha", 0);
         }else if (ELEMENT_IS_TYPE(finishColorVariance)){
-            this->endcolor.r.r = cxXMLReadFloatAttr(reader, "red", 0);
-            this->endcolor.r.g = cxXMLReadFloatAttr(reader, "green", 0);
-            this->endcolor.r.b = cxXMLReadFloatAttr(reader, "blue", 0);
-            this->endcolor.r.a = cxXMLReadFloatAttr(reader, "alpha", 0);
+            this->endcolor.r.r = cxXMLReadFloatAttr(reader, NULL,  "red", 0);
+            this->endcolor.r.g = cxXMLReadFloatAttr(reader, NULL,  "green", 0);
+            this->endcolor.r.b = cxXMLReadFloatAttr(reader, NULL,  "blue", 0);
+            this->endcolor.r.a = cxXMLReadFloatAttr(reader, NULL,  "alpha", 0);
         }else if (ELEMENT_IS_TYPE(maxParticles)){
-            cxInt number = cxXMLReadIntAttr(reader, "value", 0);
+            cxInt number = cxXMLReadIntAttr(reader, NULL, "value", 0);
             CX_ASSERT(number > 0, "particle number must > 0");
             cxParticleInit(this, number);
         }else if (ELEMENT_IS_TYPE(startParticleSize)){
-            this->startsize.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->startsize.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(startParticleSizeVariance)){
-            this->startsize.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->startsize.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(finishParticleSize)){
-            this->endsize.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->endsize.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(FinishParticleSizeVariance)){
-            this->endsize.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->endsize.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(duration)){
-            this->duration = cxXMLReadFloatAttr(reader, "value", 0);
+            this->duration = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(emitterType)){
-            this->type = cxXMLReadIntAttr(reader, "value", cxParticleEmitterGravity);
+            this->type = cxXMLReadIntAttr(reader, NULL, "value", cxParticleEmitterGravity);
         }else if (ELEMENT_IS_TYPE(blendFuncSource)){
-            this->super.super.sfactor = cxXMLReadIntAttr(reader, "value", GL_SRC_ALPHA);
+            this->super.super.sfactor = cxXMLReadIntAttr(reader, NULL, "value", GL_SRC_ALPHA);
         }else if (ELEMENT_IS_TYPE(blendFuncDestination)){
-            this->super.super.dfactor = cxXMLReadIntAttr(reader, "value", GL_ONE_MINUS_SRC_ALPHA);
+            this->super.super.dfactor = cxXMLReadIntAttr(reader, NULL, "value", GL_ONE_MINUS_SRC_ALPHA);
         }else if (ELEMENT_IS_TYPE(emitterRate)){
-            this->rate = cxXMLReadFloatAttr(reader, "value", this->rate);
+            this->rate = cxXMLReadFloatAttr(reader, NULL,  "value", this->rate);
         }else if (ELEMENT_IS_TYPE(particleToDir)){
-            this->todir = cxXMLReadBoolAttr(reader, "value", this->todir);
+            this->todir = cxXMLReadBoolAttr(reader,NULL, "value", this->todir);
         }else if (ELEMENT_IS_TYPE(rotatePerSecond)){
-            this->rotatepers.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->rotatepers.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if(ELEMENT_IS_TYPE(rotatePerSecondVariance)){
-            this->rotatepers.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->rotatepers.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(rotationStart)){
-            this->startspin.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->startspin.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(rotationStartVariance)){
-            this->startspin.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->startspin.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(rotationEnd)){
-            this->endspin.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->endspin.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(rotationEndVariance)){
-            this->endspin.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->endspin.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(maxRadius)){
-            this->startradius.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->startradius.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(maxRadiusVariance)){
-            this->startradius.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->startradius.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(minRadius)){
-            this->endradius.v = cxXMLReadFloatAttr(reader, "value", 0);
+            this->endradius.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(minRadiusVariance)){
-            this->endradius.r = cxXMLReadFloatAttr(reader, "value", 0);
+            this->endradius.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }
     }
     xmlTextReaderClose(reader);
@@ -177,6 +178,7 @@ void cxParticleInitFromFile(cxAny pview,cxConstChars file)
 
 void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
+    cxViewXML xml = xmlView;
     cxAtlasXMLReadAttr(xmlView, mView, reader);
     cxParticle this = mView;
     cxChar *src = cxXMLAttr("cxParticle.src");
@@ -185,7 +187,7 @@ void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
         xmlFree(src);
         return;
     }
-    cxInt number = cxXMLReadIntAttr(reader, "cxParticle.number", this->number);
+    cxInt number = cxXMLReadIntAttr(reader, xml->functions, "cxParticle.number", this->number);
     CX_ASSERT(number > 0, "cxParticle number must > 0");
     cxParticleInit(this, number);
     //mode add multiply
@@ -209,26 +211,26 @@ void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }
     xmlFree(type);
     //gravity
-    this->todir = cxXMLReadBoolAttr(reader, "cxParticle.todir", this->todir);
-    cxXMLReadFloatsAttr(reader, "cxParticle.duration", &this->duration);
-    cxXMLReadFloatsAttr(reader, "cxParticle.gravity", &this->gravity.x);
-    cxXMLReadFloatsAttr(reader, "cxParticle.rate", &this->rate);
-    cxXMLReadFloatsAttr(reader, "cxParticle.speed", &this->speed.v);
-    cxXMLReadFloatsAttr(reader, "cxParticle.tanaccel", &this->tanaccel.v);
-    cxXMLReadFloatsAttr(reader, "cxParticle.radaccel", &this->radaccel.v);
-    cxXMLReadFloatsAttr(reader, "cxParticle.position", &this->position.v.x);
-    cxXMLReadFloatsAttr(reader, "cxParticle.life", &this->life.v);
-    cxXMLReadFloatsAttr(reader, "cxParticle.angle", &this->angle.v);
-    cxXMLReadFloatsAttr(reader, "cxParticle.startsize", &this->startsize.v);
-    cxXMLReadFloatsAttr(reader, "cxParticle.endsize", &this->endsize.v);
-    cxXMLReadFloatsAttr(reader, "cxParticle.startcolor", &this->startcolor.v.r);
-    cxXMLReadFloatsAttr(reader, "cxParticle.endcolor", &this->endcolor.v.r);
-    cxXMLReadFloatsAttr(reader, "cxParticle.startspin", &this->startspin.v);
-    cxXMLReadFloatsAttr(reader, "cxParticle.endspin", &this->endspin.v);
+    this->todir = cxXMLReadBoolAttr(reader,xml->functions, "cxParticle.todir", this->todir);
+    this->duration = cxXMLReadFloatAttr(reader, xml->functions, "cxParticle.duration", this->duration);
+    this->gravity = cxXMLReadVec2fAttr(reader, xml->functions, "cxParticle.gravity", this->gravity);
+    this->rate = cxXMLReadFloatAttr(reader, xml->functions, "cxParticle.rate", this->rate);
+    this->speed = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.speed", this->speed);
+    this->tanaccel = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.tanaccel", this->tanaccel);
+    this->radaccel = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.radaccel", this->radaccel);
+    this->position = cxXMLReadVec2fRangeAttr(reader, xml->functions, "cxParticle.position", this->position);
+    this->life = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.life", this->life);
+    this->angle = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.angle", this->angle);
+    this->startsize = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.startsize", this->startsize);
+    this->endsize = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.endsize", this->endsize);
+    this->startcolor = cxXMLReadColor4fRangeAttr(reader, xml->functions, "cxParticle.startcolor", this->startcolor);
+    this->endcolor = cxXMLReadColor4fRangeAttr(reader, xml->functions, "cxParticle.endcolor", this->endcolor);
+    this->startspin = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.startspin", this->startspin);
+    this->endspin = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.endspin", this->endspin);
     //radial
-    cxXMLReadFloatsAttr(reader, "cxParticle.startradius", &this->startradius.v);
-    cxXMLReadFloatsAttr(reader, "cxParticle.endradius", &this->endradius.v);
-    cxXMLReadFloatsAttr(reader, "cxParticle.rotatepers", &this->rotatepers.v);
+    this->startradius = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.startradius", this->startradius);
+    this->endradius = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.endradius", this->endradius);
+    this->rotatepers = cxXMLReadFloatRangeAttr(reader, xml->functions, "cxParticle.rotatepers", this->rotatepers);
 }
 
 void cxParticleStop(cxAny pview)
@@ -314,8 +316,8 @@ static void cxParticleInitUnit(cxAny pview,cxParticleUnit *particle)
     particle->life = cxFloatValue(this->life);
     particle->position = cxVec2fValue(this->position);
     
-    cxColor4f startcolor = cxColorValue(this->startcolor);
-    cxColor4f endcolor = cxColorValue(this->endcolor);
+    cxColor4f startcolor = cxColor4fValue(this->startcolor);
+    cxColor4f endcolor = cxColor4fValue(this->endcolor);
     
     particle->color = startcolor;
     particle->deltacolor.r = (endcolor.r - startcolor.r) / particle->life;
@@ -486,22 +488,6 @@ void cxParticleInit(cxAny pview,cxInt number)
     cxSetRandSeed();
 }
 
-cxColor4f cxColorValue(cxColorRange cv)
-{
-    cxColor4f color;
-    color.r = kmClamp(cv.v.r + cv.r.r * CX_RAND_11f(), 0.0f, 1.0f);
-    color.g = kmClamp(cv.v.g + cv.r.g * CX_RAND_11f(), 0.0f, 1.0f);
-    color.b = kmClamp(cv.v.b + cv.r.b * CX_RAND_11f(), 0.0f, 1.0f);
-    color.a = kmClamp(cv.v.a + cv.r.a * CX_RAND_11f(), 0.0f, 1.0f);
-    return color;
-}
 
-cxVec2f cxVec2fValue(cxVec2fRange rv)
-{
-    cxVec2f pos;
-    pos.x = rv.v.x + rv.r.x * CX_RAND_11f();
-    pos.y = rv.v.y + rv.r.y * CX_RAND_11f();
-    return pos;
-}
 
 

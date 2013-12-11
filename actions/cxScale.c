@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxActionXML.h>
 #include "cxScale.h"
 
 static void cxScaleInit(cxAny pav)
@@ -28,10 +29,11 @@ static void cxScaleStep(cxAny pav,cxFloat dt,cxFloat time)
 
 static void cxScaleXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
+    cxActionXML xml = xmlAction;
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxScale this = mAction;
-    this->newScale.x = cxXMLReadFloatAttr(reader, "cxScale.x", this->newScale.x);
-    this->newScale.y = cxXMLReadFloatAttr(reader, "cxScale.y", this->newScale.y);
+    this->newScale.x = cxXMLReadFloatAttr(reader, xml->functions, "cxScale.x", this->newScale.x);
+    this->newScale.y = cxXMLReadFloatAttr(reader, xml->functions, "cxScale.y", this->newScale.y);
 }
 
 CX_OBJECT_INIT(cxScale, cxAction)

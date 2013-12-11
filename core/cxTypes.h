@@ -15,6 +15,21 @@
 
 #define cxFloatEqu kmAlmostEqual
 
+// -1 <-> 1
+#define CX_RAND_11f() ((2.0f*((cxFloat)rand()/(cxFloat)RAND_MAX))-1.0f)
+
+// 0 <-> 1
+#define CX_RAND_01f() ((cxFloat)rand()/(cxFloat)RAND_MAX)
+
+typedef struct {
+    cxFloat v;  //base value
+    cxFloat r;  //random value
+}cxFloatRange;
+
+#define cxFloatValue(fv) ((fv).v + (fv).r * CX_RAND_11f())
+
+#define cxFloatRangeValue(v,r) (cxFloatRange){v,r}
+
 typedef struct {
     cxInt x;
     cxInt y;
@@ -261,6 +276,22 @@ void cxTypesSet(cxTypes this,cxConstChars key,cxAny value);
 #define CX_TYPES_FOREACH(a,t,e) \
 t *e = NULL; \
 while((a) != NULL && (e = (t *)utarray_next((a)->utArray, e)) != NULL)
+
+typedef struct {
+    cxColor4f v;
+    cxColor4f r;
+}cxColor4fRange;
+
+cxColor4f cxColor4fValue(cxColor4fRange r);
+
+#define cxColor4fRangeValue(r1,g1,b1,a1,r2,g2,b2,a2)  (cxColor4fRange){{r1,g1,b1,a1},{r2,g2,b2,a2}}
+
+typedef struct {
+    cxVec2f v;
+    cxVec2f r;
+}cxVec2fRange;
+
+cxVec2f cxVec2fValue(cxVec2fRange rv);
 
 CX_C_END
 

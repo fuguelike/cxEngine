@@ -14,8 +14,15 @@
 #include "cxString.h"
 #include "cxEventItem.h"
 #include "cxHash.h"
+#include "cxTexture.h"
 
 CX_C_BEGIN
+
+CX_OBJECT_DEF(cxTextureAttr, cxObject)
+    cxTexture texture;
+    cxBoxTex2f box;
+    cxSize2f size;
+CX_OBJECT_END(cxTextureAttr)
 
 typedef cxAny (*cxXMLScriptMakeElementFunc)(const xmlChar *temp,xmlTextReaderPtr reader);
 
@@ -29,9 +36,7 @@ xmlTextReaderPtr cxXMLReaderForString(cxString code);
 
 xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this);
 
-cxInt cxXMLReadFloatsAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat *values);
-
-cxEventItem cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader);
+cxEventItem cxXMLReadEvent(cxHash events, cxConstChars name, xmlTextReaderPtr reader);
 
 #define ELEMENT_IS_TYPE(t)  (temp != NULL && xmlStrcmp(temp, BAD_CAST#t) == 0)
 
@@ -48,35 +53,45 @@ cxChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name);
 
 cxInt cxReadFloats(cxConstChars ptr,cxFloat *values);
 
-cxFloat cxXMLParseFloat(const cxChar *txt,cxFloat value);
-
 cxInt cxReadInts(cxConstChars ptr,cxInt *values);
 
-//return need xmlFree free
-cxChar *cxXMLReadString(xmlTextReaderPtr reader);
+cxBool cxXMLHasAttr(xmlTextReaderPtr reader,cxConstChars name);
 
-//return must release
-cxString cxXMLReadAllocAttr(xmlTextReaderPtr reader,cxConstChars name);
-
-cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxConstChars name,cxFloat value);
-
-cxColor4f cxXMLReadColorAttr(xmlTextReaderPtr reader,cxConstChars name,cxColor4f color);
+cxString cxXMLReadString(xmlTextReaderPtr reader);
 
 cxString cxXMLReaderReadOuterXml(xmlTextReaderPtr reader);
 
-cxString cxXMLReadLangStringAttr(xmlTextReaderPtr reader,cxConstChars name);
+cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxFloat value);
 
-cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt value);
+cxString cxXMLReadStringAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name);
 
-cxUInt cxXMLReadUIntAttr(xmlTextReaderPtr reader,cxConstChars name,cxUInt value);
+cxAssist4f cxXMLReadAssist4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxAssist4f value);
 
-cxInt cxXMLReadIntsAttr(xmlTextReaderPtr reader,cxConstChars name,cxInt *values);
+cxColor4f cxXMLReadColor4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxColor4f value);
 
-cxBool cxXMLReadBoolAttr(xmlTextReaderPtr reader,cxConstChars name,cxBool value);
+cxBox4f cxXMLReadBox4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxBox4f value);
 
-cxVec3f cxXMLReadVec3fAttr(xmlTextReaderPtr reader,cxConstChars name,cxVec3f value);
+cxVec2f cxXMLReadVec2fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec2f value);
 
-cxVec2f cxXMLReadVec2fAttr(xmlTextReaderPtr reader,cxConstChars name,cxVec2f value);
+cxVec3f cxXMLReadVec3fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec3f value);
+
+cxFloatRange cxXMLReadFloatRangeAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxFloatRange value);
+
+cxVec2fRange cxXMLReadVec2fRangeAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec2fRange value);
+
+cxColor4fRange cxXMLReadColor4fRangeAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxColor4fRange value);
+
+cxBox4i cxXMLReadBox4iAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxBox4i value);
+
+cxVec2i cxXMLReadVec2iAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxVec2i value);
+
+cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxInt value);
+
+cxUInt cxXMLReadUIntAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxUInt value);
+
+cxBool cxXMLReadBoolAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxBool value);
+
+cxTextureAttr cxXMLReadTextureAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name);
 
 CX_C_END
 

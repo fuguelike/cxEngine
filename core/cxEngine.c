@@ -136,9 +136,11 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->actions = CX_ALLOC(cxHash);
     this->dbenvs = CX_ALLOC(cxHash);
     this->bmpfonts = CX_ALLOC(cxHash);
+    this->functions = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
+    CX_RELEASE(this->functions);
     CX_RELEASE(this->bmpfonts);
     CX_RELEASE(this->actions);
     CX_RELEASE(this->lang);
@@ -203,25 +205,147 @@ void cxEngineDestroy()
     }
 }
 
+void cxEngineRegisteFunc(cxConstChars name,cxAnyFunc func)
+{
+    cxEngine this = cxEngineInstance();
+    CX_ASSERT(name != NULL, "args error");
+    if(func == NULL){
+        cxHashDel(this->functions, cxHashStrKey(name));
+        return;
+    }
+    cxFuncItem item = cxHashGet(this->functions, cxHashStrKey(name));
+    CX_ASSERT(item == NULL, "name %s function registered",name);
+    item = CX_ALLOC(cxFuncItem);
+    item->func = func;
+    cxHashSet(this->functions, cxHashStrKey(name), item);
+    CX_RELEASE(item);
+}
+
 void cxEngineRegisteEvent(cxConstChars name,cxEventFunc func)
 {
     cxEngine this = cxEngineInstance();
     if(func == NULL){
         cxHashDel(this->events, cxHashStrKey(name));
-    }else{
-        cxEventItem event = cxHashGet(this->events, cxHashStrKey(name));
-        CX_ASSERT(event == NULL, "name %s event registered",name);
-        event = CX_ALLOC(cxEventItem);
-        event->func = func;
-        cxHashSet(this->events, cxHashStrKey(name), event);
-        CX_RELEASE(event);
+        return;
     }
+    cxEventItem event = cxHashGet(this->events, cxHashStrKey(name));
+    CX_ASSERT(event == NULL, "name %s event registered",name);
+    event = CX_ALLOC(cxEventItem);
+    event->func = func;
+    cxHashSet(this->events, cxHashStrKey(name), event);
+    CX_RELEASE(event);
 }
 
 cxEventItem cxEngineGetEvent(cxConstChars name)
 {
     cxEngine this = cxEngineInstance();
     return cxHashGet(this->events, cxHashStrKey(name));
+}
+
+cxFuncItem cxEngineGetFunc(cxConstChars name)
+{
+    cxEngine this = cxEngineInstance();
+    return cxHashGet(this->functions, cxHashStrKey(name));
+}
+
+//public xml attr function
+
+static cxString cxEngineLocalizedString(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxConstChars url = cxEventArgToString(arg);
+    CX_ASSERT(url != NULL, "args error");
+    cxEngine this = cxEngineInstance();
+    cxUrlPath path = cxUrlPathParse(url);
+    cxTypes types = cxEngineDataSet(CX_CONST_STRING("%s/%s?%s",cxStringBody(this->lang),path->path,path->key));
+    CX_RETURN(types == NULL || !cxTypesIsType(types, cxTypesString), NULL);
+    return types->assist;
+}
+
+static cxString cxEngineDataString(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxConstChars url = cxEventArgToString(arg);
+    CX_ASSERT(url != NULL, "args error");
+    cxTypes types = cxEngineDataSet(url);
+    return types != NULL ? types->assist : NULL;
+}
+
+static cxNumber cxEngineDataFloat(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxConstChars url = cxEventArgToString(arg);
+    CX_ASSERT(url != NULL, "args error");
+    cxNumber number = cxEngineDataSet(url);
+    CX_ASSERT(cxObjectIsType(number, cxNumberTypeName), "type error");
+    return number;
+}
+
+static cxNumber cxEngineDataInt(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxConstChars url = cxEventArgToString(arg);
+    CX_ASSERT(url != NULL, "args error");
+    cxNumber number = cxEngineDataSet(url);
+    CX_ASSERT(cxObjectIsType(number, cxNumberTypeName), "type error");
+    return number;
+}
+
+static cxNumber cxEngineRelativeWidth(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxEngine engine = cxEngineInstance();
+    cxFloat v = cxEventArgToDouble(arg, 1.0f);
+    return cxNumberFloat(v * engine->winsize.w);
+}
+
+static cxNumber cxEngineRelativeHeight(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxEngine engine = cxEngineInstance();
+    cxFloat v = cxEventArgToDouble(arg, 1.0f);
+    return cxNumberFloat(v * engine->winsize.h);
+}
+
+static cxNumber cxEngineBinNumber(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxConstChars str = cxEventArgToString(arg);
+    CX_ASSERT(str != NULL, "args is string ps:'100010'");
+    cxUInt v = cxBinaryToUInt(str);
+    return cxNumberUInt(v);
+}
+
+static cxNumber cxEngineHexNumber(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxConstChars str = cxEventArgToString(arg);
+    CX_ASSERT(str != NULL, "args is string ps:'100010'");
+    cxUInt v = cxHexToUInt(str);
+    return cxNumberUInt(v);
+}
+
+static cxTextureAttr cxTextureCreateForXML(cxEventArg arg)
+{
+    cxTextureAttr rv = CX_CREATE(cxTextureAttr);
+    CX_ASSERT(arg != NULL, "args error");
+    cxConstChars str = cxEventArgToString(arg);
+    CX_ASSERT(str != NULL, "string null");
+    cxUrlPath path = cxUrlPathParse(str);
+    if(path->count == 0){
+        return NULL;
+    }
+    cxTexture texture = NULL;
+    if(path->count > 0){
+        texture = cxTextureCreate(path->path);
+        rv->size = texture->size;
+        CX_RETAIN_SWAP(rv->texture, texture);
+    }
+    if(path->count > 1 && texture != NULL){
+        rv->box = cxTextureBox(texture, path->key);
+        rv->size = cxTextureSize(texture, path->key);
+    }
+    return rv;
 }
 
 void cxEngineSystemInit()
@@ -240,6 +364,20 @@ void cxEngineSystemInit()
     cxEngineRegisteEvent("cxSetTexture", cxSpriteSetTextureEvent);
     //use in ->cxView up
     cxEngineRegisteEvent("cxSetView", cxViewSetViewEvent);
+    
+    //function
+    cxEngineRegisteFunc("cxLocalizedString", (cxAnyFunc)cxEngineLocalizedString);
+    //
+    cxEngineRegisteFunc("cxDataString", (cxAnyFunc)cxEngineDataString);
+    cxEngineRegisteFunc("cxDataFloat", (cxAnyFunc)cxEngineDataFloat);
+    cxEngineRegisteFunc("cxDataInt", (cxAnyFunc)cxEngineDataInt);
+    //relative screen width and height value
+    cxEngineRegisteFunc("cxRelativeW", (cxAnyFunc)cxEngineRelativeWidth);
+    cxEngineRegisteFunc("cxRelativeH", (cxAnyFunc)cxEngineRelativeHeight);
+    //
+    cxEngineRegisteFunc("cxBinNumber", (cxAnyFunc)cxEngineBinNumber);
+    cxEngineRegisteFunc("cxHexNumber", (cxAnyFunc)cxEngineHexNumber);
+    cxEngineRegisteFunc("cxTextureCreate", (cxAnyFunc)cxTextureCreateForXML);
 }
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file)
@@ -278,65 +416,19 @@ void cxEngineRemoveScript(cxConstChars file)
     cxHashDel(this->scripts, cxHashStrKey(file));
 }
 
-cxTypes cxEngineDataSet(cxConstChars url)
+cxAny cxEngineDataSet(cxConstChars url)
 {
     CX_RETURN(url == NULL, NULL);
     cxEngine this = cxEngineInstance();
-    cxChar path[128]={0};
-    cxChar key[128]={0};
-    cxInt ret = cxParseURL(url, path, key);
-    CX_RETURN(ret == 0, NULL);
-    cxHashXML sets = cxHashGet(this->datasets, cxHashStrKey(path));
+    cxUrlPath path = cxUrlPathParse(url);
+    CX_RETURN(path == NULL, NULL);
+    cxHashXML sets = cxHashGet(this->datasets, cxHashStrKey(path->path));
     if(sets == NULL){
-        sets = cxHashXMLCreate(path);
-        CX_ASSERT(sets != NULL, "load data sets %s error",path);
-        cxHashSet(this->datasets, cxHashStrKey(path), sets);
+        sets = cxHashXMLCreate(path->path);
+        CX_RETURN(sets == NULL, NULL);
+        cxHashSet(this->datasets, cxHashStrKey(path->path), sets);
     }
-    if(ret != 2){
-        return NULL;
-    }
-    return cxHashGet(sets->items, cxHashStrKey(key));
-}
-
-cxString cxEngineTypesText(cxConstChars xml,cxConstChars key)
-{
-    cxEngine this = cxEngineInstance();
-    cxConstChars url = NULL;
-    //from cxLangString
-    CX_ASSERT(this->lang != NULL, "system not set locate lang");
-    url = CX_CONST_STRING("%s?%s",xml,cxStringBody(this->lang));
-    cxString ret = NULL;
-    cxTypes types = cxEngineDataSet(url);
-    if(cxTypesIsType(types,cxTypesLangString)){
-        ret = cxTypesGet(types, key);
-    }
-    CX_RETURN(ret != NULL,ret);
-    //from cxString
-    url = CX_CONST_STRING("%s?%s",xml,key);
-    types = cxEngineDataSet(url);
-    if(cxTypesIsType(types,cxTypesString)){
-        ret = types->assist;
-    }
-    CX_RETURN(ret != NULL,ret);
-    //parse query?key=?
-    cxChar qk[128]={0};
-    cxChar qv[128]={0};
-    if(cxParseQuery(key, qk, qv) != 2){
-        return ret;
-    }
-    url = CX_CONST_STRING("%s?%s",xml,qk);
-    //from cxHash
-    types = cxEngineDataSet(url);
-    if(cxTypesIsType(types,cxTypesHash)){
-        cxAny value = cxTypesGet(types, qv);
-        ret = cxObjectIsType(value, cxStringTypeName) ? value : NULL;
-    }
-    CX_RETURN(ret != NULL,ret);
-    //from cxDB get String
-    if(cxTypesIsType(types,cxTypesDB)){
-        ret = cxDBGet(types->assist, cxStringStatic(qv));
-    }
-    return ret;
+    return path->count == 2 ? cxHashGet(sets->items, cxHashStrKey(path->key)) : NULL;
 }
 
 cxVec2f cxEngineTouchToWindow(cxVec2f pos)

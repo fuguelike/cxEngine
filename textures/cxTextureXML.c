@@ -42,7 +42,7 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         CX_ASSERT(ret, "xml innert texture error");
         CX_RETAIN(xml->innerTexture);
         //for jpg pkm atlas texture
-        xml->super.isAtlas = cxXMLReadBoolAttr(reader, "atlas", false);
+        xml->super.isAtlas = cxXMLReadBoolAttr(reader, NULL ,"atlas", false);
         xml->super.size = xml->innerTexture->size;
         xmlFree(simagePath);
         //load texcoords
@@ -58,10 +58,10 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
             cxChar *sn = cxXMLAttr("n");
             cxChar *sr = cxXMLAttr("r");
             e->isRotation = sr != NULL;
-            e->x = cxXMLReadFloatAttr(reader, "x", 0);
-            e->y = cxXMLReadFloatAttr(reader, "y", 0);
-            e->w = cxXMLReadFloatAttr(reader, "w", 0);
-            e->h = cxXMLReadFloatAttr(reader, "h", 0);
+            e->x = cxXMLReadFloatAttr(reader, NULL,  "x", 0);
+            e->y = cxXMLReadFloatAttr(reader, NULL, "y", 0);
+            e->w = cxXMLReadFloatAttr(reader, NULL, "w", 0);
+            e->h = cxXMLReadFloatAttr(reader, NULL, "h", 0);
             cxHashSet(xml->super.keys, cxHashStrKey(sn), e);
             CX_RELEASE(e);
             xmlFree(sn);

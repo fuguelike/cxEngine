@@ -23,22 +23,18 @@
         <item x="0" y="0" w="50" h="50" />
     </cxAtlasBoxPoint>
     
-    <cxLangString id="zh">
-        <item name="font">simsun.ttf</item>
-        <item name="exp">粒子系统</item>
-    </cxLangString>
-    
-    <cxLangString id="en">
-        <item name="font">banana.ttf</item>
-        <item name="exp">Particle</item>
-    </cxLangString>
-    
     <cxDBEnv type="document" logger="true">
         <cxDB id="db1" path="document" type="btree" file="test1.db" table="list"/>
         <cxDB id="db2" path="assert" type="btree" file="test2.db" table="list"/>
     </cxDBEnv>
     
     <cxString id="wavdata" src="effect.wav" />
+    
+    <cxInt id="int">123</cxInt>
+    
+    <cxFloat id="float">456</cxFloat>
+    
+    <cxDouble id="double">789</cxDouble>
     
     <cxString id="tex"><![CDATA[Test]]></cxString>
     

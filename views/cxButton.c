@@ -57,8 +57,8 @@ void cxButtonXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxXMLAppendEvent(xml->events, this, cxButton, onRelease);
     cxXMLAppendEvent(xml->events, this, cxButton, onLeave);
     cxXMLAppendEvent(xml->events, this, cxButton, onEnter);
-    cxButtonEnable(this, cxXMLReadBoolAttr(reader, "cxButton.enable", this->isEnable));
-    this->movement = cxXMLReadFloatAttr(reader, "cxButton.movement", this->movement);
+    cxButtonEnable(this, cxXMLReadBoolAttr(reader, xml->functions, "cxButton.enable", this->isEnable));
+    this->movement = cxXMLReadFloatAttr(reader, xml->functions,  "cxButton.movement", this->movement);
 }
 
 CX_OBJECT_INIT(cxButton, cxSprite)

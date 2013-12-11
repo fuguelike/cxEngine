@@ -18,10 +18,15 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxActionXML, cxObject)
     cxBool isError;
     cxHash events;
+    cxHash functions;
     cxHash codes;
     CX_EVENT_ALLOC(onLoad);
     CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
 CX_OBJECT_END(cxActionXML)
+
+void cxActionXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func);
+
+void cxActionXMLRegisteFunc(cxAny pview,cxConstChars name,cxAny func);
 
 cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader);
 

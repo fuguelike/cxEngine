@@ -8,6 +8,7 @@
 
 #include <core/cxEngine.h>
 #include <core/cxIconv.h>
+#include <core/cxViewXML.h>
 #include "cxLabelBMP.h"
 
 static void cxLabelBMPUpdateText(cxLabelBMP this)
@@ -75,17 +76,17 @@ static void cxLabelBMPUpdate(cxEvent *event)
 
 void cxLabelBMPReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
+    cxViewXML xml = xmlView;
     cxSpriteXMLReadAttr(xmlView, mView, reader);
     cxLabelBMP this = mView;
     //set font
-    cxString font = cxXMLReadLangStringAttr(reader, "cxLabelBMP.font");
+    cxString font = cxXMLReadStringAttr(reader, xml->functions, "cxLabelBMP.font");
     cxLabelBMPSetFont(this, font);
-    xmlFree(font);
     //set text
-    cxString text = cxXMLReadLangStringAttr(reader, "cxLabelBMP.text");
+    cxString text = cxXMLReadStringAttr(reader, xml->functions, "cxLabelBMP.text");
     cxLabelBMPSetText(mView, text);
     //set fontsize
-    cxLabelBMPSetSize(mView, cxXMLReadFloatAttr(reader, "cxLabelBMP.size", this->size));
+    cxLabelBMPSetSize(mView, cxXMLReadFloatAttr(reader, xml->functions, "cxLabelBMP.size", this->size));
 }
 
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)

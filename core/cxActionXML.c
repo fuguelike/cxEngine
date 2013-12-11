@@ -33,15 +33,47 @@ CX_OBJECT_INIT(cxActionXML, cxObject)
     cxObjectSetXMLReadFunc(this, cxActionRootXMLReadAttr);
     this->codes = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
+    this->functions = CX_ALLOC(cxHash);
     CX_METHOD_SET(this->Make, cxActionXMLMakeElement);
 }
 CX_OBJECT_FREE(cxActionXML, cxObject)
 {
     CX_EVENT_RELEASE(this->onLoad);
+    CX_RELEASE(this->functions);
     CX_RELEASE(this->events);
     CX_RELEASE(this->codes);
 }
 CX_OBJECT_TERM(cxActionXML, cxObject)
+
+void cxActionXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
+{
+    cxActionXML this = pview;
+    if(func == NULL){
+        cxHashDel(this->events, cxHashStrKey(name));
+        return;
+    }
+    cxEventItem event = cxHashGet(this->events, cxHashStrKey(name));
+    CX_ASSERT(event == NULL, "name %s event registered",name);
+    event = CX_ALLOC(cxEventItem);
+    event->func = func;
+    cxHashSet(this->events, cxHashStrKey(name), event);
+    CX_RELEASE(event);
+}
+
+void cxActionXMLRegisteFunc(cxAny pview,cxConstChars name,cxAny func)
+{
+    cxActionXML this = pview;
+    if(func == NULL){
+        cxHashDel(this->functions, cxHashStrKey(name));
+        return;
+    }
+    cxFuncItem item = cxHashGet(this->functions, cxHashStrKey(name));
+    CX_ASSERT(item == NULL, "name %s function registered",name);
+    item = CX_ALLOC(cxFuncItem);
+    item->func = func;
+    cxHashSet(this->events, cxHashStrKey(name), item);
+    CX_RELEASE(item);
+}
 
 static void cxActionXMLReaderError(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
 {
@@ -89,13 +121,11 @@ cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
 
 cxAny cxActionXMLGet(cxConstChars src)
 {
-    cxChar file[128]={0};
-    cxChar key[128]={0};
-    cxInt rv = cxParseURL(src, file, key);
-    CX_RETURN(rv == 0, NULL);
-    cxActionXML this = cxActionXMLCreate(file);
+    cxUrlPath path = cxUrlPathParse(src);
+    CX_RETURN(path == NULL, NULL);
+    cxActionXML this = cxActionXMLCreate(path->path);
     CX_RETURN(this == NULL, NULL);
-    cxString code = cxHashGet(this->codes, (rv == 1) ? cxHashStrKey(file) : cxHashStrKey(key));
+    cxString code = cxHashGet(this->codes, (path->count == 1) ? cxHashStrKey(path->path) : cxHashStrKey(path->key));
     CX_RETURN(code == NULL, NULL);
     xmlTextReaderPtr reader = cxXMLReaderForString(code);
     cxAny action = NULL;
@@ -108,6 +138,8 @@ cxAny cxActionXMLGet(cxConstChars src)
         if(action == NULL){
             continue;
         }
+        //save root
+        cxObjectSetRoot(action, this);
         cxObjectXMLReadAttrRun(action, this, reader);
     }
     xmlTextReaderClose(reader);

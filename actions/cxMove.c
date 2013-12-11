@@ -38,10 +38,11 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
 
 static void cxMoveXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
+    cxActionXML xml = xmlAction;
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxMove this = mAction;
-    this->endPos.x = cxXMLReadFloatAttr(reader, "cxMove.x", this->endPos.x);
-    this->endPos.y = cxXMLReadFloatAttr(reader, "cxMove.y", this->endPos.y);
+    this->endPos.x = cxXMLReadFloatAttr(reader, xml->functions, "cxMove.x", this->endPos.x);
+    this->endPos.y = cxXMLReadFloatAttr(reader, xml->functions, "cxMove.y", this->endPos.y);
 }
 
 CX_OBJECT_INIT(cxMove, cxAction)

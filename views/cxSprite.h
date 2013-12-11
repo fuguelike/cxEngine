@@ -30,6 +30,10 @@ CX_OBJECT_END(cxSprite)
 
 void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
 
+void cxSpriteSetTextureAttr(cxAny pview,cxTextureAttr attr);
+
+void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box);
+
 cxBoxTex2f cxSpriteBoxTex(cxAny pview);
 
 cxSprite cxSpriteCreateWithFile(cxConstChars file,cxConstChars key);

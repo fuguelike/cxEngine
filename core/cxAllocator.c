@@ -49,7 +49,10 @@ const cxAllocator *allocator = &(cxAllocator){
 
 void cxAllocatorInit()
 {
-    
+    xmlFree = cxFree;
+    xmlMalloc = cxMalloc;
+    xmlRealloc = cxRealloc;
+    xmlMemStrdup = cxStrdup;
 }
 
 void cxAllocatorFree()

@@ -27,7 +27,7 @@ static void cxTimerXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr r
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxActionXML xml = xmlAction;
     cxTimer this = mAction;
-    this->repeat = cxXMLReadIntAttr(reader, "cxTimer.repeat", this->repeat);
+    this->repeat = cxXMLReadIntAttr(reader, xml->functions, "cxTimer.repeat", this->repeat);
     cxXMLAppendEvent(xml->events, this, cxTimer, onArrive);
 }
 

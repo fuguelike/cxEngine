@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxActionXML.h>
 #include "cxFade.h"
 
 static void cxFadeInit(cxAny pav)
@@ -25,9 +26,10 @@ static void cxFadeStep(cxAny pav,cxFloat dt,cxFloat time)
 
 static void cxFadeXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
+    cxActionXML xml = xmlAction;
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxFade this = mAction;
-    this->alpha = cxXMLReadFloatAttr(reader, "cxFade.alpha", this->alpha);
+    this->alpha = cxXMLReadFloatAttr(reader, xml->functions, "cxFade.alpha", this->alpha);
 }
 
 CX_OBJECT_INIT(cxFade, cxAction)

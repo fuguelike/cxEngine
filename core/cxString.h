@@ -56,6 +56,8 @@ cxConstChars cxStringBody(cxString string);
 
 cxString cxStringAllocChars(cxConstChars str);
 
+cxString cxStringAttachChars(cxChar *str);
+
 cxString cxStringConstChars(cxConstChars str);
 
 void cxStringConcat(cxString string,cxString str);

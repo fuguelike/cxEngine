@@ -39,35 +39,10 @@ typedef struct {
     cxFloat deltaradius;
 }cxParticleUnit;
 
-typedef struct {
-    cxFloat v;  //base value
-    cxFloat r;  //random value
-}cxFloatRange;
-
 typedef enum {
     cxParticleBlendAdd,
     cxParticleBlendMultiply,
 }cxParticleBlendMode;
-
-#define cxFloatValue(fv) ((fv).v + (fv).r * CX_RAND_11f())
-
-#define cxFloatRangeValue(v,r) (cxFloatRange){v,r}
-
-typedef struct {
-    cxColor4f v;
-    cxColor4f r;
-}cxColorRange;
-
-cxColor4f cxColorValue(cxColorRange r);
-
-#define cxColorRangeValue(r1,g1,b1,a1,r2,g2,b2,a2)  (cxColorRange){{r1,g1,b1,a1},{r2,g2,b2,a2}}
-
-typedef struct {
-    cxVec2f v;
-    cxVec2f r;
-}cxVec2fRange;
-
-cxVec2f cxVec2fValue(cxVec2fRange rv);
 
 typedef void (*cxParticleUpdateBoxFunc)(cxAny pview,cxBoxPoint *box);
 
@@ -89,8 +64,8 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxFloatRange angle;
     cxFloatRange startsize;
     cxFloatRange endsize;
-    cxColorRange startcolor;
-    cxColorRange endcolor;
+    cxColor4fRange startcolor;
+    cxColor4fRange endcolor;
     cxFloatRange startspin;
     cxFloatRange endspin;
     //gravity mode

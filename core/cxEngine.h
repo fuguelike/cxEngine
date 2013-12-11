@@ -21,6 +21,7 @@
 #include "cxUtil.h"
 #include "cxMessage.h"
 #include "cxBMPFont.h"
+#include "cxUrlPath.h"
 
 CX_C_BEGIN
 
@@ -29,6 +30,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash bmpfonts;
     cxHash events;
+    cxHash functions;
     cxHash scripts;
     cxHash datasets;
     cxHash actions;
@@ -56,9 +58,13 @@ CX_OBJECT_END(cxEngine)
 
 cxEngine cxEngineInstance();
 
+void cxEngineRegisteFunc(cxConstChars name,cxAnyFunc func);
+
 void cxEngineRegisteEvent(cxConstChars name,cxEventFunc func);
 
 cxEventItem cxEngineGetEvent(cxConstChars name);
+
+cxFuncItem cxEngineGetFunc(cxConstChars name);
 
 void cxEngineRemoveScript(cxConstChars file);
 
@@ -68,9 +74,7 @@ cxXMLScript cxEngineGetXMLScript(cxConstChars file);
 
 void cxEngineSetLocalLang(cxString lang);
 
-cxTypes cxEngineDataSet(cxConstChars url);
-
-cxString cxEngineTypesText(cxConstChars xml,cxConstChars key);
+cxAny cxEngineDataSet(cxConstChars url);
 
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 

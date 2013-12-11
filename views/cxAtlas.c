@@ -13,6 +13,7 @@
 
 void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
+    cxViewXML xml = xmlView;
     cxAtlas this = mView;
     //support boxes mode
     cxChar *sitems = cxXMLAttr("cxAtlas.boxes");
@@ -21,8 +22,9 @@ void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }
     xmlFree(sitems);
     //support scale9 mode
-    if(cxXMLReadFloatsAttr(reader, "cxAtlas.scale9", &this->scale9.box.l) == 4){
+    if(cxXMLHasAttr(reader, "cxAtlas.scale9")){
         this->scale9.enable = true;
+        this->scale9.box = cxXMLReadBox4fAttr(reader, xml->functions, "cxAtlas.scale9", this->scale9.box);
         cxAtlasSetNumber(this, 9);
     }
     //

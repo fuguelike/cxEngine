@@ -64,6 +64,7 @@
 		839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 839E7A5617F1BC7600B0F5EC /* InfoPlist.strings */; };
 		839E7A5A17F1BC7600B0F5EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 839E7A5917F1BC7600B0F5EC /* main.m */; };
 		839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839E7A6917F1BC7600B0F5EC /* Images.xcassets */; };
+		83E51BD618570640006AD253 /* en in Resources */ = {isa = PBXBuildFile; fileRef = 83E51BD518570640006AD253 /* en */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +140,7 @@
 		839E7A5917F1BC7600B0F5EC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		839E7A5B17F1BC7600B0F5EC /* cxEngine-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "cxEngine-Prefix.pch"; sourceTree = "<group>"; };
 		839E7A6917F1BC7600B0F5EC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		83E51BD518570640006AD253 /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = res/en; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +219,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				83E51BD518570640006AD253 /* en */,
 				8372777218449156005EDE68 /* animate */,
 				832BEF0C182FBB0900F4BC22 /* test.jpg */,
 				832B1D4918264B100038D0EC /* apple.mp3 */,
@@ -346,6 +349,7 @@
 				836150FE184838B200EB9173 /* n.png in Resources */,
 				8341C6C21822812B0045A66F /* action.xml in Resources */,
 				8359F7A81856EADE0072D047 /* star.png in Resources */,
+				83E51BD618570640006AD253 /* en in Resources */,
 				8341C6CF1822812B0045A66F /* scale9.png in Resources */,
 				83515C6C184F63150031B64F /* chipmunk.xml in Resources */,
 				839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */,

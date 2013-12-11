@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxActionXML.h>
 #include "cxJump.h"
 
 static void cxJumpInit(cxAny pav)
@@ -33,11 +34,12 @@ static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
 
 static void cxJumpXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
+    cxActionXML xml = xmlAction;
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxJump this = mAction;
-    cxXMLReadFloatsAttr(reader, "cxJump.position", &this->position.x);
-    this->height = cxXMLReadFloatAttr(reader, "cxJump.height", this->height);
-    this->jumps  = cxXMLReadIntAttr(reader, "cxJump.jumps", this->jumps);
+    this->position = cxXMLReadVec2fAttr(reader, xml->functions, "cxJump.position", this->position);
+    this->height = cxXMLReadFloatAttr(reader, xml->functions, "cxJump.height", this->height);
+    this->jumps  = cxXMLReadIntAttr(reader, xml->functions, "cxJump.jumps", this->jumps);
 }
 
 CX_OBJECT_INIT(cxJump, cxAction)

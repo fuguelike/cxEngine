@@ -69,14 +69,13 @@ cxTypes cxHashXMLReadAtlasBoxPoint(cxHashXML xml,cxConstChars texfile,xmlTextRea
         }
         xmlFree(fill);
         
-        item.pos.x = cxXMLReadFloatAttr(reader, "x", 0);
-        item.pos.y = cxXMLReadFloatAttr(reader, "y", 0);
+        item.pos.x = cxXMLReadFloatAttr(reader, NULL, "x", 0);
+        item.pos.y = cxXMLReadFloatAttr(reader, NULL, "y", 0);
         
-        item.size.w = cxXMLReadFloatAttr(reader, "w", 0);
-        item.size.h = cxXMLReadFloatAttr(reader, "h", 0);
+        item.size.w = cxXMLReadFloatAttr(reader, NULL, "w", 0);
+        item.size.h = cxXMLReadFloatAttr(reader, NULL, "h", 0);
         
-        item.color = cxColor4fv(1, 1, 1, 1);
-        cxXMLReadFloatsAttr(reader, "color", &item.color.r);
+        item.color = cxXMLReadColor4fAttr(reader, NULL, "color", cxColor4fv(1, 1, 1, 1));
         
         item.texbox = cxBoxTex2fDefault();
         cxChar *skey = cxXMLAttr("key");
@@ -90,31 +89,6 @@ cxTypes cxHashXMLReadAtlasBoxPoint(cxHashXML xml,cxConstChars texfile,xmlTextRea
         xmlFree(skey);
         index ++;
         cxTypesAppend(types, item);
-    }
-    return types;
-}
-
-cxTypes cxHashXMLReadLangString(cxHashXML xml,xmlTextReaderPtr reader)
-{
-    cxTypes types = cxLangStringTypesCreate();
-    int depth = xmlTextReaderDepth(reader);
-    while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
-        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
-            continue;
-        }
-        const xmlChar *temp = xmlTextReaderConstName(reader);
-        if(!ELEMENT_IS_TYPE(item)){
-            continue;
-        }
-        cxChar *skey = cxXMLAttr("name");
-        cxChar *svalue = cxXMLReadString(reader);
-        if(skey != NULL && svalue != NULL){
-            cxString string = cxStringAllocChars(svalue);
-            cxTypesSet(types, skey, string);
-            CX_RELEASE(string);
-        }
-        xmlFree(svalue);
-        xmlFree(skey);
     }
     return types;
 }
@@ -135,7 +109,7 @@ static void cxHashXMLReadDB(cxDBEnv env,cxHashXML xml,xmlTextReaderPtr reader)
         cxChar *type = cxXMLAttr("type");
         cxChar *sid = cxXMLAttr("id");
         cxChar *path = cxXMLAttr("path");
-        cxBool rdonly = cxXMLReadBoolAttr(reader, "rdonly", false);
+        cxBool rdonly = cxXMLReadBoolAttr(reader, NULL,  "rdonly", false);
         if(sid == NULL){
             CX_WARN("db id not set,will can't add dataset");
         }
@@ -169,7 +143,7 @@ static void cxHashXMLReadDB(cxDBEnv env,cxHashXML xml,xmlTextReaderPtr reader)
 void cxHashXMLReadDBEnv(cxHashXML xml,xmlTextReaderPtr reader)
 {
     cxChar *type = cxXMLAttr("type");
-    cxBool logger = cxXMLReadBoolAttr(reader, "logger", false);
+    cxBool logger = cxXMLReadBoolAttr(reader,NULL, "logger", false);
     cxDBEnv env = cxDBEnvCreate(type, logger);
     if(env != NULL){
         cxHashXMLReadDB(env, xml, reader);
@@ -186,7 +160,7 @@ cxTypes cxHashXMLReadString(cxHashXML xml,xmlTextReaderPtr reader)
         cxStream stream = cxAssetsStreamCreate(src);
         bytes = cxStreamAllBytes(stream);
     }else if(!xmlTextReaderIsEmptyElement(reader)) {
-        bytes = cxStringConstChars(cxXMLReadString(reader));
+        bytes = cxXMLReadString(reader);
     }else{
         bytes = NULL;
     }
@@ -210,11 +184,12 @@ cxTypes cxHashXMLReadString(cxHashXML xml,xmlTextReaderPtr reader)
  </cxHash>
 */
 
-static cxAny cxReadValues(cxHashXML xml,cxTypes types,const xmlChar *temp,xmlTextReaderPtr reader)
+static cxAny cxReadValues(cxHashXML xml,const xmlChar *temp,xmlTextReaderPtr reader)
 {
     cxNumberValue vm={0};
-    cxChar *value = cxXMLReadString(reader);
-    CX_RETURN(value == NULL, NULL);
+    cxString text = cxXMLReadString(reader);
+    CX_RETURN(text == NULL, NULL);
+    cxConstChars value = cxStringBody(text);
     cxAny rv = NULL;
     if(ELEMENT_IS_TYPE(cxString)){
         rv = cxStringConstChars(value);
@@ -235,7 +210,6 @@ static cxAny cxReadValues(cxHashXML xml,cxTypes types,const xmlChar *temp,xmlTex
     }else if(ELEMENT_IS_TYPE(cxHash)){
         rv = cxHashXMLReadHash(xml,reader);
     }
-    xmlFree(value);
     return rv;
 }
 
@@ -252,7 +226,7 @@ cxTypes cxHashXMLReadHash(cxHashXML xml,xmlTextReaderPtr reader)
             continue;
         }
         const xmlChar *temp = xmlTextReaderConstName(reader);
-        cxAny value = cxReadValues(xml,types, temp, reader);
+        cxAny value = cxReadValues(xml, temp, reader);
         if(value != NULL){
             cxTypesSet(types, key, value);
         }
@@ -270,7 +244,7 @@ cxTypes cxHashXMLReadArray(cxHashXML xml,xmlTextReaderPtr reader)
             continue;
         }
         const xmlChar *temp = xmlTextReaderConstName(reader);
-        cxAny value = cxReadValues(xml,types, temp, reader);
+        cxAny value = cxReadValues(xml, temp, reader);
         if(value != NULL){
             cxArrayAppend(types->assist, value);
         }
@@ -366,14 +340,14 @@ cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader)
                 cxChar *stexture = cxXMLAttr("texture");
                 object = cxHashXMLReadAtlasBoxPoint(xml,stexture,reader);
                 xmlFree(stexture);
-            }else if(ELEMENT_IS_TYPE(cxLangString)){
-                object = cxHashXMLReadLangString(xml,reader);
             }else if(ELEMENT_IS_TYPE(cxString)){
                 object = cxHashXMLReadString(xml,reader);
             }else if(ELEMENT_IS_TYPE(cxHash)){
                 object = cxHashXMLReadHash(xml,reader);
             }else if(ELEMENT_IS_TYPE(cxArray)){
                 object = cxHashXMLReadArray(xml,reader);
+            }else{
+                object = cxReadValues(xml, temp, reader);
             }
             if(object != NULL){
                 cxHashSet(xml->items, cxHashStrKey(sid), object);

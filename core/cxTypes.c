@@ -133,6 +133,24 @@ cxBoxTex2f cxRect4fToBoxTex2f(cxRect4f box,cxSize2f texsize)
     return rv;
 }
 
+cxColor4f cxColor4fValue(cxColor4fRange cv)
+{
+    cxColor4f color;
+    color.r = kmClamp(cv.v.r + cv.r.r * CX_RAND_11f(), 0.0f, 1.0f);
+    color.g = kmClamp(cv.v.g + cv.r.g * CX_RAND_11f(), 0.0f, 1.0f);
+    color.b = kmClamp(cv.v.b + cv.r.b * CX_RAND_11f(), 0.0f, 1.0f);
+    color.a = kmClamp(cv.v.a + cv.r.a * CX_RAND_11f(), 0.0f, 1.0f);
+    return color;
+}
+
+cxVec2f cxVec2fValue(cxVec2fRange rv)
+{
+    cxVec2f pos;
+    pos.x = rv.v.x + rv.r.x * CX_RAND_11f();
+    pos.y = rv.v.y + rv.r.y * CX_RAND_11f();
+    return pos;
+}
+
 cxBool cxBox2fContainPoint(const cxBox4f box,const cxVec2f pos)
 {
     return (pos.x >= box.l && pos.x <= box.r && pos.y >= box.b && pos.y <= box.t);

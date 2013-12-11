@@ -98,7 +98,6 @@ cxEAGLView *instance = nil;
     
     glGenRenderbuffers(1, &depthBuffer);
     CX_ASSERT(depthBuffer > 0,"depth buffer create failed");
-    
     glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, colorBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorBuffer);

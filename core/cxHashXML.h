@@ -23,8 +23,6 @@ CX_OBJECT_END(cxHashXML)
 
 cxTypes cxHashXMLReadAtlasBoxPoint(cxHashXML xml,cxConstChars texfile,xmlTextReaderPtr reader);
 
-cxTypes cxHashXMLReadLangString(cxHashXML xml,xmlTextReaderPtr reader);
-
 cxTypes cxHashXMLReadString(cxHashXML xml,xmlTextReaderPtr reader);
 
 void cxHashXMLReadDBEnv(cxHashXML xml,xmlTextReaderPtr reader);

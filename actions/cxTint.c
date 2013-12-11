@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxActionXML.h>
 #include "cxTint.h"
 
 static void cxTintInit(cxAny pav)
@@ -33,9 +34,10 @@ static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
 
 static void cxTintXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
 {
+    cxActionXML xml = xmlAction;
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxTint this = mAction;
-    cxXMLReadFloatsAttr(reader, "cxTint.color", &this->color.r);
+    this->color = cxXMLReadColor4fAttr(reader, xml->functions, "cxTint.color", this->color);
 }
 
 CX_OBJECT_INIT(cxTint, cxAction)

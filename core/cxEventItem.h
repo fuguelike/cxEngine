@@ -18,6 +18,10 @@ CX_OBJECT_DEF(cxEventItem, cxObject)
     cxAny arg;
 CX_OBJECT_END(cxEventItem)
 
+CX_OBJECT_DEF(cxFuncItem, cxObject)
+    cxAnyFunc func;
+CX_OBJECT_END(cxFuncItem)
+
 CX_C_END
 
 #endif

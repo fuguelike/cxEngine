@@ -36,14 +36,29 @@ void cxViewXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
     cxViewXML this = pview;
     if(func == NULL){
         cxHashDel(this->events, cxHashStrKey(name));
-    }else{
-        cxEventItem event = cxHashGet(this->events, cxHashStrKey(name));
-        CX_ASSERT(event == NULL, "name %s event registered",name);
-        event = CX_ALLOC(cxEventItem);
-        event->func = func;
-        cxHashSet(this->events, cxHashStrKey(name), event);
-        CX_RELEASE(event);
+        return;
     }
+    cxEventItem event = cxHashGet(this->events, cxHashStrKey(name));
+    CX_ASSERT(event == NULL, "name %s event registered",name);
+    event = CX_ALLOC(cxEventItem);
+    event->func = func;
+    cxHashSet(this->events, cxHashStrKey(name), event);
+    CX_RELEASE(event);
+}
+
+void cxViewXMLRegisteFunc(cxAny pview,cxConstChars name,cxAny func)
+{
+    cxViewXML this = pview;
+    if(func == NULL){
+        cxHashDel(this->functions, cxHashStrKey(name));
+        return;
+    }
+    cxFuncItem item = cxHashGet(this->functions, cxHashStrKey(name));
+    CX_ASSERT(item == NULL, "name %s function registered",name);
+    item = CX_ALLOC(cxFuncItem);
+    item->func = func;
+    cxHashSet(this->events, cxHashStrKey(name), item);
+    CX_RELEASE(item);
 }
 
 void cxViewXMLSetItem(cxAny pview,cxConstChars key,cxAny item)
@@ -59,11 +74,13 @@ CX_OBJECT_INIT(cxViewXML, cxView)
     this->items = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
     this->actions = CX_ALLOC(cxHash);
+    this->functions = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxViewXML, cxView)
 {
     CX_EVENT_RELEASE(this->onBegin);
     CX_EVENT_RELEASE(this->onEnd);
+    CX_RELEASE(this->functions);
     CX_RELEASE(this->items);
     CX_RELEASE(this->events);
     CX_RELEASE(this->actions);

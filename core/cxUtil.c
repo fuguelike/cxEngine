@@ -153,61 +153,6 @@ void cxSetRandSeed()
     srand((unsigned)clock());
 }
 
-cxHash cxParseKeyValue(cxChar *query)
-{
-    struct evkeyvalq kv={0};
-    if(evhttp_parse_query_str(query, &kv) != 0){
-        return NULL;
-    }
-    cxHash rv = CX_CREATE(cxHash);
-	struct evkeyval *header = {0};
-	for(header = kv.tqh_first; header != NULL; header = header->next.tqe_next){
-        cxString v = cxStringAllocChars(header->value);
-        cxHashSet(rv, cxHashStrKey(header->key), v);
-        CX_RELEASE(v);
-	}
-    evhttp_clear_headers(&kv);
-    return rv;
-}
-
-cxInt cxParseQuery(cxConstChars query,cxChar *key,cxChar *value)
-{
-    CX_ASSERT(query != NULL, "query args error");
-    cxInt rv = 0;
-    cxInt len = strlen(query);
-    cxChar *sq = strrchr(query, '=');
-    if(sq != NULL){
-        cxInt cl = len - (cxInt)strlen(sq);
-        memcpy(key, query, cl);
-        key[cl]='\0';
-        memcpy(value, sq + 1, strlen(sq));
-        rv = 2;
-    }else{
-        memcpy(key, query, len + 1);
-        rv = 1;
-    }
-    return rv;
-}
-
-cxInt cxParseURL(cxConstChars url,cxChar *path,cxChar *query)
-{
-    CX_ASSERT(url != NULL && path != NULL && query != NULL, "args error");
-    cxInt rv = 0;
-    cxInt len = strlen(url);
-    cxChar *sq = strrchr(url, '?');
-    if(sq != NULL){
-        cxInt cl = len - (cxInt)strlen(sq);
-        memcpy(path, url, cl);
-        path[cl]='\0';
-        memcpy(query, sq + 1, strlen(sq));
-        rv = 2;
-    }else{
-        memcpy(path, url, len + 1);
-        rv = 1;
-    }
-    return rv;
-}
-
 cxDouble cxTimestamp()
 {
     struct timeval val;

@@ -12,7 +12,7 @@
 void cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader)
 {
     cxObject this = newobj;
-    cxObjectSetTag(this,cxXMLReadIntAttr(reader, "cxObject.tag", this->cxTag));
+    cxObjectSetTag(this,cxXMLReadIntAttr(reader, NULL, "cxObject.tag", this->cxTag));
 }
 
 void cxObjectAutoInit(cxObject this)

@@ -19,9 +19,9 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     cxActionXML xml = xmlAction;
     cxAction this = mAction;
     //delay
-    cxActionSetDelay(mAction, cxXMLReadFloatAttr(reader, "cxAction.delay", this->delay));
+    cxActionSetDelay(mAction, cxXMLReadFloatAttr(reader, xml->functions, "cxAction.delay", this->delay));
     //time
-    cxFloat time = cxXMLReadFloatAttr(reader, "cxAction.time", this->duration);
+    cxFloat time = cxXMLReadFloatAttr(reader, xml->functions, "cxAction.time", this->duration);
     cxActionSetDuration(mAction, time);
     //curve
     cxChar *scurve = cxXMLAttr("cxAction.curve");
@@ -31,17 +31,17 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     }
     xmlFree(scurve);
     //
-    cxActionSetSplit(this, cxXMLReadIntAttr(reader, "cxAction.split", this->split));
+    cxActionSetSplit(this, cxXMLReadIntAttr(reader,xml->functions, "cxAction.split", this->split));
     //
-    cxActionSetSpeed(this, cxXMLReadFloatAttr(reader, "cxAction.speed", this->speed));
+    cxActionSetSpeed(this, cxXMLReadFloatAttr(reader,xml->functions, "cxAction.speed", this->speed));
     //actionId
-    cxActionSetId(this, cxXMLReadIntAttr(reader, "cxAction.id", this->actionId));
+    cxActionSetId(this, cxXMLReadIntAttr(reader,xml->functions, "cxAction.id", this->actionId));
     //forever
-    if(cxXMLReadBoolAttr(reader, "cxAction.forever", false)){
+    if(cxXMLReadBoolAttr(reader,xml->functions, "cxAction.forever", false)){
         CX_METHOD_SET(this->Exit, cxActionForever);
     }
     //assist
-    cxXMLReadFloatsAttr(reader, "cxAction.assist", &this->assist.v1);
+    this->assist = cxXMLReadAssist4fAttr(reader, xml->functions, "cxAction.assist", this->assist);
     //event
     cxXMLAppendEvent(xml->events, this, cxAction, onStart);
     cxXMLAppendEvent(xml->events, this, cxAction, onStop);

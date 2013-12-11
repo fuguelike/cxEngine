@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxViewXML.h>
 #include <core/cxEngine.h>
 #include <actions/cxMove.h>
 #include "cxScroll.h"
@@ -14,6 +15,7 @@
 
 void cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
 {
+    cxViewXML xml = xmlView;
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxScroll this = mView;
     cxChar *type = cxXMLAttr("cxScroll.type");
@@ -25,7 +27,7 @@ void cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
         this->type |= (cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal);
     }
     xmlFree(type);
-    this->value = cxXMLReadFloatAttr(reader, "cxScroll.value", this->value);
+    this->value = cxXMLReadFloatAttr(reader, xml->functions, "cxScroll.value", this->value);
 }
 
 cxView cxScrollContainer(cxAny pview)
