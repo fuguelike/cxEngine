@@ -36,7 +36,7 @@ void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars key,cxFloat
     cxAnimateItem this = CX_CREATE(cxAnimateItem);
     if(file != NULL){
         this->texture = cache ? cxTextureFactoryLoadFile(file) : cxTextureCreate(file);
-        CX_ASSERT(this->texture != NULL, "%s load failed");
+        CX_ASSERT(this->texture != NULL, "%s load failed", file);
         CX_RETAIN(this->texture);
     }
     if(key != NULL){
@@ -87,7 +87,7 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     }
 }
 
-static void cxAnimateXMLAppend(cxArray list,cxChar *file,cxChar *key,cxInt from,cxInt to,cxBool cache)
+static void cxAnimateXMLAppend(cxArray list,cxConstChars file,cxConstChars key,cxInt from,cxInt to,cxBool cache)
 {
     for(cxInt i = from; i <= to ; i++){
         cxConstChars sfile = CX_CONST_STRING(file,i);
@@ -106,13 +106,13 @@ static void cxAnimateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        const xmlChar *temp = xmlTextReaderConstName(reader);
+        cxConstChars temp = cxXMLReadElementName(reader);
         if(!ELEMENT_IS_TYPE(cxFrame)){
             continue;
         }
         cxBool cache = cxXMLReadBoolAttr(reader, xml->functions, "cache", false);
-        cxChar *file = cxXMLAttr("file");
-        cxChar *key = cxXMLAttr("key");
+        cxConstChars file = cxXMLAttr("file");
+        cxConstChars key = cxXMLAttr("key");
         cxInt from = cxXMLReadIntAttr(reader, xml->functions, "from", 0);
         cxInt to = cxXMLReadIntAttr(reader, xml->functions, "to", 0);
         if(from > 0 && to > 0){
@@ -122,8 +122,6 @@ static void cxAnimateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr
             cxFloat delay = cxXMLReadFloatAttr(reader, xml->functions, "delay", 0);
             cxAnimateItemAppend(this->list, path->path, path->count >= 2 ? path->key : NULL, delay, cache);
         }
-        xmlFree(file);
-        xmlFree(key);
     }
     this->duration = this->super.duration;
     cxXMLAppendEvent(xml->events, this, cxAnimate, onFrame);

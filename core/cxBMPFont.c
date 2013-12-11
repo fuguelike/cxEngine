@@ -68,14 +68,12 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
         CX_ERROR("load bmpfont error file %s not exists",file);
         return false;
     }
-    xmlTextReaderPtr reader = cxXMLReaderForString(data);
-    xmlTextReaderSetErrorHandler(reader, cxBMPFontReaderError, this);
-    
+    xmlTextReaderPtr reader = cxXMLReaderForString(data, cxBMPFontReaderError, this);
     while(xmlTextReaderRead(reader) && !this->isError){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        const xmlChar *temp = xmlTextReaderConstName(reader);
+        cxConstChars temp = cxXMLReadElementName(reader);
         if(ELEMENT_IS_TYPE(info)){
             this->face = cxXMLReadStringAttr(reader, NULL, "face");
             CX_RETAIN(this->face);
@@ -99,11 +97,10 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
             this->packed = cxXMLReadIntAttr(reader, NULL, "packed", 0);
         }else if(ELEMENT_IS_TYPE(page)){
             cxInt id = cxXMLReadIntAttr(reader, NULL, "id", 0);
-            cxChar *file = cxXMLAttr("file");
+            cxConstChars file = cxXMLAttr("file");
             cxTexture texture = cxTextureCreate(file);
             CX_ASSERT(texture != NULL, "create bmp texture failed");
             cxHashSet(this->textures, cxHashIntKey(id), texture);
-            xmlFree(file);
         }else if(ELEMENT_IS_TYPE(char)){
             cxBMPElement pchar = CX_ALLOC(cxBMPElement);
             cxUInt id = cxXMLReadUIntAttr(reader, NULL, "id", 0);
@@ -119,7 +116,6 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
             CX_RELEASE(pchar);
         }
     }
-    xmlTextReaderClose(reader);
     return true;
 }
 

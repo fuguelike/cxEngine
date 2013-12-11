@@ -18,7 +18,7 @@ void cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxViewXML xml = xmlView;
     cxViewXMLReadAttr(xmlView, mView, reader);
     cxScroll this = mView;
-    cxChar *type = cxXMLAttr("cxScroll.type");
+    cxConstChars type = cxXMLAttr("cxScroll.type");
     if(cxConstCharsEqu(type, "horizontal")){
         this->type |= cxScrollMoveTypeHorizontal;
     }else if(cxConstCharsEqu(type, "vertical")){
@@ -26,7 +26,6 @@ void cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }else {
         this->type |= (cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal);
     }
-    xmlFree(type);
     this->value = cxXMLReadFloatAttr(reader, xml->functions, "cxScroll.value", this->value);
 }
 

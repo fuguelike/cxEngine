@@ -28,7 +28,7 @@ void cxActionXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func);
 
 void cxActionXMLRegisteFunc(cxAny pview,cxConstChars name,cxAny func);
 
-cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader);
+cxAny cxActionXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader);
 
 void cxActionRootXMLReadAttr(cxAny pxml,cxAny newobj, xmlTextReaderPtr reader);
 

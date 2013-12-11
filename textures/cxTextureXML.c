@@ -21,7 +21,7 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         CX_ERROR("read data failed from stream");
         return ret;
     }
-    xmlTextReaderPtr reader = cxXMLReaderForString(data);
+    xmlTextReaderPtr reader = cxXMLReaderForString(data, NULL, NULL);
     if(reader == NULL){
         CX_ERROR("xml reader from memory failed");
         return ret;
@@ -30,11 +30,11 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        const xmlChar *temp = xmlTextReaderConstName(reader);
+        cxConstChars temp = cxXMLReadElementName(reader);
         if(!ELEMENT_IS_TYPE(TextureAtlas)){
             continue;
         }
-        cxChar *simagePath = cxXMLAttr("imagePath");
+        cxConstChars simagePath = cxXMLAttr("imagePath");
         CX_ASSERT(simagePath != NULL, "xml imagePath element miss");
         
         xml->innerTexture = cxTextureCreate((cxConstChars)simagePath);
@@ -44,19 +44,18 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         //for jpg pkm atlas texture
         xml->super.isAtlas = cxXMLReadBoolAttr(reader, NULL ,"atlas", false);
         xml->super.size = xml->innerTexture->size;
-        xmlFree(simagePath);
         //load texcoords
         while(xmlTextReaderRead(reader)){
             if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
                 continue;
             }
-            const xmlChar *temp = xmlTextReaderConstName(reader);
+            cxConstChars temp = cxXMLReadElementName(reader);
             if(!ELEMENT_IS_TYPE(sprite)){
                 continue;
             }
             cxTexCoord e = CX_ALLOC(cxTexCoord);
-            cxChar *sn = cxXMLAttr("n");
-            cxChar *sr = cxXMLAttr("r");
+            cxConstChars sn = cxXMLAttr("n");
+            cxConstChars sr = cxXMLAttr("r");
             e->isRotation = sr != NULL;
             e->x = cxXMLReadFloatAttr(reader, NULL,  "x", 0);
             e->y = cxXMLReadFloatAttr(reader, NULL, "y", 0);
@@ -64,11 +63,8 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
             e->h = cxXMLReadFloatAttr(reader, NULL, "h", 0);
             cxHashSet(xml->super.keys, cxHashStrKey(sn), e);
             CX_RELEASE(e);
-            xmlFree(sn);
-            xmlFree(sr);
         }
     }
-    xmlFreeTextReader(reader);
     return ret;
 }
 

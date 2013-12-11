@@ -21,6 +21,7 @@ CX_OBJECT_FREE(cxEventArg, cxObject)
     if(this->json != NULL){
         json_decref(this->json);
     }
+    CX_RELEASE(this->number);
 }
 CX_OBJECT_TERM(cxEventArg, cxObject)
 
@@ -50,6 +51,13 @@ cxEventArg cxEventArgStrongRef(cxAny strongRef)
     return this;
 }
 
+cxEventArg cxEventArgCreateWithNumber(cxConstChars json,cxNumber number)
+{
+    cxEventArg this = cxEventArgCreate(json);
+    cxEventArgSetNumber(this, number);
+    return this;
+}
+
 cxEventArg cxEventArgCreate(cxConstChars json)
 {
     CX_RETURN(json == NULL,NULL);
@@ -61,6 +69,11 @@ cxEventArg cxEventArgCreate(cxConstChars json)
         return NULL;
     }
     return this;
+}
+
+void cxEventArgSetNumber(cxEventArg this,cxNumber num)
+{
+    CX_RETAIN_SWAP(this->number, num);
 }
 
 cxEventArg cxEventArgNumber(cxNumber number)

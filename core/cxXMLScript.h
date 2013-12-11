@@ -24,7 +24,11 @@ CX_OBJECT_DEF(cxTextureAttr, cxObject)
     cxSize2f size;
 CX_OBJECT_END(cxTextureAttr)
 
-typedef cxAny (*cxXMLScriptMakeElementFunc)(const xmlChar *temp,xmlTextReaderPtr reader);
+CX_OBJECT_DEF(cxXMLReader, cxObject)
+    xmlTextReaderPtr reader;
+CX_OBJECT_END(cxXMLReader)
+
+typedef cxAny (*cxXMLScriptMakeElementFunc)(cxConstChars temp,xmlTextReaderPtr reader);
 
 typedef cxBool (*cxXMLScriptLoadFunc)(cxAny pview);
 
@@ -32,13 +36,13 @@ CX_OBJECT_DEF(cxXMLScript, cxObject)
     cxString bytes;
 CX_OBJECT_END(cxXMLScript)
 
-xmlTextReaderPtr cxXMLReaderForString(cxString code);
+xmlTextReaderPtr cxXMLReaderForString(cxString code,xmlTextReaderErrorFunc error,cxAny arg);
 
-xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this);
+xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this,xmlTextReaderErrorFunc error,cxAny arg);
 
 cxEventItem cxXMLReadEvent(cxHash events, cxConstChars name, xmlTextReaderPtr reader);
 
-#define ELEMENT_IS_TYPE(t)  (temp != NULL && xmlStrcmp(temp, BAD_CAST#t) == 0)
+#define ELEMENT_IS_TYPE(t)  (temp != NULL && strcmp(temp, #t) == 0)
 
 #define cxXMLAppendEvent(s,o,t,e)                               \
 do{                                                             \
@@ -48,7 +52,7 @@ do{                                                             \
     }                                                           \
 }while(0)
 
-cxChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name);
+cxConstChars cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name);
 #define cxXMLAttr(n)    cxXMLAttrAuto(reader,n)
 
 cxInt cxReadFloats(cxConstChars ptr,cxFloat *values);
@@ -56,6 +60,8 @@ cxInt cxReadFloats(cxConstChars ptr,cxFloat *values);
 cxInt cxReadInts(cxConstChars ptr,cxInt *values);
 
 cxBool cxXMLHasAttr(xmlTextReaderPtr reader,cxConstChars name);
+
+cxConstChars cxXMLReadElementName(xmlTextReaderPtr reader);
 
 cxString cxXMLReadString(xmlTextReaderPtr reader);
 

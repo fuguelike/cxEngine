@@ -28,9 +28,9 @@ static void cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr 
 {
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxRotate this = mAction;
-    cxChar *sx = cxXMLAttr("cxRotate.x");
-    cxChar *sy = cxXMLAttr("cxRotate.y");
-    cxChar *sz = cxXMLAttr("cxRotate.z");
+    cxConstChars sx = cxXMLAttr("cxRotate.x");
+    cxConstChars sy = cxXMLAttr("cxRotate.y");
+    cxConstChars sz = cxXMLAttr("cxRotate.z");
     if(sx != NULL){
         this->raxis = cxVec3fv(1.0f, 0.0f, 0.0f);
         this->newRadians = kmDegreesToRadians(atof(sx));
@@ -41,9 +41,6 @@ static void cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr 
         this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
         this->newRadians = kmDegreesToRadians(atof(sz));
     }
-    xmlFree(sx);
-    xmlFree(sy);
-    xmlFree(sz);
 }
 
 CX_OBJECT_INIT(cxRotate, cxAction)

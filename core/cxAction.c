@@ -24,12 +24,11 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
     cxFloat time = cxXMLReadFloatAttr(reader, xml->functions, "cxAction.time", this->duration);
     cxActionSetDuration(mAction, time);
     //curve
-    cxChar *scurve = cxXMLAttr("cxAction.curve");
+    cxConstChars scurve = cxXMLAttr("cxAction.curve");
     cxCurveItem curve = cxCurveGet(scurve);
     if(curve != NULL){
         CX_METHOD_SET(this->Curve, curve->func);
     }
-    xmlFree(scurve);
     //
     cxActionSetSplit(this, cxXMLReadIntAttr(reader,xml->functions, "cxAction.split", this->split));
     //

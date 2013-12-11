@@ -67,17 +67,15 @@ void cxParticleInitFromFile(cxAny pview,cxConstChars file)
     cxParticle this = pview;
     cxString data = cxAssertsData(file);
     CX_RETURN(data == NULL);
-    xmlTextReaderPtr reader = cxXMLReaderForString(data);
-    xmlTextReaderSetErrorHandler(reader, cxParticleXMLReaderError, this);
+    xmlTextReaderPtr reader = cxXMLReaderForString(data,cxParticleXMLReaderError, this);
     while(xmlTextReaderRead(reader) && !this->isError){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        const xmlChar *temp = xmlTextReaderConstName(reader);
+        cxConstChars temp = cxXMLReadElementName(reader);
         if(ELEMENT_IS_TYPE(texture)){
-            cxChar *name = cxXMLAttr("name");
+            cxConstChars name = cxXMLAttr("name");
             cxSpriteSetTextureURL(this, name, true, true);
-            xmlFree(name);
         }else if(ELEMENT_IS_TYPE(sourcePosition)){
             this->position.v.x = 0;//cxXMLReadFloatAttr(reader,NULL, "x", 0);
             this->position.v.y = 0;//cxXMLReadFloatAttr(reader,NULL, "y", 0);
@@ -173,7 +171,6 @@ void cxParticleInitFromFile(cxAny pview,cxConstChars file)
             this->endradius.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }
     }
-    xmlTextReaderClose(reader);
 }
 
 void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
@@ -181,17 +178,16 @@ void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxViewXML xml = xmlView;
     cxAtlasXMLReadAttr(xmlView, mView, reader);
     cxParticle this = mView;
-    cxChar *src = cxXMLAttr("cxParticle.src");
+    cxConstChars src = cxXMLAttr("cxParticle.src");
     if(src != NULL){
         cxParticleInitFromFile(mView, src);
-        xmlFree(src);
         return;
     }
     cxInt number = cxXMLReadIntAttr(reader, xml->functions, "cxParticle.number", this->number);
     CX_ASSERT(number > 0, "cxParticle number must > 0");
     cxParticleInit(this, number);
     //mode add multiply
-    cxChar *smode = cxXMLAttr("cxParticle.blend");
+    cxConstChars smode = cxXMLAttr("cxParticle.blend");
     if(cxConstCharsEqu(smode, "add")){
         cxParticleSetBlendMode(this, cxParticleBlendAdd);
     }else if(cxConstCharsEqu(smode, "multiple")){
@@ -199,9 +195,8 @@ void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }else{//default mode
         cxParticleSetBlendMode(this, cxParticleBlendMultiply);
     }
-    xmlFree(smode);
     //
-    cxChar *type = cxXMLAttr("cxParticle.type");
+    cxConstChars type = cxXMLAttr("cxParticle.type");
     if(cxConstCharsEqu(type, "gravity")){
         cxParticleSetType(this,cxParticleEmitterGravity);
     }else if(cxConstCharsEqu(type, "radial")){
@@ -209,7 +204,6 @@ void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }else{
         cxParticleSetType(this,cxParticleEmitterGravity);
     }
-    xmlFree(type);
     //gravity
     this->todir = cxXMLReadBoolAttr(reader,xml->functions, "cxParticle.todir", this->todir);
     this->duration = cxXMLReadFloatAttr(reader, xml->functions, "cxParticle.duration", this->duration);

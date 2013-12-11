@@ -15,7 +15,7 @@ static void cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderP
     cxActionXMLReadAttr(xmlAction, mAction, reader);
     cxActionSet this = mAction;
     //get type
-    cxChar *stype = cxXMLAttr("cxActionSet.type");
+    cxConstChars stype = cxXMLAttr("cxActionSet.type");
     if(cxConstCharsEqu(stype, "multiple")){
         cxActionSetSetType(this, cxActionSetTypeMultiple);
     }else if(cxConstCharsEqu(stype, "sequence")){
@@ -23,16 +23,12 @@ static void cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderP
     }else{
         cxActionSetSetType(this, cxActionSetTypeNone);
     }
-    xmlFree(stype);
     //get sub action
     while(xmlTextReaderRead(reader)){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        const xmlChar *temp = xmlTextReaderConstName(reader);
-        if(temp == NULL){
-            continue;
-        }
+        cxConstChars temp = cxXMLReadElementName(reader);
         cxAny action = cxActionXMLMakeElement(temp, reader);
         if(action == NULL){
             continue;

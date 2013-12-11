@@ -85,14 +85,13 @@ static void cxActionXMLReaderError(void *arg,const char *msg,xmlParserSeverities
 void cxActionXMLSet(cxAny xmlAction,cxAny mAction,xmlTextReaderPtr reader)
 {
     cxActionXML this = xmlAction;
-    cxChar *id = cxXMLAttr("id");
+    cxConstChars id = cxXMLAttr("id");
     CX_RETURN(id == NULL);
     cxString code = cxXMLReaderReadOuterXml(reader);
     cxHashSet(this->codes, cxHashStrKey(id), code);
-    xmlFree(id);
 }
 
-cxAny cxActionXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
+cxAny cxActionXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
 {
     cxAny action = NULL;
     if(ELEMENT_IS_TYPE(cxMove)){
@@ -127,13 +126,13 @@ cxAny cxActionXMLGet(cxConstChars src)
     CX_RETURN(this == NULL, NULL);
     cxString code = cxHashGet(this->codes, (path->count == 1) ? cxHashStrKey(path->path) : cxHashStrKey(path->key));
     CX_RETURN(code == NULL, NULL);
-    xmlTextReaderPtr reader = cxXMLReaderForString(code);
+    xmlTextReaderPtr reader = cxXMLReaderForString(code, NULL, NULL);
     cxAny action = NULL;
     while(xmlTextReaderRead(reader)){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        const xmlChar *temp = xmlTextReaderConstName(reader);
+        cxConstChars temp = cxXMLReadElementName(reader);
         action = CX_METHOD_GET(NULL, this->Make,temp,reader);
         if(action == NULL){
             continue;
@@ -142,7 +141,6 @@ cxAny cxActionXMLGet(cxConstChars src)
         cxObjectSetRoot(action, this);
         cxObjectXMLReadAttrRun(action, this, reader);
     }
-    xmlTextReaderClose(reader);
     return action;
 }
 
@@ -164,7 +162,7 @@ void cxPlaySoundEvent(cxEvent *event)
 }
 
 //need register
-//src view curve delay
+//src view cache curve delay
 void cxViewRunActionEvent(cxEvent *event)
 {
     cxObject object = event->sender;
@@ -234,7 +232,7 @@ static void cxActionXMLLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        const xmlChar *temp = xmlTextReaderConstName(reader);
+        cxConstChars temp = cxXMLReadElementName(reader);
         if(!ELEMENT_IS_TYPE(cxActionSet)){
             continue;
         }
@@ -246,13 +244,12 @@ static void cxActionXMLLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        cxChar *id = cxXMLAttr("id");
+        cxConstChars id = cxXMLAttr("id");
         if(id == NULL){
             continue;
         }
         cxString code = cxXMLReaderReadOuterXml(reader);
         cxHashSet(this->codes, cxHashStrKey(id), code);
-        xmlFree(id);
     }
 }
 
@@ -268,15 +265,13 @@ cxAny cxActionXMLCreate(cxConstChars xml)
         CX_ERROR("%s script not register",xml);
         return NULL;
     }
-    xmlTextReaderPtr reader = cxXMLReaderForScript(script);
+    this = CX_CREATE(cxActionXML);
+    xmlTextReaderPtr reader = cxXMLReaderForScript(script,cxActionXMLReaderError, this);
     if(reader == NULL){
         CX_ERROR("create xml reader failed");
         return NULL;
     }
-    this = CX_CREATE(cxActionXML);
-    xmlTextReaderSetErrorHandler(reader, cxActionXMLReaderError, this);
     cxActionXMLLoadCodesWithReader(this, reader);
-    xmlFreeTextReader(reader);
     cxHashKey key = cxHashStrKey(xml);
     cxHashSet(this->codes, key, script->bytes);
     cxHashSet(engine->actions, key, this);

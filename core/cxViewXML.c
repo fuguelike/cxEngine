@@ -140,21 +140,19 @@ cxViewXML cxViewXMLCreate(cxConstChars xml)
 void cxViewXMLSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader)
 {
     cxViewXML this = pview;
-    cxChar *id = cxXMLAttr("id");
+    cxConstChars id = cxXMLAttr("id");
     CX_RETURN(id == NULL);
     cxHashSet(this->items, cxHashStrKey(id), cview);
-    xmlFree(id);
 }
 
-cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader)
+cxAny cxViewXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
 {
     cxView cview = NULL;
     if(ELEMENT_IS_TYPE(cxSprite)){
         cview = CX_CREATE(cxSprite);
     }else if(ELEMENT_IS_TYPE(cxViewXML)){
-        cxChar *src = cxXMLAttr("src");
+        cxConstChars src = cxXMLAttr("src");
         cview = (cxView)cxViewXMLCreate(src);
-        xmlFree(src);
     }else if(ELEMENT_IS_TYPE(cxView)){
         cview = CX_CREATE(cxView);
     }else if(ELEMENT_IS_TYPE(cxButton)){
@@ -192,10 +190,7 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
                 CX_ERROR("parse xml ui parent null");
                 break;
             }
-            const xmlChar *temp = xmlTextReaderConstName(reader);
-            if(temp == NULL){
-                continue;
-            }
+            cxConstChars temp = cxXMLReadElementName(reader);
             cxView cview = CX_METHOD_GET(NULL, this->Make, temp, reader);
             CX_ASSERT(cview != NULL, "make element null");
             cxObjectSetRoot(cview, this);
@@ -228,7 +223,7 @@ cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        const xmlChar *temp = xmlTextReaderConstName(reader);
+        cxConstChars temp = cxXMLReadElementName(reader);
         if(ELEMENT_IS_TYPE(cxViewXML)){
             ret = true;
             break;
@@ -250,20 +245,18 @@ cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
 
 cxBool cxViewXMLLoad(cxAny pview,cxConstChars xml)
 {
+    cxBool ret = false;
     cxXMLScript script = cxEngineGetXMLScript(xml);
     if(script == NULL || script->bytes == NULL){
         CX_ERROR("%s script not register",xml);
-        return false;
+        return ret;
     }
-    cxBool ret = false;
-    xmlTextReaderPtr reader = cxXMLReaderForScript(script);
+    xmlTextReaderPtr reader = cxXMLReaderForScript(script,cxViewXMLReaderError,pview);
     if(reader == NULL){
         CX_ERROR("create xml reader failed");
-        return false;
+        return ret;
     }
-    xmlTextReaderSetErrorHandler(reader, cxViewXMLReaderError, pview);
     ret = cxViewXMLLoadWithReader(pview, reader);
-    xmlFreeTextReader(reader);
     return ret;
 }
 

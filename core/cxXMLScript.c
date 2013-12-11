@@ -12,6 +12,18 @@
 #include "cxEventItem.h"
 #include "cxEngine.h"
 
+CX_OBJECT_INIT(cxXMLReader, cxObject)
+{
+    
+}
+CX_OBJECT_FREE(cxXMLReader, cxObject)
+{
+    if(this->reader != NULL){
+        xmlTextReaderClose(this->reader);
+    }
+}
+CX_OBJECT_TERM(cxXMLReader, cxObject)
+
 CX_OBJECT_INIT(cxTextureAttr, cxObject)
 {
     this->box = cxBoxTex2fDefault();
@@ -22,41 +34,61 @@ CX_OBJECT_FREE(cxTextureAttr, cxObject)
 }
 CX_OBJECT_TERM(cxTextureAttr, cxObject)
 
-#define PARSE_FUNCTION(vptr,fname,farg)     \
-cxConstChars ptr = vptr;                    \
-cxInt len = (cxInt)strlen(ptr) + 1;         \
-cxInt lpos = 0;                             \
-cxInt rpos = 0;                             \
-for(int i=0; i < len; i++){                 \
-    if(ptr[i] == '('){                      \
-        lpos = i;                           \
-    }                                       \
-    if(ptr[i] == ')'){                      \
-        rpos = i;                           \
-    }                                       \
-}                                           \
-cxBool isFunc = (lpos > 0 && rpos > 0);     \
-cxChar fname[len];                          \
-cxChar farg[len];                           \
-if(isFunc){                                 \
-    int len = rpos - lpos - 1;              \
-    memcpy(farg, ptr + lpos + 1, len);      \
-    farg[len] = '\0';                       \
-    for(int i=0; i < len;i++){              \
-        if(farg[i] == '\''){                \
-            farg[i] = '\"';                 \
-        }                                   \
-    }                                       \
-    len = lpos;                             \
-    memcpy(fname, ptr, len);                \
-    fname[len] = '\0';                      \
-}else{                                      \
-    memcpy(fname, ptr, len);                \
+#define PARSE_FUNCTION(vptr,fname,farg)                         \
+cxConstChars ptr = vptr;                                        \
+cxInt len = (cxInt)strlen(ptr) + 1;                             \
+cxInt lpos = 0;                                                 \
+cxInt rpos = 0;                                                 \
+for(cxInt i=0; i < len; i++){                                   \
+    if(ptr[i] == '('){                                          \
+        lpos = i;                                               \
+    }                                                           \
+    if(ptr[i] == ')'){                                          \
+        rpos = i;                                               \
+    }                                                           \
+}                                                               \
+cxBool isFunc = (lpos > 0 && rpos > 0);                         \
+cxChar fname[len];                                              \
+cxChar farg[len];                                               \
+if(isFunc){                                                     \
+    int len = rpos - lpos - 1;                                  \
+    memcpy(farg, ptr + lpos + 1, len);                          \
+    farg[len] = '\0';                                           \
+    for(int i=0; i < len;i++){                                  \
+        if(farg[i] == '\''){                                    \
+            farg[i] = '\"';                                     \
+        }                                                       \
+    }                                                           \
+    len = lpos;                                                 \
+    memcpy(fname, ptr, len);                                    \
+    fname[len] = '\0';                                          \
+}else{                                                          \
+    memcpy(fname, ptr, len);                                    \
+}
+
+
+#define GET_FUNCTION_ITEM(item)                                 \
+cxFuncItem item = NULL;                                         \
+if(functions != NULL){                                          \
+    item = cxHashGet(functions, cxHashStrKey(fName));           \
+}                                                               \
+if(item == NULL){                                               \
+    item = cxEngineGetFunc(fName);                              \
+}                                                               \
+CX_ASSERT(item != NULL, "function %s not eixsts",fName);
+
+
+#define GET_EVENT_ITEM(event)                                   \
+cxEventItem event = NULL;                                       \
+if(events != NULL){                                             \
+    event = cxHashGet(events, cxHashStrKey(eName));             \
+}                                                               \
+if(event == NULL){                                              \
+    event = cxEngineGetEvent(eName);                            \
 }
 
 CX_OBJECT_INIT(cxXMLScript, cxObject)
 {
-    
 }
 CX_OBJECT_FREE(cxXMLScript, cxObject)
 {
@@ -64,361 +96,249 @@ CX_OBJECT_FREE(cxXMLScript, cxObject)
 }
 CX_OBJECT_TERM(cxXMLScript, cxObject)
 
-cxChar *cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name)
+cxConstChars cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name)
 {
     xmlChar *txt = xmlTextReaderGetAttribute(reader, BAD_CAST(name));
-    if(txt != NULL && xmlStrlen(txt) > 0){
-        return (cxChar *)txt;
+    CX_RETURN(txt == NULL || xmlStrlen(txt) == 0, NULL);
+    return cxStringBody(cxStringAttachChars((cxChar *)txt));
+}
+
+xmlTextReaderPtr cxXMLReaderForString(cxString code,xmlTextReaderErrorFunc error,cxAny arg)
+{
+    cxXMLReader this = CX_CREATE(cxXMLReader);
+    this->reader = xmlReaderForMemory(cxStringBody(code), cxStringLength(code), NULL, "UTF-8", 0);
+    if(error != NULL){
+        xmlTextReaderSetErrorHandler(this->reader, error, arg);
     }
-    xmlFree(txt);
-    return NULL;
+    return this->reader;
 }
 
-xmlTextReaderPtr cxXMLReaderForString(cxString code)
+xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this,xmlTextReaderErrorFunc error,cxAny arg)
 {
-    return xmlReaderForMemory(cxStringBody(code), cxStringLength(code), NULL, "UTF-8", 0);
-}
-
-xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this)
-{
-    return cxXMLReaderForString(this->bytes);
+    return cxXMLReaderForString(this->bytes,error,arg);
 }
 
 //method({json}
 cxEventItem cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader)
 {
     //xml view event event(arg)
-    cxChar *eventName = cxXMLAttr(name);
+    cxConstChars eventName = cxXMLAttr(name);
     CX_RETURN(eventName == NULL,NULL);
     PARSE_FUNCTION(eventName, eName, eArg);
-    //get event item or from global events
-    cxEventItem event = NULL;
-    if(events != NULL){
-        event = cxHashGet(events, cxHashStrKey(eName));
-    }
-    if(event == NULL){
-        event = cxEngineGetEvent(eName);
-    }
+    GET_EVENT_ITEM(event);
     //set event arg
     if(isFunc && event != NULL){
         CX_RETAIN_SWAP(event->arg, cxEventArgCreate(eArg));
     }
-    xmlFree(eventName);
     return event;
 }
 
 cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxFloat value)
 {
     cxFloat rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberFloat(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberFloat(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToFloat(num);
     }else{
         rv = atof(svalue);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxAssist4f cxXMLReadAssist4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxAssist4f value)
 {
     cxAssist4f rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberAssist4f(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberAssist4f(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToAssist4f(num);
     }else{
         cxReadFloats(svalue, &rv.v1);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxColor4f cxXMLReadColor4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxColor4f value)
 {
     cxColor4f rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberColor4f(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberColor4f(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToColor4f(num);
     }else{
         cxReadFloats(svalue, &rv.r);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxVec2f cxXMLReadVec2fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec2f value)
 {
     cxVec2f rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberVec2f(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberVec2f(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToVec2f(num);
     }else{
         cxReadFloats(svalue, &rv.x);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxVec3f cxXMLReadVec3fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec3f value)
 {
     cxVec3f rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberVec3f(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberVec3f(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToVec3f(num);
     }else{
         cxReadFloats(svalue, &rv.x);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxFloatRange cxXMLReadFloatRangeAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxFloatRange value)
 {
     cxFloatRange rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberFloatRange(value);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberFloatRange(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToFloatRange(num);
     }else{
         cxReadFloats(svalue, &rv.v);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxVec2fRange cxXMLReadVec2fRangeAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec2fRange value)
 {
     cxVec2fRange rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberVec2fRange(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberVec2fRange(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToVec2fRange(num);
     }else{
         cxReadFloats(svalue, &rv.v.x);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxColor4fRange cxXMLReadColor4fRangeAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxColor4fRange value)
 {
     cxColor4fRange rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberColor4fRange(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberColor4fRange(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToColor4fRange(num);
     }else{
         cxReadFloats(svalue, &rv.v.r);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxVec2i cxXMLReadVec2iAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxVec2i value)
 {
     cxVec2i rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberVec2i(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberVec2i(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToVec2i(num);
     }else{
         cxReadInts(svalue, &rv.x);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxBox4i cxXMLReadBox4iAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxBox4i value)
 {
     cxBox4i rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberBox4i(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberBox4i(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToBox4i(num);
     }else{
         cxReadInts(svalue, &rv.l);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxBox4f cxXMLReadBox4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxBox4f value)
 {
     cxBox4f rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberBox4f(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberBox4f(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToBox4f(num);
     }else{
         cxReadFloats(svalue, &rv.l);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxTextureAttr cxXMLReadTextureAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name)
 {
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, NULL);
     cxTextureAttr rv = CX_CREATE(cxTextureAttr);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
+        GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreate(fArg);
         rv = item->func(args);
     }else{
@@ -434,7 +354,6 @@ cxTextureAttr cxXMLReadTextureAttr(xmlTextReaderPtr reader,cxHash functions,cxCo
             rv->size = cxTextureSize(texture, path->key);
         }
     }
-    xmlFree(svalue);
     return rv;
 }
 
@@ -480,12 +399,15 @@ cxInt cxReadInts(cxConstChars ptr,cxInt *values)
     return c;
 }
 
+cxConstChars cxXMLReadElementName(xmlTextReaderPtr reader)
+{
+    return (cxConstChars)xmlTextReaderConstName(reader);
+}
+
 cxBool cxXMLHasAttr(xmlTextReaderPtr reader,cxConstChars name)
 {
-    cxChar *s = cxXMLAttr(name);
-    cxBool ret = s != NULL;
-    xmlFree(s);
-    return ret;
+    cxConstChars s = cxXMLAttr(name);
+    return s != NULL;
 }
 
 cxString cxXMLReadString(xmlTextReaderPtr reader)
@@ -497,61 +419,43 @@ cxString cxXMLReadString(xmlTextReaderPtr reader)
 cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxInt value)
 {
     cxInt rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberInt(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberInt(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToInt(num);
     }else{
         rv = atoi(svalue);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxUInt cxXMLReadUIntAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxUInt value)
 {
     cxUInt rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberUInt(rv);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberUInt(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
         rv = cxNumberToUInt(num);
     }else{
         rv = atol(svalue);
     }
-    xmlFree(svalue);
     return rv;
 }
 
 cxString cxXMLReadStringAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name)
 {
     cxString rv = NULL;
-    cxChar *value = cxXMLAttr(name);
+    cxConstChars value = cxXMLAttr(name);
     CX_RETURN(value == NULL, NULL);
     PARSE_FUNCTION(value, fName, fArg);
     cxFuncItem item = NULL;
@@ -568,7 +472,6 @@ cxString cxXMLReadStringAttr(xmlTextReaderPtr reader,cxHash functions,cxConstCha
     if(rv == NULL){
         rv = cxStringConstChars(value);
     }
-    xmlFree(value);
     CX_ASSERT(cxObjectIsType(rv, cxStringTypeName), "get string error");
     return rv;
 }
@@ -587,27 +490,18 @@ cxString cxXMLReaderReadOuterXml(xmlTextReaderPtr reader)
 cxBool cxXMLReadBoolAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxBool value)
 {
     cxBool rv = value;
-    cxChar *svalue = cxXMLAttr(name);
+    cxConstChars svalue = cxXMLAttr(name);
     CX_RETURN(svalue == NULL, rv);
     PARSE_FUNCTION(svalue, fName, fArg);
     if(isFunc){
-        cxFuncItem item = NULL;
-        if(functions != NULL){
-            item = cxHashGet(functions, cxHashStrKey(fName));
-        }
-        if(item == NULL){
-            item = cxEngineGetFunc(fName);
-        }
-        CX_ASSERT(item != NULL, "function %s not eixsts",fName);
-        cxEventArg args = cxEventArgCreate(fArg);
-        args->number = cxNumberInt(value);
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberBool(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type");
-        rv = cxNumberToInt(num);
+        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        rv = cxNumberToBool(num);
     }else{
         rv = cxConstCharsEqu(svalue, "true");
     }
-    xmlFree(svalue);
     return rv;
 }
 

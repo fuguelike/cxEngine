@@ -15,6 +15,7 @@ CX_C_BEGIN
 
 typedef enum {
     cxNumberTypeNone = 0,
+    cxNumberTypeBool,
     cxNumberTypeInt,
     cxNumberTypeInt8,
     cxNumberTypeInt16,
@@ -41,6 +42,7 @@ typedef enum {
 }cxNumberType;
 
 typedef union {
+    cxBool bv;
     cxInt vi;
     cxInt8  i8;
     cxInt16 i16;
@@ -70,6 +72,8 @@ CX_OBJECT_DEF(cxNumber, cxObject)
     cxNumberValue value;
     cxNumberType type;
 CX_OBJECT_END(cxNumber)
+
+cxBool cxNumberToBool(cxNumber this);
 
 cxBox4i cxNumberToBox4i(cxNumber this);
 
@@ -116,6 +120,8 @@ cxUInt64 cxNumberToUInt64(cxNumber this);
 cxFloat cxNumberToFloat(cxNumber this);
 
 cxDouble cxNumberToDouble(cxNumber this);
+
+cxNumber cxNumberBool(cxBool v);
 
 cxNumber cxNumberBox4i(cxBox4i v);
 

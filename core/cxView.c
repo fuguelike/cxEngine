@@ -67,7 +67,7 @@ static void cxViewFixScaleAttr(cxViewXML xml,cxAny view,xmlTextReaderPtr reader)
     cxView this = view;
     cxEngine engine = cxEngineInstance();
     //need set engine->dessize
-    cxChar *fixscale = cxXMLAttr("cxView.fixScale");
+    cxConstChars fixscale = cxXMLAttr("cxView.fixScale");
     if(cxConstCharsEqu(fixscale, "w")){
         cxViewSetFixScale(view, cxVec2fv(engine->scale.x, engine->scale.x));
     }else if(cxConstCharsEqu(fixscale, "h")){
@@ -77,7 +77,6 @@ static void cxViewFixScaleAttr(cxViewXML xml,cxAny view,xmlTextReaderPtr reader)
     }else{
         cxViewSetFixScale(view, cxXMLReadVec2fAttr(reader, xml->functions, "cxView.fixScale", this->fixscale));
     }
-    xmlFree(fixscale);
 }
 
 void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)

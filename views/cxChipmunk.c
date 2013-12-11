@@ -41,10 +41,9 @@ void cxChipmunkXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
         int type = xmlTextReaderNodeType(reader);
         if(type == XML_READER_TYPE_ELEMENT){
             cxView parent = cxStackTop(stack);
-            const xmlChar *temp = xmlTextReaderConstName(reader);
+            cxConstChars temp = cxXMLReadElementName(reader);
             cxView cview = CX_METHOD_GET(NULL, xml->Make, temp, reader);
             CX_ASSERT(cview != NULL, "make element null");
-            
             cxObjectSetRoot(cview, xml);
             cxObjectXMLReadAttrRun(cview, xml, reader);
             cxViewXMLSet(xml, cview, reader);

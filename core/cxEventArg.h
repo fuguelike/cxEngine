@@ -23,7 +23,11 @@ CX_OBJECT_DEF(cxEventArg, cxObject)
     cxNumber number;
 CX_OBJECT_END(cxEventArg)
 
+void cxEventArgSetNumber(cxEventArg this,cxNumber num);
+
 cxEventArg cxEventArgNumber(cxNumber number);
+
+cxEventArg cxEventArgCreateWithNumber(cxConstChars json,cxNumber number);
 
 cxEventArg cxEventArgCreate(cxConstChars json);
 

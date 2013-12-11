@@ -33,7 +33,7 @@ void cxViewXMLSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader);
 
 void cxViewXMLSetItem(cxAny pview,cxConstChars key,cxAny item);
 
-cxAny cxViewXMLMakeElement(const xmlChar *temp,xmlTextReaderPtr reader);
+cxAny cxViewXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader);
 
 void cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);
 

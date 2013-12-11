@@ -16,11 +16,10 @@ void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxViewXML xml = xmlView;
     cxAtlas this = mView;
     //support boxes mode
-    cxChar *sitems = cxXMLAttr("cxAtlas.boxes");
+    cxConstChars sitems = cxXMLAttr("cxAtlas.boxes");
     if(sitems != NULL){
         this->boxesKey = cxStringAllocChars(sitems);
     }
-    xmlFree(sitems);
     //support scale9 mode
     if(cxXMLHasAttr(reader, "cxAtlas.scale9")){
         this->scale9.enable = true;
