@@ -81,7 +81,7 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     CX_METHOD_DEF(cxParticleUpdateBoxFunc, UpdateBox);
 CX_OBJECT_END(cxParticle)
 
-void cxParticleInitFromFile(cxAny pview,cxConstChars file);
+void cxParticleInitFromPEX(cxAny pview,cxConstChars file);
 
 void cxParticleSetType(cxAny pview,cxParticleEmitterType type);
 

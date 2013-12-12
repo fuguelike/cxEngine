@@ -18,9 +18,7 @@ CX_OBJECT_FREE(cxEventArg, cxObject)
     if(this->strongRef != NULL){
         CX_RELEASE(this->strongRef);
     }
-    if(this->json != NULL){
-        json_decref(this->json);
-    }
+    CX_RELEASE(this->json);
     CX_RELEASE(this->number);
 }
 CX_OBJECT_TERM(cxEventArg, cxObject)
@@ -62,12 +60,8 @@ cxEventArg cxEventArgCreate(cxConstChars json)
 {
     CX_RETURN(json == NULL,NULL);
     cxEventArg this = CX_CREATE(cxEventArg);
-    json_error_t error = {0};
-    this->json = json_loadb(json, strlen(json), JSON_DECODE_ANY, &error);
-    if(this->json == NULL){
-        CX_ERROR("event json arg decode error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
-        return NULL;
-    }
+    this->json = cxJsonCreate(UTF8(json));
+    CX_RETAIN(this->json);
     return this;
 }
 
@@ -86,81 +80,49 @@ cxEventArg cxEventArgNumber(cxNumber number)
 cxBool cxEventArgToBool(cxEventArg this,cxBool dv)
 {
     CX_ASSERT(this->json != NULL, "args error");
-    if(!json_is_integer(this->json)){
-        return dv;
-    }
-    return (this->json->type == JSON_TRUE);
+    return cxJsonToBool(this->json, dv);
 }
 
 cxBool cxEventArgBool(cxEventArg this,cxConstChars key,cxBool dv)
 {
     CX_ASSERT(this->json != NULL && key != NULL, "args error");
-    json_t *v = json_object_get(this->json, key);
-    if(v == NULL){
-        return dv;
-    }
-    CX_ASSERT(json_is_boolean(v), "key %s not bool type",key);
-    return (v->type == JSON_TRUE);
+    return cxJsonBool(this->json, key, dv);
 }
 
 cxInt cxEventArgToInt(cxEventArg this,cxInt dv)
 {
     CX_ASSERT(this->json != NULL, "args error");
-    if(!json_is_integer(this->json)){
-        return dv;
-    }
-    return (cxInt)json_integer_value(this->json);
+    return cxJsonToInt(this->json, dv);
 }
 
 cxInt cxEventArgInt(cxEventArg this,cxConstChars key,cxInt dv)
 {
     CX_ASSERT(this->json != NULL && key != NULL, "args error");
-    json_t *v = json_object_get(this->json, key);
-    if(v == NULL){
-        return dv;
-    }
-    CX_ASSERT(json_is_integer(v), "key %s not int type",key);
-    return (cxInt)json_integer_value(v);
+    return cxJsonInt(this->json, key, dv);
 }
 
 cxDouble cxEventArgToDouble(cxEventArg this,cxDouble dv)
 {
     CX_ASSERT(this->json != NULL, "args error");
-    if(!json_is_real(this->json)){
-        return dv;
-    }
-    return json_real_value(this->json);
+    return cxJsonToDouble(this->json, dv);
 }
 
 cxDouble cxEventArgDouble(cxEventArg this,cxConstChars key,cxDouble dv)
 {
     CX_ASSERT(this->json != NULL && key != NULL, "args error");
-    json_t *v = json_object_get(this->json, key);
-    if(v == NULL){
-        return dv;
-    }
-    CX_ASSERT(json_is_number(v), "key %s not real type",key);
-    return json_real_value(v);
+    return cxJsonDouble(this->json, key, dv);
 }
 
 cxConstChars cxEventArgToString(cxEventArg this)
 {
     CX_ASSERT(this->json != NULL, "args error");
-    if(!json_is_string(this->json)){
-        return NULL;
-    }
-    return json_string_value(this->json);
+    return cxJsonToString(this->json);
 }
 
 cxConstChars cxEventArgString(cxEventArg this,cxConstChars key)
 {
     CX_ASSERT(this->json != NULL && key != NULL, "args error");
-    json_t *v = json_object_get(this->json, key);
-    if(v == NULL){
-        return NULL;
-    }
-    CX_ASSERT(json_is_string(v), "key %s not string type",key);
-    return json_string_value(v);
+    return cxJsonString(this->json, key);
 }
 
 

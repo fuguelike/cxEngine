@@ -23,18 +23,16 @@
   <finishParticleSize value="10.00"/>
   <FinishParticleSizeVariance value="5.00"/>
   <duration value="-1.00"/>
-  <emitterType value="1"/>
-  <maxRadius value="134.62"/>
-  <maxRadiusVariance value="500"/>
-  <minRadius value="0"/>
-  <rotatePerSecond value="12.13"/>
-  <rotatePerSecondVariance value="322.94"/>
+  <emitterType value="0"/>
+  <maxRadius value="100.00"/>
+  <maxRadiusVariance value="0.00"/>
+  <minRadius value="0.00"/>
+  <rotatePerSecond value="0.00"/>
+  <rotatePerSecondVariance value="0.00"/>
   <blendFuncSource value="770"/>
   <blendFuncDestination value="1"/>
-
   <rotationStart value="0.00"/>
   <rotationStartVariance value="0.00"/>
   <rotationEnd value="0.00"/>
   <rotationEndVariance value="0.00"/>
-  
 </particleEmitterConfig>

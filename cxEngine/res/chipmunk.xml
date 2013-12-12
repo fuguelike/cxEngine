@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
-<cxViewXML cxView.fill="true">
+<cxViewXML cxView.fill="true" cxViewXML.onBegin="cxChipmunkBegin">
     <cxChipmunk id="chipmunk" cxView.fill="true">
         <cxView
             cxView.x="0" cxView.y="512"

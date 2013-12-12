@@ -23,13 +23,25 @@ CX_OBJECT_END(cxJson)
 
 cxJson cxJsonCreate(cxString json);
 
-cxInt cxJsonInt(cxJson json,cxConstChars key);
+cxInt cxJsonToInt(cxJson json,cxInt dv);
+
+cxConstChars cxJsonToString(cxJson json);
+
+cxDouble cxJsonToDouble(cxJson json,cxDouble dv);
+
+cxLong cxJsonToLong(cxJson json,cxLong dv);
+
+cxBool cxJsonToBool(cxJson json,cxBool dv);
+
+cxInt cxJsonInt(cxJson json,cxConstChars key,cxInt dv);
 
 cxConstChars cxJsonString(cxJson json,cxConstChars key);
 
-cxDouble cxJsonDouble(cxJson json,cxConstChars key);
+cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble ev);
 
-cxLong cxJsonLong(cxJson json,cxConstChars key);
+cxLong cxJsonLong(cxJson json,cxConstChars key,cxLong dv);
+
+cxBool cxJsonBool(cxJson json,cxConstChars key,cxBool dv);
 
 cxJson cxJsonArray(cxJson json,cxConstChars key);
 
@@ -39,9 +51,11 @@ cxInt cxJsonIntAt(cxJson json,cxInt idx);
 
 cxConstChars cxJsonStringAt(cxJson json,cxInt idx);
 
-cxDouble cxJsonDoubleAt(cxJson json,cxInt idx);
+cxDouble cxJsonDoubleAt(cxJson json,cxInt idx,cxDouble dv);
 
-cxLong cxJsonLongAt(cxJson json,cxInt idx);
+cxBool cxJsonBoolAt(cxJson json,cxInt idx,cxBool dv);
+
+cxLong cxJsonLongAt(cxJson json,cxInt idx,cxLong dv);
 
 cxJson cxJsonArrayAt(cxJson json,cxInt idx);
 

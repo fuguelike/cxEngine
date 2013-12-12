@@ -39,7 +39,7 @@
 #include <views/cxLabelBMP.h>
 #include <core/cxBMPFont.h>
 
-static cxAny loading(cxAny pview)
+static cxAny loading(cxAny loading)
 {
     cxEngineDataSet("items.xml");
     return cxViewXMLCreate("main.xml");
@@ -56,11 +56,18 @@ static void deleteSprite(cxEvent *event)
     cxChipmunkApplyImpulse(pview, cxVec2fv(0, 2000), cxVec2fv(0, 1));
 }
 
+static void cxChipmunkBegin(cxEvent *event)
+{
+    cxViewXMLRegisteEvent(event->sender, "deleteSprite", deleteSprite);
+}
+
 void cxEngineInit(cxEngine engine)
 {
-    cxEngineRegisteEvent("deleteSprite", deleteSprite);
+    cxEngineRegisteEvent("cxChipmunkBegin", cxChipmunkBegin);
+    
     engine->dessize = cxSize2fv(640, 960);
     cxPlayerOpen(0, 0);
+    
 //    engine->isShowBorder = false;
 }
 

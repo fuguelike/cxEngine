@@ -62,7 +62,7 @@ static void cxParticleXMLReaderError(void *arg,const char *msg,xmlParserSeveriti
     this->isError = true;
 }
 
-void cxParticleInitFromFile(cxAny pview,cxConstChars file)
+void cxParticleInitFromPEX(cxAny pview,cxConstChars file)
 {
     cxParticle this = pview;
     cxString data = cxAssertsData(file);
@@ -178,9 +178,9 @@ void cxParticleXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     cxViewXML xml = xmlView;
     cxAtlasXMLReadAttr(xmlView, mView, reader);
     cxParticle this = mView;
-    cxConstChars src = cxXMLAttr("cxParticle.src");
-    if(src != NULL){
-        cxParticleInitFromFile(mView, src);
+    cxConstChars pex = cxXMLAttr("cxParticle.pex");
+    if(pex != NULL){
+        cxParticleInitFromPEX(mView, pex);
         return;
     }
     cxInt number = cxXMLReadIntAttr(reader, xml->functions, "cxParticle.number", this->number);

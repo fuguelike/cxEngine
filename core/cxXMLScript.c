@@ -87,6 +87,10 @@ if(event == NULL){                                              \
     event = cxEngineGetEvent(eName);                            \
 }
 
+#define CHECK_NUMBER_TYPE(num,t)                                                        \
+CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName); \
+CX_ASSERT(num->type == t, "%s must return "#t" number value",fName);                    \
+
 CX_OBJECT_INIT(cxXMLScript, cxObject)
 {
 }
@@ -143,7 +147,7 @@ cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChar
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberFloat(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeFloat);
         rv = cxNumberToFloat(num);
     }else{
         rv = atof(svalue);
@@ -161,7 +165,7 @@ cxAssist4f cxXMLReadAssist4fAttr(xmlTextReaderPtr reader,cxHash functions, cxCon
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberAssist4f(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeAssist4f);
         rv = cxNumberToAssist4f(num);
     }else{
         cxReadFloats(svalue, &rv.v1);
@@ -179,7 +183,7 @@ cxColor4f cxXMLReadColor4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConst
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberColor4f(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeColor4f);
         rv = cxNumberToColor4f(num);
     }else{
         cxReadFloats(svalue, &rv.r);
@@ -197,7 +201,7 @@ cxVec2f cxXMLReadVec2fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberVec2f(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeVec2f);
         rv = cxNumberToVec2f(num);
     }else{
         cxReadFloats(svalue, &rv.x);
@@ -215,7 +219,7 @@ cxVec3f cxXMLReadVec3fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberVec3f(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeVec3f);
         rv = cxNumberToVec3f(num);
     }else{
         cxReadFloats(svalue, &rv.x);
@@ -233,7 +237,7 @@ cxFloatRange cxXMLReadFloatRangeAttr(xmlTextReaderPtr reader,cxHash functions,cx
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberFloatRange(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeFloatRange);
         rv = cxNumberToFloatRange(num);
     }else{
         cxReadFloats(svalue, &rv.v);
@@ -251,7 +255,7 @@ cxVec2fRange cxXMLReadVec2fRangeAttr(xmlTextReaderPtr reader,cxHash functions,cx
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberVec2fRange(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeVec2fRange);
         rv = cxNumberToVec2fRange(num);
     }else{
         cxReadFloats(svalue, &rv.v.x);
@@ -269,7 +273,7 @@ cxColor4fRange cxXMLReadColor4fRangeAttr(xmlTextReaderPtr reader,cxHash function
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberColor4fRange(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeColor4fRange);
         rv = cxNumberToColor4fRange(num);
     }else{
         cxReadFloats(svalue, &rv.v.r);
@@ -287,7 +291,7 @@ cxVec2i cxXMLReadVec2iAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChar
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberVec2i(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeVec2i);
         rv = cxNumberToVec2i(num);
     }else{
         cxReadInts(svalue, &rv.x);
@@ -305,7 +309,7 @@ cxBox4i cxXMLReadBox4iAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChar
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberBox4i(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeBox4i);
         rv = cxNumberToBox4i(num);
     }else{
         cxReadInts(svalue, &rv.l);
@@ -323,7 +327,7 @@ cxBox4f cxXMLReadBox4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChar
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberBox4f(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeBox4f);
         rv = cxNumberToBox4f(num);
     }else{
         cxReadFloats(svalue, &rv.l);
@@ -426,7 +430,7 @@ cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars nam
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberInt(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeInt);
         rv = cxNumberToInt(num);
     }else{
         rv = atoi(svalue);
@@ -444,7 +448,7 @@ cxUInt cxXMLReadUIntAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars 
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberUInt(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeUInt);
         rv = cxNumberToUInt(num);
     }else{
         rv = atol(svalue);
@@ -497,7 +501,7 @@ cxBool cxXMLReadBoolAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars n
         GET_FUNCTION_ITEM(item);
         cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberBool(rv));
         cxNumber num = item->func(args);
-        CX_ASSERT(cxObjectIsType(num, cxNumberTypeName), "%s must return cxNumber type",fName);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeBool);
         rv = cxNumberToBool(num);
     }else{
         rv = cxConstCharsEqu(svalue, "true");

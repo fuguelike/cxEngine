@@ -2,7 +2,7 @@
 
 <!--TextureKey at *.xml file use-->
 <cxViewXML cxView.fill="true">
-
+    <!--
     <cxParticle
         cxSprite.texture="n.png"
         cxView.cropping="false"
@@ -22,10 +22,8 @@
         cxParticle.startcolor="1,1,1,1"
         cxParticle.endcolor="1,1,1,0"
         cxParticle.rate = "-1" />
-    <!--
-    <cxParticle cxParticle.src = "particle.pex" />
     -->
-    <cxParticle cxParticle.src = "star.pex" />
+    <cxParticle cxParticle.pex = "particle.pex" />
     <cxButton
         cxView.w = "180"
         cxView.h = "120"

@@ -33,11 +33,50 @@ cxJson cxJsonCreate(cxString json)
     return this;
 }
 
+cxInt cxJsonToInt(cxJson json,cxInt dv)
+{
+    if(!json_is_integer(CX_JSON_PTR(json))){
+        return dv;
+    }
+    return (cxInt)json_integer_value(CX_JSON_PTR(json));
+}
+
+cxConstChars cxJsonToString(cxJson json)
+{
+    if(!json_is_string(CX_JSON_PTR(json))){
+        return NULL;
+    }
+    return json_string_value(CX_JSON_PTR(json));
+}
+
+cxDouble cxJsonToDouble(cxJson json,cxDouble dv)
+{
+    if(!json_is_number(CX_JSON_PTR(json))){
+        return dv;
+    }
+    return json_number_value(CX_JSON_PTR(json));
+}
+
+cxLong cxJsonToLong(cxJson json,cxLong dv)
+{
+    if(!json_is_number(CX_JSON_PTR(json))){
+        return dv;
+    }
+    return (cxLong)json_integer_value(CX_JSON_PTR(json));
+}
+
+cxBool cxJsonToBool(cxJson json,cxBool dv)
+{
+    if(!json_is_boolean(CX_JSON_PTR(json))){
+        return dv;
+    }
+    return json_is_true(CX_JSON_PTR(json));
+}
+
 cxInt cxJsonIntAt(cxJson json,cxInt idx)
 {
     json_t *v = json_array_get(CX_JSON_PTR(json), idx);
     if(v == NULL){
-        CX_ERROR("get json index %d failed",idx);
         return 0;
     }
     return (cxInt)json_integer_value(v);
@@ -47,28 +86,34 @@ cxConstChars cxJsonStringAt(cxJson json,cxInt idx)
 {
     json_t *v = json_array_get(CX_JSON_PTR(json), idx);
     if(v == NULL){
-        CX_ERROR("get json index %d failed",idx);
         return 0;
     }
     return json_string_value(v);
 }
 
-cxDouble cxJsonDoubleAt(cxJson json,cxInt idx)
+cxBool cxJsonBoolAt(cxJson json,cxInt idx,cxBool dv)
 {
     json_t *v = json_array_get(CX_JSON_PTR(json), idx);
     if(v == NULL){
-        CX_ERROR("get json index %d failed",idx);
-        return 0;
+        return dv;
+    }
+    return json_is_true(v);
+}
+
+cxDouble cxJsonDoubleAt(cxJson json,cxInt idx,cxDouble dv)
+{
+    json_t *v = json_array_get(CX_JSON_PTR(json), idx);
+    if(v == NULL){
+        return dv;
     }
     return json_number_value(v);
 }
 
-cxLong cxJsonLongAt(cxJson json,cxInt idx)
+cxLong cxJsonLongAt(cxJson json,cxInt idx,cxLong dv)
 {
     json_t *v = json_array_get(CX_JSON_PTR(json), idx);
     if(v == NULL){
-        CX_ERROR("get json index %d failed",idx);
-        return 0;
+        return dv;
     }
     return (cxLong)json_integer_value(v);
 }
@@ -77,7 +122,6 @@ cxJson cxJsonArrayAt(cxJson json,cxInt idx)
 {
     json_t *v = json_array_get(CX_JSON_PTR(json), idx);
     if(v == NULL){
-        CX_ERROR("get json index %d failed",idx);
         return NULL;
     }
     if(!json_is_array(v)){
@@ -97,7 +141,6 @@ cxJson cxJsonObjectAt(cxJson json,cxInt idx)
 {
     json_t *v = json_array_get(CX_JSON_PTR(json), idx);
     if(v == NULL){
-        CX_ERROR("get json index %d failed",idx);
         return NULL;
     }
     if(!json_is_object(v)){
@@ -112,7 +155,6 @@ cxJson cxJsonArray(cxJson json,cxConstChars key)
 {
     json_t *v = json_object_get(CX_JSON_PTR(json), key);
     if(v == NULL){
-        CX_ERROR("get json key %s failed",key);
         return NULL;
     }
     if(!json_is_array(v)){
@@ -127,7 +169,6 @@ cxJson cxJsonObject(cxJson json,cxConstChars key)
 {
     json_t *v = json_object_get(CX_JSON_PTR(json), key);
     if(v == NULL){
-        CX_ERROR("get json key %s failed",key);
         return NULL;
     }
     if(!json_is_object(v)){
@@ -138,42 +179,47 @@ cxJson cxJsonObject(cxJson json,cxConstChars key)
     return rv;
 }
 
+cxBool cxJsonBool(cxJson json,cxConstChars key,cxBool dv)
+{
+    json_t *v = json_object_get(CX_JSON_PTR(json), key);
+    if(v == NULL){
+        return dv;
+    }
+    return json_is_true(v);
+}
+
 cxConstChars cxJsonString(cxJson json,cxConstChars key)
 {
     json_t *v = json_object_get(CX_JSON_PTR(json), key);
     if(v == NULL){
-        CX_ERROR("get json key %s failed",key);
         return NULL;
     }
     return json_string_value(v);
 }
 
-cxDouble cxJsonDouble(cxJson json,cxConstChars key)
+cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble dv)
 {
     json_t *v = json_object_get(CX_JSON_PTR(json), key);
     if(v == NULL){
-        CX_ERROR("get json key %s failed",key);
-        return 0;
+        return dv;
     }
     return json_number_value(v);
 }
 
-cxLong cxJsonLong(cxJson json,cxConstChars key)
+cxLong cxJsonLong(cxJson json,cxConstChars key,cxLong dv)
 {
     json_t *v = json_object_get(CX_JSON_PTR(json), key);
     if(v == NULL){
-        CX_ERROR("get json key %s failed",key);
-        return 0;
+        return dv;
     }
     return (cxLong)json_integer_value(v);
 }
 
-cxInt cxJsonInt(cxJson json,cxConstChars key)
+cxInt cxJsonInt(cxJson json,cxConstChars key,cxInt dv)
 {
     json_t *v = json_object_get(CX_JSON_PTR(json), key);
     if(v == NULL){
-        CX_ERROR("get json key %s failed",key);
-        return 0;
+        return dv;
     }
     return (cxInt)json_integer_value(v);
 }

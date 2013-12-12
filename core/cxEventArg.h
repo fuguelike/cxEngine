@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxEventArg_h
 #define cxEngine_cxEventArg_h
 
-#include <jansson.h>
+#include "cxJson.h"
 #include "cxBase.h"
 #include "cxString.h"
 #include "cxNumber.h"
@@ -19,7 +19,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxEventArg, cxObject)
     cxAny weakRef;
     cxAny strongRef;
-    json_t *json;
+    cxJson json;
     cxNumber number;
 CX_OBJECT_END(cxEventArg)
 
