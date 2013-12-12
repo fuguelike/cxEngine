@@ -147,13 +147,13 @@ void cxViewXMLSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader)
 
 cxAny cxViewXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
 {
-    cxView cview = NULL;
+    cxAny cview = NULL;
     if(ELEMENT_IS_TYPE(cxSprite)){
         cview = CX_CREATE(cxSprite);
     }else if(ELEMENT_IS_TYPE(cxViewXML)){
         cxConstChars src = cxXMLAttr("src");
         CX_ASSERT(src != NULL, "require src attr");
-        cview = (cxView)cxViewXMLCreate(src);
+        cview = cxViewXMLCreate(src);
     }else if(ELEMENT_IS_TYPE(cxView)){
         cview = CX_CREATE(cxView);
     }else if(ELEMENT_IS_TYPE(cxButton)){

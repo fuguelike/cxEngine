@@ -45,6 +45,14 @@ void cxArrayUpdate(cxArray array,cxAny nAny,cxIndex index)
     CX_RETAIN(nAny);
 }
 
+void cxArrayAppends(cxArray array, cxArray data)
+{
+    CX_ARRAY_FOREACH(data, ele) {
+        cxAny obj = cxArrayObject(ele);
+        cxArrayAppend(array, obj);
+    }
+}
+
 void cxArrayAppend(cxArray array, cxAny any)
 {
     utarray_push_back(array->utArray, &any);

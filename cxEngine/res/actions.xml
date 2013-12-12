@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <cxActionSet cxActionSet.type="multiple" cxActionSet.onLoad="actionsLoad">
+    <cxSpline id="spline"
+        cxAction.time="3"
+        cxSpline.points="cxDataTypes('items.xml?spline')"
+    />
     <cxAnimate id="animate"
         cxAction.speed="1.0"
         cxAction.time="3">

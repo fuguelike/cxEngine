@@ -352,6 +352,14 @@ static cxNumber cxFixScaleByHeight(cxEventArg arg)
     return cxNumberVec2f(cxVec2fv(engine->scale.y, engine->scale.y));
 }
 
+static cxTypes cxDataSetTypes(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxConstChars url = cxEventArgToString(arg);
+    CX_ASSERT(url != NULL, "args error");
+    return cxEngineDataSet(url);
+}
+
 void cxEngineSystemInit()
 {
     //set locate lang
@@ -380,6 +388,9 @@ void cxEngineSystemInit()
     
     //cxDataString('items.xml?exp')  -> cxString
     cxEngineRegisteFunc("cxDataString", (cxAnyFunc)cxEngineDataString);
+    
+    //cxDataTypes('items.xml?spline')
+    cxEngineRegisteFunc("cxDataTypes", (cxAnyFunc)cxDataSetTypes);
     
     //cxDataInt('items,xml?int') -> cxNumber
     cxEngineRegisteFunc("cxDataNumber", (cxAnyFunc)cxEngineDataNumber);

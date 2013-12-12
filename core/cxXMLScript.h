@@ -52,8 +52,8 @@ do{                                                             \
     if(list == NULL && cxArrayLength(list) == 0){               \
         break;                                                  \
     }                                                           \
-    CX_ARRAY_FOREACH(list,e){                                   \
-        cxEventItem item = cxArrayObject(e);                    \
+    CX_ARRAY_FOREACH(list,ele){                                 \
+        cxEventItem item = cxArrayObject(ele);                  \
         CX_EVENT_APPEND(o->e, item->func,item->arg);            \
     }                                                           \
 }while(0)
@@ -70,6 +70,8 @@ cxBool cxXMLHasAttr(xmlTextReaderPtr reader,cxConstChars name);
 cxConstChars cxXMLReadElementName(xmlTextReaderPtr reader);
 
 cxString cxXMLReadString(xmlTextReaderPtr reader);
+
+cxTypes cxXMLReadTypesAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name);
 
 cxString cxXMLReaderReadOuterXml(xmlTextReaderPtr reader);
 

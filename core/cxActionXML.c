@@ -16,6 +16,7 @@
 #include <actions/cxTint.h>
 #include <actions/cxTimer.h>
 #include <actions/cxAnimate.h>
+#include <actions/cxSpline.h>
 #include <actions/cxActionSet.h>
 #include "cxViewXML.h"
 #include "cxActionXML.h"
@@ -112,6 +113,8 @@ cxAny cxActionXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
         action = CX_CREATE(cxActionSet);
     }else if(ELEMENT_IS_TYPE(cxAnimate)){
         action = CX_CREATE(cxAnimate);
+    }else if(ELEMENT_IS_TYPE(cxSpline)){
+        action = CX_CREATE(cxSpline);
     }else{
         CX_ERROR("action xml can't create type %s",temp);
     }

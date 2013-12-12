@@ -40,6 +40,8 @@ void    cxArrayClean(cxArray array);
 
 void    cxArrayUpdate(cxArray array,cxAny any,cxIndex index);
 
+void    cxArrayAppends(cxArray array, cxArray data);
+
 void    cxArrayAppend(cxArray array, cxAny any);
 
 cxIndex cxArrayIndex(cxArray array,cxAny any);

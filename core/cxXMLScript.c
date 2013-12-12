@@ -227,6 +227,21 @@ cxArray cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader)
     return ret;
 }
 
+cxTypes cxXMLReadTypesAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name)
+{
+    cxTypes rv = NULL;
+    cxConstChars svalue = cxXMLAttr(name);
+    CX_RETURN(svalue == NULL, rv);
+    PARSE_FUNCTION(svalue, fName, fArg);
+    if(isFunc){
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreate(fArg);
+        rv = item->func(args);
+        CX_ASSERT(cxObjectIsType(rv, cxTypesTypeName), "%s return must cxTypes");
+    }
+    return rv;
+}
+
 cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxFloat value)
 {
     cxFloat rv = value;

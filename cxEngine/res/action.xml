@@ -2,8 +2,6 @@
 
 <!--TextureKey at *.xml file use-->
 <cxViewXML cxView.fill="0,0,0,0">
-    
-    <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="candy.xml?green.png"/>
     <cxTable cxView.cropping="true" cxView.right="10" cxView.left="10" cxView.top="260" cxView.bottom="10" cxTable.space="10,10" cxTable.type="4,0">
         <cxButton
             cxView.w = "180"
@@ -169,9 +167,18 @@
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
+            cxButton.onRelease="cxActionRun({'src':'actions.xml?spline','view':'sprite'})">
+            <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Spline" cxLabelTTF.size="25"/>
+        </cxButton>
+        <cxButton
+            cxView.w = "180"
+            cxView.h = "120"
             cxButton.onRelease="cxPopView">
             <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Return" cxLabelTTF.size="25"/>
         </cxButton>
     </cxTable>
+    
+    <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="candy.xml?green.png"/>
 </cxViewXML>

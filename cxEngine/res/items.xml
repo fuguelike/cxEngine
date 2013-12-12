@@ -46,6 +46,14 @@
         </cxButton>
     ]]></cxString>
     
+    <cxArray id="spline">
+        <cxVec2f>-300,300</cxVec2f>
+        <cxVec2f>300,300</cxVec2f>
+        <cxVec2f>300,-300</cxVec2f>
+        <cxVec2f>-300,-300</cxVec2f>
+        <cxVec2f>-300,300</cxVec2f>
+    </cxArray>
+    
     <cxHash id="config">
         <cxString key="font">banana.ttf</cxString>
         <cxString key="test">Test2</cxString>
