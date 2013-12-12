@@ -271,24 +271,14 @@ static cxString cxEngineDataString(cxEventArg arg)
     return types != NULL ? types->assist : NULL;
 }
 
-static cxNumber cxEngineDataFloat(cxEventArg arg)
+static cxNumber cxEngineDataNumber(cxEventArg arg)
 {
     CX_ASSERT(arg != NULL, "args error");
     cxConstChars url = cxEventArgToString(arg);
     CX_ASSERT(url != NULL, "args error");
-    cxNumber number = cxEngineDataSet(url);
-    CX_ASSERT(cxObjectIsType(number, cxNumberTypeName), "type error");
-    return number;
-}
-
-static cxNumber cxEngineDataInt(cxEventArg arg)
-{
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars url = cxEventArgToString(arg);
-    CX_ASSERT(url != NULL, "args error");
-    cxNumber number = cxEngineDataSet(url);
-    CX_ASSERT(cxObjectIsType(number, cxNumberTypeName), "type error");
-    return number;
+    cxTypes types = cxEngineDataSet(url);
+    CX_ASSERT(cxTypesIsType(types, cxTypesNumber),"type error");
+    return types->assist;
 }
 
 static cxNumber cxEngineRelativeWidth(cxEventArg arg)
@@ -391,11 +381,8 @@ void cxEngineSystemInit()
     //cxDataString('items.xml?exp')  -> cxString
     cxEngineRegisteFunc("cxDataString", (cxAnyFunc)cxEngineDataString);
     
-    //cxDataFloat('items,xml?float') -> cxNumber
-    cxEngineRegisteFunc("cxDataFloat", (cxAnyFunc)cxEngineDataFloat);
-    
     //cxDataInt('items,xml?int') -> cxNumber
-    cxEngineRegisteFunc("cxDataInt", (cxAnyFunc)cxEngineDataInt);
+    cxEngineRegisteFunc("cxDataNumber", (cxAnyFunc)cxEngineDataNumber);
     
     //relative screen width and height value -> cxNumber
     cxEngineRegisteFunc("cxRelativeW", (cxAnyFunc)cxEngineRelativeWidth);
@@ -410,10 +397,8 @@ void cxEngineSystemInit()
     //cxTextureCreate('candy.xml?red.png')
     cxEngineRegisteFunc("cxTextureCreate", (cxAnyFunc)cxTextureCreateForXML);
     
-    //fixScale by window.scale.x
+    //fixScale by window.scale.x or scale.y
     cxEngineRegisteFunc("cxFixScaleW", (cxAnyFunc)cxFixScaleByWidth);
-    
-    //fixScale by window.scale.y
     cxEngineRegisteFunc("cxFixScaleH", (cxAnyFunc)cxFixScaleByHeight);
 }
 

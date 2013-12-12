@@ -235,11 +235,11 @@ typedef struct {
 
 typedef enum {
     cxTypesAtlasBoxPoint,
-    cxTypesLangString,
     cxTypesString,
     cxTypesDB,
     cxTypesHash,
     cxTypesArray,
+    cxTypesNumber,
 }cxTypesType;
 
 #define cxTypesIsType(o,t)  ((o) != NULL && (o)->type == t)
@@ -253,11 +253,11 @@ CX_OBJECT_END(cxTypes)
 
 cxTypes cxAtlasBoxPointTypesCreate();
 
-cxTypes cxLangStringTypesCreate();
-
 cxTypes cxDBTypesCreate(cxAny db);
 
 cxTypes cxHashTypesCreate();
+
+cxTypes cxNumberTypesCreate();
 
 cxTypes cxArrayTypesCreate();
 

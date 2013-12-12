@@ -34,13 +34,6 @@ cxTypes cxAtlasBoxPointTypesCreate()
     return this;
 }
 
-cxTypes cxLangStringTypesCreate()
-{
-    cxTypes this = CX_CREATE(cxTypes);
-    this->type = cxTypesLangString;
-    return this;
-}
-
 cxTypes cxStringTypesCreate()
 {
     cxTypes this = CX_CREATE(cxTypes);
@@ -52,6 +45,13 @@ cxTypes cxHashTypesCreate()
 {
     cxTypes this = CX_CREATE(cxTypes);
     this->type = cxTypesHash;
+    return this;
+}
+
+cxTypes cxNumberTypesCreate()
+{
+    cxTypes this = CX_CREATE(cxTypes);
+    this->type = cxTypesNumber;
     return this;
 }
 

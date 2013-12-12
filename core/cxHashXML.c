@@ -200,6 +200,17 @@ static cxAny cxReadValues(cxHashXML xml,cxConstChars temp,xmlTextReaderPtr reade
     return rv;
 }
 
+cxTypes cxHashXMLReadNumber(cxHashXML xml,cxConstChars temp,xmlTextReaderPtr reader)
+{
+    cxTypes types = cxNumberTypesCreate();
+    cxAny obj = cxReadValues(xml, temp, reader);
+    if(!cxObjectIsType(obj, cxNumberTypeName)){
+        return NULL;
+    }
+    CX_RETAIN_SWAP(types->assist, obj);
+    return types;
+}
+
 cxTypes cxHashXMLReadHash(cxHashXML xml,xmlTextReaderPtr reader)
 {
     cxTypes types = cxHashTypesCreate();
@@ -319,15 +330,20 @@ cxBool cxHashXMLLoadWithReader(cxAny hash,xmlTextReaderPtr reader)
         cxAny object = NULL;
         if(ELEMENT_IS_TYPE(cxAtlasBoxPoint)){
             cxConstChars stexture = cxXMLAttr("texture");
+            //cxTypesAtlasBoxPoint
             object = cxHashXMLReadAtlasBoxPoint(xml,stexture,reader);
         }else if(ELEMENT_IS_TYPE(cxString)){
+            //cxTypesString
             object = cxHashXMLReadString(xml,reader);
         }else if(ELEMENT_IS_TYPE(cxHash)){
+            //cxTypesHash
             object = cxHashXMLReadHash(xml,reader);
         }else if(ELEMENT_IS_TYPE(cxArray)){
+            //cxTypesArray
             object = cxHashXMLReadArray(xml,reader);
         }else{
-            object = cxReadValues(xml, temp, reader);
+            //cxTypesNumber
+            object = cxHashXMLReadNumber(xml, temp, reader);
         }
         if(object != NULL){
             cxHashSet(xml->items, cxHashStrKey(sid), object);
