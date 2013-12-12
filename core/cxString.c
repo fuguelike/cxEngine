@@ -79,6 +79,30 @@ cxString cxStringConstChars(cxConstChars str)
     return rv;
 }
 
+cxArray cxStringSplit(cxString string,cxConstChars sp)
+{
+    CX_ASSERT(string != NULL, "args error");
+    cxConstChars body = cxStringBody(string);
+    cxInt length = cxStringLength(string) + 1;
+    cxChar buffer[length];
+    cxInt idx = 0;
+    cxArray ret = CX_CREATE(cxArray);
+    for(cxInt i=0; i < length; i++){
+        if(!cxConstCharsHashChar(sp, body[i]) && body[i] != '\0'){
+            buffer[idx++] = body[i];
+            continue;
+        }
+        if(idx <= 0){
+            continue;
+        }
+        cxString item = CX_CREATE(cxString);
+        cxStringAppend(item, buffer, idx);
+        cxArrayAppend(ret, item);
+        idx = 0;
+    }
+    return ret;
+}
+
 cxConstChars cxStringBody(cxString string)
 {
     CX_RETURN(string == NULL,NULL);

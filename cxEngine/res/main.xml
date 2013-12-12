@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--cxView.fixScale="cxFixScaleW()"-->
-<cxViewXML cxView.w="0,0,0,0" cxViewXML.onBegin="mainBegin" cxViewXML.onEnd="mainEnd">
+<cxViewXML cxView.fill="0,0,0,0" cxViewXML.onBegin="mainBegin" cxViewXML.onEnd="mainEnd">
     <cxTable cxView.right="30" cxView.left="30" cxView.top="30" cxView.bottom="30" cxTable.space="10,10" cxTable.type="3,0">
         <cxTemplate url="items.xml?template" title="Particle" release="cxPushView('particle.xml')" />
-        <cxTemplate src="buttontemp.xml" title="Action" release="cxPushView('action.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Action" release="cxPushView('action.xml');cxPlay({'src':'effect.wav','loop':false})" />
         <cxTemplate src="buttontemp.xml" title="Wav" release="cxPlay({'src':'effect.wav','loop':false})" />
         <cxTemplate src="buttontemp.xml" title="Mp3" release="cxPlay({'src':'apple.mp3','loop':false})" />
         <cxTemplate src="buttontemp.xml" title="Clip" release="cxPushView('clipping.xml')" />
         <cxTemplate src="buttontemp.xml" title="Scroll" release="cxPushView('scroll.xml')" />
-        <cxTemplate src="buttontemp.xml" title="Button" />
         <cxTemplate src="buttontemp.xml" title="Animate" release="cxPushView('animate.xml')" />
         <cxTemplate src="buttontemp.xml" title="Chipmunk" release="cxPushView('chipmunk.xml')" />
         <cxTemplate src="buttontemp.xml" title="bmpFont" release="cxPushView('bmpfont.xml')" />

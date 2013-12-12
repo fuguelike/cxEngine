@@ -192,12 +192,10 @@ xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this,xmlTextReaderErrorFunc er
     return cxXMLReaderForString(this->bytes,error,arg);
 }
 
-//method({json}
-cxEventItem cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader)
+//mul event use ';' split
+static cxEventItem cxXMLReadEventByValue(cxHash events,cxConstChars value)
 {
-    //xml view event event(arg)
-    cxConstChars eventName = cxXMLAttr(name);
-    CX_RETURN(eventName == NULL,NULL);
+    cxConstChars eventName = value;
     PARSE_FUNCTION(eventName, eName, eArg);
     GET_EVENT_ITEM(event);
     //set event arg
@@ -205,6 +203,28 @@ cxEventItem cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr read
         CX_RETAIN_SWAP(event->arg, cxEventArgCreate(eArg));
     }
     return event;
+}
+
+//method1({json});method2({json})
+cxArray cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader)
+{
+    //xml view event event(arg)
+    cxConstChars eventName = cxXMLAttr(name);
+    CX_RETURN(eventName == NULL,NULL);
+    cxArray ret = CX_CREATE(cxArray);
+    cxArray list = cxStringSplit(cxStringConstChars(eventName), ";");
+    CX_ARRAY_FOREACH(list, e){
+        cxString item = cxArrayObject(e);
+        if(item == NULL){
+            continue;
+        }
+        cxEventItem event = cxXMLReadEventByValue(events, cxStringBody(item));
+        if(event == NULL){
+            continue;
+        }
+        cxArrayAppend(ret, event);
+    }
+    return ret;
 }
 
 cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxFloat value)

@@ -135,6 +135,7 @@
 		839103C01859632A008DF1C7 /* cxRegex.c in Sources */ = {isa = PBXBuildFile; fileRef = 839103BE1859632A008DF1C7 /* cxRegex.c */; };
 		83A5C967183A174500781096 /* cxLoading.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A5C965183A174500781096 /* cxLoading.c */; };
 		83BAB0731835F578004DAEA6 /* cxRunner.c in Sources */ = {isa = PBXBuildFile; fileRef = 83BAB0711835F578004DAEA6 /* cxRunner.c */; };
+		83DF79791859B665007F47C3 /* cxSpline.c in Sources */ = {isa = PBXBuildFile; fileRef = 83DF79771859B665007F47C3 /* cxSpline.c */; };
 		83E51BD41856F759006AD253 /* cxUrlPath.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E51BD21856F759006AD253 /* cxUrlPath.c */; };
 /* End PBXBuildFile section */
 
@@ -408,6 +409,8 @@
 		83A5C966183A174500781096 /* cxLoading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLoading.h; sourceTree = "<group>"; };
 		83BAB0711835F578004DAEA6 /* cxRunner.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxRunner.c; sourceTree = "<group>"; };
 		83BAB0721835F578004DAEA6 /* cxRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxRunner.h; sourceTree = "<group>"; };
+		83DF79771859B665007F47C3 /* cxSpline.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxSpline.c; sourceTree = "<group>"; };
+		83DF79781859B665007F47C3 /* cxSpline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxSpline.h; sourceTree = "<group>"; };
 		83E51BD21856F759006AD253 /* cxUrlPath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxUrlPath.c; sourceTree = "<group>"; };
 		83E51BD31856F759006AD253 /* cxUrlPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxUrlPath.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -501,6 +504,8 @@
 				83BAB0721835F578004DAEA6 /* cxRunner.h */,
 				83607AA018444B39005C392B /* cxAnimate.c */,
 				83607AA118444B39005C392B /* cxAnimate.h */,
+				83DF79771859B665007F47C3 /* cxSpline.c */,
+				83DF79781859B665007F47C3 /* cxSpline.h */,
 			);
 			path = actions;
 			sourceTree = "<group>";
@@ -866,6 +871,7 @@
 				835A95C0185592CE0088B413 /* cxBMPFont.c in Sources */,
 				8341C66318227DF30045A66F /* cxTextureXML.c in Sources */,
 				8341C61718227DF20045A66F /* cpSpaceStep.c in Sources */,
+				83DF79791859B665007F47C3 /* cxSpline.c in Sources */,
 				8341C60D18227DF20045A66F /* cpBBTree.c in Sources */,
 				8341C60918227DF20045A66F /* cpSlideJoint.c in Sources */,
 				8341C60A18227DF20045A66F /* cpArbiter.c in Sources */,

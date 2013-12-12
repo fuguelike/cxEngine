@@ -42,14 +42,18 @@ xmlTextReaderPtr cxXMLReaderForString(cxString code,xmlTextReaderErrorFunc error
 
 xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this,xmlTextReaderErrorFunc error,cxAny arg);
 
-cxEventItem cxXMLReadEvent(cxHash events, cxConstChars name, xmlTextReaderPtr reader);
+cxArray cxXMLReadEvent(cxHash events, cxConstChars name, xmlTextReaderPtr reader);
 
 #define ELEMENT_IS_TYPE(t)  (temp != NULL && strcmp(temp, #t) == 0)
 
 #define cxXMLAppendEvent(s,o,t,e)                               \
 do{                                                             \
-    cxEventItem item = cxXMLReadEvent(s, #t"."#e, reader);      \
-    if(item != NULL){                                           \
+    cxArray list = cxXMLReadEvent(s, #t"."#e, reader);          \
+    if(list == NULL && cxArrayLength(list) == 0){               \
+        break;                                                  \
+    }                                                           \
+    CX_ARRAY_FOREACH(list,e){                                   \
+        cxEventItem item = cxArrayObject(e);                    \
         CX_EVENT_APPEND(o->e, item->func,item->arg);            \
     }                                                           \
 }while(0)

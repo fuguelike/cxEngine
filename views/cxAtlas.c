@@ -50,24 +50,23 @@ void cxAtlasLoadBoxes(cxAny pview)
         cxAtlasBoxPointType box = *tmp;
         cxSize2f boxsize = box.size;
         cxVec2f boxpos = box.pos;
+        //
         if((box.mask & cxViewAutoResizeLeft) && (box.mask & cxViewAutoResizeRight)){
             boxsize.w = size.w - box.box.l - box.box.r;
-        }
-        if(box.mask & cxViewAutoResizeLeft){
+        }else if(box.mask & cxViewAutoResizeLeft){
             boxpos.x = boxsize.w * 0.5f + box.box.l - size.w/2.0f;
-        }
-        if(box.mask & cxViewAutoResizeRight){
+        }else if(box.mask & cxViewAutoResizeRight){
             boxpos.x = size.w/2.0f - boxsize.w * 0.5f - box.box.r;
         }
+        //
         if((box.mask & cxViewAutoResizeTop) && (box.mask & cxViewAutoResizeBottom)){
             boxsize.h = size.h - box.box.t - box.box.b;
-        }
-        if(box.mask & cxViewAutoResizeTop){
+        }else if(box.mask & cxViewAutoResizeTop){
             boxpos.y = size.h/2.0f - boxsize.h * 0.5f - box.box.t;
-        }
-        if(box.mask & cxViewAutoResizeBottom){
+        }else if(box.mask & cxViewAutoResizeBottom){
             boxpos.y = boxsize.h * 0.5f -size.h/2.0f + box.box.b;
         }
+        //
         cxBoxPoint bp = cxAtlasCreateBoxPoint(boxpos, boxsize, box.texbox, box.color);
         cxAtlasAppend(this, bp);
     }

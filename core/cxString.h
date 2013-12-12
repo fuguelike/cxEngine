@@ -11,6 +11,7 @@
 
 #include <utstring.h>
 #include "cxBase.h"
+#include "cxArray.h"
 
 CX_C_BEGIN
 
@@ -51,6 +52,8 @@ cxString cxMD5(cxString v);
 cxBool cxStringEqu(cxString s1,cxString s2);
 
 cxInt cxStringLength(cxString string);
+
+cxArray cxStringSplit(cxString string,cxConstChars sp);
 
 cxConstChars cxStringBody(cxString string);
 
