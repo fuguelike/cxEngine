@@ -128,6 +128,7 @@ static cxString cxPrepareReplaceTemplateVar(cxRegex regex,cxAny arg)
 
 static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
 {
+    cxConstChars sregex = "\\$\\((.*?)\\)";
     cxBool error = false;
     cxString input = cxRegexMatch(regex, 0);
     cxString ret = NULL;
@@ -142,13 +143,21 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
             continue;
         }
         cxConstChars src = cxXMLAttr("src");
-        CX_BREAK(src == NULL);
-        cxString data = cxAssertsData(src);
-        CX_BREAK(data == NULL);
-        //replace $(var) name
-        cxRegex regex = cxRegexCreate("\\$\\((.*?)\\)", data, 0);
-        ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
-        break;
+        if(src != NULL){
+            cxString data = cxAssertsData(src);
+            CX_ASSERT(data != NULL, "get src %s data failed", src);
+            cxRegex regex = cxRegexCreate(sregex, data, 0);
+            ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
+            break;
+        }
+        cxConstChars url = cxXMLAttr("url");
+        if(url != NULL){
+            cxTypes types = cxEngineDataSet(url);
+            CX_ASSERT(types != NULL && cxTypesIsType(types, cxTypesString), "get url %s data failed", url);
+            cxRegex regex = cxRegexCreate(sregex, types->assist, 0);
+            ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
+            break;
+        }
     }
     xmlTextReaderClose(reader);
     return ret;
