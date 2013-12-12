@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
-<cxViewXML cxView.fill="true" cxViewXML.onBegin="cxChipmunkBegin">
-    <cxChipmunk id="chipmunk" cxView.fill="true">
+<cxViewXML cxView.fill="0,0,0,0" cxViewXML.onBegin="cxChipmunkBegin">
+    <cxChipmunk id="chipmunk" cxView.fill="0,0,0,0">
         <cxView
             cxView.x="0" cxView.y="512"
             cxView.w="768" cxView.h="5"
@@ -56,11 +56,11 @@
             cxSprite.texture="candy.xml?blue.png"
             cxChipmunk.static="true"/>
         <cxButton cxView.w = "180" cxView.h = "120" cxButton.onPress="cxPopView">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="return" cxLabelTTF.size="30"/>
         </cxButton>
         <cxButton cxView.w = "180" cxView.h = "120" cxButton.onPress="deleteSprite">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="test" cxLabelTTF.size="30"/>
         </cxButton>
     </cxChipmunk>

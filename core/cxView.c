@@ -33,9 +33,9 @@ static void cxViewXMLReadAutoResize(cxViewXML xml, cxAny view,xmlTextReaderPtr r
         this->autoMask |= cxViewAutoResizeBottom;
         this->autoBox.b = cxXMLReadFloatAttr(reader, xml->functions, "cxView.bottom", 0) * this->fixscale.y;
     }
-    if(cxXMLReadBoolAttr(reader, xml->functions, "cxView.fill", false)){
+    if(cxXMLHasAttr(reader, "cxView.fill")){
         this->autoMask = cxViewAutoResizeFill;
-        this->autoBox = cxBox4fv(0, 0, 0, 0);
+        this->autoBox = cxXMLReadBox4fAttr(reader, xml->functions, "cxView.fill", this->autoBox);
     }
 }
 
@@ -593,33 +593,33 @@ void cxViewAutoResizing(cxAny pview)
     cxVec2f pos = this->position;
     cxViewAutoResizeMask mask = this->autoMask;
     cxVec2f scale = cxViewScale(this);
+    //left right
     if((mask & cxViewAutoResizeLeft) && (mask & cxViewAutoResizeRight)){
         size.w = parent->size.w - this->autoBox.l - this->autoBox.r;
         this->scale.x = 1.0f;
         this->fixscale.x = 1.0f;
-    }
-    if(mask & cxViewAutoResizeLeft){
-        pos.x -= parent->size.w/2.0f;
+        pos.x = 0;
+    }else if(mask & cxViewAutoResizeLeft){
+        pos.x  = -parent->size.w/2.0f;
         pos.x += size.w * this->anchor.x * scale.x;
         pos.x += this->autoBox.l;
-    }
-    if(mask & cxViewAutoResizeRight){
-        pos.x += parent->size.w/2.0f;
+    }else if(mask & cxViewAutoResizeRight){
+        pos.x = parent->size.w/2.0f;
         pos.x -= size.w * (1.0f - this->anchor.x) * scale.x;
         pos.x -= this->autoBox.r;
     }
+    //top bottom
     if((mask & cxViewAutoResizeTop) && (mask & cxViewAutoResizeBottom)){
         size.h = parent->size.h - this->autoBox.t - this->autoBox.b;
         this->scale.y = 1.0f;
         this->fixscale.y = 1.0f;
-    }
-    if(mask & cxViewAutoResizeTop){
-        pos.y += parent->size.h/2.0f;
+        pos.y = 0;
+    }else if(mask & cxViewAutoResizeTop){
+        pos.y = parent->size.h/2.0f;
         pos.y -= size.h * (1.0f - this->anchor.y) * scale.y;
         pos.y -= this->autoBox.t;
-    }
-    if(mask & cxViewAutoResizeBottom){
-        pos.y -= parent->size.h/2.0f;
+    }else if(mask & cxViewAutoResizeBottom){
+        pos.y  = -parent->size.h/2.0f;
         pos.y += size.h * this->anchor.y * scale.y;
         pos.y += this->autoBox.b;
     }

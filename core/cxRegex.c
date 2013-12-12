@@ -83,15 +83,10 @@ cxRegexPos cxRegexPosition(cxRegex this,cxInt index)
 
 cxBool cxRegexNext(cxRegex this)
 {
-    this->count = pcre_exec(
-                            this->regex,
-                            0,
-                            cxStringBody(this->input),
-                            cxStringLength(this->input),
-                            this->start,
-                            0,
-                            this->offsets,
-                            CX_REGEX_MAX_COUNT);
+    CX_ASSERT(this->input != NULL, "input string error");
+    cxConstChars body = cxStringBody(this->input);
+    cxInt length = cxStringLength(this->input);
+    this->count = pcre_exec(this->regex,0,body,length,this->start,0,this->offsets,CX_REGEX_MAX_COUNT);
     if(this->count > 0){
         cxRegexPos p = cxRegexPosition(this, 0);
         this->start = p.end;

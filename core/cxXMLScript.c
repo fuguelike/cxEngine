@@ -166,7 +166,7 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
 cxString cxXMLReaderPrepareTemplate(cxString code)
 {
     //replace cxTemplate
-    cxRegex regex = cxRegexCreate("(<cxTemplate\\s.*?/>)", code, 0);
+    cxRegex regex = cxRegexCreate("<cxTemplate\\s.*?/>", code, 0);
     CX_ASSERT(regex != NULL, "regex error");
     cxString ret = cxRegexReplace(regex, cxPrepareReplaceTemplate, NULL);
     if(ret == NULL){
