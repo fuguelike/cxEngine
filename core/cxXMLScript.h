@@ -81,6 +81,8 @@ cxBox4f cxXMLReadBox4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChar
 
 cxVec2f cxXMLReadVec2fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec2f value);
 
+cxSize2f cxXMLReadSize2fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxSize2f value);
+
 cxVec3f cxXMLReadVec3fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec3f value);
 
 cxFloatRange cxXMLReadFloatRangeAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxFloatRange value);

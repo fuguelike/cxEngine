@@ -348,6 +348,20 @@ static cxTextureAttr cxTextureCreateForXML(cxEventArg arg)
     return rv;
 }
 
+static cxNumber cxFixScaleByWidth(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxEngine engine = cxEngineInstance();
+    return cxNumberVec2f(cxVec2fv(engine->scale.x, engine->scale.x));
+}
+
+static cxNumber cxFixScaleByHeight(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxEngine engine = cxEngineInstance();
+    return cxNumberVec2f(cxVec2fv(engine->scale.y, engine->scale.y));
+}
+
 void cxEngineSystemInit()
 {
     //set locate lang
@@ -395,6 +409,12 @@ void cxEngineSystemInit()
     
     //cxTextureCreate('candy.xml?red.png')
     cxEngineRegisteFunc("cxTextureCreate", (cxAnyFunc)cxTextureCreateForXML);
+    
+    //fixScale by window.scale.x
+    cxEngineRegisteFunc("cxFixScaleW", (cxAnyFunc)cxFixScaleByWidth);
+    
+    //fixScale by window.scale.y
+    cxEngineRegisteFunc("cxFixScaleH", (cxAnyFunc)cxFixScaleByHeight);
 }
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file)

@@ -279,6 +279,24 @@ cxVec2f cxXMLReadVec2fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars
     return rv;
 }
 
+cxSize2f cxXMLReadSize2fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxSize2f value)
+{
+    cxSize2f rv = value;
+    cxConstChars svalue = cxXMLAttr(name);
+    CX_RETURN(svalue == NULL, rv);
+    PARSE_FUNCTION(svalue, fName, fArg);
+    if(isFunc){
+        GET_FUNCTION_ITEM(item);
+        cxEventArg args = cxEventArgCreateWithNumber(fArg,cxNumberSize2f(rv));
+        cxNumber num = item->func(args);
+        CHECK_NUMBER_TYPE(num, cxNumberTypeSize2f);
+        rv = cxNumberToSize2f(num);
+    }else{
+        cxReadFloats(svalue, &rv.w);
+    }
+    return rv;
+}
+
 cxVec3f cxXMLReadVec3fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec3f value)
 {
     cxVec3f rv = value;

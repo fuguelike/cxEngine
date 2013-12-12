@@ -42,15 +42,12 @@ static void cxViewXMLReadAutoResize(cxViewXML xml, cxAny view,xmlTextReaderPtr r
 static void cxViewXMLReadRectToView(cxViewXML xml, cxAny view,xmlTextReaderPtr reader)
 {
     cxView this = view;
-    
-    cxVec2f pos = this->position;
+    cxVec2f pos = cxXMLReadVec2fAttr(reader, xml->functions, "cxView.position", this->position);
     pos.x = cxXMLReadFloatAttr(reader, xml->functions, "cxView.x", pos.x);
     pos.y= cxXMLReadFloatAttr(reader, xml->functions, "cxView.y", pos.y);
     cxViewSetPos(view, pos);
-    
     cxViewSetOrder(view, cxXMLReadIntAttr(reader, xml->functions, "cxView.z", this->zorder));
-    
-    cxSize2f size = this->size;
+    cxSize2f size = cxXMLReadSize2fAttr(reader, xml->functions, "cxView.size", this->size);
     size.w = cxXMLReadFloatAttr(reader,xml->functions, "cxView.w", size.w);
     size.h = cxXMLReadFloatAttr(reader,xml->functions, "cxView.h", size.h);
     cxViewSetSize(view, size);
@@ -62,30 +59,13 @@ cxBool cxViewZeroSize(cxAny pview)
     return cxSize2Zero(this->size);
 }
 
-static void cxViewFixScaleAttr(cxViewXML xml,cxAny view,xmlTextReaderPtr reader)
-{
-    cxView this = view;
-    cxEngine engine = cxEngineInstance();
-    //need set engine->dessize
-    cxConstChars fixscale = cxXMLAttr("cxView.fixScale");
-    if(cxConstCharsEqu(fixscale, "w")){
-        cxViewSetFixScale(view, cxVec2fv(engine->scale.x, engine->scale.x));
-    }else if(cxConstCharsEqu(fixscale, "h")){
-        cxViewSetFixScale(view, cxVec2fv(engine->scale.y, engine->scale.y));
-    }else if(cxConstCharsEqu(fixscale, "wh")){
-        cxViewSetFixScale(view, engine->scale);
-    }else{
-        cxViewSetFixScale(view, cxXMLReadVec2fAttr(reader, xml->functions, "cxView.fixScale", this->fixscale));
-    }
-}
-
 void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
     cxObjectXMLReadAttr(pxml, view, reader);
     cxViewXML xml = pxml;
     cxView this = view;
     //fixscale
-    cxViewFixScaleAttr(pxml, view, reader);
+    cxViewSetFixScale(view, cxXMLReadVec2fAttr(reader, xml->functions, "cxView.fixScale", this->fixscale));
     //rect
     cxViewXMLReadRectToView(pxml, view,reader);
     //resize
