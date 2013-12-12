@@ -11,6 +11,8 @@
 #include "cxHash.h"
 #include "cxEventItem.h"
 #include "cxEngine.h"
+#include "cxRegex.h"
+#include "cxAutoPool.h"
 
 CX_OBJECT_INIT(cxXMLReader, cxObject)
 {
@@ -107,8 +109,67 @@ cxConstChars cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name)
     return cxStringBody(cxStringAttachChars((cxChar *)txt));
 }
 
+static void cxPrepareReaderError(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
+{
+    cxBool *error = arg;
+    *error = true;
+    CX_ERROR("%s",msg);
+}
+
+static cxString cxPrepareReplaceTemplateVar(cxRegex regex,cxAny arg)
+{
+    xmlTextReaderPtr reader = arg;
+    cxString value = cxRegexMatch(regex, 0);
+    cxString attrName = cxRegexMatch(regex, 1);
+    cxConstChars var = cxXMLAttr(cxStringBody(attrName));
+    CX_RETURN(var == NULL, value);
+    return cxStringConstChars(var);
+}
+
+static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
+{
+    cxBool error = false;
+    cxString input = cxRegexMatch(regex, 0);
+    cxString ret = NULL;
+    xmlTextReaderPtr reader = xmlReaderForMemory(cxStringBody(input), cxStringLength(input), NULL, "UTF-8", 0);
+    xmlTextReaderSetErrorHandler(reader, cxPrepareReaderError, &error);
+    while(xmlTextReaderRead(reader) && !error){
+        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
+            continue;
+        }
+        cxConstChars temp = cxXMLReadElementName(reader);
+        if(!ELEMENT_IS_TYPE(cxTemplate)){
+            continue;
+        }
+        cxConstChars src = cxXMLAttr("src");
+        CX_BREAK(src == NULL);
+        cxString data = cxAssertsData(src);
+        CX_BREAK(data == NULL);
+        //replace $(var) name
+        cxRegex regex = cxRegexCreate("\\$\\((.*?)\\)", data, 0);
+        ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
+        break;
+    }
+    xmlTextReaderClose(reader);
+    return ret;
+}
+
+cxString cxXMLReaderPrepareTemplate(cxString code)
+{
+    //replace cxTemplate
+    cxRegex regex = cxRegexCreate("(<cxTemplate\\s.*?/>)", code, 0);
+    CX_ASSERT(regex != NULL, "regex error");
+    cxString ret = cxRegexReplace(regex, cxPrepareReplaceTemplate, NULL);
+    if(ret == NULL){
+        ret = code;
+    }
+    return ret;
+}
+
 xmlTextReaderPtr cxXMLReaderForString(cxString code,xmlTextReaderErrorFunc error,cxAny arg)
 {
+    code = cxXMLReaderPrepareTemplate(code);
+    CX_ASSERT(code != NULL, "xml perpare failed");
     cxXMLReader this = CX_CREATE(cxXMLReader);
     this->reader = xmlReaderForMemory(cxStringBody(code), cxStringLength(code), NULL, "UTF-8", 0);
     if(error != NULL){

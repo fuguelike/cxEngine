@@ -15,9 +15,7 @@ CX_OBJECT_INIT(cxEventArg, cxObject)
 CX_OBJECT_FREE(cxEventArg, cxObject)
 {
     this->weakRef = NULL;
-    if(this->strongRef != NULL){
-        CX_RELEASE(this->strongRef);
-    }
+    CX_RELEASE(this->strongRef);
     CX_RELEASE(this->json);
     CX_RELEASE(this->number);
 }
@@ -65,16 +63,14 @@ cxEventArg cxEventArgCreate(cxConstChars json)
     return this;
 }
 
+cxNumber cxEventArgNumber(cxEventArg this)
+{
+    return this->number;
+}
+
 void cxEventArgSetNumber(cxEventArg this,cxNumber num)
 {
     CX_RETAIN_SWAP(this->number, num);
-}
-
-cxEventArg cxEventArgNumber(cxNumber number)
-{
-    cxEventArg this = CX_CREATE(cxEventArg);
-    CX_RETAIN_SWAP(this->number, number);
-    return this;
 }
 
 cxBool cxEventArgToBool(cxEventArg this,cxBool dv)
@@ -93,6 +89,18 @@ cxInt cxEventArgToInt(cxEventArg this,cxInt dv)
 {
     CX_ASSERT(this->json != NULL, "args error");
     return cxJsonToInt(this->json, dv);
+}
+
+cxLong cxEventArgLong(cxEventArg this,cxConstChars key,cxLong dv)
+{
+    CX_ASSERT(this->json != NULL && key != NULL, "args error");
+    return cxJsonLong(this->json, key, dv);
+}
+
+cxLong cxEventArgToLong(cxEventArg this,cxLong dv)
+{
+    CX_ASSERT(this->json != NULL, "args error");
+    return cxJsonToLong(this->json, dv);
 }
 
 cxInt cxEventArgInt(cxEventArg this,cxConstChars key,cxInt dv)

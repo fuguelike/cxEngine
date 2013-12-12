@@ -130,8 +130,9 @@ void cxStringFormat(cxString string,cxConstChars format,...)
     va_end(ap);
 }
 
-void cxStringAppend(cxString string,cxChar *d,cxInt l)
+void cxStringAppend(cxString string,cxConstChars d,cxInt l)
 {
+    CX_ASSERT(l > 0 && d != NULL, "args error");
     utstring_bincpy(&string->strptr, d, l);
 }
 

@@ -60,6 +60,8 @@
 		8384E1EF1823ABFB00EDA1D6 /* libmpg123.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */; };
 		83900BC718471D6D00E702C7 /* atlas.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 83900BC618471D6D00E702C7 /* atlas.jpg */; };
 		83900BCA18471DCE00E702C7 /* atlas.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83900BC918471DCE00E702C7 /* atlas.xml */; };
+		839103BA18595754008DF1C7 /* buttontemp.xml in Resources */ = {isa = PBXBuildFile; fileRef = 839103B918595754008DF1C7 /* buttontemp.xml */; };
+		839103BD1859631E008DF1C7 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 839103BC1859631E008DF1C7 /* libpcre.a */; };
 		839AC1D21832214D00AEBF8E /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 839AC1D11832214D00AEBF8E /* libjansson.a */; };
 		839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 839E7A5617F1BC7600B0F5EC /* InfoPlist.strings */; };
 		839E7A5A17F1BC7600B0F5EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 839E7A5917F1BC7600B0F5EC /* main.m */; };
@@ -134,6 +136,8 @@
 		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
 		83900BC618471D6D00E702C7 /* atlas.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = atlas.jpg; path = res/atlas.jpg; sourceTree = "<group>"; };
 		83900BC918471DCE00E702C7 /* atlas.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = atlas.xml; path = res/atlas.xml; sourceTree = "<group>"; };
+		839103B918595754008DF1C7 /* buttontemp.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = buttontemp.xml; path = res/buttontemp.xml; sourceTree = "<group>"; };
+		839103BC1859631E008DF1C7 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		839AC1D11832214D00AEBF8E /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
 		839E7A5517F1BC7600B0F5EC /* cxEngine-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "cxEngine-Info.plist"; sourceTree = "<group>"; };
 		839E7A5717F1BC7600B0F5EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -148,6 +152,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				839103BD1859631E008DF1C7 /* libpcre.a in Frameworks */,
 				836DBA77184A15B800CCD673 /* libluajit.a in Frameworks */,
 				839AC1D21832214D00AEBF8E /* libjansson.a in Frameworks */,
 				8384E1EF1823ABFB00EDA1D6 /* libmpg123.a in Frameworks */,
@@ -188,6 +193,7 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				839103BC1859631E008DF1C7 /* libpcre.a */,
 				836DBA76184A15B800CCD673 /* libluajit.a */,
 				839AC1D11832214D00AEBF8E /* libjansson.a */,
 				8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */,
@@ -251,6 +257,7 @@
 				8341C6B81822812B0045A66F /* effect.wav */,
 				8341C6B91822812B0045A66F /* items.xml */,
 				8341C6BA1822812B0045A66F /* main.xml */,
+				839103B918595754008DF1C7 /* buttontemp.xml */,
 				832A3EF21855F9DF00047C64 /* bmpfont.xml */,
 				837277751844962A005EDE68 /* animate.xml */,
 				832D2D80182A353200C0AF53 /* scroll.xml */,
@@ -360,6 +367,7 @@
 				832B1D4B18264B100038D0EC /* apple.mp3 in Resources */,
 				8341C6CC1822812B0045A66F /* main.xml in Resources */,
 				839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */,
+				839103BA18595754008DF1C7 /* buttontemp.xml in Resources */,
 				834F2E8118458D310067E220 /* Untitled.xml in Resources */,
 				832B1D4C18264B100038D0EC /* Track02.mp3 in Resources */,
 				8341C6C81822812B0045A66F /* candy.xml in Resources */,

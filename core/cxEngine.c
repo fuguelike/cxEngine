@@ -352,31 +352,48 @@ void cxEngineSystemInit()
 {
     //set locate lang
     cxEngineSetLocalLang(cxStringConstChars("en"));//cxLocaleLang());
-    //register global event
+    //cxActionRun({'src':'actions.xml?btnEnter','view':'id','cache':true, 'curve':'ExpOut', 'delay':0.3})
     cxEngineRegisteEvent("cxActionRun", cxViewRunActionEvent);
+    //cxPlay({'src':'aa.wav','loop':true})
     cxEngineRegisteEvent("cxPlay", cxPlaySoundEvent);
+    //cxLogger('msg')
     cxEngineRegisteEvent("cxLogger", cxPrintMessageEvent);
+    //cxPushView('url')
     cxEngineRegisteEvent("cxPushView", cxViewPushViewEvent);
+    //cxPopView
     cxEngineRegisteEvent("cxPopView", cxViewPopViewEvent);
+    //cxReplaceView('url')
     cxEngineRegisteEvent("cxReplaceView", cxViewReplaceViewEvent);
+    //cxPost('eventkey')
     cxEngineRegisteEvent("cxPost", cxMessagePostEvent);
     //use in ->cxSprite up
     cxEngineRegisteEvent("cxSetTexture", cxSpriteSetTextureEvent);
     //use in ->cxView up
     cxEngineRegisteEvent("cxSetView", cxViewSetViewEvent);
     
-    //function
+    //cxLocalizedString('items.xml?exp') -> cxString get en/items.xml?exp
     cxEngineRegisteFunc("cxLocalizedString", (cxAnyFunc)cxEngineLocalizedString);
-    //
+    
+    //cxDataString('items.xml?exp')  -> cxString
     cxEngineRegisteFunc("cxDataString", (cxAnyFunc)cxEngineDataString);
+    
+    //cxDataFloat('items,xml?float') -> cxNumber
     cxEngineRegisteFunc("cxDataFloat", (cxAnyFunc)cxEngineDataFloat);
+    
+    //cxDataInt('items,xml?int') -> cxNumber
     cxEngineRegisteFunc("cxDataInt", (cxAnyFunc)cxEngineDataInt);
-    //relative screen width and height value
+    
+    //relative screen width and height value -> cxNumber
     cxEngineRegisteFunc("cxRelativeW", (cxAnyFunc)cxEngineRelativeWidth);
     cxEngineRegisteFunc("cxRelativeH", (cxAnyFunc)cxEngineRelativeHeight);
-    //
+    
+    //cxBinNumber('110111') -> cxNumber
     cxEngineRegisteFunc("cxBinNumber", (cxAnyFunc)cxEngineBinNumber);
+    
+    //cxHexNumber('ffbb00') -> cxNumber
     cxEngineRegisteFunc("cxHexNumber", (cxAnyFunc)cxEngineHexNumber);
+    
+    //cxTextureCreate('candy.xml?red.png')
     cxEngineRegisteFunc("cxTextureCreate", (cxAnyFunc)cxTextureCreateForXML);
 }
 

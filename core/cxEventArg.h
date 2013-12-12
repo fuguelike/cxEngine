@@ -25,7 +25,7 @@ CX_OBJECT_END(cxEventArg)
 
 void cxEventArgSetNumber(cxEventArg this,cxNumber num);
 
-cxEventArg cxEventArgNumber(cxNumber number);
+cxNumber cxEventArgNumber(cxEventArg this);
 
 cxEventArg cxEventArgCreateWithNumber(cxConstChars json,cxNumber number);
 
@@ -46,6 +46,10 @@ cxBool cxEventArgToBool(cxEventArg this,cxBool dv);
 cxInt cxEventArgInt(cxEventArg this,cxConstChars key,cxInt dv);
 
 cxInt cxEventArgToInt(cxEventArg this,cxInt dv);
+
+cxLong cxEventArgLong(cxEventArg this,cxConstChars key,cxLong dv);
+
+cxLong cxEventArgToLong(cxEventArg this,cxLong dv);
 
 cxConstChars cxEventArgString(cxEventArg this,cxConstChars key);
 

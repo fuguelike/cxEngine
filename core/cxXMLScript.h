@@ -36,6 +36,8 @@ CX_OBJECT_DEF(cxXMLScript, cxObject)
     cxString bytes;
 CX_OBJECT_END(cxXMLScript)
 
+cxString cxXMLReaderPrepareTemplate(cxString code);
+
 xmlTextReaderPtr cxXMLReaderForString(cxString code,xmlTextReaderErrorFunc error,cxAny arg);
 
 xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this,xmlTextReaderErrorFunc error,cxAny arg);

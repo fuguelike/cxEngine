@@ -2,53 +2,15 @@
 
 <cxViewXML cxView.w="cxRelativeW(1.0)" cxView.h="cxRelativeH(1.0)" cxViewXML.onBegin="mainBegin" cxViewXML.onEnd="mainEnd">
     <cxTable cxView.right="30" cxView.left="30" cxView.top="30" cxView.bottom="30" cxTable.space="10,10" cxTable.type="3,0">
-        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('particle.xml')">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0"
-                cxLabelTTF.font="banana.ttf"
-                cxLabelTTF.text="cxLocalizedString('items.xml?exp')"
-                cxLabelTTF.size="30"/>
-        </cxButton>
-        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('action.xml')">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Action" cxLabelTTF.size="30"/>
-        </cxButton>
-        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPlay({'src':'effect.wav','loop':false})">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Wav" cxLabelTTF.size="30"/>
-        </cxButton>
-        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPlay({'src':'apple.mp3','loop':false})">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Mp3" cxLabelTTF.size="30"/>
-        </cxButton>
-        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('clipping.xml')">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Clip" cxLabelTTF.size="30"/>
-        </cxButton>
-        <cxButton cxView.w="180" cxView.h="120"
-            cxButton.onRelease="cxPushView('scroll.xml')"
-            cxButton.onEnter="cxActionRun({'src':'actions.xml?btnEnter','cache':true})"
-            cxButton.onLeave="cxActionRun({'src':'actions.xml?btnLeave','cache':true})">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Scroll" cxLabelTTF.size="30"/>
-        </cxButton>
-        <cxButton cxView.w="180" cxView.h="120"
-            cxButton.onEnter="cxActionRun({'src':'actions.xml?btnEnter'})"
-            cxButton.onLeave="cxActionRun({'src':'actions.xml?btnLeave'})">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Button" cxLabelTTF.size="30"/>
-        </cxButton>
-        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('animate.xml')">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Animate" cxLabelTTF.size="30"/>
-        </cxButton>
-        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('chipmunk.xml')">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Chipmunk" cxLabelTTF.size="30"/>
-        </cxButton>
-        <cxButton cxView.w="180" cxView.h="120" cxButton.onRelease="cxPushView('bmpfont.xml')">
-            <cxAtlas cxView.fill="true" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="bmpFont" cxLabelTTF.size="30"/>
-        </cxButton>
+        <cxTemplate src="buttontemp.xml" title="Particle" release="cxPushView('particle.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Action" release="cxPushView('action.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Wav" release="cxPlay({'src':'effect.wav','loop':false})" />
+        <cxTemplate src="buttontemp.xml" title="Mp3" release="cxPlay({'src':'apple.mp3','loop':false})" />
+        <cxTemplate src="buttontemp.xml" title="Clip" release="cxPushView('clipping.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Scroll" release="cxPushView('scroll.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Button" />
+        <cxTemplate src="buttontemp.xml" title="Animate" release="cxPushView('animate.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Chipmunk" release="cxPushView('chipmunk.xml')" />
+        <cxTemplate src="buttontemp.xml" title="bmpFont" release="cxPushView('bmpfont.xml')" />
     </cxTable>
 </cxViewXML>

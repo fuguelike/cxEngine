@@ -152,6 +152,7 @@ cxAny cxViewXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
         cview = CX_CREATE(cxSprite);
     }else if(ELEMENT_IS_TYPE(cxViewXML)){
         cxConstChars src = cxXMLAttr("src");
+        CX_ASSERT(src != NULL, "require src attr");
         cview = (cxView)cxViewXMLCreate(src);
     }else if(ELEMENT_IS_TYPE(cxView)){
         cview = CX_CREATE(cxView);
