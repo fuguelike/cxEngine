@@ -2,15 +2,15 @@
 
 <!--TextureKey at *.xml file use-->
 <cxViewRoot cxView.fill="true">
-    <!--
+
     <cxParticle
         cxSprite.texture="n.png"
         cxView.cropping="false"
         cxView.w = "200"
         cxView.h = "100"
-        cxParticle.type="cxpEmitterType('gravity')"
+        cxParticle.type="cxEmitterType('gravity')"
         cxParticle.number = "2"
-        cxParticle.blend = "cxpBlendMode('multiple')"
+        cxParticle.blend = "cxBlendMode('multiple')"
         cxParticle.duration = "-1"
         cxParticle.life = "1.5"
         cxParticle.speed = "200,200"
@@ -23,7 +23,7 @@
         cxParticle.startcolor="1,1,1,1"
         cxParticle.endcolor="1,1,1,0"
         cxParticle.rate = "-1" />
-    -->
+
     <cxParticle cxParticle.pex = "particle.pex" />
     <cxButton
         cxView.w = "180"

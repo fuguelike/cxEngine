@@ -198,6 +198,7 @@ static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;        \
 typedef struct _t_ * _t_;                                           \
 void _t_##AutoInit(_t_ this);                                       \
 void _t_##AutoFree(_t_ this);                                       \
+void _t_##TypeInit();                                               \
 struct _t_ {
 
 

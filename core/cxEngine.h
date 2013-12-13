@@ -28,6 +28,7 @@ CX_C_BEGIN
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
 CX_OBJECT_DEF(cxEngine, cxObject)
+    cxHash typeFunctions;
     cxHash bmpfonts;
     cxHash events;
     cxHash functions;
@@ -58,15 +59,17 @@ CX_OBJECT_END(cxEngine)
 
 cxEngine cxEngineInstance();
 
-cxAny cxEngineCallFunc(cxConstChars name,cxConstChars json);
+void cxEngineRegisteTypeFunc(cxConstType type,cxConstChars name,cxAny func);
 
-void cxEngineRegisteFunc(cxConstChars name,cxAnyFunc func);
+void cxEngineRegisteFunc(cxConstChars name,cxAny func);
 
 void cxEngineRegisteEvent(cxConstChars name,cxEventFunc func);
 
 cxEventItem cxEngineGetEvent(cxConstChars name);
 
 cxFuncItem cxEngineGetFunc(cxConstChars name);
+
+cxFuncItem cxEngineGetTypeFunc(cxConstType type,cxConstChars name);
 
 void cxEngineRemoveScript(cxConstChars file);
 

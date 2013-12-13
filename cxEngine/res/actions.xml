@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<cxActionSet cxActionSet.type="multiple" cxActionSet.onLoad="actionsLoad">
+<cxActionRoot cxActionRoot.type="multiple" cxActionRoot.onLoad="actionsLoad">
     <cxSpline id="spline"
         cxAction.time="3"
         cxSpline.points="cxDataTypes('items.xml?spline')"
@@ -72,4 +72,4 @@
         cxAction.time="2"
         cxTimer.repeat="5"
         cxTimer.onArrive="cxLogger('timer')" />
-</cxActionSet>
+</cxActionRoot>

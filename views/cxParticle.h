@@ -83,10 +83,6 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     CX_METHOD_DEF(cxParticleUpdateBoxFunc, UpdateBox);
 CX_OBJECT_END(cxParticle)
 
-cxNumber cxpBlendMode(cxEventArg arg);
-
-cxNumber cxpEmitterType(cxEventArg arg);
-
 void cxParticleInitFromPEX(cxAny pview,cxConstChars file);
 
 void cxParticleSetType(cxAny pview,cxParticleEmitterType type);

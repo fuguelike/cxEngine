@@ -70,8 +70,12 @@ if(isFunc){                                                     \
 
 
 #define GET_FUNCTION_ITEM(item)                                 \
+cxConstChars type = cxXMLGetTypeName(name);                     \
 cxFuncItem item = NULL;                                         \
-if(functions != NULL){                                          \
+if(type != NULL){                                               \
+    item = cxEngineGetTypeFunc(type, fName);                    \
+}                                                               \
+if(item == NULL && functions != NULL){                          \
     item = cxHashGet(functions, cxHashStrKey(fName));           \
 }                                                               \
 if(item == NULL){                                               \
@@ -128,7 +132,7 @@ static cxString cxPrepareReplaceTemplateVar(cxRegex regex,cxAny arg)
 
 static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
 {
-    cxConstChars sregex = "\\$\\((.*?)\\)";
+    static cxConstChars sregex = "\\$\\((.*?)\\)";
     cxBool error = false;
     cxString input = cxRegexMatch(regex, 0);
     cxString ret = NULL;
@@ -144,9 +148,9 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
         }
         cxConstChars src = cxXMLAttr("src");
         if(src != NULL){
-            cxString data = cxAssertsData(src);
-            CX_ASSERT(data != NULL, "get src %s data failed", src);
-            cxRegex regex = cxRegexCreate(sregex, data, 0);
+            cxXMLScript xml = cxEngineGetXMLScript(src);
+            CX_ASSERT(xml != NULL, "get xml %s template failed", src);
+            cxRegex regex = cxRegexCreate(sregex, xml->bytes, 0);
             ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
             break;
         }
@@ -203,6 +207,24 @@ static cxEventItem cxXMLReadEventByValue(cxHash events,cxConstChars value)
         CX_RETAIN_SWAP(event->arg, cxEventArgCreate(eArg));
     }
     return event;
+}
+
+//cxType.xx -> cxType
+static cxConstChars cxXMLGetTypeName(cxConstChars name)
+{
+    cxInt length = strlen(name);
+    cxChar rv[length + 1];
+    cxInt j = 0;
+    cxInt i = 0;
+    for(i=0; i < length; i++){
+        if(name[i] == '.'){
+            break;
+        }
+        rv[j++] = name[i];
+    }
+    rv[j] = '\0';
+    CX_RETURN(j == 0, NULL);
+    return cxStringBody(cxStringConstChars(rv));
 }
 
 //method1({json});method2({json})

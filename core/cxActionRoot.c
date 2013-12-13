@@ -236,7 +236,7 @@ static void cxActionRootLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
             continue;
         }
         cxConstChars temp = cxXMLReadElementName(reader);
-        if(!ELEMENT_IS_TYPE(cxActionSet)){
+        if(!ELEMENT_IS_TYPE(cxActionRoot)){
             continue;
         }
         cxObjectReadAttrRun(this, this, reader);

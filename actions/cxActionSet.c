@@ -6,23 +6,37 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxEngine.h>
+#include <core/cxXMLScript.h>
 #include <core/cxActionRoot.h>
 #include <core/cxEventArg.h>
 #include "cxActionSet.h"
 
+static cxNumber cxActionType(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "arg error");
+    cxConstChars mode = cxEventArgToString(arg);
+    if(cxConstCharsEqu(mode, "multiple")){
+        return cxNumberInt(cxActionSetTypeMultiple);
+    }
+    if(cxConstCharsEqu(mode, "sequence")){
+        return cxNumberInt(cxActionSetTypeSequence);
+    }
+    return cxNumberInt(cxActionSetTypeNone);
+}
+
+void cxActionRootTypeInit()
+{
+    cxEngineRegisteTypeFunc(cxActionRootTypeName, "cxActionType", cxActionType);
+}
+
 static void cxActionSetReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
+    cxActionRoot root = rootAction;
     cxActionReadAttr(rootAction, mAction, reader);
     cxActionSet this = mAction;
-    //get type
-    cxConstChars stype = cxXMLAttr("cxActionSet.type");
-    if(cxConstCharsEqu(stype, "multiple")){
-        cxActionSetSetType(this, cxActionSetTypeMultiple);
-    }else if(cxConstCharsEqu(stype, "sequence")){
-        cxActionSetSetType(this, cxActionSetTypeSequence);
-    }else{
-        cxActionSetSetType(this, cxActionSetTypeNone);
-    }
+    //get type use cxActionType('sequence') atr func
+    cxActionSetSetType(this,cxXMLReadIntAttr(reader, root->functions, "cxActionSet.type", this->type));
     //get sub action
     while(xmlTextReaderRead(reader)){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){

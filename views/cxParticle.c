@@ -173,7 +173,7 @@ void cxParticleInitFromPEX(cxAny pview,cxConstChars file)
     }
 }
 
-cxNumber cxpEmitterType(cxEventArg arg)
+static cxNumber cxEmitterType(cxEventArg arg)
 {
     CX_ASSERT(arg != NULL, "arg error");
     cxConstChars mode = cxEventArgToString(arg);
@@ -187,7 +187,7 @@ cxNumber cxpEmitterType(cxEventArg arg)
     return NULL;
 }
 
-cxNumber cxpBlendMode(cxEventArg arg)
+static cxNumber cxBlendMode(cxEventArg arg)
 {
     CX_ASSERT(arg != NULL, "arg error");
     cxConstChars mode = cxEventArgToString(arg);
@@ -199,6 +199,12 @@ cxNumber cxpBlendMode(cxEventArg arg)
     }
     CX_ERROR("blend mode add or multiple");
     return NULL;
+}
+
+void cxParticleTypeInit()
+{
+    cxEngineRegisteTypeFunc(cxParticleTypeName, "cxEmitterType", cxEmitterType);
+    cxEngineRegisteTypeFunc(cxParticleTypeName, "cxBlendMode", cxBlendMode);
 }
 
 void cxParticleReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)

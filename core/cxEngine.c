@@ -11,6 +11,7 @@
 #include <core/cxActionRoot.h>
 #include <socket/cxEventBase.h>
 #include <views/cxParticle.h>
+#include <actions/cxActionSet.h>
 #include "cxViewRoot.h"
 #include "cxEngine.h"
 #include "cxAutoPool.h"
@@ -130,17 +131,20 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->isTouch = true;
     this->contentScaleFactor = 1.0f;
     this->scale = cxVec2fv(1.0f, 1.0f);
-    this->window = CX_ALLOC(cxWindow);
-    this->scripts = CX_ALLOC(cxHash);
-    this->events = CX_ALLOC(cxHash);
-    this->datasets = CX_ALLOC(cxHash);
-    this->actions = CX_ALLOC(cxHash);
-    this->dbenvs = CX_ALLOC(cxHash);
-    this->bmpfonts = CX_ALLOC(cxHash);
+    
+    this->window    = CX_ALLOC(cxWindow);
+    this->scripts   = CX_ALLOC(cxHash);
+    this->events    = CX_ALLOC(cxHash);
+    this->datasets  = CX_ALLOC(cxHash);
+    this->actions   = CX_ALLOC(cxHash);
+    this->dbenvs    = CX_ALLOC(cxHash);
+    this->bmpfonts  = CX_ALLOC(cxHash);
     this->functions = CX_ALLOC(cxHash);
+    this->typeFunctions = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
+    CX_RELEASE(this->typeFunctions);
     CX_RELEASE(this->functions);
     CX_RELEASE(this->bmpfonts);
     CX_RELEASE(this->actions);
@@ -149,6 +153,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->events);
     CX_RELEASE(this->scripts);
     CX_RELEASE(this->dbenvs);
+    
     CX_SIGNAL_RELEASE(this->onTouch);
     CX_EVENT_RELEASE(this->onFree);
     CX_SIGNAL_RELEASE(this->onUpdate);
@@ -156,6 +161,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
     CX_RELEASE(this->window);
+    
     cxEventBaseDestroy();
     cxCurveDestroy();
     cxOpenGLDestroy();
@@ -206,7 +212,25 @@ void cxEngineDestroy()
     }
 }
 
-void cxEngineRegisteFunc(cxConstChars name,cxAnyFunc func)
+void cxEngineRegisteTypeFunc(cxConstType type,cxConstChars name,cxAny func)
+{
+    CX_ASSERT(name != NULL || func == NULL || type == NULL, "args error");
+    cxEngine this = cxEngineInstance();
+    cxHash typeFuncs = cxHashGet(this->typeFunctions, cxHashStrKey(type));
+    if(typeFuncs == NULL){
+        typeFuncs = CX_ALLOC(cxHash);
+        cxHashSet(this->typeFunctions, cxHashStrKey(type), typeFuncs);
+        CX_RELEASE(typeFuncs);
+    }
+    cxFuncItem item = cxHashGet(typeFuncs, cxHashStrKey(name));
+    CX_ASSERT(item == NULL, "type %s.%s function registered",type,name);
+    item = CX_ALLOC(cxFuncItem);
+    item->func = func;
+    cxHashSet(typeFuncs, cxHashStrKey(name), item);
+    CX_RELEASE(item);
+}
+
+void cxEngineRegisteFunc(cxConstChars name,cxAny func)
 {
     cxEngine this = cxEngineInstance();
     CX_ASSERT(name != NULL, "args error");
@@ -249,9 +273,17 @@ cxFuncItem cxEngineGetFunc(cxConstChars name)
     return cxHashGet(this->functions, cxHashStrKey(name));
 }
 
+cxFuncItem cxEngineGetTypeFunc(cxConstType type,cxConstChars name)
+{
+    cxEngine this = cxEngineInstance();
+    cxHash typeFuncs = cxHashGet(this->typeFunctions, cxHashStrKey(type));
+    CX_RETURN(typeFuncs == NULL, NULL);
+    return cxHashGet(typeFuncs, cxHashStrKey(name));
+}
+
 //public xml attr function
 
-static cxString cxEngineLocalizedString(cxEventArg arg)
+static cxString cxEngineLocalizedText(cxEventArg arg)
 {
     CX_ASSERT(arg != NULL, "args error");
     cxConstChars url = cxEventArgToString(arg);
@@ -361,16 +393,6 @@ static cxTypes cxDataSetTypes(cxEventArg arg)
     return cxEngineDataSet(url);
 }
 
-cxAny cxEngineCallFunc(cxConstChars name,cxConstChars json)
-{
-    cxString jsonTxt = UTF8("\"%s\"",json);
-    cxEventArg arg = cxEventArgCreate(cxStringBody(jsonTxt));
-    CX_ASSERT(arg != NULL, "args error");
-    cxFuncItem item = cxEngineGetFunc(name);
-    CX_ASSERT(item != NULL, "%s func not find",name);
-    return item->func(arg);
-}
-
 void cxEngineSystemInit()
 {
     //set locate lang
@@ -395,38 +417,40 @@ void cxEngineSystemInit()
     //use in ->cxView up
     cxEngineRegisteEvent("cxSetView", cxViewSetViewEvent);
     
-    //cxLocalizedString('items.xml?exp') -> cxString get en/items.xml?exp
-    cxEngineRegisteFunc("cxLocalizedString", (cxAnyFunc)cxEngineLocalizedString);
+    //cxLocalizedText('items.xml?exp') -> cxString get en/items.xml?exp
+    cxEngineRegisteFunc("cxLocalizedText", cxEngineLocalizedText);
     
     //cxDataString('items.xml?exp')  -> cxString
-    cxEngineRegisteFunc("cxDataString", (cxAnyFunc)cxEngineDataString);
+    cxEngineRegisteFunc("cxDataString", cxEngineDataString);
     
     //cxDataTypes('items.xml?spline')
-    cxEngineRegisteFunc("cxDataTypes", (cxAnyFunc)cxDataSetTypes);
+    cxEngineRegisteFunc("cxDataTypes", cxDataSetTypes);
     
     //cxDataInt('items,xml?int') -> cxNumber
-    cxEngineRegisteFunc("cxDataNumber", (cxAnyFunc)cxEngineDataNumber);
+    cxEngineRegisteFunc("cxDataNumber", cxEngineDataNumber);
     
     //relative screen width and height value -> cxNumber
-    cxEngineRegisteFunc("cxRelativeW", (cxAnyFunc)cxEngineRelativeWidth);
-    cxEngineRegisteFunc("cxRelativeH", (cxAnyFunc)cxEngineRelativeHeight);
-    
-    //cxBinNumber('110111') -> cxNumber
-    cxEngineRegisteFunc("cxBinNumber", (cxAnyFunc)cxEngineBinNumber);
-    
-    //cxHexNumber('ffbb00') -> cxNumber
-    cxEngineRegisteFunc("cxHexNumber", (cxAnyFunc)cxEngineHexNumber);
-    
-    //cxTextureCreate('candy.xml?red.png')
-    cxEngineRegisteFunc("cxTextureCreate", (cxAnyFunc)cxTextureCreateForXML);
+    cxEngineRegisteFunc("cxRelativeW", cxEngineRelativeWidth);
+    cxEngineRegisteFunc("cxRelativeH", cxEngineRelativeHeight);
     
     //fixScale by window.scale.x or scale.y
-    cxEngineRegisteFunc("cxFixScaleW", (cxAnyFunc)cxFixScaleByWidth);
-    cxEngineRegisteFunc("cxFixScaleH", (cxAnyFunc)cxFixScaleByHeight);
+    cxEngineRegisteFunc("cxFixScaleW", cxFixScaleByWidth);
+    cxEngineRegisteFunc("cxFixScaleH", cxFixScaleByHeight);
+    
+    //cxBinNumber('110111') -> cxNumber
+    cxEngineRegisteFunc("cxBinNumber", cxEngineBinNumber);
+    
+    //cxHexNumber('ffbb00') -> cxNumber
+    cxEngineRegisteFunc("cxHexNumber", cxEngineHexNumber);
+    
+    //cxTextureCreate('candy.xml?red.png')
+    cxEngineRegisteFunc("cxTextureCreate", cxTextureCreateForXML);
     
     //cxParticle func
-    cxEngineRegisteFunc("cxpBlendMode", (cxAnyFunc)cxpBlendMode);
-    cxEngineRegisteFunc("cxpEmitterType", (cxAnyFunc)cxpEmitterType);
+    cxParticleTypeInit();
+    
+    //cxActionRoot
+    cxActionRootTypeInit();
 }
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file)
