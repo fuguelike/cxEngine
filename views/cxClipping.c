@@ -78,7 +78,7 @@ static void cxClippingDrawAfter(cxAny pview)
 
 CX_OBJECT_INIT(cxClipping, cxView)
 {
-    CX_EVENT_APPEND(this->onClipping, cxClippingBoxes, NULL);
+    CX_EVENT_QUICK(this->onClipping, cxClippingBoxes);
     this->useRef = cxStencilRefAlloc();
     cxObjectSetReadAttrFunc(this, cxClippingReadAttr);
     CX_METHOD_SET(this->super.DrawBefore, cxClippingDrawBefore);

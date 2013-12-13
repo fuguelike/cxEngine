@@ -14,7 +14,14 @@
 
 CX_C_BEGIN
 
+typedef enum {
+    cxChipmunkShapeCircle = 1,
+    cxChipmunkShapeBox,
+}cxChipmunkShape;
+
 typedef struct {
+    cxChipmunkShape shape;
+    cxVec2f cp;         //when shape == cxChipmunkShapeCircle
     cxBool isStatic;
     cxFloat m;
     cxFloat e;
@@ -24,7 +31,6 @@ typedef struct {
     cpCollisionType ctype;
 }cxChipmunkAttr;
 
-#define cxChipmunkAttrDefault() (cxChipmunkAttr){false,1.0f,0.0f,0.0f,CP_NO_GROUP,CP_ALL_LAYERS,0}
 
 CX_OBJECT_DEF(cxChipmunk, cxView)
     cpSpace *space;

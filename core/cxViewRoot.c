@@ -180,24 +180,30 @@ cxAny cxViewRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
     return cview;
 }
 
+cxAny cxViewRootLoadSubviewBegin(cxViewRoot root,cxConstChars temp,xmlTextReaderPtr reader)
+{
+    cxView cview = CX_METHOD_GET(NULL, root->Make, temp, reader);
+    CX_ASSERT(cview != NULL, "make element null");
+    //save root
+    cxObjectSetRoot(cview, root);
+    //read attr
+    cxObjectReadAttrRun(cview, root, reader);
+    //save cview -> root
+    cxViewRootSet(root, cview, reader);
+    return cview;
+}
+
 static void cxViewRootLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack stack)
 {
     cxViewRoot this = pview;
     while(xmlTextReaderRead(reader)){
         int type = xmlTextReaderNodeType(reader);
         if(type == XML_READER_TYPE_ELEMENT){
-            cxView parent = cxStackTop(stack);
-            if(parent == NULL){
-                CX_ERROR("parse xml ui parent null");
-                break;
-            }
             cxConstChars temp = cxXMLReadElementName(reader);
-            cxView cview = CX_METHOD_GET(NULL, this->Make, temp, reader);
-            CX_ASSERT(cview != NULL, "make element null");
-            cxObjectSetRoot(cview, this);
+            CX_ASSERT(temp != NULL, "temp read error");
+            cxAny cview = cxViewRootLoadSubviewBegin(this, temp, reader);
+            cxView parent = cxStackTop(stack);
             cxViewAppend(parent, cview);
-            cxObjectReadAttrRun(cview, this, reader);
-            cxViewRootSet(this, cview, reader);
             if(xmlTextReaderIsEmptyElement(reader)){
                 continue;
             }

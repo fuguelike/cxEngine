@@ -87,10 +87,11 @@ void cxEngineSystemInit();
 
 //extern
 void cxEngineInit(cxEngine engine);
+
 void cxEngineMain(cxEngine engine);
+
 void cxEngineFree(cxEngine engine);
 //
-
 cxVec2f cxEngineTouchToWindow(cxVec2f pos);
 
 cxVec2f cxEngineWindowToTouch(cxVec2f pos);
@@ -98,8 +99,6 @@ cxVec2f cxEngineWindowToTouch(cxVec2f pos);
 void cxEngineEnableTouch(cxBool enable);
 
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos);
-
-void cxEngineLookAt(cxMatrix4f *matrix,const cxVec2f point);
 
 void cxEngineExit();
 

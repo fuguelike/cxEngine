@@ -10,8 +10,7 @@
         cxAction.time="3">
         <cxFrame file="animate/%d.png" from="1" to="40"/>
     </cxAnimate>
-    <cxAnimate id="animate2"
-        cxAction.time="5">
+    <cxAnimate id="animate2" cxAction.time="5">
         <cxFrame file="candy.xml?red.png" cache="true"/>
         <cxFrame file="candy.xml?green.png" cache="true"/>
         <cxFrame file="candy.xml?blue.png" cache="true"/>

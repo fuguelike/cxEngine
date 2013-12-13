@@ -29,6 +29,8 @@ CX_OBJECT_DEF(cxViewRoot, cxView)
     CX_EVENT_ALLOC(onEnd);
 CX_OBJECT_END(cxViewRoot)
 
+cxAny cxViewRootLoadSubviewBegin(cxViewRoot root,cxConstChars temp,xmlTextReaderPtr reader);
+
 void cxViewRootSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader);
 
 void cxViewRootSetItem(cxAny pview,cxConstChars key,cxAny item);

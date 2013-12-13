@@ -71,7 +71,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxVec2f fixscale;       //use fit scree size
     cxVec2f anchor;
     cxVec3f raxis;
-    cxFloat radians;
+    cxFloat angle;
     cxRect4f scissor;
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
@@ -189,9 +189,9 @@ void cxViewSetFixScale(cxAny pview,cxVec2f scale);
 
 void cxViewSetRaxis(cxAny pview,cxVec3f raxis);
 
-cxFloat cxViewRadians(cxAny pview);
+cxFloat cxViewAngle(cxAny pview);
 
-void cxViewSetRadians(cxAny pview,cxFloat radians);
+void cxViewSetAngle(cxAny pview,cxFloat angle);
 
 void cxViewSetDegrees(cxAny pview,cxFloat degrees);
 

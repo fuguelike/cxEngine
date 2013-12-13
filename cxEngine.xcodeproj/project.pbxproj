@@ -54,6 +54,7 @@
 		836150FE184838B200EB9173 /* n.png in Resources */ = {isa = PBXBuildFile; fileRef = 836150FD184838B200EB9173 /* n.png */; };
 		83615100184862CD00EB9173 /* w.png in Resources */ = {isa = PBXBuildFile; fileRef = 836150FF184862CD00EB9173 /* w.png */; };
 		836DBA77184A15B800CCD673 /* libluajit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 836DBA76184A15B800CCD673 /* libluajit.a */; };
+		836FE8D3185AFF9F003A5E9C /* ball.png in Resources */ = {isa = PBXBuildFile; fileRef = 836FE8D2185AFF9F003A5E9C /* ball.png */; };
 		8372777318449156005EDE68 /* animate in Resources */ = {isa = PBXBuildFile; fileRef = 8372777218449156005EDE68 /* animate */; };
 		837277761844962A005EDE68 /* animate.xml in Resources */ = {isa = PBXBuildFile; fileRef = 837277751844962A005EDE68 /* animate.xml */; };
 		837B7C76184C2A2100BB62AD /* pattern1.png in Resources */ = {isa = PBXBuildFile; fileRef = 837B7C75184C2A2100BB62AD /* pattern1.png */; };
@@ -129,6 +130,7 @@
 		836150FD184838B200EB9173 /* n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = n.png; path = res/n.png; sourceTree = "<group>"; };
 		836150FF184862CD00EB9173 /* w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = w.png; path = res/w.png; sourceTree = "<group>"; };
 		836DBA76184A15B800CCD673 /* libluajit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libluajit.a; path = libs/ios/lib/libluajit.a; sourceTree = "<group>"; };
+		836FE8D2185AFF9F003A5E9C /* ball.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ball.png; path = res/ball.png; sourceTree = "<group>"; };
 		8372777218449156005EDE68 /* animate */ = {isa = PBXFileReference; lastKnownFileType = folder; name = animate; path = res/animate; sourceTree = "<group>"; };
 		837277751844962A005EDE68 /* animate.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = animate.xml; path = res/animate.xml; sourceTree = "<group>"; };
 		837B7C75184C2A2100BB62AD /* pattern1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pattern1.png; path = res/pattern1.png; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 				836150FD184838B200EB9173 /* n.png */,
 				8359F7A51856EADD0072D047 /* star.pex */,
 				8359F7A61856EADD0072D047 /* star.png */,
+				836FE8D2185AFF9F003A5E9C /* ball.png */,
 				8359F7A01856C4600072D047 /* particle.pex */,
 				8359F7A11856C4600072D047 /* texture.png */,
 				834F2E7F18458D310067E220 /* Untitled.xml */,
@@ -355,6 +358,7 @@
 				8341C6C31822812B0045A66F /* actions.xml in Resources */,
 				836150FE184838B200EB9173 /* n.png in Resources */,
 				8341C6C21822812B0045A66F /* action.xml in Resources */,
+				836FE8D3185AFF9F003A5E9C /* ball.png in Resources */,
 				8359F7A81856EADE0072D047 /* star.png in Resources */,
 				83E51BD618570640006AD253 /* en in Resources */,
 				8341C6CF1822812B0045A66F /* scale9.png in Resources */,

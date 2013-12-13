@@ -31,6 +31,7 @@ CX_OBJECT_DEF(cxAction, cxObject)
     cxFloat delayElapsed;
     cxFloat duration;
     cxFloat durationElapsed;
+    cxBool stepHide;        //at view hide step action default false
     cxBool isExit;
     cxBool isPause;
     cxBool isFirst;
@@ -53,6 +54,8 @@ CX_OBJECT_DEF(cxAction, cxObject)
 CX_OBJECT_END(cxAction)
 
 cxAny cxActionView(cxAny pav);
+
+void cxActionSetStepHide(cxAny pav,cxBool stepHide);
 
 void cxActionSetSplit(cxAny pav,cxInt split);
 

@@ -39,7 +39,7 @@ cxString cxRegexReplace(cxRegex this,cxRegexReplaceFunc replaceFunc,cxAny arg)
     if(start < length){
         cxStringAppend(ret, ptr + start, length - start);
     }
-    return cxStringLength(ret) > 0 ? ret : NULL;
+    return start > 0 ? ret : NULL;
 }
 
 cxRegex cxRegexCreate(cxConstChars regex, cxString input,cxUInt flags)

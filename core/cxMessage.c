@@ -11,15 +11,18 @@
 
 static cxMessage instance = NULL;
 
-CX_OBJECT_INIT(cxMsgItem, cxObject)
+CX_OBJECT_DEF(cxMessageItem, cxObject)
+    cxMessageFunc func;
+    cxAny dst;
+CX_OBJECT_END(cxMessageItem)
+
+CX_OBJECT_INIT(cxMessageItem, cxObject)
 {
-    
 }
-CX_OBJECT_FREE(cxMsgItem, cxObject)
+CX_OBJECT_FREE(cxMessageItem, cxObject)
 {
-    
 }
-CX_OBJECT_TERM(cxMsgItem, cxObject)
+CX_OBJECT_TERM(cxMessageItem, cxObject)
 
 void cxMessageDestroy()
 {
@@ -59,11 +62,14 @@ void cxMessageRemove(cxAny dst)
     CX_HASH_FOREACH(this->keys, keye, keyt){
         cxHash list = keye->any;
         CX_HASH_FOREACH(list, vale, valt){
-            cxMsgItem item = vale->any;
+            cxMessageItem item = vale->any;
             if(item->dst != dst){
                 continue;
             }
             cxHashDelElement(list, vale);
+        }
+        if(cxHashLength(list) == 0){
+            cxHashDelElement(this->keys, keye);
         }
     }
 }
@@ -82,7 +88,7 @@ void cxMessagePost(cxConstChars key,cxAny src)
     cxHash list = cxHashGet(this->keys, cxHashStrKey(key));
     CX_RETURN(list == NULL || cxHashLength(list) == 0);
     CX_HASH_FOREACH(list, ele, tmp){
-        cxMsgItem item = ele->any;
+        cxMessageItem item = ele->any;
         item->func(item->dst,src);
     }
 }
@@ -96,7 +102,7 @@ void cxMessageAppend(cxAny dst,cxAny func,cxConstChars key)
         cxHashSet(this->keys, cxHashStrKey(key), list);
         CX_RELEASE(list);
     }
-    cxMsgItem item = CX_ALLOC(cxMsgItem);
+    cxMessageItem item = CX_ALLOC(cxMessageItem);
     item->dst = dst;
     item->func = func;
     cxHashSet(list, cxHashIntKey((cxInt)dst), item);

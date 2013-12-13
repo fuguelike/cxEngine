@@ -18,6 +18,8 @@ void cxActionReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxActionRoot root = rootAction;
     cxAction this = mAction;
+    //
+    cxActionSetStepHide(mAction, cxXMLReadBoolAttr(reader, root->functions, "cxAction.stepHide", this->stepHide));
     //delay
     cxActionSetDelay(mAction, cxXMLReadFloatAttr(reader, root->functions, "cxAction.delay", this->delay));
     //time
@@ -48,6 +50,12 @@ void cxActionReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
     cxXMLAppendEvent(root->events, this, cxAction, onStep);
 }
 
+void cxActionSetStepHide(cxAny pav,cxBool stepHide)
+{
+    cxAction this = pav;
+    this->stepHide = stepHide;
+}
+
 void cxActionSetSplit(cxAny pav,cxInt split)
 {
     cxAction this = pav;
@@ -70,6 +78,7 @@ CX_OBJECT_INIT(cxAction, cxObject)
     this->speed = 1.0f;
     this->index = -1;
     this->split = -1;
+    this->stepHide = false;
 }
 CX_OBJECT_FREE(cxAction, cxObject)
 {

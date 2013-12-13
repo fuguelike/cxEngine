@@ -89,8 +89,10 @@ void cxViewReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
     cxViewSetBorder(view, cxXMLReadBoolAttr(reader,root->functions, "cxView.border", this->isBorder));
     //rotate raxis
     cxViewSetRaxis(view, cxXMLReadVec3fAttr(reader, root->functions, "cxView.raxis", this->raxis));
+    //rotate angle
+    cxViewSetAngle(view, cxXMLReadFloatAttr(reader, root->functions, "cxView.angle", this->angle));
     //rotate degress
-    cxViewSetDegrees(view, cxXMLReadFloatAttr(reader, root->functions, "cxView.degrees", kmRadiansToDegrees(this->radians)));
+    cxViewSetDegrees(view, cxXMLReadFloatAttr(reader, root->functions, "cxView.degrees", kmRadiansToDegrees(this->angle)));
     //view event
     cxXMLAppendEvent(root->events, this, cxView, onEnter);
     cxXMLAppendEvent(root->events, this, cxView, onExit);
@@ -274,7 +276,7 @@ void cxViewSetDirty(cxAny pview,cxBool dirty)
 void cxViewOnUpdate(cxAny pview,cxEventFunc func)
 {
     cxView this = pview;
-    CX_EVENT_APPEND(this->onUpdate, func, NULL);
+    CX_EVENT_QUICK(this->onUpdate, func);
 }
 
 void cxViewSetBorder(cxAny pview,cxBool border)
@@ -453,7 +455,7 @@ void cxViewSetScale(cxAny pview,cxVec2f scale)
 
 void cxViewSetDegrees(cxAny pview,cxFloat degrees)
 {
-    cxViewSetRadians(pview,kmDegreesToRadians(degrees));
+    cxViewSetAngle(pview,kmDegreesToRadians(degrees));
 }
 
 void cxViewSetRaxis(cxAny pview,cxVec3f raxis)
@@ -464,17 +466,17 @@ void cxViewSetRaxis(cxAny pview,cxVec3f raxis)
     this->isDirty = true;
 }
 
-cxFloat cxViewRadians(cxAny pview)
+cxFloat cxViewAngle(cxAny pview)
 {
     cxView this = pview;
-    return this->radians;
+    return this->angle;
 }
 
-void cxViewSetRadians(cxAny pview,cxFloat radians)
+void cxViewSetAngle(cxAny pview,cxFloat angle)
 {
     cxView this = pview;
-    CX_RETURN(cxFloatEqu(this->radians,radians));
-    this->radians = radians;
+    CX_RETURN(cxFloatEqu(this->angle,angle));
+    this->angle = angle;
     this->isDirty = true;
 }
 
@@ -492,7 +494,7 @@ void cxViewTransform(cxAny pview)
     kmMat4Translation(&transMatrix, this->position.x, this->position.y, 0.0f);
     
     cxMatrix4f rotateMatrix;
-    kmMat4RotationAxisAngle(&rotateMatrix, &this->raxis, this->radians);
+    kmMat4RotationAxisAngle(&rotateMatrix, &this->raxis, this->angle);
     
     cxVec2f scale = cxViewScale(this);
     cxMatrix4f scaleMatrix;
@@ -730,7 +732,11 @@ static void cxViewUpdateActions(cxView this)
 {
     cxEngine engine = cxEngineInstance();
     CX_HASH_FOREACH(this->actions, ele, tmp){
-        if(!cxActionUpdate(ele->any, engine->frameDelta)){
+        cxAction action = ele->any;
+        if(!this->isVisible && !action->stepHide){
+            continue;
+        }
+        if(!cxActionUpdate(action, engine->frameDelta)){
             continue;
         }
         cxHashDelElement(this->actions, ele);
@@ -740,10 +746,12 @@ static void cxViewUpdateActions(cxView this)
 void cxViewDraw(cxAny pview)
 {
     cxView this = pview;
+    
+    //update action and update
     CX_EVENT_FIRE(this, onUpdate);
-    CX_RETURN(!this->isVisible);
-    //
     cxViewUpdateActions(this);
+    
+    CX_RETURN(!this->isVisible);
     cxViewTransform(this);
     //
     kmGLPushMatrix();

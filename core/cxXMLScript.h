@@ -49,9 +49,6 @@ cxArray cxXMLReadEvent(cxHash events, cxConstChars name, xmlTextReaderPtr reader
 #define cxXMLAppendEvent(s,o,t,e)                               \
 do{                                                             \
     cxArray list = cxXMLReadEvent(s, #t"."#e, reader);          \
-    if(list == NULL && cxArrayLength(list) == 0){               \
-        break;                                                  \
-    }                                                           \
     CX_ARRAY_FOREACH(list,ele){                                 \
         cxEventItem item = cxArrayObject(ele);                  \
         CX_EVENT_APPEND(o->e, item->func,item->arg);            \

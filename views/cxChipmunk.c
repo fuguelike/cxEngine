@@ -10,6 +10,39 @@
 #include "cxViewRoot.h"
 #include "cxChipmunk.h"
 
+static cxChipmunkAttr cxChipmunkAttrDefault()
+{
+    cxChipmunkAttr attr = {0};
+    attr.cp = cxVec2fv(0, 0);
+    attr.ctype = 0;
+    attr.e = 0.0f;;
+    attr.group = CP_NO_GROUP;
+    attr.isStatic = false;
+    attr.layer = CP_ALL_LAYERS;
+    attr.m = 1.0f;;
+    attr.shape = cxChipmunkShapeBox;
+    attr.u = 0.0f;
+    return attr;
+}
+//cxShapeType('box')
+static cxNumber cxChipmunkShapeType(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "args error");
+    cxConstChars shape = cxEventArgToString(arg);
+    if(cxConstCharsEqu(shape, "box")){
+        return cxNumberInt(cxChipmunkShapeBox);
+    }
+    if(cxConstCharsEqu(shape, "circle")){
+        return cxNumberInt(cxChipmunkShapeCircle);
+    }
+    return cxNumberInt(cxChipmunkShapeBox);
+}
+
+void cxChipmunkTypeInit()
+{
+    cxEngineRegisteTypeFunc(cxChipmunkTypeName, "cxShapeType", cxChipmunkShapeType);
+}
+
 static void cxChipmunkUpdate(cxEvent *event)
 {
     cxEngine engine = cxEngineInstance();
@@ -21,6 +54,21 @@ void cxChipmunkSetGravity(cxAny pview,cxVec2f gravity)
 {
     cxChipmunk this = pview;
     cpSpaceSetGravity(this->space, cpv(gravity.x, gravity.y));
+}
+
+static cxChipmunkAttr cxChipmunkGetAttr(cxViewRoot root,xmlTextReaderPtr reader)
+{
+    cxChipmunkAttr attr = cxChipmunkAttrDefault();
+    attr.shape = cxXMLReadIntAttr(reader, root->functions, "cxChipmunk.shape", cxChipmunkShapeBox);
+    attr.cp = cxXMLReadVec2fAttr(reader, root->functions, "cxChipmunk.center", cxVec2fv(0, 0));
+    attr.isStatic = cxXMLReadBoolAttr(reader,root->functions, "cxChipmunk.static", attr.isStatic);
+    attr.m = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.m", attr.m);
+    attr.e = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.e", attr.e);
+    attr.u = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.u", attr.u);
+    attr.group = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.group", CP_NO_GROUP);
+    attr.layer = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.layer", CP_ALL_LAYERS);
+    attr.ctype = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.ctype", 0);
+    return attr;
 }
 
 void cxChipmunkReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
@@ -40,22 +88,12 @@ void cxChipmunkReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
     while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
         int type = xmlTextReaderNodeType(reader);
         if(type == XML_READER_TYPE_ELEMENT){
-            cxView parent = cxStackTop(stack);
             cxConstChars temp = cxXMLReadElementName(reader);
-            cxView cview = CX_METHOD_GET(NULL, root->Make, temp, reader);
-            CX_ASSERT(cview != NULL, "make element null");
-            cxObjectSetRoot(cview, root);
-            cxObjectReadAttrRun(cview, root, reader);
-            cxViewRootSet(root, cview, reader);
+            CX_ASSERT(temp != NULL, "temp read error");
+            cxView cview = cxViewRootLoadSubviewBegin(root, temp, reader);
+            cxAny parent = cxStackTop(stack);
             if(parent == mView){
-                cxChipmunkAttr attr = cxChipmunkAttrDefault();
-                attr.isStatic = cxXMLReadBoolAttr(reader,root->functions, "cxChipmunk.static", attr.isStatic);
-                attr.m = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.m", attr.m);
-                attr.e = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.e", attr.e);
-                attr.u = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.u", attr.u);
-                attr.group = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.group", CP_NO_GROUP);
-                attr.layer = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.layer", CP_ALL_LAYERS);
-                attr.ctype = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.ctype", 0);
+                cxChipmunkAttr attr = cxChipmunkGetAttr(root, reader);
                 cxChipmunkAppend(parent, cview, &attr);
             }else{
                 cxViewAppend(parent, cview);
@@ -71,11 +109,16 @@ void cxChipmunkReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
     CX_RELEASE(stack);
 }
 
-static void cxChipmunkUpdatePosition(cpBody *body, cpFloat dt)
+static void cxChipmunkBodyUpdatePosition(cpBody *body, cpFloat dt)
 {
     cpBodyUpdatePosition(body, dt);
     cxViewSetPos(body->data, cxVec2fv(body->p.x, body->p.y));
-    cxViewSetRadians(body->data, body->a);
+    cxViewSetAngle(body->data, body->a);
+}
+
+static void cxChipmunkBodyUpdateVelocity(cpBody *body, cpVect gravity, cpFloat damping, cpFloat dt)
+{
+    cpBodyUpdateVelocity(body, gravity, damping, dt);
 }
 
 void cxChipmunkSetPos(cxAny pview,cxVec2f pos)
@@ -174,6 +217,18 @@ void cxChipmunkSetLayers(cxAny pview,cxUInt layers)
     cpShapeSetLayers(shape, layers);
 }
 
+static void cpBodySetPositionFunc(cpBody *body,cpBodyPositionFunc func)
+{
+    CX_ASSERT(body != NULL && func != NULL, "args error");
+    body->position_func = func;
+}
+
+static void cpBodySetVelocityFunc(cpBody *body,cpBodyVelocityFunc func)
+{
+    CX_ASSERT(body != NULL && func != NULL, "args error");
+    body->velocity_func = func;
+}
+
 cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
 {
     cxChipmunk this = pview;
@@ -184,21 +239,40 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
     CX_RETURN(cxSize2Zero(size), NULL);
     
     cxVec2f pos = cxViewPosition(nview);
-    cxFloat radians = cxViewRadians(nview);
-    //set body attr
+    cxFloat angle = cxViewAngle(nview);
     cpBody *body = NULL;
+    //get body attr
+    cxFloat i = 0;
+    cxFloat r = CX_MAX(size.w, size.h) / 2.0f;
+    if(attr->shape == cxChipmunkShapeBox){
+        i = cpMomentForBox(attr->m, size.w, size.h);
+    }else if(attr->shape == cxChipmunkShapeCircle){
+        i = cpMomentForCircle(attr->m, 0, r, cpv(attr->cp.x, attr->cp.y));
+    }else{
+        CX_ASSERT(false, "shape error");
+    }
+    //set body attr
     if(attr->isStatic){
         body = cpBodyNewStatic();
     }else{
-        body = cpBodyNew(attr->m, cpMomentForBox(attr->m, size.w, size.h));
+        body = cpBodyNew(attr->m, i);
         cpSpaceAddBody(this->space, body);
     }
-    body->position_func = cxChipmunkUpdatePosition;
-    cpBodySetAngle(body, radians);
+    cpBodySetPositionFunc(body, cxChipmunkBodyUpdatePosition);
+    cpBodySetVelocityFunc(body, cxChipmunkBodyUpdateVelocity);
+    cpBodySetAngle(body, angle);
     cpBodySetPos(body, cpv(pos.x, pos.y));
     cpBodySetUserData(body, nview);
-    //set shao attr
-    cpShape *shape = cpBoxShapeNew(body, size.w, size.h);
+    //set shape type
+    cpShape *shape = NULL;
+    if(attr->shape == cxChipmunkShapeBox){
+        shape = cpBoxShapeNew(body, size.w, size.h);
+    }else if(attr->shape == cxChipmunkShapeCircle){
+        shape = cpCircleShapeNew(body, r, cpv(attr->cp.x, attr->cp.y));
+    }else{
+        CX_ASSERT(false, "shape error");
+    }
+    //
     cpShapeSetGroup(shape, attr->group);
     cpShapeSetCollisionType(shape, attr->ctype);
     cpShapeSetLayers(shape, attr->layer);

@@ -43,6 +43,7 @@ static cxBool cxTimerExit(cxAny pav)
 
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
+    cxActionSetStepHide(this, true);
     cxObjectSetReadAttrFunc(this, cxTimerReadAttr);
     CX_METHOD_SET(this->super.Init, cxTimerInit);
     CX_METHOD_SET(this->super.Step, cxTimerStep);

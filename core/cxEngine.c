@@ -11,6 +11,7 @@
 #include <core/cxActionRoot.h>
 #include <socket/cxEventBase.h>
 #include <views/cxParticle.h>
+#include <views/cxChipmunk.h>
 #include <actions/cxActionSet.h>
 #include "cxViewRoot.h"
 #include "cxEngine.h"
@@ -70,7 +71,7 @@ void cxEngineDraw()
     cxAutoPoolClean();
 }
 
-void cxEngineLookAt(cxMatrix4f *matrix,const cxVec2f point)
+static void cxEngineLookAt(cxMatrix4f *matrix,const cxVec2f point)
 {
     cxEngine engine = cxEngineInstance();
     cxFloat zeye = engine->winsize.h / 1.1566f;
@@ -451,6 +452,9 @@ void cxEngineSystemInit()
     
     //cxActionRoot
     cxActionRootTypeInit();
+    
+    //cxChipmunk
+    cxChipmunkTypeInit();
 }
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file)

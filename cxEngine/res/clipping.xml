@@ -9,18 +9,12 @@
     <cxClipping cxView.w="300" cxView.h="300" cxClipping.boxes="items.xml?cboxes" cxClipping.inverse="true">
         <cxSprite cxView.w="300" cxView.h="300" cxSprite.texture="2.pvr" cxView.onEnter="cxActionRun({'src':'actions.xml?rotate'})" />
     </cxClipping>
-    
-    
-    
     <cxSprite cxView.y="300" cxView.w="300" cxView.h="300" cxSprite.texture="4.pvr"/>
     <cxClipping cxView.y="300" cxView.w="300" cxView.h="300" cxClipping.boxes="items.xml?cboxes" cxClipping.inverse="true">
         <cxSprite cxView.w="300" cxView.h="300" cxSprite.texture="2.pvr" cxView.onEnter="cxActionRun({'src':'actions.xml?rotate'})" />
-        
         <cxClipping cxView.w="100" cxView.h="100" cxClipping.boxes="items.xml?cboxes1" cxClipping.inverse="true">
             <cxSprite cxView.w="100" cxView.h="100" cxSprite.texture="2.pvr" cxView.onEnter="cxActionRun({'src':'actions.xml?rotate'})" />
         </cxClipping>
-        
     </cxClipping>
-    
 </cxViewRoot>
 

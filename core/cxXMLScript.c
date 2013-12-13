@@ -150,7 +150,12 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
         if(src != NULL){
             cxXMLScript xml = cxEngineGetXMLScript(src);
             CX_ASSERT(xml != NULL, "get xml %s template failed", src);
-            cxRegex regex = cxRegexCreate(sregex, xml->bytes, 0);
+            
+            //process Template's Template
+            cxString data = cxXMLReaderPrepareTemplate(xml->bytes);
+            CX_ASSERT(data != NULL, "prepare xml error");
+            
+            cxRegex regex = cxRegexCreate(sregex, data, 0);
             ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
             break;
         }
@@ -158,7 +163,11 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
         if(url != NULL){
             cxTypes types = cxEngineDataSet(url);
             CX_ASSERT(types != NULL && cxTypesIsType(types, cxTypesString), "get url %s data failed", url);
-            cxRegex regex = cxRegexCreate(sregex, types->any, 0);
+            
+            cxString data = cxXMLReaderPrepareTemplate(types->any);
+            CX_ASSERT(data != NULL, "prepare xml error");
+            
+            cxRegex regex = cxRegexCreate(sregex, data, 0);
             ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
             break;
         }

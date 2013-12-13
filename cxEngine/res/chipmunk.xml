@@ -40,9 +40,10 @@
             cxChipmunk.u="0.0"/>
         <cxSprite id="purple"
             cxChipmunk.layer="cxBinNumber('01')"
-            cxView.x="100" cxView.y="200"
-            cxSprite.texture="candy.xml?red.png"
+            cxView.x="100" cxView.y="300"
+            cxSprite.texture="ball.png"
             cxChipmunk.m="1"
+            cxChipmunk.shape="cxShapeType('circle')"
             cxChipmunk.e="1.0"
             cxChipmunk.u="0.0"/>
         <cxSprite

@@ -12,16 +12,16 @@ static void cxRotateInit(cxAny pav)
 {
     cxRotate this = pav;
     CX_ASSERT(this->super.view != NULL, "view not set");
-    this->oldRadians = this->super.view->radians;
-    this->delta = this->newRadians - this->oldRadians;
+    this->oldAngle = this->super.view->angle;
+    this->delta = this->newAngle - this->oldAngle;
     cxViewSetRaxis(this->super.view, this->raxis);
 }
 
 static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxRotate this = pav;
-    cxFloat radians = this->oldRadians + this->delta * time;
-    cxViewSetRadians(this->super.view, radians);
+    cxFloat angle = this->oldAngle + this->delta * time;
+    cxViewSetAngle(this->super.view, angle);
 }
 
 static void cxRotateReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
@@ -33,13 +33,13 @@ static void cxRotateReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr re
     cxConstChars sz = cxXMLAttr("cxRotate.z");
     if(sx != NULL){
         this->raxis = cxVec3fv(1.0f, 0.0f, 0.0f);
-        this->newRadians = kmDegreesToRadians(atof(sx));
+        this->newAngle = kmDegreesToRadians(atof(sx));
     }else if(sy != NULL){
         this->raxis = cxVec3fv(0.0f, 1.0f, 0.0f);
-        this->newRadians = kmDegreesToRadians(atof(sy));
+        this->newAngle = kmDegreesToRadians(atof(sy));
     }else if(sz != NULL){
         this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
-        this->newRadians = kmDegreesToRadians(atof(sz));
+        this->newAngle = kmDegreesToRadians(atof(sz));
     }
 }
 
@@ -56,12 +56,12 @@ CX_OBJECT_FREE(cxRotate, cxAction)
 }
 CX_OBJECT_TERM(cxRotate, cxAction)
 
-cxRotate cxRotateCreate(cxFloat duration,cxVec3f raxis,cxFloat newRadians)
+cxRotate cxRotateCreate(cxFloat duration,cxVec3f raxis,cxFloat newAngle)
 {
     cxRotate this = CX_CREATE(cxRotate);
     this->super.duration = duration;
     this->raxis = raxis;
-    this->newRadians = newRadians;
+    this->newAngle = newAngle;
     return this;
 }
 

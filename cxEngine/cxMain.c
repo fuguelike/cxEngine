@@ -21,7 +21,6 @@
 #include <views/cxSprite.h>
 #include <core/cxViewRoot.h>
 #include <views/cxButton.h>
-#include <jansson.h>
 #include <views/cxAtlas.h>
 #include <views/cxParticle.h>
 #include <views/cxTable.h>
@@ -53,7 +52,7 @@ static void finished(cxAny pview)
 static void deleteSprite(cxEvent *event)
 {
     cxAny pview = cxViewRootGet(event->sender, "purple");
-    cxChipmunkApplyImpulse(pview, cxVec2fv(0, 2000), cxVec2fv(0, 1));
+    cxChipmunkApplyImpulse(pview, cxVec2fv(1000, 1000), cxVec2fv(0, 1));
 }
 
 static void cxChipmunkBegin(cxEvent *event)
