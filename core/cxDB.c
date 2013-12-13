@@ -305,7 +305,7 @@ void cxDBEnvCheckPoint(cxDBEnv this,cxBool force)
 cxAny cxDBTypesGet(cxConstChars src)
 {
     cxTypes types = cxEngineDataSet(src);
-    return types->assist;
+    return types->any;
 }
 
 cxAny cxDBCreate(cxDBEnv env,cxConstChars file,cxConstChars table,cxConstChars type,cxBool rdonly)

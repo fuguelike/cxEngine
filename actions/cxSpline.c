@@ -58,7 +58,7 @@ static void cxSplineReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr re
     this->tension = cxXMLReadFloatAttr(reader, root->functions, "cxSpline.tension", this->tension);
     cxTypes types = cxXMLReadTypesAttr(reader, root->functions, "cxSpline.points");
     if(cxTypesIsType(types, cxTypesArray)){
-        cxArrayAppends(this->points, types->assist);
+        cxArrayAppends(this->points, types->any);
     }
     cxXMLAppendEvent(root->events, this, cxSpline, onIndex);
 }

@@ -10,6 +10,7 @@
 #include <streams/cxAssetsStream.h>
 #include <core/cxActionRoot.h>
 #include <socket/cxEventBase.h>
+#include <views/cxParticle.h>
 #include "cxViewRoot.h"
 #include "cxEngine.h"
 #include "cxAutoPool.h"
@@ -259,7 +260,7 @@ static cxString cxEngineLocalizedString(cxEventArg arg)
     cxUrlPath path = cxUrlPathParse(url);
     cxTypes types = cxEngineDataSet(CX_CONST_STRING("%s/%s?%s",cxStringBody(this->lang),path->path,path->key));
     CX_RETURN(types == NULL || !cxTypesIsType(types, cxTypesString), NULL);
-    return types->assist;
+    return types->any;
 }
 
 static cxString cxEngineDataString(cxEventArg arg)
@@ -268,7 +269,7 @@ static cxString cxEngineDataString(cxEventArg arg)
     cxConstChars url = cxEventArgToString(arg);
     CX_ASSERT(url != NULL, "args error");
     cxTypes types = cxEngineDataSet(url);
-    return types != NULL ? types->assist : NULL;
+    return types != NULL ? types->any : NULL;
 }
 
 static cxNumber cxEngineDataNumber(cxEventArg arg)
@@ -278,7 +279,7 @@ static cxNumber cxEngineDataNumber(cxEventArg arg)
     CX_ASSERT(url != NULL, "args error");
     cxTypes types = cxEngineDataSet(url);
     CX_ASSERT(cxTypesIsType(types, cxTypesNumber),"type error");
-    return types->assist;
+    return types->any;
 }
 
 static cxNumber cxEngineRelativeWidth(cxEventArg arg)
@@ -360,10 +361,21 @@ static cxTypes cxDataSetTypes(cxEventArg arg)
     return cxEngineDataSet(url);
 }
 
+cxAny cxEngineCallFunc(cxConstChars name,cxConstChars json)
+{
+    cxString jsonTxt = UTF8("\"%s\"",json);
+    cxEventArg arg = cxEventArgCreate(cxStringBody(jsonTxt));
+    CX_ASSERT(arg != NULL, "args error");
+    cxFuncItem item = cxEngineGetFunc(name);
+    CX_ASSERT(item != NULL, "%s func not find",name);
+    return item->func(arg);
+}
+
 void cxEngineSystemInit()
 {
     //set locate lang
     cxEngineSetLocalLang(cxStringConstChars("en"));//cxLocaleLang());
+    
     //cxActionRun({'src':'actions.xml?btnEnter','view':'id','cache':true, 'curve':'ExpOut', 'delay':0.3})
     cxEngineRegisteEvent("cxActionRun", cxViewRunActionEvent);
     //cxPlay({'src':'aa.wav','loop':true})
@@ -411,6 +423,10 @@ void cxEngineSystemInit()
     //fixScale by window.scale.x or scale.y
     cxEngineRegisteFunc("cxFixScaleW", (cxAnyFunc)cxFixScaleByWidth);
     cxEngineRegisteFunc("cxFixScaleH", (cxAnyFunc)cxFixScaleByHeight);
+    
+    //cxParticle func
+    cxEngineRegisteFunc("cxpBlendMode", (cxAnyFunc)cxpBlendMode);
+    cxEngineRegisteFunc("cxpEmitterType", (cxAnyFunc)cxpEmitterType);
 }
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file)

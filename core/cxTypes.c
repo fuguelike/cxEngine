@@ -18,7 +18,7 @@ CX_OBJECT_INIT(cxTypes, cxObject)
 }
 CX_OBJECT_FREE(cxTypes, cxObject)
 {
-    CX_RELEASE(this->assist);
+    CX_RELEASE(this->any);
     CX_RELEASE(this->kvs);
     if(this->utArray != NULL){
         utarray_free(this->utArray);
@@ -59,7 +59,7 @@ cxTypes cxArrayTypesCreate()
 {
     cxTypes this = CX_CREATE(cxTypes);
     this->type = cxTypesArray;
-    this->assist = CX_ALLOC(cxArray);
+    this->any = CX_ALLOC(cxArray);
     return this;
 }
 
@@ -67,7 +67,7 @@ cxTypes cxDBTypesCreate(cxAny db)
 {
     cxTypes this = CX_CREATE(cxTypes);
     this->type = cxTypesDB;
-    CX_RETAIN_SWAP(this->assist, db);
+    CX_RETAIN_SWAP(this->any, db);
     return this;
 }
 

@@ -15,10 +15,10 @@
 
 #define cxFloatEqu kmAlmostEqual
 
-// -1 <-> 1
+// -1.0f <-> 1.0f
 #define CX_RAND_11f() ((2.0f*((cxFloat)rand()/(cxFloat)RAND_MAX))-1.0f)
 
-// 0 <-> 1
+// 0.0f <-> 1.0f
 #define CX_RAND_01f() ((cxFloat)rand()/(cxFloat)RAND_MAX)
 
 typedef struct {
@@ -248,7 +248,7 @@ CX_OBJECT_DEF(cxTypes, cxObject)
     cxTypesType type;
     cxAny kvs;          //cxHash
     UT_array *utArray;
-    cxAny assist;
+    cxAny any;
 CX_OBJECT_END(cxTypes)
 
 cxTypes cxAtlasBoxPointTypesCreate();

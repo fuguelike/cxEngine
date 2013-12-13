@@ -173,6 +173,34 @@ void cxParticleInitFromPEX(cxAny pview,cxConstChars file)
     }
 }
 
+cxNumber cxpEmitterType(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "arg error");
+    cxConstChars mode = cxEventArgToString(arg);
+    if(cxConstCharsEqu(mode, "gravity")){
+        return cxNumberInt(cxParticleEmitterGravity);
+    }
+    if(cxConstCharsEqu(mode, "radial")){
+        return cxNumberInt(cxParticleEmitterRadial);
+    }
+    CX_ERROR("Emtter type gravity or radial");
+    return NULL;
+}
+
+cxNumber cxpBlendMode(cxEventArg arg)
+{
+    CX_ASSERT(arg != NULL, "arg error");
+    cxConstChars mode = cxEventArgToString(arg);
+    if(cxConstCharsEqu(mode, "add")){
+        return cxNumberInt(cxParticleBlendAdd);
+    }
+    if(cxConstCharsEqu(mode, "multiple")){
+        return cxNumberInt(cxParticleBlendAdd);
+    }
+    CX_ERROR("blend mode add or multiple");
+    return NULL;
+}
+
 void cxParticleReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxViewRoot root = rootView;
@@ -186,45 +214,30 @@ void cxParticleReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
     cxInt number = cxXMLReadIntAttr(reader, root->functions, "cxParticle.number", this->number);
     CX_ASSERT(number > 0, "cxParticle number must > 0");
     cxParticleInit(this, number);
-    //mode add multiply
-    cxConstChars smode = cxXMLAttr("cxParticle.blend");
-    if(cxConstCharsEqu(smode, "add")){
-        cxParticleSetBlendMode(this, cxParticleBlendAdd);
-    }else if(cxConstCharsEqu(smode, "multiple")){
-        cxParticleSetBlendMode(this, cxParticleBlendMultiply);
-    }else{//default mode
-        cxParticleSetBlendMode(this, cxParticleBlendMultiply);
-    }
-    //
-    cxConstChars type = cxXMLAttr("cxParticle.type");
-    if(cxConstCharsEqu(type, "gravity")){
-        cxParticleSetType(this,cxParticleEmitterGravity);
-    }else if(cxConstCharsEqu(type, "radial")){
-        cxParticleSetType(this,cxParticleEmitterRadial);
-    }else{
-        cxParticleSetType(this,cxParticleEmitterGravity);
-    }
-    //gravity
-    this->todir = cxXMLReadBoolAttr(reader,root->functions, "cxParticle.todir", this->todir);
-    this->duration = cxXMLReadFloatAttr(reader, root->functions, "cxParticle.duration", this->duration);
-    this->gravity = cxXMLReadVec2fAttr(reader, root->functions, "cxParticle.gravity", this->gravity);
-    this->rate = cxXMLReadFloatAttr(reader, root->functions, "cxParticle.rate", this->rate);
-    this->speed = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.speed", this->speed);
-    this->tanaccel = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.tanaccel", this->tanaccel);
-    this->radaccel = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.radaccel", this->radaccel);
-    this->position = cxXMLReadVec2fRangeAttr(reader, root->functions, "cxParticle.position", this->position);
-    this->life = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.life", this->life);
-    this->angle = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.angle", this->angle);
-    this->startsize = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.startsize", this->startsize);
-    this->endsize = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.endsize", this->endsize);
-    this->startcolor = cxXMLReadColor4fRangeAttr(reader, root->functions, "cxParticle.startcolor", this->startcolor);
-    this->endcolor = cxXMLReadColor4fRangeAttr(reader, root->functions, "cxParticle.endcolor", this->endcolor);
-    this->startspin = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.startspin", this->startspin);
-    this->endspin = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.endspin", this->endspin);
-    //radial
-    this->startradius = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.startradius", this->startradius);
-    this->endradius = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.endradius", this->endradius);
-    this->rotatepers = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.rotatepers", this->rotatepers);
+
+    cxParticleSetBlendMode(mView, cxXMLReadIntAttr(reader, root->functions, "cxParticle.blend", cxParticleBlendMultiply));
+    
+    cxParticleSetType(mView, cxXMLReadIntAttr(reader, root->functions, "cxParticle.type", cxParticleEmitterGravity));
+
+    this->todir         = cxXMLReadBoolAttr(reader,root->functions, "cxParticle.todir", this->todir);
+    this->duration      = cxXMLReadFloatAttr(reader, root->functions, "cxParticle.duration", this->duration);
+    this->gravity       = cxXMLReadVec2fAttr(reader, root->functions, "cxParticle.gravity", this->gravity);
+    this->rate          = cxXMLReadFloatAttr(reader, root->functions, "cxParticle.rate", this->rate);
+    this->speed         = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.speed", this->speed);
+    this->tanaccel      = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.tanaccel", this->tanaccel);
+    this->radaccel      = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.radaccel", this->radaccel);
+    this->position      = cxXMLReadVec2fRangeAttr(reader, root->functions, "cxParticle.position", this->position);
+    this->life          = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.life", this->life);
+    this->angle         = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.angle", this->angle);
+    this->startsize     = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.startsize", this->startsize);
+    this->endsize       = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.endsize", this->endsize);
+    this->startcolor    = cxXMLReadColor4fRangeAttr(reader, root->functions, "cxParticle.startcolor", this->startcolor);
+    this->endcolor      = cxXMLReadColor4fRangeAttr(reader, root->functions, "cxParticle.endcolor", this->endcolor);
+    this->startspin     = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.startspin", this->startspin);
+    this->endspin       = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.endspin", this->endspin);
+    this->startradius   = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.startradius", this->startradius);
+    this->endradius     = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.endradius", this->endradius);
+    this->rotatepers    = cxXMLReadFloatRangeAttr(reader, root->functions, "cxParticle.rotatepers", this->rotatepers);
 }
 
 void cxParticleStop(cxAny pview)

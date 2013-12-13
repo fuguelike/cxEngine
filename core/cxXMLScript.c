@@ -154,7 +154,7 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
         if(url != NULL){
             cxTypes types = cxEngineDataSet(url);
             CX_ASSERT(types != NULL && cxTypesIsType(types, cxTypesString), "get url %s data failed", url);
-            cxRegex regex = cxRegexCreate(sregex, types->assist, 0);
+            cxRegex regex = cxRegexCreate(sregex, types->any, 0);
             ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
             break;
         }

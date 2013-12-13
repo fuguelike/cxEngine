@@ -20,7 +20,7 @@ cxTypes cxHashRootReadAtlasBoxPoint(cxHashRoot root,cxConstChars texfile,xmlText
     cxTexture texture = NULL;
     cxInt index = 0;
     if(texfile != NULL){
-        types->assist = cxStringAllocChars(texfile);
+        types->any = cxStringAllocChars(texfile);
         texture = cxTextureFactoryLoadFile(texfile);
     }
     int depth = xmlTextReaderDepth(reader);
@@ -155,7 +155,7 @@ cxTypes cxHashRootReadString(cxHashRoot root,xmlTextReaderPtr reader)
     if(bytes == NULL){
         return NULL;
     }
-    CX_RETAIN_SWAP(types->assist, bytes);
+    CX_RETAIN_SWAP(types->any, bytes);
     return types;
 }
 
@@ -207,7 +207,7 @@ cxTypes cxHashRootReadNumber(cxHashRoot root,cxConstChars temp,xmlTextReaderPtr 
     if(!cxObjectIsType(obj, cxNumberTypeName)){
         return NULL;
     }
-    CX_RETAIN_SWAP(types->assist, obj);
+    CX_RETAIN_SWAP(types->any, obj);
     return types;
 }
 
@@ -243,7 +243,7 @@ cxTypes cxHashRootReadArray(cxHashRoot root,xmlTextReaderPtr reader)
         cxConstChars temp = cxXMLReadElementName(reader);
         cxAny value = cxReadValues(root, temp, reader);
         if(value != NULL){
-            cxArrayAppend(types->assist, value);
+            cxArrayAppend(types->any, value);
         }
     }
     return types;

@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <actions/cxTimer.h>
 #include <kazmath/matrix.h>
 #include "cxView.h"
 #include "cxEngine.h"
@@ -555,9 +556,11 @@ void cxViewAppend(cxAny pview,cxAny newview)
     cxView this = pview;
     cxView new = newview;
     CX_RETURN(new->parentView == pview);
+    //
     CX_ASSERT(newview != NULL && new->subElement == NULL, "newview null or add to view");
     new->subElement = cxListAppend(this->subViews, new);
     new->parentView = this;
+    //
     if(this->isRunning){
         cxViewEnter(new);
         cxViewLayout(new);
@@ -578,7 +581,7 @@ void cxViewAutoResizing(cxAny pview)
         size.w = parent->size.w - this->autoBox.l - this->autoBox.r;
         this->scale.x = 1.0f;
         this->fixscale.x = 1.0f;
-        pos.x = 0;
+        pos.x = (this->autoBox.l - this->autoBox.r)/2.0f;
     }else if(mask & cxViewAutoResizeLeft){
         pos.x  = -parent->size.w/2.0f;
         pos.x += size.w * this->anchor.x * scale.x;
@@ -593,7 +596,7 @@ void cxViewAutoResizing(cxAny pview)
         size.h = parent->size.h - this->autoBox.t - this->autoBox.b;
         this->scale.y = 1.0f;
         this->fixscale.y = 1.0f;
-        pos.y = 0;
+        pos.y = (this->autoBox.b - this->autoBox.t)/2.0f;
     }else if(mask & cxViewAutoResizeTop){
         pos.y = parent->size.h/2.0f;
         pos.y -= size.h * (1.0f - this->anchor.y) * scale.y;
@@ -622,7 +625,7 @@ void cxViewLayout(cxAny pview)
 void cxViewRemoved(cxAny pview)
 {
     cxView this = pview;
-    CX_RETURN(this->parentView == NULL || this->subElement == NULL);
+    CX_RETURN(this->parentView == NULL);
     if(this->isRunning){
         cxViewExit(this);
     }
@@ -700,6 +703,12 @@ void cxViewStopAction(cxAny pview,cxUInt actionId)
     }
 }
 
+cxAny cxViewAppendTimer(cxAny pview,cxFloat time,cxInt repeat)
+{
+    cxTimer timer = cxTimerCreate(time, repeat);
+    cxViewAppendAction(pview, timer);
+    return timer;
+}
 
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
 {

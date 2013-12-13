@@ -9,6 +9,8 @@
 #ifndef cxEngine_cxParticle_h
 #define cxEngine_cxParticle_h
 
+#include <core/cxEventArg.h>
+#include <core/cxNumber.h>
 #include "cxAtlas.h"
 
 CX_C_BEGIN
@@ -80,6 +82,10 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxFloatRange rotatepers;
     CX_METHOD_DEF(cxParticleUpdateBoxFunc, UpdateBox);
 CX_OBJECT_END(cxParticle)
+
+cxNumber cxpBlendMode(cxEventArg arg);
+
+cxNumber cxpEmitterType(cxEventArg arg);
 
 void cxParticleInitFromPEX(cxAny pview,cxConstChars file);
 

@@ -2,7 +2,7 @@
 
 <!--cxView.fixScale="cxFixScaleW()"-->
 <cxViewRoot cxView.fill="0,0,0,0" cxViewRoot.onBegin="mainBegin" cxViewRoot.onEnd="mainEnd">
-    <cxTable cxView.right="30" cxView.left="30" cxView.top="30" cxView.bottom="30" cxTable.space="10,10" cxTable.type="3,0">
+    <cxTable cxView.fill="10,10,10,10" cxTable.space="10,10" cxTable.type="3,0">
         <cxTemplate url="items.xml?template" title="Particle" release="cxPushView('particle.xml')" />
         <cxTemplate src="buttontemp.xml" title="Action" release="cxPlay({'src':'effect.wav','loop':false});cxPushView('action.xml')" />
         <cxTemplate src="buttontemp.xml" title="Wav" release="cxPlay({'src':'effect.wav','loop':false})" />

@@ -48,9 +48,9 @@ static void cxLoadingArrive(cxEvent *event)
     cxAny obj = CX_METHOD_GET(NULL, this->Loading, this);
     CX_ASSERT(obj != NULL, "loading must return view");
     cxLoadingSetObject(this, obj);
-    cxTimer timer = cxTimerCreate(1.0f, 1);
+    
+    cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
     CX_EVENT_QUICK(timer->onArrive, cxFinishedArrive);
-    cxViewAppendAction(this, timer);
 }
 
 void cxLoaingFinished(cxAny pview)
@@ -74,13 +74,15 @@ CX_OBJECT_TERM(cxLoading, cxView)
 cxAny cxLoadingStart(cxLoadingFunc loading,cxFinishedFunc finished)
 {
     cxEngine engine = cxEngineInstance();
+    
     cxLoading this = CX_CREATE(cxLoading);
     CX_METHOD_SET(this->Finished, finished);
     CX_METHOD_SET(this->Loading, loading);
-    cxTimer timer = cxTimerCreate(1.0f, 1);
+    
+    cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
     CX_EVENT_QUICK(timer->onArrive, cxLoadingArrive);
+    
     cxViewAppend(engine->window, this);
-    cxViewAppendAction(this, timer);
     return this;
 }
 

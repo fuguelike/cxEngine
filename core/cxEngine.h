@@ -58,6 +58,8 @@ CX_OBJECT_END(cxEngine)
 
 cxEngine cxEngineInstance();
 
+cxAny cxEngineCallFunc(cxConstChars name,cxConstChars json);
+
 void cxEngineRegisteFunc(cxConstChars name,cxAnyFunc func);
 
 void cxEngineRegisteEvent(cxConstChars name,cxEventFunc func);
