@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<cxViewXML cxView.fill="0,0,0,0">
+<cxViewRoot cxView.fill="0,0,0,0">
     <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="candy.xml?green.png"/>
     
     <cxScroll cxView.w="500" cxView.h="700" cxView.bottom="30" cxScroll.type="vertical" cxScroll.paging="true">
@@ -175,5 +175,5 @@
             </cxButton>
         </cxTable>
     </cxScroll>
-</cxViewXML>
+</cxViewRoot>
 

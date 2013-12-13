@@ -7,7 +7,7 @@
 //
 
 #include "cxMove.h"
-#include "cxActionXML.h"
+#include "cxActionRoot.h"
 
 static void cxMoveInit(cxAny pav)
 {
@@ -36,18 +36,18 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, npos);
 }
 
-static void cxMoveXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxMoveReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
-    cxActionXML xml = xmlAction;
-    cxActionXMLReadAttr(xmlAction, mAction, reader);
+    cxActionRoot root = rootAction;
+    cxActionReadAttr(rootAction, mAction, reader);
     cxMove this = mAction;
-    this->endPos.x = cxXMLReadFloatAttr(reader, xml->functions, "cxMove.x", this->endPos.x);
-    this->endPos.y = cxXMLReadFloatAttr(reader, xml->functions, "cxMove.y", this->endPos.y);
+    this->endPos.x = cxXMLReadFloatAttr(reader, root->functions, "cxMove.x", this->endPos.x);
+    this->endPos.y = cxXMLReadFloatAttr(reader, root->functions, "cxMove.y", this->endPos.y);
 }
 
 CX_OBJECT_INIT(cxMove, cxAction)
 {
-    cxObjectSetXMLReadFunc(this, cxMoveXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxMoveReadAttr);
     CX_METHOD_SET(this->super.Init, cxMoveInit);
     CX_METHOD_SET(this->super.Step, cxMoveStep);
 }

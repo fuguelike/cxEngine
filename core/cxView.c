@@ -11,45 +11,45 @@
 #include "cxEngine.h"
 #include "cxOpenGL.h"
 #include "cxAction.h"
-#include "cxViewXML.h"
+#include "cxViewRoot.h"
 
 //al at ar ab
-static void cxViewXMLReadAutoResize(cxViewXML xml, cxAny view,xmlTextReaderPtr reader)
+static void cxViewRootReadAutoResize(cxViewRoot root, cxAny view,xmlTextReaderPtr reader)
 {
     cxView this = view;
     if(cxXMLHasAttr(reader, "cxView.left")){
         this->autoMask |= cxViewAutoResizeLeft;
-        this->autoBox.l = cxXMLReadFloatAttr(reader, xml->functions, "cxView.left", 0) * this->fixscale.x;
+        this->autoBox.l = cxXMLReadFloatAttr(reader, root->functions, "cxView.left", 0) * this->fixscale.x;
     }
     if(cxXMLHasAttr(reader, "cxView.right")){
         this->autoMask |= cxViewAutoResizeRight;
-        this->autoBox.r = cxXMLReadFloatAttr(reader, xml->functions, "cxView.right", 0) * this->fixscale.x;
+        this->autoBox.r = cxXMLReadFloatAttr(reader, root->functions, "cxView.right", 0) * this->fixscale.x;
     }
     if(cxXMLHasAttr(reader, "cxView.top")){
         this->autoMask |= cxViewAutoResizeTop;
-        this->autoBox.t = cxXMLReadFloatAttr(reader, xml->functions, "cxView.top", 0) * this->fixscale.y;
+        this->autoBox.t = cxXMLReadFloatAttr(reader, root->functions, "cxView.top", 0) * this->fixscale.y;
     }
     if(cxXMLHasAttr(reader, "cxView.bottom")){
         this->autoMask |= cxViewAutoResizeBottom;
-        this->autoBox.b = cxXMLReadFloatAttr(reader, xml->functions, "cxView.bottom", 0) * this->fixscale.y;
+        this->autoBox.b = cxXMLReadFloatAttr(reader, root->functions, "cxView.bottom", 0) * this->fixscale.y;
     }
     if(cxXMLHasAttr(reader, "cxView.fill")){
         this->autoMask = cxViewAutoResizeFill;
-        this->autoBox = cxXMLReadBox4fAttr(reader, xml->functions, "cxView.fill", this->autoBox);
+        this->autoBox = cxXMLReadBox4fAttr(reader, root->functions, "cxView.fill", this->autoBox);
     }
 }
 
-static void cxViewXMLReadRectToView(cxViewXML xml, cxAny view,xmlTextReaderPtr reader)
+static void cxViewRootReadRectToView(cxViewRoot root, cxAny view,xmlTextReaderPtr reader)
 {
     cxView this = view;
-    cxVec2f pos = cxXMLReadVec2fAttr(reader, xml->functions, "cxView.position", this->position);
-    pos.x = cxXMLReadFloatAttr(reader, xml->functions, "cxView.x", pos.x);
-    pos.y= cxXMLReadFloatAttr(reader, xml->functions, "cxView.y", pos.y);
+    cxVec2f pos = cxXMLReadVec2fAttr(reader, root->functions, "cxView.position", this->position);
+    pos.x = cxXMLReadFloatAttr(reader, root->functions, "cxView.x", pos.x);
+    pos.y= cxXMLReadFloatAttr(reader, root->functions, "cxView.y", pos.y);
     cxViewSetPos(view, pos);
-    cxViewSetOrder(view, cxXMLReadIntAttr(reader, xml->functions, "cxView.z", this->zorder));
-    cxSize2f size = cxXMLReadSize2fAttr(reader, xml->functions, "cxView.size", this->size);
-    size.w = cxXMLReadFloatAttr(reader,xml->functions, "cxView.w", size.w);
-    size.h = cxXMLReadFloatAttr(reader,xml->functions, "cxView.h", size.h);
+    cxViewSetOrder(view, cxXMLReadIntAttr(reader, root->functions, "cxView.z", this->zorder));
+    cxSize2f size = cxXMLReadSize2fAttr(reader, root->functions, "cxView.size", this->size);
+    size.w = cxXMLReadFloatAttr(reader,root->functions, "cxView.w", size.w);
+    size.h = cxXMLReadFloatAttr(reader,root->functions, "cxView.h", size.h);
     cxViewSetSize(view, size);
 }
 
@@ -59,51 +59,51 @@ cxBool cxViewZeroSize(cxAny pview)
     return cxSize2Zero(this->size);
 }
 
-void cxViewXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
+void cxViewReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
-    cxObjectXMLReadAttr(pxml, view, reader);
-    cxViewXML xml = pxml;
+    cxObjectReadAttr(pxml, view, reader);
+    cxViewRoot root = pxml;
     cxView this = view;
     //fixscale
-    cxViewSetFixScale(view, cxXMLReadVec2fAttr(reader, xml->functions, "cxView.fixScale", this->fixscale));
+    cxViewSetFixScale(view, cxXMLReadVec2fAttr(reader, root->functions, "cxView.fixScale", this->fixscale));
     //rect
-    cxViewXMLReadRectToView(pxml, view,reader);
+    cxViewRootReadRectToView(pxml, view,reader);
     //resize
-    cxViewXMLReadAutoResize(pxml, view, reader);
+    cxViewRootReadAutoResize(pxml, view, reader);
     //cropping
-    cxViewSetCropping(view,cxXMLReadBoolAttr(reader, xml->functions, "cxView.cropping", this->isCropping));
+    cxViewSetCropping(view,cxXMLReadBoolAttr(reader, root->functions, "cxView.cropping", this->isCropping));
     //top
-    cxViewSetTop(view, cxXMLReadBoolAttr(reader,xml->functions, "cxView.hideTop", this->hideTop));
+    cxViewSetTop(view, cxXMLReadBoolAttr(reader,root->functions, "cxView.hideTop", this->hideTop));
     //anchor
-    cxViewSetAnchor(view, cxXMLReadVec2fAttr(reader, xml->functions, "cxView.anchor", this->anchor));
+    cxViewSetAnchor(view, cxXMLReadVec2fAttr(reader, root->functions, "cxView.anchor", this->anchor));
     //scale
-    cxViewSetScale(view, cxXMLReadVec2fAttr(reader, xml->functions, "cxView.scale", this->scale));
+    cxViewSetScale(view, cxXMLReadVec2fAttr(reader, root->functions, "cxView.scale", this->scale));
     //color
-    cxColor4f color = cxXMLReadColor4fAttr(reader, xml->functions, "cxView.color", this->color);
+    cxColor4f color = cxXMLReadColor4fAttr(reader, root->functions, "cxView.color", this->color);
     cxViewSetColor(view, cxColor3fv(color.r, color.g, color.b));
-    cxViewSetAlpha(view, cxXMLReadFloatAttr(reader, xml->functions, "cxView.alpha", color.a));
+    cxViewSetAlpha(view, cxXMLReadFloatAttr(reader, root->functions, "cxView.alpha", color.a));
     //visible
-    cxViewSetVisible(view, cxXMLReadBoolAttr(reader,xml->functions, "cxView.visible", this->isVisible));
+    cxViewSetVisible(view, cxXMLReadBoolAttr(reader,root->functions, "cxView.visible", this->isVisible));
     //debug border
-    cxViewSetBorder(view, cxXMLReadBoolAttr(reader,xml->functions, "cxView.border", this->isBorder));
+    cxViewSetBorder(view, cxXMLReadBoolAttr(reader,root->functions, "cxView.border", this->isBorder));
     //rotate raxis
-    cxViewSetRaxis(view, cxXMLReadVec3fAttr(reader, xml->functions, "cxView.raxis", this->raxis));
+    cxViewSetRaxis(view, cxXMLReadVec3fAttr(reader, root->functions, "cxView.raxis", this->raxis));
     //rotate degress
-    cxViewSetDegrees(view, cxXMLReadFloatAttr(reader, xml->functions, "cxView.degrees", kmRadiansToDegrees(this->radians)));
+    cxViewSetDegrees(view, cxXMLReadFloatAttr(reader, root->functions, "cxView.degrees", kmRadiansToDegrees(this->radians)));
     //view event
-    cxXMLAppendEvent(xml->events, this, cxView, onEnter);
-    cxXMLAppendEvent(xml->events, this, cxView, onExit);
-    cxXMLAppendEvent(xml->events, this, cxView, onUpdate);
-    cxXMLAppendEvent(xml->events, this, cxView, onResize);
-    cxXMLAppendEvent(xml->events, this, cxView, onLayout);
-    cxXMLAppendEvent(xml->events, this, cxView, onDirty);
+    cxXMLAppendEvent(root->events, this, cxView, onEnter);
+    cxXMLAppendEvent(root->events, this, cxView, onExit);
+    cxXMLAppendEvent(root->events, this, cxView, onUpdate);
+    cxXMLAppendEvent(root->events, this, cxView, onResize);
+    cxXMLAppendEvent(root->events, this, cxView, onLayout);
+    cxXMLAppendEvent(root->events, this, cxView, onDirty);
 }
 
 void cxViewSetViewEvent(cxEvent *event)
 {
     CX_RETURN(event->args == NULL || event->sender == NULL);
     cxConstChars viewid = cxEventArgString(event->args, "view");
-    cxView pview = cxViewXMLGet(event->sender, viewid);
+    cxView pview = cxViewRootGet(event->sender, viewid);
     CX_RETURN(pview == NULL);
     cxConstChars scale = cxEventArgString(event->args, "scale");
     if(scale != NULL){
@@ -156,7 +156,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->fixscale = cxVec2fv(1.0f, 1.0f);
     this->subViews = CX_ALLOC(cxList);
     CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
-    cxObjectSetXMLReadFunc(this, cxViewXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxViewReadAttr);
     this->actions = CX_ALLOC(cxHash);
     this->caches = CX_ALLOC(cxHash);
 }

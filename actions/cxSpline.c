@@ -8,7 +8,7 @@
 
 #include <core/cxEngine.h>
 #include <core/cxNumber.h>
-#include <core/cxActionXML.h>
+#include <core/cxActionRoot.h>
 #include "cxSpline.h"
 
 static void cxSplineInit(cxAny pav)
@@ -30,7 +30,7 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxInt index = 0;
     cxSpline this = pav;
-    cxFloat lt;
+    cxFloat lt = 0;
     if (time >= 1.0f){
         index = cxArrayLength(this->points) - 1;
         lt = 1.0f;
@@ -50,17 +50,17 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, newpos);
 }
 
-static void cxSplineXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxSplineReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
     cxSpline this = mAction;
-    cxActionXML xml = xmlAction;
-    cxActionXMLReadAttr(xmlAction, mAction, reader);
-    this->tension = cxXMLReadFloatAttr(reader, xml->functions, "cxSpline.tension", this->tension);
-    cxTypes types = cxXMLReadTypesAttr(reader, xml->functions, "cxSpline.points");
+    cxActionRoot root = rootAction;
+    cxActionReadAttr(rootAction, mAction, reader);
+    this->tension = cxXMLReadFloatAttr(reader, root->functions, "cxSpline.tension", this->tension);
+    cxTypes types = cxXMLReadTypesAttr(reader, root->functions, "cxSpline.points");
     if(cxTypesIsType(types, cxTypesArray)){
         cxArrayAppends(this->points, types->assist);
     }
-    cxXMLAppendEvent(xml->events, this, cxSpline, onIndex);
+    cxXMLAppendEvent(root->events, this, cxSpline, onIndex);
 }
 
 static void cxSplineReset(cxAny pav)
@@ -72,7 +72,7 @@ static void cxSplineReset(cxAny pav)
 CX_OBJECT_INIT(cxSpline, cxAction)
 {
     this->index = -1;
-    cxObjectSetXMLReadFunc(this, cxSplineXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxSplineReadAttr);
     CX_METHOD_SET(this->super.Init, cxSplineInit);
     CX_METHOD_SET(this->super.Step, cxSplineStep);
     CX_METHOD_SET(this->super.Reset, cxSplineReset);

@@ -17,9 +17,9 @@
 
 #include <actions/cxMove.h>
 #include <actions/cxCurve.h>
-#include <core/cxActionXML.h>
+#include <core/cxActionRoot.h>
 #include <views/cxSprite.h>
-#include <core/cxViewXML.h>
+#include <core/cxViewRoot.h>
 #include <views/cxButton.h>
 #include <jansson.h>
 #include <views/cxAtlas.h>
@@ -42,7 +42,7 @@
 static cxAny loading(cxAny loading)
 {
     cxEngineDataSet("items.xml");
-    return cxViewXMLCreate("main.xml");
+    return cxViewRootCreate("main.xml");
 }
 
 static void finished(cxAny pview)
@@ -52,13 +52,13 @@ static void finished(cxAny pview)
 
 static void deleteSprite(cxEvent *event)
 {
-    cxAny pview = cxViewXMLGet(event->sender, "purple");
+    cxAny pview = cxViewRootGet(event->sender, "purple");
     cxChipmunkApplyImpulse(pview, cxVec2fv(0, 2000), cxVec2fv(0, 1));
 }
 
 static void cxChipmunkBegin(cxEvent *event)
 {
-    cxViewXMLRegisteEvent(event->sender, "deleteSprite", deleteSprite);
+    cxViewRootRegisteEvent(event->sender, "deleteSprite", deleteSprite);
 }
 
 void cxEngineInit(cxEngine engine)

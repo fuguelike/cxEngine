@@ -8,7 +8,7 @@
 
 #include <core/cxEngine.h>
 #include <core/cxIconv.h>
-#include <core/cxViewXML.h>
+#include <core/cxViewRoot.h>
 #include "cxLabelBMP.h"
 
 static void cxLabelBMPUpdateText(cxLabelBMP this)
@@ -74,24 +74,24 @@ static void cxLabelBMPUpdate(cxEvent *event)
     this->isDirty = false;
 }
 
-void cxLabelBMPReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxLabelBMPReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
-    cxViewXML xml = xmlView;
-    cxSpriteXMLReadAttr(xmlView, mView, reader);
+    cxViewRoot root = rootView;
+    cxSpriteReadAttr(rootView, mView, reader);
     cxLabelBMP this = mView;
     //set font
-    cxString font = cxXMLReadStringAttr(reader, xml->functions, "cxLabelBMP.font");
+    cxString font = cxXMLReadStringAttr(reader, root->functions, "cxLabelBMP.font");
     cxLabelBMPSetFont(this, font);
     //set text
-    cxString text = cxXMLReadStringAttr(reader, xml->functions, "cxLabelBMP.text");
+    cxString text = cxXMLReadStringAttr(reader, root->functions, "cxLabelBMP.text");
     cxLabelBMPSetText(mView, text);
     //set fontsize
-    cxLabelBMPSetSize(mView, cxXMLReadFloatAttr(reader, xml->functions, "cxLabelBMP.size", this->size));
+    cxLabelBMPSetSize(mView, cxXMLReadFloatAttr(reader, root->functions, "cxLabelBMP.size", this->size));
 }
 
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
 {
-    cxObjectSetXMLReadFunc(this, cxLabelBMPReadAttr);
+    cxObjectSetReadAttrFunc(this, cxLabelBMPReadAttr);
     CX_EVENT_QUICK(this->super.super.super.onUpdate, cxLabelBMPUpdate);
     this->isDirty = true;
 }

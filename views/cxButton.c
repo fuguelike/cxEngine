@@ -7,7 +7,7 @@
 //
 
 #include <core/cxEngine.h>
-#include "cxViewXML.h"
+#include "cxViewRoot.h"
 #include "cxButton.h"
 #include "cxXMLScript.h"
 
@@ -48,22 +48,22 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
-void cxButtonXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxButtonReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
-    cxViewXML xml = xmlView;
+    cxViewRoot root = rootView;
     cxButton this = mView;
-    cxSpriteXMLReadAttr(xmlView, mView, reader);
-    cxXMLAppendEvent(xml->events, this, cxButton, onPress);
-    cxXMLAppendEvent(xml->events, this, cxButton, onRelease);
-    cxXMLAppendEvent(xml->events, this, cxButton, onLeave);
-    cxXMLAppendEvent(xml->events, this, cxButton, onEnter);
-    cxButtonEnable(this, cxXMLReadBoolAttr(reader, xml->functions, "cxButton.enable", this->isEnable));
-    this->movement = cxXMLReadFloatAttr(reader, xml->functions,  "cxButton.movement", this->movement);
+    cxSpriteReadAttr(rootView, mView, reader);
+    cxXMLAppendEvent(root->events, this, cxButton, onPress);
+    cxXMLAppendEvent(root->events, this, cxButton, onRelease);
+    cxXMLAppendEvent(root->events, this, cxButton, onLeave);
+    cxXMLAppendEvent(root->events, this, cxButton, onEnter);
+    cxButtonEnable(this, cxXMLReadBoolAttr(reader, root->functions, "cxButton.enable", this->isEnable));
+    this->movement = cxXMLReadFloatAttr(reader, root->functions,  "cxButton.movement", this->movement);
 }
 
 CX_OBJECT_INIT(cxButton, cxSprite)
 {
-    cxObjectSetXMLReadFunc(this, cxButtonXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxButtonReadAttr);
     this->movement = 15;
     this->isEnable = true;
     CX_METHOD_SET(this->super.super.Touch, cxButtonTouch);

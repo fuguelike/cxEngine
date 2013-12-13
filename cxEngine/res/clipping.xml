@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<cxViewXML cxView.fill="0,0,0,0">
+<cxViewRoot cxView.fill="0,0,0,0">
     <cxSprite cxView.w="300" cxView.h="300" cxSprite.texture="4.pvr"/>
     <cxButton cxView.w = "180" cxView.h = "120" cxView.right="10" cxView.bottom="10" cxButton.onRelease="cxPopView">
         <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
@@ -22,5 +22,5 @@
         
     </cxClipping>
     
-</cxViewXML>
+</cxViewRoot>
 

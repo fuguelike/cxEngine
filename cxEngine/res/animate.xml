@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
-<cxViewXML cxView.fill="0,0,0,0">
+<cxViewRoot cxView.fill="0,0,0,0">
     
     <cxSprite id="sprite" cxView.y="370" cxSprite.texture="animate/1.png"/>
 
@@ -16,4 +16,4 @@
         <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Return" cxLabelTTF.size="25"/>
     </cxButton>
-</cxViewXML>
+</cxViewRoot>

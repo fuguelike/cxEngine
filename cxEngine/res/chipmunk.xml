@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
-<cxViewXML cxView.fill="0,0,0,0" cxViewXML.onBegin="cxChipmunkBegin">
+<cxViewRoot cxView.fill="0,0,0,0" cxViewRoot.onBegin="cxChipmunkBegin">
     <cxChipmunk id="chipmunk" cxView.fill="0,0,0,0">
         <cxView
             cxView.x="0" cxView.y="512"
@@ -64,4 +64,4 @@
             <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="test" cxLabelTTF.size="30"/>
         </cxButton>
     </cxChipmunk>
-</cxViewXML>
+</cxViewRoot>

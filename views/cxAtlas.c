@@ -8,12 +8,12 @@
 
 #include <textures/cxTextureFactory.h>
 #include <core/cxEngine.h>
-#include <core/cxViewXML.h>
+#include <core/cxViewRoot.h>
 #include "cxAtlas.h"
 
-void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxAtlasReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
-    cxViewXML xml = xmlView;
+    cxViewRoot root = rootView;
     cxAtlas this = mView;
     //support boxes mode
     cxConstChars sitems = cxXMLAttr("cxAtlas.boxes");
@@ -23,11 +23,11 @@ void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     //support scale9 mode
     if(cxXMLHasAttr(reader, "cxAtlas.scale9")){
         this->scale9.enable = true;
-        this->scale9.box = cxXMLReadBox4fAttr(reader, xml->functions, "cxAtlas.scale9", this->scale9.box);
+        this->scale9.box = cxXMLReadBox4fAttr(reader, root->functions, "cxAtlas.scale9", this->scale9.box);
         cxAtlasSetNumber(this, 9);
     }
     //
-    cxSpriteXMLReadAttr(xmlView, mView, reader);
+    cxSpriteReadAttr(rootView, mView, reader);
 }
 
 //on resize load
@@ -199,7 +199,7 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);
     CX_METHOD_SET(this->super.super.Draw, cxAtlasDraw);
-    cxObjectSetXMLReadFunc(this, cxAtlasXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxAtlasReadAttr);
     CX_EVENT_QUICK(this->super.super.onResize, cxAtlasResize);
 }
 CX_OBJECT_FREE(cxAtlas, cxSprite)

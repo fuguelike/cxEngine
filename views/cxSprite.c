@@ -10,7 +10,7 @@
 #include <core/cxXMLScript.h>
 #include <textures/cxTextureFactory.h>
 #include "cxSprite.h"
-#include "cxViewXML.h"
+#include "cxViewRoot.h"
 
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor)
 {
@@ -68,7 +68,7 @@ void cxSpriteSetTextureEvent(cxEvent *event)
     cxConstChars viewid = cxEventArgString(event->args, "view");
     cxAny pview = event->sender;
     if(viewid != NULL){
-        pview = cxViewXMLGet(event->sender, viewid);
+        pview = cxViewRootGet(event->sender, viewid);
     }
     CX_RETURN(pview == NULL);
     //use texture size
@@ -115,21 +115,21 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize,cxBool
 }
 
 //texture="res/a.xml?green.png"
-void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxSpriteReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
-    cxViewXML xml = xmlView;
+    cxViewRoot root = rootView;
     cxSprite this = mView;
     //set texture
-    cxTextureAttr texAttr = cxXMLReadTextureAttr(reader, xml->functions, "cxSprite.texture");
+    cxTextureAttr texAttr = cxXMLReadTextureAttr(reader, root->functions, "cxSprite.texture");
     cxSpriteSetTextureAttr(this, texAttr);
     //flipx flipy
-    cxSpriteSetFlipX(this, cxXMLReadBoolAttr(reader,xml->functions, "cxSprite.flipX", this->isFlipX));
-    cxSpriteSetFlipY(this, cxXMLReadBoolAttr(reader,xml->functions, "cxSprite.flipY", this->isFlipY));
+    cxSpriteSetFlipX(this, cxXMLReadBoolAttr(reader,root->functions, "cxSprite.flipX", this->isFlipX));
+    cxSpriteSetFlipY(this, cxXMLReadBoolAttr(reader,root->functions, "cxSprite.flipY", this->isFlipY));
     //shader
-    cxString shader = cxXMLReadStringAttr(reader, xml->functions, "cxSprite.shader");
+    cxString shader = cxXMLReadStringAttr(reader, root->functions, "cxSprite.shader");
     cxSpriteSetShader(this, cxStringBody(shader));
     //
-    cxViewXMLReadAttr(xmlView, mView, reader);
+    cxViewReadAttr(rootView, mView, reader);
 }
 
 CX_OBJECT_INIT(cxSprite, cxView)
@@ -139,7 +139,7 @@ CX_OBJECT_INIT(cxSprite, cxView)
     CX_EVENT_QUICK(this->super.onDirty, cxSpriteDirtyEvent);
     CX_METHOD_SET(this->super.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
-    cxObjectSetXMLReadFunc(this, cxSpriteXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxSpriteReadAttr);
 }
 CX_OBJECT_FREE(cxSprite, cxView)
 {

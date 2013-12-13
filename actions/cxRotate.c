@@ -24,9 +24,9 @@ static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetRadians(this->super.view, radians);
 }
 
-static void cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxRotateReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
-    cxActionXMLReadAttr(xmlAction, mAction, reader);
+    cxActionReadAttr(rootAction, mAction, reader);
     cxRotate this = mAction;
     cxConstChars sx = cxXMLAttr("cxRotate.x");
     cxConstChars sy = cxXMLAttr("cxRotate.y");
@@ -46,7 +46,7 @@ static void cxRotateXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr 
 CX_OBJECT_INIT(cxRotate, cxAction)
 {
     this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
-    cxObjectSetXMLReadFunc(this, cxRotateXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxRotateReadAttr);
     CX_METHOD_SET(this->super.Init, cxRotateInit);
     CX_METHOD_SET(this->super.Step, cxRotateStep);
 }

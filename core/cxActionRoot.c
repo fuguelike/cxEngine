@@ -1,5 +1,5 @@
 //
-//  cxActionXML.c
+//  cxActionRoot.c
 //  cxEngine
 //
 //  Created by xuhua on 10/15/13.
@@ -18,37 +18,37 @@
 #include <actions/cxAnimate.h>
 #include <actions/cxSpline.h>
 #include <actions/cxActionSet.h>
-#include "cxViewXML.h"
-#include "cxActionXML.h"
+#include "cxViewRoot.h"
+#include "cxActionRoot.h"
 #include "cxPlayer.h"
 
-void cxActionRootXMLReadAttr(cxAny pxml,cxAny newobj, xmlTextReaderPtr reader)
+void cxActionRootReadAttr(cxAny pxml,cxAny newobj, xmlTextReaderPtr reader)
 {
-    cxObjectXMLReadAttr(pxml, newobj, reader);
-    cxActionXML this = pxml;
+    cxObjectReadAttr(pxml, newobj, reader);
+    cxActionRoot this = pxml;
     cxXMLAppendEvent(this->events, this, cxActionSet, onLoad);
 }
 
-CX_OBJECT_INIT(cxActionXML, cxObject)
+CX_OBJECT_INIT(cxActionRoot, cxObject)
 {
-    cxObjectSetXMLReadFunc(this, cxActionRootXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxActionRootReadAttr);
     this->codes = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
     this->functions = CX_ALLOC(cxHash);
-    CX_METHOD_SET(this->Make, cxActionXMLMakeElement);
+    CX_METHOD_SET(this->Make, cxActionRootMakeElement);
 }
-CX_OBJECT_FREE(cxActionXML, cxObject)
+CX_OBJECT_FREE(cxActionRoot, cxObject)
 {
     CX_EVENT_RELEASE(this->onLoad);
     CX_RELEASE(this->functions);
     CX_RELEASE(this->events);
     CX_RELEASE(this->codes);
 }
-CX_OBJECT_TERM(cxActionXML, cxObject)
+CX_OBJECT_TERM(cxActionRoot, cxObject)
 
-void cxActionXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
+void cxActionRootRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
 {
-    cxActionXML this = pview;
+    cxActionRoot this = pview;
     if(func == NULL){
         cxHashDel(this->events, cxHashStrKey(name));
         return;
@@ -61,9 +61,9 @@ void cxActionXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
     CX_RELEASE(event);
 }
 
-void cxActionXMLRegisteFunc(cxAny pview,cxConstChars name,cxAny func)
+void cxActionRootRegisteFunc(cxAny pview,cxConstChars name,cxAny func)
 {
-    cxActionXML this = pview;
+    cxActionRoot this = pview;
     if(func == NULL){
         cxHashDel(this->functions, cxHashStrKey(name));
         return;
@@ -76,23 +76,23 @@ void cxActionXMLRegisteFunc(cxAny pview,cxConstChars name,cxAny func)
     CX_RELEASE(item);
 }
 
-static void cxActionXMLReaderError(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
+static void cxActionRootReaderError(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
 {
-    cxActionXML this = arg;
+    cxActionRoot this = arg;
     CX_ERROR("%s",msg);
     this->isError = true;
 }
 
-void cxActionXMLSet(cxAny xmlAction,cxAny mAction,xmlTextReaderPtr reader)
+void cxActionRootSet(cxAny rootAction,cxAny mAction,xmlTextReaderPtr reader)
 {
-    cxActionXML this = xmlAction;
+    cxActionRoot this = rootAction;
     cxConstChars id = cxXMLAttr("id");
     CX_RETURN(id == NULL);
     cxString code = cxXMLReaderReadOuterXml(reader);
     cxHashSet(this->codes, cxHashStrKey(id), code);
 }
 
-cxAny cxActionXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
+cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
 {
     cxAny action = NULL;
     if(ELEMENT_IS_TYPE(cxMove)){
@@ -121,11 +121,11 @@ cxAny cxActionXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
     return action;
 }
 
-cxAny cxActionXMLGet(cxConstChars src)
+cxAny cxActionRootGet(cxConstChars src)
 {
     cxUrlPath path = cxUrlPathParse(src);
     CX_RETURN(path == NULL, NULL);
-    cxActionXML this = cxActionXMLCreate(path->path);
+    cxActionRoot this = cxActionRootCreate(path->path);
     CX_RETURN(this == NULL, NULL);
     cxString code = cxHashGet(this->codes, (path->count == 1) ? cxHashStrKey(path->path) : cxHashStrKey(path->key));
     CX_RETURN(code == NULL, NULL);
@@ -142,7 +142,7 @@ cxAny cxActionXMLGet(cxConstChars src)
         }
         //save root
         cxObjectSetRoot(action, this);
-        cxObjectXMLReadAttrRun(action, this, reader);
+        cxObjectReadAttrRun(action, this, reader);
     }
     return action;
 }
@@ -183,7 +183,7 @@ void cxViewRunActionEvent(cxEvent *event)
     //
     cxConstChars sview = cxEventArgString(event->args,"view");
     if(sview != NULL){
-        view = cxViewXMLGet(view, sview);
+        view = cxViewRootGet(view, sview);
         CX_RETURN(view == NULL);
     }
     //get action
@@ -195,7 +195,7 @@ void cxViewRunActionEvent(cxEvent *event)
         fromcache = (action != NULL);
     }
     if(action == NULL){
-        action = cxActionXMLGet(src);
+        action = cxActionRootGet(src);
     }
     CX_RETURN(action == NULL);
     if(!fromcache && cache){
@@ -219,18 +219,18 @@ void cxViewRunActionEvent(cxEvent *event)
     cxViewAppendAction(view, action);
 }
 
-cxAction cxActionXMLAttachView(cxAny pview,cxConstChars url)
+cxAction cxActionRootAttachView(cxAny pview,cxConstChars url)
 {
-    cxAny action = cxActionXMLGet(url);
+    cxAny action = cxActionRootGet(url);
     CX_RETURN(action == NULL, NULL);
     cxViewAppendAction(pview, action);
     return action;
     return NULL;
 }
 
-static void cxActionXMLLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
+static void cxActionRootLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
 {
-    cxActionXML this = pav;
+    cxActionRoot this = pav;
     while(xmlTextReaderRead(reader) && !this->isError){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
@@ -239,7 +239,7 @@ static void cxActionXMLLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
         if(!ELEMENT_IS_TYPE(cxActionSet)){
             continue;
         }
-        cxObjectXMLReadAttrRun(this, this, reader);
+        cxObjectReadAttrRun(this, this, reader);
         CX_EVENT_FIRE(this, onLoad);
         break;
     }
@@ -256,10 +256,10 @@ static void cxActionXMLLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
     }
 }
 
-cxAny cxActionXMLCreate(cxConstChars xml)
+cxAny cxActionRootCreate(cxConstChars xml)
 {
     cxEngine engine = cxEngineInstance();
-    cxActionXML this = cxHashGet(engine->actions, cxHashStrKey(xml));
+    cxActionRoot this = cxHashGet(engine->actions, cxHashStrKey(xml));
     if(this != NULL){
         return this;
     }
@@ -268,13 +268,13 @@ cxAny cxActionXMLCreate(cxConstChars xml)
         CX_ERROR("%s script not register",xml);
         return NULL;
     }
-    this = CX_CREATE(cxActionXML);
-    xmlTextReaderPtr reader = cxXMLReaderForScript(script,cxActionXMLReaderError, this);
+    this = CX_CREATE(cxActionRoot);
+    xmlTextReaderPtr reader = cxXMLReaderForScript(script,cxActionRootReaderError, this);
     if(reader == NULL){
         CX_ERROR("create xml reader failed");
         return NULL;
     }
-    cxActionXMLLoadCodesWithReader(this, reader);
+    cxActionRootLoadCodesWithReader(this, reader);
     cxHashKey key = cxHashStrKey(xml);
     cxHashSet(this->codes, key, script->bytes);
     cxHashSet(engine->actions, key, this);

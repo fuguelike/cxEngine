@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxActionXML.h>
+#include <core/cxActionRoot.h>
 #include "cxTimer.h"
 
 static void cxTimerInit(cxAny pav)
@@ -22,13 +22,13 @@ static void cxTimerStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_UNUSED_PARAM(this);
 }
 
-static void cxTimerXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxTimerReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
-    cxActionXMLReadAttr(xmlAction, mAction, reader);
-    cxActionXML xml = xmlAction;
+    cxActionReadAttr(rootAction, mAction, reader);
+    cxActionRoot root = rootAction;
     cxTimer this = mAction;
-    this->repeat = cxXMLReadIntAttr(reader, xml->functions, "cxTimer.repeat", this->repeat);
-    cxXMLAppendEvent(xml->events, this, cxTimer, onArrive);
+    this->repeat = cxXMLReadIntAttr(reader, root->functions, "cxTimer.repeat", this->repeat);
+    cxXMLAppendEvent(root->events, this, cxTimer, onArrive);
 }
 
 static cxBool cxTimerExit(cxAny pav)
@@ -43,7 +43,7 @@ static cxBool cxTimerExit(cxAny pav)
 
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
-    cxObjectSetXMLReadFunc(this, cxTimerXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxTimerReadAttr);
     CX_METHOD_SET(this->super.Init, cxTimerInit);
     CX_METHOD_SET(this->super.Step, cxTimerStep);
     CX_METHOD_SET(this->super.Exit, cxTimerExit);

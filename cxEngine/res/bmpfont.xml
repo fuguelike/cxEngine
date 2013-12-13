@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<cxViewXML cxView.fill="0,0,0,0">
+<cxViewRoot cxView.fill="0,0,0,0">
     <cxLabelBMP cxLabelBMP.font="font.fnt" cxLabelBMP.text="items.xml?tex" />
     <cxSprite cxSprite.texture="white.png" cxView.w="300" cxView.h="100" cxView.y="200">
         <cxLabelBMP cxLabelBMP.font="font.fnt" cxLabelBMP.text="数据库" cxView.color="1,0,0" />
@@ -9,5 +9,5 @@
         <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Return" cxLabelTTF.size="30"/>
     </cxButton>
-</cxViewXML>
+</cxViewRoot>
 

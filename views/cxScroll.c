@@ -6,17 +6,17 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxViewXML.h>
+#include <core/cxViewRoot.h>
 #include <core/cxEngine.h>
 #include <actions/cxMove.h>
 #include "cxScroll.h"
 
 #define CX_SCROLL_MOVE_ACTION_ID 100000
 
-void cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxScrollReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
-    cxViewXML xml = xmlView;
-    cxViewXMLReadAttr(xmlView, mView, reader);
+    cxViewRoot root = rootView;
+    cxViewReadAttr(rootView, mView, reader);
     cxScroll this = mView;
     cxConstChars type = cxXMLAttr("cxScroll.type");
     if(cxConstCharsEqu(type, "horizontal")){
@@ -26,7 +26,7 @@ void cxScrollXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
     }else {
         this->type |= (cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal);
     }
-    this->value = cxXMLReadFloatAttr(reader, xml->functions, "cxScroll.value", this->value);
+    this->value = cxXMLReadFloatAttr(reader, root->functions, "cxScroll.value", this->value);
 }
 
 cxView cxScrollContainer(cxAny pview)
@@ -130,7 +130,7 @@ CX_OBJECT_INIT(cxScroll, cxView)
     CX_METHOD_SET(this->super.Touch, cxScrollTouch);
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
-    cxObjectSetXMLReadFunc(this, cxScrollXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxScrollReadAttr);
     //swip cond value
     this->value = 950;
     CX_SLOT_QUICK(engine->onTouch, this, onTouch, cxScrollOnTouch);

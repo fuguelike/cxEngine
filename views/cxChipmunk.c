@@ -7,7 +7,7 @@
 //
 
 #include <core/cxEngine.h>
-#include "cxViewXML.h"
+#include "cxViewRoot.h"
 #include "cxChipmunk.h"
 
 static void cxChipmunkUpdate(cxEvent *event)
@@ -23,15 +23,15 @@ void cxChipmunkSetGravity(cxAny pview,cxVec2f gravity)
     cpSpaceSetGravity(this->space, cpv(gravity.x, gravity.y));
 }
 
-void cxChipmunkXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxChipmunkReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
-    cxViewXML xml = xmlView;
-    cxViewXMLReadAttr(xmlView, mView, reader);
+    cxViewRoot root = rootView;
+    cxViewReadAttr(rootView, mView, reader);
     cxChipmunk this = mView;
     //set space
     cpVect gravity = cpSpaceGetGravity(this->space);
     cxVec2f v = cxVec2fv(gravity.x, gravity.y);
-    v = cxXMLReadVec2fAttr(reader, xml->functions, "cxChipmunk.gravity", v);
+    v = cxXMLReadVec2fAttr(reader, root->functions, "cxChipmunk.gravity", v);
     cpSpaceSetGravity(this->space, cpv(v.x, v.y));
     //load subview
     cxStack stack = CX_ALLOC(cxStack);
@@ -42,20 +42,20 @@ void cxChipmunkXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
         if(type == XML_READER_TYPE_ELEMENT){
             cxView parent = cxStackTop(stack);
             cxConstChars temp = cxXMLReadElementName(reader);
-            cxView cview = CX_METHOD_GET(NULL, xml->Make, temp, reader);
+            cxView cview = CX_METHOD_GET(NULL, root->Make, temp, reader);
             CX_ASSERT(cview != NULL, "make element null");
-            cxObjectSetRoot(cview, xml);
-            cxObjectXMLReadAttrRun(cview, xml, reader);
-            cxViewXMLSet(xml, cview, reader);
+            cxObjectSetRoot(cview, root);
+            cxObjectReadAttrRun(cview, root, reader);
+            cxViewRootSet(root, cview, reader);
             if(parent == mView){
                 cxChipmunkAttr attr = cxChipmunkAttrDefault();
-                attr.isStatic = cxXMLReadBoolAttr(reader,xml->functions, "cxChipmunk.static", attr.isStatic);
-                attr.m = cxXMLReadFloatAttr(reader, xml->functions, "cxChipmunk.m", attr.m);
-                attr.e = cxXMLReadFloatAttr(reader, xml->functions, "cxChipmunk.e", attr.e);
-                attr.u = cxXMLReadFloatAttr(reader, xml->functions, "cxChipmunk.u", attr.u);
-                attr.group = cxXMLReadUIntAttr(reader,xml->functions, "cxChipmunk.group", CP_NO_GROUP);
-                attr.layer = cxXMLReadUIntAttr(reader,xml->functions, "cxChipmunk.layer", CP_ALL_LAYERS);
-                attr.ctype = cxXMLReadUIntAttr(reader,xml->functions, "cxChipmunk.ctype", 0);
+                attr.isStatic = cxXMLReadBoolAttr(reader,root->functions, "cxChipmunk.static", attr.isStatic);
+                attr.m = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.m", attr.m);
+                attr.e = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.e", attr.e);
+                attr.u = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.u", attr.u);
+                attr.group = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.group", CP_NO_GROUP);
+                attr.layer = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.layer", CP_ALL_LAYERS);
+                attr.ctype = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.ctype", 0);
                 cxChipmunkAppend(parent, cview, &attr);
             }else{
                 cxViewAppend(parent, cview);
@@ -240,7 +240,7 @@ void cxChipmunkRemove(cxAny pview,cxAny nview)
 CX_OBJECT_INIT(cxChipmunk, cxView)
 {
     this->items = CX_ALLOC(cxHash);
-    cxObjectSetXMLReadFunc(this, cxChipmunkXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxChipmunkReadAttr);
     this->space = cpSpaceNew();
     CX_EVENT_QUICK(this->super.onUpdate, cxChipmunkUpdate);
     cpSpaceSetGravity(this->space, cpv(0, -1000));

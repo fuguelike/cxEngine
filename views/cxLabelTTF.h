@@ -20,7 +20,7 @@ CX_OBJECT_DEF(cxLabelTTF, cxSprite)
     cxTextAttr attr;
 CX_OBJECT_END(cxLabelTTF)
 
-void cxLabelTTFXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+void cxLabelTTFReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader);
 
 void cxLabelTTFSetFontSize(cxAny pview,cxFloat fontsize);
 

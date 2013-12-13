@@ -6,20 +6,20 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxViewXML.h>
+#include <core/cxViewRoot.h>
 #include "cxTable.h"
 
-void cxTableXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxTableReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
-    cxViewXML xml = xmlView;
-    cxViewXMLReadAttr(xmlView, mView, reader);
+    cxViewRoot root = rootView;
+    cxViewReadAttr(rootView, mView, reader);
     cxTable this = mView;
     //set space
-    cxTableSetSpace(mView, cxXMLReadVec2fAttr(reader, xml->functions, "cxTable.space", this->space));
+    cxTableSetSpace(mView, cxXMLReadVec2fAttr(reader, root->functions, "cxTable.space", this->space));
     //set type
-    this->grid = cxXMLReadVec2iAttr(reader, xml->functions, "cxTable.type", this->grid);
+    this->grid = cxXMLReadVec2iAttr(reader, root->functions, "cxTable.type", this->grid);
     //array hide
-    cxTableArrayHide(mView, cxXMLReadBoolAttr(reader, xml->functions, "cxTable.arrayHide", this->arrayHide));
+    cxTableArrayHide(mView, cxXMLReadBoolAttr(reader, root->functions, "cxTable.arrayHide", this->arrayHide));
 }
 
 void cxTableSetSpace(cxAny pview,cxVec2f space)
@@ -115,7 +115,7 @@ CX_OBJECT_INIT(cxTable, cxView)
     this->arrayHide = true;
     CX_EVENT_QUICK(this->super.onResize, cxTableResize);
     CX_EVENT_QUICK(this->super.onUpdate, cxTableUpdate);
-    cxObjectSetXMLReadFunc(this, cxTableXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxTableReadAttr);
 }
 CX_OBJECT_FREE(cxTable, cxView)
 {

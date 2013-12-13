@@ -9,7 +9,7 @@
 #include "cxConfig.h"
 #include "cxXMLScript.h"
 
-void cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader)
+void cxObjectReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader)
 {
     cxObject this = newobj;
     cxObjectSetTag(this,cxXMLReadIntAttr(reader, NULL, "cxObject.tag", this->cxTag));
@@ -18,7 +18,7 @@ void cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader)
 void cxObjectAutoInit(cxObject this)
 {
     this->cxBase = cxBaseTypeObject;
-    CX_METHOD_SET(this->XMLReadAttr, cxObjectXMLReadAttr);
+    CX_METHOD_SET(this->ReadAttr, cxObjectReadAttr);
 }
 
 void cxObjectAutoFree(cxObject this)
@@ -26,16 +26,16 @@ void cxObjectAutoFree(cxObject this)
     
 }
 
-void cxObjectSetXMLReadFunc(cxAny obj,cxXMLReadAttrFunc func)
+void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func)
 {
     cxObject this = obj;
-    CX_METHOD_SET(this->XMLReadAttr, func);
+    CX_METHOD_SET(this->ReadAttr, func);
 }
 
-void cxObjectXMLReadAttrRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader)
+void cxObjectReadAttrRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader)
 {
     cxObject this = obj;
-    CX_METHOD_RUN(this->XMLReadAttr, pobj, obj,reader);
+    CX_METHOD_RUN(this->ReadAttr, pobj, obj,reader);
 }
 
 void cxObjectSetRoot(cxAny obj,cxAny root)

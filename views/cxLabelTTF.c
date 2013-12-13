@@ -7,25 +7,25 @@
 //
 #include <core/cxEngine.h>
 #include <core/cxUtil.h>
-#include <core/cxViewXML.h>
+#include <core/cxViewRoot.h>
 #include <textures/cxTextureFactory.h>
 #include "cxLabelTTF.h"
 
-void cxLabelTTFXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxLabelTTFReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
-    cxViewXML xml = xmlView;
-    cxSpriteXMLReadAttr(xmlView, mView, reader);
+    cxViewRoot root = rootView;
+    cxSpriteReadAttr(rootView, mView, reader);
     cxLabelTTF this = mView;
     //set font
-    cxString font = cxXMLReadStringAttr(reader, xml->functions, "cxLabelTTF.font");
+    cxString font = cxXMLReadStringAttr(reader, root->functions, "cxLabelTTF.font");
     cxLabelTTFSetFont(mView, font);
     //set text
-    cxString text = cxXMLReadStringAttr(reader, xml->functions, "cxLabelTTF.text");
+    cxString text = cxXMLReadStringAttr(reader, root->functions, "cxLabelTTF.text");
     cxLabelTTFSetText(mView, text);
     //set fontsize
-    cxLabelTTFSetFontSize(mView, cxXMLReadFloatAttr(reader, xml->functions, "cxLabelTTF.size", this->attr.size));
+    cxLabelTTFSetFontSize(mView, cxXMLReadFloatAttr(reader, root->functions, "cxLabelTTF.size", this->attr.size));
     //set fontbold
-    cxLabelTTFSetFontBold(mView, cxXMLReadBoolAttr(reader,xml->functions, "cxLabelTTF.bold", this->attr.bold));
+    cxLabelTTFSetFontBold(mView, cxXMLReadBoolAttr(reader,root->functions, "cxLabelTTF.bold", this->attr.bold));
 }
 
 static void cxLabelTTFUpdate(cxEvent *event)
@@ -38,7 +38,7 @@ static void cxLabelTTFUpdate(cxEvent *event)
 
 CX_OBJECT_INIT(cxLabelTTF, cxSprite)
 {
-    cxObjectSetXMLReadFunc(this, cxLabelTTFXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxLabelTTFReadAttr);
     cxViewOnUpdate(this, cxLabelTTFUpdate);
     this->attr.size = 32;
     cxSpriteSetShader(this, cxShaderAlphaKey);

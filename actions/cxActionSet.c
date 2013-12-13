@@ -6,13 +6,13 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxActionXML.h>
+#include <core/cxActionRoot.h>
 #include <core/cxEventArg.h>
 #include "cxActionSet.h"
 
-static void cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxActionSetReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
-    cxActionXMLReadAttr(xmlAction, mAction, reader);
+    cxActionReadAttr(rootAction, mAction, reader);
     cxActionSet this = mAction;
     //get type
     cxConstChars stype = cxXMLAttr("cxActionSet.type");
@@ -29,11 +29,11 @@ static void cxActionSetXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderP
             continue;
         }
         cxConstChars temp = cxXMLReadElementName(reader);
-        cxAny action = cxActionXMLMakeElement(temp, reader);
+        cxAny action = cxActionRootMakeElement(temp, reader);
         if(action == NULL){
             continue;
         }
-        cxObjectXMLReadAttrRun(action, xmlAction, reader);
+        cxObjectReadAttrRun(action, rootAction, reader);
         cxActionSetAppend(this, action);
     }
 }
@@ -98,13 +98,13 @@ static cxBool cxActionSetExit(cxAny pav)
 
 static void cxActionSetStep(cxAny pav,cxFloat dt,cxFloat time)
 {
-    //    cxActionXML this = pav;
+    //    cxActionRoot this = pav;
     //    CX_LOGGER("%f %f",this->super.duration,time);
 }
 
 CX_OBJECT_INIT(cxActionSet, cxAction)
 {
-    cxObjectSetXMLReadFunc(this, cxActionSetXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxActionSetReadAttr);
     CX_METHOD_SET(this->super.Init, cxActionSetInit);
     CX_METHOD_SET(this->super.Step, cxActionSetStep);
     CX_METHOD_SET(this->super.Exit, cxActionSetExit);

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxActionXML.h>
+#include <core/cxActionRoot.h>
 #include "cxScale.h"
 
 static void cxScaleInit(cxAny pav)
@@ -27,18 +27,18 @@ static void cxScaleStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetScale(this->super.view, nscale);
 }
 
-static void cxScaleXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxScaleReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
-    cxActionXML xml = xmlAction;
-    cxActionXMLReadAttr(xmlAction, mAction, reader);
+    cxActionRoot root = rootAction;
+    cxActionReadAttr(rootAction, mAction, reader);
     cxScale this = mAction;
-    this->newScale.x = cxXMLReadFloatAttr(reader, xml->functions, "cxScale.x", this->newScale.x);
-    this->newScale.y = cxXMLReadFloatAttr(reader, xml->functions, "cxScale.y", this->newScale.y);
+    this->newScale.x = cxXMLReadFloatAttr(reader, root->functions, "cxScale.x", this->newScale.x);
+    this->newScale.y = cxXMLReadFloatAttr(reader, root->functions, "cxScale.y", this->newScale.y);
 }
 
 CX_OBJECT_INIT(cxScale, cxAction)
 {
-    cxObjectSetXMLReadFunc(this, cxScaleXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxScaleReadAttr);
     CX_METHOD_SET(this->super.Init, cxScaleInit);
     CX_METHOD_SET(this->super.Step, cxScaleStep);
 }

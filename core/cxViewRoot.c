@@ -1,5 +1,5 @@
 //
-//  cxViewXML.c
+//  cxViewRoot.c
 //  cxEngine
 //  use attr x y w h ax ay al ar at ab texture file
 //  Created by xuhua on 10/12/13.
@@ -18,22 +18,22 @@
 #include <views/cxTable.h>
 #include <views/cxScroll.h>
 #include <views/cxChipmunk.h>
-#include "cxViewXML.h"
-#include "cxHashXML.h"
-#include "cxActionXML.h"
+#include "cxViewRoot.h"
+#include "cxHashRoot.h"
+#include "cxActionRoot.h"
 
-void cxViewRootXMLReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
+void cxViewRootReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
-    cxViewXMLReadAttr(pxml, view, reader);
-    cxViewXML this = view;
-    cxViewXML xml = pxml;
-    cxXMLAppendEvent(xml->events, this, cxViewXML, onBegin);
-    cxXMLAppendEvent(xml->events, this, cxViewXML, onEnd);
+    cxViewReadAttr(pxml, view, reader);
+    cxViewRoot this = view;
+    cxViewRoot root = pxml;
+    cxXMLAppendEvent(root->events, this, cxViewRoot, onBegin);
+    cxXMLAppendEvent(root->events, this, cxViewRoot, onEnd);
 }
 
-void cxViewXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
+void cxViewRootRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
 {
-    cxViewXML this = pview;
+    cxViewRoot this = pview;
     if(func == NULL){
         cxHashDel(this->events, cxHashStrKey(name));
         return;
@@ -46,9 +46,9 @@ void cxViewXMLRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
     CX_RELEASE(event);
 }
 
-void cxViewXMLRegisteFunc(cxAny pview,cxConstChars name,cxAny func)
+void cxViewRootRegisteFunc(cxAny pview,cxConstChars name,cxAny func)
 {
-    cxViewXML this = pview;
+    cxViewRoot this = pview;
     if(func == NULL){
         cxHashDel(this->functions, cxHashStrKey(name));
         return;
@@ -61,22 +61,22 @@ void cxViewXMLRegisteFunc(cxAny pview,cxConstChars name,cxAny func)
     CX_RELEASE(item);
 }
 
-void cxViewXMLSetItem(cxAny pview,cxConstChars key,cxAny item)
+void cxViewRootSetItem(cxAny pview,cxConstChars key,cxAny item)
 {
-    cxViewXML this = pview;
+    cxViewRoot this = pview;
     cxHashSet(this->items, cxHashStrKey(key), item);
 }
 
-CX_OBJECT_INIT(cxViewXML, cxView)
+CX_OBJECT_INIT(cxViewRoot, cxView)
 {
-    cxObjectSetXMLReadFunc(this, cxViewRootXMLReadAttr);
-    CX_METHOD_SET(this->Make, cxViewXMLMakeElement);
+    cxObjectSetReadAttrFunc(this, cxViewRootReadAttr);
+    CX_METHOD_SET(this->Make, cxViewRootMakeElement);
     this->items = CX_ALLOC(cxHash);
     this->events = CX_ALLOC(cxHash);
     this->actions = CX_ALLOC(cxHash);
     this->functions = CX_ALLOC(cxHash);
 }
-CX_OBJECT_FREE(cxViewXML, cxView)
+CX_OBJECT_FREE(cxViewRoot, cxView)
 {
     CX_EVENT_RELEASE(this->onBegin);
     CX_EVENT_RELEASE(this->onEnd);
@@ -85,17 +85,17 @@ CX_OBJECT_FREE(cxViewXML, cxView)
     CX_RELEASE(this->events);
     CX_RELEASE(this->actions);
 }
-CX_OBJECT_TERM(cxViewXML, cxView)
+CX_OBJECT_TERM(cxViewRoot, cxView)
 
-cxAny cxViewXMLGet(cxAny pview,cxConstChars key)
+cxAny cxViewRootGet(cxAny pview,cxConstChars key)
 {
-    cxViewXML xml = cxObjectRoot(pview);
-    return (xml != NULL) ? cxHashGet(xml->items, cxHashStrKey(key)) : NULL;
+    cxViewRoot root = cxObjectRoot(pview);
+    return (root != NULL) ? cxHashGet(root->items, cxHashStrKey(key)) : NULL;
 }
 
-void cxViewXMLRemove(cxAny pview,cxConstChars key)
+void cxViewRootRemove(cxAny pview,cxConstChars key)
 {
-    cxViewXML this = pview;
+    cxViewRoot this = pview;
     cxAny view = cxHashGet(this->items, cxHashStrKey(key));
     CX_RETURN(view == NULL);
     cxViewRemoved(view);
@@ -107,7 +107,7 @@ void cxViewReplaceViewEvent(cxEvent *event)
     CX_ASSERT(event->args != NULL, "args error");
     cxConstChars url = cxEventArgToString(event->args);
     CX_ASSERT(url != NULL, "args error");
-    cxViewXML view = cxViewXMLCreate(url);
+    cxViewRoot view = cxViewRootCreate(url);
     CX_ASSERT(view != NULL, "create xml view %s falied ",url);
     cxWindowReplaceView(view,event->args);
 }
@@ -117,7 +117,7 @@ void cxViewPushViewEvent(cxEvent *event)
     CX_ASSERT(event->args != NULL, "args error");
     cxConstChars url = cxEventArgToString(event->args);
     CX_ASSERT(url != NULL, "args error");
-    cxViewXML view = cxViewXMLCreate(url);
+    cxViewRoot view = cxViewRootCreate(url);
     CX_ASSERT(view != NULL, "create xml view %s falied ",url);
     cxWindowPushView(view,event->args);
 }
@@ -127,33 +127,33 @@ void cxViewPopViewEvent(cxEvent *event)
     cxWindowPopView(event->args);
 }
 
-cxViewXML cxViewXMLCreate(cxConstChars xml)
+cxViewRoot cxViewRootCreate(cxConstChars xml)
 {
-    cxViewXML this = CX_CREATE(cxViewXML);
-    if(!cxViewXMLLoad(this, xml)){
+    cxViewRoot this = CX_CREATE(cxViewRoot);
+    if(!cxViewRootLoad(this, xml)){
         return NULL;
     }
     cxObjectSetRoot(this, this);
     return this;
 }
 
-void cxViewXMLSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader)
+void cxViewRootSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader)
 {
-    cxViewXML this = pview;
+    cxViewRoot this = pview;
     cxConstChars id = cxXMLAttr("id");
     CX_RETURN(id == NULL);
     cxHashSet(this->items, cxHashStrKey(id), cview);
 }
 
-cxAny cxViewXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
+cxAny cxViewRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
 {
     cxAny cview = NULL;
     if(ELEMENT_IS_TYPE(cxSprite)){
         cview = CX_CREATE(cxSprite);
-    }else if(ELEMENT_IS_TYPE(cxViewXML)){
+    }else if(ELEMENT_IS_TYPE(cxViewRoot)){
         cxConstChars src = cxXMLAttr("src");
         CX_ASSERT(src != NULL, "require src attr");
-        cview = cxViewXMLCreate(src);
+        cview = cxViewRootCreate(src);
     }else if(ELEMENT_IS_TYPE(cxView)){
         cview = CX_CREATE(cxView);
     }else if(ELEMENT_IS_TYPE(cxButton)){
@@ -180,9 +180,9 @@ cxAny cxViewXMLMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
     return cview;
 }
 
-static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack stack)
+static void cxViewRootLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack stack)
 {
-    cxViewXML this = pview;
+    cxViewRoot this = pview;
     while(xmlTextReaderRead(reader)){
         int type = xmlTextReaderNodeType(reader);
         if(type == XML_READER_TYPE_ELEMENT){
@@ -196,8 +196,8 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
             CX_ASSERT(cview != NULL, "make element null");
             cxObjectSetRoot(cview, this);
             cxViewAppend(parent, cview);
-            cxObjectXMLReadAttrRun(cview, this, reader);
-            cxViewXMLSet(this, cview, reader);
+            cxObjectReadAttrRun(cview, this, reader);
+            cxViewRootSet(this, cview, reader);
             if(xmlTextReaderIsEmptyElement(reader)){
                 continue;
             }
@@ -208,35 +208,35 @@ static void cxViewXMLLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack st
     }
 }
 
-static void cxViewXMLReaderError(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
+static void cxViewRootReaderError(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
 {
-    cxViewXML this = arg;
+    cxViewRoot this = arg;
     CX_ERROR("%s",msg);
     this->isError = true;
 }
 
-cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
+cxBool cxViewRootLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
 {
     cxBool ret = false;
-    cxViewXML xmlView = pview;
+    cxViewRoot rootView = pview;
     cxStack stack = CX_ALLOC(cxStack);
-    while(xmlTextReaderRead(reader) && !xmlView->isError){
+    while(xmlTextReaderRead(reader) && !rootView->isError){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
         cxConstChars temp = cxXMLReadElementName(reader);
-        if(ELEMENT_IS_TYPE(cxViewXML)){
+        if(ELEMENT_IS_TYPE(cxViewRoot)){
             ret = true;
             break;
         }
     }
     if(ret){
         cxAutoPoolPush();
-        cxObjectXMLReadAttrRun(xmlView, xmlView, reader);
-        cxStackPush(stack, xmlView);
-        CX_EVENT_FIRE(xmlView, onBegin);
-        cxViewXMLLoadSubviews(xmlView,reader, stack);
-        CX_EVENT_FIRE(xmlView, onEnd);
+        cxObjectReadAttrRun(rootView, rootView, reader);
+        cxStackPush(stack, rootView);
+        CX_EVENT_FIRE(rootView, onBegin);
+        cxViewRootLoadSubviews(rootView,reader, stack);
+        CX_EVENT_FIRE(rootView, onEnd);
         cxStackPop(stack);
         cxAutoPoolPop();
     }
@@ -244,7 +244,7 @@ cxBool cxViewXMLLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
     return ret;
 }
 
-cxBool cxViewXMLLoad(cxAny pview,cxConstChars xml)
+cxBool cxViewRootLoad(cxAny pview,cxConstChars xml)
 {
     cxBool ret = false;
     cxXMLScript script = cxEngineGetXMLScript(xml);
@@ -252,12 +252,12 @@ cxBool cxViewXMLLoad(cxAny pview,cxConstChars xml)
         CX_ERROR("%s script not register",xml);
         return ret;
     }
-    xmlTextReaderPtr reader = cxXMLReaderForScript(script,cxViewXMLReaderError,pview);
+    xmlTextReaderPtr reader = cxXMLReaderForScript(script,cxViewRootReaderError,pview);
     if(reader == NULL){
         CX_ERROR("create xml reader failed");
         return ret;
     }
-    ret = cxViewXMLLoadWithReader(pview, reader);
+    ret = cxViewRootLoadWithReader(pview, reader);
     return ret;
 }
 

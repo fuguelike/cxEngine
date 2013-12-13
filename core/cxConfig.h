@@ -223,7 +223,7 @@ typedef void (*cxObjectFunc)(cxPointer this);
 
 typedef cxAny (*cxAnyFunc)(cxAny object);
 
-typedef void (*cxXMLReadAttrFunc)(cxAny pxml,cxAny pnew, xmlTextReaderPtr reader);
+typedef void (*cxReadAttrFunc)(cxAny pxml,cxAny pnew, xmlTextReaderPtr reader);
 
 //base type define
 CX_OBJECT_BEG(cxObject)
@@ -234,18 +234,18 @@ CX_OBJECT_BEG(cxObject)
     cxInt cxTag;
     cxAny cxRoot;
     cxInt cxSize;
-    CX_METHOD_DEF(cxXMLReadAttrFunc,XMLReadAttr);
+    CX_METHOD_DEF(cxReadAttrFunc,ReadAttr);
 CX_OBJECT_END(cxObject)
 
 cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type);
 
 cxBool cxObjectIsType(cxAny pobj,cxConstType type);
 
-void cxObjectXMLReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader);
+void cxObjectReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader);
 
-void cxObjectSetXMLReadFunc(cxAny obj,cxXMLReadAttrFunc func);
+void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func);
 
-void cxObjectXMLReadAttrRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader);
+void cxObjectReadAttrRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader);
 
 cxAny cxObjectRoot(cxAny obj);
 

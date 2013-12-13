@@ -31,7 +31,7 @@ CX_OBJECT_DEF(cxChipmunk, cxView)
     cxHash items;
 CX_OBJECT_END(cxChipmunk)
 
-void cxChipmunkXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+void cxChipmunkReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader);
 
 void cxChipmunkSetGravity(cxAny pview,cxVec2f gravity);
 

@@ -8,14 +8,14 @@
 
 #include <kazmath/matrix.h>
 #include <streams/cxAssetsStream.h>
-#include <core/cxActionXML.h>
+#include <core/cxActionRoot.h>
 #include <socket/cxEventBase.h>
-#include "cxViewXML.h"
+#include "cxViewRoot.h"
 #include "cxEngine.h"
 #include "cxAutoPool.h"
 #include "cxOpenGL.h"
 #include "cxUtil.h"
-#include "cxHashXML.h"
+#include "cxHashRoot.h"
 #include "cxDB.h"
 
 static cxEngine instance = NULL;
@@ -455,9 +455,9 @@ cxAny cxEngineDataSet(cxConstChars url)
     cxEngine this = cxEngineInstance();
     cxUrlPath path = cxUrlPathParse(url);
     CX_RETURN(path == NULL, NULL);
-    cxHashXML sets = cxHashGet(this->datasets, cxHashStrKey(path->path));
+    cxHashRoot sets = cxHashGet(this->datasets, cxHashStrKey(path->path));
     if(sets == NULL){
-        sets = cxHashXMLCreate(path->path);
+        sets = cxHashRootCreate(path->path);
         CX_RETURN(sets == NULL, NULL);
         cxHashSet(this->datasets, cxHashStrKey(path->path), sets);
     }

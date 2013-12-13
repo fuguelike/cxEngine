@@ -28,7 +28,7 @@ CX_OBJECT_DEF(cxSprite, cxView)
     cxBoxTex2f      texCoord;
 CX_OBJECT_END(cxSprite)
 
-void cxSpriteXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+void cxSpriteReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader);
 
 void cxSpriteSetTextureAttr(cxAny pview,cxTextureAttr attr);
 

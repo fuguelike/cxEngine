@@ -88,11 +88,11 @@ cxArray cxStringSplit(cxString string,cxConstChars sp)
     cxInt idx = 0;
     cxArray ret = CX_CREATE(cxArray);
     for(cxInt i=0; i < length; i++){
-        if(!cxConstCharsHashChar(sp, body[i]) && body[i] != '\0'){
+        if(!cxConstCharsHasChar(sp, body[i]) && body[i] != '\0'){
             buffer[idx++] = body[i];
             continue;
         }
-        if(idx <= 0){
+        if(idx == 0){
             continue;
         }
         cxString item = CX_CREATE(cxString);

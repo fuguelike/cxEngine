@@ -30,7 +30,7 @@ cxUInt cxBinaryToUInt(const cxChar *bs)
     return ret;
 }
 
-cxBool cxConstCharsHashChar(cxConstChars sp,cxChar c)
+cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c)
 {
     for(cxInt i=0; i < strlen(sp);i++){
         if(sp[i] == c){

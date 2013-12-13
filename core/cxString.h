@@ -22,22 +22,24 @@ CX_OBJECT_END(cxString)
 //create static cxString
 
 #define cxStringStatic(_s_)             \
-&(struct cxString){                     \
+(&(struct cxString){                    \
     .super.cxType=cxStringTypeName,     \
+    .super.cxBase=cxBaseTypeObject,     \
     .super.cxRefcount=1,                \
     .strptr.d=(char *)(_s_),            \
     .strptr.n=0,                        \
     .strptr.i=strlen(_s_)               \
-}
+})
 
 #define cxStringData(_d_,_l_)           \
-&(struct cxString){                     \
+(&(struct cxString){                    \
     .super.cxType=cxStringTypeName,     \
+    .super.cxBase=cxBaseTypeObject,     \
     .super.cxRefcount=1,                \
     .strptr.d=(char *)(_d_),            \
     .strptr.n=0,                        \
     .strptr.i=(_l_)                     \
-}
+})
 
 #define cxStringValue(v,t)     cxStringData(&(t){v},sizeof(t))
 

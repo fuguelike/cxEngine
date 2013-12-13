@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<cxHashXML>
+<cxHashRoot>
     <cxAtlasBoxPoint id="boxs" texture="candy.xml">
         <item top="1" left="2" right="3" bottom="4" key="red.png" />
         <item x="50" y="0" w="50" h="50" key="green.png" color="1,1,1,1" />
@@ -74,7 +74,7 @@
         <cxSize2f>100,200</cxSize2f>
         <cxColor4f>1,1,1,1</cxColor4f>
     </cxArray>
-</cxHashXML>
+</cxHashRoot>
 
 
 

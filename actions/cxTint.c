@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxActionXML.h>
+#include <core/cxActionRoot.h>
 #include "cxTint.h"
 
 static void cxTintInit(cxAny pav)
@@ -32,17 +32,17 @@ static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAlpha(this->super.view, alhpa);
 }
 
-static void cxTintXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxTintReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
-    cxActionXML xml = xmlAction;
-    cxActionXMLReadAttr(xmlAction, mAction, reader);
+    cxActionRoot root = rootAction;
+    cxActionReadAttr(rootAction, mAction, reader);
     cxTint this = mAction;
-    this->color = cxXMLReadColor4fAttr(reader, xml->functions, "cxTint.color", this->color);
+    this->color = cxXMLReadColor4fAttr(reader, root->functions, "cxTint.color", this->color);
 }
 
 CX_OBJECT_INIT(cxTint, cxAction)
 {
-    cxObjectSetXMLReadFunc(this, cxTintXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxTintReadAttr);
     CX_METHOD_SET(this->super.Init, cxTintInit);
     CX_METHOD_SET(this->super.Step, cxTintStep);
 }

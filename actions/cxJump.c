@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxActionXML.h>
+#include <core/cxActionRoot.h>
 #include "cxJump.h"
 
 static void cxJumpInit(cxAny pav)
@@ -32,19 +32,19 @@ static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, nPos);
 }
 
-static void cxJumpXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxJumpReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
-    cxActionXML xml = xmlAction;
-    cxActionXMLReadAttr(xmlAction, mAction, reader);
+    cxActionRoot root = rootAction;
+    cxActionReadAttr(rootAction, mAction, reader);
     cxJump this = mAction;
-    this->position = cxXMLReadVec2fAttr(reader, xml->functions, "cxJump.position", this->position);
-    this->height = cxXMLReadFloatAttr(reader, xml->functions, "cxJump.height", this->height);
-    this->jumps  = cxXMLReadIntAttr(reader, xml->functions, "cxJump.jumps", this->jumps);
+    this->position = cxXMLReadVec2fAttr(reader, root->functions, "cxJump.position", this->position);
+    this->height = cxXMLReadFloatAttr(reader, root->functions, "cxJump.height", this->height);
+    this->jumps  = cxXMLReadIntAttr(reader, root->functions, "cxJump.jumps", this->jumps);
 }
 
 CX_OBJECT_INIT(cxJump, cxAction)
 {
-    cxObjectSetXMLReadFunc(this, cxJumpXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxJumpReadAttr);
     CX_METHOD_SET(this->super.Init, cxJumpInit);
     CX_METHOD_SET(this->super.Step, cxJumpStep);
 }

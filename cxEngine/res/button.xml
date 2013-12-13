@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
-<cxViewXML cxView.w="250" cxView.h="120">
+<cxViewRoot cxView.w="250" cxView.h="120">
     <cxTemplate src="buttontemp.xml" title="Return" release="cxPopView" />
-</cxViewXML>
+</cxViewRoot>

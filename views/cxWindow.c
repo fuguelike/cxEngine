@@ -7,7 +7,7 @@
 //
 
 #include <core/cxEngine.h>
-#include <core/cxViewXML.h>
+#include <core/cxViewRoot.h>
 #include "cxWindow.h"
 
 CX_OBJECT_INIT(cxWindow, cxView)
@@ -22,18 +22,18 @@ CX_OBJECT_TERM(cxWindow, cxView)
 
 cxAny cxWindowPushXML(cxConstChars xml)
 {
-    cxViewXML xmlView = cxViewXMLCreate(xml);
-    CX_ASSERT(xmlView != NULL, "create xml view error : %s",xml);
-    cxWindowPushView(xmlView, NULL);
-    return xmlView;
+    cxViewRoot rootView = cxViewRootCreate(xml);
+    CX_ASSERT(rootView != NULL, "create xml view error : %s",xml);
+    cxWindowPushView(rootView, NULL);
+    return rootView;
 }
 
 cxAny cxWindowReplaceXML(cxConstChars xml)
 {
-    cxViewXML xmlView = cxViewXMLCreate(xml);
-    CX_ASSERT(xmlView != NULL, "create xml view error : %s",xml);
-    cxWindowReplaceView(xmlView, NULL);
-    return xmlView;
+    cxViewRoot rootView = cxViewRootCreate(xml);
+    CX_ASSERT(rootView != NULL, "create xml view error : %s",xml);
+    cxWindowReplaceView(rootView, NULL);
+    return rootView;
 }
 
 void cxWindowPopXML()

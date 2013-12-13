@@ -7,7 +7,7 @@
 //
 
 #include <core/cxOpenGL.h>
-#include <core/cxViewXML.h>
+#include <core/cxViewRoot.h>
 #include <core/cxEngine.h>
 #include "cxClipping.h"
 
@@ -58,17 +58,17 @@ void cxClippingSetInverse(cxAny pview,cxBool inverse)
     this->inverse = inverse;
 }
 
-void cxClippingXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader)
+void cxClippingReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
-    cxViewXMLReadAttr(xmlView, mView, reader);
-    cxViewXML xml = xmlView;
+    cxViewReadAttr(rootView, mView, reader);
+    cxViewRoot root = rootView;
     cxClipping this = mView;
-    cxClippingSetInverse(this, cxXMLReadBoolAttr(reader,xml->functions, "cxClipping.inverse", this->inverse));
+    cxClippingSetInverse(this, cxXMLReadBoolAttr(reader,root->functions, "cxClipping.inverse", this->inverse));
     cxConstChars sitems = cxXMLAttr("cxClipping.boxes");
     if(sitems != NULL){
         CX_RETAIN_SWAP(this->boxes,cxEngineDataSet(sitems));
     }
-    cxXMLAppendEvent(xml->events, this, cxClipping, onClipping);
+    cxXMLAppendEvent(root->events, this, cxClipping, onClipping);
 }
 
 static void cxClippingDrawAfter(cxAny pview)
@@ -80,7 +80,7 @@ CX_OBJECT_INIT(cxClipping, cxView)
 {
     CX_EVENT_APPEND(this->onClipping, cxClippingBoxes, NULL);
     this->useRef = cxStencilRefAlloc();
-    cxObjectSetXMLReadFunc(this, cxClippingXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxClippingReadAttr);
     CX_METHOD_SET(this->super.DrawBefore, cxClippingDrawBefore);
     CX_METHOD_SET(this->super.DrawAfter, cxClippingDrawAfter);
 }

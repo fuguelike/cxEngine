@@ -23,7 +23,7 @@ cxUInt cxBinaryToUInt(const cxChar *bs);
 
 void cxSetRandSeed();
 
-cxBool cxConstCharsHashChar(cxConstChars sp,cxChar c);
+cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c);
 
 cxString cxCompressed(cxString data);
 

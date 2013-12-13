@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 #include <core/cxEngine.h>
-#include "cxActionXML.h"
+#include "cxActionRoot.h"
 #include "cxAction.h"
 
 cxBool cxActionForever(cxAny pav)
@@ -14,14 +14,14 @@ cxBool cxActionForever(cxAny pav)
     return false;
 }
 
-void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
+void cxActionReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
 {
-    cxActionXML xml = xmlAction;
+    cxActionRoot root = rootAction;
     cxAction this = mAction;
     //delay
-    cxActionSetDelay(mAction, cxXMLReadFloatAttr(reader, xml->functions, "cxAction.delay", this->delay));
+    cxActionSetDelay(mAction, cxXMLReadFloatAttr(reader, root->functions, "cxAction.delay", this->delay));
     //time
-    cxFloat time = cxXMLReadFloatAttr(reader, xml->functions, "cxAction.time", this->duration);
+    cxFloat time = cxXMLReadFloatAttr(reader, root->functions, "cxAction.time", this->duration);
     cxActionSetDuration(mAction, time);
     //curve
     cxConstChars scurve = cxXMLAttr("cxAction.curve");
@@ -30,22 +30,22 @@ void cxActionXMLReadAttr(cxAny xmlAction,cxAny mAction, xmlTextReaderPtr reader)
         CX_METHOD_SET(this->Curve, curve->func);
     }
     //
-    cxActionSetSplit(this, cxXMLReadIntAttr(reader,xml->functions, "cxAction.split", this->split));
+    cxActionSetSplit(this, cxXMLReadIntAttr(reader,root->functions, "cxAction.split", this->split));
     //
-    cxActionSetSpeed(this, cxXMLReadFloatAttr(reader,xml->functions, "cxAction.speed", this->speed));
+    cxActionSetSpeed(this, cxXMLReadFloatAttr(reader,root->functions, "cxAction.speed", this->speed));
     //actionId
-    cxActionSetId(this, cxXMLReadIntAttr(reader,xml->functions, "cxAction.id", this->actionId));
+    cxActionSetId(this, cxXMLReadIntAttr(reader,root->functions, "cxAction.id", this->actionId));
     //forever
-    if(cxXMLReadBoolAttr(reader,xml->functions, "cxAction.forever", false)){
+    if(cxXMLReadBoolAttr(reader,root->functions, "cxAction.forever", false)){
         CX_METHOD_SET(this->Exit, cxActionForever);
     }
     //assist
-    this->assist = cxXMLReadAssist4fAttr(reader, xml->functions, "cxAction.assist", this->assist);
+    this->assist = cxXMLReadAssist4fAttr(reader, root->functions, "cxAction.assist", this->assist);
     //event
-    cxXMLAppendEvent(xml->events, this, cxAction, onStart);
-    cxXMLAppendEvent(xml->events, this, cxAction, onStop);
-    cxXMLAppendEvent(xml->events, this, cxAction, onSplit);
-    cxXMLAppendEvent(xml->events, this, cxAction, onStep);
+    cxXMLAppendEvent(root->events, this, cxAction, onStart);
+    cxXMLAppendEvent(root->events, this, cxAction, onStop);
+    cxXMLAppendEvent(root->events, this, cxAction, onSplit);
+    cxXMLAppendEvent(root->events, this, cxAction, onStep);
 }
 
 void cxActionSetSplit(cxAny pav,cxInt split)
@@ -65,7 +65,7 @@ cxAny cxActionView(cxAny pav)
 CX_OBJECT_INIT(cxAction, cxObject)
 {
     this->super.cxBase = cxBaseTypeAction;
-    cxObjectSetXMLReadFunc(this, cxActionXMLReadAttr);
+    cxObjectSetReadAttrFunc(this, cxActionReadAttr);
     this->isExit = false;
     this->speed = 1.0f;
     this->index = -1;

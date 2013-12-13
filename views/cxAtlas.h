@@ -53,7 +53,7 @@ void cxAtlasAppend(cxAny pview,cxBoxPoint point);
 
 void cxAtlasUpdate(cxAny pview,cxInt index, cxBoxPoint point);
 
-void cxAtlasXMLReadAttr(cxAny xmlView,cxAny mView, xmlTextReaderPtr reader);
+void cxAtlasReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader);
 
 CX_C_END
 
