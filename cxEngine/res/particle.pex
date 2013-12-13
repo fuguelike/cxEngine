@@ -2,12 +2,12 @@
   <texture name="texture.png"/>
   <sourcePosition x="300.00" y="300.00"/>
   <sourcePositionVariance x="0.00" y="0.00"/>
-  <speed value="100.00"/>
-  <speedVariance value="30.00"/>
+  <speed value="200.00"/>
+  <speedVariance value="50.00"/>
   <particleLifeSpan value="2.0000"/>
   <particleLifespanVariance value="1.9000"/>
-  <angle value="270.00"/>
-  <angleVariance value="2.00"/>
+  <angle value="0.00"/>
+  <angleVariance value="360.00"/>
   <gravity x="0.00" y="0.00"/>
   <radialAcceleration value="0.00"/>
   <tangentialAcceleration value="0.00"/>

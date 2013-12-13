@@ -135,6 +135,7 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
     static cxConstChars sregex = "\\$\\((.*?)\\)";
     cxBool error = false;
     cxString input = cxRegexMatch(regex, 0);
+    CX_ASSERT(input != NULL, "get group 0 failed");
     cxString ret = NULL;
     xmlTextReaderPtr reader = xmlReaderForMemory(cxStringBody(input), cxStringLength(input), NULL, "UTF-8", 0);
     xmlTextReaderSetErrorHandler(reader, cxPrepareReaderError, &error);
