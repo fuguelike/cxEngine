@@ -1,4 +1,4 @@
-cxEngine
+cxEngine V1.0
 
 2D game engine,base openGL ES 2.0
 
