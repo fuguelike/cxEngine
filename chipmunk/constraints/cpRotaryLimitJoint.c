@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
 
-#include "chipmunk_private.h"
+#include <chipmunk/chipmunk_private.h>
 #include "util.h"
 
 static void
@@ -37,7 +37,7 @@ preStep(cpRotaryLimitJoint *joint, cpFloat dt)
 	}
 	
 	// calculate moment of inertia coefficient.
-	joint->iSum = 1.0f/(1.0f/a->i + 1.0f/b->i);
+	joint->iSum = 1.0f/(a->i_inv + b->i_inv);
 	
 	// calculate bias velocity
 	cpFloat maxBias = joint->constraint.maxBias;

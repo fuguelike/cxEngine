@@ -10,7 +10,6 @@
 #include <core/cxEngine.h>
 #include <core/cxUtil.h>
 #include <streams/cxAssetsStream.h>
-#include <streams/cxMp3Stream.h>
 #include "cxPlayer.h"
 
 CX_OBJECT_INIT(cxBuffer, cxObject)
@@ -130,8 +129,6 @@ cxTrack cxPlayFile(cxConstChars file,cxBool loop)
     cxString bytes = NULL;
     if(type == cxAudioFileTypeWAV){
         bytes = cxWAVSamplesWithFile(file,&format,&freq);
-    }else if(type == cxAudioFileTypeMP3){
-        bytes = cxMP3SamplesWithFile(file,&format,&freq);
     }
     if(bytes == NULL){
         CX_ERROR("play wav file %s error",file);

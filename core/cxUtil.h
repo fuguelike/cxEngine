@@ -33,13 +33,11 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr at
 
 cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
 
-cxString cxMP3SamplesWithData(cxString data,cxUInt *format,cxUInt *freq);
-
-cxString cxMP3SamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
-
 cxHash cxParseKeyValue(cxChar *query);
 
 cxString cxAssetsPath(cxConstChars file);
+
+cxInt cxAssertsOpen(cxConstChars file,cxInt *start,cxInt *length);
 
 cxDouble cxTimestamp();
 

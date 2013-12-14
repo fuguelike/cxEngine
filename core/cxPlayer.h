@@ -9,8 +9,15 @@
 #ifndef cxEngine_cxPlayer_h
 #define cxEngine_cxPlayer_h
 
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
+#if (CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID)
+
+#elif (CX_TARGET_PLATFORM == CX_PLATFORM_IOS)
+    #include <OpenAL/al.h>
+    #include <OpenAL/alc.h>
+#else
+    #error "not define target platform"
+#endif
+
 #include "cxBase.h"
 #include "cxArray.h"
 #include "cxString.h"

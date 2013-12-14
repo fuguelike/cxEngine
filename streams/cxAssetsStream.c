@@ -5,6 +5,7 @@
 //  Created by xuhua on 9/27/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
+#include <unistd.h>
 #include <sys/stat.h>
 #include <core/cxUtil.h>
 #include "cxAssetsStream.h"
@@ -14,14 +15,12 @@ static cxBool cxAssetsStreamOpen(cxAny this)
     cxAssetsStream asserts = this;
     CX_ASSERT(asserts->super.isOpen == false,"stream repeat open");
     cxConstChars path = cxStringBody(asserts->super.path);
-    asserts->fd = fopen(path, "rb");
-    if(asserts->fd == NULL){
+    asserts->fd = cxAssertsOpen(path, &asserts->start, &asserts->super.length);
+    if(asserts->fd < 0){
         CX_ERROR("open assets %s stream failed",path);
         return false;
     }
-    struct stat stat={0};
-    lstat(path, &stat);
-    asserts->super.length = (cxSize)stat.st_size;
+    lseek(asserts->fd, asserts->start, SEEK_SET);
     asserts->super.canRead = true;
     asserts->super.canSeek = true;
     asserts->super.canWrite = false;
@@ -35,8 +34,7 @@ static cxInt cxAssetsStreamRead(cxAny this,cxPointer buffer,cxInt size)
     if(!asserts->super.canRead){
         return 0;
     }
-    int ret = (int)fread(buffer, 1, size, asserts->fd);
-    return ret;
+    return read(asserts->fd, buffer, size);
 }
 
 static cxInt cxAssetsStreamWrite(cxAny this,cxPointer buffer,cxInt size)
@@ -54,7 +52,7 @@ static cxOff cxAssetsStreamPosition(cxAny this)
     if(!asserts->super.canRead){
         return 0;
     }
-    return (cxOff)ftell(asserts->fd);
+    return (cxOff)lseek(asserts->fd, 0, SEEK_CUR);
 }
 
 static cxBool cxAssetsStreamSeek(cxAny this,cxOff off,cxInt flags)
@@ -63,7 +61,7 @@ static cxBool cxAssetsStreamSeek(cxAny this,cxOff off,cxInt flags)
     if(!asserts->super.canSeek){
         return false;
     }
-    return fseek(asserts->fd, (long)off, flags);
+    return lseek(asserts->fd, off + asserts->start, flags) > 0;
 }
 
 static cxString cxAssetsStreamAllBytes(cxAny this)
@@ -88,10 +86,7 @@ static cxString cxAssetsStreamAllBytes(cxAny this)
 static void cxAssetsStreamClose(cxAny this)
 {
     cxAssetsStream asserts = this;
-    if(asserts->fd != NULL){
-        fclose(asserts->fd);
-        asserts->fd = NULL;
-    }
+    close(asserts->fd);
     cxStreamBaseClose(this);
 }
 

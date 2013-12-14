@@ -15,7 +15,8 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxAssetsStream, cxStream)
-    FILE *fd;
+    cxInt fd;
+    cxInt start;
 CX_OBJECT_END(cxAssetsStream)
 
 cxStream cxAssetsStreamCreate(cxConstChars file);

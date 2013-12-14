@@ -31,7 +31,7 @@ typedef cxString (*cxStreamAllBytesFunc)(cxAny this);
 CX_OBJECT_DEF(cxStream, cxObject)
     cxString path;
     cxString file;
-    cxSize length;
+    cxInt length;
     cxBool canRead;
     cxBool canWrite;
     cxBool canSeek;

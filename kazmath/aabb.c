@@ -25,7 +25,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "aabb.h"
 
-
 /**
     Initializes the AABB around a central point. If centre is NULL then the origin
     is used. Returns pBox.

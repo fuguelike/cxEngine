@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
 
-#include "chipmunk_private.h"
+#include <chipmunk/chipmunk_private.h>
 #include "util.h"
 
 // TODO: Comment me!

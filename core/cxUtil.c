@@ -7,8 +7,6 @@
 //
 
 #include <zlib.h>
-#include <OpenAL/al.h>
-#include <streams/cxMp3Stream.h>
 #include <evhttp.h>
 #include <sys/time.h>
 #include <ctype.h>
@@ -92,66 +90,6 @@ cxString cxDecompress(cxString data)
     return NULL;
 }
 
-cxString cxMP3SamplesWithData(cxString data,cxUInt *format,cxUInt *freq)
-{
-    cxString rv = CX_CREATE(cxString);
-    cxInt error = 0;
-    mpg123_handle *mh = mpg123_new(NULL, &error);
-    if(mh == NULL){
-        CX_ERROR("new mp3 handle error");
-        goto completed;
-    }
-    if(mpg123_open_feed(mh) != MPG123_OK){
-        CX_ERROR("open mp3 feed error");
-        goto completed;
-    }
-    cxInt bufsiz = mpg123_outblock(mh);
-    cxPointer buffer = allocator->malloc(bufsiz);
-    size_t done = 0;
-    mpg123_feed(mh, (const cxUChar *)cxStringBody(data), cxStringLength(data));
-    cxLong mfreq = 0;
-    cxInt mchannels = 0;
-    cxInt mencoding = 0;
-    mpg123_getformat(mh, &mfreq, &mchannels, &mencoding);
-    *freq = mfreq;
-    if(mencoding & MPG123_ENC_16){
-        *format = (mchannels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
-    }else{
-        *format = (mchannels == 1) ? AL_FORMAT_MONO8 : AL_FORMAT_STEREO8;
-    }
-    while(true) {
-        cxInt ret = mpg123_read(mh, buffer, bufsiz, &done);
-        if(done > 0){
-            cxStringAppend(rv, buffer, done);
-        }
-        if(ret == MPG123_NEED_MORE || ret == MPG123_ERR || ret == MPG123_DONE){
-            break;
-        }
-    }
-    allocator->free(buffer);
-completed:
-    mpg123_close(mh);
-    mpg123_delete(mh);
-    return cxStringLength(rv) > 0 ? rv : NULL;
-}
-
-cxString cxMP3SamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
-{
-    cxMp3Stream this  = (cxMp3Stream)cxMp3StreamCreate(file);
-    cxString bytes = cxStreamAllBytes(this);
-    if(bytes == NULL){
-        CX_ERROR("get mp3 bytes error");
-        return NULL;
-    }
-    if(this->encoding & MPG123_ENC_16){
-        *format = (this->channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
-    }else{
-        *format = (this->channels == 1) ? AL_FORMAT_MONO8 : AL_FORMAT_STEREO8;
-    }
-    *freq = this->freq;
-    return bytes;
-}
-
 cxInt cxRand(cxInt min,cxInt max)
 {
     cxInt x = rand();
@@ -198,6 +136,6 @@ void cxUtilAssert(cxConstChars file,int line,cxConstChars format, ...)
 {
     va_list ap;
     va_start(ap, format);
-    cxUtilPrint("Assert", file, line, format, ap);
+    cxUtilPrint("ASSERT", file, line, format, ap);
     va_end(ap);
 }
