@@ -249,7 +249,7 @@ cxDBEnv cxDBEnvCreate(cxConstChars type,cxBool logger)
         env->env->set_flags(env->env,DB_AUTO_COMMIT, 1);
     }
     env->flags = DB_CREATE | DB_INIT_MPOOL;
-    cxString home = cxAssetsPath(NULL);;
+    cxString home = cxAssetsPath(NULL);
     if(cxConstCharsEqu(type, "document")){
         home = cxDocumentPath(NULL);
         env->flags |= (logger ? (DB_RECOVER|DB_INIT_LOG|DB_INIT_TXN|DB_THREAD): 0);

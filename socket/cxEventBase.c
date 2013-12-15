@@ -68,11 +68,3 @@ cxAny cxEventBaseHttpConnect(cxConstChars host,cxInt port)
 
 
 
-
-
-
-
-
-
-
-

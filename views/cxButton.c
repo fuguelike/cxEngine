@@ -7,9 +7,9 @@
 //
 
 #include <core/cxEngine.h>
-#include "cxViewRoot.h"
+#include <core/cxViewRoot.h>
+#include <core/cxXMLScript.h>
 #include "cxButton.h"
-#include "cxXMLScript.h"
 
 cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
 {

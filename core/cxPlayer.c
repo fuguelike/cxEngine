@@ -12,6 +12,12 @@
 #include <streams/cxAssetsStream.h>
 #include "cxPlayer.h"
 
+CX_OBJECT_DEF(cxBuffer, cxObject)
+    ALuint buffer;
+    ALenum format;
+    ALsizei freq;
+CX_OBJECT_END(cxBuffer)
+
 CX_OBJECT_INIT(cxBuffer, cxObject)
 {
     alGenBuffers(1, &this->buffer);
@@ -22,7 +28,7 @@ CX_OBJECT_FREE(cxBuffer, cxObject)
 }
 CX_OBJECT_TERM(cxBuffer, cxObject)
 
-cxBuffer cxBufferCreate(cxString data,ALenum format,ALsizei freq)
+cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
 {
     cxBuffer this = CX_CREATE(cxBuffer);
     this->format = format;
@@ -35,18 +41,11 @@ static cxInt cxPlayerFreq = 22050;
 
 static cxInt cxPlayerFormat = AL_FORMAT_MONO16;
 
-cxAudioFileType cxAudioGetType(cxConstChars file)
-{
-    cxConstChars ext = strrchr(file, '.');
-    CX_RETURN(ext == NULL,cxAudioFileTypeNone);
-    if(cxConstCharsEqu(ext, ".mp3")){
-        return cxAudioFileTypeMP3;
-    }
-    if(cxConstCharsEqu(ext, ".wav")){
-        return cxAudioFileTypeWAV;
-    }
-    return cxAudioFileTypeNone;
-}
+CX_OBJECT_DEF(cxTrack, cxObject)
+    ALsizei freq;
+    ALuint format;
+    ALuint source;
+CX_OBJECT_END(cxTrack)
 
 CX_OBJECT_INIT(cxTrack, cxObject)
 {
@@ -61,20 +60,31 @@ CX_OBJECT_FREE(cxTrack, cxObject)
 }
 CX_OBJECT_TERM(cxTrack, cxObject)
 
-void cxTrackPause(cxTrack this)
+void cxTrackPause(cxAny track)
 {
+    cxTrack this = track;
     alSourcePause(this->source);
 }
 
-void cxTrackResume(cxTrack this)
+void cxTrackResume(cxAny track)
 {
+    cxTrack this = track;
     alSourcePlay(this->source);
 }
 
-void cxTrackStop(cxTrack this)
+void cxTrackStop(cxAny track)
 {
+    cxTrack this = track;
     alSourceStop(this->source);
 }
+
+CX_OBJECT_DEF(cxPlayer, cxObject)
+    cxArray tracks;
+    cxHash caches;
+    ALCdevice *device;
+    ALCcontext *context;
+    CX_SLOT_ALLOC(onMemory);
+CX_OBJECT_END(cxPlayer)
 
 static cxPlayer instance = NULL;
 
@@ -101,7 +111,7 @@ static cxTrack cxPlayerQueryTrack()
     return track;
 }
 
-cxTrack cxPlayBuffer(cxAny buffer,cxBool loop)
+cxAny cxPlayBuffer(cxAny buffer,cxBool loop)
 {
     cxBuffer cb = buffer;
     cxTrack track = cxPlayerQueryTrack();
@@ -112,7 +122,7 @@ cxTrack cxPlayBuffer(cxAny buffer,cxBool loop)
     return track;
 }
 
-cxTrack cxPlayFile(cxConstChars file,cxBool loop)
+cxAny cxPlayFile(cxConstChars file,cxBool loop)
 {
     cxPlayer this = cxPlayerInstance();
     cxBuffer buffer = cxHashGet(this->caches, cxHashStrKey(file));
@@ -193,7 +203,7 @@ void cxPlayerOpen(cxInt freq,cxInt format)
     cxPlayerInstance();
 }
 
-cxPlayer cxPlayerInstance()
+cxAny cxPlayerInstance()
 {
     if(instance == NULL){
         instance = CX_ALLOC(cxPlayer);

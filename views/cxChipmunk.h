@@ -9,8 +9,8 @@
 #ifndef cxEngine_cxChipmunk_h
 #define cxEngine_cxChipmunk_h
 
-#include <core/cxView.h>
 #include <chipmunk/chipmunk.h>
+#include <core/cxView.h>
 
 CX_C_BEGIN
 

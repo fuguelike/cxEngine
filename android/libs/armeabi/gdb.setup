@@ -1,0 +1,2 @@
+set solib-search-path /Users/xuhua/cxEngine/android/obj/local/armeabi
+directory /Users/xuhua/android/android-ndk-r9/platforms/android-9/arch-arm/usr/include /Users/xuhua/cxEngine/android/jni /Users/xuhua/android/android-ndk-r9/sources/cxx-stl/system

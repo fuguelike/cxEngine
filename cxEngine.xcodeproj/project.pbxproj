@@ -41,6 +41,7 @@
 		8341C6CF1822812B0045A66F /* scale9.png in Resources */ = {isa = PBXBuildFile; fileRef = 8341C6BD1822812B0045A66F /* scale9.png */; };
 		8341C6D01822812B0045A66F /* simsun.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8341C6BE1822812B0045A66F /* simsun.ttf */; };
 		8341C6D11822812B0045A66F /* songti.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8341C6BF1822812B0045A66F /* songti.ttf */; };
+		83487CBA185DA08D00A8E28C /* atlas.pkm in Resources */ = {isa = PBXBuildFile; fileRef = 83487CB9185DA08D00A8E28C /* atlas.pkm */; };
 		834F2E8018458D310067E220 /* Untitled.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 834F2E7E18458D310067E220 /* Untitled.pvr */; };
 		834F2E8118458D310067E220 /* Untitled.xml in Resources */ = {isa = PBXBuildFile; fileRef = 834F2E7F18458D310067E220 /* Untitled.xml */; };
 		834F2E8418459AFE0067E220 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = 834F2E8318459AFE0067E220 /* white.png */; };
@@ -117,6 +118,7 @@
 		8341C6BD1822812B0045A66F /* scale9.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scale9.png; path = res/scale9.png; sourceTree = "<group>"; };
 		8341C6BE1822812B0045A66F /* simsun.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = simsun.ttf; path = res/simsun.ttf; sourceTree = "<group>"; };
 		8341C6BF1822812B0045A66F /* songti.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = songti.ttf; path = res/songti.ttf; sourceTree = "<group>"; };
+		83487CB9185DA08D00A8E28C /* atlas.pkm */ = {isa = PBXFileReference; lastKnownFileType = file; name = atlas.pkm; path = res/atlas.pkm; sourceTree = "<group>"; };
 		834F2E7E18458D310067E220 /* Untitled.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = Untitled.pvr; path = res/Untitled.pvr; sourceTree = "<group>"; };
 		834F2E7F18458D310067E220 /* Untitled.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Untitled.xml; path = res/Untitled.xml; sourceTree = "<group>"; };
 		834F2E8318459AFE0067E220 /* white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = white.png; path = res/white.png; sourceTree = "<group>"; };
@@ -237,6 +239,7 @@
 				835A95C2185597600088B413 /* font.png */,
 				83900BC618471D6D00E702C7 /* atlas.jpg */,
 				83900BC918471DCE00E702C7 /* atlas.xml */,
+				83487CB9185DA08D00A8E28C /* atlas.pkm */,
 				8341C6AF1822812B0045A66F /* 4.pvr */,
 				834F2E7E18458D310067E220 /* Untitled.pvr */,
 				837B7C75184C2A2100BB62AD /* pattern1.png */,
@@ -377,6 +380,7 @@
 				8341C6C81822812B0045A66F /* candy.xml in Resources */,
 				8341C6D11822812B0045A66F /* songti.ttf in Resources */,
 				8341C6D01822812B0045A66F /* simsun.ttf in Resources */,
+				83487CBA185DA08D00A8E28C /* atlas.pkm in Resources */,
 				837277761844962A005EDE68 /* animate.xml in Resources */,
 				8341C6CD1822812B0045A66F /* orange.png in Resources */,
 				8341C6C51822812B0045A66F /* button.xml in Resources */,

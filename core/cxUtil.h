@@ -12,6 +12,7 @@
 #include "cxConfig.h"
 #include "cxString.h"
 #include "cxHash.h"
+#include "cxPlayer.h"
 
 CX_C_BEGIN
 
@@ -22,6 +23,8 @@ cxUInt cxHexToUInt(const cxChar *bs);
 cxUInt cxBinaryToUInt(const cxChar *bs);
 
 void cxSetRandSeed();
+
+cxAudioFileType cxAudioGetType(cxConstChars file);
 
 cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c);
 

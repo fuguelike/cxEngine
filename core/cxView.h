@@ -54,6 +54,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxViewAutoResizeBox  autoBox;
     cxHash caches;
     cxHash actions;
+    cxArray removes;
     cxInt zorder;
     cxListElement *subElement;
     cxList subViews;

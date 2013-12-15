@@ -162,9 +162,11 @@ CX_OBJECT_INIT(cxView, cxObject)
     cxObjectSetReadAttrFunc(this, cxViewReadAttr);
     this->actions = CX_ALLOC(cxHash);
     this->caches = CX_ALLOC(cxHash);
+    this->removes = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
+    CX_RELEASE(this->removes);
     CX_EVENT_RELEASE(this->onDirty);
     CX_EVENT_RELEASE(this->onEnter);
     CX_EVENT_RELEASE(this->onExit);
@@ -632,6 +634,7 @@ void cxViewRemoved(cxAny pview)
         cxViewExit(this);
     }
     cxView parent = this->parentView;
+    cxArrayAppend(parent->removes, this);
     cxListRemove(parent->subViews, this->subElement);
     this->subElement = NULL;
     this->parentView = NULL;
@@ -776,6 +779,8 @@ void cxViewDraw(cxAny pview)
     }
     cxViewDrawBorder(this);
     kmGLPopMatrix();
+    //remove view
+    cxArrayClean(this->removes);
 }
 
 

@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 #include <core/cxEngine.h>
+#include <core/cxViewRoot.h>
 #include <core/cxOpenGL.h>
 #include <core/cxXMLScript.h>
 #include <textures/cxTextureFactory.h>
 #include "cxSprite.h"
-#include "cxViewRoot.h"
 
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor)
 {

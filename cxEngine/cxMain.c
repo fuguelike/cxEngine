@@ -13,8 +13,6 @@
 #include <textures/cxTextureFactory.h>
 #include "cxMain.h"
 #include <core/cxDB.h>
-
-
 #include <actions/cxMove.h>
 #include <actions/cxCurve.h>
 #include <core/cxActionRoot.h>

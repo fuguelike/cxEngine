@@ -41,6 +41,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxBool isInit;
     cxBool isShowBorder;
     cxBool isTouch;
+    cxBool isPause;
     cxWindow window;
     cxDouble lastTime;
     cxFloat frameDelta;

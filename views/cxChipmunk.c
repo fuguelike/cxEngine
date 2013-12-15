@@ -7,7 +7,7 @@
 //
 
 #include <core/cxEngine.h>
-#include "cxViewRoot.h"
+#include <core/cxViewRoot.h>
 #include "cxChipmunk.h"
 
 static cxChipmunkAttr cxChipmunkAttrDefault()
@@ -112,7 +112,7 @@ void cxChipmunkReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 static void cxChipmunkBodyUpdatePosition(cpBody *body, cpFloat dt)
 {
     cpBodyUpdatePosition(body, dt);
-    cxViewSetPos(body->data, cxVec2fv(body->p.x, body->p.y));
+    cxViewSetPos(body->data, body->p);
     cxViewSetAngle(body->data, body->a);
 }
 
@@ -128,7 +128,7 @@ void cxChipmunkSetPos(cxAny pview,cxVec2f pos)
     CX_RETURN(shape == NULL);
     cpBody *body = cpShapeGetBody(shape);
     CX_RETURN(cpBodyIsStatic(body));
-    cpBodySetPos(body, cpv(pos.x, pos.y));
+    cpBodySetPos(body, pos);
 }
 
 void cxChipmunkSetRadians(cxAny pview,cxFloat angle)
@@ -181,7 +181,7 @@ void cxChipmunkApplyForce(cxAny pview, cxVec2f force, cxVec2f r)
     cpShape *shape = cxEventArgToWeakRef(cxViewArgs(pview));
     CX_RETURN(shape == NULL);
     cpBody *body = cpShapeGetBody(shape);
-    cpBodyApplyForce(body, cpv(force.x, force.y), cpv(r.x, r.y));
+    cpBodyApplyForce(body, force, r);
 }
 
 void cxChipmunkApplyImpulse(cxAny pview, const cxVec2f j, const cxVec2f r)
@@ -190,7 +190,7 @@ void cxChipmunkApplyImpulse(cxAny pview, const cxVec2f j, const cxVec2f r)
     cpShape *shape = cxEventArgToWeakRef(cxViewArgs(pview));
     CX_RETURN(shape == NULL);
     cpBody *body = cpShapeGetBody(shape);
-    cpBodyApplyImpulse(body, cpv(j.x, j.y), cpv(r.x, r.y));
+    cpBodyApplyImpulse(body, j, r);
 }
 
 void cxChipmunkSetCollisionType(cxAny pview,cxUInt type)
@@ -247,7 +247,7 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
     if(attr->shape == cxChipmunkShapeBox){
         i = cpMomentForBox(attr->m, size.w, size.h);
     }else if(attr->shape == cxChipmunkShapeCircle){
-        i = cpMomentForCircle(attr->m, 0, r, cpv(attr->cp.x, attr->cp.y));
+        i = cpMomentForCircle(attr->m, 0, r, attr->cp);
     }else{
         CX_ASSERT(false, "shape error");
     }
@@ -261,14 +261,14 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
     cpBodySetPositionFunc(body, cxChipmunkBodyUpdatePosition);
     cpBodySetVelocityFunc(body, cxChipmunkBodyUpdateVelocity);
     cpBodySetAngle(body, angle);
-    cpBodySetPos(body, cpv(pos.x, pos.y));
+    cpBodySetPos(body, pos);
     cpBodySetUserData(body, nview);
     //set shape type
     cpShape *shape = NULL;
     if(attr->shape == cxChipmunkShapeBox){
         shape = cpBoxShapeNew(body, size.w, size.h);
     }else if(attr->shape == cxChipmunkShapeCircle){
-        shape = cpCircleShapeNew(body, r, cpv(attr->cp.x, attr->cp.y));
+        shape = cpCircleShapeNew(body, r, attr->cp);
     }else{
         CX_ASSERT(false, "shape error");
     }
@@ -317,7 +317,7 @@ CX_OBJECT_INIT(cxChipmunk, cxView)
     cxObjectSetReadAttrFunc(this, cxChipmunkReadAttr);
     this->space = cpSpaceNew();
     CX_EVENT_QUICK(this->super.onUpdate, cxChipmunkUpdate);
-    cpSpaceSetGravity(this->space, cpv(0, -1000));
+    cpSpaceSetGravity(this->space, cxVec2fv(0, -1000));
 }
 CX_OBJECT_FREE(cxChipmunk, cxView)
 {

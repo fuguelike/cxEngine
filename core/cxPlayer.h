@@ -30,47 +30,25 @@ typedef enum {
     cxAudioFileTypeWAV,
 }cxAudioFileType;
 
-CX_OBJECT_DEF(cxBuffer, cxObject)
-    ALuint buffer;
-    ALenum format;
-    ALsizei freq;
-CX_OBJECT_END(cxBuffer)
+cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq);
 
-cxBuffer cxBufferCreate(cxString data,ALenum format,ALsizei freq);
+void cxTrackPause(cxAny this);
 
-CX_OBJECT_DEF(cxTrack, cxObject)
-    ALsizei freq;
-    ALuint format;
-    ALuint source;
-CX_OBJECT_END(cxTrack)
+void cxTrackResume(cxAny this);
 
-void cxTrackPause(cxTrack this);
+void cxTrackStop(cxAny this);
 
-void cxTrackResume(cxTrack this);
+cxAny cxPlayBuffer(cxAny buffer,cxBool loop);
 
-void cxTrackStop(cxTrack this);
-
-cxAudioFileType cxAudioGetType(cxConstChars file);
-
-cxTrack cxPlayBuffer(cxAny buffer,cxBool loop);
-
-cxTrack cxPlayFile(cxConstChars file,cxBool loop);
+cxAny cxPlayFile(cxConstChars file,cxBool loop);
 
 #define INIT_TRACK 5
-
-CX_OBJECT_DEF(cxPlayer, cxObject)
-    cxArray tracks;
-    cxHash caches;
-    ALCdevice *device;
-    ALCcontext *context;
-    CX_SLOT_ALLOC(onMemory);
-CX_OBJECT_END(cxPlayer)
 
 void cxPlayerOpen(cxInt freq,cxInt format);
 
 void cxPlayerDestroy();
 
-cxPlayer cxPlayerInstance();
+cxAny cxPlayerInstance();
 
 CX_C_END
 

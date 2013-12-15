@@ -1,12 +1,15 @@
 #include <stdint.h>
 #include <float.h>
 
+//use cxEngine cxVec2
+#include <core/cxTypes.h>
+
 #ifdef __APPLE__
    #include "TargetConditionals.h"
 #endif
 
 #if ((TARGET_OS_IPHONE == 1) || (TARGET_OS_MAC == 1)) && (!defined CP_USE_CGPOINTS)
-	#define CP_USE_CGPOINTS 1
+	#define CP_USE_CGPOINTS 0
 #endif
 
 #if CP_USE_CGPOINTS == 1
@@ -208,13 +211,15 @@ typedef uint32_t cpCollisionID;
 
 // CGPoints are structurally the same, and allow
 // easy interoperability with other Cocoa libraries
-#if CP_USE_CGPOINTS
-	typedef CGPoint cpVect;
-#else
+//#if CP_USE_CGPOINTS
+//	typedef CGPoint cpVect;
+//#else
 /// Chipmunk's 2D vector type.
 /// @addtogroup cpVect
-	typedef struct cpVect{cpFloat x,y;} cpVect;
-#endif
+//	typedef struct cpVect{cpFloat x,y;} cpVect;
+//#endif
+
+typedef cxVec2f cpVect;
 
 typedef struct cpMat2x2 {
 	// Row major [[a, b][c d]]

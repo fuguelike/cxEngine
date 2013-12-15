@@ -30,18 +30,19 @@ void cxEngineExit()
     cxEnginePause();
     cxEngineDestroy();
     cxAllocatorFree();
-    exit(0);
 }
 
 void cxEnginePause()
 {
     cxEngine engine = cxEngineInstance();
+    engine->isPause = true;
     CX_SIGNAL_FIRE(engine->onPause, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
 }
 
 void cxEngineResume()
 {
     cxEngine engine = cxEngineInstance();
+    engine->isPause = false;
     CX_SIGNAL_FIRE(engine->onResume, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
 }
 
@@ -54,7 +55,7 @@ void cxEngineMemory()
 void cxEngineDraw()
 {
     cxEngine engine = cxEngineInstance();
-    CX_RETURN(!engine->isInit);
+    CX_RETURN(!engine->isInit || engine->isPause);
     cxOpenGLClear();
     cxAutoPoolBegin();
     

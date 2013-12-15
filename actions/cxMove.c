@@ -6,8 +6,9 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxActionRoot.h>
 #include "cxMove.h"
-#include "cxActionRoot.h"
+
 
 static void cxMoveInit(cxAny pav)
 {

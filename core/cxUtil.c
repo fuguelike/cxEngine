@@ -58,6 +58,19 @@ cxUInt cxHexToUInt(const cxChar *bs)
     return ret;
 }
 
+cxAudioFileType cxAudioGetType(cxConstChars file)
+{
+    cxConstChars ext = strrchr(file, '.');
+    CX_RETURN(ext == NULL,cxAudioFileTypeNone);
+    if(cxConstCharsEqu(ext, ".mp3")){
+        return cxAudioFileTypeMP3;
+    }
+    if(cxConstCharsEqu(ext, ".wav")){
+        return cxAudioFileTypeWAV;
+    }
+    return cxAudioFileTypeNone;
+}
+
 cxString cxCompressed(cxString data)
 {
     CX_ASSERT(data != NULL, "args error");
@@ -103,7 +116,7 @@ void cxSetRandSeed()
 
 cxDouble cxTimestamp()
 {
-    struct timeval val;
+    struct timeval val = {0};
     gettimeofday(&val, NULL);
     return val.tv_sec + (cxDouble)val.tv_usec/(cxDouble)1000000.0;
 }

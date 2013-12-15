@@ -284,6 +284,9 @@ void cxOpenGLCheckFeature()
     CX_GL_SUPPORT(GL_OES_vertex_array_object);
     CX_GL_SUPPORT(GL_EXT_discard_framebuffer);
     
+#if (CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID)
+    this->support_GL_OES_vertex_array_object = false;
+#endif
     
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &this->max_texture_size);
     CX_LOGGER("GL_MAX_TEXTURE_SIZE: %d",this->max_texture_size);

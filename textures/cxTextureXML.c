@@ -36,14 +36,16 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         }
         cxConstChars simagePath = cxXMLAttr("imagePath");
         CX_ASSERT(simagePath != NULL, "xml imagePath element miss");
-        
-        xml->innerTexture = cxTextureCreate((cxConstChars)simagePath);
+    
+        xml->innerTexture = cxTextureCreate(simagePath);
         ret = (xml->innerTexture != NULL);
         CX_ASSERT(ret, "xml innert texture error");
         CX_RETAIN(xml->innerTexture);
+        
         //for jpg pkm atlas texture
         xml->super.isAtlas = cxXMLReadBoolAttr(reader, NULL ,"atlas", false);
         xml->super.size = xml->innerTexture->size;
+
         //load texcoords
         while(xmlTextReaderRead(reader)){
             if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
@@ -57,7 +59,7 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
             cxConstChars sn = cxXMLAttr("n");
             cxConstChars sr = cxXMLAttr("r");
             e->isRotation = sr != NULL;
-            e->x = cxXMLReadFloatAttr(reader, NULL,  "x", 0);
+            e->x = cxXMLReadFloatAttr(reader, NULL, "x", 0);
             e->y = cxXMLReadFloatAttr(reader, NULL, "y", 0);
             e->w = cxXMLReadFloatAttr(reader, NULL, "w", 0);
             e->h = cxXMLReadFloatAttr(reader, NULL, "h", 0);
@@ -71,9 +73,8 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
 static void cxTextureXMLBind(cxAny this)
 {
     cxTextureXML xml = this;
-    if(xml->innerTexture != NULL){
-        cxTextureBind(xml->innerTexture);
-    }
+    CX_ASSERT(xml->innerTexture != NULL, "xml inner texture error");
+    cxTextureBind(xml->innerTexture);
 }
 
 CX_OBJECT_INIT(cxTextureXML, cxTexture)

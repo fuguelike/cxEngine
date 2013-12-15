@@ -17,6 +17,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxAssetsStream, cxStream)
     cxInt fd;
     cxInt start;
+    cxAny asset;
 CX_OBJECT_END(cxAssetsStream)
 
 cxStream cxAssetsStreamCreate(cxConstChars file);

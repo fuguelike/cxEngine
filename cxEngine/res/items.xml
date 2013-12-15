@@ -22,11 +22,12 @@
     <cxAtlasBoxPoint id="cboxes1">
         <item x="0" y="0" w="50" h="50" />
     </cxAtlasBoxPoint>
-    
+    <!--
     <cxDBEnv type="document" logger="true">
         <cxDB id="db1" path="document" type="btree" file="test1.db" table="list"/>
         <cxDB id="db2" path="assert" type="btree" file="test2.db" table="list"/>
     </cxDBEnv>
+     -->
     
     <cxString id="wavdata" src="effect.wav" />
     
