@@ -25,7 +25,7 @@
 
     <cxDBEnv type="document" logger="true">
         <cxDB id="db1" path="document" type="btree" file="test1.db" table="list"/>
-        <!--<cxDB id="db2" path="assert" type="btree" file="test2.db" table="list" copy="true"/>-->
+        <cxDB id="db2" path="document" type="btree" file="test2.db" table="list" copy="true"/>
     </cxDBEnv>
     
     <cxString id="wavdata" src="effect.wav" />

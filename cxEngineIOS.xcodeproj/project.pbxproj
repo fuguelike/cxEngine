@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8324963F182FB72000554604 /* cxTextureJPG.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324963D182FB72000554604 /* cxTextureJPG.c */; };
 		8330F7C91828E77D00E7E5B1 /* cxScroll.c in Sources */ = {isa = PBXBuildFile; fileRef = 8330F7C71828E77D00E7E5B1 /* cxScroll.c */; };
+		833E2B9E185F257E004093EF /* cxFileStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 833E2B9C185F257E004093EF /* cxFileStream.c */; };
 		8341C5F518227DF20045A66F /* cxActionSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C50218227DF20045A66F /* cxActionSet.c */; };
 		8341C5F618227DF20045A66F /* cxCurve.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C50418227DF20045A66F /* cxCurve.c */; };
 		8341C5F718227DF20045A66F /* cxFade.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C50618227DF20045A66F /* cxFade.c */; };
@@ -156,6 +157,8 @@
 		8324963E182FB72000554604 /* cxTextureJPG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTextureJPG.h; sourceTree = "<group>"; };
 		8330F7C71828E77D00E7E5B1 /* cxScroll.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxScroll.c; sourceTree = "<group>"; };
 		8330F7C81828E77D00E7E5B1 /* cxScroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxScroll.h; sourceTree = "<group>"; };
+		833E2B9C185F257E004093EF /* cxFileStream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxFileStream.c; sourceTree = "<group>"; };
+		833E2B9D185F257E004093EF /* cxFileStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxFileStream.h; sourceTree = "<group>"; };
 		8341C34B18227C310045A66F /* libcxEngineIOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcxEngineIOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8341C37E18227D2D0045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8341C38018227D320045A66F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -730,6 +733,8 @@
 				8341C5D218227DF20045A66F /* cxAssetsStream.h */,
 				8341C5D318227DF20045A66F /* cxMemStream.c */,
 				8341C5D418227DF20045A66F /* cxMemStream.h */,
+				833E2B9C185F257E004093EF /* cxFileStream.c */,
+				833E2B9D185F257E004093EF /* cxFileStream.h */,
 			);
 			path = streams;
 			sourceTree = "<group>";
@@ -897,6 +902,7 @@
 				8341C66A18227DF30045A66F /* cxTable.c in Sources */,
 				8341C63118227DF20045A66F /* cxStream.c in Sources */,
 				8341C63518227DF20045A66F /* cxUtil.c in Sources */,
+				833E2B9E185F257E004093EF /* cxFileStream.c in Sources */,
 				8341C60118227DF20045A66F /* cpDampedSpring.c in Sources */,
 				8341C62518227DF20045A66F /* cxEventItem.c in Sources */,
 				8341C62418227DF20045A66F /* cxEventArg.c in Sources */,

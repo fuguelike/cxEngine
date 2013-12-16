@@ -91,7 +91,10 @@ static cxString cxAssetsStreamAllBytes(cxAny this)
 static void cxAssetsStreamClose(cxAny this)
 {
     cxAssetsStream asserts = this;
-    fclose(asserts->asset);
+    if(asserts->asset != NULL){
+        fclose(asserts->asset);
+        asserts->asset = NULL;
+    }
     cxStreamBaseClose(this);
 }
 

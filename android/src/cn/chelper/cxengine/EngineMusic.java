@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class EngineMusic {
 	private final Context mContext;
-	private MediaPlayer mBackgroundMediaPlayer;
+	private MediaPlayer mediaPlayer;
 	private float mLeftVolume;
 	private float mRightVolume;
 	private boolean mPaused;
@@ -22,38 +22,37 @@ public class EngineMusic {
 	
 	public void preloadBackgroundMusic(final String pPath) {
 		if ((this.mCurrentPath == null) || (!this.mCurrentPath.equals(pPath))) {
-			if (this.mBackgroundMediaPlayer != null) {
-				this.mBackgroundMediaPlayer.release();
+			if (this.mediaPlayer != null) {
+				this.mediaPlayer.release();
 			}
-			this.mBackgroundMediaPlayer = this.createMediaplayer(pPath);
+			this.mediaPlayer = this.createMediaplayer(pPath);
 			this.mCurrentPath = pPath;
 		}
 	}
 
 	public void playBackgroundMusic(final String pPath, final boolean isLoop) {
 		if (this.mCurrentPath == null) {
-			this.mBackgroundMediaPlayer = this.createMediaplayer(pPath);
+			this.mediaPlayer = this.createMediaplayer(pPath);
 			this.mCurrentPath = pPath;
 		} else {
 			if (!this.mCurrentPath.equals(pPath)) {
-				if (this.mBackgroundMediaPlayer != null) {
-					this.mBackgroundMediaPlayer.release();
+				if (this.mediaPlayer != null) {
+					this.mediaPlayer.release();
 				}
-				this.mBackgroundMediaPlayer = this.createMediaplayer(pPath);
+				this.mediaPlayer = this.createMediaplayer(pPath);
 				this.mCurrentPath = pPath;
 			}
 		}
 
-		if (this.mBackgroundMediaPlayer == null) {
+		if (this.mediaPlayer == null) {
 			Log.e("EngineMusic", "playBackgroundMusic: background media player is null");
 		} else {
-			this.mBackgroundMediaPlayer.stop();
-			this.mBackgroundMediaPlayer.setLooping(isLoop);
+			this.mediaPlayer.stop();
+			this.mediaPlayer.setLooping(isLoop);
 			try {
-				this.mBackgroundMediaPlayer.prepare();
-				this.mBackgroundMediaPlayer.seekTo(0);
-				this.mBackgroundMediaPlayer.start();
-
+				this.mediaPlayer.prepare();
+				this.mediaPlayer.seekTo(0);
+				this.mediaPlayer.start();
 				this.mPaused = false;
 			} catch (final Exception e) {
 				Log.e("EngineMusic", "playBackgroundMusic: error state");
@@ -62,35 +61,33 @@ public class EngineMusic {
 	}
 
 	public void stopBackgroundMusic() {
-		if (this.mBackgroundMediaPlayer != null) {
-			this.mBackgroundMediaPlayer.stop();
+		if (this.mediaPlayer != null) {
+			this.mediaPlayer.stop();
 			this.mPaused = false;
 		}
 	}
 
 	public void pauseBackgroundMusic() {
-		if (this.mBackgroundMediaPlayer != null && this.mBackgroundMediaPlayer.isPlaying()) {
-			this.mBackgroundMediaPlayer.pause();
+		if (this.mediaPlayer != null && this.mediaPlayer.isPlaying()) {
+			this.mediaPlayer.pause();
 			this.mPaused = true;
 		}
 	}
 
 	public void resumeBackgroundMusic() {
-		if (this.mBackgroundMediaPlayer != null && this.mPaused) {
-			this.mBackgroundMediaPlayer.start();
+		if (this.mediaPlayer != null && this.mPaused) {
+			this.mediaPlayer.start();
 			this.mPaused = false;
 		}
 	}
 
 	public void rewindBackgroundMusic() {
-		if (this.mBackgroundMediaPlayer != null) {
-			this.mBackgroundMediaPlayer.stop();
-
+		if (this.mediaPlayer != null) {
+			this.mediaPlayer.stop();
 			try {
-				this.mBackgroundMediaPlayer.prepare();
-				this.mBackgroundMediaPlayer.seekTo(0);
-				this.mBackgroundMediaPlayer.start();
-
+				this.mediaPlayer.prepare();
+				this.mediaPlayer.seekTo(0);
+				this.mediaPlayer.start();
 				this.mPaused = false;
 			} catch (final Exception e) {
 				Log.e("EngineMusic", "rewindBackgroundMusic: error state");
@@ -100,26 +97,23 @@ public class EngineMusic {
 
 	public boolean isBackgroundMusicPlaying() {
 		boolean ret = false;
-
-		if (this.mBackgroundMediaPlayer == null) {
+		if (this.mediaPlayer == null) {
 			ret = false;
 		} else {
-			ret = this.mBackgroundMediaPlayer.isPlaying();
+			ret = this.mediaPlayer.isPlaying();
 		}
-
 		return ret;
 	}
 
 	public void end() {
-		if (this.mBackgroundMediaPlayer != null) {
-			this.mBackgroundMediaPlayer.release();
+		if (this.mediaPlayer != null) {
+			this.mediaPlayer.release();
 		}
-
 		this.initData();
 	}
 
 	public float getBackgroundVolume() {
-		if (this.mBackgroundMediaPlayer != null) {
+		if (this.mediaPlayer != null) {
 			return (this.mLeftVolume + this.mRightVolume) / 2;
 		} else {
 			return 0.0f;
@@ -130,21 +124,19 @@ public class EngineMusic {
 		if (pVolume < 0.0f) {
 			pVolume = 0.0f;
 		}
-
 		if (pVolume > 1.0f) {
 			pVolume = 1.0f;
 		}
-
 		this.mLeftVolume = this.mRightVolume = pVolume;
-		if (this.mBackgroundMediaPlayer != null) {
-			this.mBackgroundMediaPlayer.setVolume(this.mLeftVolume, this.mRightVolume);
+		if (this.mediaPlayer != null) {
+			this.mediaPlayer.setVolume(this.mLeftVolume, this.mRightVolume);
 		}
 	}
 
 	private void initData() {
 		this.mLeftVolume = 0.5f;
 		this.mRightVolume = 0.5f;
-		this.mBackgroundMediaPlayer = null;
+		this.mediaPlayer = null;
 		this.mPaused = false;
 		this.mCurrentPath = null;
 	}
@@ -166,7 +158,6 @@ public class EngineMusic {
 			mediaPlayer = null;
 			Log.e("EngineMusic", "error: " + e.getMessage(), e);
 		}
-
 		return mediaPlayer;
 	}
 }

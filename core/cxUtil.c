@@ -10,8 +10,38 @@
 #include <evhttp.h>
 #include <sys/time.h>
 #include <ctype.h>
+#include <streams/cxAssetsStream.h>
+#include <streams/cxFileStream.h>
 #include "cxBase.h"
 #include "cxUtil.h"
+
+cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
+{
+    cxStream src = cxAssetsStreamCreate(file);
+    cxStream dst = cxFileStreamCreate(file);
+    if(!cxStreamOpen(src)){
+        return false;
+    }
+    if(!cxStreamOpen(dst)){
+        return false;
+    }
+    cxChar buffer[1024];
+    cxProgress p = {0};
+    p.current = 0;
+    p.total = src->length;
+    while (true) {
+        cxInt bytes = cxStreamRead(src, buffer, 1024);
+        if(bytes <= 0){
+            break;
+        }
+        p.current += bytes;
+        cxStreamWrite(dst, buffer, bytes);
+        if(func != NULL){
+            func(file,&p,udata);
+        }
+    }
+    return true;
+}
 
 cxUInt cxBinaryToUInt(const cxChar *bs)
 {

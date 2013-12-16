@@ -456,6 +456,7 @@ void cxEngineSystemInit()
     cxEngineRegisteFunc("cxDataNumber", cxEngineDataNumber);
     
     //relative screen width and height value -> cxNumber
+    //cxRelativeW(1.0)
     cxEngineRegisteFunc("cxRelativeW", cxEngineRelativeWidth);
     cxEngineRegisteFunc("cxRelativeH", cxEngineRelativeHeight);
     

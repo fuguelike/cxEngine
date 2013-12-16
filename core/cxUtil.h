@@ -16,6 +16,13 @@
 
 CX_C_BEGIN
 
+typedef struct {
+    cxInt total;
+    cxInt current;
+}cxProgress;
+
+typedef void (*cxCopyFileFunc)(cxConstChars file,cxProgress *progress,cxAny udata);
+
 cxInt cxRand(cxInt min,cxInt max);
 
 cxUInt cxHexToUInt(const cxChar *bs);
@@ -23,6 +30,8 @@ cxUInt cxHexToUInt(const cxChar *bs);
 cxUInt cxBinaryToUInt(const cxChar *bs);
 
 void cxSetRandSeed();
+
+cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata);
 
 cxAudioFileType cxAudioGetType(cxConstChars file);
 

@@ -111,6 +111,10 @@ class EngineGLView extends GLSurfaceView {
     	return path;
     }
     
+	public static void terminateProcess() {
+		android.os.Process.killProcess(android.os.Process.myPid());
+	}
+    
     private static String TAG = "EngineGLView";
   
     public EngineGLView(Context context) {

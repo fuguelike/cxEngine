@@ -103,6 +103,11 @@ static void cxHashRootReadDB(cxDBEnv env,cxHashRoot root,xmlTextReaderPtr reader
         cxConstChars type = cxXMLAttr("type");
         cxConstChars sid = cxXMLAttr("id");
         cxConstChars path = cxXMLAttr("path");
+        //assert file copy ->to document
+        cxBool copy = cxXMLReadBoolAttr(reader, NULL, "copy", false);
+        if(copy && file != NULL){
+            cxCopyFile(file, NULL, NULL);
+        }
         cxBool rdonly = cxXMLReadBoolAttr(reader, NULL,  "rdonly", false);
         if(sid == NULL){
             CX_WARN("db id not set,will can't add dataset");
