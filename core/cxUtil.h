@@ -40,8 +40,6 @@ cxHash cxParseKeyValue(cxChar *query);
 
 cxString cxAssetsPath(cxConstChars file);
 
-cxInt cxAssertsOpen(cxConstChars file,cxInt *start,cxInt *length);
-
 cxDouble cxTimestamp();
 
 cxString cxLocaleLang();

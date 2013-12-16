@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <mpg123.h>
 #include <core/cxEngine.h>
 #include <core/cxUtil.h>
 #include <streams/cxAssetsStream.h>
@@ -178,11 +177,9 @@ CX_OBJECT_INIT(cxPlayer, cxObject)
         cxArrayAppend(this->tracks, track);
         CX_RELEASE(track);
     }
-    mpg123_init();
 }
 CX_OBJECT_FREE(cxPlayer, cxObject)
 {
-    mpg123_exit();
     CX_RELEASE(this->caches);
     CX_RELEASE(this->tracks);
     alcMakeContextCurrent(NULL);

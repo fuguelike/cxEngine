@@ -89,7 +89,6 @@ public class EngineActivity extends Activity {
 					EngineGLView.cxEngineExit();
 				}
 			});
-			Log.e("cxEngine", "finished");
 			glView.onDestroy();
 			this.finish();
 			return true;

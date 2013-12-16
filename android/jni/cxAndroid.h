@@ -17,6 +17,8 @@
 
 CX_C_BEGIN
 
+#define CLASS_NAME "cn/chelper/cxengine/EngineGLView"
+
 typedef struct JniMethodInfo_
 {
     JNIEnv *    env;

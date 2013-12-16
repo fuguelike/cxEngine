@@ -15,12 +15,17 @@ static cxBool cxAssetsStreamOpen(cxAny this)
     cxAssetsStream asserts = this;
     CX_ASSERT(asserts->super.isOpen == false,"stream repeat open");
     cxConstChars path = cxStringBody(asserts->super.path);
-    asserts->fd = cxAssertsOpen(path, &asserts->start, &asserts->super.length);
-    if(asserts->fd < 0){
+    asserts->asset = fopen(path, "rb");
+    if(asserts->asset == NULL){
         CX_ERROR("open assets %s stream failed",path);
         return false;
     }
-    lseek(asserts->fd, asserts->start, SEEK_SET);
+    struct stat stat={0};
+    if(lstat(path, &stat) != 0){
+        CX_ERROR("lstat assets %s stream failed",path);
+        return false;
+    }
+    asserts->super.length = (cxInt)stat.st_size;
     asserts->super.canRead = true;
     asserts->super.canSeek = true;
     asserts->super.canWrite = false;
@@ -34,7 +39,7 @@ static cxInt cxAssetsStreamRead(cxAny this,cxPointer buffer,cxInt size)
     if(!asserts->super.canRead){
         return 0;
     }
-    return read(asserts->fd, buffer, size);
+    return fread(buffer, 1, size, asserts->asset);
 }
 
 static cxInt cxAssetsStreamWrite(cxAny this,cxPointer buffer,cxInt size)
@@ -52,7 +57,7 @@ static cxOff cxAssetsStreamPosition(cxAny this)
     if(!asserts->super.canRead){
         return 0;
     }
-    return (cxOff)lseek(asserts->fd, 0, SEEK_CUR);
+    return (cxOff)ftell(asserts->asset);
 }
 
 static cxBool cxAssetsStreamSeek(cxAny this,cxOff off,cxInt flags)
@@ -61,7 +66,7 @@ static cxBool cxAssetsStreamSeek(cxAny this,cxOff off,cxInt flags)
     if(!asserts->super.canSeek){
         return false;
     }
-    return lseek(asserts->fd, off + asserts->start, flags) > 0;
+    return fseek(asserts->asset, off, flags) > 0;
 }
 
 static cxString cxAssetsStreamAllBytes(cxAny this)
@@ -86,7 +91,7 @@ static cxString cxAssetsStreamAllBytes(cxAny this)
 static void cxAssetsStreamClose(cxAny this)
 {
     cxAssetsStream asserts = this;
-    close(asserts->fd);
+    fclose(asserts->asset);
     cxStreamBaseClose(this);
 }
 

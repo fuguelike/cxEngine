@@ -55,7 +55,7 @@ void cxPauseEffect(cxAny track)
 {
     cxTrack this = track;
     JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, "cn/chelper/cxengine/EngineGLView", "cxEnginePauseEffect","(I)V");
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEnginePauseEffect","(I)V");
     CX_ASSERT(ret, "get static method info failed");
     CX_UNUSED_PARAM(ret);
     (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, this->soundId);
@@ -65,7 +65,7 @@ void cxResumeEffect(cxAny track)
 {
     cxTrack this = track;
     JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, "cn/chelper/cxengine/EngineGLView", "cxEngineResumeEffect","(I)V");
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineResumeEffect","(I)V");
     CX_ASSERT(ret, "get static method info failed");
     CX_UNUSED_PARAM(ret);
     (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, this->soundId);
@@ -75,7 +75,7 @@ void cxStopEffect(cxAny track)
 {
     cxTrack this = track;
     JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, "cn/chelper/cxengine/EngineGLView", "cxEngineStopEffect","(I)V");
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineStopEffect","(I)V");
     CX_ASSERT(ret, "get static method info failed");
     CX_UNUSED_PARAM(ret);
     (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, this->soundId);
@@ -91,7 +91,7 @@ cxAny cxPlayEffect(cxConstChars file,cxBool loop)
 {
     cxPlayer this = cxPlayerInstance();
     JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, "cn/chelper/cxengine/EngineGLView", "cxEnginePlayEffect","(Ljava/lang/String;Z)I");
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEnginePlayEffect","(Ljava/lang/String;Z)I");
     CX_ASSERT(ret, "get static method info failed");
     CX_UNUSED_PARAM(ret);
     jstring path = (*methodInfo.env)->NewStringUTF(methodInfo.env,file);
@@ -115,7 +115,7 @@ cxAny cxPlayEffect(cxConstChars file,cxBool loop)
 
 void cxPlayMusic(cxConstChars file,cxBool loop){
     JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, "cn/chelper/cxengine/EngineGLView", "cxEnginePlayMusic","(Ljava/lang/String;Z)V");
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEnginePlayMusic","(Ljava/lang/String;Z)V");
     CX_ASSERT(ret, "get static method info failed");
     CX_UNUSED_PARAM(ret);
     jstring path = (*methodInfo.env)->NewStringUTF(methodInfo.env,file);
@@ -126,7 +126,7 @@ void cxPlayMusic(cxConstChars file,cxBool loop){
 void cxStopMusic()
 {
     JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, "cn/chelper/cxengine/EngineGLView", "cxEngineStopMusic","()V");
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineStopMusic","()V");
     CX_ASSERT(ret, "get static method info failed");
     CX_UNUSED_PARAM(ret);
     (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
@@ -135,7 +135,7 @@ void cxStopMusic()
 void cxPauseMusic()
 {
     JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, "cn/chelper/cxengine/EngineGLView", "cxEnginePauseMusic","()V");
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEnginePauseMusic","()V");
     CX_ASSERT(ret, "get static method info failed");
     CX_UNUSED_PARAM(ret);
     (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
@@ -144,7 +144,7 @@ void cxPauseMusic()
 void cxResumeMusic()
 {
     JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, "cn/chelper/cxengine/EngineGLView", "cxEngineResumeMusic","()V");
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineResumeMusic","()V");
     CX_ASSERT(ret, "get static method info failed");
     CX_UNUSED_PARAM(ret);
     (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);

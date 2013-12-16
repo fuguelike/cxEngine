@@ -102,6 +102,15 @@ class EngineGLView extends GLSurfaceView {
     	return glActivity.getAssets();
     }
     
+  //get getdocument path
+    public static String cxEngineDocumentPath(String file){
+    	String path = glActivity.getFilesDir().getAbsolutePath();
+    	if(file != null){
+    		return path + "/" + file;
+    	}
+    	return path;
+    }
+    
     private static String TAG = "EngineGLView";
   
     public EngineGLView(Context context) {

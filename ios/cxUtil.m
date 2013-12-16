@@ -100,24 +100,6 @@ void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars forma
     NSLog(@"[%s:%d] %s:%s\n",file,line,type,buffer);
 }
 
-cxInt cxAssertsOpen(cxConstChars file,cxInt *start,cxInt *length)
-{
-    CX_ASSERT(file != NULL, "args error");
-    *start = 0;
-    *length = 0;
-    cxInt fd = open(file, O_RDONLY);
-    if(fd <= 0){
-        CX_ERROR("open file %s error",file);
-        return -1;
-    }
-    struct stat s={0};
-    if(fstat(fd, &s) != 0){
-        CX_ERROR("stat file %s failed");
-    }
-    *length = (cxInt)s.st_size;
-    return fd;
-}
-
 cxString cxAssetsPath(cxConstChars file)
 {
     NSString *path = [[NSBundle mainBundle] resourcePath];
