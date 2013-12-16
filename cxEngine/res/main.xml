@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--cxView.fixScale="cxFixScaleW()"-->
-<cxViewRoot cxView.fill="0,0,0,0" cxViewRoot.onBegin="mainBegin" cxViewRoot.onEnd="mainEnd">
+<cxViewRoot cxView.fixScale="cxFixScaleW()" cxView.w="640" cxView.h="960" cxViewRoot.onBegin="mainBegin" cxViewRoot.onEnd="mainEnd">
     <cxTable cxView.fill="10,10,10,10" cxTable.space="10,10" cxTable.type="3,0">
         <cxTemplate url="items.xml?template" title="Particle" release="cxPushView('particle.xml')" />
         <cxTemplate src="buttontemp.xml" title="Action" release="cxPushView('action.xml')" />

@@ -14,10 +14,10 @@ cxString cxShaderDefaultGetVertexSource(cxAny this)
     GLSL
     (
         attribute highp vec4 aPosition;
-        attribute lowp vec2 aTexcoord;
-        attribute lowp vec4 aColor;
-        varying lowp vec4 vFragmentColor;
-        varying lowp vec2 vTexCoord;
+        attribute highp vec2 aTexcoord;
+        attribute mediump vec4 aColor;
+        varying mediump vec4 vFragmentColor;
+        varying highp vec2 vTexCoord;
         void main() {
             gl_Position = kxMatrixModelViewProject * aPosition;
             vFragmentColor = aColor;
@@ -32,9 +32,9 @@ cxString cxShaderDefaultGetFragmentSource(cxAny this)
     static cxConstChars fragment =
     GLSL
     (
-        varying lowp vec4   vFragmentColor;
-        varying lowp vec2   vTexCoord;
-        uniform sampler2D   uTexture0;
+        varying mediump vec4 vFragmentColor;
+        varying highp vec2 vTexCoord;
+        uniform sampler2D uTexture0;
         void main() {
             vec4 texColor = texture2D(uTexture0, vTexCoord);
             if(kxAtlasTexture){

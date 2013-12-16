@@ -64,7 +64,7 @@ void cxButtonReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 CX_OBJECT_INIT(cxButton, cxSprite)
 {
     cxObjectSetReadAttrFunc(this, cxButtonReadAttr);
-    this->movement = 15;
+    this->movement = 25;
     this->isEnable = true;
     CX_METHOD_SET(this->super.super.Touch, cxButtonTouch);
 }

@@ -21,8 +21,8 @@ static cxString cxShaderPositionColorGetVertexSource(cxAny this)
     GLSL
     (
         attribute highp vec4 aPosition;
-        attribute lowp vec4 aColor;
-        varying lowp vec4 vColor;
+        attribute mediump vec4 aColor;
+        varying mediump vec4 vColor;
         void main() {
             gl_Position = kxMatrixModelViewProject * aPosition;
             vColor = aColor;
@@ -36,7 +36,7 @@ static cxString cxShaderPositionColorGetFragmentSource(cxAny this)
     static cxConstChars fragment =
     GLSL
     (
-        varying lowp vec4 vColor;
+        varying mediump vec4 vColor;
         void main() {
             gl_FragColor = vColor;
         }

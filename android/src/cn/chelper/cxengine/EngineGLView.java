@@ -13,7 +13,7 @@ class EngineGLView extends GLSurfaceView {
 	private static EngineSound engineSound = null;
 	private static EngineMusic engineMusic = null;
 	static {
-        System.loadLibrary("cxEngine");
+        System.loadLibrary("cxEngineTest");
     }
 	
 	private static EngineGLView glView = null;
@@ -36,7 +36,7 @@ class EngineGLView extends GLSurfaceView {
     
     //sound method
     public static int cxEnginePlayEffect(String file,boolean loop) {
-    	return engineSound.playEffect(file, loop, 1.0f, 1.0f, 1.0f);
+    	return engineSound.playEffect(file, loop, 1.0f, 0.0f, 1.0f);
     }
     
     public static void cxEnginePauseEffect(int id){
@@ -51,20 +51,35 @@ class EngineGLView extends GLSurfaceView {
     	engineSound.stopEffect(id);
     }
     
-    public static void cxEnginePlayMusic(String file,boolean loop){
+    public static void cxEnginePlayMusic(final String file,final boolean loop){
     	engineMusic.playBackgroundMusic(file, loop);
     }
     
     public static void cxEngineStopMusic(){
-    	engineMusic.stopBackgroundMusic();
+    	glActivity.runOnUiThread(new Runnable(){
+    		@Override
+    		public void run(){
+    			engineMusic.stopBackgroundMusic();
+    		}
+    	});
     }
     
     public static void cxEnginePauseMusic(){
-    	engineMusic.pauseBackgroundMusic();
+    	glActivity.runOnUiThread(new Runnable(){
+    		@Override
+    		public void run(){
+    			engineMusic.pauseBackgroundMusic();
+    		}
+    	});	
     }
     
     public static void cxEngineResumeMusic(){
-    	engineMusic.resumeBackgroundMusic();
+    	glActivity.runOnUiThread(new Runnable(){
+    		@Override
+    		public void run(){
+    			engineMusic.resumeBackgroundMusic();
+    		}
+    	});	
     }
     
     //each invoke method

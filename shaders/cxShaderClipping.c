@@ -14,8 +14,8 @@ static cxString cxShaderClippingGetFragmentSource(cxAny this)
     static cxConstChars fragment =
     GLSL
     (
-        varying lowp vec4 vFragmentColor;
-        varying lowp vec2 vTexCoord;
+        varying mediump vec4 vFragmentColor;
+        varying highp vec2 vTexCoord;
         uniform sampler2D uTexture0;
         void main() {
             vec4 texColor = texture2D(uTexture0, vTexCoord);

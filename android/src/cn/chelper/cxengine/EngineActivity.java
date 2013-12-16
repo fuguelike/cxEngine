@@ -89,6 +89,8 @@ public class EngineActivity extends Activity {
 					EngineGLView.cxEngineExit();
 				}
 			});
+			Log.e("cxEngine", "finished");
+			glView.onDestroy();
 			this.finish();
 			return true;
 		}
@@ -98,7 +100,6 @@ public class EngineActivity extends Activity {
 	@Override
 	public void onDestroy(){
 		Log.e("cxEngine", "cxEngineExit");
-		glView.onDestroy();
 		super.onDestroy();
 	}
 }

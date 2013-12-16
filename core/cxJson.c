@@ -25,11 +25,11 @@ cxJson cxJsonCreate(cxString json)
     CX_ASSERT(json != NULL, "args error");
     cxJson this = CX_CREATE(cxJson);
     json_error_t error = {0};
-    this->json = json_loadb(cxStringBody(json), cxStringLength(json), JSON_DECODE_ANY, &error);
-    if(this->json == NULL){
-        CX_ERROR("cxJson load error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
-        return NULL;
+    if(cxStringLength(json) <= 0){
+        return this;
     }
+    this->json = json_loadb(cxStringBody(json), cxStringLength(json), JSON_DECODE_ANY, &error);
+    CX_ASSERT(this->json != NULL, "cxJson load error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
     return this;
 }
 

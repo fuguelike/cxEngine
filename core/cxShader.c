@@ -60,20 +60,14 @@ static bool cxShaderCompile(cxShader this,GLuint *shader, GLenum type, cxString 
     *shader = glCreateShader(type);
     if(type == GL_VERTEX_SHADER){
         const GLchar *sources[] = {
-            "#ifdef GL_ES\n",
-            "precision lowp float;\n",
+            "precision mediump float;\n",
             "uniform highp mat4 "CX_UNIFORM_MATRIX_MODELVIEW_PROJECT";\n",
-            "#else\n",
-            "uniform mat4 "CX_UNIFORM_MATRIX_MODELVIEW_PROJECT";\n",
-            "#endif\n",
             cxStringBody(source),
         };
         glShaderSource(*shader, sizeof(sources)/sizeof(*sources), sources, NULL);
     }else if(type == GL_FRAGMENT_SHADER){
         const GLchar *sources[] = {
-            "#ifdef GL_ES\n",
-            "precision lowp float;\n",
-            "#endif\n",
+            "precision mediump float;\n",
             "uniform bool "CX_UNIFORM_ATLAS_TEXTURE";\n",
             cxStringBody(source),
         };
