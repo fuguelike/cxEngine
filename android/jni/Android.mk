@@ -120,7 +120,6 @@ $(CX_ENGINE_DIR)/shaders/cxShaderDefault.c \
 $(CX_ENGINE_DIR)/shaders/cxShaderPositionColor.c
 
 LOCAL_SRC_FILES += \
-cxAssetsStream.c \
 $(CX_ENGINE_DIR)/streams/cxMemStream.c
 
 LOCAL_SRC_FILES += \
@@ -168,32 +167,32 @@ $(CX_ENGINE_DIR)/socket/cxListen.c \
 $(CX_ENGINE_DIR)/socket/cxClient.c
 
 LOCAL_SRC_FILES += \
-$(CX_ENGINE_DIR)/core/cxConfig.c    \
-$(CX_ENGINE_DIR)/core/cxMD5.c    \
+$(CX_ENGINE_DIR)/core/cxConfig.c \
+$(CX_ENGINE_DIR)/core/cxMD5.c \
 $(CX_ENGINE_DIR)/core/cxAllocator.c \
-$(CX_ENGINE_DIR)/core/cxArray.c  \
-$(CX_ENGINE_DIR)/core/cxAutoPool.c  \
-$(CX_ENGINE_DIR)/core/cxBase.c  \
-$(CX_ENGINE_DIR)/core/cxEventArg.c  \
-$(CX_ENGINE_DIR)/core/cxEventItem.c  \
-$(CX_ENGINE_DIR)/core/cxHash.c  \
-$(CX_ENGINE_DIR)/core/cxIconv.c  \
-$(CX_ENGINE_DIR)/core/cxJson.c  \
-$(CX_ENGINE_DIR)/core/cxBMPFont.c  \
-$(CX_ENGINE_DIR)/core/cxActionRoot.c  \
-$(CX_ENGINE_DIR)/core/cxViewRoot.c  \
-$(CX_ENGINE_DIR)/core/cxList.c  \
-$(CX_ENGINE_DIR)/core/cxDB.c  \
-$(CX_ENGINE_DIR)/core/cxHashRoot.c  \
-$(CX_ENGINE_DIR)/core/cxNumber.c  \
-$(CX_ENGINE_DIR)/core/cxUtil.c  \
-$(CX_ENGINE_DIR)/core/cxRegex.c  \
-$(CX_ENGINE_DIR)/core/cxMessage.c  \
-$(CX_ENGINE_DIR)/core/cxStack.c  \
-$(CX_ENGINE_DIR)/core/cxFreeType.c  \
-$(CX_ENGINE_DIR)/core/cxString.c  \
-$(CX_ENGINE_DIR)/core/cxTypes.c  \
-$(CX_ENGINE_DIR)/core/cxUrlPath.c  \
+$(CX_ENGINE_DIR)/core/cxArray.c \
+$(CX_ENGINE_DIR)/core/cxAutoPool.c \
+$(CX_ENGINE_DIR)/core/cxBase.c \
+$(CX_ENGINE_DIR)/core/cxEventArg.c \
+$(CX_ENGINE_DIR)/core/cxEventItem.c \
+$(CX_ENGINE_DIR)/core/cxHash.c \
+$(CX_ENGINE_DIR)/core/cxIconv.c \
+$(CX_ENGINE_DIR)/core/cxJson.c \
+$(CX_ENGINE_DIR)/core/cxBMPFont.c \
+$(CX_ENGINE_DIR)/core/cxActionRoot.c \
+$(CX_ENGINE_DIR)/core/cxViewRoot.c \
+$(CX_ENGINE_DIR)/core/cxList.c \
+$(CX_ENGINE_DIR)/core/cxDB.c \
+$(CX_ENGINE_DIR)/core/cxHashRoot.c \
+$(CX_ENGINE_DIR)/core/cxNumber.c \
+$(CX_ENGINE_DIR)/core/cxUtil.c \
+$(CX_ENGINE_DIR)/core/cxRegex.c \
+$(CX_ENGINE_DIR)/core/cxMessage.c \
+$(CX_ENGINE_DIR)/core/cxStack.c \
+$(CX_ENGINE_DIR)/core/cxFreeType.c \
+$(CX_ENGINE_DIR)/core/cxString.c \
+$(CX_ENGINE_DIR)/core/cxTypes.c \
+$(CX_ENGINE_DIR)/core/cxUrlPath.c \
 $(CX_ENGINE_DIR)/core/cxXMLScript.c \
 $(CX_ENGINE_DIR)/core/cxOpenGL.c \
 $(CX_ENGINE_DIR)/core/cxShader.c \
@@ -203,7 +202,7 @@ $(CX_ENGINE_DIR)/core/cxTexture.c \
 $(CX_ENGINE_DIR)/core/cxView.c \
 $(CX_ENGINE_DIR)/core/cxAction.c
 
-LOCAL_SRC_FILES += cxAndroid.c cxMain.c
+LOCAL_SRC_FILES += cxAndroid.c cxMain.c cxAssetsStream.c cxPlayer.c
 
 LOCAL_STATIC_LIBRARIES := db pcre event jpeg mpg123 png freetype charset iconv libxml2 jansson
 

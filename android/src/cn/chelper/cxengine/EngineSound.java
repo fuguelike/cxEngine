@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
-
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -36,14 +35,12 @@ public class EngineSound {
 
 	public EngineSound(final Context pContext) {
 		this.mContext = pContext;
-
 		this.initData();
 	}
 
 	private void initData() {
 		this.mSoundPool = new SoundPool(EngineSound.MAX_SIMULTANEOUS_STREAMS_DEFAULT, AudioManager.STREAM_MUSIC, EngineSound.SOUND_QUALITY);
 		this.mSoundPool.setOnLoadCompleteListener(new OnLoadCompletedListener());
-
 		this.mLeftVolume = 0.5f;
 		this.mRightVolume = 0.5f;
 		this.mSemaphore = new Semaphore(0, true);
@@ -51,15 +48,12 @@ public class EngineSound {
 	
 	public int preloadEffect(final String pPath) {
 		Integer soundID = this.mPathSoundIDMap.get(pPath);
-
 		if (soundID == null) {
 			soundID = this.createSoundIDFromAsset(pPath);
-			// save value just in case if file is really loaded
 			if (soundID != EngineSound.INVALID_SOUND_ID) {
 				this.mPathSoundIDMap.put(pPath, soundID);
 			}
 		}
-
 		return soundID;
 	}
 
@@ -146,13 +140,14 @@ public class EngineSound {
 
 	@SuppressWarnings("unchecked")
 	public void stopAllEffects() {
-		if (!this.mPathStreamIDsMap.isEmpty()) {
-			final Iterator<?> iter = this.mPathStreamIDsMap.entrySet().iterator();
-			while (iter.hasNext()) {
-				final Map.Entry<String, ArrayList<Integer>> entry = (Map.Entry<String, ArrayList<Integer>>) iter.next();
-				for (final int pStreamID : entry.getValue()) {
-					this.mSoundPool.stop(pStreamID);
-				}
+		if (this.mPathStreamIDsMap.isEmpty()) {
+			return;
+		}
+		final Iterator<?> iter = this.mPathStreamIDsMap.entrySet().iterator();
+		while (iter.hasNext()) {
+			final Map.Entry<String, ArrayList<Integer>> entry = (Map.Entry<String, ArrayList<Integer>>) iter.next();
+			for (final int pStreamID : entry.getValue()) {
+				this.mSoundPool.stop(pStreamID);
 			}
 		}
 		this.mPathStreamIDsMap.clear();
@@ -170,13 +165,14 @@ public class EngineSound {
 			pVolume = 1;
 		}
 		this.mLeftVolume = this.mRightVolume = pVolume;
-		if (!this.mPathStreamIDsMap.isEmpty()) {
-			final Iterator<Entry<String, ArrayList<Integer>>> iter = this.mPathStreamIDsMap.entrySet().iterator();
-			while (iter.hasNext()) {
-				final Entry<String, ArrayList<Integer>> entry = iter.next();
-				for (final int pStreamID : entry.getValue()) {
-					this.mSoundPool.setVolume(pStreamID, this.mLeftVolume, this.mRightVolume);
-				}
+		if (this.mPathStreamIDsMap.isEmpty()) {
+			return;
+		}
+		final Iterator<Entry<String, ArrayList<Integer>>> iter = this.mPathStreamIDsMap.entrySet().iterator();
+		while (iter.hasNext()) {
+			final Entry<String, ArrayList<Integer>> entry = iter.next();
+			for (final int pStreamID : entry.getValue()) {
+				this.mSoundPool.setVolume(pStreamID, this.mLeftVolume, this.mRightVolume);
 			}
 		}
 	}
@@ -234,8 +230,7 @@ public class EngineSound {
 		public float pan;
 		public float gain;
 		public String path;
-		public SoundInfoForLoadedCompleted(String path, int soundId, boolean isLoop,
-											   float pitch, float pan, float gain) {
+		public SoundInfoForLoadedCompleted(String path, int soundId, boolean isLoop,float pitch, float pan, float gain) {
 			this.path = path;
 			this.soundID = soundId;
 			this.isLoop = isLoop;

@@ -4,9 +4,9 @@
 <cxViewRoot cxView.fill="0,0,0,0" cxViewRoot.onBegin="mainBegin" cxViewRoot.onEnd="mainEnd">
     <cxTable cxView.fill="10,10,10,10" cxTable.space="10,10" cxTable.type="3,0">
         <cxTemplate url="items.xml?template" title="Particle" release="cxPushView('particle.xml')" />
-        <cxTemplate src="buttontemp.xml" title="Action" release="cxPlay({'src':'effect.wav','loop':false});cxPushView('action.xml')" />
-        <cxTemplate src="buttontemp.xml" title="Wav" release="cxPlay({'src':'effect.wav','loop':false})" />
-        <cxTemplate src="buttontemp.xml" title="Mp3" release="cxPlay({'src':'apple.mp3','loop':false})" />
+        <cxTemplate src="buttontemp.xml" title="Action" release="cxPushView('action.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Wav" release="cxPlayEffect({'src':'effect.wav','loop':false})" />
+        <cxTemplate src="buttontemp.xml" title="Mp3" release="cxPlayMusic({'src':'Track02.mp3','loop':false})" />
         <cxTemplate src="buttontemp.xml" title="Clip" release="cxPushView('clipping.xml')" />
         <cxTemplate src="buttontemp.xml" title="Scroll" release="cxPushView('scroll.xml')" />
         <cxTemplate src="buttontemp.xml" title="Animate" release="cxPushView('animate.xml')" />

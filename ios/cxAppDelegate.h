@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVAudioPlayer.h>
 #import "cxViewController.h"
 
 @interface cxAppDelegate : UIResponder <UIApplicationDelegate>

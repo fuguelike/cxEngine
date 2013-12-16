@@ -46,6 +46,7 @@
 		834F2E8118458D310067E220 /* Untitled.xml in Resources */ = {isa = PBXBuildFile; fileRef = 834F2E7F18458D310067E220 /* Untitled.xml */; };
 		834F2E8418459AFE0067E220 /* white.png in Resources */ = {isa = PBXBuildFile; fileRef = 834F2E8318459AFE0067E220 /* white.png */; };
 		83515C6C184F63150031B64F /* chipmunk.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83515C6B184F63150031B64F /* chipmunk.xml */; };
+		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
 		8359F7A21856C4600072D047 /* particle.pex in Resources */ = {isa = PBXBuildFile; fileRef = 8359F7A01856C4600072D047 /* particle.pex */; };
 		8359F7A31856C4600072D047 /* texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 8359F7A11856C4600072D047 /* texture.png */; };
 		8359F7A71856EADD0072D047 /* star.pex in Resources */ = {isa = PBXBuildFile; fileRef = 8359F7A51856EADD0072D047 /* star.pex */; };
@@ -123,6 +124,7 @@
 		834F2E7F18458D310067E220 /* Untitled.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Untitled.xml; path = res/Untitled.xml; sourceTree = "<group>"; };
 		834F2E8318459AFE0067E220 /* white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = white.png; path = res/white.png; sourceTree = "<group>"; };
 		83515C6B184F63150031B64F /* chipmunk.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = chipmunk.xml; path = res/chipmunk.xml; sourceTree = "<group>"; };
+		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		8359F7A01856C4600072D047 /* particle.pex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = particle.pex; path = res/particle.pex; sourceTree = "<group>"; };
 		8359F7A11856C4600072D047 /* texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = texture.png; path = res/texture.png; sourceTree = "<group>"; };
 		8359F7A51856EADD0072D047 /* star.pex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = star.pex; path = res/star.pex; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */,
 				839103BD1859631E008DF1C7 /* libpcre.a in Frameworks */,
 				836DBA77184A15B800CCD673 /* libluajit.a in Frameworks */,
 				839AC1D21832214D00AEBF8E /* libjansson.a in Frameworks */,
@@ -197,6 +200,7 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83583427185EB87E0057E40B /* AVFoundation.framework */,
 				839103BC1859631E008DF1C7 /* libpcre.a */,
 				836DBA76184A15B800CCD673 /* libluajit.a */,
 				839AC1D11832214D00AEBF8E /* libjansson.a */,

@@ -12,9 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
-#include <core/cxUtil.h>
-#include <core/cxPlayer.h>
-#include <core/cxOpenGL.h>
+#include <core/cxEngine.h>
 
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr)
 {
@@ -52,6 +50,11 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr at
     ((cxSize2i *)buffer)->h = height;
     [attrs release];
     return cxStringAttach(buffer, bufsiz);
+}
+
+void cxEngineSendJson(cxString json)
+{
+    cxEngineRecvJson(json);
 }
 
 cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)

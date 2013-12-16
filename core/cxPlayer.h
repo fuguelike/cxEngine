@@ -30,17 +30,21 @@ typedef enum {
     cxAudioFileTypeWAV,
 }cxAudioFileType;
 
-cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq);
+void cxPauseEffect(cxAny this);
 
-void cxTrackPause(cxAny this);
+void cxResumeEffect(cxAny this);
 
-void cxTrackResume(cxAny this);
+void cxStopEffect(cxAny this);
 
-void cxTrackStop(cxAny this);
+cxAny cxPlayEffect(cxConstChars file,cxBool loop);
 
-cxAny cxPlayBuffer(cxAny buffer,cxBool loop);
+void cxPlayMusic(cxConstChars file,cxBool loop);
 
-cxAny cxPlayFile(cxConstChars file,cxBool loop);
+void cxStopMusic();
+
+void cxPauseMusic();
+
+void cxResumeMusic();
 
 #define INIT_TRACK 5
 

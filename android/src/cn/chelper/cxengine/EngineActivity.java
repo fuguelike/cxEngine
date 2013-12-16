@@ -3,6 +3,7 @@ package cn.chelper.cxengine;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 public class EngineActivity extends Activity {
@@ -12,8 +13,12 @@ public class EngineActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle state) {
 		super.onCreate(state);
-		glView = new EngineGLView(this.getApplicationContext());
-		this.setContentView(glView);
+		glView = new EngineGLView(this);
+		setContentView(glView);
+	}
+	
+	public void onEngineJson(String json){
+		
 	}
 	
 	@Override
@@ -76,14 +81,24 @@ public class EngineActivity extends Activity {
     }
 	
 	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event){
+		if(keyCode == KeyEvent.KEYCODE_BACK){
+			glView.queueEvent(new Runnable(){
+				@Override
+				public void run(){
+					EngineGLView.cxEngineExit();
+				}
+			});
+			this.finish();
+			return true;
+		}
+		return super.onKeyUp(keyCode, event);
+	}
+	
+	@Override
 	public void onDestroy(){
-		glView.queueEvent(new Runnable(){
-			@Override
-			public void run(){
-				EngineGLView.cxEngineExit();
-			}
-		});
 		Log.e("cxEngine", "cxEngineExit");
+		glView.onDestroy();
 		super.onDestroy();
 	}
 }

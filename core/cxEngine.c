@@ -22,38 +22,58 @@
 #include "cxDB.h"
 
 static cxEngine instance = NULL;
+static cxBool isExit = false;
+
+void cxEngineRecvJson(cxString json)
+{
+    CX_RETURN(isExit);
+    cxEngine engine = cxEngineInstance();
+    CX_SIGNAL_FIRE(engine->onRecvJson, CX_FUNC_TYPE(cxAny,cxString), CX_SLOT_OBJECT, json);
+}
 
 void cxEngineExit()
 {
+    CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
     CX_EVENT_FIRE(engine, onFree);
     cxEnginePause();
     cxEngineDestroy();
     cxAllocatorFree();
+    isExit = true;
 }
 
 void cxEnginePause()
 {
+    CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
     engine->isPause = true;
     CX_SIGNAL_FIRE(engine->onPause, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    if(engine->isInit){
+        cxPauseMusic();
+    }
 }
 
 void cxEngineResume()
 {
+    CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
     engine->isPause = false;
     CX_SIGNAL_FIRE(engine->onResume, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    if(engine->isInit){
+        cxResumeMusic();
+    }
 }
 
 void cxEngineMemory()
 {
+    CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
     CX_SIGNAL_FIRE(engine->onMemory, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
 }
 
 void cxEngineDraw()
 {
+    CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
     CX_RETURN(!engine->isInit || engine->isPause);
     cxOpenGLClear();
@@ -156,7 +176,9 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->scripts);
     CX_RELEASE(this->dbenvs);
     
+    CX_SIGNAL_RELEASE(this->onRecvJson);
     CX_SIGNAL_RELEASE(this->onTouch);
+    
     CX_EVENT_RELEASE(this->onFree);
     CX_SIGNAL_RELEASE(this->onUpdate);
     CX_SIGNAL_RELEASE(this->onPause);
@@ -402,8 +424,10 @@ void cxEngineSystemInit()
     
     //cxActionRun({'src':'actions.xml?btnEnter','view':'id','cache':true, 'curve':'ExpOut', 'delay':0.3})
     cxEngineRegisteEvent("cxActionRun", cxViewRunActionEvent);
-    //cxPlay({'src':'aa.wav','loop':true})
-    cxEngineRegisteEvent("cxPlay", cxPlaySoundEvent);
+    //cxPlayEffect({'src':'aa.wav','loop':true})
+    cxEngineRegisteEvent("cxPlayEffect", cxPlaySoundEvent);
+    //cxPlayMusic({'src':'aa.mp3','loop':true})
+    cxEngineRegisteEvent("cxPlayMusic", cxPlayMusicEvent);
     //cxLogger('msg')
     cxEngineRegisteEvent("cxLogger", cxPrintMessageEvent);
     //cxPushView('url')

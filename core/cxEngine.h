@@ -51,6 +51,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onMemory);
     CX_SIGNAL_ALLOC(onUpdate);
     CX_SIGNAL_ALLOC(onTouch);
+    CX_SIGNAL_ALLOC(onRecvJson);
     CX_EVENT_ALLOC(onFree);
     cxTouch touch;
     cxString lang;
@@ -98,6 +99,10 @@ cxVec2f cxEngineWindowToTouch(cxVec2f pos);
 void cxEngineEnableTouch(cxBool enable);
 
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos);
+
+void cxEngineSendJson(cxString json);
+
+void cxEngineRecvJson(cxString json);
 
 void cxEngineExit();
 

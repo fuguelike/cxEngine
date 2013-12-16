@@ -6,9 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <android/input.h>
-#include <android/asset_manager_jni.h>
-#include <unistd.h>
 #include <core/cxString.h>
 #include <android/log.h>
 #include "cxAndroid.h"
@@ -17,57 +14,6 @@
 static JNIEnv *javaENV = NULL;
 static jclass javaClass = NULL;
 
-cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
-{
-    return NULL;
-}
-
-void cxTrackPause(cxAny track)
-{
-    
-}
-
-void cxTrackResume(cxAny track)
-{
-    
-}
-
-void cxTrackStop(cxAny track)
-{
-    
-}
-
-cxAny cxPlayBuffer(cxAny buffer,cxBool loop)
-{
-    return NULL;
-}
-
-cxAny cxPlayFile(cxConstChars file,cxBool loop)
-{
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, "cn/chelper/cxengine/EngineGLView", "cxEnginePlayFile","(Ljava/lang/String;Z)V");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
-    jstring path = (*methodInfo.env)->NewStringUTF(methodInfo.env,file);
-    (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, path, loop);
-    (*methodInfo.env)->DeleteLocalRef(methodInfo.env,path);
-    return NULL;
-}
-
-void cxPlayerOpen(cxInt freq,cxInt format)
-{
-    
-}
-
-void cxPlayerDestroy()
-{
-    
-}
-
-cxAny cxPlayerInstance()
-{
-    return NULL;
-}
 
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr)
 {
@@ -159,6 +105,15 @@ AAssetManager *cxEngineGetAssetManager()
     return assetManager;
 }
 
+void cxEngineSendJson(cxString json)
+{
+    CX_ASSERT(json != NULL, "json args error");
+    JniMethodInfo methodInfo;
+    if(cxGetStaticMethodInfo(&methodInfo, "cn/chelper/cxengine/EngineGLView", "cxEngineRecvJson","(Ljava/lang/String;)V")){
+        (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
+    }
+}
+
 JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineFireTouch(JNIEnv * env, jclass class,jint action,jfloat x,jfloat y)
 {
     cxTouchType cxtype = cxTouchTypeCancel;
@@ -174,6 +129,13 @@ JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineFireTouch(J
         CX_ASSERT(false, "touch action error %d",action);
     }
     cxEngineFireTouch(cxtype, cxVec2fv(x, y));
+}
+
+JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineSendJsonImp(JNIEnv * env, jclass class,jstring json)
+{
+    CX_ASSERT(json != NULL, "args error");
+    cxString js = jstringTocxString(json);
+    cxEngineRecvJson(js);
 }
 
 JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineMemory(JNIEnv * env, jclass class)
@@ -193,10 +155,10 @@ JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEnginePause(JNIEn
 
 JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineExit(JNIEnv * env, jclass class)
 {
+    cxEngineExit();
     (*javaENV)->DeleteGlobalRef(javaENV,javaClass);
     javaENV = NULL;
     javaClass = NULL;
-    cxEngineExit();
 }
 
 JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineDraw(JNIEnv * env, jclass class)

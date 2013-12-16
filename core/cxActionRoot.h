@@ -40,6 +40,8 @@ void cxViewRunActionEvent(cxEvent *event);
 
 void cxPlaySoundEvent(cxEvent *event);
 
+void cxPlayMusicEvent(cxEvent *event);
+
 void cxPrintMessageEvent(cxEvent *event);
 
 CX_C_END

@@ -10,6 +10,9 @@
 #define android_cxAndroid_h
 
 #include <jni.h>
+#include <android/input.h>
+#include <android/asset_manager_jni.h>
+#include <unistd.h>
 #include <core/cxBase.h>
 
 CX_C_BEGIN
@@ -26,6 +29,8 @@ cxBool cxGetStaticMethodInfo(JniMethodInfo *methodinfo,cxConstChars className,cx
 AAssetManager *cxEngineGetAssetManager();
 
 cxString jstringTocxString(jstring jstr);
+
+void cxEngineRunJson(cxString json);
 
 CX_C_END
 

@@ -161,7 +161,16 @@ void cxPlaySoundEvent(cxEvent *event)
     cxConstChars src = cxEventArgString(event->args, "src");
     CX_ASSERT(src != NULL, "audio src not set");
     cxBool loop = cxEventArgBool(event->args, "loop", false);
-    cxPlayFile(src,loop);
+    cxPlayEffect(src,loop);
+}
+
+void cxPlayMusicEvent(cxEvent *event)
+{
+    CX_ASSERT(event->args != NULL, "args error");
+    cxConstChars src = cxEventArgString(event->args, "src");
+    CX_ASSERT(src != NULL, "audio src not set");
+    cxBool loop = cxEventArgBool(event->args, "loop", false);
+    cxPlayMusic(src, loop);
 }
 
 //need register

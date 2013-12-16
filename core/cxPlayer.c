@@ -28,7 +28,7 @@ CX_OBJECT_FREE(cxBuffer, cxObject)
 }
 CX_OBJECT_TERM(cxBuffer, cxObject)
 
-cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
+static cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
 {
     cxBuffer this = CX_CREATE(cxBuffer);
     this->format = format;
@@ -60,19 +60,19 @@ CX_OBJECT_FREE(cxTrack, cxObject)
 }
 CX_OBJECT_TERM(cxTrack, cxObject)
 
-void cxTrackPause(cxAny track)
+void cxPauseEffect(cxAny track)
 {
     cxTrack this = track;
     alSourcePause(this->source);
 }
 
-void cxTrackResume(cxAny track)
+void cxResumeEffect(cxAny track)
 {
     cxTrack this = track;
     alSourcePlay(this->source);
 }
 
-void cxTrackStop(cxAny track)
+void cxStopEffect(cxAny track)
 {
     cxTrack this = track;
     alSourceStop(this->source);
@@ -111,7 +111,7 @@ static cxTrack cxPlayerQueryTrack()
     return track;
 }
 
-cxAny cxPlayBuffer(cxAny buffer,cxBool loop)
+static cxAny cxPlayBuffer(cxAny buffer,cxBool loop)
 {
     cxBuffer cb = buffer;
     cxTrack track = cxPlayerQueryTrack();
@@ -122,7 +122,7 @@ cxAny cxPlayBuffer(cxAny buffer,cxBool loop)
     return track;
 }
 
-cxAny cxPlayFile(cxConstChars file,cxBool loop)
+cxAny cxPlayEffect(cxConstChars file,cxBool loop)
 {
     cxPlayer this = cxPlayerInstance();
     cxBuffer buffer = cxHashGet(this->caches, cxHashStrKey(file));
