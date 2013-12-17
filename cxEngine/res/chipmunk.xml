@@ -4,23 +4,23 @@
 <cxViewRoot cxView.fill="0,0,0,0" cxViewRoot.onBegin="cxChipmunkBegin">
     <cxChipmunk id="chipmunk" cxView.fill="0,0,0,0">
         <cxView
-            cxView.x="0" cxView.y="512"
-            cxView.w="768" cxView.h="5"
+            cxView.x="0" cxView.y="cxRelativeH(0.5)"
+            cxView.w="cxRelativeW(1.0)" cxView.h="5"
             cxChipmunk.e="1.0"
             cxChipmunk.static="true"/>
         <cxView
-            cxView.x="0" cxView.y="-512"
-            cxView.w="768" cxView.h="5"
+            cxView.x="0" cxView.y="cxRelativeH(-0.5)"
+            cxView.w="cxRelativeW(1.0)" cxView.h="5"
             cxChipmunk.e="1.0"
             cxChipmunk.static="true"/>
         <cxView
-            cxView.x="-384" cxView.y="0"
-            cxView.w="5" cxView.h="1024"
+            cxView.x="cxRelativeW(-0.5)" cxView.y="0"
+            cxView.w="5" cxView.h="cxRelativeH(1.0)"
             cxChipmunk.e="1.0"
             cxChipmunk.static="true"/>
         <cxView
-            cxView.x="384" cxView.y="0"
-            cxView.w="5" cxView.h="1024"
+            cxView.x="cxRelativeW(0.5)" cxView.y="0"
+            cxView.w="5" cxView.h="cxRelativeH(1.0)"
             cxChipmunk.e="1.0"
             cxChipmunk.static="true"/>
         <cxSprite

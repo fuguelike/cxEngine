@@ -43,6 +43,16 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr at
     }
     return rv;
 }
+//cxEngineTerminate
+void cxEngineTerminate()
+{
+    CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
+    JniMethodInfo methodInfo;
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineTerminate","()V");
+    CX_ASSERT(ret, "get static method info failed");
+    CX_UNUSED_PARAM(ret);
+    (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
+}
 
 //java:String cxEngineDocumentPath()
 cxString cxDocumentPath(cxConstChars file)

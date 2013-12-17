@@ -749,12 +749,10 @@ static void cxViewUpdateActions(cxView this)
 void cxViewDraw(cxAny pview)
 {
     cxView this = pview;
-    
+    CX_RETURN(!this->isVisible);
     //update action and update
     CX_EVENT_FIRE(this, onUpdate);
     cxViewUpdateActions(this);
-    
-    CX_RETURN(!this->isVisible);
     cxViewTransform(this);
     //
     kmGLPushMatrix();

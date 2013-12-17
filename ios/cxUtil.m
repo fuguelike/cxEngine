@@ -14,6 +14,11 @@
 #import <AudioToolbox/ExtendedAudioFile.h>
 #include <core/cxEngine.h>
 
+void cxEngineTerminate()
+{
+//    exit(0);
+}
+
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr)
 {
     CX_RETURN(txt == NULL, NULL);

@@ -108,6 +108,8 @@ void cxEngineSetLocalized(cxString lang);
 
 void cxEngineBegin();
 
+void cxEngineTerminate();
+
 void cxEngineExit();
 
 void cxEnginePause();

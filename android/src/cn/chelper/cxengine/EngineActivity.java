@@ -2,7 +2,6 @@
 package cn.chelper.cxengine;
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -81,25 +80,16 @@ public class EngineActivity extends Activity {
     }
 	
 	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event){
-		if(keyCode == KeyEvent.KEYCODE_BACK){
-			glView.queueEvent(new Runnable(){
-				@Override
-				public void run(){
-					EngineGLView.cxEngineExit();
-				}
-			});
-			this.finish();
-			return true;
+	public boolean onKeyUp(final int keyCode, KeyEvent event){
+		if(keyCode != KeyEvent.KEYCODE_BACK){
+			return super.onKeyUp(keyCode, event);
 		}
-		return super.onKeyUp(keyCode, event);
-	}
-	
-	@Override
-	public void onDestroy(){
-		glView.onDestroy();
-		super.onDestroy();
-		Log.e("cxEngine", "cxEngineExit");
-		EngineGLView.terminateProcess();
+		glView.queueEvent(new Runnable(){
+			@Override
+			public void run(){
+				EngineGLView.cxEngineExit();
+			}
+		});
+		return true;
 	}
 }

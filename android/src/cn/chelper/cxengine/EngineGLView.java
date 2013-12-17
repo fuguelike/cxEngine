@@ -34,6 +34,17 @@ class EngineGLView extends GLSurfaceView {
     public static native void cxEngineResume();
     public static native void cxEngineMemory();
     public static native void cxEngineExit();
+    //completed exit android app
+    public static void cxEngineTerminate() {
+    	glActivity.runOnUiThread(new Runnable(){
+    		@Override
+    		public void run(){
+    			glView.onDestroy();
+    			glActivity.finish();
+    			terminateProcess();
+    		}
+    	});
+    }
     //sound method
     public static int cxEnginePlayEffect(final String file,final boolean loop) {
     	return engineSound.playEffect(file, loop, 1.0f, 0.0f, 1.0f);

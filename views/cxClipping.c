@@ -55,10 +55,6 @@ void cxClippingReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
     cxViewRoot root = rootView;
     cxClipping this = mView;
     cxClippingSetInverse(this, cxXMLReadBoolAttr(reader,root->functions, "cxClipping.inverse", this->inverse));
-    cxConstChars sitems = cxXMLAttr("cxClipping.boxes");
-    if(sitems != NULL){
-        CX_RETAIN_SWAP(this->boxes,cxEngineDataSet(sitems));
-    }
     cxXMLAppendEvent(root->events, this, cxClipping, onClipping);
 }
 
@@ -77,7 +73,6 @@ CX_OBJECT_INIT(cxClipping, cxView)
 CX_OBJECT_FREE(cxClipping, cxView)
 {
     cxStencilRefFree(this->useRef);
-    CX_RELEASE(this->boxes);
     CX_EVENT_RELEASE(this->onClipping);
 }
 CX_OBJECT_TERM(cxClipping, cxView)

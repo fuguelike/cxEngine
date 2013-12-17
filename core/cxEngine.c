@@ -39,6 +39,7 @@ void cxEngineExit()
     cxEnginePause();
     cxEngineDestroy();
     cxAllocatorFree();
+    cxEngineTerminate();
     isExit = true;
 }
 
