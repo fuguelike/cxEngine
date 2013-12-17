@@ -147,6 +147,12 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
         if(!ELEMENT_IS_TYPE(cxTemplate)){
             continue;
         }
+        //
+        cxBool cond = cxXMLReadBoolAttr(reader, NULL, "cond", true);
+        if(!cond){
+            continue;
+        }
+        //
         cxConstChars src = cxXMLAttr("src");
         if(src != NULL){
             cxXMLScript xml = cxEngineGetXMLScript(src);
@@ -160,6 +166,7 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
             ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
             break;
         }
+        //
         cxConstChars url = cxXMLAttr("url");
         if(url != NULL){
             cxTypes types = cxEngineDataSet(url);

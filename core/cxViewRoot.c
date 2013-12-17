@@ -200,12 +200,9 @@ static void cxViewRootLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack s
         int type = xmlTextReaderNodeType(reader);
         if(type == XML_READER_TYPE_ELEMENT){
             cxConstChars temp = cxXMLReadElementName(reader);
-            CX_ASSERT(temp != NULL, "temp read error");
-            
             cxAny cview = cxViewRootLoadSubviewBegin(this, temp, reader);
             cxView parent = cxStackTop(stack);
             cxViewAppend(parent, cview);
-            
             if(xmlTextReaderIsEmptyElement(reader)){
                 continue;
             }

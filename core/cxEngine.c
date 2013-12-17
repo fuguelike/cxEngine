@@ -441,6 +441,24 @@ static cxTypes cxDataSetTypes(cxEventArg arg)
     return cxEngineDataSet(url);
 }
 
+static cxNumber cxEngineIsAndroid(cxEventArg arg)
+{
+#if (CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID)
+    return cxNumberBool(true);
+#else
+    return cxNumberBool(false);
+#endif
+}
+
+static cxNumber cxEngineIsIOS(cxEventArg arg)
+{
+#if (CX_TARGET_PLATFORM == CX_TARGET_OS_IPHONE)
+    return cxNumberBool(true);
+#else
+    return cxNumberBool(false);
+#endif
+}
+
 void cxEngineSystemInit()
 {
     //cxActionRun({'src':'actions.xml?btnEnter','view':'id','cache':true, 'curve':'ExpOut', 'delay':0.3})
@@ -493,6 +511,10 @@ void cxEngineSystemInit()
     
     //cxTextureCreate('candy.xml?red.png')
     cxEngineRegisteFunc("cxTextureCreate", cxTextureCreateForXML);
+    
+    //platform cond attr func,invoke when prepare xml
+    cxEngineRegisteFunc("cxIsAndroid", cxEngineIsAndroid);
+    cxEngineRegisteFunc("cxIsIOS", cxEngineIsIOS);
     
     //cxParticle func
     cxParticleTypeInit();

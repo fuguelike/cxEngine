@@ -12,5 +12,7 @@
         <cxTemplate src="buttontemp.xml" title="Animate" release="cxPushView('animate.xml')" />
         <cxTemplate src="buttontemp.xml" title="Chipmunk" release="cxPushView('chipmunk.xml')" />
         <cxTemplate src="buttontemp.xml" title="bmpFont" release="cxPushView('bmpfont.xml')" />
+        <cxTemplate cond="cxIsAndroid()" src="buttontemp.xml" title="Android" />
+        <cxTemplate cond="cxIsIOS()" src="buttontemp.xml" title="IOS" />
     </cxTable>
 </cxViewRoot>
