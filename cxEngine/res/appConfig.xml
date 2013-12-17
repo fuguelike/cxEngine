@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--TextureKey at *.xml file use-->
+<cxHashRoot>
+    <cxHash id="lang">
+        <!--lang -> dir-->
+        <cxString key="en">en</cxString>
+    </cxHash>
+</cxHashRoot>

@@ -25,20 +25,22 @@ cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
     if(!cxStreamOpen(dst)){
         return false;
     }
-    cxChar buffer[1024];
+    cxChar buffer[4096];
     cxProgress p = {0};
     p.current = 0;
     p.total = src->length;
     while (true) {
-        cxInt bytes = cxStreamRead(src, buffer, 1024);
-        if(bytes <= 0){
+        cxInt rbytes = cxStreamRead(src, buffer, 4096);
+        if(rbytes <= 0){
             break;
         }
-        p.current += bytes;
-        cxStreamWrite(dst, buffer, bytes);
+        p.current += rbytes;
+        cxInt wbytes = cxStreamWrite(dst, buffer, rbytes);
+        CX_ASSERT(wbytes == rbytes, "rw error");
         if(func != NULL){
             func(file,&p,udata);
         }
+        CX_UNUSED_PARAM(wbytes);
     }
     return true;
 }

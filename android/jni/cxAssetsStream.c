@@ -19,7 +19,10 @@ static cxBool cxAssetsStreamOpen(cxAny this)
     CX_ASSERT(asserts->super.isOpen == false,"stream repeat open");
     cxConstChars path = cxStringBody(asserts->super.path);
     asserts->asset = AAssetManager_open(cxEngineGetAssetManager(), path, AASSET_MODE_UNKNOWN);
-    CX_ASSERT(asserts->asset != NULL,"open asset file %s failed",path);
+    if(asserts->asset == NULL){
+        CX_ERROR("open asset file %s failed",path);
+        return false;
+    }
     asserts->super.length = (cxInt)AAsset_getLength(asserts->asset);
     asserts->super.canRead = true;
     asserts->super.canSeek = true;
@@ -111,7 +114,7 @@ CX_OBJECT_FREE(cxAssetsStream, cxStream)
 }
 CX_OBJECT_TERM(cxAssetsStream, cxStream)
 
-cxString cxAssertsData(cxConstChars file)
+cxString cxAssetsData(cxConstChars file)
 {
     cxStream stream = cxAssetsStreamCreate(file);
     return cxStreamAllBytes(stream);

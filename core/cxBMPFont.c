@@ -63,7 +63,7 @@ cxBMPFont cxBMPFontCreate(cxConstChars file)
 
 cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
 {
-    cxString data = cxAssertsData(file);
+    cxString data = cxAssetsData(file);
     if(data == NULL){
         CX_ERROR("load bmpfont error file %s not exists",file);
         return false;

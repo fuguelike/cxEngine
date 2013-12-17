@@ -120,7 +120,7 @@ cxInt cxStringLength(cxString string)
     return utstring_len(&string->strptr);
 }
 
-cxString cxStringBinary(cxChar *d,cxInt l)
+cxString cxStringBinary(cxPointer d,cxInt l)
 {
     cxString rv = CX_CREATE(cxString);
     cxStringAppend(rv, d, l);

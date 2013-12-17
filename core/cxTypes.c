@@ -10,29 +10,18 @@
 #include "cxTypes.h"
 #include "cxArray.h"
 
-static const UT_icd cxAtlasBoxPointTypeICD = {sizeof(cxAtlasBoxPointType),NULL,NULL,NULL};
-
 CX_OBJECT_INIT(cxTypes, cxObject)
 {
-    this->kvs = CX_ALLOC(cxHash);
+    
 }
 CX_OBJECT_FREE(cxTypes, cxObject)
 {
     CX_RELEASE(this->any);
-    CX_RELEASE(this->kvs);
     if(this->utArray != NULL){
         utarray_free(this->utArray);
     }
 }
 CX_OBJECT_TERM(cxType, cxObject)
-
-cxTypes cxAtlasBoxPointTypesCreate()
-{
-    cxTypes this = CX_CREATE(cxTypes);
-    this->type = cxTypesAtlasBoxPoint;
-    utarray_new(this->utArray, &cxAtlasBoxPointTypeICD);
-    return this;
-}
 
 cxTypes cxStringTypesCreate()
 {
@@ -45,6 +34,7 @@ cxTypes cxHashTypesCreate()
 {
     cxTypes this = CX_CREATE(cxTypes);
     this->type = cxTypesHash;
+    this->any = CX_ALLOC(cxHash);
     return this;
 }
 
@@ -69,16 +59,6 @@ cxTypes cxDBTypesCreate(cxAny db)
     this->type = cxTypesDB;
     CX_RETAIN_SWAP(this->any, db);
     return this;
-}
-
-void cxTypesSet(cxTypes this,cxConstChars key,cxAny value)
-{
-    cxHashSet(this->kvs, cxHashStrKey(key), value);
-}
-
-cxAny cxTypesGet(cxTypes this,cxConstChars key)
-{
-    return cxHashGet(this->kvs, cxHashStrKey(key));
 }
 
 cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t)

@@ -16,19 +16,38 @@ static jclass javaClass = NULL;
 
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr)
 {
-    CX_ASSERT(false, "not finished");
-    return NULL;
+    CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
+    JniMethodInfo methodInfo;
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "createTextBitmap","(Ljava/lang/String;Ljava/lang/String;I)[B");
+    CX_ASSERT(ret, "get static method info failed");
+    CX_UNUSED_PARAM(ret);
+    cxString rv = NULL;
+    jstring str = (*javaENV)->NewStringUTF(javaENV,txt);
+    jstring fontName = NULL;
+    if(font != NULL){
+        fontName = (*javaENV)->NewStringUTF(javaENV,font);
+    }
+    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(javaENV,methodInfo.classID,methodInfo.methodID,str,fontName,(jint)attr.size);
+    if(bytes != NULL){
+        jboolean ok = JNI_FALSE;
+        jsize length = (*javaENV)->GetArrayLength(javaENV,bytes);
+        jbyte *buffer = (*javaENV)->GetByteArrayElements(javaENV,bytes,&ok);
+        rv = cxStringBinary(buffer, length);
+        (*javaENV)->ReleaseByteArrayElements(javaENV,bytes,buffer,0);
+    }
+    if(fontName != NULL){
+        (*javaENV)->DeleteLocalRef(javaENV,fontName);
+    }
+    if(str != NULL){
+        (*javaENV)->DeleteLocalRef(javaENV,str);
+    }
+    return rv;
 }
 
-cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
-{
-    CX_ASSERT(false, "android platform not use");
-    return NULL;
-}
-
-//cxEngineDocumentPath
+//java:String cxEngineDocumentPath()
 cxString cxDocumentPath(cxConstChars file)
 {
+    CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
     JniMethodInfo methodInfo;
     cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineDocumentPath","(Ljava/lang/String;)Ljava/lang/String;");
     CX_ASSERT(ret, "get static method info failed");
@@ -38,17 +57,31 @@ cxString cxDocumentPath(cxConstChars file)
         path = (*methodInfo.env)->NewStringUTF(methodInfo.env,file);
     }
     jstring docPath = (*methodInfo.env)->CallStaticObjectMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, path);
+    cxString rv = jstringTocxString(docPath);
+    if(docPath != NULL){
+        (*methodInfo.env)->DeleteLocalRef(methodInfo.env,docPath);
+    }
     if(path != NULL){
         (*methodInfo.env)->DeleteLocalRef(methodInfo.env,path);
     }
-    cxString rv = jstringTocxString(docPath);
-    (*methodInfo.env)->DeleteLocalRef(methodInfo.env,docPath);
     return rv;
 }
 
-cxString cxLocaleLang()
+//java:String cxEngineLocalized()
+cxString cxLocalizedLang()
 {
-    return UTF8("en");
+    CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
+    JniMethodInfo methodInfo;
+    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineLocalized","()Ljava/lang/String;");
+    CX_ASSERT(ret, "get static method info failed");
+    CX_UNUSED_PARAM(ret);
+    cxString lngcode = NULL;
+    jstring lang = (*methodInfo.env)->CallStaticObjectMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
+    CX_ASSERT(lang != NULL, "get lang code failed");
+    lngcode = jstringTocxString(lang);
+    (*methodInfo.env)->DeleteLocalRef(methodInfo.env,lang);
+    CX_LOGGER("current localized lang:%s",cxStringBody(lngcode));
+    return lngcode;
 }
 
 void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars format,va_list ap)
@@ -56,11 +89,11 @@ void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars forma
     char buffer[CX_MAX_LOGGER_LENGTH];
     vsnprintf(buffer, CX_MAX_LOGGER_LENGTH, format, ap);
     if(cxConstCharsEqu(type, "ERROR") || cxConstCharsEqu(type, "ASSERT")){
-        __android_log_print(ANDROID_LOG_ERROR, "cxEngine", "[%s:%d] %s:%s\n",file,line,type,buffer);
+        __android_log_print(ANDROID_LOG_ERROR, "cxEngine", "[%s:%d] %s:%s",file,line,type,buffer);
     }else if(cxConstCharsEqu(type, "WARN")){
-        __android_log_print(ANDROID_LOG_WARN, "cxEngine", "[%s:%d] %s:%s\n",file,line,type,buffer);
+        __android_log_print(ANDROID_LOG_WARN, "cxEngine", "[%s:%d] %s:%s",file,line,type,buffer);
     }else{
-        __android_log_print(ANDROID_LOG_INFO, "cxEngine", "[%s:%d] %s:%s\n",file,line,type,buffer);
+        __android_log_print(ANDROID_LOG_INFO, "cxEngine", "[%s:%d] %s:%s",file,line,type,buffer);
     }
 }
 
@@ -68,6 +101,19 @@ cxString cxAssetsPath(cxConstChars file)
 {
     CX_RETURN(file == NULL, NULL);
     return cxStringConstChars(file);
+}
+
+cxBool cxAssetsExists(cxConstChars file)
+{
+    cxBool ret = false;
+    cxString path = cxAssetsPath(file);
+    AAssetManager *assetMgr = cxEngineGetAssetManager();
+    AAsset *asset = AAssetManager_open(assetMgr, cxStringBody(path), AASSET_MODE_UNKNOWN);
+    if(asset != NULL){
+        ret = AAsset_getLength(asset) > 0;
+        AAsset_close(asset);
+    }
+    return ret;
 }
 
 cxString jstringTocxString(jstring jstr) {
@@ -88,13 +134,11 @@ cxBool cxGetStaticMethodInfo(JniMethodInfo *methodinfo,cxConstChars className,cx
         return false;
     }
     CX_ASSERT(javaENV != NULL && javaClass != NULL, "java env and class error");
-    
     jmethodID methodID = (*javaENV)->GetStaticMethodID(javaENV, javaClass, methodName, paramCode);
     if (methodID == NULL) {
         CX_ERROR("Failed to find static method id of %s", methodName);
         return false;
     }
-    
     methodinfo->classID = javaClass;
     methodinfo->env = javaENV;
     methodinfo->methodID = methodID;
@@ -182,11 +226,11 @@ JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineLayout(JNIE
     cxEngineLayout(width, height);
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineInit(JNIEnv * env, jclass class)
+JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineBegin(JNIEnv * env, jclass class)
 {
     javaENV = env;
     javaClass = (*env)->NewGlobalRef(env,class);
-    cxEngineInit(cxEngineInstance());
+    cxEngineBegin();
 }
 
 

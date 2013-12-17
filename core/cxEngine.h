@@ -104,6 +104,10 @@ void cxEngineSendJson(cxString json);
 
 void cxEngineRecvJson(cxString json);
 
+void cxEngineSetLocalized(cxString lang);
+
+void cxEngineBegin();
+
 void cxEngineExit();
 
 void cxEnginePause();

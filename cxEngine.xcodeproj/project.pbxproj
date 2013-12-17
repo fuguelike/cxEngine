@@ -69,6 +69,7 @@
 		839E7A5A17F1BC7600B0F5EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 839E7A5917F1BC7600B0F5EC /* main.m */; };
 		839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839E7A6917F1BC7600B0F5EC /* Images.xcassets */; };
 		83E51BD618570640006AD253 /* en in Resources */ = {isa = PBXBuildFile; fileRef = 83E51BD518570640006AD253 /* en */; };
+		83F59E04185FF71500C43319 /* appConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83F59E03185FF71500C43319 /* appConfig.xml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -150,6 +151,7 @@
 		839E7A5B17F1BC7600B0F5EC /* cxEngine-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "cxEngine-Prefix.pch"; sourceTree = "<group>"; };
 		839E7A6917F1BC7600B0F5EC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		83E51BD518570640006AD253 /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = res/en; sourceTree = "<group>"; };
+		83F59E03185FF71500C43319 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = appConfig.xml; path = res/appConfig.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +236,7 @@
 				83E51BD518570640006AD253 /* en */,
 				8372777218449156005EDE68 /* animate */,
 				832BEF0C182FBB0900F4BC22 /* test.jpg */,
+				83F59E03185FF71500C43319 /* appConfig.xml */,
 				832B1D4918264B100038D0EC /* apple.mp3 */,
 				832B1D4A18264B100038D0EC /* Track02.mp3 */,
 				8341C6AE1822812B0045A66F /* 2.pvr */,
@@ -374,6 +377,7 @@
 				834F2E8418459AFE0067E220 /* white.png in Resources */,
 				832BEF0D182FBB0900F4BC22 /* test.jpg in Resources */,
 				832B1D4B18264B100038D0EC /* apple.mp3 in Resources */,
+				83F59E04185FF71500C43319 /* appConfig.xml in Resources */,
 				8341C6CC1822812B0045A66F /* main.xml in Resources */,
 				839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */,
 				839103BA18595754008DF1C7 /* buttontemp.xml in Resources */,

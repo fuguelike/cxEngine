@@ -224,17 +224,7 @@ cxBool cxPolygonContainPoint(const cxPolygon *polygon,const cxVec2f tp);
 //if r1 contains r2 return true
 cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2);
 
-typedef struct {
-    cxUInt mask;
-    cxBox4f box;
-    cxVec2f pos;
-    cxSize2f size;
-    cxBoxTex2f texbox;
-    cxColor4f color;
-} cxAtlasBoxPointType;
-
 typedef enum {
-    cxTypesAtlasBoxPoint,
     cxTypesString,
     cxTypesDB,
     cxTypesHash,
@@ -246,12 +236,9 @@ typedef enum {
 
 CX_OBJECT_DEF(cxTypes, cxObject)
     cxTypesType type;
-    cxAny kvs;          //cxHash
     UT_array *utArray;
     cxAny any;
 CX_OBJECT_END(cxTypes)
-
-cxTypes cxAtlasBoxPointTypesCreate();
 
 cxTypes cxDBTypesCreate(cxAny db);
 
@@ -268,10 +255,6 @@ cxTypes cxStringTypesCreate();
 #define cxTypesAppend(a,v)      utarray_push_back((a)->utArray,&(v))
 
 #define cxTypesIndex(a,t,i)     (*((t *)utarray_eltptr((a)->utArray,i)))
-
-cxAny cxTypesGet(cxTypes this,cxConstChars key);
-
-void cxTypesSet(cxTypes this,cxConstChars key,cxAny value);
 
 #define CX_TYPES_FOREACH(a,t,e) \
 t *e = NULL; \

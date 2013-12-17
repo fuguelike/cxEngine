@@ -21,8 +21,6 @@ CX_OBJECT_DEF(cxHashRoot, cxObject)
     CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
 CX_OBJECT_END(cxHashRoot)
 
-cxTypes cxHashRootReadAtlasBoxPoint(cxHashRoot root,cxConstChars texfile,xmlTextReaderPtr reader);
-
 cxTypes cxHashRootReadString(cxHashRoot root,xmlTextReaderPtr reader);
 
 void cxHashRootReadDBEnv(cxHashRoot root,xmlTextReaderPtr reader);

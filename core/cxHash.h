@@ -59,6 +59,8 @@ void    cxHashSet(cxHash hash,cxHashKey key,cxAny any);
 
 cxAny   cxHashGet(cxHash hash,cxHashKey key);
 
+cxAny   cxHashFirst(cxHash hash);
+
 CX_C_END
 
 #endif

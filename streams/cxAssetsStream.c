@@ -114,7 +114,7 @@ CX_OBJECT_FREE(cxAssetsStream, cxStream)
 }
 CX_OBJECT_TERM(cxAssetsStream, cxStream)
 
-cxString cxAssertsData(cxConstChars file)
+cxString cxAssetsData(cxConstChars file)
 {
     cxStream stream = cxAssetsStreamCreate(file);
     return cxStreamAllBytes(stream);

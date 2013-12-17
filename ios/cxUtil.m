@@ -52,6 +52,14 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr at
     return cxStringAttach(buffer, bufsiz);
 }
 
+cxBool cxAssetsExists(cxConstChars file)
+{
+    cxString path = cxAssetsPath(file);
+    CX_RETURN(path == NULL, false);
+    struct stat stat={0};
+    return lstat(cxStringBody(path), &stat) == 0;
+}
+
 void cxEngineSendJson(cxString json)
 {
     cxEngineRecvJson(json);
@@ -121,12 +129,13 @@ cxString cxDocumentPath(cxConstChars file)
     }
 }
 
-cxString cxLocaleLang()
+cxString cxLocalizedLang()
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
     NSString *current = [languages objectAtIndex:0];
     NSDictionary* temp = [NSLocale componentsFromLocaleIdentifier:current];
     NSString * lngcode = [temp objectForKey:NSLocaleLanguageCode];
+    CX_LOGGER("current localized lang:%s",[lngcode UTF8String]);
     return cxStringCreate("%s",[lngcode UTF8String]);
 }

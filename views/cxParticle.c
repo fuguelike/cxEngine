@@ -65,7 +65,7 @@ static void cxParticleXMLReaderError(void *arg,const char *msg,xmlParserSeveriti
 void cxParticleInitFromPEX(cxAny pview,cxConstChars file)
 {
     cxParticle this = pview;
-    cxString data = cxAssertsData(file);
+    cxString data = cxAssetsData(file);
     CX_RETURN(data == NULL);
     xmlTextReaderPtr reader = cxXMLReaderForString(data,cxParticleXMLReaderError, this);
     while(xmlTextReaderRead(reader) && !this->isError){
@@ -183,8 +183,7 @@ static cxNumber cxEmitterType(cxEventArg arg)
     if(cxConstCharsEqu(mode, "radial")){
         return cxNumberInt(cxParticleEmitterRadial);
     }
-    CX_ERROR("Emtter type gravity or radial");
-    return NULL;
+    return cxNumberInt(cxParticleEmitterGravity);
 }
 
 static cxNumber cxBlendMode(cxEventArg arg)
@@ -195,10 +194,9 @@ static cxNumber cxBlendMode(cxEventArg arg)
         return cxNumberInt(cxParticleBlendAdd);
     }
     if(cxConstCharsEqu(mode, "multiple")){
-        return cxNumberInt(cxParticleBlendAdd);
+        return cxNumberInt(cxParticleBlendMultiply);
     }
-    CX_ERROR("blend mode add or multiple");
-    return NULL;
+    return cxNumberInt(cxParticleBlendMultiply);
 }
 
 void cxParticleTypeInit()

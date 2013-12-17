@@ -28,10 +28,7 @@ CX_OBJECT_DEF(cxAtlas, cxSprite)
     cxBool isDirty;
     cxBool isInit;
     cxAtlasScale9 scale9;
-    cxString boxesKey;
 CX_OBJECT_END(cxAtlas)
-
-void cxAtlasLoadBoxes(cxAny pview);
 
 void cxAtlasDraw(cxAny pview);
 

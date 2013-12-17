@@ -11,6 +11,8 @@
 #include <streams/cxAssetsStream.h>
 #include "cxPlayer.h"
 
+cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
+
 CX_OBJECT_DEF(cxBuffer, cxObject)
     ALuint buffer;
     ALenum format;

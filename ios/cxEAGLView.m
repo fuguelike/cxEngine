@@ -38,7 +38,7 @@ cxEAGLView *instance = nil;
 
 -(void)initMainLoop
 {
-    cxEngineInit(cxEngineInstance());
+    cxEngineBegin();
 }
 
 -(void)freeMainLoop

@@ -260,8 +260,6 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_BREAK(cond)            if(cond)break
 
-#define CX_CONST_STRING(...)      ({cxChar tmp[CX_HASH_MAX_KEY_LENGTH]={0};snprintf(tmp, CX_HASH_MAX_KEY_LENGTH, ##__VA_ARGS__)?tmp:NULL;})
-
 #define CX_OBJECT_DEF(_t_,_b_)    CX_OBJECT_BEG(_t_) struct _b_ super;
 
 #define CX_OBJECT_INIT(_t_,_b_)   void _t_##AutoInit(_t_ this){_b_##AutoInit((_b_)this);{

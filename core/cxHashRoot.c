@@ -14,79 +14,6 @@
 #include "cxHashRoot.h"
 #include "cxDB.h"
 
-cxTypes cxHashRootReadAtlasBoxPoint(cxHashRoot root,cxConstChars texfile,xmlTextReaderPtr reader)
-{
-    cxTypes types = cxAtlasBoxPointTypesCreate();
-    cxTexture texture = NULL;
-    cxInt index = 0;
-    if(texfile != NULL){
-        types->any = cxStringAllocChars(texfile);
-        texture = cxTextureFactoryLoadFile(texfile);
-    }
-    int depth = xmlTextReaderDepth(reader);
-    while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
-        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
-            continue;
-        }
-        cxConstChars temp = cxXMLReadElementName(reader);
-        if(!ELEMENT_IS_TYPE(item)){
-            continue;
-        }
-        cxAtlasBoxPointType item = {0};
-        
-        cxConstChars top = cxXMLAttr("top");
-        if(top != NULL){
-            item.mask |= cxViewAutoResizeTop;
-            item.box.t = atof(top);
-        }
-        
-        cxConstChars left = cxXMLAttr("left");
-        if(left != NULL){
-            item.mask |= cxViewAutoResizeLeft;
-            item.box.l = atof(left);
-        }
-        
-        cxConstChars right = cxXMLAttr("right");
-        if(right != NULL){
-            item.mask |= cxViewAutoResizeRight;
-            item.box.r = atof(right);
-        }
-        
-        cxConstChars bottom = cxXMLAttr("bottom");
-        if(bottom != NULL){
-            item.mask |= cxViewAutoResizeBottom;
-            item.box.b = atof(bottom);
-        }
-        
-        cxConstChars fill = cxXMLAttr("fill");
-        if(cxConstCharsEqu(fill, "true")){
-            item.box = cxBox4fv(0, 0, 0, 0);
-            item.mask = cxViewAutoResizeFill;
-        }
-        
-        item.pos.x = cxXMLReadFloatAttr(reader, NULL, "x", 0);
-        item.pos.y = cxXMLReadFloatAttr(reader, NULL, "y", 0);
-        
-        item.size.w = cxXMLReadFloatAttr(reader, NULL, "w", 0);
-        item.size.h = cxXMLReadFloatAttr(reader, NULL, "h", 0);
-        
-        item.color = cxXMLReadColor4fAttr(reader, NULL, "color", cxColor4fv(1, 1, 1, 1));
-        
-        item.texbox = cxBoxTex2fDefault();
-        cxConstChars skey = cxXMLAttr("key");
-        if(skey != NULL){
-            item.texbox = cxTextureBox(texture, skey);
-            cxTypesSet(types, skey, cxNumberInt(index));
-        }
-        if(skey != NULL && cxSize2Zero(item.size)){
-            item.size = cxTextureSize(texture, skey);
-        };
-        index ++;
-        cxTypesAppend(types, item);
-    }
-    return types;
-}
-
 static void cxHashRootReadDB(cxDBEnv env,cxHashRoot root,xmlTextReaderPtr reader)
 {
     int depth = xmlTextReaderDepth(reader);
@@ -183,8 +110,8 @@ static cxAny cxReadValues(cxHashRoot root,cxConstChars temp,xmlTextReaderPtr rea
     CX_RETURN(text == NULL, NULL);
     cxConstChars value = cxStringBody(text);
     cxAny rv = NULL;
-    if(ELEMENT_IS_TYPE(cxString)){
-        rv = cxStringConstChars(value);
+    if(ELEMENT_IS_TYPE(cxBool)) {
+        rv = cxNumberBool(cxConstCharsEqu(value, "true"));
     }else if(ELEMENT_IS_TYPE(cxInt)){
         rv = cxNumberInt(atoi(value));
     }else if(ELEMENT_IS_TYPE(cxFloat)){
@@ -228,10 +155,22 @@ cxTypes cxHashRootReadHash(cxHashRoot root,xmlTextReaderPtr reader)
         if(key == NULL){
             continue;
         }
+        cxAny value = NULL;
         cxConstChars temp = cxXMLReadElementName(reader);
-        cxAny value = cxReadValues(root, temp, reader);
+        if(ELEMENT_IS_TYPE(cxString)){
+            cxTypes types = cxHashRootReadString(root, reader);
+            value = types != NULL ? types->any : NULL;
+        } else if(ELEMENT_IS_TYPE(cxHash)){
+            cxTypes types = cxHashRootReadHash(root, reader);
+            value = types != NULL ? types->any : NULL;
+        } else if(ELEMENT_IS_TYPE(cxArray)){
+            cxTypes types = cxHashRootReadArray(root, reader);
+            value = types != NULL ? types->any : NULL;
+        } else {
+            value = cxReadValues(root, temp, reader);
+        }
         if(value != NULL){
-            cxTypesSet(types, key, value);
+            cxHashSet(types->any, cxHashStrKey(key), value);
         }
     }
     return types;
@@ -245,8 +184,20 @@ cxTypes cxHashRootReadArray(cxHashRoot root,xmlTextReaderPtr reader)
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
+        cxAny value = NULL;
         cxConstChars temp = cxXMLReadElementName(reader);
-        cxAny value = cxReadValues(root, temp, reader);
+        if(ELEMENT_IS_TYPE(cxString)){
+            cxTypes types = cxHashRootReadString(root, reader);
+            value = types != NULL ? types->any : NULL;
+        } else if(ELEMENT_IS_TYPE(cxHash)){
+            cxTypes types = cxHashRootReadHash(root, reader);
+            value = types != NULL ? types->any : NULL;
+        } else if(ELEMENT_IS_TYPE(cxArray)){
+            cxTypes types = cxHashRootReadArray(root, reader);
+            value = types != NULL ? types->any : NULL;
+        } else {
+            value = cxReadValues(root, temp, reader);
+        }
         if(value != NULL){
             cxArrayAppend(types->any, value);
         }
@@ -328,15 +279,11 @@ cxBool cxHashRootLoadWithReader(cxHashRoot root,xmlTextReaderPtr reader)
         }
         cxConstChars  sid = cxXMLAttr("id");
         if(sid == NULL){
-            CX_WARN("not set id,data not save to hash table");
+            CX_WARN("element %s:not set id,data not save to hash table",temp);
             continue;
         }
         cxAny object = NULL;
-        if(ELEMENT_IS_TYPE(cxAtlasBoxPoint)){
-            cxConstChars stexture = cxXMLAttr("texture");
-            //cxTypesAtlasBoxPoint
-            object = cxHashRootReadAtlasBoxPoint(root,stexture,reader);
-        }else if(ELEMENT_IS_TYPE(cxString)){
+        if(ELEMENT_IS_TYPE(cxString)){
             //cxTypesString
             object = cxHashRootReadString(root,reader);
         }else if(ELEMENT_IS_TYPE(cxHash)){

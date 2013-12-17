@@ -43,15 +43,15 @@ cxString cxDecompress(cxString data);
 
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr);
 
-cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
-
 cxHash cxParseKeyValue(cxChar *query);
 
 cxString cxAssetsPath(cxConstChars file);
 
+cxBool cxAssetsExists(cxConstChars file);
+
 cxDouble cxTimestamp();
 
-cxString cxLocaleLang();
+cxString cxLocalizedLang();
 
 cxString cxDocumentPath(cxConstChars file);
 

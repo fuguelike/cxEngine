@@ -59,6 +59,8 @@ cxBool cxStreamSeek(cxAny this,cxOff off,cxInt flags);
 
 cxOff cxStreamPosition(cxAny this);
 
+cxInt cxStreamLength(cxAny this);
+
 void cxStreamClose(cxAny this);
 
 cxString cxStreamAllBytes(cxAny this);

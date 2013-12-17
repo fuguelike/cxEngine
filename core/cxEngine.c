@@ -53,6 +53,18 @@ void cxEnginePause()
     }
 }
 
+void cxEngineBegin()
+{
+    cxEngine engine = cxEngineInstance();
+    //set locate lang
+    cxEngineSetLocalized(cxLocalizedLang());
+    //load appConfig.xml
+    cxEngineDataSet("appConfig.xml");
+    //init event list and att method
+    cxEngineSystemInit();
+    cxEngineInit(engine);
+}
+
 void cxEngineResume()
 {
     CX_RETURN(isExit);
@@ -210,7 +222,7 @@ cxBMPFont cxEngineLoadBMPFont(cxConstChars file)
     return font;
 }
 
-void cxEngineSetLocalLang(cxString lang)
+void cxEngineSetLocalized(cxString lang)
 {
     cxEngine this = cxEngineInstance();
     CX_RETAIN_SWAP(this->lang, lang);
@@ -222,7 +234,6 @@ cxEngine cxEngineInstance()
         CX_LOGGER("cxEngine Version:%d",CX_ENGINE_VERSION);
         instance = CX_ALLOC(cxEngine);
         cxAllocatorInit();
-        cxEngineSystemInit();
     }
     return instance;
 }
@@ -309,13 +320,26 @@ cxFuncItem cxEngineGetTypeFunc(cxConstType type,cxConstChars name)
 
 static cxString cxEngineLocalizedText(cxEventArg arg)
 {
+    cxEngine this = cxEngineInstance();
     CX_ASSERT(arg != NULL, "args error");
+    
     cxConstChars url = cxEventArgToString(arg);
     CX_ASSERT(url != NULL, "args error");
-    cxEngine this = cxEngineInstance();
     cxUrlPath path = cxUrlPathParse(url);
-    cxTypes types = cxEngineDataSet(CX_CONST_STRING("%s/%s?%s",cxStringBody(this->lang),path->path,path->key));
-    CX_RETURN(types == NULL || !cxTypesIsType(types, cxTypesString), NULL);
+    
+    cxTypes langTypes= cxEngineDataSet("appConfig.xml?lang");
+    CX_ASSERT(langTypes != NULL, "appConfig.xml must set lang filed");
+    cxString dir = cxHashGet(langTypes->any, cxHashStrKey(cxStringBody(this->lang)));
+    if(dir == NULL){
+        dir = cxHashFirst(langTypes->any);
+    }
+    CX_ASSERT(dir != NULL, "get lang dir error");
+    cxConstChars file = CX_CONST_STRING("%s/%s",cxStringBody(dir),path->path);
+
+    cxTypes types = cxEngineDataSet(CX_CONST_STRING("%s?%s",file,path->key));
+    CX_RETURN(types == NULL, NULL);
+    
+    CX_ASSERT(cxTypesIsType(types, cxTypesString), "must is cxTypesString type");
     return types->any;
 }
 
@@ -419,9 +443,6 @@ static cxTypes cxDataSetTypes(cxEventArg arg)
 
 void cxEngineSystemInit()
 {
-    //set locate lang
-    cxEngineSetLocalLang(cxStringConstChars("en"));//cxLocaleLang());
-    
     //cxActionRun({'src':'actions.xml?btnEnter','view':'id','cache':true, 'curve':'ExpOut', 'delay':0.3})
     cxEngineRegisteEvent("cxActionRun", cxViewRunActionEvent);
     //cxPlayEffect({'src':'aa.wav','loop':true})
@@ -531,7 +552,11 @@ cxAny cxEngineDataSet(cxConstChars url)
         CX_RETURN(sets == NULL, NULL);
         cxHashSet(this->datasets, cxHashStrKey(path->path), sets);
     }
-    return path->count == 2 ? cxHashGet(sets->items, cxHashStrKey(path->key)) : NULL;
+    cxAny ret = NULL;
+    if(path->count >= 2){
+        ret = cxHashGet(sets->items, cxHashStrKey(path->key));
+    }
+    return ret;
 }
 
 cxVec2f cxEngineTouchToWindow(cxVec2f pos)

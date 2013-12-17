@@ -69,13 +69,15 @@ void cxStringConcat(cxString string,cxString str);
 
 void cxStringFormat(cxString string,cxConstChars format,...);
 
+#define CX_CONST_STRING(f,...) cxStringBody(cxStringCreate(f,##__VA_ARGS__))
+
 cxString cxStringCreate(cxConstChars format,...);
 
 #define UTF8(f,...)  cxStringCreate(f,##__VA_ARGS__)
 
 void cxStringAppend(cxString string,cxConstChars d,cxInt l);
 
-cxString cxStringBinary(cxChar *d,cxInt l);
+cxString cxStringBinary(cxPointer d,cxInt l);
 
 CX_SCRIPT_DEF(cxString);
 

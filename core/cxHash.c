@@ -57,6 +57,15 @@ cxInt cxHashLength(cxHash hash)
     return HASH_COUNT(hash->hashPtr);
 }
 
+cxAny cxHashFirst(cxHash hash)
+{
+    cxHashElement *ele = NULL, *tmp = NULL;
+    HASH_ITER(hh, hash->hashPtr, ele, tmp){
+        return ele->any;
+    }
+    return NULL;
+}
+
 cxAny cxHashGet(cxHash hash,cxHashKey key)
 {
     cxHashElement *element = cxHashGetElement(hash, key);

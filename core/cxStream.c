@@ -52,6 +52,12 @@ cxOff cxStreamPosition(cxAny this)
     return CX_METHOD_GET(0, stream->Position, this);
 }
 
+cxInt cxStreamLength(cxAny this)
+{
+    cxStream stream = this;
+    return stream->length;
+}
+
 void cxStreamClose(cxAny this)
 {
     cxStream stream = this;

@@ -1,60 +1,75 @@
 
 package cn.chelper.cxengine;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.Locale;
+
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.Paint.FontMetricsInt;
 import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 class EngineGLView extends GLSurfaceView {
-	
+	private static String TAG = "EngineGLView";
 	private static EngineActivity glActivity = null;
 	private static EngineSound engineSound = null;
 	private static EngineMusic engineMusic = null;
+	private static EngineGLView glView = null;
 	static {
         System.loadLibrary("cxEngineTest");
     }
-	
-	private static EngineGLView glView = null;
-	
 	public static native void cxEngineFireTouch(int action,float x,float y);
-	
     public static native void cxEngineLayout(int width, int height);
-    
-    public static native void cxEngineInit();
-    
+    public static native void cxEngineBegin();
     public static native void cxEngineDraw();
-    
     public static native void cxEnginePause();
-
     public static native void cxEngineResume();
-
     public static native void cxEngineMemory();
-    
     public static native void cxEngineExit();
-    
     //sound method
-    public static int cxEnginePlayEffect(String file,boolean loop) {
+    public static int cxEnginePlayEffect(final String file,final boolean loop) {
     	return engineSound.playEffect(file, loop, 1.0f, 0.0f, 1.0f);
     }
-    
-    public static void cxEnginePauseEffect(int id){
-    	engineSound.pauseEffect(id);
+    public static void cxEnginePauseEffect(final int id){
+    	glActivity.runOnUiThread(new Runnable(){
+    		@Override
+    		public void run(){
+    			engineSound.pauseEffect(id);
+    		}
+    	});
     }
-    
-    public static void cxEngineResumeEffect(int id){
-    	engineSound.resumeEffect(id);
+    public static void cxEngineResumeEffect(final int id){
+    	glActivity.runOnUiThread(new Runnable(){
+    		@Override
+    		public void run(){
+    			engineSound.resumeEffect(id);
+    		}
+    	});
     }
-    
-    public static void cxEngineStopEffect(int id){
-    	engineSound.stopEffect(id);
+    public static void cxEngineStopEffect(final int id){
+    	glActivity.runOnUiThread(new Runnable(){
+    		@Override
+    		public void run(){
+    			engineSound.stopEffect(id);
+    		}
+    	});
     }
-    
     public static void cxEnginePlayMusic(final String file,final boolean loop){
-    	engineMusic.playBackgroundMusic(file, loop);
+    	glActivity.runOnUiThread(new Runnable(){
+    		@Override
+    		public void run(){
+    			engineMusic.playBackgroundMusic(file, loop);
+    		}
+    	});
     }
-    
     public static void cxEngineStopMusic(){
     	glActivity.runOnUiThread(new Runnable(){
     		@Override
@@ -63,7 +78,6 @@ class EngineGLView extends GLSurfaceView {
     		}
     	});
     }
-    
     public static void cxEnginePauseMusic(){
     	glActivity.runOnUiThread(new Runnable(){
     		@Override
@@ -72,7 +86,6 @@ class EngineGLView extends GLSurfaceView {
     		}
     	});	
     }
-    
     public static void cxEngineResumeMusic(){
     	glActivity.runOnUiThread(new Runnable(){
     		@Override
@@ -81,8 +94,11 @@ class EngineGLView extends GLSurfaceView {
     		}
     	});	
     }
-    
-    //each invoke method
+    //get localized lang
+    public static String cxEngineLocalized(){
+    	return Locale.getDefault().getLanguage();
+    }
+    //json invoke method
     public static void cxEngineRecvJson(String json) {
     	
     }
@@ -96,12 +112,10 @@ class EngineGLView extends GLSurfaceView {
     		}
     	});
     }
-    
     //assert mehtod
     public static AssetManager cxEngineAssertManager(){
     	return glActivity.getAssets();
     }
-    
   //get getdocument path
     public static String cxEngineDocumentPath(String file){
     	String path = glActivity.getFilesDir().getAbsolutePath();
@@ -110,13 +124,57 @@ class EngineGLView extends GLSurfaceView {
     	}
     	return path;
     }
-    
 	public static void terminateProcess() {
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
-    
-    private static String TAG = "EngineGLView";
-  
+    //create bitmap method
+	private Paint newPaint(String pFontName, int pFontSize) {
+		Paint paint = new Paint();
+		paint.setColor(Color.WHITE);
+		paint.setTextSize(pFontSize);
+		paint.setAntiAlias(true);
+		if (pFontName != null) {
+			paint.setTypeface(Typeface.create(pFontName, Typeface.NORMAL));
+		} else {
+			paint.setTypeface(Typeface.DEFAULT);
+		}
+		return paint;
+	}
+	private byte[] packInt(int v) {
+		byte[] wb = new byte[4];
+		wb[0] = (byte) (v & 0xFF);
+		wb[1] = (byte) ((v >> 8) & 0xFF);
+		wb[2] = (byte) ((v >> 16) & 0xFF);
+		wb[3] = (byte) ((v >> 24) & 0xFF);
+		return wb;
+	}
+	private byte[] getPixels(Bitmap pBitmap) {
+		int width = pBitmap.getWidth();
+		int height = pBitmap.getHeight();
+		int isize = width * height * 4;
+		byte[] wb = packInt(width);
+		byte[] hb = packInt(height);
+		byte[] pixels = new byte[isize + 8];
+		ByteBuffer buf = ByteBuffer.wrap(pixels);
+		buf.order(ByteOrder.nativeOrder());
+		pBitmap.copyPixelsToBuffer(buf);
+		System.arraycopy(wb, 0, pixels, isize, 4);
+		System.arraycopy(hb, 0, pixels, isize + 4, 4);
+		return pixels;
+	}
+	public byte[] createTextBitmapImp(String pString, String pFontName, int pFontSize) {
+		Paint paint = newPaint(pFontName, pFontSize);
+		FontMetricsInt fm = paint.getFontMetricsInt();
+		int height = (int) Math.ceil(fm.bottom - fm.top);
+		int width = (int) Math.ceil(paint.measureText(pString, 0, pString.length()));
+		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(bitmap);
+		canvas.drawText(pString, 0, -fm.top, paint);
+		return getPixels(bitmap);
+	}
+	public static byte[] createTextBitmap(String pString, String pFontName, int pFontSize) {
+		return glView.createTextBitmapImp(pString, pFontName, pFontSize);
+	}
     public EngineGLView(Context context) {
         super(context);
         glView = this;
@@ -127,24 +185,19 @@ class EngineGLView extends GLSurfaceView {
         setFocusable(true);
         setRenderer(new Renderer());
     }
-    
     public void  onDestroy(){
     	engineSound.end();
     	engineMusic.end();
     }
-
     private static class Renderer implements GLSurfaceView.Renderer {
-    	
         public void onDrawFrame(GL10 gl) {
         	cxEngineDraw();
         }
-
         public void onSurfaceChanged(GL10 gl, int width, int height) {
         	cxEngineLayout(width,height);
         }
-        
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        	cxEngineInit();
+        	cxEngineBegin();
         }
     }
 }
