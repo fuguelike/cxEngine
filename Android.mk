@@ -1,68 +1,72 @@
 
 LOCAL_PATH := $(call my-dir)
+
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := cxEngine
+LOCAL_MODULE   := cxEngine
 
 LOCAL_ARM_MODE := arm
 
-LOCAL_CFLAGS    := -std=gnu99 -O2 -DANDROID -I$(LOCAL_PATH) -I$(LOCAL_PATH)/libs/android/include
+LOCAL_CFLAGS   := \
+    -std=gnu99 -O2 -DANDROID \
+    -I$(LOCAL_PATH) \
+    -I$(LOCAL_PATH)/libs/android/include
 
 LOCAL_SRC_FILES := \
-kazmath/aabb.c \
-kazmath/mat3.c \
-kazmath/mat4.c \
-kazmath/mat4stack.c \
-kazmath/matrix.c \
-kazmath/plane.c \
-kazmath/quaternion.c \
-kazmath/ray2.c \
-kazmath/ray3.c \
-kazmath/utility.c \
-kazmath/vec2.c \
-kazmath/vec3.c \
-kazmath/vec4.c
+    kazmath/aabb.c \
+    kazmath/mat3.c \
+    kazmath/mat4.c \
+    kazmath/mat4stack.c \
+    kazmath/matrix.c \
+    kazmath/plane.c \
+    kazmath/quaternion.c \
+    kazmath/ray2.c \
+    kazmath/ray3.c \
+    kazmath/utility.c \
+    kazmath/vec2.c \
+    kazmath/vec3.c \
+    kazmath/vec4.c
 
 LOCAL_SRC_FILES += \
-chipmunk/chipmunk.c \
-chipmunk/cpArbiter.c \
-chipmunk/cpArray.c \
-chipmunk/cpBB.c \
-chipmunk/cpBBTree.c \
-chipmunk/cpBody.c \
-chipmunk/cpCollision.c \
-chipmunk/cpHashSet.c \
-chipmunk/cpPolyShape.c \
-chipmunk/cpShape.c \
-chipmunk/cpSpace.c \
-chipmunk/cpSpaceComponent.c \
-chipmunk/cpSpaceHash.c \
-chipmunk/cpSpaceQuery.c \
-chipmunk/cpSpaceStep.c \
-chipmunk/cpSpatialIndex.c \
-chipmunk/cpSweep1D.c \
-chipmunk/cpVect.c \
-chipmunk/constraints/cpConstraint.c \
-chipmunk/constraints/cpDampedRotarySpring.c \
-chipmunk/constraints/cpDampedSpring.c \
-chipmunk/constraints/cpGearJoint.c \
-chipmunk/constraints/cpGrooveJoint.c \
-chipmunk/constraints/cpPinJoint.c \
-chipmunk/constraints/cpPivotJoint.c \
-chipmunk/constraints/cpRatchetJoint.c \
-chipmunk/constraints/cpRotaryLimitJoint.c \
-chipmunk/constraints/cpSimpleMotor.c \
-chipmunk/constraints/cpSlideJoint.c
+    chipmunk/chipmunk.c \
+    chipmunk/cpArbiter.c \
+    chipmunk/cpArray.c \
+    chipmunk/cpBB.c \
+    chipmunk/cpBBTree.c \
+    chipmunk/cpBody.c \
+    chipmunk/cpCollision.c \
+    chipmunk/cpHashSet.c \
+    chipmunk/cpPolyShape.c \
+    chipmunk/cpShape.c \
+    chipmunk/cpSpace.c \
+    chipmunk/cpSpaceComponent.c \
+    chipmunk/cpSpaceHash.c \
+    chipmunk/cpSpaceQuery.c \
+    chipmunk/cpSpaceStep.c \
+    chipmunk/cpSpatialIndex.c \
+    chipmunk/cpSweep1D.c \
+    chipmunk/cpVect.c \
+    chipmunk/constraints/cpConstraint.c \
+    chipmunk/constraints/cpDampedRotarySpring.c \
+    chipmunk/constraints/cpDampedSpring.c \
+    chipmunk/constraints/cpGearJoint.c \
+    chipmunk/constraints/cpGrooveJoint.c \
+    chipmunk/constraints/cpPinJoint.c \
+    chipmunk/constraints/cpPivotJoint.c \
+    chipmunk/constraints/cpRatchetJoint.c \
+    chipmunk/constraints/cpRotaryLimitJoint.c \
+    chipmunk/constraints/cpSimpleMotor.c \
+    chipmunk/constraints/cpSlideJoint.c
 
 LOCAL_SRC_FILES += \
-shaders/cxShaderAlpha.c \
-shaders/cxShaderClipping.c \
-shaders/cxShaderDefault.c \
-shaders/cxShaderPositionColor.c
+    shaders/cxShaderAlpha.c \
+    shaders/cxShaderClipping.c \
+    shaders/cxShaderDefault.c \
+    shaders/cxShaderPositionColor.c
 
 LOCAL_SRC_FILES += \
-streams/cxMemStream.c \
-streams/cxFileStream.c
+    streams/cxMemStream.c \
+    streams/cxFileStream.c
 
 LOCAL_SRC_FILES += \
     textures/cxTextureFactory.c \
