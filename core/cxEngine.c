@@ -442,22 +442,19 @@ static cxTypes cxDataSetTypes(cxEventArg arg)
     return cxEngineDataSet(url);
 }
 
+cxInt cxEnginePlatform()
+{
+    return CX_TARGET_PLATFORM;
+}
+
 static cxNumber cxEngineIsAndroid(cxEventArg arg)
 {
-#if (CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID)
-    return cxNumberBool(true);
-#else
-    return cxNumberBool(false);
-#endif
+    return cxNumberBool(CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID);
 }
 
 static cxNumber cxEngineIsIOS(cxEventArg arg)
 {
-#if (CX_TARGET_PLATFORM == CX_TARGET_OS_IPHONE)
-    return cxNumberBool(true);
-#else
-    return cxNumberBool(false);
-#endif
+    return cxNumberBool(CX_TARGET_PLATFORM == CX_TARGET_OS_IPHONE);
 }
 
 void cxEngineSystemInit()

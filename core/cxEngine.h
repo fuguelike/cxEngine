@@ -113,6 +113,8 @@ void cxEngineBegin();
 
 void cxEngineTerminate();
 
+cxInt cxEnginePlatform();
+
 void cxEngineExit();
 
 void cxEnginePause();

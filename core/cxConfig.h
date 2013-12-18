@@ -234,7 +234,6 @@ CX_OBJECT_BEG(cxObject)
     cxObjectFunc cxFree;
     cxInt cxTag;
     cxAny cxRoot;
-    cxInt cxSize;
     CX_METHOD_DEF(cxReadAttrFunc,ReadAttr);
 CX_OBJECT_END(cxObject)
 
