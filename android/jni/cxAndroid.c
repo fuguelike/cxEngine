@@ -52,6 +52,9 @@ void cxEngineTerminate()
     CX_ASSERT(ret, "get static method info failed");
     CX_UNUSED_PARAM(ret);
     (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
+    (*javaENV)->DeleteGlobalRef(javaENV,javaClass);
+    javaENV = NULL;
+    javaClass = NULL;
 }
 
 //java:String cxEngineDocumentPath()
@@ -196,6 +199,21 @@ JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineFireTouch(J
     cxEngineFireTouch(cxtype, cxVec2fv(x, y));
 }
 
+JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineFireKey(JNIEnv * env, jclass class,jint type,jint code)
+{
+    cxKeyType cxtype = cxKeyTypeDown;
+    if(type == AKEY_EVENT_ACTION_DOWN){
+        cxtype = cxKeyTypeDown;
+    }else if(type == AKEY_EVENT_ACTION_UP){
+        cxtype = cxKeyTypeUp;
+    }else if(type == AKEY_EVENT_ACTION_MULTIPLE){
+        cxtype = cxKeyTypeMultiple;
+    }else{
+        CX_ASSERT(false, "fire key type error");
+    }
+    cxEngineFireKey(cxtype, code);
+}
+
 JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineSendJsonImp(JNIEnv * env, jclass class,jstring json)
 {
     CX_ASSERT(json != NULL, "args error");
@@ -221,9 +239,6 @@ JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEnginePause(JNIEn
 JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineExit(JNIEnv * env, jclass class)
 {
     cxEngineExit();
-    (*javaENV)->DeleteGlobalRef(javaENV,javaClass);
-    javaENV = NULL;
-    javaClass = NULL;
 }
 
 JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineDraw(JNIEnv * env, jclass class)

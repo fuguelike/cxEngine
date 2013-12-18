@@ -27,6 +27,23 @@ class EngineGLView extends GLSurfaceView {
         System.loadLibrary("cxEngineTest");
     }
 	public static native void cxEngineFireTouch(int action,float x,float y);
+	public void cxEngineAsyncFireTouch(final int action,final float x,final float y){
+		this.queueEvent(new Runnable(){
+			@Override
+			public void run(){
+				cxEngineFireTouch(action,x,y);
+			}
+		});
+	}
+	public static native void cxEngineFireKey(int type,int code);
+	public void cxEngineAsyncFireKey(final int type,final int code){
+		this.queueEvent(new Runnable(){
+			@Override
+			public void run(){
+				cxEngineFireKey(type,code);
+			}
+		});
+	}
     public static native void cxEngineLayout(int width, int height);
     public static native void cxEngineBegin();
     public static native void cxEngineDraw();

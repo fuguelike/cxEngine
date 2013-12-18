@@ -175,11 +175,11 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->dbenvs    = CX_ALLOC(cxHash);
     this->bmpfonts  = CX_ALLOC(cxHash);
     this->functions = CX_ALLOC(cxHash);
-    this->typeFunctions = CX_ALLOC(cxHash);
+    this->typefuncs = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
-    CX_RELEASE(this->typeFunctions);
+    CX_RELEASE(this->typefuncs);
     CX_RELEASE(this->functions);
     CX_RELEASE(this->bmpfonts);
     CX_RELEASE(this->actions);
@@ -252,10 +252,10 @@ void cxEngineRegisteTypeFunc(cxConstType type,cxConstChars name,cxAny func)
 {
     CX_ASSERT(name != NULL || func == NULL || type == NULL, "args error");
     cxEngine this = cxEngineInstance();
-    cxHash typeFuncs = cxHashGet(this->typeFunctions, cxHashStrKey(type));
+    cxHash typeFuncs = cxHashGet(this->typefuncs, cxHashStrKey(type));
     if(typeFuncs == NULL){
         typeFuncs = CX_ALLOC(cxHash);
-        cxHashSet(this->typeFunctions, cxHashStrKey(type), typeFuncs);
+        cxHashSet(this->typefuncs, cxHashStrKey(type), typeFuncs);
         CX_RELEASE(typeFuncs);
     }
     cxFuncItem item = cxHashGet(typeFuncs, cxHashStrKey(name));
@@ -312,7 +312,7 @@ cxFuncItem cxEngineGetFunc(cxConstChars name)
 cxFuncItem cxEngineGetTypeFunc(cxConstType type,cxConstChars name)
 {
     cxEngine this = cxEngineInstance();
-    cxHash typeFuncs = cxHashGet(this->typeFunctions, cxHashStrKey(type));
+    cxHash typeFuncs = cxHashGet(this->typefuncs, cxHashStrKey(type));
     CX_RETURN(typeFuncs == NULL, NULL);
     return cxHashGet(typeFuncs, cxHashStrKey(name));
 }
@@ -604,6 +604,18 @@ void cxEngineEnableTouch(cxBool enable)
 {
     cxEngine this = cxEngineInstance();
     this->isTouch = enable;
+}
+
+cxBool cxEngineFireKey(cxKeyType type,cxInt code)
+{
+    cxEngine this = cxEngineInstance();
+    this->key.type = type;
+    this->key.code = code;
+    if(code == CX_KEYCODE_BACK && type == cxKeyTypeUp){
+        cxEngineExit();
+    }
+    CX_ERROR("fire key:=%d %d",type,code);
+    return false;
 }
 
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)

@@ -107,6 +107,7 @@ public class EngineMusic {
 
 	public void end() {
 		if (this.mediaPlayer != null) {
+			this.mediaPlayer.stop();
 			this.mediaPlayer.release();
 		}
 		this.initData();
@@ -143,6 +144,12 @@ public class EngineMusic {
 
 	private MediaPlayer createMediaplayer(final String pPath) {
 		MediaPlayer mediaPlayer = new MediaPlayer();
+		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener(){
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				Log.e("cxEngine", pPath + " play completed");				
+			}
+		});
 		try {
 			if (pPath.startsWith("/")) {
 				final FileInputStream fis = new FileInputStream(pPath);

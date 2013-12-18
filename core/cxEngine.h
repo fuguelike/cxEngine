@@ -26,7 +26,7 @@ CX_C_BEGIN
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
 CX_OBJECT_DEF(cxEngine, cxObject)
-    cxHash typeFunctions;
+    cxHash typefuncs;
     cxHash bmpfonts;
     cxHash events;
     cxHash functions;
@@ -54,6 +54,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onRecvJson);
     CX_EVENT_ALLOC(onFree);
     cxTouch touch;
+    cxKey key;
     cxString lang;
 CX_OBJECT_END(cxEngine)
 
@@ -99,6 +100,8 @@ cxVec2f cxEngineWindowToTouch(cxVec2f pos);
 void cxEngineEnableTouch(cxBool enable);
 
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos);
+
+cxBool cxEngineFireKey(cxKeyType type,cxInt code);
 
 void cxEngineSendJson(cxString json);
 

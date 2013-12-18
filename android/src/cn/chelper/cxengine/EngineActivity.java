@@ -70,26 +70,26 @@ public class EngineActivity extends Activity {
 		}
 		final float x = xs[0];
 		final float y = ys[0];
-		glView.queueEvent(new Runnable(){
-			@Override
-			public void run(){
-				EngineGLView.cxEngineFireTouch(action,x,y);
-			}
-		});
+		glView.cxEngineAsyncFireTouch(action, x, y);
     	return super.onTouchEvent(event);
     }
+	
+	@Override
+	public boolean onKeyDown(final int keyCode, KeyEvent event){
+		if(keyCode != KeyEvent.KEYCODE_BACK){
+			return super.onKeyDown(keyCode, event);
+		}
+		glView.cxEngineAsyncFireKey(KeyEvent.ACTION_DOWN, keyCode);
+		return true;
+	}
 	
 	@Override
 	public boolean onKeyUp(final int keyCode, KeyEvent event){
 		if(keyCode != KeyEvent.KEYCODE_BACK){
 			return super.onKeyUp(keyCode, event);
 		}
-		glView.queueEvent(new Runnable(){
-			@Override
-			public void run(){
-				EngineGLView.cxEngineExit();
-			}
-		});
+		glView.cxEngineAsyncFireKey(KeyEvent.ACTION_UP, keyCode);
 		return true;
 	}
 }
+

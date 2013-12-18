@@ -178,6 +178,7 @@ public class EngineSound {
 	}
 
 	public void end() {
+		this.stopAllEffects();
 		this.mSoundPool.release();
 		this.mPathStreamIDsMap.clear();
 		this.mPathSoundIDMap.clear();

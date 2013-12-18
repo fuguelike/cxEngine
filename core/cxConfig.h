@@ -278,7 +278,7 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_AUTOFREE(_o_)          cxObjectAutoRelease(_o_)
 
-#define CX_RETAIN_SWAP(_s_,_d_)   if((_s_) != (_d_)){CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
+#define CX_RETAIN_SWAP(_s_,_d_)   {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
 
 #endif
 

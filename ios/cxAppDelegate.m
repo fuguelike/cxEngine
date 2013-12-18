@@ -43,6 +43,53 @@ static cxBool cxDisableDocumentBackup()
     [self.window makeKeyAndVisible];
     return YES;
 }
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    CX_LOGGER("%s play finished",cxStringBody(currFile));
+}
+
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error
+{
+    CX_ERROR("pay music file %s decode error",cxStringBody(currFile));
+}
+
+-(void)cxPlayMusic:(cxConstChars)file loop:(cxBool)loop
+{
+    //save curr file path
+    CX_RETAIN_SWAP(currFile, cxStringConstChars(file));
+    
+    cxString path = cxAssetsPath(file);
+    CX_ASSERT(path != NULL, "path error");
+    
+    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:cxStringBody(path)]];
+    [currPlayer stop];
+    NSError *error = nil;
+    currPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    currPlayer.delegate = self;
+    CX_ASSERT(error == nil, "init audio player error %s,file=%s",[[error localizedDescription] UTF8String],file);
+    if(loop){
+        [currPlayer setNumberOfLoops:-1];
+    }
+    [currPlayer play];
+    [url release];
+}
+
+-(void)cxStopMusic
+{
+    [currPlayer stop];
+    currPlayer = nil;
+}
+
+-(void)cxPauseMusic
+{
+    [currPlayer pause];
+}
+
+-(void)cxResumeMusic
+{
+    [currPlayer play];
+}
 							
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {

@@ -6,41 +6,29 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#import <AVFoundation/AVAudioPlayer.h>
+#import "cxAppDelegate.h"
 #include <core/cxEngine.h>
-
-static AVAudioPlayer *currPlayer = nil;
 
 void cxPlayMusic(cxConstChars file,cxBool loop)
 {
-    cxString path = cxAssetsPath(file);
-    CX_ASSERT(path != NULL, "path error");
-    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:cxStringBody(path)]];
-    //stop prev
-    [currPlayer stop];
-    //start new player
-    NSError *error = nil;
-    currPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-    CX_ASSERT(error == nil, "init audio player error %s,file=%s",[[error localizedDescription] UTF8String],file);
-    if(loop){
-        [currPlayer setNumberOfLoops:-1];
-    }
-    [currPlayer play];
-    [url release];
+    cxAppDelegate *app = (cxAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [app cxPlayMusic:file loop:loop];
 }
 
 void cxStopMusic()
 {
-    [currPlayer stop];
-    currPlayer = nil;
+    cxAppDelegate *app = (cxAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [app cxStopMusic];
 }
 
 void cxPauseMusic()
 {
-    [currPlayer pause];
+    cxAppDelegate *app = (cxAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [app cxPauseMusic];
 }
 
 void cxResumeMusic()
 {
-    [currPlayer play];
+    cxAppDelegate *app = (cxAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [app cxResumeMusic];
 }

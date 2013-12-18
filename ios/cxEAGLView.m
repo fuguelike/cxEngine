@@ -111,7 +111,7 @@ cxEAGLView *instance = nil;
 
 +(cxEAGLView *)glView
 {
-    cxAppDelegate *app = [[UIApplication sharedApplication] delegate];
+    cxAppDelegate *app = (cxAppDelegate *)[[UIApplication sharedApplication] delegate];
     return (cxEAGLView *)app.viewController.view;
 }
 
