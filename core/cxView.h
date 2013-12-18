@@ -46,7 +46,11 @@ typedef void (*cxViewFunc)(cxAny pview);
 
 typedef cxBool (*cxViewTouchFunc)(cxAny pview,cxTouch *touch);
 
+typedef cxBool (*cxViewKeyFunc)(cxAny pview,cxKey *key);
+
 typedef cxUInt (*cxViewIsTouchFunc)(cxAny pview,cxTouch *touch);
+
+typedef cxUInt (*cxViewIsOnKeyFunc)(cxAny pview,cxKey *key);
 
 CX_OBJECT_DEF(cxView, cxObject)
     cxAny args;
@@ -79,6 +83,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxColor4f color;
     CX_METHOD_DEF(cxViewIsTouchFunc, IsTouch);
     CX_METHOD_DEF(cxViewTouchFunc, Touch);
+    CX_METHOD_DEF(cxViewIsOnKeyFunc, IsOnKey);
+    CX_METHOD_DEF(cxViewKeyFunc, OnKey);
     CX_METHOD_DEF(cxViewFunc, Draw);
     CX_METHOD_DEF(cxViewFunc, DrawAfter);
     CX_METHOD_DEF(cxViewFunc, DrawBefore);
@@ -143,6 +149,10 @@ cxAny cxViewAppendTimer(cxAny pview,cxFloat time,cxInt repeat);
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav);
 
 void cxViewSetOrder(cxAny pview,cxInt order);
+
+cxBool cxViewOnKey(cxAny pview,cxKey *key);
+
+cxUInt cxViewIsOnKey(cxAny pview,cxKey *key);
 
 cxBool cxViewTouch(cxAny pview,cxTouch *touch);
 

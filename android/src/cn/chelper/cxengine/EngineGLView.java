@@ -23,9 +23,7 @@ class EngineGLView extends GLSurfaceView {
 	private static EngineSound engineSound = null;
 	private static EngineMusic engineMusic = null;
 	private static EngineGLView glView = null;
-	static {
-        System.loadLibrary("cxEngineTest");
-    }
+	
 	public static native void cxEngineFireTouch(int action,float x,float y);
 	public void cxEngineAsyncFireTouch(final int action,final float x,final float y){
 		this.queueEvent(new Runnable(){

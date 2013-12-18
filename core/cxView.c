@@ -159,6 +159,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->fixscale = cxVec2fv(1.0f, 1.0f);
     this->subViews = CX_ALLOC(cxList);
     CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
+    CX_METHOD_SET(this->IsOnKey, cxViewIsOnKey);
     cxObjectSetReadAttrFunc(this, cxViewReadAttr);
     this->actions = CX_ALLOC(cxHash);
     this->caches = CX_ALLOC(cxHash);
@@ -687,6 +688,47 @@ cxBool cxViewTouch(cxAny pview,cxTouch *touch)
     }
     if(type & cxViewIsTouchTypeSelf){
         return CX_METHOD_GET(false, this->Touch, this, touch);
+    }
+    return false;
+}
+
+static cxBool cxViewOnKeySubViews(cxAny pview,cxKey *key)
+{
+    cxView this = pview;
+    cxListElement *head = cxListFirst(this->subViews);
+    for(cxListElement *ele = cxListLast(this->subViews);ele != NULL && head != NULL;ele = ele->prev){
+        cxView view = ele->any;
+        if(cxViewOnKey(view, key)){
+            return true;
+        }
+        if(ele == head){
+            break;
+        }
+    }
+    return false;
+}
+
+cxUInt cxViewIsOnKey(cxAny pview,cxKey *key)
+{
+    cxView this = pview;
+    if(!this->isVisible){
+        return cxViewIsTouchTypeNone;
+    }
+    return cxViewIsTouchTypeSelf | cxViewIsTouchTypeSubview;
+}
+
+cxBool cxViewOnKey(cxAny pview,cxKey *key)
+{
+    cxView this = pview;
+    cxUInt type = CX_METHOD_GET(cxViewIsTouchTypeNone, this->IsOnKey, this, key);
+    if(type == cxViewIsTouchTypeNone){
+        return false;
+    }
+    if((type & cxViewIsTouchTypeSubview) && cxViewOnKeySubViews(pview,key)){
+        return true;
+    }
+    if(type & cxViewIsTouchTypeSelf){
+        return CX_METHOD_GET(false, this->OnKey, this, key);
     }
     return false;
 }

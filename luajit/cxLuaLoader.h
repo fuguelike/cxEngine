@@ -21,6 +21,12 @@ CX_OBJECT_DEF(cxLuaLoader, cxObject)
     lua_State *L;
 CX_OBJECT_END(cxLuaLoader)
 
+cxBool cxLuaLoaderCheckFunc(cxLuaLoader this,cxConstChars name);
+
+cxBool cxLuaLoaderCallFunc(cxLuaLoader this,cxInt an,cxInt rn);
+
+cxBool cxLuaLoaderRun(cxLuaLoader this,cxString code);
+
 CX_C_END
 
 #endif

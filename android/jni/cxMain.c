@@ -12,12 +12,18 @@
 #include <views/cxLoading.h>
 #include <views/cxLabelTTF.h>
 
+static cxBool cxMainViewOnKey(cxAny pview,cxKey *key)
+{
+    CX_LOGGER("main on key %d",key->type);
+    return false;
+}
+
 static cxAny loading(cxAny loading)
 {
     cxEngineDataSet("items.xml");
-    cxAny rv = cxViewRootCreate("main.xml");
-    CX_ASSERT(rv != NULL, "create xml view failed");
-    return rv;
+    cxViewRoot root = cxViewRootCreate("main.xml");
+    CX_METHOD_SET(root->super.OnKey, cxMainViewOnKey);
+    return root;
 }
 
 static void finished(cxAny pview)

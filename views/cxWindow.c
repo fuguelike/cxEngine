@@ -10,8 +10,17 @@
 #include <core/cxViewRoot.h>
 #include "cxWindow.h"
 
+static cxBool cxWindowOnKey(cxAny pview,cxKey *key)
+{
+    if(key->code == CX_KEYCODE_BACK && key->type == cxKeyTypeUp){
+        cxEngineExit();
+    }
+    return true;
+}
+
 CX_OBJECT_INIT(cxWindow, cxView)
 {
+    CX_METHOD_SET(this->super.OnKey, cxWindowOnKey);
     this->views = CX_ALLOC(cxStack);
 }
 CX_OBJECT_FREE(cxWindow, cxView)

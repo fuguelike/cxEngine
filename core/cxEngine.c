@@ -611,11 +611,7 @@ cxBool cxEngineFireKey(cxKeyType type,cxInt code)
     cxEngine this = cxEngineInstance();
     this->key.type = type;
     this->key.code = code;
-    if(code == CX_KEYCODE_BACK && type == cxKeyTypeUp){
-        cxEngineExit();
-    }
-    CX_ERROR("fire key:=%d %d",type,code);
-    return false;
+    return cxViewOnKey(this->window, &this->key);
 }
 
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)

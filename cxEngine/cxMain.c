@@ -35,10 +35,18 @@
 #include <views/cxLabelBMP.h>
 #include <core/cxBMPFont.h>
 
+static cxBool cxMainViewOnKey(cxAny pview,cxKey *key)
+{
+    CX_LOGGER("main on key %d",key->type);
+    return true;
+}
+
 static cxAny loading(cxAny loading)
 {
     cxEngineDataSet("items.xml");
-    return cxViewRootCreate("main.xml");
+    cxViewRoot root = cxViewRootCreate("main.xml");
+    CX_METHOD_SET(root->super.OnKey, cxMainViewOnKey);
+    return root;
 }
 
 static void finished(cxAny pview)

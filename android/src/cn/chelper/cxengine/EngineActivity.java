@@ -1,6 +1,9 @@
 
 package cn.chelper.cxengine;
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -12,6 +15,13 @@ public class EngineActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle state) {
 		super.onCreate(state);
+		try {
+			ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+			String cxEngineName = appInfo.metaData.getString("cxEngineName");
+			System.loadLibrary(cxEngineName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		glView = new EngineGLView(this);
 		setContentView(glView);
 	}
@@ -68,9 +78,7 @@ public class EngineActivity extends Activity {
 			xs[i] = event.getX(i);
 			ys[i] = event.getY(i);
 		}
-		final float x = xs[0];
-		final float y = ys[0];
-		glView.cxEngineAsyncFireTouch(action, x, y);
+		glView.cxEngineAsyncFireTouch(action, xs[0], ys[0]);
     	return super.onTouchEvent(event);
     }
 	
