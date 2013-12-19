@@ -42,6 +42,7 @@
      <emitterType value="0"/>
      <emitterRate value="-1"/>
      <maxRadius value="100.00"/>
+     <remove value="false"/>
      <maxRadiusVariance value="0.00"/>
      <minRadius value="0.00"/>
      <rotatePerSecond value="0.00"/>
@@ -62,12 +63,19 @@ static void cxParticleXMLReaderError(void *arg,const char *msg,xmlParserSeveriti
     this->isError = true;
 }
 
+cxParticle cxParticleCreateFromPEX(cxConstChars file)
+{
+    cxParticle this = CX_CREATE(cxParticle);
+    cxParticleInitFromPEX(this, file);
+    return this;
+}
+
 void cxParticleInitFromPEX(cxAny pview,cxConstChars file)
 {
     cxParticle this = pview;
-    cxString data = cxAssetsData(file);
-    CX_RETURN(data == NULL);
-    xmlTextReaderPtr reader = cxXMLReaderForString(data,cxParticleXMLReaderError, this);
+    cxXMLScript script = cxEngineGetXMLScript(file);
+    CX_RETURN(script == NULL);
+    xmlTextReaderPtr reader = cxXMLReaderForScript(script, cxParticleXMLReaderError, this);
     while(xmlTextReaderRead(reader) && !this->isError){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
@@ -169,6 +177,8 @@ void cxParticleInitFromPEX(cxAny pview,cxConstChars file)
             this->endradius.v = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
         }else if (ELEMENT_IS_TYPE(minRadiusVariance)){
             this->endradius.r = cxXMLReadFloatAttr(reader, NULL,  "value", 0);
+        }else if(ELEMENT_IS_TYPE(remove)){
+            this->autoRemove = cxXMLReadBoolAttr(reader, NULL, "value", this->autoRemove);
         }
     }
 }
@@ -222,7 +232,7 @@ void cxParticleReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
     cxParticleSetBlendMode(mView, cxXMLReadIntAttr(reader, root->functions, "cxParticle.blend", cxParticleBlendMultiply));
     
     cxParticleSetType(mView, cxXMLReadIntAttr(reader, root->functions, "cxParticle.type", cxParticleEmitterGravity));
-
+    this->autoRemove    = cxXMLReadBoolAttr(reader, root->functions, "cxParticle.remove", this->autoRemove);
     this->todir         = cxXMLReadBoolAttr(reader,root->functions, "cxParticle.todir", this->todir);
     this->duration      = cxXMLReadFloatAttr(reader, root->functions, "cxParticle.duration", this->duration);
     this->gravity       = cxXMLReadVec2fAttr(reader, root->functions, "cxParticle.gravity", this->gravity);
@@ -384,75 +394,98 @@ static cxBool cxParticleAdd(cxAny pview)
     return true;
 }
 
+static void cxParticleComputeUnitVertex(cxParticle this,cxParticleUnit *p,cxFloat dt)
+{
+    if(this->type == cxParticleEmitterGravity){
+        cxVec2f tmp;
+        cxVec2f radial= cxVec2fv(0, 0);
+        if(p->position.x || p->position.y){
+            kmVec2Normalize(&radial, &p->position);
+        }
+        cxVec2f tangential = radial;
+        kmVec2Scale(&radial, &radial, p->radaccel);
+        //compute tangential
+        float newy = tangential.x;
+        tangential.x = -tangential.y;
+        tangential.y = newy;
+        kmVec2Scale(&tangential,&tangential,p->tanaccel);
+        //compute position
+        kmVec2Add(&tmp, &radial, &tangential);
+        kmVec2Add(&tmp, &tmp, &this->gravity);
+        kmVec2Scale(&tmp, &tmp, dt);
+        kmVec2Add(&p->dir, &p->dir, &tmp);
+        kmVec2Scale(&tmp, &p->dir, dt);
+        kmVec2Add(&p->position, &p->position, &tmp);
+    }else{
+        p->angle += p->degreespers * dt;
+        p->radius += p->deltaradius * dt;
+        p->position.x = -cosf(p->angle) * p->radius;
+        p->position.y = -sinf(p->angle) * p->radius;
+    }
+}
+
+static void cxParticleComputeUnit(cxParticle this,cxParticleUnit *p,cxFloat dt)
+{
+    p->life -= dt;
+    if(p->life > 0){
+        //vertex
+        cxParticleComputeUnitVertex(this, p, dt);
+        // color
+        p->color.r += (p->deltacolor.r * dt);
+        p->color.g += (p->deltacolor.g * dt);
+        p->color.b += (p->deltacolor.b * dt);
+        p->color.a += (p->deltacolor.a * dt);
+        // size
+        p->size = CX_MAX(0, p->size + p->deltasize * dt);
+        // angle
+        p->rotation += (p->deltarotation * dt);
+        cxParticleStep(this,p);
+        this->index ++;
+    }else{
+        if(this->index != this->count - 1){
+            this->units[this->index] = this->units[this->count - 1];
+        }
+        this->count--;
+    }
+}
+
+static cxBool cxParticleComputeUnits(cxParticle this,cxFloat dt)
+{
+    if(!this->isActive){
+        return false;
+    }
+    cxFloat rate = 1.0f / this->rate;
+    if(this->count < this->number){
+        this->emitcounter += dt;
+    }
+    while(this->count < this->number && this->emitcounter > rate && cxParticleAdd(this)){
+        this->emitcounter -= rate;
+    }
+    this->elapsed += dt;
+    if(this->duration == -1 || this->elapsed < this->duration){
+        return false;
+    }
+    this->isActive = false;
+    this->emitcounter = 0;
+    cxAtlasClean(this);
+    if(this->autoRemove){
+        cxViewRemoved(this);
+    }
+    return true;
+}
+
 static void cxParticleUpdate(cxEvent *event)
 {
     cxEngine engine = cxEngineInstance();
     cxFloat dt = engine->frameDelta;
     cxParticle this = event->sender;
-    if(this->isActive){
-        cxFloat rate = 1.0f / this->rate;
-        if(this->count < this->number){
-            this->emitcounter += dt;
-        }
-        while(this->count < this->number && this->emitcounter > rate && cxParticleAdd(this)){
-            this->emitcounter -= rate;
-        }
-        this->elapsed += dt;
-        if(this->duration != -1 && this->elapsed > this->duration){
-            this->isActive = false;
-            this->emitcounter = 0;
-            cxAtlasClean(this);
-            return;
-        }
+    if(cxParticleComputeUnits(this, dt)){
+        return;
     }
     this->index = 0;
     while(this->index < this->count){
         cxParticleUnit *p = &this->units[this->index];
-        p->life -= dt;
-        if(p->life > 0){
-            if(this->type == cxParticleEmitterGravity){
-                cxVec2f tmp;
-                cxVec2f radial= cxVec2fv(0, 0);
-                if(p->position.x || p->position.y){
-                    kmVec2Normalize(&radial, &p->position);
-                }
-                cxVec2f tangential = radial;
-                kmVec2Scale(&radial, &radial, p->radaccel);
-                //compute tangential
-                float newy = tangential.x;
-                tangential.x = -tangential.y;
-                tangential.y = newy;
-                kmVec2Scale(&tangential,&tangential,p->tanaccel);
-                //compute position
-                kmVec2Add(&tmp, &radial, &tangential);
-                kmVec2Add(&tmp, &tmp, &this->gravity);
-                kmVec2Scale(&tmp, &tmp, dt);
-                kmVec2Add(&p->dir, &p->dir, &tmp);
-                kmVec2Scale(&tmp, &p->dir, dt);
-                kmVec2Add(&p->position, &p->position, &tmp);
-            }else{
-                p->angle += p->degreespers * dt;
-                p->radius += p->deltaradius * dt;
-                p->position.x = -cosf(p->angle) * p->radius;
-                p->position.y = -sinf(p->angle) * p->radius;
-            }
-            // color
-            p->color.r += (p->deltacolor.r * dt);
-            p->color.g += (p->deltacolor.g * dt);
-            p->color.b += (p->deltacolor.b * dt);
-            p->color.a += (p->deltacolor.a * dt);
-            // size
-            p->size = CX_MAX(0, p->size + p->deltasize * dt);
-            // angle
-            p->rotation += (p->deltarotation * dt);
-            cxParticleStep(this,p);
-            this->index ++;
-        }else{
-            if(this->index != this->count - 1){
-                this->units[this->index] = this->units[this->count - 1];
-            }
-            this->count--;
-        }
+        cxParticleComputeUnit(this, p, dt);
     }
     this->super.isDirty = true;
 }

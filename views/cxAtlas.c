@@ -153,9 +153,11 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
     CX_METHOD_SET(this->super.super.Draw, cxAtlasDraw);
     cxObjectSetReadAttrFunc(this, cxAtlasReadAttr);
     CX_EVENT_QUICK(this->super.super.onResize, cxAtlasResize);
+    this->items = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxAtlas, cxSprite)
 {
+    CX_RELEASE(this->items);
     allocator->free(this->boxes);
     allocator->free(this->indices);
     glDeleteBuffers(2, this->vboid);

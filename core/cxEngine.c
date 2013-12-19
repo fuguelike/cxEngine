@@ -454,7 +454,7 @@ static cxNumber cxEngineIsAndroid(cxEventArg arg)
 
 static cxNumber cxEngineIsIOS(cxEventArg arg)
 {
-    return cxNumberBool(CX_TARGET_PLATFORM == CX_TARGET_OS_IPHONE);
+    return cxNumberBool(CX_TARGET_PLATFORM == CX_PLATFORM_IOS);
 }
 
 void cxEngineSystemInit()
@@ -522,6 +522,12 @@ void cxEngineSystemInit()
     
     //cxChipmunk
     cxChipmunkTypeInit();
+}
+
+cxString cxEngineGetLuaScript(cxConstChars file)
+{
+    cxXMLScript script = cxEngineGetXMLScript(file);
+    return script != NULL ? script->bytes : NULL;
 }
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file)

@@ -9,7 +9,7 @@
         cxParticle.type="cxEmitterType('gravity')"
         cxParticle.number = "2"
         cxParticle.blend = "cxBlendMode('multiple')"
-        cxParticle.duration = "-1"
+        cxParticle.duration = "3.0"
         cxParticle.life = "3.0"
         cxParticle.speed = "200,100"
         cxParticle.angle = "270,45"
@@ -20,11 +20,21 @@
         cxParticle.endsize = "105"
         cxParticle.startcolor="1,1,1,1"
         cxParticle.endcolor="1,1,1,1"
+        cxParticle.remove="true"
         cxParticle.rate = "-1" />
 
     <!--
     <cxParticle cxParticle.pex = "particle.pex" />
      -->
+    <cxButton
+        cxView.w = "180"
+        cxView.h = "120"
+        cxView.left="10"
+        cxView.bottom="10"
+        cxButton.onRelease="appendParticle">
+        <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+        <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Append" cxLabelTTF.size="30"/>
+    </cxButton>
     <cxButton
         cxView.w = "180"
         cxView.h = "120"

@@ -106,6 +106,7 @@ cxTypes cxHashRootReadString(cxHashRoot root,xmlTextReaderPtr reader)
 static cxAny cxReadValues(cxHashRoot root,cxConstChars temp,xmlTextReaderPtr reader)
 {
     cxNumberValue vm={0};
+    cxInt b4[4] = {255,255,255,255};
     cxString text = cxXMLReadString(reader);
     CX_RETURN(text == NULL, NULL);
     cxConstChars value = cxStringBody(text);
@@ -126,6 +127,12 @@ static cxAny cxReadValues(cxHashRoot root,cxConstChars temp,xmlTextReaderPtr rea
         rv = cxNumberColor4f(vm.color4f);
     }else if(ELEMENT_IS_TYPE(cxVec2i) && cxReadInts(value, &vm.vec2i.x) == 2){
         rv = cxNumberVec2i(vm.vec2i);
+    }else if(ELEMENT_IS_TYPE(cxColor4b) && cxReadInts(value, b4) >= 3){
+        vm.color4f.r = (cxFloat)b4[0]/255.0f;
+        vm.color4f.g = (cxFloat)b4[1]/255.0f;
+        vm.color4f.b = (cxFloat)b4[2]/255.0f;
+        vm.color4f.a = (cxFloat)b4[3]/255.0f;
+        rv = cxNumberColor4f(vm.color4f);
     }else if(ELEMENT_IS_TYPE(cxHash)){
         rv = cxHashRootReadHash(root,reader);
     }

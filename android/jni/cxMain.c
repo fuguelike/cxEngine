@@ -11,6 +11,8 @@
 #include <views/cxChipmunk.h>
 #include <views/cxLoading.h>
 #include <views/cxLabelTTF.h>
+#include <luajit/cxLuaLoader.h>
+#include <views/cxParticle.h>
 
 static cxBool cxMainViewOnKey(cxAny pview,cxKey *key)
 {
@@ -24,6 +26,15 @@ static cxAny loading(cxAny loading)
     cxViewRoot root = cxViewRootCreate("main.xml");
     CX_METHOD_SET(root->super.OnKey, cxMainViewOnKey);
     return root;
+}
+
+static void appendParticle(cxEvent *event)
+{
+    cxAny view = cxObjectRoot(event->sender);
+    cxParticle new = cxParticleCreateFromPEX("particle.pex");
+    new->autoRemove = true;
+    new->duration = 2;
+    cxViewAppend(view, new);
 }
 
 static void finished(cxAny pview)
@@ -44,6 +55,11 @@ static void cxChipmunkBegin(cxEvent *event)
 
 void cxEngineInit(cxEngine engine)
 {
+    cxLuaLoader lua = CX_ALLOC(cxLuaLoader);
+    cxLuaLoaderRun(lua, UTF8("require('aaa.lua')"));
+    cxLuaLoaderRun(lua, UTF8("test()"));
+    
+    cxEngineRegisteEvent("appendParticle", appendParticle);
     cxEngineRegisteEvent("cxChipmunkBegin", cxChipmunkBegin);
     
     engine->dessize = cxSize2fv(640, 960);

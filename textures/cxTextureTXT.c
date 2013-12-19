@@ -28,7 +28,7 @@ static cxBool cxTextureTXTUseSystemCreate(cxAny texture)
 static cxBool cxTextureTXTLoad(cxAny this,cxStream stream)
 {
     cxTextureTXT texture = this;
-    cxString unicode = cxIconvConvert(texture->string, "UTF-8", "UTF-16LE");
+    cxString unicode = cxIconvConvertUTF8ToUTF16(texture->string);
     if(unicode == NULL){
         CX_ERROR("convert to unicode error");
         return false;

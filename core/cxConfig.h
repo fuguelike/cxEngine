@@ -202,7 +202,7 @@ void _t_##TypeInit();                                               \
 struct _t_ {
 
 
-#define CX_OBJECT_END(_t_)                              };
+#define CX_OBJECT_END(_t_) };
 
 //method
 

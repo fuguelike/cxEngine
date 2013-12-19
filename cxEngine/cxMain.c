@@ -34,6 +34,7 @@
 #include <views/cxChipmunk.h>
 #include <views/cxLabelBMP.h>
 #include <core/cxBMPFont.h>
+#include <luajit/cxLuaLoader.h>
 
 static cxBool cxMainViewOnKey(cxAny pview,cxKey *key)
 {
@@ -54,6 +55,15 @@ static void finished(cxAny pview)
     cxWindowPushView(pview, NULL);
 }
 
+static void appendParticle(cxEvent *event)
+{
+    cxAny view = cxObjectRoot(event->sender);
+    cxParticle new = cxParticleCreateFromPEX("particle.pex");
+    new->autoRemove = true;
+    new->duration = 2;
+    cxViewAppend(view, new);
+}
+
 static void deleteSprite(cxEvent *event)
 {
     cxAny pview = cxViewRootGet(event->sender, "purple");
@@ -67,6 +77,11 @@ static void cxChipmunkBegin(cxEvent *event)
 
 void cxEngineInit(cxEngine engine)
 {
+    cxLuaLoader lua = CX_ALLOC(cxLuaLoader);
+    cxLuaLoaderRun(lua, UTF8("require('aaa.lua')"));
+    cxLuaLoaderRun(lua, UTF8("test()"));
+    
+    cxEngineRegisteEvent("appendParticle", appendParticle);
     cxEngineRegisteEvent("cxChipmunkBegin", cxChipmunkBegin);
     
     engine->dessize = cxSize2fv(640, 960);

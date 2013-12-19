@@ -72,6 +72,7 @@ typedef struct {
 } cxColor4f;
 #define cxColor4fv(r,g,b,a)     (cxColor4f){r,g,b,a}
 #define cxColor4fEqu(c1,c2)     (cxFloatEqu((c1).r,(c2).r)&&cxFloatEqu((c1).g,(c2).g)&&cxFloatEqu((c1).b,(c2).b)&&cxFloatEqu((c1).a,(c2).a))
+#define cxColor4bv(r,g,b,a)     (cxColor4f){(cxFloat)(r)/255.0f,(cxFloat)(g)/255.0f,(cxFloat)(b)/255.0f,(cxFloat)(a)/255.0f}
 
 typedef struct {
     kmScalar r;
@@ -80,6 +81,7 @@ typedef struct {
 } cxColor3f;
 #define cxColor3fv(r,g,b)       (cxColor3f){r,g,b}
 #define cxColor3fEqu(c1,c2)     (cxFloatEqu((c1).r,(c2).r) && cxFloatEqu((c1).g,(c2).g) && cxFloatEqu((c1).b,(c2).b))
+#define cxColor3bv(r,g,b)       (cxColor3f){(cxFloat)(r)/255.0f,(cxFloat)(g)/255.0f,(cxFloat)(b)/255.0f}
 
 //colors define
 

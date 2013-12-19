@@ -28,6 +28,8 @@ CX_OBJECT_END(cxIconv)
 
 cxIconv cxIconvInstance();
 
+cxString cxIconvConvertUTF8ToUTF16(const cxString string);
+
 cxString cxIconvConvert(const cxString string,cxConstChars from,cxConstChars to);
 
 void cxIconvDestroy();

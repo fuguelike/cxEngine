@@ -19,15 +19,17 @@
     
     <cxDouble id="double">789</cxDouble>
     
-    <cxString id="template"><![CDATA[
-        <cxButton cxView.w="180" cxView.h="120"
-            cxButton.onRelease="$(release)"
-            cxButton.onEnter="cxActionRun({'src':'actions.xml?btnEnter','cache':true})"
-            cxButton.onLeave="cxActionRun({'src':'actions.xml?btnLeave','cache':true})">
-            <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="$(title)" cxLabelTTF.size="30"/>
-        </cxButton>
-    ]]></cxString>
+    <cxString id="template">
+        <![CDATA[
+            <cxButton cxView.w="180" cxView.h="120"
+                cxButton.onRelease="$(release)"
+                cxButton.onEnter="cxActionRun({'src':'actions.xml?btnEnter','cache':true})"
+                cxButton.onLeave="cxActionRun({'src':'actions.xml?btnLeave','cache':true})">
+                <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+                <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="$(title)" cxLabelTTF.size="30"/>
+            </cxButton>
+        ]]>
+    </cxString>
     
     <cxArray id="spline">
         <cxVec2f>-300,300</cxVec2f>
@@ -53,6 +55,7 @@
         <cxVec2f key="vec2f">12,23</cxVec2f>
         <cxSize2f key="size2f">100,200</cxSize2f>
         <cxColor4f key="color">1,1,1,1</cxColor4f>
+        <cxColor4b key="color">123,202,255,255</cxColor4b>
     </cxHash>
     <cxArray id="list">
         <cxString>banana.ttf</cxString>

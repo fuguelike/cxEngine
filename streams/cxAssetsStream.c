@@ -76,7 +76,7 @@ static cxString cxAssetsStreamAllBytes(cxAny this)
         cxStreamOpen(asserts);
     }
     if(!asserts->canRead){
-        CX_ERROR("file stream can't read");
+        CX_ERROR("file %s stream can't read",cxStringBody(asserts->file));
         return NULL;
     }
     cxStreamSeek(asserts,0,SEEK_SET);

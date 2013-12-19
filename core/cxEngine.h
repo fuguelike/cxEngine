@@ -78,6 +78,8 @@ void cxEngineTimeReset();
 
 cxXMLScript cxEngineGetXMLScript(cxConstChars file);
 
+cxString cxEngineGetLuaScript(cxConstChars file);
+
 void cxEngineSetLocalLang(cxString lang);
 
 cxAny cxEngineDataSet(cxConstChars url);

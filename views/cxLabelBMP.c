@@ -16,7 +16,7 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
     CX_RETURN(!cxStringLength(this->txt));
     cxTexture texture = cxBMPFontTexture(this->font, 0);
     cxSpriteSetTexture(this, texture);
-    cxString unicode = cxIconvConvert(this->txt, "UTF-8", "UTF-16LE");
+    cxString unicode = cxIconvConvertUTF8ToUTF16(this->txt);
     cxInt number = cxStringLength(unicode) / 2;
     cxAtlasSetNumber(this, number);
     cxAtlasClean(this);

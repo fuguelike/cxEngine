@@ -153,5 +153,10 @@ LOCAL_SRC_FILES += \
     android/jni/cxAssetsStream.c \
     android/jni/cxPlayer.c
 
+LOCAL_SRC_FILES += \
+    luajit/cxLuaLoader.c \
+    luajit/cxLuaFuncs.c \
+    luajit/cxLuaView.c \
+
 include $(BUILD_STATIC_LIBRARY)
 

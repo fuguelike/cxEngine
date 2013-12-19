@@ -25,6 +25,8 @@ cxBool cxLuaLoaderCheckFunc(cxLuaLoader this,cxConstChars name);
 
 cxBool cxLuaLoaderCallFunc(cxLuaLoader this,cxInt an,cxInt rn);
 
+void cxLuaLoaderAddLuaLoader(cxLuaLoader this,lua_CFunction func);
+
 cxBool cxLuaLoaderRun(cxLuaLoader this,cxString code);
 
 CX_C_END

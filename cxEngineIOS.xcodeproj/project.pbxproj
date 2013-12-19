@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8324963F182FB72000554604 /* cxTextureJPG.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324963D182FB72000554604 /* cxTextureJPG.c */; };
+		83273E781862A19200232D58 /* cxLuaView.c in Sources */ = {isa = PBXBuildFile; fileRef = 83273E761862A19200232D58 /* cxLuaView.c */; };
+		832C0CEA186299E50049B568 /* cxLuaFuncs.c in Sources */ = {isa = PBXBuildFile; fileRef = 832C0CE8186299E50049B568 /* cxLuaFuncs.c */; };
 		8330F7C91828E77D00E7E5B1 /* cxScroll.c in Sources */ = {isa = PBXBuildFile; fileRef = 8330F7C71828E77D00E7E5B1 /* cxScroll.c */; };
 		833E2B9E185F257E004093EF /* cxFileStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 833E2B9C185F257E004093EF /* cxFileStream.c */; };
 		8341C5F518227DF20045A66F /* cxActionSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C50218227DF20045A66F /* cxActionSet.c */; };
@@ -156,6 +158,10 @@
 /* Begin PBXFileReference section */
 		8324963D182FB72000554604 /* cxTextureJPG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureJPG.c; sourceTree = "<group>"; };
 		8324963E182FB72000554604 /* cxTextureJPG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTextureJPG.h; sourceTree = "<group>"; };
+		83273E761862A19200232D58 /* cxLuaView.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLuaView.c; sourceTree = "<group>"; };
+		83273E771862A19200232D58 /* cxLuaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLuaView.h; sourceTree = "<group>"; };
+		832C0CE8186299E50049B568 /* cxLuaFuncs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLuaFuncs.c; sourceTree = "<group>"; };
+		832C0CE9186299E50049B568 /* cxLuaFuncs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLuaFuncs.h; sourceTree = "<group>"; };
 		8330F7C71828E77D00E7E5B1 /* cxScroll.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxScroll.c; sourceTree = "<group>"; };
 		8330F7C81828E77D00E7E5B1 /* cxScroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxScroll.h; sourceTree = "<group>"; };
 		833E2B9C185F257E004093EF /* cxFileStream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxFileStream.c; sourceTree = "<group>"; };
@@ -815,6 +821,10 @@
 			children = (
 				8398803318617295006FE3B9 /* cxLuaLoader.c */,
 				8398803418617295006FE3B9 /* cxLuaLoader.h */,
+				83273E761862A19200232D58 /* cxLuaView.c */,
+				83273E771862A19200232D58 /* cxLuaView.h */,
+				832C0CE8186299E50049B568 /* cxLuaFuncs.c */,
+				832C0CE9186299E50049B568 /* cxLuaFuncs.h */,
 			);
 			path = luajit;
 			sourceTree = "<group>";
@@ -879,6 +889,7 @@
 				835A95C81855A5190088B413 /* cxLabelBMP.c in Sources */,
 				8341C5FB18227DF20045A66F /* cxScale.c in Sources */,
 				8341C65218227DF30045A66F /* vec3.c in Sources */,
+				832C0CEA186299E50049B568 /* cxLuaFuncs.c in Sources */,
 				8341C65318227DF30045A66F /* vec4.c in Sources */,
 				8341C61F18227DF20045A66F /* cxAutoPool.c in Sources */,
 				83607AA218444B39005C392B /* cxAnimate.c in Sources */,
@@ -921,6 +932,7 @@
 				8341C62418227DF20045A66F /* cxEventArg.c in Sources */,
 				8341C66418227DF30045A66F /* cxAtlas.c in Sources */,
 				8341C66218227DF30045A66F /* cxTextureTXT.c in Sources */,
+				83273E781862A19200232D58 /* cxLuaView.c in Sources */,
 				8341C62718227DF20045A66F /* cxHash.c in Sources */,
 				8341C64E18227DF30045A66F /* ray2.c in Sources */,
 				8341C65518227DF30045A66F /* cxShaderClipping.c in Sources */,

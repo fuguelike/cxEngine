@@ -28,6 +28,7 @@ CX_OBJECT_DEF(cxAtlas, cxSprite)
     cxBool isDirty;
     cxBool isInit;
     cxAtlasScale9 scale9;
+    cxHash items;
 CX_OBJECT_END(cxAtlas)
 
 void cxAtlasDraw(cxAny pview);

@@ -50,6 +50,7 @@ typedef void (*cxParticleUpdateBoxFunc)(cxAny pview,cxBoxPoint *box);
 
 CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxBool isError;
+    cxBool autoRemove;
     cxParticleEmitterType type;
     cxInt index;
     cxInt count;
@@ -82,6 +83,8 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxFloatRange rotatepers;
     CX_METHOD_DEF(cxParticleUpdateBoxFunc, UpdateBox);
 CX_OBJECT_END(cxParticle)
+
+cxParticle cxParticleCreateFromPEX(cxConstChars file);
 
 void cxParticleInitFromPEX(cxAny pview,cxConstChars file);
 
