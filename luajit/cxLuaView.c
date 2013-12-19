@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxView.h>
 #include "cxLuaLoader.h"
 #include "cxLuaView.h"
 
-const luaL_reg cxViewFuns [] = {
-
+const luaL_reg cxViewFuns[] = {
     {NULL, NULL}
 };
 

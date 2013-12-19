@@ -536,22 +536,19 @@ cxXMLScript cxEngineGetXMLScript(cxConstChars file)
 {
     cxEngine this = cxEngineInstance();
     CX_RETURN(file == NULL,NULL);
+    
     cxXMLScript script = cxHashGet(this->scripts, cxHashStrKey(file));
     if(script != NULL){
         return script;
     }
-    script = CX_ALLOC(cxXMLScript);
+    script = CX_CREATE(cxXMLScript);
     cxStream stream = cxAssetsStreamCreate(file);
-    if(stream != NULL){
-        cxString data = cxStreamAllBytes(stream);
-        CX_RETAIN_SWAP(script->bytes, data);
-    }
-    if(script->bytes != NULL){
-        cxHashSet(this->scripts, cxHashStrKey(file), script);
-    }else{
-        CX_ERROR("file %s can't load bytes",file);
-    }
-    CX_RELEASE(script);
+    
+    CX_RETURN(stream == NULL, NULL);
+    CX_RETAIN_SWAP(script->bytes, cxStreamAllBytes(stream));
+    CX_RETURN(script->bytes == NULL, NULL);
+    
+    cxHashSet(this->scripts, cxHashStrKey(file), script);
     return script;
 }
 
