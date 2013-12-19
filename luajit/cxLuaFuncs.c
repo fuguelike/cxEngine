@@ -43,6 +43,7 @@ static cxInt cxLuaLogger(lua_State *L)
 {
     cxString log = cxLuaPrintString(L);
     CX_LOGGER("%s",cxStringBody(log));
+    CX_UNUSED_PARAM(log);
     return 0;
 }
 

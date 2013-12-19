@@ -161,6 +161,7 @@ void cxEngineLayout(cxInt width,cxInt height)
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
     kmGLInitialize();
+    xmlInitGlobals();
     this->frameInterval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->isTouch = true;
@@ -203,6 +204,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     cxCurveDestroy();
     cxOpenGLDestroy();
     cxMessageDestroy();
+    xmlCleanupGlobals();
     kmGLFreeAll();
     cxAutoPoolDestroy();
 }

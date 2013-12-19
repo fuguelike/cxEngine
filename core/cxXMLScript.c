@@ -22,6 +22,7 @@ CX_OBJECT_FREE(cxXMLReader, cxObject)
 {
     if(this->reader != NULL){
         xmlTextReaderClose(this->reader);
+        xmlFreeTextReader(this->reader);
     }
 }
 CX_OBJECT_TERM(cxXMLReader, cxObject)

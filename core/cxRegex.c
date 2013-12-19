@@ -14,6 +14,7 @@ CX_OBJECT_INIT(cxRegex, cxObject)
 }
 CX_OBJECT_FREE(cxRegex, cxObject)
 {
+    pcre_free(this->regex);
     CX_RELEASE(this->input);
 }
 CX_OBJECT_TERM(cxRegex, cxObject)
@@ -86,7 +87,7 @@ cxBool cxRegexNext(cxRegex this)
     CX_ASSERT(this->input != NULL, "input string error");
     cxConstChars body = cxStringBody(this->input);
     cxInt length = cxStringLength(this->input);
-    this->count = pcre_exec(this->regex,0,body,length,this->start,0,this->offsets,CX_REGEX_MAX_COUNT);
+    this->count = pcre_exec(this->regex, 0, body, length, this->start, 0, this->offsets, CX_REGEX_MAX_COUNT);
     if(this->count > 0){
         cxRegexPos p = cxRegexPosition(this, 0);
         this->start = p.end;

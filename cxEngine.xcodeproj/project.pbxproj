@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8324910417F2926600D0DF9D /* cxMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324910317F2926600D0DF9D /* cxMain.c */; };
+		83273E7B1862D8CA00232D58 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83273E7A1862D8CA00232D58 /* libxml2.a */; };
 		832A3EF31855F9DF00047C64 /* bmpfont.xml in Resources */ = {isa = PBXBuildFile; fileRef = 832A3EF21855F9DF00047C64 /* bmpfont.xml */; };
 		832B1D4B18264B100038D0EC /* apple.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 832B1D4918264B100038D0EC /* apple.mp3 */; };
 		832B1D4C18264B100038D0EC /* Track02.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 832B1D4A18264B100038D0EC /* Track02.mp3 */; };
@@ -17,7 +18,6 @@
 		8341C68D182280400045A66F /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C68A182280320045A66F /* libcxEngineIOS.a */; };
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
 		8341C69F182280E20045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69E182280E20045A66F /* libz.dylib */; };
-		8341C6A1182280E70045A66F /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A0182280E70045A66F /* libxml2.dylib */; };
 		8341C6A3182280ED0045A66F /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A2182280ED0045A66F /* libiconv.dylib */; };
 		8341C6A91822810D0045A66F /* libdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A41822810D0045A66F /* libdb.a */; };
 		8341C6AA1822810D0045A66F /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A51822810D0045A66F /* libevent.a */; };
@@ -87,6 +87,7 @@
 		8300651F18232BE000AF680D /* cxEngine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cxEngine.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8324910317F2926600D0DF9D /* cxMain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMain.c; sourceTree = "<group>"; };
 		8324910517F2953300D0DF9D /* cxMain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cxMain.h; sourceTree = "<group>"; };
+		83273E7A1862D8CA00232D58 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = libs/ios/lib/libxml2.a; sourceTree = "<group>"; };
 		832A3EF21855F9DF00047C64 /* bmpfont.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = bmpfont.xml; path = res/bmpfont.xml; sourceTree = "<group>"; };
 		832B1D4918264B100038D0EC /* apple.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = apple.mp3; path = res/apple.mp3; sourceTree = "<group>"; };
 		832B1D4A18264B100038D0EC /* Track02.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Track02.mp3; path = res/Track02.mp3; sourceTree = "<group>"; };
@@ -161,6 +162,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83273E7B1862D8CA00232D58 /* libxml2.a in Frameworks */,
 				83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */,
 				839103BD1859631E008DF1C7 /* libpcre.a in Frameworks */,
 				836DBA77184A15B800CCD673 /* libluajit.a in Frameworks */,
@@ -171,7 +173,6 @@
 				8341C6AC1822810D0045A66F /* libjpeg.a in Frameworks */,
 				8341C6AD1822810D0045A66F /* libpng.a in Frameworks */,
 				8341C6A3182280ED0045A66F /* libiconv.dylib in Frameworks */,
-				8341C6A1182280E70045A66F /* libxml2.dylib in Frameworks */,
 				8341C69F182280E20045A66F /* libz.dylib in Frameworks */,
 				8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */,
 				8341C68D182280400045A66F /* libcxEngineIOS.a in Frameworks */,
@@ -202,6 +203,7 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83273E7A1862D8CA00232D58 /* libxml2.a */,
 				83583427185EB87E0057E40B /* AVFoundation.framework */,
 				839103BC1859631E008DF1C7 /* libpcre.a */,
 				836DBA76184A15B800CCD673 /* libluajit.a */,
@@ -318,6 +320,11 @@
 				CLASSPREFIX = cx;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = xuhua;
+				TargetAttributes = {
+					839E7A4517F1BC7600B0F5EC = {
+						DevelopmentTeam = A7FD348C73;
+					};
+				};
 			};
 			buildConfigurationList = 839E7A4117F1BC7600B0F5EC /* Build configuration list for PBXProject "cxEngine" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -546,7 +553,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cxEngine/cxEngine-Prefix.pch";
