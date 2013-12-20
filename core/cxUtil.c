@@ -12,8 +12,58 @@
 #include <ctype.h>
 #include <streams/cxAssetsStream.h>
 #include <streams/cxFileStream.h>
+#include <core/cxEngine.h>
 #include "cxBase.h"
 #include "cxUtil.h"
+
+cxString cxLuaToString(lua_State *L)
+{
+    int nargs = lua_gettop(L);
+    cxString log = CX_CREATE(cxString);
+    for (int i=1; i <= nargs; i++){
+        if(lua_isstring(L, i)){
+            cxStringFormat(log, "%s",lua_tostring(L, i));
+        }else if(lua_isnumber(L, i)){
+            cxStringFormat(log, "%f",lua_tonumber(L, i));
+        }
+    }
+    return log;
+}
+
+static cxInt cxLuaLogger(lua_State *L)
+{
+    cxString log = cxLuaToString(L);
+    CX_LOGGER("%s",cxStringBody(log));
+    CX_UNUSED_PARAM(log);
+    return 0;
+}
+
+static cxInt cxLuaError(lua_State *L)
+{
+    cxString log = cxLuaToString(L);
+    CX_ERROR("%s",cxStringBody(log));
+    return 0;
+}
+
+static cxInt cxLuaWarn(lua_State *L)
+{
+    cxString log = cxLuaToString(L);
+    CX_WARN("%s",cxStringBody(log));
+    return 0;
+}
+
+const luaL_reg global_functions [] = {
+    {"cxLogger", cxLuaLogger},
+    {"cxError", cxLuaError},
+    {"cxWarn", cxLuaWarn},
+    {NULL, NULL}
+};
+
+void cxUtilTypeInit()
+{
+    cxEngine engine = cxEngineInstance();
+    luaL_register(engine->L, "_G", global_functions);
+}
 
 cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
 {

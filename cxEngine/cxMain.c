@@ -34,73 +34,73 @@
 #include <views/cxChipmunk.h>
 #include <views/cxLabelBMP.h>
 #include <core/cxBMPFont.h>
-#include <luajit/cxLuaLoader.h>
 
-static cxBool cxMainViewOnKey(cxAny pview,cxKey *key)
-{
-    CX_LOGGER("main on key %d",key->type);
-    return true;
-}
-
-static cxAny loading(cxAny loading)
-{
-    cxEngineDataSet("items.xml");
-    cxViewRoot root = cxViewRootCreate("main.xml");
-    CX_METHOD_SET(root->super.OnKey, cxMainViewOnKey);
-    return root;
-}
-
-static void finished(cxAny pview)
-{
-    cxWindowPushView(pview, NULL);
-}
-
-static void appendParticle(cxEvent *event)
-{
-    cxAny view = cxObjectRoot(event->sender);
-    cxParticle new = cxParticleCreateFromPEX("particle.pex");
-    new->autoRemove = true;
-    new->duration = 2;
-    cxViewAppend(view, new);
-}
-
-static void deleteSprite(cxEvent *event)
-{
-    cxAny pview = cxViewRootGet(event->sender, "purple");
-    cxChipmunkApplyImpulse(pview, cxVec2fv(1000, 1000), cxVec2fv(0, 1));
-}
-
-static void cxChipmunkBegin(cxEvent *event)
-{
-    cxViewRootRegisteEvent(event->sender, "deleteSprite", deleteSprite);
-}
+//static cxBool cxMainViewOnKey(cxAny pview,cxKey *key)
+//{
+//    CX_LOGGER("main on key %d",key->type);
+//    return true;
+//}
+//
+//static cxAny loading(cxAny loading)
+//{
+//    cxEngineDataSet("items.xml");
+//    cxViewRoot root = cxViewRootCreate("main.xml");
+//    CX_METHOD_SET(root->super.OnKey, cxMainViewOnKey);
+//    return root;
+//}
+//
+//static void finished(cxAny pview)
+//{
+//    cxWindowPushView(pview, NULL);
+//}
+//
+//static void appendParticle(cxEvent *event)
+//{
+//    cxAny view = cxObjectRoot(event->sender);
+//    cxParticle new = cxParticleCreateFromPEX("particle.pex");
+//    new->autoRemove = true;
+//    new->duration = 2;
+//    cxViewAppend(view, new);
+//}
+//
+//static void deleteSprite(cxEvent *event)
+//{
+//    cxAny pview = cxViewRootGet(event->sender, "purple");
+//    cxChipmunkApplyImpulse(pview, cxVec2fv(1000, 1000), cxVec2fv(0, 1));
+//}
+//
+//static void cxChipmunkBegin(cxEvent *event)
+//{
+//    cxViewRootRegisteEvent(event->sender, "deleteSprite", deleteSprite);
+//}
 
 void cxEngineInit(cxEngine engine)
 {
-    cxLuaLoader lua = CX_ALLOC(cxLuaLoader);
-    cxLuaLoaderRun(lua, UTF8("require('aaa.lua')"));
-    cxLuaLoaderRun(lua, UTF8("test()"));
+    cxEngineLuaRunChars("require('main.lua')");
+    cxEngineLuaRunChars("init()");
     
-    cxEngineRegisteEvent("appendParticle", appendParticle);
-    cxEngineRegisteEvent("cxChipmunkBegin", cxChipmunkBegin);
-    
-    engine->dessize = cxSize2fv(640, 960);
-    cxPlayerOpen(0, 0);
+//    cxEngineRegisteEvent("appendParticle", appendParticle);
+//    cxEngineRegisteEvent("cxChipmunkBegin", cxChipmunkBegin);
+//    
+//    engine->dessize = cxSize2fv(640, 960);
+//    cxPlayerOpen(0, 0);
     
 //    engine->isShowBorder = false;
 }
 
 void cxEngineMain(cxEngine engine)
 {
-    cxAny lv = cxLoadingStart(loading, finished);
-    cxLabelTTF txt = cxLabelTTFCreate(UTF8("Loading..."), UTF8("banana.ttf"), 60);
-    cxViewSetColor(txt, cxRED);
-    cxViewAppend(lv, txt);
+//    cxAny lv = cxLoadingStart(loading, finished);
+//    cxLabelTTF txt = cxLabelTTFCreate(UTF8("Loading..."), UTF8("banana.ttf"), 60);
+//    cxViewSetColor(txt, cxRED);
+//    cxViewAppend(lv, txt);
+    
+    cxEngineLuaRunChars("main()");
 }
 
 void cxEngineFree(cxEngine engine)
 {
-    
+    cxEngineLuaRunChars("free()");
 }
 
 

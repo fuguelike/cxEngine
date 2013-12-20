@@ -12,6 +12,15 @@
 #include "cxTypes.h"
 #include "cxUtil.h"
 
+const luaL_Reg cxStringInstanceMethods[] = {
+    CX_LUA_SUPER(cxObject)
+};
+
+void cxStringTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxString);
+}
+
 CX_OBJECT_INIT(cxString, cxObject)
 {
     

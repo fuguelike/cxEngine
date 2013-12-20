@@ -23,6 +23,8 @@ typedef struct {
 
 typedef void (*cxCopyFileFunc)(cxConstChars file,cxProgress *progress,cxAny udata);
 
+void cxUtilTypeInit();
+
 cxInt cxRand(cxInt min,cxInt max);
 
 cxUInt cxHexToUInt(const cxChar *bs);

@@ -24,6 +24,70 @@
 static cxEngine instance = NULL;
 static cxBool isExit = false;
 
+static int cxEngineLuaLoader(lua_State *L)
+{
+    cxConstChars file = luaL_checkstring(L, 1);
+    cxString data = cxEngineGetLuaScript(file);
+    if(data == NULL){
+        luaL_error(L, "error loading file %s error",file);
+    }else{
+        luaL_loadbuffer(L, cxStringBody(data), cxStringLength(data), file);
+    }
+    return 1;
+}
+
+static void cxEngineAddLuaLoader(lua_State *L)
+{
+    lua_getglobal(L, "package");
+    lua_getfield(L, -1, "loaders");
+    lua_pushcfunction(L, cxEngineLuaLoader);
+    for (cxInt i = lua_objlen(L, -2) + 1; i > 2; --i) {
+        lua_rawgeti(L, -2, i - 1);
+        lua_rawseti(L, -3, i);
+    }
+    lua_rawseti(L, -2, 2);
+    lua_setfield(L, -2, "loaders");
+    lua_pop(L, 1);
+}
+
+static int cxEngineLuaPanic(lua_State*L)
+{
+    CX_ERROR("PANIC: unprotected error in call to Lua API (%s)\n",lua_tostring(L, -1));
+    return 0;
+}
+
+static void *cxEngineLuaAlloc(void *ud, void *ptr, size_t osize, size_t nsize)
+{
+    if(nsize == 0){
+        allocator->free(ptr);
+        return NULL;
+    }else{
+        return allocator->realloc(ptr,nsize);
+    }
+}
+
+void cxEngineGC()
+{
+    cxEngine engine = cxEngineInstance();
+    lua_gc(engine->L, LUA_GCSTEP, 1);
+}
+
+cxBool cxEngineLuaRunString(cxString code)
+{
+    return cxEngineLuaRunChars(cxStringBody(code));
+}
+
+cxBool cxEngineLuaRunChars(cxConstChars code)
+{
+    cxEngine engine = cxEngineInstance();
+    CX_ASSERT(code != NULL && strlen(code) > 0, "code args error");
+    if(luaL_dostring(engine->L, code) != 0){
+        CX_ERROR("cxLuaLoader run code error:%s",lua_tostring(engine->L, -1));
+        return false;
+    }
+    return true;
+}
+
 void cxEngineRecvJson(cxString json)
 {
     CX_RETURN(isExit);
@@ -103,6 +167,7 @@ void cxEngineDraw()
     engine->lastTime = now;
     
     cxAutoPoolClean();
+    cxEngineGC();
 }
 
 static void cxEngineLookAt(cxMatrix4f *matrix,const cxVec2f point)
@@ -177,9 +242,17 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->bmpfonts  = CX_ALLOC(cxHash);
     this->functions = CX_ALLOC(cxHash);
     this->typefuncs = CX_ALLOC(cxHash);
+    
+    this->L = lua_newstate(cxEngineLuaAlloc, this);
+    CX_ASSERT(this->L != NULL, "new lua state error");
+    lua_atpanic(this->L, cxEngineLuaPanic);
+    luaL_openlibs(this->L);
+    cxEngineAddLuaLoader(this->L);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
+    lua_close(this->L);
+    
     CX_RELEASE(this->typefuncs);
     CX_RELEASE(this->functions);
     CX_RELEASE(this->bmpfonts);
@@ -516,6 +589,10 @@ void cxEngineSystemInit()
     cxEngineRegisteFunc("cxIsAndroid", cxEngineIsAndroid);
     cxEngineRegisteFunc("cxIsIOS", cxEngineIsIOS);
     
+    cxObjectTypeInit();
+    cxStringTypeInit();
+    cxUtilTypeInit();
+    
     //cxParticle func
     cxParticleTypeInit();
     
@@ -541,10 +618,11 @@ cxXMLScript cxEngineGetXMLScript(cxConstChars file)
     if(script != NULL){
         return script;
     }
+    
     script = CX_CREATE(cxXMLScript);
     cxStream stream = cxAssetsStreamCreate(file);
-    
     CX_RETURN(stream == NULL, NULL);
+    
     CX_RETAIN_SWAP(script->bytes, cxStreamAllBytes(stream));
     CX_RETURN(script->bytes == NULL, NULL);
     

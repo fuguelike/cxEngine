@@ -13,7 +13,7 @@
 		832B1D4B18264B100038D0EC /* apple.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 832B1D4918264B100038D0EC /* apple.mp3 */; };
 		832B1D4C18264B100038D0EC /* Track02.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 832B1D4A18264B100038D0EC /* Track02.mp3 */; };
 		832BEF0D182FBB0900F4BC22 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 832BEF0C182FBB0900F4BC22 /* test.jpg */; };
-		832C0CE61862998C0049B568 /* aaa.lua in Resources */ = {isa = PBXBuildFile; fileRef = 832C0CE51862998C0049B568 /* aaa.lua */; };
+		832C0CE61862998C0049B568 /* main.lua in Resources */ = {isa = PBXBuildFile; fileRef = 832C0CE51862998C0049B568 /* main.lua */; };
 		832D2D81182A353200C0AF53 /* scroll.xml in Resources */ = {isa = PBXBuildFile; fileRef = 832D2D80182A353200C0AF53 /* scroll.xml */; };
 		8341C68D182280400045A66F /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C68A182280320045A66F /* libcxEngineIOS.a */; };
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
@@ -92,7 +92,7 @@
 		832B1D4918264B100038D0EC /* apple.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = apple.mp3; path = res/apple.mp3; sourceTree = "<group>"; };
 		832B1D4A18264B100038D0EC /* Track02.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Track02.mp3; path = res/Track02.mp3; sourceTree = "<group>"; };
 		832BEF0C182FBB0900F4BC22 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = test.jpg; path = res/test.jpg; sourceTree = "<group>"; };
-		832C0CE51862998C0049B568 /* aaa.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = aaa.lua; path = res/aaa.lua; sourceTree = "<group>"; };
+		832C0CE51862998C0049B568 /* main.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.lua; path = res/main.lua; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.lua; };
 		832D2D80182A353200C0AF53 /* scroll.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = scroll.xml; path = res/scroll.xml; sourceTree = "<group>"; };
 		8341C684182280320045A66F /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -244,7 +244,7 @@
 				832B1D4918264B100038D0EC /* apple.mp3 */,
 				832B1D4A18264B100038D0EC /* Track02.mp3 */,
 				8341C6AE1822812B0045A66F /* 2.pvr */,
-				832C0CE51862998C0049B568 /* aaa.lua */,
+				832C0CE51862998C0049B568 /* main.lua */,
 				835A95C1185597600088B413 /* font.fnt */,
 				835A95C2185597600088B413 /* font.png */,
 				83900BC618471D6D00E702C7 /* atlas.jpg */,
@@ -407,7 +407,7 @@
 				8341C6CB1822812B0045A66F /* items.xml in Resources */,
 				832A3EF31855F9DF00047C64 /* bmpfont.xml in Resources */,
 				8341C6C61822812B0045A66F /* candy.png in Resources */,
-				832C0CE61862998C0049B568 /* aaa.lua in Resources */,
+				832C0CE61862998C0049B568 /* main.lua in Resources */,
 				8359F7A71856EADD0072D047 /* star.pex in Resources */,
 				835A95C4185597600088B413 /* font.png in Resources */,
 				832D2D81182A353200C0AF53 /* scroll.xml in Resources */,

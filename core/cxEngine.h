@@ -56,7 +56,15 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxTouch touch;
     cxKey key;
     cxString lang;
+    //lua script
+    lua_State *L;
 CX_OBJECT_END(cxEngine)
+
+void cxEngineGC();
+
+cxBool cxEngineLuaRunString(cxString code);
+
+cxBool cxEngineLuaRunChars(cxConstChars code);
 
 cxEngine cxEngineInstance();
 

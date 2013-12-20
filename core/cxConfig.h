@@ -120,6 +120,9 @@
 #include <sys/types.h>
 #include <pthread.h>
 #include <libxml/xmlreader.h>
+#include <luajit/lauxlib.h>
+#include <luajit/lualib.h>
+#include <luajit/luajit.h>
 
 #define CX_ENGINE_VERSION   100
 
@@ -191,29 +194,6 @@ do{\
 
 #endif
 
-//object
-
-#define CX_OBJECT_BEG(_t_)                                          \
-static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;        \
-typedef struct _t_ * _t_;                                           \
-void _t_##AutoInit(_t_ this);                                       \
-void _t_##AutoFree(_t_ this);                                       \
-void _t_##TypeInit();                                               \
-struct _t_ {
-
-
-#define CX_OBJECT_END(_t_) };
-
-//method
-
-#define CX_METHOD_DEF(_t_,_n_)          _t_ _n_
-
-#define CX_METHOD_SET(_m_,_f_)          _m_=_f_
-
-#define CX_METHOD_RUN(_m_,...)          if(_m_ != NULL){_m_(__VA_ARGS__);}
-
-#define CX_METHOD_GET(_v_,_m_,...)      ((_m_ != NULL)?(_m_(__VA_ARGS__)):(_v_))
-
 typedef enum {
     cxBaseTypeObject,
     cxBaseTypeView,
@@ -226,20 +206,23 @@ typedef cxAny (*cxAnyFunc)(cxAny object);
 
 typedef void (*cxReadAttrFunc)(cxAny pxml,cxAny pnew, xmlTextReaderPtr reader);
 
-//base type define
-CX_OBJECT_BEG(cxObject)
-    cxConstType cxType;
-    cxBaseType cxBase;
-    cxUInt cxRefcount;
-    cxObjectFunc cxFree;
-    cxInt cxTag;
-    cxAny cxRoot;
-    CX_METHOD_DEF(cxReadAttrFunc,ReadAttr);
-CX_OBJECT_END(cxObject)
+cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
+
+cxAny cxObjectCreate(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
+
+void cxObjectRetain(cxAny ptr);
+
+void cxObjectRelease(cxAny ptr);
+
+cxAny cxObjectAutoRelease(cxAny ptr);
+
+cxInt cxLuaLoad(cxConstType name, const luaL_Reg *cMethods,const luaL_Reg *tMethods);
 
 cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type);
 
 cxBool cxObjectIsType(cxAny pobj,cxConstType type);
+
+cxConstType cxObjectType(cxAny pobj);
 
 void cxObjectReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader);
 
@@ -278,6 +261,82 @@ cxInt cxObjectGetTag(cxAny obj);
 #define CX_AUTOFREE(_o_)          cxObjectAutoRelease(_o_)
 
 #define CX_RETAIN_SWAP(_s_,_d_)   {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
+
+//lua
+
+#define CX_LUA_SUPER(_t_)   {NULL,NULL},{"super",(cxAny)_t_##InstanceMethods}
+
+void cxLuaRegisterMethods(lua_State *L,const luaL_Reg *methods);
+
+#define CX_LUA_LOAD_TYPE(t) cxLuaLoad(t##TypeName,t##InstanceMethods,t##TypeMethods);
+
+#define CX_LUA_DEF_THIS(t)  t this = *(t *)lua_touserdata(L, 1);CX_ASSERT(this != NULL,"get this error")
+
+#define CX_LUA_GET(t,n,i)   t n = *((t *)luaL_checkudata(L, i, t##TypeName));
+
+#define CX_LUA_NEW_THIS(t)  t this = CX_ALLOC(t);*((t *)lua_newuserdata(L, sizeof(cxAny))) = this;
+
+#define CX_LUA_RET_THIS(t)  luaL_getmetatable(L, t##TypeName);lua_setmetatable(L, -2);return 1
+
+#define CX_LUA_PUSH_OBJECT(o)                           \
+do{                                                     \
+    *((cxAny *)lua_newuserdata(L, sizeof(cxAny))) = o;  \
+    CX_RETAIN(o);                                       \
+    luaL_getmetatable(L, cxObjectType(o));              \
+    lua_setmetatable(L, -2);                            \
+}while(0)
+
+#define CX_LUA_ATTACH_OBJECT(o)                         \
+do{                                                     \
+    *((cxAny *)lua_newuserdata(L, sizeof(cxAny))) = o;  \
+    luaL_getmetatable(L, cxObjectType(o));              \
+    lua_setmetatable(L, -2);                            \
+}while(0)
+
+
+//object
+
+#define CX_OBJECT_BEG(_t_)                                          \
+static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;        \
+typedef struct _t_ * _t_;                                           \
+void _t_##AutoInit(_t_ this);                                       \
+void _t_##AutoFree(_t_ this);                                       \
+void _t_##TypeInit();                                               \
+extern const luaL_Reg _t_##InstanceMethods[];                       \
+struct _t_ {
+
+#define CX_OBJECT_END(_t_) };                                       \
+static inline cxInt _t_##LuaNew(lua_State *L)                       \
+{                                                                   \
+    CX_LUA_NEW_THIS(_t_);                                           \
+    CX_LUA_RET_THIS(_t_);                                           \
+}                                                                   \
+static const luaL_Reg _t_##TypeMethods[] = {                        \
+    {"new",_t_##LuaNew},                                            \
+    {NULL,NULL}                                                     \
+};
+
+//method
+
+#define CX_METHOD_DEF(_t_,_n_)          _t_ _n_
+
+#define CX_METHOD_SET(_m_,_f_)          _m_=_f_
+
+#define CX_METHOD_RUN(_m_,...)          if(_m_ != NULL){_m_(__VA_ARGS__);}
+
+#define CX_METHOD_GET(_v_,_m_,...)      ((_m_ != NULL)?(_m_(__VA_ARGS__)):(_v_))
+
+//base type define
+CX_OBJECT_BEG(cxObject)
+    cxConstType cxType;
+    cxBaseType cxBase;
+    cxUInt cxRefcount;
+    cxObjectFunc cxFree;
+    cxInt cxTag;
+    cxAny cxRoot;
+    CX_METHOD_DEF(cxReadAttrFunc,ReadAttr);
+CX_OBJECT_END(cxObject)
+
 
 #endif
 

@@ -37,16 +37,6 @@ void cxAllocatorInit();
 
 void cxAllocatorFree();
 
-cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
-
-cxAny cxObjectCreate(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
-
-void cxObjectRetain(cxAny ptr);
-
-void cxObjectRelease(cxAny ptr);
-
-cxAny cxObjectAutoRelease(cxAny ptr);
-
 CX_C_END
 
 #endif
