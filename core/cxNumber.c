@@ -8,6 +8,39 @@
 
 #include "cxNumber.h"
 
+static cxInt cxNumberNewInt(lua_State *L)
+{
+    cxInt value =  luaL_checkinteger(L, 1);
+    CX_LUA_CREATE_THIS(cxNumber);
+    this->type = cxNumberTypeInt;
+    this->value.vi = value;
+    CX_LUA_RETURN_THIS(cxNumber);
+}
+
+static cxInt cxNumberNewFloat(lua_State *L)
+{
+    cxFloat value =  luaL_checknumber(L, 1);
+    CX_LUA_CREATE_THIS(cxNumber);
+    this->type = cxNumberTypeFloat;
+    this->value.vf = value;
+    CX_LUA_RETURN_THIS(cxNumber);
+}
+
+const luaL_Reg cxNumberInstanceMethods[] = {
+    CX_LUA_SUPER(cxObject)
+};
+
+const luaL_Reg cxNumberTypeMethods[] = {
+    {"newInt",cxNumberNewInt},
+    {"newFloat",cxNumberNewFloat},
+    CX_LUA_TYPE(cxNumber)
+};
+
+void cxNumberTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxNumber);
+}
+
 CX_OBJECT_INIT(cxNumber, cxObject)
 {
     

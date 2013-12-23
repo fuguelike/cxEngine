@@ -122,7 +122,6 @@ do{                                                             \
     _newptr_->args = NULL;                                      \
     CX_RETAIN_SWAP(_newptr_->args,_args_);                      \
     DL_APPEND(_event_, _newptr_);                               \
-    cxEventAppend(_newptr_);                                    \
 }while(0)
 
 #define CX_EVENT_QUICK(_event_,_func_)                          \
@@ -132,10 +131,10 @@ CX_EVENT_APPEND(_event_,_func_,NULL)
 do{                                                             \
     cxEvent *_newptr_ = allocator->malloc(sizeof(cxEvent));     \
     _newptr_->func = _func_;                                    \
+    _newptr_->name= #_event_;                                   \
     _newptr_->args = NULL;                                      \
     CX_RETAIN_SWAP(_newptr_->arg,_args_);                       \
     DL_PREPEND(_event_, _newptr_);                              \
-    cxEventAppend(_newptr_);                                    \
 }while(0)
 
 #define CX_EVENT_DEL(_event_,_func_)                            \
@@ -147,7 +146,6 @@ do{                                                             \
             continue;                                           \
         }                                                       \
         DL_DELETE(_event_, _ele_);                              \
-        cxEventRelease(_ele_);                                  \
         CX_RELEASE(_ele_->args);                                \
         allocator->free(_ele_);                                 \
     }                                                           \
@@ -159,7 +157,6 @@ do{                                                             \
     cxEvent *_ele_ = NULL;                                      \
     DL_FOREACH_SAFE(_event_, _ele_, _tmp_){                     \
         DL_DELETE(_event_, _ele_);                              \
-        cxEventRelease(_ele_);                                  \
         CX_RELEASE(_ele_->args);                                \
         allocator->free(_ele_);                                 \
     }                                                           \
@@ -172,15 +169,31 @@ do{                                                             \
     DL_FOREACH_SAFE(_sender_->_event_, _ele_,_tmp_){            \
         _ele_->sender = _sender_;                               \
         _ele_->func(_ele_);                                     \
-        cxEventFire(_ele_);                                     \
     }                                                           \
 }while(0)
 
-void cxEventAppend(cxEvent *event);
 
-void cxEventFire(cxEvent *event);
+#define CX_LUA_EVENT_BEGIN()                                    \
+cxConstChars name = luaL_checkstring(L, 2);                     \
+if(!lua_isfunction(L, 3)){                                      \
+    luaL_error(L, "func error");                                \
+    return 0;                                                   \
+}                                                               \
+cxInt ref = luaL_ref(L, LUA_REGISTRYINDEX);                     \
+CX_ASSERT(ref > 0,"get ref error");                             \
+cxEventArg args = cxEventArgCreateWithRef(ref);
 
-void cxEventRelease(cxEvent *event);
+#define CX_LUA_EVENT_APPEND(en)                                 \
+if(cxConstCharsEqu(name, #en)){                                 \
+    CX_EVENT_APPEND(this->en, cxObjectLuaEventFunc, args);      \
+    return 0;                                                   \
+}
+
+#define CX_LUA_EVENT_END()                                      \
+luaL_error(L, "name %s event not def");                         \
+return 0
+
+void cxObjectLuaEventFunc(cxEvent *event);
 
 void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars format,va_list ap);
 

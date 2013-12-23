@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxEngine.h"
 #include "cxEventArg.h"
 
 CX_OBJECT_INIT(cxEventArg, cxObject)
@@ -14,6 +15,11 @@ CX_OBJECT_INIT(cxEventArg, cxObject)
 }
 CX_OBJECT_FREE(cxEventArg, cxObject)
 {
+    cxEngine engine = cxEngineInstance();
+    if(this->ref > 0){
+        luaL_unref(engine->L, LUA_REGISTRYINDEX, this->ref);
+        this->ref = 0;
+    }
     this->weakRef = NULL;
     CX_RELEASE(this->strongRef);
     CX_RELEASE(this->json);
@@ -51,6 +57,18 @@ cxEventArg cxEventArgCreateWithNumber(cxConstChars json,cxNumber number)
 {
     cxEventArg this = cxEventArgCreate(json);
     cxEventArgSetNumber(this, number);
+    return this;
+}
+
+cxInt cxEventArgToRef(cxEventArg this)
+{
+    return this->ref;
+}
+
+cxEventArg cxEventArgCreateWithRef(cxInt ref)
+{
+    cxEventArg this = CX_CREATE(cxEventArg);
+    this->ref = ref;
     return this;
 }
 

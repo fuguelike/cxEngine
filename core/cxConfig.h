@@ -216,7 +216,7 @@ void cxObjectRelease(cxAny ptr);
 
 cxAny cxObjectAutoRelease(cxAny ptr);
 
-cxInt cxLuaLoad(cxConstType name, const luaL_Reg *cMethods,const luaL_Reg *tMethods);
+lua_State *cxLuaLoad(cxConstType name, const luaL_Reg *cMethods,const luaL_Reg *tMethods);
 
 cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type);
 
@@ -266,33 +266,31 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_LUA_SUPER(_t_)   {NULL,NULL},{"super",(cxAny)_t_##InstanceMethods}
 
+#define CX_LUA_TYPE(_t_)    {"alloc",_t_##LuaAlloc},{"create",_t_##LuaCreate},{NULL,NULL}
+
 void cxLuaRegisterMethods(lua_State *L,const luaL_Reg *methods);
 
-#define CX_LUA_LOAD_TYPE(t) cxLuaLoad(t##TypeName,t##InstanceMethods,t##TypeMethods);
+#define CX_LUA_NUMBER_IS_INT(n) (((lua_Number)((cxInt)(n))) == (n))
 
-#define CX_LUA_DEF_THIS(t)  t this = *(t *)lua_touserdata(L, 1);CX_ASSERT(this != NULL,"get this error")
+#define CX_LUA_LOAD_TYPE(t)     cxLuaLoad(t##TypeName,t##InstanceMethods,t##TypeMethods);
 
-#define CX_LUA_GET(t,n,i)   t n = *((t *)luaL_checkudata(L, i, t##TypeName));
+#define CX_LUA_DEF_THIS(t)      t this = lua_touserdata(L, 1);CX_ASSERT(this != NULL,"get this error")
 
-#define CX_LUA_NEW_THIS(t)  t this = CX_ALLOC(t);*((t *)lua_newuserdata(L, sizeof(cxAny))) = this;
+#define CX_LUA_GET_ANY(t,n,i)   t n = lua_isuserdata(L,i) ? lua_touserdata(L, i): NULL
 
-#define CX_LUA_RET_THIS(t)  luaL_getmetatable(L, t##TypeName);lua_setmetatable(L, -2);return 1
+#define CX_LUA_ALLOC_THIS(t)    t this = CX_ALLOC(t);lua_pushlightuserdata(L, this)
+
+#define CX_LUA_CREATE_THIS(t)   t this = CX_CREATE(t);lua_pushlightuserdata(L, this)
+
+#define CX_LUA_RETURN_THIS(t)   luaL_getmetatable(L, t##TypeName);lua_setmetatable(L, -2);return 1
 
 #define CX_LUA_PUSH_OBJECT(o)                           \
 do{                                                     \
-    *((cxAny *)lua_newuserdata(L, sizeof(cxAny))) = o;  \
-    CX_RETAIN(o);                                       \
+    lua_pushlightuserdata(L, o);                        \
     luaL_getmetatable(L, cxObjectType(o));              \
+    CX_ASSERT(lua_istable(L, -1), "metatable error");   \
     lua_setmetatable(L, -2);                            \
 }while(0)
-
-#define CX_LUA_ATTACH_OBJECT(o)                         \
-do{                                                     \
-    *((cxAny *)lua_newuserdata(L, sizeof(cxAny))) = o;  \
-    luaL_getmetatable(L, cxObjectType(o));              \
-    lua_setmetatable(L, -2);                            \
-}while(0)
-
 
 //object
 
@@ -303,18 +301,21 @@ void _t_##AutoInit(_t_ this);                                       \
 void _t_##AutoFree(_t_ this);                                       \
 void _t_##TypeInit();                                               \
 extern const luaL_Reg _t_##InstanceMethods[];                       \
+extern const luaL_Reg _t_##TypeMethods[];                           \
 struct _t_ {
 
 #define CX_OBJECT_END(_t_) };                                       \
-static inline cxInt _t_##LuaNew(lua_State *L)                       \
+cxInt _t_##LuaAppendEvent(lua_State *L);                            \
+static inline cxInt _t_##LuaAlloc(lua_State *L)                     \
 {                                                                   \
-    CX_LUA_NEW_THIS(_t_);                                           \
-    CX_LUA_RET_THIS(_t_);                                           \
+    CX_LUA_ALLOC_THIS(_t_);                                         \
+    CX_LUA_RETURN_THIS(_t_);                                        \
 }                                                                   \
-static const luaL_Reg _t_##TypeMethods[] = {                        \
-    {"new",_t_##LuaNew},                                            \
-    {NULL,NULL}                                                     \
-};
+static inline cxInt _t_##LuaCreate(lua_State *L)                    \
+{                                                                   \
+    CX_LUA_CREATE_THIS(_t_);                                        \
+    CX_LUA_RETURN_THIS(_t_);                                        \
+}
 
 //method
 

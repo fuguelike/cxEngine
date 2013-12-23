@@ -12,8 +12,22 @@
 #include "cxTypes.h"
 #include "cxUtil.h"
 
+static cxInt cxStringLuaPrint(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxString);
+    if(this != NULL){
+        CX_LOGGER("%s",cxStringBody(this));
+    }
+    return 0;
+}
+
 const luaL_Reg cxStringInstanceMethods[] = {
+    {"print",cxStringLuaPrint},
     CX_LUA_SUPER(cxObject)
+};
+
+const luaL_Reg cxStringTypeMethods[] = {
+    CX_LUA_TYPE(cxString)
 };
 
 void cxStringTypeInit()

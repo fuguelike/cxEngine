@@ -52,10 +52,19 @@ static cxInt cxLuaWarn(lua_State *L)
     return 0;
 }
 
+static cxInt cxLuaAssert(lua_State *L)
+{
+    cxBool cond = lua_toboolean(L, 1);
+    cxConstChars msg = lua_tostring(L, 2);
+    CX_ASSERT(cond, msg);
+    return 0;
+}
+
 const luaL_reg global_functions [] = {
     {"cxLogger", cxLuaLogger},
     {"cxError", cxLuaError},
     {"cxWarn", cxLuaWarn},
+    {"cxAssert", cxLuaAssert},
     {NULL, NULL}
 };
 
@@ -63,6 +72,7 @@ void cxUtilTypeInit()
 {
     cxEngine engine = cxEngineInstance();
     luaL_register(engine->L, "_G", global_functions);
+    lua_pop(engine->L, 1);
 }
 
 cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)

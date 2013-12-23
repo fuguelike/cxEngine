@@ -14,6 +14,86 @@
 #include "cxAction.h"
 #include "cxViewRoot.h"
 
+static cxInt cxViewLuaAppendView(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    CX_LUA_GET_ANY(cxView, newView, 2);
+    cxViewAppend(this, newView);
+    return 0;
+}
+
+cxInt cxViewLuaAppendEvent(lua_State *L)
+{
+    cxObjectLuaAppendEvent(L);
+    
+    CX_LUA_DEF_THIS(cxView);
+    
+    CX_LUA_EVENT_BEGIN();
+    
+    CX_LUA_EVENT_APPEND(onEnter);
+    CX_LUA_EVENT_APPEND(onExit);
+    CX_LUA_EVENT_APPEND(onResize);
+    CX_LUA_EVENT_APPEND(onLayout);
+    CX_LUA_EVENT_APPEND(onDirty);
+    
+    CX_LUA_EVENT_END();
+}
+
+const luaL_Reg cxViewInstanceMethods[] = {
+    {"on",cxViewLuaAppendEvent},
+    {"append",cxViewLuaAppendView},
+    CX_LUA_SUPER(cxObject)
+};
+
+static cxInt cxViewLuaMake(lua_State *L)
+{
+    CX_LUA_CREATE_THIS(cxView);
+    if(!lua_istable(L, 1)){
+        CX_LUA_RETURN_THIS(cxView);
+    }
+    cxVec2f pos = this->position;
+    lua_getfield(L, 1, "x");
+    if(lua_isnumber(L, -1)){
+        pos.x = lua_tonumber(L, -1);
+    }
+    lua_pop(L, 1);
+    
+    lua_getfield(L, 1, "y");
+    if(lua_isnumber(L, -1)){
+        pos.y = lua_tonumber(L, -1);
+    }
+    lua_pop(L, 1);
+    cxViewSetPos(this, pos);
+    
+    cxSize2f size = this->size;
+    
+    lua_getfield(L, 1, "w");
+    if(lua_isnumber(L, -1)){
+        size.w = lua_tonumber(L, -1);
+    }
+    lua_pop(L, 1);
+    
+    lua_getfield(L, 1, "h");
+    if(lua_isnumber(L, -1)){
+        size.h = lua_tonumber(L, -1);
+    }
+    lua_pop(L, 1);
+    cxViewSetSize(this, size);
+    
+    
+    CX_LUA_RETURN_THIS(cxView);
+}
+
+const luaL_Reg cxViewTypeMethods[] = {
+    {"make",cxViewLuaMake},
+    CX_LUA_TYPE(cxView)
+};
+
+void cxViewTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxView);
+}
+
 //al at ar ab
 static void cxViewRootReadAutoResize(cxViewRoot root, cxAny view,xmlTextReaderPtr reader)
 {

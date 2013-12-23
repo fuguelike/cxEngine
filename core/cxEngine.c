@@ -24,6 +24,51 @@
 static cxEngine instance = NULL;
 static cxBool isExit = false;
 
+static cxInt cxEngineLuaSetDesignSize(lua_State *L)
+{
+    cxEngine this = cxEngineInstance();
+    this->dessize = cxLuaGetSize2fv(L, 1, this->dessize);
+    return 0;
+}
+
+static cxInt cxEngineLuaSetShowBorder(lua_State *L)
+{
+    cxEngine this = cxEngineInstance();
+    this->isShowBorder = lua_toboolean(L, 1);
+    return 0;
+}
+
+static cxInt cxEngineLuaGetScreenSize(lua_State *L)
+{
+    cxEngine this = cxEngineInstance();
+    cxLuaPushSize2fv(L, this->winsize);
+    return 1;
+}
+
+static cxInt cxEngineLuaInstance(lua_State *L)
+{
+    CX_LUA_PUSH_OBJECT(instance);
+    return 1;
+}
+
+const luaL_Reg cxEngineInstanceMethods[] = {
+    CX_LUA_SUPER(cxObject)
+};
+
+const luaL_Reg cxEngineTypeMethods[] = {
+    {"setShowBorder",cxEngineLuaSetShowBorder},
+    {"screenSize",cxEngineLuaGetScreenSize},    //size.w size.h {w=1,h=2}
+    {"setDesignSize",cxEngineLuaSetDesignSize}, //cxEngineInstance:setDesignSize(w,h)
+    {NULL,NULL}
+};
+
+void cxEngineTypeInit()
+{
+    lua_State *L = CX_LUA_LOAD_TYPE(cxEngine);
+    lua_pushcfunction(L, cxEngineLuaInstance);
+    lua_setglobal(L, "cxEngineInstance");
+}
+
 static int cxEngineLuaLoader(lua_State *L)
 {
     cxConstChars file = luaL_checkstring(L, 1);
@@ -56,7 +101,7 @@ static int cxEngineLuaPanic(lua_State*L)
     return 0;
 }
 
-static void *cxEngineLuaAlloc(void *ud, void *ptr, size_t osize, size_t nsize)
+static void *cxEngineLuaAllocFunc(void *ud, void *ptr, size_t osize, size_t nsize)
 {
     if(nsize == 0){
         allocator->free(ptr);
@@ -127,6 +172,8 @@ void cxEngineBegin()
     cxEngineDataSet("appConfig.xml");
     //init event list and att method
     cxEngineSystemInit();
+    //
+    cxPlayerOpen(0, 0);
     cxEngineInit(engine);
 }
 
@@ -155,7 +202,6 @@ void cxEngineDraw()
     CX_RETURN(!engine->isInit || engine->isPause);
     cxOpenGLClear();
     cxAutoPoolBegin();
-    
     cxDouble now = cxTimestamp();
     engine->frameDelta = now - engine->lastTime;
     CX_SIGNAL_FIRE(engine->onUpdate, CX_FUNC_TYPE(cxAny,cxFloat),CX_SLOT_OBJECT,engine->frameDelta);
@@ -243,7 +289,7 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->functions = CX_ALLOC(cxHash);
     this->typefuncs = CX_ALLOC(cxHash);
     
-    this->L = lua_newstate(cxEngineLuaAlloc, this);
+    this->L = lua_newstate(cxEngineLuaAllocFunc, this);
     CX_ASSERT(this->L != NULL, "new lua state error");
     lua_atpanic(this->L, cxEngineLuaPanic);
     luaL_openlibs(this->L);
@@ -588,10 +634,22 @@ void cxEngineSystemInit()
     //platform cond attr func,invoke when prepare xml
     cxEngineRegisteFunc("cxIsAndroid", cxEngineIsAndroid);
     cxEngineRegisteFunc("cxIsIOS", cxEngineIsIOS);
-    
+
     cxObjectTypeInit();
+    cxNumberTypeInit();
     cxStringTypeInit();
     cxUtilTypeInit();
+    
+    cxHashTypeInit();
+    cxArrayTypeInit();
+    cxListTypeInit();
+    
+    cxViewTypeInit();
+    cxWindowTypeInit();
+    cxEngineTypeInit();
+    cxViewRootTypeInit();
+    
+    
     
     //cxParticle func
     cxParticleTypeInit();

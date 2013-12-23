@@ -10,6 +10,78 @@
 #include <core/cxViewRoot.h>
 #include "cxWindow.h"
 
+static cxInt cxWindowLuaPopView(lua_State *L)
+{
+    cxInt top = lua_gettop(L);
+    cxEventArg args = NULL;
+    if(top >=1 && lua_isstring(L, 1)){
+        args = cxEventArgCreate(lua_tostring(L, 1));
+    }
+    cxWindowPopView(args);
+    return 0;
+}
+
+static cxInt cxWindowLuaPushView(lua_State *L)
+{
+    cxInt top = lua_gettop(L);
+    cxEventArg args = NULL;
+    if(top >=2 && lua_isstring(L, 2)){
+        args = cxEventArgCreate(lua_tostring(L, 2));
+    }
+    cxAny ret = NULL;
+    if(lua_isstring(L, 1)){
+        ret = cxWindowPushXML(lua_tostring(L, 1));
+    }else{
+        CX_LUA_GET_ANY(cxView, view, 1);
+        cxWindowPushView(view, args);
+        ret = view;
+    }
+    CX_LUA_PUSH_OBJECT(ret);
+    return 1;
+}
+
+static cxInt cxWindowLuaReplaceView(lua_State *L)
+{
+    cxInt top = lua_gettop(L);
+    cxEventArg args = NULL;
+    if(top >=2 && lua_isstring(L, 2)){
+        args = cxEventArgCreate(lua_tostring(L, 2));
+    }
+    if(lua_isstring(L, 1)){
+        cxWindowReplaceXML(lua_tostring(L, 1));
+    }else{
+        CX_LUA_GET_ANY(cxView, view, 1);
+        cxWindowReplaceView(view, args);
+    }
+    return 0;
+}
+
+static cxInt cxWindowLuaInstance(lua_State *L)
+{
+    cxEngine engine = cxEngineInstance();
+    CX_LUA_PUSH_OBJECT(engine->window);
+    return 1;
+}
+
+const luaL_Reg cxWindowInstanceMethods[] = {
+
+    CX_LUA_SUPER(cxView)
+};
+
+const luaL_Reg cxWindowTypeMethods[] = {
+    {"pushView",cxWindowLuaPushView},
+    {"popView",cxWindowLuaPopView},
+    {"replaceView",cxWindowLuaReplaceView},
+    {NULL,NULL}
+};
+
+void cxWindowTypeInit()
+{
+    lua_State *L = CX_LUA_LOAD_TYPE(cxWindow);
+    lua_pushcfunction(L, cxWindowLuaInstance);
+    lua_setglobal(L, "cxWindowInstance");
+}
+
 static cxBool cxWindowOnKey(cxAny pview,cxKey *key)
 {
     if(key->code == CX_KEYCODE_BACK && key->type == cxKeyTypeUp){

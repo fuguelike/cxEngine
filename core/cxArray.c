@@ -8,6 +8,87 @@
 
 #include "cxArray.h"
 
+static cxInt cxArrayLuaLength(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxArray);
+    lua_pushnumber(L, cxArrayLength(this));
+    return 1;
+}
+
+static cxInt cxArrayLuaAtIndex(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxArray);
+    cxInt idx = lua_tointeger(L, 2);
+    cxAny any = cxArrayAtIndex(this, idx);
+    if(any == NULL){
+        lua_pushnil(L);
+    }else{
+        CX_LUA_PUSH_OBJECT(any);
+    }
+    return 1;
+}
+
+static cxInt cxArrayLuaAppend(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxArray);
+    cxAny any = cxLuaGetObject(L, 2);
+    cxArrayAppend(this, any);
+    return 0;
+}
+
+static cxInt cxArrayLuaEach(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxArray);
+    CX_ARRAY_FOREACH(this, e){
+        cxAny any = cxArrayObject(e);
+        lua_pushvalue(L, 2);
+        CX_LUA_PUSH_OBJECT(any);
+        lua_call(L, 1, 0);
+    }
+    return 0;
+}
+
+static cxInt cxArrayLuaRemove(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxArray);
+    if(lua_isuserdata(L, 2)){
+        CX_LUA_GET_ANY(cxObject, any, 2);
+        cxArrayRemove(this, any);
+        return 0;
+    }
+    if(lua_isnumber(L, 2)){
+        cxArrayRemoveAtIndex(this, lua_tointeger(L, 2));
+        return 0;
+    }
+    luaL_error(L, "args is object or int number");
+    return 0;
+}
+
+static cxInt cxArrayLuaClean(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxArray);
+    cxArrayClean(this);
+    return 0;
+}
+
+const luaL_Reg cxArrayInstanceMethods[] = {
+    {"length",cxArrayLuaLength},
+    {"at",cxArrayLuaAtIndex},
+    {"append",cxArrayLuaAppend},
+    {"remove",cxArrayLuaRemove},
+    {"each",cxArrayLuaEach},
+    {"clean",cxArrayLuaClean},
+    CX_LUA_SUPER(cxObject)
+};
+
+const luaL_Reg cxArrayTypeMethods[] = {
+    CX_LUA_TYPE(cxArray)
+};
+
+void cxArrayTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxArray);
+}
 
 CX_OBJECT_INIT(cxArray, cxObject)
 {

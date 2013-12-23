@@ -22,6 +22,26 @@
 #include "cxHashRoot.h"
 #include "cxActionRoot.h"
 
+cxInt cxViewRootLuaAppendEvent(lua_State *L)
+{
+    cxViewLuaAppendEvent(L);
+    return 0;
+}
+
+const luaL_Reg cxViewRootInstanceMethods[] = {
+    {"on",cxViewRootLuaAppendEvent},
+    CX_LUA_SUPER(cxView)
+};
+
+const luaL_Reg cxViewRootTypeMethods[] = {
+    CX_LUA_TYPE(cxViewRoot)
+};
+
+void cxViewRootTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxViewRoot);
+}
+
 void cxViewRootReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader)
 {
     cxViewReadAttr(pxml, view, reader);

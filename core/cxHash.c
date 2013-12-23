@@ -6,7 +6,115 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxString.h"
+#include "cxNumber.h"
 #include "cxHash.h"
+
+static cxInt cxHashLuaGet(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxHash);
+    cxAny any = NULL;
+    if(lua_isnumber(L, 2)){
+        cxChar num[8]={0};
+        snprintf(num, 8, "%d",lua_tointeger(L, 2));
+        any = cxHashGet(this, cxHashStrKey(num));
+    }else if(lua_isstring(L, 2)){
+        any = cxHashGet(this, cxHashStrKey(lua_tostring(L, 2)));
+    }else{
+        luaL_error(L, "cxHash:get(int|string) args error");
+        any = NULL;
+    }
+    if(any == NULL){
+        lua_pushnil(L);
+    }else{
+        CX_LUA_PUSH_OBJECT(any);
+    }
+    return 1;
+}
+
+static cxInt cxHashLuaSet(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxHash);
+    cxAny any = cxLuaGetObject(L, 3);
+    if(any == NULL){
+        luaL_error(L, "cxHash:set(int|string,any) any args error");
+        return 0;
+    }
+    if(lua_isnumber(L, 2)){
+        cxChar num[8]={0};
+        snprintf(num, 8, "%d",lua_tointeger(L, 2));
+        cxHashSet(this, cxHashStrKey(num), any);
+    }else if(lua_isstring(L, 2)){
+        cxHashSet(this, cxHashStrKey(lua_tostring(L, 2)), any);
+    }else{
+        luaL_error(L, "cxHash:set(int|string,value) args error");
+    }
+    return 0;
+}
+
+static cxInt cxHashLuaDel(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxHash);
+    if(lua_isnumber(L, 2)){
+        cxChar num[8]={0};
+        snprintf(num, 8, "%d",lua_tointeger(L, 2));
+        cxHashDel(this, cxHashStrKey(num));
+    }else if(lua_isstring(L, 2)){
+        cxHashDel(this, cxHashStrKey(lua_tostring(L, 2)));
+    }else{
+        luaL_error(L, "cxHash:del(int|string) args error");
+    }
+    return 0;
+}
+
+static cxInt cxHashLuaEach(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxHash);
+    if(!lua_isfunction(L, 2)){
+        luaL_error(L, "each function error");
+        return 0;
+    }
+    CX_HASH_FOREACH(this, ele, tmp){
+        lua_pushvalue(L, 2);
+        lua_pushstring(L, ele->key);
+        CX_LUA_PUSH_OBJECT(ele->any);
+        lua_call(L, 2, 0);
+    }
+    return 0;
+}
+
+static cxInt cxHashLuaLength(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxHash);
+    lua_pushnumber(L, cxHashLength(this));
+    return 1;
+}
+
+static cxInt cxHashLuaClean(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxHash);
+    cxHashClean(this);
+    return 0;
+}
+
+const luaL_Reg cxHashInstanceMethods[] = {
+    {"length",cxHashLuaLength},
+    {"get",cxHashLuaGet},
+    {"set",cxHashLuaSet},
+    {"del",cxHashLuaDel},
+    {"each",cxHashLuaEach},
+    {"clean",cxHashLuaClean},
+    CX_LUA_SUPER(cxObject)
+};
+
+const luaL_Reg cxHashTypeMethods[] = {
+    CX_LUA_TYPE(cxHash)
+};
+
+void cxHashTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxHash);
+}
 
 CX_OBJECT_INIT(cxHash, cxObject)
 {

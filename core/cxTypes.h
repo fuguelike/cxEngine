@@ -278,6 +278,16 @@ typedef struct {
 
 cxVec2f cxVec2fValue(cxVec2fRange rv);
 
+void cxLuaPushVec2fv(lua_State *L,cxVec2f pos);
+
+void cxLuaPushSize2fv(lua_State *L,cxSize2f size);
+
+cxSize2f cxLuaGetSize2fv(lua_State *L,cxInt n,cxSize2f d);
+
+cxVec2f cxLuaGetVec2fv(lua_State *L,cxInt n,cxVec2f d);
+
+cxAny cxLuaGetObject(lua_State *L,cxInt n);
+
 CX_C_END
 
 #endif

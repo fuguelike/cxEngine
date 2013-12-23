@@ -76,6 +76,7 @@
 
 void cxEngineInit(cxEngine engine)
 {
+    
     cxEngineLuaRunChars("require('main.lua')");
     cxEngineLuaRunChars("init()");
     
@@ -83,7 +84,6 @@ void cxEngineInit(cxEngine engine)
 //    cxEngineRegisteEvent("cxChipmunkBegin", cxChipmunkBegin);
 //    
 //    engine->dessize = cxSize2fv(640, 960);
-//    cxPlayerOpen(0, 0);
     
 //    engine->isShowBorder = false;
 }
