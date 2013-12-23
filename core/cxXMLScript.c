@@ -133,7 +133,7 @@ static cxString cxPrepareReplaceTemplateVar(cxRegex regex,cxAny arg)
 
 static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
 {
-    static cxConstChars sregex = "\\$\\((.*?)\\)";
+    static cxConstChars sregex = "\\$\\{(.*?)\\}";
     cxBool error = false;
     cxString input = cxRegexMatch(regex, 0);
     CX_ASSERT(input != NULL, "get group 0 failed");
@@ -214,14 +214,68 @@ xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this,xmlTextReaderErrorFunc er
     return cxXMLReaderForString(this->bytes,error,arg);
 }
 
+static cxEventItem cxXMLReadEventByLua(cxAny object,cxConstChars ename,cxConstChars earg,cxBool isfunc)
+{
+    cxEventItem event = CX_CREATE(cxEventItem);
+    cxEventArg args = NULL;
+    if(isfunc){
+        args = cxEventArgCreate(earg);
+    }else{
+        args = CX_CREATE(cxEventArg);
+    }
+    //from global table
+    lua_getglobal(gL, ename);
+    if(lua_isfunction(gL, -1)){
+        args->ref = lua_ref(gL, true);
+        event->func = cxObjectLuaEventFunc;
+        CX_ASSERT(args->ref > 0,"get ref error");
+        CX_RETAIN_SWAP(event->arg, args);
+        return event;
+    }
+    lua_pop(gL, 1);
+    //from root event table
+//    cxAny root = cxObjectRoot(object);
+//    cxConstType type = cxObjectType(root);
+//    if(type == NULL){
+//        return NULL;
+//    }
+//    luaL_getmetatable(gL, type);
+//    if(!lua_istable(gL, -1)){
+//        lua_pop(gL, 1);
+//        return NULL;
+//    }
+//    lua_getfield(gL, -1, "event");
+//    if(!lua_istable(gL, -1)){
+//        lua_pop(gL, 2);
+//        return NULL;
+//    }
+//    lua_getfield(gL, -1, ename);
+//    if(!lua_isfunction(gL, -1)){
+//        lua_pop(gL, 3);
+//        return NULL;
+//    }
+//    args->ref = lua_ref(gL, true);
+//    event->func = cxObjectLuaEventFunc;
+//    CX_ASSERT(args->ref > 0,"get ref error");
+//    CX_RETAIN_SWAP(event->arg, args);
+//    lua_pop(gL, 3);
+    return event;
+}
+
 //mul event use ';' split
-static cxEventItem cxXMLReadEventByValue(cxHash events,cxConstChars value)
+static cxEventItem cxXMLReadEventByValue(cxHash events,cxAny object, cxConstChars value)
 {
     cxConstChars eventName = value;
     PARSE_FUNCTION(eventName, eName, eArg);
     GET_EVENT_ITEM(event);
+    if(!isFunc){
+        return NULL;
+    }
+    if(event == NULL){
+        return cxXMLReadEventByLua(object, eName, eArg, isFunc);
+    }
     //set event arg
-    if(isFunc && event != NULL){
+    if(event != NULL){
         CX_RETAIN_SWAP(event->arg, cxEventArgCreate(eArg));
     }
     return event;
@@ -246,7 +300,7 @@ static cxConstChars cxXMLGetTypeName(cxConstChars name)
 }
 
 //method1({json});method2({json})
-cxArray cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader)
+cxArray cxXMLReadEvent(cxHash events, cxAny object, cxConstChars name,xmlTextReaderPtr reader)
 {
     //xml view event event(arg)
     cxConstChars eventName = cxXMLAttr(name);
@@ -258,7 +312,7 @@ cxArray cxXMLReadEvent(cxHash events,cxConstChars name,xmlTextReaderPtr reader)
         if(item == NULL){
             continue;
         }
-        cxEventItem event = cxXMLReadEventByValue(events, cxStringBody(item));
+        cxEventItem event = cxXMLReadEventByValue(events, object, cxStringBody(item));
         if(event == NULL){
             continue;
         }

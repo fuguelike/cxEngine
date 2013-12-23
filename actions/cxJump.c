@@ -9,6 +9,21 @@
 #include <core/cxActionRoot.h>
 #include "cxJump.h"
 
+const luaL_Reg cxJumpInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxAction)
+};
+
+const luaL_Reg cxJumpTypeMethods[] = {
+    
+    CX_LUA_TYPE(cxJump)
+};
+
+void cxJumpTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxJump);
+}
+
 static void cxJumpInit(cxAny pav)
 {
     cxJump this = pav;

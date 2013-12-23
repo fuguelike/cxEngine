@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxEngine.h"
 #include "cxJson.h"
 
 CX_OBJECT_INIT(cxJson, cxObject)
@@ -31,6 +32,40 @@ cxJson cxJsonCreate(cxString json)
     this->json = json_loadb(cxStringBody(json), cxStringLength(json), JSON_DECODE_ANY, &error);
     CX_ASSERT(this->json != NULL, "cxJson load error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
     return this;
+}
+
+cxBool cxJsonToTable(cxJson json)
+{
+    if(json_is_string(CX_JSON_PTR(json))){
+        lua_pushstring(gL, cxJsonToString(json));
+        return true;
+    }
+    if(json_is_integer(CX_JSON_PTR(json))){
+        lua_pushinteger(gL, cxJsonToInt(json, 0));
+        return true;
+    }
+    if(json_is_number(CX_JSON_PTR(json))){
+        lua_pushnumber(gL, cxJsonToDouble(json, 0));
+        return true;
+    }
+    if(json_is_object(CX_JSON_PTR(json))){
+        lua_newtable(gL);
+        cxConstChars key = NULL;
+        json_t *value = NULL;
+        json_object_foreach(CX_JSON_PTR(json), key, value){
+            lua_pushstring(gL, key);
+            if(json_is_integer(value)){
+                lua_pushinteger(gL,(int)json_integer_value(value));
+            }else if(json_is_string(value)){
+                lua_pushstring(gL, json_string_value(value));
+            }else if(json_is_number(value)){
+                lua_pushnumber(gL, json_number_value(value));
+            }
+            lua_settable(gL, -3);
+        }
+        return true;
+    }
+    return false;
 }
 
 cxInt cxJsonToInt(cxJson json,cxInt dv)

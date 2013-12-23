@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--cxView.fixScale="cxFixScaleW()" cxView.w="640" cxView.h="960""-->
-<cxViewRoot cxView.fill="0,0,0,0"  cxViewRoot.onBegin="mainBegin" cxViewRoot.onEnd="mainEnd">
+<cxViewRoot cxView.fill="0,0,0,0"  cxViewRoot.onBegin="mainBegin()" cxViewRoot.onEnd="mainEnd()">
     <cxTable cxView.fill="10,10,10,10" cxTable.space="10,10" cxTable.type="3,0">
         <cxTemplate url="items.xml?template" title="cxLocalizedText('items.xml?exp')" release="cxPushView('particle.xml')" />
         <cxTemplate src="buttontemp.xml" title="Action" release="cxPushView('action.xml')" />
@@ -13,6 +13,6 @@
         <cxTemplate src="buttontemp.xml" title="Chipmunk" release="cxPushView('chipmunk.xml')" />
         <cxTemplate src="buttontemp.xml" title="bmpFont" release="cxPushView('bmpfont.xml')" />
         <cxTemplate cond="cxIsAndroid()" src="buttontemp.xml" title="Android" />
-        <cxTemplate cond="cxIsIOS()" src="buttontemp.xml" title="IOS" />
+        <cxTemplate cond="cxIsIOS()" src="buttontemp.xml" title="IOS" release="onTest({'id':456})" />
     </cxTable>
 </cxViewRoot>

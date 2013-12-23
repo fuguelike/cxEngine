@@ -12,6 +12,21 @@
 #include <core/cxEventArg.h>
 #include "cxActionSet.h"
 
+const luaL_Reg cxActionSetInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxAction)
+};
+
+const luaL_Reg cxActionSetTypeMethods[] = {
+    
+    CX_LUA_TYPE(cxActionSet)
+};
+
+void cxActionSetTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxActionSet);
+}
+
 static cxNumber cxActionType(cxEventArg arg)
 {
     CX_ASSERT(arg != NULL, "arg error");

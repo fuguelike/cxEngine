@@ -15,9 +15,8 @@ CX_OBJECT_INIT(cxEventArg, cxObject)
 }
 CX_OBJECT_FREE(cxEventArg, cxObject)
 {
-    cxEngine engine = cxEngineInstance();
     if(this->ref > 0){
-        luaL_unref(engine->L, LUA_REGISTRYINDEX, this->ref);
+        lua_unref(gL, this->ref);
         this->ref = 0;
     }
     this->weakRef = NULL;
@@ -26,6 +25,12 @@ CX_OBJECT_FREE(cxEventArg, cxObject)
     CX_RELEASE(this->number);
 }
 CX_OBJECT_TERM(cxEventArg, cxObject)
+
+cxBool cxEventArgToTable(cxEventArg this)
+{
+    CX_RETURN(this->json == NULL, false);
+    return cxJsonToTable(this->json);
+}
 
 cxAny cxEventArgToWeakRef(cxEventArg this)
 {

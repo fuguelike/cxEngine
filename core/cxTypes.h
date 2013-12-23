@@ -276,11 +276,15 @@ typedef struct {
     cxVec2f r;
 }cxVec2fRange;
 
+cxColor4f cxLuaGetColor4f(lua_State *L,cxInt n,cxColor4f d);
+
 cxVec2f cxVec2fValue(cxVec2fRange rv);
 
 void cxLuaPushVec2fv(lua_State *L,cxVec2f pos);
 
 void cxLuaPushSize2fv(lua_State *L,cxSize2f size);
+
+void cxLuaPushColor4f(lua_State *L,cxColor4f color);
 
 cxSize2f cxLuaGetSize2fv(lua_State *L,cxInt n,cxSize2f d);
 

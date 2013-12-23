@@ -11,19 +11,29 @@
 static cxInt cxNumberNewInt(lua_State *L)
 {
     cxInt value =  luaL_checkinteger(L, 1);
-    CX_LUA_CREATE_THIS(cxNumber);
-    this->type = cxNumberTypeInt;
-    this->value.vi = value;
-    CX_LUA_RETURN_THIS(cxNumber);
+    cxNumber num = cxNumberInt(value);
+    lua_pushlightuserdata(L, num);
+    CX_LUA_RET_THIS(cxNumber);
 }
 
 static cxInt cxNumberNewFloat(lua_State *L)
 {
     cxFloat value =  luaL_checknumber(L, 1);
-    CX_LUA_CREATE_THIS(cxNumber);
-    this->type = cxNumberTypeFloat;
-    this->value.vf = value;
-    CX_LUA_RETURN_THIS(cxNumber);
+    cxNumber num = cxNumberFloat(value);
+    lua_pushlightuserdata(L, num);
+    CX_LUA_RET_THIS(cxNumber);
+}
+
+static cxInt cxNumberNewColor(lua_State *L)
+{
+    cxInt top = lua_gettop(L);
+    cxFloat r = (top >=1 && lua_isnumber(L, 1)) ? lua_tonumber(L, 1) : 1.0f;
+    cxFloat g = (top >=2 && lua_isnumber(L, 2)) ? lua_tonumber(L, 2) : 1.0f;
+    cxFloat b = (top >=3 && lua_isnumber(L, 3)) ? lua_tonumber(L, 3) : 1.0f;
+    cxFloat a = (top >=4 && lua_isnumber(L, 4)) ? lua_tonumber(L, 4) : 1.0f;
+    cxNumber num = cxNumberColor4f(cxColor4bv(r, g, b, a));
+    lua_pushlightuserdata(L, num);
+    CX_LUA_RET_THIS(cxNumber);
 }
 
 const luaL_Reg cxNumberInstanceMethods[] = {
@@ -33,6 +43,7 @@ const luaL_Reg cxNumberInstanceMethods[] = {
 const luaL_Reg cxNumberTypeMethods[] = {
     {"newInt",cxNumberNewInt},
     {"newFloat",cxNumberNewFloat},
+    {"newColor",cxNumberNewColor},
     CX_LUA_TYPE(cxNumber)
 };
 

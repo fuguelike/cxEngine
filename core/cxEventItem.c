@@ -6,11 +6,12 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxEngine.h"
 #include "cxEventItem.h"
 
 CX_OBJECT_INIT(cxEventItem, cxObject)
 {
-    
+
 }
 CX_OBJECT_FREE(cxEventItem, cxObject)
 {

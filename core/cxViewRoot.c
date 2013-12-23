@@ -28,12 +28,31 @@ cxInt cxViewRootLuaAppendEvent(lua_State *L)
     return 0;
 }
 
+static cxInt cxViewRootLuaGetView(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxViewRoot);
+    cxConstChars key = luaL_checkstring(L, 2);
+    cxAny any = cxViewRootGet(this, key);
+    CX_LUA_PUSH_OBJECT(any);
+    return 1;
+}
+
 const luaL_Reg cxViewRootInstanceMethods[] = {
+    {"getView",cxViewRootLuaGetView},
     {"on",cxViewRootLuaAppendEvent},
     CX_LUA_SUPER(cxView)
 };
 
+static cxInt cxViewRootLuaMake(lua_State *L)
+{
+    cxConstChars url = luaL_checkstring(L, 1);
+    cxAny any = cxViewRootCreate(url);
+    CX_LUA_PUSH_OBJECT(any);
+    return 1;
+}
+
 const luaL_Reg cxViewRootTypeMethods[] = {
+    {"make",cxViewRootLuaMake},
     CX_LUA_TYPE(cxViewRoot)
 };
 

@@ -10,11 +10,64 @@
 #include <actions/cxTimer.h>
 #include "cxLoading.h"
 
+static cxInt cxLoadingLuaSetObject(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxLoading);
+    CX_LUA_GET_ANY(cxObject, any, 2);
+    cxLoadingSetObject(this, any);
+    return 0;
+}
+
+static cxInt cxLoadingLuaGetObject(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxLoading);
+    CX_LUA_PUSH_OBJECT(this->object);
+    return 1;
+}
+
+static cxInt cxLoadingLuaStart(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxLoading);
+    cxLoadingStart(this);
+    return 0;
+}
+
+cxInt cxLoadingLuaAppendEvent(lua_State *L)
+{
+    cxViewLuaAppendEvent(L);
+    CX_LUA_DEF_THIS(cxLoading);
+    
+    CX_LUA_EVENT_BEGIN();
+    
+    CX_LUA_EVENT_APPEND(onFinished);
+    CX_LUA_EVENT_APPEND(onLoading);
+    CX_LUA_EVENT_APPEND(onStart);
+    
+    CX_LUA_EVENT_END();
+}
+
+const luaL_Reg cxLoadingInstanceMethods[] = {
+    {"on",cxLoadingLuaAppendEvent},
+    {"start",cxLoadingLuaStart},
+    {"setObject",cxLoadingLuaSetObject},
+    {"object",cxLoadingLuaGetObject},
+    CX_LUA_SUPER(cxView)
+};
+
+const luaL_Reg cxLoadingTypeMethods[] = {
+    CX_LUA_TYPE(cxLoading)
+};
+
+void cxLoadingTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxLoading);
+}
+
 void cxLoadingOnUpdate(cxEvent *event)
 {
     cxLoading this = event->sender;
     if(this->isLoading){
-        CX_METHOD_RUN(this->Finished,this->object);
+        CX_EVENT_FIRE(this, onFinished);
         cxViewRemoved(this);
     }
 }
@@ -45,10 +98,7 @@ static void cxFinishedArrive(cxEvent *event)
 static void cxLoadingArrive(cxEvent *event)
 {
     cxLoading this = cxActionView(event->sender);
-    cxAny obj = CX_METHOD_GET(NULL, this->Loading, this);
-    CX_ASSERT(obj != NULL, "loading must return view");
-    cxLoadingSetObject(this, obj);
-    
+    CX_EVENT_FIRE(this, onLoading);
     cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
     CX_EVENT_QUICK(timer->onArrive, cxFinishedArrive);
 }
@@ -67,23 +117,19 @@ CX_OBJECT_INIT(cxLoading, cxView)
 }
 CX_OBJECT_FREE(cxLoading, cxView)
 {
-    
+    CX_EVENT_RELEASE(this->onStart);
+    CX_EVENT_RELEASE(this->onFinished);
+    CX_EVENT_RELEASE(this->onLoading);
 }
 CX_OBJECT_TERM(cxLoading, cxView)
 
-cxAny cxLoadingStart(cxLoadingFunc loading,cxFinishedFunc finished)
+void cxLoadingStart(cxLoading this)
 {
     cxEngine engine = cxEngineInstance();
-    
-    cxLoading this = CX_CREATE(cxLoading);
-    CX_METHOD_SET(this->Finished, finished);
-    CX_METHOD_SET(this->Loading, loading);
-    
+    CX_EVENT_FIRE(this, onStart);
     cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
     CX_EVENT_QUICK(timer->onArrive, cxLoadingArrive);
-    
     cxViewAppend(engine->window, this);
-    return this;
 }
 
 

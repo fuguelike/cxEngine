@@ -172,25 +172,23 @@ do{                                                             \
     }                                                           \
 }while(0)
 
-
 #define CX_LUA_EVENT_BEGIN()                                    \
 cxConstChars name = luaL_checkstring(L, 2);                     \
 if(!lua_isfunction(L, 3)){                                      \
     luaL_error(L, "func error");                                \
     return 0;                                                   \
-}                                                               \
-cxInt ref = luaL_ref(L, LUA_REGISTRYINDEX);                     \
-CX_ASSERT(ref > 0,"get ref error");                             \
-cxEventArg args = cxEventArgCreateWithRef(ref);
+}
 
 #define CX_LUA_EVENT_APPEND(en)                                 \
 if(cxConstCharsEqu(name, #en)){                                 \
+    cxInt ref = lua_ref(L, true);                               \
+    CX_ASSERT(ref > 0,"get ref error");                         \
+    cxEventArg args = cxEventArgCreateWithRef(ref);             \
     CX_EVENT_APPEND(this->en, cxObjectLuaEventFunc, args);      \
     return 0;                                                   \
 }
 
 #define CX_LUA_EVENT_END()                                      \
-luaL_error(L, "name %s event not def");                         \
 return 0
 
 void cxObjectLuaEventFunc(cxEvent *event);

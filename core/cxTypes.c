@@ -30,6 +30,19 @@ void cxLuaPushSize2fv(lua_State *L,cxSize2f size)
     lua_setfield(L, -2, "h");
 }
 
+void cxLuaPushColor4f(lua_State *L,cxColor4f color)
+{
+    lua_newtable(L);
+    lua_pushnumber(L, color.r);
+    lua_setfield(L, -2, "r");
+    lua_pushnumber(L, color.g);
+    lua_setfield(L, -2, "g");
+    lua_pushnumber(L, color.b);
+    lua_setfield(L, -2, "b");
+    lua_pushnumber(L, color.a);
+    lua_setfield(L, -2, "a");
+}
+
 cxVec2f cxLuaGetVec2fv(lua_State *L,cxInt n,cxVec2f d)
 {
     cxVec2f v = d;
@@ -42,6 +55,35 @@ cxVec2f cxLuaGetVec2fv(lua_State *L,cxInt n,cxVec2f d)
     
     lua_getfield(L, n, "y");
     v.y = lua_tonumber(L, -1);
+    lua_pop(L, 1);
+    return v;
+}
+
+cxColor4f cxLuaGetColor4f(lua_State *L,cxInt n,cxColor4f d)
+{
+    cxColor4f v = d;
+    if(!lua_istable(L, n)){
+        return v;
+    }
+    lua_getfield(L, n, "r");
+    if(lua_isnumber(L, -1)){
+        v.r = lua_tonumber(L, -1);
+    }
+    lua_pop(L, 1);
+    lua_getfield(L, n, "g");
+    if(lua_isnumber(L, -1)){
+        v.g = lua_tonumber(L, -1);
+    }
+    lua_pop(L, 1);
+    lua_getfield(L, n, "b");
+    if(lua_isnumber(L, -1)){
+        v.b = lua_tonumber(L, -1);
+    }
+    lua_pop(L, 1);
+    lua_getfield(L, n, "a");
+    if(lua_isnumber(L, -1)){
+        v.a = lua_tonumber(L, -1);
+    }
     lua_pop(L, 1);
     return v;
 }
@@ -66,7 +108,7 @@ cxAny cxLuaGetObject(lua_State *L,cxInt n)
 {
     if(lua_isnumber(L, n)){
         lua_Number num = lua_tonumber(L, n);
-        return CX_LUA_NUMBER_IS_INT(num) ? cxNumberInt(num) : cxNumberFloat(num);
+        return CX_LUA_IS_INT(num) ? cxNumberInt(num) : cxNumberFloat(num);
     }
     if(lua_isstring(L, n)){
         return cxStringAllocChars(lua_tostring(L, n));

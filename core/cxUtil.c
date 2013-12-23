@@ -70,9 +70,8 @@ const luaL_reg global_functions [] = {
 
 void cxUtilTypeInit()
 {
-    cxEngine engine = cxEngineInstance();
-    luaL_register(engine->L, "_G", global_functions);
-    lua_pop(engine->L, 1);
+    luaL_register(gL, "_G", global_functions);
+    lua_pop(gL, 1);
 }
 
 cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)

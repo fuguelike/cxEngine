@@ -9,6 +9,21 @@
 #include <core/cxActionRoot.h>
 #include "cxFade.h"
 
+const luaL_Reg cxFadeInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxAction)
+};
+
+const luaL_Reg cxFadeTypeMethods[] = {
+    
+    CX_LUA_TYPE(cxFade)
+};
+
+void cxFadeTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxFade);
+}
+
 static void cxFadeInit(cxAny pav)
 {
     cxFade this = pav;

@@ -10,9 +10,19 @@
 #include <streams/cxAssetsStream.h>
 #include <core/cxActionRoot.h>
 #include <socket/cxEventBase.h>
+
 #include <views/cxParticle.h>
 #include <views/cxChipmunk.h>
+#include <views/cxButton.h>
+#include <views/cxLoading.h>
+#include <views/cxLabelTTF.h>
+
 #include <actions/cxActionSet.h>
+#include <actions/cxMove.h>
+#include <actions/cxFade.h>
+#include <actions/cxJump.h>
+#include <actions/cxRotate.h>
+
 #include "cxViewRoot.h"
 #include "cxEngine.h"
 #include "cxAutoPool.h"
@@ -21,52 +31,61 @@
 #include "cxHashRoot.h"
 #include "cxDB.h"
 
+
+lua_State *gL = NULL;
 static cxEngine instance = NULL;
 static cxBool isExit = false;
 
 static cxInt cxEngineLuaSetDesignSize(lua_State *L)
 {
-    cxEngine this = cxEngineInstance();
+    CX_LUA_DEF_THIS(cxEngine);
     this->dessize = cxLuaGetSize2fv(L, 1, this->dessize);
     return 0;
 }
 
 static cxInt cxEngineLuaSetShowBorder(lua_State *L)
 {
-    cxEngine this = cxEngineInstance();
+    CX_LUA_DEF_THIS(cxEngine);
     this->isShowBorder = lua_toboolean(L, 1);
     return 0;
 }
 
 static cxInt cxEngineLuaGetScreenSize(lua_State *L)
 {
-    cxEngine this = cxEngineInstance();
+    CX_LUA_DEF_THIS(cxEngine);
     cxLuaPushSize2fv(L, this->winsize);
     return 1;
 }
 
-static cxInt cxEngineLuaInstance(lua_State *L)
+cxInt cxEngineLuaAppendEvent(lua_State *L)
 {
-    CX_LUA_PUSH_OBJECT(instance);
-    return 1;
+    cxObjectLuaAppendEvent(L);
+    CX_LUA_DEF_THIS(cxEngine);
+    
+    CX_LUA_EVENT_BEGIN();
+    
+    CX_LUA_EVENT_APPEND(onFree);
+    
+    CX_LUA_EVENT_END();
 }
 
 const luaL_Reg cxEngineInstanceMethods[] = {
+    {"on",cxEngineLuaAppendEvent},
+    {"setShowBorder",cxEngineLuaSetShowBorder},
+    {"screenSize",cxEngineLuaGetScreenSize},    //size.w size.h {w=1,h=2}
+    {"setDesignSize",cxEngineLuaSetDesignSize}, //cxEngineInstance:setDesignSize(w,h)
     CX_LUA_SUPER(cxObject)
 };
 
 const luaL_Reg cxEngineTypeMethods[] = {
-    {"setShowBorder",cxEngineLuaSetShowBorder},
-    {"screenSize",cxEngineLuaGetScreenSize},    //size.w size.h {w=1,h=2}
-    {"setDesignSize",cxEngineLuaSetDesignSize}, //cxEngineInstance:setDesignSize(w,h)
     {NULL,NULL}
 };
 
 void cxEngineTypeInit()
 {
     lua_State *L = CX_LUA_LOAD_TYPE(cxEngine);
-    lua_pushcfunction(L, cxEngineLuaInstance);
-    lua_setglobal(L, "cxEngineInstance");
+    CX_LUA_PUSH_OBJECT(instance);
+    lua_setglobal(L, "cxgEngine");
 }
 
 static int cxEngineLuaLoader(lua_State *L)
@@ -113,8 +132,7 @@ static void *cxEngineLuaAllocFunc(void *ud, void *ptr, size_t osize, size_t nsiz
 
 void cxEngineGC()
 {
-    cxEngine engine = cxEngineInstance();
-    lua_gc(engine->L, LUA_GCSTEP, 1);
+    lua_gc(gL, LUA_GCSTEP, 1);
 }
 
 cxBool cxEngineLuaRunString(cxString code)
@@ -124,10 +142,9 @@ cxBool cxEngineLuaRunString(cxString code)
 
 cxBool cxEngineLuaRunChars(cxConstChars code)
 {
-    cxEngine engine = cxEngineInstance();
     CX_ASSERT(code != NULL && strlen(code) > 0, "code args error");
-    if(luaL_dostring(engine->L, code) != 0){
-        CX_ERROR("cxLuaLoader run code error:%s",lua_tostring(engine->L, -1));
+    if(luaL_dostring(gL, code) != 0){
+        CX_ERROR("cxLuaLoader run code error:%s",lua_tostring(gL, -1));
         return false;
     }
     return true;
@@ -289,15 +306,15 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->functions = CX_ALLOC(cxHash);
     this->typefuncs = CX_ALLOC(cxHash);
     
-    this->L = lua_newstate(cxEngineLuaAllocFunc, this);
-    CX_ASSERT(this->L != NULL, "new lua state error");
-    lua_atpanic(this->L, cxEngineLuaPanic);
-    luaL_openlibs(this->L);
-    cxEngineAddLuaLoader(this->L);
+    gL = lua_newstate(cxEngineLuaAllocFunc, this);
+    CX_ASSERT(gL != NULL, "new lua state error");
+    lua_atpanic(gL, cxEngineLuaPanic);
+    luaL_openlibs(gL);
+    cxEngineAddLuaLoader(gL);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
-    lua_close(this->L);
+    lua_close(gL);
     
     CX_RELEASE(this->typefuncs);
     CX_RELEASE(this->functions);
@@ -578,89 +595,6 @@ static cxNumber cxEngineIsIOS(cxEventArg arg)
     return cxNumberBool(CX_TARGET_PLATFORM == CX_PLATFORM_IOS);
 }
 
-void cxEngineSystemInit()
-{
-    //cxActionRun({'src':'actions.xml?btnEnter','view':'id','cache':true, 'curve':'ExpOut', 'delay':0.3})
-    cxEngineRegisteEvent("cxActionRun", cxViewRunActionEvent);
-    //cxPlayEffect({'src':'aa.wav','loop':true})
-    cxEngineRegisteEvent("cxPlayEffect", cxPlaySoundEvent);
-    //cxPlayMusic({'src':'aa.mp3','loop':true})
-    cxEngineRegisteEvent("cxPlayMusic", cxPlayMusicEvent);
-    //cxLogger('msg')
-    cxEngineRegisteEvent("cxLogger", cxPrintMessageEvent);
-    //cxPushView('url')
-    cxEngineRegisteEvent("cxPushView", cxViewPushViewEvent);
-    //cxPopView
-    cxEngineRegisteEvent("cxPopView", cxViewPopViewEvent);
-    //cxReplaceView('url')
-    cxEngineRegisteEvent("cxReplaceView", cxViewReplaceViewEvent);
-    //cxPost('eventkey')
-    cxEngineRegisteEvent("cxPost", cxMessagePostEvent);
-    //use in ->cxSprite up
-    cxEngineRegisteEvent("cxSetTexture", cxSpriteSetTextureEvent);
-    //use in ->cxView up
-    cxEngineRegisteEvent("cxSetView", cxViewSetViewEvent);
-    
-    //cxLocalizedText('items.xml?exp') -> cxString get en/items.xml?exp
-    cxEngineRegisteFunc("cxLocalizedText", cxEngineLocalizedText);
-    
-    //cxDataString('items.xml?exp')  -> cxString
-    cxEngineRegisteFunc("cxDataString", cxEngineDataString);
-    
-    //cxDataTypes('items.xml?spline')
-    cxEngineRegisteFunc("cxDataTypes", cxDataSetTypes);
-    
-    //cxDataInt('items,xml?int') -> cxNumber
-    cxEngineRegisteFunc("cxDataNumber", cxEngineDataNumber);
-    
-    //relative screen width and height value -> cxNumber
-    //cxRelativeW(1.0)
-    cxEngineRegisteFunc("cxRelativeW", cxEngineRelativeWidth);
-    cxEngineRegisteFunc("cxRelativeH", cxEngineRelativeHeight);
-    
-    //fixScale by window.scale.x or scale.y
-    cxEngineRegisteFunc("cxFixScaleW", cxFixScaleByWidth);
-    cxEngineRegisteFunc("cxFixScaleH", cxFixScaleByHeight);
-    
-    //cxBinNumber('110111') -> cxNumber
-    cxEngineRegisteFunc("cxBinNumber", cxEngineBinNumber);
-    
-    //cxHexNumber('ffbb00') -> cxNumber
-    cxEngineRegisteFunc("cxHexNumber", cxEngineHexNumber);
-    
-    //cxTextureCreate('candy.xml?red.png')
-    cxEngineRegisteFunc("cxTextureCreate", cxTextureCreateForXML);
-    
-    //platform cond attr func,invoke when prepare xml
-    cxEngineRegisteFunc("cxIsAndroid", cxEngineIsAndroid);
-    cxEngineRegisteFunc("cxIsIOS", cxEngineIsIOS);
-
-    cxObjectTypeInit();
-    cxNumberTypeInit();
-    cxStringTypeInit();
-    cxUtilTypeInit();
-    
-    cxHashTypeInit();
-    cxArrayTypeInit();
-    cxListTypeInit();
-    
-    cxViewTypeInit();
-    cxWindowTypeInit();
-    cxEngineTypeInit();
-    cxViewRootTypeInit();
-    
-    
-    
-    //cxParticle func
-    cxParticleTypeInit();
-    
-    //cxActionRoot
-    cxActionRootTypeInit();
-    
-    //cxChipmunk
-    cxChipmunkTypeInit();
-}
-
 cxString cxEngineGetLuaScript(cxConstChars file)
 {
     cxXMLScript script = cxEngineGetXMLScript(file);
@@ -781,6 +715,96 @@ cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
     return (ret || cxViewTouch(this->window, &this->touch));
 }
 
+void cxEngineSystemInit()
+{
+    //cxActionRun({'src':'actions.xml?btnEnter','view':'id','cache':true, 'curve':'ExpOut', 'delay':0.3})
+    cxEngineRegisteEvent("cxActionRun", cxViewRunActionEvent);
+    //cxPlayEffect({'src':'aa.wav','loop':true})
+    cxEngineRegisteEvent("cxPlayEffect", cxPlaySoundEvent);
+    //cxPlayMusic({'src':'aa.mp3','loop':true})
+    cxEngineRegisteEvent("cxPlayMusic", cxPlayMusicEvent);
+    //cxLogger('msg')
+    cxEngineRegisteEvent("cxLogger", cxPrintMessageEvent);
+    //cxPushView('url')
+    cxEngineRegisteEvent("cxPushView", cxViewPushViewEvent);
+    //cxPopView
+    cxEngineRegisteEvent("cxPopView", cxViewPopViewEvent);
+    //cxReplaceView('url')
+    cxEngineRegisteEvent("cxReplaceView", cxViewReplaceViewEvent);
+    //cxPost('eventkey')
+    cxEngineRegisteEvent("cxPost", cxMessagePostEvent);
+    //use in ->cxSprite up
+    cxEngineRegisteEvent("cxSetTexture", cxSpriteSetTextureEvent);
+    //use in ->cxView up
+    cxEngineRegisteEvent("cxSetView", cxViewSetViewEvent);
+    
+    //cxLocalizedText('items.xml?exp') -> cxString get en/items.xml?exp
+    cxEngineRegisteFunc("cxLocalizedText", cxEngineLocalizedText);
+    
+    //cxDataString('items.xml?exp')  -> cxString
+    cxEngineRegisteFunc("cxDataString", cxEngineDataString);
+    
+    //cxDataTypes('items.xml?spline')
+    cxEngineRegisteFunc("cxDataTypes", cxDataSetTypes);
+    
+    //cxDataInt('items,xml?int') -> cxNumber
+    cxEngineRegisteFunc("cxDataNumber", cxEngineDataNumber);
+    
+    //relative screen width and height value -> cxNumber
+    //cxRelativeW(1.0)
+    cxEngineRegisteFunc("cxRelativeW", cxEngineRelativeWidth);
+    cxEngineRegisteFunc("cxRelativeH", cxEngineRelativeHeight);
+    
+    //fixScale by window.scale.x or scale.y
+    cxEngineRegisteFunc("cxFixScaleW", cxFixScaleByWidth);
+    cxEngineRegisteFunc("cxFixScaleH", cxFixScaleByHeight);
+    
+    //cxBinNumber('110111') -> cxNumber
+    cxEngineRegisteFunc("cxBinNumber", cxEngineBinNumber);
+    
+    //cxHexNumber('ffbb00') -> cxNumber
+    cxEngineRegisteFunc("cxHexNumber", cxEngineHexNumber);
+    
+    //cxTextureCreate('candy.xml?red.png')
+    cxEngineRegisteFunc("cxTextureCreate", cxTextureCreateForXML);
+    
+    //platform cond attr func,invoke when prepare xml
+    cxEngineRegisteFunc("cxIsAndroid", cxEngineIsAndroid);
+    cxEngineRegisteFunc("cxIsIOS", cxEngineIsIOS);
+    
+    cxObjectTypeInit();
+    cxNumberTypeInit();
+    cxStringTypeInit();
+    cxUtilTypeInit();
+    
+    cxHashTypeInit();
+    cxArrayTypeInit();
+    cxListTypeInit();
+    
+    cxActionTypeInit();
+    cxMoveTypeInit();
+    cxActionSetTypeInit();
+    cxFadeTypeInit();
+    cxJumpTypeInit();
+    cxRotateTypeInit();
+    
+    cxViewTypeInit();
+    cxWindowTypeInit();
+    cxSpriteTypeInit();
+    cxViewRootTypeInit();
+    cxAtlasTypeInit();
+    cxButtonTypeInit();
+    cxLoadingTypeInit();
+    cxLabelTTFTypeInit();
+    
+    cxEngineTypeInit();
+
+    cxParticleTypeInit();
+
+    cxActionRootTypeInit();
+
+    cxChipmunkTypeInit();
+}
 
 
 

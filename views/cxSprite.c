@@ -12,6 +12,44 @@
 #include <textures/cxTextureFactory.h>
 #include "cxSprite.h"
 
+cxInt cxSpriteLuaAppendEvent(lua_State *L)
+{
+    cxViewLuaAppendEvent(L);
+    return 0;
+}
+
+const luaL_Reg cxSpriteInstanceMethods[] = {
+    {"on",cxSpriteLuaAppendEvent},
+    CX_LUA_SUPER(cxView)
+};
+
+static cxInt cxSpriteLuaMake(lua_State *L)
+{
+    cxInt top = lua_gettop(L);
+    CX_LUA_NEW_THIS(cxSprite);
+    cxBool ust = true;
+    cxBool cache = true;
+    cxConstChars url = luaL_checkstring(L, 1);
+    if(top >=2 && lua_isboolean(L, 2)){
+        ust = lua_toboolean(L, 2);
+    }
+    if(top >=3 && lua_isboolean(L, 3)){
+        cache = lua_toboolean(L, 3);
+    }
+    cxSpriteSetTextureURL(this, url, ust, cache);
+    CX_LUA_RET_THIS(cxSprite);
+}
+
+const luaL_Reg cxSpriteTypeMethods[] = {
+    {"make",cxSpriteLuaMake},//make(url,[useTextSiz],[cache])
+    CX_LUA_TYPE(cxSprite)
+};
+
+void cxSpriteTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxSprite);
+}
+
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor)
 {
     cxSprite this = pview;

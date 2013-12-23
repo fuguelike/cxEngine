@@ -21,6 +21,8 @@ CX_OBJECT_END(cxJson)
 
 #define CX_JSON_PTR(j)  ((j)->json)
 
+cxBool cxJsonToTable(cxJson this);
+
 cxJson cxJsonCreate(cxString json);
 
 cxInt cxJsonToInt(cxJson json,cxInt dv);

@@ -25,33 +25,11 @@ static cxInt cxObjectLuaSetTag(lua_State *L)
     return 0;
 }
 
-static cxInt cxObjectLuaRefCount(lua_State *L)
-{    
-    CX_LUA_DEF_THIS(cxObject);
-    lua_pushinteger(L, this->cxRefcount);
-    return 1;
-}
-
-static cxInt cxObjectLuaRetain(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxObject);
-    CX_RETAIN(this);
-    return 0;
-}
-
-static cxInt cxObjectLuaRelease(lua_State *L)
+static cxInt cxObjectLuaGC(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxObject);
     CX_RELEASE(this);
     return 0;
-}
-
-static cxInt cxObjectLuaAutoFree(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxObject);
-    cxAny any = CX_AUTOFREE(this);
-    CX_LUA_PUSH_OBJECT(any);
-    return 1;
 }
 
 cxInt cxObjectLuaAppendEvent(lua_State *L)
@@ -59,14 +37,19 @@ cxInt cxObjectLuaAppendEvent(lua_State *L)
     return 0;
 }
 
+static cxInt cxObjectLuaTypeName(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxObject);
+    lua_pushstring(L, cxObjectType(this));
+    return 1;
+}
+
 const luaL_Reg cxObjectInstanceMethods[] = {
     {"on",cxObjectLuaAppendEvent},
     {"getTag",cxObjectLuaGetTag},
     {"setTag",cxObjectLuaSetTag},
-    {"refCount",cxObjectLuaRefCount},
-    {"retain",cxObjectLuaRetain},
-    {"release",cxObjectLuaRelease},
-    {"autofree",cxObjectLuaAutoFree},
+    {"typeName",cxObjectLuaTypeName},
+    {"__gc",cxObjectLuaGC},
     {NULL,NULL},
     {NULL,NULL},
 };
@@ -93,18 +76,15 @@ void cxLuaRegisterMethods(lua_State *L,const luaL_Reg *methods)
 lua_State *cxLuaLoad(cxConstType name, const luaL_Reg *cMethods,const luaL_Reg *tMethods)
 {
     CX_ASSERT(cMethods != NULL && tMethods != NULL, "args error");
-    cxEngine engine = cxEngineInstance();
+    luaL_newmetatable(gL, name);
+    cxLuaRegisterMethods(gL, cMethods);
 
-    luaL_newmetatable(engine->L, name);
-    cxLuaRegisterMethods(engine->L, cMethods);
-
-    lua_pushvalue(engine->L,-1);
-    lua_setfield(engine->L, -2, "__index");
+    lua_pushvalue(gL,-1);
+    lua_setfield(gL, -2, "__index");
     
-    luaL_register(engine->L, name, tMethods);
-    
-    lua_pop(engine->L, 2);
-    return engine->L;
+    luaL_register(gL, name, tMethods);
+    lua_pop(gL, 2);
+    return gL;
 }
 
 void cxObjectTypeInit()

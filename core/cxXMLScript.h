@@ -42,13 +42,13 @@ xmlTextReaderPtr cxXMLReaderForString(cxString code,xmlTextReaderErrorFunc error
 
 xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this,xmlTextReaderErrorFunc error,cxAny arg);
 
-cxArray cxXMLReadEvent(cxHash events, cxConstChars name, xmlTextReaderPtr reader);
+cxArray cxXMLReadEvent(cxHash events, cxAny object, cxConstChars name, xmlTextReaderPtr reader);
 
 #define ELEMENT_IS_TYPE(t)  (temp != NULL && strcmp(temp, #t) == 0)
 
 #define cxXMLAppendEvent(s,o,t,e)                               \
 do{                                                             \
-    cxArray list = cxXMLReadEvent(s, #t"."#e, reader);          \
+    cxArray list = cxXMLReadEvent(s, o, #t"."#e, reader);       \
     CX_ARRAY_FOREACH(list,ele){                                 \
         cxEventItem item = cxArrayObject(ele);                  \
         CX_EVENT_APPEND(o->e, item->func,item->arg);            \

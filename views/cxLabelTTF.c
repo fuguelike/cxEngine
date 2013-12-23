@@ -11,6 +11,70 @@
 #include <textures/cxTextureFactory.h>
 #include "cxLabelTTF.h"
 
+static cxInt cxLabelTTFLuaSetFont(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxLabelTTF);
+    cxConstChars font = luaL_checkstring(L, 2);
+    cxLabelTTFSetFont(this, UTF8(font));
+    return 0;
+}
+
+static cxInt cxLabelTTFLuaSetSize(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxLabelTTF);
+    cxFloat size = luaL_checknumber(L, 2);
+    cxLabelTTFSetFontSize(this, size);
+    return 0;
+}
+
+static cxInt cxLabelTTFLuaSetText(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxLabelTTF);
+    cxConstChars text = luaL_checkstring(L, 2);
+    cxLabelTTFSetText(this, UTF8(text));
+    return 0;
+}
+
+const luaL_Reg cxLabelTTFInstanceMethods[] = {
+    {"setFont",cxLabelTTFLuaSetFont},
+    {"setSize",cxLabelTTFLuaSetSize},
+    {"setText",cxLabelTTFLuaSetText},
+    CX_LUA_SUPER(cxSprite)
+};
+
+static cxInt cxLabelTTFLuaMake(lua_State *L)
+{
+    CX_LUA_NEW_THIS(cxLabelTTF);
+    if(lua_istable(L, 1)){
+        lua_getfield(L, 1, "font");
+        if(lua_isstring(L, -1)){
+            cxLabelTTFSetFont(this, UTF8(lua_tostring(L, -1)));
+        }
+        lua_pop(L, 1);
+        lua_getfield(L, 1, "size");
+        if(lua_isnumber(L, -1)){
+            cxLabelTTFSetFontSize(this, lua_tonumber(L, -1));
+        }
+        lua_pop(L, 1);
+        lua_getfield(L, 1, "text");
+        if(lua_isstring(L, -1)){
+            cxLabelTTFSetText(this, UTF8(lua_tostring(L, -1)));
+        }
+        lua_pop(L, 1);
+    }
+    CX_LUA_RET_THIS(cxLabelTTF);
+}
+
+const luaL_Reg cxLabelTTFTypeMethods[] = {
+    {"make",cxLabelTTFLuaMake},
+    CX_LUA_TYPE(cxLabelTTF)
+};
+
+void cxLabelTTFTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxLabelTTF);
+}
+
 void cxLabelTTFReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
 {
     cxViewRoot root = rootView;

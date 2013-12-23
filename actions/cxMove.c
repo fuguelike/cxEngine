@@ -9,6 +9,28 @@
 #include <core/cxActionRoot.h>
 #include "cxMove.h"
 
+const luaL_Reg cxMoveInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxAction)
+};
+
+static cxInt cxMoveLuaMake(lua_State *L)
+{
+    CX_LUA_NEW_THIS(cxMove);
+    this->super.duration = luaL_checknumber(L, 1);
+    this->endPos = cxLuaGetVec2fv(L, 2, cxVec2fv(0, 0));
+    CX_LUA_RET_THIS(cxMove);
+}
+
+const luaL_Reg cxMoveTypeMethods[] = {
+    {"make",cxMoveLuaMake},//make(time,{x=100,y=200})
+    CX_LUA_TYPE(cxMove)
+};
+
+void cxMoveTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxMove);
+}
 
 static void cxMoveInit(cxAny pav)
 {

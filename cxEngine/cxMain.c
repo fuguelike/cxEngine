@@ -76,7 +76,6 @@
 
 void cxEngineInit(cxEngine engine)
 {
-    
     cxEngineLuaRunChars("require('main.lua')");
     cxEngineLuaRunChars("init()");
     

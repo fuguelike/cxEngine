@@ -1,56 +1,39 @@
 
 
+--global metatable
+--cxgEngine
+--cxgWindow
+
 function init()
+    cxgEngine:setDesignSize({w=640,h=960})
+    cxgEngine:setShowBorder(true)
+end
 
-    cxEngine.setDesignSize({w=640,h=960})
+function mainBegin(xml)
     
-    cxEngine.setShowBorder(true)
-    
---[[
-    local c = cxObject.new()
-    
-    c.event.func = function() io.write('test') end
+end
 
-    c.event.func()
-    
-    io.write(cxObject.typeName)
-    
-    local h = cxHash.new()
-    h:set(1,c)
-    h:set(2,c)
-    h:set(3,c)
-    h:set(4,c)
-    h:set("55",c)
-    
-    cxAssert(h:length() == 5,'hash error count')
-    
-    h:each(function(k,v) io.write(k,'\n') end)
-    
-    h:each(function(k,v) io.write(k,'\n') end)
-    
-    local a = cxArray.new()
-    a:append(c)
-    a:append(c)
-    a:append(c)
-    cxAssert(a:length() == 3,'array error count')
-    
-    a:each(function(v) io.write('array + ') end)
-    
-    local s = cxString.create(12);
-    s:print()
-    
-    local list = cxList.new();
-    list:append(s)
-]]
+function mainEnd(xml)
     
 end
 
 function main()
-    local v = cxView.make({x=100,y=200,w=300,h=300})
-
-    --cxWindowInstance():append(v)
-    --local x = cxWindow.pushView('main.xml')
-    --x:on('onEnter',function(root) io.write("\n\nonEnter\n\n") end)
+    local loader = cxLoading.new()
+    loader:on('onStart',function(loading)
+              local txt = cxLabelTTF.make({font='banana.ttf',size='65',text='Loading...'})
+              txt:setColor({r=1.0,g=0.0,b=0.0})
+              txt:setSize(90)
+              loading:append(txt)
+         end)
+    loader:on('onLoading', function(loading)
+              local xml = cxViewRoot.make('main.xml')
+              loading:setObject(xml)
+         end)
+    loader:on('onFinished', function(loading)
+            local view = loading:object()
+            cxgWindow:pushView(view)
+         end)
+    loader:start()
 end
 
 function free()

@@ -35,21 +35,129 @@ cxInt cxViewLuaAppendEvent(lua_State *L)
     CX_LUA_EVENT_APPEND(onResize);
     CX_LUA_EVENT_APPEND(onLayout);
     CX_LUA_EVENT_APPEND(onDirty);
+    CX_LUA_EVENT_APPEND(onUpdate);
     
     CX_LUA_EVENT_END();
+}
+
+static cxInt cxViewLuaAppendAction(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    CX_LUA_GET_ANY(cxAction, action, 2);
+    cxUInt id = cxViewAppendAction(this, action);
+    lua_pushnumber(L, id);
+    return 1;
+}
+
+static cxInt cxViewLuaAppendTimer(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxFloat time = luaL_checknumber(L, 2);
+    cxInt repeat = luaL_checkinteger(L, 3);
+    cxAny timer = cxViewAppendTimer(this, time, repeat);
+    CX_LUA_PUSH_OBJECT(timer);
+    return 1;
+}
+
+static cxInt cxViewLuaSetColor(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxColor4f color = cxLuaGetColor4f(L, 2, this->color);
+    cxViewSetAlpha(this, color.a);
+    cxViewSetColor(this, cxColor3fv(color.r, color.g, color.b));
+    return 0;
+}
+
+static cxInt cxViewLuaGetColor(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxLuaPushColor4f(L, this->color);
+    return 1;
+}
+
+static cxInt cxViewLuaGetPosition(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxLuaPushVec2fv(L, this->position);
+    return 1;
+}
+
+static cxInt cxViewLuaGetSize(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxLuaPushSize2fv(L, this->size);
+    return 1;
+}
+
+static cxInt cxViewLuaGetScale(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxLuaPushVec2fv(L, this->scale);
+    return 1;
+}
+
+static cxInt cxViewLuaGetFixScale(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxLuaPushVec2fv(L, this->fixscale);
+    return 1;
+}
+
+static cxInt cxViewLuaSetSize(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxSize2f size = cxLuaGetSize2fv(L, 2, this->size);
+    cxViewSetSize(this, size);
+    return 0;
+}
+
+static cxInt cxViewLuaSetPosition(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxVec2f pos = cxLuaGetVec2fv(L, 2, this->position);
+    cxViewSetPos(this, pos);
+    return 0;
+}
+
+static cxInt cxViewLuaSetScale(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxVec2f scale = cxLuaGetVec2fv(L, 2, this->scale);
+    cxViewSetScale(this, scale);
+    return 0;
+}
+
+static cxInt cxViewLuaSetFixScale(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxVec2f fixscale = cxLuaGetVec2fv(L, 2, this->fixscale);
+    cxViewSetFixScale(this, fixscale);
+    return 0;
 }
 
 const luaL_Reg cxViewInstanceMethods[] = {
     {"on",cxViewLuaAppendEvent},
     {"append",cxViewLuaAppendView},
+    {"action",cxViewLuaAppendAction},
+    {"timer",cxViewLuaAppendTimer},
+    {"setColor",cxViewLuaSetColor},
+    {"color",cxViewLuaGetColor},
+    {"setPos",cxViewLuaSetPosition},
+    {"position",cxViewLuaGetPosition},
+    {"setSize",cxViewLuaSetSize},
+    {"size",cxViewLuaGetSize},
+    {"setScale",cxViewLuaSetScale},
+    {"scale",cxViewLuaGetScale},
+    {"setFixScale",cxViewLuaSetFixScale},
+    {"fixScale",cxViewLuaGetFixScale},
     CX_LUA_SUPER(cxObject)
 };
 
 static cxInt cxViewLuaMake(lua_State *L)
 {
-    CX_LUA_CREATE_THIS(cxView);
+    CX_LUA_NEW_THIS(cxView);
     if(!lua_istable(L, 1)){
-        CX_LUA_RETURN_THIS(cxView);
+        CX_LUA_RET_THIS(cxView);
     }
     cxVec2f pos = this->position;
     lua_getfield(L, 1, "x");
@@ -81,7 +189,7 @@ static cxInt cxViewLuaMake(lua_State *L)
     cxViewSetSize(this, size);
     
     
-    CX_LUA_RETURN_THIS(cxView);
+    CX_LUA_RET_THIS(cxView);
 }
 
 const luaL_Reg cxViewTypeMethods[] = {

@@ -12,10 +12,11 @@
 
 static cxInt cxWindowLuaPopView(lua_State *L)
 {
+    CX_LUA_DEF_THIS(cxWindow);
     cxInt top = lua_gettop(L);
     cxEventArg args = NULL;
-    if(top >=1 && lua_isstring(L, 1)){
-        args = cxEventArgCreate(lua_tostring(L, 1));
+    if(top >=2 && lua_isstring(L, 2)){
+        args = cxEventArgCreate(lua_tostring(L, 2));
     }
     cxWindowPopView(args);
     return 0;
@@ -23,16 +24,17 @@ static cxInt cxWindowLuaPopView(lua_State *L)
 
 static cxInt cxWindowLuaPushView(lua_State *L)
 {
+    CX_LUA_DEF_THIS(cxWindow);
     cxInt top = lua_gettop(L);
     cxEventArg args = NULL;
-    if(top >=2 && lua_isstring(L, 2)){
-        args = cxEventArgCreate(lua_tostring(L, 2));
+    if(top >=3 && lua_isstring(L, 3)){
+        args = cxEventArgCreate(lua_tostring(L, 3));
     }
     cxAny ret = NULL;
-    if(lua_isstring(L, 1)){
-        ret = cxWindowPushXML(lua_tostring(L, 1));
+    if(lua_isstring(L, 2)){
+        ret = cxWindowPushXML(lua_tostring(L, 2));
     }else{
-        CX_LUA_GET_ANY(cxView, view, 1);
+        CX_LUA_GET_ANY(cxView, view, 2);
         cxWindowPushView(view, args);
         ret = view;
     }
@@ -42,6 +44,7 @@ static cxInt cxWindowLuaPushView(lua_State *L)
 
 static cxInt cxWindowLuaReplaceView(lua_State *L)
 {
+    CX_LUA_DEF_THIS(cxWindow);
     cxInt top = lua_gettop(L);
     cxEventArg args = NULL;
     if(top >=2 && lua_isstring(L, 2)){
@@ -56,30 +59,23 @@ static cxInt cxWindowLuaReplaceView(lua_State *L)
     return 0;
 }
 
-static cxInt cxWindowLuaInstance(lua_State *L)
-{
-    cxEngine engine = cxEngineInstance();
-    CX_LUA_PUSH_OBJECT(engine->window);
-    return 1;
-}
-
 const luaL_Reg cxWindowInstanceMethods[] = {
-
+    {"pushView",cxWindowLuaPushView},
+    {"popView",cxWindowLuaPopView},
+    {"replaceView",cxWindowLuaReplaceView},
     CX_LUA_SUPER(cxView)
 };
 
 const luaL_Reg cxWindowTypeMethods[] = {
-    {"pushView",cxWindowLuaPushView},
-    {"popView",cxWindowLuaPopView},
-    {"replaceView",cxWindowLuaReplaceView},
     {NULL,NULL}
 };
 
 void cxWindowTypeInit()
 {
+    cxEngine engine = cxEngineInstance();
     lua_State *L = CX_LUA_LOAD_TYPE(cxWindow);
-    lua_pushcfunction(L, cxWindowLuaInstance);
-    lua_setglobal(L, "cxWindowInstance");
+    CX_LUA_PUSH_OBJECT(engine->window);
+    lua_setglobal(L, "cxgWindow");
 }
 
 static cxBool cxWindowOnKey(cxAny pview,cxKey *key)

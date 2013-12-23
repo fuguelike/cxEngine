@@ -11,6 +11,36 @@
 #include <core/cxXMLScript.h>
 #include "cxButton.h"
 
+const luaL_Reg cxButtonInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxSprite)
+};
+
+cxInt cxButtonLuaAppendEvent(lua_State *L)
+{
+    cxSpriteLuaAppendEvent(L);
+    CX_LUA_DEF_THIS(cxButton);
+    
+    CX_LUA_EVENT_BEGIN();
+    
+    CX_LUA_EVENT_APPEND(onEnter);
+    CX_LUA_EVENT_APPEND(onLeave);
+    CX_LUA_EVENT_APPEND(onPress);
+    CX_LUA_EVENT_APPEND(onRelease);
+    
+    CX_LUA_EVENT_END();
+}
+
+const luaL_Reg cxButtonTypeMethods[] = {
+    {"on",cxButtonLuaAppendEvent},
+    CX_LUA_TYPE(cxButton)
+};
+
+void cxButtonTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxButton);
+}
+
 cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
 {
     cxButton this = pview;
