@@ -79,14 +79,6 @@ void cxStopEffect(cxAny track)
     alSourceStop(this->source);
 }
 
-CX_OBJECT_DEF(cxPlayer, cxObject)
-    cxArray tracks;
-    cxHash caches;
-    ALCdevice *device;
-    ALCcontext *context;
-    CX_SLOT_ALLOC(onMemory);
-CX_OBJECT_END(cxPlayer)
-
 static cxPlayer instance = NULL;
 
 static cxTrack cxPlayerQueryTrack()

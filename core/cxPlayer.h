@@ -9,18 +9,10 @@
 #ifndef cxEngine_cxPlayer_h
 #define cxEngine_cxPlayer_h
 
-#if (CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID)
-
-#elif (CX_TARGET_PLATFORM == CX_PLATFORM_IOS)
-    #include <OpenAL/al.h>
-    #include <OpenAL/alc.h>
-#else
-    #error "not define target platform"
-#endif
-
 #include "cxBase.h"
 #include "cxArray.h"
 #include "cxString.h"
+#include "cxHash.h"
 
 CX_C_BEGIN
 
@@ -29,6 +21,20 @@ typedef enum {
     cxAudioFileTypeMP3,
     cxAudioFileTypeWAV,
 }cxAudioFileType;
+
+CX_OBJECT_DEF(cxPlayer, cxObject)
+#if (CX_TARGET_PLATFORM == CX_PLATFORM_IOS)
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+    cxArray tracks;
+    cxHash caches;
+    ALCdevice *device;
+    ALCcontext *context;
+    CX_SLOT_ALLOC(onMemory);
+#else
+    cxHash tracks;
+#endif
+CX_OBJECT_END(cxPlayer)
 
 void cxPauseEffect(cxAny this);
 

@@ -2,6 +2,7 @@
 
 --global metatable
 --cxgEngine
+--cxgOpenGL
 --cxgWindow
 
 function init()
@@ -18,6 +19,8 @@ function mainEnd(xml)
 end
 
 function main()
+    
+    io.write(cxgOpenGL.cxShaderPositionColor)
 
     local loader = cxLoading.new()
     

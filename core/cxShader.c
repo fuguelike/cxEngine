@@ -10,6 +10,29 @@
 #include "cxString.h"
 #include "cxShader.h"
 
+static cxInt cxShaderLuaUsing(lua_State *L)
+{
+    cxInt top = lua_gettop(L);
+    CX_LUA_DEF_THIS(cxShader);
+    cxBool atlas = top >= 2 ? lua_toboolean(L, 2) : false;
+    cxShaderUsing(this, atlas);
+    return 0;
+}
+
+const luaL_Reg cxShaderInstanceMethods[] = {
+    {"using",cxShaderLuaUsing},
+    CX_LUA_SUPER(cxObject)
+};
+
+const luaL_Reg cxShaderTypeMethods[] = {
+    CX_LUA_TYPE(cxShader)
+};
+
+void cxShaderTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxShader);
+}
+
 void cxShaderInitPosColorTex(cxAny this)
 {
     cxShader shader = this;

@@ -73,9 +73,9 @@ const luaL_Reg cxWindowTypeMethods[] = {
 void cxWindowTypeInit()
 {
     cxEngine engine = cxEngineInstance();
-    lua_State *L = CX_LUA_LOAD_TYPE(cxWindow);
+    CX_LUA_LOAD_TYPE(cxWindow);
     CX_LUA_PUSH_OBJECT(engine->window);
-    lua_setglobal(L, "cxgWindow");
+    lua_setglobal(gL, "cxgWindow");
 }
 
 static cxBool cxWindowOnKey(cxAny pview,cxKey *key)

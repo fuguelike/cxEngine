@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <core/cxUtil.h>
 #include <streams/cxAssetsStream.h>
+#include <streams/cxAssetsLuaImp.c>
 #include "cxAndroid.h"
 
 static cxBool cxAssetsStreamOpen(cxAny this)

@@ -9,6 +9,20 @@
 #include <libgen.h>
 #include "cxStream.h"
 
+const luaL_Reg cxStreamInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxObject)
+};
+
+const luaL_Reg cxStreamTypeMethods[] = {
+    CX_LUA_TYPE(cxStream)
+};
+
+void cxStreamTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxStream);
+}
+
 CX_OBJECT_INIT(cxStream, cxObject)
 {
 }

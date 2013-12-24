@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <core/cxUtil.h>
 #include "cxAssetsStream.h"
+#include "cxAssetsLuaImp.c"
 
 static cxBool cxAssetsStreamOpen(cxAny this)
 {

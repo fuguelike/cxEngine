@@ -23,6 +23,18 @@ void cxInitTypes()
     cxArrayTypeInit();
     cxListTypeInit();
     
+    cxStreamTypeInit();
+    cxPlayerTypeInit();
+    cxAssetsStreamTypeInit();
+    
+    cxShaderClippingTypeInit();
+    cxShaderDefaultTypeInit();
+    cxShaderAlphaTypeInit();
+    cxShaderPositionColorTypeInit();
+    
+    cxShaderTypeInit();
+    cxOpenGLTypeInit();
+    
     cxActionTypeInit();
     cxActionSetTypeInit();
     cxTimerTypeInit();

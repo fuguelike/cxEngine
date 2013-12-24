@@ -9,6 +9,16 @@
 #ifndef cxEngine_cxInitType_h
 #define cxEngine_cxInitType_h
 
+#include "cxShader.h"
+#include "cxOpenGL.h"
+#include "cxStream.h"
+#include "cxPlayer.h"
+
+#include <shaders/cxShaderAlpha.h>
+#include <shaders/cxShaderDefault.h>
+#include <shaders/cxShaderPositionColor.h>
+#include <shaders/cxShaderClipping.h>
+
 #include <views/cxParticle.h>
 #include <views/cxChipmunk.h>
 #include <views/cxButton.h>

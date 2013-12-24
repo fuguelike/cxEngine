@@ -9,6 +9,7 @@
 #include <core/cxPlayer.h>
 #include <core/cxHash.h>
 #include "cxAndroid.h"
+#include <core/cxPlayerLuaImp.c>
 
 CX_OBJECT_DEF(cxTrack, cxObject)
     cxInt soundId;
@@ -24,10 +25,6 @@ CX_OBJECT_FREE(cxTrack, cxObject)
     CX_RELEASE(this->file);
 }
 CX_OBJECT_TERM(cxTrack, cxObject)
-
-CX_OBJECT_DEF(cxPlayer, cxObject)
-    cxHash tracks;
-CX_OBJECT_END(cxPlayer)
 
 CX_OBJECT_INIT(cxPlayer, cxObject)
 {

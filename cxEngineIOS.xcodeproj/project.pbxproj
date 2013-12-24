@@ -139,6 +139,8 @@
 		83BAB0731835F578004DAEA6 /* cxRunner.c in Sources */ = {isa = PBXBuildFile; fileRef = 83BAB0711835F578004DAEA6 /* cxRunner.c */; };
 		83DF79791859B665007F47C3 /* cxSpline.c in Sources */ = {isa = PBXBuildFile; fileRef = 83DF79771859B665007F47C3 /* cxSpline.c */; };
 		83E51BD41856F759006AD253 /* cxUrlPath.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E51BD21856F759006AD253 /* cxUrlPath.c */; };
+		83EB0B721869B8C900142636 /* cxAssetsLuaImp.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EB0B711869B8C900142636 /* cxAssetsLuaImp.c */; };
+		83EB0B741869B9B800142636 /* cxPlayerLuaImp.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EB0B731869B9B800142636 /* cxPlayerLuaImp.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -418,6 +420,8 @@
 		83DF79781859B665007F47C3 /* cxSpline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxSpline.h; sourceTree = "<group>"; };
 		83E51BD21856F759006AD253 /* cxUrlPath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxUrlPath.c; sourceTree = "<group>"; };
 		83E51BD31856F759006AD253 /* cxUrlPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxUrlPath.h; sourceTree = "<group>"; };
+		83EB0B711869B8C900142636 /* cxAssetsLuaImp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAssetsLuaImp.c; sourceTree = "<group>"; };
+		83EB0B731869B9B800142636 /* cxPlayerLuaImp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxPlayerLuaImp.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -637,6 +641,7 @@
 				8341C57418227DF20045A66F /* cxOpenGL.h */,
 				8341C57518227DF20045A66F /* cxPlayer.c */,
 				8341C57618227DF20045A66F /* cxPlayer.h */,
+				83EB0B731869B9B800142636 /* cxPlayerLuaImp.c */,
 				839103BE1859632A008DF1C7 /* cxRegex.c */,
 				839103BF1859632A008DF1C7 /* cxRegex.h */,
 				8341C57718227DF20045A66F /* cxShader.c */,
@@ -740,6 +745,7 @@
 				8341C5D418227DF20045A66F /* cxMemStream.h */,
 				833E2B9C185F257E004093EF /* cxFileStream.c */,
 				833E2B9D185F257E004093EF /* cxFileStream.h */,
+				83EB0B711869B8C900142636 /* cxAssetsLuaImp.c */,
 			);
 			path = streams;
 			sourceTree = "<group>";
@@ -911,6 +917,7 @@
 				8341C60118227DF20045A66F /* cpDampedSpring.c in Sources */,
 				8341C62518227DF20045A66F /* cxEventItem.c in Sources */,
 				8341C62418227DF20045A66F /* cxEventArg.c in Sources */,
+				83EB0B741869B9B800142636 /* cxPlayerLuaImp.c in Sources */,
 				8341C66418227DF30045A66F /* cxAtlas.c in Sources */,
 				8341C66218227DF30045A66F /* cxTextureTXT.c in Sources */,
 				8341C62718227DF20045A66F /* cxHash.c in Sources */,
@@ -938,6 +945,7 @@
 				8341C5F918227DF20045A66F /* cxMove.c in Sources */,
 				8341C62918227DF20045A66F /* cxIconv.c in Sources */,
 				8341C64B18227DF30045A66F /* matrix.c in Sources */,
+				83EB0B721869B8C900142636 /* cxAssetsLuaImp.c in Sources */,
 				8341C60018227DF20045A66F /* cpDampedRotarySpring.c in Sources */,
 				8341C65B18227DF30045A66F /* cxAssetsStream.c in Sources */,
 				8341C65E18227DF30045A66F /* cxTextureFactory.c in Sources */,

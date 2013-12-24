@@ -8,6 +8,20 @@
 
 #include "cxShaderPositionColor.h"
 
+const luaL_Reg cxShaderPositionColorInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxShader)
+};
+
+const luaL_Reg cxShaderPositionColorTypeMethods[] = {
+    CX_LUA_TYPE(cxShaderPositionColor)
+};
+
+void cxShaderPositionColorTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxShaderPositionColor);
+}
+
 static void cxShaderPositionColorInit(cxAny this)
 {
     cxShaderPositionColor shader = this;
@@ -18,8 +32,7 @@ static void cxShaderPositionColorInit(cxAny this)
 static cxString cxShaderPositionColorGetVertexSource(cxAny this)
 {
     static cxConstChars vertex =
-    GLSL
-    (
+    GLSL(
         attribute highp vec4 aPosition;
         attribute mediump vec4 aColor;
         varying mediump vec4 vColor;
@@ -34,8 +47,7 @@ static cxString cxShaderPositionColorGetVertexSource(cxAny this)
 static cxString cxShaderPositionColorGetFragmentSource(cxAny this)
 {
     static cxConstChars fragment =
-    GLSL
-    (
+    GLSL(
         varying mediump vec4 vColor;
         void main() {
             gl_FragColor = vColor;
