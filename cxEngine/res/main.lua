@@ -10,7 +10,7 @@ function init()
 end
 
 function mainBegin(xml)
-    
+    io.write('begin\n')
 end
 
 function mainEnd(xml)
@@ -18,7 +18,9 @@ function mainEnd(xml)
 end
 
 function main()
+
     local loader = cxLoading.new()
+    
     loader:on('onStart',function(loading)
               local txt = cxLabelTTF.make({font='banana.ttf',size='65',text='Loading...'})
               txt:setColor({r=1.0,g=0.0,b=0.0})
@@ -30,9 +32,10 @@ function main()
               loading:setObject(xml)
          end)
     loader:on('onFinished', function(loading)
-            local view = loading:object()
+            local view = loading:getObject()
             cxgWindow:pushView(view)
          end)
+    
     loader:start()
 end
 

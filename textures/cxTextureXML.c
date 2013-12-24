@@ -22,6 +22,7 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         return ret;
     }
     xmlTextReaderPtr reader = cxXMLReaderForString(data, NULL, NULL);
+    cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, NULL, this);
     if(reader == NULL){
         CX_ERROR("xml reader from memory failed");
         return ret;
@@ -34,7 +35,7 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         if(!ELEMENT_IS_TYPE(TextureAtlas)){
             continue;
         }
-        cxConstChars simagePath = cxXMLAttr("imagePath");
+        cxConstChars simagePath = cxXMLAttr(reader,"imagePath");
         CX_ASSERT(simagePath != NULL, "xml imagePath element miss");
     
         xml->innerTexture = cxTextureCreate(simagePath);
@@ -43,7 +44,7 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         CX_RETAIN(xml->innerTexture);
         
         //for jpg pkm atlas texture
-        xml->super.isAtlas = cxXMLReadBoolAttr(reader, NULL ,"atlas", false);
+        xml->super.isAtlas = cxXMLReadBoolAttr(info,"atlas", false);
         xml->super.size = xml->innerTexture->size;
 
         //load texcoords
@@ -56,13 +57,13 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
                 continue;
             }
             cxTexCoord e = CX_ALLOC(cxTexCoord);
-            cxConstChars sn = cxXMLAttr("n");
-            cxConstChars sr = cxXMLAttr("r");
+            cxConstChars sn = cxXMLAttr(reader,"n");
+            cxConstChars sr = cxXMLAttr(reader,"r");
             e->isRotation = sr != NULL;
-            e->x = cxXMLReadFloatAttr(reader, NULL, "x", 0);
-            e->y = cxXMLReadFloatAttr(reader, NULL, "y", 0);
-            e->w = cxXMLReadFloatAttr(reader, NULL, "w", 0);
-            e->h = cxXMLReadFloatAttr(reader, NULL, "h", 0);
+            e->x = cxXMLReadFloatAttr(info, "x", 0);
+            e->y = cxXMLReadFloatAttr(info, "y", 0);
+            e->w = cxXMLReadFloatAttr(info, "w", 0);
+            e->h = cxXMLReadFloatAttr(info, "h", 0);
             cxHashSet(xml->super.keys, cxHashStrKey(sn), e);
             CX_RELEASE(e);
         }

@@ -9,17 +9,16 @@
 #include <core/cxViewRoot.h>
 #include "cxTable.h"
 
-void cxTableReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
+void cxTableReadAttr(cxReaderAttrInfo *info)
 {
-    cxViewRoot root = rootView;
-    cxViewReadAttr(rootView, mView, reader);
-    cxTable this = mView;
+    cxViewReadAttr(info);
+    cxTable this = info->object;
     //set space
-    cxTableSetSpace(mView, cxXMLReadVec2fAttr(reader, root->functions, "cxTable.space", this->space));
+    cxTableSetSpace(this, cxXMLReadVec2fAttr(info, "cxTable.space", this->space));
     //set type
-    this->grid = cxXMLReadVec2iAttr(reader, root->functions, "cxTable.type", this->grid);
+    this->grid = cxXMLReadVec2iAttr(info, "cxTable.type", this->grid);
     //array hide
-    cxTableArrayHide(mView, cxXMLReadBoolAttr(reader, root->functions, "cxTable.arrayHide", this->arrayHide));
+    cxTableArrayHide(this, cxXMLReadBoolAttr(info, "cxTable.arrayHide", this->arrayHide));
 }
 
 void cxTableSetSpace(cxAny pview,cxVec2f space)

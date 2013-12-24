@@ -22,48 +22,44 @@ const luaL_Reg cxActionSetTypeMethods[] = {
     CX_LUA_TYPE(cxActionSet)
 };
 
+static cxInt cxActionType(lua_State *L)
+{
+    cxNumber num = cxNumberInt(cxActionSetTypeNone);
+    cxConstChars mode = luaL_checkstring(L, 1);
+    if(cxConstCharsEqu(mode, "multiple")){
+        num = cxNumberInt(cxActionSetTypeMultiple);
+    }
+    if(cxConstCharsEqu(mode, "sequence")){
+        num = cxNumberInt(cxActionSetTypeSequence);
+    }
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
 void cxActionSetTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxActionSet);
+    cxEngineRegisteFunc(cxActionType);
 }
 
-static cxNumber cxActionType(cxEventArg arg)
+static void cxActionSetReadAttr(cxReaderAttrInfo *info)
 {
-    CX_ASSERT(arg != NULL, "arg error");
-    cxConstChars mode = cxEventArgToString(arg);
-    if(cxConstCharsEqu(mode, "multiple")){
-        return cxNumberInt(cxActionSetTypeMultiple);
-    }
-    if(cxConstCharsEqu(mode, "sequence")){
-        return cxNumberInt(cxActionSetTypeSequence);
-    }
-    return cxNumberInt(cxActionSetTypeNone);
-}
-
-void cxActionRootTypeInit()
-{
-    cxEngineRegisteTypeFunc(cxActionRootTypeName, "cxActionType", cxActionType);
-}
-
-static void cxActionSetReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
-{
-    cxActionRoot root = rootAction;
-    cxActionReadAttr(rootAction, mAction, reader);
-    cxActionSet this = mAction;
+    cxActionReadAttr(info);
+    cxActionSet this = info->object;
     //get type use cxActionType('sequence') atr func
-    cxActionSetSetType(this,cxXMLReadIntAttr(reader, root->functions, "cxActionSet.type", this->type));
+    cxActionSetSetType(this,cxXMLReadIntAttr(info, "cxActionSet.type", this->type));
     //get sub action
-    while(xmlTextReaderRead(reader)){
-        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
+    while(xmlTextReaderRead(info->reader)){
+        if(xmlTextReaderNodeType(info->reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        cxConstChars temp = cxXMLReadElementName(reader);
-        cxAny action = cxActionRootMakeElement(temp, reader);
-        if(action == NULL){
+        cxConstChars temp = cxXMLReadElementName(info->reader);
+        info->object = cxActionRootMakeElement(temp, info->reader);
+        if(info->object == NULL){
             continue;
         }
-        cxObjectReadAttrRun(action, rootAction, reader);
-        cxActionSetAppend(this, action);
+        cxObjectReadAttrRun(info);
+        cxActionSetAppend(this, info->object);
     }
 }
 

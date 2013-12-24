@@ -30,8 +30,7 @@
         cxView.w = "180"
         cxView.h = "120"
         cxView.left="10"
-        cxView.bottom="10"
-        cxButton.onRelease="appendParticle">
+        cxView.bottom="10">
         <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Append" cxLabelTTF.size="30"/>
     </cxButton>
@@ -40,7 +39,7 @@
         cxView.h = "120"
         cxView.right="10"
         cxView.bottom="10"
-        cxButton.onRelease="cxPopView">
+        cxButton.onRelease="cxEventPopView()">
         <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Return" cxLabelTTF.size="30"/>
     </cxButton>

@@ -42,21 +42,19 @@ xmlTextReaderPtr cxXMLReaderForString(cxString code,xmlTextReaderErrorFunc error
 
 xmlTextReaderPtr cxXMLReaderForScript(cxXMLScript this,xmlTextReaderErrorFunc error,cxAny arg);
 
-cxArray cxXMLReadEvent(cxHash events, cxAny object, cxConstChars name, xmlTextReaderPtr reader);
+cxEventItem cxXMLReadEvent(cxReaderAttrInfo *info, cxConstChars name);
 
 #define ELEMENT_IS_TYPE(t)  (temp != NULL && strcmp(temp, #t) == 0)
 
-#define cxXMLAppendEvent(s,o,t,e)                               \
+#define cxXMLAppendEvent(info,o,t,e)                            \
 do{                                                             \
-    cxArray list = cxXMLReadEvent(s, o, #t"."#e, reader);       \
-    CX_ARRAY_FOREACH(list,ele){                                 \
-        cxEventItem item = cxArrayObject(ele);                  \
+   cxEventItem item = cxXMLReadEvent(info, #t"."#e);            \
+    if(item != NULL){                                           \
         CX_EVENT_APPEND(o->e, item->func,item->arg);            \
     }                                                           \
 }while(0)
 
-cxConstChars cxXMLAttrAuto(xmlTextReaderPtr reader,cxConstChars name);
-#define cxXMLAttr(n)    cxXMLAttrAuto(reader,n)
+cxConstChars cxXMLAttr(xmlTextReaderPtr reader,cxConstChars name);
 
 cxInt cxReadFloats(cxConstChars ptr,cxFloat *values);
 
@@ -68,43 +66,43 @@ cxConstChars cxXMLReadElementName(xmlTextReaderPtr reader);
 
 cxString cxXMLReadString(xmlTextReaderPtr reader);
 
-cxTypes cxXMLReadTypesAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name);
-
 cxString cxXMLReaderReadOuterXml(xmlTextReaderPtr reader);
 
-cxFloat cxXMLReadFloatAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxFloat value);
+cxTypes cxXMLReadTypesAttr(cxReaderAttrInfo *info, cxConstChars name);
 
-cxString cxXMLReadStringAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name);
+cxFloat cxXMLReadFloatAttr(cxReaderAttrInfo *info, cxConstChars name,cxFloat value);
 
-cxAssist4f cxXMLReadAssist4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxAssist4f value);
+cxString cxXMLReadStringAttr(cxReaderAttrInfo *info,cxConstChars name);
 
-cxColor4f cxXMLReadColor4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxColor4f value);
+cxAssist4f cxXMLReadAssist4fAttr(cxReaderAttrInfo *info, cxConstChars name,cxAssist4f value);
 
-cxBox4f cxXMLReadBox4fAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxBox4f value);
+cxColor4f cxXMLReadColor4fAttr(cxReaderAttrInfo *info, cxConstChars name,cxColor4f value);
 
-cxVec2f cxXMLReadVec2fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec2f value);
+cxBox4f cxXMLReadBox4fAttr(cxReaderAttrInfo *info, cxConstChars name,cxBox4f value);
 
-cxSize2f cxXMLReadSize2fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxSize2f value);
+cxVec2f cxXMLReadVec2fAttr(cxReaderAttrInfo *info,cxConstChars name,cxVec2f value);
 
-cxVec3f cxXMLReadVec3fAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec3f value);
+cxSize2f cxXMLReadSize2fAttr(cxReaderAttrInfo *info,cxConstChars name,cxSize2f value);
 
-cxFloatRange cxXMLReadFloatRangeAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxFloatRange value);
+cxVec3f cxXMLReadVec3fAttr(cxReaderAttrInfo *info,cxConstChars name,cxVec3f value);
 
-cxVec2fRange cxXMLReadVec2fRangeAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxVec2fRange value);
+cxFloatRange cxXMLReadFloatRangeAttr(cxReaderAttrInfo *info,cxConstChars name,cxFloatRange value);
 
-cxColor4fRange cxXMLReadColor4fRangeAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxColor4fRange value);
+cxVec2fRange cxXMLReadVec2fRangeAttr(cxReaderAttrInfo *info,cxConstChars name,cxVec2fRange value);
 
-cxBox4i cxXMLReadBox4iAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxBox4i value);
+cxColor4fRange cxXMLReadColor4fRangeAttr(cxReaderAttrInfo *info,cxConstChars name,cxColor4fRange value);
 
-cxVec2i cxXMLReadVec2iAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxVec2i value);
+cxBox4i cxXMLReadBox4iAttr(cxReaderAttrInfo *info, cxConstChars name,cxBox4i value);
 
-cxInt cxXMLReadIntAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxInt value);
+cxVec2i cxXMLReadVec2iAttr(cxReaderAttrInfo *info, cxConstChars name,cxVec2i value);
 
-cxUInt cxXMLReadUIntAttr(xmlTextReaderPtr reader,cxHash functions, cxConstChars name,cxUInt value);
+cxInt cxXMLReadIntAttr(cxReaderAttrInfo *info,cxConstChars name,cxInt value);
 
-cxBool cxXMLReadBoolAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name,cxBool value);
+cxUInt cxXMLReadUIntAttr(cxReaderAttrInfo *info, cxConstChars name,cxUInt value);
 
-cxTextureAttr cxXMLReadTextureAttr(xmlTextReaderPtr reader,cxHash functions,cxConstChars name);
+cxBool cxXMLReadBoolAttr(cxReaderAttrInfo *info,cxConstChars name,cxBool value);
+
+cxTextureAttr cxXMLReadTextureAttr(cxReaderAttrInfo *info,cxConstChars name);
 
 CX_C_END
 

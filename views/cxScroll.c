@@ -13,12 +13,11 @@
 
 #define CX_SCROLL_MOVE_ACTION_ID 100000
 
-void cxScrollReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
+void cxScrollReadAttr(cxReaderAttrInfo *info)
 {
-    cxViewRoot root = rootView;
-    cxViewReadAttr(rootView, mView, reader);
-    cxScroll this = mView;
-    cxConstChars type = cxXMLAttr("cxScroll.type");
+    cxViewReadAttr(info);
+    cxScroll this = info->object;
+    cxConstChars type = cxXMLAttr(info->reader,"cxScroll.type");
     if(cxConstCharsEqu(type, "horizontal")){
         this->type |= cxScrollMoveTypeHorizontal;
     }else if(cxConstCharsEqu(type, "vertical")){
@@ -26,7 +25,7 @@ void cxScrollReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
     }else {
         this->type |= (cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal);
     }
-    this->value = cxXMLReadFloatAttr(reader, root->functions, "cxScroll.value", this->value);
+    this->value = cxXMLReadFloatAttr(info, "cxScroll.value", this->value);
 }
 
 cxView cxScrollContainer(cxAny pview)

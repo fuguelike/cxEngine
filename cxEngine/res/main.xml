@@ -3,16 +3,16 @@
 <!--cxView.fixScale="cxFixScaleW()" cxView.w="640" cxView.h="960""-->
 <cxViewRoot cxView.fill="0,0,0,0"  cxViewRoot.onBegin="mainBegin()" cxViewRoot.onEnd="mainEnd()">
     <cxTable cxView.fill="10,10,10,10" cxTable.space="10,10" cxTable.type="3,0">
-        <cxTemplate url="items.xml?template" title="cxLocalizedText('items.xml?exp')" release="cxPushView('particle.xml')" />
-        <cxTemplate src="buttontemp.xml" title="Action" release="cxPushView('action.xml')" />
-        <cxTemplate src="buttontemp.xml" title="Wav" release="cxPlayEffect({'src':'effect.wav','loop':false})" />
-        <cxTemplate src="buttontemp.xml" title="Mp3" release="cxPlayMusic({'src':'Track02.mp3','loop':false})" />
-        <cxTemplate src="buttontemp.xml" title="Clip" release="cxPushView('clipping.xml')" />
-        <cxTemplate src="buttontemp.xml" title="Scroll" release="cxPushView('scroll.xml')" />
-        <cxTemplate src="buttontemp.xml" title="Animate" release="cxPushView('animate.xml')" />
-        <cxTemplate src="buttontemp.xml" title="Chipmunk" release="cxPushView('chipmunk.xml')" />
-        <cxTemplate src="buttontemp.xml" title="bmpFont" release="cxPushView('bmpfont.xml')" />
+        <cxTemplate url="items.xml?template" title="cxLocalizedText('items.xml?exp')" release="cxEventPushView('particle.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Action" release="cxEventPushView('action.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Wav" release="cxEventEffect({'src':'effect.wav','loop':false})" />
+        <cxTemplate src="buttontemp.xml" title="Mp3" release="cxEventMusic({'src':'Track02.mp3','loop':false})" />
+        <cxTemplate src="buttontemp.xml" title="Clip" release="cxEventPushView('clipping.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Scroll" release="cxEventPushView('scroll.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Animate" release="cxEventPushView('animate.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Chipmunk" release="cxEventPushView('chipmunk.xml')" />
+        <cxTemplate src="buttontemp.xml" title="bmpFont" release="cxEventPushView('bmpfont.xml')" />
         <cxTemplate cond="cxIsAndroid()" src="buttontemp.xml" title="Android" />
-        <cxTemplate cond="cxIsIOS()" src="buttontemp.xml" title="IOS" release="onTest({'id':456})" />
+        <cxTemplate cond="cxIsIOS()" src="buttontemp.xml" title="IOS" />
     </cxTable>
 </cxViewRoot>

@@ -204,7 +204,15 @@ typedef void (*cxObjectFunc)(cxPointer this);
 
 typedef cxAny (*cxAnyFunc)(cxAny object);
 
-typedef void (*cxReadAttrFunc)(cxAny pxml,cxAny pnew, xmlTextReaderPtr reader);
+typedef struct {
+    xmlTextReaderPtr reader;
+    cxAny root;
+    cxAny object;
+}cxReaderAttrInfo;
+
+#define cxReaderAttrInfoMake(reader,root,object)    &(cxReaderAttrInfo){reader,root,object}
+
+typedef void (*cxReadAttrFunc)(cxReaderAttrInfo *info);
 
 cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
 
@@ -216,6 +224,8 @@ void cxObjectRelease(cxAny ptr);
 
 cxAny cxObjectAutoRelease(cxAny ptr);
 
+void cxLuaRegisterTypeFunc(cxConstType type,cxConstChars name, lua_CFunction func);
+
 lua_State *cxLuaLoad(cxConstType name, const luaL_Reg *cMethods,const luaL_Reg *tMethods);
 
 cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type);
@@ -224,11 +234,11 @@ cxBool cxObjectIsType(cxAny pobj,cxConstType type);
 
 cxConstType cxObjectType(cxAny pobj);
 
-void cxObjectReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader);
+void cxObjectReadAttr(cxReaderAttrInfo *info);
 
 void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func);
 
-void cxObjectReadAttrRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader);
+void cxObjectReadAttrRun(cxReaderAttrInfo *info);
 
 cxAny cxObjectRoot(cxAny obj);
 
@@ -264,15 +274,19 @@ cxInt cxObjectGetTag(cxAny obj);
 
 //lua
 
-#define CX_LUA_NEW_PTR      (*(cxAny *)lua_newuserdata(L, sizeof(cxAny)))
+#define CX_LUA_NEW_PTR          (*(cxAny *)lua_newuserdata(gL, sizeof(cxAny)))
 
-#define CX_LUA_GET_PTR(i)   (*(cxAny *)lua_touserdata(L, i))
+#define CX_LUA_GET_PTR(i)       (*(cxAny *)lua_touserdata(gL, i))
 
-#define CX_LUA_SUPER(_t_)   {NULL,NULL},{"super",(cxAny)_t_##InstanceMethods}
+#define CX_LUA_SUPER(_t_)       {NULL,NULL},{"super",(cxAny)_t_##InstanceMethods}
 
-#define CX_LUA_TYPE(_t_)    {"new",_t_##LuaNew},{NULL,NULL}
+#define CX_LUA_PROPERTY(t,n)    {"set"#n,t##LuaSet##n},{"get"#n,t##LuaGet##n},
 
-void cxLuaRegisterMethods(lua_State *L,const luaL_Reg *methods);
+#define CX_LUA_ON_EVENT(t)      {"on",t##LuaAppendEvent},
+
+#define CX_LUA_GC_FUNC(t)       {"__gc",t##LuaGC},
+
+#define CX_LUA_TYPE(_t_)        {"new",_t_##LuaNew},{NULL,NULL}
 
 #define CX_LUA_IS_INT(n)        (((lua_Number)((cxInt)(n))) == (n))
 
@@ -280,21 +294,22 @@ void cxLuaRegisterMethods(lua_State *L,const luaL_Reg *methods);
 
 #define CX_LUA_DEF_THIS(t)      t this = CX_LUA_GET_PTR(1);CX_ASSERT(this != NULL,"get this error")
 
-#define CX_LUA_GET_ANY(t,n,i)   t n = lua_isuserdata(L,i) ? CX_LUA_GET_PTR(i): NULL
+#define CX_LUA_GET_ANY(t,n,i)   t n = lua_isuserdata(gL,i) ? CX_LUA_GET_PTR(i): NULL
 
 #define CX_LUA_NEW_THIS(t)      t this = CX_ALLOC(t);CX_LUA_NEW_PTR = this
 
-#define CX_LUA_RET_THIS(t)      luaL_getmetatable(L, t##TypeName);lua_setmetatable(L, -2);return 1
+#define CX_LUA_RET_THIS(t)      luaL_getmetatable(gL, t##TypeName);lua_setmetatable(gL, -2);return 1
 
-#define CX_LUA_PUSH_OBJECT(o)                           \
-if((o) != NULL) {                                       \
-    CX_LUA_NEW_PTR = o;                                 \
-    CX_RETAIN(o);                                       \
-    luaL_getmetatable(L, cxObjectType(o));              \
-    CX_ASSERT(lua_istable(L, -1), "metatable error");   \
-    lua_setmetatable(L, -2);                            \
-} else {                                                \
-    lua_pushnil(L);                                     \
+#define CX_LUA_PUSH_OBJECT(o)                                       \
+if((o) != NULL) {                                                   \
+    CX_LUA_NEW_PTR = o;                                             \
+    CX_RETAIN(o);                                                   \
+    cxConstType type = cxObjectType(o);                             \
+    luaL_getmetatable(gL, type);                                    \
+    CX_ASSERT(lua_istable(gL, -1), "metatable %s not find",type);   \
+    lua_setmetatable(gL, -2);                                       \
+} else {                                                            \
+    lua_pushnil(gL);                                                \
 }
 
 //object

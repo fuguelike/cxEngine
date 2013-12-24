@@ -59,13 +59,12 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, npos);
 }
 
-static void cxMoveReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxMoveReadAttr(cxReaderAttrInfo *info)
 {
-    cxActionRoot root = rootAction;
-    cxActionReadAttr(rootAction, mAction, reader);
-    cxMove this = mAction;
-    this->endPos.x = cxXMLReadFloatAttr(reader, root->functions, "cxMove.x", this->endPos.x);
-    this->endPos.y = cxXMLReadFloatAttr(reader, root->functions, "cxMove.y", this->endPos.y);
+    cxActionReadAttr(info);
+    cxMove this = info->object;
+    this->endPos.x = cxXMLReadFloatAttr(info, "cxMove.x", this->endPos.x);
+    this->endPos.y = cxXMLReadFloatAttr(info, "cxMove.y", this->endPos.y);
 }
 
 CX_OBJECT_INIT(cxMove, cxAction)

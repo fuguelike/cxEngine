@@ -146,7 +146,8 @@ LOCAL_SRC_FILES += \
     core/cxEngine.c \
     core/cxTexture.c \
     core/cxView.c \
-    core/cxAction.c
+    core/cxAction.c \
+    core/cxInitType.c
 
 LOCAL_SRC_FILES += \
     android/jni/cxAndroid.c \

@@ -44,7 +44,7 @@ cxEventArg cxEventArgWeakRef(cxAny weakRef);
 
 cxAny cxEventArgToWeakRef(cxEventArg this);
 
-cxBool cxEventArgToTable(cxEventArg this);
+cxBool cxEventArgPush(cxEventArg this);
 
 cxBool cxEventArgBool(cxEventArg this,cxConstChars key,cxBool dv);
 

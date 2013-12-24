@@ -10,37 +10,32 @@
 #include <core/cxViewRoot.h>
 #include "cxChipmunk.h"
 
-static cxChipmunkAttr cxChipmunkAttrDefault()
-{
-    cxChipmunkAttr attr = {0};
-    attr.cp = cxVec2fv(0, 0);
-    attr.ctype = 0;
-    attr.e = 0.0f;;
-    attr.group = CP_NO_GROUP;
-    attr.isStatic = false;
-    attr.layer = CP_ALL_LAYERS;
-    attr.m = 1.0f;;
-    attr.shape = cxChipmunkShapeBox;
-    attr.u = 0.0f;
-    return attr;
-}
+const luaL_Reg cxChipmunkInstanceMethods[] = {
+    CX_LUA_SUPER(cxView)
+};
+
+const luaL_Reg cxChipmunkTypeMethods[] = {
+    CX_LUA_TYPE(cxChipmunk)
+};
+
 //cxShapeType('box')
-static cxNumber cxChipmunkShapeType(cxEventArg arg)
+static cxInt cxShapeType(lua_State *L)
 {
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars shape = cxEventArgToString(arg);
+    cxNumber num = cxNumberInt(cxChipmunkShapeBox);
+    cxConstChars shape = luaL_checkstring(L, 1);
     if(cxConstCharsEqu(shape, "box")){
-        return cxNumberInt(cxChipmunkShapeBox);
+        num = cxNumberInt(cxChipmunkShapeBox);
+    }else if(cxConstCharsEqu(shape, "circle")){
+        num = cxNumberInt(cxChipmunkShapeCircle);
     }
-    if(cxConstCharsEqu(shape, "circle")){
-        return cxNumberInt(cxChipmunkShapeCircle);
-    }
-    return cxNumberInt(cxChipmunkShapeBox);
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
 }
 
 void cxChipmunkTypeInit()
 {
-    cxEngineRegisteTypeFunc(cxChipmunkTypeName, "cxShapeType", cxChipmunkShapeType);
+    CX_LUA_LOAD_TYPE(cxChipmunk);
+    cxEngineRegisteFunc(cxShapeType);
 }
 
 static void cxChipmunkUpdate(cxEvent *event)
@@ -56,57 +51,15 @@ void cxChipmunkSetGravity(cxAny pview,cxVec2f gravity)
     cpSpaceSetGravity(this->space, cpv(gravity.x, gravity.y));
 }
 
-static cxChipmunkAttr cxChipmunkGetAttr(cxViewRoot root,xmlTextReaderPtr reader)
+void cxChipmunkReadAttr(cxReaderAttrInfo *info)
 {
-    cxChipmunkAttr attr = cxChipmunkAttrDefault();
-    attr.shape = cxXMLReadIntAttr(reader, root->functions, "cxChipmunk.shape", cxChipmunkShapeBox);
-    attr.cp = cxXMLReadVec2fAttr(reader, root->functions, "cxChipmunk.center", cxVec2fv(0, 0));
-    attr.isStatic = cxXMLReadBoolAttr(reader,root->functions, "cxChipmunk.static", attr.isStatic);
-    attr.m = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.m", attr.m);
-    attr.e = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.e", attr.e);
-    attr.u = cxXMLReadFloatAttr(reader, root->functions, "cxChipmunk.u", attr.u);
-    attr.group = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.group", CP_NO_GROUP);
-    attr.layer = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.layer", CP_ALL_LAYERS);
-    attr.ctype = cxXMLReadUIntAttr(reader,root->functions, "cxChipmunk.ctype", 0);
-    return attr;
-}
-
-void cxChipmunkReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
-{
-    cxViewRoot root = rootView;
-    cxViewReadAttr(rootView, mView, reader);
-    cxChipmunk this = mView;
+    cxViewReadAttr(info);
+    cxChipmunk this = info->object;
     //set space
     cpVect gravity = cpSpaceGetGravity(this->space);
     cxVec2f v = cxVec2fv(gravity.x, gravity.y);
-    v = cxXMLReadVec2fAttr(reader, root->functions, "cxChipmunk.gravity", v);
+    v = cxXMLReadVec2fAttr(info, "cxChipmunk.gravity", v);
     cpSpaceSetGravity(this->space, cpv(v.x, v.y));
-    //load subview
-    cxStack stack = CX_ALLOC(cxStack);
-    cxStackPush(stack, mView);
-    int depth = xmlTextReaderDepth(reader);
-    while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
-        int type = xmlTextReaderNodeType(reader);
-        if(type == XML_READER_TYPE_ELEMENT){
-            cxConstChars temp = cxXMLReadElementName(reader);
-            CX_ASSERT(temp != NULL, "temp read error");
-            cxView cview = cxViewRootLoadSubviewBegin(root, temp, reader);
-            cxAny parent = cxStackTop(stack);
-            if(parent == mView){
-                cxChipmunkAttr attr = cxChipmunkGetAttr(root, reader);
-                cxChipmunkAppend(parent, cview, &attr);
-            }else{
-                cxViewAppend(parent, cview);
-            }
-            if(xmlTextReaderIsEmptyElement(reader)){
-                continue;
-            }
-            cxStackPush(stack, cview);
-        }else if(type == XML_READER_TYPE_END_ELEMENT){
-            cxStackPop(stack);
-        }
-    }
-    CX_RELEASE(stack);
 }
 
 static void cxChipmunkBodyUpdatePosition(cpBody *body, cpFloat dt)

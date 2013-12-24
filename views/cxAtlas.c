@@ -25,18 +25,17 @@ void cxAtlasTypeInit()
     CX_LUA_LOAD_TYPE(cxAtlas);
 }
 
-void cxAtlasReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
+void cxAtlasReadAttr(cxReaderAttrInfo *info)
 {
-    cxViewRoot root = rootView;
-    cxAtlas this = mView;
+    cxAtlas this =info->object;
     //support scale9 mode
-    if(cxXMLHasAttr(reader, "cxAtlas.scale9")){
+    if(cxXMLHasAttr(info->reader, "cxAtlas.scale9")){
         this->scale9.enable = true;
-        this->scale9.box = cxXMLReadBox4fAttr(reader, root->functions, "cxAtlas.scale9", this->scale9.box);
+        this->scale9.box = cxXMLReadBox4fAttr(info, "cxAtlas.scale9", this->scale9.box);
         cxAtlasSetNumber(this, 9);
     }
     //
-    cxSpriteReadAttr(rootView, mView, reader);
+    cxSpriteReadAttr(info);
 }
 
 static void cxAtlasVAODraw(void *pview)

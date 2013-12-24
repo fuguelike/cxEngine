@@ -6,8 +6,47 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <core/cxEventArg.h>
 #include <core/cxActionRoot.h>
 #include "cxTimer.h"
+
+cxInt cxTimerLuaAppendEvent(lua_State *L)
+{
+    cxActionLuaAppendEvent(L);
+    CX_LUA_DEF_THIS(cxTimer);
+    CX_LUA_EVENT_BEGIN();
+    CX_LUA_EVENT_APPEND(onArrive);
+    CX_LUA_EVENT_END();
+}
+
+static cxInt cxTimerLuaGetRepeat(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxTimer);
+    lua_pushinteger(L, this->repeat);
+    return 1;
+}
+
+static cxInt cxTimerLuaSetRepeat(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxTimer);
+    this->repeat = luaL_checkinteger(L, 2);
+    return 1;
+}
+
+const luaL_Reg cxTimerInstanceMethods[] = {
+    CX_LUA_PROPERTY(cxTimer, Repeat)
+    CX_LUA_ON_EVENT(cxTimer)
+    CX_LUA_SUPER(cxAction)
+};
+
+const luaL_Reg cxTimerTypeMethods[] = {
+    CX_LUA_TYPE(cxTimer)
+};
+
+void cxTimerTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxTimer);
+}
 
 static void cxTimerInit(cxAny pav)
 {
@@ -22,13 +61,12 @@ static void cxTimerStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_UNUSED_PARAM(this);
 }
 
-static void cxTimerReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxTimerReadAttr(cxReaderAttrInfo *info)
 {
-    cxActionReadAttr(rootAction, mAction, reader);
-    cxActionRoot root = rootAction;
-    cxTimer this = mAction;
-    this->repeat = cxXMLReadIntAttr(reader, root->functions, "cxTimer.repeat", this->repeat);
-    cxXMLAppendEvent(root->events, this, cxTimer, onArrive);
+    cxActionReadAttr(info);
+    cxTimer this = info->object;
+    this->repeat = cxXMLReadIntAttr(info, "cxTimer.repeat", this->repeat);
+    cxXMLAppendEvent(info, this, cxTimer, onArrive);
 }
 
 static cxBool cxTimerExit(cxAny pav)

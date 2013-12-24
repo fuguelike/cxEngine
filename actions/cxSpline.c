@@ -50,17 +50,16 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, newpos);
 }
 
-static void cxSplineReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxSplineReadAttr(cxReaderAttrInfo *info)
 {
-    cxSpline this = mAction;
-    cxActionRoot root = rootAction;
-    cxActionReadAttr(rootAction, mAction, reader);
-    this->tension = cxXMLReadFloatAttr(reader, root->functions, "cxSpline.tension", this->tension);
-    cxTypes types = cxXMLReadTypesAttr(reader, root->functions, "cxSpline.points");
+    cxActionReadAttr(info);
+    cxSpline this = info->object;    
+    this->tension = cxXMLReadFloatAttr(info, "cxSpline.tension", this->tension);
+    cxTypes types = cxXMLReadTypesAttr(info, "cxSpline.points");
     if(cxTypesIsType(types, cxTypesArray)){
         cxArrayAppends(this->points, types->any);
     }
-    cxXMLAppendEvent(root->events, this, cxSpline, onIndex);
+    cxXMLAppendEvent(info, this, cxSpline, onIndex);
 }
 
 static void cxSplineReset(cxAny pav)

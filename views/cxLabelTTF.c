@@ -75,21 +75,20 @@ void cxLabelTTFTypeInit()
     CX_LUA_LOAD_TYPE(cxLabelTTF);
 }
 
-void cxLabelTTFReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
+void cxLabelTTFReadAttr(cxReaderAttrInfo *info)
 {
-    cxViewRoot root = rootView;
-    cxSpriteReadAttr(rootView, mView, reader);
-    cxLabelTTF this = mView;
+    cxSpriteReadAttr(info);
+    cxLabelTTF this = info->object;
     //set font
-    cxString font = cxXMLReadStringAttr(reader, root->functions, "cxLabelTTF.font");
-    cxLabelTTFSetFont(mView, font);
+    cxString font = cxXMLReadStringAttr(info, "cxLabelTTF.font");
+    cxLabelTTFSetFont(this, font);
     //set text
-    cxString text = cxXMLReadStringAttr(reader, root->functions, "cxLabelTTF.text");
-    cxLabelTTFSetText(mView, text);
+    cxString text = cxXMLReadStringAttr(info, "cxLabelTTF.text");
+    cxLabelTTFSetText(this, text);
     //set fontsize
-    cxLabelTTFSetFontSize(mView, cxXMLReadFloatAttr(reader, root->functions, "cxLabelTTF.size", this->attr.size));
+    cxLabelTTFSetFontSize(this, cxXMLReadFloatAttr(info, "cxLabelTTF.size", this->attr.size));
     //set fontbold
-    cxLabelTTFSetFontBold(mView, cxXMLReadBoolAttr(reader,root->functions, "cxLabelTTF.bold", this->attr.bold));
+    cxLabelTTFSetFontBold(this, cxXMLReadBoolAttr(info, "cxLabelTTF.bold", this->attr.bold));
 }
 
 static void cxLabelTTFUpdate(cxEvent *event)

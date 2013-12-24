@@ -11,6 +11,70 @@
 #include <core/cxViewRoot.h>
 #include "cxLabelBMP.h"
 
+static cxInt cxLabelBMPLuaSetFont(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxLabelBMP);
+    cxConstChars font = luaL_checkstring(L, 2);
+    cxLabelBMPSetFont(this, UTF8(font));
+    return 0;
+}
+
+static cxInt cxLabelBMPLuaSetSize(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxLabelBMP);
+    cxFloat size = luaL_checknumber(L, 2);
+    cxLabelBMPSetSize(this, size);
+    return 0;
+}
+
+static cxInt cxLabelBMPLuaSetText(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxLabelBMP);
+    cxConstChars text = luaL_checkstring(L, 2);
+    cxLabelBMPSetText(this, UTF8(text));
+    return 0;
+}
+
+const luaL_Reg cxLabelBMPInstanceMethods[] = {
+    {"setFont",cxLabelBMPLuaSetFont},
+    {"setSize",cxLabelBMPLuaSetSize},
+    {"setText",cxLabelBMPLuaSetText},
+    CX_LUA_SUPER(cxAtlas)
+};
+
+static cxInt cxLabelBMPLuaMake(lua_State *L)
+{
+    CX_LUA_NEW_THIS(cxLabelBMP);
+    if(lua_istable(L, 1)){
+        lua_getfield(L, 1, "font");
+        if(lua_isstring(L, -1)){
+            cxLabelBMPSetFont(this, UTF8(lua_tostring(L, -1)));
+        }
+        lua_pop(L, 1);
+        lua_getfield(L, 1, "size");
+        if(lua_isnumber(L, -1)){
+            cxLabelBMPSetSize(this, lua_tonumber(L, -1));
+        }
+        lua_pop(L, 1);
+        lua_getfield(L, 1, "text");
+        if(lua_isstring(L, -1)){
+            cxLabelBMPSetText(this, UTF8(lua_tostring(L, -1)));
+        }
+        lua_pop(L, 1);
+    }
+    CX_LUA_RET_THIS(cxLabelBMP);
+}
+
+const luaL_Reg cxLabelBMPTypeMethods[] = {
+    {"make",cxLabelBMPLuaMake},
+    CX_LUA_TYPE(cxLabelBMP)
+};
+
+void cxLabelBMPTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxLabelBMP);
+}
+
 static void cxLabelBMPUpdateText(cxLabelBMP this)
 {
     CX_RETURN(!cxStringLength(this->txt));
@@ -74,19 +138,18 @@ static void cxLabelBMPUpdate(cxEvent *event)
     this->isDirty = false;
 }
 
-void cxLabelBMPReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
+void cxLabelBMPReadAttr(cxReaderAttrInfo *info)
 {
-    cxViewRoot root = rootView;
-    cxSpriteReadAttr(rootView, mView, reader);
-    cxLabelBMP this = mView;
+    cxSpriteReadAttr(info);
+    cxLabelBMP this = info->object;
     //set font
-    cxString font = cxXMLReadStringAttr(reader, root->functions, "cxLabelBMP.font");
+    cxString font = cxXMLReadStringAttr(info, "cxLabelBMP.font");
     cxLabelBMPSetFont(this, font);
     //set text
-    cxString text = cxXMLReadStringAttr(reader, root->functions, "cxLabelBMP.text");
-    cxLabelBMPSetText(mView, text);
+    cxString text = cxXMLReadStringAttr(info, "cxLabelBMP.text");
+    cxLabelBMPSetText(this, text);
     //set fontsize
-    cxLabelBMPSetSize(mView, cxXMLReadFloatAttr(reader, root->functions, "cxLabelBMP.size", this->size));
+    cxLabelBMPSetSize(this, cxXMLReadFloatAttr(info, "cxLabelBMP.size", this->size));
 }
 
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)

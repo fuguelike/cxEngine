@@ -21,39 +21,25 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxViewRoot, cxView)
     cxBool isError;
     cxHash items;
-    cxHash events;
-    cxHash functions;
     cxHash actions;
     CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
     CX_EVENT_ALLOC(onBegin);
     CX_EVENT_ALLOC(onEnd);
 CX_OBJECT_END(cxViewRoot)
 
-cxAny cxViewRootLoadSubviewBegin(cxViewRoot root,cxConstChars temp,xmlTextReaderPtr reader);
-
-void cxViewRootSet(cxAny pview,cxAny cview,xmlTextReaderPtr reader);
+void cxViewRootSet(cxReaderAttrInfo *info);
 
 void cxViewRootSetItem(cxAny pview,cxConstChars key,cxAny item);
 
 cxAny cxViewRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader);
 
-void cxViewRootReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);
-
-void cxViewRootRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func);
-
-void cxViewRootRegisteFunc(cxAny pview,cxConstChars name,cxAny func);
+void cxViewRootReadAttr(cxReaderAttrInfo *info);
 
 cxViewRoot cxViewRootCreate(cxConstChars xml);
 
 void cxViewRootRemove(cxAny pview,cxConstChars key);
 
 cxAny cxViewRootGet(cxAny pview,cxConstChars key);
-
-void cxViewReplaceViewEvent(cxEvent *event);
-
-void cxViewPushViewEvent(cxEvent *event);
-
-void cxViewPopViewEvent(cxEvent *event);
 
 cxBool cxViewRootLoad(cxAny pview,cxConstChars xml);
 

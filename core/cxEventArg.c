@@ -26,10 +26,10 @@ CX_OBJECT_FREE(cxEventArg, cxObject)
 }
 CX_OBJECT_TERM(cxEventArg, cxObject)
 
-cxBool cxEventArgToTable(cxEventArg this)
+cxBool cxEventArgPush(cxEventArg this)
 {
     CX_RETURN(this->json == NULL, false);
-    return cxJsonToTable(this->json);
+    return cxJsonPush(this->json);
 }
 
 cxAny cxEventArgToWeakRef(cxEventArg this)

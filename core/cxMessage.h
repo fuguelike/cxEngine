@@ -22,8 +22,6 @@ CX_OBJECT_END(cxMessage)
 
 void cxMessageDestroy();
 
-void cxMessagePostEvent(cxEvent *event);
-
 void cxMessageRemove(cxAny dst);
 
 void cxMessageRemoveKey(cxAny dst,cxConstChars key);

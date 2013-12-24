@@ -92,7 +92,7 @@ void cxParticleSetType(cxAny pview,cxParticleEmitterType type);
 
 void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode);
 
-void cxParticleReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader);
+void cxParticleReadAttr(cxReaderAttrInfo *info);
 
 void cxParticleStop(cxAny pview);
 

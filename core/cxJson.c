@@ -34,7 +34,7 @@ cxJson cxJsonCreate(cxString json)
     return this;
 }
 
-cxBool cxJsonToTable(cxJson json)
+cxBool cxJsonPush(cxJson json)
 {
     if(json_is_string(CX_JSON_PTR(json))){
         lua_pushstring(gL, cxJsonToString(json));
@@ -53,15 +53,22 @@ cxBool cxJsonToTable(cxJson json)
         cxConstChars key = NULL;
         json_t *value = NULL;
         json_object_foreach(CX_JSON_PTR(json), key, value){
-            lua_pushstring(gL, key);
             if(json_is_integer(value)){
                 lua_pushinteger(gL,(int)json_integer_value(value));
             }else if(json_is_string(value)){
                 lua_pushstring(gL, json_string_value(value));
             }else if(json_is_number(value)){
                 lua_pushnumber(gL, json_number_value(value));
+            }else if(json_is_true(value)){
+                lua_pushboolean(gL, 1);
+            }else if(json_is_false(value)){
+                lua_pushboolean(gL, 0);
+            }else if(json_is_null(value)){
+                lua_pushnil(gL);
+            }else if(json_is_real(value)){
+                lua_pushnumber(gL, json_real_value(value));
             }
-            lua_settable(gL, -3);
+            lua_setfield(gL, -2, key);
         }
         return true;
     }

@@ -25,11 +25,10 @@ CX_C_BEGIN
 
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
+#define cxEngineRegisteFunc(n) lua_pushcfunction(gL, n);lua_setglobal(gL, #n)
+
 CX_OBJECT_DEF(cxEngine, cxObject)
-    cxHash typefuncs;
     cxHash bmpfonts;
-    cxHash events;
-    cxHash functions;
     cxHash scripts;
     cxHash datasets;
     cxHash actions;
@@ -65,18 +64,6 @@ cxBool cxEngineLuaRunString(cxString code);
 cxBool cxEngineLuaRunChars(cxConstChars code);
 
 cxEngine cxEngineInstance();
-
-void cxEngineRegisteTypeFunc(cxConstType type,cxConstChars name,cxAny func);
-
-void cxEngineRegisteFunc(cxConstChars name,cxAny func);
-
-void cxEngineRegisteEvent(cxConstChars name,cxEventFunc func);
-
-cxEventItem cxEngineGetEvent(cxConstChars name);
-
-cxFuncItem cxEngineGetFunc(cxConstChars name);
-
-cxFuncItem cxEngineGetTypeFunc(cxConstType type,cxConstChars name);
 
 void cxEngineRemoveScript(cxConstChars file);
 

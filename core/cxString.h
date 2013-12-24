@@ -61,6 +61,8 @@ cxConstChars cxStringBody(cxString string);
 
 cxString cxStringAllocChars(cxConstChars str);
 
+void cxStringReplace(cxString string,cxChar s1,cxChar s2);
+
 cxString cxStringAttachChars(cxChar *str);
 
 cxString cxStringConstChars(cxConstChars str);

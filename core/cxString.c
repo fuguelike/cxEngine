@@ -128,6 +128,17 @@ cxString cxStringConstChars(cxConstChars str)
     return rv;
 }
 
+void cxStringReplace(cxString string,cxChar find,cxChar rep)
+{
+    cxChar *ptr = (cxChar *)cxStringBody(string);
+    cxInt len = cxStringLength(string);
+    for(cxInt i=0; i < len; i++){
+        if(ptr[i] == find){
+            ptr[i] = rep;
+        }
+    }
+}
+
 cxArray cxStringSplit(cxString string,cxConstChars sp)
 {
     CX_ASSERT(string != NULL, "args error");

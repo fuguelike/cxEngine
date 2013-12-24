@@ -5,7 +5,7 @@
     <cxSprite cxSprite.texture="white.png" cxView.w="300" cxView.h="100" cxView.y="200">
         <cxLabelBMP cxLabelBMP.font="font.fnt" cxLabelBMP.text="数据库" cxView.color="1,0,0" />
     </cxSprite>
-    <cxButton cxView.w = "180" cxView.h = "120" cxView.right="10" cxView.bottom="10" cxButton.onRelease="cxPopView">
+    <cxButton cxView.w = "180" cxView.h = "120" cxView.right="10" cxView.bottom="10" cxButton.onRelease="cxEventPopView()">
         <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Return" cxLabelTTF.size="30"/>
     </cxButton>

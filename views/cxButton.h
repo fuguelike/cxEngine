@@ -27,7 +27,7 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch);
 
 void cxButtonEnable(cxAny pview,cxBool enable);
 
-void cxButtonReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader);
+void cxButtonReadAttr(cxReaderAttrInfo *info);
 
 CX_C_END
 

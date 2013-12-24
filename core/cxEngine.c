@@ -8,21 +8,9 @@
 
 #include <kazmath/matrix.h>
 #include <streams/cxAssetsStream.h>
-#include <core/cxActionRoot.h>
 #include <socket/cxEventBase.h>
-
-#include <views/cxParticle.h>
-#include <views/cxChipmunk.h>
-#include <views/cxButton.h>
-#include <views/cxLoading.h>
-#include <views/cxLabelTTF.h>
-
-#include <actions/cxActionSet.h>
-#include <actions/cxMove.h>
-#include <actions/cxFade.h>
-#include <actions/cxJump.h>
-#include <actions/cxRotate.h>
-
+#include "cxActionRoot.h"
+#include "cxInitType.h"
 #include "cxViewRoot.h"
 #include "cxEngine.h"
 #include "cxAutoPool.h"
@@ -31,8 +19,6 @@
 #include "cxHashRoot.h"
 #include "cxDB.h"
 
-
-lua_State *gL = NULL;
 static cxEngine instance = NULL;
 static cxBool isExit = false;
 
@@ -298,13 +284,10 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     
     this->window    = CX_ALLOC(cxWindow);
     this->scripts   = CX_ALLOC(cxHash);
-    this->events    = CX_ALLOC(cxHash);
     this->datasets  = CX_ALLOC(cxHash);
     this->actions   = CX_ALLOC(cxHash);
     this->dbenvs    = CX_ALLOC(cxHash);
     this->bmpfonts  = CX_ALLOC(cxHash);
-    this->functions = CX_ALLOC(cxHash);
-    this->typefuncs = CX_ALLOC(cxHash);
     
     gL = lua_newstate(cxEngineLuaAllocFunc, this);
     CX_ASSERT(gL != NULL, "new lua state error");
@@ -316,13 +299,10 @@ CX_OBJECT_FREE(cxEngine, cxObject)
 {
     lua_close(gL);
     
-    CX_RELEASE(this->typefuncs);
-    CX_RELEASE(this->functions);
     CX_RELEASE(this->bmpfonts);
     CX_RELEASE(this->actions);
     CX_RELEASE(this->lang);
     CX_RELEASE(this->datasets);
-    CX_RELEASE(this->events);
     CX_RELEASE(this->scripts);
     CX_RELEASE(this->dbenvs);
     
@@ -386,213 +366,9 @@ void cxEngineDestroy()
     }
 }
 
-void cxEngineRegisteTypeFunc(cxConstType type,cxConstChars name,cxAny func)
-{
-    CX_ASSERT(name != NULL || func == NULL || type == NULL, "args error");
-    cxEngine this = cxEngineInstance();
-    cxHash typeFuncs = cxHashGet(this->typefuncs, cxHashStrKey(type));
-    if(typeFuncs == NULL){
-        typeFuncs = CX_ALLOC(cxHash);
-        cxHashSet(this->typefuncs, cxHashStrKey(type), typeFuncs);
-        CX_RELEASE(typeFuncs);
-    }
-    cxFuncItem item = cxHashGet(typeFuncs, cxHashStrKey(name));
-    CX_ASSERT(item == NULL, "type %s.%s function registered",type,name);
-    item = CX_ALLOC(cxFuncItem);
-    item->func = func;
-    cxHashSet(typeFuncs, cxHashStrKey(name), item);
-    CX_RELEASE(item);
-}
-
-void cxEngineRegisteFunc(cxConstChars name,cxAny func)
-{
-    cxEngine this = cxEngineInstance();
-    CX_ASSERT(name != NULL, "args error");
-    if(func == NULL){
-        cxHashDel(this->functions, cxHashStrKey(name));
-        return;
-    }
-    cxFuncItem item = cxHashGet(this->functions, cxHashStrKey(name));
-    CX_ASSERT(item == NULL, "name %s function registered",name);
-    item = CX_ALLOC(cxFuncItem);
-    item->func = func;
-    cxHashSet(this->functions, cxHashStrKey(name), item);
-    CX_RELEASE(item);
-}
-
-void cxEngineRegisteEvent(cxConstChars name,cxEventFunc func)
-{
-    cxEngine this = cxEngineInstance();
-    if(func == NULL){
-        cxHashDel(this->events, cxHashStrKey(name));
-        return;
-    }
-    cxEventItem event = cxHashGet(this->events, cxHashStrKey(name));
-    CX_ASSERT(event == NULL, "name %s event registered",name);
-    event = CX_ALLOC(cxEventItem);
-    event->func = func;
-    cxHashSet(this->events, cxHashStrKey(name), event);
-    CX_RELEASE(event);
-}
-
-cxEventItem cxEngineGetEvent(cxConstChars name)
-{
-    cxEngine this = cxEngineInstance();
-    return cxHashGet(this->events, cxHashStrKey(name));
-}
-
-cxFuncItem cxEngineGetFunc(cxConstChars name)
-{
-    cxEngine this = cxEngineInstance();
-    return cxHashGet(this->functions, cxHashStrKey(name));
-}
-
-cxFuncItem cxEngineGetTypeFunc(cxConstType type,cxConstChars name)
-{
-    cxEngine this = cxEngineInstance();
-    cxHash typeFuncs = cxHashGet(this->typefuncs, cxHashStrKey(type));
-    CX_RETURN(typeFuncs == NULL, NULL);
-    return cxHashGet(typeFuncs, cxHashStrKey(name));
-}
-
-//public xml attr function
-
-static cxString cxEngineLocalizedText(cxEventArg arg)
-{
-    cxEngine this = cxEngineInstance();
-    CX_ASSERT(arg != NULL, "args error");
-    
-    cxConstChars url = cxEventArgToString(arg);
-    CX_ASSERT(url != NULL, "args error");
-    cxUrlPath path = cxUrlPathParse(url);
-    
-    cxTypes langTypes= cxEngineDataSet("appConfig.xml?lang");
-    CX_ASSERT(langTypes != NULL, "appConfig.xml must set lang filed");
-    cxString dir = cxHashGet(langTypes->any, cxHashStrKey(cxStringBody(this->lang)));
-    if(dir == NULL){
-        dir = cxHashFirst(langTypes->any);
-    }
-    CX_ASSERT(dir != NULL, "get lang dir error");
-    cxConstChars file = CX_CONST_STRING("%s/%s",cxStringBody(dir),path->path);
-
-    cxTypes types = cxEngineDataSet(CX_CONST_STRING("%s?%s",file,path->key));
-    CX_RETURN(types == NULL, NULL);
-    
-    CX_ASSERT(cxTypesIsType(types, cxTypesString), "must is cxTypesString type");
-    return types->any;
-}
-
-static cxString cxEngineDataString(cxEventArg arg)
-{
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars url = cxEventArgToString(arg);
-    CX_ASSERT(url != NULL, "args error");
-    cxTypes types = cxEngineDataSet(url);
-    return types != NULL ? types->any : NULL;
-}
-
-static cxNumber cxEngineDataNumber(cxEventArg arg)
-{
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars url = cxEventArgToString(arg);
-    CX_ASSERT(url != NULL, "args error");
-    cxTypes types = cxEngineDataSet(url);
-    CX_ASSERT(cxTypesIsType(types, cxTypesNumber),"type error");
-    return types->any;
-}
-
-static cxNumber cxEngineRelativeWidth(cxEventArg arg)
-{
-    CX_ASSERT(arg != NULL, "args error");
-    cxEngine engine = cxEngineInstance();
-    cxFloat v = cxEventArgToDouble(arg, 1.0f);
-    return cxNumberFloat(v * engine->winsize.w);
-}
-
-static cxNumber cxEngineRelativeHeight(cxEventArg arg)
-{
-    CX_ASSERT(arg != NULL, "args error");
-    cxEngine engine = cxEngineInstance();
-    cxFloat v = cxEventArgToDouble(arg, 1.0f);
-    return cxNumberFloat(v * engine->winsize.h);
-}
-
-static cxNumber cxEngineBinNumber(cxEventArg arg)
-{
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars str = cxEventArgToString(arg);
-    CX_ASSERT(str != NULL, "args is string ps:'100010'");
-    cxUInt v = cxBinaryToUInt(str);
-    return cxNumberUInt(v);
-}
-
-static cxNumber cxEngineHexNumber(cxEventArg arg)
-{
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars str = cxEventArgToString(arg);
-    CX_ASSERT(str != NULL, "args is string ps:'100010'");
-    cxUInt v = cxHexToUInt(str);
-    return cxNumberUInt(v);
-}
-
-static cxTextureAttr cxTextureCreateForXML(cxEventArg arg)
-{
-    cxTextureAttr rv = CX_CREATE(cxTextureAttr);
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars str = cxEventArgToString(arg);
-    CX_ASSERT(str != NULL, "string null");
-    cxUrlPath path = cxUrlPathParse(str);
-    if(path->count == 0){
-        return NULL;
-    }
-    cxTexture texture = NULL;
-    if(path->count > 0){
-        texture = cxTextureCreate(path->path);
-        rv->size = texture->size;
-        CX_RETAIN_SWAP(rv->texture, texture);
-    }
-    if(path->count > 1 && texture != NULL){
-        rv->box = cxTextureBox(texture, path->key);
-        rv->size = cxTextureSize(texture, path->key);
-    }
-    return rv;
-}
-
-static cxNumber cxFixScaleByWidth(cxEventArg arg)
-{
-    CX_ASSERT(arg != NULL, "args error");
-    cxEngine engine = cxEngineInstance();
-    return cxNumberVec2f(cxVec2fv(engine->scale.x, engine->scale.x));
-}
-
-static cxNumber cxFixScaleByHeight(cxEventArg arg)
-{
-    CX_ASSERT(arg != NULL, "args error");
-    cxEngine engine = cxEngineInstance();
-    return cxNumberVec2f(cxVec2fv(engine->scale.y, engine->scale.y));
-}
-
-static cxTypes cxDataSetTypes(cxEventArg arg)
-{
-    CX_ASSERT(arg != NULL, "args error");
-    cxConstChars url = cxEventArgToString(arg);
-    CX_ASSERT(url != NULL, "args error");
-    return cxEngineDataSet(url);
-}
-
 cxInt cxEnginePlatform()
 {
     return CX_TARGET_PLATFORM;
-}
-
-static cxNumber cxEngineIsAndroid(cxEventArg arg)
-{
-    return cxNumberBool(CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID);
-}
-
-static cxNumber cxEngineIsIOS(cxEventArg arg)
-{
-    return cxNumberBool(CX_TARGET_PLATFORM == CX_PLATFORM_IOS);
 }
 
 cxString cxEngineGetLuaScript(cxConstChars file)
@@ -715,95 +491,397 @@ cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
     return (ret || cxViewTouch(this->window, &this->touch));
 }
 
+static cxInt cxLocalizedText(lua_State *L)
+{
+    cxEngine this = cxEngineInstance();
+    cxConstChars url = luaL_checkstring(L, 1);
+    CX_ASSERT(url != NULL, "args error");
+    cxUrlPath path = cxUrlPathParse(url);
+    
+    cxTypes langTypes= cxEngineDataSet("appConfig.xml?lang");
+    CX_ASSERT(langTypes != NULL, "appConfig.xml must set lang filed");
+    cxString dir = cxHashGet(langTypes->any, cxHashStrKey(cxStringBody(this->lang)));
+    if(dir == NULL){
+        dir = cxHashFirst(langTypes->any);
+    }
+    CX_ASSERT(dir != NULL, "get lang dir error");
+    cxConstChars file = CX_CONST_STRING("%s/%s",cxStringBody(dir),path->path);
+    
+    cxTypes types = cxEngineDataSet(CX_CONST_STRING("%s?%s",file,path->key));
+    CX_RETURN(types == NULL, 0);
+    
+    CX_ASSERT(cxTypesIsType(types, cxTypesString), "must is cxTypesString type");
+    
+    CX_LUA_PUSH_OBJECT(types->any);
+    return 1;
+}
+
+static cxInt cxEventAction(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxObject);
+    cxConstChars src = NULL;
+    cxConstChars viewId = NULL;
+    cxBool cache = false;
+    cxConstChars curve = NULL;
+    cxFloat delay = 0;
+    //
+    lua_getfield(L, 2, "delay");
+    if(lua_isnumber(L, -1)){
+        delay = lua_tonumber(L, -1);
+    }
+    lua_pop(L,1);
+    //
+    lua_getfield(L, 2, "src");
+    if(lua_isstring(L, -1)){
+        src = lua_tostring(L, -1);
+    }
+    lua_pop(L, 1);
+    CX_RETURN(src == NULL, 0);
+    //
+    lua_getfield(L, 2, "curve");
+    if(lua_isstring(L, -1)){
+        curve = lua_tostring(L, -1);
+    }
+    lua_pop(L, 1);
+    //
+    lua_getfield(L, 2, "view");
+    if(lua_isstring(L, -1)){
+        viewId = lua_tostring(L, -1);
+    }
+    lua_pop(L, 1);
+    //
+    lua_getfield(L, 2, "cache");
+    if(lua_isboolean(L, -1)){
+        cache = lua_toboolean(L, -1);
+    }
+    lua_pop(L, 1);
+    //get view by id and cxBase
+    cxAny view = NULL;
+    if(this->cxBase == cxBaseTypeAction){
+        view = cxActionView(this);
+    }else if(this->cxBase == cxBaseTypeView){
+        view = this;
+    }else{
+        CX_WARN("base view and action can use this event");
+        return 0;
+    }
+    CX_ASSERT(view != NULL, "this event's sender must base cxAction and cxView");
+    if(viewId != NULL){
+        view = cxViewRootGet(view, viewId);
+        CX_RETURN(view == NULL, 0);
+    }
+    //get action
+    cxAny action = NULL;
+    cxBool fromcache =  false;
+    if(cache){
+        action = cxViewGetCache(view, src);
+        fromcache = (action != NULL);
+    }
+    if(action == NULL){
+        action = cxActionRootGet(src);
+    }
+    CX_RETURN(action == NULL, 0);
+    if(!fromcache && cache){
+        cxViewSetCache(view, src, action);
+    }
+    if(fromcache){
+        cxActionReset(action);
+    }
+    //set action corve
+    cxCurveItem curveitem = cxCurveGet(curve);
+    if(curveitem != NULL){
+        cxActionSetCurve(action, curveitem->func);
+    }
+    //delay
+    if(delay > 0){
+        cxActionSetDelay(action, delay);
+    }
+    cxViewAppendAction(view, action);
+    return 0;
+}
+
+static cxInt cxEventEffect(lua_State *L)
+{
+    cxConstChars src = NULL;
+    cxBool loop = false;
+    //
+    lua_getfield(L, 2, "loop");
+    if(lua_isboolean(L, -1)){
+        loop = lua_toboolean(L, -1);
+    }
+    lua_pop(L,1);
+    //
+    lua_getfield(L, 2, "src");
+    if(lua_isstring(L, -1)){
+        src = lua_tostring(L, -1);
+    }
+    lua_pop(L,1);
+    cxPlayEffect(src,loop);
+    return 0;
+}
+
+static cxInt cxEventMusic(lua_State *L)
+{
+    cxConstChars src = NULL;
+    cxBool loop = false;
+    //
+    lua_getfield(L, 2, "loop");
+    if(lua_isboolean(L, -1)){
+        loop = lua_toboolean(L, -1);
+    }
+    lua_pop(L,1);
+    //
+    lua_getfield(L, 2, "src");
+    if(lua_isstring(L, -1)){
+        src = lua_tostring(L, -1);
+    }
+    lua_pop(L,1);
+    cxPlayMusic(src, loop);
+    return 0;
+}
+
+static cxInt cxEventLogger(lua_State *L)
+{
+    cxConstChars msg = luaL_checkstring(L, 2);
+    CX_LOGGER("%s",msg);
+    return 0;
+}
+
+static cxInt cxEventReplaceView(lua_State *L)
+{
+    cxConstChars url = luaL_checkstring(L, 2);
+    cxViewRoot view = cxViewRootCreate(url);
+    CX_ASSERT(view != NULL, "create xml view %s falied ",url);
+    cxWindowReplaceView(view,NULL);
+    return 0;
+}
+
+static cxInt cxEventPushView(lua_State *L)
+{
+    cxConstChars url = luaL_checkstring(L, 2);
+    cxViewRoot view = cxViewRootCreate(url);
+    CX_ASSERT(view != NULL, "create xml view %s falied ",url);
+    cxWindowPushView(view,NULL);
+    return 0;
+}
+
+static cxInt cxEventPopView(lua_State *L)
+{
+    cxWindowPopView(NULL);
+    return 0;
+}
+
+static cxInt cxEventMessagePost(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxObject);
+    cxConstChars skey = luaL_checkstring(L, 2);
+    cxMessagePost(skey, this);
+    return 0;
+}
+
+static cxInt cxEventSetTexture(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxConstChars url = NULL;
+    cxConstChars viewid = NULL;
+    cxBool uts = false;
+    cxBool cached = true;
+    lua_getfield(L, 2, "src");
+    if(lua_isstring(L, -1)){
+        url = lua_tostring(L, -1);
+    }
+    lua_pop(L,1);
+    lua_getfield(L, 2, "view");
+    if(lua_isstring(L, -1)){
+        viewid = lua_tostring(L, -1);
+    }
+    lua_pop(L,1);
+    lua_getfield(L, 2, "useTexSize");
+    if(lua_isboolean(L, -1)){
+        uts = lua_toboolean(L, -1);
+    }
+    lua_pop(L,1);
+    lua_getfield(L, 2, "cached");
+    if(lua_isboolean(L, -1)){
+        cached = lua_toboolean(L, -1);
+    }
+    lua_pop(L,1);
+    if(viewid == NULL){
+        return 0;
+    }
+    cxView pview = cxViewRootGet(this, viewid);
+    if(pview == NULL){
+        return 0;
+    }
+    //use texture size
+    cxSpriteSetTextureURL(pview, url, uts, cached);
+    return 0;
+}
+
+static cxInt cxEventSetView(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxView);
+    cxConstChars viewid = NULL;
+    lua_getfield(L, 2, "view");
+    if(lua_isstring(L, -1)){
+        viewid = lua_tostring(L, -1);
+    }
+    lua_pop(L, 1);
+    cxView pview = cxViewRootGet(this, viewid);
+    CX_RETURN(pview == NULL, 0);
+    
+    lua_getfield(L, 2, "scale");
+    if(lua_isstring(L, -1)){
+        cxVec2f vscale = pview->scale;
+        cxReadFloats(lua_tostring(L, -1), &vscale.x);
+        cxViewSetScale(pview, vscale);
+    }
+    lua_pop(L, 1);
+    
+    lua_getfield(L, 2, "size");
+    if(lua_isstring(L, -1)){
+        cxSize2f vsize = pview->size;
+        cxReadFloats(lua_tostring(L, -1), &vsize.w);
+        cxViewSetSize(pview, vsize);
+    }
+    lua_pop(L, 1);
+    
+    lua_getfield(L, 2, "position");
+    if(lua_isstring(L, -1)){
+        cxVec2f vposition = pview->position;
+        cxReadFloats(lua_tostring(L, -1), &vposition.x);
+        cxViewSetPos(pview, vposition);
+    }
+    lua_pop(L, 1);
+
+    lua_getfield(L, 2, "degress");
+    if(lua_isnumber(L, -1)){
+        cxViewSetDegrees(pview, lua_tonumber(L, -1));
+    }
+    lua_pop(L, 1);
+    
+    lua_getfield(L, 2, "anchor");
+    if(lua_isstring(L, -1)){
+        cxVec2f vanchor = pview->anchor;
+        cxReadFloats(lua_tostring(L, -1), &vanchor.x);
+        cxViewSetAnchor(pview, vanchor);
+    }
+    lua_pop(L, 1);
+    return 0;
+}
+
+static cxInt cxDataString(lua_State *L)
+{
+    cxConstChars url = luaL_checkstring(L, 1);
+    cxTypes types = cxEngineDataSet(url);
+    if(types == NULL || !cxObjectIsType(types->any, cxStringTypeName)){
+        lua_pushnil(L);
+    }else{
+        CX_LUA_PUSH_OBJECT(types->any);
+    }
+    return 1;
+}
+
+static cxInt cxRelativeW(lua_State *L)
+{
+    cxEngine engine = cxEngineInstance();
+    cxFloat v = luaL_checknumber(L, 1);
+    cxNumber num = cxNumberFloat(v * engine->winsize.w);
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
+static cxInt cxRelativeH(lua_State *L)
+{
+    cxEngine engine = cxEngineInstance();
+    cxFloat v = luaL_checknumber(L, 1);
+    cxNumber num = cxNumberFloat(v * engine->winsize.h);
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
+static cxInt cxBinNumber(lua_State *L)
+{
+    cxConstChars str = luaL_checkstring(L, 1);
+    cxUInt v = cxBinaryToUInt(str);
+    cxNumber num = cxNumberUInt(v);
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
+static cxInt cxHexNumber(lua_State *L)
+{
+    cxConstChars str = luaL_checkstring(L, 1);
+    cxUInt v = cxHexToUInt(str);
+    cxNumber num = cxNumberUInt(v);
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
+static cxInt cxCreateTexture(lua_State *L)
+{
+    cxTextureAttr rv = CX_CREATE(cxTextureAttr);
+    cxConstChars str = luaL_checkstring(L, 1);
+    cxUrlPath path = cxUrlPathParse(str);
+    if(path->count == 0){
+        lua_pushnil(L);
+        return 1;
+    }
+    cxTexture texture = NULL;
+    if(path->count > 0){
+        texture = cxTextureCreate(path->path);
+        rv->size = texture->size;
+        CX_RETAIN_SWAP(rv->texture, texture);
+    }
+    if(path->count > 1 && texture != NULL){
+        rv->box = cxTextureBox(texture, path->key);
+        rv->size = cxTextureSize(texture, path->key);
+    }
+    CX_LUA_PUSH_OBJECT(rv);
+    return 1;
+}
+
+static cxInt cxFixScaleW(lua_State *L)
+{
+    cxEngine engine = cxEngineInstance();
+    cxNumber num = cxNumberVec2f(cxVec2fv(engine->scale.x, engine->scale.x));
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
+static cxInt cxFixScaleH(lua_State *L)
+{
+    cxEngine engine = cxEngineInstance();
+    cxNumber num = cxNumberVec2f(cxVec2fv(engine->scale.y, engine->scale.y));
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
 void cxEngineSystemInit()
 {
-    //cxActionRun({'src':'actions.xml?btnEnter','view':'id','cache':true, 'curve':'ExpOut', 'delay':0.3})
-    cxEngineRegisteEvent("cxActionRun", cxViewRunActionEvent);
-    //cxPlayEffect({'src':'aa.wav','loop':true})
-    cxEngineRegisteEvent("cxPlayEffect", cxPlaySoundEvent);
-    //cxPlayMusic({'src':'aa.mp3','loop':true})
-    cxEngineRegisteEvent("cxPlayMusic", cxPlayMusicEvent);
-    //cxLogger('msg')
-    cxEngineRegisteEvent("cxLogger", cxPrintMessageEvent);
-    //cxPushView('url')
-    cxEngineRegisteEvent("cxPushView", cxViewPushViewEvent);
-    //cxPopView
-    cxEngineRegisteEvent("cxPopView", cxViewPopViewEvent);
-    //cxReplaceView('url')
-    cxEngineRegisteEvent("cxReplaceView", cxViewReplaceViewEvent);
-    //cxPost('eventkey')
-    cxEngineRegisteEvent("cxPost", cxMessagePostEvent);
-    //use in ->cxSprite up
-    cxEngineRegisteEvent("cxSetTexture", cxSpriteSetTextureEvent);
-    //use in ->cxView up
-    cxEngineRegisteEvent("cxSetView", cxViewSetViewEvent);
-    
-    //cxLocalizedText('items.xml?exp') -> cxString get en/items.xml?exp
-    cxEngineRegisteFunc("cxLocalizedText", cxEngineLocalizedText);
-    
-    //cxDataString('items.xml?exp')  -> cxString
-    cxEngineRegisteFunc("cxDataString", cxEngineDataString);
-    
-    //cxDataTypes('items.xml?spline')
-    cxEngineRegisteFunc("cxDataTypes", cxDataSetTypes);
-    
-    //cxDataInt('items,xml?int') -> cxNumber
-    cxEngineRegisteFunc("cxDataNumber", cxEngineDataNumber);
-    
-    //relative screen width and height value -> cxNumber
-    //cxRelativeW(1.0)
-    cxEngineRegisteFunc("cxRelativeW", cxEngineRelativeWidth);
-    cxEngineRegisteFunc("cxRelativeH", cxEngineRelativeHeight);
-    
-    //fixScale by window.scale.x or scale.y
-    cxEngineRegisteFunc("cxFixScaleW", cxFixScaleByWidth);
-    cxEngineRegisteFunc("cxFixScaleH", cxFixScaleByHeight);
-    
-    //cxBinNumber('110111') -> cxNumber
-    cxEngineRegisteFunc("cxBinNumber", cxEngineBinNumber);
-    
-    //cxHexNumber('ffbb00') -> cxNumber
-    cxEngineRegisteFunc("cxHexNumber", cxEngineHexNumber);
-    
-    //cxTextureCreate('candy.xml?red.png')
-    cxEngineRegisteFunc("cxTextureCreate", cxTextureCreateForXML);
-    
-    //platform cond attr func,invoke when prepare xml
-    cxEngineRegisteFunc("cxIsAndroid", cxEngineIsAndroid);
-    cxEngineRegisteFunc("cxIsIOS", cxEngineIsIOS);
-    
-    cxObjectTypeInit();
-    cxNumberTypeInit();
-    cxStringTypeInit();
-    cxUtilTypeInit();
-    
-    cxHashTypeInit();
-    cxArrayTypeInit();
-    cxListTypeInit();
-    
-    cxActionTypeInit();
-    cxMoveTypeInit();
-    cxActionSetTypeInit();
-    cxFadeTypeInit();
-    cxJumpTypeInit();
-    cxRotateTypeInit();
-    
-    cxViewTypeInit();
-    cxWindowTypeInit();
-    cxSpriteTypeInit();
-    cxViewRootTypeInit();
-    cxAtlasTypeInit();
-    cxButtonTypeInit();
-    cxLoadingTypeInit();
-    cxLabelTTFTypeInit();
-    
-    cxEngineTypeInit();
-
-    cxParticleTypeInit();
-
-    cxActionRootTypeInit();
-
-    cxChipmunkTypeInit();
+    //global func
+    cxEngineRegisteFunc(cxLocalizedText);
+    cxEngineRegisteFunc(cxDataString);
+    cxEngineRegisteFunc(cxRelativeW);
+    cxEngineRegisteFunc(cxRelativeH);
+    cxEngineRegisteFunc(cxBinNumber);
+    cxEngineRegisteFunc(cxHexNumber);
+    cxEngineRegisteFunc(cxCreateTexture);
+    cxEngineRegisteFunc(cxFixScaleW);
+    cxEngineRegisteFunc(cxFixScaleH);
+    //global event
+    cxEngineRegisteFunc(cxEventAction);
+    cxEngineRegisteFunc(cxEventEffect);
+    cxEngineRegisteFunc(cxEventMusic);
+    cxEngineRegisteFunc(cxEventLogger);
+    cxEngineRegisteFunc(cxEventReplaceView);
+    cxEngineRegisteFunc(cxEventPushView);
+    cxEngineRegisteFunc(cxEventPopView);
+    cxEngineRegisteFunc(cxEventMessagePost);
+    cxEngineRegisteFunc(cxEventSetTexture);
+    cxEngineRegisteFunc(cxEventSetView);
+    //type
+    cxInitTypes();
 }
 
 

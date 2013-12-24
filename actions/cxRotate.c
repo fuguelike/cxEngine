@@ -39,13 +39,13 @@ static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAngle(this->super.view, angle);
 }
 
-static void cxRotateReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxRotateReadAttr(cxReaderAttrInfo *info)
 {
-    cxActionReadAttr(rootAction, mAction, reader);
-    cxRotate this = mAction;
-    cxConstChars sx = cxXMLAttr("cxRotate.x");
-    cxConstChars sy = cxXMLAttr("cxRotate.y");
-    cxConstChars sz = cxXMLAttr("cxRotate.z");
+    cxActionReadAttr(info);
+    cxRotate this = info->object;
+    cxConstChars sx = cxXMLAttr(info->reader,"cxRotate.x");
+    cxConstChars sy = cxXMLAttr(info->reader,"cxRotate.y");
+    cxConstChars sz = cxXMLAttr(info->reader,"cxRotate.z");
     if(sx != NULL){
         this->raxis = cxVec3fv(1.0f, 0.0f, 0.0f);
         this->newAngle = kmDegreesToRadians(atof(sx));

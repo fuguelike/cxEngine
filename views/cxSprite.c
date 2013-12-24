@@ -19,7 +19,7 @@ cxInt cxSpriteLuaAppendEvent(lua_State *L)
 }
 
 const luaL_Reg cxSpriteInstanceMethods[] = {
-    {"on",cxSpriteLuaAppendEvent},
+    CX_LUA_ON_EVENT(cxSprite)
     CX_LUA_SUPER(cxView)
 };
 
@@ -98,23 +98,6 @@ static void cxSpriteDirtyEvent(cxEvent *event)
     }
 }
 
-void cxSpriteSetTextureEvent(cxEvent *event)
-{
-    CX_RETURN(event->args == NULL || event->sender == NULL);
-    cxConstChars url = cxEventArgString(event->args, "url");
-    CX_RETURN(url == NULL);
-    cxConstChars viewid = cxEventArgString(event->args, "view");
-    cxAny pview = event->sender;
-    if(viewid != NULL){
-        pview = cxViewRootGet(event->sender, viewid);
-    }
-    CX_RETURN(pview == NULL);
-    //use texture size
-    cxBool useTexSize = cxEventArgBool(event->args, "useTexSize", false);
-    cxBool cached = cxEventArgBool(event->args, "cached", true);
-    cxSpriteSetTextureURL(pview, url, useTexSize, cached);
-}
-
 void cxSpriteSetFlipX(cxAny pview,cxBool flipx)
 {
     cxSprite this = pview;
@@ -153,21 +136,20 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize,cxBool
 }
 
 //texture="res/a.xml?green.png"
-void cxSpriteReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
+void cxSpriteReadAttr(cxReaderAttrInfo *info)
 {
-    cxViewRoot root = rootView;
-    cxSprite this = mView;
+    cxSprite this = info->object;
     //set texture
-    cxTextureAttr texAttr = cxXMLReadTextureAttr(reader, root->functions, "cxSprite.texture");
+    cxTextureAttr texAttr = cxXMLReadTextureAttr(info, "cxSprite.texture");
     cxSpriteSetTextureAttr(this, texAttr);
     //flipx flipy
-    cxSpriteSetFlipX(this, cxXMLReadBoolAttr(reader,root->functions, "cxSprite.flipX", this->isFlipX));
-    cxSpriteSetFlipY(this, cxXMLReadBoolAttr(reader,root->functions, "cxSprite.flipY", this->isFlipY));
+    cxSpriteSetFlipX(this, cxXMLReadBoolAttr(info, "cxSprite.flipX", this->isFlipX));
+    cxSpriteSetFlipY(this, cxXMLReadBoolAttr(info, "cxSprite.flipY", this->isFlipY));
     //shader
-    cxString shader = cxXMLReadStringAttr(reader, root->functions, "cxSprite.shader");
+    cxString shader = cxXMLReadStringAttr(info, "cxSprite.shader");
     cxSpriteSetShader(this, cxStringBody(shader));
     //
-    cxViewReadAttr(rootView, mView, reader);
+    cxViewReadAttr(info);
 }
 
 CX_OBJECT_INIT(cxSprite, cxView)

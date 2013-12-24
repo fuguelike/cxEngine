@@ -43,40 +43,39 @@ cxBool cxActionForever(cxAny pav)
     return false;
 }
 
-void cxActionReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
+void cxActionReadAttr(cxReaderAttrInfo *info)
 {
-    cxActionRoot root = rootAction;
-    cxAction this = mAction;
+    cxAction this = info->object;
     //
-    cxActionSetStepHide(mAction, cxXMLReadBoolAttr(reader, root->functions, "cxAction.stepHide", this->stepHide));
+    cxActionSetStepHide(this, cxXMLReadBoolAttr(info, "cxAction.stepHide", this->stepHide));
     //delay
-    cxActionSetDelay(mAction, cxXMLReadFloatAttr(reader, root->functions, "cxAction.delay", this->delay));
+    cxActionSetDelay(this, cxXMLReadFloatAttr(info, "cxAction.delay", this->delay));
     //time
-    cxFloat time = cxXMLReadFloatAttr(reader, root->functions, "cxAction.time", this->duration);
-    cxActionSetDuration(mAction, time);
+    cxFloat time = cxXMLReadFloatAttr(info, "cxAction.time", this->duration);
+    cxActionSetDuration(this, time);
     //curve
-    cxConstChars scurve = cxXMLAttr("cxAction.curve");
+    cxConstChars scurve = cxXMLAttr(info->reader, "cxAction.curve");
     cxCurveItem curve = cxCurveGet(scurve);
     if(curve != NULL){
         CX_METHOD_SET(this->Curve, curve->func);
     }
     //
-    cxActionSetSplit(this, cxXMLReadIntAttr(reader,root->functions, "cxAction.split", this->split));
+    cxActionSetSplit(this, cxXMLReadIntAttr(info, "cxAction.split", this->split));
     //
-    cxActionSetSpeed(this, cxXMLReadFloatAttr(reader,root->functions, "cxAction.speed", this->speed));
+    cxActionSetSpeed(this, cxXMLReadFloatAttr(info, "cxAction.speed", this->speed));
     //actionId
-    cxActionSetId(this, cxXMLReadIntAttr(reader,root->functions, "cxAction.id", this->actionId));
+    cxActionSetId(this, cxXMLReadIntAttr(info, "cxAction.id", this->actionId));
     //forever
-    if(cxXMLReadBoolAttr(reader,root->functions, "cxAction.forever", false)){
+    if(cxXMLReadBoolAttr(info, "cxAction.forever", false)){
         CX_METHOD_SET(this->Exit, cxActionForever);
     }
     //assist
-    this->assist = cxXMLReadAssist4fAttr(reader, root->functions, "cxAction.assist", this->assist);
+    this->assist = cxXMLReadAssist4fAttr(info, "cxAction.assist", this->assist);
     //event
-    cxXMLAppendEvent(root->events, this, cxAction, onStart);
-    cxXMLAppendEvent(root->events, this, cxAction, onStop);
-    cxXMLAppendEvent(root->events, this, cxAction, onSplit);
-    cxXMLAppendEvent(root->events, this, cxAction, onStep);
+    cxXMLAppendEvent(info, this, cxAction, onStart);
+    cxXMLAppendEvent(info, this, cxAction, onStop);
+    cxXMLAppendEvent(info, this, cxAction, onSplit);
+    cxXMLAppendEvent(info, this, cxAction, onStep);
 }
 
 void cxActionSetStepHide(cxAny pav,cxBool stepHide)

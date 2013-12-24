@@ -14,30 +14,13 @@
 
 CX_C_BEGIN
 
-typedef enum {
-    cxChipmunkShapeCircle = 1,
-    cxChipmunkShapeBox,
-}cxChipmunkShape;
-
-typedef struct {
-    cxChipmunkShape shape;
-    cxVec2f cp;         //when shape == cxChipmunkShapeCircle
-    cxBool isStatic;
-    cxFloat m;
-    cxFloat e;
-    cxFloat u;
-    cpGroup group;
-    cpLayers layer;
-    cpCollisionType ctype;
-}cxChipmunkAttr;
-
 
 CX_OBJECT_DEF(cxChipmunk, cxView)
     cpSpace *space;
     cxHash items;
 CX_OBJECT_END(cxChipmunk)
 
-void cxChipmunkReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader);
+void cxChipmunkReadAttr(cxReaderAttrInfo *info);
 
 void cxChipmunkSetGravity(cxAny pview,cxVec2f gravity);
 

@@ -16,7 +16,7 @@ void cxObjectLuaEventFunc(cxEvent *event)
     CX_ASSERT(ref > 0, "args ref error");
     lua_getref(L, ref);
     CX_LUA_PUSH_OBJECT(event->sender);
-    if(cxEventArgToTable(event->args)){
+    if(cxEventArgPush(event->args)){
         lua_call(L, 2, 0);
     }else{
         lua_call(L, 1, 0);

@@ -40,7 +40,7 @@ cxString cxRegexReplace(cxRegex this,cxRegexReplaceFunc replaceFunc,cxAny arg)
     if(start < length){
         cxStringAppend(ret, ptr + start, length - start);
     }
-    return start > 0 ? ret : NULL;
+    return cxStringLength(ret) > 0 ? ret : NULL;
 }
 
 cxRegex cxRegexCreate(cxConstChars regex, cxString input,cxUInt flags)
@@ -70,7 +70,9 @@ cxString cxRegexMatch(cxRegex this,cxInt index)
         return NULL;
     }
     cxString ret = CX_CREATE(cxString);
-    cxStringAppend(ret, (cxChar *)(cxStringBody(this->input) + pos.start), pos.end - pos.start);
+    if((pos.end - pos.start) > 0){
+        cxStringAppend(ret, (cxChar *)(cxStringBody(this->input) + pos.start), pos.end - pos.start);
+    }
     return ret;
 }
 

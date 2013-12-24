@@ -22,74 +22,44 @@
 #include "cxActionRoot.h"
 #include "cxPlayer.h"
 
-void cxActionRootReadAttr(cxAny pxml,cxAny newobj, xmlTextReaderPtr reader)
+const luaL_Reg cxActionRootInstanceMethods[] = {
+    CX_LUA_SUPER(cxObject)
+};
+
+const luaL_Reg cxActionRootTypeMethods[] = {
+    CX_LUA_TYPE(cxActionRoot)
+};
+
+void cxActionRootTypeInit()
 {
-    cxObjectReadAttr(pxml, newobj, reader);
-    cxActionRoot this = pxml;
-    cxXMLAppendEvent(this->events, this, cxActionSet, onLoad);
+    CX_LUA_LOAD_TYPE(cxActionRoot);
+}
+
+void cxActionRootReadAttr(cxReaderAttrInfo *info)
+{
+    cxObjectReadAttr(info);
+    cxActionRoot this = info->root;
+    cxXMLAppendEvent(info, this, cxActionSet, onLoad);
 }
 
 CX_OBJECT_INIT(cxActionRoot, cxObject)
 {
     cxObjectSetReadAttrFunc(this, cxActionRootReadAttr);
     this->codes = CX_ALLOC(cxHash);
-    this->events = CX_ALLOC(cxHash);
-    this->functions = CX_ALLOC(cxHash);
     CX_METHOD_SET(this->Make, cxActionRootMakeElement);
 }
 CX_OBJECT_FREE(cxActionRoot, cxObject)
 {
     CX_EVENT_RELEASE(this->onLoad);
-    CX_RELEASE(this->functions);
-    CX_RELEASE(this->events);
     CX_RELEASE(this->codes);
 }
 CX_OBJECT_TERM(cxActionRoot, cxObject)
-
-void cxActionRootRegisteEvent(cxAny pview,cxConstChars name,cxEventFunc func)
-{
-    cxActionRoot this = pview;
-    if(func == NULL){
-        cxHashDel(this->events, cxHashStrKey(name));
-        return;
-    }
-    cxEventItem event = cxHashGet(this->events, cxHashStrKey(name));
-    CX_ASSERT(event == NULL, "name %s event registered",name);
-    event = CX_ALLOC(cxEventItem);
-    event->func = func;
-    cxHashSet(this->events, cxHashStrKey(name), event);
-    CX_RELEASE(event);
-}
-
-void cxActionRootRegisteFunc(cxAny pview,cxConstChars name,cxAny func)
-{
-    cxActionRoot this = pview;
-    if(func == NULL){
-        cxHashDel(this->functions, cxHashStrKey(name));
-        return;
-    }
-    cxFuncItem item = cxHashGet(this->functions, cxHashStrKey(name));
-    CX_ASSERT(item == NULL, "name %s function registered",name);
-    item = CX_ALLOC(cxFuncItem);
-    item->func = func;
-    cxHashSet(this->events, cxHashStrKey(name), item);
-    CX_RELEASE(item);
-}
 
 static void cxActionRootReaderError(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
 {
     cxActionRoot this = arg;
     CX_ERROR("%s",msg);
     this->isError = true;
-}
-
-void cxActionRootSet(cxAny rootAction,cxAny mAction,xmlTextReaderPtr reader)
-{
-    cxActionRoot this = rootAction;
-    cxConstChars id = cxXMLAttr("id");
-    CX_RETURN(id == NULL);
-    cxString code = cxXMLReaderReadOuterXml(reader);
-    cxHashSet(this->codes, cxHashStrKey(id), code);
 }
 
 cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
@@ -130,102 +100,21 @@ cxAny cxActionRootGet(cxConstChars src)
     cxString code = cxHashGet(this->codes, (path->count == 1) ? cxHashStrKey(path->path) : cxHashStrKey(path->key));
     CX_RETURN(code == NULL, NULL);
     xmlTextReaderPtr reader = cxXMLReaderForString(code, NULL, NULL);
-    cxAny action = NULL;
+    cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, this, NULL);
     while(xmlTextReaderRead(reader)){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
         cxConstChars temp = cxXMLReadElementName(reader);
-        action = CX_METHOD_GET(NULL, this->Make,temp,reader);
-        if(action == NULL){
+        info->object = CX_METHOD_GET(NULL, this->Make,temp,reader);
+        if(info->object == NULL){
             continue;
         }
         //save root
-        cxObjectSetRoot(action, this);
-        cxObjectReadAttrRun(action, this, reader);
+        cxObjectSetRoot(info->object, this);
+        cxObjectReadAttrRun(info);
     }
-    return action;
-}
-
-void cxPrintMessageEvent(cxEvent *event)
-{
-    CX_RETURN(event->args == NULL);
-    cxConstChars msg = cxEventArgToString(event->args);
-    CX_RETURN(msg == NULL);
-    CX_LOGGER("%s",msg);
-}
-
-void cxPlaySoundEvent(cxEvent *event)
-{
-    CX_ASSERT(event->args != NULL, "args error");
-    cxConstChars src = cxEventArgString(event->args, "src");
-    CX_ASSERT(src != NULL, "audio src not set");
-    cxBool loop = cxEventArgBool(event->args, "loop", false);
-    cxPlayEffect(src,loop);
-}
-
-void cxPlayMusicEvent(cxEvent *event)
-{
-    CX_ASSERT(event->args != NULL, "args error");
-    cxConstChars src = cxEventArgString(event->args, "src");
-    CX_ASSERT(src != NULL, "audio src not set");
-    cxBool loop = cxEventArgBool(event->args, "loop", false);
-    cxPlayMusic(src, loop);
-}
-
-//need register
-//src view cache curve delay
-void cxViewRunActionEvent(cxEvent *event)
-{
-    cxObject object = event->sender;
-    CX_RETURN(event->args == NULL);
-    cxConstChars src = cxEventArgString(event->args,"src");
-    CX_RETURN(src == NULL);
-    //get view by id and cxBase
-    cxAny view = NULL;
-    if(object->cxBase == cxBaseTypeAction){
-        view = cxActionView(object);
-    }else if(object->cxBase == cxBaseTypeView){
-        view = object;
-    }
-    CX_ASSERT(view != NULL, "this event's sender must base cxAction and cxView");
-    //
-    cxConstChars sview = cxEventArgString(event->args,"view");
-    if(sview != NULL){
-        view = cxViewRootGet(view, sview);
-        CX_RETURN(view == NULL);
-    }
-    //get action
-    cxAny action = NULL;
-    cxBool fromcache =  false;
-    cxBool cache = cxEventArgBool(event->args, "cache", false);
-    if(cache){
-        action = cxViewGetCache(view, src);
-        fromcache = (action != NULL);
-    }
-    if(action == NULL){
-        action = cxActionRootGet(src);
-    }
-    CX_RETURN(action == NULL);
-    if(!fromcache && cache){
-        cxViewSetCache(view, src, action);
-    }
-    if(fromcache){
-        cxActionReset(action);
-    }
-    //set action corve
-    cxConstChars scurve = cxEventArgString(event->args, "curve");
-    cxCurveItem curve = cxCurveGet(scurve);
-    if(curve != NULL){
-        cxActionSetCurve(action, curve->func);
-    }
-    //delay
-    cxFloat delay = cxEventArgDouble(event->args, "delay", 0);
-    if(delay > 0){
-        cxActionSetDelay(action, delay);
-    }
-    //append
-    cxViewAppendAction(view, action);
+    return info->object;
 }
 
 cxAction cxActionRootAttachView(cxAny pview,cxConstChars url)
@@ -240,6 +129,7 @@ cxAction cxActionRootAttachView(cxAny pview,cxConstChars url)
 static void cxActionRootLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
 {
     cxActionRoot this = pav;
+    cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, pav, pav);
     while(xmlTextReaderRead(reader) && !this->isError){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
@@ -248,7 +138,7 @@ static void cxActionRootLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
         if(!ELEMENT_IS_TYPE(cxActionRoot)){
             continue;
         }
-        cxObjectReadAttrRun(this, this, reader);
+        cxObjectReadAttrRun(info);
         CX_EVENT_FIRE(this, onLoad);
         break;
     }
@@ -256,7 +146,7 @@ static void cxActionRootLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        cxConstChars id = cxXMLAttr("id");
+        cxConstChars id = cxXMLAttr(reader, "id");
         if(id == NULL){
             continue;
         }

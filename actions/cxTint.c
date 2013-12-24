@@ -9,6 +9,19 @@
 #include <core/cxActionRoot.h>
 #include "cxTint.h"
 
+const luaL_Reg cxTintInstanceMethods[] = {
+    CX_LUA_SUPER(cxAction)
+};
+
+const luaL_Reg cxTintTypeMethods[] = {
+    CX_LUA_TYPE(cxTint)
+};
+
+void cxTintTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxTint);
+}
+
 static void cxTintInit(cxAny pav)
 {
     cxTint this = pav;
@@ -32,12 +45,11 @@ static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAlpha(this->super.view, alhpa);
 }
 
-static void cxTintReadAttr(cxAny rootAction,cxAny mAction, xmlTextReaderPtr reader)
+static void cxTintReadAttr(cxReaderAttrInfo *info)
 {
-    cxActionRoot root = rootAction;
-    cxActionReadAttr(rootAction, mAction, reader);
-    cxTint this = mAction;
-    this->color = cxXMLReadColor4fAttr(reader, root->functions, "cxTint.color", this->color);
+    cxActionReadAttr(info);
+    cxTint this = info->object;
+    this->color = cxXMLReadColor4fAttr(info, "cxTint.color", this->color);
 }
 
 CX_OBJECT_INIT(cxTint, cxAction)

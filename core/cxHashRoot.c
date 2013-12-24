@@ -16,6 +16,7 @@
 
 static void cxHashRootReadDB(cxDBEnv env,cxHashRoot root,xmlTextReaderPtr reader)
 {
+    cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, root, env);
     int depth = xmlTextReaderDepth(reader);
     while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
@@ -25,17 +26,17 @@ static void cxHashRootReadDB(cxDBEnv env,cxHashRoot root,xmlTextReaderPtr reader
         if(!ELEMENT_IS_TYPE(cxDB)){
             continue;
         }
-        cxConstChars file = cxXMLAttr("file");
-        cxConstChars table = cxXMLAttr("table");
-        cxConstChars type = cxXMLAttr("type");
-        cxConstChars sid = cxXMLAttr("id");
-        cxConstChars path = cxXMLAttr("path");
+        cxConstChars file = cxXMLAttr(reader,"file");
+        cxConstChars table = cxXMLAttr(reader,"table");
+        cxConstChars type = cxXMLAttr(reader,"type");
+        cxConstChars sid = cxXMLAttr(reader,"id");
+        cxConstChars path = cxXMLAttr(reader,"path");
         //assert file copy ->to document
-        cxBool copy = cxXMLReadBoolAttr(reader, NULL, "copy", false);
+        cxBool copy = cxXMLReadBoolAttr(info, "copy", false);
         if(copy && file != NULL){
             cxCopyFile(file, NULL, NULL);
         }
-        cxBool rdonly = cxXMLReadBoolAttr(reader, NULL,  "rdonly", false);
+        cxBool rdonly = cxXMLReadBoolAttr(info,  "rdonly", false);
         if(sid == NULL){
             CX_WARN("db id not set,will can't add dataset");
         }
@@ -63,8 +64,9 @@ static void cxHashRootReadDB(cxDBEnv env,cxHashRoot root,xmlTextReaderPtr reader
 
 void cxHashRootReadDBEnv(cxHashRoot root,xmlTextReaderPtr reader)
 {
-    cxConstChars type = cxXMLAttr("type");
-    cxBool logger = cxXMLReadBoolAttr(reader,NULL, "logger", false);
+    cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, root, NULL);
+    cxConstChars type = cxXMLAttr(reader, "type");
+    cxBool logger = cxXMLReadBoolAttr(info, "logger", false);
     cxDBEnv env = cxDBEnvCreate(type, logger);
     if(env != NULL){
         cxHashRootReadDB(env, root, reader);
@@ -75,7 +77,7 @@ cxTypes cxHashRootReadString(cxHashRoot root,xmlTextReaderPtr reader)
 {
     cxTypes types = cxStringTypesCreate();
     cxString bytes = NULL;
-    cxConstChars  src = cxXMLAttr("src");
+    cxConstChars  src = cxXMLAttr(reader, "src");
     if(src != NULL){
         cxStream stream = cxAssetsStreamCreate(src);
         bytes = cxStreamAllBytes(stream);
@@ -158,7 +160,7 @@ cxTypes cxHashRootReadHash(cxHashRoot root,xmlTextReaderPtr reader)
         if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
             continue;
         }
-        cxConstChars  key = cxXMLAttr("key");
+        cxConstChars  key = cxXMLAttr(reader,"key");
         if(key == NULL){
             continue;
         }
@@ -284,7 +286,7 @@ cxBool cxHashRootLoadWithReader(cxHashRoot root,xmlTextReaderPtr reader)
             cxHashRootReadDBEnv(root,reader);
             continue;
         }
-        cxConstChars  sid = cxXMLAttr("id");
+        cxConstChars  sid = cxXMLAttr(reader, "id");
         if(sid == NULL){
             CX_WARN("element %s:not set id,data not save to hash table",temp);
             continue;

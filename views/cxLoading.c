@@ -47,10 +47,9 @@ cxInt cxLoadingLuaAppendEvent(lua_State *L)
 }
 
 const luaL_Reg cxLoadingInstanceMethods[] = {
-    {"on",cxLoadingLuaAppendEvent},
     {"start",cxLoadingLuaStart},
-    {"setObject",cxLoadingLuaSetObject},
-    {"object",cxLoadingLuaGetObject},
+    CX_LUA_PROPERTY(cxLoading, Object)
+    CX_LUA_ON_EVENT(cxLoading)
     CX_LUA_SUPER(cxView)
 };
 

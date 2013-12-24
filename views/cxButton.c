@@ -32,7 +32,7 @@ cxInt cxButtonLuaAppendEvent(lua_State *L)
 }
 
 const luaL_Reg cxButtonTypeMethods[] = {
-    {"on",cxButtonLuaAppendEvent},
+    CX_LUA_ON_EVENT(cxButton)
     CX_LUA_TYPE(cxButton)
 };
 
@@ -78,17 +78,16 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
-void cxButtonReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader)
+void cxButtonReadAttr(cxReaderAttrInfo *info)
 {
-    cxViewRoot root = rootView;
-    cxButton this = mView;
-    cxSpriteReadAttr(rootView, mView, reader);
-    cxXMLAppendEvent(root->events, this, cxButton, onPress);
-    cxXMLAppendEvent(root->events, this, cxButton, onRelease);
-    cxXMLAppendEvent(root->events, this, cxButton, onLeave);
-    cxXMLAppendEvent(root->events, this, cxButton, onEnter);
-    cxButtonEnable(this, cxXMLReadBoolAttr(reader, root->functions, "cxButton.enable", this->isEnable));
-    this->movement = cxXMLReadFloatAttr(reader, root->functions,  "cxButton.movement", this->movement);
+    cxButton this = info->object;
+    cxSpriteReadAttr(info);
+    cxXMLAppendEvent(info, this, cxButton, onPress);
+    cxXMLAppendEvent(info, this, cxButton, onRelease);
+    cxXMLAppendEvent(info, this, cxButton, onLeave);
+    cxXMLAppendEvent(info, this, cxButton, onEnter);
+    cxButtonEnable(this, cxXMLReadBoolAttr(info, "cxButton.enable", this->isEnable));
+    this->movement = cxXMLReadFloatAttr(info,  "cxButton.movement", this->movement);
 }
 
 CX_OBJECT_INIT(cxButton, cxSprite)

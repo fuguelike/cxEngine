@@ -10,6 +10,8 @@
 #include "cxConfig.h"
 #include "cxXMLScript.h"
 
+lua_State *gL = NULL;
+
 static cxInt cxObjectLuaGetTag(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxObject);
@@ -45,11 +47,11 @@ static cxInt cxObjectLuaTypeName(lua_State *L)
 }
 
 const luaL_Reg cxObjectInstanceMethods[] = {
-    {"on",cxObjectLuaAppendEvent},
     {"getTag",cxObjectLuaGetTag},
     {"setTag",cxObjectLuaSetTag},
     {"typeName",cxObjectLuaTypeName},
-    {"__gc",cxObjectLuaGC},
+    CX_LUA_ON_EVENT(cxObject)
+    CX_LUA_GC_FUNC(cxObject)
     {NULL,NULL},
     {NULL,NULL},
 };
@@ -58,7 +60,7 @@ const luaL_Reg cxObjectTypeMethods[] = {
     CX_LUA_TYPE(cxObject)
 };
 
-void cxLuaRegisterMethods(lua_State *L,const luaL_Reg *methods)
+static void cxLuaRegisterMethods(const luaL_Reg *methods)
 {
     const luaL_Reg *curr = NULL;
     cxInt i = 0;
@@ -68,19 +70,33 @@ void cxLuaRegisterMethods(lua_State *L,const luaL_Reg *methods)
     }
     curr = &methods[i];
     if(curr->func != NULL && strcmp(curr->name, "super") == 0){
-        cxLuaRegisterMethods(L, (const luaL_Reg *)curr->func);
+        cxLuaRegisterMethods((const luaL_Reg *)curr->func);
     }
-    luaL_register(L, NULL, methods);
+    luaL_register(gL, NULL, methods);
+}
+
+void cxLuaRegisterTypeFunc(cxConstType type,cxConstChars name, lua_CFunction func)
+{
+    luaL_getmetatable(gL, type);
+    CX_ASSERT(lua_istable(gL, -1), "type %s not metatable");
+    lua_getfield(gL, -1, "function");
+    CX_ASSERT(lua_istable(gL, -1), "type %s function not find");
+    lua_pushcfunction(gL, func);
+    lua_setfield(gL, -2, name);
+    lua_pop(gL, 2);
 }
 
 lua_State *cxLuaLoad(cxConstType name, const luaL_Reg *cMethods,const luaL_Reg *tMethods)
 {
     CX_ASSERT(cMethods != NULL && tMethods != NULL, "args error");
     luaL_newmetatable(gL, name);
-    cxLuaRegisterMethods(gL, cMethods);
+    cxLuaRegisterMethods(cMethods);
 
     lua_pushvalue(gL,-1);
     lua_setfield(gL, -2, "__index");
+    
+    lua_newtable(gL);
+    lua_setfield(gL, -2, "function");
     
     luaL_register(gL, name, tMethods);
     lua_pop(gL, 2);
@@ -92,10 +108,10 @@ void cxObjectTypeInit()
     CX_LUA_LOAD_TYPE(cxObject);
 }
 
-void cxObjectReadAttr(cxAny pobj,cxAny newobj, xmlTextReaderPtr reader)
+void cxObjectReadAttr(cxReaderAttrInfo *info)
 {
-    cxObject this = newobj;
-    cxObjectSetTag(this,cxXMLReadIntAttr(reader, NULL, "cxObject.tag", this->cxTag));
+    cxObject this = info->object;
+    cxObjectSetTag(this,cxXMLReadIntAttr(info, "cxObject.tag", this->cxTag));
 }
 
 void cxObjectAutoInit(cxObject this)
@@ -115,10 +131,10 @@ void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func)
     CX_METHOD_SET(this->ReadAttr, func);
 }
 
-void cxObjectReadAttrRun(cxAny obj,cxAny pobj,xmlTextReaderPtr reader)
+void cxObjectReadAttrRun(cxReaderAttrInfo *info)
 {
-    cxObject this = obj;
-    CX_METHOD_RUN(this->ReadAttr, pobj, obj,reader);
+    cxObject this = info->object;
+    CX_METHOD_RUN(this->ReadAttr, info);
 }
 
 void cxObjectSetRoot(cxAny obj,cxAny root)

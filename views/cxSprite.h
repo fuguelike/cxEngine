@@ -28,7 +28,7 @@ CX_OBJECT_DEF(cxSprite, cxView)
     cxBoxTex2f      texCoord;
 CX_OBJECT_END(cxSprite)
 
-void cxSpriteReadAttr(cxAny rootView,cxAny mView, xmlTextReaderPtr reader);
+void cxSpriteReadAttr(cxReaderAttrInfo *info);
 
 void cxSpriteSetTextureAttr(cxAny pview,cxTextureAttr attr);
 
@@ -43,8 +43,6 @@ void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor);
 void cxSpriteSetFlipX(cxAny pview,cxBool flipx);
 
 void cxSpriteSetFlipY(cxAny pview,cxBool flipy);
-
-void cxSpriteSetTextureEvent(cxEvent *event);
 
 void cxSpriteDraw(cxAny pview);
 

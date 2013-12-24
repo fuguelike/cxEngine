@@ -10,6 +10,7 @@
 #define cxEngine_cxView_h
 
 #include <libgen.h>
+#include <chipmunk/chipmunk.h>
 #include <libxml/xmlreader.h>
 #include "cxTypes.h"
 #include "cxBase.h"
@@ -20,6 +21,23 @@
 #include "cxXMLScript.h"
 
 CX_C_BEGIN
+
+typedef enum {
+    cxChipmunkShapeCircle = 1,
+    cxChipmunkShapeBox,
+}cxChipmunkShape;
+
+typedef struct {
+    cxChipmunkShape shape;
+    cxVec2f cp;         //when shape == cxChipmunkShapeCircle
+    cxBool isStatic;
+    cxFloat m;
+    cxFloat e;
+    cxFloat u;
+    cpGroup group;
+    cpLayers layer;
+    cpCollisionType ctype;
+}cxChipmunkAttr;
 
 // L200,R100,T100,B100
 
@@ -53,6 +71,7 @@ typedef cxUInt (*cxViewIsTouchFunc)(cxAny pview,cxTouch *touch);
 typedef cxUInt (*cxViewIsOnKeyFunc)(cxAny pview,cxKey *key);
 
 CX_OBJECT_DEF(cxView, cxObject)
+    cxChipmunkAttr *cAttr;
     cxAny args;
     cxViewAutoResizeMask autoMask;
     cxViewAutoResizeBox  autoBox;
@@ -96,11 +115,11 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onDirty);
 CX_OBJECT_END(cxView)
 
+cxChipmunkAttr *cxViewSupportChipmunk(cxAny pview);
+
 void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object);
 
 cxAny cxViewGetCache(cxAny pview,cxConstChars key);
-
-void cxViewSetViewEvent(cxEvent *event);
 
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 
@@ -132,7 +151,7 @@ void cxViewSetBorder(cxAny pview,cxBool border);
 
 cxBool cxViewZeroSize(cxAny pview);
 
-void cxViewReadAttr(cxAny pxml,cxAny view, xmlTextReaderPtr reader);
+void cxViewReadAttr(cxReaderAttrInfo *info);
 
 cxAny cxViewGetParentView(cxAny pview);
 

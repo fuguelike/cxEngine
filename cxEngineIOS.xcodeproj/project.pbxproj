@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8318B9F6186916F1007C0E75 /* cxInitType.c in Sources */ = {isa = PBXBuildFile; fileRef = 8318B9F4186916F1007C0E75 /* cxInitType.c */; };
 		8324963F182FB72000554604 /* cxTextureJPG.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324963D182FB72000554604 /* cxTextureJPG.c */; };
 		8330F7C91828E77D00E7E5B1 /* cxScroll.c in Sources */ = {isa = PBXBuildFile; fileRef = 8330F7C71828E77D00E7E5B1 /* cxScroll.c */; };
 		833E2B9E185F257E004093EF /* cxFileStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 833E2B9C185F257E004093EF /* cxFileStream.c */; };
@@ -153,6 +154,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8318B9F4186916F1007C0E75 /* cxInitType.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxInitType.c; sourceTree = "<group>"; };
+		8318B9F5186916F1007C0E75 /* cxInitType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxInitType.h; sourceTree = "<group>"; };
 		8324963D182FB72000554604 /* cxTextureJPG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureJPG.c; sourceTree = "<group>"; };
 		8324963E182FB72000554604 /* cxTextureJPG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTextureJPG.h; sourceTree = "<group>"; };
 		8330F7C71828E77D00E7E5B1 /* cxScroll.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxScroll.c; sourceTree = "<group>"; };
@@ -605,6 +608,8 @@
 				8341C55D18227DF20045A66F /* cxDB.h */,
 				8341C55E18227DF20045A66F /* cxEngine.c */,
 				8341C55F18227DF20045A66F /* cxEngine.h */,
+				8318B9F4186916F1007C0E75 /* cxInitType.c */,
+				8318B9F5186916F1007C0E75 /* cxInitType.h */,
 				8341C56018227DF20045A66F /* cxEventArg.c */,
 				8341C56118227DF20045A66F /* cxEventArg.h */,
 				8341C56218227DF20045A66F /* cxEventItem.c */,
@@ -953,6 +958,7 @@
 				8341C64D18227DF30045A66F /* quaternion.c in Sources */,
 				8341C60418227DF20045A66F /* cpPinJoint.c in Sources */,
 				8341C66718227DF30045A66F /* cxLabelTTF.c in Sources */,
+				8318B9F6186916F1007C0E75 /* cxInitType.c in Sources */,
 				8341C5FA18227DF20045A66F /* cxRotate.c in Sources */,
 				8341C65618227DF30045A66F /* cxShaderDefault.c in Sources */,
 				8341C65118227DF30045A66F /* vec2.c in Sources */,
