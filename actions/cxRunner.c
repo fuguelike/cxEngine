@@ -12,7 +12,7 @@
 static void cxRunnerInit(cxAny pav)
 {
     cxRunner this = pav;
-    CX_METHOD_RUN(this->Init,this);
+    CX_METHOD_RUN(NULL, this->Init, CX_METHOD_TYPE(void,cxAny), this);
 }
 
 static cxBool cxRunnerExit(cxAny pav)
@@ -21,7 +21,7 @@ static cxBool cxRunnerExit(cxAny pav)
     if(this->count == 0){
         //can add action at exit
         this->step ++;
-        CX_METHOD_RUN(this->Exit,this);
+        CX_METHOD_RUN(NULL, this->Exit, CX_METHOD_TYPE(void,cxAny), this);
     }
     return this->count == 0;
 }
@@ -33,7 +33,8 @@ CX_OBJECT_INIT(cxRunner, cxAction)
 }
 CX_OBJECT_FREE(cxRunner, cxAction)
 {
-    
+    CX_METHOD_RELEASE(this->Init);
+    CX_METHOD_RELEASE(this->Exit);
 }
 CX_OBJECT_TERM(cxRunner, cxAction)
 

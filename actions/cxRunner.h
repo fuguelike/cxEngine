@@ -13,13 +13,11 @@
 
 CX_C_BEGIN
 
-typedef void (*cxRunnerFunc)(cxAny pav);
-
 CX_OBJECT_DEF(cxRunner, cxAction)
     cxInt count;
     cxInt step;
-    CX_METHOD_DEF(cxRunnerFunc, Init);
-    CX_METHOD_DEF(cxRunnerFunc, Exit);
+    CX_METHOD_ALLOC(Init);
+    CX_METHOD_ALLOC(Exit);
 CX_OBJECT_END(cxRunner)
 
 void cxRunnerAppend(cxAny runner,cxAny pav, cxAny pview);

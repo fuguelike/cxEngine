@@ -293,7 +293,7 @@ static void cxParticleStep(cxAny pview,cxParticleUnit *particle)
     box->rb.vertices = vq.rb;
     box->lt.vertices = vq.lt;
     box->rt.vertices = vq.rt;
-    CX_METHOD_RUN(this->UpdateBox,this,box);
+    CX_METHOD_RUN(NULL, this->UpdateBox, CX_METHOD_TYPE(void,cxAny,cxBoxPoint *),this,box);
     this->super.number = CX_MAX(this->index + 1, this->super.number);
 }
 
@@ -486,6 +486,7 @@ CX_OBJECT_INIT(cxParticle, cxAtlas)
 CX_OBJECT_FREE(cxParticle, cxAtlas)
 {
     allocator->free(this->units);
+    CX_METHOD_RELEASE(this->UpdateBox);
 }
 CX_OBJECT_TERM(cxParticle, cxAtlas)
 

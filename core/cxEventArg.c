@@ -9,6 +9,16 @@
 #include "cxEngine.h"
 #include "cxEventArg.h"
 
+CX_OBJECT_INIT(cxEventItem, cxObject)
+{
+    
+}
+CX_OBJECT_FREE(cxEventItem, cxObject)
+{
+    CX_RELEASE(this->arg);
+}
+CX_OBJECT_TERM(cxEventItem, cxObject)
+
 CX_OBJECT_INIT(cxEventArg, cxObject)
 {
     

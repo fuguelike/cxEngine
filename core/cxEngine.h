@@ -14,7 +14,6 @@
 #include "cxTypes.h"
 #include "cxInput.h"
 #include "cxXMLScript.h"
-#include "cxEventItem.h"
 #include "cxEventArg.h"
 #include "cxUtil.h"
 #include "cxMessage.h"

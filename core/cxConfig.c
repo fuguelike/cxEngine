@@ -39,17 +39,36 @@ cxInt cxObjectLuaAppendEvent(lua_State *L)
     return 0;
 }
 
-static cxInt cxObjectLuaTypeName(lua_State *L)
+static cxInt cxObjectLuaToString(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxObject);
-    lua_pushstring(L, cxObjectType(this));
+    lua_pushstring(L, this->cxType);
     return 1;
 }
 
+//static cxInt cxObjectLuaSetMethod(lua_State *L)
+//{
+//    CX_LUA_DEF_THIS(cxObject);
+//    cxConstChars name = luaL_checkstring(L, 2);
+//    lua_getmetatable(L, 1);
+//    CX_ASSERT(lua_istable(L, -1), "get type %s metatable error",this->cxType);
+//    lua_getfield(L, -1, "__index");
+//    CX_ASSERT(lua_istable(L, -1), "get type __index table error");
+//    lua_pushvalue(L, 3);
+//    lua_setfield(L, -2, name);
+//    lua_pop(L, 2);
+//    return 0;
+//}
+
+//static cxInt cxObjectLuaSetMetaTable(lua_State *L)
+//{
+//    lua_setmetatable(L, -2);
+//    return 0;
+//}
+
 const luaL_Reg cxObjectInstanceMethods[] = {
-    {"getTag",cxObjectLuaGetTag},
-    {"setTag",cxObjectLuaSetTag},
-    {"typeName",cxObjectLuaTypeName},
+    {"__tostring",cxObjectLuaToString},
+    CX_LUA_PROPERTY(cxObject, Tag)
     CX_LUA_ON_EVENT(cxObject)
     CX_LUA_GC_FUNC(cxObject)
     {NULL,NULL},
@@ -122,7 +141,7 @@ void cxObjectAutoInit(cxObject this)
 
 void cxObjectAutoFree(cxObject this)
 {
-    
+    CX_METHOD_RELEASE(this->ReadAttr);
 }
 
 void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func)
@@ -134,7 +153,7 @@ void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func)
 void cxObjectReadAttrRun(cxReaderAttrInfo *info)
 {
     cxObject this = info->object;
-    CX_METHOD_RUN(this->ReadAttr, info);
+    CX_METHOD_RUN(NULL, this->ReadAttr, CX_METHOD_TYPE(void,cxReaderAttrInfo *), info);
 }
 
 void cxObjectSetRoot(cxAny obj,cxAny root)

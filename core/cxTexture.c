@@ -29,6 +29,8 @@ CX_OBJECT_FREE(cxTexture, cxObject)
 {
     cxOpenGLDeleteTexture(0, this->textureId);
     CX_RELEASE(this->keys);
+    CX_METHOD_RELEASE(this->Load);
+    CX_METHOD_RELEASE(this->Bind);
 }
 CX_OBJECT_TERM(cxTexture, cxObject)
 
@@ -40,7 +42,7 @@ void cxTextureSetAtlas(cxTexture this,cxBool isAtlas)
 void cxTextureLoad(cxTexture this,cxStream stream)
 {
     CX_RETURN(this->isLoad);
-    this->isLoad = CX_METHOD_GET(false, this->Load,this, stream);
+    this->isLoad = CX_METHOD_RUN(false, this->Load, CX_METHOD_TYPE(cxBool,cxAny,cxStream),this,stream);
     if(!this->isLoad){
         CX_ERROR("texture  can not load");
     }
@@ -132,7 +134,7 @@ void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstC
 void cxTextureBind(cxTexture this)
 {
     CX_ASSERT(this != NULL, "bind texture null");
-    CX_METHOD_RUN(this->Bind, this);
+    CX_METHOD_RUN(NULL, this->Bind, CX_METHOD_TYPE(void,cxAny),this);
     if(!this->isSetParam){
         cxOpenGLSetTexParameters(this->texParam);
         this->isSetParam = true;

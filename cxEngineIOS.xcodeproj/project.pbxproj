@@ -59,7 +59,6 @@
 		8341C62218227DF20045A66F /* cxDB.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C55C18227DF20045A66F /* cxDB.c */; };
 		8341C62318227DF20045A66F /* cxEngine.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C55E18227DF20045A66F /* cxEngine.c */; };
 		8341C62418227DF20045A66F /* cxEventArg.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C56018227DF20045A66F /* cxEventArg.c */; };
-		8341C62518227DF20045A66F /* cxEventItem.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C56218227DF20045A66F /* cxEventItem.c */; };
 		8341C62618227DF20045A66F /* cxFreeType.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C56418227DF20045A66F /* cxFreeType.c */; };
 		8341C62718227DF20045A66F /* cxHash.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C56618227DF20045A66F /* cxHash.c */; };
 		8341C62818227DF20045A66F /* cxHashRoot.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C56818227DF20045A66F /* cxHashRoot.c */; };
@@ -132,6 +131,7 @@
 		835870F4183DEB0F007B175E /* cxClient.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870F2183DEB0F007B175E /* cxClient.c */; };
 		835A95C0185592CE0088B413 /* cxBMPFont.c in Sources */ = {isa = PBXBuildFile; fileRef = 835A95BE185592CE0088B413 /* cxBMPFont.c */; };
 		835A95C81855A5190088B413 /* cxLabelBMP.c in Sources */ = {isa = PBXBuildFile; fileRef = 835A95C61855A5190088B413 /* cxLabelBMP.c */; };
+		835C6CDE186AB9F5001CC36F /* cxMethodArg.c in Sources */ = {isa = PBXBuildFile; fileRef = 835C6CDC186AB9F5001CC36F /* cxMethodArg.c */; };
 		83607AA218444B39005C392B /* cxAnimate.c in Sources */ = {isa = PBXBuildFile; fileRef = 83607AA018444B39005C392B /* cxAnimate.c */; };
 		836150FC18482AAF00EB9173 /* cxMD5.c in Sources */ = {isa = PBXBuildFile; fileRef = 836150FA18482AAF00EB9173 /* cxMD5.c */; };
 		839103C01859632A008DF1C7 /* cxRegex.c in Sources */ = {isa = PBXBuildFile; fileRef = 839103BE1859632A008DF1C7 /* cxRegex.c */; };
@@ -266,8 +266,6 @@
 		8341C55F18227DF20045A66F /* cxEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEngine.h; sourceTree = "<group>"; };
 		8341C56018227DF20045A66F /* cxEventArg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxEventArg.c; sourceTree = "<group>"; };
 		8341C56118227DF20045A66F /* cxEventArg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEventArg.h; sourceTree = "<group>"; };
-		8341C56218227DF20045A66F /* cxEventItem.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxEventItem.c; sourceTree = "<group>"; };
-		8341C56318227DF20045A66F /* cxEventItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEventItem.h; sourceTree = "<group>"; };
 		8341C56418227DF20045A66F /* cxFreeType.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxFreeType.c; sourceTree = "<group>"; };
 		8341C56518227DF20045A66F /* cxFreeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxFreeType.h; sourceTree = "<group>"; };
 		8341C56618227DF20045A66F /* cxHash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxHash.c; sourceTree = "<group>"; };
@@ -406,6 +404,8 @@
 		835A95BF185592CE0088B413 /* cxBMPFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxBMPFont.h; sourceTree = "<group>"; };
 		835A95C61855A5190088B413 /* cxLabelBMP.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLabelBMP.c; sourceTree = "<group>"; };
 		835A95C71855A5190088B413 /* cxLabelBMP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLabelBMP.h; sourceTree = "<group>"; };
+		835C6CDC186AB9F5001CC36F /* cxMethodArg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMethodArg.c; sourceTree = "<group>"; };
+		835C6CDD186AB9F5001CC36F /* cxMethodArg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMethodArg.h; sourceTree = "<group>"; };
 		83607AA018444B39005C392B /* cxAnimate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAnimate.c; sourceTree = "<group>"; };
 		83607AA118444B39005C392B /* cxAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAnimate.h; sourceTree = "<group>"; };
 		836150FA18482AAF00EB9173 /* cxMD5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMD5.c; sourceTree = "<group>"; };
@@ -612,12 +612,8 @@
 				8341C55D18227DF20045A66F /* cxDB.h */,
 				8341C55E18227DF20045A66F /* cxEngine.c */,
 				8341C55F18227DF20045A66F /* cxEngine.h */,
-				8318B9F4186916F1007C0E75 /* cxInitType.c */,
-				8318B9F5186916F1007C0E75 /* cxInitType.h */,
 				8341C56018227DF20045A66F /* cxEventArg.c */,
 				8341C56118227DF20045A66F /* cxEventArg.h */,
-				8341C56218227DF20045A66F /* cxEventItem.c */,
-				8341C56318227DF20045A66F /* cxEventItem.h */,
 				8341C56418227DF20045A66F /* cxFreeType.c */,
 				8341C56518227DF20045A66F /* cxFreeType.h */,
 				8341C56618227DF20045A66F /* cxHash.c */,
@@ -626,6 +622,8 @@
 				8341C56918227DF20045A66F /* cxHashRoot.h */,
 				8341C56A18227DF20045A66F /* cxIconv.c */,
 				8341C56B18227DF20045A66F /* cxIconv.h */,
+				8318B9F4186916F1007C0E75 /* cxInitType.c */,
+				8318B9F5186916F1007C0E75 /* cxInitType.h */,
 				8341C56C18227DF20045A66F /* cxInput.h */,
 				83494FA518334B7A0016C3A4 /* cxJson.c */,
 				83494FA618334B7A0016C3A4 /* cxJson.h */,
@@ -635,6 +633,8 @@
 				836150FB18482AAF00EB9173 /* cxMD5.h */,
 				8341C56F18227DF20045A66F /* cxMessage.c */,
 				8341C57018227DF20045A66F /* cxMessage.h */,
+				835C6CDC186AB9F5001CC36F /* cxMethodArg.c */,
+				835C6CDD186AB9F5001CC36F /* cxMethodArg.h */,
 				8341C57118227DF20045A66F /* cxNumber.c */,
 				8341C57218227DF20045A66F /* cxNumber.h */,
 				8341C57318227DF20045A66F /* cxOpenGL.c */,
@@ -915,7 +915,6 @@
 				8341C63518227DF20045A66F /* cxUtil.c in Sources */,
 				833E2B9E185F257E004093EF /* cxFileStream.c in Sources */,
 				8341C60118227DF20045A66F /* cpDampedSpring.c in Sources */,
-				8341C62518227DF20045A66F /* cxEventItem.c in Sources */,
 				8341C62418227DF20045A66F /* cxEventArg.c in Sources */,
 				83EB0B741869B9B800142636 /* cxPlayerLuaImp.c in Sources */,
 				8341C66418227DF30045A66F /* cxAtlas.c in Sources */,
@@ -985,6 +984,7 @@
 				8341C64C18227DF30045A66F /* plane.c in Sources */,
 				8341C61518227DF20045A66F /* cpSpaceHash.c in Sources */,
 				8341C68218227FA10045A66F /* cxUtil.m in Sources */,
+				835C6CDE186AB9F5001CC36F /* cxMethodArg.c in Sources */,
 				83494FA718334B7A0016C3A4 /* cxJson.c in Sources */,
 				8341C66B18227DF30045A66F /* cxWindow.c in Sources */,
 				8341C61B18227DF20045A66F /* cxAction.c in Sources */,

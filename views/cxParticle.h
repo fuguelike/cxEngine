@@ -46,8 +46,6 @@ typedef enum {
     cxParticleBlendMultiply,
 }cxParticleBlendMode;
 
-typedef void (*cxParticleUpdateBoxFunc)(cxAny pview,cxBoxPoint *box);
-
 CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxBool isError;
     cxBool autoRemove;
@@ -81,7 +79,7 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxFloatRange startradius;
     cxFloatRange endradius;
     cxFloatRange rotatepers;
-    CX_METHOD_DEF(cxParticleUpdateBoxFunc, UpdateBox);
+    CX_METHOD_ALLOC(UpdateBox);
 CX_OBJECT_END(cxParticle)
 
 cxParticle cxParticleCreateFromPEX(cxConstChars file);

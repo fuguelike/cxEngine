@@ -22,6 +22,7 @@ void cxInitTypes()
     cxHashTypeInit();
     cxArrayTypeInit();
     cxListTypeInit();
+    cxStackTypeInit();
     
     cxStreamTypeInit();
     cxPlayerTypeInit();

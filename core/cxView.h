@@ -60,16 +60,6 @@ typedef enum{
 
 typedef cxBox4f cxViewAutoResizeBox;
 
-typedef void (*cxViewFunc)(cxAny pview);
-
-typedef cxBool (*cxViewTouchFunc)(cxAny pview,cxTouch *touch);
-
-typedef cxBool (*cxViewKeyFunc)(cxAny pview,cxKey *key);
-
-typedef cxUInt (*cxViewIsTouchFunc)(cxAny pview,cxTouch *touch);
-
-typedef cxUInt (*cxViewIsOnKeyFunc)(cxAny pview,cxKey *key);
-
 CX_OBJECT_DEF(cxView, cxObject)
     cxChipmunkAttr *cAttr;
     cxAny args;
@@ -100,19 +90,21 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
     cxColor4f color;
-    CX_METHOD_DEF(cxViewIsTouchFunc, IsTouch);
-    CX_METHOD_DEF(cxViewTouchFunc, Touch);
-    CX_METHOD_DEF(cxViewIsOnKeyFunc, IsOnKey);
-    CX_METHOD_DEF(cxViewKeyFunc, OnKey);
-    CX_METHOD_DEF(cxViewFunc, Draw);
-    CX_METHOD_DEF(cxViewFunc, DrawAfter);
-    CX_METHOD_DEF(cxViewFunc, DrawBefore);
+    CX_METHOD_ALLOC(IsTouch);   //CX_METHOD_TYPE(cxViewIsTouchType,cxAny,cxTouch *)
+    CX_METHOD_ALLOC(Touch);     //CX_METHOD_TYPE(cxBool,cxAny,cxTouch *)
+    CX_METHOD_ALLOC(IsOnKey);
+    CX_METHOD_ALLOC(OnKey);
+    CX_METHOD_ALLOC(Draw);
+    CX_METHOD_ALLOC(DrawAfter);
+    CX_METHOD_ALLOC(DrawBefore);
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
+
+    CX_METHOD_ALLOC(NewDraw);
 CX_OBJECT_END(cxView)
 
 cxChipmunkAttr *cxViewSupportChipmunk(cxAny pview);

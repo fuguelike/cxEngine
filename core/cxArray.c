@@ -20,11 +20,7 @@ static cxInt cxArrayLuaAtIndex(lua_State *L)
     CX_LUA_DEF_THIS(cxArray);
     cxInt idx = lua_tointeger(L, 2);
     cxAny any = cxArrayAtIndex(this, idx);
-    if(any == NULL){
-        lua_pushnil(L);
-    }else{
-        CX_LUA_PUSH_OBJECT(any);
-    }
+    CX_LUA_PUSH_OBJECT(any);
     return 1;
 }
 

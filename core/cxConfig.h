@@ -276,7 +276,7 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_LUA_NEW_PTR          (*(cxAny *)lua_newuserdata(gL, sizeof(cxAny)))
 
-#define CX_LUA_GET_PTR(i)       (*(cxAny *)lua_touserdata(gL, i))
+#define CX_LUA_GET_PTR(i)       lua_isuserdata(gL, i) ? (*(cxAny *)lua_touserdata(gL, i)) : NULL
 
 #define CX_LUA_SUPER(_t_)       {NULL,NULL},{"super",(cxAny)_t_##InstanceMethods}
 
@@ -302,8 +302,7 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_LUA_PUSH_OBJECT(o)                                       \
 if((o) != NULL) {                                                   \
-    CX_LUA_NEW_PTR = o;                                             \
-    CX_RETAIN(o);                                                   \
+    CX_LUA_NEW_PTR = (o);CX_RETAIN(o);                              \
     cxConstType type = cxObjectType(o);                             \
     luaL_getmetatable(gL, type);                                    \
     CX_ASSERT(lua_istable(gL, -1), "metatable %s not find",type);   \
@@ -332,17 +331,30 @@ static inline cxInt _t_##LuaNew(lua_State *L)                       \
     CX_LUA_RET_THIS(_t_);                                           \
 }
 
-//method
+
 
 extern lua_State *gL;
 
-#define CX_METHOD_DEF(_t_,_n_)          _t_ _n_
+//method
 
-#define CX_METHOD_SET(_m_,_f_)          _m_ = _f_
+typedef struct cxMethod cxMethod;
 
-#define CX_METHOD_RUN(_m_,...)          if(_m_ != NULL){_m_(__VA_ARGS__);}
+struct cxMethod {
+    cxAny func;
+    cxInt ref;
+};
 
-#define CX_METHOD_GET(_v_,_m_,...)      ((_m_ != NULL)?(_m_(__VA_ARGS__)):(_v_))
+#define CX_METHOD_TYPE(_r_,...)            (_r_ (*)(__VA_ARGS__))
+
+#define CX_METHOD_ALLOC(_n_)               cxMethod _n_
+
+#define CX_METHOD_REF(_m_,_f_,_r_)         CX_METHOD_RELEASE(_m_);(_m_).ref=_r_;(_m_).func=_f_
+
+#define CX_METHOD_RUN(_d_,_m_,_ft_,...)    ((_m_).func != NULL)?((_ft_((_m_).func))(__VA_ARGS__)):(_d_)
+
+#define CX_METHOD_RELEASE(_m_)             if((_m_).ref>0){lua_unref(gL,(_m_).ref);(_m_).ref=0;}
+
+#define CX_METHOD_SET(_m_,_f_)             (_m_).func = _f_
 
 //base type define
 CX_OBJECT_BEG(cxObject)
@@ -352,7 +364,7 @@ CX_OBJECT_BEG(cxObject)
     cxObjectFunc cxFree;
     cxInt cxTag;
     cxAny cxRoot;
-    CX_METHOD_DEF(cxReadAttrFunc,ReadAttr);
+    CX_METHOD_ALLOC(ReadAttr);
 CX_OBJECT_END(cxObject)
 
 

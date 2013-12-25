@@ -29,11 +29,25 @@ static cxInt cxEngineLuaSetDesignSize(lua_State *L)
     return 0;
 }
 
+static cxInt cxEngineLuaGetDesignSize(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxEngine);
+    cxLuaPushSize2fv(L, this->dessize);
+    return 1;
+}
+
 static cxInt cxEngineLuaSetShowBorder(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxEngine);
     this->isShowBorder = lua_toboolean(L, 1);
     return 0;
+}
+
+static cxInt cxEngineLuaGetShowBorder(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxEngine);
+    lua_pushboolean(L, this->isShowBorder);
+    return 1;
 }
 
 static cxInt cxEngineLuaGetScreenSize(lua_State *L)
@@ -56,10 +70,10 @@ cxInt cxEngineLuaAppendEvent(lua_State *L)
 }
 
 const luaL_Reg cxEngineInstanceMethods[] = {
-    {"on",cxEngineLuaAppendEvent},
-    {"setShowBorder",cxEngineLuaSetShowBorder},
-    {"screenSize",cxEngineLuaGetScreenSize},    //size.w size.h {w=1,h=2}
-    {"setDesignSize",cxEngineLuaSetDesignSize}, //cxEngineInstance:setDesignSize(w,h)
+    {"screenSize",cxEngineLuaGetScreenSize},
+    CX_LUA_PROPERTY(cxEngine, ShowBorder)
+    CX_LUA_PROPERTY(cxEngine, DesignSize)
+    CX_LUA_ON_EVENT(cxEngine)
     CX_LUA_SUPER(cxObject)
 };
 

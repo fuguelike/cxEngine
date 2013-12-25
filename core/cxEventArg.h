@@ -16,6 +16,11 @@
 
 CX_C_BEGIN
 
+CX_OBJECT_DEF(cxEventItem, cxObject)
+    cxEventFunc func;
+    cxAny arg;
+CX_OBJECT_END(cxEventItem)
+
 CX_OBJECT_DEF(cxEventArg, cxObject)
     cxAny weakRef;
     cxAny strongRef;

@@ -25,7 +25,7 @@ cxInt cxActionLuaAppendEvent(lua_State *L)
 }
 
 const luaL_Reg cxActionInstanceMethods[] = {
-    {"on",cxActionLuaAppendEvent},
+    CX_LUA_ON_EVENT(cxAction)
     CX_LUA_SUPER(cxObject)
 };
 
@@ -114,6 +114,14 @@ CX_OBJECT_FREE(cxAction, cxObject)
     CX_EVENT_RELEASE(this->onStart);
     CX_EVENT_RELEASE(this->onStop);
     CX_EVENT_RELEASE(this->onStep);
+    
+    CX_METHOD_RELEASE(this->Curve);
+    CX_METHOD_RELEASE(this->Init);
+    CX_METHOD_RELEASE(this->Active);
+    CX_METHOD_RELEASE(this->Over);
+    CX_METHOD_RELEASE(this->Reset);
+    CX_METHOD_RELEASE(this->Step);
+    CX_METHOD_RELEASE(this->Exit);
 }
 CX_OBJECT_TERM(cxAction, cxObject)
 
@@ -155,13 +163,13 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->prevTime = 0;
         this->delayElapsed = 0;
         this->durationElapsed = 0;
-        CX_METHOD_RUN(this->Init,this);
+        CX_METHOD_RUN(NULL, this->Init, CX_METHOD_TYPE(void,cxAny), this);
         CX_EVENT_FIRE(this, onStart);
     }
     //for active
     if(!this->isActive){
         this->isActive = true;
-        CX_METHOD_RUN(this->Active,this);
+        CX_METHOD_RUN(NULL, this->Active, CX_METHOD_TYPE(void,cxAny), this);
     }
     this->durationElapsed += dt;
     cxFloat value = this->durationElapsed/CX_MAX(this->duration, FLT_EPSILON);
@@ -179,23 +187,23 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     }
     //wait exit
     if(this->duration == 0){
-        isExit = CX_METHOD_GET(true, this->Exit,pav);
+        isExit = CX_METHOD_RUN(true, this->Exit, CX_METHOD_TYPE(cxBool,cxAny), this);
     }else if(this->durationElapsed < this->duration){
-        time = CX_METHOD_GET(time, this->Curve, this, time);
+        time = CX_METHOD_RUN(time, this->Curve, CX_METHOD_TYPE(cxFloat,cxAny,cxFloat), this, time);
         this->delta = time - this->prevTime;
         this->prevTime = time;
-        CX_METHOD_RUN(this->Step,this,dt,time);
+        CX_METHOD_RUN(NULL, this->Step, CX_METHOD_TYPE(void,cxAny,cxFloat,cxFloat),this,dt,time);
         CX_EVENT_FIRE(this, onStep);
     }else{
-        time = CX_METHOD_GET(1.0f, this->Curve, this, 1.0f);
+        time = CX_METHOD_RUN(1.0f, this->Curve, CX_METHOD_TYPE(cxFloat,cxAny,cxFloat),this,1.0f);
         this->delta = time - this->prevTime;
         this->prevTime = 0;
         this->durationElapsed = 0.0f;
         this->delayElapsed = 0.0f;
-        CX_METHOD_RUN(this->Step,this,dt,1.0f);
+        CX_METHOD_RUN(NULL, this->Step, CX_METHOD_TYPE(void,cxAny,cxFloat,cxFloat),this,dt,1.0f);
         CX_EVENT_FIRE(this, onStep);
         //check exit
-        isExit = CX_METHOD_GET(true, this->Exit,pav);
+        isExit = CX_METHOD_RUN(true, this->Exit, CX_METHOD_TYPE(cxBool,cxAny), this);
         this->isActive = false;
     }
     //check action exit
@@ -203,7 +211,7 @@ finished:
     //force exit or auto exit
     if(this->isExit || isExit){
         CX_EVENT_FIRE(this, onStop);
-        CX_METHOD_RUN(this->Over,this);
+        CX_METHOD_RUN(NULL, this->Over, CX_METHOD_TYPE(void,cxAny),this);
     }
     return (this->isExit || isExit);
 }
@@ -227,7 +235,7 @@ void cxActionReset(cxAny pav)
     CX_EVENT_RELEASE(this->onStart);
     CX_EVENT_RELEASE(this->onStop);
     CX_EVENT_RELEASE(this->onStep);
-    CX_METHOD_RUN(this->Reset,this);
+    CX_METHOD_RUN(NULL, this->Reset, CX_METHOD_TYPE(void,cxAny), this);
 }
 
 void cxActionResume(cxAny pav)

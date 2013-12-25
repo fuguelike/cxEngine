@@ -52,6 +52,7 @@ CX_OBJECT_FREE(cxActionRoot, cxObject)
 {
     CX_EVENT_RELEASE(this->onLoad);
     CX_RELEASE(this->codes);
+    CX_METHOD_RELEASE(this->Make);
 }
 CX_OBJECT_TERM(cxActionRoot, cxObject)
 
@@ -106,7 +107,7 @@ cxAny cxActionRootGet(cxConstChars src)
             continue;
         }
         cxConstChars temp = cxXMLReadElementName(reader);
-        info->object = CX_METHOD_GET(NULL, this->Make,temp,reader);
+        info->object = CX_METHOD_RUN(NULL, this->Make, CX_METHOD_TYPE(cxAny,cxConstChars,xmlTextReaderPtr),temp,reader);
         if(info->object == NULL){
             continue;
         }

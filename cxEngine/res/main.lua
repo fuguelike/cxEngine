@@ -1,6 +1,7 @@
 
 
 --global metatable
+
 --cxgEngine
 --cxgOpenGL
 --cxgWindow
@@ -18,17 +19,16 @@ function mainEnd(xml)
     
 end
 
+
 function main()
     
-    io.write(cxgOpenGL.cxShaderPositionColor)
-
     local loader = cxLoading.new()
     
     loader:on('onStart',function(loading)
               local txt = cxLabelTTF.make({font='banana.ttf',size='65',text='Loading...'})
               txt:setColor({r=1.0,g=0.0,b=0.0})
               txt:setSize(90)
-              loading:append(txt)
+              loading:appendView(txt)
          end)
     loader:on('onLoading', function(loading)
               local xml = cxViewRoot.make('main.xml')

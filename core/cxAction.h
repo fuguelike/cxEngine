@@ -15,12 +15,6 @@
 
 CX_C_BEGIN
 
-typedef void (*cxActionStepFunc)(cxAny pav,cxFloat dt,cxFloat time);
-
-typedef cxBool (*cxActionExitFunc)(cxAny pav);
-
-typedef void (*cxActionFunc)(cxAny pav);
-
 CX_OBJECT_DEF(cxAction, cxObject)
     cxAssist4f assist;
     cxUInt actionId;
@@ -40,13 +34,13 @@ CX_OBJECT_DEF(cxAction, cxObject)
     cxInt split;
     cxInt index;
     cxFloat splitDelta;
-    CX_METHOD_DEF(cxActionCurveFunc,Curve);
-    CX_METHOD_DEF(cxActionFunc,Init);
-    CX_METHOD_DEF(cxActionFunc,Active);
-    CX_METHOD_DEF(cxActionFunc,Over);
-    CX_METHOD_DEF(cxActionFunc,Reset);
-    CX_METHOD_DEF(cxActionStepFunc,Step);
-    CX_METHOD_DEF(cxActionExitFunc,Exit);
+    CX_METHOD_ALLOC(Curve);
+    CX_METHOD_ALLOC(Init);
+    CX_METHOD_ALLOC(Active);
+    CX_METHOD_ALLOC(Over);
+    CX_METHOD_ALLOC(Reset);
+    CX_METHOD_ALLOC(Step);
+    CX_METHOD_ALLOC(Exit);
     CX_EVENT_ALLOC(onStart);
     CX_EVENT_ALLOC(onStop);
     CX_EVENT_ALLOC(onSplit);

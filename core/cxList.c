@@ -30,11 +30,7 @@ static cxInt cxListLuaFirst(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxList);
     cxAny any = cxListFirst(this);
-    if(any == NULL){
-        lua_pushnil(L);
-    }else{
-        CX_LUA_PUSH_OBJECT(any);
-    }
+    CX_LUA_PUSH_OBJECT(any);
     return 1;
 }
 
@@ -42,11 +38,7 @@ static cxInt cxListLuaLast(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxList);
     cxAny any = cxListLast(this);
-    if(any == NULL){
-        lua_pushnil(L);
-    }else{
-        CX_LUA_PUSH_OBJECT(any);
-    }
+    CX_LUA_PUSH_OBJECT(any);
     return 1;
 }
 

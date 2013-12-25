@@ -65,7 +65,8 @@ static cxInt cxViewLuaSetColor(lua_State *L)
     cxColor4f color = cxLuaGetColor4f(L, 2, this->color);
     cxViewSetAlpha(this, color.a);
     cxViewSetColor(this, cxColor3fv(color.r, color.g, color.b));
-    return 0;
+    lua_pushvalue(L, 1);
+    return 1;
 }
 
 static cxInt cxViewLuaGetColor(lua_State *L)
@@ -105,39 +106,79 @@ static cxInt cxViewLuaGetFixScale(lua_State *L)
 
 static cxInt cxViewLuaSetSize(lua_State *L)
 {
+    cxInt top = lua_gettop(L);
     CX_LUA_DEF_THIS(cxView);
-    cxSize2f size = cxLuaGetSize2fv(L, 2, this->size);
+    cxSize2f size = this->size;
+    if(lua_istable(L, 2)){
+        size = cxLuaGetSize2fv(L, 2, this->size);
+    }else if(top == 3){
+        size.w = luaL_checknumber(L, 2);
+        size.h = luaL_checknumber(L, 3);
+    }else{
+        luaL_error(L, "args error");
+    }
     cxViewSetSize(this, size);
-    return 0;
+    lua_pushvalue(L, 1);
+    return 1;
 }
 
 static cxInt cxViewLuaSetPosition(lua_State *L)
 {
+    cxInt top = lua_gettop(L);
     CX_LUA_DEF_THIS(cxView);
-    cxVec2f pos = cxLuaGetVec2fv(L, 2, this->position);
+    cxVec2f pos = this->position;
+    if(lua_istable(L, 2)){
+        pos = cxLuaGetVec2fv(L, 2, this->position);
+    }else if(top == 3){
+        pos.x = luaL_checknumber(L, 2);
+        pos.y = luaL_checknumber(L, 3);
+    }else{
+        luaL_error(L, "args error");
+    }
     cxViewSetPos(this, pos);
-    return 0;
+    lua_pushvalue(L, 1);
+    return 1;
 }
 
 static cxInt cxViewLuaSetScale(lua_State *L)
 {
+    cxInt top = lua_gettop(L);
     CX_LUA_DEF_THIS(cxView);
-    cxVec2f scale = cxLuaGetVec2fv(L, 2, this->scale);
+    cxVec2f scale = this->scale;
+    if(lua_istable(L, 2)){
+        scale = cxLuaGetVec2fv(L, 2, this->position);
+    }else if(top == 3){
+        scale.x = luaL_checknumber(L, 2);
+        scale.y = luaL_checknumber(L, 3);
+    }else{
+        luaL_error(L, "args error");
+    }
     cxViewSetScale(this, scale);
-    return 0;
+    lua_pushvalue(L, 1);
+    return 1;
 }
 
 static cxInt cxViewLuaSetFixScale(lua_State *L)
 {
+    cxInt top = lua_gettop(L);
     CX_LUA_DEF_THIS(cxView);
-    cxVec2f fixscale = cxLuaGetVec2fv(L, 2, this->fixscale);
+    cxVec2f fixscale = this->fixscale;
+    if(lua_istable(L, 2)){
+        fixscale = cxLuaGetVec2fv(L, 2, this->position);
+    }else if(top == 3){
+        fixscale.x = luaL_checknumber(L, 2);
+        fixscale.y = luaL_checknumber(L, 3);
+    }else{
+        luaL_error(L, "args error");
+    }
     cxViewSetFixScale(this, fixscale);
-    return 0;
+    lua_pushvalue(L, 1);
+    return 1;
 }
 
 const luaL_Reg cxViewInstanceMethods[] = {
-    {"append",cxViewLuaAppendView},
-    {"action",cxViewLuaAppendAction},
+    {"appendView",cxViewLuaAppendView},
+    {"appendAction",cxViewLuaAppendAction},
     {"createTimer",cxViewLuaCreateTimer},
     CX_LUA_PROPERTY(cxView,Color)
     CX_LUA_PROPERTY(cxView,Position)
@@ -366,6 +407,14 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_RELEASE(this->actions);
     CX_RELEASE(this->caches);
     CX_RELEASE(this->args);
+    
+    CX_METHOD_RELEASE(this->IsTouch);
+    CX_METHOD_RELEASE(this->Touch);
+    CX_METHOD_RELEASE(this->IsOnKey);
+    CX_METHOD_RELEASE(this->OnKey);
+    CX_METHOD_RELEASE(this->Draw);
+    CX_METHOD_RELEASE(this->DrawAfter);
+    CX_METHOD_RELEASE(this->DrawBefore);
 }
 CX_OBJECT_TERM(cxView, cxObject)
 
@@ -873,7 +922,7 @@ cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch)
 cxBool cxViewTouch(cxAny pview,cxTouch *touch)
 {
     cxView this = pview;
-    cxUInt type = CX_METHOD_GET(cxViewIsTouchTypeNone, this->IsTouch, this, touch);
+    cxUInt type = CX_METHOD_RUN(cxViewIsTouchTypeNone, this->IsTouch, CX_METHOD_TYPE(cxViewIsTouchType,cxAny,cxTouch *),this,touch);
     if(type == cxViewIsTouchTypeNone){
         return false;
     }
@@ -881,7 +930,7 @@ cxBool cxViewTouch(cxAny pview,cxTouch *touch)
         return true;
     }
     if(type & cxViewIsTouchTypeSelf){
-        return CX_METHOD_GET(false, this->Touch, this, touch);
+        return CX_METHOD_RUN(false, this->Touch, CX_METHOD_TYPE(cxBool,cxAny,cxTouch *),this,touch);
     }
     return false;
 }
@@ -914,7 +963,7 @@ cxUInt cxViewIsOnKey(cxAny pview,cxKey *key)
 cxBool cxViewOnKey(cxAny pview,cxKey *key)
 {
     cxView this = pview;
-    cxUInt type = CX_METHOD_GET(cxViewIsTouchTypeNone, this->IsOnKey, this, key);
+    cxUInt type = CX_METHOD_RUN(cxViewIsTouchTypeNone, this->IsOnKey, CX_METHOD_TYPE(cxViewIsTouchType,cxAny,cxKey *),this,key);
     if(type == cxViewIsTouchTypeNone){
         return false;
     }
@@ -922,7 +971,7 @@ cxBool cxViewOnKey(cxAny pview,cxKey *key)
         return true;
     }
     if(type & cxViewIsTouchTypeSelf){
-        return CX_METHOD_GET(false, this->OnKey, this, key);
+        return CX_METHOD_RUN(false, this->OnKey, CX_METHOD_TYPE(cxBool,cxAny,cxKey *),this , key);
     }
     return false;
 }
@@ -998,8 +1047,9 @@ void cxViewDraw(cxAny pview)
     if(this->isCropping){
         cxOpenGLEnableScissor(this->scissor);
     }
-    CX_METHOD_RUN(this->DrawBefore,this);
-    CX_METHOD_RUN(this->Draw,this);
+    CX_METHOD_RUN(NULL, this->DrawBefore, CX_METHOD_TYPE(void,cxAny), this);
+    CX_METHOD_RUN(NULL, this->Draw, CX_METHOD_TYPE(void,cxAny), this);
+    
     if(this->isSort){
         cxViewSort(this);
     }
@@ -1007,7 +1057,7 @@ void cxViewDraw(cxAny pview)
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    CX_METHOD_RUN(this->DrawAfter,this);
+    CX_METHOD_RUN(NULL, this->DrawAfter, CX_METHOD_TYPE(void,cxAny), this);
     if(this->isCropping){
         cxOpenGLDisableScissor();
     }

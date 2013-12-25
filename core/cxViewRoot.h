@@ -10,7 +10,6 @@
 #define cxEngine_cxViewRoot_h
 
 #include <core/cxView.h>
-#include <core/cxEventItem.h>
 #include <core/cxEventArg.h>
 #include <streams/cxAssetsStream.h>
 #include <textures/cxTextureFactory.h>
@@ -22,7 +21,7 @@ CX_OBJECT_DEF(cxViewRoot, cxView)
     cxBool isError;
     cxHash items;
     cxHash actions;
-    CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
+    CX_METHOD_ALLOC(Make);
     CX_EVENT_ALLOC(onBegin);
     CX_EVENT_ALLOC(onEnd);
 CX_OBJECT_END(cxViewRoot)

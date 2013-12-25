@@ -10,7 +10,7 @@
 #define cxEngine_cxActionRoot_h
 
 #include <core/cxAction.h>
-#include "cxEventItem.h"
+#include "cxEventArg.h"
 #include "cxArray.h"
 
 CX_C_BEGIN
@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxActionRoot, cxObject)
     cxBool isError;
     cxHash codes;
     CX_EVENT_ALLOC(onLoad);
-    CX_METHOD_DEF(cxXMLScriptMakeElementFunc, Make);
+    CX_METHOD_ALLOC(Make);
 CX_OBJECT_END(cxActionRoot)
 
 cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader);

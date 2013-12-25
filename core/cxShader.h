@@ -34,10 +34,6 @@ enum {
 #define CX_UNIFORM_MATRIX_MODELVIEW_PROJECT         "kxMatrixModelViewProject"
 #define CX_UNIFORM_ATLAS_TEXTURE                    "kxAtlasTexture"
 
-typedef void (*cxShaderFunc)(cxAny shader);
-
-typedef cxString (*cxShaderSource)(cxAny shader);
-
 CX_OBJECT_DEF(cxShader, cxObject)
     cxMatrix4f kxMatrixProject;
     cxMatrix4f kxMatrixModelView;
@@ -47,11 +43,11 @@ CX_OBJECT_DEF(cxShader, cxObject)
     GLuint fragmentShader;
     GLint uniformMatrixModelviewProject;
     GLint uniformAtlasTexture;
-    CX_METHOD_DEF(cxShaderFunc,     Init);
-    CX_METHOD_DEF(cxShaderFunc,     Update);
-    CX_METHOD_DEF(cxShaderFunc,     GetUniform);
-    CX_METHOD_DEF(cxShaderSource,   GetVertexSource);
-    CX_METHOD_DEF(cxShaderSource,   GetFragmentSource);
+    CX_METHOD_ALLOC(Init);
+    CX_METHOD_ALLOC(Update);
+    CX_METHOD_ALLOC(GetUniform);
+    CX_METHOD_ALLOC(GetVertexSource);
+    CX_METHOD_ALLOC(GetFragmentSource);
 CX_OBJECT_END(cxShader)
 
 void cxShaderInitPosColorTex(cxAny this);

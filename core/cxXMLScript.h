@@ -12,7 +12,7 @@
 #include <libxml/xmlreader.h>
 #include "cxBase.h"
 #include "cxString.h"
-#include "cxEventItem.h"
+#include "cxEventArg.h"
 #include "cxHash.h"
 #include "cxTexture.h"
 
@@ -27,10 +27,6 @@ CX_OBJECT_END(cxTextureAttr)
 CX_OBJECT_DEF(cxXMLReader, cxObject)
     xmlTextReaderPtr reader;
 CX_OBJECT_END(cxXMLReader)
-
-typedef cxAny (*cxXMLScriptMakeElementFunc)(cxConstChars temp,xmlTextReaderPtr reader);
-
-typedef cxBool (*cxXMLScriptLoadFunc)(cxAny pview);
 
 CX_OBJECT_DEF(cxXMLScript, cxObject)
     cxString bytes;

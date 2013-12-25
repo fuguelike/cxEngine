@@ -131,6 +131,11 @@ CX_OBJECT_FREE(cxShader, cxObject)
     glDeleteShader(this->vertexShader);
     glDeleteShader(this->fragmentShader);
     cxOpenGLDeleteProgram(this->program);
+    CX_METHOD_RELEASE(this->Init);
+    CX_METHOD_RELEASE(this->Update);
+    CX_METHOD_RELEASE(this->GetUniform);
+    CX_METHOD_RELEASE(this->GetVertexSource);
+    CX_METHOD_RELEASE(this->GetFragmentSource);
 }
 CX_OBJECT_TERM(cxShader, cxObject)
 
@@ -142,14 +147,14 @@ void cxShaderUsing(cxShader this,cxBool isAtlas)
     kmMat4Multiply(&this->kxMatrix, &this->kxMatrixProject, &this->kxMatrixModelView);
     glUniformMatrix4fv(this->uniformMatrixModelviewProject, 1, GL_FALSE, this->kxMatrix.mat);
     glUniform1i(this->uniformAtlasTexture, isAtlas);
-    CX_METHOD_RUN(this->Update, this);
+    CX_METHOD_RUN(NULL, this->Update, CX_METHOD_TYPE(void,cxAny), this);
 }
 
 bool cxShaderInit(cxShader this)
 {
-    cxString vbytes = CX_METHOD_GET(NULL, this->GetVertexSource,this);
+    cxString vbytes = CX_METHOD_RUN(NULL, this->GetVertexSource, CX_METHOD_TYPE(cxString,cxAny), this);
     CX_ASSERT(vbytes != NULL, "get vertex shader source failed");
-    cxString fbytes = CX_METHOD_GET(NULL, this->GetFragmentSource,this);
+    cxString fbytes = CX_METHOD_RUN(NULL, this->GetFragmentSource, CX_METHOD_TYPE(cxString,cxAny), this);
     CX_ASSERT(vbytes != NULL, "get fragment shader source failed");
     if(!cxShaderCompile(this, &this->vertexShader, GL_VERTEX_SHADER, vbytes)){
         return false;
@@ -164,7 +169,7 @@ bool cxShaderInit(cxShader this)
     if(this->fragmentShader){
         glAttachShader(this->program, this->fragmentShader);
     }
-    CX_METHOD_RUN(this->Init,this);
+    CX_METHOD_RUN(NULL, this->Init, CX_METHOD_TYPE(void,cxAny), this);
     GLint status = 0;
     glLinkProgram(this->program);
     glGetProgramiv(this->program, GL_LINK_STATUS, &status);
@@ -178,7 +183,7 @@ bool cxShaderInit(cxShader this)
     cxOpenGLUseProgram(this->program);
     this->uniformMatrixModelviewProject = glGetUniformLocation(this->program, CX_UNIFORM_MATRIX_MODELVIEW_PROJECT);
     this->uniformAtlasTexture = glGetUniformLocation(this->program, CX_UNIFORM_ATLAS_TEXTURE);
-    CX_METHOD_RUN(this->GetUniform,this);
+    CX_METHOD_RUN(NULL, this->GetUniform, CX_METHOD_TYPE(void,cxAny), this);
     return true;
 }
 

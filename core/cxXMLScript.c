@@ -9,7 +9,7 @@
 #include <textures/cxTextureFactory.h>
 #include "cxXMLScript.h"
 #include "cxHash.h"
-#include "cxEventItem.h"
+#include "cxEventArg.h"
 #include "cxEngine.h"
 #include "cxRegex.h"
 #include "cxAutoPool.h"
@@ -67,26 +67,6 @@ static cxBool cxXMLAttrRunFunc(cxConstChars value,cxReaderAttrInfo *info)
     }else{
         lua_pop(gL, 1);
     }
-//    if(ret){
-//        return ret;
-//    }
-//    cxConstType type = cxObjectType(info->object);
-//    if(type == NULL){
-//        return ret;
-//    }
-//    int top = lua_gettop(gL);
-//    luaL_getmetatable(gL, type);
-//    CX_ASSERT(lua_istable(gL, -1), "type %s not register",type);
-//    lua_getfield(gL, -1, "function");
-//    CX_ASSERT(lua_istable(gL, -1), "type %s function not register",type);
-//    lua_getfield(gL, -1, funcName);
-//    if(lua_isfunction(gL, -1) || lua_iscfunction(gL, -1)){
-//        cxJsonPush(json);
-//        ret = (lua_pcall(gL, 1, 1, 0) == 0);
-//    }else{
-//        
-//    }
-//    top = lua_gettop(gL);
     return ret;
 }
 

@@ -39,7 +39,7 @@ static cxInt cxViewRootLuaGetView(lua_State *L)
 
 const luaL_Reg cxViewRootInstanceMethods[] = {
     {"getView",cxViewRootLuaGetView},
-    {"on",cxViewRootLuaAppendEvent},
+    CX_LUA_ON_EVENT(cxView)
     CX_LUA_SUPER(cxView)
 };
 
@@ -88,6 +88,7 @@ CX_OBJECT_FREE(cxViewRoot, cxView)
     CX_EVENT_RELEASE(this->onEnd);
     CX_RELEASE(this->items);
     CX_RELEASE(this->actions);
+    CX_METHOD_RELEASE(this->Make);
 }
 CX_OBJECT_TERM(cxViewRoot, cxView)
 
@@ -168,7 +169,7 @@ static void cxViewRootLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack s
         if(type == XML_READER_TYPE_ELEMENT){
             cxConstChars temp = cxXMLReadElementName(reader);
             
-            info->object = CX_METHOD_GET(NULL, this->Make, temp, info->reader);
+            info->object = CX_METHOD_RUN(NULL, this->Make, CX_METHOD_TYPE(cxAny,cxConstChars,xmlTextReaderPtr),temp,info->reader);
             CX_ASSERT(info->object != NULL, "make element failed");
             cxObjectSetRoot(info->object, this);
             
