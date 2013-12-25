@@ -13,6 +13,19 @@
 
 #define CX_SCROLL_MOVE_ACTION_ID 100000
 
+const luaL_Reg cxScrollInstanceMethods[] = {
+    CX_LUA_SUPER(cxView)
+};
+
+const luaL_Reg cxScrollTypeMethods[] = {
+    CX_LUA_TYPE(cxScroll)
+};
+
+void cxScrollTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxScroll);
+}
+
 void cxScrollReadAttr(cxReaderAttrInfo *info)
 {
     cxViewReadAttr(info);

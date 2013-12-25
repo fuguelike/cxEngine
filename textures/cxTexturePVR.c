@@ -40,6 +40,20 @@ enum{
 
 #pragma pack()
 
+const luaL_Reg cxTexturePVRInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxTexture)
+};
+
+const luaL_Reg cxTexturePVRTypeMethods[] = {
+    {NULL,NULL}
+};
+
+void cxTexturePVRTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxTexturePVR);
+}
+
 static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
 {
     cxBool ret = false;

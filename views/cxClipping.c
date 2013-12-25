@@ -15,6 +15,20 @@
 
 static cxBool refs[CX_STENCIL_MASK + 1] = {0};
 
+const luaL_Reg cxClippingInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxView)
+};
+
+const luaL_Reg cxClippingTypeMethods[] = {
+    CX_LUA_TYPE(cxClipping)
+};
+
+void cxClippingTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxClipping);
+}
+
 static cxUInt8 cxStencilRefAlloc()
 {
     for(int i=1; i < CX_STENCIL_MASK; i++){

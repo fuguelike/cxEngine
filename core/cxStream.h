@@ -25,7 +25,7 @@ CX_OBJECT_DEF(cxStream, cxObject)
     CX_METHOD_ALLOC(cxBool, Open, cxAny);
     CX_METHOD_ALLOC(cxInt, Read, cxAny, cxPointer, cxInt);
     CX_METHOD_ALLOC(cxInt, Write, cxAny, cxPointer, cxInt);
-    CX_METHOD_ALLOC(cxBool, Seek, cxAny, cxOff, cxInt);
+    CX_METHOD_ALLOC(cxInt, Seek, cxAny, cxOff, cxInt);
     CX_METHOD_ALLOC(cxOff, Position, cxAny);
     CX_METHOD_ALLOC(void, Close, cxAny);
     CX_METHOD_ALLOC(cxString, AllBytes, cxAny);
@@ -41,7 +41,7 @@ cxInt cxStreamRead(cxAny this,cxPointer buffer,cxInt size);
 
 cxInt cxStreamWrite(cxAny this,cxPointer buffer,cxInt size);
 
-cxBool cxStreamSeek(cxAny this,cxOff off,cxInt flags);
+cxInt cxStreamSeek(cxAny this,cxOff off,cxInt flags);
 
 cxOff cxStreamPosition(cxAny this);
 

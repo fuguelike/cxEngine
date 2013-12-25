@@ -14,16 +14,21 @@
 static cxInt cxLabelTTFLuaSetFont(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxLabelTTF);
-    cxConstChars font = luaL_checkstring(L, 2);
-    cxLabelTTFSetFont(this, UTF8(font));
-    return 0;
-}
-
-static cxInt cxLabelTTFLuaSetSize(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxLabelTTF);
-    cxFloat size = luaL_checknumber(L, 2);
-    cxLabelTTFSetFontSize(this, size);
+    if(!lua_istable(L, 2)){
+        luaL_error(L, "args error: {font='',size=''}");
+        return 0;
+    }
+    lua_getfield(L, 2, "font");
+    if(lua_isstring(L, -1)){
+        cxLabelTTFSetFont(this, UTF8(luaL_checkstring(L, -1)));
+    }
+    lua_pop(L, 1);
+    
+    lua_getfield(L, 2, "size");
+    if(lua_isnumber(L, -1)){
+        cxLabelTTFSetFontSize(this, luaL_checknumber(L, -1));
+    }
+    lua_pop(L, 1);
     return 0;
 }
 
@@ -37,7 +42,6 @@ static cxInt cxLabelTTFLuaSetText(lua_State *L)
 
 const luaL_Reg cxLabelTTFInstanceMethods[] = {
     {"setFont",cxLabelTTFLuaSetFont},
-    {"setSize",cxLabelTTFLuaSetSize},
     {"setText",cxLabelTTFLuaSetText},
     CX_LUA_SUPER(cxSprite)
 };

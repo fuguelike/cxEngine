@@ -13,6 +13,29 @@
 
 static cxTextureFactory instance = NULL;
 
+const luaL_Reg cxTextureFactoryInstanceMethods[] = {
+    CX_LUA_SUPER(cxObject)
+};
+
+static cxInt cxTextureFactoryLuaCreate(lua_State *L)
+{
+    cxConstChars file = luaL_checkstring(L, 1);
+    cxBool cache = cxLuaBoolValue(L, 2, true);
+    cxTexture texture = cache ? cxTextureFactoryLoadFile(file) : cxTextureCreate(file);
+    CX_LUA_PUSH_OBJECT(texture);
+    return 1;
+}
+
+const luaL_Reg cxTextureFactoryTypeMethods[] = {
+    {"create",cxTextureFactoryLuaCreate},
+    {NULL,NULL},
+};
+
+void cxTextureFactoryTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxTextureFactory);
+}
+
 cxTextureFactory cxTextureFactoryInstance()
 {
     if(instance == NULL){

@@ -62,7 +62,7 @@ static cxInt cxViewLuaCreateTimer(lua_State *L)
 static cxInt cxViewLuaSetColor(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxView);
-    cxColor4f color = cxLuaGetColor4f(L, 2, this->color);
+    cxColor4f color = cxLuaColor4fValue(L, 2, this->color);
     cxViewSetAlpha(this, color.a);
     cxViewSetColor(this, cxColor3fv(color.r, color.g, color.b));
     lua_pushvalue(L, 1);
@@ -110,7 +110,7 @@ static cxInt cxViewLuaSetSize(lua_State *L)
     CX_LUA_DEF_THIS(cxView);
     cxSize2f size = this->size;
     if(lua_istable(L, 2)){
-        size = cxLuaGetSize2fv(L, 2, this->size);
+        size = cxLuaSize2fValue(L, 2, this->size);
     }else if(top == 3){
         size.w = luaL_checknumber(L, 2);
         size.h = luaL_checknumber(L, 3);
@@ -128,7 +128,7 @@ static cxInt cxViewLuaSetPosition(lua_State *L)
     CX_LUA_DEF_THIS(cxView);
     cxVec2f pos = this->position;
     if(lua_istable(L, 2)){
-        pos = cxLuaGetVec2fv(L, 2, this->position);
+        pos = cxLuaVec2fValue(L, 2, this->position);
     }else if(top == 3){
         pos.x = luaL_checknumber(L, 2);
         pos.y = luaL_checknumber(L, 3);
@@ -146,7 +146,7 @@ static cxInt cxViewLuaSetScale(lua_State *L)
     CX_LUA_DEF_THIS(cxView);
     cxVec2f scale = this->scale;
     if(lua_istable(L, 2)){
-        scale = cxLuaGetVec2fv(L, 2, this->position);
+        scale = cxLuaVec2fValue(L, 2, this->position);
     }else if(top == 3){
         scale.x = luaL_checknumber(L, 2);
         scale.y = luaL_checknumber(L, 3);
@@ -164,7 +164,7 @@ static cxInt cxViewLuaSetFixScale(lua_State *L)
     CX_LUA_DEF_THIS(cxView);
     cxVec2f fixscale = this->fixscale;
     if(lua_istable(L, 2)){
-        fixscale = cxLuaGetVec2fv(L, 2, this->position);
+        fixscale = cxLuaVec2fValue(L, 2, this->position);
     }else if(top == 3){
         fixscale.x = luaL_checknumber(L, 2);
         fixscale.y = luaL_checknumber(L, 3);

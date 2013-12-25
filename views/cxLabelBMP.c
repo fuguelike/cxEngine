@@ -14,16 +14,21 @@
 static cxInt cxLabelBMPLuaSetFont(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxLabelBMP);
-    cxConstChars font = luaL_checkstring(L, 2);
-    cxLabelBMPSetFont(this, UTF8(font));
-    return 0;
-}
-
-static cxInt cxLabelBMPLuaSetSize(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxLabelBMP);
-    cxFloat size = luaL_checknumber(L, 2);
-    cxLabelBMPSetSize(this, size);
+    if(!lua_istable(L, 2)){
+        luaL_error(L, "args error: {font='',size=''}");
+        return 0;
+    }
+    lua_getfield(L, 2, "font");
+    if(lua_isstring(L, -1)){
+        cxLabelBMPSetFont(this, UTF8(luaL_checkstring(L, -1)));
+    }
+    lua_pop(L, 1);
+    
+    lua_getfield(L, 2, "size");
+    if(lua_isnumber(L, -1)){
+        cxLabelBMPSetSize(this, luaL_checknumber(L, -1));
+    }
+    lua_pop(L, 1);
     return 0;
 }
 
@@ -37,7 +42,6 @@ static cxInt cxLabelBMPLuaSetText(lua_State *L)
 
 const luaL_Reg cxLabelBMPInstanceMethods[] = {
     {"setFont",cxLabelBMPLuaSetFont},
-    {"setSize",cxLabelBMPLuaSetSize},
     {"setText",cxLabelBMPLuaSetText},
     CX_LUA_SUPER(cxAtlas)
 };

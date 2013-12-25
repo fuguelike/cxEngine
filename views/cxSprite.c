@@ -18,24 +18,28 @@ cxInt cxSpriteLuaAppendEvent(lua_State *L)
     return 0;
 }
 
+static cxInt cxSpriteLuaSetTexture(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxSprite);
+    cxBool ust = cxLuaBoolValue(L, 3, true);
+    cxBool cache = cxLuaBoolValue(L, 4, true);
+    cxConstChars url = luaL_checkstring(L, 2);
+    cxSpriteSetTextureURL(this, url, ust, cache);
+    return 0;
+}
+
 const luaL_Reg cxSpriteInstanceMethods[] = {
+    {"setTexture",cxSpriteLuaSetTexture},
     CX_LUA_ON_EVENT(cxSprite)
     CX_LUA_SUPER(cxView)
 };
 
 static cxInt cxSpriteLuaMake(lua_State *L)
 {
-    cxInt top = lua_gettop(L);
     CX_LUA_NEW_THIS(cxSprite);
-    cxBool ust = true;
-    cxBool cache = true;
+    cxBool ust = cxLuaBoolValue(L, 2, true);
+    cxBool cache = cxLuaBoolValue(L, 3, true);
     cxConstChars url = luaL_checkstring(L, 1);
-    if(top >=2 && lua_isboolean(L, 2)){
-        ust = lua_toboolean(L, 2);
-    }
-    if(top >=3 && lua_isboolean(L, 3)){
-        cache = lua_toboolean(L, 3);
-    }
     cxSpriteSetTextureURL(this, url, ust, cache);
     CX_LUA_RET_THIS(cxSprite);
 }

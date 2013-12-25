@@ -46,7 +46,21 @@ static cxInt cxObjectLuaToString(lua_State *L)
     return 1;
 }
 
+static cxInt cxObjectLuaSetMetaMethod(lua_State *L)
+{
+    cxConstChars name = luaL_checkstring(L, 2);
+    lua_getmetatable(L, 1);
+    CX_ASSERT(lua_istable(L, -1), "get metatable error");
+    lua_getfield(L, -1, "__index");
+    CX_ASSERT(lua_istable(L, -1), "get metatable __index error");
+    lua_pushvalue(L, 3);
+    lua_setfield(L, -2, name);
+    lua_pop(L, 2);
+    return 0;
+}
+
 const luaL_Reg cxObjectInstanceMethods[] = {
+    {"setMetaMethod",cxObjectLuaSetMetaMethod},
     {"__tostring",cxObjectLuaToString},
     CX_LUA_PROPERTY(cxObject, Tag)
     CX_LUA_ON_EVENT(cxObject)

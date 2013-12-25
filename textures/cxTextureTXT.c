@@ -11,6 +11,20 @@
 #include <core/cxUtil.h>
 #include "cxTextureTXT.h"
 
+const luaL_Reg cxTextureTXTInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxTexture)
+};
+
+const luaL_Reg cxTextureTXTTypeMethods[] = {
+    {NULL,NULL}
+};
+
+void cxTextureTXTTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxTextureTXT);
+}
+
 static cxBool cxTextureTXTUseSystemCreate(cxAny texture)
 {
     cxTextureTXT this = texture;

@@ -27,7 +27,7 @@ static cxInt cxArrayLuaAtIndex(lua_State *L)
 static cxInt cxArrayLuaAppend(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxArray);
-    cxAny any = cxLuaGetObject(L, 2);
+    cxAny any = cxLuaObjectValue(L, 2);
     cxArrayAppend(this, any);
     return 0;
 }

@@ -24,9 +24,21 @@ void cxInitTypes()
     cxListTypeInit();
     cxStackTypeInit();
     
+    cxIconvTypeInit();
+    
     cxStreamTypeInit();
     cxPlayerTypeInit();
     cxAssetsStreamTypeInit();
+    cxMemStreamTypeInit();
+    cxFileStreamTypeInit();
+    
+    cxTextureFactoryTypeInit();
+    cxTexturePKMTypeInit();
+    cxTexturePNGTypeInit();
+    cxTexturePVRTypeInit();
+    cxTextureXMLTypeInit();
+    cxTextureTXTTypeInit();
+    cxTextureTypeInit();
     
     cxShaderClippingTypeInit();
     cxShaderDefaultTypeInit();
@@ -48,6 +60,9 @@ void cxInitTypes()
     cxActionRootTypeInit();
     
     cxViewTypeInit();
+    cxClippingTypeInit();
+    cxTableTypeInit();
+    cxScrollTypeInit();
     cxWindowTypeInit();
     cxSpriteTypeInit();
     cxViewRootTypeInit();

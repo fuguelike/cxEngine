@@ -11,7 +11,7 @@
 static cxInt cxListLuaAppend(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxList);
-    cxAny any = cxLuaGetObject(L, 2);
+    cxAny any = cxLuaObjectValue(L, 2);
     cxListElement *ret = cxListAppend(this, any);
     lua_pushlightuserdata(L, ret);
     return 1;
@@ -20,7 +20,7 @@ static cxInt cxListLuaAppend(lua_State *L)
 static cxInt cxListLuaPrepend(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxList);
-    cxAny any = cxLuaGetObject(L, 2);
+    cxAny any = cxLuaObjectValue(L, 2);
     cxListElement *ret = cxListPrepend(this, any);
     lua_pushlightuserdata(L, ret);
     return 1;

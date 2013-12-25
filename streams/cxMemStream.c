@@ -8,6 +8,27 @@
 
 #include "cxMemStream.h"
 
+const luaL_Reg cxMemStreamInstanceMethods[] = {
+    CX_LUA_SUPER(cxStream)
+};
+
+static cxInt cxMemStreamLuaCreate(lua_State *L)
+{
+    cxStream stream = CX_CREATE(cxMemStream);
+    CX_LUA_PUSH_OBJECT(stream);
+    return 1;
+}
+
+const luaL_Reg cxMemStreamTypeMethods[] = {
+    {"create",cxMemStreamLuaCreate},
+    {NULL,NULL}
+};
+
+void cxMemStreamTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxMemStream);
+}
+
 static cxBool cxMemStreamOpen(cxAny this)
 {
     cxMemStream stream = this;
@@ -63,27 +84,27 @@ static cxOff cxMemStreamPosition(cxAny this)
     return stream->position;
 }
 
-static cxBool cxMemStreamSeek(cxAny this,cxOff off,cxInt flags)
+static cxInt cxMemStreamSeek(cxAny this,cxOff off,cxInt flags)
 {
     cxMemStream stream = this;
     if(!stream->super.canSeek){
-        return false;
+        return 0;
     }
     if(flags == SEEK_SET && off < stream->super.length){
         stream->position = off;
-        return true;
+        return stream->position;
     }
     cxInt seek = (cxInt)(stream->super.length - stream->position);
     if(flags == SEEK_CUR && off < seek){
         stream->position += off;
-        return true;
+        return stream->position;
     }
     seek = (cxInt)(stream->super.length + off);
     if(flags == SEEK_END && seek < stream->super.length){
         stream->position = seek;
-        return true;
+        return stream->position;
     }
-    return false;
+    return 0;
 }
 
 static cxString cxMemStreamAllBytes(cxAny this)

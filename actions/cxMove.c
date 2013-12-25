@@ -18,7 +18,7 @@ static cxInt cxMoveLuaMake(lua_State *L)
 {
     CX_LUA_NEW_THIS(cxMove);
     this->super.duration = luaL_checknumber(L, 1);
-    this->endPos = cxLuaGetVec2fv(L, 2, cxVec2fv(0, 0));
+    this->endPos = cxLuaVec2fValue(L, 2, cxVec2fv(0, 0));
     CX_LUA_RET_THIS(cxMove);
 }
 

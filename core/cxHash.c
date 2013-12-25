@@ -22,7 +22,7 @@ static cxInt cxHashLuaGet(lua_State *L)
 static cxInt cxHashLuaSet(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxHash);
-    cxAny any = cxLuaGetObject(L, 3);
+    cxAny any = cxLuaObjectValue(L, 3);
     if(any == NULL){
         luaL_error(L, "cxHash:set(int|string,any) any args error");
         return 0;

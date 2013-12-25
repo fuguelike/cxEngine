@@ -43,7 +43,47 @@ void cxLuaPushColor4f(lua_State *L,cxColor4f color)
     lua_setfield(L, -2, "a");
 }
 
-cxVec2f cxLuaGetVec2fv(lua_State *L,cxInt n,cxVec2f d)
+cxBool cxLuaBoolValue(lua_State *L,cxInt n,cxBool d)
+{
+    cxBool rv = d;
+    cxInt top = lua_gettop(L);
+    if(top >= n && lua_isboolean(L, n)){
+        rv = lua_toboolean(L, n);
+    }
+    return rv;
+}
+
+cxInt cxLuaIntValue(lua_State *L,cxInt n,cxInt d)
+{
+    cxInt rv = d;
+    cxInt top = lua_gettop(L);
+    if(top >= n && lua_isnumber(L, n)){
+        rv = lua_tointeger(L, n);
+    }
+    return rv;
+}
+
+cxConstChars cxLuaStringValue(lua_State *L,cxInt n,cxConstChars d)
+{
+    cxConstChars rv = d;
+    cxInt top = lua_gettop(L);
+    if(top >= n && lua_isstring(L, n)){
+        rv = lua_tostring(L, n);
+    }
+    return rv;
+}
+
+cxFloat cxLuaFloatValue(lua_State *L,cxInt n,cxFloat d)
+{
+    cxFloat rv = d;
+    cxInt top = lua_gettop(L);
+    if(top >= n && lua_isnumber(L, n)){
+        rv = lua_tonumber(L, n);
+    }
+    return rv;
+}
+
+cxVec2f cxLuaVec2fValue(lua_State *L,cxInt n,cxVec2f d)
 {
     cxVec2f v = d;
     if(!lua_istable(L, n)){
@@ -59,7 +99,7 @@ cxVec2f cxLuaGetVec2fv(lua_State *L,cxInt n,cxVec2f d)
     return v;
 }
 
-cxColor4f cxLuaGetColor4f(lua_State *L,cxInt n,cxColor4f d)
+cxColor4f cxLuaColor4fValue(lua_State *L,cxInt n,cxColor4f d)
 {
     cxColor4f v = d;
     if(!lua_istable(L, n)){
@@ -88,7 +128,7 @@ cxColor4f cxLuaGetColor4f(lua_State *L,cxInt n,cxColor4f d)
     return v;
 }
 
-cxSize2f cxLuaGetSize2fv(lua_State *L,cxInt n,cxSize2f d)
+cxSize2f cxLuaSize2fValue(lua_State *L,cxInt n,cxSize2f d)
 {
     cxSize2f v = d;
     if(!lua_istable(L, n)){
@@ -104,7 +144,7 @@ cxSize2f cxLuaGetSize2fv(lua_State *L,cxInt n,cxSize2f d)
     return v;
 }
 
-cxAny cxLuaGetObject(lua_State *L,cxInt n)
+cxAny cxLuaObjectValue(lua_State *L,cxInt n)
 {
     if(lua_isnumber(L, n)){
         lua_Number num = lua_tonumber(L, n);

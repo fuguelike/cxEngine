@@ -10,6 +10,34 @@
 
 static cxIconv instance = NULL;
 
+const luaL_Reg cxIconvInstanceMethods[] = {
+    CX_LUA_SUPER(cxObject)
+};
+
+static cxInt cxIconvLuaIconv(lua_State *L)
+{
+    cxString s = cxLuaObjectValue(L, 1);
+    if(!cxObjectIsType(s, cxStringTypeName)){
+        luaL_error(L, "args error");
+        return 0;
+    }
+    cxConstChars from = luaL_checkstring(L, 2);
+    cxConstChars to = luaL_checkstring(L, 3);
+    cxString d = cxIconvConvert(s, from, to);
+    CX_LUA_PUSH_OBJECT(d);
+    return 1;
+}
+
+const luaL_Reg cxIconvTypeMethods[] = {
+    {"iconv",cxIconvLuaIconv},
+    {NULL,NULL}
+};
+
+void cxIconvTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxIconv);
+}
+
 CX_OBJECT_INIT(cxIconvItem, cxObject)
 {
     

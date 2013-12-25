@@ -9,6 +9,19 @@
 #include <core/cxViewRoot.h>
 #include "cxTable.h"
 
+const luaL_Reg cxTableInstanceMethods[] = {
+    CX_LUA_SUPER(cxView)
+};
+
+const luaL_Reg cxTableTypeMethods[] = {
+    CX_LUA_TYPE(cxTable)
+};
+
+void cxTableTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxTable);
+}
+
 void cxTableReadAttr(cxReaderAttrInfo *info)
 {
     cxViewReadAttr(info);

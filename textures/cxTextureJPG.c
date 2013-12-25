@@ -14,6 +14,20 @@ typedef struct {
     int error;
 }cxJPEGError;
 
+const luaL_Reg cxTextureJPGInstanceMethods[] = {
+    
+    CX_LUA_SUPER(cxTexture)
+};
+
+const luaL_Reg cxTextureJPGTypeMethods[] = {
+    {NULL,NULL}
+};
+
+void cxTextureJPGTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxTextureJPG);
+}
+
 static void cxJPGErrorExit(j_common_ptr cinfo)
 {
     cxJPEGError *error = (cxJPEGError *)cinfo->err;

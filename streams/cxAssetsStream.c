@@ -61,7 +61,7 @@ static cxOff cxAssetsStreamPosition(cxAny this)
     return (cxOff)ftell(asserts->asset);
 }
 
-static cxBool cxAssetsStreamSeek(cxAny this,cxOff off,cxInt flags)
+static cxInt cxAssetsStreamSeek(cxAny this,cxOff off,cxInt flags)
 {
     cxAssetsStream asserts = this;
     if(!asserts->super.canSeek){
@@ -121,12 +121,16 @@ cxString cxAssetsData(cxConstChars file)
     return cxStreamAllBytes(stream);
 }
 
+void cxAssetsStreamInit(cxAssetsStream this,cxConstChars file)
+{
+    CX_RETAIN_SWAP(this->super.path, cxAssetsPath(file));
+    CX_RETAIN_SWAP(this->super.file, cxStringConstChars(file));
+}
+
 cxStream cxAssetsStreamCreate(cxConstChars file)
 {
-    cxString path = cxAssetsPath(file);
     cxAssetsStream rv = CX_CREATE(cxAssetsStream);
-    CX_RETAIN_SWAP(rv->super.path, path);
-    rv->super.file = cxStringAllocChars(file);
+    cxAssetsStreamInit(rv,file);
     return (cxStream)rv;
 }
 

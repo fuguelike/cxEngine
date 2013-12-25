@@ -19,6 +19,19 @@ CX_OBJECT_FREE(cxTexCoord, cxObject)
 }
 CX_OBJECT_TERM(cxTexCoord, cxObject)
 
+const luaL_Reg cxTextureInstanceMethods[] = {
+    CX_LUA_SUPER(cxObject)
+};
+
+const luaL_Reg cxTextureTypeMethods[] = {
+    CX_LUA_TYPE(cxTexture)
+};
+
+void cxTextureTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxTexture);
+}
+
 CX_OBJECT_INIT(cxTexture, cxObject)
 {
     this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE);

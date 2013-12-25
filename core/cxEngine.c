@@ -25,7 +25,7 @@ static cxBool isExit = false;
 static cxInt cxEngineLuaSetDesignSize(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxEngine);
-    this->dessize = cxLuaGetSize2fv(L, 1, this->dessize);
+    this->dessize = cxLuaSize2fValue(L, 1, this->dessize);
     return 0;
 }
 
