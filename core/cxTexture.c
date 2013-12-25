@@ -42,7 +42,7 @@ void cxTextureSetAtlas(cxTexture this,cxBool isAtlas)
 void cxTextureLoad(cxTexture this,cxStream stream)
 {
     CX_RETURN(this->isLoad);
-    this->isLoad = CX_METHOD_RUN(false, this->Load, CX_METHOD_TYPE(cxBool,cxAny,cxStream),this,stream);
+    this->isLoad = CX_METHOD_FIRE(false, this->Load,this,stream);
     if(!this->isLoad){
         CX_ERROR("texture  can not load");
     }
@@ -134,7 +134,7 @@ void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstC
 void cxTextureBind(cxTexture this)
 {
     CX_ASSERT(this != NULL, "bind texture null");
-    CX_METHOD_RUN(NULL, this->Bind, CX_METHOD_TYPE(void,cxAny),this);
+    CX_METHOD_FIRE(NULL, this->Bind,this);
     if(!this->isSetParam){
         cxOpenGLSetTexParameters(this->texParam);
         this->isSetParam = true;

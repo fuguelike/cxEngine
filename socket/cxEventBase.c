@@ -35,7 +35,7 @@ static void cxEventUpdate(cxAny base)
 CX_OBJECT_INIT(cxEventBase, cxObject)
 {
     cxEngine engine = cxEngineInstance();
-    CX_SLOT_QUICK(engine->onUpdate, this, onUpdate, cxEventUpdate);
+    CX_SLOT_CONNECT(engine->onUpdate, this, onUpdate, cxEventUpdate);
     this->base = event_base_new();
     this->conns = CX_ALLOC(cxHash);
 }

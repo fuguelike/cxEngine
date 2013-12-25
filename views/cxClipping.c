@@ -66,8 +66,8 @@ CX_OBJECT_INIT(cxClipping, cxView)
 {
     this->useRef = cxStencilRefAlloc();
     cxObjectSetReadAttrFunc(this, cxClippingReadAttr);
-    CX_METHOD_SET(this->super.DrawBefore, cxClippingDrawBefore);
-    CX_METHOD_SET(this->super.DrawAfter, cxClippingDrawAfter);
+    CX_METHOD_OVERRIDE(this->super.DrawBefore, cxClippingDrawBefore);
+    CX_METHOD_OVERRIDE(this->super.DrawAfter, cxClippingDrawAfter);
 }
 CX_OBJECT_FREE(cxClipping, cxView)
 {

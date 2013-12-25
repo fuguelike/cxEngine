@@ -22,13 +22,13 @@ CX_OBJECT_DEF(cxStream, cxObject)
     cxBool canWrite;
     cxBool canSeek;
     cxBool isOpen;
-    CX_METHOD_ALLOC(Open);
-    CX_METHOD_ALLOC(Read);
-    CX_METHOD_ALLOC(Write);
-    CX_METHOD_ALLOC(Seek);
-    CX_METHOD_ALLOC(Position);
-    CX_METHOD_ALLOC(Close);
-    CX_METHOD_ALLOC(AllBytes);
+    CX_METHOD_ALLOC(cxBool, Open, cxAny);
+    CX_METHOD_ALLOC(cxInt, Read, cxAny, cxPointer, cxInt);
+    CX_METHOD_ALLOC(cxInt, Write, cxAny, cxPointer, cxInt);
+    CX_METHOD_ALLOC(cxBool, Seek, cxAny, cxOff, cxInt);
+    CX_METHOD_ALLOC(cxOff, Position, cxAny);
+    CX_METHOD_ALLOC(void, Close, cxAny);
+    CX_METHOD_ALLOC(cxString, AllBytes, cxAny);
 CX_OBJECT_END(cxStream)
 
 void cxStreamBaseClose(cxAny this);

@@ -337,24 +337,13 @@ extern lua_State *gL;
 
 //method
 
-typedef struct cxMethod cxMethod;
+#define CX_METHOD_ALLOC(_r_,_n_,...)    _r_ (*_n_)(__VA_ARGS__)
 
-struct cxMethod {
-    cxAny func;
-    cxInt ref;
-};
+#define CX_METHOD_RELEASE(_m_)
 
-#define CX_METHOD_TYPE(_r_,...)            (_r_ (*)(__VA_ARGS__))
+#define CX_METHOD_FIRE(_d_,_m_,...)     (_m_ != NULL)?(_m_(__VA_ARGS__)):(_d_)
 
-#define CX_METHOD_ALLOC(_n_)               cxMethod _n_
-
-#define CX_METHOD_REF(_m_,_f_,_r_)         CX_METHOD_RELEASE(_m_);(_m_).ref=_r_;(_m_).func=_f_
-
-#define CX_METHOD_RUN(_d_,_m_,_ft_,...)    ((_m_).func != NULL)?((_ft_((_m_).func))(__VA_ARGS__)):(_d_)
-
-#define CX_METHOD_RELEASE(_m_)             if((_m_).ref>0){lua_unref(gL,(_m_).ref);(_m_).ref=0;}
-
-#define CX_METHOD_SET(_m_,_f_)             (_m_).func = _f_
+#define CX_METHOD_OVERRIDE(_m_,_f_)     _m_ = _f_
 
 //base type define
 CX_OBJECT_BEG(cxObject)
@@ -364,7 +353,7 @@ CX_OBJECT_BEG(cxObject)
     cxObjectFunc cxFree;
     cxInt cxTag;
     cxAny cxRoot;
-    CX_METHOD_ALLOC(ReadAttr);
+    CX_METHOD_ALLOC(void, ReadAttr,cxReaderAttrInfo *);
 CX_OBJECT_END(cxObject)
 
 

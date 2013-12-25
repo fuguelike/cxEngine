@@ -124,7 +124,7 @@ static bool cxShaderCompile(cxShader this,GLuint *shader, GLenum type, cxString 
 
 CX_OBJECT_INIT(cxShader, cxObject)
 {
-    CX_METHOD_SET(this->Init, cxShaderInitPosColorTex);
+    CX_METHOD_OVERRIDE(this->Init, cxShaderInitPosColorTex);
 }
 CX_OBJECT_FREE(cxShader, cxObject)
 {
@@ -147,14 +147,14 @@ void cxShaderUsing(cxShader this,cxBool isAtlas)
     kmMat4Multiply(&this->kxMatrix, &this->kxMatrixProject, &this->kxMatrixModelView);
     glUniformMatrix4fv(this->uniformMatrixModelviewProject, 1, GL_FALSE, this->kxMatrix.mat);
     glUniform1i(this->uniformAtlasTexture, isAtlas);
-    CX_METHOD_RUN(NULL, this->Update, CX_METHOD_TYPE(void,cxAny), this);
+    CX_METHOD_FIRE(NULL, this->Update, this);
 }
 
 bool cxShaderInit(cxShader this)
 {
-    cxString vbytes = CX_METHOD_RUN(NULL, this->GetVertexSource, CX_METHOD_TYPE(cxString,cxAny), this);
+    cxString vbytes = CX_METHOD_FIRE(NULL, this->GetVertexSource, this);
     CX_ASSERT(vbytes != NULL, "get vertex shader source failed");
-    cxString fbytes = CX_METHOD_RUN(NULL, this->GetFragmentSource, CX_METHOD_TYPE(cxString,cxAny), this);
+    cxString fbytes = CX_METHOD_FIRE(NULL, this->GetFragmentSource, this);
     CX_ASSERT(vbytes != NULL, "get fragment shader source failed");
     if(!cxShaderCompile(this, &this->vertexShader, GL_VERTEX_SHADER, vbytes)){
         return false;
@@ -169,7 +169,7 @@ bool cxShaderInit(cxShader this)
     if(this->fragmentShader){
         glAttachShader(this->program, this->fragmentShader);
     }
-    CX_METHOD_RUN(NULL, this->Init, CX_METHOD_TYPE(void,cxAny), this);
+    CX_METHOD_FIRE(NULL, this->Init, this);
     GLint status = 0;
     glLinkProgram(this->program);
     glGetProgramiv(this->program, GL_LINK_STATUS, &status);
@@ -183,7 +183,7 @@ bool cxShaderInit(cxShader this)
     cxOpenGLUseProgram(this->program);
     this->uniformMatrixModelviewProject = glGetUniformLocation(this->program, CX_UNIFORM_MATRIX_MODELVIEW_PROJECT);
     this->uniformAtlasTexture = glGetUniformLocation(this->program, CX_UNIFORM_ATLAS_TEXTURE);
-    CX_METHOD_RUN(NULL, this->GetUniform, CX_METHOD_TYPE(void,cxAny), this);
+    CX_METHOD_FIRE(NULL, this->GetUniform, this);
     return true;
 }
 

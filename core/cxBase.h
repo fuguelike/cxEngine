@@ -25,7 +25,6 @@ struct cxSignal {
     cxSlot *slot;
     cxAny func;
     cxAny object;
-    cxInt priority;
 };
 
 struct cxSlot {
@@ -70,37 +69,17 @@ if(_slot_.slot != NULL && _slot_.signal != NULL){               \
     _slot_.slot = NULL;                                         \
 }
 
-#define CX_SLOT_CONNECT(_signal_,_object_,_slot_,_func_,_pv_)   \
+#define CX_SLOT_CONNECT(_signal_,_object_,_slot_,_func_)        \
 do{                                                             \
     CX_SLOT_RELEASE(_object_->_slot_);                          \
     cxSignal *_new_ = allocator->calloc(1,sizeof(cxSignal));    \
-    _new_->priority = _pv_;                                     \
     _new_->func = _func_;                                       \
     _new_->object = _object_;                                   \
     _new_->slot = &_object_->_slot_;                            \
     _object_->_slot_.slot = _new_;                              \
     _object_->_slot_.signal = &_signal_;                        \
-    if(_pv_ == 0){                                              \
-        DL_APPEND(_signal_,_new_);                              \
-        break;                                                  \
-    }                                                           \
-    cxSignal *_ele_ = NULL,*_tmp_ = NULL;                       \
-    bool append = true;                                         \
-    DL_FOREACH_SAFE(_signal_,_ele_,_tmp_){                      \
-        if(_pv_ < _ele_->priority){                             \
-            continue;                                           \
-        }                                                       \
-        DL_PREPEND_ELEM(_signal_,_ele_,_new_);                  \
-        append = false;                                         \
-        break;                                                  \
-    }                                                           \
-    if(append){                                                 \
-        DL_APPEND(_signal_,_new_);                              \
-    }                                                           \
+    DL_APPEND(_signal_,_new_);                                  \
 }while(0)
-
-#define CX_SLOT_QUICK(_signal_,_object_,_slot_,_func_)          \
-CX_SLOT_CONNECT(_signal_,_object_,_slot_,_func_,0)
 
 typedef struct cxEvent cxEvent;
 

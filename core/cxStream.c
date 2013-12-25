@@ -46,31 +46,31 @@ CX_OBJECT_TERM(cxStream, cxObject)
 cxBool cxStreamOpen(cxAny this)
 {
     cxStream stream = this;
-    return CX_METHOD_RUN(false, stream->Open, CX_METHOD_TYPE(cxBool,cxAny), this);
+    return CX_METHOD_FIRE(false, stream->Open, this);
 }
 
 cxInt cxStreamRead(cxAny this,cxPointer buffer,cxInt size)
 {
     cxStream stream = this;
-    return CX_METHOD_RUN(0, stream->Read, CX_METHOD_TYPE(cxInt,cxAny,cxPointer,cxInt),this,buffer,size);
+    return CX_METHOD_FIRE(0, stream->Read,this,buffer,size);
 }
 
 cxInt cxStreamWrite(cxAny this,cxPointer buffer,cxInt size)
 {
     cxStream stream = this;
-    return CX_METHOD_RUN(0, stream->Write, CX_METHOD_TYPE(cxInt,cxAny,cxPointer,cxInt),this,buffer,size);
+    return CX_METHOD_FIRE(0, stream->Write,this,buffer,size);
 }
 
 cxBool cxStreamSeek(cxAny this,cxOff off,cxInt flags)
 {
     cxStream stream = this;
-    return CX_METHOD_RUN(false, stream->Seek, CX_METHOD_TYPE(cxBool,cxAny,cxOff,cxInt),this,off,flags);
+    return CX_METHOD_FIRE(false, stream->Seek,this,off,flags);
 }
 
 cxOff cxStreamPosition(cxAny this)
 {
     cxStream stream = this;
-    return CX_METHOD_RUN(0, stream->Position, CX_METHOD_TYPE(cxOff,cxAny), this);
+    return CX_METHOD_FIRE(0, stream->Position, this);
 }
 
 cxInt cxStreamLength(cxAny this)
@@ -82,13 +82,13 @@ cxInt cxStreamLength(cxAny this)
 void cxStreamClose(cxAny this)
 {
     cxStream stream = this;
-    CX_METHOD_RUN(NULL, stream->Close, CX_METHOD_TYPE(void,cxAny),this);
+    CX_METHOD_FIRE(NULL, stream->Close,this);
 }
 
 cxString cxStreamAllBytes(cxAny this)
 {
     cxStream stream = this;
-    return CX_METHOD_RUN(NULL, stream->AllBytes, CX_METHOD_TYPE(cxString,cxAny),this);
+    return CX_METHOD_FIRE(NULL, stream->AllBytes,this);
 }
 
 void cxStreamBaseClose(cxAny this)

@@ -85,8 +85,8 @@ static void cxTextureJPGBind(cxAny this)
 
 CX_OBJECT_INIT(cxTextureJPG, cxTexture)
 {
-    CX_METHOD_SET(this->super.Bind, cxTextureJPGBind);
-    CX_METHOD_SET(this->super.Load, cxTextureJPGLoad);
+    CX_METHOD_OVERRIDE(this->super.Bind, cxTextureJPGBind);
+    CX_METHOD_OVERRIDE(this->super.Load, cxTextureJPGLoad);
 }
 CX_OBJECT_FREE(cxTextureJPG, cxTexture)
 {

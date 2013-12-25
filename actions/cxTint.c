@@ -55,8 +55,8 @@ static void cxTintReadAttr(cxReaderAttrInfo *info)
 CX_OBJECT_INIT(cxTint, cxAction)
 {
     cxObjectSetReadAttrFunc(this, cxTintReadAttr);
-    CX_METHOD_SET(this->super.Init, cxTintInit);
-    CX_METHOD_SET(this->super.Step, cxTintStep);
+    CX_METHOD_OVERRIDE(this->super.Init, cxTintInit);
+    CX_METHOD_OVERRIDE(this->super.Step, cxTintStep);
 }
 CX_OBJECT_FREE(cxTint, cxAction)
 {

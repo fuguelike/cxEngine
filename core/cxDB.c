@@ -65,7 +65,7 @@ cxBool cxDBOpen(cxAny db,cxString file,cxString table,cxBool rdonly)
     }
     this->ret = db_create(&this->dbptr, env->env, 0);
     CX_RETURN(this->ret != 0,false);
-    this->ret = CX_METHOD_RUN(this->ret, this->OpenBefore, CX_METHOD_TYPE(cxInt,cxAny),db);
+    this->ret = CX_METHOD_FIRE(this->ret, this->OpenBefore,db);
     CX_RETURN(this->ret != 0,false);
     cxDBTxn txn = cxStackTop(env->txn);
     this->ret = this->dbptr->open(this->dbptr,cxDBTxnPtr(txn),cxStringBody(file),cxStringBody(table),this->type,this->flags,0);
@@ -76,7 +76,7 @@ cxBool cxDBOpen(cxAny db,cxString file,cxString table,cxBool rdonly)
     CX_RETURN(this->ret != 0,false);
     CX_RETAIN_SWAP(this->file, file);
     CX_RETAIN_SWAP(this->table, table);
-    return CX_METHOD_RUN(true, this->OpenAfter, CX_METHOD_TYPE(cxBool,cxAny),db);
+    return CX_METHOD_FIRE(true, this->OpenAfter,db);
 }
 
 cxBool cxDBHas(cxAny db,cxString key)
@@ -285,7 +285,7 @@ CX_OBJECT_INIT(cxDBEnv, cxObject)
     this->env->set_encrypt(this->env,"feelzx*&*1101++0529",DB_ENCRYPT_AES);
     this->env->set_verbose(this->env,DB_VERB_RECOVERY,0);
     this->env->set_feedback(this->env,cxDBEnvFeedback);
-    CX_SLOT_QUICK(engine->onPause, this, onPause, cxDBEnvOnPause);
+    CX_SLOT_CONNECT(engine->onPause, this, onPause, cxDBEnvOnPause);
     this->txn = CX_ALLOC(cxStack);
 }
 CX_OBJECT_FREE(cxDBEnv, cxObject)

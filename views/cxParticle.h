@@ -79,7 +79,7 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxFloatRange startradius;
     cxFloatRange endradius;
     cxFloatRange rotatepers;
-    CX_METHOD_ALLOC(UpdateBox);
+    CX_METHOD_ALLOC(void,UpdateBox,cxAny,cxBoxPoint *);
 CX_OBJECT_END(cxParticle)
 
 cxParticle cxParticleCreateFromPEX(cxConstChars file);

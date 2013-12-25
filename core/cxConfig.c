@@ -46,26 +46,6 @@ static cxInt cxObjectLuaToString(lua_State *L)
     return 1;
 }
 
-//static cxInt cxObjectLuaSetMethod(lua_State *L)
-//{
-//    CX_LUA_DEF_THIS(cxObject);
-//    cxConstChars name = luaL_checkstring(L, 2);
-//    lua_getmetatable(L, 1);
-//    CX_ASSERT(lua_istable(L, -1), "get type %s metatable error",this->cxType);
-//    lua_getfield(L, -1, "__index");
-//    CX_ASSERT(lua_istable(L, -1), "get type __index table error");
-//    lua_pushvalue(L, 3);
-//    lua_setfield(L, -2, name);
-//    lua_pop(L, 2);
-//    return 0;
-//}
-
-//static cxInt cxObjectLuaSetMetaTable(lua_State *L)
-//{
-//    lua_setmetatable(L, -2);
-//    return 0;
-//}
-
 const luaL_Reg cxObjectInstanceMethods[] = {
     {"__tostring",cxObjectLuaToString},
     CX_LUA_PROPERTY(cxObject, Tag)
@@ -136,7 +116,7 @@ void cxObjectReadAttr(cxReaderAttrInfo *info)
 void cxObjectAutoInit(cxObject this)
 {
     this->cxBase = cxBaseTypeObject;
-    CX_METHOD_SET(this->ReadAttr, cxObjectReadAttr);
+    CX_METHOD_OVERRIDE(this->ReadAttr, cxObjectReadAttr);
 }
 
 void cxObjectAutoFree(cxObject this)
@@ -147,13 +127,13 @@ void cxObjectAutoFree(cxObject this)
 void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func)
 {
     cxObject this = obj;
-    CX_METHOD_SET(this->ReadAttr, func);
+    CX_METHOD_OVERRIDE(this->ReadAttr, func);
 }
 
 void cxObjectReadAttrRun(cxReaderAttrInfo *info)
 {
     cxObject this = info->object;
-    CX_METHOD_RUN(NULL, this->ReadAttr, CX_METHOD_TYPE(void,cxReaderAttrInfo *), info);
+    CX_METHOD_FIRE(NULL, this->ReadAttr,info);
 }
 
 void cxObjectSetRoot(cxAny obj,cxAny root)

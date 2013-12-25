@@ -163,7 +163,7 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);
-    CX_METHOD_SET(this->super.super.Draw, cxAtlasDraw);
+    CX_METHOD_OVERRIDE(this->super.super.Draw, cxAtlasDraw);
     cxObjectSetReadAttrFunc(this, cxAtlasReadAttr);
     CX_EVENT_QUICK(this->super.super.onResize, cxAtlasResize);
     this->items = CX_ALLOC(cxHash);

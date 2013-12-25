@@ -21,7 +21,7 @@ CX_OBJECT_DEF(cxViewRoot, cxView)
     cxBool isError;
     cxHash items;
     cxHash actions;
-    CX_METHOD_ALLOC(Make);
+    CX_METHOD_ALLOC(cxAny, Make, cxConstChars, xmlTextReaderPtr);
     CX_EVENT_ALLOC(onBegin);
     CX_EVENT_ALLOC(onEnd);
 CX_OBJECT_END(cxViewRoot)

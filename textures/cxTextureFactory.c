@@ -38,7 +38,7 @@ CX_OBJECT_INIT(cxTextureFactory, cxObject)
     cxEngine engine = cxEngineInstance();
     this->caches = CX_ALLOC(cxHash);
     
-    CX_SLOT_QUICK(engine->onMemory, this, onMemory, cxTextureFactoryMemory);
+    CX_SLOT_CONNECT(engine->onMemory, this, onMemory, cxTextureFactoryMemory);
     CX_EVENT_QUICK(engine->onFree, cxTextureFactoryDestroy);
 }
 CX_OBJECT_FREE(cxTextureFactory, cxObject)

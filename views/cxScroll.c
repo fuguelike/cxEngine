@@ -126,13 +126,13 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
 CX_OBJECT_INIT(cxScroll, cxView)
 {
     cxEngine engine = cxEngineInstance();
-    CX_METHOD_SET(this->super.Touch, cxScrollTouch);
+    CX_METHOD_OVERRIDE(this->super.Touch, cxScrollTouch);
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
     cxObjectSetReadAttrFunc(this, cxScrollReadAttr);
     //swip cond value
     this->value = 950;
-    CX_SLOT_QUICK(engine->onTouch, this, onTouch, cxScrollOnTouch);
+    CX_SLOT_CONNECT(engine->onTouch, this, onTouch, cxScrollOnTouch);
 }
 CX_OBJECT_FREE(cxScroll, cxView)
 {

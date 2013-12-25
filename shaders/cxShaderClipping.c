@@ -42,8 +42,8 @@ static cxString cxShaderClippingGetFragmentSource(cxAny this)
 
 CX_OBJECT_INIT(cxShaderClipping, cxShader)
 {
-    CX_METHOD_SET(this->super.GetVertexSource, cxShaderDefaultGetVertexSource);
-    CX_METHOD_SET(this->super.GetFragmentSource, cxShaderClippingGetFragmentSource);
+    CX_METHOD_OVERRIDE(this->super.GetVertexSource, cxShaderDefaultGetVertexSource);
+    CX_METHOD_OVERRIDE(this->super.GetFragmentSource, cxShaderClippingGetFragmentSource);
 }
 CX_OBJECT_FREE(cxShaderClipping, cxShader)
 {

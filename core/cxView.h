@@ -90,21 +90,19 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
     cxColor4f color;
-    CX_METHOD_ALLOC(IsTouch);   //CX_METHOD_TYPE(cxViewIsTouchType,cxAny,cxTouch *)
-    CX_METHOD_ALLOC(Touch);     //CX_METHOD_TYPE(cxBool,cxAny,cxTouch *)
-    CX_METHOD_ALLOC(IsOnKey);
-    CX_METHOD_ALLOC(OnKey);
-    CX_METHOD_ALLOC(Draw);
-    CX_METHOD_ALLOC(DrawAfter);
-    CX_METHOD_ALLOC(DrawBefore);
+    CX_METHOD_ALLOC(cxViewIsTouchType,IsTouch,cxAny,cxTouch *);
+    CX_METHOD_ALLOC(cxBool, Touch, cxAny, cxTouch *);
+    CX_METHOD_ALLOC(cxViewIsTouchType, IsOnKey, cxAny, cxKey *);
+    CX_METHOD_ALLOC(cxBool, OnKey, cxAny, cxKey *);
+    CX_METHOD_ALLOC(void, Draw, cxAny);
+    CX_METHOD_ALLOC(void, DrawAfter, cxAny);
+    CX_METHOD_ALLOC(void, DrawBefore, cxAny);
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
-
-    CX_METHOD_ALLOC(NewDraw);
 CX_OBJECT_END(cxView)
 
 cxChipmunkAttr *cxViewSupportChipmunk(cxAny pview);

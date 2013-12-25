@@ -46,7 +46,7 @@ CX_OBJECT_INIT(cxActionRoot, cxObject)
 {
     cxObjectSetReadAttrFunc(this, cxActionRootReadAttr);
     this->codes = CX_ALLOC(cxHash);
-    CX_METHOD_SET(this->Make, cxActionRootMakeElement);
+    CX_METHOD_OVERRIDE(this->Make, cxActionRootMakeElement);
 }
 CX_OBJECT_FREE(cxActionRoot, cxObject)
 {
@@ -107,7 +107,7 @@ cxAny cxActionRootGet(cxConstChars src)
             continue;
         }
         cxConstChars temp = cxXMLReadElementName(reader);
-        info->object = CX_METHOD_RUN(NULL, this->Make, CX_METHOD_TYPE(cxAny,cxConstChars,xmlTextReaderPtr),temp,reader);
+        info->object = CX_METHOD_FIRE(NULL, this->Make,temp,reader);
         if(info->object == NULL){
             continue;
         }

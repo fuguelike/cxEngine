@@ -101,13 +101,13 @@ static void cxAssetsStreamClose(cxAny this)
 
 CX_OBJECT_INIT(cxAssetsStream, cxStream)
 {
-    CX_METHOD_SET(this->super.Open, cxAssetsStreamOpen);
-    CX_METHOD_SET(this->super.Read, cxAssetsStreamRead);
-    CX_METHOD_SET(this->super.Write, cxAssetsStreamWrite);
-    CX_METHOD_SET(this->super.Seek, cxAssetsStreamSeek);
-    CX_METHOD_SET(this->super.Close, cxAssetsStreamClose);
-    CX_METHOD_SET(this->super.Position,cxAssetsStreamPosition);
-    CX_METHOD_SET(this->super.AllBytes,cxAssetsStreamAllBytes);
+    CX_METHOD_OVERRIDE(this->super.Open, cxAssetsStreamOpen);
+    CX_METHOD_OVERRIDE(this->super.Read, cxAssetsStreamRead);
+    CX_METHOD_OVERRIDE(this->super.Write, cxAssetsStreamWrite);
+    CX_METHOD_OVERRIDE(this->super.Seek, cxAssetsStreamSeek);
+    CX_METHOD_OVERRIDE(this->super.Close, cxAssetsStreamClose);
+    CX_METHOD_OVERRIDE(this->super.Position,cxAssetsStreamPosition);
+    CX_METHOD_OVERRIDE(this->super.AllBytes,cxAssetsStreamAllBytes);
 }
 CX_OBJECT_FREE(cxAssetsStream, cxStream)
 {

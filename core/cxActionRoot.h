@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxActionRoot, cxObject)
     cxBool isError;
     cxHash codes;
     CX_EVENT_ALLOC(onLoad);
-    CX_METHOD_ALLOC(Make);
+    CX_METHOD_ALLOC(cxAny, Make, cxConstChars, xmlTextReaderPtr);
 CX_OBJECT_END(cxActionRoot)
 
 cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader);

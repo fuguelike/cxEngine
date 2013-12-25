@@ -58,9 +58,9 @@ static cxString cxShaderPositionColorGetFragmentSource(cxAny this)
 
 CX_OBJECT_INIT(cxShaderPositionColor, cxShader)
 {
-    CX_METHOD_SET(this->super.Init, cxShaderPositionColorInit);
-    CX_METHOD_SET(this->super.GetVertexSource, cxShaderPositionColorGetVertexSource);
-    CX_METHOD_SET(this->super.GetFragmentSource, cxShaderPositionColorGetFragmentSource);
+    CX_METHOD_OVERRIDE(this->super.Init, cxShaderPositionColorInit);
+    CX_METHOD_OVERRIDE(this->super.GetVertexSource, cxShaderPositionColorGetVertexSource);
+    CX_METHOD_OVERRIDE(this->super.GetFragmentSource, cxShaderPositionColorGetFragmentSource);
 }
 CX_OBJECT_FREE(cxShaderPositionColor, cxShader)
 {

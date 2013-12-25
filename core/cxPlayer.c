@@ -155,7 +155,7 @@ static void cxPlayerOnMemory(cxAny player)
 CX_OBJECT_INIT(cxPlayer, cxObject)
 {
     cxEngine engine = cxEngineInstance();
-    CX_SLOT_QUICK(engine->onMemory, this, onMemory, cxPlayerOnMemory);
+    CX_SLOT_CONNECT(engine->onMemory, this, onMemory, cxPlayerOnMemory);
     
     this->device = alcOpenDevice(NULL);
     CX_ASSERT(this->device != NULL, "alc open device failed");

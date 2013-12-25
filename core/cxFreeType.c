@@ -144,7 +144,7 @@ CX_OBJECT_INIT(cxFreeType, cxObject)
         CX_ERROR("init freeType error %d",this->error);
     }
     this->fonts = CX_ALLOC(cxHash);
-    CX_SLOT_QUICK(engine->onMemory, this, onMemory, cxFreeTypeOnMemory);
+    CX_SLOT_CONNECT(engine->onMemory, this, onMemory, cxFreeTypeOnMemory);
 }
 CX_OBJECT_FREE(cxFreeType, cxObject)
 {

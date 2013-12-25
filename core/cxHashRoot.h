@@ -18,7 +18,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxHashRoot, cxObject)
     cxHash items;
     cxBool isError;
-    CX_METHOD_ALLOC(Make);
+    CX_METHOD_ALLOC(cxAny,Make,cxConstChars,xmlTextReaderPtr);
 CX_OBJECT_END(cxHashRoot)
 
 cxTypes cxHashRootReadString(cxHashRoot root,xmlTextReaderPtr reader);

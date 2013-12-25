@@ -59,8 +59,8 @@ static void cxJumpReadAttr(cxReaderAttrInfo *info)
 CX_OBJECT_INIT(cxJump, cxAction)
 {
     cxObjectSetReadAttrFunc(this, cxJumpReadAttr);
-    CX_METHOD_SET(this->super.Init, cxJumpInit);
-    CX_METHOD_SET(this->super.Step, cxJumpStep);
+    CX_METHOD_OVERRIDE(this->super.Init, cxJumpInit);
+    CX_METHOD_OVERRIDE(this->super.Step, cxJumpStep);
 }
 CX_OBJECT_FREE(cxJump, cxAction)
 {

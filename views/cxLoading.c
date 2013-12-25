@@ -112,7 +112,7 @@ CX_OBJECT_INIT(cxLoading, cxView)
 {
     this->isLoading = false;
     CX_EVENT_QUICK(this->super.onUpdate, cxLoadingOnUpdate);
-    CX_METHOD_SET(this->super.Touch, cxLoadingTouch);
+    CX_METHOD_OVERRIDE(this->super.Touch, cxLoadingTouch);
 }
 CX_OBJECT_FREE(cxLoading, cxView)
 {

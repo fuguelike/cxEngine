@@ -80,8 +80,8 @@ static void cxTextureXMLBind(cxAny this)
 
 CX_OBJECT_INIT(cxTextureXML, cxTexture)
 {
-    CX_METHOD_SET(this->super.Bind, cxTextureXMLBind);
-    CX_METHOD_SET(this->super.Load, cxTextureXMLLoad);
+    CX_METHOD_OVERRIDE(this->super.Bind, cxTextureXMLBind);
+    CX_METHOD_OVERRIDE(this->super.Load, cxTextureXMLLoad);
 }
 CX_OBJECT_FREE(cxTextureXML, cxTexture)
 {

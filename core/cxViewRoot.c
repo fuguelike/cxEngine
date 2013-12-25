@@ -78,7 +78,7 @@ void cxViewRootSetItem(cxAny pview,cxConstChars key,cxAny item)
 CX_OBJECT_INIT(cxViewRoot, cxView)
 {
     cxObjectSetReadAttrFunc(this, cxViewRootReadAttr);
-    CX_METHOD_SET(this->Make, cxViewRootMakeElement);
+    CX_METHOD_OVERRIDE(this->Make, cxViewRootMakeElement);
     this->items = CX_ALLOC(cxHash);
     this->actions = CX_ALLOC(cxHash);
 }
@@ -169,7 +169,7 @@ static void cxViewRootLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack s
         if(type == XML_READER_TYPE_ELEMENT){
             cxConstChars temp = cxXMLReadElementName(reader);
             
-            info->object = CX_METHOD_RUN(NULL, this->Make, CX_METHOD_TYPE(cxAny,cxConstChars,xmlTextReaderPtr),temp,info->reader);
+            info->object = CX_METHOD_FIRE(NULL, this->Make,temp,info->reader);
             CX_ASSERT(info->object != NULL, "make element failed");
             cxObjectSetRoot(info->object, this);
             

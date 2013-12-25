@@ -83,9 +83,9 @@ CX_OBJECT_INIT(cxTimer, cxAction)
 {
     cxActionSetStepHide(this, true);
     cxObjectSetReadAttrFunc(this, cxTimerReadAttr);
-    CX_METHOD_SET(this->super.Init, cxTimerInit);
-    CX_METHOD_SET(this->super.Step, cxTimerStep);
-    CX_METHOD_SET(this->super.Exit, cxTimerExit);
+    CX_METHOD_OVERRIDE(this->super.Init, cxTimerInit);
+    CX_METHOD_OVERRIDE(this->super.Step, cxTimerStep);
+    CX_METHOD_OVERRIDE(this->super.Exit, cxTimerExit);
 }
 CX_OBJECT_FREE(cxTimer, cxAction)
 {

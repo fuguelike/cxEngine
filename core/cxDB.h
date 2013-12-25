@@ -50,8 +50,8 @@ CX_OBJECT_DEF(cxDB, cxObject)
     cxInt ret;
     DBTYPE type;
     cxUInt flags;
-    CX_METHOD_ALLOC(OpenBefore);
-    CX_METHOD_ALLOC(OpenAfter);
+    CX_METHOD_ALLOC(cxInt,OpenBefore,cxAny);
+    CX_METHOD_ALLOC(cxBool,OpenAfter,cxAny);
 CX_OBJECT_END(cxDB)
 
 cxBool cxDBOpen(cxAny db,cxString file,cxString table,cxBool rdonly);

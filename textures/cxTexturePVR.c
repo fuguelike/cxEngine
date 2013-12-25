@@ -137,8 +137,8 @@ static void cxTexturePVRBind(cxAny this)
 
 CX_OBJECT_INIT(cxTexturePVR, cxTexture)
 {
-    CX_METHOD_SET(this->super.Bind, cxTexturePVRBind);
-    CX_METHOD_SET(this->super.Load, cxTexturePVRLoad);
+    CX_METHOD_OVERRIDE(this->super.Bind, cxTexturePVRBind);
+    CX_METHOD_OVERRIDE(this->super.Load, cxTexturePVRLoad);
 }
 CX_OBJECT_FREE(cxTexturePVR, cxTexture)
 {

@@ -33,8 +33,8 @@ CX_OBJECT_DEF(cxTexture, cxObject)
     cxBool hasMipmap;
     cxBool isAtlas;     //for jpg pkm atlas texture
     cxSize2f size;
-    CX_METHOD_ALLOC(Load);
-    CX_METHOD_ALLOC(Bind);
+    CX_METHOD_ALLOC(cxBool, Load, cxAny, cxStream);
+    CX_METHOD_ALLOC(void, Bind, cxAny);
 CX_OBJECT_END(cxTexture)
 
 void cxDrawClippingTexture(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey);

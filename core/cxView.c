@@ -385,8 +385,8 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->fixscale = cxVec2fv(1.0f, 1.0f);
     this->subViews = CX_ALLOC(cxList);
-    CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
-    CX_METHOD_SET(this->IsOnKey, cxViewIsOnKey);
+    CX_METHOD_OVERRIDE(this->IsTouch, cxViewIsTouch);
+    CX_METHOD_OVERRIDE(this->IsOnKey, cxViewIsOnKey);
     cxObjectSetReadAttrFunc(this, cxViewReadAttr);
     this->actions = CX_ALLOC(cxHash);
     this->caches = CX_ALLOC(cxHash);
@@ -922,7 +922,7 @@ cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch)
 cxBool cxViewTouch(cxAny pview,cxTouch *touch)
 {
     cxView this = pview;
-    cxUInt type = CX_METHOD_RUN(cxViewIsTouchTypeNone, this->IsTouch, CX_METHOD_TYPE(cxViewIsTouchType,cxAny,cxTouch *),this,touch);
+    cxUInt type = CX_METHOD_FIRE(cxViewIsTouchTypeNone, this->IsTouch,this,touch);
     if(type == cxViewIsTouchTypeNone){
         return false;
     }
@@ -930,7 +930,7 @@ cxBool cxViewTouch(cxAny pview,cxTouch *touch)
         return true;
     }
     if(type & cxViewIsTouchTypeSelf){
-        return CX_METHOD_RUN(false, this->Touch, CX_METHOD_TYPE(cxBool,cxAny,cxTouch *),this,touch);
+        return CX_METHOD_FIRE(false, this->Touch,this,touch);
     }
     return false;
 }
@@ -963,7 +963,7 @@ cxUInt cxViewIsOnKey(cxAny pview,cxKey *key)
 cxBool cxViewOnKey(cxAny pview,cxKey *key)
 {
     cxView this = pview;
-    cxUInt type = CX_METHOD_RUN(cxViewIsTouchTypeNone, this->IsOnKey, CX_METHOD_TYPE(cxViewIsTouchType,cxAny,cxKey *),this,key);
+    cxUInt type = CX_METHOD_FIRE(cxViewIsTouchTypeNone, this->IsOnKey,this,key);
     if(type == cxViewIsTouchTypeNone){
         return false;
     }
@@ -971,7 +971,7 @@ cxBool cxViewOnKey(cxAny pview,cxKey *key)
         return true;
     }
     if(type & cxViewIsTouchTypeSelf){
-        return CX_METHOD_RUN(false, this->OnKey, CX_METHOD_TYPE(cxBool,cxAny,cxKey *),this , key);
+        return CX_METHOD_FIRE(false, this->OnKey,this , key);
     }
     return false;
 }
@@ -1047,9 +1047,8 @@ void cxViewDraw(cxAny pview)
     if(this->isCropping){
         cxOpenGLEnableScissor(this->scissor);
     }
-    CX_METHOD_RUN(NULL, this->DrawBefore, CX_METHOD_TYPE(void,cxAny), this);
-    CX_METHOD_RUN(NULL, this->Draw, CX_METHOD_TYPE(void,cxAny), this);
-    
+    CX_METHOD_FIRE(NULL, this->DrawBefore, this);
+    CX_METHOD_FIRE(NULL, this->Draw, this);
     if(this->isSort){
         cxViewSort(this);
     }
@@ -1057,7 +1056,7 @@ void cxViewDraw(cxAny pview)
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    CX_METHOD_RUN(NULL, this->DrawAfter, CX_METHOD_TYPE(void,cxAny), this);
+    CX_METHOD_FIRE(NULL, this->DrawAfter,this);
     if(this->isCropping){
         cxOpenGLDisableScissor();
     }
