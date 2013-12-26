@@ -166,9 +166,6 @@ CX_OBJECT_INIT(cxTypes, cxObject)
 CX_OBJECT_FREE(cxTypes, cxObject)
 {
     CX_RELEASE(this->any);
-    if(this->utArray != NULL){
-        utarray_free(this->utArray);
-    }
 }
 CX_OBJECT_TERM(cxType, cxObject)
 

@@ -119,9 +119,10 @@ static void *cxEngineLuaAllocFunc(void *ud, void *ptr, size_t osize, size_t nsiz
     }
 }
 
-void cxEngineGC()
+cxBool cxEngineLuaRunFile(cxConstChars file)
 {
-    lua_gc(gL, LUA_GCSTEP, 1);
+    cxString data = cxEngineGetLuaScript(file);
+    return cxEngineLuaRunString(data);
 }
 
 cxBool cxEngineLuaRunString(cxString code)
@@ -219,7 +220,6 @@ void cxEngineDraw()
     engine->lastTime = now;
     
     cxAutoPoolClean();
-    cxEngineGC();
 }
 
 static void cxEngineLookAt(cxMatrix4f *matrix,const cxVec2f point)
@@ -863,6 +863,13 @@ static cxInt cxFixScaleH(lua_State *L)
     CX_LUA_PUSH_OBJECT(num);
     return 1;
 }
+static cxInt cxDataTypes(lua_State *L)
+{
+    cxConstChars url = luaL_checkstring(L, 1);
+    cxTypes types = cxEngineDataSet(url);
+    CX_LUA_PUSH_OBJECT(types);
+    return 1;
+}
 
 void cxEngineSystemInit()
 {
@@ -876,6 +883,7 @@ void cxEngineSystemInit()
     cxEngineRegisteFunc(cxCreateTexture);
     cxEngineRegisteFunc(cxFixScaleW);
     cxEngineRegisteFunc(cxFixScaleH);
+    cxEngineRegisteFunc(cxDataTypes);
     //global event
     cxEngineRegisteFunc(cxEventAction);
     cxEngineRegisteFunc(cxEventEffect);

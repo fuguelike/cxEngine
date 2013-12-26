@@ -56,9 +56,9 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxString lang;
 CX_OBJECT_END(cxEngine)
 
-void cxEngineGC();
-
 cxBool cxEngineLuaRunString(cxString code);
+
+cxBool cxEngineLuaRunFile(cxConstChars file);
 
 cxBool cxEngineLuaRunChars(cxConstChars code);
 

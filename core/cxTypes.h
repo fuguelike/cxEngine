@@ -238,7 +238,6 @@ typedef enum {
 
 CX_OBJECT_DEF(cxTypes, cxObject)
     cxTypesType type;
-    UT_array *utArray;
     cxAny any;
 CX_OBJECT_END(cxTypes)
 

@@ -1,10 +1,5 @@
 
 
---global metatable
-
---cxgEngine
---cxgOpenGL
---cxgWindow
 
 function init()
     cxEngine.setDesignSize({w=640,h=960})
@@ -12,12 +7,13 @@ function init()
 end
 
 function mainBegin(xml)
-    io.write('begin\n')
+    
 end
 
 function mainEnd(xml)
     
 end
+
 
 function main()
 
