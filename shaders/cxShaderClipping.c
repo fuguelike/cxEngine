@@ -9,20 +9,6 @@
 #include "cxShaderDefault.h"
 #include "cxShaderClipping.h"
 
-const luaL_Reg cxShaderClippingInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxShader)
-};
-
-const luaL_Reg cxShaderClippingTypeMethods[] = {
-    CX_LUA_TYPE(cxShaderClipping)
-};
-
-void cxShaderClippingTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxShaderClipping);
-}
-
 static cxString cxShaderClippingGetFragmentSource(cxAny this)
 {
     static cxConstChars fragment =

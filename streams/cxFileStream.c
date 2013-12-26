@@ -11,25 +11,9 @@
 #include <core/cxUtil.h>
 #include "cxFileStream.h"
 
-const luaL_Reg cxFileStreamInstanceMethods[] = {
-    CX_LUA_SUPER(cxStream)
-};
-
-static cxInt cxFileStreamLuaCreate(lua_State *L)
-{
-    cxStream stream = cxFileStreamCreate(luaL_checkstring(L, 1));
-    CX_LUA_PUSH_OBJECT(stream);
-    return 1;
-}
-
-const luaL_Reg cxFileStreamTypeMethods[] = {
-    {"create",cxFileStreamLuaCreate},
-    {NULL,NULL}
-};
-
 void cxFileStreamTypeInit()
 {
-    CX_LUA_LOAD_TYPE(cxFileStream);
+    
 }
 
 static cxBool cxFileStreamOpen(cxAny this)

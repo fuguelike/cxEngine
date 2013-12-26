@@ -70,19 +70,14 @@ static cxInt cxHashLuaClean(lua_State *L)
     return 0;
 }
 
-const luaL_Reg cxHashInstanceMethods[] = {
+CX_LUA_METHOD_BEGIN(cxHash)
     {"length",cxHashLuaLength},
     {"get",cxHashLuaGet},
     {"set",cxHashLuaSet},
     {"del",cxHashLuaDel},
     {"each",cxHashLuaEach},
     {"clean",cxHashLuaClean},
-    CX_LUA_SUPER(cxObject)
-};
-
-const luaL_Reg cxHashTypeMethods[] = {
-    CX_LUA_TYPE(cxHash)
-};
+CX_LUA_METHOD_END(cxHash)
 
 void cxHashTypeInit()
 {

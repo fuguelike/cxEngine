@@ -11,14 +11,8 @@
 #include <core/cxXMLScript.h>
 #include "cxButton.h"
 
-const luaL_Reg cxButtonInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxSprite)
-};
-
-cxInt cxButtonLuaAppendEvent(lua_State *L)
+static cxInt cxButtonLuaAppendEvent(lua_State *L)
 {
-    cxSpriteLuaAppendEvent(L);
     CX_LUA_DEF_THIS(cxButton);
     
     CX_LUA_EVENT_BEGIN();
@@ -31,10 +25,9 @@ cxInt cxButtonLuaAppendEvent(lua_State *L)
     CX_LUA_EVENT_END();
 }
 
-const luaL_Reg cxButtonTypeMethods[] = {
-    CX_LUA_ON_EVENT(cxButton)
-    CX_LUA_TYPE(cxButton)
-};
+CX_LUA_METHOD_BEGIN(cxButton)
+    {"event",cxButtonLuaAppendEvent},
+CX_LUA_METHOD_END(cxButton)
 
 void cxButtonTypeInit()
 {

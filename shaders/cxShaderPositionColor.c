@@ -8,20 +8,6 @@
 
 #include "cxShaderPositionColor.h"
 
-const luaL_Reg cxShaderPositionColorInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxShader)
-};
-
-const luaL_Reg cxShaderPositionColorTypeMethods[] = {
-    CX_LUA_TYPE(cxShaderPositionColor)
-};
-
-void cxShaderPositionColorTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxShaderPositionColor);
-}
-
 static void cxShaderPositionColorInit(cxAny this)
 {
     cxShaderPositionColor shader = this;

@@ -154,8 +154,7 @@ cxAny cxLuaObjectValue(lua_State *L,cxInt n)
         return cxStringAllocChars(lua_tostring(L, n));
     }
     if(lua_isuserdata(L, n)){
-        CX_LUA_GET_ANY(cxObject, any, n);
-        return any;
+        return CX_LUA_GET_PTR(2);
     }
     return NULL;
 }

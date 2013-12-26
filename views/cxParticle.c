@@ -12,15 +12,6 @@
 #include <core/cxViewRoot.h>
 #include "cxParticle.h"
 
-const luaL_Reg cxParticleInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxAtlas)
-};
-
-const luaL_Reg cxParticleTypeMethods[] = {
-    CX_LUA_TYPE(cxParticle)
-};
-
 static cxInt cxEmitterType(lua_State *L)
 {
     cxNumber num = cxNumberInt(cxParticleEmitterGravity);
@@ -49,7 +40,6 @@ static cxInt cxBlendMode(lua_State *L)
 
 void cxParticleTypeInit()
 {
-    CX_LUA_LOAD_TYPE(cxParticle);
     cxEngineRegisteFunc(cxEmitterType);
     cxEngineRegisteFunc(cxBlendMode);
 }

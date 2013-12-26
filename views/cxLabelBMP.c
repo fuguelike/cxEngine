@@ -40,15 +40,9 @@ static cxInt cxLabelBMPLuaSetText(lua_State *L)
     return 0;
 }
 
-const luaL_Reg cxLabelBMPInstanceMethods[] = {
-    {"setFont",cxLabelBMPLuaSetFont},
-    {"setText",cxLabelBMPLuaSetText},
-    CX_LUA_SUPER(cxAtlas)
-};
-
 static cxInt cxLabelBMPLuaMake(lua_State *L)
 {
-    CX_LUA_NEW_THIS(cxLabelBMP);
+    CX_LUA_CREATE_THIS(cxLabelBMP);
     if(lua_istable(L, 1)){
         lua_getfield(L, 1, "font");
         if(lua_isstring(L, -1)){
@@ -69,10 +63,11 @@ static cxInt cxLabelBMPLuaMake(lua_State *L)
     CX_LUA_RET_THIS(cxLabelBMP);
 }
 
-const luaL_Reg cxLabelBMPTypeMethods[] = {
+CX_LUA_METHOD_BEGIN(cxLabelBMP)
+    {"setFont",cxLabelBMPLuaSetFont},
+    {"setText",cxLabelBMPLuaSetText},
     {"make",cxLabelBMPLuaMake},
-    CX_LUA_TYPE(cxLabelBMP)
-};
+CX_LUA_METHOD_END(cxLabelBMP)
 
 void cxLabelBMPTypeInit()
 {

@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <textures/cxTextureFactory.h>
 #include "cxShader.h"
 #include "cxTexture.h"
 
@@ -19,13 +20,19 @@ CX_OBJECT_FREE(cxTexCoord, cxObject)
 }
 CX_OBJECT_TERM(cxTexCoord, cxObject)
 
-const luaL_Reg cxTextureInstanceMethods[] = {
-    CX_LUA_SUPER(cxObject)
-};
+static cxInt cxTextureLuaCreateTexture(lua_State *L)
+{
+    cxConstChars file = luaL_checkstring(L, 1);
+    //if need save to cache
+    cxBool cache = cxLuaBoolValue(L, 2, true);
+    cxTexture texture = cache ? cxTextureFactoryLoadFile(file) : cxTextureCreate(file);
+    CX_LUA_PUSH_OBJECT(texture);
+    return 1;
+}
 
-const luaL_Reg cxTextureTypeMethods[] = {
-    CX_LUA_TYPE(cxTexture)
-};
+CX_LUA_METHOD_BEGIN(cxTexture)
+    {"create",cxTextureLuaCreateTexture},
+CX_LUA_METHOD_END(cxTexture)
 
 void cxTextureTypeInit()
 {

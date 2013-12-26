@@ -17,33 +17,27 @@
 static cxInt cxViewLuaAppendView(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxView);
-    CX_LUA_GET_ANY(cxView, newView, 2);
-    cxViewAppend(this, newView);
+    cxViewAppend(this, CX_LUA_GET_PTR(2));
     return 0;
 }
 
-cxInt cxViewLuaAppendEvent(lua_State *L)
+static cxInt cxViewLuaAppendEvent(lua_State *L)
 {
-    cxObjectLuaAppendEvent(L);
-    
     CX_LUA_DEF_THIS(cxView);
-    
     CX_LUA_EVENT_BEGIN();
-    
     CX_LUA_EVENT_APPEND(onEnter);
     CX_LUA_EVENT_APPEND(onExit);
     CX_LUA_EVENT_APPEND(onResize);
     CX_LUA_EVENT_APPEND(onLayout);
     CX_LUA_EVENT_APPEND(onDirty);
     CX_LUA_EVENT_APPEND(onUpdate);
-    
     CX_LUA_EVENT_END();
 }
 
 static cxInt cxViewLuaAppendAction(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxView);
-    CX_LUA_GET_ANY(cxAction, action, 2);
+    cxAction action = CX_LUA_GET_PTR(2);
     cxUInt id = cxViewAppendAction(this, action);
     lua_pushnumber(L, id);
     return 1;
@@ -176,22 +170,9 @@ static cxInt cxViewLuaSetFixScale(lua_State *L)
     return 1;
 }
 
-const luaL_Reg cxViewInstanceMethods[] = {
-    {"appendView",cxViewLuaAppendView},
-    {"appendAction",cxViewLuaAppendAction},
-    {"createTimer",cxViewLuaCreateTimer},
-    CX_LUA_PROPERTY(cxView,Color)
-    CX_LUA_PROPERTY(cxView,Position)
-    CX_LUA_PROPERTY(cxView,Size)
-    CX_LUA_PROPERTY(cxView,Scale)
-    CX_LUA_PROPERTY(cxView,FixScale)
-    CX_LUA_ON_EVENT(cxView)
-    CX_LUA_SUPER(cxObject)
-};
-
 static cxInt cxViewLuaMake(lua_State *L)
 {
-    CX_LUA_NEW_THIS(cxView);
+    CX_LUA_CREATE_THIS(cxView);
     if(!lua_istable(L, 1)){
         CX_LUA_RET_THIS(cxView);
     }
@@ -228,10 +209,18 @@ static cxInt cxViewLuaMake(lua_State *L)
     CX_LUA_RET_THIS(cxView);
 }
 
-const luaL_Reg cxViewTypeMethods[] = {
+CX_LUA_METHOD_BEGIN(cxView)
+    {"appendView",cxViewLuaAppendView},
+    {"appendAction",cxViewLuaAppendAction},
+    {"createTimer",cxViewLuaCreateTimer},
+    {"event",cxViewLuaAppendEvent},
+    CX_LUA_PROPERTY(cxView,Color),
+    CX_LUA_PROPERTY(cxView,Position),
+    CX_LUA_PROPERTY(cxView,Size),
+    CX_LUA_PROPERTY(cxView,Scale),
+    CX_LUA_PROPERTY(cxView,FixScale),
     {"make",cxViewLuaMake},
-    CX_LUA_TYPE(cxView)
-};
+CX_LUA_METHOD_END(cxView)
 
 void cxViewTypeInit()
 {

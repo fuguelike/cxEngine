@@ -22,8 +22,7 @@ cxConstChars cxShaderClippingKey        = "cxShaderClipping";
 
 static cxInt cxOpenGLLuaGetShader(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxOpenGL);
-    cxConstChars key = luaL_checkstring(L, 2);
+    cxConstChars key = luaL_checkstring(L, 1);
     cxAny any = cxOpenGLShader(key);
     CX_LUA_PUSH_OBJECT(any);
     return 1;
@@ -31,28 +30,20 @@ static cxInt cxOpenGLLuaGetShader(lua_State *L)
 
 static cxInt cxOpenGLLuaSetShader(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxOpenGL);
-    cxConstChars key = luaL_checkstring(L, 2);
-    CX_LUA_GET_ANY(cxShader, shader, 3);
+    cxOpenGL this = cxOpenGLInstance();
+    cxConstChars key = luaL_checkstring(L, 1);
+    cxShader shader = CX_LUA_GET_PTR(2);
     cxHashSet(this->shaders, cxHashStrKey(key), shader);
     return 0;
 }
 
-const luaL_Reg cxOpenGLInstanceMethods[] = {
-    CX_LUA_PROPERTY(cxOpenGL, Shader)
-    CX_LUA_SUPER(cxObject)
-};
-
-const luaL_Reg cxOpenGLTypeMethods[] = {
-    {NULL,NULL}
-};
+CX_LUA_METHOD_BEGIN(cxOpenGL)
+    CX_LUA_PROPERTY(cxOpenGL, Shader),
+CX_LUA_METHOD_END(cxOpenGL)
 
 void cxOpenGLTypeInit()
 {
-    cxOpenGLInstance();
     CX_LUA_LOAD_TYPE(cxOpenGL);
-    CX_LUA_PUSH_OBJECT(instance);
-    lua_setglobal(gL, "cxgOpenGL");
 }
 
 #define CX_OPENGL_LOAD_SHADER(t)                                    \

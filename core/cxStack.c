@@ -11,7 +11,7 @@
 static cxInt cxStackLuaPush(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxStack);
-    CX_LUA_GET_ANY(cxObject, any, 2);
+    cxObject any = CX_LUA_GET_PTR(2);
     cxStackPush(this, any);
     return 0;
 }
@@ -33,7 +33,7 @@ static cxInt cxStackLuaLength(lua_State *L)
 static cxInt cxStackLuaReplaceTop(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxStack);
-    CX_LUA_GET_ANY(cxObject, any, 2);
+    cxObject any = CX_LUA_GET_PTR(2);
     cxStackReplaceTop(this, any);
     return 0;
 }
@@ -46,18 +46,13 @@ static cxInt cxStackLuaTop(lua_State *L)
     return 1;
 }
 
-const luaL_Reg cxStackInstanceMethods[] = {
+CX_LUA_METHOD_BEGIN(cxStack)
     {"top",cxStackLuaTop},
     {"push",cxStackLuaPush},
     {"pop",cxStackLuaPop},
     {"length",cxStackLuaLength},
     {"replaceTop",cxStackLuaReplaceTop},
-    CX_LUA_SUPER(cxObject)
-};
-
-const luaL_Reg cxStackTypeMethods[] = {
-    CX_LUA_TYPE(cxStack)
-};
+CX_LUA_METHOD_END(cxStack)
 
 void cxStackTypeInit()
 {

@@ -8,20 +8,6 @@
 
 #include "cxShaderDefault.h"
 
-const luaL_Reg cxShaderDefaultInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxShader)
-};
-
-const luaL_Reg cxShaderDefaultTypeMethods[] = {
-    CX_LUA_TYPE(cxShaderDefault)
-};
-
-void cxShaderDefaultTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxShaderDefault);
-}
-
 cxString cxShaderDefaultGetVertexSource(cxAny this)
 {
     static cxConstChars vertex =

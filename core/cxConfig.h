@@ -224,9 +224,7 @@ void cxObjectRelease(cxAny ptr);
 
 cxAny cxObjectAutoRelease(cxAny ptr);
 
-void cxLuaRegisterTypeFunc(cxConstType type,cxConstChars name, lua_CFunction func);
-
-lua_State *cxLuaLoad(cxConstType name, const luaL_Reg *cMethods,const luaL_Reg *tMethods);
+lua_State *cxLuaLoad(cxConstType name, const luaL_Reg *methods);
 
 cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type);
 
@@ -248,65 +246,53 @@ void cxObjectSetTag(cxAny obj,cxInt tag);
 
 cxInt cxObjectGetTag(cxAny obj);
 
-#define CX_RETURN(cond,...)       if(cond)return __VA_ARGS__
+#define CX_RETURN(cond,...)         if(cond)return __VA_ARGS__
 
-#define CX_BREAK(cond)            if(cond)break
+#define CX_BREAK(cond)              if(cond)break
 
-#define CX_OBJECT_DEF(_t_,_b_)    CX_OBJECT_BEG(_t_) struct _b_ super;
+#define CX_OBJECT_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_) struct _b_ super;
 
-#define CX_OBJECT_INIT(_t_,_b_)   void _t_##AutoInit(_t_ this){_b_##AutoInit((_b_)this);{
+#define CX_OBJECT_INIT(_t_,_b_)     void _t_##AutoInit(_t_ this){_b_##AutoInit((_b_)this);{
 
-#define CX_OBJECT_FREE(_t_,_b_)   }};void _t_##AutoFree(_t_ this){{
+#define CX_OBJECT_FREE(_t_,_b_)     }};void _t_##AutoFree(_t_ this){{
 
-#define CX_OBJECT_TERM(_t_,_b_)   }_b_##AutoFree((_b_)this);}
+#define CX_OBJECT_TERM(_t_,_b_)     }_b_##AutoFree((_b_)this);}
 
-#define CX_ALLOC(_t_)             cxObjectAlloc(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
+#define CX_ALLOC(_t_)               cxObjectAlloc(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
 
-#define CX_CREATE(_t_)            cxObjectCreate(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
+#define CX_CREATE(_t_)              cxObjectCreate(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
 
-#define CX_RETAIN(_o_)            cxObjectRetain(_o_)
+#define CX_RETAIN(_o_)              cxObjectRetain(_o_)
 
-#define CX_RELEASE(_o_)           cxObjectRelease(_o_)
+#define CX_RELEASE(_o_)             cxObjectRelease(_o_)
 
-#define CX_AUTOFREE(_o_)          cxObjectAutoRelease(_o_)
+#define CX_AUTOFREE(_o_)            cxObjectAutoRelease(_o_)
 
-#define CX_RETAIN_SWAP(_s_,_d_)   {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
+#define CX_RETAIN_SWAP(_s_,_d_)     {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
 
-//lua
+#define CX_LUA_GET_PTR(i)           (lua_isuserdata(gL, i)?lua_touserdata(gL, i):NULL)
 
-#define CX_LUA_NEW_PTR          (*(cxAny *)lua_newuserdata(gL, sizeof(cxAny)))
+#define CX_LUA_PROPERTY(t,n)        {"set"#n,t##LuaSet##n},{"get"#n,t##LuaGet##n}
 
-#define CX_LUA_GET_PTR(i)       lua_isuserdata(gL, i) ? (*(cxAny *)lua_touserdata(gL, i)) : NULL
+#define CX_LUA_IS_INT(n)            (((lua_Number)((cxInt)(n))) == (n))
 
-#define CX_LUA_SUPER(_t_)       {NULL,NULL},{"super",(cxAny)_t_##InstanceMethods}
+#define CX_LUA_LOAD_TYPE(t)         cxLuaLoad(t##TypeName,t##LuaMethods)
 
-#define CX_LUA_PROPERTY(t,n)    {"set"#n,t##LuaSet##n},{"get"#n,t##LuaGet##n},
+#define CX_LUA_DEF_THIS(t)          t this = CX_LUA_GET_PTR(1);CX_ASSERT(this != NULL,"get this error")
 
-#define CX_LUA_ON_EVENT(t)      {"on",t##LuaAppendEvent},
+#define CX_LUA_CREATE_THIS(t)       t this = CX_CREATE(t)
 
-#define CX_LUA_GC_FUNC(t)       {"__gc",t##LuaGC},
+#define CX_LUA_ALLOC_THIS(t)        t this = CX_ALLOC(t)
 
-#define CX_LUA_TYPE(_t_)        {"new",_t_##LuaNew},{NULL,NULL}
+#define CX_LUA_RET_THIS(t)          lua_pushlightuserdata(gL,this);return 1
 
-#define CX_LUA_IS_INT(n)        (((lua_Number)((cxInt)(n))) == (n))
+#define CX_LUA_METHOD_BEGIN(_t_)    const luaL_Reg _t_##LuaMethods[] = {
 
-#define CX_LUA_LOAD_TYPE(t)     cxLuaLoad(t##TypeName,t##InstanceMethods,t##TypeMethods)
-
-#define CX_LUA_DEF_THIS(t)      t this = CX_LUA_GET_PTR(1);CX_ASSERT(this != NULL,"get this error")
-
-#define CX_LUA_GET_ANY(t,n,i)   t n = lua_isuserdata(gL,i) ? CX_LUA_GET_PTR(i): NULL
-
-#define CX_LUA_NEW_THIS(t)      t this = CX_ALLOC(t);CX_LUA_NEW_PTR = this
-
-#define CX_LUA_RET_THIS(t)      luaL_getmetatable(gL, t##TypeName);lua_setmetatable(gL, -2);return 1
+#define CX_LUA_METHOD_END(_t_)      {"alloc",_t_##LuaAlloc},{"create",_t_##LuaCreate},{NULL,NULL}};
 
 #define CX_LUA_PUSH_OBJECT(o)                                       \
 if((o) != NULL) {                                                   \
-    CX_LUA_NEW_PTR = (o);CX_RETAIN(o);                              \
-    cxConstType type = cxObjectType(o);                             \
-    luaL_getmetatable(gL, type);                                    \
-    CX_ASSERT(lua_istable(gL, -1), "metatable %s not find",type);   \
-    lua_setmetatable(gL, -2);                                       \
+    lua_pushlightuserdata(gL,o);                                    \
 } else {                                                            \
     lua_pushnil(gL);                                                \
 }
@@ -319,19 +305,20 @@ typedef struct _t_ * _t_;                                           \
 void _t_##AutoInit(_t_ this);                                       \
 void _t_##AutoFree(_t_ this);                                       \
 void _t_##TypeInit();                                               \
-extern const luaL_Reg _t_##InstanceMethods[];                       \
-extern const luaL_Reg _t_##TypeMethods[];                           \
+extern const luaL_Reg _t_##LuaMethods[];                            \
 struct _t_ {
 
 #define CX_OBJECT_END(_t_) };                                       \
-cxInt _t_##LuaAppendEvent(lua_State *L);                            \
-static inline cxInt _t_##LuaNew(lua_State *L)                       \
+static inline cxInt _t_##LuaAlloc(lua_State *L)                     \
 {                                                                   \
-    CX_LUA_NEW_THIS(_t_);                                           \
+    CX_LUA_CREATE_THIS(_t_);                                        \
+    CX_LUA_RET_THIS(_t_);                                           \
+}                                                                   \
+static inline cxInt _t_##LuaCreate(lua_State *L)                    \
+{                                                                   \
+    CX_LUA_ALLOC_THIS(_t_);                                         \
     CX_LUA_RET_THIS(_t_);                                           \
 }
-
-
 
 extern lua_State *gL;
 
@@ -339,9 +326,9 @@ extern lua_State *gL;
 
 #define CX_METHOD_ALLOC(_r_,_n_,...)    _r_ (*_n_)(__VA_ARGS__)
 
-#define CX_METHOD_RELEASE(_m_)
+#define CX_METHOD_RELEASE(_m_)          _m_ = NULL
 
-#define CX_METHOD_FIRE(_d_,_m_,...)     (_m_ != NULL)?(_m_(__VA_ARGS__)):(_d_)
+#define CX_METHOD_FIRE(_d_,_m_,...)     ((_m_) != NULL)?((_m_)(__VA_ARGS__)):(_d_)
 
 #define CX_METHOD_OVERRIDE(_m_,_f_)     _m_ = _f_
 

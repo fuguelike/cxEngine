@@ -10,10 +10,6 @@
 
 static cxIconv instance = NULL;
 
-const luaL_Reg cxIconvInstanceMethods[] = {
-    CX_LUA_SUPER(cxObject)
-};
-
 static cxInt cxIconvLuaIconv(lua_State *L)
 {
     cxString s = cxLuaObjectValue(L, 1);
@@ -28,10 +24,9 @@ static cxInt cxIconvLuaIconv(lua_State *L)
     return 1;
 }
 
-const luaL_Reg cxIconvTypeMethods[] = {
+CX_LUA_METHOD_BEGIN(cxIconv)
     {"iconv",cxIconvLuaIconv},
-    {NULL,NULL}
-};
+CX_LUA_METHOD_END(cxIconv)
 
 void cxIconvTypeInit()
 {

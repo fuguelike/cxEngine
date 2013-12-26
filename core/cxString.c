@@ -21,29 +21,9 @@ static cxInt cxStringLuaPrint(lua_State *L)
     return 0;
 }
 
-static cxInt cxStringLuaEqu(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxString);
-    CX_LUA_GET_ANY(cxString, right, 2);
-    if(!cxObjectIsType(right, cxStringTypeName)){
-        lua_pushboolean(L, false);
-    }else if(cxStringEqu(this, right)){
-        lua_pushboolean(L, true);
-    }else{
-        lua_pushboolean(L, false);
-    }
-    return 1;
-}
-
-const luaL_Reg cxStringInstanceMethods[] = {
-    {"print",cxStringLuaPrint},
-    {"__eq",cxStringLuaEqu},
-    CX_LUA_SUPER(cxObject)
-};
-
 static cxInt cxStringLuaMake(lua_State *L)
 {
-    CX_LUA_NEW_THIS(cxString);
+    CX_LUA_CREATE_THIS(cxString);
     int top = lua_gettop(L);
     for(cxInt i=1; i <= top; i++){
         cxStringFormat(this, "%s",lua_tostring(L, i));
@@ -51,10 +31,10 @@ static cxInt cxStringLuaMake(lua_State *L)
     CX_LUA_RET_THIS(cxString);
 }
 
-const luaL_Reg cxStringTypeMethods[] = {
+CX_LUA_METHOD_BEGIN(cxString)
     {"make",cxStringLuaMake},
-    CX_LUA_TYPE(cxString)
-};
+    {"print",cxStringLuaPrint},
+CX_LUA_METHOD_END(cxString)
 
 void cxStringTypeInit()
 {

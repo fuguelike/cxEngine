@@ -77,7 +77,7 @@ static cxInt cxStreamLuaAllBytes(lua_State *L)
     return 1;
 }
 
-const luaL_Reg cxStreamInstanceMethods[] = {
+CX_LUA_METHOD_BEGIN(cxStream)
     {"open",cxStreamLuaOpen},
     {"read",cxStreamLuaRead},
     {"write",cxStreamLuaWrite},
@@ -85,12 +85,7 @@ const luaL_Reg cxStreamInstanceMethods[] = {
     {"close",cxStreamLuaClose},
     {"position",cxStreamLuaPosition},
     {"allBytes",cxStreamLuaAllBytes},
-    CX_LUA_SUPER(cxObject)
-};
-
-const luaL_Reg cxStreamTypeMethods[] = {
-    {NULL,NULL}
-};
+CX_LUA_METHOD_END(cxStream)
 
 void cxStreamTypeInit()
 {

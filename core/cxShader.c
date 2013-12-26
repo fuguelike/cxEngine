@@ -19,14 +19,9 @@ static cxInt cxShaderLuaUsing(lua_State *L)
     return 0;
 }
 
-const luaL_Reg cxShaderInstanceMethods[] = {
+CX_LUA_METHOD_BEGIN(cxShader)
     {"using",cxShaderLuaUsing},
-    CX_LUA_SUPER(cxObject)
-};
-
-const luaL_Reg cxShaderTypeMethods[] = {
-    CX_LUA_TYPE(cxShader)
-};
+CX_LUA_METHOD_END(cxShader)
 
 void cxShaderTypeInit()
 {

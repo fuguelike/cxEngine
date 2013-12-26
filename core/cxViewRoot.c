@@ -22,12 +22,6 @@
 #include "cxHashRoot.h"
 #include "cxActionRoot.h"
 
-cxInt cxViewRootLuaAppendEvent(lua_State *L)
-{
-    cxViewLuaAppendEvent(L);
-    return 0;
-}
-
 static cxInt cxViewRootLuaGetView(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxViewRoot);
@@ -37,12 +31,6 @@ static cxInt cxViewRootLuaGetView(lua_State *L)
     return 1;
 }
 
-const luaL_Reg cxViewRootInstanceMethods[] = {
-    {"getView",cxViewRootLuaGetView},
-    CX_LUA_ON_EVENT(cxView)
-    CX_LUA_SUPER(cxView)
-};
-
 static cxInt cxViewRootLuaMake(lua_State *L)
 {
     cxConstChars url = luaL_checkstring(L, 1);
@@ -51,10 +39,10 @@ static cxInt cxViewRootLuaMake(lua_State *L)
     return 1;
 }
 
-const luaL_Reg cxViewRootTypeMethods[] = {
+CX_LUA_METHOD_BEGIN(cxViewRoot)
+    {"getView",cxViewRootLuaGetView},
     {"make",cxViewRootLuaMake},
-    CX_LUA_TYPE(cxViewRoot)
-};
+CX_LUA_METHOD_END(cxViewRoot)
 
 void cxViewRootTypeInit()
 {

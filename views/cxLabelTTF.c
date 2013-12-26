@@ -40,15 +40,9 @@ static cxInt cxLabelTTFLuaSetText(lua_State *L)
     return 0;
 }
 
-const luaL_Reg cxLabelTTFInstanceMethods[] = {
-    {"setFont",cxLabelTTFLuaSetFont},
-    {"setText",cxLabelTTFLuaSetText},
-    CX_LUA_SUPER(cxSprite)
-};
-
 static cxInt cxLabelTTFLuaMake(lua_State *L)
 {
-    CX_LUA_NEW_THIS(cxLabelTTF);
+    CX_LUA_CREATE_THIS(cxLabelTTF);
     if(lua_istable(L, 1)){
         lua_getfield(L, 1, "font");
         if(lua_isstring(L, -1)){
@@ -69,10 +63,11 @@ static cxInt cxLabelTTFLuaMake(lua_State *L)
     CX_LUA_RET_THIS(cxLabelTTF);
 }
 
-const luaL_Reg cxLabelTTFTypeMethods[] = {
+CX_LUA_METHOD_BEGIN(cxLabelTTF)
+    {"setFont",cxLabelTTFLuaSetFont},
+    {"setText",cxLabelTTFLuaSetText},
     {"make",cxLabelTTFLuaMake},
-    CX_LUA_TYPE(cxLabelTTF)
-};
+CX_LUA_METHOD_END(cxLabelTTF)
 
 void cxLabelTTFTypeInit()
 {

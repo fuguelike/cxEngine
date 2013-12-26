@@ -27,92 +27,37 @@ static cxInt cxObjectLuaSetTag(lua_State *L)
     return 0;
 }
 
-static cxInt cxObjectLuaGC(lua_State *L)
+static cxInt cxObjectLuaRetain(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxObject);
+    CX_RETAIN(this);
+    return 0;
+}
+
+static cxInt cxObjectLuaRelease(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxObject);
     CX_RELEASE(this);
     return 0;
 }
 
-cxInt cxObjectLuaAppendEvent(lua_State *L)
-{
-    return 0;
-}
-
-static cxInt cxObjectLuaToString(lua_State *L)
+static cxInt cxObjectLuaAutoRelease(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxObject);
-    lua_pushstring(L, this->cxType);
+    CX_AUTOFREE(this);
     return 1;
 }
 
-static cxInt cxObjectLuaSetMetaMethod(lua_State *L)
+CX_LUA_METHOD_BEGIN(cxObject)
+    {"retain",cxObjectLuaRetain},
+    {"release",cxObjectLuaRelease},
+    {"autoRelease",cxObjectLuaAutoRelease},
+    CX_LUA_PROPERTY(cxObject, Tag),
+CX_LUA_METHOD_END(cxObject)
+
+lua_State *cxLuaLoad(cxConstType name, const luaL_Reg *methods)
 {
-    cxConstChars name = luaL_checkstring(L, 2);
-    lua_getmetatable(L, 1);
-    CX_ASSERT(lua_istable(L, -1), "get metatable error");
-    lua_getfield(L, -1, "__index");
-    CX_ASSERT(lua_istable(L, -1), "get metatable __index error");
-    lua_pushvalue(L, 3);
-    lua_setfield(L, -2, name);
-    lua_pop(L, 2);
-    return 0;
-}
-
-const luaL_Reg cxObjectInstanceMethods[] = {
-    {"setMetaMethod",cxObjectLuaSetMetaMethod},
-    {"__tostring",cxObjectLuaToString},
-    CX_LUA_PROPERTY(cxObject, Tag)
-    CX_LUA_ON_EVENT(cxObject)
-    CX_LUA_GC_FUNC(cxObject)
-    {NULL,NULL},
-    {NULL,NULL},
-};
-
-const luaL_Reg cxObjectTypeMethods[] = {
-    CX_LUA_TYPE(cxObject)
-};
-
-static void cxLuaRegisterMethods(const luaL_Reg *methods)
-{
-    const luaL_Reg *curr = NULL;
-    cxInt i = 0;
-    while (true) {
-        curr = &methods[i++];
-        CX_BREAK(curr->func == NULL && curr->name == NULL);
-    }
-    curr = &methods[i];
-    if(curr->func != NULL && strcmp(curr->name, "super") == 0){
-        cxLuaRegisterMethods((const luaL_Reg *)curr->func);
-    }
-    luaL_register(gL, NULL, methods);
-}
-
-void cxLuaRegisterTypeFunc(cxConstType type,cxConstChars name, lua_CFunction func)
-{
-    luaL_getmetatable(gL, type);
-    CX_ASSERT(lua_istable(gL, -1), "type %s not metatable");
-    lua_getfield(gL, -1, "function");
-    CX_ASSERT(lua_istable(gL, -1), "type %s function not find");
-    lua_pushcfunction(gL, func);
-    lua_setfield(gL, -2, name);
-    lua_pop(gL, 2);
-}
-
-lua_State *cxLuaLoad(cxConstType name, const luaL_Reg *cMethods,const luaL_Reg *tMethods)
-{
-    CX_ASSERT(cMethods != NULL && tMethods != NULL, "args error");
-    luaL_newmetatable(gL, name);
-    cxLuaRegisterMethods(cMethods);
-
-    lua_pushvalue(gL,-1);
-    lua_setfield(gL, -2, "__index");
-    
-    lua_newtable(gL);
-    lua_setfield(gL, -2, "function");
-    
-    luaL_register(gL, name, tMethods);
-    lua_pop(gL, 2);
+    luaL_openlib(gL, name, methods, 0);
     return gL;
 }
 

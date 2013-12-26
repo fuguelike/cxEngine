@@ -11,20 +11,6 @@
 #include <core/cxViewRoot.h>
 #include "cxAtlas.h"
 
-const luaL_Reg cxAtlasInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxSprite)
-};
-
-const luaL_Reg cxAtlasTypeMethods[] = {
-    CX_LUA_TYPE(cxAtlas)
-};
-
-void cxAtlasTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxAtlas);
-}
-
 void cxAtlasReadAttr(cxReaderAttrInfo *info)
 {
     cxAtlas this =info->object;

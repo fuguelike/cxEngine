@@ -22,19 +22,6 @@
 #include "cxActionRoot.h"
 #include "cxPlayer.h"
 
-const luaL_Reg cxActionRootInstanceMethods[] = {
-    CX_LUA_SUPER(cxObject)
-};
-
-const luaL_Reg cxActionRootTypeMethods[] = {
-    CX_LUA_TYPE(cxActionRoot)
-};
-
-void cxActionRootTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxActionRoot);
-}
-
 void cxActionRootReadAttr(cxReaderAttrInfo *info)
 {
     cxObjectReadAttr(info);

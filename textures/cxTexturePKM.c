@@ -20,20 +20,6 @@ typedef struct{
 
 #define CX_PKM_TAG (*(uint32_t *)("PKM\x20"))
 
-const luaL_Reg cxTexturePKMInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxTexture)
-};
-
-const luaL_Reg cxTexturePKMTypeMethods[] = {
-    {NULL,NULL}
-};
-
-void cxTexturePKMTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxTexturePKM);
-}
-
 static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
 {
     cxBool ret = false;

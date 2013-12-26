@@ -9,29 +9,20 @@
 #include "cxActionRoot.h"
 #include "cxAction.h"
 
-cxInt cxActionLuaAppendEvent(lua_State *L)
+static cxInt cxActionLuaAppendEvent(lua_State *L)
 {
-    cxObjectLuaAppendEvent(L);
     CX_LUA_DEF_THIS(cxAction);
-    
     CX_LUA_EVENT_BEGIN();
-    
     CX_LUA_EVENT_APPEND(onSplit);
     CX_LUA_EVENT_APPEND(onStart);
     CX_LUA_EVENT_APPEND(onStep);
     CX_LUA_EVENT_APPEND(onStop);
-    
     CX_LUA_EVENT_END();
 }
 
-const luaL_Reg cxActionInstanceMethods[] = {
-    CX_LUA_ON_EVENT(cxAction)
-    CX_LUA_SUPER(cxObject)
-};
-
-const luaL_Reg cxActionTypeMethods[] = {
-    CX_LUA_TYPE(cxAction)
-};
+CX_LUA_METHOD_BEGIN(cxAction)
+    {"event",cxActionLuaAppendEvent},
+CX_LUA_METHOD_END(cxAction)
 
 void cxActionTypeInit()
 {

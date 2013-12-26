@@ -7,8 +7,8 @@
 --cxgWindow
 
 function init()
-    cxgEngine:setDesignSize({w=640,h=960})
-    cxgEngine:setShowBorder(true)
+    cxEngine.setDesignSize({w=640,h=960})
+    cxEngine.setShowBorder(true)
 end
 
 function mainBegin(xml)
@@ -20,39 +20,24 @@ function mainEnd(xml)
 end
 
 function main()
+
+    local loader = cxLoading.create()
     
-    --[[
-    local x = cxAssetsStream.create('items.xml');
-    local b = x:allBytes()
-    b:print()
-     ]]
-    
-    local loader = cxLoading.new()
-    
-    --loader:setMetaMethod('test',function(self) print(self:getColor().a) end)
-    --loader:test()
-    
-    loader:on('onStart',function(loading)
+    cxLoading.event(loader,'onStart',function(this)
               local txt = cxLabelTTF.make({font='banana.ttf',size='65',text='Loading...'})
-              txt:setColor({r=1.0,g=0.0,b=0.0})
-              txt:setFont({size=60})
-              loading:appendView(txt)
+              cxView.setColor(txt,{r=1.0,g=0.0,b=0.0})
+              cxLabelTTF.setFont(txt,{size=60})
+              cxView.appendView(this,txt)
          end)
-    loader:on('onLoading', function(loading)
-              local xml = cxViewRoot.make('main.xml')
-              loading:setObject(xml)
+    cxLoading.event(loader,'onLoading', function(this)
+              local xmlView = cxViewRoot.make('main.xml')
+              cxLoading.setObject(this,xmlView)
          end)
-    loader:on('onFinished', function(loading)
-            local view = loading:getObject()
-            cxgWindow:pushView(view)
+    cxLoading.event(loader,'onFinished', function(this)
+            local xmlView = cxLoading.getObject(this)
+            cxWindow.pushView(xmlView)
          end)
-    
-    loader:start()
-    
-    local btn = cxButton.new()
-    btn:setTexture('candy.xml?green.png');
-    btn:setPosition(100,200)
-    cxgWindow:appendView(btn)
+    cxLoading.start(loader)
 end
 
 function free()

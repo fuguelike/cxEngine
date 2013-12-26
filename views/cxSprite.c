@@ -12,12 +12,6 @@
 #include <textures/cxTextureFactory.h>
 #include "cxSprite.h"
 
-cxInt cxSpriteLuaAppendEvent(lua_State *L)
-{
-    cxViewLuaAppendEvent(L);
-    return 0;
-}
-
 static cxInt cxSpriteLuaSetTexture(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxSprite);
@@ -28,15 +22,9 @@ static cxInt cxSpriteLuaSetTexture(lua_State *L)
     return 0;
 }
 
-const luaL_Reg cxSpriteInstanceMethods[] = {
-    {"setTexture",cxSpriteLuaSetTexture},
-    CX_LUA_ON_EVENT(cxSprite)
-    CX_LUA_SUPER(cxView)
-};
-
 static cxInt cxSpriteLuaMake(lua_State *L)
 {
-    CX_LUA_NEW_THIS(cxSprite);
+    CX_LUA_CREATE_THIS(cxSprite);
     cxBool ust = cxLuaBoolValue(L, 2, true);
     cxBool cache = cxLuaBoolValue(L, 3, true);
     cxConstChars url = luaL_checkstring(L, 1);
@@ -44,10 +32,11 @@ static cxInt cxSpriteLuaMake(lua_State *L)
     CX_LUA_RET_THIS(cxSprite);
 }
 
-const luaL_Reg cxSpriteTypeMethods[] = {
-    {"make",cxSpriteLuaMake},//make(url,[useTextSiz],[cache])
-    CX_LUA_TYPE(cxSprite)
-};
+CX_LUA_METHOD_BEGIN(cxSprite)
+    {"setTexture",cxSpriteLuaSetTexture},
+    {"make",cxSpriteLuaMake},
+CX_LUA_METHOD_END(cxSprite)
+
 
 void cxSpriteTypeInit()
 {

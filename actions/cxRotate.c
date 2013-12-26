@@ -8,21 +8,6 @@
 
 #include "cxRotate.h"
 
-const luaL_Reg cxRotateInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxAction)
-};
-
-const luaL_Reg cxRotateTypeMethods[] = {
-    
-    CX_LUA_TYPE(cxRotate)
-};
-
-void cxRotateTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxRotate);
-}
-
 static void cxRotateInit(cxAny pav)
 {
     cxRotate this = pav;

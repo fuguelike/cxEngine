@@ -11,20 +11,6 @@
 #include "cxTextureXML.h"
 #include "cxTextureFactory.h"
 
-const luaL_Reg cxTextureXMLInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxTexture)
-};
-
-const luaL_Reg cxTextureXMLTypeMethods[] = {
-    {NULL,NULL}
-};
-
-void cxTextureXMLTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxTextureXML);
-}
-
 static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
 {
     cxBool ret = false;

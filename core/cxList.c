@@ -64,7 +64,7 @@ static cxInt cxListLuaClean(lua_State *L)
     return 0;
 }
 
-const luaL_Reg cxListInstanceMethods[] = {
+CX_LUA_METHOD_BEGIN(cxList)
     {"append",  cxListLuaAppend},
     {"prepend", cxListLuaPrepend},
     {"first",   cxListLuaFirst},
@@ -72,12 +72,7 @@ const luaL_Reg cxListInstanceMethods[] = {
     {"length",  cxListLuaLength},
     {"remove",  cxListLuaRemove},
     {"clean",   cxListLuaClean},
-    CX_LUA_SUPER(cxObject)
-};
-
-const luaL_Reg cxListTypeMethods[] = {
-    CX_LUA_TYPE(cxList)
-};
+CX_LUA_METHOD_END(cxList)
 
 void cxListTypeInit()
 {

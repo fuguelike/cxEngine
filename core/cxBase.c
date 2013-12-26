@@ -14,9 +14,9 @@ void cxObjectLuaEventFunc(cxEvent *event)
     cxInt ref = cxEventArgToRef(event->args);
     CX_ASSERT(ref > 0, "args ref error");
     lua_getref(gL, ref);
-    CX_LUA_PUSH_OBJECT(event->sender);
+    lua_pushlightuserdata(gL, event->sender);
     cxInt an = cxEventArgPush(event->args) ? 2 : 1;
-    lua_pcall(gL, an, 0, 0);
+    lua_call(gL, an, 0);
 }
 
 

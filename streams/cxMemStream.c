@@ -8,27 +8,6 @@
 
 #include "cxMemStream.h"
 
-const luaL_Reg cxMemStreamInstanceMethods[] = {
-    CX_LUA_SUPER(cxStream)
-};
-
-static cxInt cxMemStreamLuaCreate(lua_State *L)
-{
-    cxStream stream = CX_CREATE(cxMemStream);
-    CX_LUA_PUSH_OBJECT(stream);
-    return 1;
-}
-
-const luaL_Reg cxMemStreamTypeMethods[] = {
-    {"create",cxMemStreamLuaCreate},
-    {NULL,NULL}
-};
-
-void cxMemStreamTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxMemStream);
-}
-
 static cxBool cxMemStreamOpen(cxAny this)
 {
     cxMemStream stream = this;

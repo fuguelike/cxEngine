@@ -10,14 +10,6 @@
 #include <core/cxViewRoot.h>
 #include "cxChipmunk.h"
 
-const luaL_Reg cxChipmunkInstanceMethods[] = {
-    CX_LUA_SUPER(cxView)
-};
-
-const luaL_Reg cxChipmunkTypeMethods[] = {
-    CX_LUA_TYPE(cxChipmunk)
-};
-
 //cxShapeType('box')
 static cxInt cxShapeType(lua_State *L)
 {
@@ -34,7 +26,6 @@ static cxInt cxShapeType(lua_State *L)
 
 void cxChipmunkTypeInit()
 {
-    CX_LUA_LOAD_TYPE(cxChipmunk);
     cxEngineRegisteFunc(cxShapeType);
 }
 

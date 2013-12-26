@@ -12,16 +12,6 @@
 #include <core/cxEventArg.h>
 #include "cxActionSet.h"
 
-const luaL_Reg cxActionSetInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxAction)
-};
-
-const luaL_Reg cxActionSetTypeMethods[] = {
-    
-    CX_LUA_TYPE(cxActionSet)
-};
-
 static cxInt cxActionType(lua_State *L)
 {
     cxNumber num = cxNumberInt(cxActionSetTypeNone);
@@ -38,7 +28,6 @@ static cxInt cxActionType(lua_State *L)
 
 void cxActionSetTypeInit()
 {
-    CX_LUA_LOAD_TYPE(cxActionSet);
     cxEngineRegisteFunc(cxActionType);
 }
 

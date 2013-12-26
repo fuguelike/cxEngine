@@ -13,7 +13,7 @@
 static cxInt cxLoadingLuaSetObject(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxLoading);
-    CX_LUA_GET_ANY(cxObject, any, 2);
+    cxObject any = CX_LUA_GET_PTR(2);
     cxLoadingSetObject(this, any);
     return 0;
 }
@@ -32,30 +32,21 @@ static cxInt cxLoadingLuaStart(lua_State *L)
     return 0;
 }
 
-cxInt cxLoadingLuaAppendEvent(lua_State *L)
+static cxInt cxLoadingLuaAppendEvent(lua_State *L)
 {
-    cxViewLuaAppendEvent(L);
     CX_LUA_DEF_THIS(cxLoading);
-    
     CX_LUA_EVENT_BEGIN();
-    
     CX_LUA_EVENT_APPEND(onFinished);
     CX_LUA_EVENT_APPEND(onLoading);
     CX_LUA_EVENT_APPEND(onStart);
-    
     CX_LUA_EVENT_END();
 }
 
-const luaL_Reg cxLoadingInstanceMethods[] = {
+CX_LUA_METHOD_BEGIN(cxLoading)
     {"start",cxLoadingLuaStart},
-    CX_LUA_PROPERTY(cxLoading, Object)
-    CX_LUA_ON_EVENT(cxLoading)
-    CX_LUA_SUPER(cxView)
-};
-
-const luaL_Reg cxLoadingTypeMethods[] = {
-    CX_LUA_TYPE(cxLoading)
-};
+    {"event",cxLoadingLuaAppendEvent},
+    CX_LUA_PROPERTY(cxLoading, Object),
+CX_LUA_METHOD_END(cxLoading)
 
 void cxLoadingTypeInit()
 {

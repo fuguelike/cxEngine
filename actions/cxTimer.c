@@ -10,9 +10,8 @@
 #include <core/cxActionRoot.h>
 #include "cxTimer.h"
 
-cxInt cxTimerLuaAppendEvent(lua_State *L)
+static cxInt cxTimerLuaAppendEvent(lua_State *L)
 {
-    cxActionLuaAppendEvent(L);
     CX_LUA_DEF_THIS(cxTimer);
     CX_LUA_EVENT_BEGIN();
     CX_LUA_EVENT_APPEND(onArrive);
@@ -33,15 +32,10 @@ static cxInt cxTimerLuaSetRepeat(lua_State *L)
     return 1;
 }
 
-const luaL_Reg cxTimerInstanceMethods[] = {
-    CX_LUA_PROPERTY(cxTimer, Repeat)
-    CX_LUA_ON_EVENT(cxTimer)
-    CX_LUA_SUPER(cxAction)
-};
-
-const luaL_Reg cxTimerTypeMethods[] = {
-    CX_LUA_TYPE(cxTimer)
-};
+CX_LUA_METHOD_BEGIN(cxTimer)
+    {"event",cxTimerLuaAppendEvent},
+    CX_LUA_PROPERTY(cxTimer, Repeat),
+CX_LUA_METHOD_END(cxTimer)
 
 void cxTimerTypeInit()
 {

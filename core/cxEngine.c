@@ -24,68 +24,57 @@ static cxBool isExit = false;
 
 static cxInt cxEngineLuaSetDesignSize(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxEngine);
+    cxEngine this = cxEngineInstance();
     this->dessize = cxLuaSize2fValue(L, 1, this->dessize);
     return 0;
 }
 
 static cxInt cxEngineLuaGetDesignSize(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxEngine);
+    cxEngine this = cxEngineInstance();
     cxLuaPushSize2fv(L, this->dessize);
     return 1;
 }
 
 static cxInt cxEngineLuaSetShowBorder(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxEngine);
+    cxEngine this = cxEngineInstance();
     this->isShowBorder = lua_toboolean(L, 1);
     return 0;
 }
 
 static cxInt cxEngineLuaGetShowBorder(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxEngine);
+    cxEngine this = cxEngineInstance();
     lua_pushboolean(L, this->isShowBorder);
     return 1;
 }
 
 static cxInt cxEngineLuaGetScreenSize(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxEngine);
+    cxEngine this = cxEngineInstance();
     cxLuaPushSize2fv(L, this->winsize);
     return 1;
 }
 
-cxInt cxEngineLuaAppendEvent(lua_State *L)
+static cxInt cxEngineLuaAppendEvent(lua_State *L)
 {
-    cxObjectLuaAppendEvent(L);
     CX_LUA_DEF_THIS(cxEngine);
-    
     CX_LUA_EVENT_BEGIN();
-    
     CX_LUA_EVENT_APPEND(onFree);
-    
     CX_LUA_EVENT_END();
 }
 
-const luaL_Reg cxEngineInstanceMethods[] = {
+CX_LUA_METHOD_BEGIN(cxEngine)
+    {"event",cxEngineLuaAppendEvent},
     {"screenSize",cxEngineLuaGetScreenSize},
-    CX_LUA_PROPERTY(cxEngine, ShowBorder)
-    CX_LUA_PROPERTY(cxEngine, DesignSize)
-    CX_LUA_ON_EVENT(cxEngine)
-    CX_LUA_SUPER(cxObject)
-};
-
-const luaL_Reg cxEngineTypeMethods[] = {
-    {NULL,NULL}
-};
+    CX_LUA_PROPERTY(cxEngine, ShowBorder),
+    CX_LUA_PROPERTY(cxEngine, DesignSize),
+CX_LUA_METHOD_END(cxEngine)
 
 void cxEngineTypeInit()
 {
-    lua_State *L = CX_LUA_LOAD_TYPE(cxEngine);
-    CX_LUA_PUSH_OBJECT(instance);
-    lua_setglobal(L, "cxgEngine");
+    CX_LUA_LOAD_TYPE(cxEngine);
 }
 
 static int cxEngineLuaLoader(lua_State *L)
@@ -533,6 +522,7 @@ static cxInt cxLocalizedText(lua_State *L)
 static cxInt cxEventAction(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxObject);
+    cxAny view = NULL;
     cxConstChars src = NULL;
     cxConstChars viewId = NULL;
     cxBool cache = false;
@@ -561,6 +551,8 @@ static cxInt cxEventAction(lua_State *L)
     lua_getfield(L, 2, "view");
     if(lua_isstring(L, -1)){
         viewId = lua_tostring(L, -1);
+    }else if(lua_isuserdata(L, -1)){
+        view = CX_LUA_GET_PTR(-1);
     }
     lua_pop(L, 1);
     //
@@ -570,8 +562,9 @@ static cxInt cxEventAction(lua_State *L)
     }
     lua_pop(L, 1);
     //get view by id and cxBase
-    cxAny view = NULL;
-    if(this->cxBase == cxBaseTypeAction){
+    if(view != NULL){
+        viewId = NULL;
+    }else if(this->cxBase == cxBaseTypeAction){
         view = cxActionView(this);
     }else if(this->cxBase == cxBaseTypeView){
         view = this;

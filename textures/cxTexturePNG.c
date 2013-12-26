@@ -8,20 +8,6 @@
 
 #include "cxTexturePNG.h"
 
-const luaL_Reg cxTexturePNGInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxTexture)
-};
-
-const luaL_Reg cxTexturePNGTypeMethods[] = {
-    {NULL,NULL}
-};
-
-void cxTexturePNGTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxTexturePNG);
-}
-
 static cxBool cxTexturePNGLoad(cxAny this,cxStream stream)
 {
     cxBool ret = false;

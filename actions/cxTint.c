@@ -9,17 +9,9 @@
 #include <core/cxActionRoot.h>
 #include "cxTint.h"
 
-const luaL_Reg cxTintInstanceMethods[] = {
-    CX_LUA_SUPER(cxAction)
-};
-
-const luaL_Reg cxTintTypeMethods[] = {
-    CX_LUA_TYPE(cxTint)
-};
-
 void cxTintTypeInit()
 {
-    CX_LUA_LOAD_TYPE(cxTint);
+    
 }
 
 static void cxTintInit(cxAny pav)

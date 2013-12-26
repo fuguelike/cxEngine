@@ -47,8 +47,8 @@ static cxInt cxArrayLuaEach(lua_State *L)
 static cxInt cxArrayLuaRemove(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxArray);
-    if(lua_isuserdata(L, 2)){
-        CX_LUA_GET_ANY(cxObject, any, 2);
+    cxObject any = CX_LUA_GET_PTR(2);
+    if(any != NULL){
         cxArrayRemove(this, any);
         return 0;
     }
@@ -67,19 +67,14 @@ static cxInt cxArrayLuaClean(lua_State *L)
     return 0;
 }
 
-const luaL_Reg cxArrayInstanceMethods[] = {
+CX_LUA_METHOD_BEGIN(cxArray)
     {"length",cxArrayLuaLength},
     {"at",cxArrayLuaAtIndex},
     {"append",cxArrayLuaAppend},
     {"remove",cxArrayLuaRemove},
     {"each",cxArrayLuaEach},
     {"clean",cxArrayLuaClean},
-    CX_LUA_SUPER(cxObject)
-};
-
-const luaL_Reg cxArrayTypeMethods[] = {
-    CX_LUA_TYPE(cxArray)
-};
+CX_LUA_METHOD_END(cxArray)
 
 void cxArrayTypeInit()
 {

@@ -9,20 +9,6 @@
 #include "cxShaderDefault.h"
 #include "cxShaderAlpha.h"
 
-const luaL_Reg cxShaderAlphaInstanceMethods[] = {
-    
-    CX_LUA_SUPER(cxShader)
-};
-
-const luaL_Reg cxShaderAlphaTypeMethods[] = {
-    CX_LUA_TYPE(cxShaderAlpha)
-};
-
-void cxShaderAlphaTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxShaderAlpha);
-}
-
 static cxString cxShaderAlphaGetFragmentSource(cxAny this)
 {
     static cxConstChars fragment =
