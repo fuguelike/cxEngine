@@ -395,7 +395,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_RELEASE(this->actions);
     CX_RELEASE(this->caches);
     CX_RELEASE(this->args);
-    
     CX_METHOD_RELEASE(this->IsTouch);
     CX_METHOD_RELEASE(this->Touch);
     CX_METHOD_RELEASE(this->IsOnKey);
@@ -403,6 +402,7 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_METHOD_RELEASE(this->Draw);
     CX_METHOD_RELEASE(this->DrawAfter);
     CX_METHOD_RELEASE(this->DrawBefore);
+    CX_SIGNAL_RELEASE(this->EmmitDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
 
@@ -1044,6 +1044,7 @@ void cxViewDraw(cxAny pview)
         cxView view = ele->any;
         cxViewDraw(view);
     }
+    CX_SIGNAL_FIRE(this->EmmitDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
     CX_METHOD_FIRE(NULL, this->DrawAfter,this);
     if(this->isCropping){
         cxOpenGLDisableScissor();

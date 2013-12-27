@@ -17,11 +17,12 @@
         <cxFrame file="candy.xml?orange.png" cache="true"/>
         <cxFrame file="candy.xml?yellow.png" cache="true"/>
     </cxAnimate>
+    <cxRunParticle id="particle" cxRunParticle.pex="particle.pex" />
     <cxMove id="move"
         cxAction.speed="1.0"
-        cxAction.time="1.5"
-        cxMove.x="300"
-        cxMove.y="350"
+        cxAction.time="30"
+        cxMove.x="500"
+        cxMove.y="500"
         cxAction.assist="50"
         cxAction.split="10"
         cxAction.curve="ElasticOut"/>

@@ -430,20 +430,26 @@ static cxBool cxParticleComputeUnits(cxParticle this,cxFloat dt)
     return true;
 }
 
-static void cxParticleUpdate(cxEvent *event)
+void cxParticleUpdate(cxAny pview)
 {
     cxEngine engine = cxEngineInstance();
     cxFloat dt = engine->frameDelta;
-    cxParticle this = event->sender;
+    cxParticle this = pview;
     if(cxParticleComputeUnits(this, dt)){
         return;
     }
+    CX_EVENT_FIRE(this, onUpdate);
     this->index = 0;
     while(this->index < this->count){
         cxParticleUnit *p = &this->units[this->index];
         cxParticleComputeUnit(this, p, dt);
     }
     this->super.isDirty = true;
+}
+
+static void cxParticleUpdateEvent(cxEvent *event)
+{
+    cxParticleUpdate(event->sender);
 }
 
 void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode)
@@ -469,13 +475,14 @@ CX_OBJECT_INIT(cxParticle, cxAtlas)
     this->duration = -1;
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
-    cxViewOnUpdate(this, cxParticleUpdate);
+    cxViewOnUpdate(this, cxParticleUpdateEvent);
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE);
     cxObjectSetReadAttrFunc(this, cxParticleReadAttr);
 }
 CX_OBJECT_FREE(cxParticle, cxAtlas)
 {
     allocator->free(this->units);
+    CX_EVENT_RELEASE(this->onUpdate);
     CX_METHOD_RELEASE(this->UpdateBox);
 }
 CX_OBJECT_TERM(cxParticle, cxAtlas)

@@ -176,7 +176,10 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         CX_EVENT_FIRE(this,onSplit);
     }
     //wait exit
-    if(this->duration == 0){
+    if(this->duration < 0){
+        CX_METHOD_FIRE(NULL, this->Step,this,dt,time);
+        CX_EVENT_FIRE(this, onStep);
+    }else if(this->duration == 0){
         isExit = CX_METHOD_FIRE(true, this->Exit, this);
     }else if(this->durationElapsed < this->duration){
         time = CX_METHOD_FIRE(time, this->Curve, this, time);

@@ -2,7 +2,7 @@
 
 <!--TextureKey at *.xml file use-->
 <cxViewRoot cxView.fill="true">
-
+    <!--
     <cxParticle
         cxSprite.texture="n.png"
         cxView.cropping="false"
@@ -22,15 +22,17 @@
         cxParticle.endcolor="1,1,1,1"
         cxParticle.remove="true"
         cxParticle.rate = "-1" />
-
-    <!--
-    <cxParticle cxParticle.pex = "particle.pex" />
      -->
+
+
+    <cxParticle cxView.fill="0,0,0,0" id="p" cxParticle.pex = "particle.pex" />
+
     <cxButton
         cxView.w = "180"
         cxView.h = "120"
         cxView.left="10"
-        cxView.bottom="10">
+        cxView.bottom="10"
+        cxButton.onRelease="cxEventAction({'src':'actions.xml?spline','view':'p'})">
         <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Append" cxLabelTTF.size="30"/>
     </cxButton>

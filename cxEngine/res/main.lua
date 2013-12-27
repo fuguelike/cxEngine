@@ -27,7 +27,7 @@ function main()
               local xmlView = cxViewRoot.make('main.xml')
               cxLoading.setObject(this,xmlView)
          end)
-         
+    
     cxLoading.event(loader,'onFinished', function(this)
             local xmlView = cxLoading.getObject(this)
             cxWindow.pushView(xmlView)

@@ -125,6 +125,7 @@
 		8341C68218227FA10045A66F /* cxUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67D18227FA10045A66F /* cxUtil.m */; };
 		8341C68318227FA10045A66F /* cxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67F18227FA10045A66F /* cxViewController.m */; };
 		83494FA718334B7A0016C3A4 /* cxJson.c in Sources */ = {isa = PBXBuildFile; fileRef = 83494FA518334B7A0016C3A4 /* cxJson.c */; };
+		834F35E4186D7CC0005EB6D0 /* cxRunParticle.c in Sources */ = {isa = PBXBuildFile; fileRef = 834F35E2186D7CC0005EB6D0 /* cxRunParticle.c */; };
 		8358342C185EB94D0057E40B /* cxPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8358342B185EB94D0057E40B /* cxPlayer.m */; };
 		835870EA183DE608007B175E /* cxChipmunk.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870E8183DE608007B175E /* cxChipmunk.c */; };
 		835870F1183DEB02007B175E /* cxListen.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870EF183DEB02007B175E /* cxListen.c */; };
@@ -427,6 +428,8 @@
 		8341C67F18227FA10045A66F /* cxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cxViewController.m; sourceTree = "<group>"; };
 		83494FA518334B7A0016C3A4 /* cxJson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxJson.c; sourceTree = "<group>"; };
 		83494FA618334B7A0016C3A4 /* cxJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxJson.h; sourceTree = "<group>"; };
+		834F35E2186D7CC0005EB6D0 /* cxRunParticle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxRunParticle.c; sourceTree = "<group>"; };
+		834F35E3186D7CC0005EB6D0 /* cxRunParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxRunParticle.h; sourceTree = "<group>"; };
 		8358342B185EB94D0057E40B /* cxPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cxPlayer.m; sourceTree = "<group>"; };
 		835870E8183DE608007B175E /* cxChipmunk.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxChipmunk.c; sourceTree = "<group>"; };
 		835870E9183DE608007B175E /* cxChipmunk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxChipmunk.h; sourceTree = "<group>"; };
@@ -609,6 +612,8 @@
 				83607AA118444B39005C392B /* cxAnimate.h */,
 				83DF79771859B665007F47C3 /* cxSpline.c */,
 				83DF79781859B665007F47C3 /* cxSpline.h */,
+				834F35E2186D7CC0005EB6D0 /* cxRunParticle.c */,
+				834F35E3186D7CC0005EB6D0 /* cxRunParticle.h */,
 			);
 			path = actions;
 			sourceTree = "<group>";
@@ -1032,6 +1037,7 @@
 				8341C61E18227DF20045A66F /* cxArray.c in Sources */,
 				83AB71DE186C34A0000FE9FE /* ldblib.c in Sources */,
 				8341C66618227DF30045A66F /* cxClipping.c in Sources */,
+				834F35E4186D7CC0005EB6D0 /* cxRunParticle.c in Sources */,
 				8341C60E18227DF20045A66F /* cpBody.c in Sources */,
 				8341C66118227DF30045A66F /* cxTexturePVR.c in Sources */,
 				8341C66918227DF30045A66F /* cxSprite.c in Sources */,
