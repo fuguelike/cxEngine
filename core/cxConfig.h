@@ -120,6 +120,7 @@
 #include <sys/types.h>
 #include <pthread.h>
 #include <libxml/xmlreader.h>
+#include <kazmath/kazmath.h>
 #include <lua/lauxlib.h>
 #include <lua/lualib.h>
 
@@ -193,156 +194,231 @@ do{\
 
 #endif
 
-typedef enum {
-    cxBaseTypeObject,
-    cxBaseTypeView,
-    cxBaseTypeAction,
-}cxBaseType;
+#define cxFloatEqu kmAlmostEqual
 
-typedef void (*cxObjectFunc)(cxPointer this);
+// -1.0f <-> 1.0f
+#define CX_RAND_11f() ((2.0f*((cxFloat)rand()/(cxFloat)RAND_MAX))-1.0f)
 
-typedef cxAny (*cxAnyFunc)(cxAny object);
+// 0.0f <-> 1.0f
+#define CX_RAND_01f() ((cxFloat)rand()/(cxFloat)RAND_MAX)
 
 typedef struct {
-    xmlTextReaderPtr reader;
-    cxAny root;
-    cxAny object;
-}cxReaderAttrInfo;
+    cxFloat v;  //base value
+    cxFloat r;  //random value
+}cxFloatRange;
 
-#define cxReaderAttrInfoMake(reader,root,object)    &(cxReaderAttrInfo){reader,root,object}
+#define cxFloatValue(fv) ((fv).v + (fv).r * CX_RAND_11f())
 
-typedef void (*cxReadAttrFunc)(cxReaderAttrInfo *info);
+#define cxFloatRangeValue(v,r) (cxFloatRange){v,r}
 
-cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
+typedef struct {
+    cxInt x;
+    cxInt y;
+}cxVec2i;
+#define cxVec2iv(x,y)   (cxVec2i){x,y}
+#define cxVec2iEqu(p1,p2)   ((p1).x == (p2).x && (p1).y == (p2).y)
 
-cxAny cxObjectCreate(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
+typedef struct {
+    cxInt x;
+    cxInt y;
+    cxInt z;
+}cxVec3i;
+#define cxVec3iv(x,y,z)   (cxVec3i){x,y,z}
+#define cxVec3iEqu(p1,p2)   ((p1).x == (p2).x && (p1).y == (p2).y && (p1).z == (p2).z)
 
-void cxObjectRetain(cxAny ptr);
+typedef kmMat4 cxMatrix4f;
 
-void cxObjectRelease(cxAny ptr);
+typedef kmVec2 cxVec2f;
+#define cxVec2fv(x,y)           (cxVec2f){x,y}
+#define cxVec2fEqu(p1,p2)       (cxFloatEqu((p1).x,(p2).x) && cxFloatEqu((p1).y,(p2).y))
+#define cxVec2fAngle(a)         atan2f((a).y, (a).x)
+#define cxVec2fMagnitude(a)     sqrtf((a).x*(a).x + (a).y*(a).y)
 
-cxAny cxObjectAutoRelease(cxAny ptr);
+typedef kmVec3 cxVec3f;
+#define cxVec3fv(x,y,z)         (cxVec3f){x,y,z}
+#define cxVec3fEqu(p1,p2)       (cxFloatEqu((p1).x,(p2).x) && cxFloatEqu((p1).y,(p2).y) && cxFloatEqu((p1).z,(p2).z))
 
-void cxLuaLoad(cxConstType name, const luaL_Reg *methods);
+typedef struct {
+    kmScalar v1;
+    kmScalar v2;
+    kmScalar v3;
+    kmScalar v4;
+} cxAssist4f;
 
-cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type);
+typedef struct {
+    kmScalar r;
+    kmScalar g;
+    kmScalar b;
+    kmScalar a;
+} cxColor4f;
+#define cxColor4fv(r,g,b,a)     (cxColor4f){r,g,b,a}
+#define cxColor4fEqu(c1,c2)     (cxFloatEqu((c1).r,(c2).r)&&cxFloatEqu((c1).g,(c2).g)&&cxFloatEqu((c1).b,(c2).b)&&cxFloatEqu((c1).a,(c2).a))
+#define cxColor4bv(r,g,b,a)     (cxColor4f){(cxFloat)(r)/255.0f,(cxFloat)(g)/255.0f,(cxFloat)(b)/255.0f,(cxFloat)(a)/255.0f}
 
-cxBool cxObjectIsType(cxAny pobj,cxConstType type);
+typedef struct {
+    kmScalar r;
+    kmScalar g;
+    kmScalar b;
+} cxColor3f;
+#define cxColor3fv(r,g,b)       (cxColor3f){r,g,b}
+#define cxColor3fEqu(c1,c2)     (cxFloatEqu((c1).r,(c2).r) && cxFloatEqu((c1).g,(c2).g) && cxFloatEqu((c1).b,(c2).b))
+#define cxColor3bv(r,g,b)       (cxColor3f){(cxFloat)(r)/255.0f,(cxFloat)(g)/255.0f,(cxFloat)(b)/255.0f}
 
-cxConstType cxObjectType(cxAny pobj);
+//colors define
 
-void cxObjectReadAttr(cxReaderAttrInfo *info);
+static const cxColor3f cxWHITE   = cxColor3fv(1.00f, 1.00f, 1.00f);
+static const cxColor3f cxYELLOW  = cxColor3fv(1.00f, 1.00f, 0.00f);
+static const cxColor3f cxBLUE    = cxColor3fv(0.00f, 0.00f, 1.00f);
+static const cxColor3f cxGREEN   = cxColor3fv(0.00f, 1.00f, 0.00f);
+static const cxColor3f cxRED     = cxColor3fv(1.00f, 0.00f, 0.00f);
+static const cxColor3f cxMAGENTA = cxColor3fv(1.00f, 0.00f, 1.00f);
+static const cxColor3f cxBLACK   = cxColor3fv(0.00f, 0.00f, 0.00f);
+static const cxColor3f cxORANGE  = cxColor3fv(1.00f, 0.50f, 0.00f);
+static const cxColor3f cxGRAY    = cxColor3fv(0.65f, 0.65f, 0.65f);
+static const cxColor3f cxPURPLE  = cxColor3fv(0.63f, 0.13f, 0.94f);
 
-void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func);
+typedef struct {
+    cxInt w;
+    cxInt h;
+} cxSize2i;
+#define cxSize2iv(w,h)          (cxSize2i){w,h}
 
-void cxObjectReadAttrRun(cxReaderAttrInfo *info);
+typedef struct {
+    kmScalar w;
+    kmScalar h;
+} cxSize2f;
+#define cxSize2fv(w,h)          (cxSize2f){w,h}
+#define cxSize2fEqu(s1,s2)      (cxFloatEqu((s1).w,(s2).w) &&  cxFloatEqu((s1).h,(s2).h))
+#define cxSize2Zero(v)          (kmAlmostEqual((v).w, 0) && kmAlmostEqual((v).h, 0))
 
-cxAny cxObjectRoot(cxAny obj);
+typedef struct {
+    kmScalar u;
+    kmScalar v;
+} cxTexCoord2f;
+#define cxTex2fv(u,v)   (cxTexCoord2f){u,v}
 
-void cxObjectSetRoot(cxAny obj,cxAny root);
+typedef struct {
+    kmScalar l;
+    kmScalar r;
+    kmScalar t;
+    kmScalar b;
+} cxBox4f;
+#define cxBox4fv(l,r,t,b) (cxBox4f){l,r,t,b}
+#define cxBox4fInit() cxBox4fv(INT32_MAX,INT32_MIN,INT32_MIN,INT32_MAX)
 
-void cxObjectSetTag(cxAny obj,cxInt tag);
+typedef struct {
+    cxInt l;
+    cxInt r;
+    cxInt t;
+    cxInt b;
+} cxBox4i;
 
-cxInt cxObjectGetTag(cxAny obj);
+typedef struct {
+    kmScalar x;
+    kmScalar y;
+    kmScalar w;
+    kmScalar h;
+} cxRect4f;
+#define cxRect4fv(x,y,w,h)  (cxRect4f){x,y,w,h}
 
-#define CX_RETURN(cond,...)         if(cond)return __VA_ARGS__
+typedef struct {
+    cxInt x;
+    cxInt y;
+    cxInt w;
+    cxInt h;
+} cxRect4i;
+#define cxRect4iv(x,y,w,h)  (cxRect4i){x,y,w,h}
 
-#define CX_BREAK(cond)              if(cond)break
+typedef struct {
+    cxVec2f lt;
+    cxVec2f rt;
+    cxVec2f rb;
+    cxVec2f lb;
+} cxBoxVec2f;
+#define cxBoxVec2fFromBox4f(box) (cxBoxVec2f){{(box).l,(box).t},{(box).r,(box).t},{(box).r,(box).b},{(box).l,(box).b}}
 
-#define CX_OBJECT_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_) struct _b_ super;
+typedef struct {
+    cxVec2f *vs;
+    cxInt num;
+} cxPolygon;
 
-#define CX_OBJECT_INIT(_t_,_b_)     void _t_##AutoInit(_t_ this){_b_##AutoInit((_b_)this);{
+typedef struct {
+    cxVec3f lt;
+    cxVec3f lb;
+    cxVec3f rt;
+    cxVec3f rb;
+} cxBoxVec3f;
 
-#define CX_OBJECT_FREE(_t_,_b_)     }};void _t_##AutoFree(_t_ this){{
+typedef struct {
+    cxVec3f vertices;
+    cxColor4f colors;
+    cxTexCoord2f texcoords;
+} cxPoint;
 
-#define CX_OBJECT_TERM(_t_,_b_)     }_b_##AutoFree((_b_)this);}
+typedef struct {
+    cxPoint lt;
+    cxPoint lb;
+    cxPoint rt;
+    cxPoint rb;
+} cxBoxPoint;
 
-#define CX_ALLOC(_t_)               cxObjectAlloc(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
+typedef struct {
+    cxPoint p1;
+    cxPoint p2;
+} cxLinePoint;
 
-#define CX_CREATE(_t_)              cxObjectCreate(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
+typedef struct {
+    cxTexCoord2f lt;
+    cxTexCoord2f lb;
+    cxTexCoord2f rt;
+    cxTexCoord2f rb;
+} cxBoxTex2f;
+#define cxBoxTex2fDefault() (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, 1.0f),cxTex2fv(1.0f, 0.0f),cxTex2fv(1.0f, 1.0f)}
+#define cxBoxTex2Scale(v)   (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, v),cxTex2fv(v, 0.0f),cxTex2fv(v, v)}
 
-#define CX_RETAIN(_o_)              cxObjectRetain(_o_)
+cxRect4f cxBoxTex2fToRect4f(cxBoxTex2f box);
 
-#define CX_RELEASE(_o_)             cxObjectRelease(_o_)
+cxBoxTex2f cxRect4fToBoxTex2f(cxRect4f box,cxSize2f texsize);
 
-#define CX_AUTOFREE(_o_)            cxObjectAutoRelease(_o_)
+typedef struct {
+    cxColor4f lt;
+    cxColor4f lb;
+    cxColor4f rt;
+    cxColor4f rb;
+} cxBoxColor4f;
 
-#define CX_RETAIN_SWAP(_s_,_d_)     {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
-
-#define CX_LUA_GET_PTR(i)           (lua_isuserdata(gL, i)?lua_touserdata(gL, i):NULL)
-
-#define CX_LUA_PROPERTY(t,n)        {"set"#n,t##LuaSet##n},{"get"#n,t##LuaGet##n}
-
-#define CX_LUA_IS_INT(n)            (((lua_Number)((cxInt)(n))) == (n))
-
-#define CX_LUA_LOAD_TYPE(t)         cxLuaLoad(t##TypeName,t##LuaMethods)
-
-#define CX_LUA_DEF_THIS(t)          t this = CX_LUA_GET_PTR(1);CX_ASSERT(this != NULL,"get this error")
-
-#define CX_LUA_CREATE_THIS(t)       t this = CX_CREATE(t)
-
-#define CX_LUA_ALLOC_THIS(t)        t this = CX_ALLOC(t)
-
-#define CX_LUA_RET_THIS(t)          lua_pushlightuserdata(gL,this);return 1
-
-#define CX_LUA_METHOD_BEGIN(_t_)    const luaL_Reg _t_##LuaMethods[] = {
-
-#define CX_LUA_METHOD_END(_t_)      {"alloc",_t_##LuaAlloc},{"create",_t_##LuaCreate},{NULL,NULL}};
-
-#define CX_LUA_PUSH_OBJECT(o)                                       \
-if((o) != NULL) {                                                   \
-    lua_pushlightuserdata(gL,o);                                    \
-} else {                                                            \
-    lua_pushnil(gL);                                                \
-}
-
-//object
-
-#define CX_OBJECT_BEG(_t_)                                          \
-static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;        \
-typedef struct _t_ * _t_;                                           \
-void _t_##AutoInit(_t_ this);                                       \
-void _t_##AutoFree(_t_ this);                                       \
-void _t_##TypeInit();                                               \
-extern const luaL_Reg _t_##LuaMethods[];                            \
-struct _t_ {
-
-#define CX_OBJECT_END(_t_) };                                       \
-static inline cxInt _t_##LuaAlloc(lua_State *L)                     \
-{                                                                   \
-    CX_LUA_ALLOC_THIS(_t_);                                         \
-    CX_LUA_RET_THIS(_t_);                                           \
-}                                                                   \
-static inline cxInt _t_##LuaCreate(lua_State *L)                    \
-{                                                                   \
-    CX_LUA_CREATE_THIS(_t_);                                        \
-    CX_LUA_RET_THIS(_t_);                                           \
-}
-
-extern lua_State *gL;
-
-//method
-
-#define CX_METHOD_ALLOC(_r_,_n_,...)    _r_ (*_n_)(__VA_ARGS__)
-
-#define CX_METHOD_RELEASE(_m_)          _m_ = NULL
-
-#define CX_METHOD_FIRE(_d_,_m_,...)     ((_m_) != NULL)?((_m_)(__VA_ARGS__)):(_d_)
-
-#define CX_METHOD_OVERRIDE(_m_,_f_)     _m_ = _f_
-
-//base type define
-CX_OBJECT_BEG(cxObject)
-    cxConstType cxType;
-    cxBaseType cxBase;
-    cxUInt cxRefcount;
-    cxObjectFunc cxFree;
-    cxInt cxTag;
-    cxAny cxRoot;
-    CX_METHOD_ALLOC(void, ReadAttr,cxReaderAttrInfo *);
-CX_OBJECT_END(cxObject)
+typedef struct {
+    cxFloat size;
+    cxBool bold;
+}cxTextAttr;
 
 
+typedef struct {
+    cxColor4f v;
+    cxColor4f r;
+}cxColor4fRange;
+
+cxColor4f cxColor4fValue(cxColor4fRange r);
+
+#define cxColor4fRangeValue(r1,g1,b1,a1,r2,g2,b2,a2)  (cxColor4fRange){{r1,g1,b1,a1},{r2,g2,b2,a2}}
+
+typedef struct {
+    cxVec2f v;
+    cxVec2f r;
+}cxVec2fRange;
+
+cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t);
+
+cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t);
+
+cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t);
+
+cxBool cxBox2fContainPoint(const cxBox4f box,const cxVec2f pos);
+
+cxBool cxPolygonContainPoint(const cxPolygon *polygon,const cxVec2f tp);
+
+//if r1 contains r2 return true
+cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2);
 #endif
 
 

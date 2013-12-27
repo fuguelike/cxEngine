@@ -11,13 +11,12 @@
 
 static cxInt cxActionLuaAppendEvent(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxAction);
-    CX_LUA_EVENT_BEGIN();
+    CX_LUA_EVENT_BEG(cxAction);
     CX_LUA_EVENT_APPEND(onSplit);
     CX_LUA_EVENT_APPEND(onStart);
     CX_LUA_EVENT_APPEND(onStep);
     CX_LUA_EVENT_APPEND(onStop);
-    CX_LUA_EVENT_END();
+    CX_LUA_EVENT_END(cxAction);
 }
 
 CX_LUA_METHOD_BEGIN(cxAction)

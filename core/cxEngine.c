@@ -59,10 +59,9 @@ static cxInt cxEngineLuaGetScreenSize(lua_State *L)
 
 static cxInt cxEngineLuaAppendEvent(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxEngine);
-    CX_LUA_EVENT_BEGIN();
+    CX_LUA_EVENT_BEG(cxEngine);
     CX_LUA_EVENT_APPEND(onFree);
-    CX_LUA_EVENT_END();
+    CX_LUA_EVENT_END(cxEngine);
 }
 
 CX_LUA_METHOD_BEGIN(cxEngine)
@@ -293,6 +292,7 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->scale = cxVec2fv(1.0f, 1.0f);
     
     this->window    = CX_ALLOC(cxWindow);
+    
     this->scripts   = CX_ALLOC(cxHash);
     this->datasets  = CX_ALLOC(cxHash);
     this->actions   = CX_ALLOC(cxHash);

@@ -9,6 +9,7 @@
 #include "cxString.h"
 #include "cxNumber.h"
 #include "cxHash.h"
+#include "cxTypes.h"
 
 static cxInt cxHashLuaGet(lua_State *L)
 {

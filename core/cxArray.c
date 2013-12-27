@@ -7,6 +7,7 @@
 //
 
 #include "cxArray.h"
+#include "cxTypes.h"
 
 static cxInt cxArrayLuaLength(lua_State *L)
 {

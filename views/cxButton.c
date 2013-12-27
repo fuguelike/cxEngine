@@ -13,16 +13,12 @@
 
 static cxInt cxButtonLuaAppendEvent(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxButton);
-    
-    CX_LUA_EVENT_BEGIN();
-    
+    CX_LUA_EVENT_BEG(cxButton);
     CX_LUA_EVENT_APPEND(onEnter);
     CX_LUA_EVENT_APPEND(onLeave);
     CX_LUA_EVENT_APPEND(onPress);
     CX_LUA_EVENT_APPEND(onRelease);
-    
-    CX_LUA_EVENT_END();
+    CX_LUA_EVENT_END(cxButton);
 }
 
 CX_LUA_METHOD_BEGIN(cxButton)

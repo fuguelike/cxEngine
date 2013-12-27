@@ -23,15 +23,14 @@ static cxInt cxViewLuaAppendView(lua_State *L)
 
 static cxInt cxViewLuaAppendEvent(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxView);
-    CX_LUA_EVENT_BEGIN();
+    CX_LUA_EVENT_BEG(cxView);
     CX_LUA_EVENT_APPEND(onEnter);
     CX_LUA_EVENT_APPEND(onExit);
     CX_LUA_EVENT_APPEND(onResize);
     CX_LUA_EVENT_APPEND(onLayout);
     CX_LUA_EVENT_APPEND(onDirty);
     CX_LUA_EVENT_APPEND(onUpdate);
-    CX_LUA_EVENT_END();
+    CX_LUA_EVENT_END(cxView);
 }
 
 static cxInt cxViewLuaAppendAction(lua_State *L)

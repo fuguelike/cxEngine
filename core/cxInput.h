@@ -9,7 +9,6 @@
 #ifndef cxEngine_cxInput_h
 #define cxEngine_cxInput_h
 
-#include "cxTypes.h"
 #include "cxBase.h"
 
 CX_C_BEGIN

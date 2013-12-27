@@ -283,7 +283,7 @@ cxEventItem cxXMLReadEvent(cxReaderAttrInfo *info, cxConstChars name)
     return event;
 }
 
-cxTypes cxXMLReadTypesAttr(cxReaderAttrInfo *info, cxConstChars name)
+cxAny cxXMLReadTypesAttr(cxReaderAttrInfo *info, cxConstChars name)
 {
     cxTypes rv = NULL;
     cxConstChars svalue = cxXMLAttr(info->reader,name);

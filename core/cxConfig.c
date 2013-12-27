@@ -6,137 +6,105 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxEngine.h"
 #include "cxConfig.h"
-#include "cxXMLScript.h"
 
-lua_State *gL = NULL;
-
-static cxInt cxObjectLuaGetTag(lua_State *L)
+cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t)
 {
-    CX_LUA_DEF_THIS(cxObject);
-    lua_pushinteger(L, cxObjectGetTag(this));
-    return 1;
+    cxFloat t2 = t * t;
+    cxFloat t3 = t2 * t;
+    cxFloat s = (1 - tension) / 2;
+    cxFloat b1 = s * ((-t3 + (2 * t2)) - t);
+    cxFloat b2 = s * (-t3 + t2) + (2 * t3 - 3 * t2 + 1);
+    cxFloat b3 = s * (t3 - 2 * t2 + t) + (-2 * t3 + 3 * t2);
+    cxFloat b4 = s * (t3 - t2);
+    cxFloat x = (p0.x*b1 + p1.x*b2 + p2.x*b3 + p3.x*b4);
+    cxFloat y = (p0.y*b1 + p1.y*b2 + p2.y*b3 + p3.y*b4);
+	return cxVec2fv(x, y);
 }
 
-static cxInt cxObjectLuaSetTag(lua_State *L)
+cxRect4f cxBoxTex2fToRect4f(cxBoxTex2f box)
 {
-    CX_LUA_DEF_THIS(cxObject);
-    cxInt tag = luaL_checkinteger(L, 2);
-    cxObjectSetTag(this, tag);
-    return 0;
+    cxFloat x = box.lt.u;
+    cxFloat y = box.lt.v;
+    cxFloat w = box.rt.u - box.lt.u;
+    cxFloat h = box.rb.v - box.rt.v;
+    return cxRect4fv(x, y, w, h);
 }
 
-static cxInt cxObjectLuaRetain(lua_State *L)
+cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2)
 {
-    CX_LUA_DEF_THIS(cxObject);
-    CX_RETAIN(this);
-    return 0;
+    cxFloat x1 = r1.x;
+    cxFloat y1 = r1.y;
+    cxFloat x2 = r1.x + r1.w;
+    cxFloat y2 = r1.y + r1.h;
+    cxFloat x3 = r2.x;
+    cxFloat y3 = r2.y;
+    cxFloat x4 = r2.x + r2.w;
+    cxFloat y4 = r2.y + r2.h;
+    bool c1 = (x1 >=x3 && x1 < x4) || (x3 >= x1 && x3 <= x2);
+    bool c2 = (y1 >=y3 && y1 < y4) || (y3 >= y1 && y3 <= y2);
+    return (c1 && c2) ? true : false;
 }
 
-static cxInt cxObjectLuaRelease(lua_State *L)
+cxBoxTex2f cxRect4fToBoxTex2f(cxRect4f box,cxSize2f texsize)
 {
-    CX_LUA_DEF_THIS(cxObject);
-    CX_RELEASE(this);
-    return 0;
+    cxBoxTex2f rv = cxBoxTex2fDefault();
+    cxFloat x = box.x / texsize.w;
+    cxFloat y = box.y / texsize.h;
+    cxFloat w = box.w / texsize.w;
+    cxFloat h = box.h / texsize.h;
+    rv.lb = cxTex2fv(x, y + h);
+    rv.rb = cxTex2fv(x + w, y + h);
+    rv.lt = cxTex2fv(x, y);
+    rv.rt = cxTex2fv(x + w, y);
+    return rv;
 }
 
-static cxInt cxObjectLuaAutoRelease(lua_State *L)
+cxColor4f cxColor4fValue(cxColor4fRange cv)
 {
-    CX_LUA_DEF_THIS(cxObject);
-    CX_AUTOFREE(this);
-    return 1;
+    cxColor4f color;
+    color.r = kmClamp(cv.v.r + cv.r.r * CX_RAND_11f(), 0.0f, 1.0f);
+    color.g = kmClamp(cv.v.g + cv.r.g * CX_RAND_11f(), 0.0f, 1.0f);
+    color.b = kmClamp(cv.v.b + cv.r.b * CX_RAND_11f(), 0.0f, 1.0f);
+    color.a = kmClamp(cv.v.a + cv.r.a * CX_RAND_11f(), 0.0f, 1.0f);
+    return color;
 }
 
-CX_LUA_METHOD_BEGIN(cxObject)
-    {"retain",cxObjectLuaRetain},
-    {"release",cxObjectLuaRelease},
-    {"autoRelease",cxObjectLuaAutoRelease},
-    CX_LUA_PROPERTY(cxObject, Tag),
-CX_LUA_METHOD_END(cxObject)
-
-void cxLuaLoad(cxConstType name, const luaL_Reg *methods)
+cxVec2f cxVec2fValue(cxVec2fRange rv)
 {
-    luaL_newlib(gL, methods);
-    lua_setglobal(gL, name);
+    cxVec2f pos;
+    pos.x = rv.v.x + rv.r.x * CX_RAND_11f();
+    pos.y = rv.v.y + rv.r.y * CX_RAND_11f();
+    return pos;
 }
 
-void cxObjectTypeInit()
+cxBool cxBox2fContainPoint(const cxBox4f box,const cxVec2f pos)
 {
-    CX_LUA_LOAD_TYPE(cxObject);
+    return (pos.x >= box.l && pos.x <= box.r && pos.y >= box.b && pos.y <= box.t);
 }
 
-void cxObjectReadAttr(cxReaderAttrInfo *info)
+cxBool cxPolygonContainPoint(const cxPolygon *polygon,const cxVec2f tp)
 {
-    cxObject this = info->object;
-    cxObjectSetTag(this,cxXMLReadIntAttr(info, "cxObject.tag", this->cxTag));
+    cxBool c = false;
+    cxInt num = polygon->num;
+    const cxVec2f *vs = polygon->vs;
+    for (int i = 0,j = num-1; i < num; j = i++) {
+        if(!((vs[i].y > tp.y) != (vs[j].y>tp.y))){
+            continue;
+        }
+        if(tp.x < (vs[j].x - vs[i].x) * (tp.y - vs[i].y) / (vs[j].y - vs[i].y) + vs[i].x){
+            c = !c;
+        }
+    }
+    return c;
 }
 
-void cxObjectAutoInit(cxObject this)
+cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t)
 {
-    this->cxBase = cxBaseTypeObject;
-    CX_METHOD_OVERRIDE(this->ReadAttr, cxObjectReadAttr);
+    return (powf(1-t,2) * a +2*t*(1-t)*b +powf(t,2)*c);
 }
 
-void cxObjectAutoFree(cxObject this)
+cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t)
 {
-    CX_METHOD_RELEASE(this->ReadAttr);
-}
-
-void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func)
-{
-    cxObject this = obj;
-    CX_METHOD_OVERRIDE(this->ReadAttr, func);
-}
-
-void cxObjectReadAttrRun(cxReaderAttrInfo *info)
-{
-    cxObject this = info->object;
-    CX_METHOD_FIRE(NULL, this->ReadAttr,info);
-}
-
-void cxObjectSetRoot(cxAny obj,cxAny root)
-{
-    cxObject this = obj;
-    this->cxRoot = root;
-}
-
-cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type)
-{
-    cxObject this = pobj;
-    CX_RETURN(this == NULL, false);
-    return this->cxBase == type;
-}
-
-cxConstType cxObjectType(cxAny pobj)
-{
-    cxObject this = pobj;
-    CX_RETURN(this == NULL, false);
-    return this->cxType;
-}
-
-cxBool cxObjectIsType(cxAny pobj,cxConstType type)
-{
-    cxObject this = pobj;
-    CX_RETURN(this == NULL, false);
-    return this->cxType == type;
-}
-
-cxAny cxObjectRoot(cxAny obj)
-{
-    CX_RETURN(obj == NULL, NULL);
-    cxObject this = obj;
-    return this->cxRoot;
-}
-
-void cxObjectSetTag(cxAny obj,cxInt tag)
-{
-    cxObject this = obj;
-    this->cxTag = tag;
-}
-
-cxInt cxObjectGetTag(cxAny obj)
-{
-    cxObject this = obj;
-    return this->cxTag;
+    return (powf(1-t,3) * a +3*t*(powf(1-t,2))*b +3*powf(t,2)*(1-t)*c +powf(t,3)*d);
 }

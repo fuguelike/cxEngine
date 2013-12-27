@@ -12,10 +12,9 @@
 
 static cxInt cxTimerLuaAppendEvent(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxTimer);
-    CX_LUA_EVENT_BEGIN();
+    CX_LUA_EVENT_BEG(cxTimer);
     CX_LUA_EVENT_APPEND(onArrive);
-    CX_LUA_EVENT_END();
+    CX_LUA_EVENT_END(cxTimer);
 }
 
 static cxInt cxTimerLuaGetRepeat(lua_State *L)

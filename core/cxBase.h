@@ -12,7 +12,7 @@
 #include <utlist.h>
 #include "cxConfig.h"
 #include "cxAllocator.h"
-#include "cxTypes.h"
+#include "cxObject.h"
 
 #define lua_ref(L,lock)         luaL_ref(L, LUA_REGISTRYINDEX)
 
@@ -157,12 +157,14 @@ do{                                                             \
     }                                                           \
 }while(0)
 
-#define CX_LUA_EVENT_BEGIN()                                    \
+#define CX_LUA_EVENT_BEG(t)                                     \
+CX_LUA_DEF_THIS(t);                                             \
 cxConstChars eventName = luaL_checkstring(L, 2);                \
 if(!lua_isfunction(L, 3)){                                      \
     luaL_error(L, "func error");                                \
     return 0;                                                   \
-}
+}                                                               \
+do{
 
 #define CX_LUA_EVENT_APPEND(en)                                 \
 if(cxConstCharsEqu(eventName, #en)){                            \
@@ -170,10 +172,11 @@ if(cxConstCharsEqu(eventName, #en)){                            \
     CX_ASSERT(ref > 0,"get ref error");                         \
     cxEventArg args = cxEventArgCreateWithRef(ref);             \
     CX_EVENT_APPEND(this->en, cxObjectLuaEventFunc, args);      \
-    return 0;                                                   \
+    break;                                                      \
 }
 
-#define CX_LUA_EVENT_END()                                      \
+#define CX_LUA_EVENT_END(t)                                     \
+}while(0);                                                      \
 return 0
 
 void cxObjectLuaEventFunc(cxEvent *event);
@@ -191,8 +194,6 @@ void cxUtilWarn(cxConstChars file, int line, cxConstChars format, ...);
 
 //断言信息输出
 void cxUtilAssert(cxConstChars file, int line, cxConstChars format, ...);
-
-#define CX_SCRIPT_DEF(n) int n##ScriptOpen(cxAny script)
 
 CX_C_END
 

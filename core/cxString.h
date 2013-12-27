@@ -81,8 +81,6 @@ void cxStringAppend(cxString string,cxConstChars d,cxInt l);
 
 cxString cxStringBinary(cxPointer d,cxInt l);
 
-CX_SCRIPT_DEF(cxString);
-
 CX_C_END
 
 #endif

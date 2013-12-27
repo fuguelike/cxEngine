@@ -127,7 +127,9 @@ cxStream cxMemStreamCreateWithText(cxString txt)
     if(!cxStreamOpen(stream)){
         return NULL;
     }
-    cxStreamWrite(stream,(cxPointer)cxStringBody(txt),cxStringLength(txt));
+    if(txt != NULL){
+        cxStreamWrite(stream,(cxPointer)cxStringBody(txt),cxStringLength(txt));
+    }
     return stream;
 }
 

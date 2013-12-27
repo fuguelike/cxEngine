@@ -64,7 +64,7 @@ cxString cxXMLReadString(xmlTextReaderPtr reader);
 
 cxString cxXMLReaderReadOuterXml(xmlTextReaderPtr reader);
 
-cxTypes cxXMLReadTypesAttr(cxReaderAttrInfo *info, cxConstChars name);
+cxAny cxXMLReadTypesAttr(cxReaderAttrInfo *info, cxConstChars name);
 
 cxFloat cxXMLReadFloatAttr(cxReaderAttrInfo *info, cxConstChars name,cxFloat value);
 

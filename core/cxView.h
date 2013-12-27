@@ -12,7 +12,6 @@
 #include <libgen.h>
 #include <chipmunk/chipmunk.h>
 #include <libxml/xmlreader.h>
-#include "cxTypes.h"
 #include "cxBase.h"
 #include "cxList.h"
 #include "cxInput.h"
@@ -224,8 +223,6 @@ void cxViewExit(cxAny pview);
 void cxViewRemoved(cxAny pview);
 
 void cxViewTransform(cxAny pview);
-
-CX_SCRIPT_DEF(cxView);
 
 CX_C_END
 

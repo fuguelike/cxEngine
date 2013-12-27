@@ -7,7 +7,12 @@
 //
 
 #include <libgen.h>
+#include <streams/cxAssetsStream.h>
+#include <streams/cxMemStream.h>
+#include <streams/cxFileStream.h>
+#include "cxTypes.h"
 #include "cxStream.h"
+
 
 static cxInt cxStreamLuaOpen(lua_State *L)
 {
@@ -77,6 +82,29 @@ static cxInt cxStreamLuaAllBytes(lua_State *L)
     return 1;
 }
 
+static cxInt cxStreamLuaMakeAssets(lua_State *L)
+{
+    cxConstChars file = luaL_checkstring(L, 1);
+    cxStream this = cxAssetsStreamCreate(file);
+    CX_LUA_PUSH_OBJECT(this);
+    return 1;
+}
+
+static cxInt cxStreamLuaMakeMemory(lua_State *L)
+{
+    cxStream this = cxMemStreamCreateWithText(NULL);
+    CX_LUA_PUSH_OBJECT(this);
+    return 1;
+}
+
+static cxInt cxStreamLuaMakeFile(lua_State *L)
+{
+    cxConstChars file = luaL_checkstring(L, 1);
+    cxStream this = cxFileStreamCreate(file);
+    CX_LUA_PUSH_OBJECT(this);
+    return 1;
+}
+
 CX_LUA_METHOD_BEGIN(cxStream)
     {"open",cxStreamLuaOpen},
     {"read",cxStreamLuaRead},
@@ -85,6 +113,9 @@ CX_LUA_METHOD_BEGIN(cxStream)
     {"close",cxStreamLuaClose},
     {"position",cxStreamLuaPosition},
     {"allBytes",cxStreamLuaAllBytes},
+    {"assets",cxStreamLuaMakeAssets},
+    {"memory",cxStreamLuaMakeMemory},
+    {"file",cxStreamLuaMakeFile},
 CX_LUA_METHOD_END(cxStream)
 
 void cxStreamTypeInit()

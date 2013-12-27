@@ -34,12 +34,11 @@ static cxInt cxLoadingLuaStart(lua_State *L)
 
 static cxInt cxLoadingLuaAppendEvent(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxLoading);
-    CX_LUA_EVENT_BEGIN();
+    CX_LUA_EVENT_BEG(cxLoading);
     CX_LUA_EVENT_APPEND(onFinished);
     CX_LUA_EVENT_APPEND(onLoading);
     CX_LUA_EVENT_APPEND(onStart);
-    CX_LUA_EVENT_END();
+    CX_LUA_EVENT_END(cxLoading);
 }
 
 CX_LUA_METHOD_BEGIN(cxLoading)
