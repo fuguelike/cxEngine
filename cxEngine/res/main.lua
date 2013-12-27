@@ -14,7 +14,6 @@ function mainEnd(xml)
     
 end
 
-
 function main()
 
     local loader = cxLoading.create()
@@ -34,6 +33,7 @@ function main()
             cxWindow.pushView(xmlView)
          end)
     cxLoading.start(loader)
+
 end
 
 function free()

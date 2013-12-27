@@ -27,8 +27,6 @@
 #include "lundump.h"
 #include "lvm.h"
 
-
-
 const char lua_ident[] =
   "$LuaVersion: " LUA_COPYRIGHT " $"
   "$LuaAuthors: " LUA_AUTHORS " $";

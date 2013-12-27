@@ -686,7 +686,6 @@ static void createsearcherstable (lua_State *L) {
   }
 }
 
-
 LUAMOD_API int luaopen_package (lua_State *L) {
   /* create table CLIBS to keep track of loaded C libraries */
   luaL_getsubtable(L, LUA_REGISTRYINDEX, CLIBS);

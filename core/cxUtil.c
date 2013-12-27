@@ -60,7 +60,7 @@ static cxInt cxLuaAssert(lua_State *L)
     return 0;
 }
 
-const luaL_reg global_functions [] = {
+const luaL_Reg global_functions [] = {
     {"cxLogger", cxLuaLogger},
     {"cxError", cxLuaError},
     {"cxWarn", cxLuaWarn},
@@ -70,7 +70,8 @@ const luaL_reg global_functions [] = {
 
 void cxUtilTypeInit()
 {
-    luaL_register(gL, "_G", global_functions);
+    lua_getglobal(gL, "_G");
+    luaL_setfuncs(gL, global_functions, 0);
     lua_pop(gL, 1);
 }
 

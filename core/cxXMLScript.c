@@ -61,8 +61,7 @@ static cxBool cxXMLAttrRunFunc(cxConstChars value,cxReaderAttrInfo *info)
     //find global lua func
     lua_getglobal(gL, funcName);
     if(lua_iscfunction(gL, -1) || lua_isfunction(gL, -1)){
-        cxJsonPush(json);
-        ret = (lua_pcall(gL, 1, 1, 0) == 0);
+        ret = (lua_pcall(gL, cxJsonPush(json)?1:0, 1, 0) == 0);
         lua_remove(gL, -2);
     }else{
         lua_pop(gL, 1);
@@ -72,10 +71,10 @@ static cxBool cxXMLAttrRunFunc(cxConstChars value,cxReaderAttrInfo *info)
 
 static cxNumber cxXMLReaderNumber(cxConstChars svalue,cxReaderAttrInfo *info)
 {
-    if(cxXMLAttrRunFunc(svalue,info)){
-        return lua_isuserdata(gL, -1) ? CX_LUA_GET_PTR(-1) : NULL;
+    if(!cxXMLAttrRunFunc(svalue,info)){
+        return NULL;
     }
-    return NULL;
+    return CX_LUA_GET_PTR(-1);
 }
 
 cxConstChars cxXMLAttr(xmlTextReaderPtr reader,cxConstChars name)

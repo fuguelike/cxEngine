@@ -27,11 +27,6 @@ LOCAL_SRC_FILES := libpcre.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := luajit
-LOCAL_SRC_FILES := libluajit.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
 LOCAL_MODULE := event
 LOCAL_SRC_FILES := libevent.a
 include $(PREBUILT_STATIC_LIBRARY)

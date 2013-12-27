@@ -21,6 +21,10 @@ CX_OBJECT_END(cxJson)
 
 #define CX_JSON_PTR(j)  ((j)->json)
 
+void cxJsonPushArray(json_t *json);
+
+void cxJsonPushObject(json_t *json);
+
 cxBool cxJsonPush(cxJson this);
 
 cxJson cxJsonCreate(cxString json);

@@ -11,6 +11,8 @@
 #include <limits.h>
 #include <stddef.h>
 
+#define LUA_COMPAT_ALL 1
+
 
 /*
 ** ==================================================================

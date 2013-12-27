@@ -14,6 +14,12 @@
 #include "cxAllocator.h"
 #include "cxTypes.h"
 
+#define lua_ref(L,lock)         luaL_ref(L, LUA_REGISTRYINDEX)
+
+#define lua_unref(L,ref)        luaL_unref(L, LUA_REGISTRYINDEX, (ref))
+
+#define lua_getref(L,ref)       lua_rawgeti(L, LUA_REGISTRYINDEX, (ref))
+
 CX_C_BEGIN
 
 typedef struct cxSignal cxSignal;
@@ -152,14 +158,14 @@ do{                                                             \
 }while(0)
 
 #define CX_LUA_EVENT_BEGIN()                                    \
-cxConstChars name = luaL_checkstring(L, 2);                     \
+cxConstChars eventName = luaL_checkstring(L, 2);                \
 if(!lua_isfunction(L, 3)){                                      \
     luaL_error(L, "func error");                                \
     return 0;                                                   \
 }
 
 #define CX_LUA_EVENT_APPEND(en)                                 \
-if(cxConstCharsEqu(name, #en)){                                 \
+if(cxConstCharsEqu(eventName, #en)){                            \
     cxInt ref = lua_ref(L, true);                               \
     CX_ASSERT(ref > 0,"get ref error");                         \
     cxEventArg args = cxEventArgCreateWithRef(ref);             \

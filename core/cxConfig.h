@@ -120,9 +120,8 @@
 #include <sys/types.h>
 #include <pthread.h>
 #include <libxml/xmlreader.h>
-#include <luajit/lauxlib.h>
-#include <luajit/lualib.h>
-#include <luajit/luajit.h>
+#include <lua/lauxlib.h>
+#include <lua/lualib.h>
 
 #define CX_ENGINE_VERSION   100
 
@@ -224,7 +223,7 @@ void cxObjectRelease(cxAny ptr);
 
 cxAny cxObjectAutoRelease(cxAny ptr);
 
-lua_State *cxLuaLoad(cxConstType name, const luaL_Reg *methods);
+void cxLuaLoad(cxConstType name, const luaL_Reg *methods);
 
 cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type);
 
@@ -311,12 +310,12 @@ struct _t_ {
 #define CX_OBJECT_END(_t_) };                                       \
 static inline cxInt _t_##LuaAlloc(lua_State *L)                     \
 {                                                                   \
-    CX_LUA_CREATE_THIS(_t_);                                        \
+    CX_LUA_ALLOC_THIS(_t_);                                         \
     CX_LUA_RET_THIS(_t_);                                           \
 }                                                                   \
 static inline cxInt _t_##LuaCreate(lua_State *L)                    \
 {                                                                   \
-    CX_LUA_ALLOC_THIS(_t_);                                         \
+    CX_LUA_CREATE_THIS(_t_);                                        \
     CX_LUA_RET_THIS(_t_);                                           \
 }
 

@@ -77,12 +77,19 @@ void cxEngineTypeInit()
     CX_LUA_LOAD_TYPE(cxEngine);
 }
 
-static int cxEngineLuaLoader(lua_State *L)
+static cxInt cxEngineLuaLoader(lua_State *L)
 {
+    cxChar path[PATH_MAX] = {0};
     cxConstChars file = luaL_checkstring(L, 1);
-    cxString data = cxEngineGetLuaScript(file);
+    cxConstChars ext = strrchr(file, '.');
+    if(ext == NULL || strcasecmp(ext, ".lua") != 0){
+        snprintf(path, PATH_MAX, "%s.lua",file);
+    }else{
+        snprintf(path, PATH_MAX, "%s",file);
+    }
+    cxString data = cxEngineGetLuaScript(path);
     if(data == NULL){
-        luaL_error(L, "error loading file %s error",file);
+        luaL_error(L, "error loading file %s error",path);
     }else{
         luaL_loadbuffer(L, cxStringBody(data), cxStringLength(data), file);
     }
@@ -94,7 +101,7 @@ static void cxEngineAddLuaLoader(lua_State *L)
     lua_getglobal(L, "package");
     lua_getfield(L, -1, "loaders");
     lua_pushcfunction(L, cxEngineLuaLoader);
-    for (cxInt i = lua_objlen(L, -2) + 1; i > 2; --i) {
+    for (cxInt i = lua_rawlen(L, -2) + 1; i > 2; --i) {
         lua_rawgeti(L, -2, i - 1);
         lua_rawseti(L, -3, i);
     }
@@ -871,9 +878,25 @@ static cxInt cxDataTypes(lua_State *L)
     return 1;
 }
 
+static cxInt cxIsIOS(lua_State *L)
+{
+    cxNumber num = cxNumberBool(CX_TARGET_PLATFORM == CX_PLATFORM_IOS);
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
+static cxInt cxIsAndroid(lua_State *L)
+{
+    cxNumber num = cxNumberBool(CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID);
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
 void cxEngineSystemInit()
 {
     //global func
+    cxEngineRegisteFunc(cxIsAndroid);
+    cxEngineRegisteFunc(cxIsIOS);
     cxEngineRegisteFunc(cxLocalizedText);
     cxEngineRegisteFunc(cxDataString);
     cxEngineRegisteFunc(cxRelativeW);
