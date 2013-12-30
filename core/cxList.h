@@ -15,9 +15,13 @@
 
 CX_C_BEGIN
 
-#define CX_LIST_FOREACH(list,ele)   cxListElement *ele = NULL;DL_FOREACH((list)->listptr,ele)
+#define CX_LIST_FOREACH(_list_,_ele_)               \
+cxListElement *_ele_ = NULL;                        \
+DL_FOREACH((_list_)->listptr,_ele_)
 
-#define CX_LIST_SAFE_FOREACH(list,ele,tmp)  cxListElement *ele = NULL,*tmp=NULL;DL_FOREACH_SAFE((list)->listptr,ele,tmp)
+#define CX_LIST_FOREACH_SAFE(_list_,_ele_,_tmp_)    \
+cxListElement *_ele_ = NULL,*_tmp_=NULL;            \
+DL_FOREACH_SAFE((_list_)->listptr,_ele_,_tmp_)
 
 typedef struct cxListElement cxListElement;
 struct cxListElement {
@@ -31,7 +35,7 @@ CX_OBJECT_DEF(cxList, cxObject)
     cxListElement *listptr;
 CX_OBJECT_END(cxList)
 
-#define cxListSort(list,cmp)    DL_SORT((list)->listptr, cmp)
+#define cxListSort(_list_,_cmp_)    DL_SORT((_list_)->listptr, _cmp_)
 
 cxInt cxListLength(cxList list);
 

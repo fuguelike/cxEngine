@@ -1043,7 +1043,7 @@ void cxViewDraw(cxAny pview)
     if(this->isSort){
         cxViewSort(this);
     }
-    CX_LIST_SAFE_FOREACH(this->subViews, ele, tmp){
+    CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
         cxViewDraw(view);
     }

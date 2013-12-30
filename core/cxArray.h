@@ -22,19 +22,19 @@ CX_OBJECT_DEF(cxArray, cxObject)
     UT_array *utArray;
 CX_OBJECT_END(cxArray)
 
-#define CX_ARRAY_FOREACH(a,e) \
-    cxPointer *e = NULL; \
-    while((a) != NULL && (e = (cxPointer)utarray_next((a)->utArray, e)) != NULL)
+#define CX_ARRAY_FOREACH(_a_,_e_)                                                           \
+cxPointer *_e_ = NULL;                                                                      \
+while((_a_) != NULL && (_e_ = (cxPointer)utarray_next((_a_)->utArray, _e_)) != NULL)
 
-#define CX_ARRAY_REVERSE(a,e) \
-    cxPointer *e = NULL; \
-    while((a) != NULL && (e = (cxPointer)utarray_prev((a)->utArray, e)) != NULL)
+#define CX_ARRAY_REVERSE(_a_,_e_)                                                           \
+cxPointer *_e_ = NULL;                                                                      \
+while((_a_) != NULL && (_e_ = (cxPointer)utarray_prev((_a_)->utArray, _e_)) != NULL)
 
-#define cxArrayLength(a) (((a) == NULL) ? 0 : utarray_len((a)->utArray))
+#define cxArrayLength(_a_) (((_a_) == NULL) ? 0 : utarray_len((_a_)->utArray))
 
-#define cxArraySort(a,cmp) if((a) != NULL)utarray_sort((a)->utArray, cmp)
+#define cxArraySort(_a_,_cmp_) if((_a_) != NULL){utarray_sort((_a_)->utArray, _cmp_);}
 
-#define cxArrayObject(e)   (*e)
+#define cxArrayObject(_e_)   (*_e_)
 
 void    cxArrayClean(cxArray array);
 

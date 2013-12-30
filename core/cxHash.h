@@ -16,7 +16,9 @@ CX_C_BEGIN
 
 #define CX_HASH_MAX_KEY_LENGTH  128
 
-#define CX_HASH_FOREACH(hash,ele,tmp)  cxHashElement *ele = NULL,*tmp=NULL;HASH_ITER(hh, hash->hashPtr, ele, tmp)
+#define CX_HASH_FOREACH(_hash_,_ele_,_tmp_)         \
+cxHashElement *_ele_ = NULL,*_tmp_=NULL;            \
+HASH_ITER(hh, _hash_->hashPtr, _ele_, _tmp_)
 
 typedef struct {
     cxAny any;
@@ -31,17 +33,17 @@ typedef struct {
 
 typedef int (*cxHashCmpFunc)(cxHashElement *lp,cxHashElement *rp);
 
-#define cxHashIntKey(v)      (cxHashKey){.length=sizeof(cxInt),.data=(cxChar *)&(cxInt){v}}
+#define cxHashIntKey(_v_)      (cxHashKey){.length=sizeof(cxInt),.data=(cxChar *)&(cxInt){_v_}}
 
-#define cxHashStrKey(s)      (cxHashKey){.length=(cxInt)strlen(s),.data=(cxChar *)s}
+#define cxHashStrKey(_s_)      (cxHashKey){.length=(cxInt)strlen(_s_),.data=(cxChar *)_s_}
 
-#define cxHashMemKey(d,l)    (cxHashKey){.length=l,.data=(cxChar *)d}
+#define cxHashMemKey(_d_,_l_)    (cxHashKey){.length=_l_,.data=(cxChar *)_d_}
 
 CX_OBJECT_DEF(cxHash, cxObject)
     cxHashElement *hashPtr;
 CX_OBJECT_END(cxHash)
 
-#define cxHashSort(hash,cmp)    HASH_SORT(hash,cmp)
+#define cxHashSort(_hash_,_cmp_)    HASH_SORT(_hash_,_cmp_)
 
 void    cxHashClean(cxHash hash);
 
