@@ -54,6 +54,10 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxTouch touch;
     cxKey key;
     cxString lang;
+    //make view
+    CX_METHOD_ALLOC(cxAny, MakeView, cxConstChars, xmlTextReaderPtr);
+    //make action
+    CX_METHOD_ALLOC(cxAny, MakeAction, cxConstChars, xmlTextReaderPtr);
 CX_OBJECT_END(cxEngine)
 
 cxBool cxEngineLuaRunString(cxString code);

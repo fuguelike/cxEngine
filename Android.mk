@@ -89,7 +89,8 @@ LOCAL_SRC_FILES += \
     actions/cxTint.c \
     actions/cxRunner.c \
     actions/cxAnimate.c \
-    actions/cxSpline.c
+    actions/cxSpline.c \
+    actions/cxRunParticle.c
 
 LOCAL_SRC_FILES += \
     views/cxAtlas.c \
@@ -111,44 +112,10 @@ LOCAL_SRC_FILES += \
     socket/cxHttpConn.c \
     socket/cxListen.c \
     socket/cxClient.c
-    
-LOCAL_SRC_FILES += \
-    lua/lapi.c \
-    lua/lauxlib.c \
-    lua/lbaselib.c \
-    lua/lbitlib.c \
-    lua/lcode.c \
-    lua/lcorolib.c \
-    lua/lctype.c \
-    lua/ldblib.c \
-    lua/ldebug.c \
-    lua/ldo.c \
-    lua/ldump.c \
-    lua/lfunc.c \
-    lua/lgc.c \
-    lua/linit.c \
-    lua/liolib.c \
-    lua/llex.c \
-    lua/lmathlib.c \
-    lua/lmem.c \
-    lua/loadlib.c \
-    lua/lobject.c \
-    lua/lopcodes.c \
-    lua/loslib.c \
-    lua/lparser.c \
-    lua/lstate.c \
-    lua/lstring.c \
-    lua/lstrlib.c \
-    lua/ltable.c \
-    lua/ltablib.c \
-    lua/ltm.c \
-    lua/lua.c \
-    lua/lundump.c \
-    lua/lvm.c \
-    lua/lzio.c
 
 LOCAL_SRC_FILES += \
     core/cxConfig.c \
+    core/cxObject.c \
     core/cxMD5.c \
     core/cxAllocator.c \
     core/cxArray.c \

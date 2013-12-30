@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		830B8C8B186DAB210093724A /* bind.lua in Resources */ = {isa = PBXBuildFile; fileRef = 830B8C8A186DAB210093724A /* bind.lua */; };
+		830B8C8C187147790093724A /* libluajit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 836DBA76184A15B800CCD673 /* libluajit.a */; };
 		8324910417F2926600D0DF9D /* cxMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324910317F2926600D0DF9D /* cxMain.c */; };
 		83273E7B1862D8CA00232D58 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83273E7A1862D8CA00232D58 /* libxml2.a */; };
 		832A3EF31855F9DF00047C64 /* bmpfont.xml in Resources */ = {isa = PBXBuildFile; fileRef = 832A3EF21855F9DF00047C64 /* bmpfont.xml */; };
@@ -163,6 +164,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				830B8C8C187147790093724A /* libluajit.a in Frameworks */,
 				83273E7B1862D8CA00232D58 /* libxml2.a in Frameworks */,
 				83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */,
 				839103BD1859631E008DF1C7 /* libpcre.a in Frameworks */,

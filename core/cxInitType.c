@@ -37,6 +37,8 @@ void cxInitTypes()
     cxActionSetTypeInit();
     cxTimerTypeInit();
     
+    cxPlayerTypeInit();
+    
     cxViewTypeInit();
     cxWindowTypeInit();
     cxSpriteTypeInit();

@@ -121,8 +121,9 @@
 #include <pthread.h>
 #include <libxml/xmlreader.h>
 #include <kazmath/kazmath.h>
-#include <lua/lauxlib.h>
-#include <lua/lualib.h>
+#include <luajit/lauxlib.h>
+#include <luajit/lualib.h>
+#include <luajit/luajit.h>
 
 #define CX_ENGINE_VERSION   100
 

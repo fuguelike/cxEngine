@@ -115,6 +115,7 @@ void cxViewRootSet(cxReaderAttrInfo *info)
 
 cxAny cxViewRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
 {
+    cxEngine engine = cxEngineInstance();
     cxAny cview = NULL;
     if(ELEMENT_IS_TYPE(cxSprite)){
         cview = CX_CREATE(cxSprite);
@@ -143,7 +144,7 @@ cxAny cxViewRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
     }else if(ELEMENT_IS_TYPE(cxChipmunk)){
         cview = CX_CREATE(cxChipmunk);
     }else{
-        CX_ERROR("make elemement %s error",temp);
+        cview = CX_METHOD_FIRE(NULL, engine->MakeView,temp,reader);
     }
     return cview;
 }

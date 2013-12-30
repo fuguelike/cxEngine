@@ -9,19 +9,16 @@
 #include "cxEngine.h"
 #include "cxJson.h"
 
-static cxInt cxJsonLuaToJson(lua_State *L)
+static cxInt cxJsonLuaMake(lua_State *L)
 {
-    return 1;
-}
-
-static cxInt cxJsonLuaToTable(lua_State *L)
-{
+    cxConstChars json = luaL_checkstring(L, 1);
+    cxJson ret = cxJsonCreate(UTF8(json));
+    CX_LUA_PUSH_OBJECT(ret);
     return 1;
 }
 
 CX_LUA_METHOD_BEG(cxJson)
-    {"ToJson",cxJsonLuaToJson},
-    {"ToTable",cxJsonLuaToTable},
+    {"Make",cxJsonLuaMake},
 CX_LUA_METHOD_END(cxJson)
 
 void cxJsonTypeInit()

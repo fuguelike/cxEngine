@@ -70,9 +70,12 @@ const luaL_Reg global_functions [] = {
 
 void cxUtilTypeInit()
 {
+    int top = lua_gettop(gL);
     lua_getglobal(gL, "_G");
-    luaL_setfuncs(gL, global_functions, 0);
-    lua_pop(gL, 1);
+    top = lua_gettop(gL);
+    luaL_register(gL, "_G", global_functions);
+    lua_pop(gL, 2);
+    top = lua_gettop(gL);
 }
 
 cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)

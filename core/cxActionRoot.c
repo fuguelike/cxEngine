@@ -53,6 +53,7 @@ static void cxActionRootReaderError(void *arg,const char *msg,xmlParserSeveritie
 
 cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
 {
+    cxEngine engine = cxEngineInstance();
     cxAny action = NULL;
     if(ELEMENT_IS_TYPE(cxMove)){
         action = CX_CREATE(cxMove);
@@ -77,7 +78,7 @@ cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
     }else if(ELEMENT_IS_TYPE(cxRunParticle)){
         action = CX_CREATE(cxRunParticle);
     }else{
-        CX_ERROR("action xml can't create type %s",temp);
+        action = CX_METHOD_FIRE(NULL, engine->MakeAction,temp, reader);
     }
     return action;
 }

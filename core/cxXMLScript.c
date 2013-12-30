@@ -64,46 +64,40 @@ cxBool cxXMLBindObject(cxReaderAttrInfo *info)
 {
     cxConstChars bind = cxXMLAttr(info->reader,"cxObject.bind");
     CX_RETURN(bind == NULL, false);
-    cxRegex regex = cxRegexCreate("^(.+?)\\.(.+?)\\((.*?)\\)$", UTF8(bind), 0);
+    cxRegex regex = cxRegexCreate("^(.+?)\\((.*?)\\)$", UTF8(bind), 0);
     if(!cxRegexNext(regex)){
         return false;
     }
-    cxString jsontxt = cxRegexMatch(regex, 3);
+    cxString jsontxt = cxRegexMatch(regex, 2);
     cxStringReplace(jsontxt, '\'', '"');
     cxJson json = cxJsonCreate(jsontxt);
-    cxConstChars className = cxStringBody(cxRegexMatch(regex, 1));
-    cxConstChars funcName = cxStringBody(cxRegexMatch(regex, 2));
-    if(className == NULL || funcName == NULL){
+    cxConstChars funcName = cxStringBody(cxRegexMatch(regex, 1));
+    if(funcName == NULL){
         return false;
     }
+    int top = lua_gettop(gL);
     CX_ASSERT(info->object != NULL, "object error");
-    lua_getglobal(gL, className);
-    if(!lua_istable(gL, -1)){
-        lua_pop(gL, 1);
-        CX_ERROR("bind class %s not find",className);
-        return false;
-    }
-    lua_getfield(gL, -1, funcName);
+    lua_getglobal(gL, funcName);
     if(!lua_isfunction(gL, -1)){
-        lua_pop(gL, 2);
+        lua_pop(gL, 1);
         CX_ERROR("bind method %s not find",funcName);
         return false;
     }
     lua_pushlightuserdata(gL, info->object);
     cxInt an = cxJsonPush(json) ? 2 : 1;
     if(lua_pcall(gL, an, 1, 0) != 0){
-        CX_ERROR("run bind method %s.%s failed",className,funcName);
-        lua_pop(gL, 2);
+        CX_ERROR("run bind method %s failed",funcName);
+        lua_pop(gL, 1);
         return false;
     }
     if(!lua_istable(gL, -1)){
-        lua_pop(gL, 2);
+        lua_pop(gL, 1);
         CX_ERROR("bind func must return table");
         return false;
     }
     cxObject obj = info->object;
     obj->cxBind = lua_ref(gL, true);
-    lua_pop(gL, 1);
+    top = lua_gettop(gL);
     return obj->cxBind > 0;
 }
 

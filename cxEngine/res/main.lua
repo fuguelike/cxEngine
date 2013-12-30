@@ -2,8 +2,8 @@
 require('bind.lua')
 
 function init()
-    cxEngine.setDesignSize({w=640,h=960})
-    cxEngine.setShowBorder(true)
+    cxEngine.SetDesignSize({w=640,h=960})
+    cxEngine.SetShowBorder(true)
 end
 
 function mainBegin(viewRoot)

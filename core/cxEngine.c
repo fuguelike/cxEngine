@@ -81,17 +81,20 @@ static cxInt cxEngineLuaLoader(lua_State *L)
     cxChar path[PATH_MAX] = {0};
     cxConstChars file = luaL_checkstring(L, 1);
     cxConstChars ext = strrchr(file, '.');
+    cxString data = NULL;
     if(ext == NULL || strcasecmp(ext, ".lua") != 0){
         snprintf(path, PATH_MAX, "%s.lua",file);
-    }else{
-        snprintf(path, PATH_MAX, "%s",file);
+        data = cxEngineGetLuaScript(path);
     }
-    cxString data = cxEngineGetLuaScript(path);
     if(data == NULL){
-        luaL_error(L, "error loading file %s error",path);
-    }else{
-        luaL_loadbuffer(L, cxStringBody(data), cxStringLength(data), file);
+        snprintf(path, PATH_MAX, "%s",file);
+        data = cxEngineGetLuaScript(path);
     }
+    if(data != NULL){
+        luaL_loadbuffer(L, cxStringBody(data), cxStringLength(data), file);
+        return 1;
+    }
+    luaL_error(L, "error loading file %s error",path);
     return 1;
 }
 
@@ -100,7 +103,7 @@ static void cxEngineAddLuaLoader(lua_State *L)
     lua_getglobal(L, "package");
     lua_getfield(L, -1, "loaders");
     lua_pushcfunction(L, cxEngineLuaLoader);
-    for (cxInt i = lua_rawlen(L, -2) + 1; i > 2; --i) {
+    for (cxInt i = lua_objlen(L, -2) + 1; i > 2; --i) {
         lua_rawgeti(L, -2, i - 1);
         lua_rawseti(L, -3, i);
     }
@@ -325,6 +328,9 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
     CX_RELEASE(this->window);
+    
+    CX_METHOD_RELEASE(this->MakeAction);
+    CX_METHOD_RELEASE(this->MakeView);
     
     cxEventBaseDestroy();
     cxCurveDestroy();

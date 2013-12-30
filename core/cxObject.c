@@ -76,8 +76,8 @@ CX_LUA_METHOD_END(cxObject)
 
 void cxLuaLoad(cxConstType name, const luaL_Reg *methods)
 {
-    luaL_newlib(gL, methods);
-    lua_setglobal(gL, name);
+    luaL_openlib(gL, name, methods, 0);
+    lua_pop(gL, 1);
 }
 
 void cxObjectTypeInit()

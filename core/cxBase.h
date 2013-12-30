@@ -14,12 +14,6 @@
 #include "cxAllocator.h"
 #include "cxObject.h"
 
-#define lua_ref(L,lock)         luaL_ref(L, LUA_REGISTRYINDEX)
-
-#define lua_unref(L,ref)        luaL_unref(L, LUA_REGISTRYINDEX, (ref))
-
-#define lua_getref(L,ref)       lua_rawgeti(L, LUA_REGISTRYINDEX, (ref))
-
 CX_C_BEGIN
 
 typedef struct cxSignal cxSignal;
