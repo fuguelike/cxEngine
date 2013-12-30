@@ -894,7 +894,7 @@ static cxInt cxIsAndroid(lua_State *L)
 
 void cxEngineSystemInit()
 {
-    //global func
+    //global func cxReaderAttrInfo *,args...
     cxEngineRegisteFunc(cxIsAndroid);
     cxEngineRegisteFunc(cxIsIOS);
     cxEngineRegisteFunc(cxLocalizedText);
@@ -907,7 +907,7 @@ void cxEngineSystemInit()
     cxEngineRegisteFunc(cxFixScaleW);
     cxEngineRegisteFunc(cxFixScaleH);
     cxEngineRegisteFunc(cxDataTypes);
-    //global event
+    //global event this,args...
     cxEngineRegisteFunc(cxEventAction);
     cxEngineRegisteFunc(cxEventEffect);
     cxEngineRegisteFunc(cxEventMusic);

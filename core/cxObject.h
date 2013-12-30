@@ -52,6 +52,8 @@ cxBool cxObjectIsType(cxAny pobj,cxConstType type);
 
 cxConstType cxObjectType(cxAny pobj);
 
+cxInt cxObjectBind(cxAny obj);
+
 void cxObjectReadAttr(cxReaderAttrInfo *info);
 
 void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func);
@@ -160,6 +162,7 @@ CX_OBJECT_BEG(cxObject)
     cxUInt cxRefcount;
     cxObjectFunc cxFree;
     cxInt cxTag;
+    cxInt bind;
     cxAny cxRoot;
     CX_METHOD_ALLOC(void, ReadAttr,cxReaderAttrInfo *);
 CX_OBJECT_END(cxObject)

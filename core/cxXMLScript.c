@@ -13,6 +13,7 @@
 #include "cxEngine.h"
 #include "cxRegex.h"
 #include "cxAutoPool.h"
+#include "cxViewRoot.h"
 
 CX_OBJECT_INIT(cxXMLReader, cxObject)
 {
@@ -46,6 +47,66 @@ CX_OBJECT_FREE(cxXMLScript, cxObject)
 }
 CX_OBJECT_TERM(cxXMLScript, cxObject)
 
+static cxBool cxXMLAttrRunLuaFunc(cxReaderAttrInfo *info,cxJson json)
+{
+    cxBool ret = false;
+    if(lua_iscfunction(gL, -1) || lua_isfunction(gL, -1)){
+        if(!cxJsonPush(json))lua_pushlightuserdata(gL, info);
+        ret = (lua_pcall(gL, 1, 1, 0) == 0);
+        lua_remove(gL, -2);
+    }else{
+        lua_pop(gL, 1);
+    }
+    return ret;
+}
+
+cxBool cxXMLBindObject(cxReaderAttrInfo *info)
+{
+    cxConstChars bind = cxXMLAttr(info->reader,"cxObject.bind");
+    CX_RETURN(bind == NULL, false);
+    cxRegex regex = cxRegexCreate("^(.+?)\\.(.+?)\\((.*?)\\)$", UTF8(bind), 0);
+    if(!cxRegexNext(regex)){
+        return false;
+    }
+    cxString jsontxt = cxRegexMatch(regex, 3);
+    cxStringReplace(jsontxt, '\'', '"');
+    cxJson json = cxJsonCreate(jsontxt);
+    cxConstChars className = cxStringBody(cxRegexMatch(regex, 1));
+    cxConstChars funcName = cxStringBody(cxRegexMatch(regex, 2));
+    if(className == NULL || funcName == NULL){
+        return false;
+    }
+    CX_ASSERT(info->object != NULL, "object error");
+    lua_getglobal(gL, className);
+    if(!lua_istable(gL, -1)){
+        lua_pop(gL, 1);
+        CX_ERROR("bind class %s not find",className);
+        return false;
+    }
+    lua_getfield(gL, -1, funcName);
+    if(!lua_isfunction(gL, -1)){
+        lua_pop(gL, 2);
+        CX_ERROR("bind method %s not find",funcName);
+        return false;
+    }
+    lua_pushlightuserdata(gL, info->object);
+    cxInt an = cxJsonPush(json) ? 2 : 1;
+    if(lua_pcall(gL, an, 1, 0) != 0){
+        CX_ERROR("run bind method %s.%s failed",className,funcName);
+        lua_pop(gL, 2);
+        return false;
+    }
+    if(!lua_istable(gL, -1)){
+        lua_pop(gL, 2);
+        CX_ERROR("bind func must return table");
+        return false;
+    }
+    cxObject obj = info->object;
+    obj->bind = lua_ref(gL, true);
+    lua_pop(gL, 1);
+    return obj->bind > 0;
+}
+
 static cxBool cxXMLAttrRunFunc(cxConstChars value,cxReaderAttrInfo *info)
 {
     CX_ASSERT(value != NULL, "args error");
@@ -58,14 +119,37 @@ static cxBool cxXMLAttrRunFunc(cxConstChars value,cxReaderAttrInfo *info)
     cxStringReplace(jsontxt, '\'', '"');
     cxJson json = cxJsonCreate(jsontxt);
     cxConstChars funcName = cxStringBody(cxRegexMatch(regex, 1));
-    //find global lua func
-    lua_getglobal(gL, funcName);
-    if(lua_iscfunction(gL, -1) || lua_isfunction(gL, -1)){
-        ret = (lua_pcall(gL, cxJsonPush(json)?1:0, 1, 0) == 0);
+    cxViewRoot root = info->root;
+    //find curr bind
+from_curr:
+    if(cxObjectBind(info->object) > 0){
+        lua_getref(gL, cxObjectBind(info->object));
+        if(!lua_istable(gL, -1)){
+            lua_pop(gL, 1);
+            goto from_root;
+        }
+        lua_getfield(gL, -1, funcName);
+        ret = cxXMLAttrRunLuaFunc(info,json);
         lua_remove(gL, -2);
-    }else{
-        lua_pop(gL, 1);
     }
+    CX_RETURN(ret,ret);
+    //find root bind
+from_root:
+    if(cxObjectBind(root) > 0){
+        lua_getref(gL, cxObjectBind(root));
+        if(!lua_istable(gL, -1)){
+            lua_pop(gL, 1);
+            goto from_global;
+        }
+        lua_getfield(gL, -1, funcName);
+        ret = cxXMLAttrRunLuaFunc(info,json);
+        lua_remove(gL, -2);
+    }
+    CX_RETURN(ret,ret);
+    //find global func
+from_global:
+    lua_getglobal(gL, funcName);
+    ret = cxXMLAttrRunLuaFunc(info,json);
     return ret;
 }
 
@@ -255,6 +339,23 @@ cxString cxXMLReadString(xmlTextReaderPtr reader)
     return cxStringAttachChars((cxChar *)str);
 }
 
+static cxEventItem cxXMLFindEvent(cxEventArg args,cxBool ref)
+{
+    cxEventItem event = NULL;
+    if(lua_isfunction(gL, -1)){
+        event = CX_CREATE(cxEventItem);
+        args->ref = lua_ref(gL, true);
+        event->func = cxObjectLuaEventFunc;
+        CX_ASSERT(args->ref > 0,"get ref error");
+        CX_RETAIN_SWAP(event->arg, args);
+    }else{
+        lua_pop(gL, 1);
+    }
+    if(ref){
+        lua_pop(gL, 1);
+    }
+    return event;
+}
 //method1({json});
 cxEventItem cxXMLReadEvent(cxReaderAttrInfo *info, cxConstChars name)
 {
@@ -266,20 +367,50 @@ cxEventItem cxXMLReadEvent(cxReaderAttrInfo *info, cxConstChars name)
     }
     cxString argsCode = cxRegexMatch(regex, 2);
     cxStringReplace(argsCode, '\'', '"');
-    cxString funcName = cxRegexMatch(regex, 1);
+    cxConstChars funcName = cxStringBody(cxRegexMatch(regex, 1));
     cxEventItem event = NULL;
     cxEventArg args = cxStringLength(argsCode) > 0 ? cxEventArgCreate(cxStringBody(argsCode)) : CX_CREATE(cxEventArg);
-    //from global table
-    lua_getglobal(gL, cxStringBody(funcName));
-    if(lua_isfunction(gL, -1)){
-        event = CX_CREATE(cxEventItem);
-        args->ref = lua_ref(gL, true);
-        event->func = cxObjectLuaEventFunc;
-        CX_ASSERT(args->ref > 0,"get ref error");
-        CX_RETAIN_SWAP(event->arg, args);
-    }else{
-        lua_pop(gL, 1);
+    cxConstType type = cxObjectType(info->object);
+    //from object bind
+from_curr:
+    if(cxObjectBind(info->object) <= 0){
+        goto from_root;
     }
+    lua_getref(gL, cxObjectBind(info->object));
+    if(!lua_istable(gL, -1)){
+        lua_pop(gL, 1);
+        goto from_root;
+    }
+    lua_getfield(gL, -1, funcName);
+    event = cxXMLFindEvent(args, true);
+    CX_RETURN(event != NULL, event);
+    //from root bind
+from_root:
+    if(cxObjectBind(info->root) <= 0){
+        goto from_type_table;
+    }
+    lua_getref(gL, cxObjectBind(info->root));
+    if(!lua_istable(gL, -1)){
+        lua_pop(gL, 1);
+        goto from_type_table;
+    }
+    lua_getfield(gL, -1, funcName);
+    event = cxXMLFindEvent(args, true);
+    CX_RETURN(event != NULL, event);
+from_type_table:
+    //from type table find
+    lua_getglobal(gL, type);
+    if(!lua_istable(gL, -1)){
+        lua_pop(gL, 1);
+        goto from_global;
+    }
+    lua_getfield(gL, -1, funcName);
+    event = cxXMLFindEvent(args, true);
+    CX_RETURN(event != NULL, event);
+from_global:
+    //from global table type
+    lua_getglobal(gL, funcName);
+    event = cxXMLFindEvent(args, false);
     return event;
 }
 

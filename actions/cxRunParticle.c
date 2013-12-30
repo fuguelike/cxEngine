@@ -22,7 +22,6 @@ static void cxRunParticleInit(cxAny pav)
     cxParticle particle = this->particleView;
     CX_ASSERT(particle != NULL, "particle not set");
     cxParticleReset(particle);
-    CX_SLOT_RELEASE(this->DrawParticle);
     CX_SLOT_CONNECT(view->EmmitDraw, this, DrawParticle, cxRunParticleDraw);
 }
 
@@ -30,6 +29,7 @@ static void cxRunParticleOver(cxAny pav)
 {
     cxRunParticle this = pav;
     cxParticleStop(this->particleView);
+    CX_SLOT_RELEASE(this->DrawParticle);
 }
 
 static void cxRunParticleStep(cxAny pav,cxFloat dt,cxFloat time)
@@ -47,6 +47,7 @@ static void cxRunParticleReadAttr(cxReaderAttrInfo *info)
         cxParticle particle = cxParticleCreateFromPEX(pex);
         CX_RETAIN_SWAP(this->particleView, particle);
         this->super.duration = particle->duration;
+        return;
     }
 }
 

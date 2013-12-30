@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--cxView.fixScale="cxFixScaleW()" cxView.w="640" cxView.h="960""-->
-<cxViewRoot cxView.fill="0,0,0,0"  cxViewRoot.onBegin="mainBegin()" cxViewRoot.onEnd="mainEnd()">
-    <cxTable cxView.fill="10,10,10,10" cxTable.space="10,10" cxTable.type="3,0">
+<cxViewRoot
+    cxObject.bind="BindTest.New()"
+    cxView.fill="0,0,0,0"
+    cxViewRoot.onBegin="mainBegin()"
+    cxViewRoot.onEnd="mainEnd()">
+    <cxTable cxView.w="getWidth('111')" cxView.fill="10,10,10,10" cxTable.space="10,10" cxTable.type="3,0">
         <cxTemplate url="items.xml?template" title="cxLocalizedText('items.xml?exp')" release="cxEventPushView('particle.xml')" />
         <cxTemplate src="buttontemp.xml" title="Action" release="cxEventPushView('action.xml')" />
         <cxTemplate src="buttontemp.xml" title="Wav" release="cxEventEffect({'src':'effect.wav','loop':false})" />
@@ -13,6 +17,6 @@
         <cxTemplate src="buttontemp.xml" title="Chipmunk" release="cxEventPushView('chipmunk.xml')" />
         <cxTemplate src="buttontemp.xml" title="bmpFont" release="cxEventPushView('bmpfont.xml')" />
         <cxTemplate cond="cxIsAndroid()" src="buttontemp.xml" title="Android" />
-        <cxTemplate cond="cxIsIOS()" src="buttontemp.xml" title="IOS" release="cxEventPushView('bmpfont.xml')" />
+        <cxTemplate cond="cxIsIOS()" src="buttontemp.xml" title="IOS" release="iosLuaEventTest({'a':1,'b':'string'})" />
     </cxTable>
 </cxViewRoot>

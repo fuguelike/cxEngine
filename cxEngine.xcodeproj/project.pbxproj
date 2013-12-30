@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		830B8C8B186DAB210093724A /* bind.lua in Resources */ = {isa = PBXBuildFile; fileRef = 830B8C8A186DAB210093724A /* bind.lua */; };
 		8324910417F2926600D0DF9D /* cxMain.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324910317F2926600D0DF9D /* cxMain.c */; };
 		83273E7B1862D8CA00232D58 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83273E7A1862D8CA00232D58 /* libxml2.a */; };
 		832A3EF31855F9DF00047C64 /* bmpfont.xml in Resources */ = {isa = PBXBuildFile; fileRef = 832A3EF21855F9DF00047C64 /* bmpfont.xml */; };
@@ -84,6 +85,7 @@
 
 /* Begin PBXFileReference section */
 		8300651F18232BE000AF680D /* cxEngine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cxEngine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		830B8C8A186DAB210093724A /* bind.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = bind.lua; path = res/bind.lua; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.lua; };
 		8324910317F2926600D0DF9D /* cxMain.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMain.c; sourceTree = "<group>"; };
 		8324910517F2953300D0DF9D /* cxMain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cxMain.h; sourceTree = "<group>"; };
 		83273E7A1862D8CA00232D58 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = libs/ios/lib/libxml2.a; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 				839E7A5617F1BC7600B0F5EC /* InfoPlist.strings */,
 				8341C6B91822812B0045A66F /* items.xml */,
 				832C0CE51862998C0049B568 /* main.lua */,
+				830B8C8A186DAB210093724A /* bind.lua */,
 				839E7A5917F1BC7600B0F5EC /* main.m */,
 				8341C6BA1822812B0045A66F /* main.xml */,
 				836150FD184838B200EB9173 /* n.png */,
@@ -388,6 +391,7 @@
 				83F59E04185FF71500C43319 /* appConfig.xml in Resources */,
 				8341C6CC1822812B0045A66F /* main.xml in Resources */,
 				839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */,
+				830B8C8B186DAB210093724A /* bind.lua in Resources */,
 				839103BA18595754008DF1C7 /* buttontemp.xml in Resources */,
 				834F2E8118458D310067E220 /* Untitled.xml in Resources */,
 				832B1D4C18264B100038D0EC /* Track02.mp3 in Resources */,

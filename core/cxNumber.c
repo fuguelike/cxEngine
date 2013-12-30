@@ -6,9 +6,10 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxTypes.h"
 #include "cxNumber.h"
 
-static cxInt cxNumberNewInt(lua_State *L)
+static cxInt cxNumberLuaNewInt(lua_State *L)
 {
     cxInt value =  luaL_checkinteger(L, 1);
     cxNumber this = cxNumberInt(value);
@@ -16,7 +17,19 @@ static cxInt cxNumberNewInt(lua_State *L)
     CX_LUA_RET_THIS(cxNumber);
 }
 
-static cxInt cxNumberNewFloat(lua_State *L)
+static cxInt cxNumberLuaToInt(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxNumber);
+    if(this->type != cxNumberTypeInt){
+        luaL_error(L, "number type error");
+        lua_pushnil(L);
+    }else{
+        lua_pushinteger(L, this->value.vi);
+    }
+    return 1;
+}
+
+static cxInt cxNumberLuaNewFloat(lua_State *L)
 {
     cxFloat value =  luaL_checknumber(L, 1);
     cxNumber this = cxNumberFloat(value);
@@ -24,7 +37,19 @@ static cxInt cxNumberNewFloat(lua_State *L)
     CX_LUA_RET_THIS(cxNumber);
 }
 
-static cxInt cxNumberNewColor(lua_State *L)
+static cxInt cxNumberLuaToFloat(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxNumber);
+    if(this->type != cxNumberTypeFloat){
+        luaL_error(L, "number type error");
+        lua_pushnil(L);
+    }else{
+        lua_pushnumber(L, this->value.vf);
+    }
+    return 1;
+}
+
+static cxInt cxNumberLuaNewColor4f(lua_State *L)
 {
     cxInt top = lua_gettop(L);
     cxFloat r = (top >=1 && lua_isnumber(L, 1)) ? lua_tonumber(L, 1) : 1.0f;
@@ -36,10 +61,54 @@ static cxInt cxNumberNewColor(lua_State *L)
     CX_LUA_RET_THIS(cxNumber);
 }
 
+static cxInt cxNumberLuaToColor4f(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxNumber);
+    if(this->type != cxNumberTypeColor4f){
+        luaL_error(L, "number type error");
+        lua_pushnil(L);
+    }else{
+        cxLuaPushColor4f(L, this->value.color4f);
+    }
+    return 1;
+}
+
+static cxInt cxNumberLuaNewVec2f(lua_State *L)
+{
+    cxFloat x = luaL_checknumber(L, 1);
+    cxFloat y = luaL_checknumber(L, 2);
+    cxNumber this = cxNumberVec2f(cxVec2fv(x, y));
+    lua_pushlightuserdata(L, this);
+    CX_LUA_RET_THIS(cxNumber);
+}
+
+static cxInt cxNumberLuaNewBool(lua_State *L)
+{
+    cxBool b = lua_toboolean(L, 1);
+    cxNumber this = cxNumberBool(b);
+    lua_pushlightuserdata(L, this);
+    CX_LUA_RET_THIS(cxNumber);
+}
+
+static cxInt cxNumberLuaNewSize2f(lua_State *L)
+{
+    cxFloat w = luaL_checknumber(L, 1);
+    cxFloat h = luaL_checknumber(L, 2);
+    cxNumber this = cxNumberSize2f(cxSize2fv(w, h));
+    lua_pushlightuserdata(L, this);
+    CX_LUA_RET_THIS(cxNumber);
+}
+
 CX_LUA_METHOD_BEGIN(cxNumber)
-    {"newInt",cxNumberNewInt},
-    {"newFloat",cxNumberNewFloat},
-    {"newColor",cxNumberNewColor},
+    {"newInt",cxNumberLuaNewInt},
+    {"toInt",cxNumberLuaToInt},
+    {"newFloat",cxNumberLuaNewFloat},
+    {"toFloat",cxNumberLuaToFloat},
+    {"newColor4f",cxNumberLuaNewColor4f},
+    {"toColor4f",cxNumberLuaToColor4f},
+    {"newVec2f",cxNumberLuaNewVec2f},
+    {"newBool",cxNumberLuaNewBool},
+    {"newSize2f",cxNumberLuaNewSize2f},
 CX_LUA_METHOD_END(cxNumber)
 
 void cxNumberTypeInit()

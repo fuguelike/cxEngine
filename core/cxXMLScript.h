@@ -50,6 +50,8 @@ do{                                                             \
     }                                                           \
 }while(0)
 
+cxBool cxXMLBindObject(cxReaderAttrInfo *info);
+
 cxConstChars cxXMLAttr(xmlTextReaderPtr reader,cxConstChars name);
 
 cxInt cxReadFloats(cxConstChars ptr,cxFloat *values);

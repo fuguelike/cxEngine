@@ -1,15 +1,28 @@
 
+require('bind.lua')
+
 function init()
     cxEngine.setDesignSize({w=640,h=960})
     cxEngine.setShowBorder(true)
 end
 
-function mainBegin(xml)
+function mainBegin(viewRoot)
     
 end
 
-function mainEnd(xml)
+function mainEnd(viewRoot)
     
+end
+
+--[[
+function cxButton.iosLuaEventTest(sender,a)
+    io.write(a.a,a.b,'111\n')
+end
+ ]]
+
+
+function iosLuaEventTest(sender,a)
+    io.write(a.a,a.b,'222\n')
 end
 
 function main()
@@ -17,7 +30,7 @@ function main()
     local loader = cxLoading.create()
 
     cxLoading.event(loader,'onStart',function(this)
-              local txt = cxLabelTTF.make({font='banana.ttf',size='65',text='Loading...'})
+              local txt = cxLabelTTF.make({font='songti.ttf',size='65',text='Loading...'})
               cxView.setColor(txt,{r=1.0,g=0.0,b=0.0})
               cxLabelTTF.setFont(txt,{size=60})
               cxView.appendView(this,txt)

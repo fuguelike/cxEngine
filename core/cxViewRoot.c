@@ -155,8 +155,8 @@ static void cxViewRootLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack s
     while(xmlTextReaderRead(reader)){
         int type = xmlTextReaderNodeType(reader);
         if(type == XML_READER_TYPE_ELEMENT){
-            cxConstChars temp = cxXMLReadElementName(reader);
             
+            cxConstChars temp = cxXMLReadElementName(reader);
             info->object = CX_METHOD_FIRE(NULL, this->Make,temp,info->reader);
             CX_ASSERT(info->object != NULL, "make element failed");
             cxObjectSetRoot(info->object, this);
@@ -211,9 +211,7 @@ cxBool cxViewRootLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
         cxObjectReadAttrRun(info);
         cxStackPush(stack, rootView);
         CX_EVENT_FIRE(rootView, onBegin);
-        
         cxViewRootLoadSubviews(rootView,reader, stack);
-        
         CX_EVENT_FIRE(rootView, onEnd);
         cxStackPop(stack);
         cxAutoPoolPop();
