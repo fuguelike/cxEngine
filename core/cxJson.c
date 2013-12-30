@@ -9,6 +9,26 @@
 #include "cxEngine.h"
 #include "cxJson.h"
 
+static cxInt cxJsonLuaToJson(lua_State *L)
+{
+    return 1;
+}
+
+static cxInt cxJsonLuaToTable(lua_State *L)
+{
+    return 1;
+}
+
+CX_LUA_METHOD_BEG(cxJson)
+    {"ToJson",cxJsonLuaToJson},
+    {"ToTable",cxJsonLuaToTable},
+CX_LUA_METHOD_END(cxJson)
+
+void cxJsonTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxJson);
+}
+
 CX_OBJECT_INIT(cxJson, cxObject)
 {
     

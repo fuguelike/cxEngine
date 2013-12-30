@@ -66,13 +66,13 @@ static cxInt cxListLuaClean(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxList)
-    {"append",  cxListLuaAppend},
-    {"prepend", cxListLuaPrepend},
-    {"first",   cxListLuaFirst},
-    {"last",    cxListLuaLast},
-    {"length",  cxListLuaLength},
-    {"remove",  cxListLuaRemove},
-    {"clean",   cxListLuaClean},
+    {"Append",  cxListLuaAppend},
+    {"Prepend", cxListLuaPrepend},
+    {"First",   cxListLuaFirst},
+    {"Last",    cxListLuaLast},
+    {"Length",  cxListLuaLength},
+    {"Remove",  cxListLuaRemove},
+    {"Clean",   cxListLuaClean},
 CX_LUA_METHOD_END(cxList)
 
 void cxListTypeInit()

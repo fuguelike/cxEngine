@@ -97,7 +97,7 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_LUA_GET_PTR(i)           (lua_isuserdata(gL, i)?lua_touserdata(gL, i):NULL)
 
-#define CX_LUA_PROPERTY(t,n)        {"set"#n,t##LuaSet##n},{"get"#n,t##LuaGet##n}
+#define CX_LUA_PROPERTY(t,n)        {"Set"#n,t##LuaSet##n},{"Get"#n,t##LuaGet##n}
 
 #define CX_LUA_IS_INT(n)            (((lua_Number)((cxInt)(n))) == (n))
 
@@ -113,7 +113,7 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_LUA_METHOD_BEG(_t_)      const luaL_Reg _t_##LuaMethods[] = {
 
-#define CX_LUA_METHOD_END(_t_)      {"alloc",_t_##LuaAlloc},{"create",_t_##LuaCreate},{NULL,NULL}};
+#define CX_LUA_METHOD_END(_t_)      {"Alloc",_t_##LuaAlloc},{"Create",_t_##LuaCreate},{NULL,NULL}};
 
 #define CX_LUA_PUSH_OBJECT(o)       ((o) != NULL) ? lua_pushlightuserdata(gL,o) : lua_pushnil(gL)
 

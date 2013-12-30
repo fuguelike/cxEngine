@@ -21,26 +21,26 @@ end
 
 function main()
 
-    local loader = cxLoading.create()
+    local loader = cxLoading.Create()
 
-    cxLoading.event(loader,'onStart',function(this)
-              local txt = cxLabelTTF.make({font='songti.ttf',size='65',text='Loading...'})
-              cxView.setColor(txt,{r=1.0,g=0.0,b=0.0})
-              cxLabelTTF.setFont(txt,{size=60})
-              cxView.appendView(this,txt)
+    cxLoading.AppendEvent(loader,'onStart',function(this)
+              local txt = cxLabelTTF.Make({font='songti.ttf',size='65',text='Loading...'})
+              cxView.SetColor(txt,{r=1.0,g=0.0,b=0.0})
+              cxLabelTTF.SetFont(txt,{size=60})
+              cxView.AppendView(this,txt)
          end)
          
-    cxLoading.event(loader,'onLoading', function(this)
-              local xmlView = cxViewRoot.make('main.xml')
-              cxLoading.setObject(this,xmlView)
+    cxLoading.AppendEvent(loader,'onLoading', function(this)
+              local xmlView = cxViewRoot.Make('main.xml')
+              cxLoading.SetObject(this,xmlView)
          end)
     
-    cxLoading.event(loader,'onFinished', function(this)
-            local xmlView = cxLoading.getObject(this)
-            cxWindow.pushView(xmlView)
+    cxLoading.AppendEvent(loader,'onFinished', function(this)
+            local xmlView = cxLoading.GetObject(this)
+            cxWindow.PushView(xmlView)
          end)
          
-    cxLoading.start(loader)
+    cxLoading.Start(loader)
 
 end
 

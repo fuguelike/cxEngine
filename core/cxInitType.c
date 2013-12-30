@@ -24,6 +24,7 @@ void cxInitTypes()
     cxListTypeInit();
     cxStackTypeInit();
     
+    cxJsonTypeInit();
     cxIconvTypeInit();
     
     cxStreamTypeInit();

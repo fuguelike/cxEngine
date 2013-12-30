@@ -100,15 +100,15 @@ static cxInt cxNumberLuaNewSize2f(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxNumber)
-    {"newInt",cxNumberLuaNewInt},
-    {"toInt",cxNumberLuaToInt},
-    {"newFloat",cxNumberLuaNewFloat},
-    {"toFloat",cxNumberLuaToFloat},
-    {"newColor4f",cxNumberLuaNewColor4f},
-    {"toColor4f",cxNumberLuaToColor4f},
-    {"newVec2f",cxNumberLuaNewVec2f},
-    {"newBool",cxNumberLuaNewBool},
-    {"newSize2f",cxNumberLuaNewSize2f},
+    {"NewInt",cxNumberLuaNewInt},
+    {"ToInt",cxNumberLuaToInt},
+    {"NewFloat",cxNumberLuaNewFloat},
+    {"ToFloat",cxNumberLuaToFloat},
+    {"NewColor4f",cxNumberLuaNewColor4f},
+    {"ToColor4f",cxNumberLuaToColor4f},
+    {"NewVec2f",cxNumberLuaNewVec2f},
+    {"NewBool",cxNumberLuaNewBool},
+    {"NewSize2f",cxNumberLuaNewSize2f},
 CX_LUA_METHOD_END(cxNumber)
 
 void cxNumberTypeInit()

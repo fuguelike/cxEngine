@@ -66,11 +66,11 @@ static cxInt cxObjectLuaGetBind(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxObject)
-    {"getBind",cxObjectLuaGetBind},
-    {"getType",cxObjectLuagetType},
-    {"retain",cxObjectLuaRetain},
-    {"release",cxObjectLuaRelease},
-    {"autoRelease",cxObjectLuaAutoRelease},
+    {"GetBind",cxObjectLuaGetBind},
+    {"GetType",cxObjectLuagetType},
+    {"Retain",cxObjectLuaRetain},
+    {"Release",cxObjectLuaRelease},
+    {"AutoRelease",cxObjectLuaAutoRelease},
     CX_LUA_PROPERTY(cxObject, Tag),
 CX_LUA_METHOD_END(cxObject)
 

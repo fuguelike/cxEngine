@@ -72,12 +72,12 @@ static cxInt cxHashLuaClean(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxHash)
-    {"length",cxHashLuaLength},
-    {"get",cxHashLuaGet},
-    {"set",cxHashLuaSet},
-    {"del",cxHashLuaDel},
-    {"each",cxHashLuaEach},
-    {"clean",cxHashLuaClean},
+    {"Length",cxHashLuaLength},
+    {"Get",cxHashLuaGet},
+    {"Set",cxHashLuaSet},
+    {"Del",cxHashLuaDel},
+    {"Each",cxHashLuaEach},
+    {"Clean",cxHashLuaClean},
 CX_LUA_METHOD_END(cxHash)
 
 void cxHashTypeInit()

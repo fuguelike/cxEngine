@@ -209,16 +209,16 @@ static cxInt cxViewLuaMake(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxView)
-    {"appendView",cxViewLuaAppendView},
-    {"appendAction",cxViewLuaAppendAction},
-    {"createTimer",cxViewLuaCreateTimer},
-    {"event",cxViewLuaAppendEvent},
+    {"AppendView",cxViewLuaAppendView},
+    {"AppendAction",cxViewLuaAppendAction},
+    {"CreateTimer",cxViewLuaCreateTimer},
+    {"AppendEvent",cxViewLuaAppendEvent},
+    {"Make",cxViewLuaMake},
     CX_LUA_PROPERTY(cxView,Color),
     CX_LUA_PROPERTY(cxView,Position),
     CX_LUA_PROPERTY(cxView,Size),
     CX_LUA_PROPERTY(cxView,Scale),
     CX_LUA_PROPERTY(cxView,FixScale),
-    {"make",cxViewLuaMake},
 CX_LUA_METHOD_END(cxView)
 
 void cxViewTypeInit()

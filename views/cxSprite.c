@@ -33,8 +33,8 @@ static cxInt cxSpriteLuaMake(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxSprite)
-    {"setTexture",cxSpriteLuaSetTexture},
-    {"make",cxSpriteLuaMake},
+    {"SetTexture",cxSpriteLuaSetTexture},
+    {"Make",cxSpriteLuaMake},
 CX_LUA_METHOD_END(cxSprite)
 
 

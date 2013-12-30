@@ -69,12 +69,12 @@ static cxInt cxArrayLuaClean(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxArray)
-    {"length",cxArrayLuaLength},
-    {"at",cxArrayLuaAtIndex},
-    {"append",cxArrayLuaAppend},
-    {"remove",cxArrayLuaRemove},
-    {"each",cxArrayLuaEach},
-    {"clean",cxArrayLuaClean},
+    {"Length",cxArrayLuaLength},
+    {"At",cxArrayLuaAtIndex},
+    {"Append",cxArrayLuaAppend},
+    {"Remove",cxArrayLuaRemove},
+    {"Each",cxArrayLuaEach},
+    {"Clean",cxArrayLuaClean},
 CX_LUA_METHOD_END(cxArray)
 
 void cxArrayTypeInit()

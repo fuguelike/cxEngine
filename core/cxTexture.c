@@ -21,7 +21,7 @@ CX_OBJECT_FREE(cxTexCoord, cxObject)
 }
 CX_OBJECT_TERM(cxTexCoord, cxObject)
 
-static cxInt cxTextureLuaCreateTexture(lua_State *L)
+static cxInt cxTextureLuaMakeTexture(lua_State *L)
 {
     cxConstChars file = luaL_checkstring(L, 1);
     //if need save to cache
@@ -32,7 +32,7 @@ static cxInt cxTextureLuaCreateTexture(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxTexture)
-    {"create",cxTextureLuaCreateTexture},
+    {"Make",cxTextureLuaMakeTexture},
 CX_LUA_METHOD_END(cxTexture)
 
 void cxTextureTypeInit()

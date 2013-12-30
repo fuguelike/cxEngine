@@ -57,9 +57,9 @@ static cxInt cxWindowLuaReplaceView(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxWindow)
-    {"pushView",cxWindowLuaPushView},
-    {"popView",cxWindowLuaPopView},
-    {"replaceView",cxWindowLuaReplaceView},
+    {"PushView",cxWindowLuaPushView},
+    {"PopView",cxWindowLuaPopView},
+    {"ReplaceView",cxWindowLuaReplaceView},
 CX_LUA_METHOD_END(cxWindow)
 
 void cxWindowTypeInit()

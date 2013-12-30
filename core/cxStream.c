@@ -106,16 +106,16 @@ static cxInt cxStreamLuaMakeFile(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxStream)
-    {"open",cxStreamLuaOpen},
-    {"read",cxStreamLuaRead},
-    {"write",cxStreamLuaWrite},
-    {"seek",cxStreamLuaSeek},
-    {"close",cxStreamLuaClose},
-    {"position",cxStreamLuaPosition},
-    {"allBytes",cxStreamLuaAllBytes},
-    {"assets",cxStreamLuaMakeAssets},
-    {"memory",cxStreamLuaMakeMemory},
-    {"file",cxStreamLuaMakeFile},
+    {"Ppen",cxStreamLuaOpen},
+    {"Read",cxStreamLuaRead},
+    {"Write",cxStreamLuaWrite},
+    {"Seek",cxStreamLuaSeek},
+    {"Close",cxStreamLuaClose},
+    {"Position",cxStreamLuaPosition},
+    {"AllBytes",cxStreamLuaAllBytes},
+    {"Assets",cxStreamLuaMakeAssets},
+    {"Memory",cxStreamLuaMakeMemory},
+    {"File",cxStreamLuaMakeFile},
 CX_LUA_METHOD_END(cxStream)
 
 void cxStreamTypeInit()

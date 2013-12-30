@@ -32,8 +32,8 @@ static cxInt cxStringLuaMake(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxString)
-    {"make",cxStringLuaMake},
-    {"print",cxStringLuaPrint},
+    {"Make",cxStringLuaMake},
+    {"Print",cxStringLuaPrint},
 CX_LUA_METHOD_END(cxString)
 
 void cxStringTypeInit()

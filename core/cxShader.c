@@ -20,7 +20,7 @@ static cxInt cxShaderLuaUsing(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxShader)
-    {"using",cxShaderLuaUsing},
+    {"Using",cxShaderLuaUsing},
 CX_LUA_METHOD_END(cxShader)
 
 void cxShaderTypeInit()

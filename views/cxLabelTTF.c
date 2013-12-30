@@ -64,9 +64,9 @@ static cxInt cxLabelTTFLuaMake(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxLabelTTF)
-    {"setFont",cxLabelTTFLuaSetFont},
-    {"setText",cxLabelTTFLuaSetText},
-    {"make",cxLabelTTFLuaMake},
+    {"SetFont",cxLabelTTFLuaSetFont},
+    {"SetText",cxLabelTTFLuaSetText},
+    {"Make",cxLabelTTFLuaMake},
 CX_LUA_METHOD_END(cxLabelTTF)
 
 void cxLabelTTFTypeInit()

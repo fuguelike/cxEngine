@@ -17,6 +17,11 @@ LOCAL_SRC_FILES := libiconv.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := luajit
+LOCAL_SRC_FILES := libluajit.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
 LOCAL_MODULE := charset
 LOCAL_SRC_FILES := libcharset.a
 include $(PREBUILT_STATIC_LIBRARY)

@@ -64,9 +64,9 @@ static cxInt cxLabelBMPLuaMake(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxLabelBMP)
-    {"setFont",cxLabelBMPLuaSetFont},
-    {"setText",cxLabelBMPLuaSetText},
-    {"make",cxLabelBMPLuaMake},
+    {"SetFont",cxLabelBMPLuaSetFont},
+    {"SetText",cxLabelBMPLuaSetText},
+    {"Make",cxLabelBMPLuaMake},
 CX_LUA_METHOD_END(cxLabelBMP)
 
 void cxLabelBMPTypeInit()
