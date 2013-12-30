@@ -21,7 +21,7 @@ static cxInt cxButtonLuaAppendEvent(lua_State *L)
     CX_LUA_EVENT_END(cxButton);
 }
 
-CX_LUA_METHOD_BEGIN(cxButton)
+CX_LUA_METHOD_BEG(cxButton)
     {"event",cxButtonLuaAppendEvent},
 CX_LUA_METHOD_END(cxButton)
 

@@ -71,7 +71,7 @@ static cxInt cxHashLuaClean(lua_State *L)
     return 0;
 }
 
-CX_LUA_METHOD_BEGIN(cxHash)
+CX_LUA_METHOD_BEG(cxHash)
     {"length",cxHashLuaLength},
     {"get",cxHashLuaGet},
     {"set",cxHashLuaSet},

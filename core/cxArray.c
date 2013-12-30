@@ -68,7 +68,7 @@ static cxInt cxArrayLuaClean(lua_State *L)
     return 0;
 }
 
-CX_LUA_METHOD_BEGIN(cxArray)
+CX_LUA_METHOD_BEG(cxArray)
     {"length",cxArrayLuaLength},
     {"at",cxArrayLuaAtIndex},
     {"append",cxArrayLuaAppend},

@@ -99,7 +99,7 @@ static cxInt cxNumberLuaNewSize2f(lua_State *L)
     CX_LUA_RET_THIS(cxNumber);
 }
 
-CX_LUA_METHOD_BEGIN(cxNumber)
+CX_LUA_METHOD_BEG(cxNumber)
     {"newInt",cxNumberLuaNewInt},
     {"toInt",cxNumberLuaToInt},
     {"newFloat",cxNumberLuaNewFloat},

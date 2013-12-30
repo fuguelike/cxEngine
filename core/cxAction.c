@@ -19,7 +19,7 @@ static cxInt cxActionLuaAppendEvent(lua_State *L)
     CX_LUA_EVENT_END(cxAction);
 }
 
-CX_LUA_METHOD_BEGIN(cxAction)
+CX_LUA_METHOD_BEG(cxAction)
     {"event",cxActionLuaAppendEvent},
 CX_LUA_METHOD_END(cxAction)
 

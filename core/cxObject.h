@@ -18,6 +18,9 @@ typedef enum {
     cxBaseTypeObject,
     cxBaseTypeView,
     cxBaseTypeAction,
+    cxBaseTypeStream,
+    cxBaseTypeTexture,
+    cxBaseTypeShader,
 }cxBaseType;
 
 typedef void (*cxObjectFunc)(cxPointer this);
@@ -108,16 +111,11 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_LUA_RET_THIS(t)          lua_pushlightuserdata(gL,this);return 1
 
-#define CX_LUA_METHOD_BEGIN(_t_)    const luaL_Reg _t_##LuaMethods[] = {
+#define CX_LUA_METHOD_BEG(_t_)      const luaL_Reg _t_##LuaMethods[] = {
 
 #define CX_LUA_METHOD_END(_t_)      {"alloc",_t_##LuaAlloc},{"create",_t_##LuaCreate},{NULL,NULL}};
 
-#define CX_LUA_PUSH_OBJECT(o)                                       \
-    if((o) != NULL) {                                                   \
-lua_pushlightuserdata(gL,o);                                    \
-} else {                                                            \
-    lua_pushnil(gL);                                                \
-}
+#define CX_LUA_PUSH_OBJECT(o)       ((o) != NULL) ? lua_pushlightuserdata(gL,o) : lua_pushnil(gL)
 
 //object
 
@@ -162,7 +160,7 @@ CX_OBJECT_BEG(cxObject)
     cxUInt cxRefcount;
     cxObjectFunc cxFree;
     cxInt cxTag;
-    cxInt cxBind;
+    cxInt cxBind;           //bind to lua table
     cxAny cxRoot;
     CX_METHOD_ALLOC(void, ReadAttr,cxReaderAttrInfo *);
 CX_OBJECT_END(cxObject)

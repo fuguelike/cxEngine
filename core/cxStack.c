@@ -46,7 +46,7 @@ static cxInt cxStackLuaTop(lua_State *L)
     return 1;
 }
 
-CX_LUA_METHOD_BEGIN(cxStack)
+CX_LUA_METHOD_BEG(cxStack)
     {"top",cxStackLuaTop},
     {"push",cxStackLuaPush},
     {"pop",cxStackLuaPop},

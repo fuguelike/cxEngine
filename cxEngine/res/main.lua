@@ -14,16 +14,10 @@ function mainEnd(viewRoot)
     
 end
 
---[[
-function cxButton.iosLuaEventTest(sender,a)
-    io.write(a.a,a.b,'111\n')
-end
- ]]
-
-
-function iosLuaEventTest(sender,a)
-    io.write(a.a,a.b,'222\n')
-end
+--self bind table
+--root bind table
+--type table
+--global table
 
 function main()
 

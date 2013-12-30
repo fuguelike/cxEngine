@@ -208,7 +208,7 @@ static cxInt cxViewLuaMake(lua_State *L)
     CX_LUA_RET_THIS(cxView);
 }
 
-CX_LUA_METHOD_BEGIN(cxView)
+CX_LUA_METHOD_BEG(cxView)
     {"appendView",cxViewLuaAppendView},
     {"appendAction",cxViewLuaAppendAction},
     {"createTimer",cxViewLuaCreateTimer},
@@ -376,6 +376,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     CX_METHOD_OVERRIDE(this->IsTouch, cxViewIsTouch);
     CX_METHOD_OVERRIDE(this->IsOnKey, cxViewIsOnKey);
     cxObjectSetReadAttrFunc(this, cxViewReadAttr);
+    
     this->actions = CX_ALLOC(cxHash);
     this->caches = CX_ALLOC(cxHash);
     this->removes = CX_ALLOC(cxArray);
@@ -400,8 +401,8 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_METHOD_RELEASE(this->IsOnKey);
     CX_METHOD_RELEASE(this->OnKey);
     CX_METHOD_RELEASE(this->Draw);
-    CX_METHOD_RELEASE(this->DrawAfter);
-    CX_METHOD_RELEASE(this->DrawBefore);
+    CX_METHOD_RELEASE(this->After);
+    CX_METHOD_RELEASE(this->Before);
     CX_SIGNAL_RELEASE(this->EmmitDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
@@ -866,7 +867,9 @@ void cxViewRemoved(cxAny pview)
         cxViewExit(this);
     }
     cxView parent = this->parentView;
+    //join to remove list
     cxArrayAppend(parent->removes, this);
+    
     cxListRemove(parent->subViews, this->subElement);
     this->subElement = NULL;
     this->parentView = NULL;
@@ -1035,7 +1038,7 @@ void cxViewDraw(cxAny pview)
     if(this->isCropping){
         cxOpenGLEnableScissor(this->scissor);
     }
-    CX_METHOD_FIRE(NULL, this->DrawBefore, this);
+    CX_METHOD_FIRE(NULL, this->Before, this);
     CX_METHOD_FIRE(NULL, this->Draw, this);
     if(this->isSort){
         cxViewSort(this);
@@ -1045,7 +1048,7 @@ void cxViewDraw(cxAny pview)
         cxViewDraw(view);
     }
     CX_SIGNAL_FIRE(this->EmmitDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
-    CX_METHOD_FIRE(NULL, this->DrawAfter,this);
+    CX_METHOD_FIRE(NULL, this->After,this);
     if(this->isCropping){
         cxOpenGLDisableScissor();
     }

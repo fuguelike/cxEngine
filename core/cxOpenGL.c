@@ -37,7 +37,7 @@ static cxInt cxOpenGLLuaSetShader(lua_State *L)
     return 0;
 }
 
-CX_LUA_METHOD_BEGIN(cxOpenGL)
+CX_LUA_METHOD_BEG(cxOpenGL)
     CX_LUA_PROPERTY(cxOpenGL, Shader),
 CX_LUA_METHOD_END(cxOpenGL)
 

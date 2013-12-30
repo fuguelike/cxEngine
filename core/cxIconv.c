@@ -25,7 +25,7 @@ static cxInt cxIconvLuaIconv(lua_State *L)
     return 1;
 }
 
-CX_LUA_METHOD_BEGIN(cxIconv)
+CX_LUA_METHOD_BEG(cxIconv)
     {"iconv",cxIconvLuaIconv},
 CX_LUA_METHOD_END(cxIconv)
 

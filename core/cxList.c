@@ -65,7 +65,7 @@ static cxInt cxListLuaClean(lua_State *L)
     return 0;
 }
 
-CX_LUA_METHOD_BEGIN(cxList)
+CX_LUA_METHOD_BEG(cxList)
     {"append",  cxListLuaAppend},
     {"prepend", cxListLuaPrepend},
     {"first",   cxListLuaFirst},

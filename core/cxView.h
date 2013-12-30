@@ -94,8 +94,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_ALLOC(cxViewIsTouchType, IsOnKey, cxAny, cxKey *);
     CX_METHOD_ALLOC(cxBool, OnKey, cxAny, cxKey *);
     CX_METHOD_ALLOC(void, Draw, cxAny);
-    CX_METHOD_ALLOC(void, DrawAfter, cxAny);
-    CX_METHOD_ALLOC(void, DrawBefore, cxAny);
+    CX_METHOD_ALLOC(void, After, cxAny);
+    CX_METHOD_ALLOC(void, Before, cxAny);
     CX_SIGNAL_ALLOC(EmmitDraw);
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);

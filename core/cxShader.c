@@ -19,7 +19,7 @@ static cxInt cxShaderLuaUsing(lua_State *L)
     return 0;
 }
 
-CX_LUA_METHOD_BEGIN(cxShader)
+CX_LUA_METHOD_BEG(cxShader)
     {"using",cxShaderLuaUsing},
 CX_LUA_METHOD_END(cxShader)
 
@@ -119,6 +119,7 @@ static bool cxShaderCompile(cxShader this,GLuint *shader, GLenum type, cxString 
 
 CX_OBJECT_INIT(cxShader, cxObject)
 {
+    this->super.cxBase = cxBaseTypeShader;
     CX_METHOD_OVERRIDE(this->Init, cxShaderInitPosColorTex);
 }
 CX_OBJECT_FREE(cxShader, cxObject)

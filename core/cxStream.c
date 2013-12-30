@@ -105,7 +105,7 @@ static cxInt cxStreamLuaMakeFile(lua_State *L)
     return 1;
 }
 
-CX_LUA_METHOD_BEGIN(cxStream)
+CX_LUA_METHOD_BEG(cxStream)
     {"open",cxStreamLuaOpen},
     {"read",cxStreamLuaRead},
     {"write",cxStreamLuaWrite},
@@ -125,6 +125,7 @@ void cxStreamTypeInit()
 
 CX_OBJECT_INIT(cxStream, cxObject)
 {
+    this->super.cxBase  = cxBaseTypeStream;
 }
 CX_OBJECT_FREE(cxStream, cxObject)
 {

@@ -31,7 +31,7 @@ static cxInt cxStringLuaMake(lua_State *L)
     CX_LUA_RET_THIS(cxString);
 }
 
-CX_LUA_METHOD_BEGIN(cxString)
+CX_LUA_METHOD_BEG(cxString)
     {"make",cxStringLuaMake},
     {"print",cxStringLuaPrint},
 CX_LUA_METHOD_END(cxString)

@@ -2,7 +2,7 @@
 
 <!--cxView.fixScale="cxFixScaleW()" cxView.w="640" cxView.h="960""-->
 <cxViewRoot
-    cxObject.bind="BindTest.New()"
+    cxObject.bind="BindTest.New({'a':100})"
     cxView.fill="0,0,0,0"
     cxViewRoot.onBegin="mainBegin()"
     cxViewRoot.onEnd="mainEnd()">

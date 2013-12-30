@@ -39,7 +39,7 @@ static cxInt cxViewRootLuaMake(lua_State *L)
     return 1;
 }
 
-CX_LUA_METHOD_BEGIN(cxViewRoot)
+CX_LUA_METHOD_BEG(cxViewRoot)
     {"getView",cxViewRootLuaGetView},
     {"make",cxViewRootLuaMake},
 CX_LUA_METHOD_END(cxViewRoot)

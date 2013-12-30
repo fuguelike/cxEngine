@@ -31,7 +31,7 @@ static cxInt cxTextureLuaCreateTexture(lua_State *L)
     return 1;
 }
 
-CX_LUA_METHOD_BEGIN(cxTexture)
+CX_LUA_METHOD_BEG(cxTexture)
     {"create",cxTextureLuaCreateTexture},
 CX_LUA_METHOD_END(cxTexture)
 
@@ -42,8 +42,8 @@ void cxTextureTypeInit()
 
 CX_OBJECT_INIT(cxTexture, cxObject)
 {
+    this->super.cxBase = cxBaseTypeTexture;
     this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE);
-//    this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_REPEAT,GL_REPEAT);
     this->keys = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxTexture, cxObject)

@@ -47,7 +47,27 @@ static cxInt cxObjectLuaAutoRelease(lua_State *L)
     return 1;
 }
 
-CX_LUA_METHOD_BEGIN(cxObject)
+static cxInt cxObjectLuagetType(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxObject);
+    lua_pushstring(L, this->cxType);
+    return 1;
+}
+
+static cxInt cxObjectLuaGetBind(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxObject);
+    if(this->cxBind > 0){
+        lua_getref(L, this->cxBind);
+    }else{
+        lua_pushnil(L);
+    }
+    return 1;
+}
+
+CX_LUA_METHOD_BEG(cxObject)
+    {"getBind",cxObjectLuaGetBind},
+    {"getType",cxObjectLuagetType},
     {"retain",cxObjectLuaRetain},
     {"release",cxObjectLuaRelease},
     {"autoRelease",cxObjectLuaAutoRelease},
