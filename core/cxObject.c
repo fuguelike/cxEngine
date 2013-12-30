@@ -73,9 +73,9 @@ void cxObjectAutoInit(cxObject this)
 
 void cxObjectAutoFree(cxObject this)
 {
-    if(this->bind > 0){
-        lua_unref(gL, this->bind);
-        this->bind = 0;
+    if(this->cxBind > 0){
+        lua_unref(gL, this->cxBind);
+        this->cxBind = 0;
     }
     CX_METHOD_RELEASE(this->ReadAttr);
 }
@@ -84,7 +84,7 @@ cxInt cxObjectBind(cxAny obj)
 {
     CX_RETURN(obj == NULL, 0);
     cxObject this = obj;
-    return this->bind;
+    return this->cxBind;
 }
 
 void cxObjectReadAttr(cxReaderAttrInfo *info)

@@ -162,7 +162,7 @@ CX_OBJECT_BEG(cxObject)
     cxUInt cxRefcount;
     cxObjectFunc cxFree;
     cxInt cxTag;
-    cxInt bind;
+    cxInt cxBind;
     cxAny cxRoot;
     CX_METHOD_ALLOC(void, ReadAttr,cxReaderAttrInfo *);
 CX_OBJECT_END(cxObject)

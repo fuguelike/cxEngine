@@ -102,9 +102,9 @@ cxBool cxXMLBindObject(cxReaderAttrInfo *info)
         return false;
     }
     cxObject obj = info->object;
-    obj->bind = lua_ref(gL, true);
+    obj->cxBind = lua_ref(gL, true);
     lua_pop(gL, 1);
-    return obj->bind > 0;
+    return obj->cxBind > 0;
 }
 
 static cxBool cxXMLAttrRunFunc(cxConstChars value,cxReaderAttrInfo *info)
