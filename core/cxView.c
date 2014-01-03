@@ -349,6 +349,8 @@ void cxViewReadAttr(cxReaderAttrInfo *info)
     cxViewSetDegrees(this, cxXMLReadFloatAttr(info, "cxView.degrees", kmRadiansToDegrees(this->angle)));
     //Chipmunk support
     cxViewCheckChipmunkSupport(info);
+    //cxAtlas support
+    this->supportAtlasSet = cxXMLReadBoolAttr(info, "cxAtlasSet.support", false);
     //view event
     cxXMLAppendEvent(info, this, cxView, onEnter);
     cxXMLAppendEvent(info, this, cxView, onExit);
@@ -444,6 +446,18 @@ cxVec2f cxViewPosition(cxAny pview)
 {
     cxView this = pview;
     return this->position;
+}
+
+cxBool cxViewSupportAtlasSet(cxAny pview)
+{
+    cxView this = pview;
+    return this->supportAtlasSet;
+}
+
+cxList cxViewSubViews(cxAny pview)
+{
+    cxView this = pview;
+    return this->subViews;
 }
 
 cxSize2f cxViewSize(cxAny pview)
@@ -865,11 +879,11 @@ void cxViewLayout(cxAny pview)
 {
     cxView this = pview;
     cxViewAutoResizing(this);
-    CX_EVENT_FIRE(this, onLayout);
     CX_LIST_FOREACH(this->subViews, ele){
         cxView view = ele->any;
         cxViewLayout(view);
     }
+    CX_EVENT_FIRE(this, onLayout);
 }
 
 //remove from parent

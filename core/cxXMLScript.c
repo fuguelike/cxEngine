@@ -51,8 +51,9 @@ static cxBool cxXMLAttrRunLuaFunc(cxReaderAttrInfo *info,cxJson json)
 {
     cxBool ret = false;
     if(lua_iscfunction(gL, -1) || lua_isfunction(gL, -1)){
-        if(!cxJsonPush(json))lua_pushlightuserdata(gL, info);
-        ret = (lua_pcall(gL, 1, 1, 0) == 0);
+        lua_pushlightuserdata(gL, info);
+        cxInt an = cxJsonPush(json) ? 2 : 1;
+        ret = (lua_pcall(gL, an, 1, 0) == 0);
         lua_remove(gL, -2);
     }else{
         lua_pop(gL, 1);

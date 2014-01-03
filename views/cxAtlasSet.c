@@ -9,12 +9,18 @@
 #include <core/cxViewRoot.h>
 #include "cxAtlasSet.h"
 
-static void cxAtlasSetUpdate(cxEvent *event)
+void cxAtlasSetLayout(cxEvent *event)
 {
     cxAtlasSet this = event->sender;
-    cxAtlasSetNumber(this, cxViewSubviewCount(this));
-    CX_LIST_FOREACH_SAFE(this->super.super.super.subViews, ele, tmp){
+    cxAtlasClean(this);
+    cxList subViews = cxViewSubViews(this);
+    cxAtlasSetNumber(this, cxListLength(subViews));
+    CX_LIST_FOREACH_SAFE(subViews, ele, tmp){
         cxSprite sp = ele->any;
+        if(!cxViewSupportAtlasSet(sp)){
+            continue;
+        }
+        cxViewSetVisible(sp, false);
         CX_ASSERT(cxObjectIsType(sp, cxSpriteTypeName), "cxAtlasSet must is cxSprite subview");
         CX_ASSERT(sp->texture == this->super.super.texture, "must is same texture");
         cxVec2f pos = cxViewPosition(sp);
@@ -22,7 +28,6 @@ static void cxAtlasSetUpdate(cxEvent *event)
         cxBoxTex2f tex = sp->texCoord;
         cxColor4f color = cxViewColor(sp);
         cxAtlasAppendBoxPoint(this, pos, size, tex, color);
-        cxViewRemoved(sp);
     }
 }
 
@@ -33,7 +38,7 @@ void cxAtlasSetReadAttr(cxReaderAttrInfo *info)
 
 CX_OBJECT_INIT(cxAtlasSet, cxAtlas)
 {
-    CX_EVENT_QUICK(this->super.super.super.onUpdate, cxAtlasSetUpdate);
+    CX_EVENT_QUICK(this->super.super.super.onLayout, cxAtlasSetLayout);
     cxObjectSetReadAttrFunc(this, cxAtlasSetReadAttr);
 }
 CX_OBJECT_FREE(cxAtlasSet, cxAtlas)

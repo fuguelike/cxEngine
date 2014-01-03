@@ -237,6 +237,7 @@ cxBool cxViewRootLoadWithReader(cxAny pview,xmlTextReaderPtr reader)
     }
     if(ret){
         cxAutoPoolPush();
+        cxObjectSetRoot(rootView, rootView);
         cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, rootView, rootView);
         cxObjectReadAttrRun(info);
         cxStackPush(stack, rootView);

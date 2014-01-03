@@ -530,7 +530,7 @@ cxString cxEngineLocalizedText(cxConstChars url)
 
 static cxInt cxLocalizedText(lua_State *L)
 {
-    cxConstChars url = luaL_checkstring(L, 1);
+    cxConstChars url = luaL_checkstring(L, 2);
     CX_ASSERT(url != NULL, "args error");
     cxString text = cxEngineLocalizedText(url);
     CX_LUA_PUSH_OBJECT(text);
@@ -539,7 +539,6 @@ static cxInt cxLocalizedText(lua_State *L)
 
 static cxInt cxEventLogger(lua_State *L)
 {
-    CX_LUA_DEF_THIS(cxObject);
     cxConstChars msg = luaL_checkstring(L, 2);
     CX_LOGGER("%s",msg);
     return 0;
@@ -802,7 +801,7 @@ static cxInt cxEventSetView(lua_State *L)
 
 static cxInt cxDataString(lua_State *L)
 {
-    cxConstChars url = luaL_checkstring(L, 1);
+    cxConstChars url = luaL_checkstring(L, 2);
     cxTypes types = cxEngineDataSet(url);
     if(types == NULL || !cxObjectIsType(types->any, cxStringTypeName)){
         lua_pushnil(L);
@@ -815,7 +814,7 @@ static cxInt cxDataString(lua_State *L)
 static cxInt cxRelativeW(lua_State *L)
 {
     cxEngine engine = cxEngineInstance();
-    cxFloat v = luaL_checknumber(L, 1);
+    cxFloat v = luaL_checknumber(L, 2);
     cxNumber num = cxNumberFloat(v * engine->winsize.w);
     CX_LUA_PUSH_OBJECT(num);
     return 1;
@@ -824,7 +823,7 @@ static cxInt cxRelativeW(lua_State *L)
 static cxInt cxRelativeH(lua_State *L)
 {
     cxEngine engine = cxEngineInstance();
-    cxFloat v = luaL_checknumber(L, 1);
+    cxFloat v = luaL_checknumber(L, 2);
     cxNumber num = cxNumberFloat(v * engine->winsize.h);
     CX_LUA_PUSH_OBJECT(num);
     return 1;
@@ -832,7 +831,7 @@ static cxInt cxRelativeH(lua_State *L)
 
 static cxInt cxBinNumber(lua_State *L)
 {
-    cxConstChars str = luaL_checkstring(L, 1);
+    cxConstChars str = luaL_checkstring(L, 2);
     cxUInt v = cxBinaryToUInt(str);
     cxNumber num = cxNumberUInt(v);
     CX_LUA_PUSH_OBJECT(num);
@@ -841,7 +840,7 @@ static cxInt cxBinNumber(lua_State *L)
 
 static cxInt cxHexNumber(lua_State *L)
 {
-    cxConstChars str = luaL_checkstring(L, 1);
+    cxConstChars str = luaL_checkstring(L, 2);
     cxUInt v = cxHexToUInt(str);
     cxNumber num = cxNumberUInt(v);
     CX_LUA_PUSH_OBJECT(num);
@@ -851,7 +850,7 @@ static cxInt cxHexNumber(lua_State *L)
 static cxInt cxCreateTexture(lua_State *L)
 {
     cxTextureAttr rv = CX_CREATE(cxTextureAttr);
-    cxConstChars str = luaL_checkstring(L, 1);
+    cxConstChars str = luaL_checkstring(L, 2);
     cxUrlPath path = cxUrlPathParse(str);
     if(path->count == 0){
         lua_pushnil(L);
@@ -888,7 +887,7 @@ static cxInt cxFixScaleH(lua_State *L)
 }
 static cxInt cxDataTypes(lua_State *L)
 {
-    cxConstChars url = luaL_checkstring(L, 1);
+    cxConstChars url = luaL_checkstring(L, 2);
     cxTypes types = cxEngineDataSet(url);
     CX_LUA_PUSH_OBJECT(types);
     return 1;
@@ -908,9 +907,59 @@ static cxInt cxIsAndroid(lua_State *L)
     return 1;
 }
 
+static cxInt cxViewMulripleW(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxReaderAttrInfo *);
+    cxConstChars v = NULL;
+    cxFloat n = 0;
+    if(!lua_istable(L, 2)){
+        luaL_error(L, "args error");
+        return 0;
+    }
+    
+    lua_getfield(L, 2, "v");
+    v = luaL_checkstring(L, -1);
+    lua_pop(L, 1);
+    
+    lua_getfield(L, 2, "n");
+    n = luaL_checknumber(L, -1);
+    lua_pop(L, 1);
+    
+    cxView view = cxViewRootGet(this->root, v);
+    cxNumber num = cxNumberFloat(view->size.w * n);
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
+static cxInt cxViewMulripleH(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxReaderAttrInfo *);
+    cxConstChars v = NULL;
+    cxFloat n = 0;
+    if(!lua_istable(L, 2)){
+        luaL_error(L, "args error");
+        return 0;
+    }
+    
+    lua_getfield(L, 2, "v");
+    v = luaL_checkstring(L, -1);
+    lua_pop(L, 1);
+    
+    lua_getfield(L, 2, "n");
+    n = luaL_checknumber(L, -1);
+    lua_pop(L, 1);
+    
+    cxView view = cxViewRootGet(this->root, v);
+    cxNumber num = cxNumberFloat(view->size.h * n);
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
 void cxEngineSystemInit()
 {
     //global func cxReaderAttrInfo *,args...
+    cxEngineRegisteFunc(cxViewMulripleW);
+    cxEngineRegisteFunc(cxViewMulripleH);
     cxEngineRegisteFunc(cxIsAndroid);
     cxEngineRegisteFunc(cxIsIOS);
     cxEngineRegisteFunc(cxLocalizedText);

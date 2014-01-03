@@ -17,6 +17,8 @@ CX_OBJECT_DEF(cxAtlasSet, cxAtlas)
 
 CX_OBJECT_END(cxAtlasSet)
 
+void cxAtlasSetLayout(cxEvent *event);
+
 void cxAtlasSetReadAttr(cxReaderAttrInfo *info);
 
 CX_C_END

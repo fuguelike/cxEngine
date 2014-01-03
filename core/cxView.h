@@ -60,6 +60,7 @@ typedef enum{
 typedef cxBox4f cxViewAutoResizeBox;
 
 CX_OBJECT_DEF(cxView, cxObject)
+    cxBool supportAtlasSet;
     cxChipmunkAttr *cAttr;
     cxAny args;
     cxViewAutoResizeMask autoMask;
@@ -116,6 +117,10 @@ cxAny cxViewGetCache(cxAny pview,cxConstChars key);
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 
 cxVec2f cxViewPosition(cxAny pview);
+
+cxList cxViewSubViews(cxAny pview);
+
+cxBool cxViewSupportAtlasSet(cxAny pview);
 
 void cxViewSetArgs(cxAny pview,cxAny args);
 
