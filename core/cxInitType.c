@@ -36,6 +36,7 @@ void cxInitTypes()
     cxActionTypeInit();
     cxActionSetTypeInit();
     cxTimerTypeInit();
+    cxRunParticleTypeInit();
     
     cxPlayerTypeInit();
     

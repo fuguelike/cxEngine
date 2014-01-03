@@ -13,12 +13,22 @@
 
 CX_C_BEGIN
 
+typedef enum {
+    cxRunParticleTypeNone,
+    cxRunParticleTypeDraw,
+    cxRunParticleTypeAfter,
+    cxRunParticleTypeBefore
+}cxRunParticleType;
+
 CX_OBJECT_DEF(cxRunParticle, cxAction)
+    cxRunParticleType type;
     cxAny particleView;
     CX_SLOT_ALLOC(DrawParticle);
 CX_OBJECT_END(cxRunParticle)
 
-cxRunParticle cxRunParticleCreate(cxAny particleView);
+cxRunParticle cxRunParticleCreateWithPEX(cxConstChars file,cxRunParticleType type);
+
+cxRunParticle cxRunParticleCreate(cxAny particleView, cxRunParticleType type);
 
 CX_C_END
 

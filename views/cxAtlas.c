@@ -22,6 +22,7 @@ void cxAtlasReadAttr(cxReaderAttrInfo *info)
     }
     //
     cxSpriteReadAttr(info);
+    //
 }
 
 static void cxAtlasVAODraw(void *pview)
@@ -163,6 +164,12 @@ CX_OBJECT_FREE(cxAtlas, cxSprite)
     glDeleteVertexArrays(1, &this->vaoid);
 }
 CX_OBJECT_TERM(cxAtlas, cxSprite)
+
+void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color)
+{
+    cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, size, tex, color);
+    cxAtlasAppend(pview, bp);
+}
 
 cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color)
 {

@@ -40,6 +40,8 @@ void cxViewRootRemove(cxAny pview,cxConstChars key);
 
 cxAny cxViewRootGet(cxAny pview,cxConstChars key);
 
+cxAny cxViewRootMake(cxString xml);
+
 cxBool cxViewRootLoad(cxAny pview,cxConstChars xml);
 
 cxBool cxViewRootLoadWithReader(cxAny pview,xmlTextReaderPtr reader);

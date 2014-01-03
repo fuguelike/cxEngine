@@ -18,6 +18,7 @@
 #include <views/cxTable.h>
 #include <views/cxScroll.h>
 #include <views/cxChipmunk.h>
+#include <views/cxAtlasSet.h>
 #include "cxViewRoot.h"
 #include "cxHashRoot.h"
 #include "cxActionRoot.h"
@@ -143,10 +144,38 @@ cxAny cxViewRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
         cview = CX_CREATE(cxScroll);
     }else if(ELEMENT_IS_TYPE(cxChipmunk)){
         cview = CX_CREATE(cxChipmunk);
+    }else if(ELEMENT_IS_TYPE(cxAtlasSet)){
+        cview = CX_CREATE(cxAtlasSet);
     }else{
         cview = CX_METHOD_FIRE(NULL, engine->MakeView,temp,reader);
     }
     return cview;
+}
+
+
+static void cxViewRootMakeErrorFunc(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
+{
+    *(cxBool *)arg = true;
+    CX_ERROR("%s",msg);
+}
+
+cxAny cxViewRootMake(cxString xml)
+{
+    cxBool error = false;
+    xmlTextReaderPtr reader = cxXMLReaderForString(xml, cxViewRootMakeErrorFunc, &error);
+    while(xmlTextReaderRead(reader) && !error){
+        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
+            continue;
+        }
+        cxConstChars temp = cxXMLReadElementName(reader);
+        cxAny any = cxViewRootMakeElement(temp, reader);
+        if(any != NULL){
+            cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, NULL, any);
+            cxObjectReadAttrRun(info);
+            return any;
+        }
+    }
+    return NULL;
 }
 
 static void cxViewRootLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack stack)

@@ -313,6 +313,17 @@ cxInt cxReadInts(cxConstChars ptr,cxInt *values)
     return c;
 }
 
+cxString cxXMLReaderReadInnerXml(xmlTextReaderPtr reader)
+{
+    xmlChar *xml = xmlTextReaderReadInnerXml(reader);
+    cxString rv = NULL;
+    if(xml != NULL){
+        rv = cxStringConstChars((cxConstChars)xml);
+    }
+    xmlFree(xml);
+    return rv;
+}
+
 cxString cxXMLReaderReadOuterXml(xmlTextReaderPtr reader)
 {
     xmlChar *xml = xmlTextReaderReadOuterXml(reader);

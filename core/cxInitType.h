@@ -43,6 +43,7 @@
 #include <views/cxTable.h>
 #include <views/cxClipping.h>
 
+#include <actions/cxRunParticle.h>
 #include <actions/cxActionSet.h>
 #include <actions/cxMove.h>
 #include <actions/cxFade.h>

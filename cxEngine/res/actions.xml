@@ -20,7 +20,7 @@
     <cxRunParticle id="particle" cxRunParticle.pex="particle.pex" />
     <cxMove id="move"
         cxAction.speed="1.0"
-        cxAction.time="30"
+        cxAction.time="1.5"
         cxMove.x="500"
         cxMove.y="500"
         cxAction.assist="50"

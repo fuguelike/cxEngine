@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <ctype.h>
 #include "cxEngine.h"
 #include "cxMD5.h"
 #include "cxString.h"
@@ -165,6 +166,17 @@ cxString cxStringBinary(cxPointer d,cxInt l)
     cxString rv = CX_CREATE(cxString);
     cxStringAppend(rv, d, l);
     return rv;
+}
+
+cxBool cxConstCharsIsNumber(cxConstChars s)
+{
+    CX_RETURN(s == NULL, false);
+    for(cxInt i = 0; i < strlen(s); i++){
+        if(!isnumber(s[i])){
+            return false;
+        }
+    }
+    return true;
 }
 
 cxString cxStringAttach(cxChar *d,cxInt l)

@@ -230,21 +230,26 @@ void cxViewTypeInit()
 static void cxViewRootReadAutoResize(cxReaderAttrInfo *info)
 {
     cxView this = info->object;
-    if(cxXMLHasAttr(info->reader, "cxView.left")){
+    cxFloat v = 0;
+    v = cxXMLReadFloatAttr(info, "cxView.left", -1) * this->fixscale.x;
+    if(v >= 0){
         this->autoMask |= cxViewAutoResizeLeft;
-        this->autoBox.l = cxXMLReadFloatAttr(info, "cxView.left", 0) * this->fixscale.x;
+        this->autoBox.l = v;
     }
-    if(cxXMLHasAttr(info->reader, "cxView.right")){
+    v = cxXMLReadFloatAttr(info, "cxView.right", -1) * this->fixscale.x;
+    if(v >= 0){
         this->autoMask |= cxViewAutoResizeRight;
-        this->autoBox.r = cxXMLReadFloatAttr(info, "cxView.right", 0) * this->fixscale.x;
+        this->autoBox.r = v;
     }
-    if(cxXMLHasAttr(info->reader, "cxView.top")){
+    v = cxXMLReadFloatAttr(info, "cxView.top", -1) * this->fixscale.x;
+    if(v >= 0){
         this->autoMask |= cxViewAutoResizeTop;
-        this->autoBox.t = cxXMLReadFloatAttr(info, "cxView.top", 0) * this->fixscale.y;
+        this->autoBox.t = v;
     }
-    if(cxXMLHasAttr(info->reader, "cxView.bottom")){
+    v = cxXMLReadFloatAttr(info, "cxView.bottom", -1) * this->fixscale.x;
+    if(v >= 0){
         this->autoMask |= cxViewAutoResizeBottom;
-        this->autoBox.b = cxXMLReadFloatAttr(info, "cxView.bottom", 0) * this->fixscale.y;
+        this->autoBox.b = v;
     }
     if(cxXMLHasAttr(info->reader, "cxView.fill")){
         this->autoMask = cxViewAutoResizeFill;
@@ -403,7 +408,10 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_METHOD_RELEASE(this->Draw);
     CX_METHOD_RELEASE(this->After);
     CX_METHOD_RELEASE(this->Before);
+    
     CX_SIGNAL_RELEASE(this->EmmitDraw);
+    CX_SIGNAL_RELEASE(this->EmmitAfter);
+    CX_SIGNAL_RELEASE(this->EmmitBefore);
 }
 CX_OBJECT_TERM(cxView, cxObject)
 
@@ -713,6 +721,12 @@ void cxViewSetAngle(cxAny pview,cxFloat angle)
     CX_RETURN(cxFloatEqu(this->angle,angle));
     this->angle = angle;
     this->isDirty = true;
+}
+
+cxInt cxViewSubviewCount(cxAny pview)
+{
+    cxView this = pview;
+    return cxListLength(this->subViews);
 }
 
 cxVec2f cxViewScale(cxAny pview)
@@ -1038,17 +1052,25 @@ void cxViewDraw(cxAny pview)
     if(this->isCropping){
         cxOpenGLEnableScissor(this->scissor);
     }
+    
     CX_METHOD_FIRE(NULL, this->Before, this);
+    CX_SIGNAL_FIRE(this->EmmitBefore, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    
     CX_METHOD_FIRE(NULL, this->Draw, this);
+    CX_SIGNAL_FIRE(this->EmmitDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    
     if(this->isSort){
         cxViewSort(this);
     }
+    
     CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    CX_SIGNAL_FIRE(this->EmmitDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    
+    CX_SIGNAL_FIRE(this->EmmitAfter, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
     CX_METHOD_FIRE(NULL, this->After,this);
+    
     if(this->isCropping){
         cxOpenGLDisableScissor();
     }

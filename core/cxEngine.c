@@ -507,29 +507,42 @@ cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
     return (ret || cxViewTouch(this->window, &this->touch));
 }
 
-static cxInt cxLocalizedText(lua_State *L)
+cxString cxEngineLocalizedText(cxConstChars url)
 {
     cxEngine this = cxEngineInstance();
-    cxConstChars url = luaL_checkstring(L, 1);
-    CX_ASSERT(url != NULL, "args error");
     cxUrlPath path = cxUrlPathParse(url);
     
     cxTypes langTypes= cxEngineDataSet("appConfig.xml?lang");
     CX_ASSERT(langTypes != NULL, "appConfig.xml must set lang filed");
+    
     cxString dir = cxHashGet(langTypes->any, cxHashStrKey(cxStringBody(this->lang)));
     if(dir == NULL){
         dir = cxHashFirst(langTypes->any);
     }
     CX_ASSERT(dir != NULL, "get lang dir error");
+    
     cxConstChars file = CX_CONST_STRING("%s/%s",cxStringBody(dir),path->path);
     
     cxTypes types = cxEngineDataSet(CX_CONST_STRING("%s?%s",file,path->key));
-    CX_RETURN(types == NULL, 0);
-    
-    CX_ASSERT(cxTypesIsType(types, cxTypesString), "must is cxTypesString type");
-    
-    CX_LUA_PUSH_OBJECT(types->any);
+    CX_RETURN(types == NULL || !cxTypesIsType(types, cxTypesString), NULL);
+    return types->any;
+}
+
+static cxInt cxLocalizedText(lua_State *L)
+{
+    cxConstChars url = luaL_checkstring(L, 1);
+    CX_ASSERT(url != NULL, "args error");
+    cxString text = cxEngineLocalizedText(url);
+    CX_LUA_PUSH_OBJECT(text);
     return 1;
+}
+
+static cxInt cxEventLogger(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxObject);
+    cxConstChars msg = luaL_checkstring(L, 2);
+    CX_LOGGER("%s",msg);
+    return 0;
 }
 
 static cxInt cxEventAction(lua_State *L)
@@ -541,6 +554,10 @@ static cxInt cxEventAction(lua_State *L)
     cxBool cache = false;
     cxConstChars curve = NULL;
     cxFloat delay = 0;
+    if(!lua_istable(L, 2)){
+        luaL_error(L, "args error");
+        return 0;
+    }
     //
     lua_getfield(L, 2, "delay");
     if(lua_isnumber(L, -1)){
@@ -582,7 +599,7 @@ static cxInt cxEventAction(lua_State *L)
     }else if(this->cxBase == cxBaseTypeView){
         view = this;
     }else{
-        CX_WARN("base view and action can use this event");
+        luaL_error(L,"base view and action can use this event");
         return 0;
     }
     CX_ASSERT(view != NULL, "this event's sender must base cxAction and cxView");
@@ -657,13 +674,6 @@ static cxInt cxEventMusic(lua_State *L)
     }
     lua_pop(L,1);
     cxPlayMusic(src, loop);
-    return 0;
-}
-
-static cxInt cxEventLogger(lua_State *L)
-{
-    cxConstChars msg = luaL_checkstring(L, 2);
-    CX_LOGGER("%s",msg);
     return 0;
 }
 

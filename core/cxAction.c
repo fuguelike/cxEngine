@@ -41,8 +41,9 @@ void cxActionReadAttr(cxReaderAttrInfo *info)
     //delay
     cxActionSetDelay(this, cxXMLReadFloatAttr(info, "cxAction.delay", this->delay));
     //time
-    cxFloat time = cxXMLReadFloatAttr(info, "cxAction.time", this->duration);
-    cxActionSetDuration(this, time);
+    cxActionSetDuration(this, cxXMLReadFloatAttr(info, "cxAction.time", this->duration));
+    //init time
+    cxActionSetDurationInit(this, cxXMLReadFloatAttr(info, "cxAction.initTime", this->durationInit));
     //curve
     cxConstChars scurve = cxXMLAttr(info->reader, "cxAction.curve");
     cxCurveItem curve = cxCurveGet(scurve);
@@ -121,6 +122,12 @@ void cxActionSetDuration(cxAny pav,cxFloat time)
     this->duration = time;
 }
 
+void cxActionSetDurationInit(cxAny pav,cxFloat time)
+{
+    cxAction this = pav;
+    this->durationInit = time;
+}
+
 void cxActionSetSpeed(cxAny pav,cxFloat speed)
 {
     cxAction this = pav;
@@ -152,7 +159,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         CX_ASSERT(this->view != NULL, "action viewptr null");
         this->prevTime = 0;
         this->delayElapsed = 0;
-        this->durationElapsed = 0;
+        this->durationElapsed = this->durationInit;
         CX_METHOD_FIRE(NULL, this->Init, this);
         CX_EVENT_FIRE(this, onStart);
     }

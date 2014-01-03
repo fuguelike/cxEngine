@@ -23,6 +23,7 @@ CX_OBJECT_DEF(cxAction, cxObject)
     cxFloat prevTime;
     cxFloat delta;
     cxFloat delayElapsed;
+    cxFloat durationInit;
     cxFloat duration;
     cxFloat durationElapsed;
     cxBool stepHide;        //at view hide step action default false
@@ -58,6 +59,8 @@ cxBool cxActionForever(cxAny pav);
 void cxActionReadAttr(cxReaderAttrInfo *info);
 
 void cxActionSetDuration(cxAny pav,cxFloat time);
+
+void cxActionSetDurationInit(cxAny pav,cxFloat time);
 
 void cxActionSetSpeed(cxAny pav,cxFloat speed);
 

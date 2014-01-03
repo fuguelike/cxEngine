@@ -44,6 +44,13 @@ static void cxRunnerItemStop(cxEvent *event)
     this->count --;
 }
 
+cxRunner cxRunnerCreate(cxAny core)
+{
+    cxRunner this = CX_CREATE(cxRunner);
+    this->core = core;
+    return this;
+}
+
 void cxRunnerAppend(cxAny runner,cxAny pav, cxAny pview)
 {
     cxAction action = pav;

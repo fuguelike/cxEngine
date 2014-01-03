@@ -24,6 +24,8 @@ CX_C_BEGIN
 
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
+#define cxEngineRegisteNameFunc(n,f) lua_pushcfunction(gL, f);lua_setglobal(gL, #n)
+
 #define cxEngineRegisteFunc(n) lua_pushcfunction(gL, n);lua_setglobal(gL, #n)
 
 CX_OBJECT_DEF(cxEngine, cxObject)
@@ -126,6 +128,10 @@ void cxEngineDraw();
 void cxEngineLayout(cxInt width,cxInt height);
 
 void cxEngineDestroy();
+
+//
+
+cxString cxEngineLocalizedText(cxConstChars url);
 
 CX_C_END
 

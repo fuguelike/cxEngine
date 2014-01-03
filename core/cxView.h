@@ -97,6 +97,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_ALLOC(void, After, cxAny);
     CX_METHOD_ALLOC(void, Before, cxAny);
     CX_SIGNAL_ALLOC(EmmitDraw);
+    CX_SIGNAL_ALLOC(EmmitAfter);
+    CX_SIGNAL_ALLOC(EmmitBefore);
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
@@ -122,6 +124,8 @@ cxAny cxViewArgs(cxAny pview);
 cxVec2f cxViewScale(cxAny pview);
 
 cxSize2f cxViewSize(cxAny pview);
+
+cxInt cxViewSubviewCount(cxAny pview);
 
 cxColor4f cxViewColor(cxAny pview);
 
@@ -160,6 +164,7 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav);
 void cxViewSetOrder(cxAny pview,cxInt order);
 
 cxBool cxViewOnKey(cxAny pview,cxKey *key);
+
 
 cxUInt cxViewIsOnKey(cxAny pview,cxKey *key);
 
