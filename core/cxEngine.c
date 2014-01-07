@@ -427,6 +427,15 @@ void cxEngineRemoveScript(cxConstChars file)
     cxHashDel(this->scripts, cxHashStrKey(file));
 }
 
+cxAny cxEngineDB(cxConstChars url)
+{
+    cxTypes type = cxEngineDataSet(url);
+    if(type == NULL || type->any == NULL){
+        return NULL;
+    }
+    return cxTypesIsType(type, cxTypesDB) ? type->any : NULL;
+}
+
 cxAny cxEngineDataSet(cxConstChars url)
 {
     CX_RETURN(url == NULL, NULL);

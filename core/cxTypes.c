@@ -148,7 +148,7 @@ cxAny cxLuaObjectValue(lua_State *L,cxInt n)
 {
     if(lua_isnumber(L, n)){
         lua_Number num = lua_tonumber(L, n);
-        return CX_LUA_IS_INT(num) ? cxNumberInt(num) : cxNumberFloat(num);
+        return CX_LUA_NUMBER_IS_INT(num) ? cxNumberInt(num) : cxNumberFloat(num);
     }
     if(lua_isstring(L, n)){
         return cxStringAllocChars(lua_tostring(L, n));

@@ -82,6 +82,8 @@ void cxEngineSetLocalLang(cxString lang);
 
 cxAny cxEngineDataSet(cxConstChars url);
 
+cxAny cxEngineDB(cxConstChars url);
+
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 
 void cxEngineSystemInit();
