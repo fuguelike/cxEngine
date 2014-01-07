@@ -30,6 +30,11 @@ static cxStack cxAutoPoolStack()
     return autopool;
 }
 
+void cxAutoPoolInit()
+{
+    
+}
+
 void cxAutoPoolDestroy()
 {
     CX_RELEASE(autopool);

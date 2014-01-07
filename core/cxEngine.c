@@ -286,22 +286,20 @@ void cxEngineLayout(cxInt width,cxInt height)
 
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
+    cxAutoPoolInit();
     kmGLInitialize();
     xmlInitGlobals();
     this->frameInterval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->isTouch = true;
     this->contentScaleFactor = 1.0f;
-    this->scale = cxVec2fv(1.0f, 1.0f);
-    
+    this->scale     = cxVec2fv(1.0f, 1.0f);
     this->window    = CX_ALLOC(cxWindow);
-    
     this->scripts   = CX_ALLOC(cxHash);
     this->datasets  = CX_ALLOC(cxHash);
     this->actions   = CX_ALLOC(cxHash);
     this->dbenvs    = CX_ALLOC(cxHash);
     this->bmpfonts  = CX_ALLOC(cxHash);
-    
     gL = lua_newstate(cxEngineLuaAllocFunc, this);
     CX_ASSERT(gL != NULL, "new lua state error");
     lua_atpanic(gL, cxEngineLuaPanic);
