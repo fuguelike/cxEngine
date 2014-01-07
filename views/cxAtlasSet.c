@@ -22,7 +22,6 @@ void cxAtlasSetLayout(cxEvent *event)
         }
         cxViewSetVisible(sp, false);
         CX_ASSERT(cxObjectIsType(sp, cxSpriteTypeName), "cxAtlasSet must is cxSprite subview");
-        CX_ASSERT(sp->texture == this->super.super.texture, "must is same texture");
         cxVec2f pos = cxViewPosition(sp);
         cxSize2f size = cxViewSize(sp);
         cxBoxTex2f tex = sp->texCoord;

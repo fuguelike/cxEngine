@@ -953,6 +953,7 @@ static cxInt cxViewMulripleH(lua_State *L)
     lua_getfield(L, 2, "n");
     n = luaL_checknumber(L, -1);
     lua_pop(L, 1);
+    
     cxView view = cxViewRootGet(this->root, v);
     CX_ASSERT(view != NULL, "view is null");
     cxNumber num = cxNumberFloat(view->size.h * n);
@@ -960,9 +961,41 @@ static cxInt cxViewMulripleH(lua_State *L)
     return 1;
 }
 
+static cxInt cxSpriteTexture(lua_State *L)
+{
+    CX_LUA_DEF_THIS(cxReaderAttrInfo *);
+    cxConstChars v = NULL;
+    cxConstChars k = NULL;
+    if(!lua_istable(L, 2)){
+        luaL_error(L, "args error");
+        return 0;
+    }
+    lua_getfield(L, 2, "v");
+    v = luaL_checkstring(L, -1);
+    lua_pop(L, 1);
+    lua_getfield(L, 2, "k");
+    k = luaL_checkstring(L, -1);
+    lua_pop(L, 1);
+    if(v == NULL){
+        luaL_error(L, "v args error");
+        return 0;
+    }
+    cxTextureAttr attr = CX_CREATE(cxTextureAttr);
+    cxSprite sprite = cxViewRootGet(this->root, v);
+    CX_ASSERT(sprite != NULL, "sprite is null");
+    CX_RETAIN_SWAP(attr->texture, sprite->texture);
+    if(k != NULL){
+        attr->box = cxTextureBox(sprite->texture, k);
+        attr->size = cxTextureSize(sprite->texture, k);
+    }
+    CX_LUA_PUSH_OBJECT(attr);
+    return 1;
+}
+
 void cxEngineSystemInit()
 {
     //global func cxReaderAttrInfo *,args...
+    cxEngineRegisteFunc(cxSpriteTexture);
     cxEngineRegisteFunc(cxViewMulripleW);
     cxEngineRegisteFunc(cxViewMulripleH);
     cxEngineRegisteFunc(cxIsAndroid);

@@ -175,7 +175,6 @@ void cxSpriteSetTextureAttr(cxAny pview,cxTextureAttr attr)
     CX_RETURN(attr == NULL);
     cxSpriteSetTexture(pview, attr->texture);
     cxSpriteSetBoxTex(pview, attr->box);
-    //
     if(cxViewZeroSize(pview)){
         cxViewSetSize(pview, attr->size);
     }
