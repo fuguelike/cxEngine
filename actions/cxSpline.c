@@ -66,6 +66,7 @@ static void cxSplineReset(cxAny pav)
 {
     cxSpline this = pav;
     this->index = -1;
+    cxArrayClean(this->points);
 }
 
 CX_OBJECT_INIT(cxSpline, cxAction)

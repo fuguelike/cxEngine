@@ -380,6 +380,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->fixscale = cxVec2fv(1.0f, 1.0f);
     this->subViews = CX_ALLOC(cxList);
+    
     CX_METHOD_OVERRIDE(this->IsTouch, cxViewIsTouch);
     CX_METHOD_OVERRIDE(this->IsOnKey, cxViewIsOnKey);
     cxObjectSetReadAttrFunc(this, cxViewReadAttr);
@@ -392,17 +393,20 @@ CX_OBJECT_FREE(cxView, cxObject)
 {
     allocator->free(this->cAttr);
     this->cAttr = NULL;
+    
     CX_RELEASE(this->removes);
+    CX_RELEASE(this->subViews);
+    CX_RELEASE(this->actions);
+    CX_RELEASE(this->caches);
+    CX_RELEASE(this->args);
+    
     CX_EVENT_RELEASE(this->onDirty);
     CX_EVENT_RELEASE(this->onEnter);
     CX_EVENT_RELEASE(this->onExit);
     CX_EVENT_RELEASE(this->onUpdate);
     CX_EVENT_RELEASE(this->onResize);
     CX_EVENT_RELEASE(this->onLayout);
-    CX_RELEASE(this->subViews);
-    CX_RELEASE(this->actions);
-    CX_RELEASE(this->caches);
-    CX_RELEASE(this->args);
+    
     CX_METHOD_RELEASE(this->IsTouch);
     CX_METHOD_RELEASE(this->Touch);
     CX_METHOD_RELEASE(this->IsOnKey);
@@ -1062,20 +1066,19 @@ void cxViewDraw(cxAny pview)
     kmGLPushMatrix();
     kmGLMultMatrix(&this->normalMatrix);
     kmGLMultMatrix(&this->anchorMatrix);
-    //
+    //check cropping
     if(this->isCropping){
         cxOpenGLEnableScissor(this->scissor);
     }
-    
+    //check sort
+    if(this->isSort){
+        cxViewSort(this);
+    }
     CX_METHOD_FIRE(NULL, this->Before, this);
     CX_SIGNAL_FIRE(this->EmmitBefore, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
     
     CX_METHOD_FIRE(NULL, this->Draw, this);
     CX_SIGNAL_FIRE(this->EmmitDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
-    
-    if(this->isSort){
-        cxViewSort(this);
-    }
     
     CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
@@ -1084,7 +1087,7 @@ void cxViewDraw(cxAny pview)
     
     CX_SIGNAL_FIRE(this->EmmitAfter, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
     CX_METHOD_FIRE(NULL, this->After,this);
-    
+    //
     if(this->isCropping){
         cxOpenGLDisableScissor();
     }

@@ -916,16 +916,14 @@ static cxInt cxViewMulripleW(lua_State *L)
         luaL_error(L, "args error");
         return 0;
     }
-    
     lua_getfield(L, 2, "v");
     v = luaL_checkstring(L, -1);
     lua_pop(L, 1);
-    
     lua_getfield(L, 2, "n");
     n = luaL_checknumber(L, -1);
     lua_pop(L, 1);
-    
     cxView view = cxViewRootGet(this->root, v);
+    CX_ASSERT(view != NULL, "view is null");
     cxNumber num = cxNumberFloat(view->size.w * n);
     CX_LUA_PUSH_OBJECT(num);
     return 1;
@@ -940,16 +938,14 @@ static cxInt cxViewMulripleH(lua_State *L)
         luaL_error(L, "args error");
         return 0;
     }
-    
     lua_getfield(L, 2, "v");
     v = luaL_checkstring(L, -1);
     lua_pop(L, 1);
-    
     lua_getfield(L, 2, "n");
     n = luaL_checknumber(L, -1);
     lua_pop(L, 1);
-    
     cxView view = cxViewRootGet(this->root, v);
+    CX_ASSERT(view != NULL, "view is null");
     cxNumber num = cxNumberFloat(view->size.h * n);
     CX_LUA_PUSH_OBJECT(num);
     return 1;
