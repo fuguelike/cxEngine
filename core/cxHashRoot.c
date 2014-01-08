@@ -113,7 +113,9 @@ static cxAny cxReadValues(cxHashRoot root,cxConstChars temp,xmlTextReaderPtr rea
     CX_RETURN(text == NULL, NULL);
     cxConstChars value = cxStringBody(text);
     cxAny rv = NULL;
-    if(ELEMENT_IS_TYPE(cxBool)) {
+    if(ELEMENT_IS_TYPE(cxPoint) && cxReadFloats(value, &vm.vp.vertices.x) == 9){
+        rv = cxNumberPoint(vm.vp);
+    }else if(ELEMENT_IS_TYPE(cxBool)){
         rv = cxNumberBool(cxConstCharsEqu(value, "true"));
     }else if(ELEMENT_IS_TYPE(cxInt)){
         rv = cxNumberInt(atoi(value));
@@ -125,15 +127,15 @@ static cxAny cxReadValues(cxHashRoot root,cxConstChars temp,xmlTextReaderPtr rea
         rv = cxNumberVec2f(vm.vec2f);
     }else if (ELEMENT_IS_TYPE(cxSize2f) && cxReadFloats(value, &vm.size2f.w) == 2){
         rv = cxNumberSize2f(vm.size2f);
-    }else if(ELEMENT_IS_TYPE(cxColor4f) && cxReadFloats(value, &vm.color4f.r) == 4){
+    }else if(ELEMENT_IS_TYPE(cxColor4f) && cxReadFloats(value, &vm.color4f.r) >= 3){
         rv = cxNumberColor4f(vm.color4f);
     }else if(ELEMENT_IS_TYPE(cxVec2i) && cxReadInts(value, &vm.vec2i.x) == 2){
         rv = cxNumberVec2i(vm.vec2i);
     }else if(ELEMENT_IS_TYPE(cxColor4b) && cxReadInts(value, b4) >= 3){
-        vm.color4f.r = (cxFloat)b4[0]/255.0f;
-        vm.color4f.g = (cxFloat)b4[1]/255.0f;
-        vm.color4f.b = (cxFloat)b4[2]/255.0f;
-        vm.color4f.a = (cxFloat)b4[3]/255.0f;
+        vm.color4f.r = ((cxFloat)b4[0])/255.0f;
+        vm.color4f.g = ((cxFloat)b4[1])/255.0f;
+        vm.color4f.b = ((cxFloat)b4[2])/255.0f;
+        vm.color4f.a = ((cxFloat)b4[3])/255.0f;
         rv = cxNumberColor4f(vm.color4f);
     }else if(ELEMENT_IS_TYPE(cxHash)){
         rv = cxHashRootReadHash(root,reader);

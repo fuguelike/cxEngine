@@ -44,6 +44,8 @@ void cxSpriteSetFlipX(cxAny pview,cxBool flipx);
 
 void cxSpriteSetFlipY(cxAny pview,cxBool flipy);
 
+void cxSpriteBindTexture(cxAny pview);
+
 void cxSpriteDraw(cxAny pview);
 
 void cxSpriteSetShader(cxAny pview,cxConstChars key);

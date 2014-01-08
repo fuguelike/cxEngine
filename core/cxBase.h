@@ -110,7 +110,6 @@ CX_EVENT_APPEND(_event_,_func_,NULL)
 do{                                                             \
     cxEvent *_newptr_ = allocator->malloc(sizeof(cxEvent));     \
     _newptr_->func = _func_;                                    \
-    _newptr_->name= #_event_;                                   \
     _newptr_->args = NULL;                                      \
     CX_RETAIN_SWAP(_newptr_->arg,_args_);                       \
     DL_PREPEND(_event_, _newptr_);                              \

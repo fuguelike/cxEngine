@@ -19,6 +19,7 @@
 #include <views/cxScroll.h>
 #include <views/cxChipmunk.h>
 #include <views/cxAtlasSet.h>
+#include <views/cxPolygon.h>
 #include "cxViewRoot.h"
 #include "cxHashRoot.h"
 #include "cxActionRoot.h"
@@ -146,6 +147,8 @@ cxAny cxViewRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
         cview = CX_CREATE(cxChipmunk);
     }else if(ELEMENT_IS_TYPE(cxAtlasSet)){
         cview = CX_CREATE(cxAtlasSet);
+    }else if(ELEMENT_IS_TYPE(cxPolygon)){
+        cview = CX_CREATE(cxPolygon);
     }else{
         cview = CX_METHOD_FIRE(NULL, engine->MakeView,temp,reader);
     }

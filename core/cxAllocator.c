@@ -94,7 +94,7 @@ cxAny cxObjectAutoRelease(cxAny ptr)
 
 cxAny cxObjectCreate(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
 {
-    cxAny any = cxObjectAlloc(type,size,initFunc,freeFunc);
+    cxAny any = cxObjectAlloc(type, size, initFunc, freeFunc);
     return cxObjectAutoRelease(any);
 }
 

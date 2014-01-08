@@ -295,8 +295,8 @@ typedef struct {
 typedef struct {
     kmScalar u;
     kmScalar v;
-} cxTexCoord2f;
-#define cxTex2fv(u,v)   (cxTexCoord2f){u,v}
+} cxTex2f;
+#define cxTex2fv(u,v)   (cxTex2f){u,v}
 
 typedef struct {
     kmScalar l;
@@ -341,7 +341,7 @@ typedef struct {
 typedef struct {
     cxVec2f *vs;
     cxInt num;
-} cxPolygon;
+} cxPoints;
 
 typedef struct {
     cxVec3f lt;
@@ -353,7 +353,7 @@ typedef struct {
 typedef struct {
     cxVec3f vertices;
     cxColor4f colors;
-    cxTexCoord2f texcoords;
+    cxTex2f texcoords;
 } cxPoint;
 
 typedef struct {
@@ -369,10 +369,10 @@ typedef struct {
 } cxLinePoint;
 
 typedef struct {
-    cxTexCoord2f lt;
-    cxTexCoord2f lb;
-    cxTexCoord2f rt;
-    cxTexCoord2f rb;
+    cxTex2f lt;
+    cxTex2f lb;
+    cxTex2f rt;
+    cxTex2f rb;
 } cxBoxTex2f;
 #define cxBoxTex2fDefault() (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, 1.0f),cxTex2fv(1.0f, 0.0f),cxTex2fv(1.0f, 1.0f)}
 #define cxBoxTex2Scale(v)   (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, v),cxTex2fv(v, 0.0f),cxTex2fv(v, v)}
@@ -416,7 +416,7 @@ cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t);
 
 cxBool cxBox2fContainPoint(const cxBox4f box,const cxVec2f pos);
 
-cxBool cxPolygonContainPoint(const cxPolygon *polygon,const cxVec2f tp);
+cxBool cxPolygonContainPoint(const cxPoints *polygon,const cxVec2f tp);
 
 //if r1 contains r2 return true
 cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2);

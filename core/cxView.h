@@ -170,7 +170,6 @@ void cxViewSetOrder(cxAny pview,cxInt order);
 
 cxBool cxViewOnKey(cxAny pview,cxKey *key);
 
-
 cxUInt cxViewIsOnKey(cxAny pview,cxKey *key);
 
 cxBool cxViewTouch(cxAny pview,cxTouch *touch);

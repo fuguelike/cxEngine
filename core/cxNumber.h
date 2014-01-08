@@ -39,6 +39,7 @@ typedef enum {
     cxNumberTypeVec2fRange,
     cxNumberTypeColor4fRange,
     cxNumberTypeVec3f,
+    cxNumberTypePoint
 }cxNumberType;
 
 typedef union {
@@ -66,12 +67,15 @@ typedef union {
     cxFloatRange vfr;
     cxVec2fRange vvr;
     cxColor4fRange vcr;
+    cxPoint vp;
 }cxNumberValue;
 
 CX_OBJECT_DEF(cxNumber, cxObject)
     cxNumberValue value;
     cxNumberType type;
 CX_OBJECT_END(cxNumber)
+
+cxPoint cxNumberToPoint(cxNumber this);
 
 cxBool cxNumberToBool(cxNumber this);
 
@@ -120,6 +124,8 @@ cxUInt64 cxNumberToUInt64(cxNumber this);
 cxFloat cxNumberToFloat(cxNumber this);
 
 cxDouble cxNumberToDouble(cxNumber this);
+
+cxNumber cxNumberPoint(cxPoint v);
 
 cxNumber cxNumberBool(cxBool v);
 

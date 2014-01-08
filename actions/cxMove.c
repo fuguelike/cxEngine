@@ -56,10 +56,11 @@ CX_OBJECT_FREE(cxMove, cxAction)
 }
 CX_OBJECT_TERM(cxMove, cxAction)
 
-cxMove cxMoveCreate(cxFloat dutation, cxVec2f endpos)
+cxMove cxMoveCreate(cxFloat dutation, cxVec2f pos)
 {
     cxMove this = CX_CREATE(cxMove);
     this->super.duration = dutation;
-    this->endPos = endpos;
+    this->endPos = pos;
     return this;
 }
+

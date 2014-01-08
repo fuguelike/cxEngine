@@ -50,16 +50,22 @@ void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor)
     this->dfactor = dfactor;
 }
 
+void cxSpriteBindTexture(cxAny pview)
+{
+    cxSprite this = pview;
+    cxOpenGLSetBlendFactor(this->sfactor, this->dfactor);
+    cxShaderUsing(this->shader,this->texture->isAtlas);
+    cxTextureBind(this->texture);
+}
+
 void cxSpriteDraw(cxAny pview)
 {
     cxSprite this = pview;
     CX_RETURN(this->texture == NULL);
-    cxOpenGLSetBlendFactor(this->sfactor, this->dfactor);
-    cxShaderUsing(this->shader,this->texture->isAtlas);
-    cxTextureBind(this->texture);
+    cxSpriteBindTexture(pview);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
     glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), &this->vbox);
-    glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTexCoord2f), &this->tbox);
+    glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTex2f), &this->tbox);
     glVertexAttribPointer(cxVertexAttribColor,    4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), &this->cbox);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }

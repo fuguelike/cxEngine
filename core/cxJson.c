@@ -93,7 +93,7 @@ void cxJsonPushArray(json_t *json)
     lua_newtable(gL);
     cxInt index = 0;
     json_t *value = NULL;
-    cxChar key[32]={0};
+    cxChar key[32] = {0};
     json_array_foreach(json, index, value){
         cxJsonPushValue(value);
         snprintf(key, 32, "%d",index);

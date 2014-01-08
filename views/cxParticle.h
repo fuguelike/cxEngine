@@ -83,6 +83,8 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     CX_EVENT_ALLOC(onUpdate);
 CX_OBJECT_END(cxParticle)
 
+cxAny cxParticleCreate(cxConstChars texURL,cxInt number);
+
 void cxParticleUpdate(cxAny pview);
 
 cxParticle cxParticleCreateFromPEX(cxConstChars file);

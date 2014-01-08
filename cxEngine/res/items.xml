@@ -59,6 +59,7 @@
         <cxColor4b key="color">123,202,255,255</cxColor4b>
     </cxHash>
     <cxArray id="list">
+        <cxPoint>1,2,3,1,1,1,1,0.5,0.5</cxPoint>
         <cxString>banana.ttf</cxString>
         <cxString>Test2</cxString>
         <cxInt>123</cxInt>

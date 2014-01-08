@@ -210,6 +210,15 @@ void cxParticleReadAttr(cxReaderAttrInfo *info)
     this->rotatepers    = cxXMLReadFloatRangeAttr(info, "cxParticle.rotatepers", this->rotatepers);
 }
 
+cxAny cxParticleCreate(cxConstChars texURL,cxInt number)
+{
+    cxParticle this = CX_CREATE(cxParticle);
+    cxParticleInit(this, number);
+    cxSpriteSetTextureURL(this, texURL, true, true);
+    cxParticleSetBlendMode(this, cxParticleBlendMultiply);
+    return this;
+}
+
 void cxParticleStop(cxAny pview)
 {
     cxParticle this = pview;

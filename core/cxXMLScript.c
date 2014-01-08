@@ -76,7 +76,6 @@ cxBool cxXMLBindObject(cxReaderAttrInfo *info)
     if(funcName == NULL){
         return false;
     }
-    int top = lua_gettop(gL);
     CX_ASSERT(info->object != NULL, "object error");
     lua_getglobal(gL, funcName);
     if(!lua_isfunction(gL, -1)){
@@ -98,7 +97,6 @@ cxBool cxXMLBindObject(cxReaderAttrInfo *info)
     }
     cxObject obj = info->object;
     obj->cxBind = lua_ref(gL, true);
-    top = lua_gettop(gL);
     return obj->cxBind > 0;
 }
 
@@ -116,48 +114,45 @@ static cxBool cxXMLAttrRunFunc(cxConstChars value,cxReaderAttrInfo *info)
     cxConstChars funcName = cxStringBody(cxRegexMatch(regex, 1));
     cxViewRoot root = info->root;
     cxConstType type = cxObjectType(info->object);
-    do{
-        //find curr bind
-        if(cxObjectBind(info->object) > 0){
-            lua_getref(gL, cxObjectBind(info->object));
-            if(lua_istable(gL, -1)){
-                lua_getfield(gL, -1, funcName);
-                ret = cxXMLAttrRunLuaFunc(info,json);
-                lua_remove(gL, -2);
-            } else {
-                lua_pop(gL, 1);
-            }
+    //find curr bind
+    if(cxObjectBind(info->object) > 0){
+        lua_getref(gL, cxObjectBind(info->object));
+        if(lua_istable(gL, -1)){
+            lua_getfield(gL, -1, funcName);
+            ret = cxXMLAttrRunLuaFunc(info,json);
+            lua_remove(gL, -2);
+        }else{
+            lua_pop(gL, 1);
         }
-        CX_BREAK(ret);
-        //find root bind
-        if(cxObjectBind(root) > 0){
-            lua_getref(gL, cxObjectBind(root));
-            if(lua_istable(gL, -1)){
-                lua_getfield(gL, -1, funcName);
-                ret = cxXMLAttrRunLuaFunc(info,json);
-                lua_remove(gL, -2);
-            } else {
-                lua_pop(gL, 1);
-            }
+    }
+    CX_RETURN(ret, true);
+    //find root bind
+    if(cxObjectBind(root) > 0){
+        lua_getref(gL, cxObjectBind(root));
+        if(lua_istable(gL, -1)){
+            lua_getfield(gL, -1, funcName);
+            ret = cxXMLAttrRunLuaFunc(info,json);
+            lua_remove(gL, -2);
+        }else{
+            lua_pop(gL, 1);
         }
-        CX_BREAK(ret);
-        //find type func
-        if(type != NULL){
-            lua_getglobal(gL, type);
-            if(lua_istable(gL, -1)){
-                lua_getfield(gL, -1, funcName);
-                ret = cxXMLAttrRunLuaFunc(info,json);
-                lua_remove(gL, -2);
-            } else {
-                lua_pop(gL, 1);
-            }
+    }
+    CX_RETURN(ret, true);
+    //find type func
+    if(type != NULL){
+        lua_getglobal(gL, type);
+        if(lua_istable(gL, -1)){
+            lua_getfield(gL, -1, funcName);
+            ret = cxXMLAttrRunLuaFunc(info,json);
+            lua_remove(gL, -2);
+        }else{
+            lua_pop(gL, 1);
         }
-        CX_BREAK(ret);
-        //find global func
-        lua_getglobal(gL, funcName);
-        ret = cxXMLAttrRunLuaFunc(info,json);
-    }while (false);
-    return ret;
+    }
+    CX_RETURN(ret, true);
+    //find global func
+    lua_getglobal(gL, funcName);
+    return cxXMLAttrRunLuaFunc(info,json);
 }
 
 static cxNumber cxXMLReaderNumber(cxConstChars svalue,cxReaderAttrInfo *info)
@@ -350,6 +345,7 @@ cxBool cxXMLHasAttr(xmlTextReaderPtr reader,cxConstChars name)
 cxString cxXMLReadString(xmlTextReaderPtr reader)
 {
     xmlChar *str = xmlTextReaderReadString(reader);
+    CX_RETURN(str == NULL, NULL);
     return cxStringAttachChars((cxChar *)str);
 }
 
@@ -385,43 +381,40 @@ cxEventItem cxXMLReadEvent(cxReaderAttrInfo *info, cxConstChars name)
     cxEventItem event = NULL;
     cxEventArg args = cxStringLength(argsCode) > 0 ? cxEventArgCreate(cxStringBody(argsCode)) : CX_CREATE(cxEventArg);
     cxConstType type = cxObjectType(info->object);
-    do {
-        //from object bind
-        if(cxObjectBind(info->object) > 0){
-            lua_getref(gL, cxObjectBind(info->object));
-            if(lua_istable(gL, -1)){
-                lua_getfield(gL, -1, funcName);
-                event = cxXMLFindEvent(args, true);
-            } else {
-                lua_pop(gL, 1);
-            }
-        }
-        CX_BREAK(event != NULL);
-        //from root bind
-        if(cxObjectBind(info->root) > 0){
-            lua_getref(gL, cxObjectBind(info->root));
-            if(lua_istable(gL, -1)){
-                lua_getfield(gL, -1, funcName);
-                event = cxXMLFindEvent(args, true);
-            } else {
-                lua_pop(gL, 1);
-            }
-        }
-        CX_BREAK(event != NULL);
-        //from type table find
-        lua_getglobal(gL, type);
+    //from object bind
+    if(cxObjectBind(info->object) > 0){
+        lua_getref(gL, cxObjectBind(info->object));
         if(lua_istable(gL, -1)){
             lua_getfield(gL, -1, funcName);
             event = cxXMLFindEvent(args, true);
-        } else {
+        }else{
             lua_pop(gL, 1);
         }
-        CX_BREAK(event != NULL);
-        //from global table type
-        lua_getglobal(gL, funcName);
-        event = cxXMLFindEvent(args, false);
-    }while(0);
-    return event;
+    }
+    CX_RETURN(event != NULL, event);
+    //from root bind
+    if(cxObjectBind(info->root) > 0){
+        lua_getref(gL, cxObjectBind(info->root));
+        if(lua_istable(gL, -1)){
+            lua_getfield(gL, -1, funcName);
+            event = cxXMLFindEvent(args, true);
+        }else{
+            lua_pop(gL, 1);
+        }
+    }
+    CX_RETURN(event != NULL, event);
+    //from type table find
+    lua_getglobal(gL, type);
+    if(lua_istable(gL, -1)){
+        lua_getfield(gL, -1, funcName);
+        event = cxXMLFindEvent(args, true);
+    }else{
+        lua_pop(gL, 1);
+    }
+    CX_RETURN(event != NULL, event);
+    //from global table type
+    lua_getglobal(gL, funcName);
+    return cxXMLFindEvent(args, false);
 }
 
 cxAny cxXMLReadTypesAttr(cxReaderAttrInfo *info, cxConstChars name)

@@ -126,6 +126,12 @@ CX_OBJECT_FREE(cxNumber, cxObject)
 }
 CX_OBJECT_TERM(cxNumber, cxObject)
 
+cxPoint cxNumberToPoint(cxNumber this)
+{
+    CX_ASSERT(this->type == cxNumberTypePoint, "type error");
+    return this->value.vp;
+}
+
 cxBool cxNumberToBool(cxNumber this)
 {
     CX_ASSERT(this->type == cxNumberTypeBool, "type error");
@@ -268,6 +274,14 @@ cxDouble cxNumberToDouble(cxNumber this)
 {
     CX_ASSERT(this->type == cxNumberTypeDouble, "type error");
     return this->value.vd;
+}
+
+cxNumber cxNumberPoint(cxPoint v)
+{
+    cxNumber rv = CX_CREATE(cxNumber);
+    rv->type = cxNumberTypePoint;
+    rv->value.vp = v;
+    return rv;
 }
 
 cxNumber cxNumberBool(cxBool v)

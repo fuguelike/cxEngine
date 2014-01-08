@@ -83,7 +83,7 @@ cxBool cxBox2fContainPoint(const cxBox4f box,const cxVec2f pos)
     return (pos.x >= box.l && pos.x <= box.r && pos.y >= box.b && pos.y <= box.t);
 }
 
-cxBool cxPolygonContainPoint(const cxPolygon *polygon,const cxVec2f tp)
+cxBool cxPolygonContainPoint(const cxPoints *polygon,const cxVec2f tp)
 {
     cxBool c = false;
     cxInt num = polygon->num;
