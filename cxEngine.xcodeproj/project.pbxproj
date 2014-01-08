@@ -62,6 +62,7 @@
 		8372777318449156005EDE68 /* animate in Resources */ = {isa = PBXBuildFile; fileRef = 8372777218449156005EDE68 /* animate */; };
 		837277761844962A005EDE68 /* animate.xml in Resources */ = {isa = PBXBuildFile; fileRef = 837277751844962A005EDE68 /* animate.xml */; };
 		837B7C76184C2A2100BB62AD /* pattern1.png in Resources */ = {isa = PBXBuildFile; fileRef = 837B7C75184C2A2100BB62AD /* pattern1.png */; };
+		83859870187D345A00AF7472 /* polygon.xml in Resources */ = {isa = PBXBuildFile; fileRef = 8385986F187D345A00AF7472 /* polygon.xml */; };
 		83900BC718471D6D00E702C7 /* atlas.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 83900BC618471D6D00E702C7 /* atlas.jpg */; };
 		83900BCA18471DCE00E702C7 /* atlas.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83900BC918471DCE00E702C7 /* atlas.xml */; };
 		839103BA18595754008DF1C7 /* buttontemp.xml in Resources */ = {isa = PBXBuildFile; fileRef = 839103B918595754008DF1C7 /* buttontemp.xml */; };
@@ -145,6 +146,7 @@
 		837B7C75184C2A2100BB62AD /* pattern1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pattern1.png; path = res/pattern1.png; sourceTree = "<group>"; };
 		8384E1E71823997700EDA1D6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = libs/ios/lib/libcrypto.a; sourceTree = "<group>"; };
 		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
+		8385986F187D345A00AF7472 /* polygon.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = polygon.xml; path = res/polygon.xml; sourceTree = "<group>"; };
 		83900BC618471D6D00E702C7 /* atlas.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = atlas.jpg; path = res/atlas.jpg; sourceTree = "<group>"; };
 		83900BC918471DCE00E702C7 /* atlas.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = atlas.xml; path = res/atlas.xml; sourceTree = "<group>"; };
 		839103B918595754008DF1C7 /* buttontemp.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = buttontemp.xml; path = res/buttontemp.xml; sourceTree = "<group>"; };
@@ -239,6 +241,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8385986F187D345A00AF7472 /* polygon.xml */,
 				8341C6AE1822812B0045A66F /* 2.pvr */,
 				8341C6AF1822812B0045A66F /* 4.pvr */,
 				8341C6B01822812B0045A66F /* action.xml */,
@@ -414,6 +417,7 @@
 				832C0CE61862998C0049B568 /* main.lua in Resources */,
 				8359F7A71856EADD0072D047 /* star.pex in Resources */,
 				835A95C4185597600088B413 /* font.png in Resources */,
+				83859870187D345A00AF7472 /* polygon.xml in Resources */,
 				832D2D81182A353200C0AF53 /* scroll.xml in Resources */,
 				8341C6C41822812B0045A66F /* banana.ttf in Resources */,
 				8341C6CA1822812B0045A66F /* effect.wav in Resources */,

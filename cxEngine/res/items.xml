@@ -29,7 +29,6 @@
             </cxButton>
         ]]>
     </cxString>
-    
     <cxArray id="spline">
         <cxVec2f>-300,300</cxVec2f>
         <cxVec2f>300,300</cxVec2f>
@@ -39,7 +38,6 @@
         <cxVec2f>-400,400</cxVec2f>
         <cxVec2f>-100,100</cxVec2f>
     </cxArray>
-    
     <cxHash id="config">
         <cxArray key="spline">
             <cxVec2f>-300,300</cxVec2f>
@@ -58,6 +56,12 @@
         <cxColor4f key="color">1,1,1,1</cxColor4f>
         <cxColor4b key="color">123,202,255,255</cxColor4b>
     </cxHash>
+    <cxArray id="points">
+        <cxPoint>-200,200,0,1,1,1,1,0.0,0.0</cxPoint>
+        <cxPoint>200,200,0,1,1,1,1,1.0,0.0</cxPoint>
+        <cxPoint>-200,-200,0,1,1,1,1,0.0,1.0</cxPoint>
+        <cxPoint>200,-200,0,1,1,1,1,1.0,1.0</cxPoint>
+    </cxArray>
     <cxArray id="list">
         <cxPoint>1,2,3,1,1,1,1,0.5,0.5</cxPoint>
         <cxString>banana.ttf</cxString>
