@@ -142,6 +142,7 @@
 		83A5C967183A174500781096 /* cxLoading.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A5C965183A174500781096 /* cxLoading.c */; };
 		83BAB0731835F578004DAEA6 /* cxRunner.c in Sources */ = {isa = PBXBuildFile; fileRef = 83BAB0711835F578004DAEA6 /* cxRunner.c */; };
 		83DF79791859B665007F47C3 /* cxSpline.c in Sources */ = {isa = PBXBuildFile; fileRef = 83DF79771859B665007F47C3 /* cxSpline.c */; };
+		83E239E6187E9AFF0063A0B1 /* cxParabola.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E239E4187E9AFF0063A0B1 /* cxParabola.c */; };
 		83E51BD41856F759006AD253 /* cxUrlPath.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E51BD21856F759006AD253 /* cxUrlPath.c */; };
 		83EB0B721869B8C900142636 /* cxAssetsLuaImp.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EB0B711869B8C900142636 /* cxAssetsLuaImp.c */; };
 		83EB0B741869B9B800142636 /* cxPlayerLuaImp.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EB0B731869B9B800142636 /* cxPlayerLuaImp.c */; };
@@ -430,6 +431,8 @@
 		83BAB0721835F578004DAEA6 /* cxRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxRunner.h; sourceTree = "<group>"; };
 		83DF79771859B665007F47C3 /* cxSpline.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxSpline.c; sourceTree = "<group>"; };
 		83DF79781859B665007F47C3 /* cxSpline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxSpline.h; sourceTree = "<group>"; };
+		83E239E4187E9AFF0063A0B1 /* cxParabola.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxParabola.c; sourceTree = "<group>"; };
+		83E239E5187E9AFF0063A0B1 /* cxParabola.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxParabola.h; sourceTree = "<group>"; };
 		83E51BD21856F759006AD253 /* cxUrlPath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxUrlPath.c; sourceTree = "<group>"; };
 		83E51BD31856F759006AD253 /* cxUrlPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxUrlPath.h; sourceTree = "<group>"; };
 		83EB0B711869B8C900142636 /* cxAssetsLuaImp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAssetsLuaImp.c; sourceTree = "<group>"; };
@@ -529,6 +532,8 @@
 				83DF79781859B665007F47C3 /* cxSpline.h */,
 				834F35E2186D7CC0005EB6D0 /* cxRunParticle.c */,
 				834F35E3186D7CC0005EB6D0 /* cxRunParticle.h */,
+				83E239E4187E9AFF0063A0B1 /* cxParabola.c */,
+				83E239E5187E9AFF0063A0B1 /* cxParabola.h */,
 			);
 			path = actions;
 			sourceTree = "<group>";
@@ -1020,6 +1025,7 @@
 				836150FC18482AAF00EB9173 /* cxMD5.c in Sources */,
 				835870F4183DEB0F007B175E /* cxClient.c in Sources */,
 				8341C5F518227DF20045A66F /* cxActionSet.c in Sources */,
+				83E239E6187E9AFF0063A0B1 /* cxParabola.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

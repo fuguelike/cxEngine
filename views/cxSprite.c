@@ -167,6 +167,13 @@ CX_OBJECT_FREE(cxSprite, cxView)
 }
 CX_OBJECT_TERM(cxSprite, cxView)
 
+cxSprite cxSpriteCreateWithURL(cxConstChars url)
+{
+    cxSprite this = CX_CREATE(cxSprite);
+    cxSpriteSetTextureURL(this, url, true, true);
+    return this;
+}
+
 cxSprite cxSpriteCreateWithFile(cxConstChars file,cxConstChars key)
 {
     cxSprite this = CX_CREATE(cxSprite);
