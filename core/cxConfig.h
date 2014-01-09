@@ -164,7 +164,7 @@ typedef const char *    cxConstChars;
 
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
 #define CX_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
-#elif _MSC_VER >= 1400 //vs 2005 or higher
+#elif _MSC_VER >= 1400
 #define CX_DEPRECATED_ATTRIBUTE __declspec(deprecated)
 #else
 #define CX_DEPRECATED_ATTRIBUTE
@@ -177,20 +177,26 @@ typedef const char *    cxConstChars;
 #if !defined(NDEBUG)
 
 #define CX_LOGGER(format, ...)       cxUtilInfo(__FILE__,__LINE__,format, ##__VA_ARGS__)
+
 #define CX_ERROR(format, ...)        cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
+
 #define CX_WARN(format, ...)         cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
-#define CX_ASSERT(cond,format,...)  \
-do{\
-    if(!(cond)) \
-    cxUtilAssert(__FILE__,__LINE__,format, ##__VA_ARGS__);  \
-    assert(cond);   \
+
+#define CX_ASSERT(cond,format,...)                              \
+do{                                                             \
+    if(!(cond))                                                 \
+    cxUtilAssert(__FILE__,__LINE__,format, ##__VA_ARGS__);      \
+    assert(cond);                                               \
 }while(0)
 
 #else
 
 #define CX_LOGGER(format, ...)
+
 #define CX_ASSERT(cond,...)
+
 #define CX_ERROR(format, ...)         cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
+
 #define CX_WARN(format, ...)          cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
 #endif
@@ -240,26 +246,33 @@ typedef kmVec3 cxVec3f;
 #define cxVec3fEqu(p1,p2)       (cxFloatEqu((p1).x,(p2).x) && cxFloatEqu((p1).y,(p2).y) && cxFloatEqu((p1).z,(p2).z))
 
 typedef struct {
-    kmScalar v1;
-    kmScalar v2;
-    kmScalar v3;
-    kmScalar v4;
+    cxFloat v1;
+    cxFloat v2;
+    cxFloat v3;
+    cxFloat v4;
 } cxAssist4f;
 
 typedef struct {
-    kmScalar r;
-    kmScalar g;
-    kmScalar b;
-    kmScalar a;
-} cxColor4f;
-#define cxColor4fv(r,g,b,a)     (cxColor4f){r,g,b,a}
-#define cxColor4fEqu(c1,c2)     (cxFloatEqu((c1).r,(c2).r)&&cxFloatEqu((c1).g,(c2).g)&&cxFloatEqu((c1).b,(c2).b)&&cxFloatEqu((c1).a,(c2).a))
-#define cxColor4bv(r,g,b,a)     (cxColor4f){(cxFloat)(r)/255.0f,(cxFloat)(g)/255.0f,(cxFloat)(b)/255.0f,(cxFloat)(a)/255.0f}
+    cxUChar r;
+    cxUChar g;
+    cxUChar b;
+    cxUChar a;
+} cxColor4b;
+#define cxColor4bv(r,g,b,a)     (cxColor4b){r,g,b,a}
 
 typedef struct {
-    kmScalar r;
-    kmScalar g;
-    kmScalar b;
+    cxFloat r;
+    cxFloat g;
+    cxFloat b;
+    cxFloat a;
+} cxColor4f;
+#define cxColor4fv(r,g,b,a)      (cxColor4f){r,g,b,a}
+#define cxColor4fEqu(c1,c2)      (cxFloatEqu((c1).r,(c2).r)&&cxFloatEqu((c1).g,(c2).g)&&cxFloatEqu((c1).b,(c2).b)&&cxFloatEqu((c1).a,(c2).a))
+
+typedef struct {
+    cxFloat r;
+    cxFloat g;
+    cxFloat b;
 } cxColor3f;
 #define cxColor3fv(r,g,b)       (cxColor3f){r,g,b}
 #define cxColor3fEqu(c1,c2)     (cxFloatEqu((c1).r,(c2).r) && cxFloatEqu((c1).g,(c2).g) && cxFloatEqu((c1).b,(c2).b))
@@ -285,24 +298,24 @@ typedef struct {
 #define cxSize2iv(w,h)          (cxSize2i){w,h}
 
 typedef struct {
-    kmScalar w;
-    kmScalar h;
+    cxFloat w;
+    cxFloat h;
 } cxSize2f;
 #define cxSize2fv(w,h)          (cxSize2f){w,h}
 #define cxSize2fEqu(s1,s2)      (cxFloatEqu((s1).w,(s2).w) &&  cxFloatEqu((s1).h,(s2).h))
 #define cxSize2Zero(v)          (kmAlmostEqual((v).w, 0) && kmAlmostEqual((v).h, 0))
 
 typedef struct {
-    kmScalar u;
-    kmScalar v;
+    cxFloat u;
+    cxFloat v;
 } cxTex2f;
 #define cxTex2fv(u,v)   (cxTex2f){u,v}
 
 typedef struct {
-    kmScalar l;
-    kmScalar r;
-    kmScalar t;
-    kmScalar b;
+    cxFloat l;
+    cxFloat r;
+    cxFloat t;
+    cxFloat b;
 } cxBox4f;
 #define cxBox4fv(l,r,t,b) (cxBox4f){l,r,t,b}
 #define cxBox4fInit() cxBox4fv(INT32_MAX,INT32_MIN,INT32_MIN,INT32_MAX)
@@ -315,10 +328,10 @@ typedef struct {
 } cxBox4i;
 
 typedef struct {
-    kmScalar x;
-    kmScalar y;
-    kmScalar w;
-    kmScalar h;
+    cxFloat x;
+    cxFloat y;
+    cxFloat w;
+    cxFloat h;
 } cxRect4f;
 #define cxRect4fv(x,y,w,h)  (cxRect4f){x,y,w,h}
 

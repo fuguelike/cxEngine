@@ -56,7 +56,7 @@ static cxInt cxNumberLuaNewColor4f(lua_State *L)
     cxFloat g = (top >=2 && lua_isnumber(L, 2)) ? lua_tonumber(L, 2) : 1.0f;
     cxFloat b = (top >=3 && lua_isnumber(L, 3)) ? lua_tonumber(L, 3) : 1.0f;
     cxFloat a = (top >=4 && lua_isnumber(L, 4)) ? lua_tonumber(L, 4) : 1.0f;
-    cxNumber this = cxNumberColor4f(cxColor4bv(r, g, b, a));
+    cxNumber this = cxNumberColor4f(cxColor4fv(r, g, b, a));
     lua_pushlightuserdata(L, this);
     CX_LUA_RET_THIS(cxNumber);
 }

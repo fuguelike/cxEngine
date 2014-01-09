@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
-<cxViewRoot cxView.fill="0,0,0,0" cxViewRoot.onBegin="cxChipmunkBegin()">
-    <cxPolygon cxSprite.texture="candy.xml"  cxPolygon.points="items.xml?points">
-        
-    </cxPolygon>
+<cxViewRoot cxView.fill="0,0,0,0">
+    <cxPolygon cxSprite.texture="candy.xml"  cxPolygon.points="items.xml?points" />
+    <cxButton cxView.right="0" cxView.bottom="0" cxView.w = "180" cxView.h = "120" cxButton.onPress="cxEventPopView()">
+        <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+        <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="return" cxLabelTTF.size="30"/>
+    </cxButton>
 </cxViewRoot>

@@ -233,7 +233,7 @@ void cxParticleReset(cxAny pview)
     this->isActive = true;
     this->emitcounter = 0;
     this->elapsed = 0;
-    for(this->index = 0; this->index < this->count; ++this->index){
+    for(this->index = 0; this->index < this->count; this->index++){
         cxParticleUnit *p = &this->units[this->index];
         p->life = 0;
     }
@@ -352,7 +352,6 @@ static cxBool cxParticleAdd(cxAny pview)
     }
     cxParticleUnit *unit = &this->units[this->count];
     cxParticleInitUnit(pview, unit);
-    unit->index = this->count;
     this->count ++;
     return true;
 }
@@ -402,7 +401,7 @@ static void cxParticleComputeUnit(cxParticle this,cxParticleUnit *p,cxFloat dt)
         p->size = CX_MAX(0, p->size + p->deltasize * dt);
         // angle
         p->rotation += (p->deltarotation * dt);
-        cxParticleStep(this,p);
+        cxParticleStep(this, p);
         this->index ++;
     }else{
         if(this->index != this->count - 1){
@@ -421,7 +420,9 @@ static cxBool cxParticleComputeUnits(cxParticle this,cxFloat dt)
     if(this->count < this->number){
         this->emitcounter += dt;
     }
-    while(this->count < this->number && this->emitcounter > rate && cxParticleAdd(this)){
+    while(this->count < this->number &&
+          this->emitcounter > rate &&
+          cxParticleAdd(this)){
         this->emitcounter -= rate;
     }
     this->elapsed += dt;

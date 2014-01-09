@@ -18,6 +18,6 @@
         <cxTemplate src="buttontemp.xml" title="bmpFont" release="cxEventPushView('bmpfont.xml')" />
         <cxTemplate cond="cxIsAndroid()" src="buttontemp.xml" title="Android" />
         <cxTemplate cond="cxIsIOS()" src="buttontemp.xml" title="IOS" release="iosLuaEventTest({'a':1,'b':'string'})" />
-        <cxTemplate src="buttontemp.xml" title="polygon" release="cxEventPushView('polygon.xml')" />
+        <cxTemplate src="buttontemp.xml" title="Polygon" release="cxEventPushView('polygon.xml')" />
     </cxTable>
 </cxViewRoot>

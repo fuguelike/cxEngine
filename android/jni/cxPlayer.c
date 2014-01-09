@@ -38,10 +38,6 @@ CX_OBJECT_TERM(cxPlayer, cxObject)
 
 static cxPlayer instance = NULL;
 
-static cxInt cxPlayerFreq = 22050;
-
-static cxInt cxPlayerFormat = 0;
-
 cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
 {
     CX_ASSERT(false, "cxBufferCreate not use at android");
@@ -147,14 +143,8 @@ void cxResumeMusic()
     (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
 }
 
-void cxPlayerOpen(cxInt freq,cxInt format)
+void cxPlayerOpen()
 {
-    if(freq != 0){
-        cxPlayerFreq = freq;
-    }
-    if(format != 0){
-        cxPlayerFormat = format;
-    }
     cxPlayerInstance();
 }
 

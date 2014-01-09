@@ -38,10 +38,6 @@ static cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
     return this;
 }
 
-static cxInt cxPlayerFreq = 22050;
-
-static cxInt cxPlayerFormat = AL_FORMAT_MONO16;
-
 CX_OBJECT_DEF(cxTrack, cxObject)
     ALsizei freq;
     ALuint format;
@@ -50,8 +46,6 @@ CX_OBJECT_END(cxTrack)
 
 CX_OBJECT_INIT(cxTrack, cxObject)
 {
-    this->freq = cxPlayerFreq;
-    this->format = cxPlayerFormat;
     alGenSources(1, &this->source);
 }
 CX_OBJECT_FREE(cxTrack, cxObject)
@@ -183,14 +177,8 @@ CX_OBJECT_FREE(cxPlayer, cxObject)
 }
 CX_OBJECT_TERM(cxPlayer, cxObject)
 
-void cxPlayerOpen(cxInt freq,cxInt format)
+void cxPlayerOpen()
 {
-    if(freq != 0){
-        cxPlayerFreq = freq;
-    }
-    if(format != 0){
-        cxPlayerFormat = format;
-    }
     cxPlayerInstance();
 }
 

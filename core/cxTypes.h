@@ -22,7 +22,7 @@ typedef enum {
     cxTypesNumber,
 }cxTypesType;
 
-#define cxTypesIsType(o,t)  ((o) != NULL && (o)->type == t)
+#define cxTypesIsType(o,t)  ((o) != NULL && ((cxTypes)(o))->type == t)
 
 CX_OBJECT_DEF(cxTypes, cxObject)
     cxTypesType type;
@@ -38,16 +38,6 @@ cxTypes cxNumberTypesCreate();
 cxTypes cxArrayTypesCreate();
 
 cxTypes cxStringTypesCreate();
-
-#define cxTypesLength(a)        utarray_len((a)->utArray)
-
-#define cxTypesAppend(a,v)      utarray_push_back((a)->utArray,&(v))
-
-#define cxTypesIndex(a,t,i)     (*((t *)utarray_eltptr((a)->utArray,i)))
-
-#define CX_TYPES_FOREACH(a,t,e) \
-t *e = NULL; \
-while((a) != NULL && (e = (t *)utarray_next((a)->utArray, e)) != NULL)
 
 void cxLuaPushVec2fv(lua_State *L,cxVec2f pos);
 
