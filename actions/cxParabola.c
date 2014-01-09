@@ -41,8 +41,17 @@ static cxBool cxParabolaExit(cxAny pav)
     return this->super.duration != -1 && this->time >= this->super.duration;
 }
 
+static void cxParabolaReadAttr(cxReaderAttrInfo *info)
+{
+    cxActionReadAttr(info);
+    cxParabola this = info->object;
+    this->speed = cxXMLReadVec2fAttr(info, "cxParabola.speed", cxVec2fv(0, 0));
+    cxActionSetDuration(this, cxXMLReadFloatAttr(info, "cxAction.time", -1));
+}
+
 CX_OBJECT_INIT(cxParabola, cxAction)
 {
+    cxObjectSetReadAttrFunc(this, cxParabolaReadAttr);
     CX_METHOD_OVERRIDE(this->super.Exit, cxParabolaExit);
     CX_METHOD_OVERRIDE(this->super.Init, cxParabolaInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxParabolaStep);

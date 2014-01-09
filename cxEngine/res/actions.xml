@@ -18,6 +18,10 @@
         <cxFrame file="candy.xml?yellow.png" cache="true"/>
     </cxAnimate>
     <cxRunParticle id="particle" cxRunParticle.pex="particle.pex" />
+    <cxParabola id="parabola"
+        cxParabola.speed="600,600"
+        cxAction.time="3"
+    />
     <cxMove id="move"
         cxAction.speed="1.0"
         cxAction.time="1.5"
