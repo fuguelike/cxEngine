@@ -60,7 +60,19 @@ static cxInt cxLuaAssert(lua_State *L)
     return 0;
 }
 
+static cxInt cxLuaMD5(lua_State *L)
+{
+    cxSize l = 0;
+    cxConstChars s = luaL_checklstring(L, 1, &l);
+    cxString data = CX_CREATE(cxString);
+    cxStringAppend(data, s, l);
+    cxString md5 = cxMD5(data);
+    lua_pushstring(L, cxStringBody(md5));
+    return 1;
+}
+
 const luaL_Reg global_functions [] = {
+    {"cxMD5",cxLuaMD5},
     {"cxLogger", cxLuaLogger},
     {"cxError", cxLuaError},
     {"cxWarn", cxLuaWarn},
@@ -70,12 +82,9 @@ const luaL_Reg global_functions [] = {
 
 void cxUtilTypeInit()
 {
-    int top = lua_gettop(gL);
     lua_getglobal(gL, "_G");
-    top = lua_gettop(gL);
     luaL_register(gL, "_G", global_functions);
     lua_pop(gL, 2);
-    top = lua_gettop(gL);
 }
 
 cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)

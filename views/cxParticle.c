@@ -397,9 +397,9 @@ static void cxParticleComputeUnit(cxParticle this,cxParticleUnit *p,cxFloat dt)
         p->color.g += (p->deltacolor.g * dt);
         p->color.b += (p->deltacolor.b * dt);
         p->color.a += (p->deltacolor.a * dt);
-        // size
+        //size
         p->size = CX_MAX(0, p->size + p->deltasize * dt);
-        // angle
+        //angle
         p->rotation += (p->deltarotation * dt);
         cxParticleStep(this, p);
         this->index ++;

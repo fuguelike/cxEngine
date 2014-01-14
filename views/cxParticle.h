@@ -80,7 +80,7 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxFloatRange startradius;
     cxFloatRange endradius;
     cxFloatRange rotatepers;
-    CX_METHOD_ALLOC(void,UpdateBox,cxAny,cxBoxPoint *);
+    CX_METHOD_ALLOC(void, UpdateBox, cxAny, cxBoxPoint *);
     CX_EVENT_ALLOC(onUpdate);
 CX_OBJECT_END(cxParticle)
 

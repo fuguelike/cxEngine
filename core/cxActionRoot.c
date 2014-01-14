@@ -47,9 +47,7 @@ CX_OBJECT_TERM(cxActionRoot, cxObject)
 
 static void cxActionRootReaderError(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
 {
-    cxActionRoot this = arg;
-    CX_ERROR("%s",msg);
-    this->isError = true;
+    cxActionRoot this = arg;CX_ERROR("%s",msg);this->isError = true;
 }
 
 cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
@@ -118,7 +116,6 @@ cxAction cxActionRootAttachView(cxAny pview,cxConstChars url)
     CX_RETURN(action == NULL, NULL);
     cxViewAppendAction(pview, action);
     return action;
-    return NULL;
 }
 
 static void cxActionRootLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)

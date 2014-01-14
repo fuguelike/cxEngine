@@ -19,7 +19,6 @@ static cxBool cxRunnerExit(cxAny pav)
 {
     cxRunner this = pav;
     if(this->count == 0){
-        //can add action at exit
         this->step ++;
         CX_METHOD_FIRE(NULL, this->Exit, this);
     }
@@ -44,10 +43,10 @@ static void cxRunnerItemStop(cxEvent *event)
     this->count --;
 }
 
-cxRunner cxRunnerCreate(cxAny core)
+cxRunner cxRunnerCreate(cxAny data)
 {
     cxRunner this = CX_CREATE(cxRunner);
-    this->core = core;
+    this->data = data;
     return this;
 }
 
@@ -59,3 +58,4 @@ void cxRunnerAppend(cxAny runner,cxAny pav, cxAny pview)
     CX_EVENT_APPEND(action->onStop, cxRunnerItemStop, cxEventArgWeakRef(this));
     cxViewAppendAction(pview, pav);
 }
+

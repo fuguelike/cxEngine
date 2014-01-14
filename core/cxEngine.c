@@ -184,10 +184,8 @@ void cxEngineBegin()
     cxEngine engine = cxEngineInstance();
     //set locate lang
     cxEngineSetLocalized(cxLocalizedLang());
-    //load appConfig.xml
-    cxEngineDataSet("appConfig.xml");
     //init event list and att method
-    cxEngineSystemInit();
+    cxEngineSystemInit(engine);
     //
     cxPlayerOpen(0, 0);
     cxEngineInit(engine);
@@ -292,7 +290,6 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->frameInterval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->isTouch = true;
-    this->contentScaleFactor = 1.0f;
     this->scale     = cxVec2fv(1.0f, 1.0f);
     this->window    = CX_ALLOC(cxWindow);
     this->scripts   = CX_ALLOC(cxHash);
@@ -990,8 +987,20 @@ static cxInt cxSpriteTexture(lua_State *L)
     return 1;
 }
 
-void cxEngineSystemInit()
+void cxEngineSystemInit(cxEngine engine)
 {
+    //read desSize setting
+    cxTypes desSizeTypes = cxEngineDataSet("appConfig.xml?desSize");
+    if(desSizeTypes != NULL && cxTypesIsType(desSizeTypes, cxTypesNumber)){
+        cxNumber num = desSizeTypes->any;
+        engine->dessize = cxNumberToSize2f(num);
+    }
+    //read showBorder setting
+    cxTypes showBorderTypes = cxEngineDataSet("appConfig.xml?showBorder");
+    if(showBorderTypes != NULL && cxTypesIsType(showBorderTypes, cxTypesNumber)){
+        cxNumber num = showBorderTypes->any;
+        engine->isShowBorder = cxNumberToBool(num);
+    }
     //global func cxReaderAttrInfo *,args...
     cxEngineRegisteFunc(cxSpriteTexture);
     cxEngineRegisteFunc(cxViewMulripleW);

@@ -29,7 +29,7 @@ function main()
               cxLabelTTF.SetFont(txt,{size=60})
               cxView.AppendView(this,txt)
          end)
-         
+
     cxLoading.AppendEvent(loader,'onLoading', function(this)
               local xmlView = cxViewRoot.Make('main.xml')
               cxLoading.SetObject(this,xmlView)

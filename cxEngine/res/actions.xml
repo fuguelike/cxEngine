@@ -3,25 +3,21 @@
 <cxActionRoot cxActionRoot.type="multiple" cxActionRoot.onLoad="actionsLoad">
     <cxSpline id="spline"
         cxAction.time="3"
-        cxSpline.points="cxDataTypes('items.xml?spline')"
-    />
-    <cxAnimate id="animate"
-        cxAction.speed="1.0"
-        cxAction.time="3">
+        cxSpline.points="cxDataTypes('items.xml?spline')"/>
+    <cxAnimate id="animate" cxAnimate.cache="true" cxAction.speed="1.0" cxAction.time="3">
         <cxFrame file="animate/%d.png" from="1" to="40"/>
     </cxAnimate>
     <cxAnimate id="animate2" cxAction.time="5">
-        <cxFrame file="candy.xml?red.png" cache="true"/>
-        <cxFrame file="candy.xml?green.png" cache="true"/>
-        <cxFrame file="candy.xml?blue.png" cache="true"/>
-        <cxFrame file="candy.xml?orange.png" cache="true"/>
-        <cxFrame file="candy.xml?yellow.png" cache="true"/>
+        <cxFrame file="candy.xml?red.png"/>
+        <cxFrame file="candy.xml?green.png"/>
+        <cxFrame file="candy.xml?blue.png"/>
+        <cxFrame file="candy.xml?orange.png"/>
+        <cxFrame file="candy.xml?yellow.png"/>
     </cxAnimate>
     <cxRunParticle id="particle" cxRunParticle.pex="particle.pex" />
     <cxParabola id="parabola"
         cxParabola.speed="600,600"
-        cxAction.time="3"
-    />
+        cxAction.time="3"/>
     <cxMove id="move"
         cxAction.speed="1.0"
         cxAction.time="1.5"

@@ -45,7 +45,6 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxWindow window;
     cxDouble lastTime;
     cxFloat frameDelta;
-    cxFloat contentScaleFactor;
     CX_SIGNAL_ALLOC(onPause);
     CX_SIGNAL_ALLOC(onResume);
     CX_SIGNAL_ALLOC(onMemory);
@@ -86,7 +85,7 @@ cxAny cxEngineDB(cxConstChars url);
 
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 
-void cxEngineSystemInit();
+void cxEngineSystemInit(cxEngine engine);
 
 //extern
 void cxEngineInit(cxEngine engine);

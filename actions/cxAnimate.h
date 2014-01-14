@@ -16,9 +16,10 @@ CX_C_BEGIN
 
 //use at cxSprite View
 
-void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars key,cxFloat delay,cxBool cache);
+void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars key,cxFloat delay,cxBool gcache);
 
 CX_OBJECT_DEF(cxAnimate, cxAction)
+    cxBool cached;
     cxInt index;
     cxArray list;
     cxFloat duration;

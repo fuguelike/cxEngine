@@ -170,17 +170,17 @@ typedef const char *    cxConstChars;
 #define CX_DEPRECATED_ATTRIBUTE
 #endif
 
-#define CX_INVALID_INDEX   -1
+#define CX_INVALID_INDEX            -1
 
-#define CX_MAX_LOGGER_LENGTH         1024
+#define CX_MAX_LOGGER_LENGTH        1024
 
 #if !defined(NDEBUG)
 
-#define CX_LOGGER(format, ...)       cxUtilInfo(__FILE__,__LINE__,format, ##__VA_ARGS__)
+#define CX_LOGGER(format,...)       cxUtilInfo(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
-#define CX_ERROR(format, ...)        cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
+#define CX_ERROR(format,...)        cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
-#define CX_WARN(format, ...)         cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
+#define CX_WARN(format,...)         cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
 #define CX_ASSERT(cond,format,...)                              \
 do{                                                             \
@@ -191,13 +191,13 @@ do{                                                             \
 
 #else
 
-#define CX_LOGGER(format, ...)
+#define CX_LOGGER(format,...)
 
 #define CX_ASSERT(cond,...)
 
-#define CX_ERROR(format, ...)         cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
+#define CX_ERROR(format,...)         cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
-#define CX_WARN(format, ...)          cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
+#define CX_WARN(format,...)          cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
 #endif
 
@@ -213,9 +213,7 @@ typedef struct {
     cxFloat v;  //base value
     cxFloat r;  //random value
 }cxFloatRange;
-
 #define cxFloatValue(fv) ((fv).v + (fv).r * CX_RAND_11f())
-
 #define cxFloatRangeValue(v,r) (cxFloatRange){v,r}
 
 typedef struct {
@@ -250,14 +248,14 @@ typedef struct {
     cxFloat v2;
     cxFloat v3;
     cxFloat v4;
-} cxAssist4f;
+}cxAssist4f;
 
 typedef struct {
     cxUChar r;
     cxUChar g;
     cxUChar b;
     cxUChar a;
-} cxColor4b;
+}cxColor4b;
 #define cxColor4bv(r,g,b,a)     (cxColor4b){r,g,b,a}
 
 typedef struct {
@@ -265,7 +263,7 @@ typedef struct {
     cxFloat g;
     cxFloat b;
     cxFloat a;
-} cxColor4f;
+}cxColor4f;
 #define cxColor4fv(r,g,b,a)      (cxColor4f){r,g,b,a}
 #define cxColor4fEqu(c1,c2)      (cxFloatEqu((c1).r,(c2).r)&&cxFloatEqu((c1).g,(c2).g)&&cxFloatEqu((c1).b,(c2).b)&&cxFloatEqu((c1).a,(c2).a))
 
@@ -273,7 +271,8 @@ typedef struct {
     cxFloat r;
     cxFloat g;
     cxFloat b;
-} cxColor3f;
+}cxColor3f;
+#define cxColor3fToColor4f(c)   cxColor4fv((c).r,(c).g,(c).b,1.0f)
 #define cxColor3fv(r,g,b)       (cxColor3f){r,g,b}
 #define cxColor3fEqu(c1,c2)     (cxFloatEqu((c1).r,(c2).r) && cxFloatEqu((c1).g,(c2).g) && cxFloatEqu((c1).b,(c2).b))
 #define cxColor3bv(r,g,b)       (cxColor3f){(cxFloat)(r)/255.0f,(cxFloat)(g)/255.0f,(cxFloat)(b)/255.0f}
@@ -294,13 +293,13 @@ static const cxColor3f cxPURPLE  = cxColor3fv(0.63f, 0.13f, 0.94f);
 typedef struct {
     cxInt w;
     cxInt h;
-} cxSize2i;
+}cxSize2i;
 #define cxSize2iv(w,h)          (cxSize2i){w,h}
 
 typedef struct {
     cxFloat w;
     cxFloat h;
-} cxSize2f;
+}cxSize2f;
 #define cxSize2fv(w,h)          (cxSize2f){w,h}
 #define cxSize2fEqu(s1,s2)      (cxFloatEqu((s1).w,(s2).w) &&  cxFloatEqu((s1).h,(s2).h))
 #define cxSize2Zero(v)          (kmAlmostEqual((v).w, 0) && kmAlmostEqual((v).h, 0))
@@ -308,7 +307,7 @@ typedef struct {
 typedef struct {
     cxFloat u;
     cxFloat v;
-} cxTex2f;
+}cxTex2f;
 #define cxTex2fv(u,v)   (cxTex2f){u,v}
 
 typedef struct {
@@ -316,7 +315,7 @@ typedef struct {
     cxFloat r;
     cxFloat t;
     cxFloat b;
-} cxBox4f;
+}cxBox4f;
 #define cxBox4fv(l,r,t,b) (cxBox4f){l,r,t,b}
 #define cxBox4fInit() cxBox4fv(INT32_MAX,INT32_MIN,INT32_MIN,INT32_MAX)
 
@@ -325,14 +324,14 @@ typedef struct {
     cxInt r;
     cxInt t;
     cxInt b;
-} cxBox4i;
+}cxBox4i;
 
 typedef struct {
     cxFloat x;
     cxFloat y;
     cxFloat w;
     cxFloat h;
-} cxRect4f;
+}cxRect4f;
 #define cxRect4fv(x,y,w,h)  (cxRect4f){x,y,w,h}
 
 typedef struct {
@@ -340,7 +339,7 @@ typedef struct {
     cxInt y;
     cxInt w;
     cxInt h;
-} cxRect4i;
+}cxRect4i;
 #define cxRect4iv(x,y,w,h)  (cxRect4i){x,y,w,h}
 
 typedef struct {
@@ -348,45 +347,45 @@ typedef struct {
     cxVec2f rt;
     cxVec2f rb;
     cxVec2f lb;
-} cxBoxVec2f;
+}cxBoxVec2f;
 #define cxBoxVec2fFromBox4f(box) (cxBoxVec2f){{(box).l,(box).t},{(box).r,(box).t},{(box).r,(box).b},{(box).l,(box).b}}
 
 typedef struct {
     cxVec2f *vs;
     cxInt num;
-} cxPoints;
+}cxPoints;
 
 typedef struct {
     cxVec3f lt;
     cxVec3f lb;
     cxVec3f rt;
     cxVec3f rb;
-} cxBoxVec3f;
+}cxBoxVec3f;
 
 typedef struct {
     cxVec3f vertices;
     cxColor4f colors;
     cxTex2f texcoords;
-} cxPoint;
+}cxPoint;
 
 typedef struct {
     cxPoint lt;
     cxPoint lb;
     cxPoint rt;
     cxPoint rb;
-} cxBoxPoint;
+}cxBoxPoint;
 
 typedef struct {
     cxPoint p1;
     cxPoint p2;
-} cxLinePoint;
+}cxLinePoint;
 
 typedef struct {
     cxTex2f lt;
     cxTex2f lb;
     cxTex2f rt;
     cxTex2f rb;
-} cxBoxTex2f;
+}cxBoxTex2f;
 #define cxBoxTex2fDefault() (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, 1.0f),cxTex2fv(1.0f, 0.0f),cxTex2fv(1.0f, 1.0f)}
 #define cxBoxTex2Scale(v)   (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, v),cxTex2fv(v, 0.0f),cxTex2fv(v, v)}
 
@@ -399,27 +398,25 @@ typedef struct {
     cxColor4f lb;
     cxColor4f rt;
     cxColor4f rb;
-} cxBoxColor4f;
+}cxBoxColor4f;
 
 typedef struct {
     cxFloat size;
     cxBool bold;
 }cxTextAttr;
 
-
 typedef struct {
     cxColor4f v;
     cxColor4f r;
 }cxColor4fRange;
-
 cxColor4f cxColor4fValue(cxColor4fRange r);
-
 #define cxColor4fRangeValue(r1,g1,b1,a1,r2,g2,b2,a2)  (cxColor4fRange){{r1,g1,b1,a1},{r2,g2,b2,a2}}
 
 typedef struct {
     cxVec2f v;
     cxVec2f r;
 }cxVec2fRange;
+#define cxVec2fRangeValue(vx,vy,rx,ry)    (cxVec2fRange){{vx,vy},{rx,ry}}
 
 cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t);
 
@@ -433,6 +430,7 @@ cxBool cxPolygonContainPoint(const cxPoints *polygon,const cxVec2f tp);
 
 //if r1 contains r2 return true
 cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2);
+
 #endif
 
 

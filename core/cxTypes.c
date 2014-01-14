@@ -151,7 +151,7 @@ cxAny cxLuaObjectValue(lua_State *L,cxInt n)
         return CX_LUA_NUMBER_IS_INT(num) ? cxNumberInt(num) : cxNumberFloat(num);
     }
     if(lua_isstring(L, n)){
-        return cxStringAllocChars(lua_tostring(L, n));
+        return cxStringConstChars(lua_tostring(L, n));
     }
     if(lua_isuserdata(L, n)){
         return CX_LUA_GET_PTR(2);

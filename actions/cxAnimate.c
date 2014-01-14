@@ -23,6 +23,7 @@ CX_OBJECT_END(cxAnimateItem)
 
 CX_OBJECT_INIT(cxAnimateItem, cxObject)
 {
+    
 }
 CX_OBJECT_FREE(cxAnimateItem, cxObject)
 {
@@ -31,11 +32,11 @@ CX_OBJECT_FREE(cxAnimateItem, cxObject)
 }
 CX_OBJECT_TERM(cxAnimateItem, cxObject)
 
-void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars key,cxFloat delay,cxBool cache)
+void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars key,cxFloat delay,cxBool gcache)
 {
     cxAnimateItem this = CX_CREATE(cxAnimateItem);
     if(file != NULL){
-        this->texture = cache ? cxTextureFactoryLoadFile(file) : cxTextureCreate(file);
+        this->texture = gcache ? cxTextureFactoryLoadFile(file) : cxTextureCreate(file);
         CX_ASSERT(this->texture != NULL, "%s load failed", file);
         CX_RETAIN(this->texture);
     }
@@ -53,8 +54,8 @@ static void cxAnimateInit(cxAny pav)
     this->super.duration = this->duration;
     cxFloat dt = this->duration / (cxFloat)cxArrayLength(this->list);
     cxFloat i = 0;
-    CX_ARRAY_FOREACH(this->list, e){
-        cxAnimateItem item = cxArrayObject(e);
+    CX_ARRAY_FOREACH(this->list, ele){
+        cxAnimateItem item = cxArrayObject(ele);
         this->super.duration += item->delay;
         i += dt  + item->delay;
         item->time = i;
@@ -91,8 +92,12 @@ static void cxAnimateXMLAppend(cxArray list,cxConstChars file,cxConstChars key,c
 {
     for(cxInt i = from; i <= to ; i++){
         cxConstChars sfile = CX_CONST_STRING(file,i);
-        cxConstChars skey = (key != NULL) ? CX_CONST_STRING(key,i) : NULL;
-        cxAnimateItemAppend(list, sfile, skey, 0, cache);
+        cxUrlPath path = cxUrlPathParse(sfile);
+        if(path->count == 1){
+            cxAnimateItemAppend(list, sfile, NULL, 0, cache);
+        }else if(path->count == 2){
+            cxAnimateItemAppend(list, path->path, path->key, 0, cache);
+        }
     }
 }
 
@@ -100,6 +105,9 @@ static void cxAnimateReadAttr(cxReaderAttrInfo *info)
 {
     cxActionReadAttr(info);
     cxAnimate this = info->object;
+    
+    this->cached = cxXMLReadBoolAttr(info, "cxAnimate.cache", true);
+    
     int depth = xmlTextReaderDepth(info->reader);
     while(xmlTextReaderRead(info->reader) && depth != xmlTextReaderDepth(info->reader)){
         if(xmlTextReaderNodeType(info->reader) != XML_READER_TYPE_ELEMENT){
@@ -109,17 +117,16 @@ static void cxAnimateReadAttr(cxReaderAttrInfo *info)
         if(!ELEMENT_IS_TYPE(cxFrame)){
             continue;
         }
-        cxBool cache = cxXMLReadBoolAttr(info, "cache", false);
         cxConstChars file = cxXMLAttr(info->reader,"file");
         cxConstChars key = cxXMLAttr(info->reader,"key");
         cxInt from = cxXMLReadIntAttr(info, "from", 0);
         cxInt to = cxXMLReadIntAttr(info, "to", 0);
         if(from > 0 && to > 0){
-            cxAnimateXMLAppend(this->list, file, key, from, to, cache);
+            cxAnimateXMLAppend(this->list, file, key, from, to, this->cached);
         }else if(file != NULL){
             cxUrlPath path = cxUrlPathParse(file);
             cxFloat delay = cxXMLReadFloatAttr(info, "delay", 0);
-            cxAnimateItemAppend(this->list, path->path, path->count >= 2 ? path->key : NULL, delay, cache);
+            cxAnimateItemAppend(this->list, path->path, path->count >= 2 ? path->key : NULL, delay, this->cached);
         }
     }
     this->duration = this->super.duration;
@@ -139,6 +146,7 @@ CX_OBJECT_INIT(cxAnimate, cxAction)
     CX_METHOD_OVERRIDE(this->super.Step, cxAnimateStep);
     CX_METHOD_OVERRIDE(this->super.Reset, cxAnimateReset);
     this->list = CX_ALLOC(cxArray);
+    this->cached = true;
 }
 CX_OBJECT_FREE(cxAnimate, cxAction)
 {
