@@ -141,7 +141,7 @@ cxBool cxEngineLuaRunString(cxString code)
 
 cxBool cxEngineLuaRunChars(cxConstChars code)
 {
-    CX_ASSERT(code != NULL && strlen(code) > 0, "code args error");
+    CX_ASSERT(cxConstCharsOK(code), "code args error");
     if(luaL_dostring(gL, code) != 0){
         CX_ERROR("cxLuaLoader run code error:%s",lua_tostring(gL, -1));
         return false;
@@ -718,7 +718,6 @@ static cxInt cxEventSetTexture(lua_State *L)
     cxConstChars url = NULL;
     cxConstChars viewid = NULL;
     cxBool uts = false;
-    cxBool cached = true;
     lua_getfield(L, 2, "src");
     if(lua_isstring(L, -1)){
         url = lua_tostring(L, -1);
@@ -734,11 +733,6 @@ static cxInt cxEventSetTexture(lua_State *L)
         uts = lua_toboolean(L, -1);
     }
     lua_pop(L,1);
-    lua_getfield(L, 2, "cached");
-    if(lua_isboolean(L, -1)){
-        cached = lua_toboolean(L, -1);
-    }
-    lua_pop(L,1);
     if(viewid == NULL){
         return 0;
     }
@@ -747,7 +741,7 @@ static cxInt cxEventSetTexture(lua_State *L)
         return 0;
     }
     //use texture size
-    cxSpriteSetTextureURL(pview, url, uts, cached);
+    cxSpriteSetTextureURL(pview, url, uts);
     return 0;
 }
 
@@ -851,7 +845,7 @@ static cxInt cxHexNumber(lua_State *L)
     return 1;
 }
 
-static cxInt cxCreateTexture(lua_State *L)
+static cxInt cxLoadTexture(lua_State *L)
 {
     cxTextureAttr rv = CX_CREATE(cxTextureAttr);
     cxConstChars str = luaL_checkstring(L, 2);
@@ -862,7 +856,7 @@ static cxInt cxCreateTexture(lua_State *L)
     }
     cxTexture texture = NULL;
     if(path->count > 0){
-        texture = cxTextureCreate(path->path);
+        texture = cxTextureFactoryLoadFile(path->path);
         rv->size = texture->size;
         CX_RETAIN_SWAP(rv->texture, texture);
     }
@@ -1013,7 +1007,7 @@ void cxEngineSystemInit(cxEngine engine)
     cxEngineRegisteFunc(cxRelativeH);
     cxEngineRegisteFunc(cxBinNumber);
     cxEngineRegisteFunc(cxHexNumber);
-    cxEngineRegisteFunc(cxCreateTexture);
+    cxEngineRegisteFunc(cxLoadTexture);
     cxEngineRegisteFunc(cxFixScaleW);
     cxEngineRegisteFunc(cxFixScaleH);
     cxEngineRegisteFunc(cxDataTypes);

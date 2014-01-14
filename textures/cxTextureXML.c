@@ -38,7 +38,7 @@ static cxBool cxTextureXMLLoad(cxAny this,cxStream stream)
         cxConstChars simagePath = cxXMLAttr(reader,"imagePath");
         CX_ASSERT(simagePath != NULL, "xml imagePath element miss");
     
-        xml->innerTexture = cxTextureCreate(simagePath);
+        xml->innerTexture = cxTextureFactoryLoadFile(simagePath);
         ret = (xml->innerTexture != NULL);
         CX_ASSERT(ret, "xml innert texture error");
         CX_RETAIN(xml->innerTexture);

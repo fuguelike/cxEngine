@@ -25,8 +25,7 @@ static cxInt cxTextureLuaMakeTexture(lua_State *L)
 {
     cxConstChars file = luaL_checkstring(L, 1);
     //if need save to cache
-    cxBool cache = cxLuaBoolValue(L, 2, true);
-    cxTexture texture = cache ? cxTextureFactoryLoadFile(file) : cxTextureCreate(file);
+    cxTexture texture = cxTextureFactoryLoadFile(file);
     CX_LUA_PUSH_OBJECT(texture);
     return 1;
 }

@@ -72,7 +72,7 @@ void cxParticleInitFromPEX(cxAny pview,cxConstChars file)
         cxConstChars temp = cxXMLReadElementName(reader);
         if(ELEMENT_IS_TYPE(texture)){
             cxConstChars name = cxXMLAttr(reader, "name");
-            cxSpriteSetTextureURL(this, name, true, true);
+            cxSpriteSetTextureURL(this, name, true);
         }else if(ELEMENT_IS_TYPE(sourcePosition)){
             this->position.v.x = 0;//cxXMLReadFloatAttr(reader,NULL, "x", 0);
             this->position.v.y = 0;//cxXMLReadFloatAttr(reader,NULL, "y", 0);
@@ -214,7 +214,7 @@ cxAny cxParticleCreate(cxConstChars texURL,cxInt number)
 {
     cxParticle this = CX_CREATE(cxParticle);
     cxParticleInit(this, number);
-    cxSpriteSetTextureURL(this, texURL, true, true);
+    cxSpriteSetTextureURL(this, texURL, true);
     cxParticleSetBlendMode(this, cxParticleBlendMultiply);
     return this;
 }

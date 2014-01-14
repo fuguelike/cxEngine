@@ -2,10 +2,16 @@
 
 <!--TextureKey at *.xml file use-->
 <cxHashRoot>
+    
+    <cxBool id="showBorder">true</cxBool>
+    
+    <cxSize2f id="desSize">1024,768</cxSize2f>
+    
     <cxHash id="lang">
         <cxString key="en">en</cxString>
         <cxString key="zh">en</cxString>
         <cxString key="us">en</cxString>
         <cxString key="jp">en</cxString>
     </cxHash>
+    
 </cxHashRoot>

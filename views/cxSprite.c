@@ -16,9 +16,8 @@ static cxInt cxSpriteLuaSetTexture(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxSprite);
     cxBool ust = cxLuaBoolValue(L, 3, true);
-    cxBool cache = cxLuaBoolValue(L, 4, true);
     cxConstChars url = luaL_checkstring(L, 2);
-    cxSpriteSetTextureURL(this, url, ust, cache);
+    cxSpriteSetTextureURL(this, url, ust);
     return 0;
 }
 
@@ -26,9 +25,8 @@ static cxInt cxSpriteLuaMake(lua_State *L)
 {
     CX_LUA_CREATE_THIS(cxSprite);
     cxBool ust = cxLuaBoolValue(L, 2, true);
-    cxBool cache = cxLuaBoolValue(L, 3, true);
     cxConstChars url = luaL_checkstring(L, 1);
-    cxSpriteSetTextureURL(this, url, ust, cache);
+    cxSpriteSetTextureURL(this, url, ust);
     CX_LUA_RET_THIS(cxSprite);
 }
 
@@ -111,18 +109,13 @@ void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
     cxViewSetDirty(pview, true);
 }
 
-void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize,cxBool cached)
+void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
 {
     CX_RETURN(url == NULL);
     cxSprite this = pview;
     cxUrlPath path = cxUrlPathParse(url);
     CX_RETURN(path == NULL);
     cxTexture texture = cxTextureFactoryLoadFile(path->path);
-    if(cached){
-        texture = cxTextureFactoryLoadFile(path->path);
-    }else{
-        texture = cxTextureCreate(path->path);
-    }
     CX_ASSERT(texture != NULL, "texture load failed %s",path->path);
     cxSpriteSetTexture(this, texture);
     //use texture size
@@ -170,7 +163,7 @@ CX_OBJECT_TERM(cxSprite, cxView)
 cxSprite cxSpriteCreateWithURL(cxConstChars url)
 {
     cxSprite this = CX_CREATE(cxSprite);
-    cxSpriteSetTextureURL(this, url, true, true);
+    cxSpriteSetTextureURL(this, url, true);
     return this;
 }
 

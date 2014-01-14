@@ -64,7 +64,7 @@ cxTexture cxTextureFactoryLoadText(const cxString txt,const cxString font,cxText
     return (cxTexture)texture;
 }
 
-cxTexture cxTextureCreate(cxConstChars file)
+static cxTexture cxTextureCreate(cxConstChars file)
 {
     cxTexture texture = NULL;
     CX_ASSERT(file != NULL, "file args error");

@@ -52,7 +52,7 @@ void cxSpriteDraw(cxAny pview);
 
 void cxSpriteSetShader(cxAny pview,cxConstChars key);
 
-void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize,cxBool cached);
+void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize);
 
 void cxSpriteSetTexture(cxAny pview,cxTexture texture);
 

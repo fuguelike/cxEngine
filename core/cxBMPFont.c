@@ -99,7 +99,7 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
         }else if(ELEMENT_IS_TYPE(page)){
             cxInt id = cxXMLReadIntAttr(info, "id", 0);
             cxConstChars file = cxXMLAttr(reader, "file");
-            cxTexture texture = cxTextureCreate(file);
+            cxTexture texture = cxTextureFactoryLoadFile(file);
             CX_ASSERT(texture != NULL, "create bmp texture failed");
             cxHashSet(this->textures, cxHashIntKey(id), texture);
         }else if(ELEMENT_IS_TYPE(char)){
