@@ -1,5 +1,5 @@
 
-<cxButton cxView.w="180" cxView.h="120"
+<cxButton cxView.size="180,120"
     cxButton.onRelease="${release}"
     cxButton.onEnter="cxEventAction({'src':'actions.xml?btnEnter','cache':true})"
     cxButton.onLeave="cxEventAction({'src':'actions.xml?btnLeave','cache':true})">

@@ -284,19 +284,23 @@ void cxEngineLayout(cxInt width,cxInt height)
 
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
+    cxAllocatorInit();
     cxAutoPoolInit();
     kmGLInitialize();
     xmlInitGlobals();
+    
     this->frameInterval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->isTouch = true;
     this->scale     = cxVec2fv(1.0f, 1.0f);
+    
     this->window    = CX_ALLOC(cxWindow);
     this->scripts   = CX_ALLOC(cxHash);
     this->datasets  = CX_ALLOC(cxHash);
     this->actions   = CX_ALLOC(cxHash);
     this->dbenvs    = CX_ALLOC(cxHash);
     this->bmpfonts  = CX_ALLOC(cxHash);
+    
     gL = lua_newstate(cxEngineLuaAllocFunc, this);
     CX_ASSERT(gL != NULL, "new lua state error");
     lua_atpanic(gL, cxEngineLuaPanic);
@@ -313,6 +317,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->datasets);
     CX_RELEASE(this->scripts);
     CX_RELEASE(this->dbenvs);
+    CX_RELEASE(this->window);
     
     CX_SIGNAL_RELEASE(this->onRecvJson);
     CX_SIGNAL_RELEASE(this->onTouch);
@@ -322,7 +327,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_SIGNAL_RELEASE(this->onPause);
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
-    CX_RELEASE(this->window);
+    
     
     CX_METHOD_RELEASE(this->MakeAction);
     CX_METHOD_RELEASE(this->MakeView);
@@ -361,9 +366,8 @@ void cxEngineSetLocalized(cxString lang)
 cxEngine cxEngineInstance()
 {
     if(instance == NULL) {
-        CX_LOGGER("cxEngine Version:%d",CX_ENGINE_VERSION);
+        CX_LOGGER("cxEngine Version: %d",CX_ENGINE_VERSION);
         instance = CX_ALLOC(cxEngine);
-        cxAllocatorInit();
     }
     return instance;
 }
@@ -454,8 +458,8 @@ cxVec2f cxEngineTouchToWindow(cxVec2f pos)
 {
     cxEngine this = cxEngineInstance();
     cxVec2f rv;
-    rv.x = pos.x - this->winsize.w/2.0f;
-    rv.y = this->winsize.h/2.0f - pos.y;
+    rv.x = pos.x - this->winsize.w / 2.0f;
+    rv.y = this->winsize.h / 2.0f - pos.y;
     return rv;
 }
 
@@ -463,8 +467,8 @@ cxVec2f cxEngineWindowToTouch(cxVec2f pos)
 {
     cxEngine this = cxEngineInstance();
     cxVec2f rv;
-    rv.x = this->winsize.w/2.0f - pos.x;
-    rv.y = pos.y - this->winsize.h/2.0f;
+    rv.x = this->winsize.w / 2.0f - pos.x;
+    rv.y = pos.y - this->winsize.h / 2.0f;
     return rv;
 }
 
@@ -984,15 +988,13 @@ static cxInt cxSpriteTexture(lua_State *L)
 void cxEngineSystemInit(cxEngine engine)
 {
     //read desSize setting
-    cxTypes desSizeTypes = cxEngineDataSet("appConfig.xml?desSize");
-    if(desSizeTypes != NULL && cxTypesIsType(desSizeTypes, cxTypesNumber)){
-        cxNumber num = desSizeTypes->any;
+    CX_ENGINE_APP_CONFIG(desSize){
+        cxNumber num = desSize->any;
         engine->dessize = cxNumberToSize2f(num);
     }
     //read showBorder setting
-    cxTypes showBorderTypes = cxEngineDataSet("appConfig.xml?showBorder");
-    if(showBorderTypes != NULL && cxTypesIsType(showBorderTypes, cxTypesNumber)){
-        cxNumber num = showBorderTypes->any;
+    CX_ENGINE_APP_CONFIG(showBorder){
+        cxNumber num = showBorder->any;
         engine->isShowBorder = cxNumberToBool(num);
     }
     //global func cxReaderAttrInfo *,args...

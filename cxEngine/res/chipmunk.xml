@@ -29,19 +29,19 @@
             cxChipmunk.static="true"/>
         <cxSprite
             cxChipmunk.support="true"
-            cxView.x="-200" cxView.y="200"
+            cxView.position="-200,200"
             cxSprite.texture="candy.xml?green.png"
             cxChipmunk.e="0.1"
             cxChipmunk.u="0.0"/>
         <cxSprite
             cxChipmunk.support="true"
-            cxView.x="-100" cxView.y="200"
+            cxView.position="-100,200"
             cxSprite.texture="candy.xml?orange.png"
             cxChipmunk.e="0.3"
             cxChipmunk.u="0.0"/>
         <cxSprite
             cxChipmunk.support="true"
-            cxView.x="0" cxView.y="400"
+            cxView.position="0,400"
             cxSprite.texture="candy.xml?yellow.png"
             cxChipmunk.e="1.0"
             cxChipmunk.u="0.0"/>
@@ -63,14 +63,14 @@
             cxChipmunk.static="true"/>
         <cxSprite
             cxChipmunk.support="true"
-            cxView.x="200" cxView.y="200"
+            cxView.size="200,200"
             cxSprite.texture="candy.xml?blue.png"
             cxChipmunk.static="true"/>
-        <cxButton cxChipmunk.support="true" cxView.w = "180" cxView.h = "120" cxButton.onPress="cxEventPopView()">
+        <cxButton cxChipmunk.support="true" cxView.size = "180,120" cxButton.onPress="cxEventPopView()">
             <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="return" cxLabelTTF.size="30"/>
         </cxButton>
-        <cxButton cxChipmunk.support="true" cxView.w = "180" cxView.h = "120" cxButton.onPress="deleteSprite">
+        <cxButton cxChipmunk.support="true" cxView.size = "180,120" cxButton.onPress="deleteSprite">
             <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="test" cxLabelTTF.size="30"/>
         </cxButton>

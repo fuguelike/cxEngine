@@ -148,11 +148,6 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     if(this->isPause || this->isExit){
         goto finished;
     }
-    //action delay
-    this->delayElapsed += dt;
-    if(this->delay > 0 && this->delayElapsed < this->delay){
-        goto finished;
-    }
     //init event
     if(!this->isFirst){
         this->isFirst = true;
@@ -162,6 +157,11 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->durationElapsed = this->durationInit;
         CX_METHOD_FIRE(NULL, this->Init, this);
         CX_EVENT_FIRE(this, onStart);
+    }
+    //action delay
+    this->delayElapsed += dt;
+    if(this->delay > 0 && this->delayElapsed < this->delay){
+        goto finished;
     }
     //for active
     if(!this->isActive){

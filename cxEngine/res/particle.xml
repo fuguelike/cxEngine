@@ -26,9 +26,7 @@
 
     <cxParticle cxView.fill="0,0,0,0" id="p" cxParticle.pex = "particle.pex" />
 
-    <cxButton
-        cxView.w = "180"
-        cxView.h = "120"
+    <cxButton cxView.size="180,120"
         cxView.right="10"
         cxView.bottom="10"
         cxButton.onRelease="cxEventPopView()">
