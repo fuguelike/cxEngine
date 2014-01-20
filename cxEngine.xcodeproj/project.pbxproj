@@ -241,7 +241,6 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8385986F187D345A00AF7472 /* polygon.xml */,
 				8341C6AE1822812B0045A66F /* 2.pvr */,
 				8341C6AF1822812B0045A66F /* 4.pvr */,
 				8341C6B01822812B0045A66F /* action.xml */,
@@ -255,6 +254,7 @@
 				83900BC918471DCE00E702C7 /* atlas.xml */,
 				836FE8D2185AFF9F003A5E9C /* ball.png */,
 				8341C6B21822812B0045A66F /* banana.ttf */,
+				830B8C8A186DAB210093724A /* bind.lua */,
 				832A3EF21855F9DF00047C64 /* bmpfont.xml */,
 				8341C6B31822812B0045A66F /* button.xml */,
 				839103B918595754008DF1C7 /* buttontemp.xml */,
@@ -269,9 +269,9 @@
 				83E51BD518570640006AD253 /* en */,
 				835A95C1185597600088B413 /* font.fnt */,
 				835A95C2185597600088B413 /* font.png */,
+				839E7A5617F1BC7600B0F5EC /* InfoPlist.strings */,
 				8341C6B91822812B0045A66F /* items.xml */,
 				832C0CE51862998C0049B568 /* main.lua */,
-				830B8C8A186DAB210093724A /* bind.lua */,
 				839E7A5917F1BC7600B0F5EC /* main.m */,
 				8341C6BA1822812B0045A66F /* main.xml */,
 				836150FD184838B200EB9173 /* n.png */,
@@ -279,10 +279,10 @@
 				8359F7A01856C4600072D047 /* particle.pex */,
 				8341C6BC1822812B0045A66F /* particle.xml */,
 				837B7C75184C2A2100BB62AD /* pattern1.png */,
+				8385986F187D345A00AF7472 /* polygon.xml */,
 				8341C6BD1822812B0045A66F /* scale9.png */,
 				832D2D80182A353200C0AF53 /* scroll.xml */,
 				8341C6BE1822812B0045A66F /* simsun.ttf */,
-				839E7A5617F1BC7600B0F5EC /* InfoPlist.strings */,
 				8341C6BF1822812B0045A66F /* songti.ttf */,
 				8359F7A51856EADD0072D047 /* star.pex */,
 				8359F7A61856EADD0072D047 /* star.png */,

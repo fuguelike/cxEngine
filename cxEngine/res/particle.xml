@@ -2,6 +2,7 @@
 
 <!--TextureKey at *.xml file use-->
 <cxViewRoot cxView.fill="true">
+    
     <!--
     <cxParticle
         cxSprite.texture="n.png"
@@ -33,4 +34,5 @@
         <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
         <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Return" cxLabelTTF.size="30"/>
     </cxButton>
+    
 </cxViewRoot>

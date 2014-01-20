@@ -116,9 +116,9 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
     cxScroll this = pview;
     cxView view = cxScrollContainer(this);
     CX_RETURN(view == NULL || touch->type != cxTouchTypeDown);
-    this->box.l = (view->size.w-this->super.size.w)/2.0f;
+    this->box.l = (view->size.w - this->super.size.w)/2.0f;
     this->box.r = -this->box.l;
-    this->box.t = (view->size.h-this->super.size.h)/2.0f;
+    this->box.t = (view->size.h - this->super.size.h)/2.0f;
     this->box.b = -this->box.t;
     cxViewStopAction(view, CX_SCROLL_MOVE_ACTION_ID);
 }
