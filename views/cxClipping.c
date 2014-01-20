@@ -38,7 +38,9 @@ static void cxClippingDrawBefore(cxAny pview)
     glEnable(GL_STENCIL_TEST);
     glStencilFunc(GL_ALWAYS, this->useRef, CX_STENCIL_MASK);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    
     CX_EVENT_FIRE(this, onClipping);
+    
     glStencilFunc(this->inverse ? GL_NOTEQUAL : GL_EQUAL, this->useRef, CX_STENCIL_MASK);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 }

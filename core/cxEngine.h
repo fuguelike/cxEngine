@@ -24,7 +24,7 @@ CX_C_BEGIN
 
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
-#define CX_ENGINE_APP_CONFIG(n) cxTypes n = cxEngineDataSet("appConfig.xml?"#n);if((n) != NULL)
+#define CX_ENGINE_APP_CONFIG(n) cxTypes n = cxEngineTypes("appConfig.xml?"#n);if((n) != NULL)
 
 #define cxEngineRegisteNameFunc(n,f) lua_pushcfunction(gL, f);lua_setglobal(gL, #n)
 
@@ -81,7 +81,7 @@ cxString cxEngineGetLuaScript(cxConstChars file);
 
 void cxEngineSetLocalLang(cxString lang);
 
-cxAny cxEngineDataSet(cxConstChars url);
+cxAny cxEngineTypes(cxConstChars url);
 
 cxAny cxEngineDB(cxConstChars url);
 

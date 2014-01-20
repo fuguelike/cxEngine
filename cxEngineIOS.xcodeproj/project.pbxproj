@@ -459,18 +459,18 @@
 		8341C34218227C310045A66F = {
 			isa = PBXGroup;
 			children = (
-				8341C67818227FA10045A66F /* ios */,
 				8341C50118227DF20045A66F /* actions */,
 				8341C51418227DF20045A66F /* chipmunk */,
 				8341C54D18227DF20045A66F /* core */,
+				8341C34D18227C310045A66F /* Frameworks */,
+				8341C67818227FA10045A66F /* ios */,
 				8341C5A418227DF20045A66F /* kazmath */,
+				8341C34C18227C310045A66F /* Products */,
 				8341C5C018227DF20045A66F /* shaders */,
 				8341C5C918227DF20045A66F /* socket */,
 				8341C5D018227DF20045A66F /* streams */,
 				8341C5D718227DF20045A66F /* textures */,
 				8341C5E418227DF20045A66F /* views */,
-				8341C34D18227C310045A66F /* Frameworks */,
-				8341C34C18227C310045A66F /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -508,6 +508,8 @@
 			children = (
 				8341C50218227DF20045A66F /* cxActionSet.c */,
 				8341C50318227DF20045A66F /* cxActionSet.h */,
+				83607AA018444B39005C392B /* cxAnimate.c */,
+				83607AA118444B39005C392B /* cxAnimate.h */,
 				8341C50418227DF20045A66F /* cxCurve.c */,
 				8341C50518227DF20045A66F /* cxCurve.h */,
 				8341C50618227DF20045A66F /* cxFade.c */,
@@ -516,24 +518,22 @@
 				8341C50918227DF20045A66F /* cxJump.h */,
 				8341C50A18227DF20045A66F /* cxMove.c */,
 				8341C50B18227DF20045A66F /* cxMove.h */,
+				83E239E4187E9AFF0063A0B1 /* cxParabola.c */,
+				83E239E5187E9AFF0063A0B1 /* cxParabola.h */,
 				8341C50C18227DF20045A66F /* cxRotate.c */,
 				8341C50D18227DF20045A66F /* cxRotate.h */,
+				83BAB0711835F578004DAEA6 /* cxRunner.c */,
+				83BAB0721835F578004DAEA6 /* cxRunner.h */,
+				834F35E2186D7CC0005EB6D0 /* cxRunParticle.c */,
+				834F35E3186D7CC0005EB6D0 /* cxRunParticle.h */,
 				8341C50E18227DF20045A66F /* cxScale.c */,
 				8341C50F18227DF20045A66F /* cxScale.h */,
+				83DF79771859B665007F47C3 /* cxSpline.c */,
+				83DF79781859B665007F47C3 /* cxSpline.h */,
 				8341C51018227DF20045A66F /* cxTimer.c */,
 				8341C51118227DF20045A66F /* cxTimer.h */,
 				8341C51218227DF20045A66F /* cxTint.c */,
 				8341C51318227DF20045A66F /* cxTint.h */,
-				83BAB0711835F578004DAEA6 /* cxRunner.c */,
-				83BAB0721835F578004DAEA6 /* cxRunner.h */,
-				83607AA018444B39005C392B /* cxAnimate.c */,
-				83607AA118444B39005C392B /* cxAnimate.h */,
-				83DF79771859B665007F47C3 /* cxSpline.c */,
-				83DF79781859B665007F47C3 /* cxSpline.h */,
-				834F35E2186D7CC0005EB6D0 /* cxRunParticle.c */,
-				834F35E3186D7CC0005EB6D0 /* cxRunParticle.h */,
-				83E239E4187E9AFF0063A0B1 /* cxParabola.c */,
-				83E239E5187E9AFF0063A0B1 /* cxParabola.h */,
 			);
 			path = actions;
 			sourceTree = "<group>";
