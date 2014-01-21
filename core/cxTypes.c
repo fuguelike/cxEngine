@@ -92,7 +92,6 @@ cxVec2f cxLuaVec2fValue(lua_State *L,cxInt n,cxVec2f d)
     lua_getfield(L, n, "x");
     v.x = lua_tonumber(L, -1);
     lua_pop(L, 1);
-    
     lua_getfield(L, n, "y");
     v.y = lua_tonumber(L, -1);
     lua_pop(L, 1);
@@ -137,7 +136,6 @@ cxSize2f cxLuaSize2fValue(lua_State *L,cxInt n,cxSize2f d)
     lua_getfield(L, n, "w");
     v.w = lua_tonumber(L, -1);
     lua_pop(L, 1);
-    
     lua_getfield(L, n, "h");
     v.h = lua_tonumber(L, -1);
     lua_pop(L, 1);
