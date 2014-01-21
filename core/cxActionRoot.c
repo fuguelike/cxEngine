@@ -135,13 +135,11 @@ static void cxActionRootLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
         break;
     }
     while(xmlTextReaderRead(reader)){
-        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
-            continue;
-        }
+        CX_CONTINUE(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT);
+        
         cxConstChars id = cxXMLAttr(reader, "id");
-        if(id == NULL){
-            continue;
-        }
+        CX_CONTINUE(id == NULL);
+        
         cxString code = cxXMLReaderReadOuterXml(reader);
         cxHashSet(this->codes, cxHashStrKey(id), code);
     }
