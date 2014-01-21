@@ -46,7 +46,7 @@ CX_LUA_METHOD_BEG(cxViewRoot)
     {"Make",cxViewRootLuaMake},
 CX_LUA_METHOD_END(cxViewRoot)
 
-void cxViewRootTypeInit()
+void __cxViewRootTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxViewRoot);
 }

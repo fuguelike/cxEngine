@@ -54,7 +54,7 @@ CX_LUA_METHOD_BEG(cxStack)
     {"ReplaceTop",cxStackLuaReplaceTop},
 CX_LUA_METHOD_END(cxStack)
 
-void cxStackTypeInit()
+void __cxStackTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxStack);
 }

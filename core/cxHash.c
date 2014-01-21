@@ -80,7 +80,7 @@ CX_LUA_METHOD_BEG(cxHash)
     {"Clean",cxHashLuaClean},
 CX_LUA_METHOD_END(cxHash)
 
-void cxHashTypeInit()
+void __cxHashTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxHash);
 }

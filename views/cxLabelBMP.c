@@ -69,7 +69,7 @@ CX_LUA_METHOD_BEG(cxLabelBMP)
     {"Make",cxLabelBMPLuaMake},
 CX_LUA_METHOD_END(cxLabelBMP)
 
-void cxLabelBMPTypeInit()
+void __cxLabelBMPTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxLabelBMP);
 }

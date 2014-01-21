@@ -71,7 +71,7 @@ CX_LUA_METHOD_BEG(cxEngine)
     CX_LUA_PROPERTY(cxEngine, DesignSize),
 CX_LUA_METHOD_END(cxEngine)
 
-void cxEngineTypeInit()
+void __cxEngineTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxEngine);
 }

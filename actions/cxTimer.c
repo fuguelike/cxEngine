@@ -36,7 +36,7 @@ CX_LUA_METHOD_BEG(cxTimer)
     CX_LUA_PROPERTY(cxTimer, Repeat),
 CX_LUA_METHOD_END(cxTimer)
 
-void cxTimerTypeInit()
+void __cxTimerTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxTimer);
 }

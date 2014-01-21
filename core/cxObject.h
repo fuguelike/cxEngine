@@ -126,7 +126,7 @@ static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;        \
 typedef struct _t_ * _t_;                                           \
 void __##_t_##AutoInit(_t_ this);                                   \
 void __##_t_##AutoFree(_t_ this);                                   \
-void _t_##TypeInit();                                               \
+void __##_t_##TypeInit();                                           \
 extern const luaL_Reg _t_##LuaMethods[];                            \
 struct _t_ {
 

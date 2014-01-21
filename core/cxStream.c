@@ -118,7 +118,7 @@ CX_LUA_METHOD_BEG(cxStream)
     {"File",cxStreamLuaMakeFile},
 CX_LUA_METHOD_END(cxStream)
 
-void cxStreamTypeInit()
+void __cxStreamTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxStream);
 }

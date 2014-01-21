@@ -26,7 +26,7 @@ static cxInt cxActionType(lua_State *L)
     return 1;
 }
 
-void cxActionSetTypeInit()
+void __cxActionSetTypeInit()
 {
     cxEngineRegisteFunc(cxActionType);
 }

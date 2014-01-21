@@ -62,7 +62,7 @@ CX_LUA_METHOD_BEG(cxWindow)
     {"ReplaceView",cxWindowLuaReplaceView},
 CX_LUA_METHOD_END(cxWindow)
 
-void cxWindowTypeInit()
+void __cxWindowTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxWindow);
 }

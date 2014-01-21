@@ -25,7 +25,7 @@ CX_LUA_METHOD_BEG(cxButton)
     {"AppendEvent",cxButtonLuaAppendEvent},
 CX_LUA_METHOD_END(cxButton)
 
-void cxButtonTypeInit()
+void __cxButtonTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxButton);
 }

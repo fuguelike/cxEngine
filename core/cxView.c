@@ -221,7 +221,7 @@ CX_LUA_METHOD_BEG(cxView)
     CX_LUA_PROPERTY(cxView,FixScale),
 CX_LUA_METHOD_END(cxView)
 
-void cxViewTypeInit()
+void __cxViewTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxView);
 }

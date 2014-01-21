@@ -69,7 +69,7 @@ CX_LUA_METHOD_BEG(cxLabelTTF)
     {"Make",cxLabelTTFLuaMake},
 CX_LUA_METHOD_END(cxLabelTTF)
 
-void cxLabelTTFTypeInit()
+void __cxLabelTTFTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxLabelTTF);
 }

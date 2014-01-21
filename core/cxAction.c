@@ -23,7 +23,7 @@ CX_LUA_METHOD_BEG(cxAction)
     {"AppendEvent",cxActionLuaAppendEvent},
 CX_LUA_METHOD_END(cxAction)
 
-void cxActionTypeInit()
+void __cxActionTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxAction);
 }

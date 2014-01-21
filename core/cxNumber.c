@@ -111,7 +111,7 @@ CX_LUA_METHOD_BEG(cxNumber)
     {"NewSize2f",cxNumberLuaNewSize2f},
 CX_LUA_METHOD_END(cxNumber)
 
-void cxNumberTypeInit()
+void __cxNumberTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxNumber);
 }

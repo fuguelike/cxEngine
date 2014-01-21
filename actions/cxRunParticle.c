@@ -25,7 +25,7 @@ static cxInt cxRunParticleTypeImp(lua_State *L)
     return 1;
 }
 
-void cxRunParticleTypeInit()
+void __cxRunParticleTypeInit()
 {
     cxEngineRegisteNameFunc(cxRunParticleType,cxRunParticleTypeImp);
 }

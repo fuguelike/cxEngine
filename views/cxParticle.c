@@ -38,7 +38,7 @@ static cxInt cxBlendMode(lua_State *L)
     return 1;
 }
 
-void cxParticleTypeInit()
+void __cxParticleTypeInit()
 {
     cxEngineRegisteFunc(cxEmitterType);
     cxEngineRegisteFunc(cxBlendMode);

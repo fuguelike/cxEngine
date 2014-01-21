@@ -75,7 +75,7 @@ CX_LUA_METHOD_BEG(cxList)
     {"Clean",   cxListLuaClean},
 CX_LUA_METHOD_END(cxList)
 
-void cxListTypeInit()
+void __cxListTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxList);
 }

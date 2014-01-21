@@ -29,7 +29,7 @@ CX_LUA_METHOD_BEG(cxIconv)
     {"Iconv",cxIconvLuaIconv},
 CX_LUA_METHOD_END(cxIconv)
 
-void cxIconvTypeInit()
+void __cxIconvTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxIconv);
 }

@@ -37,7 +37,7 @@ CX_LUA_METHOD_BEG(cxString)
     {"Print",cxStringLuaPrint},
 CX_LUA_METHOD_END(cxString)
 
-void cxStringTypeInit()
+void __cxStringTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxString);
 }

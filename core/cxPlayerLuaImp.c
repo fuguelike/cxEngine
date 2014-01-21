@@ -30,7 +30,7 @@ CX_LUA_METHOD_BEG(cxPlayer)
     {"PlayMusic",cxPlayLuaMusic},
 CX_LUA_METHOD_END(cxPlayer)
 
-void cxPlayerTypeInit()
+void __cxPlayerTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxPlayer);
 }

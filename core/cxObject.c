@@ -80,7 +80,7 @@ void cxLuaLoad(cxConstType name, const luaL_Reg *methods)
     lua_pop(gL, 1);
 }
 
-void cxObjectTypeInit()
+void __cxObjectTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxObject);
 }

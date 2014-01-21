@@ -36,7 +36,7 @@ CX_LUA_METHOD_BEG(cxSprite)
 CX_LUA_METHOD_END(cxSprite)
 
 
-void cxSpriteTypeInit()
+void __cxSpriteTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxSprite);
 }

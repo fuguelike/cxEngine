@@ -34,7 +34,7 @@ CX_LUA_METHOD_BEG(cxTexture)
     {"Make",cxTextureLuaMakeTexture},
 CX_LUA_METHOD_END(cxTexture)
 
-void cxTextureTypeInit()
+void __cxTextureTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxTexture);
 }
