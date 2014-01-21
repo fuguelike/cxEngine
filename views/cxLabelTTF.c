@@ -88,6 +88,8 @@ void cxLabelTTFReadAttr(cxReaderAttrInfo *info)
     cxLabelTTFSetFontSize(this, cxXMLReadFloatAttr(info, "cxLabelTTF.size", this->attr.size));
     //set fontbold
     cxLabelTTFSetFontBold(this, cxXMLReadBoolAttr(info, "cxLabelTTF.bold", this->attr.bold));
+    //update size
+    cxLabelTTFUpdateText(this);
 }
 
 static void cxLabelTTFUpdate(cxEvent *event)

@@ -149,6 +149,8 @@ void cxLabelBMPReadAttr(cxReaderAttrInfo *info)
     cxLabelBMPSetText(this, text);
     //set fontsize
     cxLabelBMPSetSize(this, cxXMLReadFloatAttr(info, "cxLabelBMP.size", this->size));
+    //update size
+    cxLabelBMPUpdateText(this);
 }
 
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
