@@ -67,12 +67,23 @@
 		839103BA18595754008DF1C7 /* buttontemp.xml in Resources */ = {isa = PBXBuildFile; fileRef = 839103B918595754008DF1C7 /* buttontemp.xml */; };
 		839103BD1859631E008DF1C7 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 839103BC1859631E008DF1C7 /* libpcre.a */; };
 		839AC1D21832214D00AEBF8E /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 839AC1D11832214D00AEBF8E /* libjansson.a */; };
+		839D1EAE188F6B5B003FFC74 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 839D1EAD188F6B51003FFC74 /* libcxEngineIOS.a */; };
 		839E7A5817F1BC7600B0F5EC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 839E7A5617F1BC7600B0F5EC /* InfoPlist.strings */; };
 		839E7A5A17F1BC7600B0F5EC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 839E7A5917F1BC7600B0F5EC /* main.m */; };
 		839E7A6A17F1BC7600B0F5EC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 839E7A6917F1BC7600B0F5EC /* Images.xcassets */; };
 		83E51BD618570640006AD253 /* en in Resources */ = {isa = PBXBuildFile; fileRef = 83E51BD518570640006AD253 /* en */; };
 		83F59E04185FF71500C43319 /* appConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83F59E03185FF71500C43319 /* appConfig.xml */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		839D1EAC188F6B51003FFC74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 839D1EA8188F6B51003FFC74 /* cxEngineIOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8341C34B18227C310045A66F;
+			remoteInfo = cxEngineIOS;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		8300651F18232BE000AF680D /* cxEngine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = cxEngine.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,6 +151,7 @@
 		839103B918595754008DF1C7 /* buttontemp.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = buttontemp.xml; path = res/buttontemp.xml; sourceTree = "<group>"; };
 		839103BC1859631E008DF1C7 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		839AC1D11832214D00AEBF8E /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
+		839D1EA8188F6B51003FFC74 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		839E7A5517F1BC7600B0F5EC /* cxEngine-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "cxEngine-Info.plist"; sourceTree = "<group>"; };
 		839E7A5717F1BC7600B0F5EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		839E7A5917F1BC7600B0F5EC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -154,6 +166,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				839D1EAE188F6B5B003FFC74 /* libcxEngineIOS.a in Frameworks */,
 				830B8C8C187147790093724A /* libluajit.a in Frameworks */,
 				83273E7B1862D8CA00232D58 /* libxml2.a in Frameworks */,
 				83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */,
@@ -173,9 +186,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		839D1EA9188F6B51003FFC74 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				839D1EAD188F6B51003FFC74 /* libcxEngineIOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		839E7A3D17F1BC7600B0F5EC = {
 			isa = PBXGroup;
 			children = (
+				839D1EA8188F6B51003FFC74 /* cxEngineIOS.xcodeproj */,
 				839E7A5317F1BC7600B0F5EC /* cxEngine */,
 				839E7A4817F1BC7600B0F5EC /* Frameworks */,
 				8300651F18232BE000AF680D /* cxEngine.app */,
@@ -321,12 +343,28 @@
 			mainGroup = 839E7A3D17F1BC7600B0F5EC;
 			productRefGroup = 839E7A3D17F1BC7600B0F5EC;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 839D1EA9188F6B51003FFC74 /* Products */;
+					ProjectRef = 839D1EA8188F6B51003FFC74 /* cxEngineIOS.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				839E7A4517F1BC7600B0F5EC /* cxEngine */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		839D1EAD188F6B51003FFC74 /* libcxEngineIOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcxEngineIOS.a;
+			remoteRef = 839D1EAC188F6B51003FFC74 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		839E7A4417F1BC7600B0F5EC /* Resources */ = {
