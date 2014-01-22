@@ -36,12 +36,12 @@ enum {
     cxVertexAttribFlagTexcoord    = 1 << 2,
     cxVertexAttribFlagPosColorTex = cxVertexAttribFlagPosition|cxVertexAttribFlagColor|cxVertexAttribFlagTexcoord,
 };
-//shader key define
 
-extern cxConstChars cxShaderPositionColorKey;
-extern cxConstChars cxShaderDefaultKey;
-extern cxConstChars cxShaderAlphaKey;
-extern cxConstChars cxShaderClippingKey;
+//shader key define
+CX_EXTERN cxConstChars cxShaderPositionColorKey;
+CX_EXTERN cxConstChars cxShaderDefaultKey;
+CX_EXTERN cxConstChars cxShaderAlphaKey;
+CX_EXTERN cxConstChars cxShaderClippingKey;
 
 typedef struct{
     GLuint    minFilter;

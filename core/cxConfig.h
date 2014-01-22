@@ -89,6 +89,8 @@
 #define CX_C_END
 #endif
 
+#define CX_EXTERN   extern
+
 #ifndef CX_MIN
 #define CX_MIN(x,y) (((x) > (y)) ? (y) : (x))
 #endif

@@ -25,19 +25,21 @@
 
 #include "chipmunk_private.h"
 
+#include <core/cxBase.h>
+
 void
 cpMessage(const char *condition, const char *file, int line, cpBool isError, cpBool isHardError, const char *message, ...)
 {
-	fprintf(stderr, (isError ? "Aborting due to Chipmunk error: " : "Chipmunk warning: "));
-	
+    CX_ERROR((isError ? "Aborting due to Chipmunk error: " : "Chipmunk warning: "));
 	va_list vargs;
 	va_start(vargs, message); {
-		vfprintf(stderr, message, vargs);
-		fprintf(stderr, "\n");
+        char msg[1024]={0};
+        vsprintf(msg, message, vargs);
+        CX_ERROR(msg);
 	} va_end(vargs);
 	
-	fprintf(stderr, "\tFailed condition: %s\n", condition);
-	fprintf(stderr, "\tSource:%s:%d\n", file, line);
+	CX_ERROR("\tFailed condition: %s\n", condition);
+	CX_ERROR("\tSource:%s:%d\n", file, line);
 	
 	if(isError) abort();
 }

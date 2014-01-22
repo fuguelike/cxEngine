@@ -90,7 +90,8 @@ LOCAL_SRC_FILES += \
     actions/cxRunner.c \
     actions/cxAnimate.c \
     actions/cxSpline.c \
-    actions/cxRunParticle.c
+    actions/cxRunParticle.c \
+    actions/cxParabola.c
 
 LOCAL_SRC_FILES += \
     views/cxAtlas.c \
@@ -104,7 +105,9 @@ LOCAL_SRC_FILES += \
     views/cxScroll.c \
     views/cxLoading.c \
     views/cxChipmunk.c \
-    views/cxLabelBMP.c
+    views/cxLabelBMP.c \
+    views/cxAtlasSet.c \
+    views/cxPolygon.c
 
 LOCAL_SRC_FILES += \
     socket/cxEventBase.c \

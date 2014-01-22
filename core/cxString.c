@@ -172,7 +172,7 @@ cxBool cxConstCharsIsNumber(cxConstChars s)
 {
     CX_RETURN(s == NULL, false);
     for(cxInt i = 0; i < strlen(s); i++){
-        if(!isnumber(s[i])){
+        if(!isdigit(s[i])){
             return false;
         }
     }

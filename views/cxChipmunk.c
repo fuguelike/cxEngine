@@ -14,7 +14,7 @@
 static cxInt cxShapeType(lua_State *L)
 {
     cxNumber num = cxNumberInt(cxChipmunkShapeBox);
-    cxConstChars shape = luaL_checkstring(L, 1);
+    cxConstChars shape = luaL_checkstring(L, 2);
     if(cxConstCharsEqu(shape, "box")){
         num = cxNumberInt(cxChipmunkShapeBox);
     }else if(cxConstCharsEqu(shape, "circle")){
@@ -193,7 +193,8 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
     }else if(attr->shape == cxChipmunkShapeCircle){
         i = cpMomentForCircle(attr->m, 0, r, attr->cp);
     }else{
-        CX_ASSERT(false, "shape error");
+        CX_ERROR("shape error");
+        return NULL;
     }
     //set body attr
     if(attr->isStatic){

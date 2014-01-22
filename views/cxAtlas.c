@@ -176,15 +176,15 @@ cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColo
     cxBoxPoint rv;
     cxFloat wh = size.w/2.0f;
     cxFloat hh = size.h/2.0f;
-    
+
     rv.lb.colors = color;
     rv.lb.texcoords = tex.lb;
     rv.lb.vertices = cxVec3fv(pos.x - wh, pos.y - hh, 0.0f);
-    
+
     rv.lt.colors = color;
     rv.lt.texcoords = tex.lt;
     rv.lt.vertices = cxVec3fv(pos.x - wh, pos.y + hh, 0.0f);
-    
+
     rv.rt.colors = color;
     rv.rt.texcoords = tex.rt;
     rv.rt.vertices = cxVec3fv(pos.x + wh, pos.y + hh, 0.0f);
