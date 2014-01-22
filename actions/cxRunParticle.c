@@ -49,8 +49,6 @@ static void cxRunParticleInit(cxAny pav)
         CX_SLOT_CONNECT(view->EmmitDraw, this, DrawParticle, cxRunParticleDraw);
     }else if(this->type == cxRunParticleTypeAfter){
         CX_SLOT_CONNECT(view->EmmitAfter, this, DrawParticle, cxRunParticleDraw);
-    }else {
-        CX_ASSERT(false, "cx run type error");
     }
 }
 

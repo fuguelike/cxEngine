@@ -58,8 +58,8 @@
     </cxHash>
     <cxArray id="points">
         <cxPoint>-200,200,0,1,1,1,1,0.0,0.0</cxPoint>
-        <cxPoint>200,200,0,1,1,1,1,1.0,0.0</cxPoint>
-        <cxPoint>-200,-200,0,1,1,1,1,0.0,1.0</cxPoint>
+        <cxPoint>200,200,500,1,1,1,1,1.0,0.0</cxPoint>
+        <cxPoint>-200,-200,-500,1,1,1,1,0.0,1.0</cxPoint>
         <cxPoint>200,-200,0,1,1,1,1,1.0,1.0</cxPoint>
     </cxArray>
     <cxArray id="list">

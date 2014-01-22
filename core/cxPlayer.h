@@ -54,7 +54,7 @@ void cxResumeMusic();
 
 #define INIT_TRACK 5
 
-void cxPlayerOpen(cxInt freq,cxInt format);
+void cxPlayerOpen();
 
 void cxPlayerDestroy();
 

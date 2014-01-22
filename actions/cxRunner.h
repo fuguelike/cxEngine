@@ -14,7 +14,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxRunner, cxAction)
-    cxAny core;
+    cxAny data;
     cxInt count;
     cxInt step;
     CX_METHOD_ALLOC(void, Init, cxAny);
@@ -23,7 +23,7 @@ CX_OBJECT_END(cxRunner)
 
 void cxRunnerAppend(cxAny runner,cxAny pav, cxAny pview);
 
-cxRunner cxRunnerCreate(cxAny core);
+cxRunner cxRunnerCreate(cxAny data);
 
 CX_C_END
 

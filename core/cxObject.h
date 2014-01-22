@@ -152,7 +152,6 @@ extern lua_State *gL;
 
 #define CX_METHOD_OVERRIDE(_m_,_f_)     _m_ = _f_
 
-
 //base type define
 CX_OBJECT_BEG(cxObject)
     cxConstType cxType;
@@ -162,7 +161,7 @@ CX_OBJECT_BEG(cxObject)
     cxInt cxTag;
     cxInt cxBind;           //bind to lua table
     cxAny cxRoot;
-    CX_METHOD_ALLOC(void, ReadAttr,cxReaderAttrInfo *);
+    CX_METHOD_ALLOC(void, ReadAttr, cxReaderAttrInfo *);
 CX_OBJECT_END(cxObject)
 
 CX_C_END

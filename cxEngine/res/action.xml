@@ -181,11 +181,18 @@
         <cxButton
             cxView.w = "180"
             cxView.h = "120"
+            cxButton.onRelease="cxEventAction({'src':'actions.xml?rotate2','view':'sprite'})">
+            <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Rotate" cxLabelTTF.size="25"/>
+        </cxButton>
+        <cxButton
+            cxView.w = "180"
+            cxView.h = "120"
             cxButton.onRelease="cxEventPopView()">
             <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
             <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="Return" cxLabelTTF.size="25"/>
         </cxButton>
     </cxTable>
     
-    <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="atlas.xml?red.png"/>
+    <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="candy.xml?red.png"/>
 </cxViewRoot>

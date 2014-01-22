@@ -36,6 +36,8 @@ void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box);
 
 cxBoxTex2f cxSpriteBoxTex(cxAny pview);
 
+cxSprite cxSpriteCreateWithURL(cxConstChars url);
+
 cxSprite cxSpriteCreateWithFile(cxConstChars file,cxConstChars key);
 
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor);
@@ -50,7 +52,7 @@ void cxSpriteDraw(cxAny pview);
 
 void cxSpriteSetShader(cxAny pview,cxConstChars key);
 
-void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize,cxBool cached);
+void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize);
 
 void cxSpriteSetTexture(cxAny pview,cxTexture texture);
 

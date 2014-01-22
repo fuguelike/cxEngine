@@ -38,6 +38,10 @@
         cxAction.time="3.0"
         cxRotate.z="360"
         cxAction.curve="CubeIn"/>
+    <cxRotate id="rotate2"
+        cxAction.speed="1.0"
+        cxAction.time="1"
+        cxRotate.x="359"/>
     <cxScale id="btnEnter"
         cxAction.id="100"
         cxAction.speed="1.0"

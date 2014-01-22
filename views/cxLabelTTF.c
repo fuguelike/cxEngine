@@ -69,7 +69,7 @@ CX_LUA_METHOD_BEG(cxLabelTTF)
     {"Make",cxLabelTTFLuaMake},
 CX_LUA_METHOD_END(cxLabelTTF)
 
-void cxLabelTTFTypeInit()
+void __cxLabelTTFTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxLabelTTF);
 }
@@ -88,6 +88,8 @@ void cxLabelTTFReadAttr(cxReaderAttrInfo *info)
     cxLabelTTFSetFontSize(this, cxXMLReadFloatAttr(info, "cxLabelTTF.size", this->attr.size));
     //set fontbold
     cxLabelTTFSetFontBold(this, cxXMLReadBoolAttr(info, "cxLabelTTF.bold", this->attr.bold));
+    //update size
+    cxLabelTTFUpdateText(this);
 }
 
 static void cxLabelTTFUpdate(cxEvent *event)

@@ -19,6 +19,7 @@
 #include <actions/cxSpline.h>
 #include <actions/cxRunParticle.h>
 #include <actions/cxActionSet.h>
+#include <actions/cxParabola.h>
 #include "cxViewRoot.h"
 #include "cxActionRoot.h"
 #include "cxPlayer.h"
@@ -46,9 +47,7 @@ CX_OBJECT_TERM(cxActionRoot, cxObject)
 
 static void cxActionRootReaderError(void *arg,const char *msg,xmlParserSeverities severity,xmlTextReaderLocatorPtr locator)
 {
-    cxActionRoot this = arg;
-    CX_ERROR("%s",msg);
-    this->isError = true;
+    cxActionRoot this = arg;CX_ERROR("%s",msg);this->isError = true;
 }
 
 cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
@@ -77,8 +76,10 @@ cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
         action = CX_CREATE(cxSpline);
     }else if(ELEMENT_IS_TYPE(cxRunParticle)){
         action = CX_CREATE(cxRunParticle);
+    }else if(ELEMENT_IS_TYPE(cxParabola)){
+        action = CX_CREATE(cxParabola);
     }else{
-        action = CX_METHOD_FIRE(NULL, engine->MakeAction,temp, reader);
+        action = CX_METHOD_FIRE(NULL, engine->MakeAction, temp, reader);
     }
     return action;
 }
@@ -115,7 +116,6 @@ cxAction cxActionRootAttachView(cxAny pview,cxConstChars url)
     CX_RETURN(action == NULL, NULL);
     cxViewAppendAction(pview, action);
     return action;
-    return NULL;
 }
 
 static void cxActionRootLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)

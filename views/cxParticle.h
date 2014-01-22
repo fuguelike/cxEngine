@@ -21,7 +21,6 @@ typedef enum {
 }cxParticleEmitterType;
 
 typedef struct {
-    cxInt index;
     cxVec2f position;
     cxColor4f color;
     cxColor4f deltacolor;
@@ -45,6 +44,8 @@ typedef enum {
     cxParticleBlendAdd,
     cxParticleBlendMultiply,
 }cxParticleBlendMode;
+
+#define MAX_RATE -1
 
 CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxBool isError;
@@ -79,7 +80,7 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxFloatRange startradius;
     cxFloatRange endradius;
     cxFloatRange rotatepers;
-    CX_METHOD_ALLOC(void,UpdateBox,cxAny,cxBoxPoint *);
+    CX_METHOD_ALLOC(void, UpdateBox, cxAny, cxBoxPoint *);
     CX_EVENT_ALLOC(onUpdate);
 CX_OBJECT_END(cxParticle)
 

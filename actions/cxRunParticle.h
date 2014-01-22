@@ -1,7 +1,7 @@
 //
 //  cxRunParticle.h
 //  cxEngine
-//
+//  粒子
 //  Created by xuhua on 12/27/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //

@@ -47,7 +47,7 @@ static cxInt cxObjectLuaAutoRelease(lua_State *L)
     return 1;
 }
 
-static cxInt cxObjectLuagetType(lua_State *L)
+static cxInt cxObjectLuaGetType(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxObject);
     lua_pushstring(L, this->cxType);
@@ -67,7 +67,7 @@ static cxInt cxObjectLuaGetBind(lua_State *L)
 
 CX_LUA_METHOD_BEG(cxObject)
     {"GetBind",cxObjectLuaGetBind},
-    {"GetType",cxObjectLuagetType},
+    {"GetType",cxObjectLuaGetType},
     {"Retain",cxObjectLuaRetain},
     {"Release",cxObjectLuaRelease},
     {"AutoRelease",cxObjectLuaAutoRelease},
@@ -142,7 +142,7 @@ cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type)
 cxConstType cxObjectType(cxAny pobj)
 {
     cxObject this = pobj;
-    CX_RETURN(this == NULL, false);
+    CX_RETURN(this == NULL, NULL);
     return this->cxType;
 }
 
@@ -171,3 +171,5 @@ cxInt cxObjectGetTag(cxAny obj)
     cxObject this = obj;
     return this->cxTag;
 }
+
+

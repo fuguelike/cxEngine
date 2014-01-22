@@ -72,7 +72,7 @@ void cxParticleInitFromPEX(cxAny pview,cxConstChars file)
         cxConstChars temp = cxXMLReadElementName(reader);
         if(ELEMENT_IS_TYPE(texture)){
             cxConstChars name = cxXMLAttr(reader, "name");
-            cxSpriteSetTextureURL(this, name, true, true);
+            cxSpriteSetTextureURL(this, name, true);
         }else if(ELEMENT_IS_TYPE(sourcePosition)){
             this->position.v.x = 0;//cxXMLReadFloatAttr(reader,NULL, "x", 0);
             this->position.v.y = 0;//cxXMLReadFloatAttr(reader,NULL, "y", 0);
@@ -214,7 +214,7 @@ cxAny cxParticleCreate(cxConstChars texURL,cxInt number)
 {
     cxParticle this = CX_CREATE(cxParticle);
     cxParticleInit(this, number);
-    cxSpriteSetTextureURL(this, texURL, true, true);
+    cxSpriteSetTextureURL(this, texURL, true);
     cxParticleSetBlendMode(this, cxParticleBlendMultiply);
     return this;
 }
@@ -233,7 +233,7 @@ void cxParticleReset(cxAny pview)
     this->isActive = true;
     this->emitcounter = 0;
     this->elapsed = 0;
-    for(this->index = 0; this->index < this->count; ++this->index){
+    for(this->index = 0; this->index < this->count; this->index++){
         cxParticleUnit *p = &this->units[this->index];
         p->life = 0;
     }
@@ -352,7 +352,6 @@ static cxBool cxParticleAdd(cxAny pview)
     }
     cxParticleUnit *unit = &this->units[this->count];
     cxParticleInitUnit(pview, unit);
-    unit->index = this->count;
     this->count ++;
     return true;
 }
@@ -398,11 +397,11 @@ static void cxParticleComputeUnit(cxParticle this,cxParticleUnit *p,cxFloat dt)
         p->color.g += (p->deltacolor.g * dt);
         p->color.b += (p->deltacolor.b * dt);
         p->color.a += (p->deltacolor.a * dt);
-        // size
+        //size
         p->size = CX_MAX(0, p->size + p->deltasize * dt);
-        // angle
+        //angle
         p->rotation += (p->deltarotation * dt);
-        cxParticleStep(this,p);
+        cxParticleStep(this, p);
         this->index ++;
     }else{
         if(this->index != this->count - 1){
@@ -421,7 +420,9 @@ static cxBool cxParticleComputeUnits(cxParticle this,cxFloat dt)
     if(this->count < this->number){
         this->emitcounter += dt;
     }
-    while(this->count < this->number && this->emitcounter > rate && cxParticleAdd(this)){
+    while(this->count < this->number &&
+          this->emitcounter > rate &&
+          cxParticleAdd(this)){
         this->emitcounter -= rate;
     }
     this->elapsed += dt;
