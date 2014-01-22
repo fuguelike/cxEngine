@@ -49,6 +49,7 @@ void cxInitTypes()
     __cxLabelTTFTypeInit();
     __cxParticleTypeInit();
     __cxChipmunkTypeInit();
+    __cxScrollTypeInit();
     
     __cxEngineTypeInit();
 }

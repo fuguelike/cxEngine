@@ -13,19 +13,35 @@
 
 #define CX_SCROLL_MOVE_ACTION_ID 100000
 
+static cxInt cxMoveType(lua_State *L)
+{
+    cxNumber num = cxNumberInt(cxScrollMoveTypeVertical);
+    if(!lua_isstring(L, 2)){
+        CX_LUA_PUSH_OBJECT(num);
+        return 1;
+    }
+    cxConstChars mode = lua_tostring(L, 2);
+    if(cxConstCharsEqu(mode, "horizontal")){
+        num = cxNumberInt(cxScrollMoveTypeHorizontal);
+    }else if(cxConstCharsEqu(mode, "vertical")){
+        num = cxNumberInt(cxScrollMoveTypeVertical);
+    }else{
+        num = cxNumberInt(cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal);
+    }
+    CX_LUA_PUSH_OBJECT(num);
+    return 1;
+}
+
+void __cxScrollTypeInit()
+{
+    cxEngineRegisteFunc(cxMoveType);
+}
+
 void cxScrollReadAttr(cxReaderAttrInfo *info)
 {
     cxViewReadAttr(info);
     cxScroll this = info->object;
-    cxConstChars type = cxXMLAttr(info->reader,"cxScroll.type");
-    this->type = cxScrollMoveTypeNone;
-    if(cxConstCharsEqu(type, "horizontal")){
-        this->type |= cxScrollMoveTypeHorizontal;
-    }else if(cxConstCharsEqu(type, "vertical")){
-        this->type |= cxScrollMoveTypeVertical;
-    }else {
-        this->type |= (cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal);
-    }
+    this->type = cxXMLReadIntAttr(info, "cxScroll.type", cxScrollMoveTypeVertical);
     this->value = cxXMLReadFloatAttr(info, "cxScroll.value", this->value);
 }
 

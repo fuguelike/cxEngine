@@ -3,7 +3,7 @@
 <!--TextureKey at *.xml file use-->
 <cxViewRoot cxView.fill="true">
     
-    <!--
+
     <cxParticle
         cxSprite.texture="n.png"
         cxView.cropping="false"
@@ -23,7 +23,7 @@
         cxParticle.endcolor="1,1,1,1"
         cxParticle.remove="true"
         cxParticle.rate = "-1" />
-     -->
+
 
     <cxParticle cxView.fill="0,0,0,0" id="p" cxParticle.pex = "particle.pex" />
 

@@ -15,7 +15,11 @@
 static cxInt cxEmitterType(lua_State *L)
 {
     cxNumber num = cxNumberInt(cxParticleEmitterGravity);
-    cxConstChars mode = luaL_checkstring(L, 1);
+    if(!lua_isstring(L, 2)){
+        CX_LUA_PUSH_OBJECT(num);
+        return 1;
+    }
+    cxConstChars mode = lua_tostring(L, 2);
     if(cxConstCharsEqu(mode, "gravity")){
         num = cxNumberInt(cxParticleEmitterGravity);
     }else if(cxConstCharsEqu(mode, "radial")){
@@ -28,7 +32,11 @@ static cxInt cxEmitterType(lua_State *L)
 static cxInt cxBlendMode(lua_State *L)
 {
     cxNumber num = cxNumberInt(cxParticleBlendMultiply);
-    cxConstChars mode = luaL_checkstring(L, 1);
+    if(!lua_isstring(L, 2)){
+        CX_LUA_PUSH_OBJECT(num);
+        return 1;
+    }
+    cxConstChars mode = lua_tostring(L, 2);
     if(cxConstCharsEqu(mode, "add")){
         num = cxNumberInt(cxParticleBlendAdd);
     }else if(cxConstCharsEqu(mode, "multiple")){
