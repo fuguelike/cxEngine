@@ -10,23 +10,13 @@
 #include <core/cxViewRoot.h>
 #include "cxChipmunk.h"
 
-//cxShapeType('box')
-static cxInt cxShapeType(lua_State *L)
-{
-    cxNumber num = cxNumberInt(cxChipmunkShapeBox);
-    cxConstChars shape = luaL_checkstring(L, 2);
-    if(cxConstCharsEqu(shape, "box")){
-        num = cxNumberInt(cxChipmunkShapeBox);
-    }else if(cxConstCharsEqu(shape, "circle")){
-        num = cxNumberInt(cxChipmunkShapeCircle);
-    }
-    CX_LUA_PUSH_OBJECT(num);
-    return 1;
-}
+CX_LUA_METHOD_BEG(cxChipmunk)
+
+CX_LUA_METHOD_END(cxChipmunk)
 
 void __cxChipmunkTypeInit()
 {
-    cxEngineRegisteFunc(cxShapeType);
+    CX_LUA_LOAD_TYPE(cxChipmunk);
 }
 
 static void cxChipmunkUpdate(cxEvent *event)
@@ -173,6 +163,21 @@ static void cpBodySetVelocityFunc(cpBody *body,cpBodyVelocityFunc func)
     body->velocity_func = func;
 }
 
+cxChipmunkAttr *cxChipmunkAttrInit(cxChipmunkAttr *attr)
+{
+    memset(attr, 0, sizeof(cxChipmunkAttr));
+    attr->cp = cxVec2fv(0, 0);
+    attr->ctype = 0;
+    attr->e = 0.0f;;
+    attr->group = CP_NO_GROUP;
+    attr->isStatic = false;
+    attr->layer = CP_ALL_LAYERS;
+    attr->m = 1.0f;;
+    attr->shape = cxChipmunkShapeBox;
+    attr->u = 0.0f;
+    return attr;
+}
+
 cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
 {
     cxChipmunk this = pview;
@@ -227,6 +232,7 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
     cpSpaceAddShape(this->space, shape);
     //save shape
     cxViewSetArgs(nview, cxEventArgWeakRef(shape));
+    
     cxViewAppend(this, nview);
     cxHashSet(this->items, key, nview);
     return nview;

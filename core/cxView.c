@@ -257,44 +257,6 @@ static void cxViewRootReadAutoResize(cxReaderAttrInfo *info)
     }
 }
 
-static void cxChipmunkAttrInit(cxChipmunkAttr *attr)
-{
-    memset(attr, 0, sizeof(cxChipmunkAttr));
-    attr->cp = cxVec2fv(0, 0);
-    attr->ctype = 0;
-    attr->e = 0.0f;;
-    attr->group = CP_NO_GROUP;
-    attr->isStatic = false;
-    attr->layer = CP_ALL_LAYERS;
-    attr->m = 1.0f;;
-    attr->shape = cxChipmunkShapeBox;
-    attr->u = 0.0f;
-}
-
-static void cxChipmunkGetAttr(cxReaderAttrInfo *info,cxChipmunkAttr *attr)
-{
-    cxChipmunkAttrInit(attr);
-    attr->shape = cxXMLReadIntAttr(info, "cxChipmunk.shape", cxChipmunkShapeBox);
-    attr->cp = cxXMLReadVec2fAttr(info, "cxChipmunk.center", cxVec2fv(0, 0));
-    attr->isStatic = cxXMLReadBoolAttr(info, "cxChipmunk.static", attr->isStatic);
-    attr->m = cxXMLReadFloatAttr(info, "cxChipmunk.m", attr->m);
-    attr->e = cxXMLReadFloatAttr(info, "cxChipmunk.e", attr->e);
-    attr->u = cxXMLReadFloatAttr(info, "cxChipmunk.u", attr->u);
-    attr->group = cxXMLReadUIntAttr(info, "cxChipmunk.group", CP_NO_GROUP);
-    attr->layer = cxXMLReadUIntAttr(info, "cxChipmunk.layer", CP_ALL_LAYERS);
-    attr->ctype = cxXMLReadUIntAttr(info, "cxChipmunk.ctype", 0);
-}
-
-static void cxViewCheckChipmunkSupport(cxReaderAttrInfo *info)
-{
-    cxBool support = cxXMLReadBoolAttr(info, "cxChipmunk.support", false);
-    CX_RETURN(!support);
-    cxView this = info->object;
-    allocator->free(this->cAttr);
-    this->cAttr = allocator->malloc(sizeof(cxChipmunkAttr));
-    cxChipmunkGetAttr(info, this->cAttr);
-}
-
 static void cxViewRootReadRectToView(cxReaderAttrInfo *info)
 {
     cxView this = info->object;
@@ -347,8 +309,6 @@ void cxViewReadAttr(cxReaderAttrInfo *info)
     cxViewSetAngle(this, cxXMLReadFloatAttr(info, "cxView.angle", this->angle));
     //rotate degress
     cxViewSetDegrees(this, cxXMLReadFloatAttr(info, "cxView.degrees", kmRadiansToDegrees(this->angle)));
-    //Chipmunk support
-    cxViewCheckChipmunkSupport(info);
     //cxAtlas support
     this->supportAtlasSet = cxXMLReadBoolAttr(info, "cxAtlasSet.support", false);
     //view event
@@ -391,9 +351,6 @@ CX_OBJECT_INIT(cxView, cxObject)
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
-    allocator->free(this->cAttr);
-    this->cAttr = NULL;
-    
     CX_RELEASE(this->removes);
     CX_RELEASE(this->subViews);
     CX_RELEASE(this->actions);
@@ -420,12 +377,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_SIGNAL_RELEASE(this->EmmitBefore);
 }
 CX_OBJECT_TERM(cxView, cxObject)
-
-cxChipmunkAttr *cxViewSupportChipmunk(cxAny pview)
-{
-    cxView this = pview;
-    return this->cAttr;
-}
 
 void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object)
 {

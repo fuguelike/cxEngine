@@ -14,11 +14,29 @@
 
 CX_C_BEGIN
 
+typedef enum {
+    cxChipmunkShapeCircle = 1,
+    cxChipmunkShapeBox,
+}cxChipmunkShape;
+
+typedef struct {
+    cxChipmunkShape shape;
+    cxVec2f cp;         //when shape == cxChipmunkShapeCircle
+    cxBool isStatic;
+    cxFloat m;
+    cxFloat e;
+    cxFloat u;
+    cpGroup group;
+    cpLayers layer;
+    cpCollisionType ctype;
+}cxChipmunkAttr;
 
 CX_OBJECT_DEF(cxChipmunk, cxView)
     cpSpace *space;
     cxHash items;
 CX_OBJECT_END(cxChipmunk)
+
+cxChipmunkAttr *cxChipmunkAttrInit(cxChipmunkAttr *attr);
 
 void cxChipmunkReadAttr(cxReaderAttrInfo *info);
 

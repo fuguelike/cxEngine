@@ -198,13 +198,7 @@ static void cxViewRootLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack s
             cxViewRootSet(info);
             
             cxView parent = cxStackTop(stack);
-            
-            cxChipmunkAttr *attr = cxViewSupportChipmunk(info->object);
-            if(attr != NULL){
-                cxChipmunkAppend(parent, info->object, attr);
-            }else {
-                cxViewAppend(parent, info->object);
-            }
+            cxViewAppend(parent, info->object);
             
             if(xmlTextReaderIsEmptyElement(reader)){
                 continue;

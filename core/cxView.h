@@ -22,23 +22,6 @@
 CX_C_BEGIN
 
 typedef enum {
-    cxChipmunkShapeCircle = 1,
-    cxChipmunkShapeBox,
-}cxChipmunkShape;
-
-typedef struct {
-    cxChipmunkShape shape;
-    cxVec2f cp;         //when shape == cxChipmunkShapeCircle
-    cxBool isStatic;
-    cxFloat m;
-    cxFloat e;
-    cxFloat u;
-    cpGroup group;
-    cpLayers layer;
-    cpCollisionType ctype;
-}cxChipmunkAttr;
-
-typedef enum {
     cxViewAutoResizeNone        = 0,
     cxViewAutoResizeLeft        = 1 << 0,
     cxViewAutoResizeRight       = 1 << 1,
@@ -59,7 +42,6 @@ typedef cxBox4f cxViewAutoResizeBox;
 
 CX_OBJECT_DEF(cxView, cxObject)
     cxBool supportAtlasSet;
-    cxChipmunkAttr *cAttr;
     cxAny args;
     cxViewAutoResizeMask autoMask;
     cxViewAutoResizeBox  autoBox;
@@ -105,8 +87,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
 CX_OBJECT_END(cxView)
-
-cxChipmunkAttr *cxViewSupportChipmunk(cxAny pview);
 
 void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object);
 
