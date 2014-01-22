@@ -23,7 +23,6 @@ static cxInt cxLabelTTFLuaSetFont(lua_State *L)
         cxLabelTTFSetFont(this, UTF8(luaL_checkstring(L, -1)));
     }
     lua_pop(L, 1);
-    
     lua_getfield(L, 2, "size");
     if(lua_isnumber(L, -1)){
         cxLabelTTFSetFontSize(this, luaL_checknumber(L, -1));

@@ -328,7 +328,7 @@
 				ORGANIZATIONNAME = xuhua;
 				TargetAttributes = {
 					839E7A4517F1BC7600B0F5EC = {
-						DevelopmentTeam = LN72997P8E;
+						DevelopmentTeam = A7FD348C73;
 					};
 				};
 			};

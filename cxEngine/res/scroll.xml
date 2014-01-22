@@ -4,8 +4,8 @@
     
     <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="candy.xml?green.png"/>
     
-    <cxScroll cxView.w="500" cxView.h="700" cxView.bottom="30" cxScroll.type="vertical" cxScroll.paging="true">
-        <cxTable cxView.w="500" cxView.h="3000" cxView.top="0" cxTable.space="10,10" cxTable.type="2,0">
+    <cxScroll cxView.w="500" cxView.h="700" cxView.bottom="30" cxScroll.type="horizontal">
+        <cxTable cxView.w="3500" cxView.h="700" cxView.top="0" cxTable.space="10,10" cxTable.type="0,2">
             <cxButton cxView.size="180,120" cxButton.onRelease="cxEventAction({'src':'actions.xml?move','view':'sprite','curve':'EaseIn'})">
                 <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
                 <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="EaseIn" cxLabelTTF.size="25"/>

@@ -33,7 +33,6 @@ typedef struct {
 
 CX_OBJECT_DEF(cxChipmunk, cxView)
     cpSpace *space;
-    cxHash items;
 CX_OBJECT_END(cxChipmunk)
 
 cxChipmunkAttr *cxChipmunkAttrInit(cxChipmunkAttr *attr);
@@ -48,7 +47,7 @@ void cxChipmunkRemove(cxAny pview,cxAny nview);
 
 void cxChipmunkSetPos(cxAny pview,cxVec2f pos);
 
-void cxChipmunkSetRadians(cxAny pview,cxFloat angle);
+void cxChipmunkSetAngle(cxAny pview,cxFloat angle);
 
 void cxChipmunkSetElasticity(cxAny pview,cxFloat e);
 

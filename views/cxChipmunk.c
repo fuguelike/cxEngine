@@ -29,7 +29,7 @@ static void cxChipmunkUpdate(cxEvent *event)
 void cxChipmunkSetGravity(cxAny pview,cxVec2f gravity)
 {
     cxChipmunk this = pview;
-    cpSpaceSetGravity(this->space, cpv(gravity.x, gravity.y));
+    cpSpaceSetGravity(this->space, gravity);
 }
 
 void cxChipmunkReadAttr(cxReaderAttrInfo *info)
@@ -38,9 +38,8 @@ void cxChipmunkReadAttr(cxReaderAttrInfo *info)
     cxChipmunk this = info->object;
     //set space
     cpVect gravity = cpSpaceGetGravity(this->space);
-    cxVec2f v = cxVec2fv(gravity.x, gravity.y);
-    v = cxXMLReadVec2fAttr(info, "cxChipmunk.gravity", v);
-    cpSpaceSetGravity(this->space, cpv(v.x, v.y));
+    cxVec2f v = cxXMLReadVec2fAttr(info, "cxChipmunk.gravity", gravity);
+    cpSpaceSetGravity(this->space, v);
 }
 
 static void cxChipmunkBodyUpdatePosition(cpBody *body, cpFloat dt)
@@ -65,7 +64,7 @@ void cxChipmunkSetPos(cxAny pview,cxVec2f pos)
     cpBodySetPos(body, pos);
 }
 
-void cxChipmunkSetRadians(cxAny pview,cxFloat angle)
+void cxChipmunkSetAngle(cxAny pview,cxFloat angle)
 {
     CX_ASSERT(pview != NULL, "view null");
     cpShape *shape = cxEventArgToWeakRef(cxViewArgs(pview));
@@ -168,11 +167,11 @@ cxChipmunkAttr *cxChipmunkAttrInit(cxChipmunkAttr *attr)
     memset(attr, 0, sizeof(cxChipmunkAttr));
     attr->cp = cxVec2fv(0, 0);
     attr->ctype = 0;
-    attr->e = 0.0f;;
+    attr->e = 0.0f;
     attr->group = CP_NO_GROUP;
     attr->isStatic = false;
     attr->layer = CP_ALL_LAYERS;
-    attr->m = 1.0f;;
+    attr->m = 1.0f;
     attr->shape = cxChipmunkShapeBox;
     attr->u = 0.0f;
     return attr;
@@ -182,8 +181,7 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
 {
     cxChipmunk this = pview;
     CX_ASSERT(cxViewArgs(nview) == NULL,"not set args's view can append");
-    
-    cxHashKey key = cxHashIntKey((cxInt)nview);
+
     cxSize2f size = cxViewSize(nview);
     CX_RETURN(cxSize2Zero(size), NULL);
     
@@ -232,50 +230,74 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
     cpSpaceAddShape(this->space, shape);
     //save shape
     cxViewSetArgs(nview, cxEventArgWeakRef(shape));
-    
     cxViewAppend(this, nview);
-    cxHashSet(this->items, key, nview);
     return nview;
-}
-
-static void cxChipmunkRemoveImp(cxAny pview,cxAny nview)
-{
-    cxChipmunk this = pview;
-    cpShape *shape = cxEventArgToWeakRef(cxViewArgs(nview));
-    CX_ASSERT(shape != NULL, "not add to cxChipmunk view");
-    
-    cpBody *body = cpShapeGetBody(shape);
-    if(cpSpaceContainsBody(this->space, body)){
-        cpSpaceRemoveBody(this->space, body);
-    }
-    cpBodyFree(body);
-    
-    cpSpaceRemoveShape(this->space, shape);
-    cpShapeFree(shape);
-    cxViewSetArgs(nview, NULL);
 }
 
 void cxChipmunkRemove(cxAny pview,cxAny nview)
 {
     cxChipmunk this = pview;
-    cxChipmunkRemoveImp(pview, nview);
-    cxHashDel(this->items, cxHashIntKey((cxInt)nview));
+    cpShape *shape = cxEventArgToWeakRef(cxViewArgs(nview));
+    CX_RETURN(shape == NULL);
+    cpBody *body = cpShapeGetBody(shape);
+    if(cpSpaceContainsBody(this->space, body)){
+        cpSpaceRemoveBody(this->space, body);
+    }
+    cpBodyFree(body);
+    cpSpaceRemoveShape(this->space, shape);
+    cpShapeFree(shape);
+    cxViewSetArgs(nview, NULL);
+}
+
+//free Chipmunk body shape
+static void cxChipmunkFreeWrap(cpSpace *space, cpShape *shape, void *unused)
+{
+	cpSpaceRemoveShape(space, shape);
+	cpShapeFree(shape);
+}
+
+static void cxChipmunkShapeFree(cpShape *shape, cpSpace *space)
+{
+	cpSpaceAddPostStepCallback(space, (cpPostStepFunc)cxChipmunkFreeWrap, shape, NULL);
+}
+
+static void cxChipmunkConstraintFreeWrap(cpSpace *space, cpConstraint *constraint, void *unused)
+{
+	cpSpaceRemoveConstraint(space, constraint);
+	cpConstraintFree(constraint);
+}
+
+static void cxChipmunkConstraintFree(cpConstraint *constraint, cpSpace *space)
+{
+	cpSpaceAddPostStepCallback(space, (cpPostStepFunc)cxChipmunkConstraintFreeWrap, constraint, NULL);
+}
+
+static void cxChipmunkBodyFreeWrap(cpSpace *space, cpBody *body, void *unused)
+{
+    cxAny view = cpBodyGetUserData(body);
+    cxViewRemoved(view);
+	cpSpaceRemoveBody(space, body);
+	cpBodyFree(body);
+}
+
+static void cxChipmunkBodyFree(cpBody *body, cpSpace *space)
+{
+	cpSpaceAddPostStepCallback(space, (cpPostStepFunc)cxChipmunkBodyFreeWrap, body, NULL);
 }
 
 CX_OBJECT_INIT(cxChipmunk, cxView)
 {
-    this->items = CX_ALLOC(cxHash);
     cxObjectSetReadAttrFunc(this, cxChipmunkReadAttr);
     this->space = cpSpaceNew();
     CX_EVENT_QUICK(this->super.onUpdate, cxChipmunkUpdate);
     cpSpaceSetGravity(this->space, cxVec2fv(0, -1000));
+    cpSpaceSetUserData(this->space, this);
 }
 CX_OBJECT_FREE(cxChipmunk, cxView)
 {
-    CX_HASH_FOREACH(this->items, ele, tmp){
-        cxChipmunkRemoveImp(this, ele->any);
-    }
-    CX_RELEASE(this->items);
+    cpSpaceEachShape(this->space, (cpSpaceShapeIteratorFunc)cxChipmunkShapeFree, this->space);
+	cpSpaceEachConstraint(this->space, (cpSpaceConstraintIteratorFunc)cxChipmunkConstraintFree, this->space);
+	cpSpaceEachBody(this->space, (cpSpaceBodyIteratorFunc)cxChipmunkBodyFree, this->space);
     cpSpaceFree(this->space);
 }
 CX_OBJECT_TERM(cxChipmunk, cxView)

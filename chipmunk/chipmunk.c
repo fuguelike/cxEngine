@@ -32,15 +32,13 @@ cpMessage(const char *condition, const char *file, int line, cpBool isError, cpB
 {
     CX_ERROR((isError ? "Aborting due to Chipmunk error: " : "Chipmunk warning: "));
 	va_list vargs;
-	va_start(vargs, message); {
-        char msg[1024]={0};
-        vsprintf(msg, message, vargs);
-        CX_ERROR(msg);
-	} va_end(vargs);
-	
+	va_start(vargs, message);
+    char msg[1024]={0};
+    vsprintf(msg, message, vargs);
+    CX_ERROR(msg);
+	va_end(vargs);
 	CX_ERROR("\tFailed condition: %s\n", condition);
 	CX_ERROR("\tSource:%s:%d\n", file, line);
-	
 	if(isError) abort();
 }
 

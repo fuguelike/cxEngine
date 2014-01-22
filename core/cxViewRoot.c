@@ -93,8 +93,8 @@ void cxViewRootRemove(cxAny pview,cxConstChars key)
     cxViewRoot this = pview;
     cxAny view = cxHashGet(this->items, cxHashStrKey(key));
     CX_RETURN(view == NULL);
-    cxViewRemoved(view);
     cxHashDel(this->items, cxHashStrKey(key));
+    cxViewRemoved(view);
 }
 
 cxViewRoot cxViewRootCreate(cxConstChars xml)
