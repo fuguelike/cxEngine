@@ -60,8 +60,6 @@ cxDBEnv cxDBGetEnv(cxAny db);
 
 void cxDBSetEnv(cxAny db,cxDBEnv env);
 
-cxAny cxDBTypesGet(cxConstChars src);
-
 cxInt cxDBCount(cxAny db);
 
 cxBool cxDBHas(cxAny db,cxString key);

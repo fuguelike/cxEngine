@@ -9,8 +9,10 @@
 
 void cxEngineInit(cxEngine engine)
 {
-    cxEngineDataSet("items.xml");
+    cxEngineTypes("items.xml");
+    
     cxEngineLuaRunChars("require('main')");
+    
     cxEngineLuaRunChars("init()");
 }
 

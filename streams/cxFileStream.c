@@ -11,7 +11,7 @@
 #include <core/cxUtil.h>
 #include "cxFileStream.h"
 
-void cxFileStreamTypeInit()
+void __cxFileStreamTypeInit()
 {
     
 }

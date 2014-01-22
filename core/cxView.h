@@ -38,8 +38,6 @@ typedef struct {
     cpCollisionType ctype;
 }cxChipmunkAttr;
 
-// L200,R100,T100,B100
-
 typedef enum {
     cxViewAutoResizeNone        = 0,
     cxViewAutoResizeLeft        = 1 << 0,

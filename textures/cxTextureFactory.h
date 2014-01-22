@@ -25,8 +25,6 @@ CX_OBJECT_END(cxTextureFactory)
 
 cxTextureFactory cxTextureFactoryInstance();
 
-cxTexture cxTextureCreate(cxConstChars file);
-
 cxTexture cxTextureFactoryLoadFile(cxConstChars file);
 
 cxTexture cxTextureFactoryLoadText(const cxString txt,const cxString font,cxTextAttr attr);

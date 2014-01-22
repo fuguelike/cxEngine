@@ -9,7 +9,7 @@
 #include <core/cxActionRoot.h>
 #include "cxTint.h"
 
-void cxTintTypeInit()
+void __cxTintTypeInit()
 {
     
 }

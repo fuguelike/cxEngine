@@ -14,41 +14,41 @@
 
 void cxInitTypes()
 {
-    cxObjectTypeInit();
-    cxNumberTypeInit();
-    cxStringTypeInit();
-    cxUtilTypeInit();
+    __cxObjectTypeInit();
+    __cxNumberTypeInit();
+    __cxStringTypeInit();
+    __cxUtilTypeInit();
     
-    cxHashTypeInit();
-    cxArrayTypeInit();
-    cxListTypeInit();
-    cxStackTypeInit();
+    __cxHashTypeInit();
+    __cxArrayTypeInit();
+    __cxListTypeInit();
+    __cxStackTypeInit();
     
-    cxJsonTypeInit();
-    cxIconvTypeInit();
+    __cxJsonTypeInit();
+    __cxIconvTypeInit();
     
-    cxStreamTypeInit();
-    cxTextureTypeInit();
+    __cxStreamTypeInit();
+    __cxTextureTypeInit();
     
-    cxShaderTypeInit();
-    cxOpenGLTypeInit();
+    __cxShaderTypeInit();
+    __cxOpenGLTypeInit();
     
-    cxActionTypeInit();
-    cxActionSetTypeInit();
-    cxTimerTypeInit();
-    cxRunParticleTypeInit();
+    __cxActionTypeInit();
+    __cxActionSetTypeInit();
+    __cxTimerTypeInit();
+    __cxRunParticleTypeInit();
     
-    cxPlayerTypeInit();
+    __cxPlayerTypeInit();
     
-    cxViewTypeInit();
-    cxWindowTypeInit();
-    cxSpriteTypeInit();
-    cxViewRootTypeInit();
-    cxButtonTypeInit();
-    cxLoadingTypeInit();
-    cxLabelTTFTypeInit();
-    cxParticleTypeInit();
-    cxChipmunkTypeInit();
+    __cxViewTypeInit();
+    __cxWindowTypeInit();
+    __cxSpriteTypeInit();
+    __cxViewRootTypeInit();
+    __cxButtonTypeInit();
+    __cxLoadingTypeInit();
+    __cxLabelTTFTypeInit();
+    __cxParticleTypeInit();
+    __cxChipmunkTypeInit();
     
-    cxEngineTypeInit();
+    __cxEngineTypeInit();
 }

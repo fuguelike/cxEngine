@@ -223,7 +223,7 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
         //
         cxConstChars url = cxXMLAttr(reader,"url");
         if(url != NULL){
-            cxTypes types = cxEngineDataSet(url);
+            cxTypes types = cxEngineTypes(url);
             CX_ASSERT(types != NULL && cxTypesIsType(types, cxTypesString), "get url %s data failed", url);
             
             cxString data = cxXMLReaderPrepareTemplate(types->any);

@@ -71,7 +71,7 @@ CX_LUA_METHOD_BEG(cxEngine)
     CX_LUA_PROPERTY(cxEngine, DesignSize),
 CX_LUA_METHOD_END(cxEngine)
 
-void cxEngineTypeInit()
+void __cxEngineTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxEngine);
 }
@@ -428,14 +428,14 @@ void cxEngineRemoveScript(cxConstChars file)
 
 cxAny cxEngineDB(cxConstChars url)
 {
-    cxTypes type = cxEngineDataSet(url);
+    cxTypes type = cxEngineTypes(url);
     if(type == NULL || type->any == NULL){
         return NULL;
     }
     return cxTypesIsType(type, cxTypesDB) ? type->any : NULL;
 }
 
-cxAny cxEngineDataSet(cxConstChars url)
+cxAny cxEngineTypes(cxConstChars url)
 {
     CX_RETURN(url == NULL, NULL);
     cxEngine this = cxEngineInstance();
@@ -520,7 +520,7 @@ cxString cxEngineLocalizedText(cxConstChars url)
     cxEngine this = cxEngineInstance();
     cxUrlPath path = cxUrlPathParse(url);
     
-    cxTypes langTypes= cxEngineDataSet("appConfig.xml?lang");
+    cxTypes langTypes= cxEngineTypes("appConfig.xml?lang");
     CX_ASSERT(langTypes != NULL, "appConfig.xml must set lang filed");
     
     cxString dir = cxHashGet(langTypes->any, cxHashStrKey(cxStringBody(this->lang)));
@@ -531,7 +531,7 @@ cxString cxEngineLocalizedText(cxConstChars url)
     
     cxConstChars file = CX_CONST_STRING("%s/%s",cxStringBody(dir),path->path);
     
-    cxTypes types = cxEngineDataSet(CX_CONST_STRING("%s?%s",file,path->key));
+    cxTypes types = cxEngineTypes(CX_CONST_STRING("%s?%s",file,path->key));
     CX_RETURN(types == NULL || !cxTypesIsType(types, cxTypesString), NULL);
     return types->any;
 }
@@ -804,7 +804,7 @@ static cxInt cxEventSetView(lua_State *L)
 static cxInt cxDataString(lua_State *L)
 {
     cxConstChars url = luaL_checkstring(L, 2);
-    cxTypes types = cxEngineDataSet(url);
+    cxTypes types = cxEngineTypes(url);
     if(types == NULL || !cxObjectIsType(types->any, cxStringTypeName)){
         lua_pushnil(L);
     }else{
@@ -890,7 +890,7 @@ static cxInt cxFixScaleH(lua_State *L)
 static cxInt cxDataTypes(lua_State *L)
 {
     cxConstChars url = luaL_checkstring(L, 2);
-    cxTypes types = cxEngineDataSet(url);
+    cxTypes types = cxEngineTypes(url);
     CX_LUA_PUSH_OBJECT(types);
     return 1;
 }
@@ -987,16 +987,13 @@ static cxInt cxSpriteTexture(lua_State *L)
 
 void cxEngineSystemInit(cxEngine engine)
 {
-    //read desSize setting
-    cxTypes desSizeTypes = cxEngineDataSet("appConfig.xml?desSize");
-    if(desSizeTypes != NULL && cxTypesIsType(desSizeTypes, cxTypesNumber)){
-        cxNumber num = desSizeTypes->any;
+    CX_ENGINE_APP_CONFIG(desSize){
+        cxNumber num = desSize->any;
         engine->dessize = cxNumberToSize2f(num);
     }
     //read showBorder setting
-    cxTypes showBorderTypes = cxEngineDataSet("appConfig.xml?showBorder");
-    if(showBorderTypes != NULL && cxTypesIsType(showBorderTypes, cxTypesNumber)){
-        cxNumber num = showBorderTypes->any;
+    CX_ENGINE_APP_CONFIG(showBorder){
+        cxNumber num = showBorder->any;
         engine->isShowBorder = cxNumberToBool(num);
     }
     //global func cxReaderAttrInfo *,args...

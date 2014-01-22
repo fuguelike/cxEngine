@@ -80,7 +80,7 @@ const luaL_Reg global_functions [] = {
     {NULL, NULL}
 };
 
-void cxUtilTypeInit()
+void __cxUtilTypeInit()
 {
     lua_getglobal(gL, "_G");
     luaL_register(gL, "_G", global_functions);

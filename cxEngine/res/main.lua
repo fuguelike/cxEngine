@@ -2,8 +2,7 @@
 require('bind.lua')
 
 function init()
-    cxEngine.SetDesignSize({w=640,h=960})
-    cxEngine.SetShowBorder(true)
+    
 end
 
 function mainBegin(viewRoot)
@@ -29,7 +28,7 @@ function main()
               cxLabelTTF.SetFont(txt,{size=60})
               cxView.AppendView(this,txt)
          end)
-         
+
     cxLoading.AppendEvent(loader,'onLoading', function(this)
               local xmlView = cxViewRoot.Make('main.xml')
               cxLoading.SetObject(this,xmlView)

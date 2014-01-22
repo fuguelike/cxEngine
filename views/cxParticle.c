@@ -38,7 +38,7 @@ static cxInt cxBlendMode(lua_State *L)
     return 1;
 }
 
-void cxParticleTypeInit()
+void __cxParticleTypeInit()
 {
     cxEngineRegisteFunc(cxEmitterType);
     cxEngineRegisteFunc(cxBlendMode);
@@ -484,7 +484,7 @@ CX_OBJECT_INIT(cxParticle, cxAtlas)
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
     cxViewOnUpdate(this, cxParticleUpdateEvent);
-    cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE);
+    cxParticleSetBlendMode(this, cxParticleBlendAdd);
     cxObjectSetReadAttrFunc(this, cxParticleReadAttr);
 }
 CX_OBJECT_FREE(cxParticle, cxAtlas)

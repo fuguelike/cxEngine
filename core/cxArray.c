@@ -77,7 +77,7 @@ CX_LUA_METHOD_BEG(cxArray)
     {"Clean",cxArrayLuaClean},
 CX_LUA_METHOD_END(cxArray)
 
-void cxArrayTypeInit()
+void __cxArrayTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxArray);
 }

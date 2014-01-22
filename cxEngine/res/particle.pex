@@ -15,13 +15,13 @@
   <tangentialAccelVariance value="0"/>
   <startColor red="1" green="1" blue="1" alpha="1"/>
   <startColorVariance red="0" green="0" blue="0" alpha="0"/>
-  <finishColor red="1" green="1" blue="1" alpha="0"/>
+  <finishColor red="1" green="1" blue="1" alpha="1"/>
   <finishColorVariance red="0" green="0" blue="0" alpha="0"/>
-  <maxParticles value="15.69"/>
-  <startParticleSize value="17.67"/>
-  <startParticleSizeVariance value="0"/>
-  <finishParticleSize value="8.45"/>
-  <FinishParticleSizeVariance value="5"/>
+  <maxParticles value="191.99"/>
+  <startParticleSize value="21.89"/>
+  <startParticleSizeVariance value="4.88"/>
+  <finishParticleSize value="0"/>
+  <FinishParticleSizeVariance value="0"/>
   <duration value="-1.00"/>
   <emitterType value="0"/>
   <maxRadius value="100"/>

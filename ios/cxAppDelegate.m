@@ -23,7 +23,6 @@ static cxBool cxDisableDocumentBackup()
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    //
     cxDisableDocumentBackup();
     //
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];

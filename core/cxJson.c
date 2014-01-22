@@ -21,7 +21,7 @@ CX_LUA_METHOD_BEG(cxJson)
     {"Make",cxJsonLuaMake},
 CX_LUA_METHOD_END(cxJson)
 
-void cxJsonTypeInit()
+void __cxJsonTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxJson);
 }

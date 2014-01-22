@@ -80,18 +80,18 @@ void cxLuaLoad(cxConstType name, const luaL_Reg *methods)
     lua_pop(gL, 1);
 }
 
-void cxObjectTypeInit()
+void __cxObjectTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxObject);
 }
 
-void cxObjectAutoInit(cxObject this)
+void __cxObjectAutoInit(cxObject this)
 {
     this->cxBase = cxBaseTypeObject;
     CX_METHOD_OVERRIDE(this->ReadAttr, cxObjectReadAttr);
 }
 
-void cxObjectAutoFree(cxObject this)
+void __cxObjectAutoFree(cxObject this)
 {
     if(this->cxBind > 0){
         lua_unref(gL, this->cxBind);

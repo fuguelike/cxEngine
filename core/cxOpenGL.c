@@ -41,7 +41,7 @@ CX_LUA_METHOD_BEG(cxOpenGL)
     CX_LUA_PROPERTY(cxOpenGL, Shader),
 CX_LUA_METHOD_END(cxOpenGL)
 
-void cxOpenGLTypeInit()
+void __cxOpenGLTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxOpenGL);
 }

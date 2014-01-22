@@ -23,7 +23,7 @@ CX_LUA_METHOD_BEG(cxShader)
     {"Using",cxShaderLuaUsing},
 CX_LUA_METHOD_END(cxShader)
 
-void cxShaderTypeInit()
+void __cxShaderTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxShader);
 }

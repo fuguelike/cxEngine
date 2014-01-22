@@ -17,7 +17,7 @@ static cxInt cxPlayLuaEffect(lua_State *L)
     return 1;
 }
 
-static cxInt cxPlayLuaMusioc(lua_State *L)
+static cxInt cxPlayLuaMusic(lua_State *L)
 {
     cxConstChars file = luaL_checkstring(L, 1);
     cxBool loop = lua_toboolean(L, 2);
@@ -27,10 +27,10 @@ static cxInt cxPlayLuaMusioc(lua_State *L)
 
 CX_LUA_METHOD_BEG(cxPlayer)
     {"PlayEffect",cxPlayLuaEffect},
-    {"PlayMusic",cxPlayLuaMusioc},
+    {"PlayMusic",cxPlayLuaMusic},
 CX_LUA_METHOD_END(cxPlayer)
 
-void cxPlayerTypeInit()
+void __cxPlayerTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxPlayer);
 }

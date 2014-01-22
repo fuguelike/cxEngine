@@ -64,7 +64,7 @@ cxTexture cxTextureFactoryLoadText(const cxString txt,const cxString font,cxText
     return (cxTexture)texture;
 }
 
-cxTexture cxTextureCreate(cxConstChars file)
+static cxTexture cxTextureCreate(cxConstChars file)
 {
     cxTexture texture = NULL;
     CX_ASSERT(file != NULL, "file args error");
@@ -89,7 +89,7 @@ cxTexture cxTextureCreate(cxConstChars file)
     }else if(cxConstCharsEqu(ext, ".jpg") || cxConstCharsEqu(ext, ".jpeg")){
         texture = cxTextureJPGLoadStream(stream);
     }else{
-        CX_ERROR("load texture failed %s",file);
+        CX_ERROR("load texture failed %s,not support ext %s",file,ext);
     }
     return texture;
 }

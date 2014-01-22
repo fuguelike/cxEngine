@@ -14,7 +14,7 @@ static void cxPolygonReadAttr(cxReaderAttrInfo *info)
     cxSpriteReadAttr(info);
     cxConstChars points = cxXMLAttr(info->reader, "cxPolygon.points");
     CX_RETURN(points == NULL);
-    cxTypes type = cxEngineDataSet(points);
+    cxTypes type = cxEngineTypes(points);
     CX_ASSERT(cxTypesIsType(type, cxTypesArray), "must is array");
     cxArray list = type->any;
     CX_ARRAY_FOREACH(list, ele){

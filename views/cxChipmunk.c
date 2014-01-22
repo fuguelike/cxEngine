@@ -24,7 +24,7 @@ static cxInt cxShapeType(lua_State *L)
     return 1;
 }
 
-void cxChipmunkTypeInit()
+void __cxChipmunkTypeInit()
 {
     cxEngineRegisteFunc(cxShapeType);
 }

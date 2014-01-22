@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxString.h"
 #include "cxUrlPath.h"
 
 CX_OBJECT_INIT(cxUrlPath, cxObject)
@@ -37,8 +38,10 @@ static cxUrlPath cxUrlPathParseKeyValueImp(cxUrlPath this)
 
 cxUrlPath cxUrlPathParse(cxConstChars url)
 {
-    CX_RETURN(url == NULL, NULL);
     cxUrlPath this = CX_CREATE(cxUrlPath);
+    if(!cxConstCharsOK(url)){
+        return this;
+    }
     this->count = 0;
     cxInt len = strlen(url);
     cxChar *sq = strrchr(url, '?');
@@ -57,3 +60,4 @@ cxUrlPath cxUrlPathParse(cxConstChars url)
     }
     return cxUrlPathParseKeyValueImp(this);
 }
+

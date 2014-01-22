@@ -75,17 +75,19 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_BREAK(cond)              if(cond)break
 
+#define CX_CONTINUE(cond)           if(cond)continue
+
 #define CX_OBJECT_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_) struct _b_ super;
 
-#define CX_OBJECT_INIT(_t_,_b_)     void _t_##AutoInit(_t_ this){_b_##AutoInit((_b_)this);{
+#define CX_OBJECT_INIT(_t_,_b_)     void __##_t_##AutoInit(_t_ this){__##_b_##AutoInit((_b_)this);{
 
-#define CX_OBJECT_FREE(_t_,_b_)     }};void _t_##AutoFree(_t_ this){{
+#define CX_OBJECT_FREE(_t_,_b_)     }};void __##_t_##AutoFree(_t_ this){{
 
-#define CX_OBJECT_TERM(_t_,_b_)     }_b_##AutoFree((_b_)this);}
+#define CX_OBJECT_TERM(_t_,_b_)     }__##_b_##AutoFree((_b_)this);}
 
-#define CX_ALLOC(_t_)               cxObjectAlloc(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
+#define CX_ALLOC(_t_)               cxObjectAlloc(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)__##_t_##AutoInit,(cxObjectFunc)__##_t_##AutoFree)
 
-#define CX_CREATE(_t_)              cxObjectCreate(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)_t_##AutoInit,(cxObjectFunc)_t_##AutoFree)
+#define CX_CREATE(_t_)              cxObjectCreate(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)__##_t_##AutoInit,(cxObjectFunc)__##_t_##AutoFree)
 
 #define CX_RETAIN(_o_)              cxObjectRetain(_o_)
 
@@ -113,7 +115,7 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_LUA_METHOD_BEG(_t_)      const luaL_Reg _t_##LuaMethods[] = {
 
-#define CX_LUA_METHOD_END(_t_)      {"Alloc",_t_##LuaAlloc},{"Create",_t_##LuaCreate},{NULL,NULL}};
+#define CX_LUA_METHOD_END(_t_)      {"Alloc",__##_t_##LuaAlloc},{"Create",__##_t_##LuaCreate},{NULL,NULL}};
 
 #define CX_LUA_PUSH_OBJECT(o)       ((o) != NULL) ? lua_pushlightuserdata(gL,o) : lua_pushnil(gL)
 
@@ -122,19 +124,19 @@ cxInt cxObjectGetTag(cxAny obj);
 #define CX_OBJECT_BEG(_t_)                                          \
 static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;        \
 typedef struct _t_ * _t_;                                           \
-void _t_##AutoInit(_t_ this);                                       \
-void _t_##AutoFree(_t_ this);                                       \
-void _t_##TypeInit();                                               \
+void __##_t_##AutoInit(_t_ this);                                   \
+void __##_t_##AutoFree(_t_ this);                                   \
+void __##_t_##TypeInit();                                           \
 extern const luaL_Reg _t_##LuaMethods[];                            \
 struct _t_ {
 
 #define CX_OBJECT_END(_t_) };                                       \
-static inline cxInt _t_##LuaAlloc(lua_State *L)                     \
+static inline cxInt __##_t_##LuaAlloc(lua_State *L)                 \
 {                                                                   \
     CX_LUA_ALLOC_THIS(_t_);                                         \
     CX_LUA_RET_THIS(_t_);                                           \
 }                                                                   \
-static inline cxInt _t_##LuaCreate(lua_State *L)                    \
+static inline cxInt __##_t_##LuaCreate(lua_State *L)                \
 {                                                                   \
     CX_LUA_CREATE_THIS(_t_);                                        \
     CX_LUA_RET_THIS(_t_);                                           \

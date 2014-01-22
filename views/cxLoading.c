@@ -47,7 +47,7 @@ CX_LUA_METHOD_BEG(cxLoading)
     CX_LUA_PROPERTY(cxLoading, Object),
 CX_LUA_METHOD_END(cxLoading)
 
-void cxLoadingTypeInit()
+void __cxLoadingTypeInit()
 {
     CX_LUA_LOAD_TYPE(cxLoading);
 }
