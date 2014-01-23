@@ -26,6 +26,7 @@ static void cxPolygonReadAttr(cxReaderAttrInfo *info)
 static void cxPolygonDraw(cxAny pview)
 {
     cxPolygon this = pview;
+    CX_RETURN(this->number < 3);
     cxSpriteBindTexture(pview);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
     glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), this->points);
@@ -50,6 +51,12 @@ CX_OBJECT_FREE(cxPolygon, cxSprite)
     allocator->free(this->texs);
 }
 CX_OBJECT_TERM(cxPolygon, cxSprite)
+
+void cxPolygonClean(cxAny pview)
+{
+    cxPolygon this = pview;
+    this->number = 0;
+}
 
 void cxPolygonAppend(cxAny pview,cxPoint point)
 {

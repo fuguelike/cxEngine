@@ -3,6 +3,6 @@
     cxButton.onRelease="${release}"
     cxButton.onEnter="cxEventAction({'src':'actions.xml?btnEnter','cache':true})"
     cxButton.onLeave="cxEventAction({'src':'actions.xml?btnLeave','cache':true})">
-    <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+    <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="test:scale9.png" />
     <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="${title}" cxLabelTTF.size="30"/>
 </cxButton>

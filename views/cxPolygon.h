@@ -21,6 +21,8 @@ CX_OBJECT_DEF(cxPolygon, cxSprite)
     cxInt number;
 CX_OBJECT_END(cxPolygon)
 
+void cxPolygonClean(cxAny pview);
+
 void cxPolygonAppend(cxAny pview,cxPoint point);
 
 void cxPolygonResize(cxAny pview,cxInt add);

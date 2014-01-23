@@ -24,14 +24,29 @@ CX_OBJECT_TERM(cxTexCoord, cxObject)
 static cxInt cxTextureLuaMakeTexture(lua_State *L)
 {
     cxConstChars file = luaL_checkstring(L, 1);
-    //if need save to cache
     cxTexture texture = cxTextureFactoryLoadFile(file);
     CX_LUA_PUSH_OBJECT(texture);
     return 1;
 }
 
+static cxInt cxTextureLuaRemoveTexture(lua_State *L)
+{
+    cxConstChars file = luaL_checkstring(L, 1);
+    cxTextureFactoryUnloadFile(file);
+    return 0;
+}
+
+static cxInt cxTextureLuaCleanTexture(lua_State *L)
+{
+    cxConstChars group = luaL_checkstring(L, 1);
+    cxTextureFactoryCleanGroup(group);
+    return 0;
+}
+
 CX_LUA_METHOD_BEG(cxTexture)
     {"Make",cxTextureLuaMakeTexture},
+    {"Remove",cxTextureLuaRemoveTexture},
+    {"Clean",cxTextureLuaCleanTexture},
 CX_LUA_METHOD_END(cxTexture)
 
 void __cxTextureTypeInit()
@@ -64,7 +79,7 @@ void cxTextureLoad(cxTexture this,cxStream stream)
     CX_RETURN(this->isLoad);
     this->isLoad = CX_METHOD_FIRE(false, this->Load,this,stream);
     if(!this->isLoad){
-        CX_ERROR("texture  can not load");
+        CX_ERROR("texture can not load");
     }
 }
 
