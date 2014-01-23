@@ -13,10 +13,8 @@ void cxAtlasSetLayout(cxEvent *event)
 {
     cxAtlasSet this = event->sender;
     cxAtlasClean(this);
-    
     cxList subViews = cxViewSubViews(this);
     cxAtlasSetNumber(this, cxListLength(subViews));
-    
     CX_LIST_FOREACH_SAFE(subViews, ele, tmp){
         cxSprite sp = ele->any;
         if(!cxViewSupportAtlasSet(sp)){
