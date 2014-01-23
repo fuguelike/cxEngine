@@ -7,6 +7,7 @@
 //
 
 #include <core/cxEngine.h>
+#include <core/cxRegex.h>
 #include <streams/cxAssetsStream.h>
 #include <streams/cxMemStream.h>
 #include "cxTextureFactory.h"
@@ -75,6 +76,14 @@ static cxHash cxTextureFactoryGroup(cxConstChars file,cxChar *files)
         cxHashSet(this->caches, cxHashStrKey(group), groups);
     }
     return groups;
+}
+
+void cxTextureFactoryClean()
+{
+    cxTextureFactory this = cxTextureFactoryInstance();
+    CX_HASH_FOREACH(this->caches, ele, tmp){
+        cxHashClean(ele->any);
+    }
 }
 
 void cxTextureFactoryCleanGroup(cxConstChars group)

@@ -5,7 +5,7 @@
     cxViewRoot.onBegin="mainBegin()"
     cxViewRoot.onEnd="mainEnd()">
     <cxTable cxView.w="getWidth('111')" cxView.fill="10,10,10,10" cxTable.space="10,10" cxTable.type="3,0">
-        <cxTemplate url="items.xml?template" title="cxLocalizedText('items.xml?exp')" release="cxEventPushView('particle.xml')" />
+        <cxTemplate src="buttontemp.xml" title="cxLocalizedText('items.xml?exp')" release="cxEventPushView('particle.xml')" />
         <cxTemplate src="buttontemp.xml" title="Action" release="cxEventPushView('action.xml')" />
         <cxTemplate src="buttontemp.xml" title="Wav" release="cxEventEffect({'src':'effect.wav','loop':false})" />
         <cxTemplate src="buttontemp.xml" title="Mp3" release="cxEventMusic({'src':'Track02.mp3','loop':false})" />
@@ -14,8 +14,8 @@
         <cxTemplate src="buttontemp.xml" title="Animate" release="cxEventPushView('animate.xml')" />
         <cxTemplate src="buttontemp.xml" title="Chipmunk" release="cxEventPushView('chipmunk.xml')" />
         <cxTemplate src="buttontemp.xml" title="bmpFont" release="cxEventPushView('bmpfont.xml')" />
-        <cxTemplate cond="cxIsAndroid()" src="buttontemp.xml" title="Android" />
-        <cxTemplate cond="cxIsIOS()" src="buttontemp.xml" title="IOS" release="iosLuaEventTest({'a':1,'b':'string'})" />
+        <cxTemplate cond="cxIsAndroid()" src="buttontemp.xml" title="Android Ok" />
+        <cxTemplate cond="cxIsIOS()" src="buttontemp.xml" title="IOS Ok" release="iosLuaEventTest({'a':1,'b':'string'})" />
         <cxTemplate src="buttontemp.xml" title="Polygon" release="cxEventPushView('polygon.xml')" />
     </cxTable>
 </cxViewRoot>

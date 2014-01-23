@@ -38,8 +38,12 @@ static cxInt cxTextureLuaRemoveTexture(lua_State *L)
 
 static cxInt cxTextureLuaCleanTexture(lua_State *L)
 {
-    cxConstChars group = luaL_checkstring(L, 1);
-    cxTextureFactoryCleanGroup(group);
+    cxInt args = lua_gettop(L);
+    if(args == 0){
+        cxTextureFactoryClean();
+    }else{
+        cxTextureFactoryCleanGroup(luaL_checkstring(L, 1));
+    }
     return 0;
 }
 

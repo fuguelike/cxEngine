@@ -91,7 +91,7 @@ static bool cxShaderCompile(cxShader this,GLuint *shader, GLenum type, cxString 
         };
         glShaderSource(*shader, sizeof(sources)/sizeof(*sources), sources, NULL);
     }else {
-        CX_ERROR("type error");
+        CX_ERROR("type error GL_VERTEX_SHADER or GL_FRAGMENT_SHADER");
         return false;
     }
     glCompileShader(*shader);
@@ -108,9 +108,7 @@ static bool cxShaderCompile(cxShader this,GLuint *shader, GLenum type, cxString 
         }else{
             log = cxShaderFragmentLog(this);
         }
-        if(log != NULL){
-            CX_ERROR("compile shader error:%s",cxStringBody(log));
-        }
+        CX_ERROR("compile shader error:%s",cxStringBody(log));
         allocator->free(src);
         abort();
     }
@@ -148,6 +146,7 @@ void cxShaderUsing(cxShader this,cxBool isAtlas)
 
 bool cxShaderInit(cxShader this)
 {
+    GLint status = 0;
     cxString vbytes = CX_METHOD_FIRE(NULL, this->GetVertexSource, this);
     CX_ASSERT(vbytes != NULL, "get vertex shader source failed");
     cxString fbytes = CX_METHOD_FIRE(NULL, this->GetFragmentSource, this);
@@ -166,14 +165,11 @@ bool cxShaderInit(cxShader this)
         glAttachShader(this->program, this->fragmentShader);
     }
     CX_METHOD_FIRE(NULL, this->Init, this);
-    GLint status = 0;
     glLinkProgram(this->program);
     glGetProgramiv(this->program, GL_LINK_STATUS, &status);
     if(status == GL_FALSE){
         cxString log = cxShaderProgramLog(this);
-        if(log != NULL){
-            CX_ERROR("link program error:%s",cxStringBody(log));
-        }
+        CX_ERROR("link program error:%s",cxStringBody(log));
         return false;
     }
     cxOpenGLUseProgram(this->program);

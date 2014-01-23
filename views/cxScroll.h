@@ -20,6 +20,7 @@ typedef enum {
 }cxScrollMoveType;
 
 CX_OBJECT_DEF(cxScroll, cxView)
+    cxFloat max;
     cxFloat value;
     cxBox4f box;
     cxScrollMoveType type;
