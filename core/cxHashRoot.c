@@ -223,7 +223,6 @@ CX_OBJECT_INIT(cxHashRoot, cxObject)
 CX_OBJECT_FREE(cxHashRoot, cxObject)
 {
     CX_RELEASE(this->items);
-    CX_METHOD_RELEASE(this->Make);
 }
 CX_OBJECT_TERM(cxHashRoot, cxObject)
 

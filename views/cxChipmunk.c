@@ -23,7 +23,7 @@ static void cxChipmunkUpdate(cxEvent *event)
 {
     cxEngine engine = cxEngineInstance();
     cxChipmunk this = event->sender;
-    cpSpaceStep(this->space, engine->frameInterval);
+    cpSpaceStep(this->space, engine->frameDelta);
 }
 
 void cxChipmunkSetGravity(cxAny pview,cxVec2f gravity)
@@ -162,9 +162,9 @@ static void cpBodySetVelocityFunc(cpBody *body,cpBodyVelocityFunc func)
     body->velocity_func = func;
 }
 
-cxChipmunkAttr *cxChipmunkAttrInit(cxChipmunkAttr *attr)
+cxChipmunkAttr *cxChipmunkAttrCreate()
 {
-    memset(attr, 0, sizeof(cxChipmunkAttr));
+    cxChipmunkAttr *attr = cxMemoryCreate(sizeof(cxChipmunkAttr));
     attr->cp = cxVec2fv(0, 0);
     attr->ctype = 0;
     attr->e = 0.0f;
@@ -181,10 +181,8 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
 {
     cxChipmunk this = pview;
     CX_ASSERT(cxViewArgs(nview) == NULL,"not set args's view can append");
-
     cxSize2f size = cxViewSize(nview);
     CX_RETURN(cxSize2Zero(size), NULL);
-    
     cxVec2f pos = cxViewPosition(nview);
     cxFloat angle = cxViewAngle(nview);
     cpBody *body = NULL;

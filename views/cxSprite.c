@@ -27,7 +27,7 @@ static cxInt cxSpriteLuaMake(lua_State *L)
     cxBool ust = cxLuaBoolValue(L, 2, true);
     cxConstChars url = luaL_checkstring(L, 1);
     cxSpriteSetTextureURL(this, url, ust);
-    CX_LUA_RET_THIS(cxSprite);
+    CX_LUA_PUSH_THIS(cxSprite);
 }
 
 CX_LUA_METHOD_BEG(cxSprite)

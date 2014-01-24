@@ -111,7 +111,7 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_LUA_ALLOC_THIS(t)        t this = CX_ALLOC(t)
 
-#define CX_LUA_RET_THIS(t)          lua_pushlightuserdata(gL,this);return 1
+#define CX_LUA_PUSH_THIS(t)         lua_pushlightuserdata(gL,this);return 1
 
 #define CX_LUA_METHOD_BEG(_t_)      const luaL_Reg _t_##LuaMethods[] = {
 
@@ -123,7 +123,7 @@ cxInt cxObjectGetTag(cxAny obj);
 
 #define CX_OBJECT_BEG(_t_)                                          \
 static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;        \
-typedef struct _t_ * _t_;                                           \
+typedef struct _t_ *_t_;                                            \
 void __##_t_##AutoInit(_t_ this);                                   \
 void __##_t_##AutoFree(_t_ this);                                   \
 void __##_t_##TypeInit();                                           \
@@ -134,12 +134,12 @@ struct _t_ {
 static inline cxInt __##_t_##LuaAlloc(lua_State *L)                 \
 {                                                                   \
     CX_LUA_ALLOC_THIS(_t_);                                         \
-    CX_LUA_RET_THIS(_t_);                                           \
+    CX_LUA_PUSH_THIS(_t_);                                          \
 }                                                                   \
 static inline cxInt __##_t_##LuaCreate(lua_State *L)                \
 {                                                                   \
     CX_LUA_CREATE_THIS(_t_);                                        \
-    CX_LUA_RET_THIS(_t_);                                           \
+    CX_LUA_PUSH_THIS(_t_);                                          \
 }
 
 extern lua_State *gL;
@@ -165,6 +165,12 @@ CX_OBJECT_BEG(cxObject)
     cxAny cxRoot;
     CX_METHOD_ALLOC(void, ReadAttr, cxReaderAttrInfo *);
 CX_OBJECT_END(cxObject)
+
+CX_OBJECT_DEF(cxMemory, cxObject)
+    cxAny pointer;
+CX_OBJECT_END(cxMemory)
+
+cxAny cxMemoryCreate(cxInt size);
 
 CX_C_END
 

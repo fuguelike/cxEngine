@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <cxActionRoot cxActionRoot.type="multiple" cxActionRoot.onLoad="actionsLoad">
-    <cxSpline id="spline"
-        cxAction.time="3"
-        cxSpline.points="cxDataTypes('items.xml?spline')"/>
+    <cxSpline id="spline" cxAction.time="3" cxSpline.points="cxDataTypes('items.xml?spline')"/>
     <cxAnimate id="animate" cxAnimate.cache="true" cxAction.speed="1.0" cxAction.time="3">
         <cxFrame file="animate/%d.png" from="1" to="40"/>
     </cxAnimate>
     <cxAnimate id="animate2" cxAction.time="5">
         <cxFrame file="candy.xml?red.png"/>
-        <cxFrame file="candy.xml?green.png"/>
+        <cxFrame file="candy.xml?green.png" delay="0.5"/>
         <cxFrame file="candy.xml?blue.png"/>
         <cxFrame file="candy.xml?orange.png"/>
         <cxFrame file="candy.xml?yellow.png"/>

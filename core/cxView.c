@@ -45,9 +45,9 @@ static cxInt cxViewLuaAppendAction(lua_State *L)
 static cxInt cxViewLuaCreateTimer(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxView);
-    cxFloat time = luaL_checknumber(L, 2);
+    cxFloat freq = luaL_checknumber(L, 2);
     cxInt repeat = luaL_checkinteger(L, 3);
-    cxAny timer = cxViewAppendTimer(this, time, repeat);
+    cxAny timer = cxViewAppendTimer(this, freq, repeat);
     CX_LUA_PUSH_OBJECT(timer);
     return 1;
 }
@@ -173,7 +173,7 @@ static cxInt cxViewLuaMake(lua_State *L)
 {
     CX_LUA_CREATE_THIS(cxView);
     if(!lua_istable(L, 1)){
-        CX_LUA_RET_THIS(cxView);
+        CX_LUA_PUSH_THIS(cxView);
     }
     cxVec2f pos = this->position;
     lua_getfield(L, 1, "x");
@@ -181,7 +181,6 @@ static cxInt cxViewLuaMake(lua_State *L)
         pos.x = lua_tonumber(L, -1);
     }
     lua_pop(L, 1);
-    
     lua_getfield(L, 1, "y");
     if(lua_isnumber(L, -1)){
         pos.y = lua_tonumber(L, -1);
@@ -190,22 +189,19 @@ static cxInt cxViewLuaMake(lua_State *L)
     cxViewSetPos(this, pos);
     
     cxSize2f size = this->size;
-    
     lua_getfield(L, 1, "w");
     if(lua_isnumber(L, -1)){
         size.w = lua_tonumber(L, -1);
     }
     lua_pop(L, 1);
-    
     lua_getfield(L, 1, "h");
     if(lua_isnumber(L, -1)){
         size.h = lua_tonumber(L, -1);
     }
     lua_pop(L, 1);
     cxViewSetSize(this, size);
-    
-    
-    CX_LUA_RET_THIS(cxView);
+
+    CX_LUA_PUSH_THIS(cxView);
 }
 
 CX_LUA_METHOD_BEG(cxView)
@@ -1023,15 +1019,12 @@ void cxViewDraw(cxAny pview)
     }
     CX_METHOD_FIRE(NULL, this->Before, this);
     CX_SIGNAL_FIRE_OBJECT(this, EmmitBefore);
-    
     CX_METHOD_FIRE(NULL, this->Draw, this);
     CX_SIGNAL_FIRE_OBJECT(this, EmmitDraw);
-    
     CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    
     CX_SIGNAL_FIRE_OBJECT(this, EmmitAfter);
     CX_METHOD_FIRE(NULL, this->After,this);
     //

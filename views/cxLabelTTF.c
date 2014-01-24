@@ -59,7 +59,7 @@ static cxInt cxLabelTTFLuaMake(lua_State *L)
         }
         lua_pop(L, 1);
     }
-    CX_LUA_RET_THIS(cxLabelTTF);
+    CX_LUA_PUSH_THIS(cxLabelTTF);
 }
 
 CX_LUA_METHOD_BEG(cxLabelTTF)

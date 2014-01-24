@@ -29,7 +29,7 @@ static cxInt cxStringLuaMake(lua_State *L)
     for(cxInt i=1; i <= top; i++){
         cxStringFormat(this, "%s",lua_tostring(L, i));
     }
-    CX_LUA_RET_THIS(cxString);
+    CX_LUA_PUSH_THIS(cxString);
 }
 
 CX_LUA_METHOD_BEG(cxString)
