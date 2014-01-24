@@ -212,7 +212,7 @@ CX_LUA_METHOD_BEG(cxView)
     {"AppendView",cxViewLuaAppendView},
     {"AppendAction",cxViewLuaAppendAction},
     {"CreateTimer",cxViewLuaCreateTimer},
-    {"AppendEvent",cxViewLuaAppendEvent},
+    {"On",cxViewLuaAppendEvent},
     {"Make",cxViewLuaMake},
     CX_LUA_PROPERTY(cxView,Color),
     CX_LUA_PROPERTY(cxView,Position),
@@ -1010,7 +1010,6 @@ void cxViewDraw(cxAny pview)
     CX_EVENT_FIRE(this, onUpdate);
     cxViewUpdateActions(this);
     cxViewTransform(this);
-    //
     kmGLPushMatrix();
     kmGLMultMatrix(&this->normalMatrix);
     kmGLMultMatrix(&this->anchorMatrix);
@@ -1023,14 +1022,17 @@ void cxViewDraw(cxAny pview)
         cxViewSort(this);
     }
     CX_METHOD_FIRE(NULL, this->Before, this);
-    CX_SIGNAL_FIRE(this->EmmitBefore, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    CX_SIGNAL_FIRE_OBJECT(this, EmmitBefore);
+    
     CX_METHOD_FIRE(NULL, this->Draw, this);
-    CX_SIGNAL_FIRE(this->EmmitDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    CX_SIGNAL_FIRE_OBJECT(this, EmmitDraw);
+    
     CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    CX_SIGNAL_FIRE(this->EmmitAfter, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    
+    CX_SIGNAL_FIRE_OBJECT(this, EmmitAfter);
     CX_METHOD_FIRE(NULL, this->After,this);
     //
     if(this->isCropping){
@@ -1038,7 +1040,7 @@ void cxViewDraw(cxAny pview)
     }
     cxViewDrawBorder(this);
     kmGLPopMatrix();
-    //remove view
+    //remove subview
     cxArrayClean(this->removes);
 }
 

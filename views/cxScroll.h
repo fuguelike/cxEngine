@@ -24,6 +24,7 @@ CX_OBJECT_DEF(cxScroll, cxView)
     cxFloat value;
     cxBox4f box;
     cxScrollMoveType type;
+    cxBool selected;
     CX_SLOT_ALLOC(onTouch);
 CX_OBJECT_END(cxScroll)
 

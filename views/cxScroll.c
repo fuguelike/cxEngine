@@ -53,20 +53,37 @@ cxView cxScrollContainer(cxAny pview)
     return ele->any;
 }
 
-static cxFloat cxScrollMoveCurve(cxAny pav,cxFloat time)
-{
-    return powf(time, 1.0f / 2.5f);
-}
-
 static void cxScrollActionView(cxScroll this,cxVec2f new)
 {
     cxView view = cxScrollContainer(this);
     cxFloat distance = kmVec2DistanceBetween(&new, &view->position);
     CX_RETURN(kmAlmostEqual(distance, 0));
-    cxMove move = cxMoveCreate(distance/this->value, new);
+    cxMove move = cxMoveCreate((distance/this->value)*1.5f, new);
     cxActionSetId(move, CX_SCROLL_MOVE_ACTION_ID);
-    cxActionSetCurve(move, cxScrollMoveCurve);
+    cxActionSetCurve(move, cxCurveSineOut);
     cxViewAppendAction(view, move);
+}
+
+static void cxScrollTouchMove(cxScroll this,cxView view,cxTouch *touch)
+{
+    cxVec2f pos = cxViewPosition(view);
+    if(this->type & cxScrollMoveTypeVertical){
+        pos.y += touch->delta.y;
+    }
+    if(touch->delta.y < 0 && pos.y < (this->box.b - this->max)){
+        pos.y = this->box.b - this->max;
+    }else if(touch->delta.y > 0 && pos.y > (this->box.t + this->max)){
+        pos.y = this->box.t + this->max;
+    }
+    if(this->type & cxScrollMoveTypeHorizontal){
+        pos.x += touch->delta.x;
+    }
+    if(touch->delta.x < 0 && pos.x < (this->box.l - this->max)){
+        pos.x = this->box.l - this->max;
+    }else if(touch->delta.x > 0 && pos.x > (this->box.r + this->max)){
+        pos.x = this->box.r + this->max;
+    }
+    cxViewSetPos(view, pos);
 }
 
 cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
@@ -77,29 +94,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
         return false;
     }
     if(touch->type == cxTouchTypeMove){
-        cxVec2f pos = cxViewPosition(view);
-        cxBool setpos = false;
-        if(this->type & cxScrollMoveTypeVertical){
-            pos.y += touch->delta.y;
-            setpos = true;
-        }
-        if(touch->delta.y < 0 && pos.y < (this->box.b - this->max)){
-            pos.y = this->box.b - this->max;
-        }else if(touch->delta.y > 0 && pos.y > (this->box.t + this->max)){
-            pos.y = this->box.t + this->max;
-        }
-        if(this->type & cxScrollMoveTypeHorizontal){
-            pos.x += touch->delta.x;
-            setpos = true;
-        }
-        if(touch->delta.x < 0 && pos.x < (this->box.l - this->max)){
-            pos.x = this->box.l - this->max;
-        }else if(touch->delta.x > 0 && pos.x > (this->box.r + this->max)){
-            pos.x = this->box.r + this->max;
-        }
-        if(setpos){
-            cxViewSetPos(view, pos);
-        }
+        cxScrollTouchMove(this, view, touch);
     }else if(touch->type == cxTouchTypeUp){
         cxBool setpos = false;
         cxFloat time = touch->utime - touch->dtime;
@@ -148,6 +143,9 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
         }else{
             this->max = (this->super.size.w + this->super.size.h) / 16.0f;
         }
+        this->selected = cxViewHitTest(pview, touch->current, NULL);
+    }else if(touch->type == cxTouchTypeMove && this->selected){
+        cxScrollTouchMove(this, view, touch);
     }else if(touch->type == cxTouchTypeUp){
         cxViewStopAction(view, CX_SCROLL_MOVE_ACTION_ID);
         cxBool setpos = false;
@@ -169,6 +167,7 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
         if(setpos){
             cxScrollActionView(this, new);
         }
+        this->selected = false;
     }
 }
 

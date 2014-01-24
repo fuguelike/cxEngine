@@ -43,7 +43,7 @@ static cxInt cxLoadingLuaAppendEvent(lua_State *L)
 
 CX_LUA_METHOD_BEG(cxLoading)
     {"Start",cxLoadingLuaStart},
-    {"AppendEvent",cxLoadingLuaAppendEvent},
+    {"On",cxLoadingLuaAppendEvent},
     CX_LUA_PROPERTY(cxLoading, Object),
 CX_LUA_METHOD_END(cxLoading)
 

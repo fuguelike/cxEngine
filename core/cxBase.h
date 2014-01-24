@@ -58,6 +58,9 @@ do{                                                             \
     }                                                           \
 }while(0)
 
+#define CX_SIGNAL_FIRE_OBJECT(_o_,_s_)                          \
+CX_SIGNAL_FIRE(_o_->_s_, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+
 
 #define CX_SLOT_ALLOC(name)      cxSlot name
 

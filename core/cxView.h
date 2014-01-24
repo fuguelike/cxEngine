@@ -62,7 +62,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxSize2f size;
     cxVec2f position;
     cxVec2f scale;
-    cxVec2f fixscale;       //use fit scree size
+    cxVec2f fixscale;
     cxVec2f anchor;
     cxVec3f raxis;
     cxFloat angle;
