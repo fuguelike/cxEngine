@@ -9,7 +9,7 @@
 #include "cxTypes.h"
 #include "cxNumber.h"
 
-static cxInt cxNumberLuaNewInt(lua_State *L)
+static cxInt cxNumberLuaMakeInt(lua_State *L)
 {
     cxInt value =  luaL_checkinteger(L, 1);
     cxNumber this = cxNumberInt(value);
@@ -29,7 +29,7 @@ static cxInt cxNumberLuaToInt(lua_State *L)
     return 1;
 }
 
-static cxInt cxNumberLuaNewFloat(lua_State *L)
+static cxInt cxNumberLuaMakeFloat(lua_State *L)
 {
     cxFloat value =  luaL_checknumber(L, 1);
     cxNumber this = cxNumberFloat(value);
@@ -49,7 +49,7 @@ static cxInt cxNumberLuaToFloat(lua_State *L)
     return 1;
 }
 
-static cxInt cxNumberLuaNewColor4f(lua_State *L)
+static cxInt cxNumberLuaMakeColor4f(lua_State *L)
 {
     cxInt top = lua_gettop(L);
     cxFloat r = (top >=1 && lua_isnumber(L, 1)) ? lua_tonumber(L, 1) : 1.0f;
@@ -73,7 +73,7 @@ static cxInt cxNumberLuaToColor4f(lua_State *L)
     return 1;
 }
 
-static cxInt cxNumberLuaNewVec2f(lua_State *L)
+static cxInt cxNumberLuaMakeVec2f(lua_State *L)
 {
     cxFloat x = luaL_checknumber(L, 1);
     cxFloat y = luaL_checknumber(L, 2);
@@ -82,7 +82,7 @@ static cxInt cxNumberLuaNewVec2f(lua_State *L)
     CX_LUA_RET_THIS(cxNumber);
 }
 
-static cxInt cxNumberLuaNewBool(lua_State *L)
+static cxInt cxNumberLuaMakeBool(lua_State *L)
 {
     cxBool b = lua_toboolean(L, 1);
     cxNumber this = cxNumberBool(b);
@@ -90,7 +90,7 @@ static cxInt cxNumberLuaNewBool(lua_State *L)
     CX_LUA_RET_THIS(cxNumber);
 }
 
-static cxInt cxNumberLuaNewSize2f(lua_State *L)
+static cxInt cxNumberLuaMakeSize2f(lua_State *L)
 {
     cxFloat w = luaL_checknumber(L, 1);
     cxFloat h = luaL_checknumber(L, 2);
@@ -100,15 +100,15 @@ static cxInt cxNumberLuaNewSize2f(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxNumber)
-    {"NewInt",cxNumberLuaNewInt},
+    {"MakeInt",cxNumberLuaMakeInt},
     {"ToInt",cxNumberLuaToInt},
-    {"NewFloat",cxNumberLuaNewFloat},
+    {"MakeFloat",cxNumberLuaMakeFloat},
     {"ToFloat",cxNumberLuaToFloat},
-    {"NewColor4f",cxNumberLuaNewColor4f},
+    {"MakeColor4f",cxNumberLuaMakeColor4f},
     {"ToColor4f",cxNumberLuaToColor4f},
-    {"NewVec2f",cxNumberLuaNewVec2f},
-    {"NewBool",cxNumberLuaNewBool},
-    {"NewSize2f",cxNumberLuaNewSize2f},
+    {"MakeVec2f",cxNumberLuaMakeVec2f},
+    {"MakeBool",cxNumberLuaMakeBool},
+    {"MakeSize2f",cxNumberLuaMakeSize2f},
 CX_LUA_METHOD_END(cxNumber)
 
 void __cxNumberTypeInit()

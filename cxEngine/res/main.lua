@@ -1,5 +1,5 @@
 
-require('bind.lua')
+require('bind')
 
 function init()
     
