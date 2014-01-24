@@ -9,6 +9,16 @@
 #include <core/cxViewRoot.h>
 #include "cxTable.h"
 
+CX_LUA_METHOD_BEG(cxTable)
+
+CX_LUA_METHOD_END(cxTable)
+
+
+void __cxTableTypeInit()
+{
+    CX_LUA_LOAD_TYPE(cxTable);
+}
+
 void cxTableReadAttr(cxReaderAttrInfo *info)
 {
     cxViewReadAttr(info);

@@ -50,6 +50,7 @@ void cxInitTypes()
     __cxParticleTypeInit();
     __cxChipmunkTypeInit();
     __cxScrollTypeInit();
+    __cxTableTypeInit();
     
     __cxEngineTypeInit();
 }
