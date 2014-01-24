@@ -13,6 +13,8 @@
 
 CX_C_BEGIN
 
+#define CX_TIMER_NOT_LIMIT_REPEAT   -1
+
 CX_OBJECT_DEF(cxTimer, cxAction)
     cxInt repeat;
     CX_EVENT_ALLOC(onArrive);

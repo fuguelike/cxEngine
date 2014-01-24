@@ -36,8 +36,6 @@ cxBool cxActionForever(cxAny pav)
 void cxActionReadAttr(cxReaderAttrInfo *info)
 {
     cxAction this = info->object;
-    //
-    cxActionSetStepHide(this, cxXMLReadBoolAttr(info, "cxAction.stepHide", this->stepHide));
     //delay
     cxActionSetDelay(this, cxXMLReadFloatAttr(info, "cxAction.delay", this->delay));
     //time
@@ -69,12 +67,6 @@ void cxActionReadAttr(cxReaderAttrInfo *info)
     cxXMLAppendEvent(info, this, cxAction, onStep);
 }
 
-void cxActionSetStepHide(cxAny pav,cxBool stepHide)
-{
-    cxAction this = pav;
-    this->stepHide = stepHide;
-}
-
 void cxActionSetSplit(cxAny pav,cxInt split)
 {
     cxAction this = pav;
@@ -89,6 +81,12 @@ cxAny cxActionView(cxAny pav)
     return this->view;
 }
 
+void cxActionSetView(cxAny pav,cxAny pview)
+{
+    cxAction this = pav;
+    this->view = pview;
+}
+
 CX_OBJECT_INIT(cxAction, cxObject)
 {
     this->super.cxBase = cxBaseTypeAction;
@@ -97,7 +95,6 @@ CX_OBJECT_INIT(cxAction, cxObject)
     this->speed = 1.0f;
     this->index = -1;
     this->split = -1;
-    this->stepHide = false;
 }
 CX_OBJECT_FREE(cxAction, cxObject)
 {

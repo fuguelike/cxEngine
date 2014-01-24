@@ -140,7 +140,7 @@ void cxViewStopAction(cxAny pview,cxUInt actionId);
 
 cxBool cxViewHasAction(cxAny pview,cxUInt actionId);
 
-cxAny cxViewAppendTimer(cxAny pview,cxFloat time,cxInt repeat);
+cxAny cxViewAppendTimer(cxAny pview,cxFloat freq,cxInt repeat);
 
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav);
 

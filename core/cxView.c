@@ -967,19 +967,19 @@ void cxViewStopAction(cxAny pview,cxUInt actionId)
     }
 }
 
-cxAny cxViewAppendTimer(cxAny pview,cxFloat time,cxInt repeat)
+cxAny cxViewAppendTimer(cxAny pview,cxFloat freq,cxInt repeat)
 {
-    cxTimer timer = cxTimerCreate(time, repeat);
+    cxTimer timer = cxTimerCreate(freq, repeat);
     cxViewAppendAction(pview, timer);
     return timer;
 }
 
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
 {
-    CX_ASSERT(pav != NULL, "action null");
+    CX_ASSERT(pav != NULL && pview != NULL, "view or action null");
     cxView this = pview;
     cxAction action = pav;
-    action->view = pview;
+    cxActionSetView(action, pview);
     cxUInt actionId = cxActionGetId(action);
     cxHashKey key = cxHashIntKey(actionId);
     cxAny ptr = cxHashGet(this->actions, key);
@@ -995,9 +995,6 @@ static void cxViewUpdateActions(cxView this)
     cxEngine engine = cxEngineInstance();
     CX_HASH_FOREACH(this->actions, ele, tmp){
         cxAction action = ele->any;
-        if(!this->isVisible && !action->stepHide){
-            continue;
-        }
         if(!cxActionUpdate(action, engine->frameDelta)){
             continue;
         }
@@ -1027,15 +1024,12 @@ void cxViewDraw(cxAny pview)
     }
     CX_METHOD_FIRE(NULL, this->Before, this);
     CX_SIGNAL_FIRE(this->EmmitBefore, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
-    
     CX_METHOD_FIRE(NULL, this->Draw, this);
     CX_SIGNAL_FIRE(this->EmmitDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
-    
     CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    
     CX_SIGNAL_FIRE(this->EmmitAfter, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
     CX_METHOD_FIRE(NULL, this->After,this);
     //

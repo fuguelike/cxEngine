@@ -41,18 +41,6 @@ void __cxTimerTypeInit()
     CX_LUA_LOAD_TYPE(cxTimer);
 }
 
-static void cxTimerInit(cxAny pav)
-{
-    cxTimer this = pav;
-    CX_ASSERT(this->super.view != NULL, "view not set");
-    CX_UNUSED_PARAM(this);
-}
-
-static void cxTimerStep(cxAny pav,cxFloat dt,cxFloat time)
-{
-    cxTimer this = pav;
-    CX_UNUSED_PARAM(this);
-}
 
 static void cxTimerReadAttr(cxReaderAttrInfo *info)
 {
@@ -74,10 +62,7 @@ static cxBool cxTimerExit(cxAny pav)
 
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
-    cxActionSetStepHide(this, true);
     cxObjectSetReadAttrFunc(this, cxTimerReadAttr);
-    CX_METHOD_OVERRIDE(this->super.Init, cxTimerInit);
-    CX_METHOD_OVERRIDE(this->super.Step, cxTimerStep);
     CX_METHOD_OVERRIDE(this->super.Exit, cxTimerExit);
 }
 CX_OBJECT_FREE(cxTimer, cxAction)
@@ -93,3 +78,4 @@ cxTimer cxTimerCreate(cxFloat time,cxInt repeat)
     this->repeat = repeat;
     return this;
 }
+
