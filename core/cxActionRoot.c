@@ -28,7 +28,8 @@ void cxActionRootReadAttr(cxReaderAttrInfo *info)
 {
     cxObjectReadAttr(info);
     cxActionRoot this = info->root;
-    cxXMLAppendEvent(info, this, cxActionSet, onLoad);
+    cxXMLAppendEvent(info, this, cxViewRoot, onBegin);
+    cxXMLAppendEvent(info, this, cxViewRoot, onEnd);
 }
 
 CX_OBJECT_INIT(cxActionRoot, cxObject)
@@ -39,7 +40,8 @@ CX_OBJECT_INIT(cxActionRoot, cxObject)
 }
 CX_OBJECT_FREE(cxActionRoot, cxObject)
 {
-    CX_EVENT_RELEASE(this->onLoad);
+    CX_EVENT_RELEASE(this->onBegin);
+    CX_EVENT_RELEASE(this->onEnd);
     CX_RELEASE(this->codes);
     CX_METHOD_RELEASE(this->Make);
 }
@@ -92,17 +94,14 @@ cxAny cxActionRootGet(cxConstChars src)
     CX_RETURN(this == NULL, NULL);
     cxString code = cxHashGet(this->codes, (path->count == 1) ? cxHashStrKey(path->path) : cxHashStrKey(path->key));
     CX_RETURN(code == NULL, NULL);
+    //create by code
     xmlTextReaderPtr reader = cxXMLReaderForString(code, NULL, NULL);
     cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, this, NULL);
     while(xmlTextReaderRead(reader)){
-        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
-            continue;
-        }
+        CX_CONTINUE(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT);
         cxConstChars temp = cxXMLReadElementName(reader);
         info->object = CX_METHOD_FIRE(NULL, this->Make,temp,reader);
-        if(info->object == NULL){
-            continue;
-        }
+        CX_CONTINUE(info->object == NULL);
         //save root
         cxObjectSetRoot(info->object, this);
         cxObjectReadAttrRun(info);
@@ -131,7 +130,6 @@ static void cxActionRootLoadCodesWithReader(cxAny pav,xmlTextReaderPtr reader)
             continue;
         }
         cxObjectReadAttrRun(info);
-        CX_EVENT_FIRE(this, onLoad);
         break;
     }
     while(xmlTextReaderRead(reader)){
@@ -163,10 +161,12 @@ cxAny cxActionRootCreate(cxConstChars xml)
         CX_ERROR("create xml reader failed");
         return NULL;
     }
+    CX_EVENT_FIRE(this, onBegin);
     cxActionRootLoadCodesWithReader(this, reader);
     cxHashKey key = cxHashStrKey(xml);
     cxHashSet(this->codes, key, script->bytes);
     cxHashSet(engine->actions, key, this);
+    CX_EVENT_FIRE(this, onEnd);
     return this;
 }
 

@@ -18,7 +18,8 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxActionRoot, cxObject)
     cxBool isError;
     cxHash codes;
-    CX_EVENT_ALLOC(onLoad);
+    CX_EVENT_ALLOC(onBegin);
+    CX_EVENT_ALLOC(onEnd);
     CX_METHOD_ALLOC(cxAny, Make, cxConstChars, xmlTextReaderPtr);
 CX_OBJECT_END(cxActionRoot)
 
