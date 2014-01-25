@@ -360,6 +360,8 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_EVENT_RELEASE(this->onResize);
     CX_EVENT_RELEASE(this->onLayout);
     
+    CX_SIGNAL_RELEASE(this->onDraw);
+    
     CX_METHOD_RELEASE(this->IsTouch);
     CX_METHOD_RELEASE(this->Touch);
     CX_METHOD_RELEASE(this->IsOnKey);
@@ -367,10 +369,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_METHOD_RELEASE(this->Draw);
     CX_METHOD_RELEASE(this->After);
     CX_METHOD_RELEASE(this->Before);
-    
-    CX_SIGNAL_RELEASE(this->EmmitDraw);
-    CX_SIGNAL_RELEASE(this->EmmitAfter);
-    CX_SIGNAL_RELEASE(this->EmmitBefore);
 }
 CX_OBJECT_TERM(cxView, cxObject)
 
@@ -848,7 +846,6 @@ void cxViewRemoved(cxAny pview)
     cxView parent = this->parentView;
     //join to remove list
     cxArrayAppend(parent->removes, this);
-    
     cxListRemove(parent->subViews, this->subElement);
     this->subElement = NULL;
     this->parentView = NULL;
@@ -1001,11 +998,14 @@ static void cxViewUpdateActions(cxView this)
 void cxViewDraw(cxAny pview)
 {
     cxView this = pview;
-    CX_RETURN(!this->isVisible);
+    if(!this->isVisible){
+        goto finished;
+    }
     //update action and update
     CX_EVENT_FIRE(this, onUpdate);
     cxViewUpdateActions(this);
     cxViewTransform(this);
+    
     kmGLPushMatrix();
     kmGLMultMatrix(&this->normalMatrix);
     kmGLMultMatrix(&this->anchorMatrix);
@@ -1018,14 +1018,12 @@ void cxViewDraw(cxAny pview)
         cxViewSort(this);
     }
     CX_METHOD_FIRE(NULL, this->Before, this);
-    CX_SIGNAL_FIRE_OBJECT(this, EmmitBefore);
     CX_METHOD_FIRE(NULL, this->Draw, this);
-    CX_SIGNAL_FIRE_OBJECT(this, EmmitDraw);
+    CX_SIGNAL_FIRE(this->onDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
     CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    CX_SIGNAL_FIRE_OBJECT(this, EmmitAfter);
     CX_METHOD_FIRE(NULL, this->After,this);
     //
     if(this->isCropping){
@@ -1033,6 +1031,7 @@ void cxViewDraw(cxAny pview)
     }
     cxViewDrawBorder(this);
     kmGLPopMatrix();
+finished:
     //remove subview
     cxArrayClean(this->removes);
 }

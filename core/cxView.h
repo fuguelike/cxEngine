@@ -77,9 +77,9 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_ALLOC(void, Draw, cxAny);
     CX_METHOD_ALLOC(void, After, cxAny);
     CX_METHOD_ALLOC(void, Before, cxAny);
-    CX_SIGNAL_ALLOC(EmmitDraw);
-    CX_SIGNAL_ALLOC(EmmitAfter);
-    CX_SIGNAL_ALLOC(EmmitBefore);
+
+    CX_SIGNAL_ALLOC(onDraw);
+
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);

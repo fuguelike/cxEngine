@@ -10,27 +10,12 @@
 #include <views/cxParticle.h>
 #include "cxRunParticle.h"
 
-static cxInt cxRunParticleTypeImp(lua_State *L)
-{
-    cxNumber num = cxNumberInt(cxRunParticleTypeDraw);
-    cxConstChars mode = luaL_checkstring(L, 1);
-    if(cxConstCharsEqu(mode, "draw")){
-        num = cxNumberInt(cxRunParticleTypeDraw);
-    }else if(cxConstCharsEqu(mode, "after")){
-        num = cxNumberInt(cxRunParticleTypeAfter);
-    }else if(cxConstCharsEqu(mode, "before")){
-        num = cxNumberInt(cxRunParticleTypeBefore);
-    }
-    CX_LUA_PUSH_OBJECT(num);
-    return 1;
-}
-
 void __cxRunParticleTypeInit()
 {
-    cxEngineRegisteNameFunc(cxRunParticleType,cxRunParticleTypeImp);
+    
 }
 
-static void cxRunParticleDraw(cxAny pav)
+static void cxActionViewDraw(cxAny pav)
 {
     cxRunParticle this = pav;
     cxAtlasDraw(this->particleView);
@@ -39,24 +24,18 @@ static void cxRunParticleDraw(cxAny pav)
 static void cxRunParticleInit(cxAny pav)
 {
     cxRunParticle this = pav;
-    cxView view = this->super.view;
+    cxView view = cxActionView(pav);
     cxParticle particle = this->particleView;
     CX_ASSERT(particle != NULL, "particle not set");
     cxParticleReset(particle);
-    if(this->type == cxRunParticleTypeBefore){
-        CX_SLOT_CONNECT(view->EmmitBefore, this, DrawParticle, cxRunParticleDraw);
-    }else if(this->type == cxRunParticleTypeDraw){
-        CX_SLOT_CONNECT(view->EmmitDraw, this, DrawParticle, cxRunParticleDraw);
-    }else if(this->type == cxRunParticleTypeAfter){
-        CX_SLOT_CONNECT(view->EmmitAfter, this, DrawParticle, cxRunParticleDraw);
-    }
+    CX_SLOT_CONNECT(view->onDraw, this, onDraw, cxActionViewDraw);
 }
 
 static void cxRunParticleOver(cxAny pav)
 {
     cxRunParticle this = pav;
     cxParticleStop(this->particleView);
-    CX_SLOT_RELEASE(this->DrawParticle);
+    CX_SLOT_RELEASE(this->onDraw);
 }
 
 static void cxRunParticleStep(cxAny pav,cxFloat dt,cxFloat time)
@@ -74,13 +53,11 @@ static void cxRunParticleReadAttr(cxReaderAttrInfo *info)
         cxParticle particle = cxParticleCreateFromPEX(pex);
         CX_RETAIN_SWAP(this->particleView, particle);
         this->super.duration = particle->duration;
-        return;
     }
 }
 
 CX_OBJECT_INIT(cxRunParticle, cxAction)
 {
-    this->type = cxRunParticleTypeBefore;
     cxObjectSetReadAttrFunc(this, cxRunParticleReadAttr);
     CX_METHOD_OVERRIDE(this->super.Init, cxRunParticleInit);
     CX_METHOD_OVERRIDE(this->super.Over, cxRunParticleOver);
@@ -88,23 +65,22 @@ CX_OBJECT_INIT(cxRunParticle, cxAction)
 }
 CX_OBJECT_FREE(cxRunParticle, cxAction)
 {
-    CX_SLOT_RELEASE(this->DrawParticle);
+    CX_SLOT_RELEASE(this->onDraw);
     CX_RELEASE(this->particleView);
 }
 CX_OBJECT_TERM(cxRunParticle, cxAction)
 
-cxRunParticle cxRunParticleCreateWithPEX(cxConstChars file,cxRunParticleType type)
+cxRunParticle cxRunParticleCreateWithPEX(cxConstChars file)
 {
     cxParticle v = cxParticleCreateFromPEX(file);
-    return cxRunParticleCreate(v, type);
+    return cxRunParticleCreate(v);
 }
 
-cxRunParticle cxRunParticleCreate(cxAny particleView,cxRunParticleType type)
+cxRunParticle cxRunParticleCreate(cxAny particleView)
 {
     CX_ASSERT(particleView != NULL, "args error");
     cxParticle particle = particleView;
     cxRunParticle this = CX_CREATE(cxRunParticle);
-    this->type = type;
     CX_RETAIN_SWAP(this->particleView, particleView);
     this->super.duration = particle->duration;
     return this;

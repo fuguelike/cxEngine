@@ -180,13 +180,12 @@ cxChipmunkAttr *cxChipmunkAttrCreate(cxBool isStatic)
 cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
 {
     cxChipmunk this = pview;
-    CX_ASSERT(cxViewArgs(nview) == NULL,"not set args's view can append");
+    CX_ASSERT(cxViewArgs(nview) == NULL,"view's args not null");
     cxSize2f size = cxViewSize(nview);
     CX_RETURN(cxSize2Zero(size), NULL);
     cxVec2f pos = cxViewPosition(nview);
     cxFloat angle = cxViewAngle(nview);
     cpBody *body = NULL;
-    //get body attr
     cxFloat i = 0;
     cxFloat r = CX_MAX(size.w, size.h) / 2.0f;
     if(attr->shape == cxChipmunkShapeBox){
@@ -197,7 +196,6 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
         CX_ERROR("shape error");
         return NULL;
     }
-    //set body attr
     if(attr->isStatic){
         body = cpBodyNewStatic();
     }else{
@@ -209,7 +207,6 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
     cpBodySetAngle(body, angle);
     cpBodySetPos(body, pos);
     cpBodySetUserData(body, nview);
-    //set shape type
     cpShape *shape = NULL;
     if(attr->shape == cxChipmunkShapeBox){
         shape = cpBoxShapeNew(body, size.w, size.h);
@@ -218,7 +215,6 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
     }else{
         CX_ASSERT(false, "shape error");
     }
-    //
     cpShapeSetGroup(shape, attr->group);
     cpShapeSetCollisionType(shape, attr->ctype);
     cpShapeSetLayers(shape, attr->layer);
@@ -226,7 +222,6 @@ cxAny cxChipmunkAppend(cxAny pview,cxAny nview,cxChipmunkAttr *attr)
     cpShapeSetFriction(shape, attr->u);
     cpShapeSetUserData(shape, nview);
     cpSpaceAddShape(this->space, shape);
-    //save shape
     cxViewSetArgs(nview, cxEventArgWeakRef(shape));
     cxViewAppend(this, nview);
     return nview;
@@ -245,6 +240,7 @@ void cxChipmunkRemove(cxAny pview,cxAny nview)
     cpSpaceRemoveShape(this->space, shape);
     cpShapeFree(shape);
     cxViewSetArgs(nview, NULL);
+    cxViewRemoved(nview);
 }
 
 //free Chipmunk body shape
