@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8318B9F6186916F1007C0E75 /* cxInitType.c in Sources */ = {isa = PBXBuildFile; fileRef = 8318B9F4186916F1007C0E75 /* cxInitType.c */; };
 		8324963F182FB72000554604 /* cxTextureJPG.c in Sources */ = {isa = PBXBuildFile; fileRef = 8324963D182FB72000554604 /* cxTextureJPG.c */; };
+		832FDA0D18938CC100A9D46B /* cxAStar.c in Sources */ = {isa = PBXBuildFile; fileRef = 832FDA0B18938CC100A9D46B /* cxAStar.c */; };
 		8330F7C91828E77D00E7E5B1 /* cxScroll.c in Sources */ = {isa = PBXBuildFile; fileRef = 8330F7C71828E77D00E7E5B1 /* cxScroll.c */; };
 		833E2B9E185F257E004093EF /* cxFileStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 833E2B9C185F257E004093EF /* cxFileStream.c */; };
 		8341C5F518227DF20045A66F /* cxActionSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C50218227DF20045A66F /* cxActionSet.c */; };
@@ -165,6 +166,8 @@
 		8318B9F5186916F1007C0E75 /* cxInitType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxInitType.h; sourceTree = "<group>"; };
 		8324963D182FB72000554604 /* cxTextureJPG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureJPG.c; sourceTree = "<group>"; };
 		8324963E182FB72000554604 /* cxTextureJPG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTextureJPG.h; sourceTree = "<group>"; };
+		832FDA0B18938CC100A9D46B /* cxAStar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAStar.c; sourceTree = "<group>"; };
+		832FDA0C18938CC100A9D46B /* cxAStar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAStar.h; sourceTree = "<group>"; };
 		8330F7C71828E77D00E7E5B1 /* cxScroll.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxScroll.c; sourceTree = "<group>"; };
 		8330F7C81828E77D00E7E5B1 /* cxScroll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxScroll.h; sourceTree = "<group>"; };
 		833E2B9C185F257E004093EF /* cxFileStream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxFileStream.c; sourceTree = "<group>"; };
@@ -456,9 +459,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		832FDA0A18938B1E00A9D46B /* algorithm */ = {
+			isa = PBXGroup;
+			children = (
+				832FDA0B18938CC100A9D46B /* cxAStar.c */,
+				832FDA0C18938CC100A9D46B /* cxAStar.h */,
+			);
+			path = algorithm;
+			sourceTree = "<group>";
+		};
 		8341C34218227C310045A66F = {
 			isa = PBXGroup;
 			children = (
+				832FDA0A18938B1E00A9D46B /* algorithm */,
 				8341C50118227DF20045A66F /* actions */,
 				8341C51418227DF20045A66F /* chipmunk */,
 				8341C54D18227DF20045A66F /* core */,
@@ -1003,6 +1016,7 @@
 				8341C61C18227DF20045A66F /* cxActionRoot.c in Sources */,
 				8341C5F718227DF20045A66F /* cxFade.c in Sources */,
 				8341C68118227FA10045A66F /* cxEAGLView.m in Sources */,
+				832FDA0D18938CC100A9D46B /* cxAStar.c in Sources */,
 				8341C68318227FA10045A66F /* cxViewController.m in Sources */,
 				8341C64718227DF30045A66F /* aabb.c in Sources */,
 				8341C64818227DF30045A66F /* mat3.c in Sources */,

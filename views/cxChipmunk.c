@@ -162,14 +162,14 @@ static void cpBodySetVelocityFunc(cpBody *body,cpBodyVelocityFunc func)
     body->velocity_func = func;
 }
 
-cxChipmunkAttr *cxChipmunkAttrCreate()
+cxChipmunkAttr *cxChipmunkAttrCreate(cxBool isStatic)
 {
     cxChipmunkAttr *attr = cxMemoryCreate(sizeof(cxChipmunkAttr));
     attr->cp = cxVec2fv(0, 0);
     attr->ctype = 0;
     attr->e = 0.0f;
     attr->group = CP_NO_GROUP;
-    attr->isStatic = false;
+    attr->isStatic = isStatic;
     attr->layer = CP_ALL_LAYERS;
     attr->m = 1.0f;
     attr->shape = cxChipmunkShapeBox;

@@ -35,7 +35,7 @@ CX_OBJECT_DEF(cxChipmunk, cxView)
     cpSpace *space;
 CX_OBJECT_END(cxChipmunk)
 
-cxChipmunkAttr *cxChipmunkAttrCreate();
+cxChipmunkAttr *cxChipmunkAttrCreate(cxBool isStatic);
 
 void cxChipmunkReadAttr(cxReaderAttrInfo *info);
 
