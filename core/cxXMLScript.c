@@ -201,34 +201,27 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
         if(!ELEMENT_IS_TYPE(cxTemplate)){
             continue;
         }
-        //
         cxBool cond = cxXMLReadBoolAttr(info, "cond", true);
         if(!cond){
             continue;
         }
-        //
         cxConstChars src = cxXMLAttr(reader,"src");
         if(src != NULL){
             cxXMLScript xml = cxEngineGetXMLScript(src);
             CX_ASSERT(xml != NULL, "get xml %s template failed", src);
-            
             //process Template's Template
             cxString data = cxXMLReaderPrepareTemplate(xml->bytes);
             CX_ASSERT(data != NULL, "prepare xml error");
-            
             cxRegex regex = cxRegexCreate(sregex, data, 0);
             ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
             break;
         }
-        //
         cxConstChars url = cxXMLAttr(reader,"url");
         if(url != NULL){
             cxTypes types = cxEngineTypes(url);
             CX_ASSERT(types != NULL && cxTypesIsType(types, cxTypesString), "get url %s data failed", url);
-            
             cxString data = cxXMLReaderPrepareTemplate(types->any);
             CX_ASSERT(data != NULL, "prepare xml error");
-            
             cxRegex regex = cxRegexCreate(sregex, data, 0);
             ret = cxRegexReplace(regex, cxPrepareReplaceTemplateVar, reader);
             break;
@@ -240,7 +233,6 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
 
 cxString cxXMLReaderPrepareTemplate(cxString code)
 {
-    //replace cxTemplate
     cxRegex regex = cxRegexCreate("<cxTemplate\\s.+?/>", code, 0);
     CX_ASSERT(regex != NULL, "regex error");
     cxString ret = cxRegexReplace(regex, cxPrepareReplaceTemplate, NULL);
@@ -381,7 +373,6 @@ cxEventItem cxXMLReadEvent(cxReaderAttrInfo *info, cxConstChars name)
     cxEventItem event = NULL;
     cxEventArg args = cxStringLength(argsCode) > 0 ? cxEventArgCreate(cxStringBody(argsCode)) : CX_CREATE(cxEventArg);
     cxConstType type = cxObjectType(info->object);
-    //from object bind
     if(cxObjectBind(info->object) > 0){
         lua_getref(gL, cxObjectBind(info->object));
         if(lua_istable(gL, -1)){
@@ -392,7 +383,6 @@ cxEventItem cxXMLReadEvent(cxReaderAttrInfo *info, cxConstChars name)
         }
     }
     CX_RETURN(event != NULL, event);
-    //from root bind
     if(cxObjectBind(info->root) > 0){
         lua_getref(gL, cxObjectBind(info->root));
         if(lua_istable(gL, -1)){
@@ -403,7 +393,6 @@ cxEventItem cxXMLReadEvent(cxReaderAttrInfo *info, cxConstChars name)
         }
     }
     CX_RETURN(event != NULL, event);
-    //from type table find
     lua_getglobal(gL, type);
     if(lua_istable(gL, -1)){
         lua_getfield(gL, -1, funcName);
@@ -412,7 +401,6 @@ cxEventItem cxXMLReadEvent(cxReaderAttrInfo *info, cxConstChars name)
         lua_pop(gL, 1);
     }
     CX_RETURN(event != NULL, event);
-    //from global table type
     lua_getglobal(gL, funcName);
     return cxXMLFindEvent(args, false);
 }

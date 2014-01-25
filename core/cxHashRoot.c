@@ -48,11 +48,11 @@ static void cxHashRootReadDB(cxDBEnv env,cxHashRoot root,xmlTextReaderPtr reader
         }else if(cxConstCharsEqu(path, "document")){
             sfile = cxDocumentPath(file);
         }else{
-            CX_ERROR("must set path assert or document");
+            CX_ERROR("must set path (assert or document)");
         }
         cxAny db = NULL;
         if(file != NULL && table != NULL && type != NULL){
-            db = cxDBCreate(env, cxStringBody(sfile), table, type, rdonly);
+            db = cxDBCreate(env, sfile, cxStringConstChars(table), type, rdonly);
         }
         if(db != NULL && sid != NULL){
             cxHashSet(root->items, cxHashStrKey(sid), cxDBTypesCreate(db));

@@ -730,7 +730,6 @@ void cxViewTransform(cxAny pview)
 static void cxViewDrawBorder(cxAny pview)
 {
     cxView this = pview;
-    CX_RETURN(!cxEngineInstance()->isShowBorder && !this->isBorder);
     cxBox4f b = cxViewBox(this);
     cxBoxVec2f box = cxBoxVec2fFromBox4f(b);
     cxDrawLineBox(&box, cxRED);
@@ -1029,7 +1028,9 @@ void cxViewDraw(cxAny pview)
     if(this->isCropping){
         cxOpenGLDisableScissor();
     }
-    cxViewDrawBorder(this);
+    if(cxEngineInstance()->isShowBorder || this->isBorder){
+        cxViewDrawBorder(this);
+    }
     kmGLPopMatrix();
 finished:
     //remove subview

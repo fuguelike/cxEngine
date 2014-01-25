@@ -53,7 +53,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onUpdate);
     CX_SIGNAL_ALLOC(onTouch);
     CX_SIGNAL_ALLOC(onRecvJson);
-    CX_EVENT_ALLOC(onFree);
+    CX_EVENT_ALLOC(onExit);
     cxTouch touch;
     cxKey key;
     cxString lang;

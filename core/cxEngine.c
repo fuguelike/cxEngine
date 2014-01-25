@@ -60,7 +60,7 @@ static cxInt cxEngineLuaGetScreenSize(lua_State *L)
 static cxInt cxEngineLuaAppendEvent(lua_State *L)
 {
     CX_LUA_EVENT_BEG(cxEngine);
-    CX_LUA_EVENT_APPEND(onFree);
+    CX_LUA_EVENT_APPEND(onExit);
     CX_LUA_EVENT_END(cxEngine);
 }
 
@@ -82,7 +82,7 @@ static cxInt cxEngineLuaLoader(lua_State *L)
     cxConstChars file = luaL_checkstring(L, 1);
     cxConstChars ext = strrchr(file, '.');
     cxString data = NULL;
-    if(ext == NULL || strcasecmp(ext, ".lua") != 0){
+    if(ext == NULL || !cxConstCharsEqu(ext, ".lua")){
         snprintf(path, PATH_MAX, "%s.lua",file);
         data = cxEngineGetLuaScript(path);
     }
@@ -103,7 +103,7 @@ static void cxEngineAddLuaLoader(lua_State *L)
     lua_getglobal(L, "package");
     lua_getfield(L, -1, "loaders");
     lua_pushcfunction(L, cxEngineLuaLoader);
-    for (cxInt i = lua_objlen(L, -2) + 1; i > 2; --i) {
+    for(cxInt i = lua_objlen(L, -2) + 1; i > 2; --i){
         lua_rawgeti(L, -2, i - 1);
         lua_rawseti(L, -3, i);
     }
@@ -160,7 +160,7 @@ void cxEngineExit()
 {
     CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
-    CX_EVENT_FIRE(engine, onFree);
+    CX_EVENT_FIRE(engine, onExit);
     cxEnginePause();
     cxEngineDestroy();
     cxAllocatorFree();
@@ -219,13 +219,10 @@ void cxEngineDraw()
     cxDouble now = cxTimestamp();
     engine->frameDelta = now - engine->lastTime;
     CX_SIGNAL_FIRE(engine->onUpdate, CX_FUNC_TYPE(cxAny,cxFloat),CX_SLOT_OBJECT,engine->frameDelta);
-    
     kmGLPushMatrix();
     cxViewDraw(engine->window);
     kmGLPopMatrix();
-
     engine->lastTime = now;
-    
     cxAutoPoolClean();
 }
 
@@ -267,7 +264,7 @@ void cxEngineLayout(cxInt width,cxInt height)
     kmGLMultMatrix(&perspective);
     kmGLMatrixMode(KM_GL_MODELVIEW);
     kmGLLoadIdentity();
-    //init gl
+    //
     cxOpenGLViewport(cxBox4fv(0, engine->winsize.w, 0, engine->winsize.h));
     //
     cxMatrix4f matrix;
@@ -288,19 +285,16 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     cxAutoPoolInit();
     kmGLInitialize();
     xmlInitGlobals();
-    
     this->frameInterval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->isTouch = true;
     this->scale     = cxVec2fv(1.0f, 1.0f);
-    
     this->window    = CX_ALLOC(cxWindow);
     this->scripts   = CX_ALLOC(cxHash);
     this->datasets  = CX_ALLOC(cxHash);
     this->actions   = CX_ALLOC(cxHash);
     this->dbenvs    = CX_ALLOC(cxHash);
     this->bmpfonts  = CX_ALLOC(cxHash);
-    
     gL = lua_newstate(cxEngineLuaAllocFunc, this);
     CX_ASSERT(gL != NULL, "new lua state error");
     lua_atpanic(gL, cxEngineLuaPanic);
@@ -310,7 +304,6 @@ CX_OBJECT_INIT(cxEngine, cxObject)
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
     lua_close(gL);
-    
     CX_RELEASE(this->bmpfonts);
     CX_RELEASE(this->actions);
     CX_RELEASE(this->lang);
@@ -318,20 +311,15 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->scripts);
     CX_RELEASE(this->dbenvs);
     CX_RELEASE(this->window);
-    
+    CX_EVENT_RELEASE(this->onExit);
     CX_SIGNAL_RELEASE(this->onRecvJson);
     CX_SIGNAL_RELEASE(this->onTouch);
-    
-    CX_EVENT_RELEASE(this->onFree);
     CX_SIGNAL_RELEASE(this->onUpdate);
     CX_SIGNAL_RELEASE(this->onPause);
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
-    
-    
     CX_METHOD_RELEASE(this->MakeAction);
     CX_METHOD_RELEASE(this->MakeView);
-    
     cxEventBaseDestroy();
     cxCurveDestroy();
     cxOpenGLDestroy();

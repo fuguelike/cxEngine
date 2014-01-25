@@ -304,14 +304,14 @@ void cxDBEnvCheckPoint(cxDBEnv this,cxBool force)
     cxDBEnvSetPointAuto(this,false);
 }
 
-cxAny cxDBCreate(cxDBEnv env,cxConstChars file,cxConstChars table,cxConstChars type,cxBool rdonly)
+cxAny cxDBCreate(cxDBEnv env,cxString file,cxString table,cxConstChars type,cxBool rdonly)
 {
     cxAny db = NULL;
     CX_ASSERT(env != NULL && file != NULL && table != NULL && type != NULL, "args error");
     if(cxConstCharsEqu(type, "btree")){
-        db = cxDBTreeCreate(env,cxStringConstChars(file),cxStringConstChars(table),rdonly);
+        db = cxDBTreeCreate(env, file, table, rdonly);
     }else if(cxConstCharsEqu(type, "hash")){
-        db = cxDBHashCreate(env,cxStringConstChars(file),cxStringConstChars(table),rdonly);
+        db = cxDBHashCreate(env, file, table, rdonly);
     }
     return db;
 }

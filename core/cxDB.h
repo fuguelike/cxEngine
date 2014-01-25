@@ -74,7 +74,7 @@ cxDB cxDBTreeCreate(cxDBEnv env,cxString file,cxString table,cxBool rdonly);
 
 cxDB cxDBHashCreate(cxDBEnv env,cxString file,cxString table,cxBool rdonly);
 
-cxAny cxDBCreate(cxDBEnv env,cxConstChars file,cxConstChars table,cxConstChars type,cxBool rdonly);
+cxAny cxDBCreate(cxDBEnv env,cxString file,cxString table,cxConstChars type,cxBool rdonly);
 
 CX_C_END
 
