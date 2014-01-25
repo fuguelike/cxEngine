@@ -95,7 +95,7 @@ cxBool cxDBDel(cxAny db,cxString key)
 {
     cxDB this = db;
     cxDBEnv env = cxDBGetEnv(db);
-    CX_ASSERT(this->flags & DB_RDONLY, "only env ,can't del data");
+    CX_ASSERT(!(this->flags & DB_RDONLY), "only db,can't set data");
     cxDBTxn txn = cxStackTop(env->txn);
     DBT k={0};
     k.data = (void *)cxStringBody(key);
@@ -108,7 +108,7 @@ cxBool cxDBSet(cxAny db,cxString key,cxString value)
 {
     cxDB this = db;
     cxDBEnv env = cxDBGetEnv(db);
-    CX_ASSERT(this->flags & DB_RDONLY, "only env ,can't set data");
+    CX_ASSERT(!(this->flags & DB_RDONLY), "only db,can't set data");
     cxDBTxn txn = cxStackTop(env->txn);
     DBT k={0};
     k.data = (void *)cxStringBody(key);

@@ -4,9 +4,7 @@
 
     <cxDBEnv type="document" logger="true">
         <cxDB id="db1" path="document" type="btree" file="test1.db" table="list"/>
-        <!-- from asset copy to document dir
-        <cxDB id="db2" path="document" type="btree" file="test2.db" table="list" copy="true"/>
-         -->
+        <cxDB id="db2" path="document" type="btree" file="test2.db" table="list"/>
     </cxDBEnv>
     
     <cxBool id="supportglsl">true</cxBool>

@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 #include <core/cxEngine.h>
+#include <core/cxDB.h>
 
 void cxEngineInit(cxEngine engine)
 {
@@ -14,6 +15,9 @@ void cxEngineInit(cxEngine engine)
     cxEngineLuaRunChars("require('main')");
     
     cxEngineLuaRunChars("init()");
+    
+    cxAny db = cxEngineDB("items.xml?db2");
+    cxDBSet(db, UTF8("111"), UTF8("%d",100));
 }
 
 void cxEngineMain(cxEngine engine)
