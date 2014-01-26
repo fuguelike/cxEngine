@@ -15,9 +15,6 @@ void cxEngineInit(cxEngine engine)
     cxEngineLuaRunChars("require('main')");
     
     cxEngineLuaRunChars("init()");
-    
-    cxAny db = cxEngineDB("items.xml?db2");
-    cxDBSet(db, UTF8("111"), UTF8("%d",100));
 }
 
 void cxEngineMain(cxEngine engine)

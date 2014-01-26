@@ -3,7 +3,7 @@
 <cxHashRoot>
 
     <cxDBEnv type="document" logger="true">
-        <cxDB id="db1" path="document" type="btree" file="test1.db" table="list"/>
+        <cxDB id="db1" path="document" copy="cxIsAndroid()" type="btree" file="test1.db" table="list"/>
         <cxDB id="db2" path="document" type="btree" file="test2.db" table="list"/>
     </cxDBEnv>
     

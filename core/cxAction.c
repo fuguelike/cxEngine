@@ -70,7 +70,6 @@ void cxActionReadAttr(cxReaderAttrInfo *info)
 void cxActionSetSplit(cxAny pav,cxInt split)
 {
     cxAction this = pav;
-    CX_ASSERT(split > 1, "args error");
     CX_RETURN(this->split == split);
     this->split = split;
     this->splitDelta = 1.0f / (cxFloat)(split - 1);

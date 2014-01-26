@@ -12,7 +12,7 @@
 #include <streams/cxMemStream.h>
 #include "cxTextureFactory.h"
 
-#define CX_DEFAULT_GROUP "__default__"
+#define CX_DEFAULT_GROUP "__default__group__"
 
 static cxTextureFactory instance = NULL;
 
@@ -54,17 +54,18 @@ CX_OBJECT_FREE(cxTextureFactory, cxObject)
 }
 CX_OBJECT_TERM(cxTextureFactory, cxObject)
 
-//group:candy.xml?green.png
+//@group:candy.xml?green.png
 static cxHash cxTextureFactoryGroup(cxConstChars file,cxChar *files)
 {
     CX_ASSERT(file != NULL && files != NULL, "args error");
     cxChar group[PATH_MAX] = {0};
     cxTextureFactory this = cxTextureFactoryInstance();
     cxInt len = strlen(file);
-    cxConstChars gs = strrchr(file, ':');
-    if(gs != NULL){
+    if(file[0] == '@'){
+        cxConstChars gs = strrchr(file, ':');
+        CX_ASSERT(gs != NULL, "@ prefix must has : char");
         int glen = strlen(gs);
-        memcpy(group, file, len - glen);
+        memcpy(group, file + 1, len - glen - 1);
         memcpy(files, gs + 1, glen - 1);
     }else{
         memcpy(group, CX_DEFAULT_GROUP, strlen(CX_DEFAULT_GROUP));

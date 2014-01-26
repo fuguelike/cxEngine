@@ -40,7 +40,9 @@ CX_OBJECT_INIT(cxIconvItem, cxObject)
 }
 CX_OBJECT_FREE(cxIconvItem, cxObject)
 {
-    iconv_close(this->iconvptr);
+    if(this->iconvptr != NULL){
+        iconv_close(this->iconvptr);
+    }
     CX_RELEASE(this->from);
     CX_RELEASE(this->to);
 }
@@ -52,7 +54,10 @@ static cxIconvItem cxIconvItemCreate(cxConstChars from,cxConstChars to)
     this->from = cxStringAllocChars(from);
     this->to = cxStringAllocChars(to);
     this->iconvptr = iconv_open(to,from);
-    CX_ASSERT(this->iconvptr != NULL, "from(%s) -> to(%s) failed",from,to);
+    if(this->iconvptr == NULL){
+        CX_ERROR("iconv open error form(%s) -> to(%s)",from, to);
+        return NULL;
+    }
     return this;
 }
 
@@ -72,6 +77,7 @@ static cxString cxIconvItemConvert(cxIconvItem this,const cxString string)
         outptr[outlen] = '\0';
         return cxStringAttach(buffer, outlen);
     }
+    CX_ERROR("convert failed");
     allocator->free(buffer);
     return NULL;
 }

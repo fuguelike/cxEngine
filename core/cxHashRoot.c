@@ -19,9 +19,7 @@ static void cxHashRootReadDB(cxDBEnv env,cxHashRoot root,xmlTextReaderPtr reader
     cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, root, env);
     int depth = xmlTextReaderDepth(reader);
     while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
-        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
-            continue;
-        }
+        CX_CONTINUE(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT);
         cxConstChars temp = cxXMLReadElementName(reader);
         if(!ELEMENT_IS_TYPE(cxDB)){
             continue;
@@ -31,7 +29,7 @@ static void cxHashRootReadDB(cxDBEnv env,cxHashRoot root,xmlTextReaderPtr reader
         cxConstChars type = cxXMLAttr(reader,"type");
         cxConstChars sid = cxXMLAttr(reader,"id");
         cxConstChars path = cxXMLAttr(reader,"path");
-        //assert file copy ->to document
+        //assert file copy to document dir
         cxBool copy = cxXMLReadBoolAttr(info, "copy", false);
         if(copy && file != NULL){
             cxCopyFile(file, NULL, NULL);
@@ -43,12 +41,11 @@ static void cxHashRootReadDB(cxDBEnv env,cxHashRoot root,xmlTextReaderPtr reader
         cxString sfile = NULL;
         if(cxConstCharsEqu(path, "assert")){
             sfile = cxAssetsPath(file);
-            //assert must set true
             rdonly = true;
         }else if(cxConstCharsEqu(path, "document")){
             sfile = cxDocumentPath(file);
         }else{
-            CX_ERROR("must set path (assert or document)");
+            CX_ASSERT(false, "must set path (assert or document)");
         }
         cxAny db = NULL;
         if(file != NULL && table != NULL && type != NULL){
@@ -139,6 +136,8 @@ static cxAny cxReadValues(cxHashRoot root,cxConstChars temp,xmlTextReaderPtr rea
         rv = cxNumberColor4f(vm.color4f);
     }else if(ELEMENT_IS_TYPE(cxHash)){
         rv = cxHashRootReadHash(root,reader);
+    }else if(ELEMENT_IS_TYPE(cxArray)){
+        rv = cxHashRootReadArray(root, reader);
     }
     return rv;
 }
@@ -268,9 +267,7 @@ cxBool cxHashRootLoadWithReader(cxHashRoot root,xmlTextReaderPtr reader)
         if(root->isError){
             break;
         }
-        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
-            continue;
-        }
+        CX_CONTINUE(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT);
         cxConstChars temp = cxXMLReadElementName(reader);
         if(ELEMENT_IS_TYPE(cxHashRoot)){
             ret = true;
@@ -280,9 +277,7 @@ cxBool cxHashRootLoadWithReader(cxHashRoot root,xmlTextReaderPtr reader)
     CX_RETURN(!ret,false);
     cxAutoPoolPush();
     while(xmlTextReaderRead(reader)){
-        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
-            continue;
-        }
+        CX_CONTINUE(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT);
         cxConstChars temp = cxXMLReadElementName(reader);
         if(ELEMENT_IS_TYPE(cxDBEnv)){
             cxHashRootReadDBEnv(root,reader);

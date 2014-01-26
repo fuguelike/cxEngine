@@ -14,7 +14,9 @@ CX_OBJECT_INIT(cxRegex, cxObject)
 }
 CX_OBJECT_FREE(cxRegex, cxObject)
 {
-    pcre_free(this->regex);
+    if(this->regex != NULL){
+        pcre_free(this->regex);
+    }
     CX_RELEASE(this->input);
 }
 CX_OBJECT_TERM(cxRegex, cxObject)
@@ -26,7 +28,7 @@ cxString cxRegexReplace(cxRegex this,cxRegexReplaceFunc replaceFunc,cxAny arg)
     cxInt start = 0;
     cxInt length = cxStringLength(this->input);
     cxConstChars ptr = cxStringBody(this->input);
-    while (cxRegexNext(this)) {
+    while(cxRegexNext(this)){
         cxRegexPos pos = cxRegexPosition(this, 0);
         if((pos.start - start) > 0){
             cxStringAppend(ret, ptr + start, pos.start - start);

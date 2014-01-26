@@ -39,7 +39,7 @@ static cxBool cxTextureJPGLoad(cxAny this,cxStream stream)
         CX_ERROR("jpg read stream data error");
         goto finished;
     }
-    jpeg_mem_src(&cinfo, (unsigned char *)cxStringBody(bytes), cxStringLength(bytes));
+    jpeg_mem_src(&cinfo, (cxUChar *)cxStringBody(bytes), cxStringLength(bytes));
     jpeg_read_header(&cinfo, true);
     if(error.error){
         CX_ERROR("jpg read head failed");
@@ -90,7 +90,7 @@ CX_OBJECT_INIT(cxTextureJPG, cxTexture)
 }
 CX_OBJECT_FREE(cxTextureJPG, cxTexture)
 {
-
+    //
 }
 CX_OBJECT_TERM(cxTextureJPG, cxTexture)
 

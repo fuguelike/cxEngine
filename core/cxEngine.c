@@ -18,6 +18,7 @@
 #include "cxUtil.h"
 #include "cxHashRoot.h"
 #include "cxDB.h"
+#include "cxFreeType.h"
 
 static cxEngine instance = NULL;
 static cxBool isExit = false;
@@ -323,6 +324,9 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     cxEventBaseDestroy();
     cxCurveDestroy();
     cxOpenGLDestroy();
+    cxIconvDestroy();
+    cxFreeTypeDestroy();
+    cxPlayerDestroy();
     cxMessageDestroy();
     xmlCleanupGlobals();
     kmGLFreeAll();
@@ -979,7 +983,6 @@ void cxEngineSystemInit(cxEngine engine)
         cxNumber num = desSize->any;
         engine->dessize = cxNumberToSize2f(num);
     }
-    //read showBorder setting
     CX_ENGINE_APP_CONFIG(showBorder){
         cxNumber num = showBorder->any;
         engine->isShowBorder = cxNumberToBool(num);
@@ -1011,7 +1014,7 @@ void cxEngineSystemInit(cxEngine engine)
     cxEngineRegisteFunc(cxEventMessagePost);
     cxEngineRegisteFunc(cxEventSetTexture);
     cxEngineRegisteFunc(cxEventSetView);
-    //type
+    //init all type
     cxInitTypes();
 }
 

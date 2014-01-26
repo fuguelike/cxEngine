@@ -194,17 +194,13 @@ static cxString cxPrepareReplaceTemplate(cxRegex regex,cxAny arg)
     cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, NULL, NULL);
     xmlTextReaderSetErrorHandler(reader, cxPrepareReaderError, &error);
     while(xmlTextReaderRead(reader) && !error){
-        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
-            continue;
-        }
+        CX_CONTINUE(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT);
         cxConstChars temp = cxXMLReadElementName(reader);
         if(!ELEMENT_IS_TYPE(cxTemplate)){
             continue;
         }
         cxBool cond = cxXMLReadBoolAttr(info, "cond", true);
-        if(!cond){
-            continue;
-        }
+        CX_CONTINUE(!cond);
         cxConstChars src = cxXMLAttr(reader,"src");
         if(src != NULL){
             cxXMLScript xml = cxEngineGetXMLScript(src);
