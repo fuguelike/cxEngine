@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxDBTxn,cxObject)
     DB_TXN *txn;
 CX_OBJECT_END(cxDBTxn)
 
-#define cxDBTxnPtr(t) (t != NULL ? t->txn : NULL)
+#define cxDBTXNPtr(t) (t != NULL ? t->txn : NULL)
 
 CX_OBJECT_DEF(cxDBEnv, cxObject)
     DB_ENV *env;

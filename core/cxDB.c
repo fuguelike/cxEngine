@@ -11,7 +11,7 @@
 
 CX_OBJECT_INIT(cxDBTxn, cxObject)
 {
-
+    //
 }
 CX_OBJECT_FREE(cxDBTxn, cxObject)
 {
@@ -68,7 +68,7 @@ cxBool cxDBOpen(cxAny db,cxString file,cxString table,cxBool rdonly)
     this->ret = CX_METHOD_FIRE(this->ret, this->OpenBefore,db);
     CX_RETURN(this->ret != 0,false);
     cxDBTxn txn = cxStackTop(env->txn);
-    this->ret = this->dbptr->open(this->dbptr,cxDBTxnPtr(txn),cxStringBody(file),cxStringBody(table),this->type,this->flags,0);
+    this->ret = this->dbptr->open(this->dbptr,cxDBTXNPtr(txn),cxStringBody(file),cxStringBody(table),this->type,this->flags,0);
     if(this->ret != 0){
         CX_ERROR("open db error %s:%s",cxStringBody(file),cxStringBody(table));
         return false;
@@ -88,7 +88,7 @@ cxBool cxDBHas(cxAny db,cxString key)
     k.data = (void *)cxStringBody(key);
     k.size = cxStringLength(key);
     k.flags = DB_DBT_USERMEM;
-    return (this->dbptr->exists(this->dbptr,cxDBTxnPtr(txn),&k,0) == 0);
+    return (this->dbptr->exists(this->dbptr,cxDBTXNPtr(txn),&k,0) == 0);
 }
 
 cxBool cxDBDel(cxAny db,cxString key)
@@ -101,7 +101,7 @@ cxBool cxDBDel(cxAny db,cxString key)
     k.data = (void *)cxStringBody(key);
     k.size = cxStringLength(key);
     k.flags = DB_DBT_USERMEM;
-    return (this->dbptr->del(this->dbptr,cxDBTxnPtr(txn),&k,0) == 0);
+    return (this->dbptr->del(this->dbptr,cxDBTXNPtr(txn),&k,0) == 0);
 }
 
 cxBool cxDBSet(cxAny db,cxString key,cxString value)
@@ -118,7 +118,7 @@ cxBool cxDBSet(cxAny db,cxString key,cxString value)
     v.data = (void *)cxStringBody(value);
     v.size = cxStringLength(value);
     v.flags = DB_DBT_USERMEM;
-    return this->dbptr->put(this->dbptr,cxDBTxnPtr(txn),&k,&v,0) == 0;
+    return this->dbptr->put(this->dbptr,cxDBTXNPtr(txn),&k,&v,0) == 0;
 }
 
 cxString cxDBGet(cxAny db,cxString key)
@@ -132,7 +132,7 @@ cxString cxDBGet(cxAny db,cxString key)
     k.flags = DB_DBT_USERMEM;
     DBT v={0};
     v.flags = DB_DBT_MALLOC;
-    if(this->dbptr->get(this->dbptr, cxDBTxnPtr(txn), &k, &v,0) != 0){
+    if(this->dbptr->get(this->dbptr, cxDBTXNPtr(txn), &k, &v,0) != 0){
         return NULL;
     }
     if(v.size == 0 || v.data == NULL){
@@ -148,12 +148,12 @@ cxInt cxDBCount(cxAny db)
     cxDBTxn txn = cxStackTop(env->txn);
     if(this->type == DB_BTREE){
         DB_BTREE_STAT *stat = NULL;
-        this->dbptr->stat(this->dbptr,cxDBTxnPtr(txn),&stat,DB_READ_COMMITTED);
+        this->dbptr->stat(this->dbptr,cxDBTXNPtr(txn),&stat,DB_READ_COMMITTED);
         return stat != NULL ? stat->bt_nkeys : 0;
     }
     if(this->type == DB_HASH){
         DB_HASH_STAT *stat = NULL;
-        this->dbptr->stat(this->dbptr,cxDBTxnPtr(txn),&stat,DB_READ_COMMITTED);
+        this->dbptr->stat(this->dbptr,cxDBTXNPtr(txn),&stat,DB_READ_COMMITTED);
         return stat != NULL ? stat->hash_nkeys : 0;
     }
     return 0;
@@ -211,7 +211,7 @@ void cxDBEnvBeginTxn(cxDBEnv this)
     CX_ASSERT(this->opened, "env not open");
     cxDBTxn txn = CX_CREATE(cxDBTxn);
     cxDBTxn top = cxStackTop(this->txn);
-    if(this->env->txn_begin(this->env,cxDBTxnPtr(top),&txn->txn,0) == 0){
+    if(this->env->txn_begin(this->env,cxDBTXNPtr(top),&txn->txn,0) == 0){
         cxStackPush(this->txn, txn);
     }
 }

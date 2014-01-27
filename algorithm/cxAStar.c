@@ -14,22 +14,17 @@ CX_OBJECT_END(cxANode)
 
 CX_OBJECT_INIT(cxANode, cxObject)
 {
-    
 }
 CX_OBJECT_FREE(cxANode, cxObject)
 {
-    
 }
 CX_OBJECT_TERM(cxANode, cxObject)
 
-
 CX_OBJECT_INIT(cxAStar, cxObject)
 {
-    
 }
 CX_OBJECT_FREE(cxAStar, cxObject)
 {
-    
 }
 CX_OBJECT_TERM(cxAStar, cxObject)
 

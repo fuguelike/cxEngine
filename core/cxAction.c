@@ -53,7 +53,7 @@ void cxActionReadAttr(cxReaderAttrInfo *info)
     //
     cxActionSetSpeed(this, cxXMLReadFloatAttr(info, "cxAction.speed", this->speed));
     //actionId
-    cxActionSetId(this, cxXMLReadIntAttr(info, "cxAction.id", this->actionId));
+    cxActionSetId(this, cxXMLReadUIntAttr(info, "cxAction.id", this->actionId));
     //forever
     if(cxXMLReadBoolAttr(info, "cxAction.forever", false)){
         CX_METHOD_OVERRIDE(this->Exit, cxActionForever);

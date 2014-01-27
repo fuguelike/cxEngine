@@ -17,7 +17,6 @@
 
 CX_OBJECT_INIT(cxXMLReader, cxObject)
 {
-    
 }
 CX_OBJECT_FREE(cxXMLReader, cxObject)
 {
@@ -263,7 +262,7 @@ cxInt cxReadFloats(cxConstChars ptr,cxFloat *values)
     cxChar arg[16]={0};
     cxInt c = 0;
     CX_RETURN(len < 2, 0);
-    for(int i=0; i < len; i++){
+    for(cxInt i=0; i < len; i++){
         if(ptr[i] == ',' || ptr[i] == '\0'){
             arg[argLen] = '\0';
             (*values++) = atof(arg);
@@ -629,7 +628,7 @@ cxUInt cxXMLReadUIntAttr(cxReaderAttrInfo *info, cxConstChars name,cxUInt value)
     if(num != NULL && num->type == cxNumberTypeUInt){
         rv = cxNumberToUInt(num);
     }else{
-        rv = atoi(svalue);
+        rv = atol(svalue);
     }
     return rv;
 }
