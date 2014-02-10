@@ -22,7 +22,6 @@ CX_OBJECT_FREE(cxDBTxn, cxObject)
 }
 CX_OBJECT_TERM(cxDBTxn, cxObject)
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 CX_OBJECT_INIT(cxDB, cxObject)
@@ -294,7 +293,6 @@ CX_OBJECT_FREE(cxDBEnv, cxObject)
     CX_SLOT_RELEASE(this->onPause);
     cxDBEnvSetPointAuto(this,true);
     this->env->close(this->env,0);
-    this->env = NULL;
     CX_RELEASE(this->type);
 }
 CX_OBJECT_TERM(cxDBEnv, cxObject)

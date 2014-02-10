@@ -27,9 +27,6 @@ CX_OBJECT_INIT(cxFreeFont, cxObject)
 CX_OBJECT_FREE(cxFreeFont, cxObject)
 {
     CX_RELEASE(this->chars);
-    if(this->face != NULL){
-        FT_Done_Face(this->face);
-    }
     CX_RELEASE(this->data);
 }
 CX_OBJECT_TERM(cxFreeFont, cxObject)

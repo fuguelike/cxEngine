@@ -16,7 +16,7 @@
 
 void cxEngineTerminate()
 {
-//    exit(0);
+    exit(0);
 }
 
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr)

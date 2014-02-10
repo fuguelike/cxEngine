@@ -304,7 +304,6 @@ CX_OBJECT_INIT(cxEngine, cxObject)
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
-    lua_close(gL);
     CX_RELEASE(this->bmpfonts);
     CX_RELEASE(this->actions);
     CX_RELEASE(this->lang);
@@ -331,6 +330,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     xmlCleanupGlobals();
     kmGLFreeAll();
     cxAutoPoolDestroy();
+    lua_close(gL);
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
 
@@ -977,6 +977,12 @@ static cxInt cxSpriteTexture(lua_State *L)
     return 1;
 }
 
+static cxInt cxExit(lua_State *L)
+{
+    cxEngineExit();
+    return 0;
+}
+
 void cxEngineSystemInit(cxEngine engine)
 {
     CX_ENGINE_APP_CONFIG(desSize){
@@ -1014,6 +1020,7 @@ void cxEngineSystemInit(cxEngine engine)
     cxEngineRegisteFunc(cxEventMessagePost);
     cxEngineRegisteFunc(cxEventSetTexture);
     cxEngineRegisteFunc(cxEventSetView);
+    cxEngineRegisteFunc(cxExit);
     //init all type
     cxInitTypes();
 }
