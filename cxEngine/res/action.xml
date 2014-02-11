@@ -194,5 +194,5 @@
         </cxButton>
     </cxTable>
     
-    <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="candy.xml?red.png"/>
+    <cxSprite id="sprite" cxView.x ="-300" cxView.y="370" cxSprite.texture="candy.xml?green.png"/>
 </cxViewRoot>

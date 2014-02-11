@@ -1,74 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--TextureKey at *.xml file use-->
-<cxViewRoot cxView.fill="0,0,0,0" cxViewRoot.onBegin="cxChipmunkBegin()">
-    <cxChipmunk id="chipmunk" cxView.fill="0,0,0,0">
-        <cxView
-            cxChipmunk.support="true"
-            cxView.x="0" cxView.y="cxRelativeH(0.5)"
-            cxView.w="cxRelativeW(1.0)" cxView.h="5"
-            cxChipmunk.e="1.0"
-            cxChipmunk.static="true"/>
-        <cxView
-            cxChipmunk.support="true"
-            cxView.x="0" cxView.y="cxRelativeH(-0.5)"
-            cxView.w="cxRelativeW(1.0)" cxView.h="5"
-            cxChipmunk.e="1.0"
-            cxChipmunk.static="true"/>
-        <cxView
-            cxChipmunk.support="true"
-            cxView.x="cxRelativeW(-0.5)" cxView.y="0"
-            cxView.w="5" cxView.h="cxRelativeH(1.0)"
-            cxChipmunk.e="1.0"
-            cxChipmunk.static="true"/>
-        <cxView
-            cxChipmunk.support="true"
-            cxView.x="cxRelativeW(0.5)" cxView.y="0"
-            cxView.w="5" cxView.h="cxRelativeH(1.0)"
-            cxChipmunk.e="1.0"
-            cxChipmunk.static="true"/>
-        <cxSprite
-            cxChipmunk.support="true"
-            cxView.position="-200,200"
-            cxSprite.texture="candy.xml?green.png"
-            cxChipmunk.e="0.1"
-            cxChipmunk.u="0.0"/>
-        <cxSprite
-            cxChipmunk.support="true"
-            cxView.position="-100,200"
-            cxSprite.texture="candy.xml?orange.png"
-            cxChipmunk.e="0.3"
-            cxChipmunk.u="0.0"/>
-        <cxSprite
-            cxChipmunk.support="true"
-            cxView.position="0,400"
-            cxSprite.texture="candy.xml?yellow.png"
-            cxChipmunk.e="1.0"
-            cxChipmunk.u="0.0"/>
-        <cxSprite id="purple"
-            cxChipmunk.support="true"
-            cxChipmunk.layer="cxBinNumber('01')"
-            cxView.x="100" cxView.y="300"
-            cxSprite.texture="ball.png"
-            cxChipmunk.m="1"
-            cxChipmunk.shape="cxShapeType('circle')"
-            cxChipmunk.e="1.0"
-            cxChipmunk.u="0.0"/>
-        <cxSprite
-            cxChipmunk.support="true"
-            cxChipmunk.layer="cxBinNumber('10')"
-            cxView.x="0" cxView.y="0"
-            cxSprite.texture="candy.xml?purple.png"
-            cxChipmunk.e="1.0"
-            cxChipmunk.static="true"/>
-        <cxSprite
-            cxChipmunk.support="true"
-            cxView.size="200,200"
-            cxSprite.texture="candy.xml?blue.png"
-            cxChipmunk.static="true"/>
-        <cxButton cxChipmunk.support="true" cxView.size = "180,120" cxButton.onPress="cxEventPopView()">
-            <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
-            <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="return" cxLabelTTF.size="30"/>
-        </cxButton>
-    </cxChipmunk>
+<cxViewRoot cxView.fill="0,0,0,0" cxViewRoot.onEnd="chipmunkOnEnd()">
+    <cxChipmunk id="chipmunk" cxView.fill="0,0,0,0" />
+    <cxButton cxView.right="0" cxView.bottom="0" cxView.size = "180,120" cxButton.onPress="cxEventPopView()">
+        <cxAtlas cxView.fill="0,0,0,0" cxAtlas.scale9="50,50,50,50" cxSprite.texture="scale9.png" />
+        <cxLabelTTF cxView.color="0,0,0" cxLabelTTF.font="banana.ttf" cxLabelTTF.text="return" cxLabelTTF.size="30"/>
+    </cxButton>
 </cxViewRoot>
