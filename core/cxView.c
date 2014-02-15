@@ -1017,8 +1017,10 @@ void cxViewDraw(cxAny pview)
         cxViewSort(this);
     }
     CX_METHOD_FIRE(NULL, this->Before, this);
+    
     CX_METHOD_FIRE(NULL, this->Draw, this);
     CX_SIGNAL_FIRE(this->onDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    
     CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
         cxViewDraw(view);
