@@ -18,13 +18,15 @@ typedef struct{
     uint16_t orgHeight;
 } cxPKMHeader;
 
-#define CX_PKM_TAG (*(uint32_t *)("PKM\x20"))
+#define CX_PKM_TAG  (*(uint32_t *)("PKM\x20"))
+#define CX_PKM_V1   (*(uint16_t *)("10"))
+#define CX_PKM_V2   (*(uint16_t *)("20"))
 
 static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
 {
     cxBool ret = false;
     cxTexturePKM pkm = this;
-    CX_ASSERT(stream != NULL, "pvr stream not set");
+    CX_ASSERT(stream != NULL, "pkm stream not set");
     if(!cxOpenGLInstance()->support_GL_OES_compressed_ETC1_RGB8_texture){
         CX_ERROR("platform not support etc1 texture");
         return ret;
@@ -37,7 +39,11 @@ static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
     cxPKMHeader header;
     cxInt size = cxStreamRead(stream,&header,sizeof(cxPKMHeader));
     if(size != sizeof(cxPKMHeader) || header.pkmTag != CX_PKM_TAG){
-        CX_ERROR("read pvr header failed");
+        CX_ERROR("read pkm header failed");
+        goto completed;
+    }
+    if(header.version != CX_PKM_V1){
+        CX_ERROR("PKM use V1 version");
         goto completed;
     }
     header.extWidth = CX_SWAP16(header.extWidth);
