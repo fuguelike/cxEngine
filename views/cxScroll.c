@@ -93,9 +93,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
     if(!cxViewHitTest(pview, touch->current, NULL)){
         return false;
     }
-    if(touch->type == cxTouchTypeMove){
-        cxScrollTouchMove(this, view, touch);
-    }else if(touch->type == cxTouchTypeUp){
+    if(touch->type == cxTouchTypeUp){
         cxBool setpos = false;
         cxFloat time = touch->utime - touch->dtime;
         cxVec2f speed = cxVec2fv(touch->movement.x / time, touch->movement.y / time);
