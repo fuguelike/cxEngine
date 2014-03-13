@@ -121,25 +121,25 @@ cxInt cxObjectGetTag(cxAny obj);
 
 //object
 
-#define CX_OBJECT_BEG(_t_)                                          \
-static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;        \
-typedef struct _t_ *_t_;                                            \
-void __##_t_##AutoInit(_t_ this);                                   \
-void __##_t_##AutoFree(_t_ this);                                   \
-void __##_t_##TypeInit();                                           \
-extern const luaL_Reg _t_##LuaMethods[];                            \
+#define CX_OBJECT_BEG(_t_)                                                  \
+static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;                \
+typedef struct _t_ *_t_;                                                    \
+void __##_t_##AutoInit(_t_ this);                                           \
+void __##_t_##AutoFree(_t_ this);                                           \
+void __##_t_##TypeInit();                                                   \
+extern const luaL_Reg _t_##LuaMethods[];                                    \
 struct _t_ {
 
-#define CX_OBJECT_END(_t_) };                                       \
-static inline cxInt __##_t_##LuaAlloc(lua_State *L)                 \
-{                                                                   \
-    CX_LUA_ALLOC_THIS(_t_);                                         \
-    CX_LUA_PUSH_THIS(_t_);                                          \
-}                                                                   \
-static inline cxInt __##_t_##LuaCreate(lua_State *L)                \
-{                                                                   \
-    CX_LUA_CREATE_THIS(_t_);                                        \
-    CX_LUA_PUSH_THIS(_t_);                                          \
+#define CX_OBJECT_END(_t_) };                                               \
+static CX_UNUSED_ATTRIBUTE inline cxInt __##_t_##LuaAlloc(lua_State *L)     \
+{                                                                           \
+    CX_LUA_ALLOC_THIS(_t_);                                                 \
+    CX_LUA_PUSH_THIS(_t_);                                                  \
+}                                                                           \
+static CX_UNUSED_ATTRIBUTE inline cxInt __##_t_##LuaCreate(lua_State *L)    \
+{                                                                           \
+    CX_LUA_CREATE_THIS(_t_);                                                \
+    CX_LUA_PUSH_THIS(_t_);                                                  \
 }
 
 extern lua_State *gL;

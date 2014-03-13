@@ -21,7 +21,6 @@
 
 #include <stdio.h>
 #include <string.h>
-
 #include "chipmunk_private.h"
 
 #if DEBUG && 0
@@ -158,12 +157,12 @@ struct Edge {
 	cpVect n;
 };
 
-static inline struct Edge
-EdgeNew(cpVect va, cpVect vb, cpHashValue ha, cpHashValue hb, cpFloat r)
-{
-	struct Edge edge = {{va, ha}, {vb, hb}, r, cpvnormalize(cpvperp(cpvsub(vb, va)))};
-	return edge;
-}
+//static inline struct Edge
+//EdgeNew(cpVect va, cpVect vb, cpHashValue ha, cpHashValue hb, cpFloat r)
+//{
+//	struct Edge edge = {{va, ha}, {vb, hb}, r, cpvnormalize(cpvperp(cpvsub(vb, va)))};
+//	return edge;
+//}
 
 static struct Edge
 SupportEdgeForPoly(const cpPolyShape *poly, const cpVect n)
