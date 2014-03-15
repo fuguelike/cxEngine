@@ -115,16 +115,12 @@
 		8341C66918227DF30045A66F /* cxSprite.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5EF18227DF20045A66F /* cxSprite.c */; };
 		8341C66A18227DF30045A66F /* cxTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5F118227DF20045A66F /* cxTable.c */; };
 		8341C66B18227DF30045A66F /* cxWindow.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5F318227DF20045A66F /* cxWindow.c */; };
-		8341C66D18227E680045A66F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C66C18227E680045A66F /* Foundation.framework */; };
-		8341C66F18227E800045A66F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C66E18227E800045A66F /* UIKit.framework */; };
-		8341C67118227E8A0045A66F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C67018227E8A0045A66F /* CoreGraphics.framework */; };
-		8341C67318227E9E0045A66F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C67218227E9E0045A66F /* OpenGLES.framework */; };
-		8341C67518227EA60045A66F /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C67418227EA60045A66F /* OpenAL.framework */; };
-		8341C67718227F030045A66F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C67618227F030045A66F /* QuartzCore.framework */; };
 		8341C68018227FA10045A66F /* cxAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67A18227FA10045A66F /* cxAppDelegate.m */; };
 		8341C68118227FA10045A66F /* cxEAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67C18227FA10045A66F /* cxEAGLView.m */; };
 		8341C68218227FA10045A66F /* cxUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67D18227FA10045A66F /* cxUtil.m */; };
 		8341C68318227FA10045A66F /* cxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67F18227FA10045A66F /* cxViewController.m */; };
+		8344F0A318D3F2830003E410 /* cxGlobal.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344F0A118D3F2830003E410 /* cxGlobal.c */; };
+		8344F0A618D3F3C50003E410 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344F0A518D3F3C50003E410 /* main.m */; };
 		83494FA718334B7A0016C3A4 /* cxJson.c in Sources */ = {isa = PBXBuildFile; fileRef = 83494FA518334B7A0016C3A4 /* cxJson.c */; };
 		8349F1F6187D23A300729EE0 /* cxPolygon.c in Sources */ = {isa = PBXBuildFile; fileRef = 8349F1F4187D23A300729EE0 /* cxPolygon.c */; };
 		834F35E4186D7CC0005EB6D0 /* cxRunParticle.c in Sources */ = {isa = PBXBuildFile; fileRef = 834F35E2186D7CC0005EB6D0 /* cxRunParticle.c */; };
@@ -399,6 +395,9 @@
 		8341C67D18227FA10045A66F /* cxUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cxUtil.m; sourceTree = "<group>"; };
 		8341C67E18227FA10045A66F /* cxViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxViewController.h; sourceTree = "<group>"; };
 		8341C67F18227FA10045A66F /* cxViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cxViewController.m; sourceTree = "<group>"; };
+		8344F0A118D3F2830003E410 /* cxGlobal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxGlobal.c; sourceTree = "<group>"; };
+		8344F0A218D3F2830003E410 /* cxGlobal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxGlobal.h; sourceTree = "<group>"; };
+		8344F0A518D3F3C50003E410 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		83494FA518334B7A0016C3A4 /* cxJson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxJson.c; sourceTree = "<group>"; };
 		83494FA618334B7A0016C3A4 /* cxJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxJson.h; sourceTree = "<group>"; };
 		8349F1F4187D23A300729EE0 /* cxPolygon.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxPolygon.c; sourceTree = "<group>"; };
@@ -447,12 +446,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8341C67718227F030045A66F /* QuartzCore.framework in Frameworks */,
-				8341C67518227EA60045A66F /* OpenAL.framework in Frameworks */,
-				8341C67318227E9E0045A66F /* OpenGLES.framework in Frameworks */,
-				8341C67118227E8A0045A66F /* CoreGraphics.framework in Frameworks */,
-				8341C66F18227E800045A66F /* UIKit.framework in Frameworks */,
-				8341C66D18227E680045A66F /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,6 +635,8 @@
 				8341C55B18227DF20045A66F /* cxConfig.h */,
 				8341C55C18227DF20045A66F /* cxDB.c */,
 				8341C55D18227DF20045A66F /* cxDB.h */,
+				8344F0A118D3F2830003E410 /* cxGlobal.c */,
+				8344F0A218D3F2830003E410 /* cxGlobal.h */,
 				8341C55E18227DF20045A66F /* cxEngine.c */,
 				8341C55F18227DF20045A66F /* cxEngine.h */,
 				8341C56018227DF20045A66F /* cxEventArg.c */,
@@ -851,6 +846,7 @@
 				8341C67E18227FA10045A66F /* cxViewController.h */,
 				8341C67F18227FA10045A66F /* cxViewController.m */,
 				8358342B185EB94D0057E40B /* cxPlayer.m */,
+				8344F0A518D3F3C50003E410 /* main.m */,
 			);
 			path = ios;
 			sourceTree = "<group>";
@@ -911,6 +907,7 @@
 				8341C66618227DF30045A66F /* cxClipping.c in Sources */,
 				834F35E4186D7CC0005EB6D0 /* cxRunParticle.c in Sources */,
 				8341C60E18227DF20045A66F /* cpBody.c in Sources */,
+				8344F0A318D3F2830003E410 /* cxGlobal.c in Sources */,
 				8341C66118227DF30045A66F /* cxTexturePVR.c in Sources */,
 				8341C66918227DF30045A66F /* cxSprite.c in Sources */,
 				835A95C81855A5190088B413 /* cxLabelBMP.c in Sources */,
@@ -951,6 +948,7 @@
 				8341C63318227DF20045A66F /* cxTexture.c in Sources */,
 				8341C60218227DF20045A66F /* cpGearJoint.c in Sources */,
 				8341C66A18227DF30045A66F /* cxTable.c in Sources */,
+				8344F0A618D3F3C50003E410 /* main.m in Sources */,
 				8341C63118227DF20045A66F /* cxStream.c in Sources */,
 				8341C63518227DF20045A66F /* cxUtil.c in Sources */,
 				833E2B9E185F257E004093EF /* cxFileStream.c in Sources */,

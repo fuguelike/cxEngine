@@ -6,11 +6,11 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <pthread.h>
 #include "cxAutoPool.h"
 #include "cxStack.h"
-#include "cxEngine.h"
 
-cxStack autopool = NULL;
+static pthread_key_t autokey;
 
 CX_OBJECT_INIT(cxAutoPool, cxObject)
 {
@@ -24,21 +24,23 @@ CX_OBJECT_TERM(cxAutoPool, cxObject)
 
 static cxStack cxAutoPoolStack()
 {
-    if(autopool == NULL){
-        autopool = CX_ALLOC(cxStack);
+    cxStack stack = pthread_getspecific(autokey);
+    if(stack == NULL){
+        stack = CX_ALLOC(cxStack);
+        pthread_setspecific(autokey, stack);
     }
-    return autopool;
+    return stack;
 }
 
 void cxAutoPoolInit()
 {
-    
+    pthread_key_create(&autokey, cxObjectRelease);
 }
 
-void cxAutoPoolDestroy()
+void cxAutoPoolFree()
 {
-    CX_RELEASE(autopool);
-    autopool = NULL;
+    cxAutoPoolClean();
+    pthread_key_delete(autokey);
 }
 
 static cxAutoPool cxAutoPoolInstance()

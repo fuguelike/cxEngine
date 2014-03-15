@@ -1,8 +1,6 @@
 
 package cn.chelper.cxengine;
 import android.app.Activity;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -14,13 +12,6 @@ public class EngineActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle state) {
 		super.onCreate(state);
-		try {
-			ApplicationInfo appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
-			String cxEngineName = appInfo.metaData.getString("cxEngineName");
-			System.loadLibrary(cxEngineName);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		glView = new EngineGLView(this);
 		setContentView(glView);
 	}

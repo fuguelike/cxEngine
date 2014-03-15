@@ -10,6 +10,7 @@
 #include <android/log.h>
 #include "cxAndroid.h"
 #include <core/cxEngine.h>
+#include <core/cxGlobal.h>
 
 static JNIEnv *javaENV = NULL;
 static jclass javaClass = NULL;
@@ -55,6 +56,7 @@ void cxEngineTerminate()
     (*javaENV)->DeleteGlobalRef(javaENV,javaClass);
     javaENV = NULL;
     javaClass = NULL;
+    cxGlobalFree();
 }
 
 //java:String cxEngineDocumentPath()
@@ -236,9 +238,9 @@ JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEnginePause(JNIEn
     cxEnginePause();
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineExit(JNIEnv * env, jclass class)
+JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineInit(JNIEnv * env, jclass class)
 {
-    cxEngineExit();
+    cxGlobalInit();
 }
 
 JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineDraw(JNIEnv * env, jclass class)
@@ -255,6 +257,7 @@ JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineBegin(JNIEn
 {
     javaENV = env;
     javaClass = (*env)->NewGlobalRef(env,class);
+    cxGlobalInit();
     cxEngineBegin();
 }
 

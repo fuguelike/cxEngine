@@ -20,7 +20,7 @@ CX_OBJECT_END(cxAutoPool)
 
 void cxAutoPoolInit();
 
-void cxAutoPoolDestroy();
+void cxAutoPoolFree();
 
 cxAny cxAutoPoolAppend(cxAny any);
 

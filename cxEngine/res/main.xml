@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--cxView.fixScale="cxFixScaleW()" cxView.w="640" cxView.h="960""-->
-<cxViewRoot cxObject.bind="BindTestNew({'a':100})" cxView.fill="0,0,0,0"
-    cxViewRoot.onBegin="mainBegin()"
-    cxViewRoot.onEnd="mainEnd()">
+<cxViewRoot cxObject.bind="BindTestNew({'a':100})" cxView.fill="0,0,0,0" cxViewRoot.onBegin="mainBegin()" cxViewRoot.onEnd="mainEnd()">
     <cxTable cxView.w="getWidth('111')" cxView.fill="10,10,10,10" cxTable.space="10,10" cxTable.type="3,0">
         <cxTemplate src="buttontemp.xml" title="cxLocalizedText('items.xml?exp')" release="cxEventPushView('particle.xml')" />
         <cxTemplate src="buttontemp.xml" title="Action" release="cxEventPushView('action.xml')" />

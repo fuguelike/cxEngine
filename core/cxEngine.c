@@ -164,7 +164,6 @@ void cxEngineExit()
     CX_EVENT_FIRE(engine, onExit);
     cxEnginePause();
     cxEngineDestroy();
-    cxAllocatorFree();
     cxEngineTerminate();
     isExit = true;
 }
@@ -282,8 +281,6 @@ void cxEngineLayout(cxInt width,cxInt height)
 
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
-    cxAllocatorInit();
-    cxAutoPoolInit();
     kmGLInitialize();
     xmlInitGlobals();
     this->frameInterval = 1.0f/60.0f;
@@ -329,7 +326,6 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     cxMessageDestroy();
     xmlCleanupGlobals();
     kmGLFreeAll();
-    cxAutoPoolDestroy();
     lua_close(gL);
 }
 CX_OBJECT_TERM(cxEngine, cxObject)

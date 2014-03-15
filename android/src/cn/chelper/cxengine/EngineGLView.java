@@ -17,7 +17,7 @@ import android.opengl.GLSurfaceView;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-class EngineGLView extends GLSurfaceView {
+public class EngineGLView extends GLSurfaceView {
 	private static String TAG = "EngineGLView";
 	private static EngineActivity glActivity = null;
 	private static EngineSound engineSound = null;
@@ -48,7 +48,7 @@ class EngineGLView extends GLSurfaceView {
     public static native void cxEnginePause();
     public static native void cxEngineResume();
     public static native void cxEngineMemory();
-    public static native void cxEngineExit();
+    
     //completed exit android app
     public static void cxEngineTerminate() {
     	glActivity.runOnUiThread(new Runnable(){
