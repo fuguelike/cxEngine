@@ -153,6 +153,10 @@ LOCAL_SRC_FILES += \
     core/cxAction.c \
     core/cxInitType.c \
     core/cxGlobal.c
+    
+LOCAL_SRC_FILES += \
+    algorithm/AStar.c \
+    algorithm/cxAStar.c
 
 LOCAL_SRC_FILES += \
     android/jni/cxAndroid.c \
