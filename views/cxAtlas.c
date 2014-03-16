@@ -279,11 +279,9 @@ void cxAtlasSetNumber(cxAny pview,cxInt capacity)
     cxInt size = this->capacity * sizeof(cxBoxPoint);
     this->boxes = allocator->realloc(this->boxes,size);
     CX_ASSERT(this->boxes != NULL, "out of memory");
-    memset(this->boxes, 0, size);
     size = this->capacity * 6 * sizeof(GLushort);
     this->indices = allocator->realloc(this->indices,size);
     CX_ASSERT(this->indices != NULL, "out of memory");
-    memset(this->indices, 0, size);
     for(int i=0; i < this->capacity;i++){
         this->indices[i*6+0] = i*4+0;
         this->indices[i*6+1] = i*4+1;

@@ -33,6 +33,8 @@ void cxTextureFactoryUnloadFile(cxConstChars file);
 
 void cxTextureFactoryClean();
 
+cxTexture cxTextureCreate(cxConstChars file);
+
 void cxTextureFactoryCleanGroup(cxConstChars group);
 
 CX_C_END

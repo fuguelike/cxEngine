@@ -28,7 +28,6 @@ static cxBool chipmunkTouch(cxAny pview, cxTouch* touch)
 static cxInt chipmunkOnEnd(lua_State* L)
 {
     cxEngine engine = cxEngineInstance();
-
     cxViewRoot root = CX_LUA_GET_PTR(1);
     cxChipmunk chipmunk = cxViewRootGet(root, "chipmunk");
     CX_ASSERT(chipmunk != NULL, "get chipmunk error,xml not define chipmunk");

@@ -102,7 +102,7 @@ extern "C" {
 
 
 
-typedef long long db_off_t;
+typedef long db_off_t;
 
 
 #ifdef HAVE_MIXED_SIZE_ADDRESSING
@@ -121,7 +121,7 @@ typedef ssize_t db_ssize_t;
 /*
  * Sequences are only available on machines with 64-bit integral types.
  */
-typedef long long db_seq_t;
+typedef long db_seq_t;
 
 /* Thread and process identification. */
 typedef pthread_t db_threadid_t;

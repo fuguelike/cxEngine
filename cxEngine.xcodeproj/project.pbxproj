@@ -188,10 +188,11 @@
 				8344F0AE18D3F4830003E410 /* QuartzCore.framework in Frameworks */,
 				8344F0AC18D3F47A0003E410 /* UIKit.framework in Frameworks */,
 				8344F0AB18D3F46C0003E410 /* OpenGLES.framework in Frameworks */,
+				83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */,
+				8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */,
 				839D1EAE188F6B5B003FFC74 /* libcxEngineIOS.a in Frameworks */,
 				830B8C8C187147790093724A /* libluajit.a in Frameworks */,
 				83273E7B1862D8CA00232D58 /* libxml2.a in Frameworks */,
-				83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */,
 				839103BD1859631E008DF1C7 /* libpcre.a in Frameworks */,
 				839AC1D21832214D00AEBF8E /* libjansson.a in Frameworks */,
 				8341C6A91822810D0045A66F /* libdb.a in Frameworks */,
@@ -201,7 +202,6 @@
 				8341C6AD1822810D0045A66F /* libpng.a in Frameworks */,
 				8341C6A3182280ED0045A66F /* libiconv.dylib in Frameworks */,
 				8341C69F182280E20045A66F /* libz.dylib in Frameworks */,
-				8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

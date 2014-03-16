@@ -87,7 +87,7 @@ void cxTextureLoad(cxTexture this,cxStream stream)
     }
 }
 
-cxBoxTex2f cxTextureBox(cxTexture this,cxConstChars key)
+cxBoxTex2f cxTextureBoxPixel(cxTexture this,cxConstChars key,cxFloat subPixel)
 {
     CX_ASSERT(this != NULL, "texture null");
     cxBoxTex2f rv = cxBoxTex2fDefault();
@@ -96,15 +96,20 @@ cxBoxTex2f cxTextureBox(cxTexture this,cxConstChars key)
     if(texCoord == NULL){
         return rv;
     }
-    cxFloat x = texCoord->x / this->size.w;
-    cxFloat y = texCoord->y / this->size.h;
-    cxFloat w = texCoord->w / this->size.w;
-    cxFloat h = texCoord->h / this->size.h;
+    cxFloat x = (texCoord->x + subPixel) / this->size.w;
+    cxFloat y = (texCoord->y + subPixel) / this->size.h;
+    cxFloat w = (texCoord->w - subPixel*2.0f) / this->size.w;
+    cxFloat h = (texCoord->h - subPixel*2.0f) / this->size.h;
     rv.lb = cxTex2fv(x, y + h);
     rv.rb = cxTex2fv(x + w, y + h);
     rv.lt = cxTex2fv(x, y);
     rv.rt = cxTex2fv(x + w, y);
     return rv;
+}
+
+cxBoxTex2f cxTextureBox(cxTexture this,cxConstChars key)
+{
+    return cxTextureBoxPixel(this, key, 0);
 }
 
 cxRect4f cxTextureRect(cxTexture this,cxConstChars key)

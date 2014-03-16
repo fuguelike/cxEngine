@@ -281,6 +281,13 @@ void cxEngineLayout(cxInt width,cxInt height)
 
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
+    //init lua script object
+    gL = lua_newstate(cxEngineLuaAllocFunc, this);
+    CX_ASSERT(gL != NULL, "new lua state error");
+    lua_atpanic(gL, cxEngineLuaPanic);
+    luaL_openlibs(gL);
+    cxEngineAddLuaLoader(gL);
+    //
     kmGLInitialize();
     xmlInitGlobals();
     this->frameInterval = 1.0f/60.0f;
@@ -293,11 +300,6 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->actions   = CX_ALLOC(cxHash);
     this->dbenvs    = CX_ALLOC(cxHash);
     this->bmpfonts  = CX_ALLOC(cxHash);
-    gL = lua_newstate(cxEngineLuaAllocFunc, this);
-    CX_ASSERT(gL != NULL, "new lua state error");
-    lua_atpanic(gL, cxEngineLuaPanic);
-    luaL_openlibs(gL);
-    cxEngineAddLuaLoader(gL);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
@@ -326,6 +328,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     cxMessageDestroy();
     xmlCleanupGlobals();
     kmGLFreeAll();
+    //free lua object
     lua_close(gL);
 }
 CX_OBJECT_TERM(cxEngine, cxObject)

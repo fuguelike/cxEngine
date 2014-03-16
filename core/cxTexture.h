@@ -43,6 +43,8 @@ void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstC
 
 cxBoxTex2f cxTextureBox(cxTexture this,cxConstChars key);
 
+cxBoxTex2f cxTextureBoxPixel(cxTexture this,cxConstChars key,cxFloat subPixel);
+
 cxRect4f cxTextureRect(cxTexture this,cxConstChars key);
 
 cxSize2f cxTextureSize(cxTexture this,cxConstChars key);
