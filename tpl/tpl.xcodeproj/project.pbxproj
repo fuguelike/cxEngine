@@ -74,8 +74,6 @@
 		836DBA76184A15B800CCD673 /* libluajit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libluajit.a; path = libs/ios/lib/libluajit.a; sourceTree = "<group>"; };
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		83771AC318D9C75200CFC7F6 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appConfig.xml; sourceTree = SOURCE_ROOT; };
-		83771AC518D9C75900CFC7F6 /* tpl-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "tpl-Info.plist"; sourceTree = SOURCE_ROOT; };
-		83771AC618D9C75900CFC7F6 /* tpl-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "tpl-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		8384E1E71823997700EDA1D6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = libs/ios/lib/libcrypto.a; sourceTree = "<group>"; };
 		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
 		839103BC1859631E008DF1C7 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
@@ -182,8 +180,6 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				83771AC518D9C75900CFC7F6 /* tpl-Info.plist */,
-				83771AC618D9C75900CFC7F6 /* tpl-Prefix.pch */,
 				83771AC318D9C75200CFC7F6 /* appConfig.xml */,
 			);
 			name = "Supporting Files";
