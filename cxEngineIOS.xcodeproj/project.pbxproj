@@ -163,6 +163,7 @@
 		8318B9F5186916F1007C0E75 /* cxInitType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxInitType.h; sourceTree = "<group>"; };
 		8324963D182FB72000554604 /* cxTextureJPG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureJPG.c; sourceTree = "<group>"; };
 		8324963E182FB72000554604 /* cxTextureJPG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTextureJPG.h; sourceTree = "<group>"; };
+		8329627918D9C14E002AB028 /* cxEngine.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEngine.pch; sourceTree = "<group>"; };
 		832FDA0B18938CC100A9D46B /* cxAStar.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAStar.c; sourceTree = "<group>"; };
 		832FDA0C18938CC100A9D46B /* cxAStar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAStar.h; sourceTree = "<group>"; };
 		8330F7C71828E77D00E7E5B1 /* cxScroll.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxScroll.c; sourceTree = "<group>"; };
@@ -843,6 +844,7 @@
 		8341C67818227FA10045A66F /* ios */ = {
 			isa = PBXGroup;
 			children = (
+				8329627918D9C14E002AB028 /* cxEngine.pch */,
 				8341C67918227FA10045A66F /* cxAppDelegate.h */,
 				8341C67A18227FA10045A66F /* cxAppDelegate.m */,
 				8341C67B18227FA10045A66F /* cxEAGLView.h */,
@@ -1125,7 +1127,7 @@
 				CLANG_ENABLE_OBJC_ARC = NO;
 				DSTROOT = /tmp/cxEngineIOS.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ios/cxEnginePrefix.pch;
+				GCC_PREFIX_HEADER = ios/cxEngine.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"CX_TARGET_OS_IPHONE=1",
@@ -1151,7 +1153,7 @@
 				CLANG_ENABLE_OBJC_ARC = NO;
 				DSTROOT = /tmp/cxEngineIOS.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ios/cxEnginePrefix.pch;
+				GCC_PREFIX_HEADER = ios/cxEngine.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"CX_TARGET_OS_IPHONE=1",
 					"NDEBUG=1",

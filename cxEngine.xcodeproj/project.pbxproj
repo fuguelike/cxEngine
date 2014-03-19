@@ -100,6 +100,7 @@
 		8324910517F2953300D0DF9D /* cxMain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cxMain.h; sourceTree = "<group>"; };
 		83273E7A1862D8CA00232D58 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = libs/ios/lib/libxml2.a; sourceTree = "<group>"; };
 		832831D918D2B0CC000B3CC3 /* map_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = map_1.jpg; path = res/map_1.jpg; sourceTree = "<group>"; };
+		8329627818D9C099002AB028 /* cxEngine-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "cxEngine-Prefix.pch"; sourceTree = "<group>"; };
 		832A3EF21855F9DF00047C64 /* bmpfont.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = bmpfont.xml; path = res/bmpfont.xml; sourceTree = "<group>"; };
 		832B1D4918264B100038D0EC /* apple.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = apple.mp3; path = res/apple.mp3; sourceTree = "<group>"; };
 		832B1D4A18264B100038D0EC /* Track02.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Track02.mp3; path = res/Track02.mp3; sourceTree = "<group>"; };
@@ -171,7 +172,6 @@
 		839D1EA8188F6B51003FFC74 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		839E7A5517F1BC7600B0F5EC /* cxEngine-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "cxEngine-Info.plist"; sourceTree = "<group>"; };
 		839E7A5717F1BC7600B0F5EC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		839E7A5B17F1BC7600B0F5EC /* cxEngine-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "cxEngine-Prefix.pch"; sourceTree = "<group>"; };
 		839E7A6917F1BC7600B0F5EC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		83E51BD518570640006AD253 /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = res/en; sourceTree = "<group>"; };
 		83F59E03185FF71500C43319 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = appConfig.xml; path = res/appConfig.xml; sourceTree = "<group>"; };
@@ -269,6 +269,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8329627818D9C099002AB028 /* cxEngine-Prefix.pch */,
 				836A03A918D2AE9100BBC81B /* normal_locked.png */,
 				836A03AA18D2AE9100BBC81B /* step_text.png */,
 				832831D918D2B0CC000B3CC3 /* map_1.jpg */,
@@ -295,7 +296,6 @@
 				83515C6B184F63150031B64F /* chipmunk.xml */,
 				8341C6B71822812B0045A66F /* clipping.xml */,
 				839E7A5517F1BC7600B0F5EC /* cxEngine-Info.plist */,
-				839E7A5B17F1BC7600B0F5EC /* cxEngine-Prefix.pch */,
 				8341C6B81822812B0045A66F /* effect.wav */,
 				83E51BD518570640006AD253 /* en */,
 				835A95C1185597600088B413 /* font.fnt */,
