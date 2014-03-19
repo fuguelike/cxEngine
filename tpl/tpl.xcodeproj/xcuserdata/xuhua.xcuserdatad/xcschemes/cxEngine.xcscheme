@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
-               BuildableName = "cxEngine.app"
-               BlueprintName = "cxEngine"
-               ReferencedContainer = "container:cxEngine.xcodeproj">
+               BuildableName = "tpl.app"
+               BlueprintName = "tpl"
+               ReferencedContainer = "container:tpl.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "839E7A6E17F1BC7600B0F5EC"
                BuildableName = "cxEngineTests.xctest"
                BlueprintName = "cxEngineTests"
-               ReferencedContainer = "container:cxEngine.xcodeproj">
+               ReferencedContainer = "container:tpl.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
-            BuildableName = "cxEngine.app"
-            BlueprintName = "cxEngine"
-            ReferencedContainer = "container:cxEngine.xcodeproj">
+            BuildableName = "tpl.app"
+            BlueprintName = "tpl"
+            ReferencedContainer = "container:tpl.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
-            BuildableName = "cxEngine.app"
-            BlueprintName = "cxEngine"
-            ReferencedContainer = "container:cxEngine.xcodeproj">
+            BuildableName = "tpl.app"
+            BlueprintName = "tpl"
+            ReferencedContainer = "container:tpl.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
-            BuildableName = "cxEngine.app"
-            BlueprintName = "cxEngine"
-            ReferencedContainer = "container:cxEngine.xcodeproj">
+            BuildableName = "tpl.app"
+            BlueprintName = "tpl"
+            ReferencedContainer = "container:tpl.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
