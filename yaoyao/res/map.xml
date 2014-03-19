@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:22d96c1fc48683e44d6a73d047a53615$ -->
+<!-- $TexturePacker:SmartUpdate:6cd68e3275e5fb058265f96a0d6be5c0$ -->
 <!--Format:
 n  => name of the sprite
 x  => sprite x pos in texture
@@ -14,6 +14,7 @@ oH => sprite's original height (only available if trimmed)
 r => 'y' only set if sprite is rotated
 -->
 <TextureAtlas imagePath="map.pvr" width="256" height="256">
+    <sprite n="item.png" x="1" y="131" w="64" h="64"/>
     <sprite n="map-disable.png" x="1" y="66" w="64" h="64"/>
     <sprite n="map-enable.png" x="1" y="1" w="64" h="64"/>
 </TextureAtlas>

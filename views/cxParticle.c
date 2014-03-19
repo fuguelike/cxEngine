@@ -491,7 +491,7 @@ CX_OBJECT_INIT(cxParticle, cxAtlas)
     this->duration = -1;
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
-    cxViewOnUpdate(this, cxParticleUpdateEvent);
+    CX_EVENT_QUICK(this->super.super.super.onUpdate, cxParticleUpdateEvent);
     cxParticleSetBlendMode(this, cxParticleBlendAdd);
     cxObjectSetReadAttrFunc(this, cxParticleReadAttr);
 }

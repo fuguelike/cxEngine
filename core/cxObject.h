@@ -142,6 +142,8 @@ static CX_UNUSED_ATTRIBUTE inline cxInt __##_t_##LuaCreate(lua_State *L)    \
     CX_LUA_PUSH_THIS(_t_);                                                  \
 }
 
+#define CXT(_t_,_v_) ((_t_)_v_)
+
 extern lua_State *gL;
 
 //method

@@ -122,8 +122,6 @@ void cxViewSetTop(cxAny pview,cxBool top);
 
 void cxViewSetDirty(cxAny pview,cxBool dirty);
 
-void cxViewOnUpdate(cxAny pview,cxEventFunc func);
-
 void cxViewSetBorder(cxAny pview,cxBool border);
 
 cxBool cxViewZeroSize(cxAny pview);

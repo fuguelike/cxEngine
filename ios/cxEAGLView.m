@@ -9,6 +9,7 @@
 #include <core/cxEngine.h>
 #import "cxAppDelegate.h"
 #import "cxEAGLView.h"
+#import <regex.h>
 
 cxEAGLView *instance = nil;
 

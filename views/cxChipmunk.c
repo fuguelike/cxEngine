@@ -296,6 +296,13 @@ CX_OBJECT_FREE(cxChipmunk, cxView)
 }
 CX_OBJECT_TERM(cxChipmunk, cxView)
 
+cxChipmunk cxChipmunkCreate(cxVec2f gravity)
+{
+    cxChipmunk this = CX_CREATE(cxChipmunk);
+    cxChipmunkSetGravity(this, gravity);
+    return this;
+}
+
 
 
 

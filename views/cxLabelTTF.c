@@ -102,7 +102,7 @@ static void cxLabelTTFUpdate(cxEvent *event)
 CX_OBJECT_INIT(cxLabelTTF, cxSprite)
 {
     cxObjectSetReadAttrFunc(this, cxLabelTTFReadAttr);
-    cxViewOnUpdate(this, cxLabelTTFUpdate);
+    CX_EVENT_QUICK(this->super.super.onUpdate,cxLabelTTFUpdate);
     this->attr.size = 32;
     cxSpriteSetShader(this, cxShaderAlphaKey);
 }
