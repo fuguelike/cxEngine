@@ -14,7 +14,7 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    
+    cxWindowPushXML("main.xml");
 }
 
 void cxEngineFree(cxEngine engine)
