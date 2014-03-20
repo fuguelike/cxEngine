@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>15E092A1-25B1-402E-A3E6-68174D71FEDA</string>
+	<key>IDESourceControlProjectName</key>
+	<string>dome</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>CBFE11B0-03B9-4B08-A94C-3B1D01651426</key>
+		<string>https://github.com/cxuhua/cxEngine.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>dome/dome.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>CBFE11B0-03B9-4B08-A94C-3B1D01651426</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/cxuhua/cxEngine.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>CBFE11B0-03B9-4B08-A94C-3B1D01651426</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>CBFE11B0-03B9-4B08-A94C-3B1D01651426</string>
+			<key>IDESourceControlWCCName</key>
+			<string>cxEngine</string>
+		</dict>
+	</array>
+</dict>
+</plist>
