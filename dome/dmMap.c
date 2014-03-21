@@ -8,6 +8,87 @@
 
 #include <core/cxEngine.h>
 #include "dmMap.h"
+#include <algorithm/AStar.h>
+
+static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
+{
+    dmMap map = context;
+    cxVec2i *pathNode = (cxVec2i *)node;
+    //left
+    cxVec2i left = cxVec2iv(pathNode->x-1, pathNode->y);
+    if(dmMapValue(map, left) == 0){
+        ASNeighborListAdd(neighbors, &left, 1);
+    }
+    //right
+    cxVec2i right = cxVec2iv(pathNode->x+1, pathNode->y);
+    if(dmMapValue(map, right) == 0){
+        ASNeighborListAdd(neighbors, &right, 1);
+    }
+    //up
+    cxVec2i up = cxVec2iv(pathNode->x, pathNode->y+1);
+    if(dmMapValue(map, up) == 0){
+        ASNeighborListAdd(neighbors, &up, 1);
+    }
+    //down
+    cxVec2i down = cxVec2iv(pathNode->x, pathNode->y-1);
+    if(dmMapValue(map, down) == 0){
+        ASNeighborListAdd(neighbors, &down, 1);
+    }
+    //left-up
+    cxVec2i leftUp = cxVec2iv(pathNode->x+1, pathNode->y+1);
+    if(dmMapValue(map, leftUp) == 0){
+        ASNeighborListAdd(neighbors, &leftUp, 1);
+    }
+    //left-down
+    cxVec2i leftDown = cxVec2iv(pathNode->x+1, pathNode->y-1);
+    if(dmMapValue(map, leftDown) == 0){
+        ASNeighborListAdd(neighbors, &leftDown, 1);
+    }
+    //right-up
+    cxVec2i rightUp = cxVec2iv(pathNode->x-1, pathNode->y+1);
+    if(dmMapValue(map, rightUp) == 0){
+        ASNeighborListAdd(neighbors, &rightUp, 1);
+    }
+    //right-down
+    cxVec2i rightDown = cxVec2iv(pathNode->x-1, pathNode->y-1);
+    if(dmMapValue(map, rightDown) == 0){
+        ASNeighborListAdd(neighbors, &rightDown, 1);
+    }
+}
+
+static int PathEarlyExit(size_t visitedCount, void *visitingNode, void *goalNode, void *context)
+{
+    return 0;
+}
+
+static float PathNodeHeuristic(void *fromNode, void *toNode, void *context)
+{
+    cxVec2i *from = (cxVec2i *)fromNode;
+    cxVec2i *to = (cxVec2i *)toNode;
+    return (fabs(from->x - to->x) + fabs(from->y - to->y));
+}
+
+static const ASPathNodeSource PathNodeSource =
+{
+    sizeof(cxVec2i),
+    &PathNodeNeighbors,
+    &PathNodeHeuristic,
+    &PathEarlyExit,
+    NULL
+};
+
+cxBool dmMapCheckIdx(cxVec2i idx)
+{
+    return idx.x >= 0 && idx.x < DM_MAP_WIDTH && idx.y >= 0 && idx.y < DM_MAP_HEIGHT;
+}
+
+cxInt dmMapValue(dmMap this,cxVec2i idx)
+{
+    if(!dmMapCheckIdx(idx)){
+        return -1;
+    }
+    return this->values[idx.x][idx.y];
+}
 
 cxVec2i dmMapToIdx(dmMap this,cxVec2f pos)
 {
@@ -40,8 +121,24 @@ static cxBool dmMapTouch(cxAny pview,cxTouch *touch)
         cxViewSetPos(v, pos);
         cxViewAppend(this, v);
         CX_LOGGER("x=%d y=%d",idx.x,idx.y);
+        this->values[idx.x][idx.y] = 1;
+        cxFloat cost = dmMapFindPath(this, cxVec2iv(0, 0), cxVec2iv(9, 9));
+        CX_LOGGER("cost=%f %d",cost,this->path.number);
     }
     return false;
+}
+
+cxFloat dmMapFindPath(dmMap this,cxVec2i start,cxVec2i stop)
+{
+    ASPath path = ASPathCreate(&PathNodeSource, this, &start, &stop);
+    this->path.number = 0;
+    for (int i=0; i<ASPathGetCount(path); i++) {
+        cxVec2i *pathNode = ASPathGetNode(path, i);
+        this->path.points[this->path.number++] = *pathNode;
+    }
+    cxFloat cost = ASPathGetCost(path);
+    ASPathDestroy(path);
+    return cost;
 }
 
 CX_OBJECT_INIT(dmMap, cxView)
@@ -57,4 +154,13 @@ CX_OBJECT_FREE(dmMap, cxView)
     
 }
 CX_OBJECT_TERM(dmMap, cxView)
+
+
+
+
+
+
+
+
+
 
