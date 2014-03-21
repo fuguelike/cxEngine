@@ -15,43 +15,51 @@ static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *contex
     dmMap map = context;
     cxVec2i *pathNode = (cxVec2i *)node;
     //left
-    cxVec2i left = cxVec2iv(pathNode->x-1, pathNode->y);
-    if(dmMapValue(map, left) == 0){
+    cxVec2i left = cxVec2iv(pathNode->x - 1, pathNode->y);
+    cxInt leftValue = dmMapValue(map, left);
+    if(leftValue == 0){
         ASNeighborListAdd(neighbors, &left, 1);
     }
     //right
-    cxVec2i right = cxVec2iv(pathNode->x+1, pathNode->y);
-    if(dmMapValue(map, right) == 0){
+    cxVec2i right = cxVec2iv(pathNode->x + 1, pathNode->y);
+    cxInt rightValue = dmMapValue(map, right);
+    if(rightValue == 0){
         ASNeighborListAdd(neighbors, &right, 1);
     }
     //up
-    cxVec2i up = cxVec2iv(pathNode->x, pathNode->y+1);
-    if(dmMapValue(map, up) == 0){
+    cxVec2i up = cxVec2iv(pathNode->x, pathNode->y + 1);
+    cxInt upValue = dmMapValue(map, up);
+    if(upValue == 0){
         ASNeighborListAdd(neighbors, &up, 1);
     }
     //down
-    cxVec2i down = cxVec2iv(pathNode->x, pathNode->y-1);
-    if(dmMapValue(map, down) == 0){
+    cxVec2i down = cxVec2iv(pathNode->x, pathNode->y - 1);
+    cxInt downValue = dmMapValue(map, down);
+    if(downValue == 0){
         ASNeighborListAdd(neighbors, &down, 1);
     }
     //left-up
-    cxVec2i leftUp = cxVec2iv(pathNode->x+1, pathNode->y+1);
-    if(dmMapValue(map, leftUp) == 0){
+    cxVec2i leftUp = cxVec2iv(pathNode->x + 1, pathNode->y + 1);
+    cxInt leftUpValue = dmMapValue(map, leftUp);
+    if(leftUpValue == 0){
         ASNeighborListAdd(neighbors, &leftUp, 1);
     }
     //left-down
-    cxVec2i leftDown = cxVec2iv(pathNode->x+1, pathNode->y-1);
-    if(dmMapValue(map, leftDown) == 0){
+    cxVec2i leftDown = cxVec2iv(pathNode->x + 1, pathNode->y - 1);
+    cxInt leftDownValue = dmMapValue(map, leftDown);
+    if(leftDownValue == 0){
         ASNeighborListAdd(neighbors, &leftDown, 1);
     }
     //right-up
-    cxVec2i rightUp = cxVec2iv(pathNode->x-1, pathNode->y+1);
-    if(dmMapValue(map, rightUp) == 0){
+    cxVec2i rightUp = cxVec2iv(pathNode->x - 1, pathNode->y + 1);
+    cxInt rightUpValue = dmMapValue(map, rightUp);
+    if(rightUpValue == 0){
         ASNeighborListAdd(neighbors, &rightUp, 1);
     }
     //right-down
-    cxVec2i rightDown = cxVec2iv(pathNode->x-1, pathNode->y-1);
-    if(dmMapValue(map, rightDown) == 0){
+    cxVec2i rightDown = cxVec2iv(pathNode->x - 1, pathNode->y - 1);
+    cxInt rightDownValue = dmMapValue(map, rightDown);
+    if(rightDownValue == 0){
         ASNeighborListAdd(neighbors, &rightDown, 1);
     }
 }
