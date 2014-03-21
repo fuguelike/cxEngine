@@ -28,7 +28,7 @@
  */
 
 #include <core/cxBase.h>
-#include "AStar.h"
+#include "cxAStar.h"
 #include <math.h>
 #include <string.h>
 

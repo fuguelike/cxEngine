@@ -8,7 +8,7 @@
 
 #include <core/cxEngine.h>
 #include "dmMap.h"
-#include <algorithm/AStar.h>
+#include <algorithm/cxAStar.h>
 
 static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
 {
