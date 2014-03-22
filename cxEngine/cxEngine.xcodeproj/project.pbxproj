@@ -49,7 +49,6 @@
 		83BCA3D618DADC93001A66A6 /* candy.png in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3A318DADC93001A66A6 /* candy.png */; };
 		83BCA3D718DADC93001A66A6 /* candy.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3A418DADC93001A66A6 /* candy.pvr */; };
 		83BCA3D818DADC93001A66A6 /* candy.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3A518DADC93001A66A6 /* candy.xml */; };
-		83BCA3D918DADC93001A66A6 /* chipmunk.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3A618DADC93001A66A6 /* chipmunk.xml */; };
 		83BCA3DA18DADC93001A66A6 /* clipping.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3A718DADC93001A66A6 /* clipping.xml */; };
 		83BCA3DB18DADC93001A66A6 /* effect.wav in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3A818DADC93001A66A6 /* effect.wav */; };
 		83BCA3DC18DADC93001A66A6 /* font.fnt in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3A918DADC93001A66A6 /* font.fnt */; };
@@ -138,7 +137,6 @@
 		83BCA3A318DADC93001A66A6 /* candy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = candy.png; path = res/candy.png; sourceTree = SOURCE_ROOT; };
 		83BCA3A418DADC93001A66A6 /* candy.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = candy.pvr; path = res/candy.pvr; sourceTree = SOURCE_ROOT; };
 		83BCA3A518DADC93001A66A6 /* candy.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = candy.xml; path = res/candy.xml; sourceTree = SOURCE_ROOT; };
-		83BCA3A618DADC93001A66A6 /* chipmunk.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = chipmunk.xml; path = res/chipmunk.xml; sourceTree = SOURCE_ROOT; };
 		83BCA3A718DADC93001A66A6 /* clipping.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = clipping.xml; path = res/clipping.xml; sourceTree = SOURCE_ROOT; };
 		83BCA3A818DADC93001A66A6 /* effect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = effect.wav; path = res/effect.wav; sourceTree = SOURCE_ROOT; };
 		83BCA3A918DADC93001A66A6 /* font.fnt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = font.fnt; path = res/font.fnt; sourceTree = SOURCE_ROOT; };
@@ -284,7 +282,6 @@
 				83BCA3A318DADC93001A66A6 /* candy.png */,
 				83BCA3A418DADC93001A66A6 /* candy.pvr */,
 				83BCA3A518DADC93001A66A6 /* candy.xml */,
-				83BCA3A618DADC93001A66A6 /* chipmunk.xml */,
 				83BCA3A718DADC93001A66A6 /* clipping.xml */,
 				83BCA3A818DADC93001A66A6 /* effect.wav */,
 				83BCA3A918DADC93001A66A6 /* font.fnt */,
@@ -439,7 +436,6 @@
 				83BCA3CA18DADC93001A66A6 /* appConfig.xml in Resources */,
 				83BCA3E718DADC93001A66A6 /* particle.xml in Resources */,
 				83BCA3D418DADC93001A66A6 /* button.xml in Resources */,
-				83BCA3D918DADC93001A66A6 /* chipmunk.xml in Resources */,
 				83BCA3D818DADC93001A66A6 /* candy.xml in Resources */,
 				83BCA3D118DADC93001A66A6 /* bind.lua in Resources */,
 				83BCA3D218DADC93001A66A6 /* bind.out in Resources */,
