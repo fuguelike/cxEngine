@@ -5,10 +5,11 @@
 //  Created by xuhua on 3/20/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
-
+#include <algorithm/cxAStar.h>
 #include <core/cxEngine.h>
 #include "dmMap.h"
-#include <algorithm/cxAStar.h>
+#include "dmSprite.h"
+
 
 static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
 {
@@ -37,30 +38,6 @@ static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *contex
     cxInt downValue = dmMapValue(map, down);
     if(downValue == 0){
         ASNeighborListAdd(neighbors, &down, 1);
-    }
-    //left-up
-    cxVec2i leftUp = cxVec2iv(pathNode->x + 1, pathNode->y + 1);
-    cxInt leftUpValue = dmMapValue(map, leftUp);
-    if(leftUpValue == 0){
-        ASNeighborListAdd(neighbors, &leftUp, 1);
-    }
-    //left-down
-    cxVec2i leftDown = cxVec2iv(pathNode->x + 1, pathNode->y - 1);
-    cxInt leftDownValue = dmMapValue(map, leftDown);
-    if(leftDownValue == 0){
-        ASNeighborListAdd(neighbors, &leftDown, 1);
-    }
-    //right-up
-    cxVec2i rightUp = cxVec2iv(pathNode->x - 1, pathNode->y + 1);
-    cxInt rightUpValue = dmMapValue(map, rightUp);
-    if(rightUpValue == 0){
-        ASNeighborListAdd(neighbors, &rightUp, 1);
-    }
-    //right-down
-    cxVec2i rightDown = cxVec2iv(pathNode->x - 1, pathNode->y - 1);
-    cxInt rightDownValue = dmMapValue(map, rightDown);
-    if(rightDownValue == 0){
-        ASNeighborListAdd(neighbors, &rightDown, 1);
     }
 }
 
@@ -98,6 +75,13 @@ cxInt dmMapValue(dmMap this,cxVec2i idx)
     return this->values[idx.x][idx.y];
 }
 
+void dmMapSetValue(dmMap this,cxVec2i idx,cxInt value)
+{
+    if(dmMapCheckIdx(idx)){
+        this->values[idx.x][idx.y] = value;
+    }
+}
+
 cxVec2i dmMapToIdx(dmMap this,cxVec2f pos)
 {
     cxSize2f size = cxViewSize(this);
@@ -123,39 +107,56 @@ static cxBool dmMapTouch(cxAny pview,cxTouch *touch)
     }
     if(touch->type == cxTouchTypeDown){
         cxVec2i idx = dmMapToIdx(this, pos);
-        cxVec2f pos = dmMapToPos(this, idx);
-        cxView v = CX_CREATE(cxView);
-        cxViewSetSize(v, this->gridSize);
-        cxViewSetPos(v, pos);
-        cxViewAppend(this, v);
-        CX_LOGGER("x=%d y=%d",idx.x,idx.y);
         this->values[idx.x][idx.y] = 1;
-        cxFloat cost = dmMapFindPath(this, cxVec2iv(0, 0), cxVec2iv(9, 9));
-        CX_LOGGER("cost=%f %d",cost,this->path.number);
+        if(!dmMapFindPath(this, cxVec2iv(0, 0), cxVec2iv(9, 9))){
+            this->values[idx.x][idx.y] = 0;
+            return false;
+        }
+        
+        dmSprite sp = dmSpriteCreate(this, idx);
+        cxViewAppend(this, sp);
+        cxViewAppend(this, sp);
+        cxObjectSetTag(sp, 1);
+        cxSpriteSetTextureURL(sp, "item.xml?blue.png", false);
+        
+        CX_LIST_FOREACH(this->super.subViews, ele){
+            cxInt tag = cxObjectTag(ele->any);
+            if(tag != 1){
+                cxViewRemoved(ele->any);
+            }
+        }
+        
+        for(cxInt i=0; i < this->path.number; i++){
+            cxVec2i idx = this->path.points[i];
+            dmSprite sp = dmSpriteCreate(this, idx);
+            cxViewAppend(this, sp);
+        }
     }
     return false;
 }
 
-cxFloat dmMapFindPath(dmMap this,cxVec2i start,cxVec2i stop)
+cxBool dmMapFindPath(dmMap this,cxVec2i start,cxVec2i stop)
 {
+    cxBool rv = false;
     ASPath path = ASPathCreate(&PathNodeSource, this, &start, &stop);
     this->path.number = 0;
     for (int i=0; i<ASPathGetCount(path); i++) {
         cxVec2i *pathNode = ASPathGetNode(path, i);
         this->path.points[this->path.number++] = *pathNode;
     }
-    cxFloat cost = ASPathGetCost(path);
+    rv = (ASPathGetCount(path) > 0);
     ASPathDestroy(path);
-    return cost;
+    return rv;
 }
 
 CX_OBJECT_INIT(dmMap, cxView)
 {
     CX_METHOD_OVERRIDE(this->super.Touch, dmMapTouch);
     cxSize2f size = cxEngineInstance()->winsize;
-    this->gridSize.w = (size.w - 10) / DM_MAP_WIDTH;
+    cxFloat vw = size.w - 20;
+    this->gridSize.w = vw / DM_MAP_WIDTH;
     this->gridSize.h = this->gridSize.w;
-    cxViewSetSize(this, cxSize2fv(size.w - 10,size.w - 10));
+    cxViewSetSize(this, cxSize2fv(vw, vw));
 }
 CX_OBJECT_FREE(dmMap, cxView)
 {

@@ -34,7 +34,6 @@
 #include <streams/cxMemStream.h>
 
 #include <views/cxParticle.h>
-#include <views/cxChipmunk.h>
 #include <views/cxButton.h>
 #include <views/cxLoading.h>
 #include <views/cxLabelTTF.h>

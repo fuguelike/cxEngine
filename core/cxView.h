@@ -10,8 +10,6 @@
 #define cxEngine_cxView_h
 
 #include <libgen.h>
-#include <chipmunk/chipmunk.h>
-#include <libxml/xmlreader.h>
 #include "cxBase.h"
 #include "cxList.h"
 #include "cxInput.h"

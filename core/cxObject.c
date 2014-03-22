@@ -14,7 +14,7 @@ lua_State *gL = NULL;
 static cxInt cxObjectLuaGetTag(lua_State *L)
 {
     CX_LUA_DEF_THIS(cxObject);
-    lua_pushinteger(L, cxObjectGetTag(this));
+    lua_pushinteger(L, cxObjectTag(this));
     return 1;
 }
 
@@ -166,7 +166,7 @@ void cxObjectSetTag(cxAny obj,cxInt tag)
     this->cxTag = tag;
 }
 
-cxInt cxObjectGetTag(cxAny obj)
+cxInt cxObjectTag(cxAny obj)
 {
     cxObject this = obj;
     return this->cxTag;

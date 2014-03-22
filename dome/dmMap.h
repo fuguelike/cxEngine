@@ -27,13 +27,15 @@ CX_OBJECT_DEF(dmMap, cxView)
     dmPath path;
 CX_OBJECT_END(dmMap)
 
-cxFloat dmMapFindPath(dmMap this,cxVec2i start,cxVec2i stop);
+cxBool dmMapFindPath(dmMap this,cxVec2i start,cxVec2i stop);
 
 cxVec2i dmMapToIdx(dmMap this,cxVec2f pos);
 
 cxVec2f dmMapToPos(dmMap this,cxVec2i idx);
 
 cxInt dmMapValue(dmMap this,cxVec2i idx);
+
+void dmMapSetValue(dmMap this,cxVec2i idx,cxInt value);
 
 cxBool dmMapCheckIdx(cxVec2i idx);
 

@@ -17,7 +17,6 @@
 #include <views/cxClipping.h>
 #include <views/cxTable.h>
 #include <views/cxScroll.h>
-#include <views/cxChipmunk.h>
 #include <views/cxAtlasSet.h>
 #include <views/cxPolygon.h>
 #include "cxViewRoot.h"
@@ -143,8 +142,6 @@ cxAny cxViewRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
         cview = CX_CREATE(cxTable);
     }else if(ELEMENT_IS_TYPE(cxScroll)){
         cview = CX_CREATE(cxScroll);
-    }else if(ELEMENT_IS_TYPE(cxChipmunk)){
-        cview = CX_CREATE(cxChipmunk);
     }else if(ELEMENT_IS_TYPE(cxAtlasSet)){
         cview = CX_CREATE(cxAtlasSet);
     }else if(ELEMENT_IS_TYPE(cxPolygon)){

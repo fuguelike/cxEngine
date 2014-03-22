@@ -69,7 +69,7 @@ void cxObjectSetRoot(cxAny obj,cxAny root);
 
 void cxObjectSetTag(cxAny obj,cxInt tag);
 
-cxInt cxObjectGetTag(cxAny obj);
+cxInt cxObjectTag(cxAny obj);
 
 #define CX_RETURN(cond,...)         if(cond)return __VA_ARGS__
 
