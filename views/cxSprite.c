@@ -109,6 +109,11 @@ void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
     cxViewSetDirty(pview, true);
 }
 
+void cxSpriteSetImage(cxAny pview,cxConstChars url)
+{
+    cxSpriteSetTextureURL(pview, url, false);
+}
+
 void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
 {
     CX_RETURN(url == NULL);

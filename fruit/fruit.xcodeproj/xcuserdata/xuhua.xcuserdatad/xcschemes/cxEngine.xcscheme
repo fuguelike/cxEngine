@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
                BuildableName = "dome.app"
-               BlueprintName = "dome"
-               ReferencedContainer = "container:dome.xcodeproj">
+               BlueprintName = "fruit"
+               ReferencedContainer = "container:fruit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "839E7A6E17F1BC7600B0F5EC"
                BuildableName = "cxEngineTests.xctest"
                BlueprintName = "cxEngineTests"
-               ReferencedContainer = "container:dome.xcodeproj">
+               ReferencedContainer = "container:fruit.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -44,8 +44,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
             BuildableName = "dome.app"
-            BlueprintName = "dome"
-            ReferencedContainer = "container:dome.xcodeproj">
+            BlueprintName = "fruit"
+            ReferencedContainer = "container:fruit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -63,8 +63,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
             BuildableName = "dome.app"
-            BlueprintName = "dome"
-            ReferencedContainer = "container:dome.xcodeproj">
+            BlueprintName = "fruit"
+            ReferencedContainer = "container:fruit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -81,8 +81,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
             BuildableName = "dome.app"
-            BlueprintName = "dome"
-            ReferencedContainer = "container:dome.xcodeproj">
+            BlueprintName = "fruit"
+            ReferencedContainer = "container:fruit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

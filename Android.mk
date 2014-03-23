@@ -28,37 +28,6 @@ LOCAL_SRC_FILES := \
     kazmath/vec4.c
 
 LOCAL_SRC_FILES += \
-    chipmunk/chipmunk.c \
-    chipmunk/cpArbiter.c \
-    chipmunk/cpArray.c \
-    chipmunk/cpBB.c \
-    chipmunk/cpBBTree.c \
-    chipmunk/cpBody.c \
-    chipmunk/cpCollision.c \
-    chipmunk/cpHashSet.c \
-    chipmunk/cpPolyShape.c \
-    chipmunk/cpShape.c \
-    chipmunk/cpSpace.c \
-    chipmunk/cpSpaceComponent.c \
-    chipmunk/cpSpaceHash.c \
-    chipmunk/cpSpaceQuery.c \
-    chipmunk/cpSpaceStep.c \
-    chipmunk/cpSpatialIndex.c \
-    chipmunk/cpSweep1D.c \
-    chipmunk/cpVect.c \
-    chipmunk/constraints/cpConstraint.c \
-    chipmunk/constraints/cpDampedRotarySpring.c \
-    chipmunk/constraints/cpDampedSpring.c \
-    chipmunk/constraints/cpGearJoint.c \
-    chipmunk/constraints/cpGrooveJoint.c \
-    chipmunk/constraints/cpPinJoint.c \
-    chipmunk/constraints/cpPivotJoint.c \
-    chipmunk/constraints/cpRatchetJoint.c \
-    chipmunk/constraints/cpRotaryLimitJoint.c \
-    chipmunk/constraints/cpSimpleMotor.c \
-    chipmunk/constraints/cpSlideJoint.c
-
-LOCAL_SRC_FILES += \
     shaders/cxShaderAlpha.c \
     shaders/cxShaderClipping.c \
     shaders/cxShaderDefault.c \
@@ -104,7 +73,6 @@ LOCAL_SRC_FILES += \
     views/cxWindow.c \
     views/cxScroll.c \
     views/cxLoading.c \
-    views/cxChipmunk.c \
     views/cxLabelBMP.c \
     views/cxAtlasSet.c \
     views/cxPolygon.c
@@ -155,7 +123,6 @@ LOCAL_SRC_FILES += \
     core/cxGlobal.c
     
 LOCAL_SRC_FILES += \
-    algorithm/AStar.c \
     algorithm/cxAStar.c
 
 LOCAL_SRC_FILES += \

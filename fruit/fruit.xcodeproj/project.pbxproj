@@ -28,12 +28,12 @@
 		8344F0B218D3F4A50003E410 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B118D3F4A50003E410 /* OpenAL.framework */; };
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
-		836B256518DC57F4006D28F3 /* dmSprite.c in Sources */ = {isa = PBXBuildFile; fileRef = 836B256318DC57F4006D28F3 /* dmSprite.c */; };
+		836B256518DC57F4006D28F3 /* fcSprite.c in Sources */ = {isa = PBXBuildFile; fileRef = 836B256318DC57F4006D28F3 /* fcSprite.c */; };
 		836B256B18DC5A4D006D28F3 /* item.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 836B256918DC5A4D006D28F3 /* item.pvr */; };
 		836B256C18DC5A4D006D28F3 /* item.xml in Resources */ = {isa = PBXBuildFile; fileRef = 836B256A18DC5A4D006D28F3 /* item.xml */; };
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		83771AC418D9C75200CFC7F6 /* appConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83771AC318D9C75200CFC7F6 /* appConfig.xml */; };
-		8384A34018DAD2E200D967B9 /* dmMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384A33E18DAD2E200D967B9 /* dmMap.c */; };
+		8384A34018DAD2E200D967B9 /* fcMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384A33E18DAD2E200D967B9 /* fcMap.c */; };
 		8384A34318DAD40800D967B9 /* en in Resources */ = {isa = PBXBuildFile; fileRef = 8384A34218DAD40800D967B9 /* en */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8300651F18232BE000AF680D /* dome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = dome.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8300651F18232BE000AF680D /* fruit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fruit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83273E7A1862D8CA00232D58 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = libs/ios/lib/libxml2.a; sourceTree = "<group>"; };
 		83314F5F18D9C5D00093FF54 /* libdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdb.a; path = ../libs/ios/lib/libdb.a; sourceTree = "<group>"; };
 		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
@@ -76,15 +76,15 @@
 		8344F0B118D3F4A50003E410 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8344F0B318D3F4A90003E410 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		836B256318DC57F4006D28F3 /* dmSprite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dmSprite.c; sourceTree = SOURCE_ROOT; };
-		836B256418DC57F4006D28F3 /* dmSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dmSprite.h; sourceTree = SOURCE_ROOT; };
+		836B256318DC57F4006D28F3 /* fcSprite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcSprite.c; sourceTree = SOURCE_ROOT; };
+		836B256418DC57F4006D28F3 /* fcSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcSprite.h; sourceTree = SOURCE_ROOT; };
 		836B256918DC5A4D006D28F3 /* item.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = item.pvr; path = res/item.pvr; sourceTree = SOURCE_ROOT; };
 		836B256A18DC5A4D006D28F3 /* item.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = item.xml; path = res/item.xml; sourceTree = SOURCE_ROOT; };
 		836DBA76184A15B800CCD673 /* libluajit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libluajit.a; path = libs/ios/lib/libluajit.a; sourceTree = "<group>"; };
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		83771AC318D9C75200CFC7F6 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appConfig.xml; sourceTree = SOURCE_ROOT; };
-		8384A33E18DAD2E200D967B9 /* dmMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dmMap.c; sourceTree = SOURCE_ROOT; };
-		8384A33F18DAD2E200D967B9 /* dmMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dmMap.h; sourceTree = SOURCE_ROOT; };
+		8384A33E18DAD2E200D967B9 /* fcMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcMap.c; sourceTree = SOURCE_ROOT; };
+		8384A33F18DAD2E200D967B9 /* fcMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcMap.h; sourceTree = SOURCE_ROOT; };
 		8384A34218DAD40800D967B9 /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; path = en; sourceTree = SOURCE_ROOT; };
 		8384E1E71823997700EDA1D6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = libs/ios/lib/libcrypto.a; sourceTree = "<group>"; };
 		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
@@ -138,7 +138,7 @@
 				83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */,
 				839E7A5317F1BC7600B0F5EC /* cxEngine */,
 				839E7A4817F1BC7600B0F5EC /* Frameworks */,
-				8300651F18232BE000AF680D /* dome.app */,
+				8300651F18232BE000AF680D /* fruit.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,10 +185,10 @@
 			children = (
 				83314F7218D9C6530093FF54 /* main.c */,
 				839E7A5417F1BC7600B0F5EC /* Supporting Files */,
-				8384A33E18DAD2E200D967B9 /* dmMap.c */,
-				8384A33F18DAD2E200D967B9 /* dmMap.h */,
-				836B256318DC57F4006D28F3 /* dmSprite.c */,
-				836B256418DC57F4006D28F3 /* dmSprite.h */,
+				8384A33E18DAD2E200D967B9 /* fcMap.c */,
+				8384A33F18DAD2E200D967B9 /* fcMap.h */,
+				836B256318DC57F4006D28F3 /* fcSprite.c */,
+				836B256418DC57F4006D28F3 /* fcSprite.h */,
 			);
 			path = cxEngine;
 			sourceTree = "<group>";
@@ -207,9 +207,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		839E7A4517F1BC7600B0F5EC /* dome */ = {
+		839E7A4517F1BC7600B0F5EC /* fruit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 839E7A8017F1BC7600B0F5EC /* Build configuration list for PBXNativeTarget "dome" */;
+			buildConfigurationList = 839E7A8017F1BC7600B0F5EC /* Build configuration list for PBXNativeTarget "fruit" */;
 			buildPhases = (
 				839E7A4217F1BC7600B0F5EC /* Sources */,
 				839E7A4317F1BC7600B0F5EC /* Frameworks */,
@@ -219,9 +219,9 @@
 			);
 			dependencies = (
 			);
-			name = dome;
+			name = fruit;
 			productName = cxEngine;
-			productReference = 8300651F18232BE000AF680D /* dome.app */;
+			productReference = 8300651F18232BE000AF680D /* fruit.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -239,7 +239,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 839E7A4117F1BC7600B0F5EC /* Build configuration list for PBXProject "dome" */;
+			buildConfigurationList = 839E7A4117F1BC7600B0F5EC /* Build configuration list for PBXProject "fruit" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -258,7 +258,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				839E7A4517F1BC7600B0F5EC /* dome */,
+				839E7A4517F1BC7600B0F5EC /* fruit */,
 			);
 		};
 /* End PBXProject section */
@@ -292,9 +292,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				836B256518DC57F4006D28F3 /* dmSprite.c in Sources */,
+				836B256518DC57F4006D28F3 /* fcSprite.c in Sources */,
 				83314F7318D9C6530093FF54 /* main.c in Sources */,
-				8384A34018DAD2E200D967B9 /* dmMap.c in Sources */,
+				8384A34018DAD2E200D967B9 /* fcMap.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,7 +382,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "dome-Prefix.pch";
+				GCC_PREFIX_HEADER = "fruit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"CX_TARGET_OS_IPHONE=1",
@@ -392,10 +392,10 @@
 					"$(SRCROOT)/../",
 					"$(SRCROOT)/../libs/ios/include",
 				);
-				INFOPLIST_FILE = "dome-Info.plist";
+				INFOPLIST_FILE = "fruit-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../libs/ios/lib";
-				PRODUCT_NAME = dome;
+				PRODUCT_NAME = fruit;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";
@@ -413,7 +413,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "dome-Prefix.pch";
+				GCC_PREFIX_HEADER = "fruit-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"NDEBUG=1",
 					"CX_TARGET_OS_IPHONE=1",
@@ -423,10 +423,10 @@
 					"$(SRCROOT)/../",
 					"$(SRCROOT)/../libs/ios/include",
 				);
-				INFOPLIST_FILE = "dome-Info.plist";
+				INFOPLIST_FILE = "fruit-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../libs/ios/lib";
-				PRODUCT_NAME = dome;
+				PRODUCT_NAME = fruit;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";
@@ -437,7 +437,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		839E7A4117F1BC7600B0F5EC /* Build configuration list for PBXProject "dome" */ = {
+		839E7A4117F1BC7600B0F5EC /* Build configuration list for PBXProject "fruit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				839E7A7E17F1BC7600B0F5EC /* Debug */,
@@ -446,7 +446,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		839E7A8017F1BC7600B0F5EC /* Build configuration list for PBXNativeTarget "dome" */ = {
+		839E7A8017F1BC7600B0F5EC /* Build configuration list for PBXNativeTarget "fruit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				839E7A8117F1BC7600B0F5EC /* Debug */,

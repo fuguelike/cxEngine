@@ -13,7 +13,7 @@ LOCAL_ARM_MODE := arm
 
 LOCAL_CFLAGS   := -std=gnu99 -O2 -DANDROID -I$(CX_ENGINE_DIR) -I$(CX_ENGINE_DIR)/libs/android/include
 
-LOCAL_SRC_FILES := ../../cxEngine/cxMain.c 
+LOCAL_SRC_FILES := ../../cxEngine/main.c 
 
 LOCAL_WHOLE_STATIC_LIBRARIES += cxEngine
 

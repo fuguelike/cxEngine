@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 #include <core/cxEngine.h>
-#include "dmMap.h"
+#include "fcMap.h"
 
 void cxEngineInit(cxEngine engine)
 {
@@ -15,7 +15,7 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    dmMap map = CX_CREATE(dmMap);
+    fcMap map = CX_CREATE(fcMap);
     cxWindowPushView(map, NULL);
 }
 
