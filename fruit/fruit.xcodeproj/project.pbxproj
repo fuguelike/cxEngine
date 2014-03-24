@@ -28,6 +28,7 @@
 		8344F0B218D3F4A50003E410 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B118D3F4A50003E410 /* OpenAL.framework */; };
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
+		8363089318DE8D5E009B5357 /* fcDefine.c in Sources */ = {isa = PBXBuildFile; fileRef = 8363089118DE8D5E009B5357 /* fcDefine.c */; };
 		836B256518DC57F4006D28F3 /* fcSprite.c in Sources */ = {isa = PBXBuildFile; fileRef = 836B256318DC57F4006D28F3 /* fcSprite.c */; };
 		836B256B18DC5A4D006D28F3 /* item.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 836B256918DC5A4D006D28F3 /* item.pvr */; };
 		836B256C18DC5A4D006D28F3 /* item.xml in Resources */ = {isa = PBXBuildFile; fileRef = 836B256A18DC5A4D006D28F3 /* item.xml */; };
@@ -76,6 +77,8 @@
 		8344F0B118D3F4A50003E410 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8344F0B318D3F4A90003E410 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		8363089118DE8D5E009B5357 /* fcDefine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcDefine.c; sourceTree = SOURCE_ROOT; };
+		8363089218DE8D5E009B5357 /* fcDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcDefine.h; sourceTree = SOURCE_ROOT; };
 		836B256318DC57F4006D28F3 /* fcSprite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcSprite.c; sourceTree = SOURCE_ROOT; };
 		836B256418DC57F4006D28F3 /* fcSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcSprite.h; sourceTree = SOURCE_ROOT; };
 		836B256918DC5A4D006D28F3 /* item.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = item.pvr; path = res/item.pvr; sourceTree = SOURCE_ROOT; };
@@ -189,6 +192,8 @@
 				8384A33F18DAD2E200D967B9 /* fcMap.h */,
 				836B256318DC57F4006D28F3 /* fcSprite.c */,
 				836B256418DC57F4006D28F3 /* fcSprite.h */,
+				8363089118DE8D5E009B5357 /* fcDefine.c */,
+				8363089218DE8D5E009B5357 /* fcDefine.h */,
 			);
 			path = cxEngine;
 			sourceTree = "<group>";
@@ -295,6 +300,7 @@
 				836B256518DC57F4006D28F3 /* fcSprite.c in Sources */,
 				83314F7318D9C6530093FF54 /* main.c in Sources */,
 				8384A34018DAD2E200D967B9 /* fcMap.c in Sources */,
+				8363089318DE8D5E009B5357 /* fcDefine.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

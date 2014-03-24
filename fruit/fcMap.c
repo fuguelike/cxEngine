@@ -108,7 +108,8 @@ static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
     if(touch->type == cxTouchTypeDown){
         cxVec2i idx = fcMapToIdx(this, pos);
         this->values[idx.x][idx.y] = 1;
-        if(!fcMapFindPath(this, cxVec2iv(0, 0), cxVec2iv(9, 9))){
+        fcPath path;
+        if(!fcMapFindPath(this, &path, cxVec2iv(0, 0), cxVec2iv(9, 9))){
             this->values[idx.x][idx.y] = 0;
             return false;
         }
@@ -126,8 +127,8 @@ static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
             }
         }
         
-        for(cxInt i=0; i < this->path.number; i++){
-            cxVec2i idx = this->path.points[i];
+        for(cxInt i=0; i < path.number; i++){
+            cxVec2i idx = path.points[i];
             fcSprite sp = fcSpriteCreate(this, idx);
             cxSpriteSetImage(sp, "item.xml?white.png");
             cxViewAppend(this, sp);
@@ -136,17 +137,17 @@ static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
-cxBool fcMapFindPath(fcMap this,cxVec2i start,cxVec2i stop)
+cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop)
 {
     cxBool rv = false;
-    ASPath path = ASPathCreate(&PathNodeSource, this, &start, &stop);
-    this->path.number = 0;
-    for (int i=0; i<ASPathGetCount(path); i++) {
-        cxVec2i *pathNode = ASPathGetNode(path, i);
-        this->path.points[this->path.number++] = *pathNode;
+    ASPath apath = ASPathCreate(&PathNodeSource, this, &start, &stop);
+    path->number = 0;
+    for (int i=0; i<ASPathGetCount(apath); i++) {
+        cxVec2i *pathNode = ASPathGetNode(apath, i);
+        path->points[path->number++] = *pathNode;
     }
-    rv = (ASPathGetCount(path) > 0);
-    ASPathDestroy(path);
+    rv = (ASPathGetCount(apath) > 0);
+    ASPathDestroy(apath);
     return rv;
 }
 

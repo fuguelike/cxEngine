@@ -10,6 +10,7 @@
 #define fruit_fcSprite_h
 
 #include <views/cxSprite.h>
+#include "fcDefine.h"
 
 CX_C_BEGIN
 

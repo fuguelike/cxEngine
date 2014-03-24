@@ -95,6 +95,13 @@ CX_OBJECT_FREE(cxButton, cxSprite)
 }
 CX_OBJECT_TERM(cxButton, cxSprite)
 
+cxButton cxButtonCreate(cxConstChars url)
+{
+    cxButton this = CX_CREATE(cxButton);
+    cxSpriteSetTextureURL(this, url, true);
+    return this;
+}
+
 void cxButtonEnable(cxAny pview,cxBool enable)
 {
     cxButton this = pview;

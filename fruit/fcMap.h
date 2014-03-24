@@ -10,25 +10,17 @@
 #define fruit_fcMap_h
 
 #include <core/cxView.h>
+#include "fcDefine.h"
 
 CX_C_BEGIN
-
-#define DM_MAP_WIDTH    10
-#define DM_MAP_HEIGHT   10
-
-typedef struct {
-    cxVec2i points[DM_MAP_WIDTH*DM_MAP_HEIGHT];
-    cxInt number;
-}fcPath;
 
 CX_OBJECT_DEF(fcMap, cxView)
     cxSize2f gridSize;
     cxInt values[DM_MAP_WIDTH][DM_MAP_HEIGHT];
-    fcPath path;
     cxList enemies;
 CX_OBJECT_END(fcMap)
 
-cxBool fcMapFindPath(fcMap this,cxVec2i start,cxVec2i stop);
+cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop);
 
 cxVec2i fcMapToIdx(fcMap this,cxVec2f pos);
 

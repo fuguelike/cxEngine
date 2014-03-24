@@ -20,6 +20,7 @@
 #include <actions/cxRunParticle.h>
 #include <actions/cxActionSet.h>
 #include <actions/cxParabola.h>
+#include <actions/cxFollow.h>
 #include "cxViewRoot.h"
 #include "cxActionRoot.h"
 #include "cxPlayer.h"
@@ -80,6 +81,8 @@ cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
         action = CX_CREATE(cxRunParticle);
     }else if(ELEMENT_IS_TYPE(cxParabola)){
         action = CX_CREATE(cxParabola);
+    }else if(ELEMENT_IS_TYPE(cxFollow)){
+        action = CX_CREATE(cxFollow);
     }else{
         action = CX_METHOD_FIRE(NULL, engine->MakeAction, temp, reader);
     }
