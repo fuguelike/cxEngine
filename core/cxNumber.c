@@ -13,7 +13,6 @@ static cxInt cxNumberLuaMakeInt(lua_State *L)
 {
     cxInt value =  luaL_checkinteger(L, 1);
     cxNumber this = cxNumberInt(value);
-    lua_pushlightuserdata(L, this);
     CX_LUA_PUSH_THIS(cxNumber);
 }
 
@@ -33,7 +32,6 @@ static cxInt cxNumberLuaMakeFloat(lua_State *L)
 {
     cxFloat value =  luaL_checknumber(L, 1);
     cxNumber this = cxNumberFloat(value);
-    lua_pushlightuserdata(L, this);
     CX_LUA_PUSH_THIS(cxNumber);
 }
 
@@ -57,7 +55,6 @@ static cxInt cxNumberLuaMakeColor4f(lua_State *L)
     cxFloat b = (top >=3 && lua_isnumber(L, 3)) ? lua_tonumber(L, 3) : 1.0f;
     cxFloat a = (top >=4 && lua_isnumber(L, 4)) ? lua_tonumber(L, 4) : 1.0f;
     cxNumber this = cxNumberColor4f(cxColor4fv(r, g, b, a));
-    lua_pushlightuserdata(L, this);
     CX_LUA_PUSH_THIS(cxNumber);
 }
 
@@ -78,7 +75,6 @@ static cxInt cxNumberLuaMakeVec2f(lua_State *L)
     cxFloat x = luaL_checknumber(L, 1);
     cxFloat y = luaL_checknumber(L, 2);
     cxNumber this = cxNumberVec2f(cxVec2fv(x, y));
-    lua_pushlightuserdata(L, this);
     CX_LUA_PUSH_THIS(cxNumber);
 }
 
@@ -86,7 +82,6 @@ static cxInt cxNumberLuaMakeBool(lua_State *L)
 {
     cxBool b = lua_toboolean(L, 1);
     cxNumber this = cxNumberBool(b);
-    lua_pushlightuserdata(L, this);
     CX_LUA_PUSH_THIS(cxNumber);
 }
 
@@ -95,7 +90,6 @@ static cxInt cxNumberLuaMakeSize2f(lua_State *L)
     cxFloat w = luaL_checknumber(L, 1);
     cxFloat h = luaL_checknumber(L, 2);
     cxNumber this = cxNumberSize2f(cxSize2fv(w, h));
-    lua_pushlightuserdata(L, this);
     CX_LUA_PUSH_THIS(cxNumber);
 }
 
