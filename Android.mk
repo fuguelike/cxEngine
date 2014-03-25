@@ -60,7 +60,8 @@ LOCAL_SRC_FILES += \
     actions/cxAnimate.c \
     actions/cxSpline.c \
     actions/cxRunParticle.c \
-    actions/cxParabola.c
+    actions/cxParabola.c \
+    actions/cxFollow.c
 
 LOCAL_SRC_FILES += \
     views/cxAtlas.c \
