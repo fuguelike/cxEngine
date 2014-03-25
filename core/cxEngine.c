@@ -66,8 +66,8 @@ static cxInt cxEngineLuaAppendEvent(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxEngine)
-    {"On",cxEngineLuaAppendEvent},
     {"ScreenSize",cxEngineLuaGetScreenSize},
+    CX_LUA_EVENT(cxEngine),
     CX_LUA_PROPERTY(cxEngine, ShowBorder),
     CX_LUA_PROPERTY(cxEngine, DesignSize),
 CX_LUA_METHOD_END(cxEngine)

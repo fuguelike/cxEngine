@@ -652,7 +652,7 @@ cxBool cxXMLReadBoolAttr(cxReaderAttrInfo *info,cxConstChars name,cxBool value)
     if(num != NULL && num->type == cxNumberTypeBool){
         rv = cxNumberToBool(num);
     }else{
-        rv = cxConstCharsEqu(svalue, "true");
+        rv = cxConstCaseCharsEqu(svalue, "true");
     }
     return rv;
 }

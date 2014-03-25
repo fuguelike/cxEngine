@@ -32,7 +32,7 @@ static cxInt cxTimerLuaSetRepeat(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxTimer)
-    {"On",cxTimerLuaAppendEvent},
+    CX_LUA_EVENT(cxTimer),
     CX_LUA_PROPERTY(cxTimer, Repeat),
 CX_LUA_METHOD_END(cxTimer)
 

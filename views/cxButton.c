@@ -22,7 +22,7 @@ static cxInt cxButtonLuaAppendEvent(lua_State *L)
 }
 
 CX_LUA_METHOD_BEG(cxButton)
-    {"On",cxButtonLuaAppendEvent},
+    CX_LUA_EVENT(cxButton),
 CX_LUA_METHOD_END(cxButton)
 
 void __cxButtonTypeInit()

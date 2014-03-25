@@ -20,7 +20,6 @@ static cxBool cxFollowDefaultExit(cxAny pav)
     cxVec2f cp = cxViewPosition(this->super.view);
     cxFloat distance = kmVec2DistanceBetween(&tp, &cp);
     if(distance < this->minDistance){
-        CX_LOGGER("exit %f",this->minDistance);
         return true;
     }
     return false;

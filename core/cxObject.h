@@ -101,6 +101,8 @@ cxInt cxObjectTag(cxAny obj);
 
 #define CX_LUA_PROPERTY(t,n)        {"Set"#n,t##LuaSet##n},{"Get"#n,t##LuaGet##n}
 
+#define CX_LUA_EVENT(t)             {"Event",t##LuaAppendEvent}
+
 #define CX_LUA_NUMBER_IS_INT(n)     (((lua_Number)((cxInt)(n))) == (n))
 
 #define CX_LUA_LOAD_TYPE(t)         cxLuaLoad(t##TypeName,t##LuaMethods)
