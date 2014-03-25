@@ -29,7 +29,8 @@
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
-		83771AC418D9C75200CFC7F6 /* appConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83771AC318D9C75200CFC7F6 /* appConfig.xml */; };
+		83EAEC5618E16AA800082272 /* appConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83EAEC5518E16AA800082272 /* appConfig.xml */; };
+		83EAEC5818E16AB100082272 /* en in Resources */ = {isa = PBXBuildFile; fileRef = 83EAEC5718E16AB100082272 /* en */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,11 +74,12 @@
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		836DBA76184A15B800CCD673 /* libluajit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libluajit.a; path = libs/ios/lib/libluajit.a; sourceTree = "<group>"; };
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
-		83771AC318D9C75200CFC7F6 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = appConfig.xml; sourceTree = SOURCE_ROOT; };
 		8384E1E71823997700EDA1D6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = libs/ios/lib/libcrypto.a; sourceTree = "<group>"; };
 		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
 		839103BC1859631E008DF1C7 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		839AC1D11832214D00AEBF8E /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
+		83EAEC5518E16AA800082272 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = appConfig.xml; path = res/appConfig.xml; sourceTree = SOURCE_ROOT; };
+		83EAEC5718E16AB100082272 /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = res/en; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,7 +182,8 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				83771AC318D9C75200CFC7F6 /* appConfig.xml */,
+				83EAEC5718E16AB100082272 /* en */,
+				83EAEC5518E16AA800082272 /* appConfig.xml */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -259,7 +262,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83771AC418D9C75200CFC7F6 /* appConfig.xml in Resources */,
+				83EAEC5618E16AA800082272 /* appConfig.xml in Resources */,
+				83EAEC5818E16AB100082272 /* en in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
