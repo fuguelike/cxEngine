@@ -184,7 +184,7 @@ void cxEngineSendJson(cxString json)
     }
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineFireTouch(JNIEnv * env, jclass class,jint action,jfloat x,jfloat y)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireTouch(JNIEnv * env, jclass class,jint action,jfloat x,jfloat y)
 {
     cxTouchType cxtype = cxTouchTypeCancel;
     if(action == AMOTION_EVENT_ACTION_DOWN){
@@ -201,7 +201,7 @@ JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineFireTouch(J
     cxEngineFireTouch(cxtype, cxVec2fv(x, y));
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineFireKey(JNIEnv * env, jclass class,jint type,jint code)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireKey(JNIEnv * env, jclass class,jint type,jint code)
 {
     cxKeyType cxtype = cxKeyTypeDown;
     if(type == AKEY_EVENT_ACTION_DOWN){
@@ -216,44 +216,44 @@ JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineFireKey(JNI
     cxEngineFireKey(cxtype, code);
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineSendJsonImp(JNIEnv * env, jclass class,jstring json)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineSendJsonImp(JNIEnv * env, jclass class,jstring json)
 {
     CX_ASSERT(json != NULL, "args error");
     cxString js = jstringTocxString(json);
     cxEngineRecvJson(js);
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineMemory(JNIEnv * env, jclass class)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineMemory(JNIEnv * env, jclass class)
 {
     cxEngineMemory();
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineResume(JNIEnv * env, jclass class)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineResume(JNIEnv * env, jclass class)
 {
     cxEngineResume();
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEnginePause(JNIEnv * env, jclass class)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEnginePause(JNIEnv * env, jclass class)
 {
     cxEnginePause();
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineInit(JNIEnv * env, jclass class)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineInit(JNIEnv * env, jclass class)
 {
     cxGlobalInit();
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineDraw(JNIEnv * env, jclass class)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineDraw(JNIEnv * env, jclass class)
 {
     cxEngineDraw();
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineLayout(JNIEnv * env, jclass class,  jint width, jint height)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineLayout(JNIEnv * env, jclass class,  jint width, jint height)
 {
     cxEngineLayout(width, height);
 }
 
-JNIEXPORT void JNICALL Java_cn_chelper_cxengine_EngineGLView_cxEngineBegin(JNIEnv * env, jclass class)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineBegin(JNIEnv * env, jclass class)
 {
     javaENV = env;
     javaClass = (*env)->NewGlobalRef(env,class);
