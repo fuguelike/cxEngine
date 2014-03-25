@@ -36,6 +36,7 @@
 		836B256C18DC5A4D006D28F3 /* item.xml in Resources */ = {isa = PBXBuildFile; fileRef = 836B256A18DC5A4D006D28F3 /* item.xml */; };
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		8384A34018DAD2E200D967B9 /* fcMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384A33E18DAD2E200D967B9 /* fcMap.c */; };
+		83F88D8D18E1B73C00B778EE /* fcAttacker.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F88D8B18E1B73C00B778EE /* fcAttacker.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,8 @@
 		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
 		839103BC1859631E008DF1C7 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		839AC1D11832214D00AEBF8E /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
+		83F88D8B18E1B73C00B778EE /* fcAttacker.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcAttacker.c; sourceTree = SOURCE_ROOT; };
+		83F88D8C18E1B73C00B778EE /* fcAttacker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcAttacker.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -194,6 +197,8 @@
 				836B256418DC57F4006D28F3 /* fcSprite.h */,
 				8363089118DE8D5E009B5357 /* fcDefine.c */,
 				8363089218DE8D5E009B5357 /* fcDefine.h */,
+				83F88D8B18E1B73C00B778EE /* fcAttacker.c */,
+				83F88D8C18E1B73C00B778EE /* fcAttacker.h */,
 			);
 			path = cxEngine;
 			sourceTree = "<group>";
@@ -297,6 +302,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83F88D8D18E1B73C00B778EE /* fcAttacker.c in Sources */,
 				836B256518DC57F4006D28F3 /* fcSprite.c in Sources */,
 				83314F7318D9C6530093FF54 /* main.c in Sources */,
 				8384A34018DAD2E200D967B9 /* fcMap.c in Sources */,

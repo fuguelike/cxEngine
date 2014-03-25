@@ -22,9 +22,21 @@ typedef struct {
     cxInt number;
 }fcPath;
 
-CX_OBJECT_DEF(fcDefine, cxObject)
+typedef enum {
+    fcSpriteTypeNone = 0,       //什么都不是
+    fcSpriteTypeDecoration,     //装饰物,例如地面，道路，花花草草
+    fcSpriteTypeContainer,      //容器，例如水果仓库，水果篮子
+    fcSpriteTypeAttacker,       //攻击物，例如12生效宠物,投射机
+    fcSpriteTypeProducer,       //生成者，例如果树,神树
+}fcSpriteType;
 
-CX_OBJECT_END(fcDefine)
+typedef enum {
+    fcAttackerTypeNone = 0,
+    fcAttackerTypeSmallMachine,     //投射机 - 小型
+    fcAttackerTypeNormalMachine,    //投射机 - 中型
+    fcAttackerTypeBigMachine,       //投射机 - 大型
+    fcAttackerTypeSuperMachine,     //投射机 - 重型
+}fcAttackerType;
 
 CX_C_END
 

@@ -7,13 +7,3 @@
 //
 
 #include "fcDefine.h"
-
-CX_OBJECT_INIT(fcDefine, cxObject)
-{
-    
-}
-CX_OBJECT_FREE(fcDefine, cxObject)
-{
-
-}
-CX_OBJECT_TERM(fcDefine, cxObject)

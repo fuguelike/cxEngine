@@ -8,7 +8,7 @@
 #include <algorithm/cxAStar.h>
 #include <core/cxEngine.h>
 #include "fcMap.h"
-#include "fcSprite.h"
+#include "fcAttacker.h"
 
 
 static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
@@ -98,6 +98,8 @@ cxVec2f fcMapToPos(fcMap this,cxVec2i idx)
     return cxVec2fv(x + this->gridSize.w/2.0f, y + this->gridSize.h/2.0f);
 }
 
+fcAttacker m;
+
 static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
 {
     fcMap this = pview;
@@ -105,35 +107,38 @@ static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
     if(!cxViewHitTest(this, touch->current, &pos)){
         return false;
     }
-    if(touch->type == cxTouchTypeDown){
-        cxVec2i idx = fcMapToIdx(this, pos);
-        this->values[idx.x][idx.y] = 1;
-        fcPath path;
-        if(!fcMapFindPath(this, &path, cxVec2iv(0, 0), cxVec2iv(9, 9))){
-            this->values[idx.x][idx.y] = 0;
-            return false;
-        }
-        
-        fcSprite sp = fcSpriteCreate(this, idx);
-        cxViewAppend(this, sp);
-        cxViewAppend(this, sp);
-        cxObjectSetTag(sp, 1);
-        cxSpriteSetImage(sp, "item.xml?blue.png");
-        
-        CX_LIST_FOREACH_SAFE(this->super.subViews, ele, tmp){
-            cxInt tag = cxObjectTag(ele->any);
-            if(tag != 1){
-                cxViewRemoved(ele->any);
-            }
-        }
-        
-        for(cxInt i=0; i < path.number; i++){
-            cxVec2i idx = path.points[i];
-            fcSprite sp = fcSpriteCreate(this, idx);
-            cxSpriteSetImage(sp, "item.xml?white.png");
-            cxViewAppend(this, sp);
-        }
+    if(touch->type == cxTouchTypeMove){
+        cxViewSetPos(m, pos);
     }
+//    if(touch->type == cxTouchTypeDown){
+//        cxVec2i idx = fcMapToIdx(this, pos);
+//        this->values[idx.x][idx.y] = 1;
+//        fcPath path;
+//        if(!fcMapFindPath(this, &path, cxVec2iv(0, 0), cxVec2iv(9, 9))){
+//            this->values[idx.x][idx.y] = 0;
+//            return false;
+//        }
+//        
+//        fcSprite sp = fcSpriteCreate(this, idx);
+//        cxViewAppend(this, sp);
+//        cxViewAppend(this, sp);
+//        cxObjectSetTag(sp, 1);
+//        cxSpriteSetImage(sp, "item.xml?blue.png");
+//        
+//        CX_LIST_FOREACH_SAFE(this->super.subViews, ele, tmp){
+//            cxInt tag = cxObjectTag(ele->any);
+//            if(tag != 1){
+//                cxViewRemoved(ele->any);
+//            }
+//        }
+//        
+//        for(cxInt i=0; i < path.number; i++){
+//            cxVec2i idx = path.points[i];
+//            fcSprite sp = fcSpriteCreate(this, idx);
+//            cxSpriteSetImage(sp, "item.xml?white.png");
+//            cxViewAppend(this, sp);
+//        }
+//    }
     return false;
 }
 
@@ -153,17 +158,30 @@ cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop)
 
 CX_OBJECT_INIT(fcMap, cxView)
 {
+    this->sprites = CX_ALLOC(cxArray);
+    
     CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
+    
     cxSize2f size = cxEngineInstance()->winsize;
     cxFloat vw = size.w - 20;
     this->gridSize.w = vw / DM_MAP_WIDTH;
     this->gridSize.h = this->gridSize.w;
     cxViewSetSize(this, cxSize2fv(vw, vw));
-    this->enemies = CX_ALLOC(cxList);
+    
+    fcAttacker a = fcAttackerCreate(this, cxVec2iv(0, 0), fcAttackerTypeSmallMachine);
+    cxSpriteSetImage(a, "item.xml?red.png");
+    cxViewAppend(this, a);
+    
+    fcAttacker b = fcAttackerCreate(this, cxVec2iv(6, 6), fcAttackerTypeSmallMachine);
+    cxSpriteSetImage(b, "item.xml?blue.png");
+    cxViewAppend(this, b);
+    m = b;
+    
+    fcSpriteTarget(a, b);
 }
 CX_OBJECT_FREE(fcMap, cxView)
 {
-    CX_RELEASE(this->enemies);
+    CX_RELEASE(this->sprites);
 }
 CX_OBJECT_TERM(fcMap, cxView)
 

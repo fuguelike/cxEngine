@@ -17,7 +17,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(fcMap, cxView)
     cxSize2f gridSize;
     cxInt values[DM_MAP_WIDTH][DM_MAP_HEIGHT];
-    cxList enemies;
+    cxArray sprites;
 CX_OBJECT_END(fcMap)
 
 cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop);
