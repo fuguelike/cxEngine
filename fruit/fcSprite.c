@@ -16,13 +16,12 @@ CX_OBJECT_INIT(fcSprite, cxSprite)
 }
 CX_OBJECT_FREE(fcSprite, cxSprite)
 {
-    CX_EVENT_RELEASE(this->onOver);
     CX_RELEASE(this->targets);
     CX_RELEASE(this->murderers);
 }
 CX_OBJECT_TERM(fcSprite, cxSprite)
 
-void fcSpriteOver(cxAny this)
+void fcSpriteUnsetTarget(cxAny this)
 {
     fcSprite s = this;
     cxHashKey key = cxHashIntKey((cxInt)s);
@@ -40,10 +39,9 @@ void fcSpriteOver(cxAny this)
     }
     //解除我的所有的凶手
     cxHashClean(s->murderers);
-    CX_EVENT_FIRE(s, onOver);
 }
 
-void fcSpriteTarget(cxAny this,cxAny target)
+void fcSpriteSetTarget(cxAny this,cxAny target)
 {
     CX_ASSERT(this != target, "target can't this");
     fcSprite s = this;

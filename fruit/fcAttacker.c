@@ -22,13 +22,18 @@ CX_OBJECT_TERM(fcAttacker, fcSprite)
 static void fireActionStop(cxEvent *e)
 {
     cxSprite this = cxActionView(e->sender);
+    fcSprite target = cxFollowTarget(e->sender);
+    fcSpriteUnsetTarget(target);
     cxViewRemoved(this);
 }
 
 static void fcAttackerRun(cxEvent *e)
 {
     fcAttacker this = cxActionView(e->sender);
+    //没有目标就搜索范围内的目标
+    //攻击目标
     CX_HASH_FOREACH(this->super.targets, ele, tmp){
+        
         cxSprite fire = cxSpriteCreateWithURL("item.xml?fire.png");
         cxViewSetPos(fire, cxViewPosition(this));
         cxViewAppend(this->super.map, fire);

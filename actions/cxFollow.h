@@ -24,6 +24,8 @@ CX_OBJECT_END(cxFollow)
 
 cxFollow cxFollowCreate(cxFloat speed,cxAny target);
 
+cxAny cxFollowTarget(cxAny pav);
+
 CX_C_END
 
 #endif

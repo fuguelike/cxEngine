@@ -48,6 +48,12 @@ static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
     this->super.isExit = CX_METHOD_FIRE(false, this->FollowExit, this);
 }
 
+cxAny cxFollowTarget(cxAny pav)
+{
+    cxFollow this = pav;
+    return this->target;
+}
+
 CX_OBJECT_INIT(cxFollow, cxAction)
 {
     CX_METHOD_OVERRIDE(this->super.Init, cxFollowInit);

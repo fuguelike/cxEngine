@@ -23,13 +23,11 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     cxHash targets;
     //盯住我的凶手,当攻击目标时记得把目标的murderers加上自己
     cxHash murderers;
-    //当目标结束时，关系已经被解除
-    CX_EVENT_ALLOC(onOver);
 CX_OBJECT_END(fcSprite)
 
-void fcSpriteOver(cxAny this);
+void fcSpriteUnsetTarget(cxAny this);
 
-void fcSpriteTarget(cxAny this,cxAny target);
+void fcSpriteSetTarget(cxAny this,cxAny target);
 
 void fcSpriteInit(cxAny this,cxAny map,cxVec2i idx);
 
