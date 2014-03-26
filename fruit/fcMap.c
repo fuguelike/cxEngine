@@ -9,6 +9,7 @@
 #include <core/cxEngine.h>
 #include "fcMap.h"
 #include "fcAttacker.h"
+#include "fcFruit.h"
 
 
 static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
@@ -142,6 +143,11 @@ static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
+cxFloat fcMapScaleValue(fcMap this,cxFloat v)
+{
+    return this->gridSize.w * v;
+}
+
 cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop)
 {
     cxBool rv = false;
@@ -156,9 +162,35 @@ cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop)
     return rv;
 }
 
+void fcMapAppendSprite(fcMap this,cxAny sprite)
+{
+    fcSprite m = sprite;
+    m->element = cxListAppend(this->sprites, sprite);
+    cxViewAppend(this, sprite);
+}
+
+void fcMapRemoveSprite(fcMap this,cxAny sprite)
+{
+    fcSprite m = sprite;
+    if(m->element != NULL){
+        cxListRemove(this->sprites, m->element);
+        m->element = NULL;
+    }
+    cxViewRemoved(m);
+}
+
+static cxInt attackedTest(cxAny sprite,cxAny fruit)
+{
+    fcAttacker s = sprite;
+    fcFruit f = fruit;
+    CX_LOGGER("%p attacked %p",f, s);
+//    fcSpriteRemoved(s);
+    return 0;
+}
+
 CX_OBJECT_INIT(fcMap, cxView)
 {
-    this->sprites = CX_ALLOC(cxArray);
+    this->sprites = CX_ALLOC(cxList);
     
     CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
     
@@ -170,14 +202,24 @@ CX_OBJECT_INIT(fcMap, cxView)
     
     fcAttacker a = fcAttackerCreate(this, cxVec2iv(0, 0), fcAttackerTypeSmallMachine);
     cxSpriteSetImage(a, "item.xml?red.png");
-    cxViewAppend(this, a);
+    fcMapAppendSprite(this, a);
     
     fcAttacker b = fcAttackerCreate(this, cxVec2iv(6, 6), fcAttackerTypeSmallMachine);
+    CX_METHOD_OVERRIDE(b->super.Attacked, attackedTest);
     cxSpriteSetImage(b, "item.xml?blue.png");
-    cxViewAppend(this, b);
+    fcMapAppendSprite(this, b);
+    
+    a->super.group = fcGroupTypeAttacker;
+    a->attackNumber = 1;
+    a->attackPower = 5;
+    
+    b->super.group = fcGroupTypeDefenser;
+    
+    fcAttackerLoop(a);
+    
     m = b;
     
-    fcSpriteTarget(a, b);
+    //fcSpriteTarget(a, b);
 }
 CX_OBJECT_FREE(fcMap, cxView)
 {

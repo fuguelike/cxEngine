@@ -17,8 +17,11 @@ CX_C_BEGIN
 CX_OBJECT_DEF(fcMap, cxView)
     cxSize2f gridSize;
     cxInt values[DM_MAP_WIDTH][DM_MAP_HEIGHT];
-    cxArray sprites;
+    cxList sprites;
 CX_OBJECT_END(fcMap)
+
+//获取实际的像素
+cxFloat fcMapScaleValue(fcMap this,cxFloat v);
 
 cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop);
 
@@ -31,6 +34,10 @@ cxInt fcMapValue(fcMap this,cxVec2i idx);
 void fcMapSetValue(fcMap this,cxVec2i idx,cxInt value);
 
 cxBool fcMapCheckIdx(cxVec2i idx);
+
+void fcMapAppendSprite(fcMap this,cxAny sprite);
+
+void fcMapRemoveSprite(fcMap this,cxAny sprite);
 
 CX_C_END
 

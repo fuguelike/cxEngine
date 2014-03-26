@@ -62,6 +62,7 @@ CX_OBJECT_INIT(cxFollow, cxAction)
 }
 CX_OBJECT_FREE(cxFollow, cxAction)
 {
+    CX_RELEASE(this->target);
     CX_METHOD_RELEASE(this->FollowExit);
 }
 CX_OBJECT_TERM(cxFollow, cxAction)
@@ -71,7 +72,7 @@ cxFollow cxFollowCreate(cxFloat speed,cxAny target)
     cxFollow this = CX_CREATE(cxFollow);
     this->super.duration = -1;
     this->speed = speed;
-    this->target = target;
+    CX_RETAIN_SWAP(this->target, target);
     return this;
 }
 

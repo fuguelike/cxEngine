@@ -9,6 +9,16 @@
 #include "fcMap.h"
 #include "fcSprite.h"
 
+void fcSpriteRemoved(cxAny this)
+{
+    fcSprite s = this;
+    CX_ASSERT(s->map != NULL, "not join map");
+    //解除所有关系
+    fcSpriteUnset(s);
+    //移除地图
+    fcMapRemoveSprite(s->map, this);
+}
+
 CX_OBJECT_INIT(fcSprite, cxSprite)
 {
     this->targets = CX_ALLOC(cxHash);
@@ -16,10 +26,23 @@ CX_OBJECT_INIT(fcSprite, cxSprite)
 }
 CX_OBJECT_FREE(fcSprite, cxSprite)
 {
+    CX_METHOD_RELEASE(this->Attacked);
     CX_RELEASE(this->targets);
     CX_RELEASE(this->murderers);
 }
 CX_OBJECT_TERM(fcSprite, cxSprite)
+
+cxInt fcSpriteTargetNumber(cxAny this)
+{
+    fcSprite s = this;
+    return cxHashLength(s->targets);
+}
+
+cxInt fcSpriteMurdererNumber(cxAny this)
+{
+    fcSprite s = this;
+    return cxHashLength(s->murderers);
+}
 
 void fcSpriteLookAt(cxAny s1,cxAny s2)
 {
