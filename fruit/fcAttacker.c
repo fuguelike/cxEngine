@@ -9,7 +9,7 @@
 #include <actions/cxFollow.h>
 #include "fcAttacker.h"
 #include "fcMap.h"
-#include "fcFruitFollow.h"
+#include "fcFollow.h"
 
 cxBool fcAttackerIsRangeIn(cxAny this,cxAny target)
 {
@@ -74,7 +74,7 @@ static void fcAttackerRun(cxEvent *e)
             continue;
         }
         //创建水果弹药
-        fcFruitFollow fire = fcFruitFollowCreate(this->super.map, 6);
+        fcFollow fire = fcFollowCreate(this->super.map, 6);
         fcFruitFire(fire, this, ele->any);
     }
 }

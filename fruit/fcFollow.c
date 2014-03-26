@@ -1,5 +1,5 @@
 //
-//  fcFruitFollow.c
+//  fcFollow.c
 //  fruit
 //
 //  Created by xuhua on 3/26/14.
@@ -9,11 +9,11 @@
 #include <actions/cxFollow.h>
 #include "fcMap.h"
 #include "fcSprite.h"
-#include "fcFruitFollow.h"
+#include "fcFollow.h"
 
-static void fcFruitFollowStop(cxEvent *e)
+static void fcFollowStop(cxEvent *e)
 {
-    fcFruitFollow this = cxActionView(e->sender);
+    fcFollow this = cxActionView(e->sender);
     fcSprite target = cxFollowTarget(e->sender);
     //目标被攻击了
     CX_METHOD_FIRE(0, target->Attacked, target, this);
@@ -21,33 +21,33 @@ static void fcFruitFollowStop(cxEvent *e)
     fcFruitRemoved(this);
 }
 
-static cxInt fcFruitFollowFire(cxAny this, cxAny sprite, cxAny target)
+static cxInt fcFollowFire(cxAny this, cxAny sprite, cxAny target)
 {
-    fcFruitFollow ff = this;
+    fcFollow ff = this;
     cxViewSetPos(this, cxViewPosition(sprite));
     cxViewAppend(ff->super.map, this);
     cxFloat speed = fcMapScaleValue(ff->super.map, ff->super.speed);
     cxFollow follow = cxFollowCreate(speed, target);
-    CX_EVENT_QUICK(follow->super.onStop, fcFruitFollowStop);
+    CX_EVENT_QUICK(follow->super.onStop, fcFollowStop);
     cxViewAppendAction(ff, follow);
     return 0;
 }
 
-CX_OBJECT_INIT(fcFruitFollow, fcFruit)
+CX_OBJECT_INIT(fcFollow, fcFruit)
 {
     this->super.attackPower = 10;
     this->super.type = fcFruitTypeFollow;
-    CX_METHOD_OVERRIDE(this->super.Fire, fcFruitFollowFire);
+    CX_METHOD_OVERRIDE(this->super.Fire, fcFollowFire);
 }
-CX_OBJECT_FREE(fcFruitFollow, fcFruit)
+CX_OBJECT_FREE(fcFollow, fcFruit)
 {
 
 }
-CX_OBJECT_TERM(fcFruitFollow, fcFruit)
+CX_OBJECT_TERM(fcFollow, fcFruit)
 
-fcFruitFollow fcFruitFollowCreate(cxAny map,cxFloat speed)
+fcFollow fcFollowCreate(cxAny map,cxFloat speed)
 {
-    fcFruitFollow this = CX_CREATE(fcFruitFollow);
+    fcFollow this = CX_CREATE(fcFollow);
     fcFruitInit(this, map, "item.xml?fire.png",speed);
     return this;
 }

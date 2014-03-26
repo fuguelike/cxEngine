@@ -32,7 +32,7 @@
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
 		8363089318DE8D5E009B5357 /* fcDefine.c in Sources */ = {isa = PBXBuildFile; fileRef = 8363089118DE8D5E009B5357 /* fcDefine.c */; };
 		836895A618E2EC2B0084EFFD /* fcFruit.c in Sources */ = {isa = PBXBuildFile; fileRef = 836895A418E2EC2B0084EFFD /* fcFruit.c */; };
-		836895AA18E300F70084EFFD /* fcFruitFollow.c in Sources */ = {isa = PBXBuildFile; fileRef = 836895A818E300F70084EFFD /* fcFruitFollow.c */; };
+		836895AA18E300F70084EFFD /* fcFollow.c in Sources */ = {isa = PBXBuildFile; fileRef = 836895A818E300F70084EFFD /* fcFollow.c */; };
 		836B256518DC57F4006D28F3 /* fcSprite.c in Sources */ = {isa = PBXBuildFile; fileRef = 836B256318DC57F4006D28F3 /* fcSprite.c */; };
 		836B256B18DC5A4D006D28F3 /* item.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 836B256918DC5A4D006D28F3 /* item.pvr */; };
 		836B256C18DC5A4D006D28F3 /* item.xml in Resources */ = {isa = PBXBuildFile; fileRef = 836B256A18DC5A4D006D28F3 /* item.xml */; };
@@ -86,8 +86,8 @@
 		8363089218DE8D5E009B5357 /* fcDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcDefine.h; sourceTree = SOURCE_ROOT; };
 		836895A418E2EC2B0084EFFD /* fcFruit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcFruit.c; sourceTree = SOURCE_ROOT; };
 		836895A518E2EC2B0084EFFD /* fcFruit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcFruit.h; sourceTree = SOURCE_ROOT; };
-		836895A818E300F70084EFFD /* fcFruitFollow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcFruitFollow.c; sourceTree = SOURCE_ROOT; };
-		836895A918E300F70084EFFD /* fcFruitFollow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcFruitFollow.h; sourceTree = SOURCE_ROOT; };
+		836895A818E300F70084EFFD /* fcFollow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcFollow.c; sourceTree = SOURCE_ROOT; };
+		836895A918E300F70084EFFD /* fcFollow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcFollow.h; sourceTree = SOURCE_ROOT; };
 		836B256318DC57F4006D28F3 /* fcSprite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcSprite.c; sourceTree = SOURCE_ROOT; };
 		836B256418DC57F4006D28F3 /* fcSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcSprite.h; sourceTree = SOURCE_ROOT; };
 		836B256918DC5A4D006D28F3 /* item.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = item.pvr; path = res/item.pvr; sourceTree = SOURCE_ROOT; };
@@ -207,8 +207,8 @@
 				83F88D8C18E1B73C00B778EE /* fcAttacker.h */,
 				836895A418E2EC2B0084EFFD /* fcFruit.c */,
 				836895A518E2EC2B0084EFFD /* fcFruit.h */,
-				836895A818E300F70084EFFD /* fcFruitFollow.c */,
-				836895A918E300F70084EFFD /* fcFruitFollow.h */,
+				836895A818E300F70084EFFD /* fcFollow.c */,
+				836895A918E300F70084EFFD /* fcFollow.h */,
 			);
 			path = cxEngine;
 			sourceTree = "<group>";
@@ -318,7 +318,7 @@
 				836895A618E2EC2B0084EFFD /* fcFruit.c in Sources */,
 				8384A34018DAD2E200D967B9 /* fcMap.c in Sources */,
 				8363089318DE8D5E009B5357 /* fcDefine.c in Sources */,
-				836895AA18E300F70084EFFD /* fcFruitFollow.c in Sources */,
+				836895AA18E300F70084EFFD /* fcFollow.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

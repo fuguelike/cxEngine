@@ -23,12 +23,11 @@ CX_OBJECT_DEF(fcFruit, cxSprite)
     CX_METHOD_ALLOC(cxInt, Fire,cxAny fruit,cxAny sprite,cxAny target);
 CX_OBJECT_END(fcFruit)
 
-//从移除
 void fcFruitRemoved(cxAny this);
 
 void fcFruitInit(cxAny this,cxAny map,cxConstChars url,cxFloat speed);
 
-//从sprite 向 target 开火
+//fruit 从sprite 向 target 开火
 cxInt fcFruitFire(cxAny this,cxAny sprite,cxAny target);
 
 CX_C_END

@@ -24,7 +24,7 @@ typedef struct {
 
 typedef enum {
     fcGroupTypeNone = 0,
-    fcGroupTypeDefenser,   //防御方
+    fcGroupTypeDefenser,    //防御方
     fcGroupTypeAttacker,    //进攻方
 }fcGroupType;
 
