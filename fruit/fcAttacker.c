@@ -41,17 +41,22 @@ static void fcAttackerSearchTarget(fcAttacker this)
 {
     fcMap map = this->super.map;
     CX_LIST_FOREACH(map->sprites, ele){
-        fcSprite sprite = ele->any;
+        fcSprite target = ele->any;
         //只搜索范围内的敌人
-        if(sprite->group == this->super.group){
+        if(target->group == this->super.group){
             continue;
         }
-        if(fcAttackerIsRangeIn(this, sprite)){
-            fcSpriteTarget(this, sprite);
+        //已经在目标列表中
+        if(fcSpriteInTargets(this, target)){
+            continue;
         }
+        //不在攻击范围内
+        if(!fcAttackerIsRangeIn(this, target)){
+            continue;
+        }
+        fcSpriteTarget(this, target);
         //到达攻击数量
-        cxIndex targetNum = fcSpriteTargetNumber(this);
-        if(targetNum >= this->attackNumber){
+        if(this->attackNumber == fcSpriteTargetNumber(this)){
             break;
         }
     }
@@ -82,7 +87,8 @@ static void fcAttackerRun(cxEvent *e)
 void fcAttackerLoop(cxAny this)
 {
     fcAttacker a = this;
-    CX_ASSERT(a->attackNumber > 0 && a->attackRate > 0, "attacker not set attack property");
+    CX_ASSERT(a->attackNumber > 0, "attacker not set attack property");
+    CX_ASSERT(a->attackRate > 0, "attacker not set attack property");
     CX_ASSERT(a->attackPower > 0, "can attack when attack power > 0");
     cxTimer timer = fcSpriteTimer(this, a->attackRate);
     CX_EVENT_APPEND(timer->onArrive, fcAttackerRun, NULL);

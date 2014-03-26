@@ -210,7 +210,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     fcMapAppendSprite(this, b);
     
     a->super.group = fcGroupTypeAttacker;
-    a->attackNumber = 1;
+    a->attackNumber = 2;
     a->attackPower = 5;
     
     b->super.group = fcGroupTypeDefenser;

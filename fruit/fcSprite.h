@@ -53,6 +53,9 @@ cxFloat fcSpriteDistance(cxAny s1,cxAny s2);
 //解除所有关系
 void fcSpriteUnset(cxAny this);
 
+//target已经队列中
+cxBool fcSpriteInTargets(cxAny this,cxAny target);
+
 //设置目标
 void fcSpriteTarget(cxAny this,cxAny target);
 

@@ -81,6 +81,15 @@ void fcSpriteUnset(cxAny this)
     cxHashClean(s->murderers);
 }
 
+//target 已经在攻击队列中
+cxBool fcSpriteInTargets(cxAny this,cxAny target)
+{
+    fcSprite s = this;
+    fcSprite t = target;
+    cxHashKey tk = cxHashIntKey((cxInt)t);
+    return cxHashHas(s->targets, tk);
+}
+
 void fcSpriteTarget(cxAny this,cxAny target)
 {
     CX_ASSERT(this != target, "target can't this");
