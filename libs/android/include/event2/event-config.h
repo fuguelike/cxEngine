@@ -14,7 +14,7 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
 /* Define if libevent should build without support for a debug mode */
-/* #undef _EVENT_DISABLE_DEBUG_MODE */
+#define _EVENT_DISABLE_DEBUG_MODE 1
 
 /* Define if libevent should not allow replacing the mm functions */
 /* #undef _EVENT_DISABLE_MM_REPLACEMENT */
@@ -32,23 +32,23 @@
 #define _EVENT_HAVE_ARPA_INET_H 1
 
 /* Define to 1 if you have the `clock_gettime' function. */
-/* #undef _EVENT_HAVE_CLOCK_GETTIME */
+#define _EVENT_HAVE_CLOCK_GETTIME 1
 
 /* Define to 1 if you have the declaration of `CTL_KERN', and to 0 if you
    don't. */
-#define _EVENT_HAVE_DECL_CTL_KERN 1
+/* #undef _EVENT_HAVE_DECL_CTL_KERN */
 
 /* Define to 1 if you have the declaration of `KERN_ARND', and to 0 if you
    don't. */
-#define _EVENT_HAVE_DECL_KERN_ARND 0
+/* #undef _EVENT_HAVE_DECL_KERN_ARND */
 
 /* Define to 1 if you have the declaration of `KERN_RANDOM', and to 0 if you
    don't. */
-#define _EVENT_HAVE_DECL_KERN_RANDOM 0
+/* #undef _EVENT_HAVE_DECL_KERN_RANDOM */
 
 /* Define to 1 if you have the declaration of `RANDOM_UUID', and to 0 if you
    don't. */
-#define _EVENT_HAVE_DECL_RANDOM_UUID 0
+/* #undef _EVENT_HAVE_DECL_RANDOM_UUID */
 
 /* Define if /dev/poll is available */
 /* #undef _EVENT_HAVE_DEVPOLL */
@@ -57,13 +57,13 @@
 #define _EVENT_HAVE_DLFCN_H 1
 
 /* Define if your system supports the epoll system calls */
-/* #undef _EVENT_HAVE_EPOLL */
+#define _EVENT_HAVE_EPOLL 1
 
 /* Define to 1 if you have the `epoll_ctl' function. */
-/* #undef _EVENT_HAVE_EPOLL_CTL */
+#define _EVENT_HAVE_EPOLL_CTL 1
 
 /* Define to 1 if you have the `eventfd' function. */
-/* #undef _EVENT_HAVE_EVENTFD */
+#define _EVENT_HAVE_EVENTFD 1
 
 /* Define if your system supports event ports */
 /* #undef _EVENT_HAVE_EVENT_PORTS */
@@ -75,7 +75,7 @@
 #define _EVENT_HAVE_FCNTL_H 1
 
 /* Define to 1 if the system has the type `fd_mask'. */
-#define _EVENT_HAVE_FD_MASK 1
+/* #undef _EVENT_HAVE_FD_MASK */
 
 /* Do we have getaddrinfo()? */
 #define _EVENT_HAVE_GETADDRINFO 1
@@ -126,7 +126,7 @@
 #define _EVENT_HAVE_ISSETUGID 1
 
 /* Define to 1 if you have the `kqueue' function. */
-#define _EVENT_HAVE_KQUEUE 1
+/* #undef _EVENT_HAVE_KQUEUE */
 
 /* Define if the system has zlib */
 #define _EVENT_HAVE_LIBZ 1
@@ -141,7 +141,7 @@
 #define _EVENT_HAVE_NETDB_H 1
 
 /* Define to 1 if you have the <netinet/in6.h> header file. */
-/* #undef _EVENT_HAVE_NETINET_IN6_H */
+#define _EVENT_HAVE_NETINET_IN6_H 1
 
 /* Define to 1 if you have the <netinet/in.h> header file. */
 #define _EVENT_HAVE_NETINET_IN_H 1
@@ -195,7 +195,7 @@
 #define _EVENT_HAVE_SIGACTION 1
 
 /* Define to 1 if you have the `signal' function. */
-#define _EVENT_HAVE_SIGNAL 1
+/* #undef _EVENT_HAVE_SIGNAL */
 
 /* Define to 1 if you have the `splice' function. */
 /* #undef _EVENT_HAVE_SPLICE */
@@ -237,19 +237,19 @@
 #define _EVENT_HAVE_STRUCT_IN6_ADDR 1
 
 /* Define to 1 if `s6_addr16' is a member of `struct in6_addr'. */
-/* #undef _EVENT_HAVE_STRUCT_IN6_ADDR_S6_ADDR16 */
+#define _EVENT_HAVE_STRUCT_IN6_ADDR_S6_ADDR16 1
 
 /* Define to 1 if `s6_addr32' is a member of `struct in6_addr'. */
-/* #undef _EVENT_HAVE_STRUCT_IN6_ADDR_S6_ADDR32 */
+#define _EVENT_HAVE_STRUCT_IN6_ADDR_S6_ADDR32 1
 
 /* Define to 1 if the system has the type `struct sockaddr_in6'. */
 #define _EVENT_HAVE_STRUCT_SOCKADDR_IN6 1
 
 /* Define to 1 if `sin6_len' is a member of `struct sockaddr_in6'. */
-#define _EVENT_HAVE_STRUCT_SOCKADDR_IN6_SIN6_LEN 1
+/* #undef _EVENT_HAVE_STRUCT_SOCKADDR_IN6_SIN6_LEN */
 
 /* Define to 1 if `sin_len' is a member of `struct sockaddr_in'. */
-#define _EVENT_HAVE_STRUCT_SOCKADDR_IN_SIN_LEN 1
+/* #undef _EVENT_HAVE_STRUCT_SOCKADDR_IN_SIN_LEN */
 
 /* Define to 1 if the system has the type `struct sockaddr_storage'. */
 #define _EVENT_HAVE_STRUCT_SOCKADDR_STORAGE 1
@@ -261,19 +261,19 @@
 /* #undef _EVENT_HAVE_STRUCT_SOCKADDR_STORAGE___SS_FAMILY */
 
 /* Define to 1 if you have the `sysctl' function. */
-#define _EVENT_HAVE_SYSCTL 1
+/* #undef _EVENT_HAVE_SYSCTL */
 
 /* Define to 1 if you have the <sys/devpoll.h> header file. */
 /* #undef _EVENT_HAVE_SYS_DEVPOLL_H */
 
 /* Define to 1 if you have the <sys/epoll.h> header file. */
-/* #undef _EVENT_HAVE_SYS_EPOLL_H */
+#define _EVENT_HAVE_SYS_EPOLL_H 1
 
 /* Define to 1 if you have the <sys/eventfd.h> header file. */
-/* #undef _EVENT_HAVE_SYS_EVENTFD_H */
+#define _EVENT_HAVE_SYS_EVENTFD_H 1
 
 /* Define to 1 if you have the <sys/event.h> header file. */
-#define _EVENT_HAVE_SYS_EVENT_H 1
+/* #undef _EVENT_HAVE_SYS_EVENT_H */
 
 /* Define to 1 if you have the <sys/ioctl.h> header file. */
 #define _EVENT_HAVE_SYS_IOCTL_H 1
@@ -291,7 +291,7 @@
 #define _EVENT_HAVE_SYS_SELECT_H 1
 
 /* Define to 1 if you have the <sys/sendfile.h> header file. */
-/* #undef _EVENT_HAVE_SYS_SENDFILE_H */
+#define _EVENT_HAVE_SYS_SENDFILE_H 1
 
 /* Define to 1 if you have the <sys/socket.h> header file. */
 #define _EVENT_HAVE_SYS_SOCKET_H 1
@@ -300,7 +300,7 @@
 #define _EVENT_HAVE_SYS_STAT_H 1
 
 /* Define to 1 if you have the <sys/sysctl.h> header file. */
-#define _EVENT_HAVE_SYS_SYSCTL_H 1
+/* #undef _EVENT_HAVE_SYS_SYSCTL_H */
 
 /* Define to 1 if you have the <sys/time.h> header file. */
 #define _EVENT_HAVE_SYS_TIME_H 1
