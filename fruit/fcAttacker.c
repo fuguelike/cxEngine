@@ -22,8 +22,8 @@ CX_OBJECT_TERM(fcAttacker, fcSprite)
 static void fireActionStop(cxEvent *e)
 {
     cxSprite this = cxActionView(e->sender);
-    fcSprite target = cxFollowTarget(e->sender);
-    fcSpriteUnsetTarget(target);
+//    fcSprite target = cxFollowTarget(e->sender);
+//    fcSpriteUnset(target);
     cxViewRemoved(this);
 }
 
@@ -41,6 +41,8 @@ static void fcAttackerRun(cxEvent *e)
         cxFollow follow = cxFollowCreate(500, ele->any);
         cxViewAppendAction(fire, follow);
         CX_EVENT_APPEND(follow->super.onStop, fireActionStop, NULL);
+        
+        fcSpriteLookAt(this, ele->any);
     }
 }
 

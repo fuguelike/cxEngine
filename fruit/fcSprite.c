@@ -21,7 +21,24 @@ CX_OBJECT_FREE(fcSprite, cxSprite)
 }
 CX_OBJECT_TERM(fcSprite, cxSprite)
 
-void fcSpriteUnsetTarget(cxAny this)
+void fcSpriteLookAt(cxAny s1,cxAny s2)
+{
+    CX_ASSERT(s1 != NULL && s2 != NULL, "s1 or s2 null");
+    cxVec2f p1 = cxViewPosition(s1);
+    cxVec2f p2 = cxViewPosition(s2);
+    cxFloat angle = atan2f(p2.y - p1.y, p2.x - p1.x);
+    cxViewSetAngle(s1, angle);
+}
+
+cxFloat fcSpriteDistance(cxAny s1,cxAny s2)
+{
+    CX_ASSERT(s1 != NULL && s2 != NULL, "s1 or s2 null");
+    cxVec2f p1 = cxViewPosition(s1);
+    cxVec2f p2 = cxViewPosition(s2);
+    return kmVec2DistanceBetween(&p1, &p2);
+}
+
+void fcSpriteUnset(cxAny this)
 {
     fcSprite s = this;
     cxHashKey key = cxHashIntKey((cxInt)s);
@@ -41,7 +58,7 @@ void fcSpriteUnsetTarget(cxAny this)
     cxHashClean(s->murderers);
 }
 
-void fcSpriteSetTarget(cxAny this,cxAny target)
+void fcSpriteTarget(cxAny this,cxAny target)
 {
     CX_ASSERT(this != target, "target can't this");
     fcSprite s = this;

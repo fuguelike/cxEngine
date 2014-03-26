@@ -25,9 +25,19 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     cxHash murderers;
 CX_OBJECT_END(fcSprite)
 
-void fcSpriteUnsetTarget(cxAny this);
+//s1 指向 s2
+void fcSpriteLookAt(cxAny s1,cxAny s2);
 
-void fcSpriteSetTarget(cxAny this,cxAny target);
+//获取两个sprite间的距离
+cxFloat fcSpriteDistance(cxAny s1,cxAny s2);
+
+//解除
+
+//解除所有关系
+void fcSpriteUnset(cxAny this);
+
+//设置目标
+void fcSpriteTarget(cxAny this,cxAny target);
 
 void fcSpriteInit(cxAny this,cxAny map,cxVec2i idx);
 

@@ -177,7 +177,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     cxViewAppend(this, b);
     m = b;
     
-    fcSpriteSetTarget(b, a);
+    fcSpriteTarget(a, b);
 }
 CX_OBJECT_FREE(fcMap, cxView)
 {
