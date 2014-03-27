@@ -30,8 +30,8 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     cxHash murderers;
     //组 敌人组和自己组
     fcGroupType group;
-    //当被打中时
-    CX_METHOD_ALLOC(cxInt, Attacked, cxAny sprite, cxAny fruit);
+    //当被打中时 sprite 被 fruit 打中，凶手是 attacker
+    CX_METHOD_ALLOC(cxInt, Attacked, cxAny sprite, cxAny fruit,cxAny attacker);
     //生命
     cxInt life;
 CX_OBJECT_END(fcSprite)
@@ -53,8 +53,8 @@ cxFloat fcSpriteDistance(cxAny s1,cxAny s2);
 //解除所有关系
 void fcSpriteUnset(cxAny this);
 
-//target已经队列中
-cxBool fcSpriteInTargets(cxAny this,cxAny target);
+//target已经有这个目标
+cxBool fcSpriteHasTarget(cxAny this,cxAny target);
 
 //设置目标
 void fcSpriteTarget(cxAny this,cxAny target);

@@ -34,12 +34,3 @@ void fcFruitInit(cxAny this,cxAny map,cxConstChars url,cxFloat speed)
     fruit->speed = speed;
     cxSpriteSetTextureURL(fruit, url, true);
 }
-
-cxInt fcFruitFire(cxAny this,cxAny sprite,cxAny target)
-{
-    fcFruit fruit = this;
-    //盯住目标
-    fcSpriteLookAt(sprite, target);
-    //发射
-    return CX_METHOD_FIRE(0, fruit->Fire, this, sprite, target);
-}

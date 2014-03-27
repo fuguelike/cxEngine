@@ -29,7 +29,7 @@ typedef enum {
 }fcGroupType;
 
 typedef enum {
-    fcSpriteTypeNone = 0,       //什么都不是
+    fcSpriteTypeNone = 0,       //你什么都不是
     fcSpriteTypeDecoration,     //装饰物,例如地面，道路，花花草草
     fcSpriteTypeContainer,      //容器，例如水果仓库，水果篮子
     fcSpriteTypeAttacker,       //攻击物，例如12生效宠物,投射机
@@ -47,6 +47,7 @@ typedef enum {
 typedef enum {
     fcFruitTypeNone = 0,
     fcFruitTypeFollow,      //跟踪水果
+    fcFruitTypePierce,      //穿透水果
 }fcFruitType;
 
 CX_C_END

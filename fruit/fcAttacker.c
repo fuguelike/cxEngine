@@ -11,7 +11,8 @@
 #include "fcMap.h"
 #include "fcFollow.h"
 
-cxBool fcAttackerIsRangeIn(cxAny this,cxAny target)
+//target 是否在攻击范围内
+static cxBool fcAttackerInRange(cxAny this,cxAny target)
 {
     if(this == target){
         return false;
@@ -26,13 +27,13 @@ cxBool fcAttackerIsRangeIn(cxAny this,cxAny target)
 CX_OBJECT_INIT(fcAttacker, fcSprite)
 {
     this->super.type = fcSpriteTypeAttacker;
-    this->attackRange = 8;
+    this->attackRange = 0;
     this->attackRate = 0.5f;
     this->attackPower = 0;
 }
 CX_OBJECT_FREE(fcAttacker, fcSprite)
 {
-    
+    CX_METHOD_RELEASE(this->MakeFruit);
 }
 CX_OBJECT_TERM(fcAttacker, fcSprite)
 
@@ -40,18 +41,18 @@ CX_OBJECT_TERM(fcAttacker, fcSprite)
 static void fcAttackerSearchTarget(fcAttacker this)
 {
     fcMap map = this->super.map;
-    CX_LIST_FOREACH(map->sprites, ele){
+    CX_LIST_FOREACH(map->fights, ele){
         fcSprite target = ele->any;
-        //只搜索范围内的敌人
+        //不攻击同一组的
         if(target->group == this->super.group){
             continue;
         }
         //已经在目标列表中
-        if(fcSpriteInTargets(this, target)){
+        if(fcSpriteHasTarget(this, target)){
             continue;
         }
         //不在攻击范围内
-        if(!fcAttackerIsRangeIn(this, target)){
+        if(!fcAttackerInRange(this, target)){
             continue;
         }
         fcSpriteTarget(this, target);
@@ -62,10 +63,19 @@ static void fcAttackerSearchTarget(fcAttacker this)
     }
 }
 
+//sprite 使用 fruit 攻击 target
+static cxInt fcAttackerFire(cxAny sprite,cxAny fruit,cxAny target)
+{
+    fcFruit this = fruit;
+    //盯住目标
+    fcSpriteLookAt(sprite, target);
+    //发射
+    return CX_METHOD_FIRE(0, this->Fire, sprite, fruit, target);
+}
+
 static void fcAttackerRun(cxEvent *e)
 {
     fcAttacker this = cxActionView(e->sender);
-    
     cxIndex targetNum = fcSpriteTargetNumber(this);
     //没有目标就搜索范围内的目标
     if(targetNum < this->attackNumber){
@@ -74,22 +84,26 @@ static void fcAttackerRun(cxEvent *e)
     //攻击目标
     CX_HASH_FOREACH(this->super.targets, ele, tmp){
         //解除范围外的目标
-        if(!fcAttackerIsRangeIn(this,ele->any)){
+        if(!fcAttackerInRange(this,ele->any)){
             fcSpriteUnset(ele->any);
             continue;
         }
-        //创建水果弹药
-        fcFollow fire = fcFollowCreate(this->super.map, 6);
-        fcFruitFire(fire, this, ele->any);
+        //创建水果弹药发射
+        cxAny fruit = CX_METHOD_FIRE(NULL, this->MakeFruit, this);
+        if(fruit == NULL){
+            continue;
+        }
+        fcAttackerFire(this, fruit, ele->any);
     }
 }
 
 void fcAttackerLoop(cxAny this)
 {
     fcAttacker a = this;
-    CX_ASSERT(a->attackNumber > 0, "attacker not set attack property");
-    CX_ASSERT(a->attackRate > 0, "attacker not set attack property");
+    CX_ASSERT(a->attackNumber > 0, "can attack when attack number > 0");
+    CX_ASSERT(a->attackRate > 0, "can attack when attack rate > 0");
     CX_ASSERT(a->attackPower > 0, "can attack when attack power > 0");
+    CX_ASSERT(a->attackRange > 0, "can attack when attack range > 0");
     cxTimer timer = fcSpriteTimer(this, a->attackRate);
     CX_EVENT_APPEND(timer->onArrive, fcAttackerRun, NULL);
 }

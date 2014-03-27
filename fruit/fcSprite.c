@@ -16,7 +16,7 @@ void fcSpriteRemoved(cxAny this)
     //解除所有关系
     fcSpriteUnset(s);
     //移除地图
-    fcMapRemoveSprite(s->map, this);
+    fcMapRemoveFights(s->map, this);
 }
 
 CX_OBJECT_INIT(fcSprite, cxSprite)
@@ -64,7 +64,7 @@ cxFloat fcSpriteDistance(cxAny s1,cxAny s2)
 void fcSpriteUnset(cxAny this)
 {
     fcSprite s = this;
-    cxHashKey key = cxHashIntKey((cxInt)s);
+    cxHashKey key = cxHashPtrKey(s);
     //解除目标是我
     CX_HASH_FOREACH(s->targets, sele, stmp){
         fcSprite st = sele->any;
@@ -82,21 +82,22 @@ void fcSpriteUnset(cxAny this)
 }
 
 //target 已经在攻击队列中
-cxBool fcSpriteInTargets(cxAny this,cxAny target)
+cxBool fcSpriteHasTarget(cxAny this,cxAny target)
 {
     fcSprite s = this;
     fcSprite t = target;
-    cxHashKey tk = cxHashIntKey((cxInt)t);
+    cxHashKey tk = cxHashPtrKey(t);
     return cxHashHas(s->targets, tk);
 }
 
 void fcSpriteTarget(cxAny this,cxAny target)
 {
+    //自己不能打自己
     CX_ASSERT(this != target, "target can't this");
     fcSprite s = this;
     fcSprite t = target;
-    cxHashKey sk = cxHashIntKey((cxInt)s);
-    cxHashKey tk = cxHashIntKey((cxInt)t);
+    cxHashKey sk = cxHashPtrKey(s);
+    cxHashKey tk = cxHashPtrKey(t);
     //设置目标的凶手我自己
     cxHashSet(t->murderers, sk, s);
     //设置我的目标为target

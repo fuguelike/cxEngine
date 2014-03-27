@@ -20,15 +20,12 @@ CX_OBJECT_DEF(fcFruit, cxSprite)
     cxFloat speed;
     cxFloat attackPower;
     //当碰到时
-    CX_METHOD_ALLOC(cxInt, Fire,cxAny fruit,cxAny sprite,cxAny target);
+    CX_METHOD_ALLOC(cxInt, Fire,cxAny attacker,cxAny fruit,cxAny target);
 CX_OBJECT_END(fcFruit)
 
 void fcFruitRemoved(cxAny this);
 
 void fcFruitInit(cxAny this,cxAny map,cxConstChars url,cxFloat speed);
-
-//fruit 从sprite 向 target 开火
-cxInt fcFruitFire(cxAny this,cxAny sprite,cxAny target);
 
 CX_C_END
 

@@ -13,23 +13,24 @@
 
 static void fcFollowStop(cxEvent *e)
 {
-    fcFollow this = cxActionView(e->sender);
-    fcSprite target = cxFollowTarget(e->sender);
+    cxAny attacker = cxEventArgToWeakRef(e->args);
+    fcFollow fruit = cxActionView(e->sender);
+    fcSprite sprite = cxFollowTarget(e->sender);
     //目标被攻击了
-    CX_METHOD_FIRE(0, target->Attacked, target, this);
-    //默认移除
-    fcFruitRemoved(this);
+    CX_METHOD_FIRE(0, sprite->Attacked, sprite, fruit, attacker);
+    //移除水果导弹
+    fcFruitRemoved(fruit);
 }
 
-static cxInt fcFollowFire(cxAny this, cxAny sprite, cxAny target)
+static cxInt fcFollowFire(cxAny attacker,cxAny fruit,cxAny target)
 {
-    fcFollow ff = this;
-    cxViewSetPos(this, cxViewPosition(sprite));
-    cxViewAppend(ff->super.map, this);
-    cxFloat speed = fcMapScaleValue(ff->super.map, ff->super.speed);
-    cxFollow follow = cxFollowCreate(speed, target);
-    CX_EVENT_QUICK(follow->super.onStop, fcFollowStop);
-    cxViewAppendAction(ff, follow);
+    fcFollow follow = fruit;
+    cxViewSetPos(follow, cxViewPosition(attacker));
+    cxViewAppend(follow->super.map, follow);
+    cxFloat speed = fcMapScaleValue(follow->super.map, follow->super.speed);
+    cxFollow followAction = cxFollowCreate(speed, target);
+    CX_EVENT_APPEND(followAction->super.onStop, fcFollowStop, cxEventArgWeakRef(attacker));
+    cxViewAppendAction(follow, followAction);
     return 0;
 }
 

@@ -10,7 +10,7 @@
 #include "fcMap.h"
 #include "fcAttacker.h"
 #include "fcFruit.h"
-
+#include "fcFollow.h"
 
 static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
 {
@@ -99,7 +99,7 @@ cxVec2f fcMapToPos(fcMap this,cxVec2i idx)
     return cxVec2fv(x + this->gridSize.w/2.0f, y + this->gridSize.h/2.0f);
 }
 
-fcAttacker m;
+fcSprite m;
 
 static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
 {
@@ -162,35 +162,60 @@ cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop)
     return rv;
 }
 
-void fcMapAppendSprite(fcMap this,cxAny sprite)
+void fcMapAppendFights(fcMap this,cxAny sprite)
 {
     fcSprite m = sprite;
-    m->element = cxListAppend(this->sprites, sprite);
+    m->element = cxListAppend(this->fights, sprite);
     cxViewAppend(this, sprite);
 }
 
-void fcMapRemoveSprite(fcMap this,cxAny sprite)
+void fcMapRemoveFights(fcMap this,cxAny sprite)
 {
     fcSprite m = sprite;
     if(m->element != NULL){
-        cxListRemove(this->sprites, m->element);
+        cxListRemove(this->fights, m->element);
         m->element = NULL;
     }
     cxViewRemoved(m);
 }
 
-static cxInt attackedTest(cxAny sprite,cxAny fruit)
+void fcMapAppendStatics(fcMap this,cxAny sprite)
+{
+    fcSprite m = sprite;
+    m->element = cxListAppend(this->statics, sprite);
+    cxViewAppend(this, sprite);
+}
+
+void fcMapRemoveStatics(fcMap this,cxAny sprite)
+{
+    fcSprite m = sprite;
+    if(m->element != NULL){
+        cxListRemove(this->statics, m->element);
+        m->element = NULL;
+    }
+    cxViewRemoved(m);
+}
+
+static cxInt attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
 {
     fcAttacker s = sprite;
     fcFruit f = fruit;
-    CX_LOGGER("%p attacked %p",f, s);
+    CX_LOGGER("%p attacked %p,attacker = %p",f, s, attacker);
 //    fcSpriteRemoved(s);
     return 0;
 }
 
+static cxAny attackerMakeFruit(cxAny attacker)
+{
+    fcAttacker this = attacker;
+    fcFollow fruit = fcFollowCreate(this->super.map, 6);
+    return fruit;
+}
+
 CX_OBJECT_INIT(fcMap, cxView)
 {
-    this->sprites = CX_ALLOC(cxList);
+    this->fights = CX_ALLOC(cxList);
+    this->statics = CX_ALLOC(cxList);
     
     CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
     
@@ -200,30 +225,48 @@ CX_OBJECT_INIT(fcMap, cxView)
     this->gridSize.h = this->gridSize.w;
     cxViewSetSize(this, cxSize2fv(vw, vw));
     
-    fcAttacker a = fcAttackerCreate(this, cxVec2iv(0, 0), fcAttackerTypeSmallMachine);
-    cxSpriteSetImage(a, "item.xml?red.png");
-    fcMapAppendSprite(this, a);
+    //
+    {
+        fcAttacker a = fcAttackerCreate(this, cxVec2iv(0, 0), fcAttackerTypeSmallMachine);
+        cxSpriteSetImage(a, "item.xml?red.png");
+        CX_METHOD_OVERRIDE(a->MakeFruit, attackerMakeFruit);
+        a->super.group = fcGroupTypeAttacker;
+        a->attackRange = 8;
+        a->attackNumber = 2;
+        a->attackPower = 5;
+        fcMapAppendFights(this, a);
+        //开始搜索攻击
+        fcAttackerLoop(a);
+    }
     
-    fcAttacker b = fcAttackerCreate(this, cxVec2iv(6, 6), fcAttackerTypeSmallMachine);
-    CX_METHOD_OVERRIDE(b->super.Attacked, attackedTest);
+//    {
+//        fcAttacker a = fcAttackerCreate(this, cxVec2iv(5, 5), fcAttackerTypeSmallMachine);
+//        cxSpriteSetImage(a, "item.xml?red.png");
+//        CX_METHOD_OVERRIDE(a->MakeFruit, attackerMakeFruit);
+//        a->super.group = fcGroupTypeAttacker;
+//        a->attackRange = 8;
+//        a->attackNumber = 2;
+//        a->attackPower = 5;
+//        fcMapAppendFights(this, a);
+//        //开始搜索攻击
+//        fcAttackerLoop(a);
+//    }
+    
+    fcSprite b = CX_CREATE(fcSprite);
+    fcSpriteInit(b, this, cxVec2iv(6, 6));
+    CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
     cxSpriteSetImage(b, "item.xml?blue.png");
-    fcMapAppendSprite(this, b);
+    b->group = fcGroupTypeDefenser;
+    fcMapAppendFights(this, b);
     
-    a->super.group = fcGroupTypeAttacker;
-    a->attackNumber = 2;
-    a->attackPower = 5;
-    
-    b->super.group = fcGroupTypeDefenser;
-    
-    fcAttackerLoop(a);
+
     
     m = b;
-    
-    //fcSpriteTarget(a, b);
 }
 CX_OBJECT_FREE(fcMap, cxView)
 {
-    CX_RELEASE(this->sprites);
+    CX_RELEASE(this->statics);
+    CX_RELEASE(this->fights);
 }
 CX_OBJECT_TERM(fcMap, cxView)
 

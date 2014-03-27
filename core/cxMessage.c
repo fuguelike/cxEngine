@@ -71,7 +71,7 @@ void cxMessageRemoveKey(cxAny dst,cxConstChars key)
     cxMessage this = cxMessageInstance();
     cxHash list = cxHashGet(this->keys, cxHashStrKey(key));
     CX_RETURN(list == NULL || cxHashLength(list) == 0);
-    cxHashDel(list, cxHashIntKey((cxInt)dst));
+    cxHashDel(list, cxHashPtrKey(dst));
 }
 
 void cxMessagePost(cxConstChars key,cxAny src)
@@ -97,7 +97,7 @@ void cxMessageAppend(cxAny dst,cxAny func,cxConstChars key)
     cxMessageItem item = CX_ALLOC(cxMessageItem);
     item->dst = dst;
     item->func = func;
-    cxHashSet(list, cxHashIntKey((cxInt)dst), item);
+    cxHashSet(list, cxHashPtrKey(dst), item);
     CX_RELEASE(item);
 }
 
