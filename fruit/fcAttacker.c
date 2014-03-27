@@ -24,6 +24,30 @@ static cxBool fcAttackerInRange(cxAny this,cxAny target)
     return d <= r;
 }
 
+void fcAttackerPauseTime(cxAny this,cxFloat time)
+{
+    fcAttacker a = this;
+    if(a->loopTimer != NULL){
+        cxActionSetPauseTime(a->loopTimer, time);
+    }
+}
+
+void fcAttackerPause(cxAny this)
+{
+    fcAttacker a = this;
+    if(a->loopTimer != NULL){
+        cxActionPause(a->loopTimer);
+    }
+}
+
+void fcAttackerResume(cxAny this)
+{
+    fcAttacker a = this;
+    if(a->loopTimer != NULL){
+        cxActionResume(a->loopTimer);
+    }
+}
+
 CX_OBJECT_INIT(fcAttacker, fcSprite)
 {
     this->super.type = fcSpriteTypeAttacker;
@@ -33,7 +57,7 @@ CX_OBJECT_INIT(fcAttacker, fcSprite)
 }
 CX_OBJECT_FREE(fcAttacker, fcSprite)
 {
-    CX_METHOD_RELEASE(this->MakeFruit);
+    CX_METHOD_RELEASE(this->FruitMaker);
 }
 CX_OBJECT_TERM(fcAttacker, fcSprite)
 
@@ -63,14 +87,14 @@ static void fcAttackerSearchTarget(fcAttacker this)
     }
 }
 
-//sprite 使用 fruit 攻击 target
-static cxInt fcAttackerFire(cxAny sprite,cxAny fruit,cxAny target)
+//sprite 使用  fruit 攻击 target
+static void fcAttackerFire(cxAny sprite, cxAny fruit,cxAny target)
 {
     fcFruit this = fruit;
     //盯住目标
     fcSpriteLookAt(sprite, target);
     //发射
-    return CX_METHOD_GET(0, this->Fire, sprite, fruit, target);
+    CX_METHOD_RUN(this->Fire, this, sprite, target);
 }
 
 static void fcAttackerRun(cxEvent *e)
@@ -89,7 +113,7 @@ static void fcAttackerRun(cxEvent *e)
             continue;
         }
         //创建水果弹药发射
-        cxAny fruit = CX_METHOD_GET(NULL, this->MakeFruit, this);
+        cxAny fruit = CX_METHOD_GET(NULL, this->FruitMaker, this);
         if(fruit == NULL){
             continue;
         }
@@ -104,8 +128,8 @@ void fcAttackerLoop(cxAny this)
     CX_ASSERT(a->attackRate > 0, "can attack when attack rate > 0");
     CX_ASSERT(a->attackPower > 0, "can attack when attack power > 0");
     CX_ASSERT(a->attackRange > 0, "can attack when attack range > 0");
-    cxTimer timer = fcSpriteTimer(this, a->attackRate);
-    CX_EVENT_APPEND(timer->onArrive, fcAttackerRun, NULL);
+    a->loopTimer = fcSpriteTimer(this, a->attackRate);
+    CX_EVENT_APPEND(a->loopTimer->onArrive, fcAttackerRun, NULL);
 }
 
 fcAttacker fcAttackerCreate(cxAny map,cxVec2i idx,fcAttackerType type)

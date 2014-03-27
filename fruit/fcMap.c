@@ -201,14 +201,14 @@ static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
     fcAttacker s = sprite;
     fcFruit f = fruit;
     CX_LOGGER("%p attacked %p,attacker = %p",f, s, attacker);
+//    fcAttackerPauseTime(attacker,5);
 //    fcSpriteRemoved(s);
 }
 
-static cxAny attackerMakeFruit(cxAny attacker)
+static cxAny attackerFruitMaker(cxAny attacker)
 {
     fcAttacker this = attacker;
-    fcFollow fruit = fcFollowCreate(this->super.map, 6);
-    return fruit;
+    return fcFollowCreate(this->super.map, 6);
 }
 
 CX_OBJECT_INIT(fcMap, cxView)
@@ -228,7 +228,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     {
         fcAttacker a = fcAttackerCreate(this, cxVec2iv(0, 0), fcAttackerTypeSmallMachine);
         cxSpriteSetImage(a, "item.xml?red.png");
-        CX_METHOD_OVERRIDE(a->MakeFruit, attackerMakeFruit);
+        CX_METHOD_OVERRIDE(a->FruitMaker, attackerFruitMaker);
         a->super.group = fcGroupTypeAttacker;
         a->attackRange = 8;
         a->attackNumber = 2;

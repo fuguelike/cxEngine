@@ -17,10 +17,12 @@ CX_C_BEGIN
 CX_OBJECT_DEF(fcFruit, cxSprite)
     fcFruitType type;
     cxAny map;
+    //飞行速度
     cxFloat speed;
+    //攻击力
     cxFloat attackPower;
     //当碰到时
-    CX_METHOD_ALLOC(cxInt, Fire,cxAny attacker,cxAny fruit,cxAny target);
+    CX_METHOD_ALLOC(void, Fire, cxAny fruit, cxAny attacker,cxAny target);
 CX_OBJECT_END(fcFruit)
 
 void fcFruitRemoved(cxAny this);

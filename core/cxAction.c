@@ -137,11 +137,21 @@ void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
     CX_METHOD_OVERRIDE(this->Curve, curve);
 }
 
+void cxActionSetPauseTime(cxAny pav,cxFloat time)
+{
+    cxAction this = pav;
+    this->pauseTime = time;
+}
+
 cxBool cxActionUpdate(cxAny pav,cxFloat dt)
 {
     cxAction this = pav;
     cxBool isExit = false;
     dt = dt * this->speed;
+    if(this->pauseTime > 0){
+        this->pauseTime -= dt;
+        goto finished;
+    }
     if(this->isPause || this->isExit){
         goto finished;
     }

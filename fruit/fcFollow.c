@@ -22,16 +22,15 @@ static void fcFollowStop(cxEvent *e)
     fcFruitRemoved(fruit);
 }
 
-static cxInt fcFollowFire(cxAny attacker,cxAny fruit,cxAny target)
+static void fcFollowFire(cxAny fruit, cxAny attacker,cxAny target)
 {
-    fcFollow follow = fruit;
-    cxViewSetPos(follow, cxViewPosition(attacker));
-    cxViewAppend(follow->super.map, follow);
-    cxFloat speed = fcMapScaleValue(follow->super.map, follow->super.speed);
-    cxFollow followAction = cxFollowCreate(speed, target);
-    CX_EVENT_APPEND(followAction->super.onStop, fcFollowStop, cxEventArgWeakRef(attacker));
-    cxViewAppendAction(follow, followAction);
-    return 0;
+    fcFollow this = fruit;
+    cxViewSetPos(this, cxViewPosition(attacker));
+    cxViewAppend(this->super.map, this);
+    cxFloat speed = fcMapScaleValue(this->super.map, this->super.speed);
+    cxFollow follow = cxFollowCreate(speed, target);
+    CX_EVENT_APPEND(follow->super.onStop, fcFollowStop, cxEventArgWeakRef(attacker));
+    cxViewAppendAction(this, follow);
 }
 
 CX_OBJECT_INIT(fcFollow, fcFruit)
@@ -42,7 +41,7 @@ CX_OBJECT_INIT(fcFollow, fcFruit)
 }
 CX_OBJECT_FREE(fcFollow, fcFruit)
 {
-
+    
 }
 CX_OBJECT_TERM(fcFollow, fcFruit)
 

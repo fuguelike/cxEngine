@@ -26,6 +26,7 @@ CX_OBJECT_DEF(cxAction, cxObject)
     cxFloat durationInit;
     cxFloat duration;
     cxFloat durationElapsed;
+    cxFloat pauseTime;
     cxBool isExit;
     cxBool isPause;
     cxBool isFirst;
@@ -46,6 +47,8 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_EVENT_ALLOC(onSplit);
     CX_EVENT_ALLOC(onStep);
 CX_OBJECT_END(cxAction)
+
+void cxActionSetPauseTime(cxAny pav,cxFloat time);
 
 cxAny cxActionView(cxAny pav);
 
