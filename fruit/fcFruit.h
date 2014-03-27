@@ -27,7 +27,7 @@ CX_OBJECT_END(fcFruit)
 
 void fcFruitRemoved(cxAny this);
 
-void fcFruitInit(cxAny this,cxAny map,cxConstChars url,cxFloat speed);
+void fcFruitInit(cxAny this,cxAny map,cxFloat speed);
 
 CX_C_END
 

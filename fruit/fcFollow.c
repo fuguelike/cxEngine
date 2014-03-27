@@ -45,9 +45,7 @@ CX_OBJECT_FREE(fcFollow, fcFruit)
 }
 CX_OBJECT_TERM(fcFollow, fcFruit)
 
-fcFollow fcFollowCreate(cxAny map,cxFloat speed)
+void fcFollowInit(fcFollow this,cxAny map,cxFloat speed)
 {
-    fcFollow this = CX_CREATE(fcFollow);
-    fcFruitInit(this, map, "item.xml?fire.png",speed);
-    return this;
+    fcFruitInit(this, map,speed);
 }

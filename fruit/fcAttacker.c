@@ -57,6 +57,7 @@ CX_OBJECT_INIT(fcAttacker, fcSprite)
 }
 CX_OBJECT_FREE(fcAttacker, fcSprite)
 {
+    CX_METHOD_RELEASE(this->FruitFire);
     CX_METHOD_RELEASE(this->FruitMaker);
 }
 CX_OBJECT_TERM(fcAttacker, fcSprite)
@@ -90,11 +91,14 @@ static void fcAttackerSearchTarget(fcAttacker this)
 //sprite 使用  fruit 攻击 target
 static void fcAttackerFire(cxAny sprite, cxAny fruit,cxAny target)
 {
+    fcAttacker a = sprite;
     fcFruit this = fruit;
     //盯住目标
-    fcSpriteLookAt(sprite, target);
+    fcSpriteLookAt(a, target);
     //发射
-    CX_METHOD_RUN(this->Fire, this, sprite, target);
+    CX_METHOD_RUN(this->Fire, this, a, target);
+    //
+    CX_METHOD_RUN(a->FruitFire, a, fruit, target);
 }
 
 static void fcAttackerRun(cxEvent *e)
@@ -127,6 +131,11 @@ static void fcAttackerRun(cxEvent *e)
     }
 }
 
+void fcAttackerInit(fcAttacker this,cxAny map)
+{
+    fcSpriteInit(this, map);
+}
+
 void fcAttackerLoop(cxAny this)
 {
     fcAttacker a = this;
@@ -136,12 +145,4 @@ void fcAttackerLoop(cxAny this)
     CX_ASSERT(a->attackRange > 0, "can attack when attack range > 0");
     a->loopTimer = fcSpriteTimer(this, a->attackRate);
     CX_EVENT_APPEND(a->loopTimer->onArrive, fcAttackerRun, NULL);
-}
-
-fcAttacker fcAttackerCreate(cxAny map,cxVec2i idx,fcAttackerType type)
-{
-    fcAttacker this = CX_CREATE(fcAttacker);
-    fcSpriteInit(this, map, idx);
-    this->attackerType = type;
-    return this;
 }

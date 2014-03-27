@@ -20,6 +20,8 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     cxListElement *element;
     //地图指针
     cxAny map;
+    //当前运动路线
+    fcPath path;
     //坐标
     cxVec2i idx;
     //类型
@@ -34,9 +36,21 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     CX_METHOD_ALLOC(void, Attacked, cxAny sprite, cxAny fruit,cxAny attacker);
     //sprite 是否能被 attacker 发射的 fruit 攻击
     CX_METHOD_ALLOC(cxBool, IsAttack,cxAny sprite,cxAny fruit,cxAny attacker);
+    //获取参与路径计算的值
+    CX_METHOD_ALLOC(cxInt, PathValue,cxAny sprite);
     //生命
     cxInt life;
 CX_OBJECT_END(fcSprite)
+
+//寻找通向idx的路径
+cxBool fcSpriteFindPath(cxAny this,cxVec2i idx);
+
+//获取参与路径搜索的值
+cxInt fcSpritePathValue(cxAny this);
+
+void fcSpriteInitIndex(cxAny this, cxVec2i idx);
+
+void fcSpriteMoveTo(cxAny this,cxVec2i idx);
 
 void fcSpriteRemoved(cxAny this);
 
@@ -61,7 +75,7 @@ cxBool fcSpriteHasTarget(cxAny this,cxAny target);
 //设置目标
 void fcSpriteTarget(cxAny this,cxAny target);
 
-void fcSpriteInit(cxAny this,cxAny map,cxVec2i idx);
+void fcSpriteInit(cxAny this,cxAny map);
 
 //创建定时器
 cxTimer fcSpriteTimer(cxAny this,cxFloat time);

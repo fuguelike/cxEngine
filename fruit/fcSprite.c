@@ -19,13 +19,54 @@ void fcSpriteRemoved(cxAny this)
     fcMapRemoveFights(s->map, this);
 }
 
+cxInt fcSpritePathValue(cxAny this)
+{
+    fcSprite s = this;
+    return CX_METHOD_GET(s->type, s->PathValue, s);
+}
+
+void fcSpriteInitIndex(cxAny this, cxVec2i idx)
+{
+    CX_ASSERT(fcMapCheckIdx(idx), "idx error");
+    fcSprite s = this;
+    fcMap map = s->map;
+    CX_ASSERT(fcMapSprite(map, idx) == NULL, "has sprite in here");
+    s->idx = idx;
+    map->sprites[idx.x][idx.y] = this;
+    cxVec2f pos = fcMapToPos(map, idx);
+    cxViewSetPos(s, pos);
+}
+
+cxBool fcSpriteFindPath(cxAny this,cxVec2i idx)
+{
+    fcSprite s = this;
+    CX_ASSERT(fcMapCheckIdx(s->idx), "must first fcSpriteInitIndex");
+    return fcMapFindPath(s->map, &s->path, s->idx, idx);
+}
+
+void fcSpriteMoveTo(cxAny this,cxVec2i idx)
+{
+    CX_ASSERT(fcMapCheckIdx(idx), "idx error");
+    fcSprite s = this;
+    CX_ASSERT(!cxVec2iEqu(s->idx, idx),"self move to self");
+    fcMap map = s->map;
+    CX_ASSERT(fcMapSprite(map, idx) == NULL,"target idx has sprite");
+    map->sprites[s->idx.x][s->idx.y] = NULL;
+    map->sprites[idx.x][idx.y] = s;
+    s->idx = idx;
+    cxVec2f pos = fcMapToPos(map, idx);
+    cxViewSetPos(s, pos);
+}
+
 CX_OBJECT_INIT(fcSprite, cxSprite)
 {
+    this->idx = cxVec2iv(-1, -1);
     this->targets = CX_ALLOC(cxHash);
     this->murderers = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(fcSprite, cxSprite)
 {
+    CX_METHOD_RELEASE(this->PathValue);
     CX_METHOD_RELEASE(this->Attacked);
     CX_RELEASE(this->targets);
     CX_RELEASE(this->murderers);
@@ -104,15 +145,11 @@ void fcSpriteTarget(cxAny this,cxAny target)
     cxHashSet(s->targets, tk, t);
 }
 
-void fcSpriteInit(cxAny sprite,cxAny map,cxVec2i idx)
+void fcSpriteInit(cxAny sprite,cxAny map)
 {
-    fcMap dm = map;
     fcSprite this = sprite;
-    cxVec2f pos = fcMapToPos(dm, idx);
-    cxViewSetPos(this, pos);
-    cxViewSetSize(this, dm->gridSize);
-    this->map = map;
-    this->idx = idx;
+    fcMap m = map;
+    this->map = m;
 }
 
 cxTimer fcSpriteTimer(cxAny this,cxFloat time)

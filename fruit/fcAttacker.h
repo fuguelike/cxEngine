@@ -25,6 +25,7 @@ CX_OBJECT_DEF(fcAttacker, fcSprite)
     cxFloat attackPower;    //攻击力
     //水果创建者
     CX_METHOD_ALLOC(cxAny, FruitMaker,cxAny this);
+    CX_METHOD_ALLOC(void, FruitFire,cxAny this,cxAny fruit,cxAny target);
 CX_OBJECT_END(fcAttacker)
 //暂停一段时间
 void fcAttackerPauseTime(cxAny this,cxFloat time);
@@ -32,8 +33,8 @@ void fcAttackerPauseTime(cxAny this,cxFloat time);
 void fcAttackerPause(cxAny this);
 //继续攻击
 void fcAttackerResume(cxAny this);
-//创建攻击者
-fcAttacker fcAttackerCreate(cxAny map,cxVec2i idx,fcAttackerType type);
+//初始化攻击者
+void fcAttackerInit(fcAttacker this,cxAny map);
 //开始搜索攻击
 void fcAttackerLoop(cxAny this);
 CX_C_END

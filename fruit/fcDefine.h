@@ -31,7 +31,7 @@ typedef enum {
 typedef enum {
     fcSpriteTypeNone = 0,       //你什么都不是
     fcSpriteTypeDecoration,     //装饰物,例如地面，道路，花花草草
-    fcSpriteTypeContainer,      //容器，例如水果仓库，水果篮子
+    fcSpriteTypeContainer,      //容器，例如水果仓库，水果篮子,宝箱
     fcSpriteTypeAttacker,       //攻击物，例如12生效宠物,投射机
     fcSpriteTypeProducer,       //生成者，例如果树,神树
 }fcSpriteType;

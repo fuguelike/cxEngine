@@ -17,7 +17,7 @@ CX_OBJECT_DEF(fcFollow, fcFruit)
     
 CX_OBJECT_END(fcFollow)
 
-fcFollow fcFollowCreate(cxAny map,cxFloat speed);
+void fcFollowInit(fcFollow this,cxAny map,cxFloat speed);
 
 CX_C_END
 

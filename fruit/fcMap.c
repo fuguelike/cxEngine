@@ -17,28 +17,52 @@ static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *contex
     fcMap map = context;
     cxVec2i *pathNode = (cxVec2i *)node;
     //left
-    cxVec2i left = cxVec2iv(pathNode->x - 1, pathNode->y);
-    cxInt leftValue = fcMapValue(map, left);
-    if(leftValue == 0){
-        ASNeighborListAdd(neighbors, &left, 1);
+    cxVec2i l = cxVec2iv(pathNode->x - 1, pathNode->y);
+    cxInt lv = fcMapValue(map, l);
+    if(lv == 0){
+        ASNeighborListAdd(neighbors, &l, 1);
     }
     //right
-    cxVec2i right = cxVec2iv(pathNode->x + 1, pathNode->y);
-    cxInt rightValue = fcMapValue(map, right);
-    if(rightValue == 0){
-        ASNeighborListAdd(neighbors, &right, 1);
+    cxVec2i r = cxVec2iv(pathNode->x + 1, pathNode->y);
+    cxInt rv = fcMapValue(map, r);
+    if(rv == 0){
+        ASNeighborListAdd(neighbors, &r, 1);
     }
     //up
-    cxVec2i up = cxVec2iv(pathNode->x, pathNode->y + 1);
-    cxInt upValue = fcMapValue(map, up);
-    if(upValue == 0){
-        ASNeighborListAdd(neighbors, &up, 1);
+    cxVec2i u = cxVec2iv(pathNode->x, pathNode->y + 1);
+    cxInt uv = fcMapValue(map, u);
+    if(uv == 0){
+        ASNeighborListAdd(neighbors, &u, 1);
     }
     //down
-    cxVec2i down = cxVec2iv(pathNode->x, pathNode->y - 1);
-    cxInt downValue = fcMapValue(map, down);
-    if(downValue == 0){
-        ASNeighborListAdd(neighbors, &down, 1);
+    cxVec2i d = cxVec2iv(pathNode->x, pathNode->y - 1);
+    cxInt dv = fcMapValue(map, d);
+    if(dv == 0){
+        ASNeighborListAdd(neighbors, &d, 1);
+    }
+    //left up
+    cxVec2i lu = cxVec2iv(pathNode->x - 1, pathNode->y + 1);
+    cxInt luv = fcMapValue(map, lu);
+    if(luv == 0 && (lv ==0 || uv == 0)){
+        ASNeighborListAdd(neighbors, &lu, 1);
+    }
+    //right up
+    cxVec2i ru = cxVec2iv(pathNode->x + 1, pathNode->y + 1);
+    cxInt ruv = fcMapValue(map, ru);
+    if(ruv == 0 && (rv ==0 || uv == 0)){
+        ASNeighborListAdd(neighbors, &ru, 1);
+    }
+    //left down
+    cxVec2i ld = cxVec2iv(pathNode->x - 1, pathNode->y - 1);
+    cxInt ldv = fcMapValue(map, ld);
+    if(ldv == 0 && (lv ==0 || dv == 0)){
+        ASNeighborListAdd(neighbors, &ld, 1);
+    }
+    //right down
+    cxVec2i rd = cxVec2iv(pathNode->x + 1, pathNode->y - 1);
+    cxInt rdv = fcMapValue(map, rd);
+    if(rdv == 0 && (rv ==0 || dv == 0)){
+        ASNeighborListAdd(neighbors, &rd, 1);
     }
 }
 
@@ -68,19 +92,21 @@ cxBool fcMapCheckIdx(cxVec2i idx)
     return idx.x >= 0 && idx.x < DM_MAP_WIDTH && idx.y >= 0 && idx.y < DM_MAP_HEIGHT;
 }
 
-cxInt fcMapValue(fcMap this,cxVec2i idx)
+cxAny fcMapSprite(fcMap this,cxVec2i idx)
 {
     if(!fcMapCheckIdx(idx)){
-        return -1;
+        return NULL;
     }
-    return this->values[idx.x][idx.y];
+    return this->sprites[idx.x][idx.y];
 }
 
-void fcMapSetValue(fcMap this,cxVec2i idx,cxInt value)
+cxInt fcMapValue(fcMap this,cxVec2i idx)
 {
-    if(fcMapCheckIdx(idx)){
-        this->values[idx.x][idx.y] = value;
+    fcSprite sprite = fcMapSprite(this, idx);
+    if(sprite == NULL){
+        return 0;
     }
+    return fcSpritePathValue(sprite);
 }
 
 cxVec2i fcMapToIdx(fcMap this,cxVec2f pos)
@@ -179,23 +205,6 @@ void fcMapRemoveFights(fcMap this,cxAny sprite)
     cxViewRemoved(m);
 }
 
-void fcMapAppendStatics(fcMap this,cxAny sprite)
-{
-    fcSprite m = sprite;
-    m->element = cxListAppend(this->statics, sprite);
-    cxViewAppend(this, sprite);
-}
-
-void fcMapRemoveStatics(fcMap this,cxAny sprite)
-{
-    fcSprite m = sprite;
-    if(m->element != NULL){
-        cxListRemove(this->statics, m->element);
-        m->element = NULL;
-    }
-    cxViewRemoved(m);
-}
-
 static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
 {
     fcAttacker s = sprite;
@@ -216,13 +225,15 @@ static cxBool isAttackMe(cxAny sprite, cxAny fruit,cxAny attacker)
 static cxAny attackerFruitMaker(cxAny attacker)
 {
     fcAttacker this = attacker;
-    return fcFollowCreate(this->super.map, 6);
+    fcFollow follow = CX_CREATE(fcFollow);
+    fcFollowInit(follow, this->super.map, 6);
+    cxSpriteSetImage(follow, "item.xml?fire.png");
+    return follow;
 }
 
 CX_OBJECT_INIT(fcMap, cxView)
 {
     this->fights = CX_ALLOC(cxList);
-    this->statics = CX_ALLOC(cxList);
     cxSize2f size = cxEngineInstance()->winsize;
     cxFloat vw = size.w - 20;
     this->gridSize.w = vw / DM_MAP_WIDTH;
@@ -231,10 +242,15 @@ CX_OBJECT_INIT(fcMap, cxView)
     
     CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
     //
-    fcAttacker a = fcAttackerCreate(this, cxVec2iv(0, 0), fcAttackerTypeSmallMachine);
+    fcAttacker a = CX_CREATE(fcAttacker);
+    fcAttackerInit(a, this);
+    fcSpriteInitIndex(a, cxVec2iv(0, 0));
+    
+//    fcSpriteMoveTo(a, cxVec2iv(1, 1));
+    
     cxSpriteSetImage(a, "item.xml?red.png");
     CX_METHOD_OVERRIDE(a->FruitMaker, attackerFruitMaker);
-    a->super.group = fcGroupTypeAttacker;
+    a->super.group = fcGroupTypeDefenser;
     a->attackRange = 8;
     a->attackNumber = 2;
     a->attackPower = 5;
@@ -243,20 +259,20 @@ CX_OBJECT_INIT(fcMap, cxView)
     fcAttackerLoop(a);
     
     fcSprite b = CX_CREATE(fcSprite);
-    fcSpriteInit(b, this, cxVec2iv(6, 6));
+    fcSpriteInit(b, this);
+    fcSpriteInitIndex(b, cxVec2iv(6, 6));
     cxSpriteSetImage(b, "item.xml?blue.png");
     
     CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
     CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
     
-    b->group = fcGroupTypeDefenser;
+    b->group = fcGroupTypeAttacker;
     fcMapAppendFights(this, b);
 
     m = b;
 }
 CX_OBJECT_FREE(fcMap, cxView)
 {
-    CX_RELEASE(this->statics);
     CX_RELEASE(this->fights);
 }
 CX_OBJECT_TERM(fcMap, cxView)

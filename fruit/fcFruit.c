@@ -27,10 +27,9 @@ CX_OBJECT_FREE(fcFruit, cxSprite)
 }
 CX_OBJECT_TERM(fcFruit, cxSprite)
 
-void fcFruitInit(cxAny this,cxAny map,cxConstChars url,cxFloat speed)
+void fcFruitInit(cxAny this,cxAny map,cxFloat speed)
 {
     fcFruit fruit = this;
     fruit->map = map;
     fruit->speed = speed;
-    cxSpriteSetTextureURL(fruit, url, true);
 }
