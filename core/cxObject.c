@@ -123,7 +123,7 @@ void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func)
 void cxObjectReadAttrRun(cxReaderAttrInfo *info)
 {
     cxObject this = info->object;
-    CX_METHOD_FIRE(NULL, this->ReadAttr,info);
+    CX_METHOD_RUN(this->ReadAttr,info);
 }
 
 void cxObjectSetRoot(cxAny obj,cxAny root)

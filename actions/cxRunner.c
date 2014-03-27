@@ -12,7 +12,7 @@
 static void cxRunnerInit(cxAny pav)
 {
     cxRunner this = pav;
-    CX_METHOD_FIRE(NULL, this->Init, this);
+    CX_METHOD_RUN(this->Init, this);
 }
 
 static cxBool cxRunnerExit(cxAny pav)
@@ -20,7 +20,7 @@ static cxBool cxRunnerExit(cxAny pav)
     cxRunner this = pav;
     if(this->count == 0){
         this->step ++;
-        CX_METHOD_FIRE(NULL, this->Exit, this);
+        CX_METHOD_RUN(this->Exit, this);
     }
     return this->count == 0;
 }

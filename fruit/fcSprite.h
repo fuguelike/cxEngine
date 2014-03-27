@@ -30,8 +30,8 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     cxHash murderers;
     //组 敌人组和自己组
     fcGroupType group;
-    //当被打中时 sprite 被 fruit 打中，凶手是 attacker
-    CX_METHOD_ALLOC(cxInt, Attacked, cxAny sprite, cxAny fruit,cxAny attacker);
+    //sprite 被 fruit 打中，凶手是 attacker
+    CX_METHOD_ALLOC(void, Attacked, cxAny sprite, cxAny fruit,cxAny attacker);
     //生命
     cxInt life;
 CX_OBJECT_END(fcSprite)

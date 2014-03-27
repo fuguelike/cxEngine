@@ -152,7 +152,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->prevTime = 0;
         this->delayElapsed = 0;
         this->durationElapsed = this->durationInit;
-        CX_METHOD_FIRE(NULL, this->Init, this);
+        CX_METHOD_RUN(this->Init, this);
         CX_EVENT_FIRE(this, onStart);
     }
     //action delay
@@ -163,7 +163,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //for active
     if(!this->isActive){
         this->isActive = true;
-        CX_METHOD_FIRE(NULL, this->Active, this);
+        CX_METHOD_RUN(this->Active, this);
     }
     this->durationElapsed += dt;
     cxFloat value = this->durationElapsed/CX_MAX(this->duration, FLT_EPSILON);
@@ -181,26 +181,26 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     }
     //wait exit
     if(this->duration < 0){
-        CX_METHOD_FIRE(NULL, this->Step,this,dt,time);
+        CX_METHOD_RUN(this->Step,this,dt,time);
         CX_EVENT_FIRE(this, onStep);
     }else if(this->duration == 0){
-        isExit = CX_METHOD_FIRE(true, this->Exit, this);
+        isExit = CX_METHOD_GET(true, this->Exit, this);
     }else if(this->durationElapsed < this->duration){
-        time = CX_METHOD_FIRE(time, this->Curve, this, time);
+        time = CX_METHOD_GET(time, this->Curve, this, time);
         this->delta = time - this->prevTime;
         this->prevTime = time;
-        CX_METHOD_FIRE(NULL, this->Step,this,dt,time);
+        CX_METHOD_RUN(this->Step,this,dt,time);
         CX_EVENT_FIRE(this, onStep);
     }else{
-        time = CX_METHOD_FIRE(1.0f, this->Curve,this,1.0f);
+        time = CX_METHOD_GET(1.0f, this->Curve,this,1.0f);
         this->delta = time - this->prevTime;
         this->prevTime = 0;
         this->durationElapsed = 0.0f;
         this->delayElapsed = 0.0f;
-        CX_METHOD_FIRE(NULL, this->Step,this,dt,1.0f);
+        CX_METHOD_RUN(this->Step,this,dt,1.0f);
         CX_EVENT_FIRE(this, onStep);
         //check exit
-        isExit = CX_METHOD_FIRE(true, this->Exit,this);
+        isExit = CX_METHOD_GET(true, this->Exit,this);
         this->isActive = false;
     }
     //check action exit
@@ -208,7 +208,7 @@ finished:
     //force exit or auto exit
     if(this->isExit || isExit){
         CX_EVENT_FIRE(this, onStop);
-        CX_METHOD_FIRE(NULL, this->Over,this);
+        CX_METHOD_RUN(this->Over,this);
     }
     return (this->isExit || isExit);
 }
@@ -232,7 +232,7 @@ void cxActionReset(cxAny pav)
     CX_EVENT_RELEASE(this->onStart);
     CX_EVENT_RELEASE(this->onStop);
     CX_EVENT_RELEASE(this->onStep);
-    CX_METHOD_FIRE(NULL, this->Reset, this);
+    CX_METHOD_RUN(this->Reset, this);
 }
 
 void cxActionResume(cxAny pav)

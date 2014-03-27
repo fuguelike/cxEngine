@@ -84,7 +84,7 @@ cxAny cxActionRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
     }else if(ELEMENT_IS_TYPE(cxFollow)){
         action = CX_CREATE(cxFollow);
     }else{
-        action = CX_METHOD_FIRE(NULL, engine->MakeAction, temp, reader);
+        action = CX_METHOD_GET(NULL, engine->MakeAction, temp, reader);
     }
     return action;
 }
@@ -103,7 +103,7 @@ cxAny cxActionRootGet(cxConstChars src)
     while(xmlTextReaderRead(reader)){
         CX_CONTINUE(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT);
         cxConstChars temp = cxXMLReadElementName(reader);
-        info->object = CX_METHOD_FIRE(NULL, this->Make,temp,reader);
+        info->object = CX_METHOD_GET(NULL, this->Make,temp,reader);
         CX_CONTINUE(info->object == NULL);
         //save root
         cxObjectSetRoot(info->object, this);

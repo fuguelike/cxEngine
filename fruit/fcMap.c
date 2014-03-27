@@ -196,13 +196,12 @@ void fcMapRemoveStatics(fcMap this,cxAny sprite)
     cxViewRemoved(m);
 }
 
-static cxInt attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
+static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
 {
     fcAttacker s = sprite;
     fcFruit f = fruit;
     CX_LOGGER("%p attacked %p,attacker = %p",f, s, attacker);
 //    fcSpriteRemoved(s);
-    return 0;
 }
 
 static cxAny attackerMakeFruit(cxAny attacker)

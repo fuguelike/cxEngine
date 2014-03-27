@@ -45,7 +45,7 @@ static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
     currentPos.x += (s * cosf(angle));
     currentPos.y += (s * sinf(angle));
     cxViewSetPos(this->super.view, currentPos);
-    this->super.isExit = CX_METHOD_FIRE(false, this->FollowExit, this);
+    this->super.isExit = CX_METHOD_GET(false, this->FollowExit, this);
 }
 
 cxAny cxFollowTarget(cxAny pav)

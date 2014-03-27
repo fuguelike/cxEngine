@@ -70,7 +70,7 @@ static cxInt fcAttackerFire(cxAny sprite,cxAny fruit,cxAny target)
     //盯住目标
     fcSpriteLookAt(sprite, target);
     //发射
-    return CX_METHOD_FIRE(0, this->Fire, sprite, fruit, target);
+    return CX_METHOD_GET(0, this->Fire, sprite, fruit, target);
 }
 
 static void fcAttackerRun(cxEvent *e)
@@ -89,7 +89,7 @@ static void fcAttackerRun(cxEvent *e)
             continue;
         }
         //创建水果弹药发射
-        cxAny fruit = CX_METHOD_FIRE(NULL, this->MakeFruit, this);
+        cxAny fruit = CX_METHOD_GET(NULL, this->MakeFruit, this);
         if(fruit == NULL){
             continue;
         }

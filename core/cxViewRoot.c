@@ -147,7 +147,7 @@ cxAny cxViewRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
     }else if(ELEMENT_IS_TYPE(cxPolygon)){
         cview = CX_CREATE(cxPolygon);
     }else{
-        cview = CX_METHOD_FIRE(NULL, engine->MakeView,temp,reader);
+        cview = CX_METHOD_GET(NULL, engine->MakeView,temp,reader);
     }
     return cview;
 }
@@ -187,7 +187,7 @@ static void cxViewRootLoadSubviews(cxAny pview,xmlTextReaderPtr reader,cxStack s
         if(type == XML_READER_TYPE_ELEMENT){
             
             cxConstChars temp = cxXMLReadElementName(reader);
-            info->object = CX_METHOD_FIRE(NULL, this->Make,temp,info->reader);
+            info->object = CX_METHOD_GET(NULL, this->Make,temp,info->reader);
             CX_ASSERT(info->object != NULL, "make element failed");
             cxObjectSetRoot(info->object, this);
             

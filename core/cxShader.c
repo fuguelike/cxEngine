@@ -141,15 +141,15 @@ void cxShaderUsing(cxShader this,cxBool isAtlas)
     kmMat4Multiply(&this->kxMatrix, &this->kxMatrixProject, &this->kxMatrixModelView);
     glUniformMatrix4fv(this->uniformMatrixModelviewProject, 1, GL_FALSE, this->kxMatrix.mat);
     glUniform1i(this->uniformAtlasTexture, isAtlas);
-    CX_METHOD_FIRE(NULL, this->Update, this);
+    CX_METHOD_RUN(this->Update, this);
 }
 
 bool cxShaderInit(cxShader this)
 {
     GLint status = 0;
-    cxString vbytes = CX_METHOD_FIRE(NULL, this->GetVertexSource, this);
+    cxString vbytes = CX_METHOD_GET(NULL, this->GetVertexSource, this);
     CX_ASSERT(vbytes != NULL, "get vertex shader source failed");
-    cxString fbytes = CX_METHOD_FIRE(NULL, this->GetFragmentSource, this);
+    cxString fbytes = CX_METHOD_GET(NULL, this->GetFragmentSource, this);
     CX_ASSERT(vbytes != NULL, "get fragment shader source failed");
     if(!cxShaderCompile(this, &this->vertexShader, GL_VERTEX_SHADER, vbytes)){
         return false;
@@ -164,7 +164,7 @@ bool cxShaderInit(cxShader this)
     if(this->fragmentShader){
         glAttachShader(this->program, this->fragmentShader);
     }
-    CX_METHOD_FIRE(NULL, this->Init, this);
+    CX_METHOD_RUN(this->Init, this);
     glLinkProgram(this->program);
     glGetProgramiv(this->program, GL_LINK_STATUS, &status);
     if(status == GL_FALSE){
@@ -175,7 +175,7 @@ bool cxShaderInit(cxShader this)
     cxOpenGLUseProgram(this->program);
     this->uniformMatrixModelviewProject = glGetUniformLocation(this->program, CX_UNIFORM_MATRIX_MODELVIEW_PROJECT);
     this->uniformAtlasTexture = glGetUniformLocation(this->program, CX_UNIFORM_ATLAS_TEXTURE);
-    CX_METHOD_FIRE(NULL, this->GetUniform, this);
+    CX_METHOD_RUN(this->GetUniform, this);
     return true;
 }
 

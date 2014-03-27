@@ -64,7 +64,7 @@ cxBool cxDBOpen(cxAny db,cxString file,cxString table,cxBool rdonly)
     }
     this->ret = db_create(&this->dbptr, env->env, 0);
     CX_RETURN(this->ret != 0,false);
-    this->ret = CX_METHOD_FIRE(this->ret, this->OpenBefore,db);
+    this->ret = CX_METHOD_GET(this->ret, this->OpenBefore,db);
     CX_RETURN(this->ret != 0,false);
     cxDBTxn txn = cxStackTop(env->txn);
     this->ret = this->dbptr->open(this->dbptr,cxDBTXNPtr(txn),cxStringBody(file),cxStringBody(table),this->type,this->flags,0);
@@ -75,7 +75,7 @@ cxBool cxDBOpen(cxAny db,cxString file,cxString table,cxBool rdonly)
     CX_RETURN(this->ret != 0,false);
     CX_RETAIN_SWAP(this->file, file);
     CX_RETAIN_SWAP(this->table, table);
-    return CX_METHOD_FIRE(true, this->OpenAfter,db);
+    return CX_METHOD_GET(true, this->OpenAfter,db);
 }
 
 cxBool cxDBHas(cxAny db,cxString key)

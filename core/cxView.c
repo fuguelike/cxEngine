@@ -882,7 +882,7 @@ cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch)
 cxBool cxViewTouch(cxAny pview,cxTouch *touch)
 {
     cxView this = pview;
-    cxUInt type = CX_METHOD_FIRE(cxViewIsTouchTypeNone, this->IsTouch,this,touch);
+    cxUInt type = CX_METHOD_GET(cxViewIsTouchTypeNone, this->IsTouch,this,touch);
     if(type == cxViewIsTouchTypeNone){
         return false;
     }
@@ -890,7 +890,7 @@ cxBool cxViewTouch(cxAny pview,cxTouch *touch)
         return true;
     }
     if(type & cxViewIsTouchTypeSelf){
-        return CX_METHOD_FIRE(false, this->Touch,this,touch);
+        return CX_METHOD_GET(false, this->Touch,this,touch);
     }
     return false;
 }
@@ -923,7 +923,7 @@ cxUInt cxViewIsOnKey(cxAny pview,cxKey *key)
 cxBool cxViewOnKey(cxAny pview,cxKey *key)
 {
     cxView this = pview;
-    cxUInt type = CX_METHOD_FIRE(cxViewIsTouchTypeNone, this->IsOnKey,this,key);
+    cxUInt type = CX_METHOD_GET(cxViewIsTouchTypeNone, this->IsOnKey,this,key);
     if(type == cxViewIsTouchTypeNone){
         return false;
     }
@@ -931,7 +931,7 @@ cxBool cxViewOnKey(cxAny pview,cxKey *key)
         return true;
     }
     if(type & cxViewIsTouchTypeSelf){
-        return CX_METHOD_FIRE(false, this->OnKey,this , key);
+        return CX_METHOD_GET(false, this->OnKey,this , key);
     }
     return false;
 }
@@ -1010,16 +1010,16 @@ void cxViewDraw(cxAny pview)
     if(this->isSort){
         cxViewSort(this);
     }
-    CX_METHOD_FIRE(NULL, this->Before, this);
+    CX_METHOD_RUN(this->Before, this);
     
-    CX_METHOD_FIRE(NULL, this->Draw, this);
+    CX_METHOD_RUN(this->Draw, this);
     CX_SIGNAL_FIRE(this->onDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
     
     CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    CX_METHOD_FIRE(NULL, this->After,this);
+    CX_METHOD_RUN(this->After,this);
     //
     if(this->isCropping){
         cxOpenGLDisableScissor();
