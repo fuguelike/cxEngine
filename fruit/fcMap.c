@@ -205,6 +205,14 @@ static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
 //    fcSpriteRemoved(s);
 }
 
+static cxBool isAttackMe(cxAny sprite, cxAny fruit,cxAny attacker)
+{
+    fcSprite s = sprite;
+    fcFruit f = fruit;
+    CX_LOGGER("%p will attacked %p,use fruit = %p",attacker, s, f);
+    return true;
+}
+
 static cxAny attackerFruitMaker(cxAny attacker)
 {
     fcAttacker this = attacker;
@@ -215,51 +223,35 @@ CX_OBJECT_INIT(fcMap, cxView)
 {
     this->fights = CX_ALLOC(cxList);
     this->statics = CX_ALLOC(cxList);
-    
-    CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
-    
     cxSize2f size = cxEngineInstance()->winsize;
     cxFloat vw = size.w - 20;
     this->gridSize.w = vw / DM_MAP_WIDTH;
     this->gridSize.h = this->gridSize.w;
     cxViewSetSize(this, cxSize2fv(vw, vw));
     
+    CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
     //
-    {
-        fcAttacker a = fcAttackerCreate(this, cxVec2iv(0, 0), fcAttackerTypeSmallMachine);
-        cxSpriteSetImage(a, "item.xml?red.png");
-        CX_METHOD_OVERRIDE(a->FruitMaker, attackerFruitMaker);
-        a->super.group = fcGroupTypeAttacker;
-        a->attackRange = 8;
-        a->attackNumber = 2;
-        a->attackPower = 5;
-        fcMapAppendFights(this, a);
-        //开始搜索攻击
-        fcAttackerLoop(a);
-    }
-    
-//    {
-//        fcAttacker a = fcAttackerCreate(this, cxVec2iv(5, 5), fcAttackerTypeSmallMachine);
-//        cxSpriteSetImage(a, "item.xml?red.png");
-//        CX_METHOD_OVERRIDE(a->MakeFruit, attackerMakeFruit);
-//        a->super.group = fcGroupTypeAttacker;
-//        a->attackRange = 8;
-//        a->attackNumber = 2;
-//        a->attackPower = 5;
-//        fcMapAppendFights(this, a);
-//        //开始搜索攻击
-//        fcAttackerLoop(a);
-//    }
+    fcAttacker a = fcAttackerCreate(this, cxVec2iv(0, 0), fcAttackerTypeSmallMachine);
+    cxSpriteSetImage(a, "item.xml?red.png");
+    CX_METHOD_OVERRIDE(a->FruitMaker, attackerFruitMaker);
+    a->super.group = fcGroupTypeAttacker;
+    a->attackRange = 8;
+    a->attackNumber = 2;
+    a->attackPower = 5;
+    fcMapAppendFights(this, a);
+    //开始搜索攻击
+    fcAttackerLoop(a);
     
     fcSprite b = CX_CREATE(fcSprite);
     fcSpriteInit(b, this, cxVec2iv(6, 6));
-    CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
     cxSpriteSetImage(b, "item.xml?blue.png");
+    
+    CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
+    CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
+    
     b->group = fcGroupTypeDefenser;
     fcMapAppendFights(this, b);
-    
 
-    
     m = b;
 }
 CX_OBJECT_FREE(fcMap, cxView)

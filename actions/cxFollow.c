@@ -41,11 +41,12 @@ static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f targetPos = cxViewPosition(this->target);
     cxVec2f currentPos = cxViewPosition(this->super.view);
     cxFloat angle = atan2f(targetPos.y - currentPos.y, targetPos.x - currentPos.x);
-    cxFloat s = dt * this->speed;
+    cxFloat speed = CX_METHOD_GET(this->speed, this->Speed,pav,this->super.durationElapsed);
+    cxFloat s = dt * speed;
     currentPos.x += (s * cosf(angle));
     currentPos.y += (s * sinf(angle));
     cxViewSetPos(this->super.view, currentPos);
-    this->super.isExit = CX_METHOD_GET(false, this->FollowExit, this);
+    this->super.isExit = CX_METHOD_GET(false, this->Exit, this);
 }
 
 cxAny cxFollowTarget(cxAny pav)
@@ -58,12 +59,13 @@ CX_OBJECT_INIT(cxFollow, cxAction)
 {
     CX_METHOD_OVERRIDE(this->super.Init, cxFollowInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxFollowStep);
-    CX_METHOD_OVERRIDE(this->FollowExit, cxFollowDefaultExit);
+    CX_METHOD_OVERRIDE(this->Exit, cxFollowDefaultExit);
 }
 CX_OBJECT_FREE(cxFollow, cxAction)
 {
     CX_RELEASE(this->target);
-    CX_METHOD_RELEASE(this->FollowExit);
+    CX_METHOD_RELEASE(this->Exit);
+    CX_METHOD_RELEASE(this->Speed);
 }
 CX_OBJECT_TERM(cxFollow, cxAction)
 

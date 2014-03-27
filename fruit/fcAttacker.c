@@ -107,9 +107,10 @@ static void fcAttackerRun(cxEvent *e)
     }
     //攻击目标
     CX_HASH_FOREACH(this->super.targets, ele, tmp){
+        fcSprite sprite = ele->any;
         //解除范围外的目标
-        if(!fcAttackerInRange(this,ele->any)){
-            fcSpriteUnset(ele->any);
+        if(!fcAttackerInRange(this,sprite)){
+            fcSpriteUnset(sprite);
             continue;
         }
         //创建水果弹药发射
@@ -117,7 +118,12 @@ static void fcAttackerRun(cxEvent *e)
         if(fruit == NULL){
             continue;
         }
-        fcAttackerFire(this, fruit, ele->any);
+        //sprite 是否能被 this 发射的 fruit 攻击
+        cxBool isAttack = CX_METHOD_GET(true, sprite->IsAttack, sprite, fruit, this);
+        if(!isAttack){
+            continue;
+        }
+        fcAttackerFire(this, fruit, sprite);
     }
 }
 

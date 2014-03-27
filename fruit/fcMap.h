@@ -36,10 +36,12 @@ void fcMapSetValue(fcMap this,cxVec2i idx,cxInt value);
 
 cxBool fcMapCheckIdx(cxVec2i idx);
 
+//添加战斗单位
 void fcMapAppendFights(fcMap this,cxAny sprite);
 
 void fcMapRemoveFights(fcMap this,cxAny sprite);
 
+//添加静态单位
 void fcMapAppendStatics(fcMap this,cxAny sprite);
 
 void fcMapRemoveStatics(fcMap this,cxAny sprite);

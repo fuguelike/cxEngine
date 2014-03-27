@@ -32,6 +32,8 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     fcGroupType group;
     //当 sprite 被 fruit 打中，凶手是 attacker
     CX_METHOD_ALLOC(void, Attacked, cxAny sprite, cxAny fruit,cxAny attacker);
+    //sprite 是否能被 attacker 发射的 fruit 攻击
+    CX_METHOD_ALLOC(cxBool, IsAttack,cxAny sprite,cxAny fruit,cxAny attacker);
     //生命
     cxInt life;
 CX_OBJECT_END(fcSprite)

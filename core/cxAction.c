@@ -248,6 +248,7 @@ void cxActionReset(cxAny pav)
 void cxActionResume(cxAny pav)
 {
     cxAction this = pav;
+    this->pauseTime = 0.0f;
     this->isPause = false;
 }
 

@@ -19,7 +19,8 @@ CX_OBJECT_DEF(cxFollow, cxAction)
     cxAny target;
     cxFloat speed;
     cxFloat minDistance;
-    CX_METHOD_ALLOC(cxBool, FollowExit, cxAny);
+    CX_METHOD_ALLOC(cxBool, Exit, cxAny);
+    CX_METHOD_ALLOC(cxFloat, Speed,cxAny,cxFloat);
 CX_OBJECT_END(cxFollow)
 
 cxFollow cxFollowCreate(cxFloat speed,cxAny target);
