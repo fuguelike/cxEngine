@@ -41,7 +41,7 @@ void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,
 
 cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color);
 
-void cxAtlasSetNumber(cxAny pview,cxInt capacity);
+void cxAtlasSetCapacity(cxAny pview,cxInt capacity);
 
 void cxAtlasSetScale9(cxAny pview,cxBox4f box);
 

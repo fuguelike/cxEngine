@@ -33,7 +33,6 @@
 #include <streams/cxFileStream.h>
 #include <streams/cxMemStream.h>
 
-#include <views/cxParticle.h>
 #include <views/cxButton.h>
 #include <views/cxLoading.h>
 #include <views/cxLabelTTF.h>
@@ -42,7 +41,7 @@
 #include <views/cxTable.h>
 #include <views/cxClipping.h>
 
-#include <actions/cxRunParticle.h>
+#include <actions/cxParticle.h>
 #include <actions/cxActionSet.h>
 #include <actions/cxMove.h>
 #include <actions/cxFade.h>

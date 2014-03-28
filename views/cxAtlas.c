@@ -18,7 +18,7 @@ void cxAtlasReadAttr(cxReaderAttrInfo *info)
     if(cxXMLHasAttr(info->reader, "cxAtlas.scale9")){
         this->scale9.enable = true;
         this->scale9.box = cxXMLReadBox4fAttr(info, "cxAtlas.scale9", this->scale9.box);
-        cxAtlasSetNumber(this, 9);
+        cxAtlasSetCapacity(this, 9);
     }
     //
     cxSpriteReadAttr(info);
@@ -207,7 +207,7 @@ void cxAtlasAppend(cxAny pview,cxBoxPoint point)
     cxAtlas this = pview;
     //realloc
     if(this->capacity <= this->number){
-        cxAtlasSetNumber(pview, this->capacity + 8);
+        cxAtlasSetCapacity(pview, this->capacity + 8);
     }
     CX_ASSERT(this->number < this->capacity, "atlas number > boxNumber");
     this->boxes[this->number++] = point;
@@ -271,7 +271,7 @@ void cxAtlasDrawInit(cxAny pview)
     }
 }
 
-void cxAtlasSetNumber(cxAny pview,cxInt capacity)
+void cxAtlasSetCapacity(cxAny pview,cxInt capacity)
 {
     cxAtlas this = pview;
     CX_RETURN(this->capacity >= capacity);

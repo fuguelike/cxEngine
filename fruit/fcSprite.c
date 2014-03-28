@@ -162,6 +162,7 @@ void fcSpriteInit(cxAny sprite,cxAny map)
     fcSprite this = sprite;
     fcMap m = map;
     this->map = m;
+    cxViewSetSize(this, m->gridSize);
 }
 
 cxTimer fcSpriteTimer(cxAny this,cxFloat time)

@@ -11,7 +11,6 @@
 #include <core/cxAutoPool.h>
 #include <views/cxButton.h>
 #include <views/cxAtlas.h>
-#include <views/cxParticle.h>
 #include <views/cxLabelTTF.h>
 #include <views/cxLabelBMP.h>
 #include <views/cxClipping.h>
@@ -130,8 +129,6 @@ cxAny cxViewRootMakeElement(cxConstChars temp,xmlTextReaderPtr reader)
         cview = CX_CREATE(cxButton);
     }else if(ELEMENT_IS_TYPE(cxAtlas)){
         cview = CX_CREATE(cxAtlas);
-    }else if(ELEMENT_IS_TYPE(cxParticle)){
-        cview = CX_CREATE(cxParticle);
     }else if(ELEMENT_IS_TYPE(cxLabelTTF)){
         cview = CX_CREATE(cxLabelTTF);
     }else if(ELEMENT_IS_TYPE(cxLabelBMP)){

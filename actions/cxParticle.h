@@ -1,17 +1,16 @@
 //
-//  cxParticle.h
+//  cxRunParticle.h
 //  cxEngine
-//
-//  Created by xuhua on 10/18/13.
+//  粒子
+//  Created by xuhua on 12/27/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#ifndef cxEngine_cxParticle_h
-#define cxEngine_cxParticle_h
+#ifndef cxEngine_cxRunParticle_h
+#define cxEngine_cxRunParticle_h
 
-#include <core/cxEventArg.h>
-#include <core/cxNumber.h>
-#include "cxAtlas.h"
+#include <core/cxAction.h>
+#include <views/cxAtlas.h>
 
 CX_C_BEGIN
 
@@ -40,32 +39,21 @@ typedef struct {
     cxFloat deltaradius;
 }cxParticleUnit;
 
-typedef struct {
-    cxVec2f position;
-    cxFloat angle;
-    cxFloat speed;
-}cxParticleInitArgs;
-
 typedef enum {
     cxParticleBlendAdd,
     cxParticleBlendMultiply,
 }cxParticleBlendMode;
 
-#define MAX_RATE -1
-
-CX_OBJECT_DEF(cxParticle, cxAtlas)
-    cxBool isError;
-    cxBool autoRemove;
+CX_OBJECT_DEF(cxParticle, cxAction)
+    cxAtlas atlas;
     cxParticleEmitterType type;
     cxInt index;
     cxInt count;
     cxParticleUnit *units;
     cxBool isActive;
     cxFloat emitcounter;
-    cxFloat elapsed;
     cxParticleBlendMode blend;
     cxInt number;
-    cxFloat duration;
     cxFloat rate;
     cxVec2fRange position;
     cxFloatRange life;
@@ -86,37 +74,17 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxFloatRange startradius;
     cxFloatRange endradius;
     cxFloatRange rotatepers;
-    CX_METHOD_ALLOC(void, UpdateBox, cxAny, cxBoxPoint *);
-    CX_METHOD_ALLOC(cxParticleInitArgs, InitArgs,cxAny,cxParticleInitArgs *);
-    CX_EVENT_ALLOC(onUpdate);
+    CX_SLOT_ALLOC(onDraw);
 CX_OBJECT_END(cxParticle)
-
-cxAny cxParticleCreate(cxConstChars texURL,cxInt number);
-
-void cxParticleUpdate(cxAny pview);
 
 void cxParticleSetType(cxAny pview,cxParticleEmitterType type);
 
-void cxParticleSetBlendMode(cxAny pview,cxParticleBlendMode mode);
+void cxParticleInitNumber(cxAny pav,cxInt number);
 
-void cxParticleReadAttr(cxReaderAttrInfo *info);
+void cxParticleSetBlendMode(cxAny pav,cxParticleBlendMode mode);
 
-void cxParticleStop(cxAny pview);
-
-void cxParticleReset(cxAny pview);
-
-void cxParticleInit(cxAny pview,cxInt number);
+cxParticle cxParticleCreate(cxFloat duration,cxConstChars url,cxIndex number);
 
 CX_C_END
 
 #endif
-
-
-
-
-
-
-
-
-
-

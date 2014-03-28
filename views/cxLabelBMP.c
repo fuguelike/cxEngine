@@ -81,7 +81,7 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
     cxSpriteSetTexture(this, texture);
     cxString unicode = cxIconvConvertUTF8ToUTF16(this->txt);
     cxInt number = cxStringLength(unicode) / 2;
-    cxAtlasSetNumber(this, number);
+    cxAtlasSetCapacity(this, number);
     cxAtlasClean(this);
     //get size
     cxSize2f size = cxViewSize(this);

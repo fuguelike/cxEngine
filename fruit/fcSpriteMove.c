@@ -59,12 +59,11 @@ void fcSpriteMoveLoop(cxAny sprite,cxVec2i d)
 {
     fcSprite s = sprite;
     if(fcSpriteFindPath(s, d) && s->path.number > 1){
-        
         fcSpriteMove move = CX_CREATE(fcSpriteMove);
+        cxActionSetId(move, FC_MOVE_ACTION_ID);
         cxFloat speed = fcMapScaleValue(s->map, s->speed);
         cxFollowSetInitSpeed(move, speed);
         cxViewAppendAction(s, move);
-        
         cxVec2f pt = fcSpriteMoveTargetPos(move);
         cxFollowSetVec2f(move, pt);
     }

@@ -127,6 +127,10 @@ cxVec2f fcMapToPos(fcMap this,cxVec2i idx)
     return cxVec2fv(x + this->gridSize.w/2.0f, y + this->gridSize.h/2.0f);
 }
 
+#include <actions/cxParticle.h>
+
+cxAny x;
+
 static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
 {
     fcMap this = pview;
@@ -134,8 +138,20 @@ static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
     if(!cxViewHitTest(this, touch->current, &pos)){
         return false;
     }
-    if(touch->type == cxTouchTypeMove){
+    if(touch->type == cxTouchTypeUp){
+        fcSpriteMoveLoop(x, cxVec2iv(8, 1));
         
+        cxParticle p = cxParticleCreate(-1,"item.xml?texture.png", 100);
+        p->life = cxFloatRangeValue(3, 1);
+        p->startsize = cxFloatRangeValue(70, 50);
+        p->endsize = cxFloatRangeValue(10, 5);
+        p->angle = cxFloatRangeValue(90, 0);
+        p->speed = cxFloatRangeValue(100, 30);
+        p->startcolor = cxColor4fRangeValue(1.0f, 0.3f, 0.0f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f);
+        p->endcolor = cxColor4fRangeValue(1.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        p->rate = 20;
+        cxParticleSetBlendMode(p, cxParticleBlendAdd);
+        cxViewAppendAction(this, p);
     }
     return false;
 }
@@ -295,7 +311,6 @@ CX_OBJECT_INIT(fcMap, cxView)
         fcMapAppendFights(this, b);
         fcSpriteMoveLoop(b, cxVec2iv(8, 8));
     }
-    
     {
         fcSprite b = CX_CREATE(fcSprite);
         fcSpriteInit(b, this);
@@ -307,7 +322,8 @@ CX_OBJECT_INIT(fcMap, cxView)
         b->speed = 1;
         fcSpriteSetGroup(b, fcGroupTypeAttacker);
         fcMapAppendFights(this, b);
-        fcSpriteMoveLoop(b, cxVec2iv(8, 1));
+        
+        x = b;
     }
 }
 CX_OBJECT_FREE(fcMap, cxView)
