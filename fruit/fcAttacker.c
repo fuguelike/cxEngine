@@ -131,8 +131,9 @@ static void fcAttackerRun(cxEvent *e)
     }
 }
 
-void fcAttackerInit(fcAttacker this,cxAny map)
+void fcAttackerInit(fcAttacker this,cxAny map,fcAttackerType type)
 {
+    this->type = type;
     fcSpriteInit(this, map);
 }
 

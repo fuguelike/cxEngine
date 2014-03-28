@@ -30,6 +30,12 @@ cxInt fcSpritePathValue(cxAny this)
     return CX_METHOD_GET(s->type, s->PathValue, s);
 }
 
+void fcSpriteSetGroup(cxAny this,fcGroupType group)
+{
+    fcSprite s = this;
+    s->group = group;
+}
+
 void fcSpriteInitIndex(cxAny this, cxVec2i idx)
 {
     CX_ASSERT(fcMapCheckIdx(idx), "idx error");

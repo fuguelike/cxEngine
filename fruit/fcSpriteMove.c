@@ -40,7 +40,7 @@ static cxBool fcSpriteMoveExit(cxAny pav)
 static void fcSpriteMoveInit(cxAny pav)
 {
     fcSpriteMove this = pav;
-    this->super.minDistance = 5;
+    this->super.minDistance = 3;
 }
 
 CX_OBJECT_INIT(fcSpriteMove, cxFollow)
@@ -59,6 +59,7 @@ void fcSpriteMoveLoop(cxAny sprite,cxVec2i d)
 {
     fcSprite s = sprite;
     if(fcSpriteFindPath(s, d) && s->path.number > 1){
+        
         fcSpriteMove move = CX_CREATE(fcSpriteMove);
         cxFloat speed = fcMapScaleValue(s->map, s->speed);
         cxFollowSetInitSpeed(move, speed);
@@ -66,7 +67,8 @@ void fcSpriteMoveLoop(cxAny sprite,cxVec2i d)
         
         cxVec2f pt = fcSpriteMoveTargetPos(move);
         cxFollowSetVec2f(move, pt);
-    } else {
-        CX_LOGGER("");
     }
 }
+
+
+

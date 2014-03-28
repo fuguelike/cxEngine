@@ -12,6 +12,7 @@
 #include "fcFruit.h"
 #include "fcFollow.h"
 #include "fcSpriteMove.h"
+#include "fcTreasureBox.h"
 
 static void fcPathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
 {
@@ -44,25 +45,25 @@ static void fcPathNodeNeighbors(ASNeighborList neighbors, void *node, void *cont
     //left up
     cxVec2i lu = cxVec2iv(pathNode->x - 1, pathNode->y + 1);
     cxInt luv = fcMapValue(map, lu);
-    if(luv == 0 && (lv == 0 && uv == 0)){
+    if(luv == 0 && lv == 0 && uv == 0){
         ASNeighborListAdd(neighbors, &lu, 1);
     }
     //right up
     cxVec2i ru = cxVec2iv(pathNode->x + 1, pathNode->y + 1);
     cxInt ruv = fcMapValue(map, ru);
-    if(ruv == 0 && (rv == 0 && uv == 0)){
+    if(ruv == 0 && rv == 0 && uv == 0){
         ASNeighborListAdd(neighbors, &ru, 1);
     }
     //left down
     cxVec2i ld = cxVec2iv(pathNode->x - 1, pathNode->y - 1);
     cxInt ldv = fcMapValue(map, ld);
-    if(ldv == 0 && (lv == 0 && dv == 0)){
+    if(ldv == 0 && lv == 0 && dv == 0){
         ASNeighborListAdd(neighbors, &ld, 1);
     }
     //right down
     cxVec2i rd = cxVec2iv(pathNode->x + 1, pathNode->y - 1);
     cxInt rdv = fcMapValue(map, rd);
-    if(rdv == 0 && (rv == 0 && dv == 0)){
+    if(rdv == 0 && rv == 0 && dv == 0){
         ASNeighborListAdd(neighbors, &rd, 1);
     }
 }
@@ -126,8 +127,6 @@ cxVec2f fcMapToPos(fcMap this,cxVec2i idx)
     return cxVec2fv(x + this->gridSize.w/2.0f, y + this->gridSize.h/2.0f);
 }
 
-fcSprite m;
-
 static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
 {
     fcMap this = pview;
@@ -136,37 +135,8 @@ static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
         return false;
     }
     if(touch->type == cxTouchTypeMove){
-        cxViewSetPos(m, pos);
+        
     }
-//    if(touch->type == cxTouchTypeDown){
-//        cxVec2i idx = fcMapToIdx(this, pos);
-//        this->values[idx.x][idx.y] = 1;
-//        fcPath path;
-//        if(!fcMapFindPath(this, &path, cxVec2iv(0, 0), cxVec2iv(9, 9))){
-//            this->values[idx.x][idx.y] = 0;
-//            return false;
-//        }
-//        
-//        fcSprite sp = fcSpriteCreate(this, idx);
-//        cxViewAppend(this, sp);
-//        cxViewAppend(this, sp);
-//        cxObjectSetTag(sp, 1);
-//        cxSpriteSetImage(sp, "item.xml?blue.png");
-//        
-//        CX_LIST_FOREACH_SAFE(this->super.subViews, ele, tmp){
-//            cxInt tag = cxObjectTag(ele->any);
-//            if(tag != 1){
-//                cxViewRemoved(ele->any);
-//            }
-//        }
-//        
-//        for(cxInt i=0; i < path.number; i++){
-//            cxVec2i idx = path.points[i];
-//            fcSprite sp = fcSpriteCreate(this, idx);
-//            cxSpriteSetImage(sp, "item.xml?white.png");
-//            cxViewAppend(this, sp);
-//        }
-//    }
     return false;
 }
 
@@ -245,11 +215,11 @@ CX_OBJECT_INIT(fcMap, cxView)
     //
     {
         fcAttacker a = CX_CREATE(fcAttacker);
-        fcAttackerInit(a, this);
+        fcAttackerInit(a, this, fcAttackerTypeSmallMachine);
         fcSpriteInitIndex(a, cxVec2iv(0, 0));
         cxSpriteSetImage(a, "item.xml?red.png");
+        fcSpriteSetGroup(a, fcGroupTypeDefenser);
         CX_METHOD_OVERRIDE(a->FruitMaker, attackerFruitMaker);
-        a->super.group = fcGroupTypeDefenser;
         a->attackRange = 4;
         a->attackNumber = 2;
         a->attackPower = 5;
@@ -260,11 +230,11 @@ CX_OBJECT_INIT(fcMap, cxView)
     
     {
         fcAttacker a = CX_CREATE(fcAttacker);
-        fcAttackerInit(a, this);
+        fcAttackerInit(a, this, fcAttackerTypeSmallMachine);
         fcSpriteInitIndex(a, cxVec2iv(9, 9));
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, attackerFruitMaker);
-        a->super.group = fcGroupTypeDefenser;
+        fcSpriteSetGroup(a, fcGroupTypeDefenser);
         a->attackRange = 4;
         a->attackNumber = 2;
         a->attackPower = 5;
@@ -275,11 +245,11 @@ CX_OBJECT_INIT(fcMap, cxView)
     
     {
         fcAttacker a = CX_CREATE(fcAttacker);
-        fcAttackerInit(a, this);
+        fcAttackerInit(a, this, fcAttackerTypeSmallMachine);
         fcSpriteInitIndex(a, cxVec2iv(0, 9));
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, attackerFruitMaker);
-        a->super.group = fcGroupTypeDefenser;
+        fcSpriteSetGroup(a, fcGroupTypeDefenser);
         a->attackRange = 4;
         a->attackNumber = 2;
         a->attackPower = 5;
@@ -290,11 +260,11 @@ CX_OBJECT_INIT(fcMap, cxView)
     
     {
         fcAttacker a = CX_CREATE(fcAttacker);
-        fcAttackerInit(a, this);
+        fcAttackerInit(a, this, fcAttackerTypeSmallMachine);
         fcSpriteInitIndex(a, cxVec2iv(9, 0));
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, attackerFruitMaker);
-        a->super.group = fcGroupTypeDefenser;
+        fcSpriteSetGroup(a, fcGroupTypeDefenser);
         a->attackRange = 4;
         a->attackNumber = 2;
         a->attackPower = 5;
@@ -303,20 +273,42 @@ CX_OBJECT_INIT(fcMap, cxView)
         fcAttackerLoop(a);
     }
     
-    fcSprite b = CX_CREATE(fcSprite);
-    fcSpriteInit(b, this);
-    fcSpriteInitIndex(b, cxVec2iv(1, 1));
-    cxSpriteSetImage(b, "item.xml?blue.png");
+    {
+        fcTreasureBox b = CX_CREATE(fcTreasureBox);
+        cxSpriteSetImage(b, "item.xml?white.png");
+        fcTreasureBoxInit(b, this);
+        fcSpriteInitIndex(b, cxVec2iv(2, 2));
+        fcSpriteSetGroup(b, fcGroupTypeDefenser);
+        fcMapAppendFights(this, b);
+    }
     
-    CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
-    CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
-    b->speed = 1;
-    b->group = fcGroupTypeAttacker;
-    fcMapAppendFights(this, b);
+    {
+        fcSprite b = CX_CREATE(fcSprite);
+        fcSpriteInit(b, this);
+        fcSpriteInitIndex(b, cxVec2iv(1, 1));
+        cxSpriteSetImage(b, "item.xml?blue.png");
+        
+        CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
+        CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
+        b->speed = 2;
+        fcSpriteSetGroup(b, fcGroupTypeAttacker);
+        fcMapAppendFights(this, b);
+        fcSpriteMoveLoop(b, cxVec2iv(8, 8));
+    }
     
-    fcSpriteMoveLoop(b, cxVec2iv(8, 8));
-
-    m = b;
+    {
+        fcSprite b = CX_CREATE(fcSprite);
+        fcSpriteInit(b, this);
+        fcSpriteInitIndex(b, cxVec2iv(1, 8));
+        cxSpriteSetImage(b, "item.xml?blue.png");
+        
+        CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
+        CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
+        b->speed = 1;
+        fcSpriteSetGroup(b, fcGroupTypeAttacker);
+        fcMapAppendFights(this, b);
+        fcSpriteMoveLoop(b, cxVec2iv(8, 1));
+    }
 }
 CX_OBJECT_FREE(fcMap, cxView)
 {

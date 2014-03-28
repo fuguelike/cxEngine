@@ -14,10 +14,10 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(fcAttacker, fcSprite)
+    //类型
+    fcAttackerType type;
     //搜索攻击Timer
     cxTimer loopTimer;
-    //攻击类型
-    fcAttackerType attackerType;
     //属性
     cxFloat attackRate;     //攻击频率
     cxFloat attackRange;    //攻击距离
@@ -34,7 +34,7 @@ void fcAttackerPause(cxAny this);
 //继续攻击
 void fcAttackerResume(cxAny this);
 //初始化攻击者
-void fcAttackerInit(fcAttacker this,cxAny map);
+void fcAttackerInit(fcAttacker this,cxAny map,fcAttackerType type);
 //开始搜索攻击
 void fcAttackerLoop(cxAny this);
 CX_C_END

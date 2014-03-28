@@ -40,9 +40,12 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     CX_METHOD_ALLOC(cxInt, PathValue,cxAny sprite);
     //生命
     cxInt life;
-    //速度
+    //移动速度
     cxFloat speed;
 CX_OBJECT_END(fcSprite)
+
+//设置组
+void fcSpriteSetGroup(cxAny this,fcGroupType group);
 
 //寻找通向idx的路径
 cxBool fcSpriteFindPath(cxAny this,cxVec2i idx);
