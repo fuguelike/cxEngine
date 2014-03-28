@@ -44,25 +44,25 @@ static void fcPathNodeNeighbors(ASNeighborList neighbors, void *node, void *cont
     //left up
     cxVec2i lu = cxVec2iv(pathNode->x - 1, pathNode->y + 1);
     cxInt luv = fcMapValue(map, lu);
-    if(luv == 0 && (lv ==0 || uv == 0)){
+    if(luv == 0 && (lv == 0 && uv == 0)){
         ASNeighborListAdd(neighbors, &lu, 1);
     }
     //right up
     cxVec2i ru = cxVec2iv(pathNode->x + 1, pathNode->y + 1);
     cxInt ruv = fcMapValue(map, ru);
-    if(ruv == 0 && (rv ==0 || uv == 0)){
+    if(ruv == 0 && (rv == 0 && uv == 0)){
         ASNeighborListAdd(neighbors, &ru, 1);
     }
     //left down
     cxVec2i ld = cxVec2iv(pathNode->x - 1, pathNode->y - 1);
     cxInt ldv = fcMapValue(map, ld);
-    if(ldv == 0 && (lv ==0 || dv == 0)){
+    if(ldv == 0 && (lv == 0 && dv == 0)){
         ASNeighborListAdd(neighbors, &ld, 1);
     }
     //right down
     cxVec2i rd = cxVec2iv(pathNode->x + 1, pathNode->y - 1);
     cxInt rdv = fcMapValue(map, rd);
-    if(rdv == 0 && (rv ==0 || dv == 0)){
+    if(rdv == 0 && (rv == 0 && dv == 0)){
         ASNeighborListAdd(neighbors, &rd, 1);
     }
 }
