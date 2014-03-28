@@ -59,6 +59,8 @@ static void cxParticleInit(cxAny pav)
 {
     cxParticle this = pav;
     cxView view = cxActionView(pav);
+    view = CX_METHOD_GET(view, this->GetDrawView, this);
+    CX_ASSERT(view != NULL, "draw view must not null");
     CX_SLOT_CONNECT(view->onDraw, this, onDraw, cxActionViewDraw);
 }
 
@@ -73,9 +75,13 @@ static void cxParticleOver(cxAny pav)
 
 static void cxParticleInitUnit(cxParticle this,cxParticleUnit *particle)
 {
-    particle->position = cxVec2fValue(this->position);
-    cxFloat angle = kmDegreesToRadians(cxFloatValue(this->angle));
-    cxFloat speed = cxFloatValue(this->speed);
+    cxParticleArgs args = {0};
+    args.position = cxVec2fValue(this->position);
+    args.angle = kmDegreesToRadians(cxFloatValue(this->angle));
+    args.speed = cxFloatValue(this->speed);
+    CX_METHOD_RUN(this->SetUnitArgs, this, &args);
+    
+    particle->position = args.position;
     particle->life = cxFloatValue(this->life);
     
     cxColor4f startcolor = cxColor4fValue(this->startcolor);
@@ -96,8 +102,8 @@ static void cxParticleInitUnit(cxParticle this,cxParticleUnit *particle)
     particle->deltarotation = (endspin - startspin) / particle->life;
     
     if(this->type == cxParticleEmitterGravity){
-        cxVec2f v = cxVec2fv(cosf(angle), sinf(angle));
-        kmVec2Scale(&particle->dir, &v, speed);
+        cxVec2f v = cxVec2fv(cosf(args.angle), sinf(args.angle));
+        kmVec2Scale(&particle->dir, &v, args.speed);
         particle->radaccel = cxFloatValue(this->radaccel);
         particle->tanaccel = cxFloatValue(this->tanaccel);
         if(this->todir){
@@ -112,7 +118,7 @@ static void cxParticleInitUnit(cxParticle this,cxParticleUnit *particle)
         }else{
             particle->deltaradius = (endradius - startradius) / particle->life;
         }
-        particle->angle = angle;
+        particle->angle = args.angle;
         particle->degreespers = kmDegreesToRadians(cxFloatValue(this->rotatepers));
     }
 }
@@ -337,6 +343,8 @@ CX_OBJECT_FREE(cxParticle, cxAction)
     allocator->free(this->units);
     CX_RELEASE(this->atlas);
     CX_SLOT_RELEASE(this->onDraw);
+    CX_METHOD_RELEASE(this->GetDrawView);
+    CX_METHOD_RELEASE(this->SetUnitArgs);
 }
 CX_OBJECT_TERM(cxParticle, cxAction)
 

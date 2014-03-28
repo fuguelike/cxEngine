@@ -55,6 +55,11 @@ CX_OBJECT_FREE(fcSpriteMove, cxFollow)
 }
 CX_OBJECT_TERM(fcSpriteMove, cxFollow)
 
+cxAny fcSpriteMoveAction(cxAny pview)
+{
+    return cxViewGetAction(pview, FC_MOVE_ACTION_ID);
+}
+
 void fcSpriteMoveLoop(cxAny sprite,cxVec2i d)
 {
     fcSprite s = sprite;

@@ -943,6 +943,13 @@ cxBool cxViewHasAction(cxAny pview,cxUInt actionId)
     return cxHashHas(this->actions, key);
 }
 
+cxAny cxViewGetAction(cxAny pview,cxUInt actionId)
+{
+    cxView this = pview;
+    cxHashKey key = cxHashIntKey(actionId);
+    return cxHashGet(this->actions, key);
+}
+
 void cxViewStopAction(cxAny pview,cxUInt actionId)
 {
     cxView this = pview;

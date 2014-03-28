@@ -131,6 +131,22 @@ cxVec2f fcMapToPos(fcMap this,cxVec2i idx)
 
 cxAny x;
 
+static cxAny fcMapDrawView(cxAny pav)
+{
+    fcSprite view = cxActionView(pav);
+    return view->map;
+}
+
+static void fcMapSetUnitArgs(cxAny pav,cxParticleArgs *args)
+{
+    cxView view = cxActionView(pav);
+    args->position = cxViewPosition(view);
+    cxFollow move = fcSpriteMoveAction(view);
+    if(move != NULL){
+        args->angle = move->angle;
+    }
+}
+
 static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
 {
     fcMap this = pview;
@@ -139,19 +155,22 @@ static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
         return false;
     }
     if(touch->type == cxTouchTypeUp){
+        
         fcSpriteMoveLoop(x, cxVec2iv(8, 1));
         
         cxParticle p = cxParticleCreate(-1,"item.xml?texture.png", 100);
-        p->life = cxFloatRangeValue(3, 1);
+        p->life = cxFloatRangeValue(5, 1);
         p->startsize = cxFloatRangeValue(70, 50);
         p->endsize = cxFloatRangeValue(10, 5);
-        p->angle = cxFloatRangeValue(90, 0);
+        p->angle = cxFloatRangeValue(180, 0);
         p->speed = cxFloatRangeValue(100, 30);
         p->startcolor = cxColor4fRangeValue(1.0f, 0.3f, 0.0f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f);
         p->endcolor = cxColor4fRangeValue(1.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-        p->rate = 20;
+        p->rate = 50;
         cxParticleSetBlendMode(p, cxParticleBlendAdd);
-        cxViewAppendAction(this, p);
+        CX_METHOD_OVERRIDE(p->GetDrawView, fcMapDrawView);
+        CX_METHOD_OVERRIDE(p->SetUnitArgs, fcMapSetUnitArgs);
+        cxViewAppendAction(x, p);
     }
     return false;
 }

@@ -20,6 +20,8 @@ CX_OBJECT_DEF(fcSpriteMove, cxFollow)
     cxInt pointIndex;
 CX_OBJECT_END(fcSpriteMove)
 
+cxAny fcSpriteMoveAction(cxAny pview);
+
 void fcSpriteMoveLoop(cxAny sprite,cxVec2i d);
 
 CX_C_END

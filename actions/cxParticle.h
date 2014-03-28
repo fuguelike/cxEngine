@@ -44,6 +44,12 @@ typedef enum {
     cxParticleBlendMultiply,
 }cxParticleBlendMode;
 
+typedef struct {
+    cxVec2f position;
+    cxFloat angle;
+    cxFloat speed;
+}cxParticleArgs;
+
 CX_OBJECT_DEF(cxParticle, cxAction)
     cxAtlas atlas;
     cxParticleEmitterType type;
@@ -74,6 +80,8 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     cxFloatRange startradius;
     cxFloatRange endradius;
     cxFloatRange rotatepers;
+    CX_METHOD_ALLOC(cxAny, GetDrawView,cxAny);
+    CX_METHOD_ALLOC(void, SetUnitArgs,cxAny,cxParticleArgs *);
     CX_SLOT_ALLOC(onDraw);
 CX_OBJECT_END(cxParticle)
 
