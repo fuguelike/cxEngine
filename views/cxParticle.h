@@ -40,6 +40,12 @@ typedef struct {
     cxFloat deltaradius;
 }cxParticleUnit;
 
+typedef struct {
+    cxVec2f position;
+    cxFloat angle;
+    cxFloat speed;
+}cxParticleInitArgs;
+
 typedef enum {
     cxParticleBlendAdd,
     cxParticleBlendMultiply,
@@ -81,16 +87,13 @@ CX_OBJECT_DEF(cxParticle, cxAtlas)
     cxFloatRange endradius;
     cxFloatRange rotatepers;
     CX_METHOD_ALLOC(void, UpdateBox, cxAny, cxBoxPoint *);
+    CX_METHOD_ALLOC(cxParticleInitArgs, InitArgs,cxAny,cxParticleInitArgs *);
     CX_EVENT_ALLOC(onUpdate);
 CX_OBJECT_END(cxParticle)
 
 cxAny cxParticleCreate(cxConstChars texURL,cxInt number);
 
 void cxParticleUpdate(cxAny pview);
-
-cxParticle cxParticleCreateFromPEX(cxConstChars file);
-
-void cxParticleInitFromPEX(cxAny pview,cxConstChars file);
 
 void cxParticleSetType(cxAny pview,cxParticleEmitterType type);
 

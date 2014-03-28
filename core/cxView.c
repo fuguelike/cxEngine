@@ -1011,14 +1011,12 @@ void cxViewDraw(cxAny pview)
         cxViewSort(this);
     }
     CX_METHOD_RUN(this->Before, this);
-    
     CX_METHOD_RUN(this->Draw, this);
-    CX_SIGNAL_FIRE(this->onDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
-    
     CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
         cxViewDraw(view);
     }
+    CX_SIGNAL_FIRE(this->onDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
     CX_METHOD_RUN(this->After,this);
     //
     if(this->isCropping){

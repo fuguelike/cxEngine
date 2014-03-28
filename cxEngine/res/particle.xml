@@ -11,8 +11,8 @@
         cxParticle.duration = "3.0"
         cxParticle.life = "3.0"
         cxParticle.speed = "200,100"
-        cxParticle.angle = "270,45"
-        cxParticle.gravity = "0,-100"
+        cxParticle.angle = "90,45"
+        cxParticle.gravity = "0,0"
         cxParticle.todir = "true"
         cxParticle.startspin="1500"
         cxParticle.startsize = "105"
@@ -21,7 +21,6 @@
         cxParticle.endcolor="1,1,1,1"
         cxParticle.remove="true"
         cxParticle.rate = "-1" />
-    <cxParticle cxView.fill="0,0,0,0" id="p" cxParticle.pex = "particle.pex" />
     <cxButton cxView.size = "180,120"
         cxView.right="10"
         cxView.bottom="10"

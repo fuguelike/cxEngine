@@ -24,7 +24,7 @@ static void cxActionViewDraw(cxAny pav)
 static void cxRunParticleInit(cxAny pav)
 {
     cxRunParticle this = pav;
-    cxView view = cxActionView(pav);
+    cxView view = (this->drawView != NULL) ? this->drawView : cxActionView(pav);
     cxParticle particle = this->particleView;
     CX_ASSERT(particle != NULL, "particle not set");
     cxParticleReset(particle);
@@ -46,14 +46,7 @@ static void cxRunParticleStep(cxAny pav,cxFloat dt,cxFloat time)
 
 static void cxRunParticleReadAttr(cxReaderAttrInfo *info)
 {
-    cxRunParticle this = info->object;
     cxActionReadAttr(info);
-    cxConstChars pex = cxXMLAttr(info->reader, "cxRunParticle.pex");
-    if(pex != NULL){
-        cxParticle particle = cxParticleCreateFromPEX(pex);
-        CX_RETAIN_SWAP(this->particleView, particle);
-        this->super.duration = particle->duration;
-    }
 }
 
 CX_OBJECT_INIT(cxRunParticle, cxAction)
@@ -65,15 +58,16 @@ CX_OBJECT_INIT(cxRunParticle, cxAction)
 }
 CX_OBJECT_FREE(cxRunParticle, cxAction)
 {
+    CX_RELEASE(this->drawView);
     CX_SLOT_RELEASE(this->onDraw);
     CX_RELEASE(this->particleView);
 }
 CX_OBJECT_TERM(cxRunParticle, cxAction)
 
-cxRunParticle cxRunParticleCreateWithPEX(cxConstChars file)
+void cxRunParticleSetDrawView(cxAny pav,cxAny dv)
 {
-    cxParticle v = cxParticleCreateFromPEX(file);
-    return cxRunParticleCreate(v);
+    cxRunParticle this = pav;
+    CX_RETAIN_SWAP(this->drawView, dv);
 }
 
 cxRunParticle cxRunParticleCreate(cxAny particleView)

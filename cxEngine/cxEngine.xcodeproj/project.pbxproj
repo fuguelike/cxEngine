@@ -61,7 +61,6 @@
 		83BCA3E318DADC93001A66A6 /* n.png in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3B018DADC93001A66A6 /* n.png */; };
 		83BCA3E418DADC93001A66A6 /* normal_locked.png in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3B118DADC93001A66A6 /* normal_locked.png */; };
 		83BCA3E518DADC93001A66A6 /* orange.png in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3B218DADC93001A66A6 /* orange.png */; };
-		83BCA3E618DADC93001A66A6 /* particle.pex in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3B318DADC93001A66A6 /* particle.pex */; };
 		83BCA3E718DADC93001A66A6 /* particle.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3B418DADC93001A66A6 /* particle.xml */; };
 		83BCA3E818DADC93001A66A6 /* pattern1.png in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3B518DADC93001A66A6 /* pattern1.png */; };
 		83BCA3E918DADC93001A66A6 /* polygon.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83BCA3B618DADC93001A66A6 /* polygon.xml */; };
@@ -149,7 +148,6 @@
 		83BCA3B018DADC93001A66A6 /* n.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = n.png; path = res/n.png; sourceTree = SOURCE_ROOT; };
 		83BCA3B118DADC93001A66A6 /* normal_locked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = normal_locked.png; path = res/normal_locked.png; sourceTree = SOURCE_ROOT; };
 		83BCA3B218DADC93001A66A6 /* orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = orange.png; path = res/orange.png; sourceTree = SOURCE_ROOT; };
-		83BCA3B318DADC93001A66A6 /* particle.pex */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = particle.pex; path = res/particle.pex; sourceTree = SOURCE_ROOT; };
 		83BCA3B418DADC93001A66A6 /* particle.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = particle.xml; path = res/particle.xml; sourceTree = SOURCE_ROOT; };
 		83BCA3B518DADC93001A66A6 /* pattern1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pattern1.png; path = res/pattern1.png; sourceTree = SOURCE_ROOT; };
 		83BCA3B618DADC93001A66A6 /* polygon.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = polygon.xml; path = res/polygon.xml; sourceTree = SOURCE_ROOT; };
@@ -294,7 +292,6 @@
 				83BCA3B018DADC93001A66A6 /* n.png */,
 				83BCA3B118DADC93001A66A6 /* normal_locked.png */,
 				83BCA3B218DADC93001A66A6 /* orange.png */,
-				83BCA3B318DADC93001A66A6 /* particle.pex */,
 				83BCA3B418DADC93001A66A6 /* particle.xml */,
 				83BCA3B518DADC93001A66A6 /* pattern1.png */,
 				83BCA3B618DADC93001A66A6 /* polygon.xml */,
@@ -419,7 +416,6 @@
 				83BCA3E918DADC93001A66A6 /* polygon.xml in Resources */,
 				83BCA3CD18DADC93001A66A6 /* atlas.pkm in Resources */,
 				83BCA3E518DADC93001A66A6 /* orange.png in Resources */,
-				83BCA3E618DADC93001A66A6 /* particle.pex in Resources */,
 				83BCA3EE18DADC93001A66A6 /* star.pex in Resources */,
 				83BCA3C718DADC93001A66A6 /* action.xml in Resources */,
 				83BCA3E018DADC93001A66A6 /* main.out in Resources */,

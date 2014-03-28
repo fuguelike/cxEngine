@@ -15,10 +15,11 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxRunParticle, cxAction)
     cxAny particleView;
+    cxAny drawView;
     CX_SLOT_ALLOC(onDraw);
 CX_OBJECT_END(cxRunParticle)
 
-cxRunParticle cxRunParticleCreateWithPEX(cxConstChars file);
+void cxRunParticleSetDrawView(cxAny pav,cxAny dv);
 
 cxRunParticle cxRunParticleCreate(cxAny particleView);
 
