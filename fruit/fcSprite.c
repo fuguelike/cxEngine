@@ -122,7 +122,7 @@ void fcSpriteUnset(cxAny this)
     cxHashClean(s->murderers);
 }
 
-//target 已经在攻击队列中
+//target是否已经在this的攻击队列中
 cxBool fcSpriteHasTarget(cxAny this,cxAny target)
 {
     fcSprite s = this;

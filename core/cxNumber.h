@@ -75,6 +75,8 @@ CX_OBJECT_DEF(cxNumber, cxObject)
     cxNumberType type;
 CX_OBJECT_END(cxNumber)
 
+cxBool cxNumberIsType(cxAny this,cxNumberType type);
+
 cxPoint cxNumberToPoint(cxNumber this);
 
 cxBool cxNumberToBool(cxNumber this);

@@ -110,6 +110,12 @@ void __cxNumberTypeInit()
     CX_LUA_LOAD_TYPE(cxNumber);
 }
 
+cxBool cxNumberIsType(cxAny this,cxNumberType type)
+{
+    cxNumber number = this;
+    return number != NULL && number->type == type;
+}
+
 CX_OBJECT_INIT(cxNumber, cxObject)
 {
     

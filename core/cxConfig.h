@@ -191,11 +191,15 @@ do{                                                             \
     assert(cond);                                               \
 }while(0)
 
+#define CX_ASSERT_FALSE(format,...) CX_ASSERT(false,format,##__VA_ARGS__)
+
 #else
 
 #define CX_LOGGER(format,...)
 
 #define CX_ASSERT(cond,...)
+
+#define CX_ASSERT_FALSE(format,...)
 
 #define CX_ERROR(format,...)         cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
 

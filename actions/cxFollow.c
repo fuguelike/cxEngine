@@ -35,16 +35,29 @@ static void cxFollowInit(cxAny pav)
     this->minDistance = CX_MIN(ts.h, ts.w) / 2.0f + CX_MIN(cs.h, cs.w);
 }
 
+//get target point
+static cxVec2f cxFollowTargetPos(cxFollow this)
+{
+    if(!cxObjectIsType(this->target, cxNumberTypeName)){
+        return cxViewPosition(this->target);
+    }else if(cxNumberIsType(this->target, cxNumberTypeVec2f)){
+        return cxNumberToVec2f(this->target);
+    }else{
+        CX_ASSERT_FALSE("target type error");
+        return cxVec2fv(0, 0);
+    }
+}
+
 static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxFollow this = pav;
-    cxVec2f targetPos = cxViewPosition(this->target);
+    cxVec2f targetPos = cxFollowTargetPos(this);
     cxVec2f currentPos = cxViewPosition(this->super.view);
-    cxFloat angle = atan2f(targetPos.y - currentPos.y, targetPos.x - currentPos.x);
-    cxFloat speed = CX_METHOD_GET(this->speed, this->Speed,pav,this->super.durationElapsed);
-    cxFloat s = dt * speed;
-    currentPos.x += (s * cosf(angle));
-    currentPos.y += (s * sinf(angle));
+    this->angle = cxVec2f2PAngle(targetPos,currentPos);
+    this->speed = CX_METHOD_GET(this->initSpeed, this->Speed,pav,this->super.durationElapsed);
+    cxFloat s = dt * this->speed;
+    currentPos.x += (s * cosf(this->angle));
+    currentPos.y += (s * sinf(this->angle));
     cxViewSetPos(this->super.view, currentPos);
     this->super.isExit = CX_METHOD_GET(false, this->Exit, this);
 }
@@ -69,12 +82,18 @@ CX_OBJECT_FREE(cxFollow, cxAction)
 }
 CX_OBJECT_TERM(cxFollow, cxAction)
 
-cxFollow cxFollowCreate(cxFloat speed,cxAny target)
+void cxFollowSetTarget(cxAny pav,cxAny target)
+{
+    cxFollow this = pav;
+    CX_RETAIN_SWAP(this->target, target);
+}
+
+cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target)
 {
     cxFollow this = CX_CREATE(cxFollow);
     this->super.duration = -1;
-    this->speed = speed;
-    CX_RETAIN_SWAP(this->target, target);
+    this->initSpeed = initSpeed;
+    cxFollowSetTarget(this, target);
     return this;
 }
 

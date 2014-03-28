@@ -17,13 +17,17 @@ typedef cxBool (cxFollowExitFunc)(cxAny pav);
 
 CX_OBJECT_DEF(cxFollow, cxAction)
     cxAny target;
+    cxFloat angle;
     cxFloat speed;
+    cxFloat initSpeed;
     cxFloat minDistance;
     CX_METHOD_ALLOC(cxBool, Exit, cxAny);
     CX_METHOD_ALLOC(cxFloat, Speed,cxAny,cxFloat);
 CX_OBJECT_END(cxFollow)
 
-cxFollow cxFollowCreate(cxFloat speed,cxAny target);
+void cxFollowSetTarget(cxAny pav,cxAny target);
+
+cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target);
 
 cxAny cxFollowTarget(cxAny pav);
 
