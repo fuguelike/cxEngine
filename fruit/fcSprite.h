@@ -40,6 +40,8 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     CX_METHOD_ALLOC(cxInt, PathValue,cxAny sprite);
     //生命
     cxInt life;
+    //速度
+    cxFloat speed;
 CX_OBJECT_END(fcSprite)
 
 //寻找通向idx的路径

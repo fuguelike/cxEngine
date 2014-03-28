@@ -11,8 +11,9 @@
 #include "fcAttacker.h"
 #include "fcFruit.h"
 #include "fcFollow.h"
+#include "fcSpriteMove.h"
 
-static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
+static void fcPathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
 {
     fcMap map = context;
     cxVec2i *pathNode = (cxVec2i *)node;
@@ -66,12 +67,12 @@ static void PathNodeNeighbors(ASNeighborList neighbors, void *node, void *contex
     }
 }
 
-static int PathEarlyExit(size_t visitedCount, void *visitingNode, void *goalNode, void *context)
+static int fcPathEarlyExit(size_t visitedCount, void *visitingNode, void *goalNode, void *context)
 {
     return 0;
 }
 
-static float PathNodeHeuristic(void *fromNode, void *toNode, void *context)
+static float fcPathNodeHeuristic(void *fromNode, void *toNode, void *context)
 {
     cxVec2i *from = (cxVec2i *)fromNode;
     cxVec2i *to = (cxVec2i *)toNode;
@@ -81,9 +82,9 @@ static float PathNodeHeuristic(void *fromNode, void *toNode, void *context)
 static const ASPathNodeSource PathNodeSource =
 {
     sizeof(cxVec2i),
-    &PathNodeNeighbors,
-    &PathNodeHeuristic,
-    &PathEarlyExit,
+    &fcPathNodeNeighbors,
+    &fcPathNodeHeuristic,
+    &fcPathEarlyExit,
     NULL
 };
 
@@ -304,14 +305,16 @@ CX_OBJECT_INIT(fcMap, cxView)
     
     fcSprite b = CX_CREATE(fcSprite);
     fcSpriteInit(b, this);
-    fcSpriteInitIndex(b, cxVec2iv(6, 6));
+    fcSpriteInitIndex(b, cxVec2iv(1, 1));
     cxSpriteSetImage(b, "item.xml?blue.png");
     
     CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
     CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
-    
+    b->speed = 1;
     b->group = fcGroupTypeAttacker;
     fcMapAppendFights(this, b);
+    
+    fcSpriteMoveLoop(b, cxVec2iv(8, 8));
 
     m = b;
 }

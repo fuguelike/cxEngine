@@ -13,8 +13,13 @@ void fcSpriteRemoved(cxAny this)
 {
     fcSprite s = this;
     CX_ASSERT(s->map != NULL, "not join map");
+    fcMap map = s->map;
     //解除所有关系
     fcSpriteUnset(s);
+    //移除二维索引
+    if(fcMapCheckIdx(s->idx)){
+        map->sprites[s->idx.x][s->idx.y] = NULL;
+    }
     //移除地图
     fcMapRemoveFights(s->map, this);
 }
@@ -36,10 +41,11 @@ void fcSpriteInitIndex(cxAny this, cxVec2i idx)
     cxVec2f pos = fcMapToPos(map, idx);
     cxViewSetPos(s, pos);
 }
-
+//搜索将重新确定this的idx坐标
 cxBool fcSpriteFindPath(cxAny this,cxVec2i idx)
 {
     fcSprite s = this;
+    s->idx = fcMapToIdx(s->map, cxViewPosition(s));
     CX_ASSERT(fcMapCheckIdx(s->idx), "must first fcSpriteInitIndex");
     return fcMapFindPath(s->map, &s->path, s->idx, idx);
 }

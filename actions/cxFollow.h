@@ -25,6 +25,14 @@ CX_OBJECT_DEF(cxFollow, cxAction)
     CX_METHOD_ALLOC(cxFloat, Speed,cxAny,cxFloat);
 CX_OBJECT_END(cxFollow)
 
+void cxFollowInit(cxAny pav);
+
+void cxFollowSetInitSpeed(cxAny pav,cxFloat speed);
+
+cxBool cxFollowDefaultExit(cxAny pav);
+
+void cxFollowSetVec2f(cxAny pav,cxVec2f pt);
+
 void cxFollowSetTarget(cxAny pav,cxAny target);
 
 cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target);

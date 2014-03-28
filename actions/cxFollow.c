@@ -13,7 +13,7 @@ void __cxFollowTypeInit()
     
 }
 
-static cxBool cxFollowDefaultExit(cxAny pav)
+cxBool cxFollowDefaultExit(cxAny pav)
 {
     cxFollow this = pav;
     cxVec2f tp = cxViewPosition(this->target);
@@ -25,7 +25,7 @@ static cxBool cxFollowDefaultExit(cxAny pav)
     return false;
 }
 
-static void cxFollowInit(cxAny pav)
+void cxFollowInit(cxAny pav)
 {
     cxFollow this = pav;
     CX_ASSERT(this->super.view != NULL, "view not set");
@@ -70,6 +70,7 @@ cxAny cxFollowTarget(cxAny pav)
 
 CX_OBJECT_INIT(cxFollow, cxAction)
 {
+    this->super.duration = -1;
     CX_METHOD_OVERRIDE(this->super.Init, cxFollowInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxFollowStep);
     CX_METHOD_OVERRIDE(this->Exit, cxFollowDefaultExit);
@@ -82,6 +83,18 @@ CX_OBJECT_FREE(cxFollow, cxAction)
 }
 CX_OBJECT_TERM(cxFollow, cxAction)
 
+void cxFollowSetInitSpeed(cxAny pav,cxFloat speed)
+{
+    cxFollow this = pav;
+    this->initSpeed = speed;
+}
+
+void cxFollowSetVec2f(cxAny pav,cxVec2f pt)
+{
+    cxNumber num = cxNumberVec2f(pt);
+    cxFollowSetTarget(pav, num);
+}
+
 void cxFollowSetTarget(cxAny pav,cxAny target)
 {
     cxFollow this = pav;
@@ -91,7 +104,6 @@ void cxFollowSetTarget(cxAny pav,cxAny target)
 cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target)
 {
     cxFollow this = CX_CREATE(cxFollow);
-    this->super.duration = -1;
     this->initSpeed = initSpeed;
     cxFollowSetTarget(this, target);
     return this;

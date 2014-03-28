@@ -20,6 +20,7 @@
 		83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6718D9C5D00093FF54 /* libpng.a */; };
 		83314F7118D9C5D80093FF54 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A0182280E70045A66F /* libxml2.dylib */; };
 		83314F7318D9C6530093FF54 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 83314F7218D9C6530093FF54 /* main.c */; };
+		833C6A3518E5247B001DC1C4 /* fcSpriteMove.c in Sources */ = {isa = PBXBuildFile; fileRef = 833C6A3318E5247B001DC1C4 /* fcSpriteMove.c */; };
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
 		8341C69F182280E20045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69E182280E20045A66F /* libz.dylib */; };
 		8341C6A3182280ED0045A66F /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A2182280ED0045A66F /* libiconv.dylib */; };
@@ -66,6 +67,8 @@
 		83314F6618D9C5D00093FF54 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = ../libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		83314F6718D9C5D00093FF54 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../libs/ios/lib/libpng.a; sourceTree = "<group>"; };
 		83314F7218D9C6530093FF54 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = SOURCE_ROOT; };
+		833C6A3318E5247B001DC1C4 /* fcSpriteMove.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcSpriteMove.c; sourceTree = SOURCE_ROOT; };
+		833C6A3418E5247B001DC1C4 /* fcSpriteMove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcSpriteMove.h; sourceTree = SOURCE_ROOT; };
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8341C69E182280E20045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8341C6A0182280E70045A66F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
@@ -207,6 +210,8 @@
 				83F88D8C18E1B73C00B778EE /* fcAttacker.h */,
 				836895A418E2EC2B0084EFFD /* fcFruit.c */,
 				836895A518E2EC2B0084EFFD /* fcFruit.h */,
+				833C6A3318E5247B001DC1C4 /* fcSpriteMove.c */,
+				833C6A3418E5247B001DC1C4 /* fcSpriteMove.h */,
 				836895A818E300F70084EFFD /* fcFollow.c */,
 				836895A918E300F70084EFFD /* fcFollow.h */,
 			);
@@ -318,6 +323,7 @@
 				836895A618E2EC2B0084EFFD /* fcFruit.c in Sources */,
 				8384A34018DAD2E200D967B9 /* fcMap.c in Sources */,
 				8363089318DE8D5E009B5357 /* fcDefine.c in Sources */,
+				833C6A3518E5247B001DC1C4 /* fcSpriteMove.c in Sources */,
 				836895AA18E300F70084EFFD /* fcFollow.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

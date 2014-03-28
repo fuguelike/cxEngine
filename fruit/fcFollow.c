@@ -16,7 +16,7 @@ static void fcFollowStop(cxEvent *e)
     cxAny attacker = cxEventArgToWeakRef(e->args);
     fcFollow fruit = cxActionView(e->sender);
     fcSprite sprite = cxFollowTarget(e->sender);
-    //目标被攻击了
+    //sprite 被 fruit 击中，凶手是attacker
     CX_METHOD_RUN(sprite->Attacked, sprite, fruit, attacker);
     //移除水果导弹
     fcFruitRemoved(fruit);

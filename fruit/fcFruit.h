@@ -21,7 +21,7 @@ CX_OBJECT_DEF(fcFruit, cxSprite)
     cxFloat speed;
     //攻击力
     cxFloat attackPower;
-    //当碰到时
+    //开火
     CX_METHOD_ALLOC(void, Fire, cxAny fruit, cxAny attacker,cxAny target);
 CX_OBJECT_END(fcFruit)
 

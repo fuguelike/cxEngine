@@ -230,7 +230,7 @@ typedef kmVec2 cxVec2f;
 #define cxVec2fEqu(p1,p2)       (cxFloatEqu((p1).x,(p2).x) && cxFloatEqu((p1).y,(p2).y))
 #define cxVec2fAngle(a)         atan2f((a).y, (a).x)
 #define cxVec2fMagnitude(a)     sqrtf((a).x*(a).x + (a).y*(a).y)
-#define cxVec2f2PAngle(p1,p2)   atan2f((p2).y - (p1).y, (p2).x - (p1).x)
+#define cxVec2f2PAngle(p1,p2)   atan2f((p1).y - (p2).y, (p1).x - (p2).x)
 
 typedef kmVec3 cxVec3f;
 #define cxVec3fv(x,y,z)         (cxVec3f){x,y,z}
