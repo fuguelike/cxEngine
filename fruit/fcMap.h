@@ -18,6 +18,7 @@ CX_OBJECT_DEF(fcMap, cxView)
     cxSize2f gridSize;
     cxAny sprites[DM_MAP_WIDTH][DM_MAP_HEIGHT];
     cxList fights;//可加入战斗的单位，包括被打的和打别人的
+    cxList props;//道具列表
 CX_OBJECT_END(fcMap)
 
 //获取实际的像素
@@ -39,6 +40,11 @@ cxBool fcMapCheckIdx(cxVec2i idx);
 void fcMapAppendFights(fcMap this,cxAny sprite);
 
 void fcMapRemoveFights(fcMap this,cxAny sprite);
+
+//添加道具
+void fcMapAppendProps(fcMap this,cxAny sprite);
+
+void fcMapRemoveProps(fcMap this,cxAny sprite);
 
 CX_C_END
 

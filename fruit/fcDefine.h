@@ -32,17 +32,19 @@ typedef enum {
     fcSpriteTypeNone = 0,       //你什么都不是
     fcSpriteTypeDecoration,     //装饰物,例如地面，道路，花花草草
     fcSpriteTypeContainer,      //容器，例如水果仓库，水果篮子,宝箱
-    fcSpriteTypeAttacker,       //攻击物，例如12生效宠物,投射机
+    fcSpriteTypeIntruder,       //闯关者,例如12生效宠物
+    fcSpriteTypeThrower,        //投掷机,例如水果投射机
     fcSpriteTypeProducer,       //生成者，例如果树,神树
+    fcSpriteTypeProperty,       //道具
 }fcSpriteType;
 
 typedef enum {
-    fcAttackerTypeNone = 0,
-    fcAttackerTypeSmallMachine,     //投射机 - 小型
-    fcAttackerTypeNormalMachine,    //投射机 - 中型
-    fcAttackerTypeBigMachine,       //投射机 - 大型
-    fcAttackerTypeSuperMachine,     //投射机 - 重型
-}fcAttackerType;
+    fcThrowerTypeNone = 0,
+    fcThrowerTypeSmallMachine,     //投射机 - 小型
+    fcThrowerTypeNormalMachine,    //投射机 - 中型
+    fcThrowerTypeBigMachine,       //投射机 - 大型
+    fcThrowerTypeSuperMachine,     //投射机 - 重型
+}fcThrowerType;
 
 typedef enum {
     fcFruitTypeNone = 0,

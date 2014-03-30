@@ -1,5 +1,5 @@
 //
-//  fcAttacker.c
+//  fcThrower.c
 //  fruit
 //
 //  Created by xuhua on 3/25/14.
@@ -7,63 +7,39 @@
 //
 
 #include <actions/cxFollow.h>
-#include "fcAttacker.h"
+#include "fcThrower.h"
 #include "fcMap.h"
 #include "fcFollow.h"
 
 //target 是否在攻击范围内
-static cxBool fcAttackerInRange(cxAny this,cxAny target)
+static cxBool fcThrowerInRange(cxAny this,cxAny target)
 {
     if(this == target){
         return false;
     }
-    fcAttacker s = this;
+    fcThrower s = this;
     fcSprite t = target;
     cxFloat r = fcMapScaleValue(s->super.map, s->attackRange);
     cxFloat d = fcSpriteDistance(s, t);
     return d <= r;
 }
 
-void fcAttackerPauseTime(cxAny this,cxFloat time)
+CX_OBJECT_INIT(fcThrower, fcSprite)
 {
-    fcAttacker a = this;
-    if(a->loopTimer != NULL){
-        cxActionSetPauseTime(a->loopTimer, time);
-    }
-}
-
-void fcAttackerPause(cxAny this)
-{
-    fcAttacker a = this;
-    if(a->loopTimer != NULL){
-        cxActionPause(a->loopTimer);
-    }
-}
-
-void fcAttackerResume(cxAny this)
-{
-    fcAttacker a = this;
-    if(a->loopTimer != NULL){
-        cxActionResume(a->loopTimer);
-    }
-}
-
-CX_OBJECT_INIT(fcAttacker, fcSprite)
-{
-    this->super.type = fcSpriteTypeAttacker;
+    this->super.type = fcSpriteTypeThrower;
     this->attackRange = 0;
     this->attackRate = 0.5f;
     this->attackPower = 0;
 }
-CX_OBJECT_FREE(fcAttacker, fcSprite)
+CX_OBJECT_FREE(fcThrower, fcSprite)
 {
     CX_METHOD_RELEASE(this->FruitFire);
     CX_METHOD_RELEASE(this->FruitMaker);
 }
-CX_OBJECT_TERM(fcAttacker, fcSprite)
+CX_OBJECT_TERM(fcThrower, fcSprite)
 
 //搜索敌人开始
-static void fcAttackerSearchTarget(fcAttacker this)
+static void fcThrowerSearchTarget(fcThrower this)
 {
     fcMap map = this->super.map;
     CX_LIST_FOREACH(map->fights, ele){
@@ -77,7 +53,7 @@ static void fcAttackerSearchTarget(fcAttacker this)
             continue;
         }
         //不在攻击范围内
-        if(!fcAttackerInRange(this, target)){
+        if(!fcThrowerInRange(this, target)){
             continue;
         }
         fcSpriteTarget(this, target);
@@ -88,32 +64,32 @@ static void fcAttackerSearchTarget(fcAttacker this)
     }
 }
 
-//sprite 使用  fruit 攻击 target
-static void fcAttackerFire(cxAny sprite, cxAny fruit,cxAny target)
+//sprite 使用  fruit 投掷 target
+static void fcThrowerFire(cxAny sprite, cxAny fruit,cxAny target)
 {
-    fcAttacker a = sprite;
+    fcThrower a = sprite;
     fcFruit this = fruit;
     //盯住目标
     fcSpriteLookAt(a, target);
-    //发射
+    //投掷水果
     CX_METHOD_RUN(this->Fire, this, a, target);
     //
     CX_METHOD_RUN(a->FruitFire, a, fruit, target);
 }
 
-static void fcAttackerRun(cxEvent *e)
+static void fcThrowerRun(cxEvent *e)
 {
-    fcAttacker this = cxActionView(e->sender);
+    fcThrower this = cxActionView(e->sender);
     cxIndex targetNum = fcSpriteTargetNumber(this);
     //没有目标就搜索范围内的目标
     if(targetNum < this->attackNumber){
-        fcAttackerSearchTarget(this);
+        fcThrowerSearchTarget(this);
     }
     //攻击目标
     CX_HASH_FOREACH(this->super.targets, ele, tmp){
         fcSprite sprite = ele->any;
         //解除范围外的目标
-        if(!fcAttackerInRange(this,sprite)){
+        if(!fcThrowerInRange(this,sprite)){
             fcSpriteUnset(sprite);
             continue;
         }
@@ -122,28 +98,30 @@ static void fcAttackerRun(cxEvent *e)
         if(fruit == NULL){
             continue;
         }
-        //sprite 是否能被 this 发射的 fruit 攻击
-        cxBool isAttack = CX_METHOD_GET(true, sprite->IsAttack, sprite, fruit, this);
-        if(!isAttack){
+        //sprite 是否能被 this 投掷的 fruit 攻击
+        if(!CX_METHOD_GET(true, sprite->IsAttack, sprite, fruit, this)){
             continue;
         }
-        fcAttackerFire(this, fruit, sprite);
+        fcThrowerFire(this, fruit, sprite);
     }
 }
 
-void fcAttackerInit(fcAttacker this,cxAny map,fcAttackerType type)
+void fcThrowerInit(cxAny this,cxAny map,fcThrowerType type)
 {
-    this->type = type;
+    fcThrower t = this;
+    t->type = type;
     fcSpriteInit(this, map);
 }
 
-void fcAttackerLoop(cxAny this)
+void fcThrowerLoop(cxAny this)
 {
-    fcAttacker a = this;
+    fcThrower a = this;
     CX_ASSERT(a->attackNumber > 0, "can attack when attack number > 0");
     CX_ASSERT(a->attackRate > 0, "can attack when attack rate > 0");
     CX_ASSERT(a->attackPower > 0, "can attack when attack power > 0");
     CX_ASSERT(a->attackRange > 0, "can attack when attack range > 0");
-    a->loopTimer = fcSpriteTimer(this, a->attackRate);
-    CX_EVENT_APPEND(a->loopTimer->onArrive, fcAttackerRun, NULL);
+    fcSpriteStartAITimer(a, fcThrowerRun, a->attackRate);
 }
+
+
+

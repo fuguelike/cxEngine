@@ -10,6 +10,16 @@
 #include "fcMap.h"
 #include "fcSprite.h"
 #include "fcFollow.h"
+#include "fcThrower.h"
+
+cxAny fcFollowMaker(cxAny thrower)
+{
+    fcThrower this = thrower;
+    fcFollow follow = CX_CREATE(fcFollow);
+    fcFollowInit(follow, this->super.map, 6);
+    cxSpriteSetImage(follow, "item.xml?fire.png");
+    return follow;
+}
 
 static void fcFollowStop(cxEvent *e)
 {

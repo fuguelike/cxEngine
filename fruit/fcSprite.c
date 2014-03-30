@@ -9,6 +9,37 @@
 #include "fcMap.h"
 #include "fcSprite.h"
 
+void fcSpriteStartAITimer(cxAny this,cxEventFunc aiFunc,cxFloat interval)
+{
+    fcSprite a = this;
+    a->aiTimer = cxViewAppendTimer(this, interval, -1);
+    CX_EVENT_APPEND(a->aiTimer->onArrive, aiFunc, cxEventArgWeakRef(a));
+}
+
+void fcSpritePauseTime(cxAny this,cxFloat time)
+{
+    fcSprite a = this;
+    if(a->aiTimer != NULL){
+        cxActionSetPauseTime(a->aiTimer, time);
+    }
+}
+
+void fcSpritePause(cxAny this)
+{
+    fcSprite a = this;
+    if(a->aiTimer != NULL){
+        cxActionPause(a->aiTimer);
+    }
+}
+
+void fcSpriteResume(cxAny this)
+{
+    fcSprite a = this;
+    if(a->aiTimer != NULL){
+        cxActionResume(a->aiTimer);
+    }
+}
+
 void fcSpriteRemoved(cxAny this)
 {
     fcSprite s = this;
@@ -27,6 +58,18 @@ void fcSpriteRemoved(cxAny this)
 cxInt fcSpritePathValue(cxAny this)
 {
     fcSprite s = this;
+    //道具不阻碍寻路
+    if(s->type == fcSpriteTypeProperty){
+        return 0;
+    }
+    //装饰不阻碍寻路
+    if(s->type == fcSpriteTypeDecoration){
+        return 0;
+    }
+    //闯关者不阻碍寻路
+    if(s->type == fcSpriteTypeIntruder){
+        return 0;
+    }
     return CX_METHOD_GET(s->type, s->PathValue, s);
 }
 

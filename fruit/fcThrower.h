@@ -1,23 +1,21 @@
 //
-//  fcAttacker.h
+//  fcThrower.h
 //  cxEngine
-//
+//  水果发射机
 //  Created by xuhua on 3/25/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
-#ifndef fruit_fcAttacker_h
-#define fruit_fcAttacker_h
+#ifndef fruit_fcThrower_h
+#define fruit_fcThrower_h
 
 #include "fcSprite.h"
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(fcAttacker, fcSprite)
+CX_OBJECT_DEF(fcThrower, fcSprite)
     //类型
-    fcAttackerType type;
-    //搜索攻击Timer
-    cxTimer loopTimer;
+    fcThrowerType type;
     //属性
     cxFloat attackRate;     //攻击频率
     cxFloat attackRange;    //攻击距离
@@ -26,17 +24,11 @@ CX_OBJECT_DEF(fcAttacker, fcSprite)
     //水果创建者
     CX_METHOD_ALLOC(cxAny, FruitMaker,cxAny this);
     CX_METHOD_ALLOC(void, FruitFire,cxAny this,cxAny fruit,cxAny target);
-CX_OBJECT_END(fcAttacker)
-//暂停一段时间
-void fcAttackerPauseTime(cxAny this,cxFloat time);
-//暂停攻击
-void fcAttackerPause(cxAny this);
-//继续攻击
-void fcAttackerResume(cxAny this);
-//初始化攻击者
-void fcAttackerInit(fcAttacker this,cxAny map,fcAttackerType type);
-//开始搜索攻击
-void fcAttackerLoop(cxAny this);
+CX_OBJECT_END(fcThrower)
+//初始化投掷器
+void fcThrowerInit(cxAny this,cxAny map,fcThrowerType type);
+//开始搜索投掷
+void fcThrowerLoop(cxAny this);
 CX_C_END
 
 #endif

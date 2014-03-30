@@ -16,6 +16,8 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(fcSprite, cxSprite)
+    //
+    cxTimer aiTimer;
     //map list element,移除后设置为NULL
     cxListElement *element;
     //地图指针
@@ -43,6 +45,17 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     //移动速度
     cxFloat speed;
 CX_OBJECT_END(fcSprite)
+
+void fcSpriteStartAITimer(cxAny this,cxEventFunc aiFunc,cxFloat interval);
+
+//暂停一段ai
+void fcSpritePauseTime(cxAny this,cxFloat time);
+
+//暂停ai
+void fcSpritePause(cxAny this);
+
+//恢复ai
+void fcSpriteResume(cxAny this);
 
 //设置组
 void fcSpriteSetGroup(cxAny this,fcGroupType group);

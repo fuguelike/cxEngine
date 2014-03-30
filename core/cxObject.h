@@ -154,7 +154,7 @@ extern lua_State *gL;
 
 #define CX_METHOD_RELEASE(_m_)          _m_ = NULL
 
-#define CX_METHOD_GET(_d_,_m_,...)      ((_m_) != NULL)?((_m_)(__VA_ARGS__)):(_d_)
+#define CX_METHOD_GET(_d_,_m_,...)      (((_m_) != NULL)?((_m_)(__VA_ARGS__)):(_d_))
 
 #define CX_METHOD_RUN(_m_,...)          if((_m_) != NULL)(_m_)(__VA_ARGS__)
 
