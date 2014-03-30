@@ -13,6 +13,7 @@
 #include "fcFollow.h"
 #include "fcSpriteMove.h"
 #include "fcTreasureBox.h"
+#include "fcSpeedUp.h"
 #include "fcIntruder.h"
 
 static void fcPathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
@@ -356,13 +357,20 @@ CX_OBJECT_INIT(fcMap, cxView)
         b->speed = 2;
         fcMapAppendIntruder(this, b);
         fcSpriteMoveLoop(b, cxVec2iv(8, 8));
+        fcIntruderLoop(b);
+    }
+    {
+        fcSpeedUp su = CX_CREATE(fcSpeedUp);
+        cxSpriteSetImage(su, "item.xml?yellow.png");
+        fcSpriteInit(su, this);
+        fcSpriteInitIndex(su, cxVec2iv(8,8));
+        fcMapAppendProps(this, su);
     }
     {
         fcIntruder b = CX_CREATE(fcIntruder);
-        fcIntruderInit(b, this);
+        fcIntruderInit(b, this, 0);
         fcSpriteInitIndex(b, cxVec2iv(1, 8));
         cxSpriteSetImage(b, "item.xml?blue.png");
-        
         CX_METHOD_OVERRIDE(b->super.IsAttack, isAttackMe);
         CX_METHOD_OVERRIDE(b->super.Attacked, attackedTest);
         b->super.speed = 1;

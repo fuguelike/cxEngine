@@ -100,6 +100,7 @@ CX_OBJECT_INIT(fcSprite, cxSprite)
 }
 CX_OBJECT_FREE(fcSprite, cxSprite)
 {
+    CX_METHOD_RELEASE(this->Collide);
     CX_METHOD_RELEASE(this->PathValue);
     CX_METHOD_RELEASE(this->Attacked);
     CX_RELEASE(this->targets);

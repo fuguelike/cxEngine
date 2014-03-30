@@ -32,7 +32,7 @@ void cxFollowInit(cxAny pav)
     CX_ASSERT(this->target != NULL, "target view null");
     cxSize2f ts = cxViewSize(this->target);
     cxSize2f cs = cxViewSize(this->super.view);
-    this->minDistance = CX_MIN(ts.h, ts.w) / 2.0f + CX_MIN(cs.h, cs.w);
+    this->minDistance = CX_MIN(ts.h, ts.w)/2.0f + CX_MIN(cs.h, cs.w)/2.0f;
 }
 
 //get target point

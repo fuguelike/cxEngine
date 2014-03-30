@@ -41,6 +41,10 @@ typedef enum {
 }fcThrowerType;
 
 typedef enum {
+    fcIntruderTypeNone = 0,
+}fcIntruderType;
+
+typedef enum {
     fcFruitTypeNone = 0,
     fcFruitTypeFollow,      //跟踪水果
     fcFruitTypePierce,      //穿透水果

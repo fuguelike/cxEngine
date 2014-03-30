@@ -14,9 +14,13 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(fcIntruder, fcSprite)
+    fcIntruderType type;
+    cxFloat rate;//检测频率
 CX_OBJECT_END(fcIntruder)
 
-void fcIntruderInit(cxAny this,cxAny map);
+void fcIntruderInit(cxAny this,cxAny map,fcIntruderType type);
+
+void fcIntruderLoop(cxAny this);
 
 CX_C_END
 

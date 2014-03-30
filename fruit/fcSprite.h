@@ -32,12 +32,14 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     cxHash targets;
     //盯住我的凶手,当攻击目标时记得把目标的murderers加上自己
     cxHash murderers;
-    //当 sprite 被 fruit 打中，凶手是 attacker
-    CX_METHOD_ALLOC(void, Attacked, cxAny sprite, cxAny fruit,cxAny attacker);
-    //sprite 是否能被 attacker 发射的 fruit 攻击
-    CX_METHOD_ALLOC(cxBool, IsAttack,cxAny sprite,cxAny fruit,cxAny attacker);
+    //当 sprite 被 fruit 打中，凶手是 thrower
+    CX_METHOD_ALLOC(void, Attacked, cxAny sprite, cxAny fruit, cxAny thrower);
+    //sprite 是否能被 thrower 发射的 fruit 攻击
+    CX_METHOD_ALLOC(cxBool, IsAttack, cxAny sprite, cxAny fruit, cxAny thrower);
     //获取参与路径计算的值
-    CX_METHOD_ALLOC(cxInt, PathValue,cxAny sprite);
+    CX_METHOD_ALLOC(cxInt, PathValue, cxAny sprite);
+    //当sprite 被 taget 撞到时,例如sprite撞到道具
+    CX_METHOD_ALLOC(void, Collide, cxAny sprite, cxAny target);
     //生命
     cxInt life;
     //移动速度
