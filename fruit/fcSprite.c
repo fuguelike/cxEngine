@@ -40,21 +40,6 @@ void fcSpriteResume(cxAny this)
     }
 }
 
-void fcSpriteRemoved(cxAny this)
-{
-    fcSprite s = this;
-    CX_ASSERT(s->map != NULL, "not join map");
-    fcMap map = s->map;
-    //解除所有关系
-    fcSpriteUnset(s);
-    //移除二维索引
-    if(fcMapCheckIdx(s->idx)){
-        map->sprites[s->idx.x][s->idx.y] = NULL;
-    }
-    //移除地图
-    fcMapRemoveFights(s->map, this);
-}
-
 cxInt fcSpritePathValue(cxAny this)
 {
     fcSprite s = this;
@@ -71,12 +56,6 @@ cxInt fcSpritePathValue(cxAny this)
         return 0;
     }
     return CX_METHOD_GET(s->type, s->PathValue, s);
-}
-
-void fcSpriteSetGroup(cxAny this,fcGroupType group)
-{
-    fcSprite s = this;
-    s->group = group;
 }
 
 void fcSpriteInitIndex(cxAny this, cxVec2i idx)

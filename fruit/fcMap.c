@@ -212,26 +212,43 @@ void fcMapRemoveProps(fcMap this,cxAny sprite)
     fcSprite m = sprite;
     if(m->element != NULL){
         cxListRemove(this->props, m->element);
+        cxViewRemoved(m);
         m->element = NULL;
     }
-    cxViewRemoved(m);
 }
 
-void fcMapAppendFights(fcMap this,cxAny sprite)
+void fcMapAppendIntruder(fcMap this,cxAny sprite)
 {
     fcSprite m = sprite;
-    m->element = cxListAppend(this->fights, sprite);
+    m->element = cxListAppend(this->intruder, sprite);
     cxViewAppend(this, sprite);
 }
 
-void fcMapRemoveFights(fcMap this,cxAny sprite)
+void fcMapRemoveIntruder(fcMap this,cxAny sprite)
 {
     fcSprite m = sprite;
     if(m->element != NULL){
-        cxListRemove(this->fights, m->element);
+        cxListRemove(this->intruder, m->element);
+        cxViewRemoved(m);
         m->element = NULL;
     }
-    cxViewRemoved(m);
+}
+
+void fcMapAppendDefenser(fcMap this,cxAny sprite)
+{
+    fcSprite m = sprite;
+    m->element = cxListAppend(this->defenser, sprite);
+    cxViewAppend(this, sprite);
+}
+
+void fcMapRemoveDefenser(fcMap this,cxAny sprite)
+{
+    fcSprite m = sprite;
+    if(m->element != NULL){
+        cxListRemove(this->defenser, m->element);
+        cxViewRemoved(m);
+        m->element = NULL;
+    }
 }
 
 static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
@@ -253,7 +270,8 @@ static cxBool isAttackMe(cxAny sprite, cxAny fruit,cxAny attacker)
 
 CX_OBJECT_INIT(fcMap, cxView)
 {
-    this->fights = CX_ALLOC(cxList);
+    this->intruder = CX_ALLOC(cxList);
+    this->defenser = CX_ALLOC(cxList);
     this->props = CX_ALLOC(cxList);
     cxSize2f size = cxEngineInstance()->winsize;
     cxFloat vw = size.w - 20;
@@ -268,12 +286,11 @@ CX_OBJECT_INIT(fcMap, cxView)
         fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
         fcSpriteInitIndex(a, cxVec2iv(0, 0));
         cxSpriteSetImage(a, "item.xml?red.png");
-        fcSpriteSetGroup(a, fcGroupTypeDefenser);
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
         a->attackNumber = 2;
         a->attackPower = 5;
-        fcMapAppendFights(this, a);
+        fcMapAppendDefenser(this, a);
         //开始搜索攻击
         fcThrowerLoop(a);
     }
@@ -284,11 +301,10 @@ CX_OBJECT_INIT(fcMap, cxView)
         fcSpriteInitIndex(a, cxVec2iv(9, 9));
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
-        fcSpriteSetGroup(a, fcGroupTypeDefenser);
         a->attackRange = 4;
         a->attackNumber = 2;
         a->attackPower = 5;
-        fcMapAppendFights(this, a);
+        fcMapAppendDefenser(this, a);
         //开始搜索攻击
         fcThrowerLoop(a);
     }
@@ -299,11 +315,10 @@ CX_OBJECT_INIT(fcMap, cxView)
         fcSpriteInitIndex(a, cxVec2iv(0, 9));
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
-        fcSpriteSetGroup(a, fcGroupTypeDefenser);
         a->attackRange = 4;
         a->attackNumber = 2;
         a->attackPower = 5;
-        fcMapAppendFights(this, a);
+        fcMapAppendDefenser(this, a);
         //开始搜索攻击
         fcThrowerLoop(a);
     }
@@ -314,11 +329,10 @@ CX_OBJECT_INIT(fcMap, cxView)
         fcSpriteInitIndex(a, cxVec2iv(9, 0));
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
-        fcSpriteSetGroup(a, fcGroupTypeDefenser);
         a->attackRange = 4;
         a->attackNumber = 2;
         a->attackPower = 5;
-        fcMapAppendFights(this, a);
+        fcMapAppendDefenser(this, a);
         //开始搜索攻击
         fcThrowerLoop(a);
     }
@@ -328,8 +342,7 @@ CX_OBJECT_INIT(fcMap, cxView)
         cxSpriteSetImage(b, "item.xml?white.png");
         fcTreasureBoxInit(b, this);
         fcSpriteInitIndex(b, cxVec2iv(2, 2));
-        fcSpriteSetGroup(b, fcGroupTypeDefenser);
-        fcMapAppendFights(this, b);
+        fcMapAppendDefenser(this, b);
     }
     
     {
@@ -341,8 +354,7 @@ CX_OBJECT_INIT(fcMap, cxView)
         CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
         CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
         b->speed = 2;
-        fcSpriteSetGroup(b, fcGroupTypeAttacker);
-        fcMapAppendFights(this, b);
+        fcMapAppendIntruder(this, b);
         fcSpriteMoveLoop(b, cxVec2iv(8, 8));
     }
     {
@@ -354,16 +366,16 @@ CX_OBJECT_INIT(fcMap, cxView)
         CX_METHOD_OVERRIDE(b->super.IsAttack, isAttackMe);
         CX_METHOD_OVERRIDE(b->super.Attacked, attackedTest);
         b->super.speed = 1;
-        fcSpriteSetGroup(b, fcGroupTypeAttacker);
-        fcMapAppendFights(this, b);
+        fcMapAppendIntruder(this, b);
         
         x = b;
     }
 }
 CX_OBJECT_FREE(fcMap, cxView)
 {
+    CX_RELEASE(this->defenser);
     CX_RELEASE(this->props);
-    CX_RELEASE(this->fights);
+    CX_RELEASE(this->intruder);
 }
 CX_OBJECT_TERM(fcMap, cxView)
 

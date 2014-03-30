@@ -32,8 +32,6 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     cxHash targets;
     //盯住我的凶手,当攻击目标时记得把目标的murderers加上自己
     cxHash murderers;
-    //组 敌人组和自己组
-    fcGroupType group;
     //当 sprite 被 fruit 打中，凶手是 attacker
     CX_METHOD_ALLOC(void, Attacked, cxAny sprite, cxAny fruit,cxAny attacker);
     //sprite 是否能被 attacker 发射的 fruit 攻击
@@ -57,9 +55,6 @@ void fcSpritePause(cxAny this);
 //恢复ai
 void fcSpriteResume(cxAny this);
 
-//设置组
-void fcSpriteSetGroup(cxAny this,fcGroupType group);
-
 //寻找通向idx的路径
 cxBool fcSpriteFindPath(cxAny this,cxVec2i idx);
 
@@ -69,8 +64,6 @@ cxInt fcSpritePathValue(cxAny this);
 void fcSpriteInitIndex(cxAny this, cxVec2i idx);
 
 void fcSpriteMoveTo(cxAny this,cxVec2i idx);
-
-void fcSpriteRemoved(cxAny this);
 
 //获取目标数量
 cxInt fcSpriteTargetNumber(cxAny this);

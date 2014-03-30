@@ -17,7 +17,8 @@ CX_C_BEGIN
 CX_OBJECT_DEF(fcMap, cxView)
     cxSize2f gridSize;
     cxAny sprites[DM_MAP_WIDTH][DM_MAP_HEIGHT];
-    cxList fights;//可加入战斗的单位，包括被打的和打别人的
+    cxList intruder;//闯关列表
+    cxList defenser;//防御者
     cxList props;//道具列表
 CX_OBJECT_END(fcMap)
 
@@ -36,10 +37,15 @@ cxAny fcMapSprite(fcMap this,cxVec2i idx);
 
 cxBool fcMapCheckIdx(cxVec2i idx);
 
-//添加战斗单位
-void fcMapAppendFights(fcMap this,cxAny sprite);
+//添加闯关者
+void fcMapAppendIntruder(fcMap this,cxAny sprite);
 
-void fcMapRemoveFights(fcMap this,cxAny sprite);
+void fcMapRemoveIntruder(fcMap this,cxAny sprite);
+
+//添加防御者
+void fcMapAppendDefenser(fcMap this,cxAny sprite);
+
+void fcMapRemoveDefenser(fcMap this,cxAny sprite);
 
 //添加道具
 void fcMapAppendProps(fcMap this,cxAny sprite);

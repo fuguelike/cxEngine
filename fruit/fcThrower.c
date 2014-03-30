@@ -42,12 +42,8 @@ CX_OBJECT_TERM(fcThrower, fcSprite)
 static void fcThrowerSearchTarget(fcThrower this)
 {
     fcMap map = this->super.map;
-    CX_LIST_FOREACH(map->fights, ele){
+    CX_LIST_FOREACH(map->intruder, ele){
         fcSprite target = ele->any;
-        //不攻击同一组的
-        if(target->group == this->super.group){
-            continue;
-        }
         //已经在目标列表中
         if(fcSpriteHasTarget(this, target)){
             continue;
