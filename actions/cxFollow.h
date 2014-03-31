@@ -29,7 +29,7 @@ CX_OBJECT_END(cxFollow)
 
 void cxFollowInit(cxAny pav);
 
-void cxFollowSetInitSpeed(cxAny pav,cxFloat speed);
+void cxFollowSetInit(cxAny pav,cxFloat init);
 
 cxBool cxFollowDefaultExit(cxAny pav);
 

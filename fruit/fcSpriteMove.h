@@ -16,7 +16,7 @@ CX_C_BEGIN
 //移动
 CX_OBJECT_DEF(fcSpriteMove, cxFollow)
     cxInt pointIndex;
-    cxFloat upSpeed;//提升的速度
+    cxFloat speed;//提升的速度
 CX_OBJECT_END(fcSpriteMove)
 
 cxAny fcSpriteMoveAction(cxAny pview);

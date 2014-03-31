@@ -83,10 +83,10 @@ CX_OBJECT_FREE(cxFollow, cxAction)
 }
 CX_OBJECT_TERM(cxFollow, cxAction)
 
-void cxFollowSetInitSpeed(cxAny pav,cxFloat speed)
+void cxFollowSetInit(cxAny pav,cxFloat init)
 {
     cxFollow this = pav;
-    this->init = speed;
+    this->init = init;
 }
 
 void cxFollowSetVec2f(cxAny pav,cxVec2f pt)

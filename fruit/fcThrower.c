@@ -42,7 +42,7 @@ CX_OBJECT_TERM(fcThrower, fcSprite)
 static void fcThrowerSearchTarget(fcThrower this)
 {
     fcMap map = this->super.map;
-    CX_LIST_FOREACH(map->intruder, ele){
+    CX_LIST_FOREACH_SAFE(map->intruder, ele, tmp){
         fcSprite target = ele->any;
         //已经在目标列表中
         if(fcSpriteHasTarget(this, target)){

@@ -53,9 +53,7 @@ static void cxTimerReadAttr(cxReaderAttrInfo *info)
 static cxBool cxTimerExit(cxAny pav)
 {
     cxTimer this = pav;
-    if(this->repeat > 0){
-        this->repeat --;
-    }
+    this->repeat --;
     CX_EVENT_FIRE(this, onArrive);
     return this->repeat == 0;
 }
