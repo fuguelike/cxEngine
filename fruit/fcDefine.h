@@ -17,6 +17,8 @@ CX_C_BEGIN
 
 #define DM_MAP_HEIGHT   10
 
+#define FC_MOVE_ACTION_ID   1000
+
 typedef struct {
     cxVec2i points[DM_MAP_WIDTH*DM_MAP_HEIGHT];
     cxInt number;

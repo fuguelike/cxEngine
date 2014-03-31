@@ -19,7 +19,7 @@ cxBool cxFollowDefaultExit(cxAny pav)
     cxVec2f tp = cxViewPosition(this->target);
     cxVec2f cp = cxViewPosition(this->super.view);
     cxFloat distance = kmVec2DistanceBetween(&tp, &cp);
-    if(distance < this->minDistance){
+    if(distance < this->min){
         return true;
     }
     return false;
@@ -32,7 +32,7 @@ void cxFollowInit(cxAny pav)
     CX_ASSERT(this->target != NULL, "target view null");
     cxSize2f ts = cxViewSize(this->target);
     cxSize2f cs = cxViewSize(this->super.view);
-    this->minDistance = CX_MIN(ts.h, ts.w)/2.0f + CX_MIN(cs.h, cs.w)/2.0f;
+    this->min = CX_MIN(ts.h, ts.w)/2.0f + CX_MIN(cs.h, cs.w)/2.0f;
 }
 
 //get target point
@@ -54,7 +54,7 @@ static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f targetPos = cxFollowTargetPos(this);
     cxVec2f currentPos = cxViewPosition(this->super.view);
     this->angle = cxVec2f2PAngle(targetPos,currentPos);
-    this->speed = CX_METHOD_GET(this->initSpeed, this->Speed,pav,this->super.durationElapsed);
+    this->speed = CX_METHOD_GET(this->init, this->Speed,pav,this->super.durationElapsed);
     cxFloat s = dt * this->speed;
     currentPos.x += (s * cosf(this->angle));
     currentPos.y += (s * sinf(this->angle));
@@ -86,7 +86,7 @@ CX_OBJECT_TERM(cxFollow, cxAction)
 void cxFollowSetInitSpeed(cxAny pav,cxFloat speed)
 {
     cxFollow this = pav;
-    this->initSpeed = speed;
+    this->init = speed;
 }
 
 void cxFollowSetVec2f(cxAny pav,cxVec2f pt)
@@ -104,7 +104,7 @@ void cxFollowSetTarget(cxAny pav,cxAny target)
 cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target)
 {
     cxFollow this = CX_CREATE(cxFollow);
-    this->initSpeed = initSpeed;
+    this->init = initSpeed;
     cxFollowSetTarget(this, target);
     return this;
 }

@@ -13,11 +13,10 @@
 
 CX_C_BEGIN
 
-#define FC_MOVE_ACTION_ID   1000
-
 //移动
 CX_OBJECT_DEF(fcSpriteMove, cxFollow)
     cxInt pointIndex;
+    cxFloat upSpeed;//提升的速度
 CX_OBJECT_END(fcSpriteMove)
 
 cxAny fcSpriteMoveAction(cxAny pview);

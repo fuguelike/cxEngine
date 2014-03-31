@@ -25,7 +25,7 @@ static cxBool fcSpriteMoveExit(cxAny pav)
     cxVec2f tp = fcSpriteMoveTargetPos(pav);
     cxVec2f cp = cxViewPosition(sprite);
     cxFloat distance = kmVec2DistanceBetween(&tp, &cp);
-    if(distance > this->super.minDistance){
+    if(distance > this->super.min){
         return false;
     }
     if(this->pointIndex >= (sprite->path.number - 1)){
@@ -37,15 +37,25 @@ static cxBool fcSpriteMoveExit(cxAny pav)
     return false;
 }
 
+static cxFloat fcSpriteMoveSpeed(cxAny pav,cxFloat time)
+{
+    fcSpriteMove this = pav;
+    fcSprite s = cxActionView(pav);
+    cxFloat us = fcMapScaleValue(s->map, this->upSpeed);
+    return (this->super.init + us);
+}
+
 static void fcSpriteMoveInit(cxAny pav)
 {
     fcSpriteMove this = pav;
-    this->super.minDistance = 3;
+    this->super.min = 5;
 }
 
 CX_OBJECT_INIT(fcSpriteMove, cxFollow)
 {
+    this->upSpeed = 0;
     this->pointIndex = 1;
+    CX_METHOD_OVERRIDE(this->super.Speed, fcSpriteMoveSpeed);
     CX_METHOD_OVERRIDE(this->super.super.Init, fcSpriteMoveInit);
     CX_METHOD_OVERRIDE(this->super.Exit, fcSpriteMoveExit);
 }
