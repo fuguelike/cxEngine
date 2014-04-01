@@ -67,7 +67,7 @@ static void fcThrowerFire(cxAny sprite, cxAny fruit,cxAny target)
     fcThrower a = sprite;
     fcFruit this = fruit;
     //盯住目标
-    fcSpriteLookAt(a, target);
+//    fcSpriteLookAt(a, target);
     //投掷水果
     CX_METHOD_RUN(this->Fire, this, a, target);
     //

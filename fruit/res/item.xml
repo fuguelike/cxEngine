@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:47c57e1732e0a862d80bc59cf6ac4a0e$ -->
+<!-- $TexturePacker:SmartUpdate:c359e3c27d4e79f605566ada49e045b8$ -->
 <!--Format:
 n  => name of the sprite
 x  => sprite x pos in texture
@@ -14,9 +14,11 @@ oH => sprite's original height (only available if trimmed)
 r => 'y' only set if sprite is rotated
 -->
 <TextureAtlas imagePath="item.pvr" width="256" height="256">
-    <sprite n="begin.png" x="68" y="68" w="64" h="64"/>
-    <sprite n="blue.png" x="134" y="2" w="64" h="64"/>
-    <sprite n="end.png" x="68" y="2" w="64" h="64"/>
+    <sprite n="begin.png" x="134" y="68" w="64" h="64"/>
+    <sprite n="blue.png" x="68" y="134" w="64" h="64"/>
+    <sprite n="edit-mode.png" x="68" y="68" w="64" h="64"/>
+    <sprite n="end.png" x="134" y="2" w="64" h="64"/>
+    <sprite n="fire-mode.png" x="68" y="2" w="64" h="64"/>
     <sprite n="fire.png" x="2" y="234" w="16" h="16"/>
     <sprite n="red.png" x="2" y="134" w="64" h="64"/>
     <sprite n="texture.png" x="2" y="200" w="32" h="32"/>

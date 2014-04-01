@@ -11,10 +11,9 @@
 #include "fcSpeedUp.h"
 
 //props 被 target 碰到
-static cxBool fcSpeedUpCollide(cxAny props,cxAny sprite)
+static void fcSpeedUpCollide(cxAny props,cxAny sprite)
 {
-    CX_LOGGER("fcSpeedUp Collide target");
-    return true;
+//    CX_LOGGER("fcSpeedUp Collide target");
 }
 
 CX_OBJECT_INIT(fcSpeedUp, fcSprite)

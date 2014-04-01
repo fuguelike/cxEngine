@@ -31,7 +31,6 @@ static void fcIntruderRun(cxEvent *e)
 {
     fcIntruder this = cxActionView(e->sender);
     fcMap map = this->super.map;
-    fcSprites dels={0};
     CX_LIST_FOREACH(map->props, ele){
         fcSprite target = ele->any;
         CX_ASSERT(target->type == fcSpriteTypeProperty, "must is property");
@@ -40,13 +39,9 @@ static void fcIntruderRun(cxEvent *e)
         cxFloat min = CX_MIN(ts.h, ts.w)/2.0f + CX_MIN(cs.h, cs.w)/2.0f;
         cxFloat distance = fcSpriteDistance(this, target);
         //target被this碰到
-        if(distance < min && CX_METHOD_GET(false, target->Collide,target,this)){
-            fcSpritesAppend(&dels, target);
+        if(distance < min){
+            CX_METHOD_RUN(target->Collide, target, this);
         }
-    }
-    //处理需要移除的道具
-    for(cxInt i=0; i < dels.number; i++){
-        fcMapRemoveProps(map, dels.sprite[i]);
     }
 }
 

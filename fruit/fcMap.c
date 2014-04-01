@@ -130,24 +130,6 @@ cxVec2f fcMapToPos(fcMap this,cxVec2i idx)
     return cxVec2fv(x + this->gridSize.w/2.0f, y + this->gridSize.h/2.0f);
 }
 
-#include <actions/cxParticle.h>
-
-//static cxAny fcMapDrawView(cxAny pav)
-//{
-//    fcSprite view = cxActionView(pav);
-//    return view->map;
-//}
-//
-//static void fcMapSetUnitArgs(cxAny pav,cxParticleArgs *args)
-//{
-//    cxView view = cxActionView(pav);
-//    args->position = cxViewPosition(view);
-//    cxFollow move = fcSpriteMoveAction(view);
-//    if(move != NULL){
-//        args->angle = move->angle + kmDegreesToRadians(180);
-//    }
-//}
-
 static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
 {
     fcMap this = pview;
@@ -155,27 +137,6 @@ static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
     if(!cxViewHitTest(this, touch->current, &pos)){
         return false;
     }
-//    if(touch->type == cxTouchTypeMove){
-//        return false;
-//    }
-//    if(touch->type == cxTouchTypeUp){
-//        
-//        fcSpriteMoveLoop(x, cxVec2iv(8, 1));
-//        
-//        cxParticle p = cxParticleCreate(-1,"item.xml?texture.png", 100);
-//        p->life = cxFloatRangeValue(3, 1);
-//        p->startsize = cxFloatRangeValue(70, 50);
-//        p->endsize = cxFloatRangeValue(10, 5);
-//        p->angle = cxFloatRangeValue(180, 0);
-//        p->speed = cxFloatRangeValue(200, 30);
-//        p->startcolor = cxColor4fRangeValue(1.0f, 0.3f, 0.0f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f);
-//        p->endcolor = cxColor4fRangeValue(1.0f, 0.3f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-//        p->rate = 20;
-//        cxParticleSetBlendMode(p, cxParticleBlendAdd);
-//        CX_METHOD_OVERRIDE(p->GetDrawView, fcMapDrawView);
-//        CX_METHOD_OVERRIDE(p->SetUnitArgs, fcMapSetUnitArgs);
-//        cxViewAppendAction(x, p);
-//    }
     return false;
 }
 
@@ -267,6 +228,12 @@ static cxBool isAttackMe(cxAny sprite, cxAny fruit,cxAny attacker)
     return true;
 }
 
+void fcMapSetMode(cxAny this,fcMapMode mode)
+{
+    fcMap m = this;
+    m->mode = mode;
+}
+
 cxVec2i fcMapBeginLocation(cxAny map)
 {
     fcMap this = map;
@@ -281,8 +248,30 @@ cxVec2i fcMapEndLocation(cxAny map)
     return fcSpriteIndex(this->eLoc);
 }
 
+static void fcMapLocation(cxAny map,cxAny loc)
+{
+    fcMap this = map;
+    fcLocation l = loc;
+    if(l->type != fcLocationTypeBegin){
+        return;
+    }
+    fcSprite b = CX_CREATE(fcSprite);
+    fcSpriteInit(b, this);
+    fcSpriteInitIndex(b, fcMapBeginLocation(this), false);
+    cxSpriteSetImage(b, "item.xml?blue.png");
+    CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
+    CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
+    b->speed = 2;
+    fcMapAppendIntruder(this, b);
+    fcSpriteMoveLoop(b);
+    fcIntruderLoop(b);
+}
+
 CX_OBJECT_INIT(fcMap, cxView)
 {
+    fcMapSetMode(this, fcMapModeEdit);
+    //
+    CX_METHOD_OVERRIDE(this->Location, fcMapLocation);
     //
     this->intruder = CX_ALLOC(cxList);
     this->defenser = CX_ALLOC(cxList);
@@ -304,7 +293,7 @@ CX_OBJECT_INIT(fcMap, cxView)
         fcMapAppendDefenser(this, this->bLoc);
         
         this->eLoc = CX_CREATE(fcLocation);
-        fcLocationInit(this->eLoc, this, fcLocationTypeBegin);
+        fcLocationInit(this->eLoc, this, fcLocationTypeEnd);
         fcSpriteInitIndex(this->eLoc, cxVec2iv(9, 8), true);
         cxSpriteSetImage(this->eLoc, "item.xml?end.png");
         fcMapAppendDefenser(this, this->eLoc);
@@ -373,20 +362,6 @@ CX_OBJECT_INIT(fcMap, cxView)
         fcSpriteInitIndex(b, cxVec2iv(1, 2), true);
         fcMapAppendDefenser(this, b);
     }
-    
-    {
-        fcSprite b = CX_CREATE(fcSprite);
-        fcSpriteInit(b, this);
-        fcSpriteInitIndex(b, fcMapBeginLocation(this), false);
-        cxSpriteSetImage(b, "item.xml?blue.png");
-        
-        CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
-        CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
-        b->speed = 2;
-        fcMapAppendIntruder(this, b);
-        fcSpriteMoveLoop(b);
-        fcIntruderLoop(b);
-    }
     {
         fcSpeedUp su = CX_CREATE(fcSpeedUp);
         cxSpriteSetImage(su, "item.xml?yellow.png");
@@ -397,6 +372,8 @@ CX_OBJECT_INIT(fcMap, cxView)
 }
 CX_OBJECT_FREE(fcMap, cxView)
 {
+    CX_METHOD_RELEASE(this->Arrive);
+    CX_METHOD_RELEASE(this->Location);
     CX_RELEASE(this->defenser);
     CX_RELEASE(this->props);
     CX_RELEASE(this->intruder);

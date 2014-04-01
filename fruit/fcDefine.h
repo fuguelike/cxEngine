@@ -46,6 +46,12 @@ typedef enum {
 }fcSpriteType;
 
 typedef enum {
+    fcMapModeNone = 0,
+    fcMapModeEdit,      //编辑模式
+    fcMapModeFire,      //进攻模式
+}fcMapMode;
+
+typedef enum {
     fcThrowerTypeNone = 0,
     fcThrowerTypeSmallMachine,     //投射机 - 小型
     fcThrowerTypeNormalMachine,    //投射机 - 中型

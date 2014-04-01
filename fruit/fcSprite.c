@@ -64,14 +64,15 @@ cxVec2i fcSpriteIndex(cxAny this)
     return s->idx;
 }
 
-void fcSpriteInitIndex(cxAny this, cxVec2i idx,cxBool space)
+void fcSpriteInitIndex(cxAny this, cxVec2i idx,cxBool isSpace)
 {
     CX_ASSERT(fcMapCheckIdx(idx), "idx error");
     fcSprite s = this;
     fcMap map = s->map;
+    s->isSpace = isSpace;
     s->idx = idx;
     //如果sprite影响到寻路
-    if(space){
+    if(isSpace){
         CX_ASSERT(fcMapSprite(map, idx) == NULL, "has sprite in here");
         map->sprites[idx.x][idx.y] = this;
     }
@@ -95,22 +96,68 @@ cxBool fcSpriteFindPath(cxAny this,cxVec2i idx)
     return fcMapFindPath(s->map, &s->path, s->idx, idx);
 }
 
-void fcSpriteMoveTo(cxAny this,cxVec2i idx)
+cxBool fcSpriteMoveTo(cxAny this,cxVec2i idx)
 {
-    CX_ASSERT(fcMapCheckIdx(idx), "idx error");
     fcSprite s = this;
-    CX_ASSERT(!cxVec2iEqu(s->idx, idx),"self move to self");
     fcMap map = s->map;
-    CX_ASSERT(fcMapSprite(map, idx) == NULL,"target idx has sprite");
+    if(!fcMapCheckIdx(idx)){
+        return false;
+    }
+    if(cxVec2iEqu(s->idx, idx)){
+        return false;
+    }
+    if(fcMapSprite(map, idx) != NULL){
+        return false;
+    }
     map->sprites[s->idx.x][s->idx.y] = NULL;
     map->sprites[idx.x][idx.y] = s;
     s->idx = idx;
     cxVec2f pos = fcMapToPos(map, idx);
     cxViewSetPos(s, pos);
+    return true;
+}
+
+cxAny fcSpriteMapView(cxAny this)
+{
+    fcSprite s = this;
+    return s->map;
+}
+
+cxBool fcSpriteTouch(cxAny pview,cxTouch *touch)
+{
+    fcSprite this = pview;
+    fcMap map = fcSpriteMapView(pview);
+    if(!this->isSpace || map->mode != fcMapModeEdit){
+        return false;
+    }
+    cxVec2f pos = cxVec2fv(0, 0);
+    if(touch->type == cxTouchTypeDown){
+        this->isSelected = cxViewHitTest(pview, touch->current, &pos);
+        this->currPos = cxViewPosition(pview);
+        return this->isSelected;
+    }
+    if(touch->type == cxTouchTypeMove && this->isSelected){
+        this->currPos.x += touch->delta.x;
+        this->currPos.y += touch->delta.y;
+        cxVec2i idx = fcMapToIdx(this->map, this->currPos);
+        if(cxVec2iEqu(idx, this->idx)){
+            return false;
+        }
+        if(!fcMapCheckIdx(idx)){
+            return false;
+        }
+        return fcSpriteMoveTo(pview, idx);
+    }
+    if(touch->type == cxTouchTypeUp){
+        this->isSelected = false;
+        return false;
+    }
+    return false;
 }
 
 CX_OBJECT_INIT(fcSprite, cxSprite)
 {
+    CX_METHOD_OVERRIDE(this->super.super.Touch, fcSpriteTouch);
     this->idx = cxVec2iv(-1, -1);
     this->targets = CX_ALLOC(cxHash);
     this->murderers = CX_ALLOC(cxHash);

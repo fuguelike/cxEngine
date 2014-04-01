@@ -75,6 +75,17 @@ cxAny fcSpriteMoveAction(cxAny pview)
     return cxViewGetAction(pview, FC_MOVE_ACTION_ID);
 }
 
+static void fcSpriteMoveStop(cxEvent *e)
+{
+    fcSprite s = cxActionView(e->sender);
+    fcMap map = s->map;
+    cxVec2i eIdx = fcMapEndLocation(map);
+    if(!cxVec2iEqu(s->idx, eIdx)){
+        return;
+    }
+    CX_METHOD_RUN(map->Arrive, map, s);
+}
+
 void fcSpriteMoveLoop(cxAny sprite)
 {
     fcSprite s = sprite;
@@ -91,6 +102,7 @@ void fcSpriteMoveLoop(cxAny sprite)
     cxViewAppendAction(s, move);
     cxVec2f pt = fcSpriteMoveTargetPos(move);
     cxFollowSetVec2f(move, pt);
+    CX_EVENT_QUICK(move->super.super.onStop, fcSpriteMoveStop);
 }
 
 

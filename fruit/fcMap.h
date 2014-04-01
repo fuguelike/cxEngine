@@ -22,7 +22,14 @@ CX_OBJECT_DEF(fcMap, cxView)
     cxList props;       //道具列表
     cxAny bLoc;         //起点
     cxAny eLoc;         //终点
+    fcMapMode mode;
+    CX_METHOD_ALLOC(void, Location,cxAny map,cxAny loc);
+    //当有sprite到达end location
+    CX_METHOD_ALLOC(void, Arrive,cxAny map,cxAny sprite);
 CX_OBJECT_END(fcMap)
+
+//设置地图模式
+void fcMapSetMode(cxAny this,fcMapMode mode);
 
 //获取起点
 cxVec2i fcMapBeginLocation(cxAny map);

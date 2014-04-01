@@ -16,7 +16,12 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(fcSprite, cxSprite)
-    //
+    //是否可移动
+    cxBool isSpace;
+    //当前是否被选中
+    cxVec2f currPos;
+    cxBool isSelected;
+    //ai计时器
     cxTimer aiTimer;
     //map list element,移除后设置为NULL
     cxListElement *element;
@@ -39,12 +44,18 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     //获取参与路径计算的值
     CX_METHOD_ALLOC(cxInt, PathValue, cxAny sprite);
     //当sprite 被 taget 撞到时,例如sprite撞到道具,返回true表示删除target
-    CX_METHOD_ALLOC(cxBool, Collide, cxAny sprite, cxAny target);
+    CX_METHOD_ALLOC(void, Collide, cxAny sprite, cxAny target);
     //生命
     cxInt life;
     //移动速度
     cxFloat speed;
 CX_OBJECT_END(fcSprite)
+
+//获取map
+cxAny fcSpriteMapView(cxAny this);
+
+//移动
+cxBool fcSpriteTouch(cxAny pview,cxTouch *touch);
 
 //获取索引位置
 cxVec2i fcSpriteIndex(cxAny this);
@@ -71,10 +82,10 @@ cxBool fcSpriteFindEndLocationPath(cxAny this);
 cxInt fcSpritePathValue(cxAny this);
 
 //初始化位置和寻路数据,space 是否占据地图位置
-void fcSpriteInitIndex(cxAny this, cxVec2i idx,cxBool space);
+void fcSpriteInitIndex(cxAny this, cxVec2i idx,cxBool isSpace);
 
 //移动到新位置 针对影响寻路的sprite
-void fcSpriteMoveTo(cxAny this,cxVec2i idx);
+cxBool fcSpriteMoveTo(cxAny this,cxVec2i idx);
 
 //获取目标数量
 cxInt fcSpriteTargetNumber(cxAny this);
@@ -97,6 +108,7 @@ cxBool fcSpriteHasTarget(cxAny this,cxAny target);
 //设置目标
 void fcSpriteTarget(cxAny this,cxAny target);
 
+//初始化
 void fcSpriteInit(cxAny this,cxAny map);
 
 //创建定时器
