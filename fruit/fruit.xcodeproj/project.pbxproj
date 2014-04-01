@@ -42,6 +42,8 @@
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		8384A34018DAD2E200D967B9 /* fcMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384A33E18DAD2E200D967B9 /* fcMap.c */; };
 		839F7FF318E546FA00727C0C /* fcTreasureBox.c in Sources */ = {isa = PBXBuildFile; fileRef = 839F7FF118E546FA00727C0C /* fcTreasureBox.c */; };
+		83D003A518EAF5E4007DFEBD /* main.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83D003A418EAF5E4007DFEBD /* main.xml */; };
+		83D003A918EAF6FF007DFEBD /* actions.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83D003A718EAF6FF007DFEBD /* actions.xml */; };
 		83F511B518EA593500FC57D4 /* fcLocation.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F511B318EA593500FC57D4 /* fcLocation.c */; };
 		83F88D8D18E1B73C00B778EE /* fcThrower.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F88D8B18E1B73C00B778EE /* fcThrower.c */; };
 /* End PBXBuildFile section */
@@ -113,6 +115,8 @@
 		839AC1D11832214D00AEBF8E /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
 		839F7FF118E546FA00727C0C /* fcTreasureBox.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcTreasureBox.c; sourceTree = SOURCE_ROOT; };
 		839F7FF218E546FA00727C0C /* fcTreasureBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcTreasureBox.h; sourceTree = SOURCE_ROOT; };
+		83D003A418EAF5E4007DFEBD /* main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = main.xml; path = res/main.xml; sourceTree = SOURCE_ROOT; };
+		83D003A718EAF6FF007DFEBD /* actions.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = actions.xml; path = res/actions.xml; sourceTree = SOURCE_ROOT; };
 		83F511B318EA593500FC57D4 /* fcLocation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcLocation.c; sourceTree = SOURCE_ROOT; };
 		83F511B418EA593500FC57D4 /* fcLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcLocation.h; sourceTree = SOURCE_ROOT; };
 		83F88D8B18E1B73C00B778EE /* fcThrower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcThrower.c; sourceTree = SOURCE_ROOT; };
@@ -241,6 +245,8 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				83D003A718EAF6FF007DFEBD /* actions.xml */,
+				83D003A418EAF5E4007DFEBD /* main.xml */,
 				831079C618E176FC00C6A262 /* appConfig.xml */,
 				831079C418E176F400C6A262 /* en */,
 				836B256918DC5A4D006D28F3 /* item.pvr */,
@@ -324,6 +330,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				836B256C18DC5A4D006D28F3 /* item.xml in Resources */,
+				83D003A918EAF6FF007DFEBD /* actions.xml in Resources */,
+				83D003A518EAF5E4007DFEBD /* main.xml in Resources */,
 				831079C518E176F400C6A262 /* en in Resources */,
 				836B256B18DC5A4D006D28F3 /* item.pvr in Resources */,
 				831079C718E176FC00C6A262 /* appConfig.xml in Resources */,

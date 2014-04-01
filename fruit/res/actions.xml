@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<cxActionRoot cxActionRoot.type="multiple" cxActionRoot.onLoad="actionsLoad">
+    <cxScale id="btnEnter"
+        cxAction.id="100"
+        cxAction.speed="1.0"
+        cxAction.time="0.1"
+        cxScale.x="0.85"
+        cxScale.y="0.85"/>
+    <cxScale id="btnLeave"
+        cxAction.id="100"
+        cxAction.speed="1.0"
+        cxAction.time="0.1"
+        cxScale.x="1.0"
+        cxScale.y="1.0"/>
+</cxActionRoot>

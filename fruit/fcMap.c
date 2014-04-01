@@ -17,6 +17,15 @@
 #include "fcIntruder.h"
 #include "fcLocation.h"
 
+CX_LUA_METHOD_BEG(fcMap)
+
+CX_LUA_METHOD_END(fcMap)
+
+void __fcMapTypeInit()
+{
+    CX_LUA_LOAD_TYPE(fcMap);
+}
+
 static void fcPathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
 {
     fcMap map = context;
@@ -267,8 +276,14 @@ static void fcMapLocation(cxAny map,cxAny loc)
     fcIntruderLoop(b);
 }
 
+void fcMapReadAttr(cxReaderAttrInfo *info)
+{
+    cxViewReadAttr(info);
+}
+
 CX_OBJECT_INIT(fcMap, cxView)
 {
+    cxObjectSetReadAttrFunc(this, fcMapReadAttr);
     fcMapSetMode(this, fcMapModeEdit);
     //
     CX_METHOD_OVERRIDE(this->Location, fcMapLocation);
