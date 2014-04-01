@@ -79,7 +79,7 @@ void fcSpriteInitIndex(cxAny this, cxVec2i idx,cxBool space)
     cxViewSetPos(s, pos);
 }
 
-cxBool fcSpriteFindEndPath(cxAny this)
+cxBool fcSpriteFindEndLocationPath(cxAny this)
 {
     fcSprite s = this;
     cxVec2i end = fcMapEndLocation(s->map);

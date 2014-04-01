@@ -189,10 +189,10 @@ cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop)
     CX_ASSERT(path != NULL && this != NULL, "map or path error");
     cxBool rv = false;
     ASPath apath = ASPathCreate(&PathNodeSource, this, &start, &stop);
-    path->number = 0;
+    fcPathClean(path);
     for (int i=0; i<ASPathGetCount(apath); i++) {
         cxVec2i *pathNode = ASPathGetNode(apath, i);
-        path->points[path->number++] = *pathNode;
+        fcPathAppend(path, *pathNode);
     }
     rv = (ASPathGetCount(apath) > 0);
     ASPathDestroy(apath);
@@ -283,15 +283,18 @@ cxVec2i fcMapEndLocation(cxAny map)
 
 CX_OBJECT_INIT(fcMap, cxView)
 {
+    //
     this->intruder = CX_ALLOC(cxList);
     this->defenser = CX_ALLOC(cxList);
     this->props = CX_ALLOC(cxList);
+    //
     cxSize2f size = cxEngineInstance()->winsize;
     cxFloat vw = size.w - 20;
     this->gridSize.w = vw / DM_MAP_WIDTH;
     this->gridSize.h = this->gridSize.w;
     cxViewSetSize(this, cxSize2fv(vw, vw));
-    
+    //
+    CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
     //设置起点和终点
     {
         this->bLoc = CX_CREATE(fcLocation);
@@ -306,13 +309,11 @@ CX_OBJECT_INIT(fcMap, cxView)
         cxSpriteSetImage(this->eLoc, "item.xml?end.png");
         fcMapAppendDefenser(this, this->eLoc);
     }
-    
-    CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
     //
     {
         fcThrower a = CX_CREATE(fcThrower);
         fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
-        fcSpriteInitIndex(a, cxVec2iv(0, 0), true);
+        fcSpriteInitIndex(a, cxVec2iv(5, 8), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
@@ -326,7 +327,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     {
         fcThrower a = CX_CREATE(fcThrower);
         fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
-        fcSpriteInitIndex(a, cxVec2iv(9, 9), true);
+        fcSpriteInitIndex(a, cxVec2iv(7, 6), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
@@ -340,7 +341,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     {
         fcThrower a = CX_CREATE(fcThrower);
         fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
-        fcSpriteInitIndex(a, cxVec2iv(0, 9), true);
+        fcSpriteInitIndex(a, cxVec2iv(5, 5), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
@@ -354,7 +355,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     {
         fcThrower a = CX_CREATE(fcThrower);
         fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
-        fcSpriteInitIndex(a, cxVec2iv(9, 0), true);
+        fcSpriteInitIndex(a, cxVec2iv(3, 4), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
@@ -369,7 +370,7 @@ CX_OBJECT_INIT(fcMap, cxView)
         fcTreasureBox b = CX_CREATE(fcTreasureBox);
         cxSpriteSetImage(b, "item.xml?white.png");
         fcTreasureBoxInit(b, this);
-        fcSpriteInitIndex(b, cxVec2iv(2, 2), true);
+        fcSpriteInitIndex(b, cxVec2iv(1, 2), true);
         fcMapAppendDefenser(this, b);
     }
     

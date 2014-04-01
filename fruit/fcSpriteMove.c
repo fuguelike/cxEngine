@@ -78,16 +78,22 @@ cxAny fcSpriteMoveAction(cxAny pview)
 void fcSpriteMoveLoop(cxAny sprite)
 {
     fcSprite s = sprite;
-    if(fcSpriteFindEndPath(s) && s->path.number > 1){
-        fcSpriteMove move = CX_CREATE(fcSpriteMove);
-        cxActionSetId(move, FC_MOVE_ACTION_ID);
-        cxFloat speed = fcMapScaleValue(s->map, s->speed);
-        cxFollowSetInit(move, speed);
-        cxViewAppendAction(s, move);
-        cxVec2f pt = fcSpriteMoveTargetPos(move);
-        cxFollowSetVec2f(move, pt);
+    if(!fcSpriteFindEndLocationPath(s)){
+        return;
     }
+    if(s->path.number < 2){
+        return;
+    }
+    fcSpriteMove move = CX_CREATE(fcSpriteMove);
+    cxActionSetId(move, FC_MOVE_ACTION_ID);
+    cxFloat speed = fcMapScaleValue(s->map, s->speed);
+    cxFollowSetInit(move, speed);
+    cxViewAppendAction(s, move);
+    cxVec2f pt = fcSpriteMoveTargetPos(move);
+    cxFollowSetVec2f(move, pt);
 }
+
+
 
 
 

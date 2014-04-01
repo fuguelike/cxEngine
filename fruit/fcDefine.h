@@ -24,6 +24,17 @@ typedef struct {
     cxInt number;
 }fcPath;
 
+#define fcPathAppend(_c_,_i_)    (_c_)->points[(_c_)->number++] = (_i_)
+#define fcPathClean(_c_)         (_c_)->number = 0
+
+typedef struct {
+    cxAny sprite[DM_MAP_WIDTH*DM_MAP_HEIGHT];
+    cxInt number;
+}fcSprites;
+
+#define fcSpritesAppend(_c_,_i_)    (_c_)->sprite[(_c_)->number++] = (_i_)
+#define fcSpritesClean(_c_)         (_c_)->numner = 0
+
 typedef enum {
     fcSpriteTypeNone = 0,       //你什么都不是
     fcSpriteTypeDecoration,     //装饰物,例如地面，道路，花花草草，起点，终点

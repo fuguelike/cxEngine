@@ -38,8 +38,8 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     CX_METHOD_ALLOC(cxBool, IsAttack, cxAny sprite, cxAny fruit, cxAny thrower);
     //获取参与路径计算的值
     CX_METHOD_ALLOC(cxInt, PathValue, cxAny sprite);
-    //当sprite 被 taget 撞到时,例如sprite撞到道具
-    CX_METHOD_ALLOC(void, Collide, cxAny sprite, cxAny target);
+    //当sprite 被 taget 撞到时,例如sprite撞到道具,返回true表示删除target
+    CX_METHOD_ALLOC(cxBool, Collide, cxAny sprite, cxAny target);
     //生命
     cxInt life;
     //移动速度
@@ -65,7 +65,7 @@ void fcSpriteResume(cxAny this);
 cxBool fcSpriteFindPath(cxAny this,cxVec2i idx);
 
 //寻找通向终点的路线
-cxBool fcSpriteFindEndPath(cxAny this);
+cxBool fcSpriteFindEndLocationPath(cxAny this);
 
 //获取参与路径搜索的值
 cxInt fcSpritePathValue(cxAny this);
