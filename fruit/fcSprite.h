@@ -28,7 +28,7 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     cxVec2i idx;
     //类型
     fcSpriteType type;
-    //攻击目标一个或多个,当sprite死去的时候，记得从所有的murderers的targets中删除
+    //攻击目标一个或多个,当sprite死去的时候，记得使用 fcSpriteUnset 从所有的murderers的targets中删除
     cxHash targets;
     //盯住我的凶手,当攻击目标时记得把目标的murderers加上自己
     cxHash murderers;
@@ -46,7 +46,11 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     cxFloat speed;
 CX_OBJECT_END(fcSprite)
 
-void fcSpriteStartAITimer(cxAny this,cxEventFunc aiFunc,cxFloat interval);
+//获取索引位置
+cxVec2i fcSpriteIndex(cxAny this);
+
+//启动ai循环
+void fcSpriteStartAILoop(cxAny this,cxEventFunc aiFunc,cxFloat interval);
 
 //暂停一段ai
 void fcSpritePauseTime(cxAny this,cxFloat time);
@@ -60,11 +64,16 @@ void fcSpriteResume(cxAny this);
 //寻找通向idx的路径
 cxBool fcSpriteFindPath(cxAny this,cxVec2i idx);
 
+//寻找通向终点的路线
+cxBool fcSpriteFindEndPath(cxAny this);
+
 //获取参与路径搜索的值
 cxInt fcSpritePathValue(cxAny this);
 
-void fcSpriteInitIndex(cxAny this, cxVec2i idx);
+//初始化位置和寻路数据,space 是否占据地图位置
+void fcSpriteInitIndex(cxAny this, cxVec2i idx,cxBool space);
 
+//移动到新位置 针对影响寻路的sprite
 void fcSpriteMoveTo(cxAny this,cxVec2i idx);
 
 //获取目标数量

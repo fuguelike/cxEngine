@@ -9,7 +9,7 @@
 #include "fcMap.h"
 #include "fcSprite.h"
 
-void fcSpriteStartAITimer(cxAny this,cxEventFunc aiFunc,cxFloat interval)
+void fcSpriteStartAILoop(cxAny this,cxEventFunc aiFunc,cxFloat interval)
 {
     fcSprite a = this;
     a->aiTimer = cxViewAppendTimer(this, interval, -1);
@@ -58,17 +58,34 @@ cxInt fcSpritePathValue(cxAny this)
     return CX_METHOD_GET(s->type, s->PathValue, s);
 }
 
-void fcSpriteInitIndex(cxAny this, cxVec2i idx)
+cxVec2i fcSpriteIndex(cxAny this)
+{
+    fcSprite s = this;
+    return s->idx;
+}
+
+void fcSpriteInitIndex(cxAny this, cxVec2i idx,cxBool space)
 {
     CX_ASSERT(fcMapCheckIdx(idx), "idx error");
     fcSprite s = this;
     fcMap map = s->map;
-    CX_ASSERT(fcMapSprite(map, idx) == NULL, "has sprite in here");
     s->idx = idx;
-    map->sprites[idx.x][idx.y] = this;
+    //如果sprite影响到寻路
+    if(space){
+        CX_ASSERT(fcMapSprite(map, idx) == NULL, "has sprite in here");
+        map->sprites[idx.x][idx.y] = this;
+    }
     cxVec2f pos = fcMapToPos(map, idx);
     cxViewSetPos(s, pos);
 }
+
+cxBool fcSpriteFindEndPath(cxAny this)
+{
+    fcSprite s = this;
+    cxVec2i end = fcMapEndLocation(s->map);
+    return fcSpriteFindPath(this, end);
+}
+
 //搜索将重新确定this的idx坐标
 cxBool fcSpriteFindPath(cxAny this,cxVec2i idx)
 {

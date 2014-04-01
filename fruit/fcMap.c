@@ -15,6 +15,7 @@
 #include "fcTreasureBox.h"
 #include "fcSpeedUp.h"
 #include "fcIntruder.h"
+#include "fcLocation.h"
 
 static void fcPathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
 {
@@ -131,8 +132,6 @@ cxVec2f fcMapToPos(fcMap this,cxVec2i idx)
 
 #include <actions/cxParticle.h>
 
-cxAny x;
-
 //static cxAny fcMapDrawView(cxAny pav)
 //{
 //    fcSprite view = cxActionView(pav);
@@ -156,10 +155,9 @@ static cxBool fcMapTouch(cxAny pview,cxTouch *touch)
     if(!cxViewHitTest(this, touch->current, &pos)){
         return false;
     }
-    if(touch->type == cxTouchTypeMove){
-        cxViewSetPos(x, pos);
-        return false;
-    }
+//    if(touch->type == cxTouchTypeMove){
+//        return false;
+//    }
 //    if(touch->type == cxTouchTypeUp){
 //        
 //        fcSpriteMoveLoop(x, cxVec2iv(8, 1));
@@ -269,6 +267,20 @@ static cxBool isAttackMe(cxAny sprite, cxAny fruit,cxAny attacker)
     return true;
 }
 
+cxVec2i fcMapBeginLocation(cxAny map)
+{
+    fcMap this = map;
+    CX_ASSERT(this->bLoc != NULL, "not set begin location");
+    return fcSpriteIndex(this->bLoc);
+}
+
+cxVec2i fcMapEndLocation(cxAny map)
+{
+    fcMap this = map;
+    CX_ASSERT(this->eLoc != NULL, "not set end location");
+    return fcSpriteIndex(this->eLoc);
+}
+
 CX_OBJECT_INIT(fcMap, cxView)
 {
     this->intruder = CX_ALLOC(cxList);
@@ -280,12 +292,27 @@ CX_OBJECT_INIT(fcMap, cxView)
     this->gridSize.h = this->gridSize.w;
     cxViewSetSize(this, cxSize2fv(vw, vw));
     
+    //设置起点和终点
+    {
+        this->bLoc = CX_CREATE(fcLocation);
+        fcLocationInit(this->bLoc, this, fcLocationTypeBegin);
+        fcSpriteInitIndex(this->bLoc, cxVec2iv(0, 1), true);
+        cxSpriteSetImage(this->bLoc, "item.xml?begin.png");
+        fcMapAppendDefenser(this, this->bLoc);
+        
+        this->eLoc = CX_CREATE(fcLocation);
+        fcLocationInit(this->eLoc, this, fcLocationTypeBegin);
+        fcSpriteInitIndex(this->eLoc, cxVec2iv(9, 8), true);
+        cxSpriteSetImage(this->eLoc, "item.xml?end.png");
+        fcMapAppendDefenser(this, this->eLoc);
+    }
+    
     CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
     //
     {
         fcThrower a = CX_CREATE(fcThrower);
         fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
-        fcSpriteInitIndex(a, cxVec2iv(0, 0));
+        fcSpriteInitIndex(a, cxVec2iv(0, 0), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
@@ -299,7 +326,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     {
         fcThrower a = CX_CREATE(fcThrower);
         fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
-        fcSpriteInitIndex(a, cxVec2iv(9, 9));
+        fcSpriteInitIndex(a, cxVec2iv(9, 9), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
@@ -313,7 +340,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     {
         fcThrower a = CX_CREATE(fcThrower);
         fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
-        fcSpriteInitIndex(a, cxVec2iv(0, 9));
+        fcSpriteInitIndex(a, cxVec2iv(0, 9), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
@@ -327,7 +354,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     {
         fcThrower a = CX_CREATE(fcThrower);
         fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
-        fcSpriteInitIndex(a, cxVec2iv(9, 0));
+        fcSpriteInitIndex(a, cxVec2iv(9, 0), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
@@ -342,41 +369,29 @@ CX_OBJECT_INIT(fcMap, cxView)
         fcTreasureBox b = CX_CREATE(fcTreasureBox);
         cxSpriteSetImage(b, "item.xml?white.png");
         fcTreasureBoxInit(b, this);
-        fcSpriteInitIndex(b, cxVec2iv(2, 2));
+        fcSpriteInitIndex(b, cxVec2iv(2, 2), true);
         fcMapAppendDefenser(this, b);
     }
     
     {
         fcSprite b = CX_CREATE(fcSprite);
         fcSpriteInit(b, this);
-        fcSpriteInitIndex(b, cxVec2iv(1, 1));
+        fcSpriteInitIndex(b, fcMapBeginLocation(this), false);
         cxSpriteSetImage(b, "item.xml?blue.png");
         
         CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
         CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
         b->speed = 2;
         fcMapAppendIntruder(this, b);
-        fcSpriteMoveLoop(b, cxVec2iv(8, 8));
+        fcSpriteMoveLoop(b);
         fcIntruderLoop(b);
     }
     {
         fcSpeedUp su = CX_CREATE(fcSpeedUp);
         cxSpriteSetImage(su, "item.xml?yellow.png");
         fcSpriteInit(su, this);
-        fcSpriteInitIndex(su, cxVec2iv(8,8));
+        fcSpriteInitIndex(su, cxVec2iv(8,8), true);
         fcMapAppendProps(this, su);
-    }
-    {
-        fcIntruder b = CX_CREATE(fcIntruder);
-        fcIntruderInit(b, this, 0);
-        fcSpriteInitIndex(b, cxVec2iv(1, 8));
-        cxSpriteSetImage(b, "item.xml?blue.png");
-        CX_METHOD_OVERRIDE(b->super.IsAttack, isAttackMe);
-        CX_METHOD_OVERRIDE(b->super.Attacked, attackedTest);
-        b->super.speed = 1;
-        fcMapAppendIntruder(this, b);
-        
-        x = b;
     }
 }
 CX_OBJECT_FREE(fcMap, cxView)

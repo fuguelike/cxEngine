@@ -11,9 +11,10 @@
 #include "fcMap.h"
 #include "fcFollow.h"
 
-//target 是否在攻击范围内
+//target 是否在投射范围内
 static cxBool fcThrowerInRange(cxAny this,cxAny target)
 {
+    //自己不能投射自己
     if(this == target){
         return false;
     }
@@ -116,7 +117,7 @@ void fcThrowerLoop(cxAny this)
     CX_ASSERT(a->attackRate > 0, "can attack when attack rate > 0");
     CX_ASSERT(a->attackPower > 0, "can attack when attack power > 0");
     CX_ASSERT(a->attackRange > 0, "can attack when attack range > 0");
-    fcSpriteStartAITimer(a, fcThrowerRun, a->attackRate);
+    fcSpriteStartAILoop(a, fcThrowerRun, a->attackRate);
 }
 
 

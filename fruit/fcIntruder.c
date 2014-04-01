@@ -38,7 +38,7 @@ static void fcIntruderRun(cxEvent *e)
         cxSize2f cs = cxViewSize(this);
         cxFloat min = CX_MIN(ts.h, ts.w)/2.0f + CX_MIN(cs.h, cs.w)/2.0f;
         cxFloat distance = fcSpriteDistance(this, target);
-        //this 撞上了 target 道具
+        //target被this碰到
         if(distance < min){
             CX_METHOD_RUN(target->Collide,target,this);
         }
@@ -48,6 +48,6 @@ static void fcIntruderRun(cxEvent *e)
 void fcIntruderLoop(cxAny this)
 {
     fcIntruder i = this;
-    fcSpriteStartAITimer(this, fcIntruderRun, i->rate);
+    fcSpriteStartAILoop(this, fcIntruderRun, i->rate);
 }
 

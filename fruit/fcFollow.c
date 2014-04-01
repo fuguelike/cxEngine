@@ -21,6 +21,18 @@ cxAny fcFollowMaker(cxAny thrower)
     return follow;
 }
 
+cxBool fcFollowExit(cxAny pav)
+{
+    cxFollow this = pav;
+    cxVec2f tp = cxViewPosition(this->target);
+    cxVec2f cp = cxViewPosition(this->super.view);
+    cxFloat distance = kmVec2DistanceBetween(&tp, &cp);
+    if(distance < 5){
+        return true;
+    }
+    return false;
+}
+
 static void fcFollowStop(cxEvent *e)
 {
     cxAny attacker = cxEventArgToWeakRef(e->args);
@@ -39,6 +51,7 @@ static void fcFollowFire(cxAny fruit, cxAny attacker,cxAny target)
     cxViewAppend(this->super.map, this);
     cxFloat speed = fcMapScaleValue(this->super.map, this->super.speed);
     cxFollow follow = cxFollowCreate(speed, target);
+    CX_METHOD_OVERRIDE(follow->Exit, fcFollowExit);
     CX_EVENT_APPEND(follow->super.onStop, fcFollowStop, cxEventArgWeakRef(attacker));
     cxViewAppendAction(this, follow);
 }

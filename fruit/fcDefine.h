@@ -26,7 +26,7 @@ typedef struct {
 
 typedef enum {
     fcSpriteTypeNone = 0,       //你什么都不是
-    fcSpriteTypeDecoration,     //装饰物,例如地面，道路，花花草草
+    fcSpriteTypeDecoration,     //装饰物,例如地面，道路，花花草草，起点，终点
     fcSpriteTypeContainer,      //容器，例如水果仓库，水果篮子,宝箱
     fcSpriteTypeIntruder,       //闯关者,例如12生效宠物
     fcSpriteTypeThrower,        //投掷机,例如水果投射机
@@ -45,6 +45,12 @@ typedef enum {
 typedef enum {
     fcIntruderTypeNone = 0,
 }fcIntruderType;
+
+typedef enum {
+    fcLocationTypeNone = 0,
+    fcLocationTypeBegin,            //起点
+    fcLocationTypeEnd,              //终点
+}fcLocationType;
 
 typedef enum {
     fcFruitTypeNone = 0,

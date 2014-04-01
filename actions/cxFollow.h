@@ -13,17 +13,13 @@
 
 CX_C_BEGIN
 
-typedef cxBool (cxFollowExitFunc)(cxAny pav);
-
 CX_OBJECT_DEF(cxFollow, cxAction)
-    cxAny target;   //跟踪目标 cxNumber or cxView
-    cxFloat angle;  //当前运动角度
-    cxFloat speed;  //当前速度
-    cxFloat init;   //开始速度
-    cxFloat min;    //最小距离
-    //是否结束跟踪
+    cxAny target;   //follow target, cxNumber or cxView
+    cxFloat angle;  //current angle
+    cxFloat speed;  //current speed
+    cxFloat init;   //init speed
+    cxFloat min;    //exit min distance
     CX_METHOD_ALLOC(cxBool, Exit, cxAny);
-    //速度公式
     CX_METHOD_ALLOC(cxFloat, Speed,cxAny,cxFloat);
 CX_OBJECT_END(cxFollow)
 

@@ -17,10 +17,18 @@ CX_C_BEGIN
 CX_OBJECT_DEF(fcMap, cxView)
     cxSize2f gridSize;
     cxAny sprites[DM_MAP_WIDTH][DM_MAP_HEIGHT];
-    cxList intruder;//闯关列表
-    cxList defenser;//防御者
-    cxList props;//道具列表
+    cxList intruder;    //闯关列表
+    cxList defenser;    //防御者
+    cxList props;       //道具列表
+    cxAny bLoc;         //起点
+    cxAny eLoc;         //终点
 CX_OBJECT_END(fcMap)
+
+//获取起点
+cxVec2i fcMapBeginLocation(cxAny map);
+
+//获取终点
+cxVec2i fcMapEndLocation(cxAny map);
 
 //获取实际的像素
 cxFloat fcMapScaleValue(fcMap this,cxFloat v);

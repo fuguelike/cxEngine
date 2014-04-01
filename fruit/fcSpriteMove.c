@@ -31,6 +31,8 @@ static cxBool fcSpriteMoveExit(cxAny pav)
     }
     //已经到最后一点
     if(this->pointIndex >= (sprite->path.number - 1)){
+        //更新位置索引
+        sprite->idx = fcMapToIdx(sprite->map, cp);
         return true;
     }
     //设置到下一点目标
@@ -51,7 +53,7 @@ static cxFloat fcSpriteMoveSpeed(cxAny pav,cxFloat time)
 static void fcSpriteMoveInit(cxAny pav)
 {
     fcSpriteMove this = pav;
-    this->super.min = 5;
+    this->super.min = 3;
 }
 
 CX_OBJECT_INIT(fcSpriteMove, cxFollow)
@@ -73,10 +75,10 @@ cxAny fcSpriteMoveAction(cxAny pview)
     return cxViewGetAction(pview, FC_MOVE_ACTION_ID);
 }
 
-void fcSpriteMoveLoop(cxAny sprite,cxVec2i d)
+void fcSpriteMoveLoop(cxAny sprite)
 {
     fcSprite s = sprite;
-    if(fcSpriteFindPath(s, d) && s->path.number > 1){
+    if(fcSpriteFindEndPath(s) && s->path.number > 1){
         fcSpriteMove move = CX_CREATE(fcSpriteMove);
         cxActionSetId(move, FC_MOVE_ACTION_ID);
         cxFloat speed = fcMapScaleValue(s->map, s->speed);

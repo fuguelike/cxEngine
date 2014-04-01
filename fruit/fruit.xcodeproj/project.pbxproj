@@ -42,6 +42,7 @@
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		8384A34018DAD2E200D967B9 /* fcMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384A33E18DAD2E200D967B9 /* fcMap.c */; };
 		839F7FF318E546FA00727C0C /* fcTreasureBox.c in Sources */ = {isa = PBXBuildFile; fileRef = 839F7FF118E546FA00727C0C /* fcTreasureBox.c */; };
+		83F511B518EA593500FC57D4 /* fcLocation.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F511B318EA593500FC57D4 /* fcLocation.c */; };
 		83F88D8D18E1B73C00B778EE /* fcThrower.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F88D8B18E1B73C00B778EE /* fcThrower.c */; };
 /* End PBXBuildFile section */
 
@@ -112,6 +113,8 @@
 		839AC1D11832214D00AEBF8E /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
 		839F7FF118E546FA00727C0C /* fcTreasureBox.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcTreasureBox.c; sourceTree = SOURCE_ROOT; };
 		839F7FF218E546FA00727C0C /* fcTreasureBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcTreasureBox.h; sourceTree = SOURCE_ROOT; };
+		83F511B318EA593500FC57D4 /* fcLocation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcLocation.c; sourceTree = SOURCE_ROOT; };
+		83F511B418EA593500FC57D4 /* fcLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcLocation.h; sourceTree = SOURCE_ROOT; };
 		83F88D8B18E1B73C00B778EE /* fcThrower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcThrower.c; sourceTree = SOURCE_ROOT; };
 		83F88D8C18E1B73C00B778EE /* fcThrower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcThrower.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -215,6 +218,8 @@
 				8341787718E847A1005B56CC /* fcSpeedUp.h */,
 				836B256318DC57F4006D28F3 /* fcSprite.c */,
 				836B256418DC57F4006D28F3 /* fcSprite.h */,
+				83F511B318EA593500FC57D4 /* fcLocation.c */,
+				83F511B418EA593500FC57D4 /* fcLocation.h */,
 				839F7FF118E546FA00727C0C /* fcTreasureBox.c */,
 				839F7FF218E546FA00727C0C /* fcTreasureBox.h */,
 				8363089118DE8D5E009B5357 /* fcDefine.c */,
@@ -335,6 +340,7 @@
 				839F7FF318E546FA00727C0C /* fcTreasureBox.c in Sources */,
 				8341787818E847A1005B56CC /* fcSpeedUp.c in Sources */,
 				83F88D8D18E1B73C00B778EE /* fcThrower.c in Sources */,
+				83F511B518EA593500FC57D4 /* fcLocation.c in Sources */,
 				8341787F18E84D64005B56CC /* fcIntruder.c in Sources */,
 				836B256518DC57F4006D28F3 /* fcSprite.c in Sources */,
 				83314F7318D9C6530093FF54 /* main.c in Sources */,
