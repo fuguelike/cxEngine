@@ -12,63 +12,6 @@
 #include "cxAutoPool.h"
 #include "cxStack.h"
 #include "cxHashRoot.h"
-#include "cxDB.h"
-
-static void cxHashRootReadDB(cxDBEnv env,cxHashRoot root,xmlTextReaderPtr reader)
-{
-    cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, root, env);
-    int depth = xmlTextReaderDepth(reader);
-    while(xmlTextReaderRead(reader) && depth != xmlTextReaderDepth(reader)){
-        CX_CONTINUE(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT);
-        cxConstChars temp = cxXMLReadElementName(reader);
-        if(!ELEMENT_IS_TYPE(cxDB)){
-            continue;
-        }
-        cxConstChars file = cxXMLAttr(reader,"file");
-        cxConstChars table = cxXMLAttr(reader,"table");
-        cxConstChars type = cxXMLAttr(reader,"type");
-        cxConstChars sid = cxXMLAttr(reader,"id");
-        cxConstChars path = cxXMLAttr(reader,"path");
-        //assert file copy to document dir
-        cxBool copy = cxXMLReadBoolAttr(info, "copy", false);
-        if(copy && file != NULL){
-            cxCopyFile(file, NULL, NULL);
-        }
-        cxBool rdonly = cxXMLReadBoolAttr(info,  "rdonly", false);
-        if(sid == NULL){
-            CX_WARN("db id not set,will can't add dataset");
-        }
-        cxString sfile = NULL;
-        if(cxConstCharsEqu(path, "assert")){
-            sfile = cxAssetsPath(file);
-            rdonly = true;
-        }else if(cxConstCharsEqu(path, "document")){
-            sfile = cxDocumentPath(file);
-        }else{
-            CX_ASSERT(false, "must set path (assert or document)");
-        }
-        cxAny db = NULL;
-        if(file != NULL && table != NULL && type != NULL){
-            db = cxDBCreate(env, sfile, cxStringConstChars(table), type, rdonly);
-        }
-        if(db != NULL && sid != NULL){
-            cxHashSet(root->items, cxHashStrKey(sid), cxDBTypesCreate(db));
-        }else{
-            CX_ERROR("open dbenv type %s,db %s:%s failed",cxStringBody(env->type),file,table);
-        }
-    }
-}
-
-void cxHashRootReadDBEnv(cxHashRoot root,xmlTextReaderPtr reader)
-{
-    cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, root, NULL);
-    cxConstChars type = cxXMLAttr(reader, "type");
-    cxBool logger = cxXMLReadBoolAttr(info, "logger", false);
-    cxDBEnv env = cxDBEnvCreate(type, logger);
-    if(env != NULL){
-        cxHashRootReadDB(env, root, reader);
-    }
-}
 
 cxTypes cxHashRootReadString(cxHashRoot root,xmlTextReaderPtr reader)
 {
@@ -279,10 +222,6 @@ cxBool cxHashRootLoadWithReader(cxHashRoot root,xmlTextReaderPtr reader)
     while(xmlTextReaderRead(reader)){
         CX_CONTINUE(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT);
         cxConstChars temp = cxXMLReadElementName(reader);
-        if(ELEMENT_IS_TYPE(cxDBEnv)){
-            cxHashRootReadDBEnv(root,reader);
-            continue;
-        }
         cxConstChars  sid = cxXMLAttr(reader, "id");
         if(sid == NULL){
             CX_WARN("element %s:not set id,data not save to hash table",temp);

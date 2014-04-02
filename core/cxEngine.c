@@ -17,7 +17,6 @@
 #include "cxOpenGL.h"
 #include "cxUtil.h"
 #include "cxHashRoot.h"
-#include "cxDB.h"
 #include "cxFreeType.h"
 
 static cxEngine instance = NULL;

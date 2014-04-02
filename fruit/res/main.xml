@@ -2,6 +2,7 @@
 
 <!--cxView.fixScale="cxFixScaleW()" cxView.w="640" cxView.h="960""-->
 <cxViewRoot cxView.fill="0,0,0,0">
+    
     <fcMap id="map" />
     
     <cxButton cxView.size="180,120" cxView.bottom="0" cxView.left="0"

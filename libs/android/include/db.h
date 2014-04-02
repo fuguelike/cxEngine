@@ -102,7 +102,7 @@ extern "C" {
 
 
 
-typedef long long db_off_t;
+typedef int db_off_t;
 
 
 #ifdef HAVE_MIXED_SIZE_ADDRESSING

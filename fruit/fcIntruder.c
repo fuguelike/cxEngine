@@ -31,7 +31,7 @@ static void fcIntruderRun(cxEvent *e)
 {
     fcIntruder this = cxActionView(e->sender);
     fcMap map = this->super.map;
-    CX_LIST_FOREACH(map->props, ele){
+    CX_LIST_FOREACH_SAFE(map->props, ele, tmp){
         fcSprite target = ele->any;
         CX_ASSERT(target->type == fcSpriteTypeProperty, "must is property");
         cxSize2f ts = cxViewSize(target);

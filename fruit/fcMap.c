@@ -169,16 +169,16 @@ cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop)
     return rv;
 }
 
-void fcMapAppendProps(fcMap this,cxAny sprite)
+void fcMapAppendProps(fcMap this,cxAny props)
 {
-    fcSprite m = sprite;
-    m->element = cxListAppend(this->props, sprite);
-    cxViewAppend(this, sprite);
+    fcSprite m = props;
+    m->element = cxListAppend(this->props, props);
+    cxViewAppend(this, props);
 }
 
-void fcMapRemoveProps(fcMap this,cxAny sprite)
+void fcMapRemoveProps(fcMap this,cxAny props)
 {
-    fcSprite m = sprite;
+    fcSprite m = props;
     if(m->element != NULL){
         cxListRemove(this->props, m->element);
         cxViewRemoved(m);

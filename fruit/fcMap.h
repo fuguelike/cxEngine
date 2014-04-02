@@ -63,9 +63,9 @@ void fcMapAppendDefenser(fcMap this,cxAny sprite);
 void fcMapRemoveDefenser(fcMap this,cxAny sprite);
 
 //添加道具
-void fcMapAppendProps(fcMap this,cxAny sprite);
+void fcMapAppendProps(fcMap this,cxAny props);
 
-void fcMapRemoveProps(fcMap this,cxAny sprite);
+void fcMapRemoveProps(fcMap this,cxAny props);
 
 CX_C_END
 

@@ -13,7 +13,9 @@
 //props 被 target 碰到
 static void fcSpeedUpCollide(cxAny props,cxAny sprite)
 {
-//    CX_LOGGER("fcSpeedUp Collide target");
+    fcSpeedUp this = props;
+    CX_LOGGER("fcSpeedUp Collide target");
+    fcMapRemoveProps(this->super.map, props);
 }
 
 CX_OBJECT_INIT(fcSpeedUp, fcSprite)
