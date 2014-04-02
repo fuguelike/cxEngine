@@ -59,7 +59,7 @@ LOCAL_SRC_FILES += \
     actions/cxRunner.c \
     actions/cxAnimate.c \
     actions/cxSpline.c \
-    actions/cxRunParticle.c \
+    actions/cxParticle.c \
     actions/cxParabola.c \
     actions/cxFollow.c
 
@@ -68,7 +68,6 @@ LOCAL_SRC_FILES += \
     views/cxButton.c \
     views/cxClipping.c \
     views/cxLabelTTF.c \
-    views/cxParticle.c \
     views/cxSprite.c \
     views/cxTable.c \
     views/cxWindow.c \
@@ -101,7 +100,6 @@ LOCAL_SRC_FILES += \
     core/cxActionRoot.c \
     core/cxViewRoot.c \
     core/cxList.c \
-    core/cxDB.c \
     core/cxHashRoot.c \
     core/cxNumber.c \
     core/cxUtil.c \

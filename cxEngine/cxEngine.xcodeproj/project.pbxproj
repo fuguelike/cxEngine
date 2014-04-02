@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		83314F6818D9C5D00093FF54 /* libdb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F5F18D9C5D00093FF54 /* libdb.a */; };
 		83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6018D9C5D00093FF54 /* libevent.a */; };
 		83314F6A18D9C5D00093FF54 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6118D9C5D00093FF54 /* libfreetype.a */; };
 		83314F6B18D9C5D00093FF54 /* libgif.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6218D9C5D00093FF54 /* libgif.a */; };
@@ -176,7 +175,6 @@
 			files = (
 				83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */,
 				83314F7118D9C5D80093FF54 /* libxml2.dylib in Frameworks */,
-				83314F6818D9C5D00093FF54 /* libdb.a in Frameworks */,
 				83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */,
 				83314F6A18D9C5D00093FF54 /* libfreetype.a in Frameworks */,
 				83314F6B18D9C5D00093FF54 /* libgif.a in Frameworks */,
