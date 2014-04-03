@@ -165,7 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */,
-				839E7A5317F1BC7600B0F5EC /* cxEngine */,
+				839E7A5317F1BC7600B0F5EC /* fruit */,
 				839E7A4817F1BC7600B0F5EC /* Frameworks */,
 				8300651F18232BE000AF680D /* fruit.app */,
 			);
@@ -209,7 +209,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		839E7A5317F1BC7600B0F5EC /* cxEngine */ = {
+		839E7A5317F1BC7600B0F5EC /* fruit */ = {
 			isa = PBXGroup;
 			children = (
 				83314F7218D9C6530093FF54 /* main.c */,
@@ -237,6 +237,7 @@
 				836895A818E300F70084EFFD /* fcFollow.c */,
 				836895A918E300F70084EFFD /* fcFollow.h */,
 			);
+			name = fruit;
 			path = cxEngine;
 			sourceTree = "<group>";
 		};

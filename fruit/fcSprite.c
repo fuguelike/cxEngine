@@ -83,7 +83,7 @@ void fcSpriteInitIndex(cxAny this, cxVec2i idx,cxBool isSpace)
 cxBool fcSpriteFindEndLocationPath(cxAny this)
 {
     fcSprite s = this;
-    cxVec2i end = fcMapEndLocation(s->map);
+    cxVec2i end = fcMapEndIndex(s->map);
     return fcSpriteFindPath(this, end);
 }
 
@@ -144,6 +144,9 @@ cxBool fcSpriteTouch(cxAny pview,cxTouch *touch)
             return false;
         }
         if(!fcMapCheckIdx(idx)){
+            return false;
+        }
+        if(!fcMapHasPass(map)){
             return false;
         }
         return fcSpriteMoveTo(pview, idx);

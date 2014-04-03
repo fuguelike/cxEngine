@@ -186,6 +186,23 @@ void fcMapRemoveProps(fcMap this,cxAny props)
     }
 }
 
+void fcMapAppendPoints(fcMap this,cxAny loc)
+{
+    fcSprite m = loc;
+    m->element = cxListAppend(this->points, loc);
+    cxViewAppend(this, loc);
+}
+
+void fcMapRemovePoints(fcMap this,cxAny loc)
+{
+    fcSprite m = loc;
+    if(m->element != NULL){
+        cxListRemove(this->points, m->element);
+        cxViewRemoved(m);
+        m->element = NULL;
+    }
+}
+
 void fcMapAppendIntruder(fcMap this,cxAny sprite)
 {
     fcSprite m = sprite;
@@ -222,11 +239,11 @@ void fcMapRemoveDefenser(fcMap this,cxAny sprite)
 
 static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
 {
-//    fcThrower s = sprite;
-//    fcFruit f = fruit;
-//    CX_LOGGER("%p attacked %p,attacker = %p",f, s, attacker);
-//    fcThrowerPauseTime(attacker,5);
-//    fcSpriteRemoved(s);
+    fcThrower s = sprite;
+    fcFruit f = fruit;
+    CX_LOGGER("%p attacked %p,attacker = %p removed",f, s, attacker);
+    fcSpriteUnset(sprite);
+    fcMapRemoveIntruder(s->super.map, s);
 }
 
 static cxBool isAttackMe(cxAny sprite, cxAny fruit,cxAny attacker)
@@ -243,18 +260,52 @@ void fcMapSetMode(cxAny this,fcMapMode mode)
     m->mode = mode;
 }
 
-cxVec2i fcMapBeginLocation(cxAny map)
+cxBool fcMapHasPass(cxAny map)
 {
     fcMap this = map;
-    CX_ASSERT(this->bLoc != NULL, "not set begin location");
-    return fcSpriteIndex(this->bLoc);
+    cxVec2i b = cxVec2iv(-1, -1),e = cxVec2iv(-1, -1);
+    cxInt i = 0, j = 0;
+    CX_LIST_FOREACH(this->points, ele){
+        fcLocation loc = ele->any;
+        if(loc->type == fcLocationTypeBegin){
+            b = loc->super.idx;
+            i++;
+        }else if(loc->type == fcLocationTypeEnd){
+            e = loc->super.idx;
+            j++;
+        }
+    }
+    if(i == 0 || j == 0){
+        CX_ASSERT_FALSE("not set beign point and end point");
+        return false;
+    }
+    return fcMapFindPath(map, &this->path, b, e);
 }
 
-cxVec2i fcMapEndLocation(cxAny map)
+cxVec2i fcMapEndIndex(cxAny map)
 {
     fcMap this = map;
-    CX_ASSERT(this->eLoc != NULL, "not set end location");
-    return fcSpriteIndex(this->eLoc);
+    CX_LIST_FOREACH(this->points, ele){
+        fcLocation loc = ele->any;
+        if(loc->type == fcLocationTypeEnd){
+            return loc->super.idx;
+        }
+    }
+    CX_ASSERT_FALSE("must set end location");
+    return cxVec2iv(0, 0);
+}
+
+cxVec2i fcMapBegIndex(cxAny map)
+{
+    fcMap this = map;
+    CX_LIST_FOREACH(this->points, ele){
+        fcLocation loc = ele->any;
+        if(loc->type == fcLocationTypeBegin){
+            return loc->super.idx;
+        }
+    }
+    CX_ASSERT_FALSE("must set begin location");
+    return cxVec2iv(0, 0);
 }
 
 static void fcMapLocation(cxAny map,cxAny loc)
@@ -264,13 +315,14 @@ static void fcMapLocation(cxAny map,cxAny loc)
     if(l->type != fcLocationTypeBegin){
         return;
     }
-    fcSprite b = CX_CREATE(fcSprite);
+    fcIntruder b = CX_CREATE(fcIntruder);
     fcSpriteInit(b, this);
-    fcSpriteInitIndex(b, fcMapBeginLocation(this), false);
+    fcSpriteInitIndex(b,l->super.idx, false);
     cxSpriteSetImage(b, "item.xml?blue.png");
-    CX_METHOD_OVERRIDE(b->IsAttack, isAttackMe);
-    CX_METHOD_OVERRIDE(b->Attacked, attackedTest);
-    b->speed = 2;
+    CX_METHOD_OVERRIDE(b->super.IsAttack, isAttackMe);
+    CX_METHOD_OVERRIDE(b->super.Attacked, attackedTest);
+    b->super.speed = 2;
+    b->super.life = 100;
     fcMapAppendIntruder(this, b);
     fcSpriteMoveLoop(b);
     fcIntruderLoop(b);
@@ -288,6 +340,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     //
     CX_METHOD_OVERRIDE(this->Location, fcMapLocation);
     //
+    this->points = CX_ALLOC(cxList);
     this->intruder = CX_ALLOC(cxList);
     this->defenser = CX_ALLOC(cxList);
     this->props = CX_ALLOC(cxList);
@@ -299,19 +352,20 @@ CX_OBJECT_INIT(fcMap, cxView)
     cxViewSetSize(this, cxSize2fv(vw, vw));
     //
     CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
-    //设置起点和终点
+    //设置1个起点和1个终点(只能有1个终点)
     {
-        this->bLoc = CX_CREATE(fcLocation);
-        fcLocationInit(this->bLoc, this, fcLocationTypeBegin);
-        fcSpriteInitIndex(this->bLoc, cxVec2iv(0, 1), true);
-        cxSpriteSetImage(this->bLoc, "item.xml?begin.png");
-        fcMapAppendDefenser(this, this->bLoc);
-        
-        this->eLoc = CX_CREATE(fcLocation);
-        fcLocationInit(this->eLoc, this, fcLocationTypeEnd);
-        fcSpriteInitIndex(this->eLoc, cxVec2iv(9, 8), true);
-        cxSpriteSetImage(this->eLoc, "item.xml?end.png");
-        fcMapAppendDefenser(this, this->eLoc);
+        fcLocation loc = CX_CREATE(fcLocation);
+        fcLocationInit(loc, this, fcLocationTypeBegin);
+        fcSpriteInitIndex(loc, cxVec2iv(4, 5), true);
+        cxSpriteSetImage(loc, "item.xml?begin.png");
+        fcMapAppendPoints(this, loc);
+    }
+    {
+        fcLocation loc = CX_CREATE(fcLocation);
+        fcLocationInit(loc, this, fcLocationTypeEnd);
+        fcSpriteInitIndex(loc, cxVec2iv(9, 8), true);
+        cxSpriteSetImage(loc, "item.xml?end.png");
+        fcMapAppendPoints(this, loc);
     }
     //
     {
@@ -321,7 +375,7 @@ CX_OBJECT_INIT(fcMap, cxView)
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
-        a->attackNumber = 2;
+        a->attackNumber = 1;
         a->attackPower = 5;
         fcMapAppendDefenser(this, a);
         //开始搜索攻击
@@ -335,7 +389,7 @@ CX_OBJECT_INIT(fcMap, cxView)
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
-        a->attackNumber = 2;
+        a->attackNumber = 1;
         a->attackPower = 5;
         fcMapAppendDefenser(this, a);
         //开始搜索攻击
@@ -349,7 +403,7 @@ CX_OBJECT_INIT(fcMap, cxView)
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
-        a->attackNumber = 2;
+        a->attackNumber = 1;
         a->attackPower = 5;
         fcMapAppendDefenser(this, a);
         //开始搜索攻击
@@ -363,7 +417,7 @@ CX_OBJECT_INIT(fcMap, cxView)
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
         a->attackRange = 4;
-        a->attackNumber = 2;
+        a->attackNumber = 1;
         a->attackPower = 5;
         fcMapAppendDefenser(this, a);
         //开始搜索攻击
@@ -392,6 +446,7 @@ CX_OBJECT_FREE(fcMap, cxView)
     CX_RELEASE(this->defenser);
     CX_RELEASE(this->props);
     CX_RELEASE(this->intruder);
+    CX_RELEASE(this->points);
 }
 CX_OBJECT_TERM(fcMap, cxView)
 

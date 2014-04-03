@@ -15,13 +15,13 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(fcMap, cxView)
+    fcPath path;//begin point -> end point
     cxSize2f gridSize;
     cxAny sprites[DM_MAP_WIDTH][DM_MAP_HEIGHT];
     cxList intruder;    //闯关列表
     cxList defenser;    //防御者
     cxList props;       //道具列表
-    cxAny bLoc;         //起点
-    cxAny eLoc;         //终点
+    cxList points;      //开始点和终点
     fcMapMode mode;
     CX_METHOD_ALLOC(void, Location,cxAny map,cxAny loc);
     //当有sprite到达end location
@@ -30,13 +30,12 @@ CX_OBJECT_END(fcMap)
 
 //设置地图模式
 void fcMapSetMode(cxAny this,fcMapMode mode);
-
-//获取起点
-cxVec2i fcMapBeginLocation(cxAny map);
-
+//起到释放能到达终点
+cxBool fcMapHasPass(cxAny map);
 //获取终点
-cxVec2i fcMapEndLocation(cxAny map);
-
+cxVec2i fcMapEndIndex(cxAny map);
+//获取起点
+cxVec2i fcMapBegindex(cxAny map);
 //获取实际的像素
 cxFloat fcMapScaleValue(fcMap this,cxFloat v);
 
@@ -51,6 +50,10 @@ cxInt fcMapValue(fcMap this,cxVec2i idx);
 cxAny fcMapSprite(fcMap this,cxVec2i idx);
 
 cxBool fcMapCheckIdx(cxVec2i idx);
+//添加活动点
+void fcMapAppendPoints(fcMap this,cxAny loc);
+
+void fcMapRemovePoints(fcMap this,cxAny loc);
 
 //添加闯关者
 void fcMapAppendIntruder(fcMap this,cxAny sprite);

@@ -21,6 +21,8 @@ CX_OBJECT_END(fcSpriteMove)
 
 cxAny fcSpriteMoveAction(cxAny pview);
 
+void fcSpriteStop(cxAny sprite);
+
 //向终点前进
 void fcSpriteMoveLoop(cxAny sprite);
 

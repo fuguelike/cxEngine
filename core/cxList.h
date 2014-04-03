@@ -29,8 +29,6 @@ struct cxListElement {
     cxAny any;
 };
 
-typedef int (*cxListCmpFunc)(cxListElement *lp,cxListElement *rp);
-
 CX_OBJECT_DEF(cxList, cxObject)
     cxListElement *listptr;
 CX_OBJECT_END(cxList)

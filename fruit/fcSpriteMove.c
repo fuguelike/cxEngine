@@ -75,11 +75,19 @@ cxAny fcSpriteMoveAction(cxAny pview)
     return cxViewGetAction(pview, FC_MOVE_ACTION_ID);
 }
 
+void fcSpriteStop(cxAny sprite)
+{
+    cxAny pav = fcSpriteMoveAction(sprite);
+    if(pav != NULL){
+        cxActionStop(pav);
+    }
+}
+
 static void fcSpriteMoveStop(cxEvent *e)
 {
     fcSprite s = cxActionView(e->sender);
     fcMap map = s->map;
-    cxVec2i eIdx = fcMapEndLocation(map);
+    cxVec2i eIdx = fcMapEndIndex(map);
     if(!cxVec2iEqu(s->idx, eIdx)){
         return;
     }
