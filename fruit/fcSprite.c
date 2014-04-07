@@ -58,6 +58,12 @@ cxInt fcSpritePathValue(cxAny this)
     return CX_METHOD_GET(s->type, s->PathValue, s);
 }
 
+cxBool fcSpriteHasOver(cxAny this)
+{
+    fcSprite s = this;
+    return s->life <= 0;
+}
+
 cxVec2i fcSpriteIndex(cxAny this)
 {
     fcSprite s = this;
@@ -71,11 +77,6 @@ void fcSpriteInitIndex(cxAny this, cxVec2i idx,cxBool isSpace)
     fcMap map = s->map;
     s->isSpace = isSpace;
     s->idx = idx;
-    //如果sprite影响到寻路
-    if(isSpace){
-        CX_ASSERT(fcMapSprite(map, idx) == NULL, "has sprite in here");
-        map->sprites[idx.x][idx.y] = this;
-    }
     cxVec2f pos = fcMapToPos(map, idx);
     cxViewSetPos(s, pos);
 }
@@ -131,8 +132,9 @@ cxBool fcSpriteTouch(cxAny pview,cxTouch *touch)
         return false;
     }
     cxVec2f pos = cxVec2fv(0, 0);
+    cxBool selected = cxViewHitTest(pview, touch->current, &pos);
     if(touch->type == cxTouchTypeDown){
-        this->isSelected = cxViewHitTest(pview, touch->current, &pos);
+        this->isSelected = selected;
         this->currPos = cxViewPosition(pview);
         return this->isSelected;
     }

@@ -10,19 +10,11 @@
 #include "fcSprite.h"
 #include "fcSpriteMove.h"
 
-static cxVec2f fcSpriteMoveTargetPos(cxAny pav)
-{
-    fcSpriteMove move = pav;
-    fcSprite s = cxActionView(move);
-    cxVec2i idx = s->path.points[move->pointIndex];
-    return fcMapToPos(s->map, idx);
-}
-
 static cxBool fcSpriteMoveExit(cxAny pav)
 {
     fcSpriteMove this = pav;
     fcSprite sprite = cxActionView(pav);
-    cxVec2f tp = fcSpriteMoveTargetPos(pav);
+    cxVec2f tp = this->points[this->pointIndex];
     cxVec2f cp = cxViewPosition(sprite);
     cxFloat distance = kmVec2DistanceBetween(&tp, &cp);
     //未到达目的点
@@ -37,8 +29,7 @@ static cxBool fcSpriteMoveExit(cxAny pav)
     }
     //设置到下一点目标
     this->pointIndex ++;
-    cxVec2f np = fcSpriteMoveTargetPos(pav);
-    cxFollowSetVec2f(pav, np);
+    cxFollowSetVec2f(pav, this->points[this->pointIndex]);
     return false;
 }
 
@@ -66,7 +57,7 @@ CX_OBJECT_INIT(fcSpriteMove, cxFollow)
 }
 CX_OBJECT_FREE(fcSpriteMove, cxFollow)
 {
-    
+    allocator->free(this->points);
 }
 CX_OBJECT_TERM(fcSpriteMove, cxFollow)
 
@@ -75,7 +66,7 @@ cxAny fcSpriteMoveAction(cxAny pview)
     return cxViewGetAction(pview, FC_MOVE_ACTION_ID);
 }
 
-void fcSpriteStop(cxAny sprite)
+void fcSpriteMoveStop(cxAny sprite)
 {
     cxAny pav = fcSpriteMoveAction(sprite);
     if(pav != NULL){
@@ -83,7 +74,7 @@ void fcSpriteStop(cxAny sprite)
     }
 }
 
-static void fcSpriteMoveStop(cxEvent *e)
+static void fcSpriteMoveOnStop(cxEvent *e)
 {
     fcSprite s = cxActionView(e->sender);
     fcMap map = s->map;
@@ -91,12 +82,14 @@ static void fcSpriteMoveStop(cxEvent *e)
     if(!cxVec2iEqu(s->idx, eIdx)){
         return;
     }
+    CX_LOGGER("arrive %d %d",eIdx.x,eIdx.y);
     CX_METHOD_RUN(map->Arrive, map, s);
 }
 
 void fcSpriteMoveLoop(cxAny sprite)
 {
     fcSprite s = sprite;
+    fcMap map = s->map;
     if(!fcSpriteFindEndLocationPath(s)){
         return;
     }
@@ -108,9 +101,15 @@ void fcSpriteMoveLoop(cxAny sprite)
     cxFloat speed = fcMapScaleValue(s->map, s->speed);
     cxFollowSetInit(move, speed);
     cxViewAppendAction(s, move);
-    cxVec2f pt = fcSpriteMoveTargetPos(move);
-    cxFollowSetVec2f(move, pt);
-    CX_EVENT_QUICK(move->super.super.onStop, fcSpriteMoveStop);
+    move->points = allocator->realloc(move->points,sizeof(cxVec2f) * s->path.number);
+    for(cxInt i=0; i < s->path.number; i++){
+        cxVec2f pos = fcMapToPos(s->map, s->path.points[i]);
+        pos.x += (CX_RAND_11f() * map->gridSize.w / 2.0f);
+        pos.y += (CX_RAND_11f() * map->gridSize.h / 2.0f);
+        move->points[i] = pos;
+    }
+    cxFollowSetVec2f(move, move->points[move->pointIndex]);
+    CX_EVENT_QUICK(move->super.super.onStop, fcSpriteMoveOnStop);
 }
 
 

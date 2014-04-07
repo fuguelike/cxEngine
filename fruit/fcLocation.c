@@ -25,7 +25,7 @@ static cxBool fcLocationTouch(cxAny pview,cxTouch *touch)
     }
     if(touch->type == cxTouchTypeUp){
         //点击到起点或者终点
-        CX_METHOD_RUN(map->Location, map, this);
+        CX_METHOD_RUN(map->TouchLocation, map, this);
         CX_LOGGER("touch locaton %d",this->type);
         return true;
     }

@@ -169,21 +169,40 @@ cxBool fcMapFindPath(fcMap this,fcPath *path,cxVec2i start,cxVec2i stop)
     return rv;
 }
 
+static void fcMapAppendItem(fcMap this, cxList list,cxAny item)
+{
+    fcSprite s = item;
+    s->element = cxListAppend(list, item);
+    if(s->isSpace){
+        CX_ASSERT(fcMapSprite(this, s->idx) == NULL, "has sprite in here");
+        this->sprites[s->idx.x][s->idx.y] = s;
+    }
+    cxViewAppend(this, item);
+}
+
+static void fcMapRemoveItem(fcMap this, cxList list,cxAny item)
+{
+    fcSprite s = item;
+    if(s->element == NULL){
+        return;
+    }
+    if(s->isSpace){
+        CX_ASSERT(fcMapSprite(this, s->idx) != NULL, "has sprite in here");
+        this->sprites[s->idx.x][s->idx.y] = NULL;
+    }
+    cxListRemove(list, s->element);
+    s->element = NULL;
+    cxViewRemoved(s);
+}
+
 void fcMapAppendProps(fcMap this,cxAny props)
 {
-    fcSprite m = props;
-    m->element = cxListAppend(this->props, props);
-    cxViewAppend(this, props);
+    fcMapAppendItem(this, this->props, props);
 }
 
 void fcMapRemoveProps(fcMap this,cxAny props)
 {
-    fcSprite m = props;
-    if(m->element != NULL){
-        cxListRemove(this->props, m->element);
-        cxViewRemoved(m);
-        m->element = NULL;
-    }
+    fcMapRemoveItem(this, this->props, props);
 }
 
 void fcMapAppendPoints(fcMap this,cxAny loc)
@@ -195,63 +214,46 @@ void fcMapAppendPoints(fcMap this,cxAny loc)
 
 void fcMapRemovePoints(fcMap this,cxAny loc)
 {
-    fcSprite m = loc;
-    if(m->element != NULL){
-        cxListRemove(this->points, m->element);
-        cxViewRemoved(m);
-        m->element = NULL;
-    }
+    fcMapRemoveItem(this, this->points, loc);
 }
 
 void fcMapAppendIntruder(fcMap this,cxAny sprite)
 {
-    fcSprite m = sprite;
-    m->element = cxListAppend(this->intruder, sprite);
-    cxViewAppend(this, sprite);
+    fcMapAppendItem(this, this->intruder, sprite);
 }
 
 void fcMapRemoveIntruder(fcMap this,cxAny sprite)
 {
-    fcSprite m = sprite;
-    if(m->element != NULL){
-        cxListRemove(this->intruder, m->element);
-        cxViewRemoved(m);
-        m->element = NULL;
-    }
+    fcMapRemoveItem(this, this->intruder, sprite);
 }
 
 void fcMapAppendDefenser(fcMap this,cxAny sprite)
 {
-    fcSprite m = sprite;
-    m->element = cxListAppend(this->defenser, sprite);
-    cxViewAppend(this, sprite);
+    fcMapAppendItem(this, this->defenser, sprite);
 }
 
 void fcMapRemoveDefenser(fcMap this,cxAny sprite)
 {
-    fcSprite m = sprite;
-    if(m->element != NULL){
-        cxListRemove(this->defenser, m->element);
-        cxViewRemoved(m);
-        m->element = NULL;
-    }
+    fcMapRemoveItem(this, this->defenser, sprite);
 }
 
 static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
 {
-    fcThrower s = sprite;
+    fcThrower a = attacker;
+    fcIntruder s = sprite;
     fcFruit f = fruit;
-    CX_LOGGER("%p attacked %p,attacker = %p removed",f, s, attacker);
-    fcSpriteUnset(sprite);
-    fcMapRemoveIntruder(s->super.map, s);
+    if(s->super.life <= 0){
+        CX_LOGGER("%p attacked %p,attacker = %p removed",f, s, a);
+        fcSpriteUnset(sprite);
+        fcMapRemoveIntruder(s->super.map, s);
+    }
+    s->super.life -= 10;
 }
 
 static cxBool isAttackMe(cxAny sprite, cxAny fruit,cxAny attacker)
 {
-//    fcSprite s = sprite;
-//    fcFruit f = fruit;
-//    CX_LOGGER("%p will attacked %p,use fruit = %p",attacker, s, f);
-    return true;
+    fcIntruder s = sprite;
+    return s->super.life > 0;
 }
 
 void fcMapSetMode(cxAny this,fcMapMode mode)
@@ -308,7 +310,7 @@ cxVec2i fcMapBegIndex(cxAny map)
     return cxVec2iv(0, 0);
 }
 
-static void fcMapLocation(cxAny map,cxAny loc)
+static void fcMapTouchLocation(cxAny map,cxAny loc)
 {
     fcMap this = map;
     fcLocation l = loc;
@@ -319,6 +321,7 @@ static void fcMapLocation(cxAny map,cxAny loc)
     fcSpriteInit(b, this);
     fcSpriteInitIndex(b,l->super.idx, false);
     cxSpriteSetImage(b, "item.xml?blue.png");
+    cxViewSetSize(b, cxSize2fv(this->gridSize.w/2, this->gridSize.h/2));
     CX_METHOD_OVERRIDE(b->super.IsAttack, isAttackMe);
     CX_METHOD_OVERRIDE(b->super.Attacked, attackedTest);
     b->super.speed = 2;
@@ -338,12 +341,12 @@ CX_OBJECT_INIT(fcMap, cxView)
     cxObjectSetReadAttrFunc(this, fcMapReadAttr);
     fcMapSetMode(this, fcMapModeEdit);
     //
-    CX_METHOD_OVERRIDE(this->Location, fcMapLocation);
+    CX_METHOD_OVERRIDE(this->TouchLocation, fcMapTouchLocation);
     //
-    this->points = CX_ALLOC(cxList);
-    this->intruder = CX_ALLOC(cxList);
-    this->defenser = CX_ALLOC(cxList);
-    this->props = CX_ALLOC(cxList);
+    this->points    = CX_ALLOC(cxList);
+    this->intruder  = CX_ALLOC(cxList);
+    this->defenser  = CX_ALLOC(cxList);
+    this->props     = CX_ALLOC(cxList);
     //
     cxSize2f size = cxEngineInstance()->winsize;
     cxFloat vw = size.w - 20;
@@ -356,7 +359,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     {
         fcLocation loc = CX_CREATE(fcLocation);
         fcLocationInit(loc, this, fcLocationTypeBegin);
-        fcSpriteInitIndex(loc, cxVec2iv(4, 5), true);
+        fcSpriteInitIndex(loc, cxVec2iv(0, 0), true);
         cxSpriteSetImage(loc, "item.xml?begin.png");
         fcMapAppendPoints(this, loc);
     }
@@ -442,7 +445,7 @@ CX_OBJECT_INIT(fcMap, cxView)
 CX_OBJECT_FREE(fcMap, cxView)
 {
     CX_METHOD_RELEASE(this->Arrive);
-    CX_METHOD_RELEASE(this->Location);
+    CX_METHOD_RELEASE(this->TouchLocation);
     CX_RELEASE(this->defenser);
     CX_RELEASE(this->props);
     CX_RELEASE(this->intruder);

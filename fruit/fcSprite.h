@@ -51,6 +51,9 @@ CX_OBJECT_DEF(fcSprite, cxSprite)
     cxFloat speed;
 CX_OBJECT_END(fcSprite)
 
+//是否死了
+cxBool fcSpriteHasOver(cxAny this);
+
 //获取map
 cxAny fcSpriteMapView(cxAny this);
 

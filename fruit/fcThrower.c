@@ -29,7 +29,7 @@ CX_OBJECT_INIT(fcThrower, fcSprite)
 {
     this->super.type = fcSpriteTypeThrower;
     this->attackRange = 0;
-    this->attackRate = 0.5f;
+    this->attackRate = 0.1f;
     this->attackPower = 0;
 }
 CX_OBJECT_FREE(fcThrower, fcSprite)
@@ -45,6 +45,10 @@ static void fcThrowerSearchTarget(fcThrower this)
     fcMap map = this->super.map;
     CX_LIST_FOREACH_SAFE(map->intruder, ele, tmp){
         fcSprite target = ele->any;
+        //死了的
+        if(fcSpriteHasOver(target)){
+            continue;
+        }
         //已经在目标列表中
         if(fcSpriteHasTarget(this, target)){
             continue;
@@ -67,7 +71,7 @@ static void fcThrowerFire(cxAny sprite, cxAny fruit,cxAny target)
     fcThrower a = sprite;
     fcFruit this = fruit;
     //盯住目标
-//    fcSpriteLookAt(a, target);
+    fcSpriteLookAt(a, target);
     //投掷水果
     CX_METHOD_RUN(this->Fire, this, a, target);
     //
@@ -85,7 +89,7 @@ static void fcThrowerRun(cxEvent *e)
     //攻击目标
     CX_HASH_FOREACH(this->super.targets, ele, tmp){
         fcSprite sprite = ele->any;
-        //解除范围外的目标
+        //解除范围外的和死去的目标
         if(!fcThrowerInRange(this,sprite)){
             fcSpriteUnset(sprite);
             continue;
@@ -100,6 +104,10 @@ static void fcThrowerRun(cxEvent *e)
             continue;
         }
         fcThrowerFire(this, fruit, sprite);
+        //解除死去的
+        if(fcSpriteHasOver(sprite)){
+            fcSpriteUnset(sprite);
+        }
     }
 }
 

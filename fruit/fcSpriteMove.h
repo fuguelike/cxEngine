@@ -17,11 +17,12 @@ CX_C_BEGIN
 CX_OBJECT_DEF(fcSpriteMove, cxFollow)
     cxInt pointIndex;
     cxFloat speed;//提升的速度
+    cxVec2f *points;
 CX_OBJECT_END(fcSpriteMove)
 
 cxAny fcSpriteMoveAction(cxAny pview);
 
-void fcSpriteStop(cxAny sprite);
+void fcSpriteMoveStop(cxAny sprite);
 
 //向终点前进
 void fcSpriteMoveLoop(cxAny sprite);

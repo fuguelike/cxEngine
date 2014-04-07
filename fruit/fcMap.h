@@ -23,7 +23,8 @@ CX_OBJECT_DEF(fcMap, cxView)
     cxList props;       //道具列表
     cxList points;      //开始点和终点
     fcMapMode mode;
-    CX_METHOD_ALLOC(void, Location,cxAny map,cxAny loc);
+    //当点击到起点或者终点时
+    CX_METHOD_ALLOC(void, TouchLocation,cxAny map,cxAny loc);
     //当有sprite到达end location
     CX_METHOD_ALLOC(void, Arrive,cxAny map,cxAny sprite);
 CX_OBJECT_END(fcMap)
