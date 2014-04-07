@@ -207,9 +207,7 @@ void fcMapRemoveProps(fcMap this,cxAny props)
 
 void fcMapAppendPoints(fcMap this,cxAny loc)
 {
-    fcSprite m = loc;
-    m->element = cxListAppend(this->points, loc);
-    cxViewAppend(this, loc);
+    fcMapAppendItem(this, this->points, loc);
 }
 
 void fcMapRemovePoints(fcMap this,cxAny loc)
@@ -242,12 +240,14 @@ static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
     fcThrower a = attacker;
     fcIntruder s = sprite;
     fcFruit f = fruit;
+    
+    s->super.life -= 10;
+    
     if(s->super.life <= 0){
         CX_LOGGER("%p attacked %p,attacker = %p removed",f, s, a);
         fcSpriteUnset(sprite);
         fcMapRemoveIntruder(s->super.map, s);
     }
-    s->super.life -= 10;
 }
 
 static cxBool isAttackMe(cxAny sprite, cxAny fruit,cxAny attacker)

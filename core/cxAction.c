@@ -150,9 +150,14 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     dt = dt * this->speed;
     if(this->pauseTime > 0){
         this->pauseTime -= dt;
+        CX_EVENT_FIRE(this, onStep);
         goto finished;
     }
-    if(this->isPause || this->isExit){
+    if(this->isPause){
+        CX_EVENT_FIRE(this, onStep);
+        goto finished;
+    }
+    if(this->isExit){
         goto finished;
     }
     //init event
@@ -168,6 +173,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //action delay
     this->delayElapsed += dt;
     if(this->delay > 0 && this->delayElapsed < this->delay){
+        CX_EVENT_FIRE(this, onStep);
         goto finished;
     }
     //for active

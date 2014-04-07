@@ -16,7 +16,7 @@ cxAny fcFollowMaker(cxAny thrower)
 {
     fcThrower this = thrower;
     fcFollow follow = CX_CREATE(fcFollow);
-    fcFollowInit(follow, this->super.map, 6);
+    fcFollowInit(follow, this->super.map, 8);
     cxSpriteSetImage(follow, "item.xml?fire.png");
     return follow;
 }
@@ -39,9 +39,20 @@ static void fcFollowStop(cxEvent *e)
     fcFollow fruit = cxActionView(e->sender);
     fcSprite sprite = cxFollowTarget(e->sender);
     //sprite 被 fruit 击中，凶手是attacker
-    CX_METHOD_RUN(sprite->Attacked, sprite, fruit, attacker);
+    if(!fcSpriteHasOver(sprite)){
+        CX_METHOD_RUN(sprite->Attacked, sprite, fruit, attacker);
+    }
     //移除水果导弹
     fcFruitRemoved(fruit);
+}
+
+//目标死亡后停止
+static void fcFollowStep(cxEvent *e)
+{
+    fcSprite sprite = cxFollowTarget(e->sender);
+    if(fcSpriteHasOver(sprite)) {
+        cxActionStop(e->sender);
+    }
 }
 
 static void fcFollowFire(cxAny fruit, cxAny attacker,cxAny target)
@@ -53,6 +64,7 @@ static void fcFollowFire(cxAny fruit, cxAny attacker,cxAny target)
     cxFollow follow = cxFollowCreate(speed, target);
     CX_METHOD_OVERRIDE(follow->Exit, fcFollowExit);
     CX_EVENT_APPEND(follow->super.onStop, fcFollowStop, cxEventArgWeakRef(attacker));
+    CX_EVENT_APPEND(follow->super.onStep, fcFollowStep, cxEventArgWeakRef(attacker));
     cxViewAppendAction(this, follow);
 }
 

@@ -16,6 +16,8 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(fcSprite, cxSprite)
+    //成功到达
+    cxBool isSuccess;
     //是否可移动
     cxBool isSpace;
     //当前是否被选中

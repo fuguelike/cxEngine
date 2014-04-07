@@ -82,6 +82,7 @@ static void fcSpriteMoveOnStop(cxEvent *e)
     if(!cxVec2iEqu(s->idx, eIdx)){
         return;
     }
+    s->isSuccess = true;
     CX_LOGGER("arrive %d %d",eIdx.x,eIdx.y);
     CX_METHOD_RUN(map->Arrive, map, s);
 }

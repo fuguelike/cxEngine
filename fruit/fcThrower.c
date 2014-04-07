@@ -45,6 +45,10 @@ static void fcThrowerSearchTarget(fcThrower this)
     fcMap map = this->super.map;
     CX_LIST_FOREACH_SAFE(map->intruder, ele, tmp){
         fcSprite target = ele->any;
+        //成功到达的
+        if(target->isSuccess){
+            continue;
+        }
         //死了的
         if(fcSpriteHasOver(target)){
             continue;
@@ -104,9 +108,15 @@ static void fcThrowerRun(cxEvent *e)
             continue;
         }
         fcThrowerFire(this, fruit, sprite);
+        //成功到达的
+        if(sprite->isSuccess){
+            fcSpriteUnset(sprite);
+            continue;
+        }
         //解除死去的
         if(fcSpriteHasOver(sprite)){
             fcSpriteUnset(sprite);
+            continue;
         }
     }
 }

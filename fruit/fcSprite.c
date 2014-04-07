@@ -74,10 +74,9 @@ void fcSpriteInitIndex(cxAny this, cxVec2i idx,cxBool isSpace)
 {
     CX_ASSERT(fcMapCheckIdx(idx), "idx error");
     fcSprite s = this;
-    fcMap map = s->map;
     s->isSpace = isSpace;
     s->idx = idx;
-    cxVec2f pos = fcMapToPos(map, idx);
+    cxVec2f pos = fcMapToPos(s->map, idx);
     cxViewSetPos(s, pos);
 }
 
