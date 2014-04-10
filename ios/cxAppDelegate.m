@@ -16,8 +16,14 @@
 static cxBool cxDisableDocumentBackup()
 {
     cxString docPath = cxDocumentPath(NULL);
-    u_int8_t attrValue = 1;
-    return setxattr(cxStringBody(docPath), "com.apple.MobileBackup", &attrValue, sizeof(attrValue), 0, 0) == 0;
+    u_int8_t attrValue = 0;
+    cxConstChars path = cxStringBody(docPath);
+    cxConstChars name = "com.apple.MobileBackup";
+    if(getxattr(path, name, &attrValue, sizeof(attrValue), 0, 0) && attrValue == 1){
+        return true;
+    }
+    attrValue = 1;
+    return setxattr(path, name, &attrValue, sizeof(attrValue), 0, 0);
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions

@@ -280,7 +280,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     this->props         = CX_ALLOC(cxList);
     //
     cxSize2f size = cxEngineInstance()->winsize;
-    cxFloat vw = size.w - 20;
+    cxFloat vw = size.w - 10;
     this->gridSize.w = vw / DM_MAP_WIDTH;
     this->gridSize.h = this->gridSize.w;
     cxViewSetSize(this, cxSize2fv(vw, vw));

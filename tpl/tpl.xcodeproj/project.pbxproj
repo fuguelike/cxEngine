@@ -27,6 +27,7 @@
 		8344F0B218D3F4A50003E410 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B118D3F4A50003E410 /* OpenAL.framework */; };
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
+		836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 836165D518F67BC400FFF173 /* Default-568h@2x.png */; };
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		83EAEC5618E16AA800082272 /* appConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83EAEC5518E16AA800082272 /* appConfig.xml */; };
 		83EAEC5818E16AB100082272 /* en in Resources */ = {isa = PBXBuildFile; fileRef = 83EAEC5718E16AB100082272 /* en */; };
@@ -44,7 +45,6 @@
 
 /* Begin PBXFileReference section */
 		8300651F18232BE000AF680D /* tpl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tpl.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		83273E7A1862D8CA00232D58 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = libs/ios/lib/libxml2.a; sourceTree = "<group>"; };
 		83314F5F18D9C5D00093FF54 /* libdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdb.a; path = ../libs/ios/lib/libdb.a; sourceTree = "<group>"; };
 		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
 		83314F6118D9C5D00093FF54 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../libs/ios/lib/libfreetype.a; sourceTree = "<group>"; };
@@ -59,11 +59,6 @@
 		8341C69E182280E20045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8341C6A0182280E70045A66F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		8341C6A2182280ED0045A66F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
-		8341C6A41822810D0045A66F /* libdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdb.a; path = libs/ios/lib/libdb.a; sourceTree = "<group>"; };
-		8341C6A51822810D0045A66F /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = libs/ios/lib/libevent.a; sourceTree = "<group>"; };
-		8341C6A61822810D0045A66F /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = libs/ios/lib/libfreetype.a; sourceTree = "<group>"; };
-		8341C6A71822810D0045A66F /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = libs/ios/lib/libjpeg.a; sourceTree = "<group>"; };
-		8341C6A81822810D0045A66F /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = libs/ios/lib/libpng.a; sourceTree = "<group>"; };
 		8344F0A818D3F4380003E410 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8344F0AA18D3F46C0003E410 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		8344F0AD18D3F4830003E410 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -71,12 +66,8 @@
 		8344F0B118D3F4A50003E410 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8344F0B318D3F4A90003E410 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		836DBA76184A15B800CCD673 /* libluajit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libluajit.a; path = libs/ios/lib/libluajit.a; sourceTree = "<group>"; };
+		836165D518F67BC400FFF173 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
-		8384E1E71823997700EDA1D6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = libs/ios/lib/libcrypto.a; sourceTree = "<group>"; };
-		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
-		839103BC1859631E008DF1C7 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
-		839AC1D11832214D00AEBF8E /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
 		83EAEC5518E16AA800082272 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = appConfig.xml; path = res/appConfig.xml; sourceTree = SOURCE_ROOT; };
 		83EAEC5718E16AB100082272 /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = res/en; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -124,7 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */,
-				839E7A5317F1BC7600B0F5EC /* cxEngine */,
+				839E7A5317F1BC7600B0F5EC /* tpl */,
 				839E7A4817F1BC7600B0F5EC /* Frameworks */,
 				8300651F18232BE000AF680D /* tpl.app */,
 			);
@@ -148,18 +139,7 @@
 				8344F0AD18D3F4830003E410 /* QuartzCore.framework */,
 				8344F0AA18D3F46C0003E410 /* OpenGLES.framework */,
 				8344F0A818D3F4380003E410 /* UIKit.framework */,
-				83273E7A1862D8CA00232D58 /* libxml2.a */,
 				83583427185EB87E0057E40B /* AVFoundation.framework */,
-				839103BC1859631E008DF1C7 /* libpcre.a */,
-				836DBA76184A15B800CCD673 /* libluajit.a */,
-				839AC1D11832214D00AEBF8E /* libjansson.a */,
-				8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */,
-				8384E1E71823997700EDA1D6 /* libcrypto.a */,
-				8341C6A41822810D0045A66F /* libdb.a */,
-				8341C6A51822810D0045A66F /* libevent.a */,
-				8341C6A61822810D0045A66F /* libfreetype.a */,
-				8341C6A71822810D0045A66F /* libjpeg.a */,
-				8341C6A81822810D0045A66F /* libpng.a */,
 				8341C6A2182280ED0045A66F /* libiconv.dylib */,
 				8341C6A0182280E70045A66F /* libxml2.dylib */,
 				8341C69E182280E20045A66F /* libz.dylib */,
@@ -168,18 +148,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		839E7A5317F1BC7600B0F5EC /* cxEngine */ = {
+		839E7A5317F1BC7600B0F5EC /* tpl */ = {
 			isa = PBXGroup;
 			children = (
 				83314F7218D9C6530093FF54 /* main.c */,
 				839E7A5417F1BC7600B0F5EC /* Supporting Files */,
 			);
+			name = tpl;
 			path = cxEngine;
 			sourceTree = "<group>";
 		};
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				836165D518F67BC400FFF173 /* Default-568h@2x.png */,
 				83EAEC5718E16AB100082272 /* en */,
 				83EAEC5518E16AA800082272 /* appConfig.xml */,
 			);
@@ -262,6 +244,7 @@
 			files = (
 				83EAEC5618E16AA800082272 /* appConfig.xml in Resources */,
 				83EAEC5818E16AB100082272 /* en in Resources */,
+				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

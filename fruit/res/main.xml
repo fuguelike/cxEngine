@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--cxView.fixScale="cxFixScaleW()" cxView.w="640" cxView.h="960""-->
 <cxViewRoot cxView.fill="0,0,0,0">
     
     <fcMap id="map" />
     
-    <cxButton cxView.size="180,120" cxView.bottom="0" cxView.left="0"
+    <cxButton cxView.size="fcButtonSize()" cxView.bottom="0" cxView.left="0"
         cxButton.onRelease="fcMapSetEditMode()"
         cxButton.onEnter="cxEventAction({'src':'actions.xml?btnEnter','cache':true})"
         cxButton.onLeave="cxEventAction({'src':'actions.xml?btnLeave','cache':true})"
         cxSprite.texture="item.xml?edit-mode.png">
     </cxButton>
     
-    <cxButton cxView.size="180,120" cxView.bottom="0" cxView.right="0"
+    <cxButton cxView.size="fcButtonSize()" cxView.bottom="0" cxView.right="0"
         cxButton.onRelease="fcMapSetFireMode()"
         cxButton.onEnter="cxEventAction({'src':'actions.xml?btnEnter','cache':true})"
         cxButton.onLeave="cxEventAction({'src':'actions.xml?btnLeave','cache':true})"

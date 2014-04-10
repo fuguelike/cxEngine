@@ -36,11 +36,24 @@ static cxInt fcMapSetFireMode(lua_State *L)
     return 0;
 }
 
+static cxInt fcButtonSize(lua_State *L)
+{
+    cxEngine engine = cxEngineInstance();
+    cxFloat w = engine->winsize.w / 6;
+    cxFloat h = engine->winsize.h / 16;
+    cxNumber this = cxNumberSize2f(cxSize2fv(w, h));
+    CX_LUA_PUSH_OBJECT(this);
+    return 1;
+}
+
 void cxEngineInit(cxEngine engine)
 {
     cxEngineRegisteFunc(fcMapSetEditMode);
     cxEngineRegisteFunc(fcMapSetFireMode);
+    cxEngineRegisteFunc(fcButtonSize);
+    
     CX_METHOD_OVERRIDE(engine->MakeView, fcMakeView);
+    
     __fcMapTypeInit();
 }
 

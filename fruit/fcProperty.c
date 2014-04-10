@@ -25,7 +25,7 @@ CX_OBJECT_INIT(fcProperty, fcSprite)
 }
 CX_OBJECT_FREE(fcProperty, fcSprite)
 {
-
+    //
 }
 CX_OBJECT_TERM(fcProperty, fcSprite)
 

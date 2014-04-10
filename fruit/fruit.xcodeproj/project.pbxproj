@@ -36,6 +36,7 @@
 		8344F0B218D3F4A50003E410 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B118D3F4A50003E410 /* OpenAL.framework */; };
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
+		836165D218F67B6200FFF173 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 836165D118F67B6200FFF173 /* Default-568h@2x.png */; };
 		8363089318DE8D5E009B5357 /* fcDefine.c in Sources */ = {isa = PBXBuildFile; fileRef = 8363089118DE8D5E009B5357 /* fcDefine.c */; };
 		836895A618E2EC2B0084EFFD /* fcFruit.c in Sources */ = {isa = PBXBuildFile; fileRef = 836895A418E2EC2B0084EFFD /* fcFruit.c */; };
 		836B256518DC57F4006D28F3 /* fcSprite.c in Sources */ = {isa = PBXBuildFile; fileRef = 836B256318DC57F4006D28F3 /* fcSprite.c */; };
@@ -63,7 +64,6 @@
 		8300651F18232BE000AF680D /* fruit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fruit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		831079C418E176F400C6A262 /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = res/en; sourceTree = SOURCE_ROOT; };
 		831079C618E176FC00C6A262 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = appConfig.xml; path = res/appConfig.xml; sourceTree = SOURCE_ROOT; };
-		83273E7A1862D8CA00232D58 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = libs/ios/lib/libxml2.a; sourceTree = "<group>"; };
 		832D0F2A18F6508C00073C3B /* fcDecorationBegin.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcDecorationBegin.c; sourceTree = "<group>"; };
 		832D0F2B18F6508C00073C3B /* fcDecorationBegin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcDecorationBegin.h; sourceTree = "<group>"; };
 		832D0F2C18F6508C00073C3B /* fcDecorationEnd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcDecorationEnd.c; sourceTree = "<group>"; };
@@ -72,7 +72,6 @@
 		832D0F3218F650D400073C3B /* fcDecoration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcDecoration.h; sourceTree = SOURCE_ROOT; };
 		832D0F3618F6515400073C3B /* fcFollow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcFollow.c; sourceTree = "<group>"; };
 		832D0F3718F6515400073C3B /* fcFollow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcFollow.h; sourceTree = "<group>"; };
-		83314F5F18D9C5D00093FF54 /* libdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdb.a; path = ../libs/ios/lib/libdb.a; sourceTree = "<group>"; };
 		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
 		83314F6118D9C5D00093FF54 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../libs/ios/lib/libfreetype.a; sourceTree = "<group>"; };
 		83314F6218D9C5D00093FF54 /* libgif.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif.a; path = ../libs/ios/lib/libgif.a; sourceTree = "<group>"; };
@@ -92,11 +91,6 @@
 		8341C69E182280E20045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8341C6A0182280E70045A66F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		8341C6A2182280ED0045A66F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
-		8341C6A41822810D0045A66F /* libdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdb.a; path = libs/ios/lib/libdb.a; sourceTree = "<group>"; };
-		8341C6A51822810D0045A66F /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = libs/ios/lib/libevent.a; sourceTree = "<group>"; };
-		8341C6A61822810D0045A66F /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = libs/ios/lib/libfreetype.a; sourceTree = "<group>"; };
-		8341C6A71822810D0045A66F /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = libs/ios/lib/libjpeg.a; sourceTree = "<group>"; };
-		8341C6A81822810D0045A66F /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = libs/ios/lib/libpng.a; sourceTree = "<group>"; };
 		8344F0A818D3F4380003E410 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8344F0AA18D3F46C0003E410 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		8344F0AD18D3F4830003E410 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -104,6 +98,8 @@
 		8344F0B118D3F4A50003E410 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8344F0B318D3F4A90003E410 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		836165CD18F66CD200FFF173 /* fruit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "fruit-Info.plist"; sourceTree = SOURCE_ROOT; };
+		836165D118F67B6200FFF173 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		8363089118DE8D5E009B5357 /* fcDefine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcDefine.c; sourceTree = SOURCE_ROOT; };
 		8363089218DE8D5E009B5357 /* fcDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcDefine.h; sourceTree = SOURCE_ROOT; };
 		836895A418E2EC2B0084EFFD /* fcFruit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcFruit.c; sourceTree = SOURCE_ROOT; };
@@ -112,14 +108,9 @@
 		836B256418DC57F4006D28F3 /* fcSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcSprite.h; sourceTree = SOURCE_ROOT; };
 		836B256918DC5A4D006D28F3 /* item.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = item.pvr; path = res/item.pvr; sourceTree = SOURCE_ROOT; };
 		836B256A18DC5A4D006D28F3 /* item.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = item.xml; path = res/item.xml; sourceTree = SOURCE_ROOT; };
-		836DBA76184A15B800CCD673 /* libluajit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libluajit.a; path = libs/ios/lib/libluajit.a; sourceTree = "<group>"; };
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		8384A33E18DAD2E200D967B9 /* fcMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcMap.c; sourceTree = SOURCE_ROOT; };
 		8384A33F18DAD2E200D967B9 /* fcMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcMap.h; sourceTree = SOURCE_ROOT; };
-		8384E1E71823997700EDA1D6 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = libs/ios/lib/libcrypto.a; sourceTree = "<group>"; };
-		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
-		839103BC1859631E008DF1C7 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
-		839AC1D11832214D00AEBF8E /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
 		839F7FF118E546FA00727C0C /* fcContainer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcContainer.c; sourceTree = SOURCE_ROOT; };
 		839F7FF218E546FA00727C0C /* fcContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcContainer.h; sourceTree = SOURCE_ROOT; };
 		83D003A418EAF5E4007DFEBD /* main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = main.xml; path = res/main.xml; sourceTree = SOURCE_ROOT; };
@@ -228,7 +219,6 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				83314F5F18D9C5D00093FF54 /* libdb.a */,
 				83314F6018D9C5D00093FF54 /* libevent.a */,
 				83314F6118D9C5D00093FF54 /* libfreetype.a */,
 				83314F6218D9C5D00093FF54 /* libgif.a */,
@@ -243,18 +233,7 @@
 				8344F0AD18D3F4830003E410 /* QuartzCore.framework */,
 				8344F0AA18D3F46C0003E410 /* OpenGLES.framework */,
 				8344F0A818D3F4380003E410 /* UIKit.framework */,
-				83273E7A1862D8CA00232D58 /* libxml2.a */,
 				83583427185EB87E0057E40B /* AVFoundation.framework */,
-				839103BC1859631E008DF1C7 /* libpcre.a */,
-				836DBA76184A15B800CCD673 /* libluajit.a */,
-				839AC1D11832214D00AEBF8E /* libjansson.a */,
-				8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */,
-				8384E1E71823997700EDA1D6 /* libcrypto.a */,
-				8341C6A41822810D0045A66F /* libdb.a */,
-				8341C6A51822810D0045A66F /* libevent.a */,
-				8341C6A61822810D0045A66F /* libfreetype.a */,
-				8341C6A71822810D0045A66F /* libjpeg.a */,
-				8341C6A81822810D0045A66F /* libpng.a */,
 				8341C6A2182280ED0045A66F /* libiconv.dylib */,
 				8341C6A0182280E70045A66F /* libxml2.dylib */,
 				8341C69E182280E20045A66F /* libz.dylib */,
@@ -302,6 +281,8 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				836165D118F67B6200FFF173 /* Default-568h@2x.png */,
+				836165CD18F66CD200FFF173 /* fruit-Info.plist */,
 				83D003A718EAF6FF007DFEBD /* actions.xml */,
 				83D003A418EAF5E4007DFEBD /* main.xml */,
 				831079C618E176FC00C6A262 /* appConfig.xml */,
@@ -391,6 +372,7 @@
 				83D003A518EAF5E4007DFEBD /* main.xml in Resources */,
 				831079C518E176F400C6A262 /* en in Resources */,
 				836B256B18DC5A4D006D28F3 /* item.pvr in Resources */,
+				836165D218F67B6200FFF173 /* Default-568h@2x.png in Resources */,
 				831079C718E176FC00C6A262 /* appConfig.xml in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -454,7 +436,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 			};
@@ -486,7 +468,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -496,8 +478,6 @@
 		839E7A8117F1BC7600B0F5EC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -514,7 +494,7 @@
 					"$(SRCROOT)/../libs/ios/include",
 				);
 				INFOPLIST_FILE = "fruit-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../libs/ios/lib";
 				PRODUCT_NAME = fruit;
 				PROVISIONING_PROFILE = "";
@@ -527,8 +507,6 @@
 		839E7A8217F1BC7600B0F5EC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -545,7 +523,7 @@
 					"$(SRCROOT)/../libs/ios/include",
 				);
 				INFOPLIST_FILE = "fruit-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../libs/ios/lib";
 				PRODUCT_NAME = fruit;
 				PROVISIONING_PROFILE = "";
