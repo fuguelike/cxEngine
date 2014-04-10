@@ -47,7 +47,6 @@ typedef enum {
 }fcSpriteType;
 
 //容器类型
-
 typedef enum {
     fcContainerTypeNone = 0,
 }fcContainerType;
@@ -80,10 +79,10 @@ typedef enum {
 
 //地面
 typedef enum {
-    fcLocationTypeNone = 0,
-    fcLocationTypeBegin,            //起点
-    fcLocationTypeEnd,              //终点
-}fcLocationType;
+    fcDecorationTypeNone = 0,
+    fcDecorationTypeBegin,            //起点
+    fcDecorationTypeEnd,              //终点
+}fcDecorationType;
 
 //水果弹药类型
 typedef enum {

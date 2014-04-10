@@ -21,12 +21,11 @@ CX_OBJECT_DEF(fcMap, cxView)
     cxList intruder;    //闯关列表
     cxList defenser;    //防御者
     cxList props;       //道具列表
-    cxList points;      //开始点和终点
+    cxList decoration;  //装饰品
     fcMapMode mode;
-    //当点击到起点或者终点时
-    CX_METHOD_ALLOC(void, TouchLocation,cxAny map,cxAny loc);
-    //当有sprite到达end location
-    CX_METHOD_ALLOC(void, Arrive,cxAny map,cxAny sprite);
+    //
+    cxAny begin;        //fcLocationBegin
+    cxAny end;          //fcLocationEnd
 CX_OBJECT_END(fcMap)
 
 //设置地图模式
@@ -36,7 +35,7 @@ cxBool fcMapHasPass(cxAny map);
 //获取终点
 cxVec2i fcMapEndIndex(cxAny map);
 //获取起点
-cxVec2i fcMapBegindex(cxAny map);
+cxVec2i fcMapBegIndex(cxAny map);
 //获取实际的像素
 cxFloat fcMapScaleValue(fcMap this,cxFloat v);
 
@@ -51,10 +50,10 @@ cxInt fcMapValue(fcMap this,cxVec2i idx);
 cxAny fcMapSprite(fcMap this,cxVec2i idx);
 
 cxBool fcMapCheckIdx(cxVec2i idx);
-//添加活动点
-void fcMapAppendPoints(fcMap this,cxAny loc);
+//添加装饰品
+void fcMapAppendDecoration(fcMap this,cxAny sprite);
 
-void fcMapRemovePoints(fcMap this,cxAny loc);
+void fcMapRemoveDecoration(fcMap this,cxAny sprite);
 
 //添加闯关者
 void fcMapAppendIntruder(fcMap this,cxAny sprite);
@@ -67,9 +66,9 @@ void fcMapAppendDefenser(fcMap this,cxAny sprite);
 void fcMapRemoveDefenser(fcMap this,cxAny sprite);
 
 //添加道具
-void fcMapAppendProps(fcMap this,cxAny props);
+void fcMapAppendProps(fcMap this,cxAny sprite);
 
-void fcMapRemoveProps(fcMap this,cxAny props);
+void fcMapRemoveProps(fcMap this,cxAny sprite);
 
 CX_C_END
 

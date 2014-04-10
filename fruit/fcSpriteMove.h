@@ -1,7 +1,7 @@
 //
 //  fcSpriteMove.h
 //  cxEngine
-//
+//  精灵移动Action
 //  Created by xuhua on 3/28/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //

@@ -9,7 +9,7 @@
 #ifndef fruit_fcFollow_h
 #define fruit_fcFollow_h
 
-#include "fcFruit.h"
+#include <fcFruit.h>
 
 CX_C_BEGIN
 

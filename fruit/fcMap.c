@@ -15,7 +15,8 @@
 #include "fcContainer.h"
 #include "fcProperty.h"
 #include "fcIntruder.h"
-#include "fcLocation.h"
+#include "decoration/fcDecorationBegin.h"
+#include "decoration/fcDecorationEnd.h"
 
 CX_LUA_METHOD_BEG(fcMap)
 
@@ -195,24 +196,24 @@ static void fcMapRemoveItem(fcMap this, cxList list,cxAny item)
     cxViewRemoved(s);
 }
 
-void fcMapAppendProps(fcMap this,cxAny props)
+void fcMapAppendProps(fcMap this,cxAny sprite)
 {
-    fcMapAppendItem(this, this->props, props);
+    fcMapAppendItem(this, this->props, sprite);
 }
 
-void fcMapRemoveProps(fcMap this,cxAny props)
+void fcMapRemoveProps(fcMap this,cxAny sprite)
 {
-    fcMapRemoveItem(this, this->props, props);
+    fcMapRemoveItem(this, this->props, sprite);
 }
 
-void fcMapAppendPoints(fcMap this,cxAny loc)
+void fcMapAppendDecoration(fcMap this,cxAny sprite)
 {
-    fcMapAppendItem(this, this->points, loc);
+    fcMapAppendItem(this, this->decoration, sprite);
 }
 
-void fcMapRemovePoints(fcMap this,cxAny loc)
+void fcMapRemoveDecoration(fcMap this,cxAny sprite)
 {
-    fcMapRemoveItem(this, this->points, loc);
+    fcMapRemoveItem(this, this->decoration, sprite);
 }
 
 void fcMapAppendIntruder(fcMap this,cxAny sprite)
@@ -235,29 +236,6 @@ void fcMapRemoveDefenser(fcMap this,cxAny sprite)
     fcMapRemoveItem(this, this->defenser, sprite);
 }
 
-//受到攻击时
-static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
-{
-    fcThrower a = attacker;
-    fcIntruder s = sprite;
-    fcFruit f = fruit;
-    
-    s->super.life -= 10;
-    
-    if(s->super.life <= 0){
-        CX_LOGGER("%p attacked %p,attacker = %p removed",f, s, a);
-        fcSpriteUnset(sprite);
-        fcMapRemoveIntruder(s->super.map, s);
-    }
-}
-
-//是否可以攻击
-static cxBool isAttackMe(cxAny sprite, cxAny fruit,cxAny attacker)
-{
-    fcIntruder s = sprite;
-    return s->super.life > 0;
-}
-
 void fcMapSetMode(cxAny this,fcMapMode mode)
 {
     fcMap m = this;
@@ -267,70 +245,23 @@ void fcMapSetMode(cxAny this,fcMapMode mode)
 cxBool fcMapHasPass(cxAny map)
 {
     fcMap this = map;
-    cxVec2i b = cxVec2iv(-1, -1),e = cxVec2iv(-1, -1);
-    cxInt i = 0, j = 0;
-    CX_LIST_FOREACH(this->points, ele){
-        fcLocation loc = ele->any;
-        if(loc->type == fcLocationTypeBegin){
-            b = loc->super.idx;
-            i++;
-        }else if(loc->type == fcLocationTypeEnd){
-            e = loc->super.idx;
-            j++;
-        }
-    }
-    if(i == 0 || j == 0){
-        CX_ASSERT_FALSE("not set beign point and end point");
-        return false;
-    }
+    cxVec2i b = fcMapBegIndex(map);
+    cxVec2i e = fcMapEndIndex(map);
     return fcMapFindPath(map, &this->path, b, e);
 }
 
 cxVec2i fcMapEndIndex(cxAny map)
 {
     fcMap this = map;
-    CX_LIST_FOREACH(this->points, ele){
-        fcLocation loc = ele->any;
-        if(loc->type == fcLocationTypeEnd){
-            return loc->super.idx;
-        }
-    }
-    CX_ASSERT_FALSE("must set end location");
-    return cxVec2iv(0, 0);
+    CX_ASSERT(this->end != NULL, "not set end location");
+    return fcSpriteIndex(this->end);
 }
 
 cxVec2i fcMapBegIndex(cxAny map)
 {
     fcMap this = map;
-    CX_LIST_FOREACH(this->points, ele){
-        fcLocation loc = ele->any;
-        if(loc->type == fcLocationTypeBegin){
-            return loc->super.idx;
-        }
-    }
-    CX_ASSERT_FALSE("must set begin location");
-    return cxVec2iv(0, 0);
-}
-
-static void fcMapTouchLocation(cxAny map,cxAny loc)
-{
-    fcMap this = map;
-    fcLocation l = loc;
-    if(l->type != fcLocationTypeBegin){
-        return;
-    }
-    fcIntruder b = CX_CREATE(fcIntruder);
-    fcSpriteInit(b, this);
-    fcSpriteInitIndex(b,l->super.idx, false);
-    cxSpriteSetImage(b, "item.xml?blue.png");
-    cxViewSetSize(b, cxSize2fv(this->gridSize.w/2, this->gridSize.h/2));
-    CX_METHOD_OVERRIDE(b->super.IsAttack, isAttackMe);
-    CX_METHOD_OVERRIDE(b->super.Attacked, attackedTest);
-    b->super.speed = 2;
-    b->super.life = 100;
-    fcMapAppendIntruder(this, b);
-    fcSpriteMoveLoop(b);
-    fcIntruderLoop(b);
+    CX_ASSERT(this->begin != NULL, "not set begin location");
+    return fcSpriteIndex(this->begin);
 }
 
 void fcMapReadAttr(cxReaderAttrInfo *info)
@@ -343,12 +274,10 @@ CX_OBJECT_INIT(fcMap, cxView)
     cxObjectSetReadAttrFunc(this, fcMapReadAttr);
     fcMapSetMode(this, fcMapModeEdit);
     //
-    CX_METHOD_OVERRIDE(this->TouchLocation, fcMapTouchLocation);
-    //
-    this->points    = CX_ALLOC(cxList);
-    this->intruder  = CX_ALLOC(cxList);
-    this->defenser  = CX_ALLOC(cxList);
-    this->props     = CX_ALLOC(cxList);
+    this->decoration    = CX_ALLOC(cxList);
+    this->intruder      = CX_ALLOC(cxList);
+    this->defenser      = CX_ALLOC(cxList);
+    this->props         = CX_ALLOC(cxList);
     //
     cxSize2f size = cxEngineInstance()->winsize;
     cxFloat vw = size.w - 20;
@@ -359,18 +288,18 @@ CX_OBJECT_INIT(fcMap, cxView)
     CX_METHOD_OVERRIDE(this->super.Touch, fcMapTouch);
     //设置1个起点和1个终点(只能有1个终点)
     {
-        fcLocation loc = CX_CREATE(fcLocation);
-        fcLocationInit(loc, this, fcLocationTypeBegin);
-        fcSpriteInitIndex(loc, cxVec2iv(0, 0), true);
-        cxSpriteSetImage(loc, "item.xml?begin.png");
-        fcMapAppendPoints(this, loc);
+        this->begin = CX_CREATE(fcDecorationBegin);
+        fcDecorationBeginInit(this->begin, this);
+        fcSpriteInitIndex(this->begin, cxVec2iv(0, 0), true);
+        cxSpriteSetImage(this->begin, "item.xml?begin.png");
+        fcMapAppendDecoration(this, this->begin);
     }
     {
-        fcLocation loc = CX_CREATE(fcLocation);
-        fcLocationInit(loc, this, fcLocationTypeEnd);
-        fcSpriteInitIndex(loc, cxVec2iv(9, 8), true);
-        cxSpriteSetImage(loc, "item.xml?end.png");
-        fcMapAppendPoints(this, loc);
+        this->end = CX_CREATE(fcDecorationEnd);
+        fcDecorationEndInit(this->end, this);
+        fcSpriteInitIndex(this->end, cxVec2iv(9, 8), true);
+        cxSpriteSetImage(this->end, "item.xml?end.png");
+        fcMapAppendDecoration(this, this->end);
     }
     //
     {
@@ -446,12 +375,10 @@ CX_OBJECT_INIT(fcMap, cxView)
 }
 CX_OBJECT_FREE(fcMap, cxView)
 {
-    CX_METHOD_RELEASE(this->Arrive);
-    CX_METHOD_RELEASE(this->TouchLocation);
     CX_RELEASE(this->defenser);
     CX_RELEASE(this->props);
     CX_RELEASE(this->intruder);
-    CX_RELEASE(this->points);
+    CX_RELEASE(this->decoration);
 }
 CX_OBJECT_TERM(fcMap, cxView)
 

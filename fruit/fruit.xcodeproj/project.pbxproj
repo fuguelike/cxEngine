@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		831079C518E176F400C6A262 /* en in Resources */ = {isa = PBXBuildFile; fileRef = 831079C418E176F400C6A262 /* en */; };
 		831079C718E176FC00C6A262 /* appConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 831079C618E176FC00C6A262 /* appConfig.xml */; };
+		832D0F2F18F6508C00073C3B /* fcDecorationBegin.c in Sources */ = {isa = PBXBuildFile; fileRef = 832D0F2A18F6508C00073C3B /* fcDecorationBegin.c */; };
+		832D0F3018F6508C00073C3B /* fcDecorationEnd.c in Sources */ = {isa = PBXBuildFile; fileRef = 832D0F2C18F6508C00073C3B /* fcDecorationEnd.c */; };
+		832D0F3318F650D400073C3B /* fcDecoration.c in Sources */ = {isa = PBXBuildFile; fileRef = 832D0F3118F650D400073C3B /* fcDecoration.c */; };
+		832D0F3B18F6515400073C3B /* fcFollow.c in Sources */ = {isa = PBXBuildFile; fileRef = 832D0F3618F6515400073C3B /* fcFollow.c */; };
 		83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6018D9C5D00093FF54 /* libevent.a */; };
 		83314F6A18D9C5D00093FF54 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6118D9C5D00093FF54 /* libfreetype.a */; };
 		83314F6B18D9C5D00093FF54 /* libgif.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6218D9C5D00093FF54 /* libgif.a */; };
@@ -34,7 +38,6 @@
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
 		8363089318DE8D5E009B5357 /* fcDefine.c in Sources */ = {isa = PBXBuildFile; fileRef = 8363089118DE8D5E009B5357 /* fcDefine.c */; };
 		836895A618E2EC2B0084EFFD /* fcFruit.c in Sources */ = {isa = PBXBuildFile; fileRef = 836895A418E2EC2B0084EFFD /* fcFruit.c */; };
-		836895AA18E300F70084EFFD /* fcFollow.c in Sources */ = {isa = PBXBuildFile; fileRef = 836895A818E300F70084EFFD /* fcFollow.c */; };
 		836B256518DC57F4006D28F3 /* fcSprite.c in Sources */ = {isa = PBXBuildFile; fileRef = 836B256318DC57F4006D28F3 /* fcSprite.c */; };
 		836B256B18DC5A4D006D28F3 /* item.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 836B256918DC5A4D006D28F3 /* item.pvr */; };
 		836B256C18DC5A4D006D28F3 /* item.xml in Resources */ = {isa = PBXBuildFile; fileRef = 836B256A18DC5A4D006D28F3 /* item.xml */; };
@@ -43,7 +46,6 @@
 		839F7FF318E546FA00727C0C /* fcContainer.c in Sources */ = {isa = PBXBuildFile; fileRef = 839F7FF118E546FA00727C0C /* fcContainer.c */; };
 		83D003A518EAF5E4007DFEBD /* main.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83D003A418EAF5E4007DFEBD /* main.xml */; };
 		83D003A918EAF6FF007DFEBD /* actions.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83D003A718EAF6FF007DFEBD /* actions.xml */; };
-		83F511B518EA593500FC57D4 /* fcLocation.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F511B318EA593500FC57D4 /* fcLocation.c */; };
 		83F88D8D18E1B73C00B778EE /* fcThrower.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F88D8B18E1B73C00B778EE /* fcThrower.c */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +64,14 @@
 		831079C418E176F400C6A262 /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = res/en; sourceTree = SOURCE_ROOT; };
 		831079C618E176FC00C6A262 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = appConfig.xml; path = res/appConfig.xml; sourceTree = SOURCE_ROOT; };
 		83273E7A1862D8CA00232D58 /* libxml2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libxml2.a; path = libs/ios/lib/libxml2.a; sourceTree = "<group>"; };
+		832D0F2A18F6508C00073C3B /* fcDecorationBegin.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcDecorationBegin.c; sourceTree = "<group>"; };
+		832D0F2B18F6508C00073C3B /* fcDecorationBegin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcDecorationBegin.h; sourceTree = "<group>"; };
+		832D0F2C18F6508C00073C3B /* fcDecorationEnd.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcDecorationEnd.c; sourceTree = "<group>"; };
+		832D0F2D18F6508C00073C3B /* fcDecorationEnd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcDecorationEnd.h; sourceTree = "<group>"; };
+		832D0F3118F650D400073C3B /* fcDecoration.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcDecoration.c; sourceTree = SOURCE_ROOT; };
+		832D0F3218F650D400073C3B /* fcDecoration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcDecoration.h; sourceTree = SOURCE_ROOT; };
+		832D0F3618F6515400073C3B /* fcFollow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcFollow.c; sourceTree = "<group>"; };
+		832D0F3718F6515400073C3B /* fcFollow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcFollow.h; sourceTree = "<group>"; };
 		83314F5F18D9C5D00093FF54 /* libdb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdb.a; path = ../libs/ios/lib/libdb.a; sourceTree = "<group>"; };
 		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
 		83314F6118D9C5D00093FF54 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../libs/ios/lib/libfreetype.a; sourceTree = "<group>"; };
@@ -98,8 +108,6 @@
 		8363089218DE8D5E009B5357 /* fcDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcDefine.h; sourceTree = SOURCE_ROOT; };
 		836895A418E2EC2B0084EFFD /* fcFruit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcFruit.c; sourceTree = SOURCE_ROOT; };
 		836895A518E2EC2B0084EFFD /* fcFruit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcFruit.h; sourceTree = SOURCE_ROOT; };
-		836895A818E300F70084EFFD /* fcFollow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcFollow.c; sourceTree = SOURCE_ROOT; };
-		836895A918E300F70084EFFD /* fcFollow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcFollow.h; sourceTree = SOURCE_ROOT; };
 		836B256318DC57F4006D28F3 /* fcSprite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcSprite.c; sourceTree = SOURCE_ROOT; };
 		836B256418DC57F4006D28F3 /* fcSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcSprite.h; sourceTree = SOURCE_ROOT; };
 		836B256918DC5A4D006D28F3 /* item.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = item.pvr; path = res/item.pvr; sourceTree = SOURCE_ROOT; };
@@ -116,8 +124,6 @@
 		839F7FF218E546FA00727C0C /* fcContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcContainer.h; sourceTree = SOURCE_ROOT; };
 		83D003A418EAF5E4007DFEBD /* main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = main.xml; path = res/main.xml; sourceTree = SOURCE_ROOT; };
 		83D003A718EAF6FF007DFEBD /* actions.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = actions.xml; path = res/actions.xml; sourceTree = SOURCE_ROOT; };
-		83F511B318EA593500FC57D4 /* fcLocation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcLocation.c; sourceTree = SOURCE_ROOT; };
-		83F511B418EA593500FC57D4 /* fcLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcLocation.h; sourceTree = SOURCE_ROOT; };
 		83F88D8B18E1B73C00B778EE /* fcThrower.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcThrower.c; sourceTree = SOURCE_ROOT; };
 		83F88D8C18E1B73C00B778EE /* fcThrower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcThrower.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -153,6 +159,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		832D0F2718F6508C00073C3B /* decoration */ = {
+			isa = PBXGroup;
+			children = (
+				832D0F2A18F6508C00073C3B /* fcDecorationBegin.c */,
+				832D0F2B18F6508C00073C3B /* fcDecorationBegin.h */,
+				832D0F2C18F6508C00073C3B /* fcDecorationEnd.c */,
+				832D0F2D18F6508C00073C3B /* fcDecorationEnd.h */,
+			);
+			path = decoration;
+			sourceTree = SOURCE_ROOT;
+		};
+		832D0F3418F6515400073C3B /* container */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = container;
+			sourceTree = SOURCE_ROOT;
+		};
+		832D0F3518F6515400073C3B /* fruit */ = {
+			isa = PBXGroup;
+			children = (
+				832D0F3618F6515400073C3B /* fcFollow.c */,
+				832D0F3718F6515400073C3B /* fcFollow.h */,
+			);
+			path = fruit;
+			sourceTree = SOURCE_ROOT;
+		};
+		832D0F3818F6515400073C3B /* intruder */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = intruder;
+			sourceTree = SOURCE_ROOT;
+		};
+		832D0F3918F6515400073C3B /* property */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = property;
+			sourceTree = SOURCE_ROOT;
+		};
+		832D0F3A18F6515400073C3B /* thrower */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = thrower;
+			sourceTree = SOURCE_ROOT;
+		};
 		83771ABD18D9C6F900CFC7F6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -212,16 +266,22 @@
 		839E7A5317F1BC7600B0F5EC /* fruit */ = {
 			isa = PBXGroup;
 			children = (
+				832D0F3418F6515400073C3B /* container */,
+				832D0F3518F6515400073C3B /* fruit */,
+				832D0F3818F6515400073C3B /* intruder */,
+				832D0F3918F6515400073C3B /* property */,
+				832D0F3A18F6515400073C3B /* thrower */,
+				832D0F2718F6508C00073C3B /* decoration */,
 				83314F7218D9C6530093FF54 /* main.c */,
 				839E7A5417F1BC7600B0F5EC /* Supporting Files */,
 				8384A33E18DAD2E200D967B9 /* fcMap.c */,
 				8384A33F18DAD2E200D967B9 /* fcMap.h */,
+				832D0F3118F650D400073C3B /* fcDecoration.c */,
+				832D0F3218F650D400073C3B /* fcDecoration.h */,
 				8341787618E847A1005B56CC /* fcProperty.c */,
 				8341787718E847A1005B56CC /* fcProperty.h */,
 				836B256318DC57F4006D28F3 /* fcSprite.c */,
 				836B256418DC57F4006D28F3 /* fcSprite.h */,
-				83F511B318EA593500FC57D4 /* fcLocation.c */,
-				83F511B418EA593500FC57D4 /* fcLocation.h */,
 				839F7FF118E546FA00727C0C /* fcContainer.c */,
 				839F7FF218E546FA00727C0C /* fcContainer.h */,
 				8363089118DE8D5E009B5357 /* fcDefine.c */,
@@ -234,8 +294,6 @@
 				836895A518E2EC2B0084EFFD /* fcFruit.h */,
 				833C6A3318E5247B001DC1C4 /* fcSpriteMove.c */,
 				833C6A3418E5247B001DC1C4 /* fcSpriteMove.h */,
-				836895A818E300F70084EFFD /* fcFollow.c */,
-				836895A918E300F70084EFFD /* fcFollow.h */,
 			);
 			name = fruit;
 			path = cxEngine;
@@ -347,15 +405,17 @@
 				839F7FF318E546FA00727C0C /* fcContainer.c in Sources */,
 				8341787818E847A1005B56CC /* fcProperty.c in Sources */,
 				83F88D8D18E1B73C00B778EE /* fcThrower.c in Sources */,
-				83F511B518EA593500FC57D4 /* fcLocation.c in Sources */,
 				8341787F18E84D64005B56CC /* fcIntruder.c in Sources */,
 				836B256518DC57F4006D28F3 /* fcSprite.c in Sources */,
 				83314F7318D9C6530093FF54 /* main.c in Sources */,
+				832D0F2F18F6508C00073C3B /* fcDecorationBegin.c in Sources */,
 				836895A618E2EC2B0084EFFD /* fcFruit.c in Sources */,
 				8384A34018DAD2E200D967B9 /* fcMap.c in Sources */,
+				832D0F3018F6508C00073C3B /* fcDecorationEnd.c in Sources */,
+				832D0F3318F650D400073C3B /* fcDecoration.c in Sources */,
 				8363089318DE8D5E009B5357 /* fcDefine.c in Sources */,
 				833C6A3518E5247B001DC1C4 /* fcSpriteMove.c in Sources */,
-				836895AA18E300F70084EFFD /* fcFollow.c in Sources */,
+				832D0F3B18F6515400073C3B /* fcFollow.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

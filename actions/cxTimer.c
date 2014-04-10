@@ -58,6 +58,12 @@ static cxBool cxTimerExit(cxAny pav)
     return this->repeat == 0;
 }
 
+void cxTimerReset(cxAny timer)
+{
+    cxTimer this = timer;
+    this->super.durationElapsed = 0;
+}
+
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
     cxObjectSetReadAttrFunc(this, cxTimerReadAttr);

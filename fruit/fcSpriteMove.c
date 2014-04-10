@@ -9,6 +9,7 @@
 #include "fcMap.h"
 #include "fcSprite.h"
 #include "fcSpriteMove.h"
+#include "decoration/fcDecorationEnd.h"
 
 static cxBool fcSpriteMoveExit(cxAny pav)
 {
@@ -83,8 +84,7 @@ static void fcSpriteMoveOnStop(cxEvent *e)
         return;
     }
     s->isSuccess = true;
-    CX_LOGGER("arrive %d %d",eIdx.x,eIdx.y);
-    CX_METHOD_RUN(map->Arrive, map, s);
+    fcDecorationEndOnArrive(map->end, s);
 }
 
 void fcSpriteMoveLoop(cxAny sprite)

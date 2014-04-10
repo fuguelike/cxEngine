@@ -7,10 +7,10 @@
 //
 
 #include <actions/cxFollow.h>
-#include "fcMap.h"
-#include "fcSprite.h"
+#include <fcMap.h>
+#include <fcSprite.h>
+#include <fcThrower.h>
 #include "fcFollow.h"
-#include "fcThrower.h"
 
 cxAny fcFollowMaker(cxAny thrower)
 {
