@@ -98,6 +98,11 @@ static void fcThrowerRun(cxEvent *e)
             fcSpriteUnset(sprite);
             continue;
         }
+        //成功到达的
+        if(sprite->isSuccess){
+            fcSpriteUnset(sprite);
+            continue;
+        }
         //创建水果弹药发射
         cxAny fruit = CX_METHOD_GET(NULL, this->FruitMaker, this);
         if(fruit == NULL){
@@ -108,11 +113,6 @@ static void fcThrowerRun(cxEvent *e)
             continue;
         }
         fcThrowerFire(this, fruit, sprite);
-        //成功到达的
-        if(sprite->isSuccess){
-            fcSpriteUnset(sprite);
-            continue;
-        }
         //解除死去的
         if(fcSpriteHasOver(sprite)){
             fcSpriteUnset(sprite);

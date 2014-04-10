@@ -17,7 +17,7 @@ LOCAL_SRC_FILES := ../../cxEngine/main.c
 
 LOCAL_WHOLE_STATIC_LIBRARIES += cxEngine
 
-LOCAL_STATIC_LIBRARIES := db pcre event jpeg mpg123 png freetype charset iconv libxml2 jansson luajit
+LOCAL_STATIC_LIBRARIES := pcre event jpeg png freetype charset iconv libxml2 jansson luajit
 
 LOCAL_LDLIBS := -llog -lGLESv2 -lz -landroid
 

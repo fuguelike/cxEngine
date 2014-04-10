@@ -7,11 +7,6 @@ LOCAL_SRC_FILES := libxml2.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := db
-LOCAL_SRC_FILES := libdb.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
 LOCAL_MODULE := iconv
 LOCAL_SRC_FILES := libiconv.a
 include $(PREBUILT_STATIC_LIBRARY)
@@ -39,11 +34,6 @@ include $(PREBUILT_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := jpeg
 LOCAL_SRC_FILES := libjpeg.a
-include $(PREBUILT_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := mpg123
-LOCAL_SRC_FILES := libmpg123.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
