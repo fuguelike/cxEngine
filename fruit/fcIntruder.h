@@ -1,7 +1,7 @@
 //
 //  fcIntruder.h
 //  cxEngine
-//
+//  进攻者基类
 //  Created by xuhua on 3/30/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //

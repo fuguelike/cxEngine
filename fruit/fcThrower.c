@@ -61,6 +61,7 @@ static void fcThrowerSearchTarget(fcThrower this)
         if(!fcThrowerInRange(this, target)){
             continue;
         }
+        //设置攻击目标
         fcSpriteTarget(this, target);
         //到达攻击数量
         if(this->attackNumber == fcSpriteTargetNumber(this)){
@@ -75,11 +76,11 @@ static void fcThrowerFire(cxAny sprite, cxAny fruit,cxAny target)
     fcThrower a = sprite;
     fcFruit this = fruit;
     //盯住目标
-    fcSpriteLookAt(a, target);
+    cxFloat angle = fcSpriteAngle(a, target);
+    cxViewSetAngle(a, angle);
     //投掷水果
-    CX_METHOD_RUN(this->Fire, this, a, target);
-    //
     CX_METHOD_RUN(a->FruitFire, a, fruit, target);
+    CX_METHOD_RUN(this->Fire, this, a, target);
 }
 
 static void fcThrowerRun(cxEvent *e)

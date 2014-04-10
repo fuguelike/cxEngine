@@ -1,7 +1,7 @@
 //
 //  fcSpeedUp.h
 //  cxEngine
-//  加速道具
+//  道具基类
 //  Created by xuhua on 3/30/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
@@ -13,12 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(fcSpeedUp, fcSprite)
-    cxFloat speed;//增加的速度
-    cxFloat time;//持续的时间
-CX_OBJECT_END(fcSpeedUp)
+CX_OBJECT_DEF(fcProperty, fcSprite)
+    fcPropertyType type;
+CX_OBJECT_END(fcProperty)
 
-void fcSpeedUpInit(cxAny this,cxAny map);
+void fcPropertyInit(cxAny this,cxAny map,fcPropertyType type);
 
 CX_C_END
 

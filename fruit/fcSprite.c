@@ -188,13 +188,12 @@ cxInt fcSpriteMurdererNumber(cxAny this)
     return cxHashLength(s->murderers);
 }
 
-void fcSpriteLookAt(cxAny s1,cxAny s2)
+cxFloat fcSpriteAngle(cxAny s1,cxAny s2)
 {
     CX_ASSERT(s1 != NULL && s2 != NULL, "s1 or s2 null");
     cxVec2f p1 = cxViewPosition(s1);
     cxVec2f p2 = cxViewPosition(s2);
-    cxFloat angle = atan2f(p2.y - p1.y, p2.x - p1.x);
-    cxViewSetAngle(s1, angle);
+    return atan2f(p2.y - p1.y, p2.x - p1.x);
 }
 
 cxFloat fcSpriteDistance(cxAny s1,cxAny s2)

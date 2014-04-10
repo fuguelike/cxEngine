@@ -20,7 +20,7 @@
 		83314F7118D9C5D80093FF54 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A0182280E70045A66F /* libxml2.dylib */; };
 		83314F7318D9C6530093FF54 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 83314F7218D9C6530093FF54 /* main.c */; };
 		833C6A3518E5247B001DC1C4 /* fcSpriteMove.c in Sources */ = {isa = PBXBuildFile; fileRef = 833C6A3318E5247B001DC1C4 /* fcSpriteMove.c */; };
-		8341787818E847A1005B56CC /* fcSpeedUp.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341787618E847A1005B56CC /* fcSpeedUp.c */; };
+		8341787818E847A1005B56CC /* fcProperty.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341787618E847A1005B56CC /* fcProperty.c */; };
 		8341787F18E84D64005B56CC /* fcIntruder.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341787D18E84D64005B56CC /* fcIntruder.c */; };
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
 		8341C69F182280E20045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69E182280E20045A66F /* libz.dylib */; };
@@ -40,7 +40,7 @@
 		836B256C18DC5A4D006D28F3 /* item.xml in Resources */ = {isa = PBXBuildFile; fileRef = 836B256A18DC5A4D006D28F3 /* item.xml */; };
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		8384A34018DAD2E200D967B9 /* fcMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 8384A33E18DAD2E200D967B9 /* fcMap.c */; };
-		839F7FF318E546FA00727C0C /* fcTreasureBox.c in Sources */ = {isa = PBXBuildFile; fileRef = 839F7FF118E546FA00727C0C /* fcTreasureBox.c */; };
+		839F7FF318E546FA00727C0C /* fcContainer.c in Sources */ = {isa = PBXBuildFile; fileRef = 839F7FF118E546FA00727C0C /* fcContainer.c */; };
 		83D003A518EAF5E4007DFEBD /* main.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83D003A418EAF5E4007DFEBD /* main.xml */; };
 		83D003A918EAF6FF007DFEBD /* actions.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83D003A718EAF6FF007DFEBD /* actions.xml */; };
 		83F511B518EA593500FC57D4 /* fcLocation.c in Sources */ = {isa = PBXBuildFile; fileRef = 83F511B318EA593500FC57D4 /* fcLocation.c */; };
@@ -74,8 +74,8 @@
 		83314F7218D9C6530093FF54 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = SOURCE_ROOT; };
 		833C6A3318E5247B001DC1C4 /* fcSpriteMove.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcSpriteMove.c; sourceTree = SOURCE_ROOT; };
 		833C6A3418E5247B001DC1C4 /* fcSpriteMove.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcSpriteMove.h; sourceTree = SOURCE_ROOT; };
-		8341787618E847A1005B56CC /* fcSpeedUp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcSpeedUp.c; sourceTree = SOURCE_ROOT; };
-		8341787718E847A1005B56CC /* fcSpeedUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcSpeedUp.h; sourceTree = SOURCE_ROOT; };
+		8341787618E847A1005B56CC /* fcProperty.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcProperty.c; sourceTree = SOURCE_ROOT; };
+		8341787718E847A1005B56CC /* fcProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcProperty.h; sourceTree = SOURCE_ROOT; };
 		8341787D18E84D64005B56CC /* fcIntruder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcIntruder.c; sourceTree = SOURCE_ROOT; };
 		8341787E18E84D64005B56CC /* fcIntruder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcIntruder.h; sourceTree = SOURCE_ROOT; };
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -112,8 +112,8 @@
 		8384E1EE1823ABFB00EDA1D6 /* libmpg123.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmpg123.a; path = libs/ios/lib/libmpg123.a; sourceTree = "<group>"; };
 		839103BC1859631E008DF1C7 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		839AC1D11832214D00AEBF8E /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
-		839F7FF118E546FA00727C0C /* fcTreasureBox.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcTreasureBox.c; sourceTree = SOURCE_ROOT; };
-		839F7FF218E546FA00727C0C /* fcTreasureBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcTreasureBox.h; sourceTree = SOURCE_ROOT; };
+		839F7FF118E546FA00727C0C /* fcContainer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcContainer.c; sourceTree = SOURCE_ROOT; };
+		839F7FF218E546FA00727C0C /* fcContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fcContainer.h; sourceTree = SOURCE_ROOT; };
 		83D003A418EAF5E4007DFEBD /* main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = main.xml; path = res/main.xml; sourceTree = SOURCE_ROOT; };
 		83D003A718EAF6FF007DFEBD /* actions.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = actions.xml; path = res/actions.xml; sourceTree = SOURCE_ROOT; };
 		83F511B318EA593500FC57D4 /* fcLocation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fcLocation.c; sourceTree = SOURCE_ROOT; };
@@ -216,14 +216,14 @@
 				839E7A5417F1BC7600B0F5EC /* Supporting Files */,
 				8384A33E18DAD2E200D967B9 /* fcMap.c */,
 				8384A33F18DAD2E200D967B9 /* fcMap.h */,
-				8341787618E847A1005B56CC /* fcSpeedUp.c */,
-				8341787718E847A1005B56CC /* fcSpeedUp.h */,
+				8341787618E847A1005B56CC /* fcProperty.c */,
+				8341787718E847A1005B56CC /* fcProperty.h */,
 				836B256318DC57F4006D28F3 /* fcSprite.c */,
 				836B256418DC57F4006D28F3 /* fcSprite.h */,
 				83F511B318EA593500FC57D4 /* fcLocation.c */,
 				83F511B418EA593500FC57D4 /* fcLocation.h */,
-				839F7FF118E546FA00727C0C /* fcTreasureBox.c */,
-				839F7FF218E546FA00727C0C /* fcTreasureBox.h */,
+				839F7FF118E546FA00727C0C /* fcContainer.c */,
+				839F7FF218E546FA00727C0C /* fcContainer.h */,
 				8363089118DE8D5E009B5357 /* fcDefine.c */,
 				8363089218DE8D5E009B5357 /* fcDefine.h */,
 				83F88D8B18E1B73C00B778EE /* fcThrower.c */,
@@ -344,8 +344,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				839F7FF318E546FA00727C0C /* fcTreasureBox.c in Sources */,
-				8341787818E847A1005B56CC /* fcSpeedUp.c in Sources */,
+				839F7FF318E546FA00727C0C /* fcContainer.c in Sources */,
+				8341787818E847A1005B56CC /* fcProperty.c in Sources */,
 				83F88D8D18E1B73C00B778EE /* fcThrower.c in Sources */,
 				83F511B518EA593500FC57D4 /* fcLocation.c in Sources */,
 				8341787F18E84D64005B56CC /* fcIntruder.c in Sources */,

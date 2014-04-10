@@ -12,8 +12,8 @@
 #include "fcFruit.h"
 #include "fcFollow.h"
 #include "fcSpriteMove.h"
-#include "fcTreasureBox.h"
-#include "fcSpeedUp.h"
+#include "fcContainer.h"
+#include "fcProperty.h"
 #include "fcIntruder.h"
 #include "fcLocation.h"
 
@@ -235,6 +235,7 @@ void fcMapRemoveDefenser(fcMap this,cxAny sprite)
     fcMapRemoveItem(this, this->defenser, sprite);
 }
 
+//受到攻击时
 static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
 {
     fcThrower a = attacker;
@@ -250,6 +251,7 @@ static void attackedTest(cxAny sprite,cxAny fruit,cxAny attacker)
     }
 }
 
+//是否可以攻击
 static cxBool isAttackMe(cxAny sprite, cxAny fruit,cxAny attacker)
 {
     fcIntruder s = sprite;
@@ -428,16 +430,16 @@ CX_OBJECT_INIT(fcMap, cxView)
     }
     
     {
-        fcTreasureBox b = CX_CREATE(fcTreasureBox);
+        fcContainer b = CX_CREATE(fcContainer);
         cxSpriteSetImage(b, "item.xml?white.png");
-        fcTreasureBoxInit(b, this);
+        fcContainerInit(b, this, 0);
         fcSpriteInitIndex(b, cxVec2iv(1, 2), true);
         fcMapAppendDefenser(this, b);
     }
     {
-        fcSpeedUp su = CX_CREATE(fcSpeedUp);
+        fcProperty su = CX_CREATE(fcProperty);
         cxSpriteSetImage(su, "item.xml?yellow.png");
-        fcSpriteInit(su, this);
+        fcPropertyInit(su, this, 0);
         fcSpriteInitIndex(su, cxVec2iv(8,8), true);
         fcMapAppendProps(this, su);
     }

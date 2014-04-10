@@ -1,7 +1,7 @@
 //
 //  fcThrower.h
 //  cxEngine
-//  水果发射机
+//  防御者基类
 //  Created by xuhua on 3/25/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
@@ -21,8 +21,9 @@ CX_OBJECT_DEF(fcThrower, fcSprite)
     cxFloat attackRange;    //攻击距离
     cxInt attackNumber;     //可攻击的数量,0表示不会攻击
     cxFloat attackPower;    //攻击力
-    //水果创建者
+    //水果创建
     CX_METHOD_ALLOC(cxAny, FruitMaker,cxAny this);
+    //this朝target投掷了fruit
     CX_METHOD_ALLOC(void, FruitFire,cxAny this,cxAny fruit,cxAny target);
 CX_OBJECT_END(fcThrower)
 //初始化投掷器

@@ -99,7 +99,7 @@ cxInt fcSpriteTargetNumber(cxAny this);
 cxInt fcSpriteMurdererNumber(cxAny this);
 
 //s1 指向 s2
-void fcSpriteLookAt(cxAny s1,cxAny s2);
+cxFloat fcSpriteAngle(cxAny s1,cxAny s2);
 
 //获取两个sprite间的距离
 cxFloat fcSpriteDistance(cxAny s1,cxAny s2);

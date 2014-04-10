@@ -1,7 +1,7 @@
 //
 //  fcFruit.h
 //  cxEngine
-//
+//  水果弹药基类
 //  Created by xuhua on 3/26/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
@@ -21,7 +21,7 @@ CX_OBJECT_DEF(fcFruit, cxSprite)
     cxFloat speed;
     //攻击力
     cxFloat attackPower;
-    //开火
+    //fruit被attacker投向target
     CX_METHOD_ALLOC(void, Fire, cxAny fruit, cxAny attacker,cxAny target);
 CX_OBJECT_END(fcFruit)
 

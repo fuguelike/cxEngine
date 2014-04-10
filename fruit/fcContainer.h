@@ -1,7 +1,7 @@
 //
-//  fcTreasureBox.h
+//  fcContainer.h
 //  cxEngine
-//  存放金币的宝箱
+//  容器基类
 //  Created by xuhua on 3/28/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
@@ -13,12 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(fcTreasureBox, fcSprite)
-    //黄金数量
-    cxInt gold;
-CX_OBJECT_END(fcTreasureBox)
+CX_OBJECT_DEF(fcContainer, fcSprite)
+    fcContainerType type;
+CX_OBJECT_END(fcContainer)
 
-void fcTreasureBoxInit(fcTreasureBox this,cxAny map);
+void fcContainerInit(cxAny this,cxAny map,fcContainerType type);
 
 CX_C_END
 

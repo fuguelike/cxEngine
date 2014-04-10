@@ -35,6 +35,7 @@ typedef struct {
 #define fcSpritesAppend(_c_,_i_)    (_c_)->sprite[(_c_)->number++] = (_i_)
 #define fcSpritesClean(_c_)         (_c_)->numner = 0
 
+//精灵类型
 typedef enum {
     fcSpriteTypeNone = 0,       //你什么都不是
     fcSpriteTypeDecoration,     //装饰物,例如地面，道路，花花草草，起点，终点
@@ -45,12 +46,25 @@ typedef enum {
     fcSpriteTypeProperty,       //道具
 }fcSpriteType;
 
+//容器类型
+
+typedef enum {
+    fcContainerTypeNone = 0,
+}fcContainerType;
+
+//道具类型
+typedef enum {
+    fcPropertyTypeNone = 0,
+}fcPropertyType;
+
+//地图模式
 typedef enum {
     fcMapModeNone = 0,
     fcMapModeEdit,      //编辑模式
     fcMapModeFire,      //进攻模式
 }fcMapMode;
 
+//防御者类型
 typedef enum {
     fcThrowerTypeNone = 0,
     fcThrowerTypeSmallMachine,     //投射机 - 小型
@@ -59,16 +73,19 @@ typedef enum {
     fcThrowerTypeSuperMachine,     //投射机 - 重型
 }fcThrowerType;
 
+//闯关者类型
 typedef enum {
     fcIntruderTypeNone = 0,
 }fcIntruderType;
 
+//地面
 typedef enum {
     fcLocationTypeNone = 0,
     fcLocationTypeBegin,            //起点
     fcLocationTypeEnd,              //终点
 }fcLocationType;
 
+//水果弹药类型
 typedef enum {
     fcFruitTypeNone = 0,
     fcFruitTypeFollow,      //跟踪水果
