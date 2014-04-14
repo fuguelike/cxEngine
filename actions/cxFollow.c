@@ -28,6 +28,7 @@ cxBool cxFollowDefaultExit(cxAny pav)
 void cxFollowInit(cxAny pav)
 {
     cxFollow this = pav;
+    CX_ASSERT(this->super.view != this->target, "target error,can't action'view");
     CX_ASSERT(this->super.view != NULL, "view not set");
     CX_ASSERT(this->target != NULL, "target view null");
     cxSize2f ts = cxViewSize(this->target);
@@ -38,14 +39,8 @@ void cxFollowInit(cxAny pav)
 //get target point
 static cxVec2f cxFollowTargetPos(cxFollow this)
 {
-    if(!cxObjectIsType(this->target, cxNumberTypeName)){
-        return cxViewPosition(this->target);
-    }else if(cxNumberIsType(this->target, cxNumberTypeVec2f)){
-        return cxNumberToVec2f(this->target);
-    }else{
-        CX_ASSERT_FALSE("target type error");
-        return cxVec2fv(0, 0);
-    }
+    cxBool isNum = cxObjectIsType(this->target, cxNumberTypeName);
+    return isNum ? cxNumberToVec2f(this->target) : cxViewPosition(this->target);
 }
 
 static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)

@@ -23,7 +23,7 @@ CX_OBJECT_DEF(fcMap, cxView)
     cxList props;       //道具列表
     cxList decoration;  //装饰品
     fcMapMode mode;
-    //
+    //起点和终点
     cxAny begin;        //fcLocationBegin
     cxAny end;          //fcLocationEnd
 CX_OBJECT_END(fcMap)

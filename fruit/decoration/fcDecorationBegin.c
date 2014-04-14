@@ -47,7 +47,7 @@ static void fcDecorationBeginRun(fcDecorationBegin this,fcMap map)
     CX_METHOD_OVERRIDE(b->super.IsAttack, isAttackMe);
     CX_METHOD_OVERRIDE(b->super.Attacked, attackedTest);
     b->super.speed = 2;
-    b->super.life = 100;
+    b->super.life = 1000;
     fcMapAppendIntruder(map, b);
     fcSpriteMoveLoop(b);
     fcIntruderLoop(b);

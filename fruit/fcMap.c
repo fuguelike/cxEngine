@@ -304,7 +304,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     //
     {
         fcThrower a = CX_CREATE(fcThrower);
-        fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
+        fcThrowerInit(a, this, 0);
         fcSpriteInitIndex(a, cxVec2iv(5, 8), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
@@ -318,7 +318,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     
     {
         fcThrower a = CX_CREATE(fcThrower);
-        fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
+        fcThrowerInit(a, this, 0);
         fcSpriteInitIndex(a, cxVec2iv(7, 6), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
@@ -332,7 +332,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     
     {
         fcThrower a = CX_CREATE(fcThrower);
-        fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
+        fcThrowerInit(a, this, 0);
         fcSpriteInitIndex(a, cxVec2iv(5, 5), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);
@@ -346,7 +346,7 @@ CX_OBJECT_INIT(fcMap, cxView)
     
     {
         fcThrower a = CX_CREATE(fcThrower);
-        fcThrowerInit(a, this, fcThrowerTypeSmallMachine);
+        fcThrowerInit(a, this, 0);
         fcSpriteInitIndex(a, cxVec2iv(3, 4), true);
         cxSpriteSetImage(a, "item.xml?red.png");
         CX_METHOD_OVERRIDE(a->FruitMaker, fcFollowMaker);

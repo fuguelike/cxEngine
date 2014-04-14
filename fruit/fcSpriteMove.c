@@ -67,6 +67,14 @@ cxAny fcSpriteMoveAction(cxAny pview)
     return cxViewGetAction(pview, FC_MOVE_ACTION_ID);
 }
 
+void fcSpriteMoveSetSpeed(cxAny sprite,cxFloat speed)
+{
+    fcSpriteMove this = fcSpriteMoveAction(sprite);
+    if(this != NULL){
+        this->speed = speed;
+    }
+}
+
 void fcSpriteMoveStop(cxAny sprite)
 {
     cxAny pav = fcSpriteMoveAction(sprite);

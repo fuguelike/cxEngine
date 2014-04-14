@@ -24,6 +24,9 @@ cxAny fcSpriteMoveAction(cxAny pview);
 
 void fcSpriteMoveStop(cxAny sprite);
 
+//设置速度，可加速或减速
+void fcSpriteMoveSetSpeed(cxAny sprite,cxFloat speed);
+
 //向终点前进
 void fcSpriteMoveLoop(cxAny sprite);
 

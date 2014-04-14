@@ -30,6 +30,7 @@ CX_OBJECT_END(fcThrower)
 void fcThrowerInit(cxAny this,cxAny map,fcThrowerType type);
 //开始搜索投掷
 void fcThrowerLoop(cxAny this);
+
 CX_C_END
 
 #endif

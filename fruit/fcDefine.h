@@ -24,8 +24,8 @@ typedef struct {
     cxInt number;
 }fcPath;
 
-#define fcPathAppend(_c_,_i_)    (_c_)->points[(_c_)->number++] = (_i_)
-#define fcPathClean(_c_)         (_c_)->number = 0
+#define fcPathAppend(_c_,_i_)       (_c_)->points[(_c_)->number++] = (_i_)
+#define fcPathClean(_c_)            (_c_)->number = 0
 
 typedef struct {
     cxAny sprite[DM_MAP_WIDTH*DM_MAP_HEIGHT];
@@ -61,15 +61,12 @@ typedef enum {
     fcMapModeNone = 0,
     fcMapModeEdit,      //编辑模式
     fcMapModeFire,      //进攻模式
+    fcMapModeLook,      //查看模式
 }fcMapMode;
 
 //防御者类型
 typedef enum {
     fcThrowerTypeNone = 0,
-    fcThrowerTypeSmallMachine,     //投射机 - 小型
-    fcThrowerTypeNormalMachine,    //投射机 - 中型
-    fcThrowerTypeBigMachine,       //投射机 - 大型
-    fcThrowerTypeSuperMachine,     //投射机 - 重型
 }fcThrowerType;
 
 //闯关者类型
@@ -77,7 +74,7 @@ typedef enum {
     fcIntruderTypeNone = 0,
 }fcIntruderType;
 
-//地面
+//装饰
 typedef enum {
     fcDecorationTypeNone = 0,
     fcDecorationTypeBegin,            //起点

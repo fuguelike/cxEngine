@@ -15,9 +15,7 @@
 static cxBool fcThrowerInRange(cxAny this,cxAny target)
 {
     //自己不能投射自己
-    if(this == target){
-        return false;
-    }
+    CX_ASSERT(this != target, "self can't attack self");
     fcThrower s = this;
     fcSprite t = target;
     cxFloat r = fcMapScaleValue(s->super.map, s->attackRange);
@@ -132,10 +130,6 @@ void fcThrowerInit(cxAny this,cxAny map,fcThrowerType type)
 void fcThrowerLoop(cxAny this)
 {
     fcThrower a = this;
-    CX_ASSERT(a->attackNumber > 0, "can attack when attack number > 0");
-    CX_ASSERT(a->attackRate > 0, "can attack when attack rate > 0");
-    CX_ASSERT(a->attackPower > 0, "can attack when attack power > 0");
-    CX_ASSERT(a->attackRange > 0, "can attack when attack range > 0");
     fcSpriteStartAILoop(a, fcThrowerRun, a->attackRate);
 }
 
