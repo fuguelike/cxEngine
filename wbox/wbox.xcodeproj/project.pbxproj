@@ -44,7 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8300651F18232BE000AF680D /* tpl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tpl.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8300651F18232BE000AF680D /* wbox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = wbox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
 		83314F6118D9C5D00093FF54 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../libs/ios/lib/libfreetype.a; sourceTree = "<group>"; };
 		83314F6218D9C5D00093FF54 /* libgif.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif.a; path = ../libs/ios/lib/libgif.a; sourceTree = "<group>"; };
@@ -114,9 +114,9 @@
 			isa = PBXGroup;
 			children = (
 				83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */,
-				839E7A5317F1BC7600B0F5EC /* tpl */,
+				839E7A5317F1BC7600B0F5EC /* wbox */,
 				839E7A4817F1BC7600B0F5EC /* Frameworks */,
-				8300651F18232BE000AF680D /* tpl.app */,
+				8300651F18232BE000AF680D /* wbox.app */,
 			);
 			sourceTree = "<group>";
 		};
@@ -146,13 +146,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		839E7A5317F1BC7600B0F5EC /* tpl */ = {
+		839E7A5317F1BC7600B0F5EC /* wbox */ = {
 			isa = PBXGroup;
 			children = (
 				83314F7218D9C6530093FF54 /* main.c */,
 				839E7A5417F1BC7600B0F5EC /* Supporting Files */,
 			);
-			name = tpl;
+			name = wbox;
 			path = cxEngine;
 			sourceTree = "<group>";
 		};
@@ -169,9 +169,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		839E7A4517F1BC7600B0F5EC /* tpl */ = {
+		839E7A4517F1BC7600B0F5EC /* wbox */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 839E7A8017F1BC7600B0F5EC /* Build configuration list for PBXNativeTarget "tpl" */;
+			buildConfigurationList = 839E7A8017F1BC7600B0F5EC /* Build configuration list for PBXNativeTarget "wbox" */;
 			buildPhases = (
 				839E7A4217F1BC7600B0F5EC /* Sources */,
 				839E7A4317F1BC7600B0F5EC /* Frameworks */,
@@ -181,9 +181,9 @@
 			);
 			dependencies = (
 			);
-			name = tpl;
+			name = wbox;
 			productName = cxEngine;
-			productReference = 8300651F18232BE000AF680D /* tpl.app */;
+			productReference = 8300651F18232BE000AF680D /* wbox.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -201,7 +201,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 839E7A4117F1BC7600B0F5EC /* Build configuration list for PBXProject "tpl" */;
+			buildConfigurationList = 839E7A4117F1BC7600B0F5EC /* Build configuration list for PBXProject "wbox" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -220,7 +220,7 @@
 			);
 			projectRoot = "";
 			targets = (
-				839E7A4517F1BC7600B0F5EC /* tpl */,
+				839E7A4517F1BC7600B0F5EC /* wbox */,
 			);
 		};
 /* End PBXProject section */
@@ -341,7 +341,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "tpl-Prefix.pch";
+				GCC_PREFIX_HEADER = "wbox-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"CX_TARGET_OS_IPHONE=1",
@@ -351,10 +351,10 @@
 					"$(SRCROOT)/../",
 					"$(SRCROOT)/../libs/ios/include",
 				);
-				INFOPLIST_FILE = "tpl-Info.plist";
+				INFOPLIST_FILE = "wbox-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../libs/ios/lib";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = wbox;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";
@@ -372,7 +372,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COMPRESS_PNG_FILES = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "tpl-Prefix.pch";
+				GCC_PREFIX_HEADER = "wbox-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"NDEBUG=1",
 					"CX_TARGET_OS_IPHONE=1",
@@ -382,10 +382,10 @@
 					"$(SRCROOT)/../",
 					"$(SRCROOT)/../libs/ios/include",
 				);
-				INFOPLIST_FILE = "tpl-Info.plist";
+				INFOPLIST_FILE = "wbox-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../libs/ios/lib";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = wbox;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv7s";
@@ -396,7 +396,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		839E7A4117F1BC7600B0F5EC /* Build configuration list for PBXProject "tpl" */ = {
+		839E7A4117F1BC7600B0F5EC /* Build configuration list for PBXProject "wbox" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				839E7A7E17F1BC7600B0F5EC /* Debug */,
@@ -405,7 +405,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		839E7A8017F1BC7600B0F5EC /* Build configuration list for PBXNativeTarget "tpl" */ = {
+		839E7A8017F1BC7600B0F5EC /* Build configuration list for PBXNativeTarget "wbox" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				839E7A8117F1BC7600B0F5EC /* Debug */,
