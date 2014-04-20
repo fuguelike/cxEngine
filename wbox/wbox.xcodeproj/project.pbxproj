@@ -31,6 +31,11 @@
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		83EAEC5618E16AA800082272 /* appConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83EAEC5518E16AA800082272 /* appConfig.xml */; };
 		83EAEC5818E16AB100082272 /* en in Resources */ = {isa = PBXBuildFile; fileRef = 83EAEC5718E16AB100082272 /* en */; };
+		83EF58581903C13B003AEC9F /* wMainBox.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EF58561903C13B003AEC9F /* wMainBox.c */; };
+		83EF585B1903C1A4003AEC9F /* main.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83EF585A1903C1A4003AEC9F /* main.xml */; };
+		83EF585E1903E603003AEC9F /* texture.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 83EF585C1903E603003AEC9F /* texture.pvr */; };
+		83EF585F1903E603003AEC9F /* texture.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83EF585D1903E603003AEC9F /* texture.xml */; };
+		83EF58621903E62E003AEC9F /* cxBoxDefine.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EF58601903E62E003AEC9F /* cxBoxDefine.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +74,13 @@
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		83EAEC5518E16AA800082272 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = appConfig.xml; path = res/appConfig.xml; sourceTree = SOURCE_ROOT; };
 		83EAEC5718E16AB100082272 /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = res/en; sourceTree = SOURCE_ROOT; };
+		83EF58561903C13B003AEC9F /* wMainBox.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wMainBox.c; sourceTree = SOURCE_ROOT; };
+		83EF58571903C13B003AEC9F /* wMainBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wMainBox.h; sourceTree = SOURCE_ROOT; };
+		83EF585A1903C1A4003AEC9F /* main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = main.xml; path = res/main.xml; sourceTree = SOURCE_ROOT; };
+		83EF585C1903E603003AEC9F /* texture.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = texture.pvr; path = res/texture.pvr; sourceTree = SOURCE_ROOT; };
+		83EF585D1903E603003AEC9F /* texture.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = texture.xml; path = res/texture.xml; sourceTree = SOURCE_ROOT; };
+		83EF58601903E62E003AEC9F /* cxBoxDefine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxBoxDefine.c; sourceTree = SOURCE_ROOT; };
+		83EF58611903E62E003AEC9F /* cxBoxDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxBoxDefine.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,8 +161,12 @@
 		839E7A5317F1BC7600B0F5EC /* wbox */ = {
 			isa = PBXGroup;
 			children = (
-				83314F7218D9C6530093FF54 /* main.c */,
 				839E7A5417F1BC7600B0F5EC /* Supporting Files */,
+				83314F7218D9C6530093FF54 /* main.c */,
+				83EF58561903C13B003AEC9F /* wMainBox.c */,
+				83EF58571903C13B003AEC9F /* wMainBox.h */,
+				83EF58601903E62E003AEC9F /* cxBoxDefine.c */,
+				83EF58611903E62E003AEC9F /* cxBoxDefine.h */,
 			);
 			name = wbox;
 			path = cxEngine;
@@ -159,9 +175,12 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				83EF585C1903E603003AEC9F /* texture.pvr */,
+				83EF585D1903E603003AEC9F /* texture.xml */,
 				836165D518F67BC400FFF173 /* Default-568h@2x.png */,
 				83EAEC5718E16AB100082272 /* en */,
 				83EAEC5518E16AA800082272 /* appConfig.xml */,
+				83EF585A1903C1A4003AEC9F /* main.xml */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -241,7 +260,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				83EAEC5618E16AA800082272 /* appConfig.xml in Resources */,
+				83EF585B1903C1A4003AEC9F /* main.xml in Resources */,
 				83EAEC5818E16AB100082272 /* en in Resources */,
+				83EF585F1903E603003AEC9F /* texture.xml in Resources */,
+				83EF585E1903E603003AEC9F /* texture.pvr in Resources */,
 				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,7 +275,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83EF58581903C13B003AEC9F /* wMainBox.c in Sources */,
 				83314F7318D9C6530093FF54 /* main.c in Sources */,
+				83EF58621903E62E003AEC9F /* cxBoxDefine.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -39,6 +39,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxFloat frameInterval;
     cxSize2f winsize;   //screen size
     cxSize2f dessize;   //design size
+    cxFloat  desRate;   //design h/w
     cxVec2f scale;
     cxBool isInit;
     cxBool isShowBorder;

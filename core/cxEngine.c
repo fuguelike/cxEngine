@@ -986,6 +986,7 @@ void cxEngineSystemInit(cxEngine engine)
     CX_ENGINE_APP_CONFIG(desSize){
         cxNumber num = desSize->any;
         engine->dessize = cxNumberToSize2f(num);
+        engine->desRate = engine->dessize.h / engine->dessize.w;
     }
     CX_ENGINE_APP_CONFIG(showBorder){
         cxNumber num = showBorder->any;

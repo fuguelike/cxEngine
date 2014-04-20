@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
-               BuildableName = "tpl.app"
+               BuildableName = "wbox.app"
                BlueprintName = "wbox"
                ReferencedContainer = "container:wbox.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
-            BuildableName = "tpl.app"
+            BuildableName = "wbox.app"
             BlueprintName = "wbox"
             ReferencedContainer = "container:wbox.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
-            BuildableName = "tpl.app"
+            BuildableName = "wbox.app"
             BlueprintName = "wbox"
             ReferencedContainer = "container:wbox.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "839E7A4517F1BC7600B0F5EC"
-            BuildableName = "tpl.app"
+            BuildableName = "wbox.app"
             BlueprintName = "wbox"
             ReferencedContainer = "container:wbox.xcodeproj">
          </BuildableReference>
