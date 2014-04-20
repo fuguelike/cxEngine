@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 #include <core/cxEngine.h>
-#include "wMainBox.h"
+#include "wBoxMain.h"
 
 static cxAny wMakeView(cxConstChars temp, xmlTextReaderPtr reader)
 {
-    if(ELEMENT_IS_TYPE(wMainBox)){
-        return CX_CREATE(wMainBox);
+    if(ELEMENT_IS_TYPE(wBoxMain)){
+        return CX_CREATE(wBoxMain);
     }
     return NULL;
 }

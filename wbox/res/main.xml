@@ -2,6 +2,6 @@
 
 <cxViewRoot cxView.fill="0,0,0,0">
     
-    <wMainBox id="box" />
+    <wBoxMain id="main" />
     
 </cxViewRoot>

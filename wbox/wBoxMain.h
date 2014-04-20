@@ -10,18 +10,18 @@
 #define wbox_wMainBox_h
 
 #include <core/cxView.h>
-#include "cxBoxDefine.h"
+#include "wBoxDefine.h"
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(wMainBox, cxView)
+CX_OBJECT_DEF(wBoxMain, cxView)
     cxSize2f unitSize;
     cxUInt items[W_BOX_COL][W_BOX_ROW];
-CX_OBJECT_END(wMainBox)
+CX_OBJECT_END(wBoxMain)
 
-cxVec2i wMainBoxToIdx(cxAny box,cxVec2f pos);
+cxVec2i wBoxMainToIdx(cxAny box,cxVec2f pos);
 
-cxVec2f wMainBoxToPos(cxAny box,cxVec2i idx);
+cxVec2f wBoxMainToPos(cxAny box,cxVec2i idx);
 
 CX_C_END
 
