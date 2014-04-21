@@ -16,7 +16,8 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(wBoxMain, cxView)
     cxSize2f unitSize;
-    cxUInt items[W_BOX_COL][W_BOX_ROW];
+    cxAny items[W_BOX_COL][W_BOX_ROW];
+    wUnit unit;
 CX_OBJECT_END(wBoxMain)
 
 cxVec2i wBoxMainToIdx(cxAny box,cxVec2f pos);

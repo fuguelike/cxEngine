@@ -136,6 +136,8 @@ void cxViewStopAction(cxAny pview,cxUInt actionId);
 
 cxBool cxViewHasAction(cxAny pview,cxUInt actionId);
 
+void cxViewCleanActions(cxAny pview);
+
 cxAny cxViewGetAction(cxAny pview,cxUInt actionId);
 
 cxAny cxViewAppendTimer(cxAny pview,cxFloat freq,cxInt repeat);

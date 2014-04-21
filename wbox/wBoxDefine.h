@@ -17,6 +17,10 @@ CX_C_BEGIN
 
 #define W_BOX_ROW 20
 
+cxBool wBoxCheckIdx(cxVec2i idx);
+
+cxVec2i wBoxInitIdx(cxVec2i idx);
+
 typedef enum {
     wUnitColorNone = 0,
     wUnitColorRed,      //红
@@ -48,14 +52,16 @@ typedef enum {
 
 //4x4
 typedef struct {
-    cxVec2i rotIdx;     // x y >= 0 can rot
-    cxUInt grids[4][2]; // -> wUnitColorRed - wUnitColorYellow
-    wUnitType type;
-    wUnitDir dir;
     cxVec2i idx;
+    cxVec2i rotIdx;     // x y >= 0 can rot
+    cxUInt grids[4][4]; // -> wUnitColorRed - wUnitColorYellow
+    wUnitType type;
+    wUnitDir dir;    
 }wUnit;
 
 void wUnitInit(wUnit *unit,wUnitType type);
+
+void wUnitRotate(wUnit *unit);
 
 CX_C_END
 

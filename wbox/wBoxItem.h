@@ -10,11 +10,17 @@
 #define wbox_wBoxItem_h
 
 #include <views/cxSprite.h>
+#include "wBoxDefine.h"
 
 CX_C_BEGIN
 
 CX_OBJECT_DEF(wBoxItem, cxSprite)
+    cxAny box;
 CX_OBJECT_END(wBoxItem)
+
+void wBoxItemSetColor(cxAny ite,wUnitColor color);
+
+wBoxItem wBoxItemCreate(cxAny box,cxVec2i idx);
 
 CX_C_END
 

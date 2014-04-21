@@ -936,6 +936,12 @@ cxBool cxViewOnKey(cxAny pview,cxKey *key)
     return false;
 }
 
+void cxViewCleanActions(cxAny pview)
+{
+    cxView this = pview;
+    cxHashClean(this->actions);
+}
+
 cxBool cxViewHasAction(cxAny pview,cxUInt actionId)
 {
     cxView this = pview;

@@ -9,10 +9,22 @@
 #include <core/cxEngine.h>
 #include <views/cxSprite.h>
 #include "wBoxMain.h"
+#include "wBoxItem.h"
+
+static cxBool wBoxMainTouch(cxAny pview,cxTouch *touch)
+{
+    if(touch->type == cxTouchTypeUp){
+       
+    }
+    return false;
+}
 
 
 CX_OBJECT_INIT(wBoxMain, cxView)
 {
+
+    CX_METHOD_OVERRIDE(this->super.Touch, wBoxMainTouch);
+    
     cxEngine engine = cxEngineInstance();
     cxFloat h = engine->winsize.h / 23;
     cxFloat w = h;
@@ -20,31 +32,13 @@ CX_OBJECT_INIT(wBoxMain, cxView)
     cxViewSetSize(this, cxSize2fv(w * W_BOX_COL, h * W_BOX_ROW));
     cxViewSetAutoResizeMask(this, cxViewAutoResizeBottom);
     
-//    //test
-//    for(int i=0;i < 10; i++){
-//        for (int j=0; j < 20; j++) {
-//            cxSprite s = cxSpriteCreateWithURL("texture.xml?blue.png");
-//            cxVec2f pos = wBoxMainToPos(this, cxVec2iv(i, j));
-//            cxViewSetPos(s, pos);
-//            cxViewSetSize(s, this->unitSize);
-//            cxViewAppend(this, s);
-//        }
-//    }
+    wUnitInit(&this->unit, wUnitType_I);
     
-    wUnit u;
-    wUnitInit(&u, wUnitType_T);
-    for(int i=0; i < 4; i++){
-        for (int j=0; j < 2; j++) {
-            cxSprite s;
-            if(u.grids[i][j] > 0){
-                s = cxSpriteCreateWithURL("texture.xml?blue.png");
-            }else{
-                s = cxSpriteCreateWithURL("texture.xml?white.png");
-            }
-            cxVec2f pos = wBoxMainToPos(this, cxVec2iv(i, j));
-            cxViewSetPos(s, pos);
-            cxViewSetSize(s, this->unitSize);
-            cxViewAppend(this, s);
+    for(cxInt x=0; x < W_BOX_COL;x++){
+        for(cxInt y=0; y < W_BOX_ROW; y++){
+            wBoxItem item = wBoxItemCreate(this, cxVec2iv(x, y));
+            cxViewSetVisible(item, false);
+            cxViewAppend(this, item);
         }
     }
 }
