@@ -29,6 +29,7 @@ int main(int argc, const char * argv[])
     cxFrameworkInit();
     //
     Test t = CX_ALLOC(Test);
+    CX_RELEASE(t);
     //
     cxFrameworkFree();
     //

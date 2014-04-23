@@ -10,6 +10,12 @@
 		8344120F1907B1A0003D7B45 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344120E1907B1A0003D7B45 /* main.c */; };
 		834412111907B1A0003D7B45 /* cxFramework.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 834412101907B1A0003D7B45 /* cxFramework.1 */; };
 		834412911907B88E003D7B45 /* cxFramework.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344128F1907B88E003D7B45 /* cxFramework.c */; };
+		834412A31907C3D3003D7B45 /* cxArray.c in Sources */ = {isa = PBXBuildFile; fileRef = 834412991907C3D3003D7B45 /* cxArray.c */; };
+		834412A41907C3D3003D7B45 /* cxHash.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344129B1907C3D3003D7B45 /* cxHash.c */; };
+		834412A51907C3D3003D7B45 /* cxList.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344129D1907C3D3003D7B45 /* cxList.c */; };
+		834412A61907C3D3003D7B45 /* cxStack.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344129F1907C3D3003D7B45 /* cxStack.c */; };
+		834412A71907C3D3003D7B45 /* cxString.c in Sources */ = {isa = PBXBuildFile; fileRef = 834412A11907C3D3003D7B45 /* cxString.c */; };
+		834412AA1907C42C003D7B45 /* cxMD5.c in Sources */ = {isa = PBXBuildFile; fileRef = 834412A81907C42C003D7B45 /* cxMD5.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +37,22 @@
 		834412101907B1A0003D7B45 /* cxFramework.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = cxFramework.1; sourceTree = "<group>"; };
 		8344128F1907B88E003D7B45 /* cxFramework.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxFramework.c; sourceTree = "<group>"; };
 		834412901907B88E003D7B45 /* cxFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxFramework.h; sourceTree = "<group>"; };
+		834412951907C392003D7B45 /* utarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utarray.h; sourceTree = "<group>"; };
+		834412961907C392003D7B45 /* uthash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uthash.h; sourceTree = "<group>"; };
+		834412971907C392003D7B45 /* utlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utlist.h; sourceTree = "<group>"; };
+		834412981907C392003D7B45 /* utstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utstring.h; sourceTree = "<group>"; };
+		834412991907C3D3003D7B45 /* cxArray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxArray.c; sourceTree = "<group>"; };
+		8344129A1907C3D3003D7B45 /* cxArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxArray.h; sourceTree = "<group>"; };
+		8344129B1907C3D3003D7B45 /* cxHash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxHash.c; sourceTree = "<group>"; };
+		8344129C1907C3D3003D7B45 /* cxHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxHash.h; sourceTree = "<group>"; };
+		8344129D1907C3D3003D7B45 /* cxList.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxList.c; sourceTree = "<group>"; };
+		8344129E1907C3D3003D7B45 /* cxList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxList.h; sourceTree = "<group>"; };
+		8344129F1907C3D3003D7B45 /* cxStack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxStack.c; sourceTree = "<group>"; };
+		834412A01907C3D3003D7B45 /* cxStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxStack.h; sourceTree = "<group>"; };
+		834412A11907C3D3003D7B45 /* cxString.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxString.c; sourceTree = "<group>"; };
+		834412A21907C3D3003D7B45 /* cxString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxString.h; sourceTree = "<group>"; };
+		834412A81907C42C003D7B45 /* cxMD5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMD5.c; sourceTree = "<group>"; };
+		834412A91907C42C003D7B45 /* cxMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMD5.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +95,22 @@
 		8344128E1907B88E003D7B45 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				834412991907C3D3003D7B45 /* cxArray.c */,
+				834412A81907C42C003D7B45 /* cxMD5.c */,
+				834412A91907C42C003D7B45 /* cxMD5.h */,
+				8344129A1907C3D3003D7B45 /* cxArray.h */,
+				8344129B1907C3D3003D7B45 /* cxHash.c */,
+				8344129C1907C3D3003D7B45 /* cxHash.h */,
+				8344129D1907C3D3003D7B45 /* cxList.c */,
+				8344129E1907C3D3003D7B45 /* cxList.h */,
+				8344129F1907C3D3003D7B45 /* cxStack.c */,
+				834412A01907C3D3003D7B45 /* cxStack.h */,
+				834412A11907C3D3003D7B45 /* cxString.c */,
+				834412A21907C3D3003D7B45 /* cxString.h */,
+				834412951907C392003D7B45 /* utarray.h */,
+				834412961907C392003D7B45 /* uthash.h */,
+				834412971907C392003D7B45 /* utlist.h */,
+				834412981907C392003D7B45 /* utstring.h */,
 				8344128F1907B88E003D7B45 /* cxFramework.c */,
 				834412901907B88E003D7B45 /* cxFramework.h */,
 			);
@@ -131,7 +169,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				834412A71907C3D3003D7B45 /* cxString.c in Sources */,
+				834412AA1907C42C003D7B45 /* cxMD5.c in Sources */,
+				834412A41907C3D3003D7B45 /* cxHash.c in Sources */,
+				834412A31907C3D3003D7B45 /* cxArray.c in Sources */,
 				8344120F1907B1A0003D7B45 /* main.c in Sources */,
+				834412A61907C3D3003D7B45 /* cxStack.c in Sources */,
+				834412A51907C3D3003D7B45 /* cxList.c in Sources */,
 				834412911907B88E003D7B45 /* cxFramework.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
