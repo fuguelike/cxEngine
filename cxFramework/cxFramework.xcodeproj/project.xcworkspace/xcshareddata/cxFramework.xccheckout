@@ -5,16 +5,16 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>95BFB736-CB65-4559-BA06-682FC8A0D690</string>
+	<string>03BA7AA1-DB2B-462E-97C8-00A9668D4836</string>
 	<key>IDESourceControlProjectName</key>
-	<string>cxEngine</string>
+	<string>cxFramework</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>CBFE11B0-03B9-4B08-A94C-3B1D01651426</key>
 		<string>https://github.com/cxuhua/cxEngine.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>cxEngine/cxEngine.xcodeproj/project.xcworkspace</string>
+	<string>cxFramework/cxFramework.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>CBFE11B0-03B9-4B08-A94C-3B1D01651426</key>
