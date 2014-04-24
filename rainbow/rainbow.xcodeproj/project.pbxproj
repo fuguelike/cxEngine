@@ -12,10 +12,8 @@
 		83314F6B18D9C5D00093FF54 /* libgif.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6218D9C5D00093FF54 /* libgif.a */; };
 		83314F6C18D9C5D00093FF54 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6318D9C5D00093FF54 /* libjansson.a */; };
 		83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6418D9C5D00093FF54 /* libjpeg.a */; };
-		83314F6E18D9C5D00093FF54 /* libluajit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6518D9C5D00093FF54 /* libluajit.a */; };
 		83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6618D9C5D00093FF54 /* libpcre.a */; };
 		83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6718D9C5D00093FF54 /* libpng.a */; };
-		83314F7118D9C5D80093FF54 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A0182280E70045A66F /* libxml2.dylib */; };
 		83314F7318D9C6530093FF54 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 83314F7218D9C6530093FF54 /* main.c */; };
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
 		8341C69F182280E20045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69E182280E20045A66F /* libz.dylib */; };
@@ -30,10 +28,9 @@
 		836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 836165D518F67BC400FFF173 /* Default-568h@2x.png */; };
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		83E705621909127B0056EBCC /* rbMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E705601909127B0056EBCC /* rbMap.c */; };
-		83E70564190913200056EBCC /* main.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83E70563190913200056EBCC /* main.xml */; };
 		83E70567190913C70056EBCC /* rbDefine.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E70565190913C70056EBCC /* rbDefine.c */; };
-		83EAEC5618E16AA800082272 /* appConfig.xml in Resources */ = {isa = PBXBuildFile; fileRef = 83EAEC5518E16AA800082272 /* appConfig.xml */; };
-		83EAEC5818E16AB100082272 /* en in Resources */ = {isa = PBXBuildFile; fileRef = 83EAEC5718E16AB100082272 /* en */; };
+		83E925421909361A00D24201 /* texture.json in Resources */ = {isa = PBXBuildFile; fileRef = 83E925401909361A00D24201 /* texture.json */; };
+		83E925431909361A00D24201 /* texture.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 83E925411909361A00D24201 /* texture.pvr */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,13 +50,11 @@
 		83314F6218D9C5D00093FF54 /* libgif.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif.a; path = ../libs/ios/lib/libgif.a; sourceTree = "<group>"; };
 		83314F6318D9C5D00093FF54 /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = ../libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
 		83314F6418D9C5D00093FF54 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../libs/ios/lib/libjpeg.a; sourceTree = "<group>"; };
-		83314F6518D9C5D00093FF54 /* libluajit.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libluajit.a; path = ../libs/ios/lib/libluajit.a; sourceTree = "<group>"; };
 		83314F6618D9C5D00093FF54 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = ../libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		83314F6718D9C5D00093FF54 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../libs/ios/lib/libpng.a; sourceTree = "<group>"; };
 		83314F7218D9C6530093FF54 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = SOURCE_ROOT; };
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8341C69E182280E20045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		8341C6A0182280E70045A66F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		8341C6A2182280ED0045A66F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		8344F0A818D3F4380003E410 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8344F0AA18D3F46C0003E410 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -72,11 +67,10 @@
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		83E705601909127B0056EBCC /* rbMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rbMap.c; sourceTree = SOURCE_ROOT; };
 		83E705611909127B0056EBCC /* rbMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rbMap.h; sourceTree = SOURCE_ROOT; };
-		83E70563190913200056EBCC /* main.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = main.xml; path = res/main.xml; sourceTree = SOURCE_ROOT; };
 		83E70565190913C70056EBCC /* rbDefine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rbDefine.c; sourceTree = SOURCE_ROOT; };
 		83E70566190913C70056EBCC /* rbDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rbDefine.h; sourceTree = SOURCE_ROOT; };
-		83EAEC5518E16AA800082272 /* appConfig.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = appConfig.xml; path = res/appConfig.xml; sourceTree = SOURCE_ROOT; };
-		83EAEC5718E16AB100082272 /* en */ = {isa = PBXFileReference; lastKnownFileType = folder; name = en; path = res/en; sourceTree = SOURCE_ROOT; };
+		83E925401909361A00D24201 /* texture.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = texture.json; path = res/texture.json; sourceTree = SOURCE_ROOT; };
+		83E925411909361A00D24201 /* texture.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = texture.pvr; path = res/texture.pvr; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,13 +79,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */,
-				83314F7118D9C5D80093FF54 /* libxml2.dylib in Frameworks */,
 				83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */,
 				83314F6A18D9C5D00093FF54 /* libfreetype.a in Frameworks */,
 				83314F6B18D9C5D00093FF54 /* libgif.a in Frameworks */,
 				83314F6C18D9C5D00093FF54 /* libjansson.a in Frameworks */,
 				83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */,
-				83314F6E18D9C5D00093FF54 /* libluajit.a in Frameworks */,
 				83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */,
 				83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */,
 				8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */,
@@ -136,7 +128,6 @@
 				83314F6218D9C5D00093FF54 /* libgif.a */,
 				83314F6318D9C5D00093FF54 /* libjansson.a */,
 				83314F6418D9C5D00093FF54 /* libjpeg.a */,
-				83314F6518D9C5D00093FF54 /* libluajit.a */,
 				83314F6618D9C5D00093FF54 /* libpcre.a */,
 				83314F6718D9C5D00093FF54 /* libpng.a */,
 				8344F0B318D3F4A90003E410 /* Foundation.framework */,
@@ -147,7 +138,6 @@
 				8344F0A818D3F4380003E410 /* UIKit.framework */,
 				83583427185EB87E0057E40B /* AVFoundation.framework */,
 				8341C6A2182280ED0045A66F /* libiconv.dylib */,
-				8341C6A0182280E70045A66F /* libxml2.dylib */,
 				8341C69E182280E20045A66F /* libz.dylib */,
 				8341C69C182280C20045A66F /* AudioToolbox.framework */,
 			);
@@ -171,10 +161,9 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				83E70563190913200056EBCC /* main.xml */,
+				83E925401909361A00D24201 /* texture.json */,
+				83E925411909361A00D24201 /* texture.pvr */,
 				836165D518F67BC400FFF173 /* Default-568h@2x.png */,
-				83EAEC5718E16AB100082272 /* en */,
-				83EAEC5518E16AA800082272 /* appConfig.xml */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -253,10 +242,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83E70564190913200056EBCC /* main.xml in Resources */,
-				83EAEC5618E16AA800082272 /* appConfig.xml in Resources */,
-				83EAEC5818E16AB100082272 /* en in Resources */,
+				83E925431909361A00D24201 /* texture.pvr in Resources */,
 				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
+				83E925421909361A00D24201 /* texture.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

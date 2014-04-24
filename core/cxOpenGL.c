@@ -20,32 +20,6 @@ cxConstChars cxShaderDefaultKey         = "cxShaderDefault";
 cxConstChars cxShaderAlphaKey           = "cxShaderAlpha";
 cxConstChars cxShaderClippingKey        = "cxShaderClipping";
 
-static cxInt cxOpenGLLuaGetShader(lua_State *L)
-{
-    cxConstChars key = luaL_checkstring(L, 1);
-    cxAny any = cxOpenGLShader(key);
-    CX_LUA_PUSH_OBJECT(any);
-    return 1;
-}
-
-static cxInt cxOpenGLLuaSetShader(lua_State *L)
-{
-    cxOpenGL this = cxOpenGLInstance();
-    cxConstChars key = luaL_checkstring(L, 1);
-    cxShader shader = CX_LUA_GET_PTR(2);
-    cxHashSet(this->shaders, cxHashStrKey(key), shader);
-    return 0;
-}
-
-CX_LUA_METHOD_BEG(cxOpenGL)
-    CX_LUA_PROPERTY(cxOpenGL, Shader),
-CX_LUA_METHOD_END(cxOpenGL)
-
-void __cxOpenGLTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxOpenGL);
-}
-
 #define CX_OPENGL_LOAD_SHADER(t)                                    \
 do{                                                                 \
     cxShader shader = CX_ALLOC(t);                                  \

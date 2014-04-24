@@ -13,7 +13,6 @@
 #include "cxStack.h"
 #include "cxTypes.h"
 #include "cxInput.h"
-#include "cxXMLScript.h"
 #include "cxEventArg.h"
 #include "cxUtil.h"
 #include "cxMessage.h"
@@ -32,9 +31,6 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash bmpfonts;
-    cxHash scripts;
-    cxHash datasets;
-    cxHash actions;
     cxHash dbenvs;
     cxFloat frameInterval;
     cxSize2f winsize;   //screen size
@@ -58,31 +54,11 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxTouch touch;
     cxKey key;
     cxString lang;
-    //make view
-    CX_METHOD_ALLOC(cxAny, MakeView, cxConstChars, xmlTextReaderPtr);
-    //make action
-    CX_METHOD_ALLOC(cxAny, MakeAction, cxConstChars, xmlTextReaderPtr);
 CX_OBJECT_END(cxEngine)
-
-cxBool cxEngineLuaRunString(cxString code);
-
-cxBool cxEngineLuaRunFile(cxConstChars file);
-
-cxBool cxEngineLuaRunChars(cxConstChars code);
 
 cxEngine cxEngineInstance();
 
-void cxEngineRemoveScript(cxConstChars file);
-
 void cxEngineTimeReset();
-
-cxXMLScript cxEngineGetXMLScript(cxConstChars file);
-
-cxString cxEngineGetLuaScript(cxConstChars file);
-
-void cxEngineSetLocalLang(cxString lang);
-
-cxAny cxEngineTypes(cxConstChars url);
 
 cxAny cxEngineDB(cxConstChars url);
 
@@ -132,10 +108,6 @@ void cxEngineDraw();
 void cxEngineLayout(cxInt width,cxInt height);
 
 void cxEngineDestroy();
-
-//
-
-cxString cxEngineLocalizedText(cxConstChars url);
 
 CX_C_END
 

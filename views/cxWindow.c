@@ -7,65 +7,7 @@
 //
 
 #include <core/cxEngine.h>
-#include <core/cxViewRoot.h>
 #include "cxWindow.h"
-
-static cxInt cxWindowLuaPopView(lua_State *L)
-{
-    cxInt top = lua_gettop(L);
-    cxEventArg args = NULL;
-    if(top >=1 && lua_isstring(L, 1)){
-        args = cxEventArgCreate(lua_tostring(L, 1));
-    }
-    cxWindowPopView(args);
-    return 0;
-}
-
-static cxInt cxWindowLuaPushView(lua_State *L)
-{
-    cxInt top = lua_gettop(L);
-    cxEventArg args = NULL;
-    if(top >=2 && lua_isstring(L, 2)){
-        args = cxEventArgCreate(lua_tostring(L, 2));
-    }
-    cxAny ret = NULL;
-    if(lua_isstring(L, 1)){
-        ret = cxWindowPushXML(lua_tostring(L, 1));
-    }else{
-        cxView view = CX_LUA_GET_PTR(1);
-        cxWindowPushView(view, args);
-        ret = view;
-    }
-    CX_LUA_PUSH_OBJECT(ret);
-    return 1;
-}
-
-static cxInt cxWindowLuaReplaceView(lua_State *L)
-{
-    cxInt top = lua_gettop(L);
-    cxEventArg args = NULL;
-    if(top >=2 && lua_isstring(L, 2)){
-        args = cxEventArgCreate(lua_tostring(L, 2));
-    }
-    if(lua_isstring(L, 1)){
-        cxWindowReplaceXML(lua_tostring(L, 1));
-    }else{
-        cxView view = CX_LUA_GET_PTR(1);
-        cxWindowReplaceView(view, args);
-    }
-    return 0;
-}
-
-CX_LUA_METHOD_BEG(cxWindow)
-    {"PushView",cxWindowLuaPushView},
-    {"PopView",cxWindowLuaPopView},
-    {"ReplaceView",cxWindowLuaReplaceView},
-CX_LUA_METHOD_END(cxWindow)
-
-void __cxWindowTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxWindow);
-}
 
 static cxBool cxWindowOnKey(cxAny pview,cxKey *key)
 {
@@ -85,27 +27,6 @@ CX_OBJECT_FREE(cxWindow, cxView)
     CX_RELEASE(this->views);
 }
 CX_OBJECT_TERM(cxWindow, cxView)
-
-cxAny cxWindowPushXML(cxConstChars xml)
-{
-    cxViewRoot rootView = cxViewRootCreate(xml);
-    CX_ASSERT(rootView != NULL, "create xml view error : %s",xml);
-    cxWindowPushView(rootView, NULL);
-    return rootView;
-}
-
-cxAny cxWindowReplaceXML(cxConstChars xml)
-{
-    cxViewRoot rootView = cxViewRootCreate(xml);
-    CX_ASSERT(rootView != NULL, "create xml view error : %s",xml);
-    cxWindowReplaceView(rootView, NULL);
-    return rootView;
-}
-
-void cxWindowPopXML()
-{
-    cxWindowPopView(NULL);
-}
 
 cxAny cxWindowTopView()
 {

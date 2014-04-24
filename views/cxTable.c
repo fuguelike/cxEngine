@@ -6,30 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxViewRoot.h>
 #include "cxTable.h"
-
-CX_LUA_METHOD_BEG(cxTable)
-
-CX_LUA_METHOD_END(cxTable)
-
-
-void __cxTableTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxTable);
-}
-
-void cxTableReadAttr(cxReaderAttrInfo *info)
-{
-    cxViewReadAttr(info);
-    cxTable this = info->object;
-    //set space
-    cxTableSetSpace(this, cxXMLReadVec2fAttr(info, "cxTable.space", this->space));
-    //set type
-    this->grid = cxXMLReadVec2iAttr(info, "cxTable.type", this->grid);
-    //array hide
-    cxTableArrayHide(this, cxXMLReadBoolAttr(info, "cxTable.arrayHide", this->arrayHide));
-}
 
 void cxTableSetSpace(cxAny pview,cxVec2f space)
 {
@@ -124,7 +101,6 @@ CX_OBJECT_INIT(cxTable, cxView)
     this->arrayHide = true;
     CX_EVENT_QUICK(this->super.onResize, cxTableResize);
     CX_EVENT_QUICK(this->super.onUpdate, cxTableUpdate);
-    cxObjectSetReadAttrFunc(this, cxTableReadAttr);
 }
 CX_OBJECT_FREE(cxTable, cxView)
 {

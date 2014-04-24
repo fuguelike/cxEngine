@@ -22,7 +22,7 @@
 #include <textures/cxTexturePNG.h>
 #include <textures/cxTexturePVR.h>
 #include <textures/cxTextureTXT.h>
-#include <textures/cxTextureXML.h>
+#include <textures/cxTextureJSON.h>
 
 #include <shaders/cxShaderAlpha.h>
 #include <shaders/cxShaderDefault.h>

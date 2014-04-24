@@ -26,6 +26,8 @@ CX_OBJECT_DEF(cxAnimate, cxAction)
     CX_EVENT_ALLOC(onFrame);
 CX_OBJECT_END(cxAnimate)
 
+void cxAnimateXMLAppend(cxArray list,cxConstChars file,cxConstChars key,cxInt from,cxInt to);
+
 cxAnimate cxAnimateCreate(cxFloat duration,cxArray list);
 
 CX_C_END

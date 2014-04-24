@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxActionRoot.h>
 #include "cxJump.h"
 
 static void cxJumpInit(cxAny pav)
@@ -32,18 +31,8 @@ static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, nPos);
 }
 
-static void cxJumpReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxJump this = info->object;
-    this->position = cxXMLReadVec2fAttr(info, "cxJump.position", this->position);
-    this->height = cxXMLReadFloatAttr(info, "cxJump.height", this->height);
-    this->jumps  = cxXMLReadIntAttr(info, "cxJump.jumps", this->jumps);
-}
-
 CX_OBJECT_INIT(cxJump, cxAction)
 {
-    cxObjectSetReadAttrFunc(this, cxJumpReadAttr);
     CX_METHOD_OVERRIDE(this->super.Init, cxJumpInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxJumpStep);
 }

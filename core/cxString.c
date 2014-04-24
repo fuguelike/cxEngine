@@ -13,35 +13,6 @@
 #include "cxTypes.h"
 #include "cxUtil.h"
 
-static cxInt cxStringLuaPrint(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxString);
-    if(this != NULL){
-        CX_LOGGER("%s",cxStringBody(this));
-    }
-    return 0;
-}
-
-static cxInt cxStringLuaMake(lua_State *L)
-{
-    CX_LUA_CREATE_THIS(cxString);
-    int top = lua_gettop(L);
-    for(cxInt i=1; i <= top; i++){
-        cxStringFormat(this, "%s",lua_tostring(L, i));
-    }
-    CX_LUA_PUSH_THIS(cxString);
-}
-
-CX_LUA_METHOD_BEG(cxString)
-    {"Make",cxStringLuaMake},
-    {"Print",cxStringLuaPrint},
-CX_LUA_METHOD_END(cxString)
-
-void __cxStringTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxString);
-}
-
 CX_OBJECT_INIT(cxString, cxObject)
 {
     

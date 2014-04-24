@@ -7,50 +7,8 @@
 //
 
 #include <core/cxEngine.h>
-#include <core/cxXMLScript.h>
-#include <core/cxActionRoot.h>
 #include <core/cxEventArg.h>
 #include "cxActionSet.h"
-
-static cxInt cxActionType(lua_State *L)
-{
-    cxNumber num = cxNumberInt(cxActionSetTypeNone);
-    cxConstChars mode = luaL_checkstring(L, 1);
-    if(cxConstCharsEqu(mode, "multiple")){
-        num = cxNumberInt(cxActionSetTypeMultiple);
-    }
-    if(cxConstCharsEqu(mode, "sequence")){
-        num = cxNumberInt(cxActionSetTypeSequence);
-    }
-    CX_LUA_PUSH_OBJECT(num);
-    return 1;
-}
-
-void __cxActionSetTypeInit()
-{
-    cxEngineRegisteFunc(cxActionType);
-}
-
-static void cxActionSetReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxActionSet this = info->object;
-    //get type use cxActionType('sequence') atr func
-    cxActionSetSetType(this,cxXMLReadIntAttr(info, "cxActionSet.type", this->type));
-    //get sub action
-    while(xmlTextReaderRead(info->reader)){
-        if(xmlTextReaderNodeType(info->reader) != XML_READER_TYPE_ELEMENT){
-            continue;
-        }
-        cxConstChars temp = cxXMLReadElementName(info->reader);
-        info->object = cxActionRootMakeElement(temp, info->reader);
-        if(info->object == NULL){
-            continue;
-        }
-        cxObjectReadAttrRun(info);
-        cxActionSetAppend(this, info->object);
-    }
-}
 
 static void cxActionSetRunNext(cxAny pav);
 
@@ -118,7 +76,6 @@ static void cxActionSetStep(cxAny pav,cxFloat dt,cxFloat time)
 
 CX_OBJECT_INIT(cxActionSet, cxAction)
 {
-    cxObjectSetReadAttrFunc(this, cxActionSetReadAttr);
     CX_METHOD_OVERRIDE(this->super.Init, cxActionSetInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxActionSetStep);
     CX_METHOD_OVERRIDE(this->super.Exit, cxActionSetExit);

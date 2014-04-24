@@ -11,7 +11,7 @@
 
 #include "cxTexturePVR.h"
 #include "cxTexturePNG.h"
-#include "cxTextureXML.h"
+#include "cxTextureJSON.h"
 #include "cxTextureTXT.h"
 #include "cxTexturePKM.h"
 #include "cxTextureJPG.h"

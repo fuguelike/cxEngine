@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--cxView.fixScale="cxFixScaleW()" cxView.w="640" cxView.h="960""-->
-<cxViewRoot cxView.fill="0,0,0,">
-    <rbMap id="map" cxView.bottom="9" />
-</cxViewRoot>

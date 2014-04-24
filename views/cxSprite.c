@@ -6,40 +6,9 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 #include <core/cxEngine.h>
-#include <core/cxViewRoot.h>
 #include <core/cxOpenGL.h>
-#include <core/cxXMLScript.h>
 #include <textures/cxTextureFactory.h>
 #include "cxSprite.h"
-
-static cxInt cxSpriteLuaSetTexture(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxSprite);
-    cxBool ust = cxLuaBoolValue(L, 3, true);
-    cxConstChars url = luaL_checkstring(L, 2);
-    cxSpriteSetTextureURL(this, url, ust);
-    return 0;
-}
-
-static cxInt cxSpriteLuaMake(lua_State *L)
-{
-    CX_LUA_CREATE_THIS(cxSprite);
-    cxBool ust = cxLuaBoolValue(L, 2, true);
-    cxConstChars url = luaL_checkstring(L, 1);
-    cxSpriteSetTextureURL(this, url, ust);
-    CX_LUA_PUSH_THIS(cxSprite);
-}
-
-CX_LUA_METHOD_BEG(cxSprite)
-    {"SetTexture",cxSpriteLuaSetTexture},
-    {"Make",cxSpriteLuaMake},
-CX_LUA_METHOD_END(cxSprite)
-
-
-void __cxSpriteTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxSprite);
-}
 
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor)
 {
@@ -132,23 +101,6 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
     }
 }
 
-//texture="res/a.xml?green.png"
-void cxSpriteReadAttr(cxReaderAttrInfo *info)
-{
-    cxSprite this = info->object;
-    //set texture
-    cxTextureAttr texAttr = cxXMLReadTextureAttr(info, "cxSprite.texture");
-    cxSpriteSetTextureAttr(this, texAttr);
-    //flipx flipy
-    cxSpriteSetFlipX(this, cxXMLReadBoolAttr(info, "cxSprite.flipX", this->isFlipX));
-    cxSpriteSetFlipY(this, cxXMLReadBoolAttr(info, "cxSprite.flipY", this->isFlipY));
-    //shader
-    cxString shader = cxXMLReadStringAttr(info, "cxSprite.shader");
-    cxSpriteSetShader(this, cxStringBody(shader));
-    //
-    cxViewReadAttr(info);
-}
-
 CX_OBJECT_INIT(cxSprite, cxView)
 {
     this->texCoord = cxBoxTex2fDefault();
@@ -156,7 +108,6 @@ CX_OBJECT_INIT(cxSprite, cxView)
     CX_EVENT_QUICK(this->super.onDirty, cxSpriteDirtyEvent);
     CX_METHOD_OVERRIDE(this->super.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
-    cxObjectSetReadAttrFunc(this, cxSpriteReadAttr);
 }
 CX_OBJECT_FREE(cxSprite, cxView)
 {
@@ -179,16 +130,6 @@ cxSprite cxSpriteCreateWithFile(cxConstChars file,cxConstChars key)
     cxSpriteSetTexture(this, texture);
     cxSpriteSetTextureKey(this, key, true);
     return this;
-}
-
-void cxSpriteSetTextureAttr(cxAny pview,cxTextureAttr attr)
-{
-    CX_RETURN(attr == NULL);
-    cxSpriteSetTexture(pview, attr->texture);
-    cxSpriteSetBoxTex(pview, attr->box);
-    if(cxViewZeroSize(pview)){
-        cxViewSetSize(pview, attr->size);
-    }
 }
 
 void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box)

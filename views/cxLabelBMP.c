@@ -8,71 +8,7 @@
 
 #include <core/cxEngine.h>
 #include <core/cxIconv.h>
-#include <core/cxViewRoot.h>
 #include "cxLabelBMP.h"
-
-static cxInt cxLabelBMPLuaSetFont(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxLabelBMP);
-    if(!lua_istable(L, 2)){
-        luaL_error(L, "args error: {font='',size=''}");
-        return 0;
-    }
-    lua_getfield(L, 2, "font");
-    if(lua_isstring(L, -1)){
-        cxLabelBMPSetFont(this, UTF8(luaL_checkstring(L, -1)));
-    }
-    lua_pop(L, 1);
-    
-    lua_getfield(L, 2, "size");
-    if(lua_isnumber(L, -1)){
-        cxLabelBMPSetSize(this, luaL_checknumber(L, -1));
-    }
-    lua_pop(L, 1);
-    return 0;
-}
-
-static cxInt cxLabelBMPLuaSetText(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxLabelBMP);
-    cxConstChars text = luaL_checkstring(L, 2);
-    cxLabelBMPSetText(this, UTF8(text));
-    return 0;
-}
-
-static cxInt cxLabelBMPLuaMake(lua_State *L)
-{
-    CX_LUA_CREATE_THIS(cxLabelBMP);
-    if(lua_istable(L, 1)){
-        lua_getfield(L, 1, "font");
-        if(lua_isstring(L, -1)){
-            cxLabelBMPSetFont(this, UTF8(lua_tostring(L, -1)));
-        }
-        lua_pop(L, 1);
-        lua_getfield(L, 1, "size");
-        if(lua_isnumber(L, -1)){
-            cxLabelBMPSetSize(this, lua_tonumber(L, -1));
-        }
-        lua_pop(L, 1);
-        lua_getfield(L, 1, "text");
-        if(lua_isstring(L, -1)){
-            cxLabelBMPSetText(this, UTF8(lua_tostring(L, -1)));
-        }
-        lua_pop(L, 1);
-    }
-    CX_LUA_PUSH_THIS(cxLabelBMP);
-}
-
-CX_LUA_METHOD_BEG(cxLabelBMP)
-    {"SetFont",cxLabelBMPLuaSetFont},
-    {"SetText",cxLabelBMPLuaSetText},
-    {"Make",cxLabelBMPLuaMake},
-CX_LUA_METHOD_END(cxLabelBMP)
-
-void __cxLabelBMPTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxLabelBMP);
-}
 
 static void cxLabelBMPUpdateText(cxLabelBMP this)
 {
@@ -137,25 +73,8 @@ static void cxLabelBMPUpdate(cxEvent *event)
     this->isDirty = false;
 }
 
-void cxLabelBMPReadAttr(cxReaderAttrInfo *info)
-{
-    cxSpriteReadAttr(info);
-    cxLabelBMP this = info->object;
-    //set font
-    cxString font = cxXMLReadStringAttr(info, "cxLabelBMP.font");
-    cxLabelBMPSetFont(this, font);
-    //set text
-    cxString text = cxXMLReadStringAttr(info, "cxLabelBMP.text");
-    cxLabelBMPSetText(this, text);
-    //set fontsize
-    cxLabelBMPSetSize(this, cxXMLReadFloatAttr(info, "cxLabelBMP.size", this->size));
-    //update size
-    cxLabelBMPUpdateText(this);
-}
-
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
 {
-    cxObjectSetReadAttrFunc(this, cxLabelBMPReadAttr);
     CX_EVENT_QUICK(this->super.super.super.onUpdate, cxLabelBMPUpdate);
     this->isDirty = true;
 }

@@ -20,7 +20,6 @@ CX_OBJECT_DEF(cxTable, cxView)
     cxVec2i grid;
 CX_OBJECT_END(cxTable)
 
-void cxTableReadAttr(cxReaderAttrInfo *info);
 
 void cxTableArrayHide(cxAny pview,cxBool arrayHide);
 

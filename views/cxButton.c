@@ -7,28 +7,7 @@
 //
 
 #include <core/cxEngine.h>
-#include <core/cxViewRoot.h>
-#include <core/cxXMLScript.h>
 #include "cxButton.h"
-
-static cxInt cxButtonLuaAppendEvent(lua_State *L)
-{
-    CX_LUA_EVENT_BEG(cxButton);
-    CX_LUA_EVENT_APPEND(onEnter);
-    CX_LUA_EVENT_APPEND(onLeave);
-    CX_LUA_EVENT_APPEND(onPress);
-    CX_LUA_EVENT_APPEND(onRelease);
-    CX_LUA_EVENT_END(cxButton);
-}
-
-CX_LUA_METHOD_BEG(cxButton)
-    CX_LUA_EVENT(cxButton),
-CX_LUA_METHOD_END(cxButton)
-
-void __cxButtonTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxButton);
-}
 
 cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
 {
@@ -67,21 +46,8 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
-void cxButtonReadAttr(cxReaderAttrInfo *info)
-{
-    cxButton this = info->object;
-    cxSpriteReadAttr(info);
-    cxXMLAppendEvent(info, this, cxButton, onPress);
-    cxXMLAppendEvent(info, this, cxButton, onRelease);
-    cxXMLAppendEvent(info, this, cxButton, onLeave);
-    cxXMLAppendEvent(info, this, cxButton, onEnter);
-    cxButtonEnable(this, cxXMLReadBoolAttr(info, "cxButton.enable", this->isEnable));
-    this->movement = cxXMLReadFloatAttr(info,  "cxButton.movement", this->movement);
-}
-
 CX_OBJECT_INIT(cxButton, cxSprite)
 {
-    cxObjectSetReadAttrFunc(this, cxButtonReadAttr);
     this->movement = 25;
     this->isEnable = true;
     CX_METHOD_OVERRIDE(this->super.super.Touch, cxButtonTouch);

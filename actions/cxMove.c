@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxActionRoot.h>
 #include "cxMove.h"
 
 static void cxMoveInit(cxAny pav)
@@ -36,17 +35,8 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, npos);
 }
 
-static void cxMoveReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxMove this = info->object;
-    this->endPos.x = cxXMLReadFloatAttr(info, "cxMove.x", this->endPos.x);
-    this->endPos.y = cxXMLReadFloatAttr(info, "cxMove.y", this->endPos.y);
-}
-
 CX_OBJECT_INIT(cxMove, cxAction)
 {
-    cxObjectSetReadAttrFunc(this, cxMoveReadAttr);
     CX_METHOD_OVERRIDE(this->super.Init, cxMoveInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxMoveStep);
 }

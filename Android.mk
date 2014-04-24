@@ -42,7 +42,7 @@ LOCAL_SRC_FILES += \
     textures/cxTexturePKM.c \
     textures/cxTexturePNG.c \
     textures/cxTextureTXT.c \
-    textures/cxTextureXML.c \
+    textures/cxTextureJSON.c \
     textures/cxTexturePVR.c \
     textures/cxTextureJPG.c
 
@@ -97,10 +97,7 @@ LOCAL_SRC_FILES += \
     core/cxIconv.c \
     core/cxJson.c \
     core/cxBMPFont.c \
-    core/cxActionRoot.c \
-    core/cxViewRoot.c \
     core/cxList.c \
-    core/cxHashRoot.c \
     core/cxNumber.c \
     core/cxUtil.c \
     core/cxRegex.c \
@@ -110,7 +107,6 @@ LOCAL_SRC_FILES += \
     core/cxString.c \
     core/cxTypes.c \
     core/cxUrlPath.c \
-    core/cxXMLScript.c \
     core/cxOpenGL.c \
     core/cxShader.c \
     core/cxStream.c \

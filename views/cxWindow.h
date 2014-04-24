@@ -18,13 +18,7 @@ CX_OBJECT_DEF(cxWindow, cxView)
     cxStack views;
 CX_OBJECT_END(cxWindow)
 
-cxAny cxWindowPushXML(cxConstChars xml);
-
-cxAny cxWindowReplaceXML(cxConstChars xml);
-
 cxAny cxWindowTopView();
-
-void cxWindowPopXML();
 
 void cxWindowPushView(cxAny pview,cxAny args);
 

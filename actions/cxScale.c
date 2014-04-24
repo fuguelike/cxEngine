@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxActionRoot.h>
 #include "cxScale.h"
 
 static void cxScaleInit(cxAny pav)
@@ -27,17 +26,8 @@ static void cxScaleStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetScale(this->super.view, nscale);
 }
 
-static void cxScaleReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxScale this = info->object;
-    this->newScale.x = cxXMLReadFloatAttr(info, "cxScale.x", this->newScale.x);
-    this->newScale.y = cxXMLReadFloatAttr(info, "cxScale.y", this->newScale.y);
-}
-
 CX_OBJECT_INIT(cxScale, cxAction)
 {
-    cxObjectSetReadAttrFunc(this, cxScaleReadAttr);
     CX_METHOD_OVERRIDE(this->super.Init, cxScaleInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxScaleStep);
 }

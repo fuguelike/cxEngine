@@ -8,22 +8,7 @@
 
 #include <textures/cxTextureFactory.h>
 #include <core/cxEngine.h>
-#include <core/cxViewRoot.h>
 #include "cxAtlas.h"
-
-void cxAtlasReadAttr(cxReaderAttrInfo *info)
-{
-    cxAtlas this =info->object;
-    //support scale9 mode
-    if(cxXMLHasAttr(info->reader, "cxAtlas.scale9")){
-        this->scale9.enable = true;
-        this->scale9.box = cxXMLReadBox4fAttr(info, "cxAtlas.scale9", this->scale9.box);
-        cxAtlasSetCapacity(this, 9);
-    }
-    //
-    cxSpriteReadAttr(info);
-    //
-}
 
 static void cxAtlasVAODraw(void *pview)
 {
@@ -151,7 +136,6 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);
     CX_METHOD_OVERRIDE(this->super.super.Draw, cxAtlasDraw);
-    cxObjectSetReadAttrFunc(this, cxAtlasReadAttr);
     CX_EVENT_QUICK(this->super.super.onResize, cxAtlasResize);
     this->items = CX_ALLOC(cxHash);
 }

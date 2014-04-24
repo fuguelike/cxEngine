@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxActionRoot.h>
 #include "cxFade.h"
 
 static void cxFadeInit(cxAny pav)
@@ -24,16 +23,8 @@ static void cxFadeStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAlpha(this->super.view, alpha);
 }
 
-static void cxFadeReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxFade this = info->object;
-    this->alpha = cxXMLReadFloatAttr(info, "cxFade.alpha", this->alpha);
-}
-
 CX_OBJECT_INIT(cxFade, cxAction)
 {
-    cxObjectSetReadAttrFunc(this, cxFadeReadAttr);
     CX_METHOD_OVERRIDE(this->super.Init, cxFadeInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxFadeStep);
 }

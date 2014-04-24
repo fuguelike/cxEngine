@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!--TextureKey at *.xml file use-->
-<cxViewRoot cxView.w="250" cxView.h="120">
-    <cxSprite cxSprite.texture="ball.png" />
-</cxViewRoot>

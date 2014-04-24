@@ -7,7 +7,6 @@
 //
 
 #include <core/cxOpenGL.h>
-#include <core/cxViewRoot.h>
 #include <core/cxEngine.h>
 #include "cxClipping.h"
 
@@ -51,14 +50,6 @@ void cxClippingSetInverse(cxAny pview,cxBool inverse)
     this->inverse = inverse;
 }
 
-void cxClippingReadAttr(cxReaderAttrInfo *info)
-{
-    cxViewReadAttr(info);
-    cxClipping this = info->object;
-    cxClippingSetInverse(this, cxXMLReadBoolAttr(info, "cxClipping.inverse", this->inverse));
-    cxXMLAppendEvent(info, this, cxClipping, onClipping);
-}
-
 static void cxClippingDrawAfter(cxAny pview)
 {
     glDisable(GL_STENCIL_TEST);
@@ -67,7 +58,6 @@ static void cxClippingDrawAfter(cxAny pview)
 CX_OBJECT_INIT(cxClipping, cxView)
 {
     this->useRef = cxStencilRefAlloc();
-    cxObjectSetReadAttrFunc(this, cxClippingReadAttr);
     CX_METHOD_OVERRIDE(this->super.Before, cxClippingDrawBefore);
     CX_METHOD_OVERRIDE(this->super.After, cxClippingDrawAfter);
 }

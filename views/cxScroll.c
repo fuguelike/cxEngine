@@ -6,44 +6,11 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxViewRoot.h>
 #include <core/cxEngine.h>
 #include <actions/cxMove.h>
 #include "cxScroll.h"
 
 #define CX_SCROLL_MOVE_ACTION_ID 100000
-
-static cxInt cxMoveType(lua_State *L)
-{
-    cxNumber num = cxNumberInt(cxScrollMoveTypeVertical);
-    if(!lua_isstring(L, 2)){
-        CX_LUA_PUSH_OBJECT(num);
-        return 1;
-    }
-    cxConstChars mode = lua_tostring(L, 2);
-    if(cxConstCharsEqu(mode, "horizontal")){
-        num = cxNumberInt(cxScrollMoveTypeHorizontal);
-    }else if(cxConstCharsEqu(mode, "vertical")){
-        num = cxNumberInt(cxScrollMoveTypeVertical);
-    }else{
-        num = cxNumberInt(cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal);
-    }
-    CX_LUA_PUSH_OBJECT(num);
-    return 1;
-}
-
-void __cxScrollTypeInit()
-{
-    cxEngineRegisteFunc(cxMoveType);
-}
-
-void cxScrollReadAttr(cxReaderAttrInfo *info)
-{
-    cxViewReadAttr(info);
-    cxScroll this = info->object;
-    this->type = cxXMLReadIntAttr(info, "cxScroll.type", cxScrollMoveTypeVertical);
-    this->value = cxXMLReadFloatAttr(info, "cxScroll.value", this->value);
-}
 
 cxView cxScrollContainer(cxAny pview)
 {
@@ -175,7 +142,6 @@ CX_OBJECT_INIT(cxScroll, cxView)
     CX_METHOD_OVERRIDE(this->super.Touch, cxScrollTouch);
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
-    cxObjectSetReadAttrFunc(this, cxScrollReadAttr);
     //swip cond value
     this->value = 950;
     CX_SLOT_CONNECT(engine->onTouch, this, onTouch, cxScrollOnTouch);

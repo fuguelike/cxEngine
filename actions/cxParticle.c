@@ -9,46 +9,6 @@
 #include <core/cxEngine.h>
 #include "cxParticle.h"
 
-static cxInt cxEmitterType(lua_State *L)
-{
-    cxNumber num = cxNumberInt(cxParticleEmitterGravity);
-    if(!lua_isstring(L, 2)){
-        CX_LUA_PUSH_OBJECT(num);
-        return 1;
-    }
-    cxConstChars mode = lua_tostring(L, 2);
-    if(cxConstCharsEqu(mode, "gravity")){
-        num = cxNumberInt(cxParticleEmitterGravity);
-    }else if(cxConstCharsEqu(mode, "radial")){
-        num = cxNumberInt(cxParticleEmitterRadial);
-    }
-    CX_LUA_PUSH_OBJECT(num);
-    return 1;
-}
-
-static cxInt cxBlendMode(lua_State *L)
-{
-    cxNumber num = cxNumberInt(cxParticleBlendMultiply);
-    if(!lua_isstring(L, 2)){
-        CX_LUA_PUSH_OBJECT(num);
-        return 1;
-    }
-    cxConstChars mode = lua_tostring(L, 2);
-    if(cxConstCharsEqu(mode, "add")){
-        num = cxNumberInt(cxParticleBlendAdd);
-    }else if(cxConstCharsEqu(mode, "multiple")){
-        num = cxNumberInt(cxParticleBlendMultiply);
-    }
-    CX_LUA_PUSH_OBJECT(num);
-    return 1;
-}
-
-void __cxParticleTypeInit()
-{
-    cxEngineRegisteFunc(cxEmitterType);
-    cxEngineRegisteFunc(cxBlendMode);
-}
-
 static void cxActionViewDraw(cxAny pav)
 {
     cxParticle this = pav;
@@ -271,37 +231,6 @@ void cxParticleSetType(cxAny pview,cxParticleEmitterType type)
     this->type = type;
 }
 
-static void cxParticleReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxParticle this = info->object;
-    
-    cxInt number = cxXMLReadIntAttr(info, "cxParticle.number", this->number);
-    CX_ASSERT(number > 0, "cxParticle.number must > 0");
-    cxParticleInitNumber(this, number);
-    cxParticleSetBlendMode(this, cxXMLReadIntAttr(info, "cxParticle.blend", cxParticleBlendMultiply));
-    cxParticleSetType(this, cxXMLReadIntAttr(info, "cxParticle.type", cxParticleEmitterGravity));
-    
-    this->todir         = cxXMLReadBoolAttr(info, "cxParticle.todir", this->todir);
-    this->gravity       = cxXMLReadVec2fAttr(info, "cxParticle.gravity", this->gravity);
-    this->rate          = cxXMLReadFloatAttr(info, "cxParticle.rate", this->rate);
-    this->speed         = cxXMLReadFloatRangeAttr(info, "cxParticle.speed", this->speed);
-    this->tanaccel      = cxXMLReadFloatRangeAttr(info, "cxParticle.tanaccel", this->tanaccel);
-    this->radaccel      = cxXMLReadFloatRangeAttr(info, "cxParticle.radaccel", this->radaccel);
-    this->position      = cxXMLReadVec2fRangeAttr(info, "cxParticle.position", this->position);
-    this->life          = cxXMLReadFloatRangeAttr(info, "cxParticle.life", this->life);
-    this->angle         = cxXMLReadFloatRangeAttr(info, "cxParticle.angle", this->angle);
-    this->startsize     = cxXMLReadFloatRangeAttr(info, "cxParticle.startsize", this->startsize);
-    this->endsize       = cxXMLReadFloatRangeAttr(info, "cxParticle.endsize", this->endsize);
-    this->startcolor    = cxXMLReadColor4fRangeAttr(info, "cxParticle.startcolor", this->startcolor);
-    this->endcolor      = cxXMLReadColor4fRangeAttr(info, "cxParticle.endcolor", this->endcolor);
-    this->startspin     = cxXMLReadFloatRangeAttr(info, "cxParticle.startspin", this->startspin);
-    this->endspin       = cxXMLReadFloatRangeAttr(info, "cxParticle.endspin", this->endspin);
-    this->startradius   = cxXMLReadFloatRangeAttr(info, "cxParticle.startradius", this->startradius);
-    this->endradius     = cxXMLReadFloatRangeAttr(info, "cxParticle.endradius", this->endradius);
-    this->rotatepers    = cxXMLReadFloatRangeAttr(info, "cxParticle.rotatepers", this->rotatepers);
-}
-
 void cxParticleSetBlendMode(cxAny pav,cxParticleBlendMode mode)
 {
     cxParticle this = pav;
@@ -332,7 +261,6 @@ CX_OBJECT_INIT(cxParticle, cxAction)
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
     cxParticleSetBlendMode(this, cxParticleBlendAdd);
-    cxObjectSetReadAttrFunc(this, cxParticleReadAttr);
     CX_METHOD_OVERRIDE(this->super.Reset, cxParticleReset);
     CX_METHOD_OVERRIDE(this->super.Init, cxParticleInit);
     CX_METHOD_OVERRIDE(this->super.Over, cxParticleOver);

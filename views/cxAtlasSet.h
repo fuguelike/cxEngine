@@ -19,8 +19,6 @@ CX_OBJECT_END(cxAtlasSet)
 
 void cxAtlasSetLayout(cxEvent *event);
 
-void cxAtlasSetReadAttr(cxReaderAttrInfo *info);
-
 CX_C_END
 
 #endif

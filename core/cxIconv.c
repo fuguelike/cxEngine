@@ -11,29 +11,6 @@
 
 static cxIconv instance = NULL;
 
-static cxInt cxIconvLuaIconv(lua_State *L)
-{
-    cxString s = cxLuaObjectValue(L, 1);
-    if(!cxObjectIsType(s, cxStringTypeName)){
-        luaL_error(L, "args error");
-        return 0;
-    }
-    cxConstChars from = luaL_checkstring(L, 2);
-    cxConstChars to = luaL_checkstring(L, 3);
-    cxString d = cxIconvConvert(s, from, to);
-    CX_LUA_PUSH_OBJECT(d);
-    return 1;
-}
-
-CX_LUA_METHOD_BEG(cxIconv)
-    {"Iconv",cxIconvLuaIconv},
-CX_LUA_METHOD_END(cxIconv)
-
-void __cxIconvTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxIconv);
-}
-
 CX_OBJECT_INIT(cxIconvItem, cxObject)
 {
     

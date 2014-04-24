@@ -7,48 +7,7 @@
 //
 
 #include <core/cxEventArg.h>
-#include <core/cxActionRoot.h>
 #include "cxTimer.h"
-
-static cxInt cxTimerLuaAppendEvent(lua_State *L)
-{
-    CX_LUA_EVENT_BEG(cxTimer);
-    CX_LUA_EVENT_APPEND(onArrive);
-    CX_LUA_EVENT_END(cxTimer);
-}
-
-static cxInt cxTimerLuaGetRepeat(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxTimer);
-    lua_pushinteger(L, this->repeat);
-    return 1;
-}
-
-static cxInt cxTimerLuaSetRepeat(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxTimer);
-    this->repeat = luaL_checkinteger(L, 2);
-    return 1;
-}
-
-CX_LUA_METHOD_BEG(cxTimer)
-    CX_LUA_EVENT(cxTimer),
-    CX_LUA_PROPERTY(cxTimer, Repeat),
-CX_LUA_METHOD_END(cxTimer)
-
-void __cxTimerTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxTimer);
-}
-
-
-static void cxTimerReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxTimer this = info->object;
-    this->repeat = cxXMLReadIntAttr(info, "cxTimer.repeat", this->repeat);
-    cxXMLAppendEvent(info, this, cxTimer, onArrive);
-}
 
 static cxBool cxTimerExit(cxAny pav)
 {
@@ -66,7 +25,6 @@ void cxTimerReset(cxAny timer)
 
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
-    cxObjectSetReadAttrFunc(this, cxTimerReadAttr);
     CX_METHOD_OVERRIDE(this->super.Exit, cxTimerExit);
 }
 CX_OBJECT_FREE(cxTimer, cxAction)

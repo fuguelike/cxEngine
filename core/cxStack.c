@@ -8,57 +8,6 @@
 
 #include "cxStack.h"
 
-static cxInt cxStackLuaPush(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxStack);
-    cxObject any = CX_LUA_GET_PTR(2);
-    cxStackPush(this, any);
-    return 0;
-}
-
-static cxInt cxStackLuaPop(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxStack);
-    cxStackPop(this);
-    return 0;
-}
-
-static cxInt cxStackLuaLength(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxStack);
-    lua_pushinteger(L, cxStackLength(this));
-    return 1;
-}
-
-static cxInt cxStackLuaReplaceTop(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxStack);
-    cxObject any = CX_LUA_GET_PTR(2);
-    cxStackReplaceTop(this, any);
-    return 0;
-}
-
-static cxInt cxStackLuaTop(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxStack);
-    cxAny top = cxStackTop(this);
-    CX_LUA_PUSH_OBJECT(top);
-    return 1;
-}
-
-CX_LUA_METHOD_BEG(cxStack)
-    {"Top",cxStackLuaTop},
-    {"Push",cxStackLuaPush},
-    {"Pop",cxStackLuaPop},
-    {"Length",cxStackLuaLength},
-    {"ReplaceTop",cxStackLuaReplaceTop},
-CX_LUA_METHOD_END(cxStack)
-
-void __cxStackTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxStack);
-}
-
 CX_OBJECT_INIT(cxStack, cxObject)
 {
     this->array = CX_ALLOC(cxArray);

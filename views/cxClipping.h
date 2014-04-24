@@ -19,8 +19,6 @@ CX_OBJECT_DEF(cxClipping, cxView)
     CX_EVENT_ALLOC(onClipping);
 CX_OBJECT_END(cxClipping)
 
-void cxClippingReadAttr(cxReaderAttrInfo *info);
-
 void cxClippingSetInverse(cxAny pview,cxBool inverse);
 
 CX_C_END

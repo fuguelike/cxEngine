@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
-#include <core/cxViewRoot.h>
 #include "cxAtlasSet.h"
 
 void cxAtlasSetLayout(cxEvent *event)
@@ -30,15 +29,10 @@ void cxAtlasSetLayout(cxEvent *event)
     }
 }
 
-void cxAtlasSetReadAttr(cxReaderAttrInfo *info)
-{
-    cxAtlasReadAttr(info);
-}
 
 CX_OBJECT_INIT(cxAtlasSet, cxAtlas)
 {
     CX_EVENT_QUICK(this->super.super.super.onLayout, cxAtlasSetLayout);
-    cxObjectSetReadAttrFunc(this, cxAtlasSetReadAttr);
 }
 CX_OBJECT_FREE(cxAtlasSet, cxAtlas)
 {

@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxActionRoot.h>
 #include "cxTint.h"
 
 void __cxTintTypeInit()
@@ -37,16 +36,8 @@ static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAlpha(this->super.view, alhpa);
 }
 
-static void cxTintReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxTint this = info->object;
-    this->color = cxXMLReadColor4fAttr(info, "cxTint.color", this->color);
-}
-
 CX_OBJECT_INIT(cxTint, cxAction)
 {
-    cxObjectSetReadAttrFunc(this, cxTintReadAttr);
     CX_METHOD_OVERRIDE(this->super.Init, cxTintInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxTintStep);
 }

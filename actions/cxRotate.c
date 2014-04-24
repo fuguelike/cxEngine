@@ -24,29 +24,9 @@ static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAngle(this->super.view, angle);
 }
 
-static void cxRotateReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxRotate this = info->object;
-    cxConstChars sx = cxXMLAttr(info->reader,"cxRotate.x");
-    cxConstChars sy = cxXMLAttr(info->reader,"cxRotate.y");
-    cxConstChars sz = cxXMLAttr(info->reader,"cxRotate.z");
-    if(sx != NULL){
-        this->raxis = cxVec3fv(1.0f, 0.0f, 0.0f);
-        this->newAngle = kmDegreesToRadians(atof(sx));
-    }else if(sy != NULL){
-        this->raxis = cxVec3fv(0.0f, 1.0f, 0.0f);
-        this->newAngle = kmDegreesToRadians(atof(sy));
-    }else if(sz != NULL){
-        this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
-        this->newAngle = kmDegreesToRadians(atof(sz));
-    }
-}
-
 CX_OBJECT_INIT(cxRotate, cxAction)
 {
     this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
-    cxObjectSetReadAttrFunc(this, cxRotateReadAttr);
     CX_METHOD_OVERRIDE(this->super.Init, cxRotateInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxRotateStep);
 }

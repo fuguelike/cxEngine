@@ -7,89 +7,8 @@
 //
 #include <core/cxEngine.h>
 #include <core/cxUtil.h>
-#include <core/cxViewRoot.h>
 #include <textures/cxTextureFactory.h>
 #include "cxLabelTTF.h"
-
-static cxInt cxLabelTTFLuaSetFont(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxLabelTTF);
-    if(!lua_istable(L, 2)){
-        luaL_error(L, "args error: {font='',size=''}");
-        return 0;
-    }
-    lua_getfield(L, 2, "font");
-    if(lua_isstring(L, -1)){
-        cxLabelTTFSetFont(this, UTF8(luaL_checkstring(L, -1)));
-    }
-    lua_pop(L, 1);
-    lua_getfield(L, 2, "size");
-    if(lua_isnumber(L, -1)){
-        cxLabelTTFSetFontSize(this, luaL_checknumber(L, -1));
-    }
-    lua_pop(L, 1);
-    return 0;
-}
-
-static cxInt cxLabelTTFLuaSetText(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxLabelTTF);
-    cxConstChars text = luaL_checkstring(L, 2);
-    cxLabelTTFSetText(this, UTF8(text));
-    return 0;
-}
-
-static cxInt cxLabelTTFLuaMake(lua_State *L)
-{
-    CX_LUA_CREATE_THIS(cxLabelTTF);
-    if(lua_istable(L, 1)){
-        lua_getfield(L, 1, "font");
-        if(lua_isstring(L, -1)){
-            cxLabelTTFSetFont(this, UTF8(lua_tostring(L, -1)));
-        }
-        lua_pop(L, 1);
-        lua_getfield(L, 1, "size");
-        if(lua_isnumber(L, -1)){
-            cxLabelTTFSetFontSize(this, lua_tonumber(L, -1));
-        }
-        lua_pop(L, 1);
-        lua_getfield(L, 1, "text");
-        if(lua_isstring(L, -1)){
-            cxLabelTTFSetText(this, UTF8(lua_tostring(L, -1)));
-        }
-        lua_pop(L, 1);
-    }
-    CX_LUA_PUSH_THIS(cxLabelTTF);
-}
-
-CX_LUA_METHOD_BEG(cxLabelTTF)
-    {"SetFont",cxLabelTTFLuaSetFont},
-    {"SetText",cxLabelTTFLuaSetText},
-    {"Make",cxLabelTTFLuaMake},
-CX_LUA_METHOD_END(cxLabelTTF)
-
-void __cxLabelTTFTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxLabelTTF);
-}
-
-void cxLabelTTFReadAttr(cxReaderAttrInfo *info)
-{
-    cxSpriteReadAttr(info);
-    cxLabelTTF this = info->object;
-    //set font
-    cxString font = cxXMLReadStringAttr(info, "cxLabelTTF.font");
-    cxLabelTTFSetFont(this, font);
-    //set text
-    cxString text = cxXMLReadStringAttr(info, "cxLabelTTF.text");
-    cxLabelTTFSetText(this, text);
-    //set fontsize
-    cxLabelTTFSetFontSize(this, cxXMLReadFloatAttr(info, "cxLabelTTF.size", this->attr.size));
-    //set fontbold
-    cxLabelTTFSetFontBold(this, cxXMLReadBoolAttr(info, "cxLabelTTF.bold", this->attr.bold));
-    //update size
-    cxLabelTTFUpdateText(this);
-}
 
 static void cxLabelTTFUpdate(cxEvent *event)
 {
@@ -101,7 +20,6 @@ static void cxLabelTTFUpdate(cxEvent *event)
 
 CX_OBJECT_INIT(cxLabelTTF, cxSprite)
 {
-    cxObjectSetReadAttrFunc(this, cxLabelTTFReadAttr);
     CX_EVENT_QUICK(this->super.super.onUpdate,cxLabelTTFUpdate);
     this->attr.size = 32;
     cxSpriteSetShader(this, cxShaderAlphaKey);

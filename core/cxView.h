@@ -15,7 +15,6 @@
 #include "cxInput.h"
 #include "cxHash.h"
 #include "cxString.h"
-#include "cxXMLScript.h"
 
 CX_C_BEGIN
 
@@ -123,8 +122,6 @@ void cxViewSetDirty(cxAny pview,cxBool dirty);
 void cxViewSetBorder(cxAny pview,cxBool border);
 
 cxBool cxViewZeroSize(cxAny pview);
-
-void cxViewReadAttr(cxReaderAttrInfo *info);
 
 cxAny cxViewGetParentView(cxAny pview);
 

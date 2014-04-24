@@ -10,48 +10,6 @@
 #include <actions/cxTimer.h>
 #include "cxLoading.h"
 
-static cxInt cxLoadingLuaSetObject(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxLoading);
-    cxObject any = CX_LUA_GET_PTR(2);
-    cxLoadingSetObject(this, any);
-    return 0;
-}
-
-static cxInt cxLoadingLuaGetObject(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxLoading);
-    CX_LUA_PUSH_OBJECT(this->object);
-    return 1;
-}
-
-static cxInt cxLoadingLuaStart(lua_State *L)
-{
-    CX_LUA_DEF_THIS(cxLoading);
-    cxLoadingStart(this);
-    return 0;
-}
-
-static cxInt cxLoadingLuaAppendEvent(lua_State *L)
-{
-    CX_LUA_EVENT_BEG(cxLoading);
-    CX_LUA_EVENT_APPEND(onFinished);
-    CX_LUA_EVENT_APPEND(onLoading);
-    CX_LUA_EVENT_APPEND(onStart);
-    CX_LUA_EVENT_END(cxLoading);
-}
-
-CX_LUA_METHOD_BEG(cxLoading)
-    {"Start",cxLoadingLuaStart},
-    CX_LUA_EVENT(cxLoading),
-    CX_LUA_PROPERTY(cxLoading, Object),
-CX_LUA_METHOD_END(cxLoading)
-
-void __cxLoadingTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxLoading);
-}
-
 void cxLoadingOnUpdate(cxEvent *event)
 {
     cxLoading this = event->sender;

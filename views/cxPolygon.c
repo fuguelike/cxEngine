@@ -9,20 +9,6 @@
 #include <core/cxEngine.h>
 #include "cxPolygon.h"
 
-static void cxPolygonReadAttr(cxReaderAttrInfo *info)
-{
-    cxSpriteReadAttr(info);
-    cxConstChars points = cxXMLAttr(info->reader, "cxPolygon.points");
-    CX_RETURN(points == NULL);
-    cxTypes type = cxEngineTypes(points);
-    CX_ASSERT(cxTypesIsType(type, cxTypesArray), "must is array");
-    cxArray list = type->any;
-    CX_ARRAY_FOREACH(list, ele){
-        cxNumber bp = cxArrayObject(ele);
-        cxPolygonAppend(info->object, cxNumberToPoint(bp));
-    }
-}
-
 static void cxPolygonDraw(cxAny pview)
 {
     cxPolygon this = pview;
@@ -37,7 +23,6 @@ static void cxPolygonDraw(cxAny pview)
 
 CX_OBJECT_INIT(cxPolygon, cxSprite)
 {
-    cxObjectSetReadAttrFunc(this, cxPolygonReadAttr);
     CX_METHOD_OVERRIDE(this->super.super.Draw, cxPolygonDraw);
     this->capacity = 8;
     this->points = allocator->malloc(sizeof(cxVec3f) * this->capacity);

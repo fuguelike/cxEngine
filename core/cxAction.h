@@ -58,8 +58,6 @@ void cxActionSetSplit(cxAny pav,cxInt split);
 
 cxBool cxActionForever(cxAny pav);
 
-void cxActionReadAttr(cxReaderAttrInfo *info);
-
 void cxActionSetDuration(cxAny pav,cxFloat time);
 
 void cxActionSetDurationInit(cxAny pav,cxFloat time);

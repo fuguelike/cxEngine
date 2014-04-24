@@ -9,7 +9,6 @@
 #include <views/cxSprite.h>
 #include <textures/cxTextureFactory.h>
 #include <core/cxTexture.h>
-#include <core/cxActionRoot.h>
 #include <core/cxUtil.h>
 #include <core/cxUrlPath.h>
 #include "cxAnimate.h"
@@ -88,7 +87,7 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     }
 }
 
-static void cxAnimateXMLAppend(cxArray list,cxConstChars file,cxConstChars key,cxInt from,cxInt to)
+void cxAnimateXMLAppend(cxArray list,cxConstChars file,cxConstChars key,cxInt from,cxInt to)
 {
     for(cxInt i = from; i <= to ; i++){
         cxConstChars sfile = CX_CONST_STRING(file,i);
@@ -96,35 +95,6 @@ static void cxAnimateXMLAppend(cxArray list,cxConstChars file,cxConstChars key,c
         cxConstChars skey = key != NULL ? CX_CONST_STRING(key, i) : NULL;
         cxAnimateItemAppend(list, path->path, path->count == 2 ? path->key : skey, 0);
     }
-}
-
-static void cxAnimateReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxAnimate this = info->object;
-    int depth = xmlTextReaderDepth(info->reader);
-    while(xmlTextReaderRead(info->reader) && depth != xmlTextReaderDepth(info->reader)){
-        if(xmlTextReaderNodeType(info->reader) != XML_READER_TYPE_ELEMENT){
-            continue;
-        }
-        cxConstChars temp = cxXMLReadElementName(info->reader);
-        if(!ELEMENT_IS_TYPE(cxFrame)){
-            continue;
-        }
-        cxConstChars file = cxXMLAttr(info->reader,"file");
-        cxConstChars key = cxXMLAttr(info->reader,"key");
-        cxInt from = cxXMLReadIntAttr(info, "from", 0);
-        cxInt to = cxXMLReadIntAttr(info, "to", 0);
-        if(from > 0 && to > 0){
-            cxAnimateXMLAppend(this->list, file, key, from, to);
-        }else if(file != NULL){
-            cxUrlPath path = cxUrlPathParse(file);
-            cxFloat delay = cxXMLReadFloatAttr(info, "delay", 0);
-            cxAnimateItemAppend(this->list, path->path, path->count >= 2 ? path->key : NULL, delay);
-        }
-    }
-    this->duration = this->super.duration;
-    cxXMLAppendEvent(info, this, cxAnimate, onFrame);
 }
 
 static void cxAnimateReset(cxAny pav)
@@ -135,7 +105,6 @@ static void cxAnimateReset(cxAny pav)
 
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {
-    cxObjectSetReadAttrFunc(this, cxAnimateReadAttr);
     CX_METHOD_OVERRIDE(this->super.Init, cxAnimateInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxAnimateStep);
     CX_METHOD_OVERRIDE(this->super.Reset, cxAnimateReset);

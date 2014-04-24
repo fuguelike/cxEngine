@@ -8,23 +8,21 @@
 #include <core/cxEngine.h>
 #include "rbMap.h"
 
-static cxAny rbMakeView(cxConstChars temp, xmlTextReaderPtr reader)
-{
-    if(ELEMENT_IS_TYPE(rbMap)){
-        return CX_CREATE(rbMap);
-    }
-    return NULL;
-}
-
 void cxEngineInit(cxEngine engine)
 {
-    CX_METHOD_OVERRIDE(engine->MakeView, rbMakeView);
     
 }
 
+#include <views/cxSprite.h>
 void cxEngineMain(cxEngine engine)
 {
-    cxWindowPushXML("main.xml");
+//    rbMap map = CX_CREATE(rbMap);
+//    cxViewSetAutoResizeBox(map, cxBox4fv(0, 0, 0, 9));
+//    cxViewSetAutoResizeMask(map, cxViewAutoResizeBottom);
+//    cxWindowPushView(map, NULL);
+    
+    cxSprite s = cxSpriteCreateWithURL("texture.json?green.png");
+    cxWindowPushView(s, NULL);
 }
 
 void cxEngineFree(cxEngine engine)

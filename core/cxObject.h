@@ -27,16 +27,6 @@ typedef void (*cxObjectFunc)(cxPointer this);
 
 typedef cxAny (*cxAnyFunc)(cxAny object);
 
-typedef struct {
-    xmlTextReaderPtr reader;
-    cxAny root;
-    cxAny object;
-}cxReaderAttrInfo;
-
-#define cxReaderAttrInfoMake(reader,root,object)    &(cxReaderAttrInfo){reader,root,object}
-
-typedef void (*cxReadAttrFunc)(cxReaderAttrInfo *info);
-
 cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
 
 cxAny cxObjectCreate(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
@@ -47,21 +37,11 @@ void cxObjectRelease(cxAny ptr);
 
 cxAny cxObjectAutoRelease(cxAny ptr);
 
-void cxLuaLoad(cxConstType name, const luaL_Reg *methods);
-
 cxBool cxObjectIsBaseType(cxAny pobj,cxBaseType type);
 
 cxBool cxObjectIsType(cxAny pobj,cxConstType type);
 
 cxConstType cxObjectType(cxAny pobj);
-
-cxInt cxObjectBind(cxAny obj);
-
-void cxObjectReadAttr(cxReaderAttrInfo *info);
-
-void cxObjectSetReadAttrFunc(cxAny obj,cxReadAttrFunc func);
-
-void cxObjectReadAttrRun(cxReaderAttrInfo *info);
 
 cxAny cxObjectRoot(cxAny obj);
 
@@ -97,30 +77,6 @@ cxInt cxObjectTag(cxAny obj);
 
 #define CX_RETAIN_SWAP(_s_,_d_)     {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
 
-#define CX_LUA_GET_PTR(i)           (lua_isuserdata(gL, i)?lua_touserdata(gL, i):NULL)
-
-#define CX_LUA_PROPERTY(t,n)        {"Set"#n,t##LuaSet##n},{"Get"#n,t##LuaGet##n}
-
-#define CX_LUA_EVENT(t)             {"Event",t##LuaAppendEvent}
-
-#define CX_LUA_NUMBER_IS_INT(n)     (((lua_Number)((cxInt)(n))) == (n))
-
-#define CX_LUA_LOAD_TYPE(t)         cxLuaLoad(t##TypeName,t##LuaMethods)
-
-#define CX_LUA_DEF_THIS(t)          t this = CX_LUA_GET_PTR(1);CX_ASSERT(this != NULL,"get this error")
-
-#define CX_LUA_CREATE_THIS(t)       t this = CX_CREATE(t)
-
-#define CX_LUA_ALLOC_THIS(t)        t this = CX_ALLOC(t)
-
-#define CX_LUA_PUSH_THIS(t)         lua_pushlightuserdata(gL,this);return 1
-
-#define CX_LUA_METHOD_BEG(_t_)      const luaL_Reg _t_##LuaMethods[] = {
-
-#define CX_LUA_METHOD_END(_t_)      {"Alloc",__##_t_##LuaAlloc},{"Create",__##_t_##LuaCreate},{NULL,NULL}};
-
-#define CX_LUA_PUSH_OBJECT(o)       ((o) != NULL) ? lua_pushlightuserdata(gL,o) : lua_pushnil(gL)
-
 //object
 
 #define CX_OBJECT_BEG(_t_)                                                  \
@@ -128,25 +84,9 @@ static CX_UNUSED_ATTRIBUTE cxConstType _t_##TypeName = #_t_;                \
 typedef struct _t_ *_t_;                                                    \
 void __##_t_##AutoInit(_t_ this);                                           \
 void __##_t_##AutoFree(_t_ this);                                           \
-void __##_t_##TypeInit();                                                   \
-extern const luaL_Reg _t_##LuaMethods[];                                    \
 struct _t_ {
 
-#define CX_OBJECT_END(_t_) };                                               \
-static CX_UNUSED_ATTRIBUTE inline cxInt __##_t_##LuaAlloc(lua_State *L)     \
-{                                                                           \
-    CX_LUA_ALLOC_THIS(_t_);                                                 \
-    CX_LUA_PUSH_THIS(_t_);                                                  \
-}                                                                           \
-static CX_UNUSED_ATTRIBUTE inline cxInt __##_t_##LuaCreate(lua_State *L)    \
-{                                                                           \
-    CX_LUA_CREATE_THIS(_t_);                                                \
-    CX_LUA_PUSH_THIS(_t_);                                                  \
-}
-
-#define CXT(_t_,_v_) ((_t_)_v_)
-
-extern lua_State *gL;
+#define CX_OBJECT_END(_t_) };
 
 //method
 
@@ -167,9 +107,6 @@ CX_OBJECT_BEG(cxObject)
     cxUInt cxRefcount;
     cxObjectFunc cxFree;
     cxInt cxTag;
-    cxInt cxBind;           //bind to lua table
-    cxAny cxRoot;
-    CX_METHOD_ALLOC(void, ReadAttr, cxReaderAttrInfo *);
 CX_OBJECT_END(cxObject)
 
 CX_OBJECT_DEF(cxMemory, cxObject)

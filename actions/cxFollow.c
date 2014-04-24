@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
+#include <core/cxNumber.h>
 #include "cxFollow.h"
 
 void __cxFollowTypeInit()

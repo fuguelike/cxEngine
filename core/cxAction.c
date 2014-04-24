@@ -6,65 +6,11 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 #include <core/cxEngine.h>
-#include "cxActionRoot.h"
 #include "cxAction.h"
-
-static cxInt cxActionLuaAppendEvent(lua_State *L)
-{
-    CX_LUA_EVENT_BEG(cxAction);
-    CX_LUA_EVENT_APPEND(onSplit);
-    CX_LUA_EVENT_APPEND(onStart);
-    CX_LUA_EVENT_APPEND(onStep);
-    CX_LUA_EVENT_APPEND(onStop);
-    CX_LUA_EVENT_END(cxAction);
-}
-
-CX_LUA_METHOD_BEG(cxAction)
-    CX_LUA_EVENT(cxAction),
-CX_LUA_METHOD_END(cxAction)
-
-void __cxActionTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxAction);
-}
 
 cxBool cxActionForever(cxAny pav)
 {
     return false;
-}
-
-void cxActionReadAttr(cxReaderAttrInfo *info)
-{
-    cxAction this = info->object;
-    //delay
-    cxActionSetDelay(this, cxXMLReadFloatAttr(info, "cxAction.delay", this->delay));
-    //time
-    cxActionSetDuration(this, cxXMLReadFloatAttr(info, "cxAction.time", this->duration));
-    //init time
-    cxActionSetDurationInit(this, cxXMLReadFloatAttr(info, "cxAction.initTime", this->durationInit));
-    //curve
-    cxConstChars scurve = cxXMLAttr(info->reader, "cxAction.curve");
-    cxCurveItem curve = cxCurveGet(scurve);
-    if(curve != NULL){
-        CX_METHOD_OVERRIDE(this->Curve, curve->func);
-    }
-    //
-    cxActionSetSplit(this, cxXMLReadIntAttr(info, "cxAction.split", this->split));
-    //
-    cxActionSetSpeed(this, cxXMLReadFloatAttr(info, "cxAction.speed", this->speed));
-    //actionId
-    cxActionSetId(this, cxXMLReadUIntAttr(info, "cxAction.id", this->actionId));
-    //forever
-    if(cxXMLReadBoolAttr(info, "cxAction.forever", false)){
-        CX_METHOD_OVERRIDE(this->Exit, cxActionForever);
-    }
-    //assist
-    this->assist = cxXMLReadAssist4fAttr(info, "cxAction.assist", this->assist);
-    //event
-    cxXMLAppendEvent(info, this, cxAction, onStart);
-    cxXMLAppendEvent(info, this, cxAction, onStop);
-    cxXMLAppendEvent(info, this, cxAction, onSplit);
-    cxXMLAppendEvent(info, this, cxAction, onStep);
 }
 
 void cxActionSetSplit(cxAny pav,cxInt split)
@@ -90,7 +36,6 @@ void cxActionSetView(cxAny pav,cxAny pview)
 CX_OBJECT_INIT(cxAction, cxObject)
 {
     this->super.cxBase = cxBaseTypeAction;
-    cxObjectSetReadAttrFunc(this, cxActionReadAttr);
     this->isExit = false;
     this->speed = 1.0f;
     this->index = -1;

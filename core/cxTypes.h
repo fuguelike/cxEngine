@@ -39,29 +39,7 @@ cxTypes cxArrayTypesCreate();
 
 cxTypes cxStringTypesCreate();
 
-void cxLuaPushVec2fv(lua_State *L,cxVec2f pos);
-
-void cxLuaPushSize2fv(lua_State *L,cxSize2f size);
-
-void cxLuaPushColor4f(lua_State *L,cxColor4f color);
-
-cxColor4f cxLuaColor4fValue(lua_State *L,cxInt n,cxColor4f d);
-
 cxVec2f cxVec2fValue(cxVec2fRange rv);
-
-cxSize2f cxLuaSize2fValue(lua_State *L,cxInt n,cxSize2f d);
-
-cxVec2f cxLuaVec2fValue(lua_State *L,cxInt n,cxVec2f d);
-
-cxAny cxLuaObjectValue(lua_State *L,cxInt n);
-
-cxBool cxLuaBoolValue(lua_State *L,cxInt n,cxBool d);
-
-cxInt cxLuaIntValue(lua_State *L,cxInt n,cxInt d);
-
-cxConstChars cxLuaStringValue(lua_State *L,cxInt n,cxConstChars d);
-
-cxFloat cxLuaFloatValue(lua_State *L,cxInt n,cxFloat d);
 
 CX_C_END
 

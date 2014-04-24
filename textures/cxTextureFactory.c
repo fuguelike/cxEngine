@@ -131,8 +131,8 @@ cxTexture cxTextureCreate(cxConstChars file)
         texture = cxTexturePNGLoadStream(stream);
     }else if(cxConstCharsEqu(ext, ".pvr")){
         texture = cxTexturePVRLoadStream(stream);
-    }else if(cxConstCharsEqu(ext, ".xml")){
-        texture = cxTextureXMLLoadStream(stream);
+    }else if(cxConstCharsEqu(ext, ".json")){
+        texture = cxTextureJSONLoadStream(stream);
     }else if(cxConstCharsEqu(ext, ".pkm")){
         texture = cxTexturePKMLoadStream(stream);
     }else if(cxConstCharsEqu(ext, ".jpg") || cxConstCharsEqu(ext, ".jpeg")){

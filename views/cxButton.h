@@ -27,8 +27,6 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch);
 
 void cxButtonEnable(cxAny pview,cxBool enable);
 
-void cxButtonReadAttr(cxReaderAttrInfo *info);
-
 cxButton cxButtonCreate(cxConstChars url);
 
 CX_C_END

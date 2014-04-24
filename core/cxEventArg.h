@@ -26,16 +26,11 @@ CX_OBJECT_DEF(cxEventArg, cxObject)
     cxAny strongRef;
     cxJson json;
     cxNumber number;
-    cxInt ref;
 CX_OBJECT_END(cxEventArg)
 
 void cxEventArgSetNumber(cxEventArg this,cxNumber num);
 
 cxNumber cxEventArgNumber(cxEventArg this);
-
-cxInt cxEventArgToRef(cxEventArg this);
-
-cxEventArg cxEventArgCreateWithRef(cxInt ref);
 
 cxEventArg cxEventArgCreateWithNumber(cxConstChars json,cxNumber number);
 
@@ -48,8 +43,6 @@ cxAny cxEventArgToStrongRef(cxEventArg this);
 cxEventArg cxEventArgWeakRef(cxAny weakRef);
 
 cxAny cxEventArgToWeakRef(cxEventArg this);
-
-cxBool cxEventArgPush(cxEventArg this);
 
 cxBool cxEventArgBool(cxEventArg this,cxConstChars key,cxBool dv);
 

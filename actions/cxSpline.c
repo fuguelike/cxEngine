@@ -8,7 +8,6 @@
 
 #include <core/cxEngine.h>
 #include <core/cxNumber.h>
-#include <core/cxActionRoot.h>
 #include "cxSpline.h"
 
 static void cxSplineInit(cxAny pav)
@@ -50,18 +49,6 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, newpos);
 }
 
-static void cxSplineReadAttr(cxReaderAttrInfo *info)
-{
-    cxActionReadAttr(info);
-    cxSpline this = info->object;    
-    this->tension = cxXMLReadFloatAttr(info, "cxSpline.tension", this->tension);
-    cxTypes types = cxXMLReadTypesAttr(info, "cxSpline.points");
-    if(cxTypesIsType(types, cxTypesArray)){
-        cxArrayAppends(this->points, types->any);
-    }
-    cxXMLAppendEvent(info, this, cxSpline, onIndex);
-}
-
 static void cxSplineReset(cxAny pav)
 {
     cxSpline this = pav;
@@ -72,7 +59,6 @@ static void cxSplineReset(cxAny pav)
 CX_OBJECT_INIT(cxSpline, cxAction)
 {
     this->index = -1;
-    cxObjectSetReadAttrFunc(this, cxSplineReadAttr);
     CX_METHOD_OVERRIDE(this->super.Init, cxSplineInit);
     CX_METHOD_OVERRIDE(this->super.Step, cxSplineStep);
     CX_METHOD_OVERRIDE(this->super.Reset, cxSplineReset);

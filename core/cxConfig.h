@@ -121,11 +121,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <pthread.h>
-#include <libxml/xmlreader.h>
 #include <kazmath/kazmath.h>
-#include <luajit/lauxlib.h>
-#include <luajit/lualib.h>
-#include <luajit/luajit.h>
 
 #define CX_ENGINE_VERSION   100
 

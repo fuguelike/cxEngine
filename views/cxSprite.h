@@ -28,10 +28,6 @@ CX_OBJECT_DEF(cxSprite, cxView)
     cxBoxTex2f      texCoord;
 CX_OBJECT_END(cxSprite)
 
-void cxSpriteReadAttr(cxReaderAttrInfo *info);
-
-void cxSpriteSetTextureAttr(cxAny pview,cxTextureAttr attr);
-
 void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box);
 
 cxBoxTex2f cxSpriteBoxTex(cxAny pview);

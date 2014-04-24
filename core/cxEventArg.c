@@ -25,22 +25,12 @@ CX_OBJECT_INIT(cxEventArg, cxObject)
 }
 CX_OBJECT_FREE(cxEventArg, cxObject)
 {
-    if(this->ref > 0){
-        lua_unref(gL, this->ref);
-        this->ref = 0;
-    }
     this->weakRef = NULL;
     CX_RELEASE(this->strongRef);
     CX_RELEASE(this->json);
     CX_RELEASE(this->number);
 }
 CX_OBJECT_TERM(cxEventArg, cxObject)
-
-cxBool cxEventArgPush(cxEventArg this)
-{
-    CX_RETURN(this->json == NULL, false);
-    return cxJsonPush(this->json);
-}
 
 cxAny cxEventArgToWeakRef(cxEventArg this)
 {
@@ -72,18 +62,6 @@ cxEventArg cxEventArgCreateWithNumber(cxConstChars json,cxNumber number)
 {
     cxEventArg this = cxEventArgCreate(json);
     cxEventArgSetNumber(this, number);
-    return this;
-}
-
-cxInt cxEventArgToRef(cxEventArg this)
-{
-    return this->ref;
-}
-
-cxEventArg cxEventArgCreateWithRef(cxInt ref)
-{
-    cxEventArg this = CX_CREATE(cxEventArg);
-    this->ref = ref;
     return this;
 }
 

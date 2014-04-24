@@ -175,8 +175,6 @@ if(cxConstCharsEqu(eventName, #en)){                            \
 }while(0);                                                      \
 return 0
 
-void cxObjectLuaEventFunc(cxEvent *event);
-
 void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars format,va_list ap);
 
 //调试信息输出

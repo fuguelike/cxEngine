@@ -21,43 +21,6 @@ CX_OBJECT_FREE(cxTexCoord, cxObject)
 }
 CX_OBJECT_TERM(cxTexCoord, cxObject)
 
-static cxInt cxTextureLuaMakeTexture(lua_State *L)
-{
-    cxConstChars file = luaL_checkstring(L, 1);
-    cxTexture texture = cxTextureFactoryLoadFile(file);
-    CX_LUA_PUSH_OBJECT(texture);
-    return 1;
-}
-
-static cxInt cxTextureLuaRemoveTexture(lua_State *L)
-{
-    cxConstChars file = luaL_checkstring(L, 1);
-    cxTextureFactoryUnloadFile(file);
-    return 0;
-}
-
-static cxInt cxTextureLuaCleanTexture(lua_State *L)
-{
-    cxInt args = lua_gettop(L);
-    if(args == 0){
-        cxTextureFactoryClean();
-    }else{
-        cxTextureFactoryCleanGroup(luaL_checkstring(L, 1));
-    }
-    return 0;
-}
-
-CX_LUA_METHOD_BEG(cxTexture)
-    {"Make",cxTextureLuaMakeTexture},
-    {"Remove",cxTextureLuaRemoveTexture},
-    {"Clean",cxTextureLuaCleanTexture},
-CX_LUA_METHOD_END(cxTexture)
-
-void __cxTextureTypeInit()
-{
-    CX_LUA_LOAD_TYPE(cxTexture);
-}
-
 CX_OBJECT_INIT(cxTexture, cxObject)
 {
     this->super.cxBase = cxBaseTypeTexture;
@@ -83,7 +46,7 @@ void cxTextureLoad(cxTexture this,cxStream stream)
     CX_RETURN(this->isLoad);
     this->isLoad = CX_METHOD_GET(false, this->Load,this,stream);
     if(!this->isLoad){
-        CX_ERROR("texture can not load");
+        CX_ERROR("texture %s can not load",cxStringBody(stream->path));
     }
 }
 
