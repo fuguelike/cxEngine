@@ -263,16 +263,12 @@ void cxObjectRelease(cxAny ptr);
 
 void cxUtilPrint(cxConstChars type,cxConstChars file,cxInt line,cxConstChars format,va_list ap);
 
-//调试信息输出
 void cxUtilInfo(cxConstChars file, cxInt line, cxConstChars format, ...);
 
-//错误信息输出
 void cxUtilError(cxConstChars file, cxInt line, cxConstChars format, ...);
 
-//警告信息输出
 void cxUtilWarn(cxConstChars file, cxInt line, cxConstChars format, ...);
 
-//断言信息输出
 void cxUtilAssert(cxConstChars file, cxInt line, cxConstChars format, ...);
 
 #define CX_OBJECT_BEG(_t_)                                                  \
@@ -292,8 +288,8 @@ CX_OBJECT_BEG(cxObject)
     cxInt cxTag;
 CX_OBJECT_END(cxObject)
 
-void cxFrameworkInit();
+void cxCoreInit();
 
-void cxFrameworkFree();
+void cxCoreFree();
 
 #endif

@@ -10,7 +10,7 @@
 #define cxEngine_cxHash_h
 
 #include "uthash.h"
-#include "cxFramework.h"
+#include "cxCore.h"
 
 CX_C_BEGIN
 

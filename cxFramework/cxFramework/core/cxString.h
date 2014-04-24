@@ -10,7 +10,7 @@
 #define cxEngine_cxString_h
 
 #include "utstring.h"
-#include "cxFramework.h"
+#include "cxCore.h"
 #include "cxMD5.h"
 
 CX_C_BEGIN

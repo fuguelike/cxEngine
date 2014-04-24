@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		8344120F1907B1A0003D7B45 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344120E1907B1A0003D7B45 /* main.c */; };
 		834412111907B1A0003D7B45 /* cxFramework.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 834412101907B1A0003D7B45 /* cxFramework.1 */; };
-		834412911907B88E003D7B45 /* cxFramework.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344128F1907B88E003D7B45 /* cxFramework.c */; };
+		834412911907B88E003D7B45 /* cxCore.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344128F1907B88E003D7B45 /* cxCore.c */; };
 		834412A31907C3D3003D7B45 /* cxArray.c in Sources */ = {isa = PBXBuildFile; fileRef = 834412991907C3D3003D7B45 /* cxArray.c */; };
 		834412A41907C3D3003D7B45 /* cxHash.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344129B1907C3D3003D7B45 /* cxHash.c */; };
 		834412A51907C3D3003D7B45 /* cxList.c in Sources */ = {isa = PBXBuildFile; fileRef = 8344129D1907C3D3003D7B45 /* cxList.c */; };
@@ -35,8 +35,8 @@
 		8344120B1907B1A0003D7B45 /* cxFramework */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = cxFramework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8344120E1907B1A0003D7B45 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		834412101907B1A0003D7B45 /* cxFramework.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = cxFramework.1; sourceTree = "<group>"; };
-		8344128F1907B88E003D7B45 /* cxFramework.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxFramework.c; sourceTree = "<group>"; };
-		834412901907B88E003D7B45 /* cxFramework.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxFramework.h; sourceTree = "<group>"; };
+		8344128F1907B88E003D7B45 /* cxCore.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxCore.c; sourceTree = "<group>"; };
+		834412901907B88E003D7B45 /* cxCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxCore.h; sourceTree = "<group>"; };
 		834412951907C392003D7B45 /* utarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utarray.h; sourceTree = "<group>"; };
 		834412961907C392003D7B45 /* uthash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uthash.h; sourceTree = "<group>"; };
 		834412971907C392003D7B45 /* utlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utlist.h; sourceTree = "<group>"; };
@@ -53,6 +53,7 @@
 		834412A21907C3D3003D7B45 /* cxString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxString.h; sourceTree = "<group>"; };
 		834412A81907C42C003D7B45 /* cxMD5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMD5.c; sourceTree = "<group>"; };
 		834412A91907C42C003D7B45 /* cxMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMD5.h; sourceTree = "<group>"; };
+		837577C419089CF800B2D16A /* cxBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cxBase.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,13 +97,15 @@
 			isa = PBXGroup;
 			children = (
 				834412991907C3D3003D7B45 /* cxArray.c */,
-				834412A81907C42C003D7B45 /* cxMD5.c */,
-				834412A91907C42C003D7B45 /* cxMD5.h */,
 				8344129A1907C3D3003D7B45 /* cxArray.h */,
+				8344128F1907B88E003D7B45 /* cxCore.c */,
+				834412901907B88E003D7B45 /* cxCore.h */,
 				8344129B1907C3D3003D7B45 /* cxHash.c */,
 				8344129C1907C3D3003D7B45 /* cxHash.h */,
 				8344129D1907C3D3003D7B45 /* cxList.c */,
 				8344129E1907C3D3003D7B45 /* cxList.h */,
+				834412A81907C42C003D7B45 /* cxMD5.c */,
+				834412A91907C42C003D7B45 /* cxMD5.h */,
 				8344129F1907C3D3003D7B45 /* cxStack.c */,
 				834412A01907C3D3003D7B45 /* cxStack.h */,
 				834412A11907C3D3003D7B45 /* cxString.c */,
@@ -111,8 +114,7 @@
 				834412961907C392003D7B45 /* uthash.h */,
 				834412971907C392003D7B45 /* utlist.h */,
 				834412981907C392003D7B45 /* utstring.h */,
-				8344128F1907B88E003D7B45 /* cxFramework.c */,
-				834412901907B88E003D7B45 /* cxFramework.h */,
+				837577C419089CF800B2D16A /* cxBase.h */,
 			);
 			name = core;
 			path = cxFramework/core;
@@ -176,7 +178,7 @@
 				8344120F1907B1A0003D7B45 /* main.c in Sources */,
 				834412A61907C3D3003D7B45 /* cxStack.c in Sources */,
 				834412A51907C3D3003D7B45 /* cxList.c in Sources */,
-				834412911907B88E003D7B45 /* cxFramework.c in Sources */,
+				834412911907B88E003D7B45 /* cxCore.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +293,7 @@
 				834412161907B1A0003D7B45 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

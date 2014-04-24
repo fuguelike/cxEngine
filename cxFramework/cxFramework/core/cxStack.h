@@ -9,7 +9,6 @@
 #ifndef cxEngine_cxStack_h
 #define cxEngine_cxStack_h
 
-#include "cxFramework.h"
 #include "cxArray.h"
 
 CX_C_BEGIN

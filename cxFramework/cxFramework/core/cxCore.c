@@ -6,10 +6,11 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
-#include "cxFramework.h"
-
-#if CX_TARGET_PLATFORM==CX_PLATFORM_MAC || CX_TARGET_PLATFORM==CX_PLATFORM_IOS
 #include <stdio.h>
+#include "cxCore.h"
+
+//IOS MAC atomic support
+#if CX_TARGET_PLATFORM==CX_PLATFORM_MAC || CX_TARGET_PLATFORM==CX_PLATFORM_IOS
 #include <libkern/OSAtomic.h>
 void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars format,va_list ap)
 {
@@ -20,11 +21,34 @@ void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars forma
 }
 cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x)
 {
-    return (OSAtomicAdd32((int32_t)x, (int32_t *)p));
+    return OSAtomicAdd32((int32_t)x, (int32_t *)p);
 }
 cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
 {
-    return (OSAtomicAdd32(-((int32_t)x), (int32_t *)p));
+    return OSAtomicAdd32(-((int32_t)x), (int32_t *)p);
+}
+#elif CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID
+#include <android/log.h>
+#include <sys/atomics.h>
+void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars format,va_list ap)
+{
+    char buffer[CX_MAX_LOGGER_LENGTH];
+    vsnprintf(buffer, CX_MAX_LOGGER_LENGTH, format, ap);
+    if(cxConstCharsEqu(type, "ERROR") || cxConstCharsEqu(type, "ASSERT")){
+        __android_log_print(ANDROID_LOG_ERROR, "cxEngine", "[%s:%d] %s:%s",file,line,type,buffer);
+    }else if(cxConstCharsEqu(type, "WARN")){
+        __android_log_print(ANDROID_LOG_WARN, "cxEngine", "[%s:%d] %s:%s",file,line,type,buffer);
+    }else{
+        __android_log_print(ANDROID_LOG_INFO, "cxEngine", "[%s:%d] %s:%s",file,line,type,buffer);
+    }
+}
+cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x)
+{
+    return __sync_fetch_and_sub(p,x);
+}
+cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
+{
+    return __sync_fetch_and_add(p,x);
 }
 #endif
 
@@ -157,12 +181,12 @@ cxAny cxObjectAlloc(cxConstType type,cxInt size,cxObjectFunc initFunc,cxObjectFu
 }
 
 
-void cxFrameworkInit()
+void cxCoreInit()
 {
     cxAllocatorInit();
 }
 
-void cxFrameworkFree()
+void cxCoreFree()
 {
     cxAllocatorFree();
 }

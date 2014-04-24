@@ -10,7 +10,7 @@
 #define cxEngine_cxArray_h
 
 #include "utarray.h"
-#include "cxFramework.h"
+#include "cxCore.h"
 
 CX_C_BEGIN
 

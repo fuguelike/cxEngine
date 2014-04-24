@@ -7,7 +7,7 @@
 //
 
 #include <stdio.h>
-#include "core/cxFramework.h"
+#include "core/cxBase.h"
 
 CX_OBJECT_DEF(Test, cxObject)
 
@@ -26,12 +26,12 @@ CX_OBJECT_TERM(Test, cxObject)
 int main(int argc, const char * argv[])
 {
     //
-    cxFrameworkInit();
+    cxCoreInit();
     //
     Test t = CX_ALLOC(Test);
     CX_RELEASE(t);
     //
-    cxFrameworkFree();
+    cxCoreFree();
     //
     return 0;
 }
