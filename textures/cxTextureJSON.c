@@ -36,7 +36,7 @@ static cxBool cxTextureJSONLoad(cxAny this,cxStream stream)
     
     texture->innerTexture = cxTextureFactoryLoadFile(simagePath);
     ret = (texture->innerTexture != NULL);
-    CX_ASSERT(ret, "xml innert texture error");
+    CX_ASSERT(ret, "get innerTexture error");
     CX_RETAIN(texture->innerTexture);
     
     //for jpg pkm atlas texture

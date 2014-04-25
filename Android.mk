@@ -124,6 +124,19 @@ LOCAL_SRC_FILES += \
     android/jni/cxAndroid.c \
     android/jni/cxAssetsStream.c \
     android/jni/cxPlayer.c
+    
+LOCAL_SRC_FILES += \
+    jansson/dump.c \
+    jansson/error.c \
+    jansson/hashtable.c \
+    jansson/hashtable_seed.c \
+    jansson/load.c \
+    jansson/memory.c \
+    jansson/pack_unpack.c \
+    jansson/strbuffer.c \
+    jansson/strconv.c \
+    jansson/utf.c \
+    jansson/value.c
 
 include $(BUILD_STATIC_LIBRARY)
 
