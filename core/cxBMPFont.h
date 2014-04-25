@@ -25,6 +25,15 @@ CX_OBJECT_DEF(cxBMPElement, cxObject)
     cxInt page;
 CX_OBJECT_END(cxBMPElement)
 
+//key = (first<<16) | (second & 0xffff);
+CX_OBJECT_DEF(cxBMPKerning, cxObject)
+    cxInt first;
+    cxInt second;
+    cxInt amount;
+CX_OBJECT_END(cxBMPKerning)
+
+#define cxBMPKerningKey(f,s)    (((f) << 16) | ((s) & 0xffff))
+
 CX_OBJECT_DEF(cxBMPFont, cxObject)
     cxString face;
     cxInt bold;
@@ -44,6 +53,7 @@ CX_OBJECT_DEF(cxBMPFont, cxObject)
     cxInt packed;
     cxHash textures;
     cxHash chars;
+    cxHash kernings;
     cxBool isError;
 CX_OBJECT_END(cxBMPFont)
 

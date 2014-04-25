@@ -34,6 +34,15 @@ cxJson cxJsonCreate(cxString json)
     return this;
 }
 
+cxJson cxJsonAttachAlloc(json_t *json)
+{
+    CX_ASSERT(json != NULL, "json ptr error");
+    cxJson this = CX_CREATE(cxJson);
+    this->json = json;
+    json_incref(this->json);
+    return this;
+}
+
 cxInt cxJsonToInt(cxJson json,cxInt dv)
 {
     if(!json_is_integer(CX_JSON_PTR(json))){

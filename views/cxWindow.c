@@ -34,7 +34,7 @@ cxAny cxWindowTopView()
     return cxStackTop(engine->window->views);
 }
 
-void cxWindowPushView(cxAny pview,cxAny args)
+void cxWindowPushView(cxAny pview)
 {
     CX_ASSERT(pview != NULL, "new view null");
     cxEngine engine = cxEngineInstance();
@@ -45,12 +45,11 @@ void cxWindowPushView(cxAny pview,cxAny args)
         cxViewExit(top);
     }
     cxStackPush(engine->window->views, new);
-    cxViewSetArgs(new, args);
     cxViewAppend(engine->window, new);
     cxEngineTimeReset();
 }
 
-void cxWindowPopView(cxAny args)
+void cxWindowPopView()
 {
     cxEngine engine = cxEngineInstance();
     cxBool hideTop = false;
@@ -62,14 +61,13 @@ void cxWindowPopView(cxAny args)
         cxViewRemoved(prev);
     }
     if(top != NULL && hideTop){
-        cxViewSetArgs(top,args);
         cxViewEnter(top);
         cxViewSetVisible(top, true);
     }
     cxEngineTimeReset();
 }
 
-void cxWindowReplaceView(cxAny pview,cxAny args)
+void cxWindowReplaceView(cxAny pview)
 {
     CX_ASSERT(pview != NULL, "new view null");
     cxEngine engine = cxEngineInstance();
@@ -79,7 +77,6 @@ void cxWindowReplaceView(cxAny pview,cxAny args)
         cxStackPop(engine->window->views);
     }
     cxStackPush(engine->window->views, pview);
-    cxViewSetArgs(pview, args);
     cxViewAppend(engine->window, pview);
     cxEngineTimeReset();
 }

@@ -39,7 +39,6 @@ typedef cxBox4f cxViewAutoResizeBox;
 
 CX_OBJECT_DEF(cxView, cxObject)
     cxBool supportAtlasSet;
-    cxAny args;
     cxViewAutoResizeMask autoMask;
     cxViewAutoResizeBox  autoBox;
     cxHash caches;
@@ -96,10 +95,6 @@ cxVec2f cxViewPosition(cxAny pview);
 cxList cxViewSubViews(cxAny pview);
 
 cxBool cxViewSupportAtlasSet(cxAny pview);
-
-void cxViewSetArgs(cxAny pview,cxAny args);
-
-cxAny cxViewArgs(cxAny pview);
 
 cxVec2f cxViewScale(cxAny pview);
 

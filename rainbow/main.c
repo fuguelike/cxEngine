@@ -16,13 +16,10 @@ void cxEngineInit(cxEngine engine)
 #include <views/cxSprite.h>
 void cxEngineMain(cxEngine engine)
 {
-//    rbMap map = CX_CREATE(rbMap);
-//    cxViewSetAutoResizeBox(map, cxBox4fv(0, 0, 0, 9));
-//    cxViewSetAutoResizeMask(map, cxViewAutoResizeBottom);
-//    cxWindowPushView(map, NULL);
-    
-    cxSprite s = cxSpriteCreateWithURL("texture.json?green.png");
-    cxWindowPushView(s, NULL);
+    rbMap map = CX_CREATE(rbMap);
+    cxViewSetAutoResizeBox(map, cxBox4fv(0, 0, 0, 9));
+    cxViewSetAutoResizeMask(map, cxViewAutoResizeBottom);
+    cxWindowPushView(map);
 }
 
 void cxEngineFree(cxEngine engine)

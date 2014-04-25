@@ -19,11 +19,22 @@ CX_OBJECT_FREE(cxBMPElement, cxObject)
 }
 CX_OBJECT_TERM(cxBMPElement, cxObject)
 
+CX_OBJECT_INIT(cxBMPKerning, cxObject)
+{
+    
+}
+CX_OBJECT_FREE(cxBMPKerning, cxObject)
+{
+    
+}
+CX_OBJECT_TERM(cxBMPKerning, cxObject)
+
 
 CX_OBJECT_INIT(cxBMPFont, cxObject)
 {
     this->textures = CX_ALLOC(cxHash);
     this->chars = CX_ALLOC(cxHash);
+    this->kernings = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxBMPFont, cxObject)
 {
@@ -31,6 +42,7 @@ CX_OBJECT_FREE(cxBMPFont, cxObject)
     CX_RELEASE(this->chasrset);
     CX_RELEASE(this->textures);
     CX_RELEASE(this->chars);
+    CX_RELEASE(this->kernings);
 }
 CX_OBJECT_TERM(cxBMPFont, cxObject)
 

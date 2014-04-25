@@ -33,45 +33,29 @@ static cxBool cxTextureJSONLoad(cxAny this,cxStream stream)
     }
     cxConstChars simagePath = cxJsonString(meta, "image");
     CX_ASSERT(simagePath != NULL, "json image null");
-    
+    //make texture
     texture->innerTexture = cxTextureFactoryLoadFile(simagePath);
     ret = (texture->innerTexture != NULL);
     CX_ASSERT(ret, "get innerTexture error");
     CX_RETAIN(texture->innerTexture);
-    
     //for jpg pkm atlas texture
     texture->super.isAtlas = cxJsonBool(meta, "atlas", false);
     texture->super.size = texture->innerTexture->size;
-    
     cxJson frames = cxJsonArray(json, "frames");
-    json_t *value = NULL;
-    cxInt index = 0;
-    json_array_foreach(CX_JSON_PTR(frames), index, value){
+    CX_JSON_ARRAY_EACH_BEG(frames, item)
+    {
         cxTexCoord e = CX_ALLOC(cxTexCoord);
-        
-        json_t *tmp = json_object_get(value, "filename");
-        cxConstChars sn = json_string_value(tmp);
-        
-        tmp = json_object_get(value, "rotated");
-        e->isRotation = json_boolean(tmp);
-        
-        json_t *frame = json_object_get(value, "frame");
-        
-        tmp = json_object_get(frame, "x");
-        e->x = json_number_value(tmp);
-        
-        tmp = json_object_get(frame, "y");
-        e->y = json_number_value(tmp);
-        
-        tmp = json_object_get(frame, "w");
-        e->w = json_number_value(tmp);
-        
-        tmp = json_object_get(frame, "h");
-        e->h = json_number_value(tmp);
-        
+        cxConstChars sn = cxJsonString(item, "filename");
+        e->isRotation = cxJsonBool(item, "rotated", false);
+        cxJson frame = cxJsonObject(item, "frame");
+        e->x = cxJsonDouble(frame, "x", 0);
+        e->y = cxJsonDouble(frame, "y", 0);
+        e->w = cxJsonDouble(frame, "w", 0);
+        e->h = cxJsonDouble(frame, "h", 0);
         cxHashSet(texture->super.keys, cxHashStrKey(sn), e);
         CX_RELEASE(e);
     }
+    CX_JSON_ARRAY_EACH_END(frames, item);
     return ret;
 }
 

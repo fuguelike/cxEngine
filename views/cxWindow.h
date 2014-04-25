@@ -20,11 +20,11 @@ CX_OBJECT_END(cxWindow)
 
 cxAny cxWindowTopView();
 
-void cxWindowPushView(cxAny pview,cxAny args);
+void cxWindowPushView(cxAny pview);
 
-void cxWindowPopView(cxAny args);
+void cxWindowPopView();
 
-void cxWindowReplaceView(cxAny pview,cxAny args);
+void cxWindowReplaceView(cxAny pview);
 
 CX_C_END
 

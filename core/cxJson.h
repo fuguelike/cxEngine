@@ -21,7 +21,20 @@ CX_OBJECT_END(cxJson)
 
 #define CX_JSON_PTR(j)  ((j)->json)
 
+#define CX_JSON_ARRAY_EACH_BEG(_j_,_i_) { \
+    json_t *_value_ = NULL; \
+    cxInt _index_ = 0; \
+    json_array_foreach(CX_JSON_PTR(_j_), _index_, _value_){ \
+        cxJson _i_ = cxJsonAttachAlloc(_value_);
+
+#define CX_JSON_ARRAY_EACH_END(_j_,_i_) \
+        CX_RELEASE(_i_); \
+    } \
+}
+
 cxJson cxJsonCreate(cxString json);
+
+cxJson cxJsonAttachAlloc(json_t *json);
 
 cxInt cxJsonToInt(cxJson json,cxInt dv);
 

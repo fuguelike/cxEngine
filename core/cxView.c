@@ -53,7 +53,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_RELEASE(this->subViews);
     CX_RELEASE(this->actions);
     CX_RELEASE(this->caches);
-    CX_RELEASE(this->args);
     
     CX_EVENT_RELEASE(this->onDirty);
     CX_EVENT_RELEASE(this->onEnter);
@@ -87,12 +86,6 @@ cxAny cxViewGetCache(cxAny pview,cxConstChars key)
     return cxHashGet(this->caches, cxHashStrKey(key));
 }
 
-void cxViewSetArgs(cxAny pview,cxAny args)
-{
-    cxView this = pview;
-    CX_RETAIN_SWAP(this->args, args);
-}
-
 cxVec2f cxViewPosition(cxAny pview)
 {
     cxView this = pview;
@@ -123,12 +116,6 @@ cxBox4f cxViewBox(cxAny pview)
     cxFloat wh = this->size.w/2.0f;
     cxFloat hh = this->size.h/2.0f;
     return cxBox4fv(-wh, wh, hh, -hh);
-}
-
-cxAny cxViewArgs(cxAny pview)
-{
-    cxView this = pview;
-    return this->args;
 }
 
 cxColor4f cxViewColor(cxAny pview)

@@ -1,5 +1,5 @@
 //
-//  cxLabelBMP.c
+//  cxLabelFNT.c
 //  cxEngine
 //
 //  Created by xuhua on 12/9/13.
@@ -8,9 +8,9 @@
 
 #include <core/cxEngine.h>
 #include <core/cxIconv.h>
-#include "cxLabelBMP.h"
+#include "cxLabelFNT.h"
 
-static void cxLabelBMPUpdateText(cxLabelBMP this)
+static void cxLabelFNTUpdateText(cxLabelFNT this)
 {
     CX_RETURN(!cxStringLength(this->txt));
     cxTexture texture = cxBMPFontTexture(this->font, 0);
@@ -65,37 +65,37 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
     }
 }
 
-static void cxLabelBMPUpdate(cxEvent *event)
+static void cxLabelFNTUpdate(cxEvent *event)
 {
-    cxLabelBMP this = event->sender;
+    cxLabelFNT this = event->sender;
     CX_RETURN(!this->isDirty);
-    cxLabelBMPUpdateText(this);
+    cxLabelFNTUpdateText(this);
     this->isDirty = false;
 }
 
-CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
+CX_OBJECT_INIT(cxLabelFNT, cxAtlas)
 {
-    CX_EVENT_QUICK(this->super.super.super.onUpdate, cxLabelBMPUpdate);
+    CX_EVENT_QUICK(this->super.super.super.onUpdate, cxLabelFNTUpdate);
     this->isDirty = true;
 }
-CX_OBJECT_FREE(cxLabelBMP, cxAtlas)
+CX_OBJECT_FREE(cxLabelFNT, cxAtlas)
 {
     CX_RELEASE(this->font);
     CX_RELEASE(this->txt);
 }
-CX_OBJECT_TERM(cxLabelBMP, cxAtlas)
+CX_OBJECT_TERM(cxLabelFNT, cxAtlas)
 
-void cxLabelBMPSetSize(cxAny pview,cxFloat size)
+void cxLabelFNTSetSize(cxAny pview,cxFloat size)
 {
-    cxLabelBMP this = pview;
+    cxLabelFNT this = pview;
     CX_RETURN(cxFloatEqu(this->size,size));
     this->size = size;
     this->isDirty = true;
 }
 
-void cxLabelBMPSetFont(cxAny pview,cxString font)
+void cxLabelFNTSetFont(cxAny pview,cxString font)
 {
-    cxLabelBMP this = pview;
+    cxLabelFNT this = pview;
     cxBMPFont bmpfont = cxEngineLoadBMPFont(cxStringBody(font));
     CX_ASSERT(bmpfont != NULL, "%s font not load",font);
     CX_RETURN(bmpfont == this->font);
@@ -103,9 +103,9 @@ void cxLabelBMPSetFont(cxAny pview,cxString font)
     this->isDirty = true;
 }
 
-void cxLabelBMPSetText(cxAny pview,cxString txt)
+void cxLabelFNTSetText(cxAny pview,cxString txt)
 {
-    cxLabelBMP this = pview;
+    cxLabelFNT this = pview;
     CX_RETURN(cxStringEqu(this->txt, txt));
     CX_RETAIN_SWAP(this->txt, txt);
     this->isDirty = true;
