@@ -31,6 +31,8 @@ CX_OBJECT_DEF(cxAtlas, cxSprite)
     cxHash items;
 CX_OBJECT_END(cxAtlas)
 
+void cxAtlasSetNumber(cxAny pview,cxInt number);
+
 void cxAtlasDraw(cxAny pview);
 
 void cxAtlasDrawInit(cxAny pview);

@@ -174,55 +174,60 @@ static void cxParticleSetBox(cxAny pav,cxParticleUnit *particle)
     box->rb.vertices = vq.rb;
     box->lt.vertices = vq.lt;
     box->rt.vertices = vq.rt;
-    this->atlas->number = CX_MAX(this->index + 1, this->atlas->number);
 }
 
-static void cxParticleComputeUnit(cxParticle this,cxParticleUnit *p,cxFloat dt)
+void cxParticleStop(cxAny pav)
 {
-    p->life -= dt;
-    if(p->life > 0){
-        //vertex
-        cxParticleComputeUnitVertex(this, p, dt);
-        // color
-        p->color.r += (p->deltacolor.r * dt);
-        p->color.g += (p->deltacolor.g * dt);
-        p->color.b += (p->deltacolor.b * dt);
-        p->color.a += (p->deltacolor.a * dt);
-        //size
-        p->size = CX_MAX(0, p->size + p->deltasize * dt);
-        //angle
-        p->rotation += (p->deltarotation * dt);
-        cxParticleSetBox(this, p);
-        this->index ++;
-    }else{
-        if(this->index != this->count - 1){
-            this->units[this->index] = this->units[this->count - 1];
-        }
-        this->count--;
-    }
+    cxParticle this = pav;
+    this->isActive = false;
+    this->emitcounter = 0;
 }
 
 static void cxParticleStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxParticle this = pav;
-    if(!this->isActive){
-        return;
-    }
-    cxFloat rate = 1.0f / this->rate;
-    if(this->count < this->number){
-        this->emitcounter += dt;
-    }
-    while(this->count < this->number &&
-          this->emitcounter > rate &&
-          cxParticleAdd(this)){
-        this->emitcounter -= rate;
+    if(this->isActive){
+        cxFloat rate = 1.0f / this->rate;
+        if(this->count < this->number){
+            this->emitcounter += dt;
+        }
+        while(this->count < this->number && this->emitcounter > rate){
+            cxParticleAdd(this);
+            this->emitcounter -= rate;
+        }
+		if (this->duration != -1 && this->duration < this->super.durationElapsed){
+			cxParticleStop(pav);
+        }
     }
     this->index = 0;
     while(this->index < this->count){
         cxParticleUnit *p = &this->units[this->index];
-        cxParticleComputeUnit(this, p, dt);
+        p->life -= dt;
+        if(p->life > 0){
+            //vertex
+            cxParticleComputeUnitVertex(this, p, dt);
+            // color
+            p->color.r += (p->deltacolor.r * dt);
+            p->color.g += (p->deltacolor.g * dt);
+            p->color.b += (p->deltacolor.b * dt);
+            p->color.a += (p->deltacolor.a * dt);
+            //size
+            p->size = CX_MAX(0, p->size + p->deltasize * dt);
+            //angle
+            p->rotation += (p->deltarotation * dt);
+            cxParticleSetBox(this, p);
+            this->index ++;
+        }else{
+            if(this->index != this->count - 1){
+                this->units[this->index] = this->units[this->count - 1];
+            }
+            this->count--;
+        }
     }
-    this->atlas->isDirty = true;
+    if(!this->isActive && this->count <= 0){
+        cxActionStop(pav);
+    }
+    cxAtlasSetNumber(this->atlas, this->count);
 }
 
 void cxParticleSetType(cxAny pview,cxParticleEmitterType type)
@@ -287,7 +292,8 @@ void cxParticleInitNumber(cxAny pav,cxInt number)
 cxParticle cxParticleCreate(cxFloat duration,cxConstChars url,cxIndex number)
 {
     cxParticle this = CX_CREATE(cxParticle);
-    this->super.duration = duration;
+    this->super.duration = -1;
+    this->duration = duration;
     cxParticleInitNumber(this,number);
     cxSpriteSetTextureURL(this->atlas, url, true);
     cxSetRandSeed();

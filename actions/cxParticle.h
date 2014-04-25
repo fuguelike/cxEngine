@@ -51,6 +51,7 @@ typedef struct {
 }cxParticleArgs;
 
 CX_OBJECT_DEF(cxParticle, cxAction)
+    cxFloat duration;
     cxAtlas atlas;
     cxParticleEmitterType type;
     cxInt index;
@@ -84,6 +85,8 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     CX_METHOD_ALLOC(void, SetUnitArgs,cxAny,cxParticleArgs *);
     CX_SLOT_ALLOC(onDraw);
 CX_OBJECT_END(cxParticle)
+
+void cxParticleStop(cxAny pav);
 
 void cxParticleSetType(cxAny pview,cxParticleEmitterType type);
 

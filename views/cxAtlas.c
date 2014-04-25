@@ -246,6 +246,14 @@ static void cxAtlasInitVBO(cxAny pview)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void cxAtlasSetNumber(cxAny pview,cxInt number)
+{
+    CX_ASSERT(number >= 0, "number must >= 0");
+    cxAtlas this = pview;
+    this->isDirty = true;
+    this->number = number;
+}
+
 void cxAtlasDrawInit(cxAny pview)
 {
     if(cxOpenGLInstance()->support_GL_OES_vertex_array_object){
