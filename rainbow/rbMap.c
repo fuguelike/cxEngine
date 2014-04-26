@@ -7,6 +7,7 @@
 //
 
 #include <core/cxEngine.h>
+#include <views/cxSprite.h>
 #include "rbMap.h"
 
 CX_OBJECT_INIT(rbMap, cxView)

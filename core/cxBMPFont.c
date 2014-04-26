@@ -128,7 +128,7 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
     CX_JSON_ARRAY_EACH_BEG(chars, item)
     {
         cxBMPElement pchar = CX_ALLOC(cxBMPElement);
-        cxUInt id = cxJsonInt(item, "id", 0);
+        pchar->key = cxJsonInt(item, "id", 0);
         pchar->box.x = cxJsonInt(item, "x", 0);
         pchar->box.y = cxJsonInt(item, "y", 0);
         pchar->box.w = cxJsonInt(item, "width", 0);
@@ -137,7 +137,7 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
         pchar->yoffset = cxJsonInt(item, "yoffset", 0);
         pchar->xadvance = cxJsonInt(item, "xadvance", 0);
         pchar->page = cxJsonInt(item, "page", 0);
-        cxHashSet(this->chars, cxHashIntKey(id), pchar);
+        cxHashSet(this->chars, cxHashIntKey(pchar->key), pchar);
         CX_RELEASE(pchar);
     }
     CX_JSON_ARRAY_EACH_END(chars, item)

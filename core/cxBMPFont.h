@@ -23,6 +23,7 @@ CX_OBJECT_DEF(cxBMPElement, cxObject)
     cxInt yoffset;
     cxInt xadvance;
     cxInt page;
+    cxInt key;
 CX_OBJECT_END(cxBMPElement)
 
 //key = (first<<16) | (second & 0xffff);
