@@ -13,8 +13,6 @@ void cxEngineInit(cxEngine engine)
     
 }
 
-#include <actions/cxParticle.h>
-
 void cxEngineMain(cxEngine engine)
 {
     rbMap map = CX_CREATE(rbMap);

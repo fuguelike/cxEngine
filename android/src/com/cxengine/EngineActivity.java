@@ -7,6 +7,10 @@ import android.view.MotionEvent;
 
 public class EngineActivity extends Activity {
 	
+    static {
+        System.loadLibrary("cxEngineTest");
+    }
+	
 	private EngineGLView glView = null;
 	
 	@Override

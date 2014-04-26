@@ -56,9 +56,9 @@ cxLong cxEventArgLong(cxEventArg this,cxConstChars key,cxLong dv);
 
 cxLong cxEventArgToLong(cxEventArg this,cxLong dv);
 
-cxConstChars cxEventArgString(cxEventArg this,cxConstChars key);
+cxConstChars cxEventArgConstChars(cxEventArg this,cxConstChars key);
 
-cxConstChars cxEventArgToString(cxEventArg this);
+cxConstChars cxEventArgToConstChars(cxEventArg this);
 
 cxDouble cxEventArgDouble(cxEventArg this,cxConstChars key,cxDouble dv);
 

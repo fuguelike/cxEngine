@@ -9,8 +9,6 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE   := cxEngineTest
 
-LOCAL_ARM_MODE := arm
-
 LOCAL_CFLAGS   := -std=gnu99 -O2 -DANDROID -I$(CX_ENGINE_DIR) -I$(CX_ENGINE_DIR)/libs/android/include
 
 LOCAL_SRC_FILES := main.c 

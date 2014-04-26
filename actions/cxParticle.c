@@ -94,36 +94,6 @@ static cxBool cxParticleAdd(cxParticle this)
     return true;
 }
 
-static void cxParticleComputeUnitVertex(cxParticle this,cxParticleUnit *p,cxFloat dt)
-{
-    if(this->type == cxParticleEmitterGravity){
-        cxVec2f tmp;
-        cxVec2f radial= cxVec2fv(0, 0);
-        if(p->position.x || p->position.y){
-            kmVec2Normalize(&radial, &p->position);
-        }
-        cxVec2f tangential = radial;
-        kmVec2Scale(&radial, &radial, p->radaccel);
-        //compute tangential
-        cxFloat newy = tangential.x;
-        tangential.x = -tangential.y;
-        tangential.y = newy;
-        kmVec2Scale(&tangential,&tangential,p->tanaccel);
-        //compute position
-        kmVec2Add(&tmp, &radial, &tangential);
-        kmVec2Add(&tmp, &tmp, &this->gravity);
-        kmVec2Scale(&tmp, &tmp, dt);
-        kmVec2Add(&p->dir, &p->dir, &tmp);
-        kmVec2Scale(&tmp, &p->dir, dt);
-        kmVec2Add(&p->position, &p->position, &tmp);
-    }else{
-        p->angle += p->degreespers * dt;
-        p->radius += p->deltaradius * dt;
-        p->position.x = -cosf(p->angle) * p->radius;
-        p->position.y = -sinf(p->angle) * p->radius;
-    }
-}
-
 static void cxParticleUnitToBoxVec3f(cxParticleUnit *particle,cxBoxVec3f *vq)
 {
     cxFloat sizeh = particle->size/2;
@@ -161,6 +131,7 @@ static void cxParticleSetBox(cxAny pav,cxParticleUnit *particle)
     cxBoxVec3f vq={0};
     cxColor4f color = particle->color;
     cxParticleUnitToBoxVec3f(particle, &vq);
+    
     cxBoxPoint *box = &this->atlas->boxes[this->index];
     box->lb.colors = color;
     box->rb.colors = color;
@@ -205,7 +176,32 @@ static void cxParticleStep(cxAny pav,cxFloat dt,cxFloat time)
         p->life -= dt;
         if(p->life > 0){
             //vertex
-            cxParticleComputeUnitVertex(this, p, dt);
+            if(this->type == cxParticleEmitterGravity){
+                cxVec2f tmp;
+                cxVec2f radial= cxVec2fv(0, 0);
+                if(p->position.x || p->position.y){
+                    kmVec2Normalize(&radial, &p->position);
+                }
+                cxVec2f tangential = radial;
+                kmVec2Scale(&radial, &radial, p->radaccel);
+                //compute tangential
+                cxFloat newy = tangential.x;
+                tangential.x = -tangential.y;
+                tangential.y = newy;
+                kmVec2Scale(&tangential,&tangential,p->tanaccel);
+                //compute position
+                kmVec2Add(&tmp, &radial, &tangential);
+                kmVec2Add(&tmp, &tmp, &this->gravity);
+                kmVec2Scale(&tmp, &tmp, dt);
+                kmVec2Add(&p->dir, &p->dir, &tmp);
+                kmVec2Scale(&tmp, &p->dir, dt);
+                kmVec2Add(&p->position, &p->position, &tmp);
+            }else{
+                p->angle += p->degreespers * dt;
+                p->radius += p->deltaradius * dt;
+                p->position.x = -cosf(p->angle) * p->radius;
+                p->position.y = -sinf(p->angle) * p->radius;
+            }
             // color
             p->color.r += (p->deltacolor.r * dt);
             p->color.g += (p->deltacolor.g * dt);

@@ -57,6 +57,8 @@ CX_OBJECT_DEF(cxBMPFont, cxObject)
     cxBool isError;
 CX_OBJECT_END(cxBMPFont)
 
+cxFloat cxBMPKerningAmount(cxBMPFont this, cxUInt16 prev,cxUInt16 curr);
+
 cxTexture cxBMPFontTexture(cxBMPFont this,cxUChar page);
 
 cxBMPElement cxBMPFontChar(cxBMPFont this,cxUInt id);

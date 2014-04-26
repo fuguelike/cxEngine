@@ -132,16 +132,16 @@ cxDouble cxEventArgDouble(cxEventArg this,cxConstChars key,cxDouble dv)
     return cxJsonDouble(this->json, key, dv);
 }
 
-cxConstChars cxEventArgToString(cxEventArg this)
+cxConstChars cxEventArgToConstChars(cxEventArg this)
 {
     CX_ASSERT(this->json != NULL, "args error");
-    return cxJsonToString(this->json);
+    return cxJsonToConstChars(this->json);
 }
 
-cxConstChars cxEventArgString(cxEventArg this,cxConstChars key)
+cxConstChars cxEventArgConstChars(cxEventArg this,cxConstChars key)
 {
     CX_ASSERT(this->json != NULL && key != NULL, "args error");
-    return cxJsonString(this->json, key);
+    return cxJsonConstChars(this->json, key);
 }
 
 

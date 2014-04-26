@@ -7,6 +7,7 @@
 //
 
 #include <textures/cxTextureFactory.h>
+#include "cxJson.h"
 #include "cxBMPFont.h"
 
 CX_OBJECT_INIT(cxBMPElement, cxObject)
@@ -51,6 +52,19 @@ cxTexture cxBMPFontTexture(cxBMPFont this,cxUChar page)
     return cxHashGet(this->textures, cxHashIntKey(page));
 }
 
+cxFloat cxBMPKerningAmount(cxBMPFont this, cxUInt16 prev,cxUInt16 curr)
+{
+    if(prev == 0){
+        return 0;
+    }
+    cxInt key = cxBMPKerningKey(prev, curr);
+    cxBMPKerning bk = cxHashGet(this->kernings, cxHashIntKey(key));
+    if(bk == NULL){
+        return 0;
+    }
+    return bk->amount;
+}
+
 cxBMPElement cxBMPFontChar(cxBMPFont this,cxUInt id)
 {
     return cxHashGet(this->chars, cxHashIntKey(id));
@@ -72,55 +86,74 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
         CX_ERROR("load bmpfont error file %s not exists",file);
         return false;
     }
-//    xmlTextReaderPtr reader = cxXMLReaderForString(data, cxBMPFontReaderError, this);
-//    cxReaderAttrInfo *info = cxReaderAttrInfoMake(reader, NULL, this);
-//    while(xmlTextReaderRead(reader) && !this->isError){
-//        if(xmlTextReaderNodeType(reader) != XML_READER_TYPE_ELEMENT){
-//            continue;
-//        }
-//        cxConstChars temp = cxXMLReadElementName(reader);
-//        if(ELEMENT_IS_TYPE(info)){
-//            this->face = cxXMLReadStringAttr(info, "face");
-//            CX_RETAIN(this->face);
-//            this->size = cxXMLReadIntAttr(info, "size", 0);
-//            this->bold = cxXMLReadIntAttr(info, "bold", 0);
-//            this->italic = cxXMLReadIntAttr(info, "italic", 0);
-//            this->chasrset = cxXMLReadStringAttr(info, "chasrset");
-//            CX_RETAIN(this->chasrset);
-//            this->unicode = cxXMLReadIntAttr(info, "unicode", 0);
-//            this->stretchH = cxXMLReadIntAttr(info, "stretchH", 0);
-//            this->smooth = cxXMLReadIntAttr(info, "smooth", 0);
-//            this->aa = cxXMLReadIntAttr(info, "aa", 0);
-//            this->padding = cxXMLReadBox4iAttr(info, "padding", this->padding);
-//            this->spacing = cxXMLReadVec2iAttr(info, "spacing", this->spacing);
-//        }else if(ELEMENT_IS_TYPE(common)){
-//            this->lineHeight = cxXMLReadIntAttr(info, "lineHeight", 0);
-//            this->base = cxXMLReadIntAttr(info, "base", 0);
-//            this->scale.w = cxXMLReadIntAttr(info, "scaleW", 0);
-//            this->scale.h = cxXMLReadIntAttr(info, "scaleH", 0);
-//            this->pages = cxXMLReadIntAttr(info, "pages", 0);
-//            this->packed = cxXMLReadIntAttr(info, "packed", 0);
-//        }else if(ELEMENT_IS_TYPE(page)){
-//            cxInt id = cxXMLReadIntAttr(info, "id", 0);
-//            cxConstChars file = cxXMLAttr(reader, "file");
-//            cxTexture texture = cxTextureFactoryLoadFile(file);
-//            CX_ASSERT(texture != NULL, "create bmp texture failed");
-//            cxHashSet(this->textures, cxHashIntKey(id), texture);
-//        }else if(ELEMENT_IS_TYPE(char)){
-//            cxBMPElement pchar = CX_ALLOC(cxBMPElement);
-//            cxUInt id = cxXMLReadUIntAttr(info, "id", 0);
-//            pchar->box.x = cxXMLReadIntAttr(info, "x", 0);
-//            pchar->box.y = cxXMLReadIntAttr(info, "y", 0);
-//            pchar->box.w = cxXMLReadIntAttr(info, "width", 0);
-//            pchar->box.h = cxXMLReadIntAttr(info, "height", 0);
-//            pchar->xoffset = cxXMLReadIntAttr(info, "xoffset", 0);
-//            pchar->yoffset = cxXMLReadIntAttr(info, "yoffset", 0);
-//            pchar->xadvance = cxXMLReadIntAttr(info, "xadvance", 0);
-//            pchar->page = cxXMLReadIntAttr(info, "page", 0);
-//            cxHashSet(this->chars, cxHashIntKey(id), pchar);
-//            CX_RELEASE(pchar);
-//        }
-//    }
+    cxJson json = cxJsonCreate(data);
+    if(json == NULL){
+        CX_ERROR("load bmpfont error file %s not json",file);
+        return false;
+    }
+    cxJson info = cxJsonObject(json, "info");
+    this->face = cxJsonString(info, "face");
+    CX_RETAIN(this->face);
+    this->size = cxJsonInt(info, "size", 0);
+    this->bold = cxJsonInt(info, "bold", 0);
+    this->italic = cxJsonInt(info, "italic", 0);
+    this->chasrset = cxJsonString(info, "chasrset");
+    CX_RETAIN(this->chasrset);
+    this->unicode = cxJsonInt(info, "unicode", 0);
+    this->stretchH = cxJsonInt(info, "stretchH", 0);
+    this->smooth = cxJsonInt(info, "smooth", 0);
+    this->aa = cxJsonInt(info, "aa", 0);
+    
+    cxJson common = cxJsonObject(json, "common");
+    this->lineHeight = cxJsonInt(common, "lineHeight", 0);
+    this->base = cxJsonInt(common, "base", 0);
+    this->scale.w = cxJsonInt(common, "scaleW", 0);
+    this->scale.h = cxJsonInt(common, "scaleH", 0);
+    this->pages = cxJsonInt(common, "pages", 0);
+    this->packed = cxJsonInt(common, "packed", 0);
+
+    cxJson pages = cxJsonArray(json, "pages");
+    CX_JSON_ARRAY_EACH_BEG(pages, item)
+    {
+        cxInt id = cxJsonInt(item, "id", 0);
+        cxConstChars file = cxJsonConstChars(item, "file");
+        CX_ASSERT(file != NULL, "file null string");
+        cxTexture texture = cxTextureFactoryLoadFile(file);
+        CX_ASSERT(texture != NULL, "create bmp texture failed %s",file);
+        cxHashSet(this->textures, cxHashIntKey(id), texture);
+    }
+    CX_JSON_ARRAY_EACH_END(pages, item)
+    
+    cxJson chars = cxJsonArray(json, "chars");
+    CX_JSON_ARRAY_EACH_BEG(chars, item)
+    {
+        cxBMPElement pchar = CX_ALLOC(cxBMPElement);
+        cxUInt id = cxJsonInt(item, "id", 0);
+        pchar->box.x = cxJsonInt(item, "x", 0);
+        pchar->box.y = cxJsonInt(item, "y", 0);
+        pchar->box.w = cxJsonInt(item, "width", 0);
+        pchar->box.h = cxJsonInt(item, "height", 0);
+        pchar->xoffset = cxJsonInt(item, "xoffset", 0);
+        pchar->yoffset = cxJsonInt(item, "yoffset", 0);
+        pchar->xadvance = cxJsonInt(item, "xadvance", 0);
+        pchar->page = cxJsonInt(item, "page", 0);
+        cxHashSet(this->chars, cxHashIntKey(id), pchar);
+        CX_RELEASE(pchar);
+    }
+    CX_JSON_ARRAY_EACH_END(chars, item)
+    
+    cxJson kernings = cxJsonArray(json, "kernings");
+    CX_JSON_ARRAY_EACH_BEG(kernings, item)
+    {
+        cxBMPKerning kerning = CX_ALLOC(cxBMPKerning);
+        kerning->first = cxJsonInt(item, "first", 0);
+        kerning->second = cxJsonInt(item, "second", 0);
+        kerning->amount = cxJsonInt(item, "amount", 0);
+        cxInt key = cxBMPKerningKey(kerning->first, kerning->second);
+        cxHashSet(this->kernings, cxHashIntKey(key), kerning);
+        CX_RELEASE(kerning);
+    }
+    CX_JSON_ARRAY_EACH_END(kernings, item)
     return true;
 }
 

@@ -31,7 +31,7 @@ static cxBool cxTextureJSONLoad(cxAny this,cxStream stream)
         CX_ERROR("read json meta object error");
         return ret;
     }
-    cxConstChars simagePath = cxJsonString(meta, "image");
+    cxConstChars simagePath = cxJsonConstChars(meta, "image");
     CX_ASSERT(simagePath != NULL, "json image null");
     //make texture
     texture->innerTexture = cxTextureFactoryLoadFile(simagePath);
@@ -45,7 +45,7 @@ static cxBool cxTextureJSONLoad(cxAny this,cxStream stream)
     CX_JSON_ARRAY_EACH_BEG(frames, item)
     {
         cxTexCoord e = CX_ALLOC(cxTexCoord);
-        cxConstChars sn = cxJsonString(item, "filename");
+        cxConstChars sn = cxJsonConstChars(item, "filename");
         e->isRotation = cxJsonBool(item, "rotated", false);
         cxJson frame = cxJsonObject(item, "frame");
         e->x = cxJsonDouble(frame, "x", 0);

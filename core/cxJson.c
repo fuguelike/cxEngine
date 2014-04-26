@@ -37,7 +37,7 @@ cxJson cxJsonCreate(cxString json)
 cxJson cxJsonAttachAlloc(json_t *json)
 {
     CX_ASSERT(json != NULL, "json ptr error");
-    cxJson this = CX_CREATE(cxJson);
+    cxJson this = CX_ALLOC(cxJson);
     this->json = json;
     json_incref(this->json);
     return this;
@@ -45,13 +45,16 @@ cxJson cxJsonAttachAlloc(json_t *json)
 
 cxInt cxJsonToInt(cxJson json,cxInt dv)
 {
+    if(json_is_string(CX_JSON_PTR(json))){
+        return atoi(json_string_value(CX_JSON_PTR(json)));
+    }
     if(!json_is_integer(CX_JSON_PTR(json))){
         return dv;
     }
     return (cxInt)json_integer_value(CX_JSON_PTR(json));
 }
 
-cxConstChars cxJsonToString(cxJson json)
+cxConstChars cxJsonToConstChars(cxJson json)
 {
     if(!json_is_string(CX_JSON_PTR(json))){
         return NULL;
@@ -59,8 +62,17 @@ cxConstChars cxJsonToString(cxJson json)
     return json_string_value(CX_JSON_PTR(json));
 }
 
+cxString cxJsonToString(cxJson json)
+{
+    cxConstChars str = cxJsonToConstChars(json);
+    return (str != NULL)?cxStringConstChars(str) : NULL;
+}
+
 cxDouble cxJsonToDouble(cxJson json,cxDouble dv)
 {
+    if(json_is_string(CX_JSON_PTR(json))){
+        return atof(json_string_value(CX_JSON_PTR(json)));
+    }
     if(!json_is_number(CX_JSON_PTR(json))){
         return dv;
     }
@@ -69,6 +81,9 @@ cxDouble cxJsonToDouble(cxJson json,cxDouble dv)
 
 cxLong cxJsonToLong(cxJson json,cxLong dv)
 {
+    if(json_is_string(CX_JSON_PTR(json))){
+        return atol(json_string_value(CX_JSON_PTR(json)));
+    }
     if(!json_is_number(CX_JSON_PTR(json))){
         return dv;
     }
@@ -77,22 +92,28 @@ cxLong cxJsonToLong(cxJson json,cxLong dv)
 
 cxBool cxJsonToBool(cxJson json,cxBool dv)
 {
+    if(json_is_string(CX_JSON_PTR(json))){
+        return strcasecmp(json_string_value(CX_JSON_PTR(json)), "true") == 0;
+    }
     if(!json_is_boolean(CX_JSON_PTR(json))){
         return dv;
     }
     return json_is_true(CX_JSON_PTR(json));
 }
 
-cxInt cxJsonIntAt(cxJson json,cxInt idx)
+cxInt cxJsonIntAt(cxJson json,cxInt idx,cxInt dv)
 {
     json_t *v = json_array_get(CX_JSON_PTR(json), idx);
     if(v == NULL){
-        return 0;
+        return dv;
+    }
+    if(json_is_string(v)){
+        return atoi(json_string_value(v));
     }
     return (cxInt)json_integer_value(v);
 }
 
-cxConstChars cxJsonStringAt(cxJson json,cxInt idx)
+cxConstChars cxJsonConstCharsAt(cxJson json,cxInt idx)
 {
     json_t *v = json_array_get(CX_JSON_PTR(json), idx);
     if(v == NULL){
@@ -101,11 +122,20 @@ cxConstChars cxJsonStringAt(cxJson json,cxInt idx)
     return json_string_value(v);
 }
 
+cxString cxJsonStringAt(cxJson json,cxInt idx)
+{
+    cxConstChars str = cxJsonConstCharsAt(json, idx);
+    return (str != NULL)?cxStringConstChars(str) : NULL;
+}
+
 cxBool cxJsonBoolAt(cxJson json,cxInt idx,cxBool dv)
 {
     json_t *v = json_array_get(CX_JSON_PTR(json), idx);
     if(v == NULL){
         return dv;
+    }
+    if(json_is_string(v)){
+        return strcasecmp(json_string_value(v),"true") == 0;
     }
     return json_is_true(v);
 }
@@ -116,6 +146,9 @@ cxDouble cxJsonDoubleAt(cxJson json,cxInt idx,cxDouble dv)
     if(v == NULL){
         return dv;
     }
+    if(json_is_string(v)){
+        return atof(json_string_value(v));
+    }
     return json_number_value(v);
 }
 
@@ -124,6 +157,9 @@ cxLong cxJsonLongAt(cxJson json,cxInt idx,cxLong dv)
     json_t *v = json_array_get(CX_JSON_PTR(json), idx);
     if(v == NULL){
         return dv;
+    }
+    if(json_is_string(v)){
+        return atol(json_string_value(v));
     }
     return (cxLong)json_integer_value(v);
 }
@@ -195,10 +231,13 @@ cxBool cxJsonBool(cxJson json,cxConstChars key,cxBool dv)
     if(v == NULL){
         return dv;
     }
+    if(json_is_string(v)){
+        return strcasecmp(json_string_value(v), "true") == 0;
+    }
     return json_is_true(v);
 }
 
-cxConstChars cxJsonString(cxJson json,cxConstChars key)
+cxConstChars cxJsonConstChars(cxJson json,cxConstChars key)
 {
     json_t *v = json_object_get(CX_JSON_PTR(json), key);
     if(v == NULL){
@@ -207,11 +246,20 @@ cxConstChars cxJsonString(cxJson json,cxConstChars key)
     return json_string_value(v);
 }
 
+cxString cxJsonString(cxJson json,cxConstChars key)
+{
+    cxConstChars str = cxJsonConstChars(json, key);
+    return (str != NULL && strlen(str) > 0)?cxStringConstChars(str) : NULL;
+}
+
 cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble dv)
 {
     json_t *v = json_object_get(CX_JSON_PTR(json), key);
     if(v == NULL){
         return dv;
+    }
+    if(json_is_string(v)){
+        return atof(json_string_value(v));
     }
     return json_number_value(v);
 }
@@ -222,6 +270,9 @@ cxLong cxJsonLong(cxJson json,cxConstChars key,cxLong dv)
     if(v == NULL){
         return dv;
     }
+    if(json_is_string(v)){
+        return atol(json_string_value(v));
+    }
     return (cxLong)json_integer_value(v);
 }
 
@@ -231,6 +282,19 @@ cxInt cxJsonInt(cxJson json,cxConstChars key,cxInt dv)
     if(v == NULL){
         return dv;
     }
+    if(json_is_string(v)){
+        return atoi(json_string_value(v));
+    }
     return (cxInt)json_integer_value(v);
 }
+
+
+
+
+
+
+
+
+
+
 
