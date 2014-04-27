@@ -29,8 +29,6 @@
 		83E70567190913C70056EBCC /* rbDefine.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E70565190913C70056EBCC /* rbDefine.c */; };
 		83E858B9190B783000B6A35D /* font.json in Resources */ = {isa = PBXBuildFile; fileRef = 83E858B7190B783000B6A35D /* font.json */; };
 		83E858BA190B783000B6A35D /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 83E858B8190B783000B6A35D /* font.png */; };
-		83E8DD1C190CC50F00398C05 /* bananasp.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83E8DD1B190CC50F00398C05 /* bananasp.ttf */; };
-		83E8DD1F190CDA5400398C05 /* Arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 83E8DD1E190CDA5400398C05 /* Arial.ttf */; };
 		83E925421909361A00D24201 /* texture.json in Resources */ = {isa = PBXBuildFile; fileRef = 83E925401909361A00D24201 /* texture.json */; };
 		83E925431909361A00D24201 /* texture.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 83E925411909361A00D24201 /* texture.pvr */; };
 /* End PBXBuildFile section */
@@ -71,8 +69,6 @@
 		83E70566190913C70056EBCC /* rbDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rbDefine.h; sourceTree = SOURCE_ROOT; };
 		83E858B7190B783000B6A35D /* font.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = font.json; path = res/font.json; sourceTree = SOURCE_ROOT; };
 		83E858B8190B783000B6A35D /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = res/font.png; sourceTree = SOURCE_ROOT; };
-		83E8DD1B190CC50F00398C05 /* bananasp.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = bananasp.ttf; path = res/bananasp.ttf; sourceTree = SOURCE_ROOT; };
-		83E8DD1E190CDA5400398C05 /* Arial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Arial.ttf; path = res/Arial.ttf; sourceTree = SOURCE_ROOT; };
 		83E925401909361A00D24201 /* texture.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = texture.json; path = res/texture.json; sourceTree = SOURCE_ROOT; };
 		83E925411909361A00D24201 /* texture.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = texture.pvr; path = res/texture.pvr; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
@@ -161,8 +157,6 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				83E8DD1E190CDA5400398C05 /* Arial.ttf */,
-				83E8DD1B190CC50F00398C05 /* bananasp.ttf */,
 				83E858B7190B783000B6A35D /* font.json */,
 				83E858B8190B783000B6A35D /* font.png */,
 				83E925401909361A00D24201 /* texture.json */,
@@ -247,9 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83E8DD1C190CC50F00398C05 /* bananasp.ttf in Resources */,
 				83E858B9190B783000B6A35D /* font.json in Resources */,
-				83E8DD1F190CDA5400398C05 /* Arial.ttf in Resources */,
 				83E858BA190B783000B6A35D /* font.png in Resources */,
 				83E925431909361A00D24201 /* texture.pvr in Resources */,
 				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
