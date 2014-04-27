@@ -30,7 +30,7 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
     cxUInt16 *sptr = NULL;
     cxSize2f viewSize = cxViewSize(this);
     viewSize.h = this->font->lineHeight;
-    for(i=0,sptr = codeptr; i < txtLength; i++,sptr++,prev = *sptr){
+    for(i=0,sptr = codeptr; i < txtLength; i++,prev = *sptr,sptr++){
         cxBMPElement pchar = cxBMPFontChar(this->font, *sptr);
         if(pchar == NULL){
             continue;
@@ -49,19 +49,18 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
     
     prev = 0;
     nextpos = cxVec2fv(0, 0);
-    for(i=0,sptr = codeptr; i < txtLength; i++,sptr++,prev = *sptr){
+    for(i=0,sptr = codeptr; i < txtLength; i++,prev = *sptr,sptr++){
         cxBMPElement pchar = cxBMPFontChar(this->font, *sptr);
         if(pchar == NULL){
             continue;
         }
         cxFloat kerning = cxBMPKerningAmount(this->font, prev, *sptr);
-        cxFloat yoffset = this->font->lineHeight - pchar->yoffset;
         cxSize2f size = cxSize2fv(pchar->box.w, pchar->box.h);
         cxBoxTex2f tex = cxRect4fToBoxTex2f(pchar->box, this->font->scale);
         cxColor4f color = cxViewColor(this);
         cxVec2f pos = cxVec2fv(0,0);
         pos.x = nextpos.x + pchar->xoffset + kerning + size.w/2.0f - viewSize.w/2.0f;
-        pos.y = nextpos.y + yoffset - size.h/2.0f - viewSize.h/2.0f;
+        pos.y = nextpos.y + this->font->lineHeight - pchar->yoffset - size.h/2.0f - viewSize.h/2.0f;
         cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, size, tex, color);
         cxAtlasAppend(this, bp);
         nextpos.x += (pchar->xadvance + kerning);

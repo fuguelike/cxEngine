@@ -28,7 +28,6 @@
 		8341C62118227DF20045A66F /* cxConfig.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C55A18227DF20045A66F /* cxConfig.c */; };
 		8341C62318227DF20045A66F /* cxEngine.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C55E18227DF20045A66F /* cxEngine.c */; };
 		8341C62418227DF20045A66F /* cxEventArg.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C56018227DF20045A66F /* cxEventArg.c */; };
-		8341C62618227DF20045A66F /* cxFreeType.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C56418227DF20045A66F /* cxFreeType.c */; };
 		8341C62718227DF20045A66F /* cxHash.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C56618227DF20045A66F /* cxHash.c */; };
 		8341C62918227DF20045A66F /* cxIconv.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C56A18227DF20045A66F /* cxIconv.c */; };
 		8341C62A18227DF20045A66F /* cxList.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C56D18227DF20045A66F /* cxList.c */; };
@@ -185,8 +184,6 @@
 		8341C55F18227DF20045A66F /* cxEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEngine.h; sourceTree = "<group>"; };
 		8341C56018227DF20045A66F /* cxEventArg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxEventArg.c; sourceTree = "<group>"; };
 		8341C56118227DF20045A66F /* cxEventArg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEventArg.h; sourceTree = "<group>"; };
-		8341C56418227DF20045A66F /* cxFreeType.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxFreeType.c; sourceTree = "<group>"; };
-		8341C56518227DF20045A66F /* cxFreeType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxFreeType.h; sourceTree = "<group>"; };
 		8341C56618227DF20045A66F /* cxHash.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxHash.c; sourceTree = "<group>"; };
 		8341C56718227DF20045A66F /* cxHash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxHash.h; sourceTree = "<group>"; };
 		8341C56A18227DF20045A66F /* cxIconv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxIconv.c; sourceTree = "<group>"; };
@@ -495,8 +492,6 @@
 				8341C55F18227DF20045A66F /* cxEngine.h */,
 				8341C56018227DF20045A66F /* cxEventArg.c */,
 				8341C56118227DF20045A66F /* cxEventArg.h */,
-				8341C56418227DF20045A66F /* cxFreeType.c */,
-				8341C56518227DF20045A66F /* cxFreeType.h */,
 				8341C56618227DF20045A66F /* cxHash.c */,
 				8341C56718227DF20045A66F /* cxHash.h */,
 				8341C56A18227DF20045A66F /* cxIconv.c */,
@@ -826,7 +821,6 @@
 				83B08D0D1909FCB5005A63D2 /* pack_unpack.c in Sources */,
 				8341C63018227DF20045A66F /* cxStack.c in Sources */,
 				8341C66518227DF30045A66F /* cxButton.c in Sources */,
-				8341C62618227DF20045A66F /* cxFreeType.c in Sources */,
 				83B08D0A1909FCB5005A63D2 /* hashtable_seed.c in Sources */,
 				835870F1183DEB02007B175E /* cxListen.c in Sources */,
 				83B08D0B1909FCB5005A63D2 /* load.c in Sources */,

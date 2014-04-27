@@ -14,7 +14,6 @@
 #include "cxAutoPool.h"
 #include "cxOpenGL.h"
 #include "cxUtil.h"
-#include "cxFreeType.h"
 
 static cxEngine instance = NULL;
 static cxBool isExit = false;
@@ -176,7 +175,6 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     cxCurveDestroy();
     cxOpenGLDestroy();
     cxIconvDestroy();
-    cxFreeTypeDestroy();
     cxPlayerDestroy();
     cxMessageDestroy();
     kmGLFreeAll();

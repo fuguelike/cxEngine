@@ -73,7 +73,7 @@ LOCAL_SRC_FILES += \
     views/cxWindow.c \
     views/cxScroll.c \
     views/cxLoading.c \
-    views/cxLabelFNT.c \
+    views/cxLabelBMP.c \
     views/cxAtlasSet.c \
     views/cxPolygon.c
 
@@ -103,7 +103,6 @@ LOCAL_SRC_FILES += \
     core/cxRegex.c \
     core/cxMessage.c \
     core/cxStack.c \
-    core/cxFreeType.c \
     core/cxString.c \
     core/cxTypes.c \
     core/cxUrlPath.c \

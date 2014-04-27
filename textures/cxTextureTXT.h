@@ -19,7 +19,6 @@ CX_OBJECT_DEF(cxTextureTXT, cxTexture)
     cxString fontfile;
     cxString string;
     cxTextAttr attr;
-    cxBool useSystemCreate;
 CX_OBJECT_END(cxTextureTXT)
 
 void cxTextureTXTMakeTexture(cxTextureTXT texture,cxPointer buffer,cxInt width,cxInt height);
