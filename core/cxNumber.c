@@ -25,64 +25,10 @@ CX_OBJECT_FREE(cxNumber, cxObject)
 }
 CX_OBJECT_TERM(cxNumber, cxObject)
 
-cxPoint cxNumberToPoint(cxNumber this)
-{
-    CX_ASSERT(this->type == cxNumberTypePoint, "type error");
-    return this->value.vp;
-}
-
 cxBool cxNumberToBool(cxNumber this)
 {
     CX_ASSERT(this->type == cxNumberTypeBool, "type error");
     return this->value.bv;
-}
-
-cxBox4i cxNumberToBox4i(cxNumber this)
-{
-    CX_ASSERT(this->type == cxNumberTypeBox4i, "type error");
-    return this->value.box4i;
-}
-
-cxVec3f cxNumberToVec3f(cxNumber this)
-{
-    CX_ASSERT(this->type == cxNumberTypeVec3f, "type error");
-    return this->value.vec3f;
-}
-
-cxColor4fRange cxNumberToColor4fRange(cxNumber this)
-{
-    CX_ASSERT(this->type == cxNumberTypeColor4fRange, "type error");
-    return this->value.vcr;
-}
-
-cxVec2fRange cxNumberToVec2fRange(cxNumber this)
-{
-    CX_ASSERT(this->type == cxNumberTypeVec2fRange, "type error");
-    return this->value.vvr;
-}
-
-cxFloatRange cxNumberToFloatRange(cxNumber this)
-{
-    CX_ASSERT(this->type == cxNumberTypeFloatRange, "type error");
-    return this->value.vfr;
-}
-
-cxBox4f cxNumberToBox4f(cxNumber this)
-{
-    CX_ASSERT(this->type == cxNumberTypeBox4f, "type error");
-    return this->value.box4f;
-}
-
-cxAssist4f cxNumberToAssist4f(cxNumber this)
-{
-    CX_ASSERT(this->type == cxNumberTypeAssist4f, "type error");
-    return this->value.assist4f;
-}
-
-cxColor4f cxNumberToColor4f(cxNumber this)
-{
-    CX_ASSERT(this->type == cxNumberTypeColor4f, "type error");
-    return this->value.color4f;
 }
 
 cxVec2i cxNumberToVec2i(cxNumber this)
@@ -175,75 +121,11 @@ cxDouble cxNumberToDouble(cxNumber this)
     return this->value.vd;
 }
 
-cxNumber cxNumberPoint(cxPoint v)
-{
-    cxNumber rv = CX_CREATE(cxNumber);
-    rv->type = cxNumberTypePoint;
-    rv->value.vp = v;
-    return rv;
-}
-
 cxNumber cxNumberBool(cxBool v)
 {
     cxNumber rv = CX_CREATE(cxNumber);
     rv->type = cxNumberTypeBool;
     rv->value.bv = v;
-    return rv;
-}
-
-cxNumber cxNumberBox4i(cxBox4i v)
-{
-    cxNumber rv = CX_CREATE(cxNumber);
-    rv->type = cxNumberTypeBox4i;
-    rv->value.box4i = v;
-    return rv;
-}
-
-cxNumber cxNumberVec3f(cxVec3f v)
-{
-    cxNumber rv = CX_CREATE(cxNumber);
-    rv->type = cxNumberTypeVec3f;
-    rv->value.vec3f = v;
-    return rv;
-}
-
-cxNumber cxNumberVec2fRange(cxVec2fRange v)
-{
-    cxNumber rv = CX_CREATE(cxNumber);
-    rv->type = cxNumberTypeVec2fRange;
-    rv->value.vvr = v;
-    return rv;
-}
-
-cxNumber cxNumberColor4fRange(cxColor4fRange v)
-{
-    cxNumber rv = CX_CREATE(cxNumber);
-    rv->type = cxNumberTypeColor4fRange;
-    rv->value.vcr = v;
-    return rv;
-}
-
-cxNumber cxNumberFloatRange(cxFloatRange v)
-{
-    cxNumber rv = CX_CREATE(cxNumber);
-    rv->type = cxNumberTypeFloatRange;
-    rv->value.vfr = v;
-    return rv;
-}
-
-cxNumber cxNumberBox4f(cxBox4f v)
-{
-    cxNumber rv = CX_CREATE(cxNumber);
-    rv->type = cxNumberTypeBox4f;
-    rv->value.box4f = v;
-    return rv;
-}
-
-cxNumber cxNumberAssist4f(cxAssist4f v)
-{
-    cxNumber rv = CX_CREATE(cxNumber);
-    rv->type = cxNumberTypeAssist4f;
-    rv->value.assist4f = v;
     return rv;
 }
 
@@ -268,14 +150,6 @@ cxNumber cxNumberSize2f(cxSize2f v)
     cxNumber rv = CX_CREATE(cxNumber);
     rv->type = cxNumberTypeSize2f;
     rv->value.size2f = v;
-    return rv;
-}
-
-cxNumber cxNumberColor4f(cxColor4f v)
-{
-    cxNumber rv = CX_CREATE(cxNumber);
-    rv->type = cxNumberTypeColor4f;
-    rv->value.color4f = v;
     return rv;
 }
 

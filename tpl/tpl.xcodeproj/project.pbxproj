@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6018D9C5D00093FF54 /* libevent.a */; };
-		83314F6A18D9C5D00093FF54 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6118D9C5D00093FF54 /* libfreetype.a */; };
 		83314F6C18D9C5D00093FF54 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6318D9C5D00093FF54 /* libjansson.a */; };
 		83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6418D9C5D00093FF54 /* libjpeg.a */; };
 		83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6618D9C5D00093FF54 /* libpcre.a */; };
@@ -41,7 +40,6 @@
 /* Begin PBXFileReference section */
 		8300651F18232BE000AF680D /* tpl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tpl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
-		83314F6118D9C5D00093FF54 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../libs/ios/lib/libfreetype.a; sourceTree = "<group>"; };
 		83314F6318D9C5D00093FF54 /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = ../libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
 		83314F6418D9C5D00093FF54 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../libs/ios/lib/libjpeg.a; sourceTree = "<group>"; };
 		83314F6618D9C5D00093FF54 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = ../libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
@@ -68,7 +66,6 @@
 			files = (
 				83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */,
 				83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */,
-				83314F6A18D9C5D00093FF54 /* libfreetype.a in Frameworks */,
 				83314F6C18D9C5D00093FF54 /* libjansson.a in Frameworks */,
 				83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */,
 				83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */,
@@ -112,7 +109,6 @@
 			isa = PBXGroup;
 			children = (
 				83314F6018D9C5D00093FF54 /* libevent.a */,
-				83314F6118D9C5D00093FF54 /* libfreetype.a */,
 				83314F6318D9C5D00093FF54 /* libjansson.a */,
 				83314F6418D9C5D00093FF54 /* libjpeg.a */,
 				83314F6618D9C5D00093FF54 /* libpcre.a */,

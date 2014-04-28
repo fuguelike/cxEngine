@@ -31,15 +31,6 @@ typedef enum {
     cxNumberTypeVec2f,
     cxNumberTypeVec2i,
     cxNumberTypeSize2f,
-    cxNumberTypeColor4f,
-    cxNumberTypeAssist4f,
-    cxNumberTypeBox4f,
-    cxNumberTypeBox4i,
-    cxNumberTypeFloatRange,
-    cxNumberTypeVec2fRange,
-    cxNumberTypeColor4fRange,
-    cxNumberTypeVec3f,
-    cxNumberTypePoint
 }cxNumberType;
 
 typedef union {
@@ -57,17 +48,8 @@ typedef union {
     cxFloat vf;
     cxDouble vd;
     cxVec2f vec2f;
-    cxVec3f vec3f;
     cxVec2i vec2i;
     cxSize2f size2f;
-    cxColor4f color4f;
-    cxAssist4f assist4f;
-    cxBox4f box4f;
-    cxBox4i box4i;
-    cxFloatRange vfr;
-    cxVec2fRange vvr;
-    cxColor4fRange vcr;
-    cxPoint vp;
 }cxNumberValue;
 
 CX_OBJECT_DEF(cxNumber, cxObject)
@@ -77,25 +59,7 @@ CX_OBJECT_END(cxNumber)
 
 cxBool cxNumberIsType(cxAny this,cxNumberType type);
 
-cxPoint cxNumberToPoint(cxNumber this);
-
 cxBool cxNumberToBool(cxNumber this);
-
-cxBox4i cxNumberToBox4i(cxNumber this);
-
-cxVec3f cxNumberToVec3f(cxNumber this);
-
-cxColor4fRange cxNumberToColor4fRange(cxNumber this);
-
-cxVec2fRange cxNumberToVec2fRange(cxNumber this);
-
-cxFloatRange cxNumberToFloatRange(cxNumber this);
-
-cxBox4f cxNumberToBox4f(cxNumber this);
-
-cxAssist4f cxNumberToAssist4f(cxNumber this);
-
-cxColor4f cxNumberToColor4f(cxNumber this);
 
 cxVec2i cxNumberToVec2i(cxNumber this);
 
@@ -127,31 +91,13 @@ cxFloat cxNumberToFloat(cxNumber this);
 
 cxDouble cxNumberToDouble(cxNumber this);
 
-cxNumber cxNumberPoint(cxPoint v);
-
 cxNumber cxNumberBool(cxBool v);
-
-cxNumber cxNumberBox4i(cxBox4i v);
-
-cxNumber cxNumberVec3f(cxVec3f v);
-
-cxNumber cxNumberVec2fRange(cxVec2fRange v);
-
-cxNumber cxNumberColor4fRange(cxColor4fRange v);
-
-cxNumber cxNumberFloatRange(cxFloatRange v);
-
-cxNumber cxNumberBox4f(cxBox4f v);
-
-cxNumber cxNumberAssist4f(cxAssist4f v);
 
 cxNumber cxNumberVec2i(cxVec2i v);
 
 cxNumber cxNumberVec2f(cxVec2f v);
 
 cxNumber cxNumberSize2f(cxSize2f v);
-
-cxNumber cxNumberColor4f(cxColor4f v);
 
 cxNumber cxNumberInt(cxInt v);
 

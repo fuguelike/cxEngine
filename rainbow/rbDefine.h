@@ -14,6 +14,7 @@
 CX_C_BEGIN
 
 #define RB_COL 9
+
 #define RB_ROW 9
 
 CX_C_END
