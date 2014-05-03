@@ -116,7 +116,6 @@
 		83DF79791859B665007F47C3 /* cxSpline.c in Sources */ = {isa = PBXBuildFile; fileRef = 83DF79771859B665007F47C3 /* cxSpline.c */; };
 		83E239E6187E9AFF0063A0B1 /* cxParabola.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E239E4187E9AFF0063A0B1 /* cxParabola.c */; };
 		83E51BD41856F759006AD253 /* cxUrlPath.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E51BD21856F759006AD253 /* cxUrlPath.c */; };
-		83EB0B721869B8C900142636 /* cxAssetsLuaImp.c in Sources */ = {isa = PBXBuildFile; fileRef = 83EB0B711869B8C900142636 /* cxAssetsLuaImp.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -361,7 +360,6 @@
 		83E239E5187E9AFF0063A0B1 /* cxParabola.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxParabola.h; sourceTree = "<group>"; };
 		83E51BD21856F759006AD253 /* cxUrlPath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxUrlPath.c; sourceTree = "<group>"; };
 		83E51BD31856F759006AD253 /* cxUrlPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxUrlPath.h; sourceTree = "<group>"; };
-		83EB0B711869B8C900142636 /* cxAssetsLuaImp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAssetsLuaImp.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -387,12 +385,12 @@
 		8341C34218227C310045A66F = {
 			isa = PBXGroup;
 			children = (
-				83B08CF21909FCB4005A63D2 /* jansson */,
-				832FDA0A18938B1E00A9D46B /* algorithm */,
 				8341C50118227DF20045A66F /* actions */,
+				832FDA0A18938B1E00A9D46B /* algorithm */,
 				8341C54D18227DF20045A66F /* core */,
 				8341C34D18227C310045A66F /* Frameworks */,
 				8341C67818227FA10045A66F /* ios */,
+				83B08CF21909FCB4005A63D2 /* jansson */,
 				8341C5A418227DF20045A66F /* kazmath */,
 				8341C34C18227C310045A66F /* Products */,
 				8341C5C018227DF20045A66F /* shaders */,
@@ -616,7 +614,6 @@
 				8341C5D418227DF20045A66F /* cxMemStream.h */,
 				833E2B9C185F257E004093EF /* cxFileStream.c */,
 				833E2B9D185F257E004093EF /* cxFileStream.h */,
-				83EB0B711869B8C900142636 /* cxAssetsLuaImp.c */,
 			);
 			path = streams;
 			sourceTree = "<group>";
@@ -830,7 +827,6 @@
 				8341C5F918227DF20045A66F /* cxMove.c in Sources */,
 				8341C62918227DF20045A66F /* cxIconv.c in Sources */,
 				8341C64B18227DF30045A66F /* matrix.c in Sources */,
-				83EB0B721869B8C900142636 /* cxAssetsLuaImp.c in Sources */,
 				8341C65B18227DF30045A66F /* cxAssetsStream.c in Sources */,
 				8341C65E18227DF30045A66F /* cxTextureFactory.c in Sources */,
 				83A5C967183A174500781096 /* cxLoading.c in Sources */,

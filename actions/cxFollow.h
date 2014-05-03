@@ -14,7 +14,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxFollow, cxAction)
-    cxAny target;   //follow target, cxNumber or cxView
+    cxAny target;   //follow target, cxNumber(cxVec2f) or cxView
     cxFloat angle;  //current angle
     cxFloat speed;  //current speed
     cxFloat init;   //init speed
