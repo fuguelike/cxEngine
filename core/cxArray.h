@@ -30,11 +30,11 @@ while((_a_) != NULL && (_e_ = (cxPointer)utarray_next((_a_)->utArray, _e_)) != N
 cxPointer *_e_ = NULL;                                                                      \
 while((_a_) != NULL && (_e_ = (cxPointer)utarray_prev((_a_)->utArray, _e_)) != NULL)
 
-#define cxArrayLength(_a_) (((_a_) == NULL) ? 0 : utarray_len((_a_)->utArray))
+#define cxArrayLength(_a_)      (((_a_) == NULL) ? 0 : utarray_len((_a_)->utArray))
 
-#define cxArraySort(_a_,_cmp_) if((_a_) != NULL){utarray_sort((_a_)->utArray, _cmp_);}
+#define cxArraySort(_a_,_cmp_)  if((_a_) != NULL){utarray_sort((_a_)->utArray, _cmp_);}
 
-#define cxArrayObject(_e_)   (*_e_)
+#define cxArrayObject(_e_)      (*(_e_))
 
 void    cxArrayClean(cxArray array);
 
@@ -47,6 +47,10 @@ void    cxArrayAppend(cxArray array, cxAny any);
 cxIndex cxArrayIndex(cxArray array,cxAny any);
 
 void    cxArrayRemove(cxArray array,cxAny any);
+
+void    cxArrayFastRemove(cxArray array,cxAny any);
+
+void    cxArrayFastRemoveAtIndex(cxArray array,cxIndex index);
 
 void    cxArrayRemoveAtIndex(cxArray array,cxIndex index);
 

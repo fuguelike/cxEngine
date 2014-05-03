@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+
 #include "cxArray.h"
-#include "cxTypes.h"
 
 CX_OBJECT_INIT(cxArray, cxObject)
 {
@@ -27,6 +27,18 @@ void cxArrayClean(cxArray array)
         CX_RELEASE(any);
     }
     utarray_clear(array->utArray);
+}
+
+void cxArrayFastRemoveAtIndex(cxArray array,cxIndex index)
+{
+    CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
+    cxAny srcObject = cxArrayAtIndex(array, index);
+    CX_RELEASE(srcObject);
+    cxInt last = cxArrayLength(array) - 1;
+    void *dst = array->utArray->d + array->utArray->icd.sz * index;
+    void *src = array->utArray->d + array->utArray->icd.sz * last;
+    memcpy(dst, src, array->utArray->icd.sz);
+    array->utArray->i--;
 }
 
 void cxArrayUpdate(cxArray array,cxAny nAny,cxIndex index)
@@ -72,10 +84,18 @@ cxIndex cxArrayObjectIndex(cxArray array,cxAny any)
 
 void cxArrayRemove(cxArray array,cxAny any)
 {
-    int index = cxArrayObjectIndex(array, any);
+    cxInt index = cxArrayObjectIndex(array, any);
     if(index != CX_INVALID_INDEX) {
         utarray_erase(array->utArray, index, 1);
         CX_RELEASE(any);
+    }
+}
+
+void cxArrayFastRemove(cxArray array,cxAny any)
+{
+    cxInt index = cxArrayObjectIndex(array, any);
+    if(index != CX_INVALID_INDEX) {
+        cxArrayFastRemoveAtIndex(array, index);
     }
 }
 
