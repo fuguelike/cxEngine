@@ -40,7 +40,6 @@
 		8341C63118227DF20045A66F /* cxStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C57B18227DF20045A66F /* cxStream.c */; };
 		8341C63218227DF20045A66F /* cxString.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C57D18227DF20045A66F /* cxString.c */; };
 		8341C63318227DF20045A66F /* cxTexture.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C57F18227DF20045A66F /* cxTexture.c */; };
-		8341C63418227DF20045A66F /* cxTypes.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C58118227DF20045A66F /* cxTypes.c */; };
 		8341C63518227DF20045A66F /* cxUtil.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C58318227DF20045A66F /* cxUtil.c */; };
 		8341C63618227DF20045A66F /* cxView.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C58518227DF20045A66F /* cxView.c */; };
 		8341C64718227DF30045A66F /* aabb.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5A518227DF20045A66F /* aabb.c */; };
@@ -208,8 +207,6 @@
 		8341C57E18227DF20045A66F /* cxString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxString.h; sourceTree = "<group>"; };
 		8341C57F18227DF20045A66F /* cxTexture.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTexture.c; sourceTree = "<group>"; };
 		8341C58018227DF20045A66F /* cxTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTexture.h; sourceTree = "<group>"; };
-		8341C58118227DF20045A66F /* cxTypes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTypes.c; sourceTree = "<group>"; };
-		8341C58218227DF20045A66F /* cxTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTypes.h; sourceTree = "<group>"; };
 		8341C58318227DF20045A66F /* cxUtil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxUtil.c; sourceTree = "<group>"; };
 		8341C58418227DF20045A66F /* cxUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxUtil.h; sourceTree = "<group>"; };
 		8341C58518227DF20045A66F /* cxView.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxView.c; sourceTree = "<group>"; };
@@ -525,8 +522,6 @@
 				8341C57E18227DF20045A66F /* cxString.h */,
 				8341C57F18227DF20045A66F /* cxTexture.c */,
 				8341C58018227DF20045A66F /* cxTexture.h */,
-				8341C58118227DF20045A66F /* cxTypes.c */,
-				8341C58218227DF20045A66F /* cxTypes.h */,
 				83E51BD21856F759006AD253 /* cxUrlPath.c */,
 				83E51BD31856F759006AD253 /* cxUrlPath.h */,
 				8341C58318227DF20045A66F /* cxUtil.c */,
@@ -784,7 +779,6 @@
 				83DF79791859B665007F47C3 /* cxSpline.c in Sources */,
 				8330F7C91828E77D00E7E5B1 /* cxScroll.c in Sources */,
 				8341C62F18227DF20045A66F /* cxShader.c in Sources */,
-				8341C63418227DF20045A66F /* cxTypes.c in Sources */,
 				8341C64918227DF30045A66F /* mat4.c in Sources */,
 				8341C68018227FA10045A66F /* cxAppDelegate.m in Sources */,
 				836BFD1E186D16110098B11E /* cxObject.c in Sources */,

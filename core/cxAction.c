@@ -13,12 +13,12 @@ cxBool cxActionForever(cxAny pav)
     return false;
 }
 
-void cxActionSetSplit(cxAny pav,cxInt split)
+void cxActionSetIndex(cxAny pav,cxInt indexNum)
 {
     cxAction this = pav;
-    CX_RETURN(this->split == split);
-    this->split = split;
-    this->splitDelta = 1.0f / (cxFloat)(split - 1);
+    CX_RETURN(this->indexNum == indexNum);
+    this->indexNum = indexNum;
+    this->indexDelta = 1.0f / (cxFloat)(indexNum - 1);
 }
 
 cxAny cxActionView(cxAny pav)
@@ -39,11 +39,11 @@ CX_OBJECT_INIT(cxAction, cxObject)
     this->isExit = false;
     this->speed = 1.0f;
     this->index = -1;
-    this->split = -1;
+    this->indexNum = -1;
 }
 CX_OBJECT_FREE(cxAction, cxObject)
 {
-    CX_EVENT_RELEASE(this->onSplit);
+    CX_EVENT_RELEASE(this->onIndex);
     CX_EVENT_RELEASE(this->onStart);
     CX_EVENT_RELEASE(this->onStop);
     CX_EVENT_RELEASE(this->onStep);
@@ -132,13 +132,13 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //split index event fire
     cxInt index = -1;
     if(time >= 1.0f){
-        index = this->split - 1;
-    }else if(this->splitDelta > 0){
-        index = time / this->splitDelta;
+        index = this->indexNum - 1;
+    }else if(this->indexDelta > 0){
+        index = time / this->indexDelta;
     }
     if(this->index != index && index >= 0){
         this->index = index;
-        CX_EVENT_FIRE(this,onSplit);
+        CX_EVENT_FIRE(this,onIndex);
     }
     //wait exit
     if(this->duration < 0){
@@ -186,10 +186,10 @@ void cxActionReset(cxAny pav)
     this->isFirst = false;
     this->isExit = false;
     this->index = -1;
-    this->split = -1;
+    this->indexNum = -1;
     this->durationElapsed = 0;
     this->delayElapsed = 0;
-    CX_EVENT_RELEASE(this->onSplit);
+    CX_EVENT_RELEASE(this->onIndex);
     CX_EVENT_RELEASE(this->onStart);
     CX_EVENT_RELEASE(this->onStop);
     CX_EVENT_RELEASE(this->onStep);

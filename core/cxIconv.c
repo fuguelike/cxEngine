@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxTypes.h"
 #include "cxIconv.h"
 
 static cxIconv instance = NULL;

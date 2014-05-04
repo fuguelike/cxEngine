@@ -9,7 +9,6 @@
 #include "cxString.h"
 #include "cxNumber.h"
 #include "cxHash.h"
-#include "cxTypes.h"
 
 CX_OBJECT_INIT(cxHash, cxObject)
 {

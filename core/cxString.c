@@ -10,7 +10,6 @@
 #include "cxEngine.h"
 #include "cxMD5.h"
 #include "cxString.h"
-#include "cxTypes.h"
 #include "cxUtil.h"
 
 CX_OBJECT_INIT(cxString, cxObject)

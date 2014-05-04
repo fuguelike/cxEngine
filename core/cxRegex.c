@@ -34,7 +34,7 @@ cxString cxRegexReplace(cxRegex this,cxRegexReplaceFunc replaceFunc,cxAny arg)
             cxStringAppend(ret, ptr + start, pos.start - start);
         }
         cxString replace = replaceFunc(this,arg);
-        if(replace != NULL && cxStringLength(replace) > 0){
+        if(cxStringOK(replace)){
             cxStringConcat(ret, replace);
         }
         start = pos.end;

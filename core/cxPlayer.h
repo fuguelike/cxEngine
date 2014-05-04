@@ -14,6 +14,11 @@
 #include "cxString.h"
 #include "cxHash.h"
 
+#if (CX_TARGET_PLATFORM == CX_PLATFORM_IOS)
+#include <OpenAL/al.h>
+#include <OpenAL/alc.h>
+#endif
+
 CX_C_BEGIN
 
 typedef enum {
@@ -24,14 +29,12 @@ typedef enum {
 
 CX_OBJECT_DEF(cxPlayer, cxObject)
 #if (CX_TARGET_PLATFORM == CX_PLATFORM_IOS)
-#include <OpenAL/al.h>
-#include <OpenAL/alc.h>
     cxArray tracks;
     cxHash caches;
     ALCdevice *device;
     ALCcontext *context;
     CX_SLOT_ALLOC(onMemory);
-#else
+#elif CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID
     cxHash tracks;
 #endif
 CX_OBJECT_END(cxPlayer)

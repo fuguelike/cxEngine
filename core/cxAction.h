@@ -32,9 +32,9 @@ CX_OBJECT_DEF(cxAction, cxObject)
     cxBool isFirst;
     cxBool isActive;
     cxView view;
-    cxInt split;
+    cxInt indexNum;
     cxInt index;
-    cxFloat splitDelta;
+    cxFloat indexDelta;
     CX_METHOD_ALLOC(cxFloat, Curve, cxAny, cxFloat);
     CX_METHOD_ALLOC(void, Init, cxAny);
     CX_METHOD_ALLOC(void, Active, cxAny);
@@ -44,7 +44,7 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_METHOD_ALLOC(cxBool, Exit, cxAny);
     CX_EVENT_ALLOC(onStart);
     CX_EVENT_ALLOC(onStop);
-    CX_EVENT_ALLOC(onSplit);
+    CX_EVENT_ALLOC(onIndex);
     CX_EVENT_ALLOC(onStep);
 CX_OBJECT_END(cxAction)
 
@@ -54,7 +54,7 @@ cxAny cxActionView(cxAny pav);
 
 void cxActionSetView(cxAny pav,cxAny pview);
 
-void cxActionSetSplit(cxAny pav,cxInt split);
+void cxActionSetIndex(cxAny pav,cxInt indexNum);
 
 cxBool cxActionForever(cxAny pav);
 

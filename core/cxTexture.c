@@ -8,7 +8,6 @@
 
 #include <textures/cxTextureFactory.h>
 #include "cxShader.h"
-#include "cxTypes.h"
 #include "cxTexture.h"
 
 CX_OBJECT_INIT(cxTexCoord, cxObject)

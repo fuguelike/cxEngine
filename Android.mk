@@ -104,7 +104,6 @@ LOCAL_SRC_FILES += \
     core/cxMessage.c \
     core/cxStack.c \
     core/cxString.c \
-    core/cxTypes.c \
     core/cxUrlPath.c \
     core/cxOpenGL.c \
     core/cxShader.c \

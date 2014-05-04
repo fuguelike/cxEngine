@@ -10,7 +10,6 @@
 #include <streams/cxAssetsStream.h>
 #include <streams/cxMemStream.h>
 #include <streams/cxFileStream.h>
-#include "cxTypes.h"
 #include "cxStream.h"
 
 CX_OBJECT_INIT(cxStream, cxObject)

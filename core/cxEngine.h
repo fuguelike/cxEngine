@@ -11,7 +11,6 @@
 #include <actions/cxCurve.h>
 #include "cxBase.h"
 #include "cxStack.h"
-#include "cxTypes.h"
 #include "cxInput.h"
 #include "cxEventArg.h"
 #include "cxUtil.h"

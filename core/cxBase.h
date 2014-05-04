@@ -407,6 +407,7 @@ typedef struct {
     cxVec2f v;
     cxVec2f r;
 }cxVec2fRange;
+cxVec2f cxVec2fValue(cxVec2fRange rv);
 #define cxVec2fRangeValue(vx,vy,rx,ry)    (cxVec2fRange){{vx,vy},{rx,ry}}
 
 cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t);

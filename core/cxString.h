@@ -41,13 +41,15 @@ CX_OBJECT_END(cxString)
     .strptr.i=(_l_)                     \
 })
 
-#define cxStringValue(v,t)     cxStringData(&(t){v},sizeof(t))
+#define cxStringNumber(v,t)     cxStringData(&(t){v},sizeof(t))
 
 #define cxConstCharsEqu(s1,s2) ((s1) != NULL && (s2) != NULL && strcmp(s1,s2) == 0)
 
 #define cxConstCaseCharsEqu(s1,s2) ((s1) != NULL && (s2) != NULL && strcasecmp(s1,s2) == 0)
 
 #define cxConstCharsOK(s)       ((s) != NULL && strlen(s) > 0)
+
+#define cxStringOK(s)   ((s) != NULL && cxStringLength(s) > 0)
 
 cxBool cxConstCharsIsNumber(cxConstChars s);
 

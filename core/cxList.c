@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxTypes.h"
 #include "cxList.h"
 
 CX_OBJECT_INIT(cxList, cxObject)
