@@ -87,6 +87,14 @@ CX_OBJECT_FREE(cxLabelBMP, cxAtlas)
 }
 CX_OBJECT_TERM(cxLabelBMP, cxAtlas)
 
+cxLabelBMP cxLabelBMPCreate(cxString font,cxString txt)
+{
+    cxLabelBMP this = CX_CREATE(cxLabelBMP);
+    cxLabelBMPSetFont(this, font);
+    cxLabelBMPSetText(this, txt);
+    return this;
+}
+
 void cxLabelBMPSetFont(cxAny pview,cxString font)
 {
     cxLabelBMP this = pview;

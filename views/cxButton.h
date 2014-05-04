@@ -16,7 +16,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxButton, cxSprite)
     cxBool isEnable;
     cxBool isDown;
-    cxFloat movement;
+    cxFloat movement;           //when touch move > movement will fire onLeave,but don't fire onRelease
     CX_EVENT_ALLOC(onPress);
     CX_EVENT_ALLOC(onRelease);
     CX_EVENT_ALLOC(onEnter);

@@ -51,6 +51,10 @@ CX_OBJECT_END(cxString)
 
 #define cxStringOK(s)   ((s) != NULL && cxStringLength(s) > 0)
 
+#define CX_CONST_STRING(f,...) cxStringBody(cxStringCreate(f,##__VA_ARGS__))
+
+#define UTF8(f,...)  cxStringCreate(f,##__VA_ARGS__)
+
 cxBool cxConstCharsIsNumber(cxConstChars s);
 
 cxString cxStringAttach(cxChar *d,cxInt l);
@@ -79,11 +83,7 @@ void cxStringConcat(cxString string,cxString str);
 
 void cxStringFormat(cxString string,cxConstChars format,...);
 
-#define CX_CONST_STRING(f,...) cxStringBody(cxStringCreate(f,##__VA_ARGS__))
-
 cxString cxStringCreate(cxConstChars format,...);
-
-#define UTF8(f,...)  cxStringCreate(f,##__VA_ARGS__)
 
 void cxStringAppend(cxString string,cxConstChars d,cxInt l);
 

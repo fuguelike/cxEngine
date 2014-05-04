@@ -25,6 +25,8 @@
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
 		836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 836165D518F67BC400FFF173 /* Default-568h@2x.png */; };
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
+		839722AE19161746006D0F89 /* font.json in Resources */ = {isa = PBXBuildFile; fileRef = 839722AC19161746006D0F89 /* font.json */; };
+		839722AF19161746006D0F89 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 839722AD19161746006D0F89 /* font.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,8 @@
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		836165D518F67BC400FFF173 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
+		839722AC19161746006D0F89 /* font.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = font.json; path = res/font.json; sourceTree = SOURCE_ROOT; };
+		839722AD19161746006D0F89 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = res/font.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +143,8 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				839722AC19161746006D0F89 /* font.json */,
+				839722AD19161746006D0F89 /* font.png */,
 				836165D518F67BC400FFF173 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
@@ -219,7 +225,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				839722AE19161746006D0F89 /* font.json in Resources */,
 				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
+				839722AF19161746006D0F89 /* font.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,7 @@
 #include <core/cxEngine.h>
 #include <core/cxView.h>
 #include <actions/cxRotate.h>
+#include <views/cxLabelBMP.h>
 
 void cxEngineInit(cxEngine engine)
 {
@@ -16,9 +17,8 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxView v = CX_CREATE(cxView);
-    cxViewSetSize(v, cxSize2fv(200, 200));
-    cxWindowPushView(v);
+    cxLabelBMP b = cxLabelBMPCreate(UTF8("font.json"), UTF8("Hello Everybody"));
+    cxWindowPushView(b);
 }
 
 void cxEngineFree(cxEngine engine)

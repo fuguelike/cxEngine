@@ -34,8 +34,6 @@ cxBoxTex2f cxSpriteBoxTex(cxAny pview);
 
 cxSprite cxSpriteCreateWithURL(cxConstChars url);
 
-cxSprite cxSpriteCreateWithFile(cxConstChars file,cxConstChars key);
-
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor);
 
 void cxSpriteSetFlipX(cxAny pview,cxBool flipx);

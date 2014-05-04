@@ -123,15 +123,6 @@ cxSprite cxSpriteCreateWithURL(cxConstChars url)
     return this;
 }
 
-cxSprite cxSpriteCreateWithFile(cxConstChars file,cxConstChars key)
-{
-    cxSprite this = CX_CREATE(cxSprite);
-    cxTexture texture = cxTextureFactoryLoadFile(file);
-    cxSpriteSetTexture(this, texture);
-    cxSpriteSetTextureKey(this, key, true);
-    return this;
-}
-
 void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box)
 {
     cxSprite this = pview;
