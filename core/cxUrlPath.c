@@ -25,14 +25,15 @@ static cxUrlPath cxUrlPathParseKeyValueImp(cxUrlPath this)
     cxConstChars url = this->key;
     cxInt len = strlen(url);
     cxChar *sq = strrchr(url, '=');
-    if(sq != NULL){
-        cxInt kl = len - (cxInt)strlen(sq);
-        this->key[kl]='\0';
-        cxInt vl = strlen(sq + 1);
-        memcpy(this->value, sq + 1, vl);
-        this->value[vl]='\0';
-        this->count = 3;
+    if(sq == NULL){
+        return this;
     }
+    cxInt kl = len - (cxInt)strlen(sq);
+    this->key[kl]='\0';
+    cxInt vl = strlen(sq + 1);
+    memcpy(this->value, sq + 1, vl);
+    this->value[vl]='\0';
+    this->count = 3;
     return this;
 }
 

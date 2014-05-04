@@ -102,12 +102,12 @@ cxBool cxPolygonContainPoint(const cxPoints *polygon,const cxVec2f tp)
 
 cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t)
 {
-    return (powf(1-t,2) * a +2*t*(1-t)*b +powf(t,2)*c);
+    return (powf(1.0f-t,2.0f)*a+2.0f*t*(1.0f-t)*b+powf(t,2.0f)*c);
 }
 
 cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t)
 {
-    return (powf(1-t,3) * a +3*t*(powf(1-t,2))*b +3*powf(t,2)*(1-t)*c +powf(t,3)*d);
+    return (powf(1.0f-t,3.0f)*a+3.0f*t*(powf(1.0f-t,2.0f))*b+3.0f*powf(t,2.0f)*(1.0f-t)*c+powf(t,3.0f)*d);
 }
 
 

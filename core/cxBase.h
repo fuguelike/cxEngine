@@ -234,6 +234,10 @@ typedef kmVec3 cxVec3f;
 #define cxVec3fv(x,y,z)         (cxVec3f){x,y,z}
 #define cxVec3fEqu(p1,p2)       (cxFloatEqu((p1).x,(p2).x) && cxFloatEqu((p1).y,(p2).y) && cxFloatEqu((p1).z,(p2).z))
 
+static const cxVec3f cxVec3fX  = cxVec3fv(1.0f,0.0f,0.0f);
+static const cxVec3f cxVec3fY  = cxVec3fv(0.0f,1.0f,0.0f);
+static const cxVec3f cxVec3fZ  = cxVec3fv(0.0f,0.0f,1.0f);
+
 typedef struct {
     cxFloat v1;
     cxFloat v2;

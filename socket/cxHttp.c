@@ -86,10 +86,16 @@ static cxHttpConn cxHttpGetConnect(cxAny http)
     return cxEventBaseHttpConnect(host,port < 0 ? 80 : port);
 }
 
-cxString cxHttpGetData(cxAny http)
+cxString cxHttpBody(cxAny http)
 {
     cxHttp this = http;
     return this->data;
+}
+
+cxInt cxHttpLength(cxAny http)
+{
+    cxHttp this = http;
+    return (cxInt)this->bodyBytes;
 }
 
 static cxString cxHttpGetUri(cxAny http)
@@ -117,7 +123,7 @@ static cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked)
     return true;
 }
 
-cxHttp cxHttpPostRequest(cxConstChars url,cxString data,cxBool chunked)
+cxHttp cxHttpPost(cxConstChars url,cxString data,cxBool chunked)
 {
     cxHttp this = CX_CREATE(cxHttp);
     if(!cxHttpInit(this,url,chunked)){
@@ -144,7 +150,7 @@ cxHttp cxHttpPostRequest(cxConstChars url,cxString data,cxBool chunked)
     return this;
 }
 
-cxHttp cxHttpGetRequest(cxConstChars url,cxBool chunked)
+cxHttp cxHttpGet(cxConstChars url,cxBool chunked)
 {
     cxHttp this = CX_CREATE(cxHttp);
     if(!cxHttpInit(this,url,chunked)){
@@ -167,3 +173,4 @@ cxHttp cxHttpGetRequest(cxConstChars url,cxBool chunked)
     }
     return this;
 }
+

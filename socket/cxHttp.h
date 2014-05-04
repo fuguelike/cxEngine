@@ -33,11 +33,13 @@ cxString cxHttpUriEncode(cxString uri);
 
 cxString cxHttpUriDecode(cxString uri);
 
-cxString cxHttpGetData(cxAny http);
+cxInt cxHttpLength(cxAny http);
 
-cxHttp cxHttpGetRequest(cxConstChars url,cxBool chunked);
+cxString cxHttpBody(cxAny http);
 
-cxHttp cxHttpPostRequest(cxConstChars url,cxString data,cxBool chunked);
+cxHttp cxHttpGet(cxConstChars url,cxBool chunked);
+
+cxHttp cxHttpPost(cxConstChars url,cxString data,cxBool chunked);
 
 CX_C_END
 
