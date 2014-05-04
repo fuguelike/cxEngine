@@ -41,13 +41,16 @@ static cxBool cxTextureJSONLoad(cxAny this,cxStream stream)
     //for jpg pkm atlas texture
     texture->super.isAtlas = cxJsonBool(meta, "atlas", false);
     texture->super.size = texture->innerTexture->size;
+    //parse frames
     cxJson frames = cxJsonArray(json, "frames");
     CX_JSON_ARRAY_EACH_BEG(frames, item)
     {
         cxTexCoord e = CX_ALLOC(cxTexCoord);
         cxConstChars sn = cxJsonConstChars(item, "filename");
+        CX_ASSERT(sn != NULL, "filename node miss");
         e->isRotation = cxJsonBool(item, "rotated", false);
         cxJson frame = cxJsonObject(item, "frame");
+        CX_ASSERT(frame != NULL, "frame node miss");
         e->x = cxJsonDouble(frame, "x", 0);
         e->y = cxJsonDouble(frame, "y", 0);
         e->w = cxJsonDouble(frame, "w", 0);

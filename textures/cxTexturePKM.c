@@ -9,18 +9,18 @@
 #include "cxTexturePKM.h"
 
 typedef struct{
-	uint32_t pkmTag;
-    uint16_t version;
-    uint16_t type;
-    uint16_t extWidth;
-    uint16_t extHeight;
-    uint16_t orgWidth;
-    uint16_t orgHeight;
+	cxUInt32 pkmTag;
+    cxUInt16 version;
+    cxUInt16 type;
+    cxUInt16 extWidth;
+    cxUInt16 extHeight;
+    cxUInt16 orgWidth;
+    cxUInt16 orgHeight;
 } cxPKMHeader;
 
-#define CX_PKM_TAG  (*(uint32_t *)("PKM\x20"))
-#define CX_PKM_V1   (*(uint16_t *)("10"))
-#define CX_PKM_V2   (*(uint16_t *)("20"))
+#define CX_PKM_TAG  (*(cxUInt32 *)("PKM\x20"))
+#define CX_PKM_V1   (*(cxUInt16 *)("10"))
+#define CX_PKM_V2   (*(cxUInt16 *)("20"))
 
 static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
 {

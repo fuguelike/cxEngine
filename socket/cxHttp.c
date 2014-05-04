@@ -140,7 +140,7 @@ cxHttp cxHttpPost(cxConstChars url,cxString data,cxBool chunked)
         CX_ERROR("get uri error");
         return NULL;
     }
-    if(cxStringLength(data) > 0){
+    if(cxStringOK(data)){
         evbuffer_add(this->request->output_buffer, cxStringBody(data), cxStringLength(data));
     }
     if(evhttp_make_request(conn->conn, this->request, EVHTTP_REQ_POST, cxStringBody(suri)) != 0){

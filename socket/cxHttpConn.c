@@ -36,3 +36,4 @@ cxHttpConn cxHttpConnectOpen(cxConstChars host,cxInt port)
     }
     return this;
 }
+
