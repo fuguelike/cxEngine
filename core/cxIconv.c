@@ -82,7 +82,7 @@ CX_OBJECT_FREE(cxIconv, cxObject)
 }
 CX_OBJECT_TERM(cxIconv, cxObject)
 
-cxString cxIconvConvertUTF8ToUTF16(const cxString string)
+cxString cxIconvConvertUTF8ToUTF16LE(const cxString string)
 {
     return cxIconvConvert(string, "UTF-8", "UTF-16LE");
 }

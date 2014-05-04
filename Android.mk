@@ -74,7 +74,6 @@ LOCAL_SRC_FILES += \
     views/cxScroll.c \
     views/cxLoading.c \
     views/cxLabelBMP.c \
-    views/cxAtlasSet.c \
     views/cxPolygon.c
 
 LOCAL_SRC_FILES += \

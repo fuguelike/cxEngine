@@ -89,27 +89,12 @@
 #define CX_C_END
 #endif
 
-#define CX_EXTERN   extern
-
-#ifndef CX_MIN
-#define CX_MIN(x,y) (((x) > (y)) ? (y) : (x))
-#endif
-
-#ifndef CX_MAX
-#define CX_MAX(x,y) (((x) < (y)) ? (y) : (x))
-#endif
-
-#ifndef CX_SWAP
-#define CX_SWAP(v1, v2, type) {type _temp_=(v1);v1=v2;v2=_temp_;}
-#endif
-
-#ifndef CX_SWAP32
-#define CX_SWAP32(i)  ((i & 0x000000ff) << 24 | (i & 0x0000ff00) << 8 | (i & 0x00ff0000) >> 8 | (i & 0xff000000) >> 24)
-#endif
-
-#ifndef CX_SWAP16
-#define CX_SWAP16(i)  ((i & 0x00ff) << 8 | (i &0xff00) >> 8)
-#endif
+#define CX_EXTERN       extern
+#define CX_MIN(x,y)     (((x) > (y)) ? (y) : (x))
+#define CX_MAX(x,y)     (((x) < (y)) ? (y) : (x))
+#define CX_SWAP(v1,     v2, type) {type _temp_=(v1);v1=v2;v2=_temp_;}
+#define CX_SWAP32(i)    ((i & 0x000000ff) << 24 | (i & 0x0000ff00) << 8 | (i & 0x00ff0000) >> 8 | (i & 0xff000000) >> 24)
+#define CX_SWAP16(i)    ((i & 0x00ff) << 8 | (i & 0xff00) >> 8)
 
 #include <stdlib.h>
 #include <string.h>

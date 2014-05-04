@@ -42,15 +42,15 @@ static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
         CX_ERROR("read pkm header failed");
         goto completed;
     }
-    if(header.version != CX_PKM_V1){
-        CX_ERROR("PKM use V1 version");
-        goto completed;
-    }
     header.extWidth = CX_SWAP16(header.extWidth);
     header.extHeight = CX_SWAP16(header.extHeight);
     header.orgWidth = CX_SWAP16(header.orgWidth);
     header.orgHeight = CX_SWAP16(header.orgHeight);
     pkm->super.size = cxSize2fv(header.extWidth, header.extHeight);
+    if(header.version != CX_PKM_V1){
+        CX_ERROR("PKM use V1 version");
+        goto completed;
+    }
     cxOpenGLGenTextures(1, &pkm->super.textureId);
     cxOpenGLBindTexture(0, pkm->super.textureId);
     cxInt bufsiz = stream->length - sizeof(cxPKMHeader);

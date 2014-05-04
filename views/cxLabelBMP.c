@@ -13,23 +13,25 @@
 static void cxLabelBMPUpdateText(cxLabelBMP this)
 {
     CX_RETURN(!cxStringLength(this->txt));
-    
+    //support 1 page
     cxTexture texture = cxBMPFontTexture(this->font, 0);
+    CX_ASSERT(texture != NULL, "texture miss");
     cxSpriteSetTexture(this, texture);
-    
-    cxString unicode = cxIconvConvertUTF8ToUTF16(this->txt);
+    //convert to unicode
+    cxString unicode = cxIconvConvertUTF8ToUTF16LE(this->txt);
     cxInt txtLength = cxStringLength(unicode) / 2;
     cxUInt16 *codeptr = (cxUInt16 *)unicode->strptr.d;
-    
+    //init atlas
     cxAtlasSetCapacity(this, txtLength);
     cxAtlasClean(this);
-    
+    //compute txt size
     cxUInt16 prev = 0;
     cxVec2f nextpos = cxVec2fv(0, 0);
     cxInt i = 0;
     cxUInt16 *sptr = NULL;
     cxSize2f viewSize = cxViewSize(this);
     viewSize.h = this->font->lineHeight;
+    viewSize.w = 0;
     for(i=0,sptr = codeptr; i < txtLength; i++,prev = *sptr,sptr++){
         cxBMPElement pchar = cxBMPFontChar(this->font, *sptr);
         if(pchar == NULL){
@@ -37,16 +39,15 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
         }
         cxFloat kerning = cxBMPKerningAmount(this->font, prev, *sptr);
         if(i == 0 && pchar->xadvance < 0){
-            nextpos.x -= pchar->xadvance;
+            viewSize.w -= pchar->xadvance;
         }else if(i == (txtLength - 1) && pchar->box.w > pchar->xadvance){
-            nextpos.x += pchar->box.w;
+            viewSize.w += pchar->box.w;
         }else{
-            nextpos.x += (pchar->xadvance + kerning);
+            viewSize.w += (pchar->xadvance + kerning);
         }
     }
-    viewSize.w = nextpos.x;
     cxViewSetSize(this, viewSize);
-    
+    //set draw attr
     prev = 0;
     nextpos = cxVec2fv(0, 0);
     for(i=0,sptr = codeptr; i < txtLength; i++,prev = *sptr,sptr++){

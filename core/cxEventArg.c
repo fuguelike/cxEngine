@@ -25,7 +25,6 @@ CX_OBJECT_INIT(cxEventArg, cxObject)
 }
 CX_OBJECT_FREE(cxEventArg, cxObject)
 {
-    this->weakRef = NULL;
     CX_RELEASE(this->strongRef);
     CX_RELEASE(this->json);
     CX_RELEASE(this->number);
