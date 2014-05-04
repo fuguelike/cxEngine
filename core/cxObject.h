@@ -77,6 +77,8 @@ cxInt cxObjectTag(cxAny obj);
 
 #define CX_RETAIN_SWAP(_s_,_d_)     {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
 
+#define CX_RETAIN_SET(_n_,_v_)      {_n_ = _v_;CX_RETAIN(_n_);}
+
 //object
 
 #define CX_OBJECT_BEG(_t_)                                                  \
