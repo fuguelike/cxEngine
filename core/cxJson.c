@@ -9,7 +9,8 @@
 #include "cxEngine.h"
 #include "cxJson.h"
 
-static cxBool cxJsomKeyIsArray(cxString key,cxChar *skey,cxInt *index)
+//if field is array
+static cxBool cxJsonKeyIsArray(cxString key,cxChar *skey,cxInt *index)
 {
     cxInt s,e = -1;
     cxConstChars ckey = cxStringBody(key);
@@ -39,14 +40,12 @@ static json_t *cxJsonGetJson(cxJson json,cxConstChars key)
 {
     cxString str = cxStringConstChars(key);
     cxArray list = cxStringSplit(str, ".");
-    cxInt count = cxArrayLength(list);
     json_t *pv = CX_JSON_PTR(json);
     cxInt index = 0;
     cxChar skey[64]={0};
     json_t *rv = NULL;
-    for(cxInt i=0;i<count;i++){
-        cxString item = cxArrayAtIndex(list, i);
-        if(cxJsomKeyIsArray(item, skey, &index)){
+    CX_ARRAY_FOREACH(list, e){
+        if(cxJsonKeyIsArray(cxArrayObject(e), skey, &index)){
             pv = strlen(skey) > 0 ? json_object_get(pv, skey) : pv;
             CX_ASSERT(json_is_array(pv), "json must is array");
             rv = json_array_get(pv, index);
@@ -82,7 +81,7 @@ cxJson cxJsonCreate(cxString json)
     CX_ASSERT(this->json != NULL, "cxJson load error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
     return this;
 }
-
+//alloc must release
 cxJson cxJsonAttachAlloc(json_t *json)
 {
     CX_ASSERT(json != NULL, "json ptr error");

@@ -21,15 +21,27 @@ CX_OBJECT_END(cxJson)
 
 #define CX_JSON_PTR(j)  ((j)->json)
 
-#define CX_JSON_ARRAY_EACH_BEG(_j_,_i_)                         \
+#define CX_JSON_ARRAY_EACH_BEG(_j_,_v_)                         \
 if((_j_) != NULL){                                              \
     json_t *_value_ = NULL;                                     \
     cxInt _index_ = 0;                                          \
     json_array_foreach(CX_JSON_PTR(_j_), _index_, _value_){     \
-        cxJson _i_ = cxJsonAttachAlloc(_value_);
+        cxJson _v_ = cxJsonAttachAlloc(_value_);
 
-#define CX_JSON_ARRAY_EACH_END(_j_,_i_)                         \
-        CX_RELEASE(_i_);                                        \
+#define CX_JSON_ARRAY_EACH_END(_j_,_v_)                         \
+        CX_RELEASE(_v_);                                        \
+    }                                                           \
+}
+
+#define CX_JSON_OBJECT_EACH_BEG(_j_,_v_)                        \
+if((_j_) != NULL){                                              \
+    json_t *_value_ = NULL;                                     \
+    cxConstChars _key_ = NULL;                                  \
+    json_object_foreach(CX_JSON_PTR(_j_), _key_, _value_){      \
+        cxJson _v_ = cxJsonAttachAlloc(_value_);
+
+#define CX_JSON_OBJECT_EACH_END(_j_,_v_)                        \
+        CX_RELEASE(_v_);                                        \
     }                                                           \
 }
 
