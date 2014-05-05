@@ -112,10 +112,10 @@ CX_OBJECT_BEG(cxObject)
 CX_OBJECT_END(cxObject)
 
 CX_OBJECT_DEF(cxMemory, cxObject)
-    cxAny pointer;
+    cxPointer pointer;
 CX_OBJECT_END(cxMemory)
 
-cxAny cxMemoryCreate(cxInt size);
+cxMemory cxMemoryCreate(cxInt size);
 
 CX_C_END
 

@@ -51,7 +51,6 @@ cxInt cxObjectTag(cxAny obj)
     return this->cxTag;
 }
 
-
 //auto release memory block
 CX_OBJECT_INIT(cxMemory, cxObject)
 {
@@ -63,12 +62,11 @@ CX_OBJECT_FREE(cxMemory, cxObject)
 }
 CX_OBJECT_TERM(cxMemory, cxObject)
 
-cxAny cxMemoryCreate(cxInt size)
+cxMemory cxMemoryCreate(cxInt size)
 {
     cxMemory this = CX_CREATE(cxMemory);
-    this->pointer = allocator->malloc(size);
-    memset(this->pointer, 0, size);
-    return this->pointer;
+    this->pointer = allocator->calloc(1,size);
+    return this;
 }
 
 

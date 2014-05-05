@@ -29,8 +29,7 @@ cxString cxShaderDefaultGetVertexSource(cxAny this)
 cxString cxShaderDefaultGetFragmentSource(cxAny this)
 {
     static cxConstChars fragment =
-    GLSL
-    (
+    GLSL(
         varying mediump vec4 vFragmentColor;
         varying highp vec2 vTexCoord;
         uniform sampler2D uTexture0;

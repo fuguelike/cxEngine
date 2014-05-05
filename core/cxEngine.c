@@ -80,17 +80,18 @@ void cxEngineMemory()
 
 void cxEngineDraw()
 {
-    CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
-    CX_RETURN(!engine->isInit || engine->isPause);
+    CX_RETURN(isExit || !engine->isInit || engine->isPause);
     cxOpenGLClear();
     cxAutoPoolBegin();
     cxDouble now = cxTimestamp();
     engine->frameDelta = now - engine->lastTime;
     CX_SIGNAL_FIRE(engine->onUpdate, CX_FUNC_TYPE(cxAny,cxFloat),CX_SLOT_OBJECT,engine->frameDelta);
+    
     kmGLPushMatrix();
     cxViewDraw(engine->window);
     kmGLPopMatrix();
+    
     engine->lastTime = now;
     cxAutoPoolClean();
 }

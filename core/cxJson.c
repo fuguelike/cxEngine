@@ -9,6 +9,55 @@
 #include "cxEngine.h"
 #include "cxJson.h"
 
+static cxBool cxJsomKeyIsArray(cxString key,cxChar *skey,cxInt *index)
+{
+    cxInt s,e = -1;
+    cxConstChars ckey = cxStringBody(key);
+    cxInt len = cxStringLength(key);
+    for(cxInt i=0; i < len;i++){
+        if(ckey[i] == '['){
+            s = i;
+        }else if(ckey[i] == ']'){
+            e = i;
+        }
+    }
+    if(s == -1 || e == -1){
+        memcpy(skey, ckey, len);
+        skey[len] = '\0';
+        return false;
+    }
+    cxChar num[32]={0};
+    memcpy(num, ckey + s + 1, e - s - 1);
+    memcpy(skey, ckey, s);
+    skey[s] = '\0';
+    *index = atoi(num);
+    return true;
+}
+
+//support key.key key[0].filed
+static json_t *cxJsonGetJson(cxJson json,cxConstChars key)
+{
+    cxString str = cxStringConstChars(key);
+    cxArray list = cxStringSplit(str, ".");
+    cxInt count = cxArrayLength(list);
+    json_t *pv = CX_JSON_PTR(json);
+    cxInt index = 0;
+    cxChar skey[64]={0};
+    json_t *rv = NULL;
+    for(cxInt i=0;i<count;i++){
+        cxString item = cxArrayAtIndex(list, i);
+        if(cxJsomKeyIsArray(item, skey, &index)){
+            pv = strlen(skey) > 0 ? json_object_get(pv, skey) : pv;
+            CX_ASSERT(json_is_array(pv), "json must is array");
+            rv = json_array_get(pv, index);
+        }else{
+            rv = json_object_get(pv, skey);
+        }
+        pv = rv;
+    }
+    return rv;
+}
+
 CX_OBJECT_INIT(cxJson, cxObject)
 {
     
@@ -199,7 +248,7 @@ cxJson cxJsonObjectAt(cxJson json,cxInt idx)
 
 cxJson cxJsonArray(cxJson json,cxConstChars key)
 {
-    json_t *v = json_object_get(CX_JSON_PTR(json), key);
+    json_t *v = cxJsonGetJson(json, key);
     if(v == NULL){
         return NULL;
     }
@@ -213,7 +262,7 @@ cxJson cxJsonArray(cxJson json,cxConstChars key)
 
 cxJson cxJsonObject(cxJson json,cxConstChars key)
 {
-    json_t *v = json_object_get(CX_JSON_PTR(json), key);
+    json_t *v = cxJsonGetJson(json, key);
     if(v == NULL){
         return NULL;
     }
@@ -227,7 +276,7 @@ cxJson cxJsonObject(cxJson json,cxConstChars key)
 
 cxBool cxJsonBool(cxJson json,cxConstChars key,cxBool dv)
 {
-    json_t *v = json_object_get(CX_JSON_PTR(json), key);
+    json_t *v = cxJsonGetJson(json, key);
     if(v == NULL){
         return dv;
     }
@@ -239,7 +288,7 @@ cxBool cxJsonBool(cxJson json,cxConstChars key,cxBool dv)
 
 cxConstChars cxJsonConstChars(cxJson json,cxConstChars key)
 {
-    json_t *v = json_object_get(CX_JSON_PTR(json), key);
+    json_t *v = cxJsonGetJson(json, key);
     if(v == NULL){
         return NULL;
     }
@@ -254,7 +303,7 @@ cxString cxJsonString(cxJson json,cxConstChars key)
 
 cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble dv)
 {
-    json_t *v = json_object_get(CX_JSON_PTR(json), key);
+    json_t *v = cxJsonGetJson(json, key);
     if(v == NULL){
         return dv;
     }
@@ -266,7 +315,7 @@ cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble dv)
 
 cxLong cxJsonLong(cxJson json,cxConstChars key,cxLong dv)
 {
-    json_t *v = json_object_get(CX_JSON_PTR(json), key);
+    json_t *v = cxJsonGetJson(json, key);
     if(v == NULL){
         return dv;
     }
@@ -278,7 +327,7 @@ cxLong cxJsonLong(cxJson json,cxConstChars key,cxLong dv)
 
 cxInt cxJsonInt(cxJson json,cxConstChars key,cxInt dv)
 {
-    json_t *v = json_object_get(CX_JSON_PTR(json), key);
+    json_t *v = cxJsonGetJson(json, key);
     if(v == NULL){
         return dv;
     }
