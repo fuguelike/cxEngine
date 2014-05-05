@@ -86,6 +86,8 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
     cxUInt widthBlocks = 0;
     cxUInt heightBlocks = 0;
     cxInt i = 0;
+    cxPointer buffer = NULL;
+    cxInt bufBytes = 0;
     while (dataOff< dataLen){
         if (pvr->format == cxFormatPVR4BPP){
             blockSize = 4 * 4;
@@ -105,19 +107,23 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
             heightBlocks = 2;
         }
         cxUInt bufSize = widthBlocks * heightBlocks * ((blockSize  * bpp) / 8);
-        cxPointer buffer = allocator->malloc(bufSize);
+        if(bufSize > bufBytes){
+            buffer = allocator->realloc(buffer,bufSize);
+            CX_ASSERT(buffer != NULL, "realloc mem failed");
+            bufBytes = bufSize;
+        }
         cxInt size = cxStreamRead(stream,buffer,bufSize);
         if(size == bufSize){
             glCompressedTexImage2D(GL_TEXTURE_2D, i, pvr->glFormat, width, height, 0, bufSize, buffer);
         }else{
             CX_WARN("pvr read stream data failed");
         }
-        allocator->free(buffer);
         dataOff += bufSize;
         width = CX_MAX(width >> 1, 1);
         height = CX_MAX(height >> 1, 1);
         i++;
     }
+    allocator->free(buffer);
     if(i > 1){
         cxTextureSetParam((cxTexture)pvr, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     }

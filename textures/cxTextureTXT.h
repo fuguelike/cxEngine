@@ -16,7 +16,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxTextureTXT, cxTexture)
-    cxString fontfile;
+    cxString font;
     cxString string;
     cxTextAttr attr;
 CX_OBJECT_END(cxTextureTXT)

@@ -27,7 +27,7 @@ cxTextureFactory cxTextureFactoryInstance();
 
 cxTexture cxTextureFactoryLoadFile(cxConstChars file);
 
-cxTexture cxTextureFactoryLoadText(const cxString txt,const cxString font,cxTextAttr attr);
+cxTexture cxTextureFactoryLoadText(cxString txt,cxString font,cxTextAttr attr);
 
 void cxTextureFactoryUnloadFile(cxConstChars file);
 

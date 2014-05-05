@@ -54,7 +54,7 @@ CX_OBJECT_FREE(cxTextureFactory, cxObject)
 }
 CX_OBJECT_TERM(cxTextureFactory, cxObject)
 
-//@group:candy.xml?green.png
+//@GroupName:candy.xml?green.png
 static cxHash cxTextureFactoryGroup(cxConstChars file,cxChar *files)
 {
     CX_ASSERT(file != NULL && files != NULL, "args error");
@@ -73,8 +73,9 @@ static cxHash cxTextureFactoryGroup(cxConstChars file,cxChar *files)
     }
     cxHash groups = cxHashGet(this->caches, cxHashStrKey(group));
     if(groups == NULL){
-        groups = CX_CREATE(cxHash);
+        groups = CX_ALLOC(cxHash);
         cxHashSet(this->caches, cxHashStrKey(group), groups);
+        CX_RELEASE(groups);
     }
     return groups;
 }
@@ -103,12 +104,12 @@ void cxTextureFactoryUnloadFile(cxConstChars file)
     cxHashDel(groups, cxHashStrKey(files));
 }
 
-cxTexture cxTextureFactoryLoadText(const cxString txt,const cxString font,cxTextAttr attr)
+cxTexture cxTextureFactoryLoadText(cxString txt,cxString font,cxTextAttr attr)
 {
     cxTextureTXT texture = CX_CREATE(cxTextureTXT);
     texture->attr = attr;
     CX_RETAIN_SWAP(texture->string, txt);
-    CX_RETAIN_SWAP(texture->fontfile, font);
+    CX_RETAIN_SWAP(texture->font, font);
     cxTextureLoad((cxTexture)texture,NULL);
     return (cxTexture)texture;
 }

@@ -48,7 +48,7 @@ static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
     header.orgHeight = CX_SWAP16(header.orgHeight);
     pkm->super.size = cxSize2fv(header.extWidth, header.extHeight);
     if(header.version != CX_PKM_V1){
-        CX_ERROR("PKM use V1 version");
+        CX_ERROR("PKM only use V1 version");
         goto completed;
     }
     cxOpenGLGenTextures(1, &pkm->super.textureId);

@@ -14,7 +14,7 @@
 static cxBool cxTextureTXTLoad(cxAny texture,cxStream stream)
 {
     cxTextureTXT this = texture;
-    cxConstChars font = this->fontfile == NULL ? NULL : cxStringBody(this->fontfile);
+    cxConstChars font = this->font == NULL ? NULL : cxStringBody(this->font);
     cxConstChars text = cxStringBody(this->string);
     cxString data = cxCreateTXTTextureData(text, font, this->attr);
     CX_RETURN(data == NULL, false);
@@ -54,7 +54,7 @@ CX_OBJECT_INIT(cxTextureTXT, cxTexture)
 CX_OBJECT_FREE(cxTextureTXT, cxTexture)
 {
     CX_RELEASE(this->string);
-    CX_RELEASE(this->fontfile);
+    CX_RELEASE(this->font);
 }
 CX_OBJECT_TERM(cxTextureTXT, cxTexture)
 
