@@ -13,7 +13,7 @@
 void cxLoadingOnUpdate(cxEvent *event)
 {
     cxLoading this = event->sender;
-    if(this->isLoading){
+    if(!this->isLoading){
         CX_EVENT_FIRE(this, onFinished);
         cxViewRemoved(this);
     }
@@ -53,12 +53,12 @@ static void cxLoadingArrive(cxEvent *event)
 void cxLoaingFinished(cxAny pview)
 {
     cxLoading this = pview;
-    this->isLoading = true;
+    this->isLoading = false;
 }
 
 CX_OBJECT_INIT(cxLoading, cxView)
 {
-    this->isLoading = false;
+    this->isLoading = true;
     CX_EVENT_QUICK(this->super.onUpdate, cxLoadingOnUpdate);
     CX_METHOD_OVERRIDE(this->super.Touch, cxLoadingTouch);
 }
@@ -74,6 +74,7 @@ void cxLoadingStart(cxLoading this)
 {
     cxEngine engine = cxEngineInstance();
     CX_EVENT_FIRE(this, onStart);
+    this->isLoading = true;
     cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
     CX_EVENT_QUICK(timer->onArrive, cxLoadingArrive);
     cxViewAppend(engine->window, this);

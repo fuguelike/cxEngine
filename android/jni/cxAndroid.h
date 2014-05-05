@@ -32,6 +32,8 @@ AAssetManager *cxEngineGetAssetManager();
 
 cxString jstringTocxString(jstring jstr);
 
+jstring cxStringTojstring(cxString str);
+
 void cxEngineRunJson(cxString json);
 
 CX_C_END

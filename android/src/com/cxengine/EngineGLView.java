@@ -14,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.Paint.FontMetricsInt;
 import android.opengl.GLSurfaceView;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -125,8 +126,13 @@ public class EngineGLView extends GLSurfaceView {
     	return Locale.getDefault().getLanguage();
     }
     //json invoke method
-    public static void cxEngineRecvJson(String json) {
-    	
+    public static void cxEngineRecvJson(final String json) {
+    	glActivity.runOnUiThread(new Runnable(){
+    		@Override
+    		public void run(){
+    			glActivity.onRecvJson(json);
+    		}
+    	});
     }
     //send json -> cxEngine c runtime
     public static native void cxEngineSendJsonImp(String json);
@@ -150,6 +156,7 @@ public class EngineGLView extends GLSurfaceView {
     	}
     	return path;
     }
+    //force exit
 	public static void terminateProcess() {
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
@@ -188,6 +195,7 @@ public class EngineGLView extends GLSurfaceView {
 		System.arraycopy(hb, 0, pixels, isize + 4, 4);
 		return pixels;
 	}
+	//create ttf image
 	public byte[] createTextBitmapImp(String pString, String pFontName, int pFontSize) {
 		Paint paint = newPaint(pFontName, pFontSize);
 		FontMetricsInt fm = paint.getFontMetricsInt();
@@ -198,6 +206,7 @@ public class EngineGLView extends GLSurfaceView {
 		canvas.drawText(pString, 0, -fm.top, paint);
 		return getPixels(bitmap);
 	}
+	
 	public static byte[] createTextBitmap(String pString, String pFontName, int pFontSize) {
 		return glView.createTextBitmapImp(pString, pFontName, pFontSize);
 	}

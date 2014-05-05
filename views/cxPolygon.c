@@ -21,13 +21,18 @@ static void cxPolygonDraw(cxAny pview)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, this->number);
 }
 
+static void cxPolygonMalloc(cxPolygon this)
+{
+    this->points = allocator->realloc(this->points,sizeof(cxVec3f) * this->capacity);
+    this->colors = allocator->realloc(this->colors,sizeof(cxColor4f) * this->capacity);
+    this->texs = allocator->realloc(this->texs,sizeof(cxTex2f) * this->capacity);
+}
+
 CX_OBJECT_INIT(cxPolygon, cxSprite)
 {
     CX_METHOD_OVERRIDE(this->super.super.Draw, cxPolygonDraw);
     this->capacity = 8;
-    this->points = allocator->malloc(sizeof(cxVec3f) * this->capacity);
-    this->colors = allocator->malloc(sizeof(cxColor4f) * this->capacity);
-    this->texs = allocator->malloc(sizeof(cxTex2f) * this->capacity);
+    cxPolygonMalloc(this);
 }
 CX_OBJECT_FREE(cxPolygon, cxSprite)
 {
@@ -46,6 +51,9 @@ void cxPolygonClean(cxAny pview)
 void cxPolygonAppend(cxAny pview,cxPoint point)
 {
     cxPolygon this = pview;
+    if((this->capacity - 1) <= this->number){
+        cxPolygonResize(pview, 8);
+    }
     this->points[this->number] = point.vertices;
     this->colors[this->number] = point.colors;
     this->texs[this->number] = point.texcoords;
@@ -56,9 +64,7 @@ void cxPolygonResize(cxAny pview,cxInt add)
 {
     cxPolygon this = pview;
     this->capacity = this->capacity + add;
-    this->points = allocator->realloc(this->points,sizeof(cxVec3f) * this->capacity);
-    this->colors = allocator->realloc(this->points,sizeof(cxColor4f) * this->capacity);
-    this->texs = allocator->realloc(this->points,sizeof(cxTex2f) * this->capacity);
+    cxPolygonMalloc(this);
 }
 
 

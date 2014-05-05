@@ -565,7 +565,7 @@ cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch)
     if(!this->isVisible){
         return cxViewIsTouchTypeNone;
     }
-    return cxViewIsTouchTypeSelf | cxViewIsTouchTypeSubview;
+    return cxViewIsTouchTypeThis | cxViewIsTouchTypeSubview;
 }
 
 cxBool cxViewTouch(cxAny pview,cxTouch *touch)
@@ -578,7 +578,7 @@ cxBool cxViewTouch(cxAny pview,cxTouch *touch)
     if((type & cxViewIsTouchTypeSubview) && cxViewTouchSubViews(pview,touch)){
         return true;
     }
-    if(type & cxViewIsTouchTypeSelf){
+    if(type & cxViewIsTouchTypeThis){
         return CX_METHOD_GET(false, this->Touch,this,touch);
     }
     return false;
@@ -606,7 +606,7 @@ cxUInt cxViewIsOnKey(cxAny pview,cxKey *key)
     if(!this->isVisible){
         return cxViewIsTouchTypeNone;
     }
-    return cxViewIsTouchTypeSelf | cxViewIsTouchTypeSubview;
+    return cxViewIsTouchTypeThis | cxViewIsTouchTypeSubview;
 }
 
 cxBool cxViewOnKey(cxAny pview,cxKey *key)
@@ -619,7 +619,7 @@ cxBool cxViewOnKey(cxAny pview,cxKey *key)
     if((type & cxViewIsTouchTypeSubview) && cxViewOnKeySubViews(pview,key)){
         return true;
     }
-    if(type & cxViewIsTouchTypeSelf){
+    if(type & cxViewIsTouchTypeThis){
         return CX_METHOD_GET(false, this->OnKey,this , key);
     }
     return false;

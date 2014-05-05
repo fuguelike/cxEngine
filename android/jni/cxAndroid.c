@@ -143,6 +143,15 @@ cxString jstringTocxString(jstring jstr) {
     return rv;
 }
 
+jstring cxStringTojstring(cxString str)
+{
+    if(!cxStringOK(str)){
+        return NULL;
+    }
+    CX_ASSERT(javaENV != NULL, "java env error");
+    return (*javaENV)->NewStringUTF(javaENV,cxStringBody(str));
+}
+
 cxBool cxGetStaticMethodInfo(JniMethodInfo *methodinfo,cxConstChars className,cxConstChars methodName,cxConstChars paramCode)
 {
     if ((NULL == className) || (NULL == methodName) || (NULL == paramCode)) {
@@ -180,7 +189,9 @@ void cxEngineSendJson(cxString json)
     CX_ASSERT(json != NULL, "json args error");
     JniMethodInfo methodInfo;
     if(cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineRecvJson","(Ljava/lang/String;)V")){
-        (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
+        jstring str = cxStringTojstring(json);
+        (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID,str);
+        (*methodInfo.env)->DeleteLocalRef(methodInfo.env,str);
     }
 }
 

@@ -23,6 +23,7 @@ void cxEngineRecvJson(cxString json)
     CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
     CX_SIGNAL_FIRE(engine->onRecvJson, CX_FUNC_TYPE(cxAny,cxString), CX_SLOT_OBJECT, json);
+    CX_LOGGER("cxengine recv:%s",cxStringBody(json));
 }
 
 void cxEngineExit()
@@ -55,7 +56,7 @@ void cxEngineBegin()
     //init event list and att method
     cxEngineSystemInit(engine);
     //
-    cxPlayerOpen(0, 0);
+    cxPlayerOpen();
     cxEngineInit(engine);
 }
 

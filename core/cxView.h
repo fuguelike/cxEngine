@@ -35,7 +35,7 @@ typedef enum {
 
 typedef enum{
     cxViewIsTouchTypeNone       = 0,
-    cxViewIsTouchTypeSelf       = 1 << 0,   //only touch self
+    cxViewIsTouchTypeThis       = 1 << 0,   //only touch self this
     cxViewIsTouchTypeSubview    = 1 << 1,   //touch subviews
 }cxViewIsTouchType;
 

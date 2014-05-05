@@ -20,7 +20,7 @@ public class EngineActivity extends Activity {
 		setContentView(glView);
 	}
 	
-	public void onEngineJson(String json){
+	public void onRecvJson(String json){
 		
 	}
 	
