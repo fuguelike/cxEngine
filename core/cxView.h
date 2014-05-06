@@ -55,7 +55,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool isRunning;
     cxBool isDirty;
     cxBool isVisible;
-    cxBool isBorder;        //if draw border
+    cxBool isShowBorder;        //if draw border
     cxBool hideTop;         //=true hide prev view
     cxBool isSort;
     cxBool isCropping;
@@ -70,6 +70,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
     cxColor4f color;
+
     CX_METHOD_ALLOC(cxViewIsTouchType,IsTouch,cxAny,cxTouch *);
     CX_METHOD_ALLOC(cxBool, Touch, cxAny, cxTouch *);
     CX_METHOD_ALLOC(cxViewIsTouchType, IsOnKey, cxAny, cxKey *);
@@ -118,7 +119,7 @@ void cxViewSetTop(cxAny pview,cxBool top);
 
 void cxViewSetDirty(cxAny pview,cxBool dirty);
 
-void cxViewSetBorder(cxAny pview,cxBool border);
+void cxViewSetShowBorder(cxAny pview,cxBool isShowBorder);
 
 cxBool cxViewZeroSize(cxAny pview);
 

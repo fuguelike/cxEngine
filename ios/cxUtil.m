@@ -19,6 +19,21 @@ void cxEngineTerminate()
     exit(0);
 }
 
+cxArray cxFontNames()
+{
+    cxArray list = CX_CREATE(cxArray);
+    NSArray* familys = [UIFont familyNames];
+    for (NSString *family  in familys) {
+        NSArray* fonts = [UIFont fontNamesForFamilyName:family];
+        for (NSString *font in fonts) {
+            cxString item = cxStringAllocChars([font UTF8String]);
+            cxArrayAppend(list, item);
+            CX_RELEASE(item);
+        }
+    }
+    return list;
+}
+
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr)
 {
     CX_RETURN(txt == NULL, NULL);

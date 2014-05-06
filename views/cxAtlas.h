@@ -41,6 +41,8 @@ void cxAtlasResize(cxEvent *event);
 
 void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color);
 
+cxInt cxAtlasAppendSprite(cxAny pview,cxConstChars key);
+
 cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color);
 
 void cxAtlasSetCapacity(cxAny pview,cxInt capacity);

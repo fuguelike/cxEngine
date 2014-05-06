@@ -29,7 +29,7 @@ CX_OBJECT_INIT(cxView, cxObject)
 {
     this->super.cxBase = cxBaseTypeView;
     this->hideTop = true;
-    this->isBorder = false;
+    this->isShowBorder = false;
     this->isVisible = true;
     this->isDirty = true;
     this->color = cxColor4fv(1.0f, 1.0f, 1.0f, 1.0f);
@@ -168,10 +168,10 @@ void cxViewSetDirty(cxAny pview,cxBool dirty)
     this->isDirty = dirty;
 }
 
-void cxViewSetBorder(cxAny pview,cxBool border)
+void cxViewSetShowBorder(cxAny pview,cxBool isShowBorder)
 {
     cxView this = pview;
-    this->isBorder = border;
+    this->isShowBorder = isShowBorder;
 }
 
 cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint)
@@ -502,6 +502,7 @@ void cxViewAutoResizing(cxAny pview)
         pos.y += size.h * this->anchor.y * scale.y;
         pos.y += this->autoBox.b;
     }
+    //update pos and size
     cxViewSetPos(this, pos);
     cxViewSetSize(this, size);
 }
@@ -724,7 +725,7 @@ void cxViewDraw(cxAny pview)
     if(this->isCropping){
         cxOpenGLDisableScissor();
     }
-    if(cxEngineInstance()->isShowBorder || this->isBorder){
+    if(cxEngineInstance()->isShowBorder || this->isShowBorder){
         cxViewDrawBorder(this);
     }
     kmGLPopMatrix();

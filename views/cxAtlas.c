@@ -155,6 +155,31 @@ void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,
     cxAtlasAppend(pview, bp);
 }
 
+cxInt cxAtlasAppendSprite(cxAny pview,cxConstChars key)
+{
+    cxAtlas this = pview;
+    cxColor4f color = cxColor4fv(1, 1, 1, 1);
+    cxVec2f pos = cxVec2fv(0, 0);
+    cxBoxTex2f tbox = cxTextureBox(this->super.texture, key);
+    cxSize2f siz = cxTextureSize(this->super.texture, key);
+    cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, siz, tbox, color);
+    cxAtlasAppend(pview, bp);
+    return this->number - 1;
+}
+
+void cxAtlasSetItemPos(cxAny pview,cxInt idx,cxVec2f pos)
+{
+    cxAtlas this = pview;
+    cxBoxPoint *bp = &this->boxes[idx];
+    cxFloat wh = (bp->rb.vertices.x - bp->lt.vertices.x) / 2.0f;
+    cxFloat hh = (bp->lt.vertices.y - bp->rb.vertices.y) / 2.0f;
+    bp->lb.vertices = cxVec3fv(pos.x - wh, pos.y - hh, 0.0f);
+    bp->lt.vertices = cxVec3fv(pos.x - wh, pos.y + hh, 0.0f);
+    bp->rt.vertices = cxVec3fv(pos.x + wh, pos.y + hh, 0.0f);
+    bp->rb.vertices = cxVec3fv(pos.x + wh, pos.y - hh, 0.0f);
+    this->isDirty = true;
+}
+
 cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color)
 {
     cxBoxPoint rv;

@@ -60,10 +60,13 @@ static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
     CX_UNUSED_PARAM(readbytes);
 #if defined(GL_OES_compressed_ETC1_RGB8_texture)
     glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES,header.extWidth, header.extHeight, 0, bufsiz, buffer);
+    ret = true;
+#else
+    CX_ERROR("platform not support GL_OES_compressed_ETC1_RGB8_texture");
+    ret = false;
 #endif
     allocator->free(buffer);
     cxOpenGLBindTexture(0, 0);
-    ret = true;
 completed:
     cxStreamClose(stream);
     return ret;
