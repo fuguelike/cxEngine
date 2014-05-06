@@ -214,7 +214,7 @@ static void cxParticleStep(cxAny pav,cxFloat dt,cxFloat time)
             cxParticleSetBox(this, p);
             this->index ++;
         }else{
-            if(this->index != this->count - 1){
+            if(this->index != (this->count - 1)){
                 this->units[this->index] = this->units[this->count - 1];
             }
             this->count--;

@@ -12,7 +12,7 @@
 
 static cxPointer cxMalloc(cxSize size)
 {
-    return malloc(size);
+    return calloc(1,size);
 }
 
 static cxPointer cxRealloc(cxPointer ptr,cxSize size)

@@ -55,7 +55,6 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr at
     cxInt bufsiz = width * height * 4 + sizeof(cxSize2i);
     cxPointer buffer = allocator->malloc(bufsiz);
     cxPointer data = buffer + sizeof(cxSize2i);
-    memset(buffer, 0, bufsiz);
     CGColorSpaceRef color = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(data,width,height,8,width*4,color,kCGImageAlphaPremultipliedLast|kCGBitmapByteOrder32Big);
     CGColorSpaceRelease(color);
@@ -104,7 +103,7 @@ cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
         goto completed;
     }
     if(!AudioFileGetProperty(afid, kAudioFilePropertyAudioDataByteCount, &thePropertySize, &fileDataSize)){
-        theData = allocator->calloc(1,(cxInt)fileDataSize);
+        theData = allocator->malloc((cxInt)fileDataSize);
         AudioFileReadBytes(afid, false, 0, (UInt32 *)&fileDataSize, theData);
         *freq = (ALsizei)fileformat.mSampleRate;
         if(fileformat.mBitsPerChannel == 16){

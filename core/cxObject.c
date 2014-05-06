@@ -65,7 +65,7 @@ CX_OBJECT_TERM(cxMemory, cxObject)
 cxMemory cxMemoryCreate(cxInt size)
 {
     cxMemory this = CX_CREATE(cxMemory);
-    this->pointer = allocator->calloc(1,size);
+    this->pointer = allocator->malloc(size);
     return this;
 }
 
