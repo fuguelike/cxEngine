@@ -110,7 +110,7 @@ CX_OBJECT_INIT(cxAssetsStream, cxStream)
 }
 CX_OBJECT_FREE(cxAssetsStream, cxStream)
 {
-    cxAssetsStreamClose(this);
+    
 }
 CX_OBJECT_TERM(cxAssetsStream, cxStream)
 

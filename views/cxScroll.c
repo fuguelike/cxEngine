@@ -136,6 +136,19 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
     }
 }
 
+void cxScrollInitView(cxAny pview,cxJson json)
+{
+    cxScroll this = pview;
+    cxConstChars type = cxJsonConstChars(json, "type");
+    if(cxConstCharsEqu(type, "horizontal")){
+        this->type |= cxScrollMoveTypeHorizontal;
+    }
+    if(cxConstCharsEqu(type, "vertical")){
+        this->type |= cxScrollMoveTypeVertical;
+    }
+    CX_VIEW_SUPER_INIT(cxView);
+}
+
 CX_OBJECT_INIT(cxScroll, cxView)
 {
     cxEngine engine = cxEngineInstance();
@@ -145,6 +158,7 @@ CX_OBJECT_INIT(cxScroll, cxView)
     //swip cond value
     this->value = 950;
     CX_SLOT_CONNECT(engine->onTouch, this, onTouch, cxScrollOnTouch);
+    CX_METHOD_OVERRIDE(this->super.InitView, cxScrollInitView);
 }
 CX_OBJECT_FREE(cxScroll, cxView)
 {

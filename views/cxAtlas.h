@@ -31,6 +31,8 @@ CX_OBJECT_DEF(cxAtlas, cxSprite)
     cxHash items;
 CX_OBJECT_END(cxAtlas)
 
+void cxAtlasInitView(cxAny pview,cxJson json);
+
 void cxAtlasSetNumber(cxAny pview,cxInt number);
 
 void cxAtlasDraw(cxAny pview);

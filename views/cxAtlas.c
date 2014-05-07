@@ -130,8 +130,55 @@ void cxAtlasResize(cxEvent *event)
     cxAtlasUpdateScale9(event->sender);
 }
 
+void cxAtlasInitView(cxAny pview,cxJson json)
+{
+    CX_VIEW_SUPER_INIT(cxSprite);
+    cxAtlas this = pview;
+    cxJson points = cxJsonArray(json, "points");
+    if(cxJsonBool(json, "scale9.enable", false)){
+        
+        cxAtlasSetCapacity(this, 9);
+        this->scale9.enable = true;
+        this->scale9.box.l = cxJsonDouble(json, "scale9.box.l", this->scale9.box.l);
+        this->scale9.box.r = cxJsonDouble(json, "scale9.box.r", this->scale9.box.r);
+        this->scale9.box.t = cxJsonDouble(json, "scale9.box.t", this->scale9.box.t);
+        this->scale9.box.b = cxJsonDouble(json, "scale9.box.b", this->scale9.box.b);
+        cxAtlasUpdateScale9(this);
+    }else if(points != NULL){
+        cxInt len = cxJsonArrayLength(points);
+        CX_ASSERT(len > 0, "points empty");
+        cxAtlasSetCapacity(this, len);
+        CX_JSON_ARRAY_EACH_BEG(points, point);
+        {
+            cxVec2f pos = cxVec2fv(0, 0);
+            cxSize2f size = cxSize2fv(0, 0);
+            cxBoxTex2f tex = cxBoxTex2fDefault();
+            cxColor4f color = cxColor4fv(1, 1, 1, 1);
+            pos.x = cxJsonDouble(point, "p.x", pos.x);
+            pos.y = cxJsonDouble(point, "p.y", pos.y);
+            size.w = cxJsonDouble(point, "s.w", size.w);
+            size.h = cxJsonDouble(point, "s.h", size.h);
+            tex.lb.u = cxJsonDouble(point, "t.lb.u", tex.lb.u);
+            tex.lb.v = cxJsonDouble(point, "t.lb.v", tex.lb.v);
+            tex.rb.u = cxJsonDouble(point, "t.rb.u", tex.rb.u);
+            tex.rb.v = cxJsonDouble(point, "t.rb.v", tex.rb.v);
+            tex.lt.u = cxJsonDouble(point, "t.lt.u", tex.lt.u);
+            tex.lt.v = cxJsonDouble(point, "t.lt.v", tex.lt.v);
+            tex.rt.u = cxJsonDouble(point, "t.rt.u", tex.rt.u);
+            tex.rt.v = cxJsonDouble(point, "t.rt.v", tex.rt.v);
+            color.a = cxJsonDouble(point, "c.a", color.a);
+            color.r = cxJsonDouble(point, "c.r", color.r);
+            color.g = cxJsonDouble(point, "c.g", color.g);
+            color.b = cxJsonDouble(point, "c.b", color.b);
+            cxAtlasAppendBoxPoint(this, pos, size, tex, color);
+        }
+        CX_JSON_ARRAY_EACH_END(points, point);
+    }
+}
+
 CX_OBJECT_INIT(cxAtlas, cxSprite)
 {
+    CX_METHOD_OVERRIDE(this->super.super.InitView, cxAtlasInitView);
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);

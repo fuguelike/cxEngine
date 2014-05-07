@@ -40,8 +40,7 @@ void cxFollowInit(cxAny pav)
 //get target point
 static cxVec2f cxFollowTargetPos(cxFollow this)
 {
-    cxBool isNum = cxObjectIsType(this->target, cxNumberTypeName);
-    return isNum ? cxNumberToVec2f(this->target) : cxViewPosition(this->target);
+    return this->isNum ? cxNumberToVec2f(this->target) : cxViewPosition(this->target);
 }
 
 static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
@@ -88,20 +87,21 @@ void cxFollowSetInit(cxAny pav,cxFloat init)
 void cxFollowSetVec2f(cxAny pav,cxVec2f pt)
 {
     cxNumber num = cxNumberVec2f(pt);
-    cxFollowSetTarget(pav, num);
+    cxFollowSetTarget(pav, num, true);
 }
 
-void cxFollowSetTarget(cxAny pav,cxAny target)
+void cxFollowSetTarget(cxAny pav,cxAny target,cxBool isNum)
 {
     cxFollow this = pav;
+    this->isNum = isNum;
     CX_RETAIN_SWAP(this->target, target);
 }
 
-cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target)
+cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target,cxBool isNum)
 {
     cxFollow this = CX_CREATE(cxFollow);
     this->init = initSpeed;
-    cxFollowSetTarget(this, target);
+    cxFollowSetTarget(this, target, isNum);
     return this;
 }
 

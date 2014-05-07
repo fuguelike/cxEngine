@@ -35,7 +35,6 @@ void cxActionSetView(cxAny pav,cxAny pview)
 
 CX_OBJECT_INIT(cxAction, cxObject)
 {
-    this->super.cxBase = cxBaseTypeAction;
     this->isExit = false;
     this->speed = 1.0f;
     this->index = -1;

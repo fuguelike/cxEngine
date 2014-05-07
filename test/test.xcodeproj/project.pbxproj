@@ -27,6 +27,9 @@
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		839722AE19161746006D0F89 /* font.json in Resources */ = {isa = PBXBuildFile; fileRef = 839722AC19161746006D0F89 /* font.json */; };
 		839722AF19161746006D0F89 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 839722AD19161746006D0F89 /* font.png */; };
+		83DAD700191A14A6000A7D1F /* ui.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD6FF191A14A6000A7D1F /* ui.json */; };
+		83DAD707191A26BF000A7D1F /* texture.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD705191A26BF000A7D1F /* texture.json */; };
+		83DAD708191A26BF000A7D1F /* texture.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD706191A26BF000A7D1F /* texture.pvr */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +64,9 @@
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		839722AC19161746006D0F89 /* font.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = font.json; path = res/font.json; sourceTree = SOURCE_ROOT; };
 		839722AD19161746006D0F89 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = res/font.png; sourceTree = SOURCE_ROOT; };
+		83DAD6FF191A14A6000A7D1F /* ui.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = ui.json; path = res/ui.json; sourceTree = SOURCE_ROOT; };
+		83DAD705191A26BF000A7D1F /* texture.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = texture.json; path = res/texture.json; sourceTree = SOURCE_ROOT; };
+		83DAD706191A26BF000A7D1F /* texture.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = texture.pvr; path = res/texture.pvr; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +149,9 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				83DAD705191A26BF000A7D1F /* texture.json */,
+				83DAD706191A26BF000A7D1F /* texture.pvr */,
+				83DAD6FF191A14A6000A7D1F /* ui.json */,
 				839722AC19161746006D0F89 /* font.json */,
 				839722AD19161746006D0F89 /* font.png */,
 				836165D518F67BC400FFF173 /* Default-568h@2x.png */,
@@ -225,8 +234,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83DAD708191A26BF000A7D1F /* texture.pvr in Resources */,
 				839722AE19161746006D0F89 /* font.json in Resources */,
+				83DAD700191A14A6000A7D1F /* ui.json in Resources */,
 				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
+				83DAD707191A26BF000A7D1F /* texture.json in Resources */,
 				839722AF19161746006D0F89 /* font.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

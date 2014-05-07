@@ -92,7 +92,7 @@
 #define CX_EXTERN       extern
 #define CX_MIN(x,y)     (((x) > (y)) ? (y) : (x))
 #define CX_MAX(x,y)     (((x) < (y)) ? (y) : (x))
-#define CX_SWAP(v1,     v2, type) {type _temp_=(v1);v1=v2;v2=_temp_;}
+#define CX_SWAP(v1,v2)  {__typeof__(v1) _temp_=(v1);v1=v2;v2=_temp_;}
 #define CX_SWAP32(i)    ((i & 0x000000ff) << 24 | (i & 0x0000ff00) << 8 | (i & 0x00ff0000) >> 8 | (i & 0xff000000) >> 24)
 #define CX_SWAP16(i)    ((i & 0x00ff) << 8 | (i & 0xff00) >> 8)
 
@@ -140,9 +140,9 @@ typedef const char *    cxConstType;
 typedef const char *    cxConstChars;
 
 #ifdef __GNUC__
-#define CX_UNUSED_ATTRIBUTE  __attribute__ ((__unused__))
+#define CX_ATTRIBUTE_UNUSED     __attribute__ ((__unused__))
 #else
-#define CX_UNUSED_ATTRIBUTE
+#define CX_ATTRIBUTE_UNUSED
 #endif
 
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))

@@ -13,6 +13,56 @@
 #include "cxOpenGL.h"
 #include "cxAction.h"
 
+//parse type id subview property
+static cxAny cxViewLoadByJson(cxAny pview, cxJson json, cxHash hash)
+{
+    CX_ASSERT(json != NULL, "json args error");
+    cxEngine engine = cxEngineInstance();
+    //get view type
+    cxConstChars type = cxJsonConstChars(json, "type");
+    if(type == NULL){
+        CX_ERROR("json must has type field");
+        return NULL;
+    }
+    //create view
+    cxView view = CX_METHOD_GET(NULL, engine->CreateView,type);
+    if(view == NULL){
+        CX_ERROR("create view %s failed");
+        return NULL;
+    }
+    //save view to cache
+    cxConstChars id = cxJsonConstChars(json, "id");
+    if(id != NULL && hash != NULL && cxHashSet(hash, cxHashStrKey(id), view)){
+        CX_WARN("view id %s,exists hash");
+    }
+    //init view
+    CX_METHOD_RUN(view->InitView,view,json);
+    //load subview
+    cxJson subviews = cxJsonArray(json, "subviews");
+    CX_JSON_ARRAY_EACH_BEG(subviews, item)
+    {
+        cxView subview = cxViewLoadByJson(view, item, hash);
+        if(subview != NULL){
+            cxViewAppend(view, subview);
+        }
+    }
+    CX_JSON_ARRAY_EACH_END(subviews, item)
+    return view;
+}
+//save to hash with id
+cxAny cxViewLoad(cxConstChars file,cxHash hash)
+{
+    cxString data = cxAssetsData(file);
+    if(data == NULL){
+        return NULL;
+    }
+    cxJson json = cxJsonCreate(data);
+    if(json == NULL){
+        return NULL;
+    }
+    return cxViewLoadByJson(NULL,json, hash);
+}
+
 void cxViewSetCropping(cxAny pview,cxBool cropping)
 {
     cxView this = pview;
@@ -25,9 +75,40 @@ cxBool cxViewZeroSize(cxAny pview)
     return cxSize2Zero(this->size);
 }
 
+void cxViewInitView(cxAny pview,cxJson json)
+{
+    cxView this = pview;
+    this->position.x = cxJsonDouble(json, "position.x", this->position.x);
+    this->position.y = cxJsonDouble(json, "position.y", this->position.y);
+    this->size.w = cxJsonDouble(json, "size.w", this->size.w);
+    this->size.h = cxJsonDouble(json, "size.h", this->size.h);
+    this->anchor.x = cxJsonDouble(json, "anchor.x", this->anchor.x);
+    this->anchor.y = cxJsonDouble(json, "anchor.y", this->anchor.y);
+    this->isShowBorder = cxJsonBool(json, "border", this->isShowBorder);
+    this->color.a = cxJsonDouble(json, "color.a", this->color.a);
+    this->color.r = cxJsonDouble(json, "color.r", this->color.r);
+    this->color.g = cxJsonDouble(json, "color.g", this->color.g);
+    this->color.b = cxJsonDouble(json, "color.b", this->color.b);
+    this->raxis.x = cxJsonDouble(json, "raxis.x", this->raxis.x);
+    this->raxis.y = cxJsonDouble(json, "raxis.y", this->raxis.y);
+    this->raxis.z = cxJsonDouble(json, "raxis.z", this->raxis.z);
+    this->scale.x = cxJsonDouble(json, "scale.x", this->scale.x);
+    this->scale.y = cxJsonDouble(json, "scale.y", this->scale.y);
+    this->fixscale.x = cxJsonDouble(json, "fixscale.x", this->fixscale.x);
+    this->fixscale.x = cxJsonDouble(json, "fixscale.y", this->fixscale.y);
+    this->isVisible = cxJsonBool(json, "visible", true);
+    cxFloat degrees = cxJsonDouble(json, "degrees", INFINITY);
+    if(!isinf(degrees)){
+        cxViewSetDegrees(this, degrees);
+    }
+    this->hideTop = cxJsonBool(json, "hidetop", this->hideTop);
+    this->isCropping = cxJsonBool(json, "cropping", this->isCropping);
+    this->zorder = cxJsonInt(json, "zorder", this->zorder);
+    this->isDirty = true;
+}
+
 CX_OBJECT_INIT(cxView, cxObject)
 {
-    this->super.cxBase = cxBaseTypeView;
     this->hideTop = true;
     this->isShowBorder = false;
     this->isVisible = true;
@@ -38,11 +119,12 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->fixscale = cxVec2fv(1.0f, 1.0f);
-    this->subViews = CX_ALLOC(cxList);
-    
+
     CX_METHOD_OVERRIDE(this->IsTouch, cxViewIsTouch);
     CX_METHOD_OVERRIDE(this->IsOnKey, cxViewIsOnKey);
+    CX_METHOD_OVERRIDE(this->InitView, cxViewInitView);
     
+    this->subViews = CX_ALLOC(cxList);
     this->actions = CX_ALLOC(cxHash);
     this->caches = CX_ALLOC(cxHash);
     this->removes = CX_ALLOC(cxArray);
@@ -63,6 +145,7 @@ CX_OBJECT_FREE(cxView, cxObject)
     
     CX_SIGNAL_RELEASE(this->onDraw);
     
+    CX_METHOD_RELEASE(this->InitView);
     CX_METHOD_RELEASE(this->IsTouch);
     CX_METHOD_RELEASE(this->Touch);
     CX_METHOD_RELEASE(this->IsOnKey);
@@ -452,11 +535,9 @@ void cxViewAppend(cxAny pview,cxAny newview)
     cxView this = pview;
     cxView new = newview;
     CX_RETURN(new->parentView == pview);
-    //
     CX_ASSERT(newview != NULL && new->subElement == NULL, "newview null or add to view");
     new->subElement = cxListAppend(this->subViews, new);
     new->parentView = this;
-    //
     if(this->isRunning){
         cxViewEnter(new);
         cxViewLayout(new);

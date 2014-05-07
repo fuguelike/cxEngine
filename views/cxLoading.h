@@ -23,6 +23,8 @@ CX_OBJECT_DEF(cxLoading, cxView)
     CX_EVENT_ALLOC(onStart);
 CX_OBJECT_END(cxLoading)
 
+void cxLoadingInitView(cxAny pview,cxJson json);
+
 cxAny cxLoadingObject(cxAny pview);
 
 void cxLoadingSetObject(cxAny pview,cxAny object);

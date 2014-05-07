@@ -28,6 +28,8 @@ CX_OBJECT_DEF(cxScroll, cxView)
     CX_SLOT_ALLOC(onTouch);
 CX_OBJECT_END(cxScroll)
 
+void cxScrollInitView(cxAny pview,cxJson json);
+
 cxBool cxScrollTouch(cxAny pview,cxTouch *touch);
 
 cxView cxScrollContainer(cxAny pview);

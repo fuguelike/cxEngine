@@ -99,7 +99,6 @@ static bool cxShaderCompile(cxShader this,GLuint *shader, GLenum type, cxString 
 
 CX_OBJECT_INIT(cxShader, cxObject)
 {
-    this->super.cxBase = cxBaseTypeShader;
     CX_METHOD_OVERRIDE(this->Init, cxShaderInitPosColorTex);
 }
 CX_OBJECT_FREE(cxShader, cxObject)

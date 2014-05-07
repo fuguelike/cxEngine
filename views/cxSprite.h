@@ -28,6 +28,8 @@ CX_OBJECT_DEF(cxSprite, cxView)
     cxBoxTex2f      texCoord;
 CX_OBJECT_END(cxSprite)
 
+void cxSpriteInitView(cxAny pview,cxJson json);
+
 void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box);
 
 cxBoxTex2f cxSpriteBoxTex(cxAny pview);

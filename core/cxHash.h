@@ -59,7 +59,7 @@ cxBool  cxHashHas(cxHash hash,cxHashKey key);
 
 void    cxHashDel(cxHash hash,cxHashKey key);
 
-void    cxHashSet(cxHash hash,cxHashKey key,cxAny any);
+cxBool    cxHashSet(cxHash hash,cxHashKey key,cxAny any);
 
 cxAny   cxHashGet(cxHash hash,cxHashKey key);
 

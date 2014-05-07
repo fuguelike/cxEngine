@@ -9,6 +9,16 @@
 #include <kazmath/matrix.h>
 #include <streams/cxAssetsStream.h>
 #include <socket/cxEventBase.h>
+#include <views/cxSprite.h>
+#include <views/cxAtlas.h>
+#include <views/cxButton.h>
+#include <views/cxClipping.h>
+#include <views/cxLabelBMP.h>
+#include <views/cxLabelTTF.h>
+#include <views/cxLoading.h>
+#include <views/cxPolygon.h>
+#include <views/cxScroll.h>
+#include <views/cxTable.h>
 #include "cxInitType.h"
 #include "cxEngine.h"
 #include "cxAutoPool.h"
@@ -17,6 +27,24 @@
 
 static cxEngine instance = NULL;
 static cxBool isExit = false;
+
+#define CX_CREATE_VIEW(_t_) if(strcmp(type,#_t_) == 0) return CX_CREATE(_t_)
+
+cxAny cxEngineCreateView(cxConstChars type)
+{
+    CX_CREATE_VIEW(cxView);
+    CX_CREATE_VIEW(cxSprite);
+    CX_CREATE_VIEW(cxAtlas);
+    CX_CREATE_VIEW(cxButton);
+    CX_CREATE_VIEW(cxClipping);
+    CX_CREATE_VIEW(cxLabelBMP);
+    CX_CREATE_VIEW(cxLabelTTF);
+    CX_CREATE_VIEW(cxLoading);
+    CX_CREATE_VIEW(cxPolygon);
+    CX_CREATE_VIEW(cxScroll);
+    CX_CREATE_VIEW(cxTable);
+    return NULL;
+}
 
 void cxEngineRecvJson(cxString json)
 {
@@ -159,6 +187,7 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->window    = CX_ALLOC(cxWindow);
     this->dbenvs    = CX_ALLOC(cxHash);
     this->bmpfonts  = CX_ALLOC(cxHash);
+    CX_METHOD_OVERRIDE(this->CreateView, cxEngineCreateView);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
@@ -173,6 +202,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_SIGNAL_RELEASE(this->onPause);
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
+    CX_METHOD_RELEASE(this->CreateView);
     cxEventBaseDestroy();
     cxCurveDestroy();
     cxOpenGLDestroy();

@@ -15,6 +15,8 @@
 
 CX_C_BEGIN
 
+//use texturepack to json array file
+
 CX_OBJECT_DEF(cxTextureJSON, cxTexture)
     cxTexture innerTexture;
 CX_OBJECT_END(cxTextureJSON)

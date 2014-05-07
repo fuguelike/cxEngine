@@ -116,8 +116,7 @@ CX_OBJECT_INIT(cxMemStream, cxStream)
 }
 CX_OBJECT_FREE(cxMemStream, cxStream)
 {
-    allocator->free(this->data);
-    this->data = NULL;
+    
 }
 CX_OBJECT_TERM(cxMemStream, cxStream)
 

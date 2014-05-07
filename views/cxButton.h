@@ -23,6 +23,8 @@ CX_OBJECT_DEF(cxButton, cxSprite)
     CX_EVENT_ALLOC(onLeave);
 CX_OBJECT_END(cxButton)
 
+void cxButtonInitView(cxAny pview,cxJson json);
+
 cxBool cxButtonTouch(cxAny pview,cxTouch *touch);
 
 void cxButtonEnable(cxAny pview,cxBool enable);

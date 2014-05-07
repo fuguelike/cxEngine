@@ -93,15 +93,17 @@ static void cxHashSetUnsafe(cxHash hash,cxHashKey key,cxAny any)
     CX_RETAIN(new->any);
 }
 
-void cxHashSet(cxHash hash,cxHashKey key,cxAny any)
+cxBool cxHashSet(cxHash hash,cxHashKey key,cxAny any)
 {
     CX_ASSERT(any != NULL, "any object error");
     cxHashElement *element = cxHashGetElement(hash, key);
     if(element == NULL){
         cxHashSetUnsafe(hash, key, any);
+        return false;
     }else if(element->any != any){
         CX_RETAIN_SWAP(element->any, any);
     }
+    return true;
 }
 
 

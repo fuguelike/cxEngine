@@ -15,6 +15,7 @@
 #include "cxInput.h"
 #include "cxHash.h"
 #include "cxString.h"
+#include "cxJson.h"
 
 CX_C_BEGIN
 
@@ -78,6 +79,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_ALLOC(void, Draw, cxAny);
     CX_METHOD_ALLOC(void, After, cxAny);
     CX_METHOD_ALLOC(void, Before, cxAny);
+    CX_METHOD_ALLOC(void, InitView,cxAny,cxJson);
 
     CX_SIGNAL_ALLOC(onDraw);
 
@@ -88,6 +90,12 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
 CX_OBJECT_END(cxView)
+
+#define CX_VIEW_SUPER_INIT(_t_) {cxJson super = cxJsonObject(json, "super");if(super != NULL){_t_##InitView(pview, super);}}
+
+void cxViewInitView(cxAny pview,cxJson json);
+
+cxAny cxViewLoad(cxConstChars file,cxHash hash);
 
 void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object);
 

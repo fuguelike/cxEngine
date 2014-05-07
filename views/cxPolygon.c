@@ -28,8 +28,32 @@ static void cxPolygonMalloc(cxPolygon this)
     this->texs = allocator->realloc(this->texs,sizeof(cxTex2f) * this->capacity);
 }
 
+void cxPolygonInitView(cxAny pview,cxJson json)
+{
+    cxJson points = cxJsonArray(json, "points");
+    CX_JSON_ARRAY_EACH_BEG(points, point);
+    {
+        cxPoint p = {0};
+        p.colors = cxColor4fv(1, 1, 1, 1);
+        p.texcoords = cxTex2fv(0, 0);
+        p.vertices = cxVec3fv(0, 0, 0);
+        p.vertices.x = cxJsonDouble(point, "p.x", p.vertices.x);
+        p.vertices.y = cxJsonDouble(point, "p.y", p.vertices.y);
+        p.texcoords.u = cxJsonDouble(point, "t.u", p.texcoords.u);
+        p.texcoords.v = cxJsonDouble(point, "t.v", p.texcoords.v);
+        p.colors.a = cxJsonDouble(point, "c.a", p.colors.a);
+        p.colors.r = cxJsonDouble(point, "c.r", p.colors.r);
+        p.colors.g = cxJsonDouble(point, "c.g", p.colors.g);
+        p.colors.b = cxJsonDouble(point, "c.b", p.colors.b);
+        cxPolygonAppend(pview, p);
+    }
+    CX_JSON_ARRAY_EACH_END(points, point);
+    CX_VIEW_SUPER_INIT(cxSprite);
+}
+
 CX_OBJECT_INIT(cxPolygon, cxSprite)
 {
+    CX_METHOD_OVERRIDE(this->super.super.InitView, cxPolygonInitView);
     CX_METHOD_OVERRIDE(this->super.super.Draw, cxPolygonDraw);
     this->capacity = 8;
     cxPolygonMalloc(this);

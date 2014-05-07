@@ -44,12 +44,15 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onTouch);
     CX_SIGNAL_ALLOC(onRecvJson);
     CX_EVENT_ALLOC(onExit);
+    CX_METHOD_ALLOC(cxAny, CreateView,cxConstChars);
     cxTouch touch;
     cxKey key;
     cxString lang;
 CX_OBJECT_END(cxEngine)
 
 cxEngine cxEngineInstance();
+
+cxAny cxEngineCreateView(cxConstChars type);
 
 void cxEngineTimeReset();
 

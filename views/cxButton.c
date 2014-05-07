@@ -46,11 +46,17 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
+void cxButtonInitView(cxAny pview,cxJson json)
+{
+    CX_VIEW_SUPER_INIT(cxSprite);
+}
+
 CX_OBJECT_INIT(cxButton, cxSprite)
 {
     this->movement = 25;
     this->isEnable = true;
     CX_METHOD_OVERRIDE(this->super.super.Touch, cxButtonTouch);
+    CX_METHOD_OVERRIDE(this->super.super.InitView, cxButtonInitView);
 }
 CX_OBJECT_FREE(cxButton, cxSprite)
 {

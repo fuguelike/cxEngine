@@ -101,6 +101,16 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
     }
 }
 
+void cxSpriteInitView(cxAny pview,cxJson json)
+{
+    cxBool usetexsize = cxJsonBool(json, "uts", true);
+    cxConstChars texture = cxJsonConstChars(json, "texture");
+    if(texture != NULL){
+        cxSpriteSetTextureURL(pview, texture, usetexsize);
+    }
+    CX_VIEW_SUPER_INIT(cxView);
+}
+
 CX_OBJECT_INIT(cxSprite, cxView)
 {
     this->texCoord = cxBoxTex2fDefault();
@@ -108,6 +118,7 @@ CX_OBJECT_INIT(cxSprite, cxView)
     CX_EVENT_QUICK(this->super.onDirty, cxSpriteDirtyEvent);
     CX_METHOD_OVERRIDE(this->super.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
+    CX_METHOD_OVERRIDE(this->super.InitView, cxSpriteInitView);
 }
 CX_OBJECT_FREE(cxSprite, cxView)
 {

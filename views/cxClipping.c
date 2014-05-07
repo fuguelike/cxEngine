@@ -55,8 +55,14 @@ static void cxClippingDrawAfter(cxAny pview)
     glDisable(GL_STENCIL_TEST);
 }
 
+void cxClippingInitView(cxAny pview,cxJson json)
+{
+    CX_VIEW_SUPER_INIT(cxView);
+}
+
 CX_OBJECT_INIT(cxClipping, cxView)
 {
+    CX_METHOD_OVERRIDE(this->super.InitView, cxClippingInitView);
     this->useRef = cxStencilRefAlloc();
     CX_METHOD_OVERRIDE(this->super.Before, cxClippingDrawBefore);
     CX_METHOD_OVERRIDE(this->super.After, cxClippingDrawAfter);

@@ -5,8 +5,6 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE   := cxEngine
 
-LOCAL_ARM_MODE := arm
-
 LOCAL_CFLAGS   := \
     -std=gnu99 -O2 -DANDROID \
     -I$(LOCAL_PATH) \

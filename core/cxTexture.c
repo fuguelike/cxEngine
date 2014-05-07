@@ -22,7 +22,6 @@ CX_OBJECT_TERM(cxTexCoord, cxObject)
 
 CX_OBJECT_INIT(cxTexture, cxObject)
 {
-    this->super.cxBase = cxBaseTypeTexture;
     this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE);
     this->keys = CX_ALLOC(cxHash);
 }

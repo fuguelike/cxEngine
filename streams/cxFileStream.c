@@ -11,11 +11,6 @@
 #include <core/cxUtil.h>
 #include "cxFileStream.h"
 
-void __cxFileStreamTypeInit()
-{
-    
-}
-
 static cxBool cxFileStreamOpen(cxAny this)
 {
     cxFileStream file = this;
@@ -115,7 +110,7 @@ CX_OBJECT_INIT(cxFileStream, cxStream)
 }
 CX_OBJECT_FREE(cxFileStream, cxStream)
 {
-    cxFileStreamClose(this);
+    
 }
 CX_OBJECT_TERM(cxFileStream, cxStream)
 

@@ -19,6 +19,8 @@ CX_OBJECT_DEF(cxClipping, cxView)
     CX_EVENT_ALLOC(onClipping);
 CX_OBJECT_END(cxClipping)
 
+void cxClippingInitView(cxAny pview,cxJson json);
+
 void cxClippingSetInverse(cxAny pview,cxBool inverse);
 
 CX_C_END

@@ -14,7 +14,8 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    
+    cxAny view = cxViewLoad("ui.json", NULL);
+    cxWindowPushView(view);
 }
 
 void cxEngineFree(cxEngine engine)

@@ -14,7 +14,7 @@
 
 CX_OBJECT_INIT(cxStream, cxObject)
 {
-    this->super.cxBase  = cxBaseTypeStream;
+    //
 }
 CX_OBJECT_FREE(cxStream, cxObject)
 {

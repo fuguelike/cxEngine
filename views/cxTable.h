@@ -20,6 +20,8 @@ CX_OBJECT_DEF(cxTable, cxView)
     cxVec2i grid;
 CX_OBJECT_END(cxTable)
 
+void cxTableInitView(cxAny pview,cxJson json);
+
 void cxTableArrayHide(cxAny pview,cxBool arrayHide);
 
 void cxTableArraySubviews(cxAny pview);

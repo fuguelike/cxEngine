@@ -21,6 +21,8 @@ CX_OBJECT_DEF(cxLabelBMP, cxAtlas)
     cxFloat size;
 CX_OBJECT_END(cxLabelBMP)
 
+void cxLabelBMPInitView(cxAny pview,cxJson json);
+
 cxLabelBMP cxLabelBMPCreate(cxString font,cxString txt);
 
 void cxLabelBMPSetFont(cxAny pview,cxString font);
