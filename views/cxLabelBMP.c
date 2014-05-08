@@ -76,22 +76,22 @@ static void cxLabelBMPUpdate(cxEvent *event)
     this->isDirty = false;
 }
 
-void cxLabelBMPInitView(cxAny pview,cxJson json)
+void __cxLabelBMPInitObject(cxAny object,cxAny json)
 {
     cxString font = cxJsonString(json, "font");
     if(cxStringOK(font)){
-        cxLabelBMPSetFont(pview, font);
+        cxLabelBMPSetFont(object, font);
     }
     cxString text = cxJsonString(json, "text");
     if(cxStringOK(text)){
-        cxLabelBMPSetText(pview, text);
+        cxLabelBMPSetText(object, text);
     }
-    CX_VIEW_SUPER_INIT(cxAtlas);
+    CX_BASE_SUPER(cxAtlas);
 }
 
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
 {
-    CX_METHOD_OVERRIDE(this->super.super.super.InitView, cxLabelBMPInitView);
+    CX_BASE_OVERRIDE(cxLabelBMP, this);
     CX_EVENT_QUICK(this->super.super.super.onUpdate, cxLabelBMPUpdate);
     this->isDirty = true;
 }

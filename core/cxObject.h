@@ -30,13 +30,22 @@ cxAny cxObjectAutoRelease(cxAny ptr);
 
 //object
 
-#define CX_OBJECT_BEG(_t_,...)                                  \
-typedef struct _t_ *_t_;                                        \
-void __##_t_##AutoInit(_t_ this);                               \
-void __##_t_##AutoFree(_t_ this);                               \
+#define CX_OBJECT_BEG(_t_,...)                          \
+typedef struct _t_ *_t_;                                \
+void __##_t_##AutoInit(_t_ this);                       \
+void __##_t_##AutoFree(_t_ this);                       \
+void __##_t_##InitObject(cxAny,cxAny);                  \
 struct _t_ {
 
-#define CX_OBJECT_END(_t_) };
+#define CX_OBJECT_END(_t_) };                           \
+CX_ATTRIBUTE_UNUSED static cxAny __##_t_##CreateFunc()  \
+{                                                       \
+    return CX_CREATE(_t_);                              \
+}                                                       \
+CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()   \
+{                                                       \
+    return CX_ALLOC(_t_);                               \
+}
 
 #define CX_RETURN(cond,...)         if(cond)return __VA_ARGS__
 

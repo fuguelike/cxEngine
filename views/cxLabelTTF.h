@@ -20,8 +20,6 @@ CX_OBJECT_DEF(cxLabelTTF, cxSprite)
     cxTextAttr attr;
 CX_OBJECT_END(cxLabelTTF)
 
-void cxLabelTTFInitView(cxAny pview,cxJson json);
-
 void cxLabelTTFSetFontSize(cxAny pview,cxFloat fontsize);
 
 void cxLabelTTFSetFontBold(cxAny pview,cxBool bold);

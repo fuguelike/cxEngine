@@ -1,5 +1,11 @@
 {
   "id": "v0",
-  "type": "cxLabelTTF",
-  "text":"hello word中"
+  "src": "cxLabelTTF.json",
+  "super": {
+    "super": {
+      "position": {
+        "x": 200
+      }
+    }
+  }
 }

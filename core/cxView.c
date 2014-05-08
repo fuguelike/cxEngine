@@ -14,34 +14,35 @@
 #include "cxAction.h"
 
 //parse type id subview property
-static cxAny cxViewLoadByJson(cxAny pview, cxJson json, cxHash hash)
+static cxAny cxViewLoadByJson(cxJson json, cxHash hash)
 {
     CX_ASSERT(json != NULL, "json args error");
     cxEngine engine = cxEngineInstance();
-    //get view type
+    //link to src file
+    cxConstChars src = cxJsonConstChars(json, "src");
+    //make type
     cxConstChars type = cxJsonConstChars(json, "type");
-    if(type == NULL){
-        CX_ERROR("json must has type field");
-        return NULL;
+    cxAny view = NULL;
+    if(src != NULL){
+        view = cxViewLoad(src, hash);
+    }else if(type != NULL){
+        view = CX_METHOD_GET(NULL, engine->CreateObject,type);
+    }else{
+        CX_ASSERT_FALSE("json file must set src or type property");
     }
-    //create view
-    cxView view = CX_METHOD_GET(NULL, engine->CreateView,type);
-    if(view == NULL){
-        CX_ERROR("create view %s failed");
-        return NULL;
-    }
-    //save view to cache
+    CX_RETURN(view == NULL, NULL);
+    //init view
+    CX_BASE_RUN(view, json);
+    //save view to hash
     cxConstChars id = cxJsonConstChars(json, "id");
     if(id != NULL && hash != NULL && cxHashSet(hash, cxHashStrKey(id), view)){
-        CX_WARN("view id %s,exists hash");
+        CX_WARN("view id %s exists in hash");
     }
-    //init view
-    CX_METHOD_RUN(view->InitView,view,json);
     //load subview
     cxJson subviews = cxJsonArray(json, "subviews");
     CX_JSON_ARRAY_EACH_BEG(subviews, item)
     {
-        cxView subview = cxViewLoadByJson(view, item, hash);
+        cxView subview = cxViewLoadByJson(item, hash);
         if(subview != NULL){
             cxViewAppend(view, subview);
         }
@@ -52,15 +53,11 @@ static cxAny cxViewLoadByJson(cxAny pview, cxJson json, cxHash hash)
 //save to hash with id
 cxAny cxViewLoad(cxConstChars file,cxHash hash)
 {
-    cxString data = cxAssetsData(file);
-    if(data == NULL){
-        return NULL;
-    }
-    cxJson json = cxJsonCreate(data);
+    cxJson json = cxEngineLoadJsonFile(file);
     if(json == NULL){
         return NULL;
     }
-    return cxViewLoadByJson(NULL,json, hash);
+    return cxViewLoadByJson(json, hash);
 }
 
 void cxViewSetCropping(cxAny pview,cxBool cropping)
@@ -75,9 +72,9 @@ cxBool cxViewZeroSize(cxAny pview)
     return cxSize2Zero(this->size);
 }
 
-void cxViewInitView(cxAny pview,cxJson json)
+void __cxViewInitObject(cxAny object,cxAny json)
 {
-    cxView this = pview;
+    cxView this = object;
     this->position.x = cxJsonDouble(json, "position.x", this->position.x);
     this->position.y = cxJsonDouble(json, "position.y", this->position.y);
     this->size.w = cxJsonDouble(json, "size.w", this->size.w);
@@ -105,9 +102,10 @@ void cxViewInitView(cxAny pview,cxJson json)
     this->isCropping = cxJsonBool(json, "cropping", this->isCropping);
     this->zorder = cxJsonInt(json, "zorder", this->zorder);
     this->isDirty = true;
+    CX_BASE_SUPER(cxBase);
 }
 
-CX_OBJECT_INIT(cxView, cxObject)
+CX_OBJECT_INIT(cxView, cxBase)
 {
     this->hideTop = true;
     this->isShowBorder = false;
@@ -122,14 +120,14 @@ CX_OBJECT_INIT(cxView, cxObject)
 
     CX_METHOD_OVERRIDE(this->IsTouch, cxViewIsTouch);
     CX_METHOD_OVERRIDE(this->IsOnKey, cxViewIsOnKey);
-    CX_METHOD_OVERRIDE(this->InitView, cxViewInitView);
+    CX_BASE_OVERRIDE(cxView, this);
     
     this->subViews = CX_ALLOC(cxList);
     this->actions = CX_ALLOC(cxHash);
     this->caches = CX_ALLOC(cxHash);
     this->removes = CX_ALLOC(cxArray);
 }
-CX_OBJECT_FREE(cxView, cxObject)
+CX_OBJECT_FREE(cxView, cxBase)
 {
     CX_RELEASE(this->removes);
     CX_RELEASE(this->subViews);
@@ -145,7 +143,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     
     CX_SIGNAL_RELEASE(this->onDraw);
     
-    CX_METHOD_RELEASE(this->InitView);
     CX_METHOD_RELEASE(this->IsTouch);
     CX_METHOD_RELEASE(this->Touch);
     CX_METHOD_RELEASE(this->IsOnKey);
@@ -154,7 +151,7 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_METHOD_RELEASE(this->After);
     CX_METHOD_RELEASE(this->Before);
 }
-CX_OBJECT_TERM(cxView, cxObject)
+CX_OBJECT_TERM(cxView, cxBase)
 
 void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object)
 {

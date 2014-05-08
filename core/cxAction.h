@@ -15,7 +15,7 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxAction, cxObject)
+CX_OBJECT_DEF(cxAction, cxBase)
     cxAssist4f assist;
     cxUInt actionId;
     cxFloat speed;

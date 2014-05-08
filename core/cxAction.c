@@ -33,14 +33,20 @@ void cxActionSetView(cxAny pav,cxAny pview)
     this->view = pview;
 }
 
-CX_OBJECT_INIT(cxAction, cxObject)
+void __cxActionInitObject(cxAny object,cxAny json)
 {
+    CX_BASE_SUPER(cxBase);
+}
+
+CX_OBJECT_INIT(cxAction, cxBase)
+{
+    CX_BASE_OVERRIDE(cxAction, this);
     this->isExit = false;
     this->speed = 1.0f;
     this->index = -1;
     this->indexNum = -1;
 }
-CX_OBJECT_FREE(cxAction, cxObject)
+CX_OBJECT_FREE(cxAction, cxBase)
 {
     CX_EVENT_RELEASE(this->onIndex);
     CX_EVENT_RELEASE(this->onStart);
@@ -55,7 +61,7 @@ CX_OBJECT_FREE(cxAction, cxObject)
     CX_METHOD_RELEASE(this->Step);
     CX_METHOD_RELEASE(this->Exit);
 }
-CX_OBJECT_TERM(cxAction, cxObject)
+CX_OBJECT_TERM(cxAction, cxBase)
 
 void cxActionSetDuration(cxAny pav,cxFloat time)
 {

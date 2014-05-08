@@ -21,8 +21,6 @@ CX_OBJECT_DEF(cxPolygon, cxSprite)
     cxInt number;
 CX_OBJECT_END(cxPolygon)
 
-void cxPolygonInitView(cxAny pview,cxJson json);
-
 void cxPolygonClean(cxAny pview);
 
 void cxPolygonAppend(cxAny pview,cxPoint point);

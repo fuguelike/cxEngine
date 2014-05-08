@@ -110,7 +110,8 @@ LOCAL_SRC_FILES += \
     core/cxView.c \
     core/cxAction.c \
     core/cxInitType.c \
-    core/cxGlobal.c
+    core/cxGlobal.c \
+    core/cxController.c
     
 LOCAL_SRC_FILES += \
     algorithm/cxAStar.c

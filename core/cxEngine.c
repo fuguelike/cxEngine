@@ -9,41 +9,28 @@
 #include <kazmath/matrix.h>
 #include <streams/cxAssetsStream.h>
 #include <socket/cxEventBase.h>
-#include <views/cxSprite.h>
-#include <views/cxAtlas.h>
-#include <views/cxButton.h>
-#include <views/cxClipping.h>
-#include <views/cxLabelBMP.h>
-#include <views/cxLabelTTF.h>
-#include <views/cxLoading.h>
-#include <views/cxPolygon.h>
-#include <views/cxScroll.h>
-#include <views/cxTable.h>
 #include "cxInitType.h"
 #include "cxEngine.h"
 #include "cxAutoPool.h"
 #include "cxOpenGL.h"
 #include "cxUtil.h"
+#include "cxIconv.h"
 
 static cxEngine instance = NULL;
 static cxBool isExit = false;
 
-#define CX_CREATE_VIEW(_t_) if(strcmp(type,#_t_) == 0) return CX_CREATE(_t_)
-
-cxAny cxEngineCreateView(cxConstChars type)
+cxAny cxEngineCreateObject(cxConstChars name)
 {
-    CX_CREATE_VIEW(cxView);
-    CX_CREATE_VIEW(cxSprite);
-    CX_CREATE_VIEW(cxAtlas);
-    CX_CREATE_VIEW(cxButton);
-    CX_CREATE_VIEW(cxClipping);
-    CX_CREATE_VIEW(cxLabelBMP);
-    CX_CREATE_VIEW(cxLabelTTF);
-    CX_CREATE_VIEW(cxLoading);
-    CX_CREATE_VIEW(cxPolygon);
-    CX_CREATE_VIEW(cxScroll);
-    CX_CREATE_VIEW(cxTable);
-    return NULL;
+    CX_ASSERT(instance != NULL, "engine not init");
+    cxType type = cxHashGet(instance->classes, cxHashStrKey(name));
+    CX_ASSERT(type != NULL, "type %s not register");
+    return type->Create();
+}
+
+void cxEngineRegisterType(cxConstChars name, cxAny type)
+{
+    CX_ASSERT(instance != NULL, "engine not init");
+    cxHashSet(instance->classes, cxHashStrKey(name), type);
 }
 
 void cxEngineRecvJson(cxString json)
@@ -187,10 +174,14 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->window    = CX_ALLOC(cxWindow);
     this->dbenvs    = CX_ALLOC(cxHash);
     this->bmpfonts  = CX_ALLOC(cxHash);
-    CX_METHOD_OVERRIDE(this->CreateView, cxEngineCreateView);
+    this->jsons     = CX_ALLOC(cxHash);
+    this->classes   = CX_ALLOC(cxHash);
+    CX_METHOD_OVERRIDE(this->CreateObject, cxEngineCreateObject);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
+    CX_RELEASE(this->classes);
+    CX_RELEASE(this->jsons);
     CX_RELEASE(this->bmpfonts);
     CX_RELEASE(this->lang);
     CX_RELEASE(this->dbenvs);
@@ -202,7 +193,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_SIGNAL_RELEASE(this->onPause);
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
-    CX_METHOD_RELEASE(this->CreateView);
+    CX_METHOD_RELEASE(this->CreateObject);
     cxEventBaseDestroy();
     cxCurveDestroy();
     cxOpenGLDestroy();
@@ -212,6 +203,25 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     kmGLFreeAll();
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
+
+cxJson cxEngineLoadJsonFile(cxConstChars file)
+{
+    cxEngine this = cxEngineInstance();
+    cxJson json = cxHashGet(this->jsons, cxHashStrKey(file));
+    if(json != NULL){
+        return json;
+    }
+    cxString data = cxAssetsData(file);
+    if(data == NULL){
+        return NULL;
+    }
+    json = cxJsonCreate(data);
+    if(json == NULL){
+        return NULL;
+    }
+    cxHashSet(this->jsons, cxHashStrKey(file), json);
+    return json;
+}
 
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file)
 {

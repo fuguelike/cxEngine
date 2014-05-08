@@ -24,7 +24,9 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash bmpfonts;
+    cxHash jsons;
     cxHash dbenvs;
+    cxHash classes;
     cxFloat frameInterval;
     cxSize2f winsize;   //screen size
     cxSize2f dessize;   //design size
@@ -44,19 +46,32 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onTouch);
     CX_SIGNAL_ALLOC(onRecvJson);
     CX_EVENT_ALLOC(onExit);
-    CX_METHOD_ALLOC(cxAny, CreateView,cxConstChars);
+    CX_METHOD_ALLOC(cxAny, CreateObject,cxConstChars);
     cxTouch touch;
     cxKey key;
     cxString lang;
 CX_OBJECT_END(cxEngine)
 
+#define CX_REGISTER_TYPE(_t_)                                               \
+{                                                                           \
+    cxType _t_##Type = CX_ALLOC(cxType);                                    \
+    CX_METHOD_OVERRIDE(_t_##Type->Alloc, __##_t_##AllocFunc);               \
+    CX_METHOD_OVERRIDE(_t_##Type->Create, __##_t_##CreateFunc);             \
+    cxEngineRegisterType(#_t_,_t_##Type);                                   \
+    CX_RELEASE(_t_##Type);                                                  \
+}
+
+void cxEngineRegisterType(cxConstChars name, cxAny type);
+
 cxEngine cxEngineInstance();
 
-cxAny cxEngineCreateView(cxConstChars type);
+cxAny cxEngineCreateObject(cxConstChars name);
 
 void cxEngineTimeReset();
 
 cxAny cxEngineDB(cxConstChars url);
+
+cxJson cxEngineLoadJsonFile(cxConstChars file);
 
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 
