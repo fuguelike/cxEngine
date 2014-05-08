@@ -12,12 +12,15 @@ void cxEngineInit(cxEngine engine)
     
 }
 
-#include <views/cxSprite.h>
-
 void cxEngineMain(cxEngine engine)
 {
-    cxAny view = cxObjectLoad("ui.json", NULL);
-    cxWindowPushView(view);
+    cxController controller = CX_ALLOC(cxController);
+    cxControllerInitWithFile(controller, "ui.json");
+    cxAny object = cxControllerGet(controller, "v0");
+    if(CX_INSTANCE_OF(object, cxView)){
+        cxWindowPushView(object);
+    }
+    CX_RELEASE(controller);
 }
 
 void cxEngineFree(cxEngine engine)

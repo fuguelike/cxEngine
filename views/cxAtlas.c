@@ -134,9 +134,7 @@ void __cxAtlasInitObject(cxAny object,cxAny json,cxAny hash)
 {
     CX_OBJECT_INIT_SUPER(cxSprite);
     cxAtlas this = object;
-    cxJson points = cxJsonArray(json, "points");
     if(cxJsonBool(json, "scale9.enable", false)){
-        
         cxAtlasSetCapacity(this, 9);
         this->scale9.enable = true;
         this->scale9.box.l = cxJsonDouble(json, "scale9.box.l", this->scale9.box.l);
@@ -144,35 +142,52 @@ void __cxAtlasInitObject(cxAny object,cxAny json,cxAny hash)
         this->scale9.box.t = cxJsonDouble(json, "scale9.box.t", this->scale9.box.t);
         this->scale9.box.b = cxJsonDouble(json, "scale9.box.b", this->scale9.box.b);
         cxAtlasUpdateScale9(this);
-    }else if(points != NULL){
-        cxInt len = cxJsonArrayLength(points);
-        CX_ASSERT(len > 0, "points empty");
+        return;
+    }
+    cxJson layers = cxJsonArray(json, "layers");
+    if(layers != NULL){
+        cxInt len = cxJsonArrayLength(layers);
+        CX_ASSERT(len > 0, "layers empty");
         cxAtlasSetCapacity(this, len);
-        CX_JSON_ARRAY_EACH_BEG(points, point);
+        CX_JSON_ARRAY_EACH_BEG(layers, layer)
         {
             cxVec2f pos = cxVec2fv(0, 0);
             cxSize2f size = cxSize2fv(0, 0);
             cxBoxTex2f tex = cxBoxTex2fDefault();
             cxColor4f color = cxColor4fv(1, 1, 1, 1);
-            pos.x = cxJsonDouble(point, "p.x", pos.x);
-            pos.y = cxJsonDouble(point, "p.y", pos.y);
-            size.w = cxJsonDouble(point, "s.w", size.w);
-            size.h = cxJsonDouble(point, "s.h", size.h);
-            tex.lb.u = cxJsonDouble(point, "t.lb.u", tex.lb.u);
-            tex.lb.v = cxJsonDouble(point, "t.lb.v", tex.lb.v);
-            tex.rb.u = cxJsonDouble(point, "t.rb.u", tex.rb.u);
-            tex.rb.v = cxJsonDouble(point, "t.rb.v", tex.rb.v);
-            tex.lt.u = cxJsonDouble(point, "t.lt.u", tex.lt.u);
-            tex.lt.v = cxJsonDouble(point, "t.lt.v", tex.lt.v);
-            tex.rt.u = cxJsonDouble(point, "t.rt.u", tex.rt.u);
-            tex.rt.v = cxJsonDouble(point, "t.rt.v", tex.rt.v);
-            color.a = cxJsonDouble(point, "c.a", color.a);
-            color.r = cxJsonDouble(point, "c.r", color.r);
-            color.g = cxJsonDouble(point, "c.g", color.g);
-            color.b = cxJsonDouble(point, "c.b", color.b);
+            
+            pos.x = cxJsonDouble(layer, "position.x", pos.x);
+            pos.y = cxJsonDouble(layer, "position.y", pos.y);
+            
+            size.w = cxJsonDouble(layer, "size.w", size.w);
+            size.h = cxJsonDouble(layer, "size.h", size.h);
+            
+            cxConstChars key = cxJsonConstChars(layer, "key");
+            if(key != NULL){
+                tex = cxTextureBox(this->super.texture, key);
+            }else{
+                tex.lb.u = cxJsonDouble(layer, "coord.lb.u", tex.lb.u);
+                tex.lb.v = cxJsonDouble(layer, "coord.lb.v", tex.lb.v);
+                tex.rb.u = cxJsonDouble(layer, "coord.rb.u", tex.rb.u);
+                tex.rb.v = cxJsonDouble(layer, "coord.rb.v", tex.rb.v);
+                tex.lt.u = cxJsonDouble(layer, "coord.lt.u", tex.lt.u);
+                tex.lt.v = cxJsonDouble(layer, "coord.lt.v", tex.lt.v);
+                tex.rt.u = cxJsonDouble(layer, "coord.rt.u", tex.rt.u);
+                tex.rt.v = cxJsonDouble(layer, "coord.rt.v", tex.rt.v);
+            }
+            if(cxSize2Zero(size) && key != NULL)
+            {
+                size = cxTextureSize(this->super.texture, key);
+            }
+            
+            color.a = cxJsonDouble(layer, "color.a", color.a);
+            color.r = cxJsonDouble(layer, "color.r", color.r);
+            color.g = cxJsonDouble(layer, "color.g", color.g);
+            color.b = cxJsonDouble(layer, "color.b", color.b);
             cxAtlasAppendBoxPoint(this, pos, size, tex, color);
         }
-        CX_JSON_ARRAY_EACH_END(points, point);
+        CX_JSON_ARRAY_EACH_END(layers, layer)
+        return;
     }
 }
 
@@ -258,7 +273,7 @@ void cxAtlasClean(cxAny pview)
     this->isDirty = true;
 }
 
-void cxAtlasAppend(cxAny pview,cxBoxPoint point)
+void cxAtlasAppend(cxAny pview,cxBoxPoint layer)
 {
     cxAtlas this = pview;
     //realloc
@@ -266,15 +281,15 @@ void cxAtlasAppend(cxAny pview,cxBoxPoint point)
         cxAtlasSetCapacity(pview, this->capacity + 8);
     }
     CX_ASSERT(this->number < this->capacity, "atlas number > boxNumber");
-    this->boxes[this->number++] = point;
+    this->boxes[this->number++] = layer;
     this->isDirty = true;
 }
 
-void cxAtlasUpdate(cxAny pview,cxInt index, cxBoxPoint point)
+void cxAtlasUpdate(cxAny pview,cxInt index, cxBoxPoint layer)
 {
     cxAtlas this = pview;
     CX_ASSERT(index >= 0 && index < this->capacity, "index > boxNumber");
-    this->boxes[index] = point;
+    this->boxes[index] = layer;
     this->isDirty = true;
 }
 

@@ -31,6 +31,7 @@
 		83DAD707191A26BF000A7D1F /* texture.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD705191A26BF000A7D1F /* texture.json */; };
 		83DAD708191A26BF000A7D1F /* texture.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD706191A26BF000A7D1F /* texture.pvr */; };
 		83DAD70A191A386C000A7D1F /* cxLabelTTF.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD709191A386C000A7D1F /* cxLabelTTF.json */; };
+		83F3CCD0191B674D00D6BCFB /* cxAtlas.json in Resources */ = {isa = PBXBuildFile; fileRef = 83F3CCCF191B674D00D6BCFB /* cxAtlas.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,7 @@
 		83DAD705191A26BF000A7D1F /* texture.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = texture.json; path = res/texture.json; sourceTree = SOURCE_ROOT; };
 		83DAD706191A26BF000A7D1F /* texture.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = texture.pvr; path = res/texture.pvr; sourceTree = SOURCE_ROOT; };
 		83DAD709191A386C000A7D1F /* cxLabelTTF.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxLabelTTF.json; path = res/cxLabelTTF.json; sourceTree = SOURCE_ROOT; };
+		83F3CCCF191B674D00D6BCFB /* cxAtlas.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxAtlas.json; path = res/cxAtlas.json; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				83F3CCCF191B674D00D6BCFB /* cxAtlas.json */,
 				83DAD709191A386C000A7D1F /* cxLabelTTF.json */,
 				83DAD705191A26BF000A7D1F /* texture.json */,
 				83DAD706191A26BF000A7D1F /* texture.pvr */,
@@ -241,6 +244,7 @@
 				839722AE19161746006D0F89 /* font.json in Resources */,
 				83DAD700191A14A6000A7D1F /* ui.json in Resources */,
 				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
+				83F3CCD0191B674D00D6BCFB /* cxAtlas.json in Resources */,
 				83DAD707191A26BF000A7D1F /* texture.json in Resources */,
 				839722AF19161746006D0F89 /* font.png in Resources */,
 				83DAD70A191A386C000A7D1F /* cxLabelTTF.json in Resources */,

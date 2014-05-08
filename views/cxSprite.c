@@ -103,7 +103,7 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
 
 void __cxSpriteInitObject(cxAny object,cxAny json,cxAny hash)
 {
-    cxBool usetexsize = cxJsonBool(json, "uts", true);
+    cxBool usetexsize = cxJsonBool(json, "usetexsize", true);
     cxConstChars texture = cxJsonConstChars(json, "texture");
     if(texture != NULL){
         cxSpriteSetTextureURL(object, texture, usetexsize);

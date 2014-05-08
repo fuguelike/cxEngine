@@ -21,7 +21,7 @@ static void cxLabelTTFUpdate(cxEvent *event)
 void __cxLabelTTFInitObject(cxAny object,cxAny json,cxAny hash)
 {
     cxLabelTTF this = object;
-    cxString font = cxJsonString(json, "font");
+    cxString font = cxJsonString(json, "font.name");
     if(cxStringOK(font)){
         cxLabelTTFSetFont(this, font);
     }
@@ -30,7 +30,7 @@ void __cxLabelTTFInitObject(cxAny object,cxAny json,cxAny hash)
         cxLabelTTFSetText(this, text);
     }
     cxLabelTTFSetFontBold(this, cxJsonBool(json, "bold", this->attr.bold));
-    cxLabelTTFSetFontSize(this, cxJsonDouble(json, "size", this->attr.size));
+    cxLabelTTFSetFontSize(this, cxJsonDouble(json, "font.size", this->attr.size));
     CX_OBJECT_INIT_SUPER(cxSprite);
 }
 

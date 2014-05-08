@@ -1,16 +1,13 @@
 {
   "id": "v0",
   "src": "cxLabelTTF.json?ttf3",
-  "super": {
-    "super": {
-      "position": {
-        "x": 100
-      },
-      "subviews": [
-        {
-          "src": "cxLabelTTF.json?ttf1"
-        }
-      ]
+  "position": {
+    "x": 100
+  },
+  "subviews": [
+    {
+      "src": "cxLabelTTF.json?ttf1",
+      "position":{"y":100}
     }
-  }
+  ]
 }

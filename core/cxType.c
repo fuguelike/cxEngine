@@ -139,6 +139,7 @@ void cxInitTypes()
     CX_REGISTER_TYPE(cxStream,cxObject);
     CX_REGISTER_TYPE(cxString,cxObject);
     CX_REGISTER_TYPE(cxTexture,cxObject);
+    CX_REGISTER_TYPE(cxNumber,cxObject);
     
     //register views
     CX_REGISTER_TYPE(cxView, cxObject);

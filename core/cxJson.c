@@ -10,7 +10,7 @@
 #include "cxJson.h"
 
 //if field is array
-static cxBool cxJsonKeyIsArray(cxString key,cxChar *skey,cxInt *index)
+static cxBool keyIsArray(cxString key,cxChar *skey,cxInt *index)
 {
     cxInt s,e = -1;
     cxConstChars ckey = cxStringBody(key);
@@ -42,10 +42,10 @@ static json_t *cxJsonGetJson(cxJson json,cxConstChars key)
     cxArray list = cxStringSplit(str, ".");
     json_t *pv = CX_JSON_PTR(json);
     cxInt index = 0;
-    cxChar skey[64]={0};
+    cxChar skey[CX_HASH_MAX_KEY_LENGTH]={0};
     json_t *rv = NULL;
     CX_ARRAY_FOREACH(list, e){
-        if(cxJsonKeyIsArray(cxArrayObject(e), skey, &index)){
+        if(keyIsArray(cxArrayObject(e), skey, &index)){
             pv = strlen(skey) > 0 ? json_object_get(pv, skey) : pv;
             CX_ASSERT(json_is_array(pv), "json must is array");
             rv = json_array_get(pv, index);
@@ -68,6 +68,41 @@ CX_OBJECT_FREE(cxJson, cxObject)
     }
 }
 CX_OBJECT_TERM(cxJson, cxObject)
+
+cxBool cxJsonIsInt(cxJson json)
+{
+    return json_is_integer(CX_JSON_PTR(json));
+}
+
+cxBool cxJsonIsDouble(cxJson json)
+{
+    return json_is_real(CX_JSON_PTR(json));
+}
+
+cxBool cxJsonIsNumber(cxJson json)
+{
+    return json_is_number(CX_JSON_PTR(json));
+}
+
+cxBool cxJsonIsString(cxJson json)
+{
+    return json_is_string(CX_JSON_PTR(json));
+}
+
+cxBool cxJsonIsBool(cxJson json)
+{
+    return json_is_boolean(CX_JSON_PTR(json));
+}
+
+cxBool cxJsonIsArray(cxJson json)
+{
+    return json_is_array(CX_JSON_PTR(json));
+}
+
+cxBool cxJsonIsObject(cxJson json)
+{
+    return json_is_object(CX_JSON_PTR(json));
+}
 
 cxJson cxJsonCreate(cxString json)
 {

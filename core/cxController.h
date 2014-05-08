@@ -15,13 +15,13 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxController, cxObject)
-    cxAny rootView;
-    cxHash views;
+    cxAny root;
+    cxHash objects;
 CX_OBJECT_END(cxController)
 
-void cxControllerLoadView(cxAny pc, cxConstChars file);
+void cxControllerInitWithFile(cxAny pc, cxConstChars file);
 
-cxAny cxControllerFindView(cxAny pc,cxConstChars key);
+cxAny cxControllerGet(cxAny pc,cxConstChars key);
 
 CX_C_END
 

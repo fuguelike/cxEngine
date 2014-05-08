@@ -103,7 +103,7 @@ CX_OBJECT_BEG(cxObject)
     CX_METHOD_ALLOC(void,InitObject,cxAny,cxAny,cxAny);
 CX_OBJECT_END(cxObject)
 
-#define CX_OBJECT_INIT_SUPER(_t_)          {cxJson super = cxJsonObject(json, "super");if(super != NULL){__##_t_##InitObject(object, super, hash);}}
+#define CX_OBJECT_INIT_SUPER(_t_)          __##_t_##InitObject(object, json, hash)
 
 #define CX_OBJECT_INIT_OVERRIDE(_t_,_o_)   CX_METHOD_OVERRIDE(((cxObject)(_o_))->InitObject, __##_t_##InitObject)
 

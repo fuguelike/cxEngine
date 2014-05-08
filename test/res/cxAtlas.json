@@ -1,0 +1,36 @@
+{
+  "id": "v0",
+  "type": "cxAtlas",
+  "texture": "texture.json",
+  "size": {
+    "w": 200,
+    "h": 200
+  },
+  "position": {
+    "x": 100
+  },
+  "layers": [
+    {
+      "position": {
+        "x": 0,
+        "y": 100
+      },
+      "size": {
+        "w": 100,
+        "h": 100
+      },
+      "key": "artichoke.png"
+    },
+    {
+      "position": {
+        "x": 0,
+        "y": 200
+      },
+      "size": {
+        "w": 100,
+        "h": 100
+      },
+      "key": "carrot.png"
+    }
+  ]
+}

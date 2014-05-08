@@ -47,6 +47,20 @@ if((_j_) != NULL){                                              \
 
 cxJson cxJsonCreate(cxString json);
 
+cxBool cxJsonIsInt(cxJson json);
+
+cxBool cxJsonIsDouble(cxJson json);
+
+cxBool cxJsonIsNumber(cxJson json);
+
+cxBool cxJsonIsString(cxJson json);
+
+cxBool cxJsonIsBool(cxJson json);
+
+cxBool cxJsonIsArray(cxJson json);
+
+cxBool cxJsonIsObject(cxJson json);
+
 cxJson cxJsonAttachAlloc(json_t *json);
 
 cxInt cxJsonToInt(cxJson json,cxInt dv);
