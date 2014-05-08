@@ -96,18 +96,18 @@ static void cxTableUpdate(cxEvent *event)
     }
 }
 
-void __cxTableInitObject(cxAny object,cxAny json)
+void __cxTableInitObject(cxAny object,cxAny json,cxAny hash)
 {
     cxTable this = object;
     this->grid.x = cxJsonInt(json, "grid.x", this->grid.x);
     this->grid.y = cxJsonInt(json, "grid.y", this->grid.y);
-    CX_OBJECT_SUPER(cxView);
+    CX_OBJECT_INIT_SUPER(cxView);
 }
 
 CX_OBJECT_INIT(cxTable, cxView)
 {
     this->arrayHide = true;
-    CX_OBJECT_OVERRIDE(cxTable, this);
+    CX_OBJECT_INIT_OVERRIDE(cxTable, this);
     CX_EVENT_QUICK(this->super.onResize, cxTableResize);
     CX_EVENT_QUICK(this->super.onUpdate, cxTableUpdate);
 }

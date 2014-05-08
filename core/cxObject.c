@@ -9,15 +9,16 @@
 #include "cxObject.h"
 #include "cxUtil.h"
 #include "cxJson.h"
+#include "cxType.h"
 
-void __cxObjectInitObject(cxAny object,cxAny json)
+void __cxObjectInitObject(cxAny object,cxAny json,cxAny hash)
 {
     
 }
 
 void __cxObjectAutoInit(cxObject this)
 {
-    CX_OBJECT_OVERRIDE(cxObject, this);
+    CX_OBJECT_INIT_OVERRIDE(cxObject, this);
 }
 
 void __cxObjectAutoFree(cxObject this)

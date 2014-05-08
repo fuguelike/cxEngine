@@ -12,48 +12,7 @@
 #include "cxEngine.h"
 #include "cxOpenGL.h"
 #include "cxAction.h"
-
-//parse type id subview property
-static cxAny cxViewLoadByJson(cxJson json, cxHash hash)
-{
-    CX_ASSERT(json != NULL, "json args error");
-    //link to src file
-    cxConstChars src = cxJsonConstChars(json, "src");
-    cxAny view = NULL;
-    if(src != NULL){
-        view = cxViewLoad(src, hash);
-    }else {
-        view = cxTypeCreate(json);
-    }
-    CX_RETURN(view == NULL, NULL);
-    //init view
-    CX_OBJECT_RUN(view, json);
-    //save view to hash
-    cxConstChars id = cxJsonConstChars(json, "id");
-    if(id != NULL && hash != NULL && cxHashSet(hash, cxHashStrKey(id), view)){
-        CX_WARN("view id %s exists in hash");
-    }
-    //load subview
-    cxJson subviews = cxJsonArray(json, "subviews");
-    CX_JSON_ARRAY_EACH_BEG(subviews, item)
-    {
-        cxView subview = cxViewLoadByJson(item, hash);
-        if(subview != NULL){
-            cxViewAppend(view, subview);
-        }
-    }
-    CX_JSON_ARRAY_EACH_END(subviews, item)
-    return view;
-}
-//save to hash with id
-cxAny cxViewLoad(cxConstChars file,cxHash hash)
-{
-    cxJson json = cxEngineLoadJsonFile(file);
-    if(json == NULL){
-        return NULL;
-    }
-    return cxViewLoadByJson(json, hash);
-}
+#include "cxType.h"
 
 void cxViewSetCropping(cxAny pview,cxBool cropping)
 {
@@ -67,7 +26,7 @@ cxBool cxViewZeroSize(cxAny pview)
     return cxSize2Zero(this->size);
 }
 
-void __cxViewInitObject(cxAny object,cxAny json)
+void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
 {
     cxView this = object;
     this->position.x = cxJsonDouble(json, "position.x", this->position.x);
@@ -121,7 +80,16 @@ void __cxViewInitObject(cxAny object,cxAny json)
     if(cxConstCharsHas(mask, "height")){
         this->autoMask |= cxViewAutoResizeHeight;
     }
-    CX_OBJECT_SUPER(cxObject);
+    //load subview
+    cxJson subviews = cxJsonArray(json, "subviews");
+    CX_JSON_ARRAY_EACH_BEG(subviews, item)
+    {
+        cxAny subview = cxObjectLoadByJson(item, hash);
+        CX_ASSERT(CX_INSTANCE_OF(subview, cxView), "subview must is cxView type");
+        cxViewAppend(this, subview);
+    }
+    CX_JSON_ARRAY_EACH_END(subviews, item)
+    CX_OBJECT_INIT_SUPER(cxObject);
 }
 
 CX_OBJECT_INIT(cxView, cxObject)
@@ -139,7 +107,7 @@ CX_OBJECT_INIT(cxView, cxObject)
 
     CX_METHOD_OVERRIDE(this->IsTouch, cxViewIsTouch);
     CX_METHOD_OVERRIDE(this->IsOnKey, cxViewIsOnKey);
-    CX_OBJECT_OVERRIDE(cxView, this);
+    CX_OBJECT_INIT_OVERRIDE(cxView, this);
     
     this->subViews = CX_ALLOC(cxList);
     this->actions = CX_ALLOC(cxHash);

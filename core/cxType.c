@@ -59,6 +59,57 @@
 #include <actions/cxScale.h>
 #include <actions/cxSpline.h>
 
+static cxHash types;
+
+void cxTypeInit()
+{
+    types = CX_ALLOC(cxHash);
+}
+
+void cxTypeFree()
+{
+    CX_RELEASE(types);
+}
+
+cxAny cxTypeGet(cxConstType type)
+{
+    return cxHashGet(types, cxHashStrKey(type));
+}
+
+void cxTypeSet(cxConstType type,cxAny ptype)
+{
+    cxHashSet(types, cxHashStrKey(type), ptype);
+}
+
+cxBool cxInstanceOf(cxAny object,cxConstType type)
+{
+    CX_RETURN(object == NULL, false);
+    cxObject this = object;
+    if(this->type == type){
+        return true;
+    }
+    cxType ptype = cxTypeGet(this->type);
+    while (ptype != NULL && ptype->superType != NULL) {
+        if(ptype->superType->typeName == type){
+            return true;
+        }
+        ptype = ptype->superType;
+    }
+    return false;
+}
+
+cxAny cxTypeCreate(cxJson json,cxAny hash)
+{
+    CX_ASSERT(json != NULL, "json error");
+    cxConstChars type = cxJsonConstChars(json, "type");
+    cxType ptype = cxTypeGet(type);
+    CX_ASSERT(ptype != NULL, "type(%s) not register",type);
+    cxObject object = CX_METHOD_GET(NULL, ptype->Create);
+    CX_ASSERT(object != NULL, "type(%s) create object failed",type);
+    CX_METHOD_RUN(object->InitObject,object,json,hash);
+    return object;
+}
+
 CX_OBJECT_INIT(cxType, cxObject)
 {
     
@@ -77,8 +128,17 @@ void cxInitTypes()
     cxType objectType = CX_ALLOC(cxType);
     CX_METHOD_OVERRIDE(objectType->Alloc, __cxObjectAllocFunc);
     CX_METHOD_OVERRIDE(objectType->Create, __cxObjectCreateFunc);
-    cxEngineSetType(cxObjectTypeName,objectType);
+    cxTypeSet(cxObjectTypeName,objectType);
     CX_RELEASE(objectType);
+    
+    //register core
+    CX_REGISTER_TYPE(cxHash,cxObject);
+    CX_REGISTER_TYPE(cxArray,cxObject);
+    CX_REGISTER_TYPE(cxList,cxObject);
+    CX_REGISTER_TYPE(cxStack,cxObject);
+    CX_REGISTER_TYPE(cxStream,cxObject);
+    CX_REGISTER_TYPE(cxString,cxObject);
+    CX_REGISTER_TYPE(cxTexture,cxObject);
     
     //register views
     CX_REGISTER_TYPE(cxView, cxObject);
@@ -110,6 +170,41 @@ void cxInitTypes()
     CX_REGISTER_TYPE(cxSpline, cxAction);
     CX_REGISTER_TYPE(cxTimer, cxAction);
     CX_REGISTER_TYPE(cxTint, cxAction);
+}
+
+//parse type id subview property
+cxAny cxObjectLoadByJson(cxJson json, cxHash hash)
+{
+    CX_ASSERT(json != NULL, "json args error");
+    //link to src file
+    cxConstChars src = cxJsonConstChars(json, "src");
+    cxObject object = NULL;
+    if(src != NULL){
+        object = cxObjectLoad(src, hash);
+        CX_METHOD_RUN(object->InitObject,object,json,hash);
+    }else {
+        object = cxTypeCreate(json,hash);
+    }
+    CX_RETURN(object == NULL, NULL);
+    //save view to hash
+    cxConstChars id = cxJsonConstChars(json, "id");
+    if(id != NULL && hash != NULL && cxHashSet(hash, cxHashStrKey(id), object)){
+        CX_WARN("view id %s exists in hash");
+    }
+    return object;
+}
+//save to hash with id
+cxAny cxObjectLoad(cxConstChars file,cxHash hash)
+{
+    cxUrlPath path = cxUrlPathParse(file);
+    cxJson json = cxEngineLoadJsonFile(path->path);
+    CX_RETURN(json == NULL, NULL);
+    //get file.json?key
+    if(path->count == 2){
+        json = cxJsonObject(json, path->key);
+    }
+    CX_RETURN(json == NULL, NULL);
+    return cxObjectLoadByJson(json, hash);
 }
 
 

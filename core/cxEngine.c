@@ -17,41 +17,8 @@
 #include "cxIconv.h"
 
 static cxEngine instance = NULL;
+
 static cxBool isExit = false;
-
-cxAny cxTypeCreate(cxJson json)
-{
-    cxEngine engine = cxEngineInstance();
-    CX_ASSERT(json != NULL, "json error");
-    cxConstChars type = cxJsonConstChars(json, "type");
-    cxObject object = CX_METHOD_GET(NULL, engine->CreateObject,type);
-    if(object == NULL){
-        return NULL;
-    }
-    CX_OBJECT_RUN(object, json);
-    return object;
-}
-
-cxAny cxEngineCreateObject(cxConstChars name)
-{
-    CX_ASSERT(instance != NULL, "engine not init");
-    cxType type = cxHashGet(instance->classes, cxHashStrKey(name));
-    CX_ASSERT(type != NULL, "type %s not register");
-    return type->Create();
-}
-
-void cxEngineSetType(cxConstChars name, cxAny type)
-{
-    CX_ASSERT(instance != NULL, "engine not init");
-    cxType this = type;
-    this->typeName = name;
-    cxHashSet(instance->classes, cxHashStrKey(name), this);
-}
-
-cxAny cxEngineGetType(cxConstChars name)
-{
-    return cxHashGet(instance->classes, cxHashStrKey(name));
-}
 
 void cxEngineRecvJson(cxString json)
 {
@@ -195,12 +162,9 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->dbenvs    = CX_ALLOC(cxHash);
     this->bmpfonts  = CX_ALLOC(cxHash);
     this->jsons     = CX_ALLOC(cxHash);
-    this->classes   = CX_ALLOC(cxHash);
-    CX_METHOD_OVERRIDE(this->CreateObject, cxEngineCreateObject);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
-    CX_RELEASE(this->classes);
     CX_RELEASE(this->jsons);
     CX_RELEASE(this->bmpfonts);
     CX_RELEASE(this->lang);
@@ -213,7 +177,6 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_SIGNAL_RELEASE(this->onPause);
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
-    CX_METHOD_RELEASE(this->CreateObject);
     cxEventBaseDestroy();
     cxCurveDestroy();
     cxOpenGLDestroy();

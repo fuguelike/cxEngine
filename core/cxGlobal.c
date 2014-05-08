@@ -9,17 +9,19 @@
 #include "cxGlobal.h"
 #include "cxAllocator.h"
 #include "cxAutoPool.h"
-
+#include "cxType.h"
 
 void cxGlobalInit()
 {
     cxAllocatorInit();
     cxAutoPoolInit();
+    cxTypeInit();
     CX_LOGGER("global init");
 }
 
 void cxGlobalFree()
 {
+    cxTypeFree();
     CX_LOGGER("global free");
     cxAutoPoolFree();
     cxAllocatorFree();

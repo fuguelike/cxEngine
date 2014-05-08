@@ -28,7 +28,7 @@ static void cxPolygonMalloc(cxPolygon this)
     this->texs = allocator->realloc(this->texs,sizeof(cxTex2f) * this->capacity);
 }
 
-void __cxPolygonInitObject(cxAny object,cxAny json)
+void __cxPolygonInitObject(cxAny object,cxAny json,cxAny hash)
 {
     cxJson points = cxJsonArray(json, "points");
     CX_JSON_ARRAY_EACH_BEG(points, point);
@@ -48,12 +48,12 @@ void __cxPolygonInitObject(cxAny object,cxAny json)
         cxPolygonAppend(object, p);
     }
     CX_JSON_ARRAY_EACH_END(points, point);
-    CX_OBJECT_SUPER(cxSprite);
+    CX_OBJECT_INIT_SUPER(cxSprite);
 }
 
 CX_OBJECT_INIT(cxPolygon, cxSprite)
 {
-    CX_OBJECT_OVERRIDE(cxPolygon, this);
+    CX_OBJECT_INIT_OVERRIDE(cxPolygon, this);
     CX_METHOD_OVERRIDE(this->super.super.Draw, cxPolygonDraw);
     this->capacity = 8;
     cxPolygonMalloc(this);

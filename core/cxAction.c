@@ -33,14 +33,14 @@ void cxActionSetView(cxAny pav,cxAny pview)
     this->view = pview;
 }
 
-void __cxActionInitObject(cxAny object,cxAny json)
+void __cxActionInitObject(cxAny object,cxAny json,cxAny hash)
 {
-    CX_OBJECT_SUPER(cxObject);
+    CX_OBJECT_INIT_SUPER(cxObject);
 }
 
 CX_OBJECT_INIT(cxAction, cxObject)
 {
-    CX_OBJECT_OVERRIDE(cxAction, this);
+    CX_OBJECT_INIT_OVERRIDE(cxAction, this);
     this->isExit = false;
     this->speed = 1.0f;
     this->index = -1;

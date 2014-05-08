@@ -130,9 +130,9 @@ void cxAtlasResize(cxEvent *event)
     cxAtlasUpdateScale9(event->sender);
 }
 
-void __cxAtlasInitObject(cxAny object,cxAny json)
+void __cxAtlasInitObject(cxAny object,cxAny json,cxAny hash)
 {
-    CX_OBJECT_SUPER(cxSprite);
+    CX_OBJECT_INIT_SUPER(cxSprite);
     cxAtlas this = object;
     cxJson points = cxJsonArray(json, "points");
     if(cxJsonBool(json, "scale9.enable", false)){
@@ -178,7 +178,7 @@ void __cxAtlasInitObject(cxAny object,cxAny json)
 
 CX_OBJECT_INIT(cxAtlas, cxSprite)
 {
-    CX_OBJECT_OVERRIDE(cxAtlas, this);
+    CX_OBJECT_INIT_OVERRIDE(cxAtlas, this);
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);

@@ -17,6 +17,7 @@
 #include "cxMessage.h"
 #include "cxBMPFont.h"
 #include "cxUrlPath.h"
+#include "cxType.h"
 
 CX_C_BEGIN
 
@@ -26,7 +27,6 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash bmpfonts;
     cxHash jsons;
     cxHash dbenvs;
-    cxHash classes;
     cxFloat frameInterval;
     cxSize2f winsize;   //screen size
     cxSize2f dessize;   //design size
@@ -46,29 +46,10 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onTouch);
     CX_SIGNAL_ALLOC(onRecvJson);
     CX_EVENT_ALLOC(onExit);
-    CX_METHOD_ALLOC(cxAny, CreateObject,cxConstChars);
     cxTouch touch;
     cxKey key;
     cxString lang;
 CX_OBJECT_END(cxEngine)
-
-#define CX_REGISTER_TYPE(_t_,_b_)                                           \
-{                                                                           \
-    cxType superType =  cxEngineGetType(#_b_);                              \
-    CX_ASSERT(superType != NULL,"super not register");                      \
-    cxType _t_##Type = CX_ALLOC(cxType);                                    \
-    CX_RETAIN_SWAP(_t_##Type->superType,superType);                         \
-    CX_METHOD_OVERRIDE(_t_##Type->Alloc, __##_t_##AllocFunc);               \
-    CX_METHOD_OVERRIDE(_t_##Type->Create, __##_t_##CreateFunc);             \
-    cxEngineSetType(_t_##TypeName,_t_##Type);                               \
-    CX_RELEASE(_t_##Type);                                                  \
-}
-
-cxAny cxTypeCreate(cxJson json);
-
-cxAny cxEngineGetType(cxConstChars name);
-
-void cxEngineSetType(cxConstChars name, cxAny type);
 
 cxEngine cxEngineInstance();
 

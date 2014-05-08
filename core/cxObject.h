@@ -28,6 +28,8 @@ void cxObjectRelease(cxAny ptr);
 
 cxAny cxObjectAutoRelease(cxAny ptr);
 
+cxBool cxInstanceOf(cxAny object,cxConstType type);
+
 //object
 
 #define CX_OBJECT_BEG(_t_,...)                                  \
@@ -35,7 +37,7 @@ CX_ATTRIBUTE_UNUSED static cxConstType _t_##TypeName=#_t_;      \
 typedef struct _t_ *_t_;                                        \
 void __##_t_##AutoInit(_t_ this);                               \
 void __##_t_##AutoFree(_t_ this);                               \
-void __##_t_##InitObject(cxAny,cxAny);                          \
+void __##_t_##InitObject(cxAny,cxAny,cxAny);                    \
 struct _t_ {
 
 #define CX_OBJECT_END(_t_) };                                   \
@@ -77,6 +79,10 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 
 #define CX_RETAIN_SET(_n_,_v_)      {_n_ = _v_;CX_RETAIN(_n_);}
 
+#define CX_INSTANCE_OF(_o_,_t_)     cxInstanceOf(_o_,_t_##TypeName)
+
+#define CX_CAST(_t_,_o_)            (_t_)(_o_);if(!CX_INSTANCE_OF(_o_,_t_))CX_ASSERT_FALSE("cast to type(%s) error",#_t_)
+
 //method
 
 #define CX_METHOD_ALLOC(_r_,_n_,...)    _r_ (*_n_)(__VA_ARGS__)
@@ -94,14 +100,12 @@ CX_OBJECT_BEG(cxObject)
     cxConstType type;
     cxULong cxRefcount;
     cxObjectFunc cxFree;
-    CX_METHOD_ALLOC(void, InitObject,cxAny,cxAny);
+    CX_METHOD_ALLOC(void,InitObject,cxAny,cxAny,cxAny);
 CX_OBJECT_END(cxObject)
 
-#define CX_OBJECT_SUPER(_t_)          {cxJson super = cxJsonObject(json, "super");if(super != NULL){__##_t_##InitObject(object, super);}}
+#define CX_OBJECT_INIT_SUPER(_t_)          {cxJson super = cxJsonObject(json, "super");if(super != NULL){__##_t_##InitObject(object, super, hash);}}
 
-#define CX_OBJECT_OVERRIDE(_t_,_o_)   CX_METHOD_OVERRIDE(((cxObject)(_o_))->InitObject, __##_t_##InitObject)
-
-#define CX_OBJECT_RUN(_o_,_j_)        CX_METHOD_RUN(((cxObject)(_o_))->InitObject,_o_,_j_);
+#define CX_OBJECT_INIT_OVERRIDE(_t_,_o_)   CX_METHOD_OVERRIDE(((cxObject)(_o_))->InitObject, __##_t_##InitObject)
 
 CX_OBJECT_DEF(cxMemory, cxObject)
     cxPointer pointer;

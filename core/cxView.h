@@ -90,8 +90,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onDirty);
 CX_OBJECT_END(cxView)
 
-cxAny cxViewLoad(cxConstChars file,cxHash hash);
-
 void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object);
 
 cxAny cxViewGetCache(cxAny pview,cxConstChars key);

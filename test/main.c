@@ -12,9 +12,11 @@ void cxEngineInit(cxEngine engine)
     
 }
 
+#include <views/cxSprite.h>
+
 void cxEngineMain(cxEngine engine)
 {
-    cxAny view = cxViewLoad("ui.json", NULL);
+    cxAny view = cxObjectLoad("ui.json", NULL);
     cxWindowPushView(view);
 }
 
