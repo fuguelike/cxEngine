@@ -37,6 +37,7 @@ cxAny cxWindowTopView()
 void cxWindowPushView(cxAny pview)
 {
     CX_ASSERT(pview != NULL, "new view null");
+    CX_ASSERT(CX_INSTANCE_OF(pview, cxView), "pview type error");
     cxEngine engine = cxEngineInstance();
     cxView new = pview;
     cxView top = cxStackTop(engine->window->views);

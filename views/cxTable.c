@@ -101,6 +101,7 @@ void __cxTableInitObject(cxAny object,cxAny json,cxAny hash)
     cxTable this = object;
     this->grid.x = cxJsonInt(json, "grid.x", this->grid.x);
     this->grid.y = cxJsonInt(json, "grid.y", this->grid.y);
+    cxTableArraySubviews(this);
     CX_OBJECT_INIT_SUPER(cxView);
 }
 

@@ -35,3 +35,10 @@ void cxControllerInitWithFile(cxAny pc, cxConstChars file)
     CX_RETAIN_SWAP(this->root, root);
 }
 
+cxController cxControllerCreate(cxConstChars file)
+{
+    cxController this = CX_CREATE(cxController);
+    cxControllerInitWithFile(this, file);
+    return this;
+}
+

@@ -139,11 +139,12 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
 void __cxScrollInitObject(cxAny object,cxAny json,cxAny hash)
 {
     cxScroll this = object;
-    cxConstChars type = cxJsonConstChars(json, "type");
-    if(cxConstCharsEqu(type, "horizontal")){
+    cxConstChars type = cxJsonConstChars(json, "layout");
+    this->type = type != NULL ? cxScrollMoveTypeNone : this->type;
+    if(cxConstCharsHas(type, "horizontal")){
         this->type |= cxScrollMoveTypeHorizontal;
     }
-    if(cxConstCharsEqu(type, "vertical")){
+    if(cxConstCharsHas(type, "vertical")){
         this->type |= cxScrollMoveTypeVertical;
     }
     CX_OBJECT_INIT_SUPER(cxView);

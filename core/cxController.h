@@ -23,6 +23,8 @@ void cxControllerInitWithFile(cxAny pc, cxConstChars file);
 
 cxAny cxControllerGet(cxAny pc,cxConstChars key);
 
+cxController cxControllerCreate(cxConstChars file);
+
 CX_C_END
 
 #endif
