@@ -8,15 +8,21 @@
 
 #include "cxObject.h"
 #include "cxUtil.h"
+#include "cxJson.h"
 
-void __cxObjectAutoInit(cxObject this)
+void __cxObjectInitObject(cxAny object,cxAny json)
 {
     
 }
 
+void __cxObjectAutoInit(cxObject this)
+{
+    CX_OBJECT_OVERRIDE(cxObject, this);
+}
+
 void __cxObjectAutoFree(cxObject this)
 {
-   
+    CX_METHOD_RELEASE(this->InitObject);
 }
 
 //auto release memory block

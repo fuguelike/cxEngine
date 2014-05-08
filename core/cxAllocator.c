@@ -89,17 +89,18 @@ cxAny cxObjectAutoRelease(cxAny ptr)
     return cxAutoPoolAppend(ptr);
 }
 
-cxAny cxObjectCreate(int size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
+cxAny cxObjectCreate(cxConstType type, int size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
 {
-    cxAny any = cxObjectAlloc(size, initFunc, freeFunc);
+    cxAny any = cxObjectAlloc(type, size, initFunc, freeFunc);
     return cxObjectAutoRelease(any);
 }
 
-cxAny cxObjectAlloc(int size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
+cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
 {
     cxAny ptr = cxMalloc(size);
     CX_ASSERT(ptr != NULL, "alloc memory error size=%d",size);
     cxObject object = (cxObject)ptr;
+    object->type = type;
     object->cxRefcount = 1;
     object->cxFree = freeFunc;
     initFunc(object);

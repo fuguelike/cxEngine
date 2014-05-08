@@ -146,7 +146,7 @@ void __cxScrollInitObject(cxAny object,cxAny json)
     if(cxConstCharsEqu(type, "vertical")){
         this->type |= cxScrollMoveTypeVertical;
     }
-    CX_BASE_SUPER(cxView);
+    CX_OBJECT_SUPER(cxView);
 }
 
 CX_OBJECT_INIT(cxScroll, cxView)
@@ -158,7 +158,7 @@ CX_OBJECT_INIT(cxScroll, cxView)
     //swip cond value
     this->value = 950;
     CX_SLOT_CONNECT(engine->onTouch, this, onTouch, cxScrollOnTouch);
-    CX_BASE_OVERRIDE(cxScroll, this);
+    CX_OBJECT_OVERRIDE(cxScroll, this);
 }
 CX_OBJECT_FREE(cxScroll, cxView)
 {

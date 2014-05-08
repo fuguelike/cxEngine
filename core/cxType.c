@@ -8,7 +8,7 @@
 
 #include "cxEngine.h"
 #include "cxUtil.h"
-#include "cxInitType.h"
+#include "cxType.h"
 
 #include "cxShader.h"
 #include "cxOpenGL.h"
@@ -65,6 +65,7 @@ CX_OBJECT_INIT(cxType, cxObject)
 }
 CX_OBJECT_FREE(cxType, cxObject)
 {
+    CX_RELEASE(this->superType);
     CX_METHOD_RELEASE(this->Create);
     CX_METHOD_RELEASE(this->Alloc);
 }
@@ -72,33 +73,43 @@ CX_OBJECT_TERM(cxType, cxObject)
 
 void cxInitTypes()
 {
-    CX_REGISTER_TYPE(cxView);
-    CX_REGISTER_TYPE(cxAtlas);
-    CX_REGISTER_TYPE(cxButton);
-    CX_REGISTER_TYPE(cxClipping);
-    CX_REGISTER_TYPE(cxLabelBMP);
-    CX_REGISTER_TYPE(cxLabelTTF);
-    CX_REGISTER_TYPE(cxLoading);
-    CX_REGISTER_TYPE(cxPolygon);
-    CX_REGISTER_TYPE(cxScroll);
-    CX_REGISTER_TYPE(cxSprite);
-    CX_REGISTER_TYPE(cxTable);
-    CX_REGISTER_TYPE(cxWindow);
+    //register object class
+    cxType objectType = CX_ALLOC(cxType);
+    CX_METHOD_OVERRIDE(objectType->Alloc, __cxObjectAllocFunc);
+    CX_METHOD_OVERRIDE(objectType->Create, __cxObjectCreateFunc);
+    cxEngineSetType(cxObjectTypeName,objectType);
+    CX_RELEASE(objectType);
     
-    CX_REGISTER_TYPE(cxActionSet);
-    CX_REGISTER_TYPE(cxAnimate);
-    CX_REGISTER_TYPE(cxFade);
-    CX_REGISTER_TYPE(cxFollow);
-    CX_REGISTER_TYPE(cxJump);
-    CX_REGISTER_TYPE(cxMove);
-    CX_REGISTER_TYPE(cxParabola);
-    CX_REGISTER_TYPE(cxParticle);
-    CX_REGISTER_TYPE(cxRotate);
-    CX_REGISTER_TYPE(cxRunner);
-    CX_REGISTER_TYPE(cxScale);
-    CX_REGISTER_TYPE(cxSpline);
-    CX_REGISTER_TYPE(cxTimer);
-    CX_REGISTER_TYPE(cxTint);
+    //register views
+    CX_REGISTER_TYPE(cxView, cxObject);
+    CX_REGISTER_TYPE(cxSprite, cxView);
+    CX_REGISTER_TYPE(cxScroll, cxView);
+    CX_REGISTER_TYPE(cxTable, cxView);
+    CX_REGISTER_TYPE(cxWindow, cxView);
+    CX_REGISTER_TYPE(cxClipping, cxView);
+    CX_REGISTER_TYPE(cxLoading, cxView);
+    CX_REGISTER_TYPE(cxPolygon, cxSprite);
+    CX_REGISTER_TYPE(cxAtlas, cxSprite);
+    CX_REGISTER_TYPE(cxButton, cxSprite);
+    CX_REGISTER_TYPE(cxLabelTTF, cxSprite);
+    CX_REGISTER_TYPE(cxLabelBMP, cxAtlas);
+    
+    //register actions
+    CX_REGISTER_TYPE(cxAction, cxObject);
+    CX_REGISTER_TYPE(cxActionSet, cxAction);
+    CX_REGISTER_TYPE(cxAnimate, cxAction);
+    CX_REGISTER_TYPE(cxFade, cxAction);
+    CX_REGISTER_TYPE(cxFollow, cxAction);
+    CX_REGISTER_TYPE(cxJump, cxAction);
+    CX_REGISTER_TYPE(cxMove, cxAction);
+    CX_REGISTER_TYPE(cxParabola, cxAction);
+    CX_REGISTER_TYPE(cxParticle, cxAction);
+    CX_REGISTER_TYPE(cxRotate, cxAction);
+    CX_REGISTER_TYPE(cxRunner, cxAction);
+    CX_REGISTER_TYPE(cxScale, cxAction);
+    CX_REGISTER_TYPE(cxSpline, cxAction);
+    CX_REGISTER_TYPE(cxTimer, cxAction);
+    CX_REGISTER_TYPE(cxTint, cxAction);
 }
 
 

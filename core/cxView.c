@@ -17,22 +17,17 @@
 static cxAny cxViewLoadByJson(cxJson json, cxHash hash)
 {
     CX_ASSERT(json != NULL, "json args error");
-    cxEngine engine = cxEngineInstance();
     //link to src file
     cxConstChars src = cxJsonConstChars(json, "src");
-    //make type
-    cxConstChars type = cxJsonConstChars(json, "type");
     cxAny view = NULL;
     if(src != NULL){
         view = cxViewLoad(src, hash);
-    }else if(type != NULL){
-        view = CX_METHOD_GET(NULL, engine->CreateObject,type);
-    }else{
-        CX_ASSERT_FALSE("json file must set src or type property");
+    }else {
+        view = cxTypeCreate(json);
     }
     CX_RETURN(view == NULL, NULL);
     //init view
-    CX_BASE_RUN(view, json);
+    CX_OBJECT_RUN(view, json);
     //save view to hash
     cxConstChars id = cxJsonConstChars(json, "id");
     if(id != NULL && hash != NULL && cxHashSet(hash, cxHashStrKey(id), view)){
@@ -101,11 +96,35 @@ void __cxViewInitObject(cxAny object,cxAny json)
     this->hideTop = cxJsonBool(json, "hidetop", this->hideTop);
     this->isCropping = cxJsonBool(json, "cropping", this->isCropping);
     this->zorder = cxJsonInt(json, "zorder", this->zorder);
-    this->isDirty = true;
-    CX_BASE_SUPER(cxBase);
+    //resizing box
+    this->autoBox.l = cxJsonDouble(json, "resizing.left", this->autoBox.l);
+    this->autoBox.r = cxJsonDouble(json, "resizing.right", this->autoBox.r);
+    this->autoBox.t = cxJsonDouble(json, "resizing.top", this->autoBox.t);
+    this->autoBox.b = cxJsonDouble(json, "resizing.bottom", this->autoBox.b);
+    //resizing mask
+    cxConstChars mask = cxJsonConstChars(json, "resizing.mask");
+    if(cxConstCharsHas(mask,"left")){
+        this->autoMask |= cxViewAutoResizeLeft;
+    }
+    if(cxConstCharsHas(mask, "right")){
+        this->autoMask |= cxViewAutoResizeRight;
+    }
+    if(cxConstCharsHas(mask, "top")){
+        this->autoMask |= cxViewAutoResizeTop;
+    }
+    if(cxConstCharsHas(mask, "bottom")){
+        this->autoMask |= cxViewAutoResizeBottom;
+    }
+    if(cxConstCharsHas(mask, "width")){
+        this->autoMask |= cxViewAutoResizeWidth;
+    }
+    if(cxConstCharsHas(mask, "height")){
+        this->autoMask |= cxViewAutoResizeHeight;
+    }
+    CX_OBJECT_SUPER(cxObject);
 }
 
-CX_OBJECT_INIT(cxView, cxBase)
+CX_OBJECT_INIT(cxView, cxObject)
 {
     this->hideTop = true;
     this->isShowBorder = false;
@@ -120,14 +139,14 @@ CX_OBJECT_INIT(cxView, cxBase)
 
     CX_METHOD_OVERRIDE(this->IsTouch, cxViewIsTouch);
     CX_METHOD_OVERRIDE(this->IsOnKey, cxViewIsOnKey);
-    CX_BASE_OVERRIDE(cxView, this);
+    CX_OBJECT_OVERRIDE(cxView, this);
     
     this->subViews = CX_ALLOC(cxList);
     this->actions = CX_ALLOC(cxHash);
     this->caches = CX_ALLOC(cxHash);
     this->removes = CX_ALLOC(cxArray);
 }
-CX_OBJECT_FREE(cxView, cxBase)
+CX_OBJECT_FREE(cxView, cxObject)
 {
     CX_RELEASE(this->removes);
     CX_RELEASE(this->subViews);
@@ -151,7 +170,7 @@ CX_OBJECT_FREE(cxView, cxBase)
     CX_METHOD_RELEASE(this->After);
     CX_METHOD_RELEASE(this->Before);
 }
-CX_OBJECT_TERM(cxView, cxBase)
+CX_OBJECT_TERM(cxView, cxObject)
 
 void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object)
 {

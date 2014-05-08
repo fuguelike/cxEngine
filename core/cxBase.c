@@ -9,23 +9,6 @@
 #include <core/cxEngine.h>
 #include "cxBase.h"
 
-void __cxBaseInitObject(cxAny object,cxAny json)
-{
-    cxBase this = object;
-    this->tag = cxJsonLong(json, "tag", this->tag);
-}
-
-CX_OBJECT_INIT(cxBase, cxObject)
-{
-    CX_BASE_OVERRIDE(cxBase, this);
-}
-CX_OBJECT_FREE(cxBase, cxObject)
-{
-    CX_METHOD_RELEASE(this->InitObject);
-}
-CX_OBJECT_TERM(cxBase, cxObject)
-
-
 cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t)
 {
     cxFloat t2 = t * t;

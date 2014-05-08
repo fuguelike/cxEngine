@@ -16,6 +16,8 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxType, cxObject)
     CX_METHOD_ALLOC(cxAny, Create);
     CX_METHOD_ALLOC(cxAny, Alloc);
+    cxConstType typeName;
+    cxType superType;
 CX_OBJECT_END(cxType)
 
 void cxInitTypes();

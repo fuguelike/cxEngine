@@ -9,7 +9,7 @@
 #include <kazmath/matrix.h>
 #include <streams/cxAssetsStream.h>
 #include <socket/cxEventBase.h>
-#include "cxInitType.h"
+#include "cxType.h"
 #include "cxEngine.h"
 #include "cxAutoPool.h"
 #include "cxOpenGL.h"
@@ -19,6 +19,19 @@
 static cxEngine instance = NULL;
 static cxBool isExit = false;
 
+cxAny cxTypeCreate(cxJson json)
+{
+    cxEngine engine = cxEngineInstance();
+    CX_ASSERT(json != NULL, "json error");
+    cxConstChars type = cxJsonConstChars(json, "type");
+    cxObject object = CX_METHOD_GET(NULL, engine->CreateObject,type);
+    if(object == NULL){
+        return NULL;
+    }
+    CX_OBJECT_RUN(object, json);
+    return object;
+}
+
 cxAny cxEngineCreateObject(cxConstChars name)
 {
     CX_ASSERT(instance != NULL, "engine not init");
@@ -27,10 +40,17 @@ cxAny cxEngineCreateObject(cxConstChars name)
     return type->Create();
 }
 
-void cxEngineRegisterType(cxConstChars name, cxAny type)
+void cxEngineSetType(cxConstChars name, cxAny type)
 {
     CX_ASSERT(instance != NULL, "engine not init");
-    cxHashSet(instance->classes, cxHashStrKey(name), type);
+    cxType this = type;
+    this->typeName = name;
+    cxHashSet(instance->classes, cxHashStrKey(name), this);
+}
+
+cxAny cxEngineGetType(cxConstChars name)
+{
+    return cxHashGet(instance->classes, cxHashStrKey(name));
 }
 
 void cxEngineRecvJson(cxString json)

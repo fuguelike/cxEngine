@@ -45,6 +45,8 @@ CX_OBJECT_END(cxString)
 
 #define cxConstCharsEqu(s1,s2) ((s1) != NULL && (s2) != NULL && strcmp(s1,s2) == 0)
 
+#define cxConstCharsHas(str,sub)    (str != NULL && sub != NULL && strstr(str,sub))
+
 #define cxConstCaseCharsEqu(s1,s2) ((s1) != NULL && (s2) != NULL && strcasecmp(s1,s2) == 0)
 
 #define cxConstCharsOK(s)       ((s) != NULL && strlen(s) > 0)

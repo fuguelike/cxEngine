@@ -48,12 +48,12 @@ void __cxPolygonInitObject(cxAny object,cxAny json)
         cxPolygonAppend(object, p);
     }
     CX_JSON_ARRAY_EACH_END(points, point);
-    CX_BASE_SUPER(cxSprite);
+    CX_OBJECT_SUPER(cxSprite);
 }
 
 CX_OBJECT_INIT(cxPolygon, cxSprite)
 {
-    CX_BASE_OVERRIDE(cxPolygon, this);
+    CX_OBJECT_OVERRIDE(cxPolygon, this);
     CX_METHOD_OVERRIDE(this->super.super.Draw, cxPolygonDraw);
     this->capacity = 8;
     cxPolygonMalloc(this);

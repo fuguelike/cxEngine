@@ -42,7 +42,7 @@ typedef enum{
 
 typedef cxBox4f cxViewAutoResizeBox;
 
-CX_OBJECT_DEF(cxView, cxBase)
+CX_OBJECT_DEF(cxView, cxObject)
     cxBool supportAtlasSet;
     cxViewAutoResizeMask autoMask;
     cxViewAutoResizeBox  autoBox;

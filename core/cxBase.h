@@ -423,17 +423,6 @@ cxBool cxPolygonContainPoint(const cxPoints *polygon,const cxVec2f tp);
 //if r1 contains r2 return true
 cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2);
 
-CX_OBJECT_DEF(cxBase, cxObject)
-    cxLong tag;
-    CX_METHOD_ALLOC(void, InitObject,cxAny,cxAny);
-CX_OBJECT_END(cxBase)
-
-#define CX_BASE_SUPER(_t_)          {cxJson super = cxJsonObject(json, "super");if(super != NULL){__##_t_##InitObject(object, super);}}
-
-#define CX_BASE_OVERRIDE(_t_,_o_)   CX_METHOD_OVERRIDE(((cxBase)(_o_))->InitObject, __##_t_##InitObject)
-
-#define CX_BASE_RUN(_o_,_j_)        CX_METHOD_RUN(((cxBase)(_o_))->InitObject,_o_,_j_);
-
 CX_C_END
 
 #endif

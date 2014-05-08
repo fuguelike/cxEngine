@@ -109,7 +109,7 @@ LOCAL_SRC_FILES += \
     core/cxTexture.c \
     core/cxView.c \
     core/cxAction.c \
-    core/cxInitType.c \
+    core/cxType.c \
     core/cxGlobal.c \
     core/cxController.c
     

@@ -52,16 +52,23 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxString lang;
 CX_OBJECT_END(cxEngine)
 
-#define CX_REGISTER_TYPE(_t_)                                               \
+#define CX_REGISTER_TYPE(_t_,_b_)                                           \
 {                                                                           \
+    cxType superType =  cxEngineGetType(#_b_);                              \
+    CX_ASSERT(superType != NULL,"super not register");                      \
     cxType _t_##Type = CX_ALLOC(cxType);                                    \
+    CX_RETAIN_SWAP(_t_##Type->superType,superType);                         \
     CX_METHOD_OVERRIDE(_t_##Type->Alloc, __##_t_##AllocFunc);               \
     CX_METHOD_OVERRIDE(_t_##Type->Create, __##_t_##CreateFunc);             \
-    cxEngineRegisterType(#_t_,_t_##Type);                                   \
+    cxEngineSetType(_t_##TypeName,_t_##Type);                               \
     CX_RELEASE(_t_##Type);                                                  \
 }
 
-void cxEngineRegisterType(cxConstChars name, cxAny type);
+cxAny cxTypeCreate(cxJson json);
+
+cxAny cxEngineGetType(cxConstChars name);
+
+void cxEngineSetType(cxConstChars name, cxAny type);
 
 cxEngine cxEngineInstance();
 

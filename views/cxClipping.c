@@ -57,12 +57,12 @@ static void cxClippingDrawAfter(cxAny pview)
 
 void __cxClippingInitObject(cxAny object,cxAny json)
 {
-    CX_BASE_SUPER(cxView);
+    CX_OBJECT_SUPER(cxView);
 }
 
 CX_OBJECT_INIT(cxClipping, cxView)
 {
-    CX_BASE_OVERRIDE(cxClipping, this);
+    CX_OBJECT_OVERRIDE(cxClipping, this);
     this->useRef = cxStencilRefAlloc();
     CX_METHOD_OVERRIDE(this->super.Before, cxClippingDrawBefore);
     CX_METHOD_OVERRIDE(this->super.After, cxClippingDrawAfter);

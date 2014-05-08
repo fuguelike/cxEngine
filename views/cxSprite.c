@@ -108,7 +108,7 @@ void __cxSpriteInitObject(cxAny object,cxAny json)
     if(texture != NULL){
         cxSpriteSetTextureURL(object, texture, usetexsize);
     }
-    CX_BASE_SUPER(cxView);
+    CX_OBJECT_SUPER(cxView);
 }
 
 CX_OBJECT_INIT(cxSprite, cxView)
@@ -118,7 +118,7 @@ CX_OBJECT_INIT(cxSprite, cxView)
     CX_EVENT_QUICK(this->super.onDirty, cxSpriteDirtyEvent);
     CX_METHOD_OVERRIDE(this->super.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
-    CX_BASE_OVERRIDE(cxSprite, this);
+    CX_OBJECT_OVERRIDE(cxSprite, this);
 }
 CX_OBJECT_FREE(cxSprite, cxView)
 {

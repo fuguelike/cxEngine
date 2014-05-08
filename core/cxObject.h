@@ -18,9 +18,9 @@ typedef void (*cxObjectFunc)(cxPointer this);
 
 typedef cxAny (*cxAnyFunc)(cxAny object);
 
-cxAny cxObjectAlloc(int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
+cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
 
-cxAny cxObjectCreate(int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
+cxAny cxObjectCreate(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
 
 void cxObjectRetain(cxAny ptr);
 
@@ -30,21 +30,22 @@ cxAny cxObjectAutoRelease(cxAny ptr);
 
 //object
 
-#define CX_OBJECT_BEG(_t_,...)                          \
-typedef struct _t_ *_t_;                                \
-void __##_t_##AutoInit(_t_ this);                       \
-void __##_t_##AutoFree(_t_ this);                       \
-void __##_t_##InitObject(cxAny,cxAny);                  \
+#define CX_OBJECT_BEG(_t_,...)                                  \
+CX_ATTRIBUTE_UNUSED static cxConstType _t_##TypeName=#_t_;      \
+typedef struct _t_ *_t_;                                        \
+void __##_t_##AutoInit(_t_ this);                               \
+void __##_t_##AutoFree(_t_ this);                               \
+void __##_t_##InitObject(cxAny,cxAny);                          \
 struct _t_ {
 
-#define CX_OBJECT_END(_t_) };                           \
-CX_ATTRIBUTE_UNUSED static cxAny __##_t_##CreateFunc()  \
-{                                                       \
-    return CX_CREATE(_t_);                              \
-}                                                       \
-CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()   \
-{                                                       \
-    return CX_ALLOC(_t_);                               \
+#define CX_OBJECT_END(_t_) };                                   \
+CX_ATTRIBUTE_UNUSED static cxAny __##_t_##CreateFunc()          \
+{                                                               \
+    return CX_CREATE(_t_);                                      \
+}                                                               \
+CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
+{                                                               \
+    return CX_ALLOC(_t_);                                       \
 }
 
 #define CX_RETURN(cond,...)         if(cond)return __VA_ARGS__
@@ -61,9 +62,9 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()   \
 
 #define CX_OBJECT_TERM(_t_,_b_)     }__##_b_##AutoFree((_b_)this);}
 
-#define CX_ALLOC(_t_)               cxObjectAlloc(sizeof(struct _t_),(cxObjectFunc)__##_t_##AutoInit,(cxObjectFunc)__##_t_##AutoFree)
+#define CX_ALLOC(_t_)               cxObjectAlloc(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)__##_t_##AutoInit,(cxObjectFunc)__##_t_##AutoFree)
 
-#define CX_CREATE(_t_)              cxObjectCreate(sizeof(struct _t_),(cxObjectFunc)__##_t_##AutoInit,(cxObjectFunc)__##_t_##AutoFree)
+#define CX_CREATE(_t_)              cxObjectCreate(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)__##_t_##AutoInit,(cxObjectFunc)__##_t_##AutoFree)
 
 #define CX_RETAIN(_o_)              cxObjectRetain(_o_)
 
@@ -90,9 +91,17 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()   \
 
 //base type define
 CX_OBJECT_BEG(cxObject)
+    cxConstType type;
     cxULong cxRefcount;
     cxObjectFunc cxFree;
+    CX_METHOD_ALLOC(void, InitObject,cxAny,cxAny);
 CX_OBJECT_END(cxObject)
+
+#define CX_OBJECT_SUPER(_t_)          {cxJson super = cxJsonObject(json, "super");if(super != NULL){__##_t_##InitObject(object, super);}}
+
+#define CX_OBJECT_OVERRIDE(_t_,_o_)   CX_METHOD_OVERRIDE(((cxObject)(_o_))->InitObject, __##_t_##InitObject)
+
+#define CX_OBJECT_RUN(_o_,_j_)        CX_METHOD_RUN(((cxObject)(_o_))->InitObject,_o_,_j_);
 
 CX_OBJECT_DEF(cxMemory, cxObject)
     cxPointer pointer;
