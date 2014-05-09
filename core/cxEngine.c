@@ -98,10 +98,8 @@ void cxEngineDraw()
     cxAutoPoolClean();
 }
 
-static void cxEngineLookAt(cxMatrix4f *matrix,const cxVec2f point)
+static void cxEngineLookAt(cxMatrix4f *matrix,cxFloat zeye,const cxVec2f point)
 {
-    cxEngine engine = cxEngineInstance();
-    cxFloat zeye = engine->winsize.h / 1.1566f;
     cxVec3f eye;
     cxVec3f center;
     cxVec3f up;
@@ -110,6 +108,12 @@ static void cxEngineLookAt(cxMatrix4f *matrix,const cxVec2f point)
     kmVec3Fill(&up, 0.0f, 1.0f, 0.0f);
     kmMat4Identity(matrix);
     kmMat4LookAt(matrix, &eye, &center, &up);
+}
+
+void cxEngineSetDesignSize(cxSize2f dessize)
+{
+    cxEngine engine = cxEngineInstance();
+    engine->dessize = dessize;
 }
 
 void cxEngineLayout(cxInt width,cxInt height)
@@ -140,7 +144,7 @@ void cxEngineLayout(cxInt width,cxInt height)
     cxOpenGLViewport(cxBox4fv(0, engine->winsize.w, 0, engine->winsize.h));
     //
     cxMatrix4f matrix;
-    cxEngineLookAt(&matrix,cxVec2fv(0, 0));
+    cxEngineLookAt(&matrix,zeye,cxVec2fv(0, 0));
     kmGLMultMatrix(&matrix);
     //
     engine->lastTime = cxTimestamp();

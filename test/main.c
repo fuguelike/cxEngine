@@ -9,7 +9,7 @@
 
 void cxEngineInit(cxEngine engine)
 {
-    
+    cxEngineSetDesignSize(cxSize2fv(640, 960));
 }
 
 void cxEngineMain(cxEngine engine)

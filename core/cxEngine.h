@@ -54,7 +54,7 @@ CX_OBJECT_END(cxEngine)
 
 cxEngine cxEngineInstance();
 
-cxAny cxEngineCreateObject(cxConstChars name);
+void cxEngineSetDesignSize(cxSize2f dessize);
 
 void cxEngineTimeReset();
 

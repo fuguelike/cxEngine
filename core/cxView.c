@@ -29,6 +29,7 @@ cxBool cxViewZeroSize(cxAny pview)
 void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
 {
     cxView this = object;
+    cxEngine engine = cxEngineInstance();
     this->position.x = cxJsonDouble(json, "position.x", this->position.x);
     this->position.y = cxJsonDouble(json, "position.y", this->position.y);
     this->size.w = cxJsonDouble(json, "size.w", this->size.w);
@@ -45,8 +46,18 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
     this->raxis.z = cxJsonDouble(json, "raxis.z", this->raxis.z);
     this->scale.x = cxJsonDouble(json, "scale.x", this->scale.x);
     this->scale.y = cxJsonDouble(json, "scale.y", this->scale.y);
-    this->fixscale.x = cxJsonDouble(json, "fixscale.x", this->fixscale.x);
-    this->fixscale.x = cxJsonDouble(json, "fixscale.y", this->fixscale.y);
+    //auto fixscale
+    cxConstChars autofix = cxJsonConstChars(json, "autofix");
+    if(cxConstCharsHas(autofix, "horizontal")){
+        this->fixscale.x = engine->scale.x;
+        this->fixscale.y = engine->scale.x;
+    }else if(cxConstCharsHas(autofix, "vertical")){
+        this->fixscale.x = engine->scale.y;
+        this->fixscale.y = engine->scale.y;
+    }else{
+        this->fixscale.x = cxJsonDouble(json, "fixscale.x", this->fixscale.x);
+        this->fixscale.x = cxJsonDouble(json, "fixscale.y", this->fixscale.y);
+    }
     this->isVisible = cxJsonBool(json, "visible", true);
     cxFloat degrees = cxJsonDouble(json, "degrees", INFINITY);
     if(!isinf(degrees)){
