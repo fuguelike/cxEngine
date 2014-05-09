@@ -17,8 +17,8 @@ CX_OBJECT_DEF(cxRunner, cxAction)
     cxAny data;
     cxInt count;
     cxInt step;
-    CX_METHOD_ALLOC(void, Init, cxAny);
-    CX_METHOD_ALLOC(void, Exit, cxAny);
+    CX_METHOD_DEF(void, Init, cxAny);
+    CX_METHOD_DEF(void, Exit, cxAny);
 CX_OBJECT_END(cxRunner)
 
 void cxRunnerAppend(cxAny runner,cxAny pav, cxAny pview);

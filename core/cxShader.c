@@ -99,18 +99,13 @@ static bool cxShaderCompile(cxShader this,GLuint *shader, GLenum type, cxString 
 
 CX_OBJECT_INIT(cxShader, cxObject)
 {
-    CX_METHOD_OVERRIDE(this->Init, cxShaderInitPosColorTex);
+    CX_METHOD_SET(this->Init, cxShaderInitPosColorTex);
 }
 CX_OBJECT_FREE(cxShader, cxObject)
 {
     glDeleteShader(this->vertexShader);
     glDeleteShader(this->fragmentShader);
     cxOpenGLDeleteProgram(this->program);
-    CX_METHOD_RELEASE(this->Init);
-    CX_METHOD_RELEASE(this->Update);
-    CX_METHOD_RELEASE(this->GetUniform);
-    CX_METHOD_RELEASE(this->GetVertexSource);
-    CX_METHOD_RELEASE(this->GetFragmentSource);
 }
 CX_OBJECT_TERM(cxShader, cxObject)
 

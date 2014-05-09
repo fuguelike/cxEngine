@@ -27,8 +27,8 @@ static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
 CX_OBJECT_INIT(cxRotate, cxAction)
 {
     this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
-    CX_METHOD_OVERRIDE(this->super.Init, cxRotateInit);
-    CX_METHOD_OVERRIDE(this->super.Step, cxRotateStep);
+    CX_METHOD_SET(this->super.Init, cxRotateInit);
+    CX_METHOD_SET(this->super.Step, cxRotateStep);
 }
 CX_OBJECT_FREE(cxRotate, cxAction)
 {

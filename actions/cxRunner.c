@@ -27,13 +27,12 @@ static cxBool cxRunnerExit(cxAny pav)
 
 CX_OBJECT_INIT(cxRunner, cxAction)
 {
-    CX_METHOD_OVERRIDE(this->super.Init, cxRunnerInit);
-    CX_METHOD_OVERRIDE(this->super.Exit, cxRunnerExit);
+    CX_METHOD_SET(this->super.Init, cxRunnerInit);
+    CX_METHOD_SET(this->super.Exit, cxRunnerExit);
 }
 CX_OBJECT_FREE(cxRunner, cxAction)
 {
-    CX_METHOD_RELEASE(this->Init);
-    CX_METHOD_RELEASE(this->Exit);
+    //
 }
 CX_OBJECT_TERM(cxRunner, cxAction)
 

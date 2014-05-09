@@ -66,15 +66,13 @@ cxAny cxFollowTarget(cxAny pav)
 CX_OBJECT_INIT(cxFollow, cxAction)
 {
     this->super.duration = -1;
-    CX_METHOD_OVERRIDE(this->super.Init, cxFollowInit);
-    CX_METHOD_OVERRIDE(this->super.Step, cxFollowStep);
-    CX_METHOD_OVERRIDE(this->Exit, cxFollowDefaultExit);
+    CX_METHOD_SET(this->super.Init, cxFollowInit);
+    CX_METHOD_SET(this->super.Step, cxFollowStep);
+    CX_METHOD_SET(this->Exit, cxFollowDefaultExit);
 }
 CX_OBJECT_FREE(cxFollow, cxAction)
 {
     CX_RELEASE(this->target);
-    CX_METHOD_RELEASE(this->Exit);
-    CX_METHOD_RELEASE(this->Speed);
 }
 CX_OBJECT_TERM(cxFollow, cxAction)
 

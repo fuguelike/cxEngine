@@ -28,8 +28,8 @@ static void cxScaleStep(cxAny pav,cxFloat dt,cxFloat time)
 
 CX_OBJECT_INIT(cxScale, cxAction)
 {
-    CX_METHOD_OVERRIDE(this->super.Init, cxScaleInit);
-    CX_METHOD_OVERRIDE(this->super.Step, cxScaleStep);
+    CX_METHOD_SET(this->super.Init, cxScaleInit);
+    CX_METHOD_SET(this->super.Step, cxScaleStep);
 }
 CX_OBJECT_FREE(cxScale, cxAction)
 {

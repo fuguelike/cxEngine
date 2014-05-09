@@ -116,7 +116,7 @@ CX_OBJECT_INIT(cxSprite, cxView)
     this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     CX_EVENT_QUICK(this->super.onDirty, cxSpriteDirtyEvent);
-    CX_METHOD_OVERRIDE(this->super.Draw, cxSpriteDraw);
+    CX_METHOD_SET(this->super.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
     CX_OBJECT_INIT_OVERRIDE(cxSprite, this);
 }

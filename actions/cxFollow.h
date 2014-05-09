@@ -20,8 +20,8 @@ CX_OBJECT_DEF(cxFollow, cxAction)
     cxFloat speed;  //current speed
     cxFloat init;   //init speed
     cxFloat min;    //exit min distance
-    CX_METHOD_ALLOC(cxBool, Exit, cxAny);
-    CX_METHOD_ALLOC(cxFloat, Speed,cxAny,cxFloat);
+    CX_METHOD_DEF(cxBool, Exit, cxAny);
+    CX_METHOD_DEF(cxFloat, Speed,cxAny,cxFloat);
 CX_OBJECT_END(cxFollow)
 
 void cxFollowInit(cxAny pav);

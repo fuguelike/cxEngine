@@ -25,7 +25,7 @@ void cxTimerReset(cxAny timer)
 
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
-    CX_METHOD_OVERRIDE(this->super.Exit, cxTimerExit);
+    CX_METHOD_SET(this->super.Exit, cxTimerExit);
 }
 CX_OBJECT_FREE(cxTimer, cxAction)
 {

@@ -59,9 +59,9 @@ static void cxSplineReset(cxAny pav)
 CX_OBJECT_INIT(cxSpline, cxAction)
 {
     this->index = -1;
-    CX_METHOD_OVERRIDE(this->super.Init, cxSplineInit);
-    CX_METHOD_OVERRIDE(this->super.Step, cxSplineStep);
-    CX_METHOD_OVERRIDE(this->super.Reset, cxSplineReset);
+    CX_METHOD_SET(this->super.Init, cxSplineInit);
+    CX_METHOD_SET(this->super.Step, cxSplineStep);
+    CX_METHOD_SET(this->super.Reset, cxSplineReset);
     this->points = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxSpline, cxAction)

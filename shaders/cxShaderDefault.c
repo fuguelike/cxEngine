@@ -46,8 +46,8 @@ cxString cxShaderDefaultGetFragmentSource(cxAny this)
 
 CX_OBJECT_INIT(cxShaderDefault, cxShader)
 {
-    CX_METHOD_OVERRIDE(this->super.GetVertexSource, cxShaderDefaultGetVertexSource);
-    CX_METHOD_OVERRIDE(this->super.GetFragmentSource, cxShaderDefaultGetFragmentSource);
+    CX_METHOD_SET(this->super.GetVertexSource, cxShaderDefaultGetVertexSource);
+    CX_METHOD_SET(this->super.GetFragmentSource, cxShaderDefaultGetFragmentSource);
 }
 CX_OBJECT_FREE(cxShaderDefault, cxShader)
 {

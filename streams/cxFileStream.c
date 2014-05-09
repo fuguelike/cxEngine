@@ -100,13 +100,13 @@ static void cxFileStreamClose(cxAny this)
 
 CX_OBJECT_INIT(cxFileStream, cxStream)
 {
-    CX_METHOD_OVERRIDE(this->super.Open, cxFileStreamOpen);
-    CX_METHOD_OVERRIDE(this->super.Read, cxFileStreamRead);
-    CX_METHOD_OVERRIDE(this->super.Write, cxFileStreamWrite);
-    CX_METHOD_OVERRIDE(this->super.Seek, cxFileStreamSeek);
-    CX_METHOD_OVERRIDE(this->super.Close, cxFileStreamClose);
-    CX_METHOD_OVERRIDE(this->super.Position,cxFileStreamPosition);
-    CX_METHOD_OVERRIDE(this->super.AllBytes,cxFileStreamAllBytes);
+    CX_METHOD_SET(this->super.Open, cxFileStreamOpen);
+    CX_METHOD_SET(this->super.Read, cxFileStreamRead);
+    CX_METHOD_SET(this->super.Write, cxFileStreamWrite);
+    CX_METHOD_SET(this->super.Seek, cxFileStreamSeek);
+    CX_METHOD_SET(this->super.Close, cxFileStreamClose);
+    CX_METHOD_SET(this->super.Position,cxFileStreamPosition);
+    CX_METHOD_SET(this->super.AllBytes,cxFileStreamAllBytes);
 }
 CX_OBJECT_FREE(cxFileStream, cxStream)
 {

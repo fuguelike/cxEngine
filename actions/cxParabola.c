@@ -43,9 +43,9 @@ static cxBool cxParabolaExit(cxAny pav)
 
 CX_OBJECT_INIT(cxParabola, cxAction)
 {
-    CX_METHOD_OVERRIDE(this->super.Exit, cxParabolaExit);
-    CX_METHOD_OVERRIDE(this->super.Init, cxParabolaInit);
-    CX_METHOD_OVERRIDE(this->super.Step, cxParabolaStep);
+    CX_METHOD_SET(this->super.Exit, cxParabolaExit);
+    CX_METHOD_SET(this->super.Init, cxParabolaInit);
+    CX_METHOD_SET(this->super.Step, cxParabolaStep);
     this->gravity = cxVec2fv(0, -1000);
     this->super.duration = -1;
 }

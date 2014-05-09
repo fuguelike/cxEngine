@@ -48,8 +48,8 @@ static void cxTexturePNGBind(cxAny this)
 
 CX_OBJECT_INIT(cxTexturePNG, cxTexture)
 {
-    CX_METHOD_OVERRIDE(this->super.Bind, cxTexturePNGBind);
-    CX_METHOD_OVERRIDE(this->super.Load, cxTexturePNGLoad);
+    CX_METHOD_SET(this->super.Bind, cxTexturePNGBind);
+    CX_METHOD_SET(this->super.Load, cxTexturePNGLoad);
 }
 CX_OBJECT_FREE(cxTexturePNG, cxTexture)
 {

@@ -76,9 +76,9 @@ static void cxActionSetStep(cxAny pav,cxFloat dt,cxFloat time)
 
 CX_OBJECT_INIT(cxActionSet, cxAction)
 {
-    CX_METHOD_OVERRIDE(this->super.Init, cxActionSetInit);
-    CX_METHOD_OVERRIDE(this->super.Step, cxActionSetStep);
-    CX_METHOD_OVERRIDE(this->super.Exit, cxActionSetExit);
+    CX_METHOD_SET(this->super.Init, cxActionSetInit);
+    CX_METHOD_SET(this->super.Step, cxActionSetStep);
+    CX_METHOD_SET(this->super.Exit, cxActionSetExit);
     this->items = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxActionSet, cxAction)

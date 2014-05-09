@@ -262,18 +262,16 @@ CX_OBJECT_INIT(cxParticle, cxAction)
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
     cxParticleSetBlendMode(this, cxParticleBlendAdd);
-    CX_METHOD_OVERRIDE(this->super.Reset, cxParticleReset);
-    CX_METHOD_OVERRIDE(this->super.Init, cxParticleInit);
-    CX_METHOD_OVERRIDE(this->super.Over, cxParticleOver);
-    CX_METHOD_OVERRIDE(this->super.Step, cxParticleStep);
+    CX_METHOD_SET(this->super.Reset, cxParticleReset);
+    CX_METHOD_SET(this->super.Init, cxParticleInit);
+    CX_METHOD_SET(this->super.Over, cxParticleOver);
+    CX_METHOD_SET(this->super.Step, cxParticleStep);
 }
 CX_OBJECT_FREE(cxParticle, cxAction)
 {
     allocator->free(this->units);
     CX_RELEASE(this->atlas);
     CX_SLOT_RELEASE(this->onDraw);
-    CX_METHOD_RELEASE(this->GetDrawView);
-    CX_METHOD_RELEASE(this->SetUnitArgs);
 }
 CX_OBJECT_TERM(cxParticle, cxAction)
 

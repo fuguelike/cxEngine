@@ -23,13 +23,6 @@ CX_OBJECT_FREE(cxStream, cxObject)
     }
     CX_RELEASE(this->path);
     CX_RELEASE(this->file);
-    CX_METHOD_RELEASE(this->Read);
-    CX_METHOD_RELEASE(this->Write);
-    CX_METHOD_RELEASE(this->Open);
-    CX_METHOD_RELEASE(this->Seek);
-    CX_METHOD_RELEASE(this->AllBytes);
-    CX_METHOD_RELEASE(this->Close);
-    CX_METHOD_RELEASE(this->Position);
 }
 CX_OBJECT_TERM(cxStream, cxObject)
 

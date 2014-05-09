@@ -25,8 +25,8 @@ static void cxFadeStep(cxAny pav,cxFloat dt,cxFloat time)
 
 CX_OBJECT_INIT(cxFade, cxAction)
 {
-    CX_METHOD_OVERRIDE(this->super.Init, cxFadeInit);
-    CX_METHOD_OVERRIDE(this->super.Step, cxFadeStep);
+    CX_METHOD_SET(this->super.Init, cxFadeInit);
+    CX_METHOD_SET(this->super.Step, cxFadeStep);
 }
 CX_OBJECT_FREE(cxFade, cxAction)
 {

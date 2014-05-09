@@ -71,8 +71,8 @@ static void cxTextureJSONBind(cxAny this)
 
 CX_OBJECT_INIT(cxTextureJSON, cxTexture)
 {
-    CX_METHOD_OVERRIDE(this->super.Bind, cxTextureJSONBind);
-    CX_METHOD_OVERRIDE(this->super.Load, cxTextureJSONLoad);
+    CX_METHOD_SET(this->super.Bind, cxTextureJSONBind);
+    CX_METHOD_SET(this->super.Load, cxTextureJSONLoad);
 }
 CX_OBJECT_FREE(cxTextureJSON, cxTexture)
 {

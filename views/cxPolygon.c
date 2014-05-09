@@ -54,7 +54,7 @@ void __cxPolygonInitObject(cxAny object,cxAny json,cxAny hash)
 CX_OBJECT_INIT(cxPolygon, cxSprite)
 {
     CX_OBJECT_INIT_OVERRIDE(cxPolygon, this);
-    CX_METHOD_OVERRIDE(this->super.super.Draw, cxPolygonDraw);
+    CX_METHOD_SET(this->super.super.Draw, cxPolygonDraw);
     this->capacity = 8;
     cxPolygonMalloc(this);
 }

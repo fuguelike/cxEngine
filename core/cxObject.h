@@ -90,15 +90,13 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 
 //method
 
-#define CX_METHOD_ALLOC(_r_,_n_,...)    _r_ (*_n_)(__VA_ARGS__)
-
-#define CX_METHOD_RELEASE(_m_)          _m_ = NULL
+#define CX_METHOD_DEF(_r_,_n_,...)      _r_ (*_n_)(__VA_ARGS__)
 
 #define CX_METHOD_GET(_d_,_m_,...)      (((_m_) != NULL)?((_m_)(__VA_ARGS__)):(_d_))
 
 #define CX_METHOD_RUN(_m_,...)          if((_m_) != NULL)(_m_)(__VA_ARGS__)
 
-#define CX_METHOD_OVERRIDE(_m_,_f_)     _m_ = _f_
+#define CX_METHOD_SET(_m_,_f_)          _m_ = _f_
 
 //base type define
 CX_OBJECT_BEG(cxObject)
@@ -112,7 +110,7 @@ CX_OBJECT_END(cxObject)
 #define CX_OBJECT_INIT_SUPER(_t_)          __##_t_##InitObject(object, json, hash)
 
 //override init method
-#define CX_OBJECT_INIT_OVERRIDE(_t_,_o_)   CX_METHOD_OVERRIDE(((cxObject)(_o_))->cxInit, __##_t_##InitObject)
+#define CX_OBJECT_INIT_OVERRIDE(_t_,_o_)   CX_METHOD_SET(((cxObject)(_o_))->cxInit, __##_t_##InitObject)
 
 CX_OBJECT_DEF(cxMemory, cxObject)
     cxPointer pointer;

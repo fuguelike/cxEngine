@@ -52,14 +52,6 @@ CX_OBJECT_FREE(cxAction, cxObject)
     CX_EVENT_RELEASE(this->onStart);
     CX_EVENT_RELEASE(this->onStop);
     CX_EVENT_RELEASE(this->onStep);
-    
-    CX_METHOD_RELEASE(this->Curve);
-    CX_METHOD_RELEASE(this->Init);
-    CX_METHOD_RELEASE(this->Active);
-    CX_METHOD_RELEASE(this->Over);
-    CX_METHOD_RELEASE(this->Reset);
-    CX_METHOD_RELEASE(this->Step);
-    CX_METHOD_RELEASE(this->Exit);
 }
 CX_OBJECT_TERM(cxAction, cxObject)
 
@@ -84,7 +76,7 @@ void cxActionSetSpeed(cxAny pav,cxFloat speed)
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
 {
     cxAction this = pav;
-    CX_METHOD_OVERRIDE(this->Curve, curve);
+    CX_METHOD_SET(this->Curve, curve);
 }
 
 void cxActionSetPauseTime(cxAny pav,cxFloat time)

@@ -113,8 +113,8 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->fixscale = cxVec2fv(1.0f, 1.0f);
 
-    CX_METHOD_OVERRIDE(this->IsTouch, cxViewIsTouch);
-    CX_METHOD_OVERRIDE(this->IsOnKey, cxViewIsOnKey);
+    CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
+    CX_METHOD_SET(this->IsOnKey, cxViewIsOnKey);
     CX_OBJECT_INIT_OVERRIDE(cxView, this);
     
     this->subViews = CX_ALLOC(cxList);
@@ -137,14 +137,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_EVENT_RELEASE(this->onLayout);
     
     CX_SIGNAL_RELEASE(this->onDraw);
-    
-    CX_METHOD_RELEASE(this->IsTouch);
-    CX_METHOD_RELEASE(this->Touch);
-    CX_METHOD_RELEASE(this->IsOnKey);
-    CX_METHOD_RELEASE(this->OnKey);
-    CX_METHOD_RELEASE(this->Draw);
-    CX_METHOD_RELEASE(this->After);
-    CX_METHOD_RELEASE(this->Before);
 }
 CX_OBJECT_TERM(cxView, cxObject)
 

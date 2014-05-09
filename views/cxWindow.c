@@ -19,7 +19,7 @@ static cxBool cxWindowOnKey(cxAny pview,cxKey *key)
 
 CX_OBJECT_INIT(cxWindow, cxView)
 {
-    CX_METHOD_OVERRIDE(this->super.OnKey, cxWindowOnKey);
+    CX_METHOD_SET(this->super.OnKey, cxWindowOnKey);
     this->views = CX_ALLOC(cxStack);
 }
 CX_OBJECT_FREE(cxWindow, cxView)

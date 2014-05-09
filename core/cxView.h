@@ -72,13 +72,13 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f anchorMatrix;
     cxColor4f color;
 
-    CX_METHOD_ALLOC(cxViewIsTouchType,IsTouch,cxAny,cxTouch *);
-    CX_METHOD_ALLOC(cxBool, Touch, cxAny, cxTouch *);
-    CX_METHOD_ALLOC(cxViewIsTouchType, IsOnKey, cxAny, cxKey *);
-    CX_METHOD_ALLOC(cxBool, OnKey, cxAny, cxKey *);
-    CX_METHOD_ALLOC(void, Draw, cxAny);
-    CX_METHOD_ALLOC(void, After, cxAny);
-    CX_METHOD_ALLOC(void, Before, cxAny);
+    CX_METHOD_DEF(cxViewIsTouchType,IsTouch,cxAny,cxTouch *);
+    CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouch *);
+    CX_METHOD_DEF(cxViewIsTouchType, IsOnKey, cxAny, cxKey *);
+    CX_METHOD_DEF(cxBool, OnKey, cxAny, cxKey *);
+    CX_METHOD_DEF(void, Draw, cxAny);
+    CX_METHOD_DEF(void, After, cxAny);
+    CX_METHOD_DEF(void, Before, cxAny);
 
     CX_SIGNAL_ALLOC(onDraw);
 

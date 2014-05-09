@@ -37,8 +37,8 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
 
 CX_OBJECT_INIT(cxMove, cxAction)
 {
-    CX_METHOD_OVERRIDE(this->super.Init, cxMoveInit);
-    CX_METHOD_OVERRIDE(this->super.Step, cxMoveStep);
+    CX_METHOD_SET(this->super.Init, cxMoveInit);
+    CX_METHOD_SET(this->super.Step, cxMoveStep);
 }
 CX_OBJECT_FREE(cxMove, cxAction)
 {

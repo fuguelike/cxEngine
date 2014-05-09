@@ -71,14 +71,22 @@ void cxTypeFree()
     CX_RELEASE(types);
 }
 
-cxAny cxTypeGet(cxConstType type)
+cxType cxTypeGet(cxConstType typeName)
 {
-    return cxHashGet(types, cxHashStrKey(type));
+    return cxHashGet(types, cxHashStrKey(typeName));
 }
 
-void cxTypeSet(cxConstType type,cxAny ptype)
+void cxTypeSet(cxConstType typeName,cxType type)
 {
-    cxHashSet(types, cxHashStrKey(type), ptype);
+    CX_ASSERT(typeName != NULL && type != NULL, "args error");
+    type->typeName = typeName;
+    cxHashSet(types, cxHashStrKey(typeName), type);
+}
+
+void cxTypeSetSuper(cxType type,cxType super)
+{
+    CX_ASSERT(type != NULL, "type arsg error");
+    CX_RETAIN_SWAP(type->superType, super);
 }
 
 cxBool cxInstanceOf(cxAny object,cxConstType type)
@@ -120,73 +128,71 @@ CX_OBJECT_INIT(cxType, cxObject)
 CX_OBJECT_FREE(cxType, cxObject)
 {
     CX_RELEASE(this->superType);
-    CX_METHOD_RELEASE(this->Create);
-    CX_METHOD_RELEASE(this->Alloc);
 }
 CX_OBJECT_TERM(cxType, cxObject)
 
 void cxInitTypes()
 {
     //register object class
-    cxType objectType = CX_ALLOC(cxType);
-    CX_METHOD_OVERRIDE(objectType->Alloc, __cxObjectAllocFunc);
-    CX_METHOD_OVERRIDE(objectType->Create, __cxObjectCreateFunc);
-    cxTypeSet(cxObjectTypeName,objectType);
-    CX_RELEASE(objectType);
+    cxType tmp = CX_ALLOC(cxType);
+    CX_METHOD_SET(tmp->Alloc, __cxObjectAllocFunc);
+    CX_METHOD_SET(tmp->Create, __cxObjectCreateFunc);
+    cxTypeSet(cxObjectTypeName,tmp);
+    CX_RELEASE(tmp);
     
     //register core
-    CX_REGISTER_TYPE(cxHash,cxObject);
-    CX_REGISTER_TYPE(cxArray,cxObject);
-    CX_REGISTER_TYPE(cxList,cxObject);
-    CX_REGISTER_TYPE(cxStack,cxObject);
-    CX_REGISTER_TYPE(cxStream,cxObject);
-    CX_REGISTER_TYPE(cxString,cxObject);
-    CX_REGISTER_TYPE(cxTexture,cxObject);
-    CX_REGISTER_TYPE(cxNumber,cxObject);
+    CX_REGISTER_TYPE(cxHash,         cxObject);
+    CX_REGISTER_TYPE(cxArray,        cxObject);
+    CX_REGISTER_TYPE(cxList,         cxObject);
+    CX_REGISTER_TYPE(cxStack,        cxObject);
+    CX_REGISTER_TYPE(cxStream,       cxObject);
+    CX_REGISTER_TYPE(cxString,       cxObject);
+    CX_REGISTER_TYPE(cxTexture,      cxObject);
+    CX_REGISTER_TYPE(cxNumber,       cxObject);
     
     //register streams
     CX_REGISTER_TYPE(cxAssetsStream, cxStream);
-    CX_REGISTER_TYPE(cxFileStream, cxStream);
-    CX_REGISTER_TYPE(cxMemStream, cxStream);
+    CX_REGISTER_TYPE(cxFileStream,   cxStream);
+    CX_REGISTER_TYPE(cxMemStream,    cxStream);
     
     //register textures
-    CX_REGISTER_TYPE(cxTextureJPG, cxTexture);
-    CX_REGISTER_TYPE(cxTexturePKM, cxTexture);
-    CX_REGISTER_TYPE(cxTexturePNG, cxTexture);
-    CX_REGISTER_TYPE(cxTextureTXT, cxTexture);
-    CX_REGISTER_TYPE(cxTexturePVR, cxTexture);
-    CX_REGISTER_TYPE(cxTextureJSON, cxTexture);
+    CX_REGISTER_TYPE(cxTextureJPG,   cxTexture);
+    CX_REGISTER_TYPE(cxTexturePKM,   cxTexture);
+    CX_REGISTER_TYPE(cxTexturePNG,   cxTexture);
+    CX_REGISTER_TYPE(cxTextureTXT,   cxTexture);
+    CX_REGISTER_TYPE(cxTexturePVR,   cxTexture);
+    CX_REGISTER_TYPE(cxTextureJSON,  cxTexture);
     
     //register views
-    CX_REGISTER_TYPE(cxView, cxObject);
-    CX_REGISTER_TYPE(cxSprite, cxView);
-    CX_REGISTER_TYPE(cxScroll, cxView);
-    CX_REGISTER_TYPE(cxTable, cxView);
-    CX_REGISTER_TYPE(cxWindow, cxView);
-    CX_REGISTER_TYPE(cxClipping, cxView);
-    CX_REGISTER_TYPE(cxLoading, cxView);
-    CX_REGISTER_TYPE(cxPolygon, cxSprite);
-    CX_REGISTER_TYPE(cxAtlas, cxSprite);
-    CX_REGISTER_TYPE(cxButton, cxSprite);
-    CX_REGISTER_TYPE(cxLabelTTF, cxSprite);
-    CX_REGISTER_TYPE(cxLabelBMP, cxAtlas);
+    CX_REGISTER_TYPE(cxView,         cxObject);
+    CX_REGISTER_TYPE(cxSprite,       cxView);
+    CX_REGISTER_TYPE(cxScroll,       cxView);
+    CX_REGISTER_TYPE(cxTable,        cxView);
+    CX_REGISTER_TYPE(cxWindow,       cxView);
+    CX_REGISTER_TYPE(cxClipping,     cxView);
+    CX_REGISTER_TYPE(cxLoading,      cxView);
+    CX_REGISTER_TYPE(cxPolygon,      cxSprite);
+    CX_REGISTER_TYPE(cxAtlas,        cxSprite);
+    CX_REGISTER_TYPE(cxButton,       cxSprite);
+    CX_REGISTER_TYPE(cxLabelTTF,     cxSprite);
+    CX_REGISTER_TYPE(cxLabelBMP,     cxAtlas);
     
     //register actions
-    CX_REGISTER_TYPE(cxAction, cxObject);
-    CX_REGISTER_TYPE(cxActionSet, cxAction);
-    CX_REGISTER_TYPE(cxAnimate, cxAction);
-    CX_REGISTER_TYPE(cxFade, cxAction);
-    CX_REGISTER_TYPE(cxFollow, cxAction);
-    CX_REGISTER_TYPE(cxJump, cxAction);
-    CX_REGISTER_TYPE(cxMove, cxAction);
-    CX_REGISTER_TYPE(cxParabola, cxAction);
-    CX_REGISTER_TYPE(cxParticle, cxAction);
-    CX_REGISTER_TYPE(cxRotate, cxAction);
-    CX_REGISTER_TYPE(cxRunner, cxAction);
-    CX_REGISTER_TYPE(cxScale, cxAction);
-    CX_REGISTER_TYPE(cxSpline, cxAction);
-    CX_REGISTER_TYPE(cxTimer, cxAction);
-    CX_REGISTER_TYPE(cxTint, cxAction);
+    CX_REGISTER_TYPE(cxAction,       cxObject);
+    CX_REGISTER_TYPE(cxActionSet,    cxAction);
+    CX_REGISTER_TYPE(cxAnimate,      cxAction);
+    CX_REGISTER_TYPE(cxFade,         cxAction);
+    CX_REGISTER_TYPE(cxFollow,       cxAction);
+    CX_REGISTER_TYPE(cxJump,         cxAction);
+    CX_REGISTER_TYPE(cxMove,         cxAction);
+    CX_REGISTER_TYPE(cxParabola,     cxAction);
+    CX_REGISTER_TYPE(cxParticle,     cxAction);
+    CX_REGISTER_TYPE(cxRotate,       cxAction);
+    CX_REGISTER_TYPE(cxRunner,       cxAction);
+    CX_REGISTER_TYPE(cxScale,        cxAction);
+    CX_REGISTER_TYPE(cxSpline,       cxAction);
+    CX_REGISTER_TYPE(cxTimer,        cxAction);
+    CX_REGISTER_TYPE(cxTint,         cxAction);
 }
 
 //parse type id subview property

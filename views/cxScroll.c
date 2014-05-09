@@ -165,7 +165,7 @@ void __cxScrollInitObject(cxAny object,cxAny json,cxAny hash)
 CX_OBJECT_INIT(cxScroll, cxView)
 {
     cxEngine engine = cxEngineInstance();
-    CX_METHOD_OVERRIDE(this->super.Touch, cxScrollTouch);
+    CX_METHOD_SET(this->super.Touch, cxScrollTouch);
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
     //swip cond value

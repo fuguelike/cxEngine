@@ -91,7 +91,6 @@
 		835870F4183DEB0F007B175E /* cxClient.c in Sources */ = {isa = PBXBuildFile; fileRef = 835870F2183DEB0F007B175E /* cxClient.c */; };
 		835A95C0185592CE0088B413 /* cxBMPFont.c in Sources */ = {isa = PBXBuildFile; fileRef = 835A95BE185592CE0088B413 /* cxBMPFont.c */; };
 		835A95C81855A5190088B413 /* cxLabelBMP.c in Sources */ = {isa = PBXBuildFile; fileRef = 835A95C61855A5190088B413 /* cxLabelBMP.c */; };
-		835C6CDE186AB9F5001CC36F /* cxMethodArg.c in Sources */ = {isa = PBXBuildFile; fileRef = 835C6CDC186AB9F5001CC36F /* cxMethodArg.c */; };
 		83607AA218444B39005C392B /* cxAnimate.c in Sources */ = {isa = PBXBuildFile; fileRef = 83607AA018444B39005C392B /* cxAnimate.c */; };
 		836150FC18482AAF00EB9173 /* cxMD5.c in Sources */ = {isa = PBXBuildFile; fileRef = 836150FA18482AAF00EB9173 /* cxMD5.c */; };
 		836BFD1E186D16110098B11E /* cxObject.c in Sources */ = {isa = PBXBuildFile; fileRef = 836BFD1C186D16110098B11E /* cxObject.c */; };
@@ -130,6 +129,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		83162619191CD56900A7AC87 /* cxObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxObject.h; sourceTree = "<group>"; };
 		8318B9F4186916F1007C0E75 /* cxType.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxType.c; sourceTree = "<group>"; };
 		8318B9F5186916F1007C0E75 /* cxType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxType.h; sourceTree = "<group>"; };
 		8324963D182FB72000554604 /* cxTextureJPG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureJPG.c; sourceTree = "<group>"; };
@@ -313,14 +313,11 @@
 		835A95BF185592CE0088B413 /* cxBMPFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxBMPFont.h; sourceTree = "<group>"; };
 		835A95C61855A5190088B413 /* cxLabelBMP.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLabelBMP.c; sourceTree = "<group>"; };
 		835A95C71855A5190088B413 /* cxLabelBMP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLabelBMP.h; sourceTree = "<group>"; };
-		835C6CDC186AB9F5001CC36F /* cxMethodArg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMethodArg.c; sourceTree = "<group>"; };
-		835C6CDD186AB9F5001CC36F /* cxMethodArg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMethodArg.h; sourceTree = "<group>"; };
 		83607AA018444B39005C392B /* cxAnimate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAnimate.c; sourceTree = "<group>"; };
 		83607AA118444B39005C392B /* cxAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAnimate.h; sourceTree = "<group>"; };
 		836150FA18482AAF00EB9173 /* cxMD5.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMD5.c; sourceTree = "<group>"; };
 		836150FB18482AAF00EB9173 /* cxMD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMD5.h; sourceTree = "<group>"; };
 		836BFD1C186D16110098B11E /* cxObject.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxObject.c; sourceTree = "<group>"; };
-		836BFD1D186D16110098B11E /* cxObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxObject.h; sourceTree = "<group>"; };
 		8384FCDA18DF31F0003BE461 /* cxFollow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxFollow.c; sourceTree = "<group>"; };
 		8384FCDB18DF31F0003BE461 /* cxFollow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxFollow.h; sourceTree = "<group>"; };
 		839103BE1859632A008DF1C7 /* cxRegex.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxRegex.c; sourceTree = "<group>"; };
@@ -502,8 +499,6 @@
 				836150FB18482AAF00EB9173 /* cxMD5.h */,
 				8341C56F18227DF20045A66F /* cxMessage.c */,
 				8341C57018227DF20045A66F /* cxMessage.h */,
-				835C6CDC186AB9F5001CC36F /* cxMethodArg.c */,
-				835C6CDD186AB9F5001CC36F /* cxMethodArg.h */,
 				8341C57118227DF20045A66F /* cxNumber.c */,
 				8341C57218227DF20045A66F /* cxNumber.h */,
 				8341C57318227DF20045A66F /* cxOpenGL.c */,
@@ -531,7 +526,7 @@
 				839F8EB0191B0BC60035EBDE /* cxController.c */,
 				839F8EB1191B0BC60035EBDE /* cxController.h */,
 				836BFD1C186D16110098B11E /* cxObject.c */,
-				836BFD1D186D16110098B11E /* cxObject.h */,
+				83162619191CD56900A7AC87 /* cxObject.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -853,7 +848,6 @@
 				8341C63618227DF20045A66F /* cxView.c in Sources */,
 				8341C64C18227DF30045A66F /* plane.c in Sources */,
 				8341C68218227FA10045A66F /* cxUtil.m in Sources */,
-				835C6CDE186AB9F5001CC36F /* cxMethodArg.c in Sources */,
 				83494FA718334B7A0016C3A4 /* cxJson.c in Sources */,
 				8341C66B18227DF30045A66F /* cxWindow.c in Sources */,
 				8341C61B18227DF20045A66F /* cxAction.c in Sources */,

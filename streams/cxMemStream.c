@@ -106,13 +106,13 @@ static void cxMemStreamClose(cxAny this)
 
 CX_OBJECT_INIT(cxMemStream, cxStream)
 {
-    CX_METHOD_OVERRIDE(this->super.Open, cxMemStreamOpen);
-    CX_METHOD_OVERRIDE(this->super.Read, cxMemStreamRead);
-    CX_METHOD_OVERRIDE(this->super.Write, cxMemStreamWrite);
-    CX_METHOD_OVERRIDE(this->super.Seek, cxMemStreamSeek);
-    CX_METHOD_OVERRIDE(this->super.Close, cxMemStreamClose);
-    CX_METHOD_OVERRIDE(this->super.Position,cxMemStreamPosition);
-    CX_METHOD_OVERRIDE(this->super.AllBytes,cxMemStreamAllBytes);
+    CX_METHOD_SET(this->super.Open, cxMemStreamOpen);
+    CX_METHOD_SET(this->super.Read, cxMemStreamRead);
+    CX_METHOD_SET(this->super.Write, cxMemStreamWrite);
+    CX_METHOD_SET(this->super.Seek, cxMemStreamSeek);
+    CX_METHOD_SET(this->super.Close, cxMemStreamClose);
+    CX_METHOD_SET(this->super.Position,cxMemStreamPosition);
+    CX_METHOD_SET(this->super.AllBytes,cxMemStreamAllBytes);
 }
 CX_OBJECT_FREE(cxMemStream, cxStream)
 {

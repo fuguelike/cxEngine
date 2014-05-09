@@ -105,9 +105,9 @@ static void cxAnimateReset(cxAny pav)
 
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {
-    CX_METHOD_OVERRIDE(this->super.Init, cxAnimateInit);
-    CX_METHOD_OVERRIDE(this->super.Step, cxAnimateStep);
-    CX_METHOD_OVERRIDE(this->super.Reset, cxAnimateReset);
+    CX_METHOD_SET(this->super.Init, cxAnimateInit);
+    CX_METHOD_SET(this->super.Step, cxAnimateStep);
+    CX_METHOD_SET(this->super.Reset, cxAnimateReset);
     this->list = CX_ALLOC(cxArray);
     this->cached = true;
 }

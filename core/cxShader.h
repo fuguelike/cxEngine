@@ -43,11 +43,11 @@ CX_OBJECT_DEF(cxShader, cxObject)
     GLuint fragmentShader;
     GLint uniformMatrixModelviewProject;
     GLint uniformAtlasTexture;
-    CX_METHOD_ALLOC(void,Init,cxAny);
-    CX_METHOD_ALLOC(void,Update,cxAny);
-    CX_METHOD_ALLOC(void,GetUniform,cxAny);
-    CX_METHOD_ALLOC(cxString, GetVertexSource, cxAny);
-    CX_METHOD_ALLOC(cxString, GetFragmentSource, cxAny);
+    CX_METHOD_DEF(void,Init,cxAny);
+    CX_METHOD_DEF(void,Update,cxAny);
+    CX_METHOD_DEF(void,GetUniform,cxAny);
+    CX_METHOD_DEF(cxString, GetVertexSource, cxAny);
+    CX_METHOD_DEF(cxString, GetFragmentSource, cxAny);
 CX_OBJECT_END(cxShader)
 
 void cxShaderInitPosColorTex(cxAny this);
