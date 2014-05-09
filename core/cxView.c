@@ -30,20 +30,27 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
 {
     cxView this = object;
     cxEngine engine = cxEngineInstance();
+    //
     this->position.x = cxJsonDouble(json, "position.x", this->position.x);
     this->position.y = cxJsonDouble(json, "position.y", this->position.y);
+    //
     this->size.w = cxJsonDouble(json, "size.w", this->size.w);
     this->size.h = cxJsonDouble(json, "size.h", this->size.h);
+    //
     this->anchor.x = cxJsonDouble(json, "anchor.x", this->anchor.x);
     this->anchor.y = cxJsonDouble(json, "anchor.y", this->anchor.y);
+    //
     this->isShowBorder = cxJsonBool(json, "border", this->isShowBorder);
+    //
     this->color.a = cxJsonDouble(json, "color.a", this->color.a);
     this->color.r = cxJsonDouble(json, "color.r", this->color.r);
     this->color.g = cxJsonDouble(json, "color.g", this->color.g);
     this->color.b = cxJsonDouble(json, "color.b", this->color.b);
+    //
     this->raxis.x = cxJsonDouble(json, "raxis.x", this->raxis.x);
     this->raxis.y = cxJsonDouble(json, "raxis.y", this->raxis.y);
     this->raxis.z = cxJsonDouble(json, "raxis.z", this->raxis.z);
+    //
     this->scale.x = cxJsonDouble(json, "scale.x", this->scale.x);
     this->scale.y = cxJsonDouble(json, "scale.y", this->scale.y);
     //auto fixscale
@@ -58,6 +65,7 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
         this->fixscale.x = cxJsonDouble(json, "fixscale.x", this->fixscale.x);
         this->fixscale.x = cxJsonDouble(json, "fixscale.y", this->fixscale.y);
     }
+    //
     this->isVisible = cxJsonBool(json, "visible", true);
     cxFloat degrees = cxJsonDouble(json, "degrees", INFINITY);
     if(!isinf(degrees)){
@@ -97,6 +105,16 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
         cxViewAppend(this, subview);
     }
     CX_JSON_ARRAY_EACH_END(subviews, item)
+    //load actions
+    cxJson actions = cxJsonArray(json, "actions");
+    CX_JSON_ARRAY_EACH_BEG(actions, item)
+    {
+        cxAny action = cxObjectLoadByJson(item, hash);
+        CX_ASSERT(CX_INSTANCE_OF(action, cxAction), "subview must is cxView type");
+        cxViewAppendAction(this, action);
+    }
+    CX_JSON_ARRAY_EACH_END(actions, item)
+    //
     CX_OBJECT_INIT_SUPER(cxObject);
 }
 
@@ -115,7 +133,7 @@ CX_OBJECT_INIT(cxView, cxObject)
 
     CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
     CX_METHOD_SET(this->IsOnKey, cxViewIsOnKey);
-    CX_OBJECT_INIT_OVERRIDE(cxView, this);
+    CX_OBJECT_INIT_OVERRIDE(cxView);
     
     this->subViews = CX_ALLOC(cxList);
     this->actions = CX_ALLOC(cxHash);

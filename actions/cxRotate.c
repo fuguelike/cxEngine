@@ -24,8 +24,14 @@ static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAngle(this->super.view, angle);
 }
 
+void __cxRotateInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    
+}
+
 CX_OBJECT_INIT(cxRotate, cxAction)
 {
+    CX_OBJECT_INIT_OVERRIDE(cxRotate);
     this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
     CX_METHOD_SET(this->super.Init, cxRotateInit);
     CX_METHOD_SET(this->super.Step, cxRotateStep);

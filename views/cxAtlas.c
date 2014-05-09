@@ -193,7 +193,7 @@ void __cxAtlasInitObject(cxAny object,cxAny json,cxAny hash)
 
 CX_OBJECT_INIT(cxAtlas, cxSprite)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxAtlas, this);
+    CX_OBJECT_INIT_OVERRIDE(cxAtlas);
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);

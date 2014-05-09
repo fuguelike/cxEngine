@@ -4,6 +4,17 @@
     "w": 400,
     "h": 400
   },
+  "actions": [
+    {
+      "id": "move",
+      "duration":3,
+      "type": "cxMove",
+      "to": {
+        "x": 300,
+        "y": 300
+      }
+    }
+  ],
   "layout": "horizontal",
   "subviews": [
     {

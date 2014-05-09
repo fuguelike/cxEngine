@@ -69,6 +69,14 @@ CX_OBJECT_FREE(cxJson, cxObject)
 }
 CX_OBJECT_TERM(cxJson, cxObject)
 
+cxBool cxJsonExists(cxJson json,cxConstChars key)
+{
+    if(!cxJsonIsObject(json)){
+        return false;
+    }
+    return json_object_get(CX_JSON_PTR(json), key) != NULL;
+}
+
 cxBool cxJsonIsInt(cxJson json)
 {
     return json_is_integer(CX_JSON_PTR(json));

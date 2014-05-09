@@ -91,7 +91,7 @@ void __cxLabelBMPInitObject(cxAny object,cxAny json,cxAny hash)
 
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxLabelBMP, this);
+    CX_OBJECT_INIT_OVERRIDE(cxLabelBMP);
     CX_EVENT_QUICK(this->super.super.super.onUpdate, cxLabelBMPUpdate);
     this->isDirty = true;
 }

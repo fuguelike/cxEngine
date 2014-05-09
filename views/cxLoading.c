@@ -63,7 +63,7 @@ void __cxLoadingInitObject(cxAny object,cxAny json,cxAny hash)
 
 CX_OBJECT_INIT(cxLoading, cxView)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxLoading, this);
+    CX_OBJECT_INIT_OVERRIDE(cxLoading);
     this->isLoading = true;
     CX_EVENT_QUICK(this->super.onUpdate, cxLoadingOnUpdate);
     CX_METHOD_SET(this->super.Touch, cxLoadingTouch);

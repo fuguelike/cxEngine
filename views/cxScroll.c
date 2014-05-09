@@ -172,7 +172,7 @@ CX_OBJECT_INIT(cxScroll, cxView)
     this->delta = 15;
     this->value = 950;
     CX_SLOT_CONNECT(engine->onTouch, this, onTouch, cxScrollOnTouch);
-    CX_OBJECT_INIT_OVERRIDE(cxScroll, this);
+    CX_OBJECT_INIT_OVERRIDE(cxScroll);
 }
 CX_OBJECT_FREE(cxScroll, cxView)
 {

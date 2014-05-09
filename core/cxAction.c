@@ -35,12 +35,31 @@ void cxActionSetView(cxAny pav,cxAny pview)
 
 void __cxActionInitObject(cxAny object,cxAny json,cxAny hash)
 {
+    cxAction this = object;
+    this->duration = cxJsonDouble(json, "duration", this->duration);
+    this->speed = cxJsonDouble(json, "speed", this->speed);
+    this->delay = cxJsonDouble(json, "delay", this->delay);
+    //
+    cxConstChars curve = cxJsonConstChars(json, "curve");
+    cxCurveItem item = NULL;
+    if(curve != NULL){
+        item = cxCurveGet(curve);
+    }
+    if(item != NULL){
+        cxActionSetCurve(this, item->func);
+    }
+    //
+    this->actionId = cxJsonLong(json, "actionid", this->actionId);
+    //
+    cxInt indexnum = cxJsonInt(json, "index", this->indexNum);
+    cxActionSetIndex(this, indexnum);
+    //
     CX_OBJECT_INIT_SUPER(cxObject);
 }
 
 CX_OBJECT_INIT(cxAction, cxObject)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxAction, this);
+    CX_OBJECT_INIT_OVERRIDE(cxAction);
     this->isExit = false;
     this->speed = 1.0f;
     this->index = -1;
@@ -183,13 +202,8 @@ void cxActionReset(cxAny pav)
     this->isFirst = false;
     this->isExit = false;
     this->index = -1;
-    this->indexNum = -1;
     this->durationElapsed = 0;
     this->delayElapsed = 0;
-    CX_EVENT_RELEASE(this->onIndex);
-    CX_EVENT_RELEASE(this->onStart);
-    CX_EVENT_RELEASE(this->onStop);
-    CX_EVENT_RELEASE(this->onStep);
     CX_METHOD_RUN(this->Reset, this);
 }
 

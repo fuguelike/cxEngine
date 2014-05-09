@@ -36,7 +36,7 @@ void __cxLabelTTFInitObject(cxAny object,cxAny json,cxAny hash)
 
 CX_OBJECT_INIT(cxLabelTTF, cxSprite)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxLabelTTF, this);
+    CX_OBJECT_INIT_OVERRIDE(cxLabelTTF);
     CX_EVENT_QUICK(this->super.super.onUpdate,cxLabelTTFUpdate);
     this->attr.size = 32;
     cxSpriteSetShader(this, cxShaderAlphaKey);

@@ -21,6 +21,13 @@ CX_OBJECT_FREE(cxController, cxObject)
 }
 CX_OBJECT_TERM(cxController, cxObject)
 
+void cxControllerAction(cxAny pc,cxConstChars key)
+{
+    cxController this = pc;
+    cxAny action = cxControllerObject(pc, key);
+    cxViewAppendAction(this->root, action);
+}
+
 cxAny cxControllerObject(cxAny pc,cxConstChars key)
 {
     CX_ASSERT(pc != NULL, "pc args error");

@@ -107,10 +107,10 @@ CX_OBJECT_BEG(cxObject)
 CX_OBJECT_END(cxObject)
 
 //invoke super init method
-#define CX_OBJECT_INIT_SUPER(_t_)          __##_t_##InitObject(object, json, hash)
+#define CX_OBJECT_INIT_SUPER(_t_)       __##_t_##InitObject(object, json, hash)
 
 //override init method
-#define CX_OBJECT_INIT_OVERRIDE(_t_,_o_)   CX_METHOD_SET(((cxObject)(_o_))->cxInit, __##_t_##InitObject)
+#define CX_OBJECT_INIT_OVERRIDE(_t_)    CX_METHOD_SET(((cxObject)this)->cxInit, __##_t_##InitObject)
 
 CX_OBJECT_DEF(cxMemory, cxObject)
     cxPointer pointer;

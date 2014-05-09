@@ -35,8 +35,17 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, npos);
 }
 
+void __cxMoveInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    cxMove this = object;
+    this->endPos.x = cxJsonDouble(json, "to.x", this->endPos.x);
+    this->endPos.y = cxJsonDouble(json, "to.y", this->endPos.y);
+    CX_OBJECT_INIT_SUPER(cxAction);
+}
+
 CX_OBJECT_INIT(cxMove, cxAction)
 {
+    CX_OBJECT_INIT_OVERRIDE(cxMove);
     CX_METHOD_SET(this->super.Init, cxMoveInit);
     CX_METHOD_SET(this->super.Step, cxMoveStep);
 }

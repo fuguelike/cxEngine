@@ -91,6 +91,8 @@ cxJson cxJsonArray(cxJson json,cxConstChars key);
 
 cxJson cxJsonObject(cxJson json,cxConstChars key);
 
+cxBool cxJsonExists(cxJson json,cxConstChars key);
+
 cxInt cxJsonIntAt(cxJson json,cxInt idx,cxInt dv);
 
 cxConstChars cxJsonConstCharsAt(cxJson json,cxInt idx);

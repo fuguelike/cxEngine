@@ -108,7 +108,7 @@ void __cxTableInitObject(cxAny object,cxAny json,cxAny hash)
 CX_OBJECT_INIT(cxTable, cxView)
 {
     this->arrayHide = true;
-    CX_OBJECT_INIT_OVERRIDE(cxTable, this);
+    CX_OBJECT_INIT_OVERRIDE(cxTable);
     CX_EVENT_QUICK(this->super.onResize, cxTableResize);
     CX_EVENT_QUICK(this->super.onUpdate, cxTableUpdate);
 }

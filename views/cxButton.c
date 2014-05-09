@@ -56,7 +56,7 @@ CX_OBJECT_INIT(cxButton, cxSprite)
     this->movement = 25;
     this->isEnable = true;
     CX_METHOD_SET(this->super.super.Touch, cxButtonTouch);
-    CX_OBJECT_INIT_OVERRIDE(cxButton, this);
+    CX_OBJECT_INIT_OVERRIDE(cxButton);
 }
 CX_OBJECT_FREE(cxButton, cxSprite)
 {
