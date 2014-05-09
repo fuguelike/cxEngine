@@ -21,7 +21,7 @@ CX_OBJECT_END(cxController)
 
 void cxControllerInitWithFile(cxAny pc, cxConstChars file);
 
-cxAny cxControllerGet(cxAny pc,cxConstChars key);
+cxAny cxControllerObject(cxAny pc,cxConstChars key);
 
 cxController cxControllerCreate(cxConstChars file);
 

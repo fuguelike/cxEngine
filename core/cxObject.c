@@ -23,7 +23,7 @@ void __cxObjectAutoInit(cxObject this)
 
 void __cxObjectAutoFree(cxObject this)
 {
-    CX_METHOD_RELEASE(this->InitObject);
+    
 }
 
 //auto release memory block

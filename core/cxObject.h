@@ -14,8 +14,13 @@
 
 CX_C_BEGIN
 
-typedef void (*cxObjectFunc)(cxPointer this);
+//
+typedef void (*cxObjectFunc)(cxAny);
 
+//this,json,hash
+typedef void (*cxObjectInit)(cxAny,cxAny,cxAny);
+
+//
 typedef cxAny (*cxAnyFunc)(cxAny object);
 
 cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
@@ -97,15 +102,17 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 
 //base type define
 CX_OBJECT_BEG(cxObject)
-    cxConstType type;
+    cxConstType cxType;
     cxULong cxRefcount;
     cxObjectFunc cxFree;
-    CX_METHOD_ALLOC(void,InitObject,cxAny,cxAny,cxAny);
+    cxObjectInit cxInit;
 CX_OBJECT_END(cxObject)
 
+//invoke super init method
 #define CX_OBJECT_INIT_SUPER(_t_)          __##_t_##InitObject(object, json, hash)
 
-#define CX_OBJECT_INIT_OVERRIDE(_t_,_o_)   CX_METHOD_OVERRIDE(((cxObject)(_o_))->InitObject, __##_t_##InitObject)
+//override init method
+#define CX_OBJECT_INIT_OVERRIDE(_t_,_o_)   CX_METHOD_OVERRIDE(((cxObject)(_o_))->cxInit, __##_t_##InitObject)
 
 CX_OBJECT_DEF(cxMemory, cxObject)
     cxPointer pointer;

@@ -62,6 +62,9 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
     this->autoBox.b = cxJsonDouble(json, "resizing.bottom", this->autoBox.b);
     //resizing mask
     cxConstChars mask = cxJsonConstChars(json, "resizing.mask");
+    if(mask != NULL){
+        this->autoMask = cxViewAutoResizeNone;
+    }
     if(cxConstCharsHas(mask,"left")){
         this->autoMask |= cxViewAutoResizeLeft;
     }
@@ -73,12 +76,6 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
     }
     if(cxConstCharsHas(mask, "bottom")){
         this->autoMask |= cxViewAutoResizeBottom;
-    }
-    if(cxConstCharsHas(mask, "width")){
-        this->autoMask |= cxViewAutoResizeWidth;
-    }
-    if(cxConstCharsHas(mask, "height")){
-        this->autoMask |= cxViewAutoResizeHeight;
     }
     //load subview
     cxJson subviews = cxJsonArray(json, "subviews");

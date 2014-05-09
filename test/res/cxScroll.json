@@ -1,15 +1,20 @@
 {
   "type": "cxScroll",
   "size": {
-    "w": 200,
-    "h": 200
+    "w": 400,
+    "h": 400
   },
-  "layout":"horizontal",
+  "layout": "horizontal",
   "subviews": [
     {
       "type": "cxTable",
-      "grid":{"x":4},
-      "size":{"w":500,"h":200},
+      "grid": {
+        "x": 4
+      },
+      "size": {
+        "w": 500,
+        "h": 200
+      },
       "subviews": [
         {
           "type": "cxView",

@@ -100,7 +100,7 @@ cxAny cxObjectAlloc(cxConstType type,int size,cxObjectFunc initFunc,cxObjectFunc
     cxAny ptr = cxMalloc(size);
     CX_ASSERT(ptr != NULL, "alloc memory error size=%d",size);
     cxObject object = (cxObject)ptr;
-    object->type = type;
+    object->cxType = type;
     object->cxRefcount = 1;
     object->cxFree = freeFunc;
     initFunc(object);

@@ -83,12 +83,15 @@ void cxTypeSet(cxConstType type,cxAny ptype)
 
 cxBool cxInstanceOf(cxAny object,cxConstType type)
 {
+    //all NULL type
+    CX_RETURN(object == NULL && type == NULL,true);
+    //
     CX_RETURN(object == NULL, false);
     cxObject this = object;
-    if(this->type == type){
+    if(this->cxType == type){
         return true;
     }
-    cxType ptype = cxTypeGet(this->type);
+    cxType ptype = cxTypeGet(this->cxType);
     while (ptype != NULL && ptype->superType != NULL) {
         if(ptype->superType->typeName == type){
             return true;
@@ -98,7 +101,7 @@ cxBool cxInstanceOf(cxAny object,cxConstType type)
     return false;
 }
 
-cxAny cxTypeCreate(cxJson json,cxAny hash)
+cxAny cxTypeCreate(cxJson json,cxHash hash)
 {
     CX_ASSERT(json != NULL, "json error");
     cxConstChars type = cxJsonConstChars(json, "type");
@@ -106,7 +109,7 @@ cxAny cxTypeCreate(cxJson json,cxAny hash)
     CX_ASSERT(ptype != NULL, "type(%s) not register",type);
     cxObject object = CX_METHOD_GET(NULL, ptype->Create);
     CX_ASSERT(object != NULL, "type(%s) create object failed",type);
-    CX_METHOD_RUN(object->InitObject,object,json,hash);
+    CX_METHOD_RUN(object->cxInit,object,json,hash);
     return object;
 }
 
@@ -140,6 +143,19 @@ void cxInitTypes()
     CX_REGISTER_TYPE(cxString,cxObject);
     CX_REGISTER_TYPE(cxTexture,cxObject);
     CX_REGISTER_TYPE(cxNumber,cxObject);
+    
+    //register streams
+    CX_REGISTER_TYPE(cxAssetsStream, cxStream);
+    CX_REGISTER_TYPE(cxFileStream, cxStream);
+    CX_REGISTER_TYPE(cxMemStream, cxStream);
+    
+    //register textures
+    CX_REGISTER_TYPE(cxTextureJPG, cxTexture);
+    CX_REGISTER_TYPE(cxTexturePKM, cxTexture);
+    CX_REGISTER_TYPE(cxTexturePNG, cxTexture);
+    CX_REGISTER_TYPE(cxTextureTXT, cxTexture);
+    CX_REGISTER_TYPE(cxTexturePVR, cxTexture);
+    CX_REGISTER_TYPE(cxTextureJSON, cxTexture);
     
     //register views
     CX_REGISTER_TYPE(cxView, cxObject);
@@ -182,7 +198,7 @@ cxAny cxObjectLoadByJson(cxJson json, cxHash hash)
     cxObject object = NULL;
     if(src != NULL){
         object = cxObjectLoad(src, hash);
-        CX_METHOD_RUN(object->InitObject,object,json,hash);
+        CX_METHOD_RUN(object->cxInit,object,json,hash);
     }else {
         object = cxTypeCreate(json,hash);
     }

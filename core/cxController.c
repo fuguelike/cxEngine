@@ -21,8 +21,9 @@ CX_OBJECT_FREE(cxController, cxObject)
 }
 CX_OBJECT_TERM(cxController, cxObject)
 
-cxAny cxControllerGet(cxAny pc,cxConstChars key)
+cxAny cxControllerObject(cxAny pc,cxConstChars key)
 {
+    CX_ASSERT(pc != NULL, "pc args error");
     cxController this = pc;
     return cxHashGet(this->objects, cxHashStrKey(key));
 }
