@@ -22,6 +22,7 @@ typedef enum {
 CX_OBJECT_DEF(cxScroll, cxView)
     cxFloat max;
     cxFloat value;
+    cxFloat delta;
     cxBox4f box;
     cxScrollMoveType type;
     cxBool selected;

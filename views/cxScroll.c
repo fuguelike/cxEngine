@@ -67,34 +67,33 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
     if(!cxViewHitTest(pview, touch->current, NULL)){
         return false;
     }
-    if(touch->type == cxTouchTypeUp){
-        cxBool setpos = false;
-        cxFloat time = touch->utime - touch->dtime;
-        cxVec2f speed = cxVec2fv(touch->movement.x / time, touch->movement.y / time);
-        cxVec2f new = cxViewPosition(view);
-        if((this->type & cxScrollMoveTypeVertical) && (fabsf(speed.y) >= this->value)){
-            new.y += speed.y * this->super.size.h / this->value;
-            setpos = fabsf(touch->delta.y) > 15;
-            //
-            if(touch->current.y < touch->start.y && new.y < this->box.b){
-                new.y = this->box.b;
-            }else if(touch->current.y > touch->start.y > 0 && new.y > this->box.t){
-                new.y = this->box.t;
-            }
+    if(touch->type != cxTouchTypeUp){
+        return false;
+    }
+    cxBool setpos = false;
+    cxFloat time = touch->utime - touch->dtime;
+    cxVec2f speed = cxVec2fv(touch->movement.x / time, touch->movement.y / time);
+    cxVec2f new = cxViewPosition(view);
+    if((this->type & cxScrollMoveTypeVertical) && (fabsf(speed.y) >= this->value)){
+        new.y += speed.y * this->super.size.h / this->value;
+        if(touch->current.y < touch->start.y && new.y < this->box.b){
+            new.y = this->box.b;
+        }else if(touch->current.y > touch->start.y > 0 && new.y > this->box.t){
+            new.y = this->box.t;
         }
-        if((this->type & cxScrollMoveTypeHorizontal) && (fabsf(speed.x) >= this->value)){
-            new.x += speed.x * this->super.size.w / this->value;
-            setpos = fabsf(touch->delta.x) > 15;
-            //
-            if(touch->current.x < touch->start.x && new.x < this->box.l){
-                new.x = this->box.l;
-            }else if(touch->current.x > touch->start.x && new.x > this->box.r){
-                new.x = this->box.r;
-            }
+        setpos = fabsf(touch->delta.y) > this->delta;
+    }
+    if((this->type & cxScrollMoveTypeHorizontal) && (fabsf(speed.x) >= this->value)){
+        new.x += speed.x * this->super.size.w / this->value;
+        if(touch->current.x < touch->start.x && new.x < this->box.l){
+            new.x = this->box.l;
+        }else if(touch->current.x > touch->start.x && new.x > this->box.r){
+            new.x = this->box.r;
         }
-        if(setpos){
-            cxScrollActionView(this, new);
-        }
+        setpos = fabsf(touch->delta.x) > this->delta;
+    }
+    if(setpos){
+        cxScrollActionView(this, new);
     }
     return false;
 }
@@ -170,6 +169,7 @@ CX_OBJECT_INIT(cxScroll, cxView)
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
     //swip cond value
+    this->delta = 15;
     this->value = 950;
     CX_SLOT_CONNECT(engine->onTouch, this, onTouch, cxScrollOnTouch);
     CX_OBJECT_INIT_OVERRIDE(cxScroll, this);
