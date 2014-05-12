@@ -31,6 +31,8 @@ typedef enum {
     cxNumberTypeVec2f,
     cxNumberTypeVec2i,
     cxNumberTypeSize2f,
+    cxNumberTypeTex2f,
+    cxNumberTypeSize2i,
 }cxNumberType;
 
 typedef union {
@@ -50,6 +52,8 @@ typedef union {
     cxVec2f vec2f;
     cxVec2i vec2i;
     cxSize2f size2f;
+    cxTex2f tex2f;
+    cxSize2i size2i;
 }cxNumberValue;
 
 CX_OBJECT_DEF(cxNumber, cxObject)
@@ -65,7 +69,11 @@ cxVec2i cxNumberToVec2i(cxNumber this);
 
 cxVec2f cxNumberToVec2f(cxNumber this);
 
+cxTex2f cxNumberToTex2f(cxNumber this);
+
 cxSize2f cxNumberToSize2f(cxNumber this);
+
+cxSize2i cxNumberToSize2i(cxNumber this);
 
 cxInt cxNumberToInt(cxNumber this);
 
@@ -97,7 +105,11 @@ cxNumber cxNumberVec2i(cxVec2i v);
 
 cxNumber cxNumberVec2f(cxVec2f v);
 
+cxNumber cxNumberTex2f(cxTex2f v);
+
 cxNumber cxNumberSize2f(cxSize2f v);
+
+cxNumber cxNumberSize2i(cxSize2i v);
 
 cxNumber cxNumberInt(cxInt v);
 

@@ -193,6 +193,8 @@ void cxInitTypes()
     CX_REGISTER_TYPE(cxSpline,       cxAction);
     CX_REGISTER_TYPE(cxTimer,        cxAction);
     CX_REGISTER_TYPE(cxTint,         cxAction);
+    
+    //register
 }
 
 //parse type id subview property

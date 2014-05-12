@@ -42,10 +42,22 @@ cxVec2f cxNumberToVec2f(cxNumber this)
     return this->value.vec2f;
 }
 
+cxTex2f cxNumberToTex2f(cxNumber this)
+{
+    CX_ASSERT(this->type == cxNumberTypeTex2f, "type error");
+    return this->value.tex2f;
+}
+
 cxSize2f cxNumberToSize2f(cxNumber this)
 {
     CX_ASSERT(this->type == cxNumberTypeSize2f, "type error");
     return this->value.size2f;
+}
+
+cxSize2i cxNumberToSize2i(cxNumber this)
+{
+    CX_ASSERT(this->type == cxNumberTypeSize2i, "type error");
+    return this->value.size2i;
 }
 
 cxInt cxNumberToInt(cxNumber this)
@@ -136,6 +148,14 @@ cxNumber cxNumberVec2f(cxVec2f v)
     return rv;
 }
 
+cxNumber cxNumberTex2f(cxTex2f v)
+{
+    cxNumber rv = CX_CREATE(cxNumber);
+    rv->type = cxNumberTypeTex2f;
+    rv->value.tex2f = v;
+    return rv;
+}
+
 cxNumber cxNumberVec2i(cxVec2i v)
 {
     cxNumber rv = CX_CREATE(cxNumber);
@@ -149,6 +169,14 @@ cxNumber cxNumberSize2f(cxSize2f v)
     cxNumber rv = CX_CREATE(cxNumber);
     rv->type = cxNumberTypeSize2f;
     rv->value.size2f = v;
+    return rv;
+}
+
+cxNumber cxNumberSize2i(cxSize2i v)
+{
+    cxNumber rv = CX_CREATE(cxNumber);
+    rv->type = cxNumberTypeSize2i;
+    rv->value.size2i = v;
     return rv;
 }
 

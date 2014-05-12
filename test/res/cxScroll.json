@@ -7,7 +7,7 @@
   "actions": [
     {
       "id": "move",
-      "duration":3,
+      "duration": 3,
       "type": "cxMove",
       "to": {
         "x": 300,

@@ -29,7 +29,7 @@ void __cxLabelTTFInitObject(cxAny object,cxAny json,cxAny hash)
     if(cxStringOK(text)){
         cxLabelTTFSetText(this, text);
     }
-    cxLabelTTFSetFontBold(this, cxJsonBool(json, "bold", this->attr.bold));
+    cxLabelTTFSetFontBold(this, cxJsonBool(json, "font.bold", this->attr.bold));
     cxLabelTTFSetFontSize(this, cxJsonDouble(json, "font.size", this->attr.size));
     CX_OBJECT_INIT_SUPER(cxSprite);
 }

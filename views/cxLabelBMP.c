@@ -78,7 +78,7 @@ static void cxLabelBMPUpdate(cxEvent *event)
 
 void __cxLabelBMPInitObject(cxAny object,cxAny json,cxAny hash)
 {
-    cxString font = cxJsonString(json, "font");
+    cxString font = cxJsonString(json, "font.name");
     if(cxStringOK(font)){
         cxLabelBMPSetFont(object, font);
     }
