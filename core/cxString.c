@@ -12,9 +12,18 @@
 #include "cxString.h"
 #include "cxUtil.h"
 
+void __cxStringInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    cxConstChars text = cxJsonConstChars(json, "text");
+    if(text != NULL){
+        cxStringFormat(object, "%s",text);
+    }
+    CX_OBJECT_INIT_SUPER(cxObject);
+}
+
 CX_OBJECT_INIT(cxString, cxObject)
 {
-    
+    CX_OBJECT_INIT_OVERRIDE(cxString);
 }
 CX_OBJECT_FREE(cxString, cxObject)
 {
@@ -106,8 +115,8 @@ cxArray cxStringSplit(cxString string,cxConstChars sp)
         if(idx == 0){
             continue;
         }
-        cxString item = CX_CREATE(cxString);
-        cxStringAppend(item, buffer, idx);
+        cxString item = cxStringCreateWithData(buffer, idx);
+        CX_ASSERT(item != NULL, "create string with data error");
         cxArrayAppend(ret, item);
         idx = 0;
     }
@@ -155,6 +164,13 @@ cxString cxStringAttach(cxChar *d,cxInt l)
     rv->strptr.d = d;
     rv->strptr.i = l;
     rv->strptr.n = l;
+    return rv;
+}
+
+cxString cxStringCreateWithData(cxConstChars d,cxInt l)
+{
+    cxString rv = CX_CREATE(cxString);
+    cxStringAppend(rv, d, l);
     return rv;
 }
 

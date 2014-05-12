@@ -9,6 +9,50 @@
 #include <core/cxEngine.h>
 #include "cxParticle.h"
 
+//{"vx":0,"vy":0,"rx":0,"ry":0}
+static cxVec2fRange cxParticleGetVec2fRangle(cxJson json,cxConstChars key)
+{
+    cxJson obj = cxJsonObject(json, key);
+    if(obj == NULL){
+        return cxVec2fRangeValue(0, 0, 0, 0);
+    }
+    cxFloat vx = cxJsonDouble(obj, "vx", 0);
+    cxFloat vy = cxJsonDouble(obj, "vy", 0);
+    cxFloat rx = cxJsonDouble(obj, "rx", 0);
+    cxFloat ry = cxJsonDouble(obj, "ry", 0);
+    return cxVec2fRangeValue(vx, vy, rx, ry);
+}
+
+//{"v":0,"r":0}
+static cxFloatRange cxParticleGetFloatRangle(cxJson json,cxConstChars key)
+{
+    cxJson obj = cxJsonObject(json, key);
+    if(obj == NULL){
+        return cxFloatRangeValue(0, 0);
+    }
+    cxFloat v = cxJsonDouble(obj, "v", 0);
+    cxFloat r = cxJsonDouble(obj, "r", 0);
+    return cxFloatRangeValue(v, r);
+}
+
+//{"vr":0,"vg":0,"vb":0,"va":0,"rr":0,"rg":0,"rb":0,"ra":0}
+static cxColor4fRange cxParticleGetColor4fRangle(cxJson json,cxConstChars key)
+{
+    cxJson obj = cxJsonObject(json, key);
+    if(obj == NULL){
+        return cxColor4fRangeValue(0, 0, 0, 0, 0, 0, 0, 0);
+    }
+    cxFloat vr = cxJsonDouble(obj, "vr", 0);
+    cxFloat vg = cxJsonDouble(obj, "vg", 0);
+    cxFloat vb = cxJsonDouble(obj, "vb", 0);
+    cxFloat va = cxJsonDouble(obj, "va", 0);
+    cxFloat rr = cxJsonDouble(obj, "rr", 0);
+    cxFloat rg = cxJsonDouble(obj, "rg", 0);
+    cxFloat rb = cxJsonDouble(obj, "rb", 0);
+    cxFloat ra = cxJsonDouble(obj, "ra", 0);
+    return cxColor4fRangeValue(vr, vg, vb, va, rr, rg, rb, ra);
+}
+
 static void cxActionViewDraw(cxAny pav)
 {
     cxParticle this = pav;
@@ -255,8 +299,62 @@ static void cxParticleReset(cxAny pav)
     cxAtlasClean(this->atlas);
 }
 
+void __cxParticleInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    cxParticle this = object;
+    //
+    cxInt number = cxJsonInt(json, "number", 0);
+    CX_ASSERT(number > 0, "number must > 0");
+    cxParticleInitNumber(this, number);
+    //
+    cxConstChars texture = cxJsonConstChars(json, "texture");
+    if(texture != NULL){
+        cxSpriteSetTextureKey(this->atlas, texture, true);
+    }
+    //
+    cxConstChars type = cxJsonConstChars(json, "type");
+    if(cxConstCharsEqu(type, "gravity")){
+        this->type = cxParticleEmitterGravity;
+    }else if(cxConstCharsEqu(type, "radial")){
+        this->type = cxParticleEmitterRadial;
+    }else{
+        this->type = cxParticleEmitterGravity;
+    }
+    //
+    cxConstChars blend = cxJsonConstChars(json, "blend");
+    if(cxConstCharsEqu(blend, "add")){
+        cxParticleSetBlendMode(this, cxParticleBlendAdd);
+    }else if(cxConstCharsEqu(blend, "multiply")){
+        cxParticleSetBlendMode(this, cxParticleBlendMultiply);
+    }else{
+        cxParticleSetBlendMode(this, cxParticleBlendAdd);
+    }
+    //
+    this->life = cxParticleGetFloatRangle(json, "life");
+    this->position = cxParticleGetVec2fRangle(json, "position");
+    this->rate = cxJsonDouble(json, "rate", 0);
+    this->angle = cxParticleGetFloatRangle(json, "angle");
+    this->startsize = cxParticleGetFloatRangle(json, "startsize");
+    this->endsize = cxParticleGetFloatRangle(json, "endsize");
+    this->startcolor = cxParticleGetColor4fRangle(json, "startcolor");
+    this->endcolor = cxParticleGetColor4fRangle(json, "endcolor");
+    this->startspin = cxParticleGetFloatRangle(json, "startspin");
+    this->endspin = cxParticleGetFloatRangle(json, "endspin");
+    this->gravity.x = cxJsonDouble(json, "gravity.x", 0);
+    this->gravity.y = cxJsonDouble(json, "gravity.y", 0);
+    this->todir = cxJsonBool(json, "todir", false);
+    this->speed = cxParticleGetFloatRangle(json, "speed");
+    this->tanaccel = cxParticleGetFloatRangle(json, "tanaccel");
+    this->radaccel = cxParticleGetFloatRangle(json, "radaccel");
+    this->startradius = cxParticleGetFloatRangle(json, "startradius");
+    this->endradius = cxParticleGetFloatRangle(json, "endradius");
+    this->rotatepers = cxParticleGetFloatRangle(json, "rotatepers");
+    CX_OBJECT_INIT_SUPER(cxAction);
+}
+
 CX_OBJECT_INIT(cxParticle, cxAction)
 {
+    CX_OBJECT_INIT_OVERRIDE(cxParticle);
     this->atlas = CX_ALLOC(cxAtlas);
     this->rate = -1;
     this->isActive = true;

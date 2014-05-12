@@ -25,10 +25,8 @@ CX_C_BEGIN
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
 CX_OBJECT_DEF(cxEngine, cxObject)
-    cxHash bmpfonts;
-    cxHash jsons;
-    cxHash dbenvs;
-    cxFloat frameInterval;
+    cxHash files;
+    cxFloat interval;
     cxSize2f winsize;   //screen size
     cxSize2f dessize;   //design size
     cxFloat  desRate;   //design h/w
@@ -58,13 +56,9 @@ void cxEngineSetDesignSize(cxSize2f dessize);
 
 void cxEngineTimeReset();
 
-cxAny cxEngineDB(cxConstChars url);
-
-cxJson cxEngineLoadJsonFile(cxConstChars file);
+cxJson cxEngineLoadJson(cxConstChars file);
 
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
-
-void cxEngineSystemInit(cxEngine engine);
 
 //extern
 void cxEngineInit(cxEngine engine);
@@ -92,8 +86,6 @@ void cxEngineSetLocalized(cxString lang);
 void cxEngineBegin();
 
 void cxEngineTerminate();
-
-cxInt cxEnginePlatform();
 
 void cxEngineExit();
 

@@ -54,7 +54,7 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
     this->scale.x = cxJsonDouble(json, "scale.x", this->scale.x);
     this->scale.y = cxJsonDouble(json, "scale.y", this->scale.y);
     //auto fixscale
-    cxConstChars autofix = cxJsonConstChars(json, "autofix");
+    cxConstChars autofix = cxJsonConstChars(json, "fixscale");
     if(cxConstCharsHas(autofix, "horizontal")){
         this->fixscale.x = engine->scale.x;
         this->fixscale.y = engine->scale.x;
@@ -110,7 +110,7 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
     CX_JSON_ARRAY_EACH_BEG(actions, item)
     {
         cxAny action = cxObjectLoadByJson(item, hash);
-        CX_ASSERT(CX_INSTANCE_OF(action, cxAction), "subview must is cxView type");
+        CX_ASSERT(CX_INSTANCE_OF(action, cxAction), "actions must is cxAction type");
         cxViewAppendAction(this, action);
     }
     CX_JSON_ARRAY_EACH_END(actions, item)

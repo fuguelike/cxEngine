@@ -63,7 +63,7 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
         pos.x = nextpos.x + pchar->xoffset + kerning + size.w/2.0f - viewSize.w/2.0f;
         pos.y = nextpos.y + this->font->lineHeight - pchar->yoffset - size.h/2.0f - viewSize.h/2.0f;
         cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, size, tex, color);
-        cxAtlasAppend(this, bp);
+        cxAtlasAppend(this, &bp);
         nextpos.x += (pchar->xadvance + kerning);
     }
 }

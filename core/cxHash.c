@@ -10,9 +10,15 @@
 #include "cxNumber.h"
 #include "cxHash.h"
 
+void __cxHashInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    //load items
+    CX_OBJECT_INIT_SUPER(cxObject);
+}
+
 CX_OBJECT_INIT(cxHash, cxObject)
 {
-    
+    CX_OBJECT_INIT_OVERRIDE(cxHash);
 }
 CX_OBJECT_FREE(cxHash, cxObject)
 {

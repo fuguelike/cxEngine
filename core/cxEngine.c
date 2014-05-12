@@ -53,11 +53,8 @@ void cxEnginePause()
 void cxEngineBegin()
 {
     cxEngine engine = cxEngineInstance();
-    //set locate lang
     cxEngineSetLocalized(cxLocalizedLang());
-    //init event list and att method
-    cxEngineSystemInit(engine);
-    //
+    cxInitTypes();
     cxPlayerOpen();
     cxEngineInit(engine);
 }
@@ -123,7 +120,8 @@ void cxEngineLayout(cxInt width,cxInt height)
     engine->winsize = cxSize2fv(width, height);
     cxViewSetSize(engine->window, engine->winsize);
     if(!cxSize2Zero(engine->dessize)){
-        engine->scale = cxVec2fv(engine->winsize.w/engine->dessize.w, engine->winsize.h/engine->dessize.h);
+        engine->scale.x = engine->winsize.w/engine->dessize.w;
+        engine->scale.y = engine->winsize.h/engine->dessize.h;
     }
     //
     if(!engine->isInit){
@@ -158,21 +156,17 @@ void cxEngineLayout(cxInt width,cxInt height)
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
     kmGLInitialize();
-    this->frameInterval = 1.0f/60.0f;
+    this->interval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->isTouch = true;
-    this->scale     = cxVec2fv(1.0f, 1.0f);
-    this->window    = CX_ALLOC(cxWindow);
-    this->dbenvs    = CX_ALLOC(cxHash);
-    this->bmpfonts  = CX_ALLOC(cxHash);
-    this->jsons     = CX_ALLOC(cxHash);
+    this->scale    = cxVec2fv(1.0f, 1.0f);
+    this->window   = CX_ALLOC(cxWindow);
+    this->files    = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
-    CX_RELEASE(this->jsons);
-    CX_RELEASE(this->bmpfonts);
+    CX_RELEASE(this->files);
     CX_RELEASE(this->lang);
-    CX_RELEASE(this->dbenvs);
     CX_RELEASE(this->window);
     CX_EVENT_RELEASE(this->onExit);
     CX_SIGNAL_RELEASE(this->onRecvJson);
@@ -191,11 +185,12 @@ CX_OBJECT_FREE(cxEngine, cxObject)
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
 
-cxJson cxEngineLoadJsonFile(cxConstChars file)
+cxJson cxEngineLoadJson(cxConstChars file)
 {
     cxEngine this = cxEngineInstance();
-    cxJson json = cxHashGet(this->jsons, cxHashStrKey(file));
+    cxJson json = cxHashGet(this->files, cxHashStrKey(file));
     if(json != NULL){
+        CX_ASSERT(CX_INSTANCE_OF(json, cxJson), "%s type error",file);
         return json;
     }
     cxString data = cxAssetsData(file);
@@ -206,22 +201,23 @@ cxJson cxEngineLoadJsonFile(cxConstChars file)
     if(json == NULL){
         return NULL;
     }
-    cxHashSet(this->jsons, cxHashStrKey(file), json);
+    cxHashSet(this->files, cxHashStrKey(file), json);
     return json;
 }
 
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file)
 {
     cxEngine this = cxEngineInstance();
-    cxBMPFont font = cxHashGet(this->bmpfonts, cxHashStrKey(file));
+    cxBMPFont font = cxHashGet(this->files, cxHashStrKey(file));
     if(font != NULL){
+        CX_ASSERT(CX_INSTANCE_OF(font, cxBMPFont), "%s type error",file);
         return font;
     }
     font = cxBMPFontCreate(file);
     if(font == NULL){
         return NULL;
     }
-    cxHashSet(this->bmpfonts, cxHashStrKey(file), font);
+    cxHashSet(this->files, cxHashStrKey(file), font);
     return font;
 }
 
@@ -247,11 +243,6 @@ void cxEngineDestroy()
         CX_RELEASE(instance);
         instance = NULL;
     }
-}
-
-cxInt cxEnginePlatform()
-{
-    return CX_TARGET_PLATFORM;
 }
 
 void cxEngineTimeReset()
@@ -321,10 +312,6 @@ cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
     return (ret || cxViewTouch(this->window, &this->touch));
 }
 
-void cxEngineSystemInit(cxEngine engine)
-{
-    cxInitTypes();
-}
 
 
 

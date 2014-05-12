@@ -53,9 +53,9 @@ void cxAtlasUpdateScale9(cxAny pview);
 
 void cxAtlasClean(cxAny pview);
 
-void cxAtlasAppend(cxAny pview,cxBoxPoint point);
+void cxAtlasAppend(cxAny pview,cxBoxPoint *point);
 
-void cxAtlasUpdate(cxAny pview,cxInt index, cxBoxPoint point);
+void cxAtlasUpdate(cxAny pview,cxInt index, cxBoxPoint *point);
 
 CX_C_END
 

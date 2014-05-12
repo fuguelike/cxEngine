@@ -121,7 +121,7 @@ void cxAtlasUpdateScale9(cxAny pview)
         bp.rb.texcoords = cxTex2fv(tx2, ty2);
         bp.lt.texcoords = cxTex2fv(tx1, ty1);
         bp.rt.texcoords = cxTex2fv(tx2, ty1);
-        cxAtlasAppend(this, bp);
+        cxAtlasAppend(this, &bp);
     }
 }
 
@@ -214,7 +214,7 @@ CX_OBJECT_TERM(cxAtlas, cxSprite)
 void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color)
 {
     cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, size, tex, color);
-    cxAtlasAppend(pview, bp);
+    cxAtlasAppend(pview, &bp);
 }
 
 cxInt cxAtlasAppendSprite(cxAny pview,cxConstChars key)
@@ -225,7 +225,7 @@ cxInt cxAtlasAppendSprite(cxAny pview,cxConstChars key)
     cxBoxTex2f tbox = cxTextureBox(this->super.texture, key);
     cxSize2f siz = cxTextureSize(this->super.texture, key);
     cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, siz, tbox, color);
-    cxAtlasAppend(pview, bp);
+    cxAtlasAppend(pview, &bp);
     return this->number - 1;
 }
 
@@ -273,7 +273,7 @@ void cxAtlasClean(cxAny pview)
     this->isDirty = true;
 }
 
-void cxAtlasAppend(cxAny pview,cxBoxPoint layer)
+void cxAtlasAppend(cxAny pview,cxBoxPoint *point)
 {
     cxAtlas this = pview;
     //realloc
@@ -281,15 +281,15 @@ void cxAtlasAppend(cxAny pview,cxBoxPoint layer)
         cxAtlasSetCapacity(pview, this->capacity + 8);
     }
     CX_ASSERT(this->number < this->capacity, "atlas number > boxNumber");
-    this->boxes[this->number++] = layer;
+    this->boxes[this->number++] = *point;
     this->isDirty = true;
 }
 
-void cxAtlasUpdate(cxAny pview,cxInt index, cxBoxPoint layer)
+void cxAtlasUpdate(cxAny pview,cxInt index, cxBoxPoint *point)
 {
     cxAtlas this = pview;
     CX_ASSERT(index >= 0 && index < this->capacity, "index > boxNumber");
-    this->boxes[index] = layer;
+    this->boxes[index] = *point;
     this->isDirty = true;
 }
 

@@ -8,8 +8,15 @@
 
 #include "cxStack.h"
 
+void __cxStackInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    //load items
+    CX_OBJECT_INIT_SUPER(cxObject);
+}
+
 CX_OBJECT_INIT(cxStack, cxObject)
 {
+    CX_OBJECT_INIT_OVERRIDE(cxStack);
     this->array = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxStack, cxObject)

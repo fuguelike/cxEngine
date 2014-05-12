@@ -85,6 +85,8 @@ void cxStringConcat(cxString string,cxString str);
 
 void cxStringFormat(cxString string,cxConstChars format,...);
 
+cxString cxStringCreateWithData(cxConstChars d,cxInt l);
+
 cxString cxStringCreate(cxConstChars format,...);
 
 void cxStringAppend(cxString string,cxConstChars d,cxInt l);

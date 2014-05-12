@@ -59,6 +59,7 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     cxParticleUnit *units;
     cxBool isActive;
     cxFloat emitcounter;
+    //base property
     cxParticleBlendMode blend;
     cxInt number;
     cxFloat rate;

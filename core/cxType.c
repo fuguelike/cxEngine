@@ -91,14 +91,10 @@ void cxTypeSetSuper(cxType type,cxType super)
 
 cxBool cxInstanceOf(cxAny object,cxConstType type)
 {
-    //all NULL type
-    CX_RETURN(object == NULL && type == NULL,true);
-    //
-    CX_RETURN(object == NULL, false);
     cxObject this = object;
-    if(this->cxType == type){
-        return true;
-    }
+    CX_RETURN(object == NULL && type == NULL,true);
+    CX_RETURN(object == NULL || type == NULL, false);
+    CX_RETURN(this->cxType == type, true);
     cxType ptype = cxTypeGet(this->cxType);
     while (ptype != NULL && ptype->superType != NULL) {
         if(ptype->superType->typeName == type){
@@ -222,7 +218,7 @@ cxAny cxObjectLoadByJson(cxJson json, cxHash hash)
 cxAny cxObjectLoad(cxConstChars file,cxHash hash)
 {
     cxUrlPath path = cxUrlPathParse(file);
-    cxJson json = cxEngineLoadJsonFile(path->path);
+    cxJson json = cxEngineLoadJson(path->path);
     CX_RETURN(json == NULL, NULL);
     //get file.json?key
     if(path->count == 2){
