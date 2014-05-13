@@ -37,8 +37,8 @@ void __cxActionInitObject(cxAny object,cxAny json,cxAny hash)
 {
     cxAction this = object;
     this->duration = cxJsonDouble(json, "duration", this->duration);
-    this->speed = cxJsonDouble(json, "speed", this->speed);
     this->delay = cxJsonDouble(json, "delay", this->delay);
+    this->scale = cxJsonDouble(json, "scale", this->scale);
     //
     cxConstChars curve = cxJsonConstChars(json, "curve");
     cxCurveItem item = NULL;
@@ -60,8 +60,8 @@ void __cxActionInitObject(cxAny object,cxAny json,cxAny hash)
 CX_OBJECT_INIT(cxAction, cxObject)
 {
     CX_OBJECT_INIT_OVERRIDE(cxAction);
+    this->scale = 1.0f;
     this->isExit = false;
-    this->speed = 1.0f;
     this->index = -1;
     this->indexNum = -1;
 }
@@ -80,16 +80,16 @@ void cxActionSetDuration(cxAny pav,cxFloat time)
     this->duration = time;
 }
 
+void cxActionSetScale(cxAny pav,cxFloat scale)
+{
+    cxAction this = pav;
+    this->scale = scale;
+}
+
 void cxActionSetDurationInit(cxAny pav,cxFloat time)
 {
     cxAction this = pav;
     this->durationInit = time;
-}
-
-void cxActionSetSpeed(cxAny pav,cxFloat speed)
-{
-    cxAction this = pav;
-    this->speed = speed;
 }
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
@@ -108,7 +108,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
 {
     cxAction this = pav;
     cxBool isExit = false;
-    dt = dt * this->speed;
+    dt = dt * this->scale;
     if(this->pauseTime > 0){
         this->pauseTime -= dt;
         CX_EVENT_FIRE(this, onStep);

@@ -18,7 +18,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxAction, cxObject)
     cxAssist4f assist;
     cxUInt actionId;
-    cxFloat speed;
+    cxFloat scale;
     cxFloat delay;
     cxFloat prevTime;
     cxFloat delta;
@@ -56,13 +56,13 @@ void cxActionSetView(cxAny pav,cxAny pview);
 
 void cxActionSetIndex(cxAny pav,cxInt indexNum);
 
+void cxActionSetScale(cxAny pav,cxFloat scale);
+
 cxBool cxActionForever(cxAny pav);
 
 void cxActionSetDuration(cxAny pav,cxFloat time);
 
 void cxActionSetDurationInit(cxAny pav,cxFloat time);
-
-void cxActionSetSpeed(cxAny pav,cxFloat speed);
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve);
 

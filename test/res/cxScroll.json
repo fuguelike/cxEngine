@@ -6,12 +6,45 @@
   },
   "actions": [
     {
-      "id": "move",
-      "duration": 3,
-      "type": "cxMove",
-      "to": {
-        "x": 300,
-        "y": 300
+      "type": "cxParticle",
+      "time": 5,
+      "number": 100,
+      "rate": 60,
+      "texture": "texture.json?chilli.png",
+      "life": {
+        "v": 2,
+        "r": 1
+      },
+      "speed": {
+        "v": 200
+      },
+      "angle": {
+        "r": 360
+      },
+      "startsize": {
+        "v": 50
+      },
+      "endsize": {
+        "v": 50
+      },
+      "startcolor": {
+        "vr": 1,
+        "vg": 1,
+        "vb": 1,
+        "va": 1
+      },
+      "endcolor": {
+        "vr": 1,
+        "vg": 1,
+        "vb": 1,
+        "va": 1
+      },
+      "todir": true,
+      "startspin": {
+        "v": 2000
+      },
+      "endspin": {
+        "v": 1000
       }
     }
   ],

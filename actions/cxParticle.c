@@ -35,6 +35,18 @@ static cxFloatRange cxParticleGetFloatRangle(cxJson json,cxConstChars key)
     return cxFloatRangeValue(v, r);
 }
 
+//{"x":0,"y":0}
+static cxVec2f cxParticleGetVec2f(cxJson json,cxConstChars key)
+{
+    cxJson obj = cxJsonObject(json, key);
+    if(obj == NULL){
+        return cxVec2fv(0, 0);
+    }
+    cxFloat x = cxJsonDouble(obj, "x", 0);
+    cxFloat y = cxJsonDouble(obj, "y", 0);
+    return cxVec2fv(x, y);
+}
+
 //{"vr":0,"vg":0,"vb":0,"va":0,"rr":0,"rg":0,"rb":0,"ra":0}
 static cxColor4fRange cxParticleGetColor4fRangle(cxJson json,cxConstChars key)
 {
@@ -175,7 +187,6 @@ static void cxParticleSetBox(cxAny pav,cxParticleUnit *particle)
     cxBoxVec3f vq={0};
     cxColor4f color = particle->color;
     cxParticleUnitToBoxVec3f(particle, &vq);
-    
     cxBoxPoint *box = &this->atlas->boxes[this->index];
     box->lb.colors = color;
     box->rb.colors = color;
@@ -210,7 +221,7 @@ static void cxParticleStep(cxAny pav,cxFloat dt,cxFloat time)
             cxParticleAdd(this);
             this->emitcounter -= rate;
         }
-		if (this->duration != -1 && this->duration < this->super.durationElapsed){
+		if (this->time != -1 && this->time < this->super.durationElapsed){
 			cxParticleStop(pav);
         }
     }
@@ -309,16 +320,16 @@ void __cxParticleInitObject(cxAny object,cxAny json,cxAny hash)
     //
     cxConstChars texture = cxJsonConstChars(json, "texture");
     if(texture != NULL){
-        cxSpriteSetTextureKey(this->atlas, texture, true);
+        cxSpriteSetTextureURL(this->atlas, texture, true);
     }
     //
-    cxConstChars type = cxJsonConstChars(json, "type");
+    cxConstChars type = cxJsonConstChars(json, "emitter");
     if(cxConstCharsEqu(type, "gravity")){
-        this->type = cxParticleEmitterGravity;
+        cxParticleSetType(this, cxParticleEmitterGravity);
     }else if(cxConstCharsEqu(type, "radial")){
-        this->type = cxParticleEmitterRadial;
+        cxParticleSetType(this, cxParticleEmitterRadial);
     }else{
-        this->type = cxParticleEmitterGravity;
+        cxParticleSetType(this, cxParticleEmitterGravity);
     }
     //
     cxConstChars blend = cxJsonConstChars(json, "blend");
@@ -330,9 +341,10 @@ void __cxParticleInitObject(cxAny object,cxAny json,cxAny hash)
         cxParticleSetBlendMode(this, cxParticleBlendAdd);
     }
     //
+    this->time = cxJsonDouble(json, "time", this->time);
     this->life = cxParticleGetFloatRangle(json, "life");
     this->position = cxParticleGetVec2fRangle(json, "position");
-    this->rate = cxJsonDouble(json, "rate", 0);
+    this->rate = cxJsonDouble(json, "rate", this->rate);
     this->angle = cxParticleGetFloatRangle(json, "angle");
     this->startsize = cxParticleGetFloatRangle(json, "startsize");
     this->endsize = cxParticleGetFloatRangle(json, "endsize");
@@ -340,9 +352,8 @@ void __cxParticleInitObject(cxAny object,cxAny json,cxAny hash)
     this->endcolor = cxParticleGetColor4fRangle(json, "endcolor");
     this->startspin = cxParticleGetFloatRangle(json, "startspin");
     this->endspin = cxParticleGetFloatRangle(json, "endspin");
-    this->gravity.x = cxJsonDouble(json, "gravity.x", 0);
-    this->gravity.y = cxJsonDouble(json, "gravity.y", 0);
-    this->todir = cxJsonBool(json, "todir", false);
+    this->gravity = cxParticleGetVec2f(json, "gravity");
+    this->todir = cxJsonBool(json, "todir", this->todir);
     this->speed = cxParticleGetFloatRangle(json, "speed");
     this->tanaccel = cxParticleGetFloatRangle(json, "tanaccel");
     this->radaccel = cxParticleGetFloatRangle(json, "radaccel");
@@ -355,6 +366,7 @@ void __cxParticleInitObject(cxAny object,cxAny json,cxAny hash)
 CX_OBJECT_INIT(cxParticle, cxAction)
 {
     CX_OBJECT_INIT_OVERRIDE(cxParticle);
+    this->super.duration = -1;
     this->atlas = CX_ALLOC(cxAtlas);
     this->rate = -1;
     this->isActive = true;
@@ -381,11 +393,10 @@ void cxParticleInitNumber(cxAny pav,cxInt number)
     cxAtlasSetCapacity(this->atlas, number);
 }
 
-cxParticle cxParticleCreate(cxFloat duration,cxConstChars url,cxIndex number)
+cxParticle cxParticleCreate(cxFloat time,cxConstChars url,cxIndex number)
 {
     cxParticle this = CX_CREATE(cxParticle);
-    this->super.duration = -1;
-    this->duration = duration;
+    this->time = time;
     cxParticleInitNumber(this,number);
     cxSpriteSetTextureURL(this->atlas, url, true);
     cxSetRandSeed();

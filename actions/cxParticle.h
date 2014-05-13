@@ -51,7 +51,7 @@ typedef struct {
 }cxParticleArgs;
 
 CX_OBJECT_DEF(cxParticle, cxAction)
-    cxFloat duration;
+    cxFloat time;
     cxAtlas atlas;
     cxParticleEmitterType type;
     cxInt index;
@@ -95,7 +95,7 @@ void cxParticleInitNumber(cxAny pav,cxInt number);
 
 void cxParticleSetBlendMode(cxAny pav,cxParticleBlendMode mode);
 
-cxParticle cxParticleCreate(cxFloat duration,cxConstChars url,cxIndex number);
+cxParticle cxParticleCreate(cxFloat time,cxConstChars url,cxIndex number);
 
 CX_C_END
 
