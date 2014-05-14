@@ -117,6 +117,9 @@ cxVec2fRange cxJsonVec2fRangle(cxJson json,cxConstChars key,cxVec2fRange dv);
 
 cxFloatRange cxJsonFloatRangle(cxJson json,cxConstChars key,cxFloatRange dv);
 
+cxColor4fRange cxJsonColor4fRangle(cxJson json,cxConstChars key,cxColor4fRange dv);
+
+//
 cxVec2f cxJsonVec2f(cxJson json,cxConstChars key,cxVec2f dv);
 
 cxVec2i cxJsonVec2i(cxJson json,cxConstChars key,cxVec2i dv);
@@ -125,7 +128,7 @@ cxVec3f cxJsonVec3f(cxJson json,cxConstChars key,cxVec3f dv);
 
 cxSize2f cxJsonSize2f(cxJson json,cxConstChars key,cxSize2f dv);
 
-cxColor4fRange cxJsonColor4fRangle(cxJson json,cxConstChars key,cxColor4fRange dv);
+cxSize2i cxJsonSize2i(cxJson json,cxConstChars key,cxSize2i dv);
 
 cxColor4f cxJsonColor4f(cxJson json,cxConstChars key,cxColor4f dv);
 

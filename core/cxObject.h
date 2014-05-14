@@ -101,7 +101,7 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 //base type define
 CX_OBJECT_BEG(cxObject)
     cxConstType cxType;
-    cxULong cxRefcount;
+    cxUInt cxRefcount;
     cxObjectFunc cxFree;
     cxObjectInit cxInit;
 CX_OBJECT_END(cxObject)

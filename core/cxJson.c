@@ -36,7 +36,6 @@ static cxBool keyIsArray(cxString key,cxChar *skey,cxInt *index)
     *index = atoi(num);
     return true;
 }
-
 //support key.key key[0].filed
 static json_t *cxJsonGetJson(cxJson json,cxConstChars key)
 {
@@ -53,6 +52,9 @@ static json_t *cxJsonGetJson(cxJson json,cxConstChars key)
             rv = json_array_get(pv, index);
         }else{
             rv = json_object_get(pv, skey);
+        }
+        if(rv == NULL){
+            CX_ERROR("get json node %s failed,whole key %s",skey, key);
         }
         pv = rv;
     }
@@ -103,6 +105,17 @@ cxSize2f cxJsonSize2f(cxJson json,cxConstChars key,cxSize2f dv)
     CX_RETURN(!cxJsonIsObject(obj),dv);
     dv.w = cxJsonDouble(obj, "w", dv.w);
     dv.h = cxJsonDouble(obj, "h", dv.h);
+    return dv;
+}
+
+//{"w":0,"h":0}
+cxSize2i cxJsonSize2i(cxJson json,cxConstChars key,cxSize2i dv)
+{
+    CX_ASSERT(json != NULL, "json error");
+    cxJson obj = cxJsonObject(json, key);
+    CX_RETURN(!cxJsonIsObject(obj),dv);
+    dv.w = cxJsonInt(obj, "w", dv.w);
+    dv.h = cxJsonInt(obj, "h", dv.h);
     return dv;
 }
 

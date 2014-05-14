@@ -10,6 +10,41 @@
 #include "cxAllocator.h"
 #include "cxAutoPool.h"
 
+//MAC atomic support
+#if CX_TARGET_PLATFORM==CX_PLATFORM_MAC
+#include <libkern/OSAtomic.h>
+cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x)
+{
+    return OSAtomicAdd32((int32_t)x, (int32_t *)p);
+}
+cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
+{
+    return OSAtomicAdd32(-((int32_t)x), (int32_t *)p);
+}
+//IOS atomic support
+#elif CX_TARGET_PLATFORM == CX_PLATFORM_IOS
+#include <libkern/OSAtomic.h>
+cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x)
+{
+    return OSAtomicAdd32((int32_t)x, (int32_t *)p);
+}
+cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
+{
+    return OSAtomicAdd32(-((int32_t)x), (int32_t *)p);
+}
+//ANDROID atomic support
+#elif CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID
+#include <sys/atomics.h>
+cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x)
+{
+    return __sync_fetch_and_sub(p,x);
+}
+cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
+{
+    return __sync_fetch_and_add(p,x);
+}
+#endif
+
 static cxPointer cxMalloc(cxSize size)
 {
     return calloc(1,size);
@@ -70,7 +105,7 @@ void cxObjectRetain(cxAny ptr)
     CX_RETURN(ptr == NULL);
     cxObject object = (cxObject)ptr;
     CX_ASSERT(object->cxRefcount > 0, "retain count must > 0");
-    object->cxRefcount ++;
+    cxAtomicAddUInt32(&object->cxRefcount, 1);
 }
 
 void cxObjectRelease(cxAny ptr)
@@ -78,7 +113,7 @@ void cxObjectRelease(cxAny ptr)
     CX_RETURN(ptr == NULL);
     cxObject object = (cxObject)ptr;
     CX_ASSERT(object->cxRefcount > 0, "retain count must > 0");
-    object->cxRefcount --;
+    cxAtomicSubUInt32(&object->cxRefcount, 1);
     if(object->cxRefcount == 0) {
         cxObjectDestroy(ptr);
     }

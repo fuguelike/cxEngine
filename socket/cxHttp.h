@@ -35,6 +35,8 @@ cxString cxHttpUriDecode(cxString uri);
 
 cxInt cxHttpLength(cxAny http);
 
+void cxHttpCancel(cxAny http);
+
 cxString cxHttpBody(cxAny http);
 
 cxHttp cxHttpGet(cxConstChars url,cxBool chunked);

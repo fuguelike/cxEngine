@@ -62,6 +62,17 @@ cxInt cxRegexLength(cxRegex this)
     return this->count;
 }
 
+cxArray cxRegexMatchAll(cxRegex this)
+{
+    cxArray rv = CX_CREATE(cxArray);
+    for(cxInt i=0; i < this->count;i++){
+        cxString item = cxRegexMatch(this, i);
+        CX_CONTINUE(item == NULL);
+        cxArrayAppend(rv, item);
+    }
+    return rv;
+}
+
 cxString cxRegexMatch(cxRegex this,cxInt index)
 {
     if(index < 0 || index >= this->count){

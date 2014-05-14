@@ -42,6 +42,8 @@ cxRegex cxRegexCreate(cxConstChars regex, cxString input,cxUInt flags);
 
 cxInt cxRegexLength(cxRegex this);
 
+cxArray cxRegexMatchAll(cxRegex this);
+
 cxString cxRegexMatch(cxRegex this,cxInt index);
 
 cxRegexPos cxRegexPosition(cxRegex this,cxInt index);
