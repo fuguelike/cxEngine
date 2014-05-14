@@ -39,7 +39,6 @@ void __cxActionInitObject(cxAny object,cxAny json,cxAny hash)
     this->duration = cxJsonDouble(json, "duration", this->duration);
     this->delay = cxJsonDouble(json, "delay", this->delay);
     this->scale = cxJsonDouble(json, "scale", this->scale);
-    //
     cxConstChars curve = cxJsonConstChars(json, "curve");
     cxCurveItem item = NULL;
     if(curve != NULL){
@@ -48,12 +47,9 @@ void __cxActionInitObject(cxAny object,cxAny json,cxAny hash)
     if(item != NULL){
         cxActionSetCurve(this, item->func);
     }
-    //
     this->actionId = cxJsonLong(json, "actionid", this->actionId);
-    //
     cxInt indexnum = cxJsonInt(json, "index", this->indexNum);
     cxActionSetIndex(this, indexnum);
-    //
     CX_OBJECT_INIT_SUPER(cxObject);
 }
 

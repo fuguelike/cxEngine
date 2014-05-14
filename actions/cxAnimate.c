@@ -31,19 +31,29 @@ CX_OBJECT_FREE(cxAnimateItem, cxObject)
 }
 CX_OBJECT_TERM(cxAnimateItem, cxObject)
 
-void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars key,cxFloat delay)
+//texture.json?blue.png
+void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars keyfmt,cxFloat delay)
 {
     cxAnimateItem this = CX_CREATE(cxAnimateItem);
     if(file != NULL){
-        this->texture = cxTextureFactoryLoadFile(file);
-        CX_ASSERT(this->texture != NULL, "%s load failed", file);
-        CX_RETAIN(this->texture);
+        CX_RETAIN_SET(this->texture, cxTextureFactoryLoadFile(file));
     }
-    if(key != NULL){
-        this->key = cxStringAllocChars(key);
+    if(keyfmt != NULL){
+        this->key = cxStringAllocChars(keyfmt);
     }
     this->delay = delay;
     cxArrayAppend(list, this);
+}
+
+//texture.json
+void cxAnimateAppendSeries(cxArray list,cxConstChars file,cxConstChars keyfmt,cxInt from,cxInt to)
+{
+    for(cxInt i = from; i <= to ; i++){
+        cxConstChars sfile = CX_CONST_STRING(file,i);
+        cxUrlPath path = cxUrlPathParse(sfile);
+        cxConstChars skey = keyfmt != NULL ? CX_CONST_STRING(keyfmt, i) : NULL;
+        cxAnimateItemAppend(list, path->path, path->count == 2 ? path->key : skey, 0);
+    }
 }
 
 static void cxAnimateInit(cxAny pav)
@@ -87,24 +97,41 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     }
 }
 
-void cxAnimateXMLAppend(cxArray list,cxConstChars file,cxConstChars key,cxInt from,cxInt to)
-{
-    for(cxInt i = from; i <= to ; i++){
-        cxConstChars sfile = CX_CONST_STRING(file,i);
-        cxUrlPath path = cxUrlPathParse(sfile);
-        cxConstChars skey = key != NULL ? CX_CONST_STRING(key, i) : NULL;
-        cxAnimateItemAppend(list, path->path, path->count == 2 ? path->key : skey, 0);
-    }
-}
-
 static void cxAnimateReset(cxAny pav)
 {
     cxAnimate this = pav;
-    CX_EVENT_RELEASE(this->onFrame);
+    this->index = 0;
+    this->super.duration = this->duration;
+}
+
+//
+void __cxAnimateInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    cxAnimate this = object;
+    this->duration = cxJsonDouble(json, "duration", this->duration);
+    //load frames
+    cxJson frames = cxJsonArray(json, "frames");
+    CX_JSON_ARRAY_EACH_BEG(frames, item)
+    {
+        cxConstChars texture = cxJsonConstChars(item, "texture");
+        cxConstChars key = cxJsonConstChars(item, "key");
+        cxInt from = cxJsonInt(item, "from", 0);
+        cxInt to = cxJsonInt(item, "to", 0);
+        cxFloat delay = cxJsonDouble(item, "delay", 0);
+        if((to - from) > 0){
+            cxAnimateAppendSeries(this->list, texture, key, from, to);
+        }else{
+            cxAnimateItemAppend(this->list, texture, key, delay);
+        }
+    }
+    CX_JSON_ARRAY_EACH_END(frames, item)
+    //
+    CX_OBJECT_INIT_SUPER(cxAction);
 }
 
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {
+    CX_OBJECT_INIT_OVERRIDE(cxAnimate);
     CX_METHOD_SET(this->super.Init, cxAnimateInit);
     CX_METHOD_SET(this->super.Step, cxAnimateStep);
     CX_METHOD_SET(this->super.Reset, cxAnimateReset);

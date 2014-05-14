@@ -82,7 +82,7 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 
 #define CX_RETAIN_SWAP(_s_,_d_)     {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
 
-#define CX_RETAIN_SET(_n_,_v_)      {_n_ = _v_;CX_RETAIN(_n_);}
+#define CX_RETAIN_SET(_n_,_v_)      {_n_ = (_v_);CX_RETAIN(_n_);}
 
 #define CX_INSTANCE_OF(_o_,_t_)     cxInstanceOf(_o_,_t_##TypeName)
 

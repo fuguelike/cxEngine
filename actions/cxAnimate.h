@@ -16,7 +16,9 @@ CX_C_BEGIN
 
 //use at cxSprite View
 
-void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars key,cxFloat delay);
+void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars keyfmt,cxFloat delay);
+
+void cxAnimateAppendSeries(cxArray list,cxConstChars file,cxConstChars keyfmt,cxInt from,cxInt to);
 
 CX_OBJECT_DEF(cxAnimate, cxAction)
     cxBool cached;
@@ -25,8 +27,6 @@ CX_OBJECT_DEF(cxAnimate, cxAction)
     cxFloat duration;
     CX_EVENT_ALLOC(onFrame);
 CX_OBJECT_END(cxAnimate)
-
-void cxAnimateXMLAppend(cxArray list,cxConstChars file,cxConstChars key,cxInt from,cxInt to);
 
 cxAnimate cxAnimateCreate(cxFloat duration,cxArray list);
 
