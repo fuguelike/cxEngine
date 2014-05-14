@@ -85,19 +85,18 @@ cxEAGLView *instance = nil;
     eaglCTX = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     CX_ASSERT(eaglCTX != nil,"alloc EAGL Context error");
     
-    if(![EAGLContext setCurrentContext:eaglCTX])
-    {
+    if(![EAGLContext setCurrentContext:eaglCTX]){
         CX_ERROR("set current eagl context error");
     }
     
     glGenFramebuffers(1, &frameBuffer);
-    CX_ASSERT(frameBuffer > 0,"frame buffer create failed");
+    CX_ASSERT(frameBuffer > 0,"gl frame buffer create failed");
     
     glGenRenderbuffers(1, &colorBuffer);
-    CX_ASSERT(colorBuffer > 0,"color buffer create failed");
+    CX_ASSERT(colorBuffer > 0,"gl color buffer create failed");
     
     glGenRenderbuffers(1, &depthBuffer);
-    CX_ASSERT(depthBuffer > 0,"depth buffer create failed");
+    CX_ASSERT(depthBuffer > 0,"gl depth buffer create failed");
     glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, colorBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorBuffer);

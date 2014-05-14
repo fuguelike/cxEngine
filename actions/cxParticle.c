@@ -9,62 +9,6 @@
 #include <core/cxEngine.h>
 #include "cxParticle.h"
 
-//{"vx":0,"vy":0,"rx":0,"ry":0}
-static cxVec2fRange cxParticleGetVec2fRangle(cxJson json,cxConstChars key)
-{
-    cxJson obj = cxJsonObject(json, key);
-    if(obj == NULL){
-        return cxVec2fRangeValue(0, 0, 0, 0);
-    }
-    cxFloat vx = cxJsonDouble(obj, "vx", 0);
-    cxFloat vy = cxJsonDouble(obj, "vy", 0);
-    cxFloat rx = cxJsonDouble(obj, "rx", 0);
-    cxFloat ry = cxJsonDouble(obj, "ry", 0);
-    return cxVec2fRangeValue(vx, vy, rx, ry);
-}
-
-//{"v":0,"r":0}
-static cxFloatRange cxParticleGetFloatRangle(cxJson json,cxConstChars key)
-{
-    cxJson obj = cxJsonObject(json, key);
-    if(obj == NULL){
-        return cxFloatRangeValue(0, 0);
-    }
-    cxFloat v = cxJsonDouble(obj, "v", 0);
-    cxFloat r = cxJsonDouble(obj, "r", 0);
-    return cxFloatRangeValue(v, r);
-}
-
-//{"x":0,"y":0}
-static cxVec2f cxParticleGetVec2f(cxJson json,cxConstChars key)
-{
-    cxJson obj = cxJsonObject(json, key);
-    if(obj == NULL){
-        return cxVec2fv(0, 0);
-    }
-    cxFloat x = cxJsonDouble(obj, "x", 0);
-    cxFloat y = cxJsonDouble(obj, "y", 0);
-    return cxVec2fv(x, y);
-}
-
-//{"vr":0,"vg":0,"vb":0,"va":0,"rr":0,"rg":0,"rb":0,"ra":0}
-static cxColor4fRange cxParticleGetColor4fRangle(cxJson json,cxConstChars key)
-{
-    cxJson obj = cxJsonObject(json, key);
-    if(obj == NULL){
-        return cxColor4fRangeValue(0, 0, 0, 0, 0, 0, 0, 0);
-    }
-    cxFloat vr = cxJsonDouble(obj, "vr", 0);
-    cxFloat vg = cxJsonDouble(obj, "vg", 0);
-    cxFloat vb = cxJsonDouble(obj, "vb", 0);
-    cxFloat va = cxJsonDouble(obj, "va", 0);
-    cxFloat rr = cxJsonDouble(obj, "rr", 0);
-    cxFloat rg = cxJsonDouble(obj, "rg", 0);
-    cxFloat rb = cxJsonDouble(obj, "rb", 0);
-    cxFloat ra = cxJsonDouble(obj, "ra", 0);
-    return cxColor4fRangeValue(vr, vg, vb, va, rr, rg, rb, ra);
-}
-
 static void cxActionViewDraw(cxAny pav)
 {
     cxParticle this = pav;
@@ -342,24 +286,24 @@ void __cxParticleInitObject(cxAny object,cxAny json,cxAny hash)
     }
     //
     this->time = cxJsonDouble(json, "time", this->time);
-    this->life = cxParticleGetFloatRangle(json, "life");
-    this->position = cxParticleGetVec2fRangle(json, "position");
+    this->life = cxJsonFloatRangle(json, "life",this->life);
+    this->position = cxJsonVec2fRangle(json, "position",this->position);
     this->rate = cxJsonDouble(json, "rate", this->rate);
-    this->angle = cxParticleGetFloatRangle(json, "angle");
-    this->startsize = cxParticleGetFloatRangle(json, "startsize");
-    this->endsize = cxParticleGetFloatRangle(json, "endsize");
-    this->startcolor = cxParticleGetColor4fRangle(json, "startcolor");
-    this->endcolor = cxParticleGetColor4fRangle(json, "endcolor");
-    this->startspin = cxParticleGetFloatRangle(json, "startspin");
-    this->endspin = cxParticleGetFloatRangle(json, "endspin");
-    this->gravity = cxParticleGetVec2f(json, "gravity");
+    this->angle = cxJsonFloatRangle(json, "angle",this->angle);
+    this->startsize = cxJsonFloatRangle(json, "startsize",this->startsize);
+    this->endsize = cxJsonFloatRangle(json, "endsize",this->endsize);
+    this->startcolor = cxJsonColor4fRangle(json, "startcolor",this->startcolor);
+    this->endcolor = cxJsonColor4fRangle(json, "endcolor",this->endcolor);
+    this->startspin = cxJsonFloatRangle(json, "startspin",this->startspin);
+    this->endspin = cxJsonFloatRangle(json, "endspin",this->endspin);
+    this->gravity = cxJsonVec2f(json, "gravity",this->gravity);
     this->todir = cxJsonBool(json, "todir", this->todir);
-    this->speed = cxParticleGetFloatRangle(json, "speed");
-    this->tanaccel = cxParticleGetFloatRangle(json, "tanaccel");
-    this->radaccel = cxParticleGetFloatRangle(json, "radaccel");
-    this->startradius = cxParticleGetFloatRangle(json, "startradius");
-    this->endradius = cxParticleGetFloatRangle(json, "endradius");
-    this->rotatepers = cxParticleGetFloatRangle(json, "rotatepers");
+    this->speed = cxJsonFloatRangle(json, "speed",this->speed);
+    this->tanaccel = cxJsonFloatRangle(json, "tanaccel",this->tanaccel);
+    this->radaccel = cxJsonFloatRangle(json, "radaccel",this->radaccel);
+    this->startradius = cxJsonFloatRangle(json, "startradius",this->startradius);
+    this->endradius = cxJsonFloatRangle(json, "endradius",this->endradius);
+    this->rotatepers = cxJsonFloatRangle(json, "rotatepers",this->rotatepers);
     CX_OBJECT_INIT_SUPER(cxAction);
 }
 

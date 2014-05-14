@@ -14,10 +14,10 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxMove, cxAction)
-    cxVec2f endPos;
-    cxVec2f prevPos;
-    cxVec2f currPos;
-    cxVec2f begPos;
+    cxVec2f to;
+    cxVec2f prev;
+    cxVec2f curr;
+    cxVec2f from;
     cxVec2f posDelta;
 CX_OBJECT_END(cxMove)
 

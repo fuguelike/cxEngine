@@ -111,6 +111,30 @@ cxJson cxJsonObjectAt(cxJson json,cxInt idx);
 
 cxInt cxJsonArrayLength(cxJson json);
 
+//
+
+cxVec2fRange cxJsonVec2fRangle(cxJson json,cxConstChars key,cxVec2fRange dv);
+
+cxFloatRange cxJsonFloatRangle(cxJson json,cxConstChars key,cxFloatRange dv);
+
+cxVec2f cxJsonVec2f(cxJson json,cxConstChars key,cxVec2f dv);
+
+cxVec2i cxJsonVec2i(cxJson json,cxConstChars key,cxVec2i dv);
+
+cxVec3f cxJsonVec3f(cxJson json,cxConstChars key,cxVec3f dv);
+
+cxSize2f cxJsonSize2f(cxJson json,cxConstChars key,cxSize2f dv);
+
+cxColor4fRange cxJsonColor4fRangle(cxJson json,cxConstChars key,cxColor4fRange dv);
+
+cxColor4f cxJsonColor4f(cxJson json,cxConstChars key,cxColor4f dv);
+
+cxBox4f cxJsonBox4f(cxJson json,cxConstChars key,cxBox4f dv);
+
+cxBoxTex2f cxJsonBoxTex2f(cxJson json,cxConstChars key,cxBoxTex2f dv);
+
+cxTex2f cxJsonTex2f(cxJson json,cxConstChars key,cxTex2f dv);
+
 CX_C_END
 
 #endif

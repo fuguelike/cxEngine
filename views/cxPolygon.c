@@ -37,14 +37,9 @@ void __cxPolygonInitObject(cxAny object,cxAny json,cxAny hash)
         p.colors = cxColor4fv(1, 1, 1, 1);
         p.texcoords = cxTex2fv(0, 0);
         p.vertices = cxVec3fv(0, 0, 0);
-        p.vertices.x = cxJsonDouble(point, "p.x", p.vertices.x);
-        p.vertices.y = cxJsonDouble(point, "p.y", p.vertices.y);
-        p.texcoords.u = cxJsonDouble(point, "t.u", p.texcoords.u);
-        p.texcoords.v = cxJsonDouble(point, "t.v", p.texcoords.v);
-        p.colors.a = cxJsonDouble(point, "c.a", p.colors.a);
-        p.colors.r = cxJsonDouble(point, "c.r", p.colors.r);
-        p.colors.g = cxJsonDouble(point, "c.g", p.colors.g);
-        p.colors.b = cxJsonDouble(point, "c.b", p.colors.b);
+        p.vertices = cxJsonVec3f(point, "p", p.vertices);
+        p.texcoords = cxJsonTex2f(point, "t", p.texcoords);
+        p.colors = cxJsonColor4f(point, "c", p.colors);
         cxPolygonAppend(object, p);
     }
     CX_JSON_ARRAY_EACH_END(points, point);

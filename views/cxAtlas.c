@@ -137,10 +137,7 @@ void __cxAtlasInitObject(cxAny object,cxAny json,cxAny hash)
     if(cxJsonBool(json, "scale9.enable", false)){
         cxAtlasSetCapacity(this, 9);
         this->scale9.enable = true;
-        this->scale9.box.l = cxJsonDouble(json, "scale9.box.l", this->scale9.box.l);
-        this->scale9.box.r = cxJsonDouble(json, "scale9.box.r", this->scale9.box.r);
-        this->scale9.box.t = cxJsonDouble(json, "scale9.box.t", this->scale9.box.t);
-        this->scale9.box.b = cxJsonDouble(json, "scale9.box.b", this->scale9.box.b);
+        this->scale9.box = cxJsonBox4f(json, "scale9.box", this->scale9.box);
         cxAtlasUpdateScale9(this);
         return;
     }
@@ -155,35 +152,18 @@ void __cxAtlasInitObject(cxAny object,cxAny json,cxAny hash)
             cxSize2f size = cxSize2fv(0, 0);
             cxBoxTex2f tex = cxBoxTex2fDefault();
             cxColor4f color = cxColor4fv(1, 1, 1, 1);
-            
-            pos.x = cxJsonDouble(layer, "position.x", pos.x);
-            pos.y = cxJsonDouble(layer, "position.y", pos.y);
-            
-            size.w = cxJsonDouble(layer, "size.w", size.w);
-            size.h = cxJsonDouble(layer, "size.h", size.h);
-            
+            pos = cxJsonVec2f(layer, "position", pos);
+            size = cxJsonSize2f(layer, "size", size);
             cxConstChars key = cxJsonConstChars(layer, "key");
             if(key != NULL){
                 tex = cxTextureBox(this->super.texture, key);
             }else{
-                tex.lb.u = cxJsonDouble(layer, "coord.lb.u", tex.lb.u);
-                tex.lb.v = cxJsonDouble(layer, "coord.lb.v", tex.lb.v);
-                tex.rb.u = cxJsonDouble(layer, "coord.rb.u", tex.rb.u);
-                tex.rb.v = cxJsonDouble(layer, "coord.rb.v", tex.rb.v);
-                tex.lt.u = cxJsonDouble(layer, "coord.lt.u", tex.lt.u);
-                tex.lt.v = cxJsonDouble(layer, "coord.lt.v", tex.lt.v);
-                tex.rt.u = cxJsonDouble(layer, "coord.rt.u", tex.rt.u);
-                tex.rt.v = cxJsonDouble(layer, "coord.rt.v", tex.rt.v);
+                tex = cxJsonBoxTex2f(layer, "coord", tex);
             }
-            if(cxSize2Zero(size) && key != NULL)
-            {
+            if(cxSize2Zero(size) && key != NULL){
                 size = cxTextureSize(this->super.texture, key);
             }
-            
-            color.a = cxJsonDouble(layer, "color.a", color.a);
-            color.r = cxJsonDouble(layer, "color.r", color.r);
-            color.g = cxJsonDouble(layer, "color.g", color.g);
-            color.b = cxJsonDouble(layer, "color.b", color.b);
+            color = cxJsonColor4f(layer, "color", color);
             cxAtlasAppendBoxPoint(this, pos, size, tex, color);
         }
         CX_JSON_ARRAY_EACH_END(layers, layer)

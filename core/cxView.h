@@ -40,12 +40,10 @@ typedef enum{
     cxViewIsTouchTypeSubview    = 1 << 1,   //touch subviews
 }cxViewIsTouchType;
 
-typedef cxBox4f cxViewAutoResizeBox;
-
 CX_OBJECT_DEF(cxView, cxObject)
     cxBool supportAtlasSet;
     cxViewAutoResizeMask autoMask;
-    cxViewAutoResizeBox  autoBox;
+    cxBox4f  autoBox;
     cxHash caches;
     cxHash actions;
     cxArray removes;

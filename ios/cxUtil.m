@@ -93,9 +93,10 @@ cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
     CFURLRef fileURL = (__bridge CFURLRef)[NSURL fileURLWithPath:path];
     UInt64 fileDataSize = 0;
     UInt32 thePropertySize = sizeof(UInt64);
-    AudioFileID afid = 0;
-    void *theData = NULL;
+    AudioFileID afid = NULL;
+    cxPointer theData = NULL;
     if(AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, &afid)){
+        CX_ERROR("open url %s error",file);
         goto completed;
     }
     if(AudioFileGetProperty(afid, kAudioFilePropertyDataFormat, &formatsize, &fileformat)){

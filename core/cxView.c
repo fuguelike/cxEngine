@@ -31,28 +31,13 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
     cxView this = object;
     cxEngine engine = cxEngineInstance();
     //
-    this->position.x = cxJsonDouble(json, "position.x", this->position.x);
-    this->position.y = cxJsonDouble(json, "position.y", this->position.y);
-    //
-    this->size.w = cxJsonDouble(json, "size.w", this->size.w);
-    this->size.h = cxJsonDouble(json, "size.h", this->size.h);
-    //
-    this->anchor.x = cxJsonDouble(json, "anchor.x", this->anchor.x);
-    this->anchor.y = cxJsonDouble(json, "anchor.y", this->anchor.y);
-    //
+    this->position = cxJsonVec2f(json, "position", this->position);
+    this->size = cxJsonSize2f(json, "size", this->size);
+    this->anchor = cxJsonVec2f(json, "anchor", this->anchor);
     this->isShowBorder = cxJsonBool(json, "border", this->isShowBorder);
-    //
-    this->color.a = cxJsonDouble(json, "color.a", this->color.a);
-    this->color.r = cxJsonDouble(json, "color.r", this->color.r);
-    this->color.g = cxJsonDouble(json, "color.g", this->color.g);
-    this->color.b = cxJsonDouble(json, "color.b", this->color.b);
-    //
-    this->raxis.x = cxJsonDouble(json, "raxis.x", this->raxis.x);
-    this->raxis.y = cxJsonDouble(json, "raxis.y", this->raxis.y);
-    this->raxis.z = cxJsonDouble(json, "raxis.z", this->raxis.z);
-    //
-    this->scale.x = cxJsonDouble(json, "scale.x", this->scale.x);
-    this->scale.y = cxJsonDouble(json, "scale.y", this->scale.y);
+    this->color = cxJsonColor4f(json, "color", this->color);
+    this->raxis = cxJsonVec3f(json, "raxis", this->raxis);
+    this->scale = cxJsonVec2f(json, "scale", this->scale);
     //auto fixscale
     cxConstChars autofix = cxJsonConstChars(json, "fixscale");
     if(cxConstCharsHas(autofix, "horizontal")){
@@ -62,8 +47,7 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
         this->fixscale.x = engine->scale.y;
         this->fixscale.y = engine->scale.y;
     }else{
-        this->fixscale.x = cxJsonDouble(json, "fixscale.x", this->fixscale.x);
-        this->fixscale.x = cxJsonDouble(json, "fixscale.y", this->fixscale.y);
+        this->fixscale = cxJsonVec2f(json, "fixscale", this->fixscale);
     }
     //
     this->isVisible = cxJsonBool(json, "visible", true);
@@ -75,12 +59,9 @@ void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
     this->isCropping = cxJsonBool(json, "cropping", this->isCropping);
     this->zorder = cxJsonInt(json, "zorder", this->zorder);
     //resizing box
-    this->autoBox.l = cxJsonDouble(json, "resizing.left", this->autoBox.l);
-    this->autoBox.r = cxJsonDouble(json, "resizing.right", this->autoBox.r);
-    this->autoBox.t = cxJsonDouble(json, "resizing.top", this->autoBox.t);
-    this->autoBox.b = cxJsonDouble(json, "resizing.bottom", this->autoBox.b);
+    this->autoBox = cxJsonBox4f(json, "autobox", this->autoBox);
     //resizing mask
-    cxConstChars mask = cxJsonConstChars(json, "resizing.mask");
+    cxConstChars mask = cxJsonConstChars(json, "resizing");
     if(mask != NULL){
         this->autoMask = cxViewAutoResizeNone;
     }
