@@ -37,6 +37,9 @@ void cxAllocatorInit();
 
 void cxAllocatorFree();
 
+cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x);
+cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x);
+
 CX_C_END
 
 #endif

@@ -43,6 +43,26 @@ cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
 {
     return __sync_fetch_and_add(p,x);
 }
+#else
+cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x)
+{
+	asm volatile (
+                  "lock; xaddl %0, %1;"
+                  : "+r" (x), "=m" (*p) /* Outputs. */
+                  : "m" (*p) /* Inputs. */
+                  );
+	return (x);
+}
+cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
+{
+	x = (uint32_t)(-(int32_t)x);
+	asm volatile (
+                  "lock; xaddl %0, %1;"
+                  : "+r" (x), "=m" (*p) /* Outputs. */
+                  : "m" (*p) /* Inputs. */
+                  );
+	return (x);
+}
 #endif
 
 static cxPointer cxMalloc(cxSize size)
