@@ -31,14 +31,24 @@ static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, nPos);
 }
 
+void __cxJumpInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    cxJump this = object;
+    this->position = cxJsonVec2f(json, "position", this->position);
+    this->height = cxJsonDouble(json, "height", this->height);
+    this->jumps = cxJsonInt(json, "jumps", this->jumps);
+    CX_OBJECT_INIT_SUPER(cxAction);
+}
+
 CX_OBJECT_INIT(cxJump, cxAction)
 {
+    CX_OBJECT_INIT_OVERRIDE(cxJump);
     CX_METHOD_SET(this->super.Init, cxJumpInit);
     CX_METHOD_SET(this->super.Step, cxJumpStep);
 }
 CX_OBJECT_FREE(cxJump, cxAction)
 {
-
+    //
 }
 CX_OBJECT_TERM(cxJump, cxAction)
 

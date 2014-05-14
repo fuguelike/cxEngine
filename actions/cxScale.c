@@ -26,8 +26,16 @@ static void cxScaleStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetScale(this->super.view, nscale);
 }
 
+void __cxScaleInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    cxScale this = object;
+    this->newScale = cxJsonVec2f(json, "scale", this->newScale);
+    CX_OBJECT_INIT_SUPER(cxAction);
+}
+
 CX_OBJECT_INIT(cxScale, cxAction)
 {
+    CX_OBJECT_INIT_OVERRIDE(cxScale);
     CX_METHOD_SET(this->super.Init, cxScaleInit);
     CX_METHOD_SET(this->super.Step, cxScaleStep);
 }

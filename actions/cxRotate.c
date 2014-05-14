@@ -26,7 +26,10 @@ static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
 
 void __cxRotateInitObject(cxAny object,cxAny json,cxAny hash)
 {
-    
+    cxRotate this = object;
+    this->raxis = cxJsonVec3f(json, "raxis", this->raxis);
+    this->newAngle = cxJsonDouble(json, "angle", this->newAngle);
+    CX_OBJECT_INIT_SUPER(cxAction);
 }
 
 CX_OBJECT_INIT(cxRotate, cxAction)

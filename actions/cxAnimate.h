@@ -18,7 +18,7 @@ CX_C_BEGIN
 
 void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars keyfmt,cxFloat delay);
 
-void cxAnimateAppendSeries(cxArray list,cxConstChars file,cxConstChars keyfmt,cxInt from,cxInt to);
+void cxAnimateAppendSeries(cxArray list,cxConstChars file,cxConstChars keyfmt,cxInt from,cxInt to,cxFloat delay);
 
 CX_OBJECT_DEF(cxAnimate, cxAction)
     cxBool cached;

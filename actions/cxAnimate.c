@@ -46,13 +46,13 @@ void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars keyfmt,cxFl
 }
 
 //texture.json
-void cxAnimateAppendSeries(cxArray list,cxConstChars file,cxConstChars keyfmt,cxInt from,cxInt to)
+void cxAnimateAppendSeries(cxArray list,cxConstChars file,cxConstChars keyfmt,cxInt from,cxInt to,cxFloat delay)
 {
     for(cxInt i = from; i <= to ; i++){
         cxConstChars sfile = CX_CONST_STRING(file,i);
         cxUrlPath path = cxUrlPathParse(sfile);
         cxConstChars skey = keyfmt != NULL ? CX_CONST_STRING(keyfmt, i) : NULL;
-        cxAnimateItemAppend(list, path->path, path->count == 2 ? path->key : skey, 0);
+        cxAnimateItemAppend(list, path->path, path->count == 2 ? path->key : skey, delay);
     }
 }
 
@@ -119,7 +119,7 @@ void __cxAnimateInitObject(cxAny object,cxAny json,cxAny hash)
         cxInt to = cxJsonInt(item, "to", 0);
         cxFloat delay = cxJsonDouble(item, "delay", 0);
         if((to - from) > 0){
-            cxAnimateAppendSeries(this->list, texture, key, from, to);
+            cxAnimateAppendSeries(this->list, texture, key, from, to, delay);
         }else{
             cxAnimateItemAppend(this->list, texture, key, delay);
         }

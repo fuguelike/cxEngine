@@ -56,8 +56,25 @@ static void cxSplineReset(cxAny pav)
     cxArrayClean(this->points);
 }
 
+void __cxSplineInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    cxSpline this = object;
+    //load points
+    cxJson points = cxJsonArray(json, "actions");
+    CX_JSON_ARRAY_EACH_BEG(points, item)
+    {
+        cxVec2f point = cxVec2fv(0, 0);
+        point.x = cxJsonDouble(item, "x", point.x);
+        point.y = cxJsonDouble(item, "y", point.y);
+        cxSplineAppend(this, point);
+    }
+    CX_JSON_ARRAY_EACH_END(points, item)
+    CX_OBJECT_INIT_SUPER(cxAction);
+}
+
 CX_OBJECT_INIT(cxSpline, cxAction)
 {
+    CX_OBJECT_INIT_OVERRIDE(cxSpline);
     this->index = -1;
     CX_METHOD_SET(this->super.Init, cxSplineInit);
     CX_METHOD_SET(this->super.Step, cxSplineStep);

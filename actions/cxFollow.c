@@ -63,8 +63,24 @@ cxAny cxFollowTarget(cxAny pav)
     return this->target;
 }
 
+void __cxFollowInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    cxFollow this = object;
+    cxJson jt = cxJsonObject(json, "target");
+    if(cxJsonIsString(jt)){
+        cxConstChars key = cxJsonToConstChars(jt);
+        cxAny target = cxHashGet(hash, cxHashStrKey(key));
+        cxFollowSetTarget(this, target, false);
+    }else{
+        cxVec2f target = cxJsonVec2f(json, "target", cxVec2fv(0, 0));
+        cxFollowSetVec2f(this, target);
+    }
+    CX_OBJECT_INIT_SUPER(cxAction);
+}
+
 CX_OBJECT_INIT(cxFollow, cxAction)
 {
+    CX_OBJECT_INIT_OVERRIDE(cxFollow);
     this->super.duration = -1;
     CX_METHOD_SET(this->super.Init, cxFollowInit);
     CX_METHOD_SET(this->super.Step, cxFollowStep);

@@ -76,6 +76,16 @@ static void cxActionSetStep(cxAny pav,cxFloat dt,cxFloat time)
 
 void __cxActionSetInitObject(cxAny object,cxAny json,cxAny hash)
 {
+    cxActionSet this = object;
+    //set type
+    cxConstChars setType = cxJsonConstChars(json, "settype");
+    if(cxConstCharsEqu(setType, "multiple")){
+        this->type = cxActionSetTypeMultiple;
+    }else if(cxConstCharsEqu(setType, "sequence")){
+        this->type = cxActionSetTypeSequence;
+    }else{
+        this->type = cxActionSetTypeMultiple;
+    }
     //load actions
     cxJson actions = cxJsonArray(json, "actions");
     CX_JSON_ARRAY_EACH_BEG(actions, item)
