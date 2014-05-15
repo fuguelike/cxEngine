@@ -254,62 +254,65 @@ static void cxParticleReset(cxAny pav)
     cxAtlasClean(this->atlas);
 }
 
-void __cxParticleInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxParticleInitType(cxAny type)
 {
-    cxParticle this = object;
-    //
-    cxInt number = cxJsonInt(json, "number", 0);
-    CX_ASSERT(number > 0, "number must > 0");
-    cxParticleInitNumber(this, number);
-    //
-    cxConstChars texture = cxJsonConstChars(json, "texture");
-    if(texture != NULL){
-        cxSpriteSetTextureURL(this->atlas, texture, true);
-    }
-    //
-    cxConstChars type = cxJsonConstChars(json, "emitter");
-    if(cxConstCharsEqu(type, "gravity")){
-        cxParticleSetType(this, cxParticleEmitterGravity);
-    }else if(cxConstCharsEqu(type, "radial")){
-        cxParticleSetType(this, cxParticleEmitterRadial);
-    }else{
-        cxParticleSetType(this, cxParticleEmitterGravity);
-    }
-    //
-    cxConstChars blend = cxJsonConstChars(json, "blend");
-    if(cxConstCharsEqu(blend, "add")){
-        cxParticleSetBlendMode(this, cxParticleBlendAdd);
-    }else if(cxConstCharsEqu(blend, "multiply")){
-        cxParticleSetBlendMode(this, cxParticleBlendMultiply);
-    }else{
-        cxParticleSetBlendMode(this, cxParticleBlendAdd);
-    }
-    //
-    this->time = cxJsonDouble(json, "time", this->time);
-    this->life = cxJsonFloatRangle(json, "life",this->life);
-    this->position = cxJsonVec2fRangle(json, "position",this->position);
-    this->rate = cxJsonDouble(json, "rate", this->rate);
-    this->angle = cxJsonFloatRangle(json, "angle",this->angle);
-    this->startsize = cxJsonFloatRangle(json, "startsize",this->startsize);
-    this->endsize = cxJsonFloatRangle(json, "endsize",this->endsize);
-    this->startcolor = cxJsonColor4fRangle(json, "startcolor",this->startcolor);
-    this->endcolor = cxJsonColor4fRangle(json, "endcolor",this->endcolor);
-    this->startspin = cxJsonFloatRangle(json, "startspin",this->startspin);
-    this->endspin = cxJsonFloatRangle(json, "endspin",this->endspin);
-    this->gravity = cxJsonVec2f(json, "gravity",this->gravity);
-    this->todir = cxJsonBool(json, "todir", this->todir);
-    this->speed = cxJsonFloatRangle(json, "speed",this->speed);
-    this->tanaccel = cxJsonFloatRangle(json, "tanaccel",this->tanaccel);
-    this->radaccel = cxJsonFloatRangle(json, "radaccel",this->radaccel);
-    this->startradius = cxJsonFloatRangle(json, "startradius",this->startradius);
-    this->endradius = cxJsonFloatRangle(json, "endradius",this->endradius);
-    this->rotatepers = cxJsonFloatRangle(json, "rotatepers",this->rotatepers);
-    CX_OBJECT_INIT_SUPER(cxAction);
+    
 }
+
+//void __cxParticleInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxParticle this = object;
+//    //
+//    cxInt number = cxJsonInt(json, "number", this->number);
+//    cxParticleInitNumber(this, number);
+//    //
+//    cxConstChars texture = cxJsonConstChars(json, "texture");
+//    if(texture != NULL){
+//        cxSpriteSetTextureURL(this->atlas, texture, true);
+//    }
+//    //
+//    cxConstChars type = cxJsonConstChars(json, "emitter");
+//    if(cxConstCharsEqu(type, "gravity")){
+//        cxParticleSetType(this, cxParticleEmitterGravity);
+//    }else if(cxConstCharsEqu(type, "radial")){
+//        cxParticleSetType(this, cxParticleEmitterRadial);
+//    }else{
+//        cxParticleSetType(this, cxParticleEmitterGravity);
+//    }
+//    //
+//    cxConstChars blend = cxJsonConstChars(json, "blend");
+//    if(cxConstCharsEqu(blend, "add")){
+//        cxParticleSetBlendMode(this, cxParticleBlendAdd);
+//    }else if(cxConstCharsEqu(blend, "multiply")){
+//        cxParticleSetBlendMode(this, cxParticleBlendMultiply);
+//    }else{
+//        cxParticleSetBlendMode(this, cxParticleBlendAdd);
+//    }
+//    //
+//    this->time = cxJsonDouble(json, "time", this->time);
+//    this->life = cxJsonFloatRangle(json, "life",this->life);
+//    this->position = cxJsonVec2fRangle(json, "position",this->position);
+//    this->rate = cxJsonDouble(json, "rate", this->rate);
+//    this->angle = cxJsonFloatRangle(json, "angle",this->angle);
+//    this->startsize = cxJsonFloatRangle(json, "startsize",this->startsize);
+//    this->endsize = cxJsonFloatRangle(json, "endsize",this->endsize);
+//    this->startcolor = cxJsonColor4fRangle(json, "startcolor",this->startcolor);
+//    this->endcolor = cxJsonColor4fRangle(json, "endcolor",this->endcolor);
+//    this->startspin = cxJsonFloatRangle(json, "startspin",this->startspin);
+//    this->endspin = cxJsonFloatRangle(json, "endspin",this->endspin);
+//    this->gravity = cxJsonVec2f(json, "gravity",this->gravity);
+//    this->todir = cxJsonBool(json, "todir", this->todir);
+//    this->speed = cxJsonFloatRangle(json, "speed",this->speed);
+//    this->tanaccel = cxJsonFloatRangle(json, "tanaccel",this->tanaccel);
+//    this->radaccel = cxJsonFloatRangle(json, "radaccel",this->radaccel);
+//    this->startradius = cxJsonFloatRangle(json, "startradius",this->startradius);
+//    this->endradius = cxJsonFloatRangle(json, "endradius",this->endradius);
+//    this->rotatepers = cxJsonFloatRangle(json, "rotatepers",this->rotatepers);
+//    CX_OBJECT_INIT_SUPER(cxAction);
+//}
 
 CX_OBJECT_INIT(cxParticle, cxAction)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxParticle);
     this->super.duration = -1;
     this->atlas = CX_ALLOC(cxAtlas);
     this->rate = -1;
@@ -332,8 +335,9 @@ CX_OBJECT_TERM(cxParticle, cxAction)
 void cxParticleInitNumber(cxAny pav,cxInt number)
 {
     cxParticle this = pav;
+    CX_RETURN(this->number >= number);
     this->number = number;
-    this->units = allocator->calloc(number,sizeof(cxParticleUnit));
+    this->units = allocator->realloc(this->units,sizeof(cxParticleUnit)*number);
     cxAtlasSetCapacity(this->atlas, number);
 }
 

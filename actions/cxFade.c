@@ -23,16 +23,20 @@ static void cxFadeStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAlpha(this->super.view, alpha);
 }
 
-void __cxFadeInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxFadeInitType(cxAny type)
 {
-    cxFade this = object;
-    this->alpha = cxJsonDouble(json, "alpha", this->alpha);
-    CX_OBJECT_INIT_SUPER(cxAction);
+    
 }
+
+//void __cxFadeInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxFade this = object;
+//    this->alpha = cxJsonDouble(json, "alpha", this->alpha);
+//    CX_OBJECT_INIT_SUPER(cxAction);
+//}
 
 CX_OBJECT_INIT(cxFade, cxAction)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxFade);
     CX_METHOD_SET(this->super.Init, cxFadeInit);
     CX_METHOD_SET(this->super.Step, cxFadeStep);
 }

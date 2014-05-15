@@ -78,6 +78,16 @@ static void cxTexturePKMBind(cxAny this)
     cxOpenGLBindTexture(0, pkm->super.textureId);
 }
 
+void __cxTexturePKMInitType(cxAny type)
+{
+    
+}
+
+void __cxTexturePKMInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    
+}
+
 CX_OBJECT_INIT(cxTexturePKM, cxTexture)
 {
     CX_METHOD_SET(this->super.Bind, cxTexturePKMBind);

@@ -54,7 +54,6 @@ void cxEngineBegin()
 {
     cxEngine engine = cxEngineInstance();
     cxEngineSetLocalized(cxLocalizedLang());
-    cxInitTypes();
     cxPlayerOpen();
     cxEngineInit(engine);
 }

@@ -24,8 +24,8 @@ CX_OBJECT_END(cxJson)
 #define CX_JSON_ARRAY_EACH_BEG(_j_,_v_)                         \
 if((_j_) != NULL){                                              \
     json_t *_value_ = NULL;                                     \
-    cxInt _index_ = 0;                                          \
-    json_array_foreach(CX_JSON_PTR(_j_), _index_, _value_){     \
+    cxInt index = 0;                                            \
+    json_array_foreach(CX_JSON_PTR(_j_), index, _value_){       \
         cxJson _v_ = cxJsonAttachAlloc(_value_);
 
 #define CX_JSON_ARRAY_EACH_END(_j_,_v_)                         \
@@ -36,8 +36,8 @@ if((_j_) != NULL){                                              \
 #define CX_JSON_OBJECT_EACH_BEG(_j_,_v_)                        \
 if((_j_) != NULL){                                              \
     json_t *_value_ = NULL;                                     \
-    cxConstChars _key_ = NULL;                                  \
-    json_object_foreach(CX_JSON_PTR(_j_), _key_, _value_){      \
+    cxConstChars key = NULL;                                    \
+    json_object_foreach(CX_JSON_PTR(_j_), key, _value_){        \
         cxJson _v_ = cxJsonAttachAlloc(_value_);
 
 #define CX_JSON_OBJECT_EACH_END(_j_,_v_)                        \
@@ -111,6 +111,33 @@ cxJson cxJsonObjectAt(cxJson json,cxInt idx);
 
 cxInt cxJsonArrayLength(cxJson json);
 
+cxInt cxJsonObjectLength(cxJson json);
+//
+
+cxVec2f cxJsonToVec2f(cxJson json,cxVec2f dv);
+
+cxVec2i cxJsonToVec2i(cxJson json,cxVec2i dv);
+
+cxVec3f cxJsonToVec3f(cxJson json,cxVec3f dv);
+
+cxSize2f cxJsonToSize2f(cxJson json,cxSize2f dv);
+
+cxSize2i cxJsonToSize2i(cxJson json,cxSize2i dv);
+
+cxColor4f cxJsonToColor4f(cxJson json,cxColor4f dv);
+
+cxBox4f cxJsonToBox4f(cxJson json,cxBox4f dv);
+
+cxBoxTex2f cxJsonToBoxTex2f(cxJson json,cxBoxTex2f dv);
+
+cxTex2f cxJsonToTex2f(cxJson json,cxTex2f dv);
+
+cxVec2fRange cxJsonToVec2fRangle(cxJson json,cxVec2fRange dv);
+
+cxFloatRange cxJsonToFloatRangle(cxJson json,cxFloatRange dv);
+
+cxColor4fRange cxJsonToColor4fRangle(cxJson json,cxColor4fRange dv);
+
 //
 
 cxVec2fRange cxJsonVec2fRangle(cxJson json,cxConstChars key,cxVec2fRange dv);
@@ -119,7 +146,6 @@ cxFloatRange cxJsonFloatRangle(cxJson json,cxConstChars key,cxFloatRange dv);
 
 cxColor4fRange cxJsonColor4fRangle(cxJson json,cxConstChars key,cxColor4fRange dv);
 
-//
 cxVec2f cxJsonVec2f(cxJson json,cxConstChars key,cxVec2f dv);
 
 cxVec2i cxJsonVec2i(cxJson json,cxConstChars key,cxVec2i dv);
@@ -137,6 +163,7 @@ cxBox4f cxJsonBox4f(cxJson json,cxConstChars key,cxBox4f dv);
 cxBoxTex2f cxJsonBoxTex2f(cxJson json,cxConstChars key,cxBoxTex2f dv);
 
 cxTex2f cxJsonTex2f(cxJson json,cxConstChars key,cxTex2f dv);
+
 
 CX_C_END
 

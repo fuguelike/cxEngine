@@ -35,16 +35,19 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, npos);
 }
 
-void __cxMoveInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxMoveInitType(cxAny type)
 {
-    cxMove this = object;
-    this->to = cxJsonVec2f(json, "to", this->to);
-    CX_OBJECT_INIT_SUPER(cxAction);
+    
 }
+
+//void __cxMoveInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxMove this = object;
+//    this->to = cxJsonVec2f(json, "to", this->to);
+//}
 
 CX_OBJECT_INIT(cxMove, cxAction)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxMove);
     CX_METHOD_SET(this->super.Init, cxMoveInit);
     CX_METHOD_SET(this->super.Step, cxMoveStep);
 }

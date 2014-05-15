@@ -46,6 +46,16 @@ static void cxTextureTXTBind(cxAny this)
     cxOpenGLBindTexture(0, txt->super.textureId);
 }
 
+void __cxTextureTXTInitType(cxAny type)
+{
+    
+}
+
+void __cxTextureTXTInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    
+}
+
 CX_OBJECT_INIT(cxTextureTXT, cxTexture)
 {
     CX_METHOD_SET(this->super.Bind, cxTextureTXTBind);

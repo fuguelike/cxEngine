@@ -11,14 +11,14 @@
 #include "cxJson.h"
 #include "cxType.h"
 
-void __cxObjectInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxObjectInitType(cxAny type)
 {
     
 }
 
 void __cxObjectAutoInit(cxObject this)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxObject);
+    
 }
 
 void __cxObjectAutoFree(cxObject this)

@@ -8,15 +8,14 @@
 
 #include "cxList.h"
 
-void __cxListInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxListInitType(cxAny type)
 {
-    //load items
-    CX_OBJECT_INIT_SUPER(cxObject);
+    
 }
 
 CX_OBJECT_INIT(cxList, cxObject)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxList);
+    //
 }
 CX_OBJECT_FREE(cxList, cxObject)
 {

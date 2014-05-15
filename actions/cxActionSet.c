@@ -74,33 +74,37 @@ static void cxActionSetStep(cxAny pav,cxFloat dt,cxFloat time)
     //    CX_LOGGER("%f %f",this->super.duration,time);
 }
 
-void __cxActionSetInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxActionSetInitType(cxAny type)
 {
-    cxActionSet this = object;
-    //set type
-    cxConstChars setType = cxJsonConstChars(json, "settype");
-    if(cxConstCharsEqu(setType, "multiple")){
-        this->type = cxActionSetTypeMultiple;
-    }else if(cxConstCharsEqu(setType, "sequence")){
-        this->type = cxActionSetTypeSequence;
-    }else{
-        this->type = cxActionSetTypeMultiple;
-    }
-    //load actions
-    cxJson actions = cxJsonArray(json, "actions");
-    CX_JSON_ARRAY_EACH_BEG(actions, item)
-    {
-        cxAny action = cxObjectLoadByJson(item, hash);
-        CX_ASSERT(CX_INSTANCE_OF(action, cxAction), "actions must is cxAction type");
-        cxActionSetAppend(object, action);
-    }
-    CX_JSON_ARRAY_EACH_END(actions, item)
-    CX_OBJECT_INIT_SUPER(cxAction);
+    
 }
+
+//void __cxActionSetInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxActionSet this = object;
+//    //set type
+//    cxConstChars setType = cxJsonConstChars(json, "settype");
+//    if(cxConstCharsEqu(setType, "multiple")){
+//        this->type = cxActionSetTypeMultiple;
+//    }else if(cxConstCharsEqu(setType, "sequence")){
+//        this->type = cxActionSetTypeSequence;
+//    }else{
+//        this->type = cxActionSetTypeMultiple;
+//    }
+//    //load actions
+//    cxJson actions = cxJsonArray(json, "actions");
+//    CX_JSON_ARRAY_EACH_BEG(actions, item)
+//    {
+//        cxAny action = cxObjectLoadWithJson(item, hash);
+//        CX_ASSERT(CX_INSTANCE_OF(action, cxAction), "actions must is cxAction type");
+//        cxActionSetAppend(object, action);
+//    }
+//    CX_JSON_ARRAY_EACH_END(actions, item)
+//    CX_OBJECT_INIT_SUPER(cxAction);
+//}
 
 CX_OBJECT_INIT(cxActionSet, cxAction)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxActionSet);
     CX_METHOD_SET(this->super.Init, cxActionSetInit);
     CX_METHOD_SET(this->super.Step, cxActionSetStep);
     CX_METHOD_SET(this->super.Exit, cxActionSetExit);

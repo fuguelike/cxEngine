@@ -61,82 +61,18 @@
 
 static cxHash types;
 
-void cxTypeInit()
-{
-    types = CX_ALLOC(cxHash);
-}
-
-void cxTypeFree()
-{
-    CX_RELEASE(types);
-}
-
-cxType cxTypeGet(cxConstType typeName)
-{
-    return cxHashGet(types, cxHashStrKey(typeName));
-}
-
-void cxTypeSet(cxConstType typeName,cxType type)
-{
-    CX_ASSERT(typeName != NULL && type != NULL, "args error");
-    type->typeName = typeName;
-    cxHashSet(types, cxHashStrKey(typeName), type);
-}
-
-void cxTypeSetSuper(cxType type,cxType super)
-{
-    CX_ASSERT(type != NULL, "type arsg error");
-    CX_RETAIN_SWAP(type->superType, super);
-}
-
-cxBool cxInstanceOf(cxAny object,cxConstType type)
-{
-    cxObject this = object;
-    CX_RETURN(object == NULL && type == NULL,true);
-    CX_RETURN(object == NULL || type == NULL, false);
-    CX_RETURN(this->cxType == type, true);
-    cxType ptype = cxTypeGet(this->cxType);
-    while (ptype != NULL && ptype->superType != NULL) {
-        if(ptype->superType->typeName == type){
-            return true;
-        }
-        ptype = ptype->superType;
-    }
-    return false;
-}
-
-cxAny cxTypeCreate(cxJson json,cxHash hash)
-{
-    CX_ASSERT(json != NULL, "json error");
-    cxConstChars type = cxJsonConstChars(json, "type");
-    cxType ptype = cxTypeGet(type);
-    CX_ASSERT(ptype != NULL, "type(%s) not register",type);
-    cxObject object = CX_METHOD_GET(NULL, ptype->Create);
-    CX_ASSERT(object != NULL, "type(%s) create object failed",type);
-    CX_METHOD_RUN(object->cxInit,object,json,hash);
-    return object;
-}
-
-CX_OBJECT_INIT(cxType, cxObject)
-{
-    
-}
-CX_OBJECT_FREE(cxType, cxObject)
-{
-    CX_RELEASE(this->superType);
-}
-CX_OBJECT_TERM(cxType, cxObject)
-
-void cxInitTypes()
+static void cxInitTypes()
 {
     //register object class
     cxType tmp = CX_ALLOC(cxType);
     CX_METHOD_SET(tmp->Alloc, __cxObjectAllocFunc);
     CX_METHOD_SET(tmp->Create, __cxObjectCreateFunc);
     cxTypeSet(cxObjectTypeName,tmp);
+    __cxObjectInitType(tmp);
     CX_RELEASE(tmp);
     
     //register core
+    CX_REGISTER_TYPE(cxType,         cxObject);
     CX_REGISTER_TYPE(cxHash,         cxObject);
     CX_REGISTER_TYPE(cxArray,        cxObject);
     CX_REGISTER_TYPE(cxList,         cxObject);
@@ -193,29 +129,159 @@ void cxInitTypes()
     //register
 }
 
+void cxTypeInit()
+{
+    types = CX_ALLOC(cxHash);
+    cxInitTypes();
+}
+
+void cxTypeFree()
+{
+    CX_RELEASE(types);
+}
+
+cxType cxTypeGet(cxConstType typeName)
+{
+    return cxHashGet(types, cxHashStrKey(typeName));
+}
+
+cxProperty cxTypeProperty(cxType this,cxConstChars key)
+{
+    cxAny p = cxHashGet(this->properties, cxHashStrKey(key));
+    if(p == NULL){
+        p = CX_ALLOC(cxProperty);
+        cxHashSet(this->properties, cxHashStrKey(key), p);
+        CX_RELEASE(p);
+    }
+    return p;
+}
+
+void cxTypeSet(cxConstType typeName,cxType type)
+{
+    CX_ASSERT(typeName != NULL && type != NULL, "args error");
+    type->typeName = typeName;
+    cxHashSet(types, cxHashStrKey(typeName), type);
+}
+
+void cxTypeSetSuper(cxType type,cxType super)
+{
+    CX_ASSERT(type != NULL, "type arsg error");
+    CX_RETAIN_SWAP(type->superType, super);
+}
+
+cxBool cxInstanceOf(cxAny object,cxConstType type)
+{
+    cxObject this = object;
+    CX_RETURN(object == NULL && type == NULL,true);
+    CX_RETURN(object == NULL || type == NULL, false);
+    CX_RETURN(this->cxType == type, true);
+    cxType ptype = cxTypeGet(this->cxType);
+    while (ptype != NULL && ptype->superType != NULL) {
+        if(ptype->superType->typeName == type){
+            return true;
+        }
+        ptype = ptype->superType;
+    }
+    return false;
+}
+
+void cxTypeInvokeSetter(cxType this,cxConstChars key,cxAny object,cxAny value)
+{
+    CX_ASSERT(this != NULL && key != NULL && object != NULL && value != NULL, "args error");
+    cxType curr = this;
+    while(curr != NULL){
+        cxProperty p = cxHashGet(this->properties, cxHashStrKey(key));
+        if(p != NULL && p->setter != NULL){
+            p->setter(object,value);
+            break;
+        }
+        curr = curr->superType;
+    }
+}
+
+cxAny cxTypeInvokeGetter(cxType this,cxConstChars key,cxAny object)
+{
+    CX_ASSERT(this != NULL && key != NULL && object != NULL, "args error");
+    cxType curr = this;
+    while(curr != NULL){
+        cxProperty p = cxHashGet(this->properties, cxHashStrKey(key));
+        if(p != NULL && p->getter != NULL){
+            return p->getter(object);
+        }
+        curr = curr->superType;
+    }
+    return NULL;
+}
+
+void cxTypeRunObjectSetter(cxObject object,cxJson json)
+{
+    cxType this = cxTypeGet(object->cxType);
+    CX_JSON_OBJECT_EACH_BEG(json, item)
+    cxTypeInvokeSetter(this, key, object, item);
+    CX_JSON_OBJECT_EACH_END(json, item)
+}
+
+cxAny cxTypeCreate(cxJson json)
+{
+    CX_ASSERT(json != NULL, "json error");
+    cxConstChars type = cxJsonConstChars(json, "type");
+    CX_ASSERT(type != NULL, "type field null");
+    cxType ptype = cxTypeGet(type);
+    CX_ASSERT(ptype != NULL, "type(%s) not register",type);
+    cxObject object = CX_METHOD_GET(NULL, ptype->Create);
+    CX_ASSERT(object != NULL, "type(%s) create object failed",type);
+    cxTypeRunObjectSetter(object, json);
+    return object;
+}
+
+void __cxTypeInitType(cxAny type)
+{
+    
+}
+
+void __cxTypeInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    
+}
+
+CX_OBJECT_INIT(cxType, cxObject)
+{
+    this->properties = CX_ALLOC(cxHash);
+}
+CX_OBJECT_FREE(cxType, cxObject)
+{
+    CX_RELEASE(this->properties);
+    CX_RELEASE(this->superType);
+}
+CX_OBJECT_TERM(cxType, cxObject)
+
 //parse type id subview property
-cxAny cxObjectLoadByJson(cxJson json, cxHash hash)
+cxAny cxObjectLoadWithJson(cxJson json)
 {
     CX_ASSERT(json != NULL, "json args error");
-    //link to src file
-    cxConstChars src = cxJsonConstChars(json, "src");
+    cxConstChars src = NULL;
     cxObject object = NULL;
-    if(src != NULL){
-        object = cxObjectLoad(src, hash);
-        CX_METHOD_RUN(object->cxInit,object,json,hash);
-    }else {
-        object = cxTypeCreate(json,hash);
+    //link to src file
+    if(cxJsonIsString(json)){
+        src = cxJsonToConstChars(json);
+    }else if(cxJsonIsObject(json)){
+        src = cxJsonConstChars(json, "src");
     }
-    CX_RETURN(object == NULL, NULL);
-    //save view to hash
-    cxConstChars id = cxJsonConstChars(json, "id");
-    if(id != NULL && hash != NULL && cxHashSet(hash, cxHashStrKey(id), object)){
-        CX_WARN("view id %s exists in hash");
+    if(src != NULL){
+        object = cxObjectLoadWithFile(src);
+        cxTypeRunObjectSetter(object, json);
+    }else {
+        object = cxTypeCreate(json);
+    }
+    if(object == NULL){
+        CX_ERROR("create object failed");
+        return NULL;
     }
     return object;
 }
+
 //save to hash with id
-cxAny cxObjectLoad(cxConstChars file,cxHash hash)
+cxAny cxObjectLoadWithFile(cxConstChars file)
 {
     cxUrlPath path = cxUrlPathParse(file);
     cxJson json = cxEngineLoadJson(path->path);
@@ -225,7 +291,7 @@ cxAny cxObjectLoad(cxConstChars file,cxHash hash)
         json = cxJsonObject(json, path->key);
     }
     CX_RETURN(json == NULL, NULL);
-    return cxObjectLoadByJson(json, hash);
+    return cxObjectLoadWithJson(json);
 }
 
 

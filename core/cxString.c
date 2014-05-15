@@ -12,18 +12,23 @@
 #include "cxString.h"
 #include "cxUtil.h"
 
-void __cxStringInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxStringInitType(cxAny type)
 {
-    cxConstChars text = cxJsonConstChars(json, "text");
-    if(text != NULL){
-        cxStringFormat(object, "%s",text);
-    }
-    CX_OBJECT_INIT_SUPER(cxObject);
+    
 }
+
+//void __cxStringInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxConstChars text = cxJsonConstChars(json, "text");
+//    if(text != NULL){
+//        cxStringFormat(object, "%s",text);
+//    }
+//    CX_OBJECT_INIT_SUPER(cxObject);
+//}
 
 CX_OBJECT_INIT(cxString, cxObject)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxString);
+    //
 }
 CX_OBJECT_FREE(cxString, cxObject)
 {

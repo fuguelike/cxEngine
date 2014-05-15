@@ -41,17 +41,21 @@ static cxBool cxParabolaExit(cxAny pav)
     return this->super.duration != -1 && this->time >= this->super.duration;
 }
 
-void __cxParabolaInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxParabolaInitType(cxAny type)
 {
-    cxParabola this = object;
-    this->speed = cxJsonVec2f(json, "speed", this->speed);
-    this->gravity = cxJsonVec2f(json, "gravity", this->gravity);
-    CX_OBJECT_INIT_SUPER(cxAction);
+    
 }
+
+//void __cxParabolaInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxParabola this = object;
+//    this->speed = cxJsonVec2f(json, "speed", this->speed);
+//    this->gravity = cxJsonVec2f(json, "gravity", this->gravity);
+//    CX_OBJECT_INIT_SUPER(cxAction);
+//}
 
 CX_OBJECT_INIT(cxParabola, cxAction)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxParabola);
     CX_METHOD_SET(this->super.Exit, cxParabolaExit);
     CX_METHOD_SET(this->super.Init, cxParabolaInit);
     CX_METHOD_SET(this->super.Step, cxParabolaStep);

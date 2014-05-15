@@ -14,90 +14,94 @@
 #include "cxAction.h"
 #include "cxType.h"
 
-void cxViewSetCropping(cxAny pview,cxBool cropping)
+CX_SETTER_DEF(cxView, size)
 {
-    cxView this = pview;
-    this->isCropping = cropping;
+    this->size = cxJsonToSize2f(value, this->size);
 }
 
-cxBool cxViewZeroSize(cxAny pview)
+CX_SETTER_DEF(cxView, position)
 {
-    cxView this = pview;
-    return cxSize2Zero(this->size);
+    this->position = cxJsonToVec2f(value, this->position);
 }
 
-void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxViewInitType(cxAny type)
 {
-    cxView this = object;
-    cxEngine engine = cxEngineInstance();
-    //
-    this->position = cxJsonVec2f(json, "position", this->position);
-    this->size = cxJsonSize2f(json, "size", this->size);
-    this->anchor = cxJsonVec2f(json, "anchor", this->anchor);
-    this->isShowBorder = cxJsonBool(json, "border", this->isShowBorder);
-    this->color = cxJsonColor4f(json, "color", this->color);
-    this->raxis = cxJsonVec3f(json, "raxis", this->raxis);
-    this->scale = cxJsonVec2f(json, "scale", this->scale);
-    //auto fixscale
-    cxConstChars autofix = cxJsonConstChars(json, "fixscale");
-    if(cxConstCharsHas(autofix, "horizontal")){
-        this->fixscale.x = engine->scale.x;
-        this->fixscale.y = engine->scale.x;
-    }else if(cxConstCharsHas(autofix, "vertical")){
-        this->fixscale.x = engine->scale.y;
-        this->fixscale.y = engine->scale.y;
-    }else{
-        this->fixscale = cxJsonVec2f(json, "fixscale", this->fixscale);
-    }
-    //
-    this->isVisible = cxJsonBool(json, "visible", true);
-    cxFloat degrees = cxJsonDouble(json, "degrees", INFINITY);
-    if(!isinf(degrees)){
-        cxViewSetDegrees(this, degrees);
-    }
-    this->hideTop = cxJsonBool(json, "hidetop", this->hideTop);
-    this->isCropping = cxJsonBool(json, "cropping", this->isCropping);
-    this->zorder = cxJsonInt(json, "zorder", this->zorder);
-    //resizing box
-    this->autoBox = cxJsonBox4f(json, "autobox", this->autoBox);
-    //resizing mask
-    cxConstChars mask = cxJsonConstChars(json, "resizing");
-    if(mask != NULL){
-        this->autoMask = cxViewAutoResizeNone;
-    }
-    if(cxConstCharsHas(mask,"left")){
-        this->autoMask |= cxViewAutoResizeLeft;
-    }
-    if(cxConstCharsHas(mask, "right")){
-        this->autoMask |= cxViewAutoResizeRight;
-    }
-    if(cxConstCharsHas(mask, "top")){
-        this->autoMask |= cxViewAutoResizeTop;
-    }
-    if(cxConstCharsHas(mask, "bottom")){
-        this->autoMask |= cxViewAutoResizeBottom;
-    }
-    //load subview
-    cxJson subviews = cxJsonArray(json, "subviews");
-    CX_JSON_ARRAY_EACH_BEG(subviews, item)
-    {
-        cxAny subview = cxObjectLoadByJson(item, hash);
-        CX_ASSERT(CX_INSTANCE_OF(subview, cxView), "subview must is cxView type");
-        cxViewAppend(this, subview);
-    }
-    CX_JSON_ARRAY_EACH_END(subviews, item)
-    //load actions
-    cxJson actions = cxJsonArray(json, "actions");
-    CX_JSON_ARRAY_EACH_BEG(actions, item)
-    {
-        cxAny action = cxObjectLoadByJson(item, hash);
-        CX_ASSERT(CX_INSTANCE_OF(action, cxAction), "actions must is cxAction type");
-        cxViewAppendAction(this, action);
-    }
-    CX_JSON_ARRAY_EACH_END(actions, item)
-    //
-    CX_OBJECT_INIT_SUPER(cxObject);
+    CX_PROPERTY_SETTER(cxView, size);
+    CX_PROPERTY_SETTER(cxView, position);
 }
+
+//void __cxViewInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxView this = object;
+//    cxEngine engine = cxEngineInstance();
+//    //
+//    this->position = cxJsonVec2f(json, "position", this->position);
+//    this->size = cxJsonSize2f(json, "size", this->size);
+//    this->anchor = cxJsonVec2f(json, "anchor", this->anchor);
+//    this->isShowBorder = cxJsonBool(json, "border", this->isShowBorder);
+//    this->color = cxJsonColor4f(json, "color", this->color);
+//    this->raxis = cxJsonVec3f(json, "raxis", this->raxis);
+//    this->scale = cxJsonVec2f(json, "scale", this->scale);
+//    //auto fixscale
+//    cxConstChars autofix = cxJsonConstChars(json, "fixscale");
+//    if(cxConstCharsHas(autofix, "horizontal")){
+//        this->fixscale.x = engine->scale.x;
+//        this->fixscale.y = engine->scale.x;
+//    }else if(cxConstCharsHas(autofix, "vertical")){
+//        this->fixscale.x = engine->scale.y;
+//        this->fixscale.y = engine->scale.y;
+//    }else{
+//        this->fixscale = cxJsonVec2f(json, "fixscale", this->fixscale);
+//    }
+//    //
+//    this->isVisible = cxJsonBool(json, "visible", true);
+//    cxFloat degrees = cxJsonDouble(json, "degrees", INFINITY);
+//    if(!isinf(degrees)){
+//        cxViewSetDegrees(this, degrees);
+//    }
+//    this->hideTop = cxJsonBool(json, "hidetop", this->hideTop);
+//    this->isCropping = cxJsonBool(json, "cropping", this->isCropping);
+//    this->zorder = cxJsonInt(json, "zorder", this->zorder);
+//    //resizing box
+//    this->autoBox = cxJsonBox4f(json, "autobox", this->autoBox);
+//    //resizing mask
+//    cxConstChars mask = cxJsonConstChars(json, "resizing");
+//    if(mask != NULL){
+//        this->autoMask = cxViewAutoResizeNone;
+//    }
+//    if(cxConstCharsHas(mask,"left")){
+//        this->autoMask |= cxViewAutoResizeLeft;
+//    }
+//    if(cxConstCharsHas(mask, "right")){
+//        this->autoMask |= cxViewAutoResizeRight;
+//    }
+//    if(cxConstCharsHas(mask, "top")){
+//        this->autoMask |= cxViewAutoResizeTop;
+//    }
+//    if(cxConstCharsHas(mask, "bottom")){
+//        this->autoMask |= cxViewAutoResizeBottom;
+//    }
+//    //load subview
+//    cxJson subviews = cxJsonArray(json, "subviews");
+//    CX_JSON_ARRAY_EACH_BEG(subviews, item)
+//    {
+//        cxAny subview = cxObjectLoadWithJson(item, hash);
+//        CX_ASSERT(CX_INSTANCE_OF(subview, cxView), "subview must is cxView type");
+//        cxViewAppend(this, subview);
+//    }
+//    CX_JSON_ARRAY_EACH_END(subviews, item)
+//    //load actions
+//    cxJson actions = cxJsonArray(json, "actions");
+//    CX_JSON_ARRAY_EACH_BEG(actions, item)
+//    {
+//        cxAny action = cxObjectLoadWithJson(item, hash);
+//        CX_ASSERT(CX_INSTANCE_OF(action, cxAction), "actions must is cxAction type");
+//        cxViewAppendAction(this, action);
+//    }
+//    CX_JSON_ARRAY_EACH_END(actions, item)
+//    //
+//    CX_OBJECT_INIT_SUPER(cxObject);
+//}
 
 CX_OBJECT_INIT(cxView, cxObject)
 {
@@ -114,7 +118,6 @@ CX_OBJECT_INIT(cxView, cxObject)
 
     CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
     CX_METHOD_SET(this->IsOnKey, cxViewIsOnKey);
-    CX_OBJECT_INIT_OVERRIDE(cxView);
     
     this->subViews = CX_ALLOC(cxList);
     this->actions = CX_ALLOC(cxHash);
@@ -138,6 +141,18 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
+
+void cxViewSetCropping(cxAny pview,cxBool cropping)
+{
+    cxView this = pview;
+    this->isCropping = cropping;
+}
+
+cxBool cxViewZeroSize(cxAny pview)
+{
+    cxView this = pview;
+    return cxSize2Zero(this->size);
+}
 
 void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object)
 {

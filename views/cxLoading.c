@@ -56,14 +56,14 @@ void cxLoaingFinished(cxAny pview)
     this->isLoading = false;
 }
 
-void __cxLoadingInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxLoadingInitType(cxAny type)
 {
-    CX_OBJECT_INIT_SUPER(cxView);
+    
 }
+
 
 CX_OBJECT_INIT(cxLoading, cxView)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxLoading);
     this->isLoading = true;
     CX_EVENT_QUICK(this->super.onUpdate, cxLoadingOnUpdate);
     CX_METHOD_SET(this->super.Touch, cxLoadingTouch);

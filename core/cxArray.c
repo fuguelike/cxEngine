@@ -9,15 +9,13 @@
 
 #include "cxArray.h"
 
-void __cxArrayInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxArrayInitType(cxAny type)
 {
-    //load items
-    CX_OBJECT_INIT_SUPER(cxObject);
+    
 }
 
 CX_OBJECT_INIT(cxArray, cxObject)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxArray);
     utarray_new(this->uta, &ut_ptr_icd);
 }
 CX_OBJECT_FREE(cxArray, cxObject)

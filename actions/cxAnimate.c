@@ -104,34 +104,38 @@ static void cxAnimateReset(cxAny pav)
     this->super.duration = this->duration;
 }
 
-//
-void __cxAnimateInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxAnimateInitType(cxAny type)
 {
-    cxAnimate this = object;
-    this->duration = cxJsonDouble(json, "duration", this->duration);
-    //load frames
-    cxJson frames = cxJsonArray(json, "frames");
-    CX_JSON_ARRAY_EACH_BEG(frames, item)
-    {
-        cxConstChars texture = cxJsonConstChars(item, "texture");
-        cxConstChars key = cxJsonConstChars(item, "key");
-        cxInt from = cxJsonInt(item, "from", 0);
-        cxInt to = cxJsonInt(item, "to", 0);
-        cxFloat delay = cxJsonDouble(item, "delay", 0);
-        if((to - from) > 0){
-            cxAnimateAppendSeries(this->list, texture, key, from, to, delay);
-        }else{
-            cxAnimateItemAppend(this->list, texture, key, delay);
-        }
-    }
-    CX_JSON_ARRAY_EACH_END(frames, item)
-    //
-    CX_OBJECT_INIT_SUPER(cxAction);
+    
 }
+
+//
+//void __cxAnimateInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxAnimate this = object;
+//    this->duration = cxJsonDouble(json, "duration", this->duration);
+//    //load frames
+//    cxJson frames = cxJsonArray(json, "frames");
+//    CX_JSON_ARRAY_EACH_BEG(frames, item)
+//    {
+//        cxConstChars texture = cxJsonConstChars(item, "texture");
+//        cxConstChars key = cxJsonConstChars(item, "key");
+//        cxInt from = cxJsonInt(item, "from", 0);
+//        cxInt to = cxJsonInt(item, "to", 0);
+//        cxFloat delay = cxJsonDouble(item, "delay", 0);
+//        if((to - from) > 0){
+//            cxAnimateAppendSeries(this->list, texture, key, from, to, delay);
+//        }else{
+//            cxAnimateItemAppend(this->list, texture, key, delay);
+//        }
+//    }
+//    CX_JSON_ARRAY_EACH_END(frames, item)
+//    //
+//    CX_OBJECT_INIT_SUPER(cxAction);
+//}
 
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxAnimate);
     CX_METHOD_SET(this->super.Init, cxAnimateInit);
     CX_METHOD_SET(this->super.Step, cxAnimateStep);
     CX_METHOD_SET(this->super.Reset, cxAnimateReset);

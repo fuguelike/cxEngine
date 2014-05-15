@@ -98,6 +98,16 @@ static void cxAssetsStreamClose(cxAny this)
     cxStreamBaseClose(this);
 }
 
+void __cxAssetsStreamInitType(cxAny type)
+{
+    
+}
+
+void __cxAssetsStreamInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    
+}
+
 CX_OBJECT_INIT(cxAssetsStream, cxStream)
 {
     CX_METHOD_SET(this->super.Open, cxAssetsStreamOpen);

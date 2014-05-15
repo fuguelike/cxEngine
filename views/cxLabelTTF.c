@@ -18,25 +18,29 @@ static void cxLabelTTFUpdate(cxEvent *event)
     this->isDirty = false;
 }
 
-void __cxLabelTTFInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxLabelTTFInitType(cxAny type)
 {
-    cxLabelTTF this = object;
-    cxString font = cxJsonString(json, "font.name");
-    if(cxStringOK(font)){
-        cxLabelTTFSetFont(this, font);
-    }
-    cxString text = cxJsonString(json, "text");
-    if(cxStringOK(text)){
-        cxLabelTTFSetText(this, text);
-    }
-    cxLabelTTFSetFontBold(this, cxJsonBool(json, "font.bold", this->attr.bold));
-    cxLabelTTFSetFontSize(this, cxJsonDouble(json, "font.size", this->attr.size));
-    CX_OBJECT_INIT_SUPER(cxSprite);
+    
 }
+
+//void __cxLabelTTFInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxLabelTTF this = object;
+//    cxString font = cxJsonString(json, "font.name");
+//    if(cxStringOK(font)){
+//        cxLabelTTFSetFont(this, font);
+//    }
+//    cxString text = cxJsonString(json, "text");
+//    if(cxStringOK(text)){
+//        cxLabelTTFSetText(this, text);
+//    }
+//    cxLabelTTFSetFontBold(this, cxJsonBool(json, "font.bold", this->attr.bold));
+//    cxLabelTTFSetFontSize(this, cxJsonDouble(json, "font.size", this->attr.size));
+//    CX_OBJECT_INIT_SUPER(cxSprite);
+//}
 
 CX_OBJECT_INIT(cxLabelTTF, cxSprite)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxLabelTTF);
     CX_EVENT_QUICK(this->super.super.onUpdate,cxLabelTTFUpdate);
     this->attr.size = 32;
     cxSpriteSetShader(this, cxShaderAlphaKey);

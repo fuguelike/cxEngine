@@ -33,29 +33,33 @@ void cxActionSetView(cxAny pav,cxAny pview)
     this->view = pview;
 }
 
-void __cxActionInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxActionInitType(cxAny type)
 {
-    cxAction this = object;
-    this->duration = cxJsonDouble(json, "duration", this->duration);
-    this->delay = cxJsonDouble(json, "delay", this->delay);
-    this->scale = cxJsonDouble(json, "scale", this->scale);
-    cxConstChars curve = cxJsonConstChars(json, "curve");
-    cxCurveItem item = NULL;
-    if(curve != NULL){
-        item = cxCurveGet(curve);
-    }
-    if(item != NULL){
-        cxActionSetCurve(this, item->func);
-    }
-    this->actionId = cxJsonLong(json, "actionid", this->actionId);
-    cxInt indexnum = cxJsonInt(json, "index", this->indexNum);
-    cxActionSetIndex(this, indexnum);
-    CX_OBJECT_INIT_SUPER(cxObject);
+    
 }
+
+//void __cxActionInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxAction this = object;
+//    this->duration = cxJsonDouble(json, "duration", this->duration);
+//    this->delay = cxJsonDouble(json, "delay", this->delay);
+//    this->scale = cxJsonDouble(json, "scale", this->scale);
+//    cxConstChars curve = cxJsonConstChars(json, "curve");
+//    cxCurveItem item = NULL;
+//    if(curve != NULL){
+//        item = cxCurveGet(curve);
+//    }
+//    if(item != NULL){
+//        cxActionSetCurve(this, item->func);
+//    }
+//    this->actionId = cxJsonLong(json, "actionid", this->actionId);
+//    cxInt indexnum = cxJsonInt(json, "index", this->indexNum);
+//    cxActionSetIndex(this, indexnum);
+//    CX_OBJECT_INIT_SUPER(cxObject);
+//}
 
 CX_OBJECT_INIT(cxAction, cxObject)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxAction);
     this->scale = 1.0f;
     this->isExit = false;
     this->index = -1;

@@ -98,6 +98,16 @@ static void cxFileStreamClose(cxAny this)
     cxStreamBaseClose(this);
 }
 
+void __cxFileStreamInitType(cxAny type)
+{
+    
+}
+
+void __cxFileStreamInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    
+}
+
 CX_OBJECT_INIT(cxFileStream, cxStream)
 {
     CX_METHOD_SET(this->super.Open, cxFileStreamOpen);

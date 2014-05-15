@@ -17,6 +17,16 @@ static cxBool cxWindowOnKey(cxAny pview,cxKey *key)
     return true;
 }
 
+void __cxWindowInitType(cxAny type)
+{
+    
+}
+
+void __cxWindowInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    
+}
+
 CX_OBJECT_INIT(cxWindow, cxView)
 {
     CX_METHOD_SET(this->super.OnKey, cxWindowOnKey);

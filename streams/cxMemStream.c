@@ -104,6 +104,16 @@ static void cxMemStreamClose(cxAny this)
     cxStreamBaseClose(this);
 }
 
+void __cxMemStreamInitType(cxAny type)
+{
+    
+}
+
+void __cxMemStreamInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    
+}
+
 CX_OBJECT_INIT(cxMemStream, cxStream)
 {
     CX_METHOD_SET(this->super.Open, cxMemStreamOpen);

@@ -10,15 +10,14 @@
 #include "cxNumber.h"
 #include "cxHash.h"
 
-void __cxHashInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxHashInitType(cxAny type)
 {
-    //load items
-    CX_OBJECT_INIT_SUPER(cxObject);
+    
 }
 
 CX_OBJECT_INIT(cxHash, cxObject)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxHash);
+    //
 }
 CX_OBJECT_FREE(cxHash, cxObject)
 {
@@ -106,7 +105,8 @@ cxBool cxHashSet(cxHash hash,cxHashKey key,cxAny any)
     if(element == NULL){
         cxHashSetUnsafe(hash, key, any);
         return false;
-    }else if(element->any != any){
+    }
+    if(element->any != any){
         CX_RETAIN_SWAP(element->any, any);
     }
     return true;

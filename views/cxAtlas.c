@@ -130,50 +130,53 @@ void cxAtlasResize(cxEvent *event)
     cxAtlasUpdateScale9(event->sender);
 }
 
-void __cxAtlasInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxAtlasInitType(cxAny type)
 {
-    CX_OBJECT_INIT_SUPER(cxSprite);
-    cxAtlas this = object;
-    if(cxJsonBool(json, "scale9.enable", false)){
-        cxAtlasSetCapacity(this, 9);
-        this->scale9.enable = true;
-        this->scale9.box = cxJsonBox4f(json, "scale9.box", this->scale9.box);
-        cxAtlasUpdateScale9(this);
-        return;
-    }
-    cxJson layers = cxJsonArray(json, "layers");
-    if(layers != NULL){
-        cxInt len = cxJsonArrayLength(layers);
-        CX_ASSERT(len > 0, "layers empty");
-        cxAtlasSetCapacity(this, len);
-        CX_JSON_ARRAY_EACH_BEG(layers, layer)
-        {
-            cxVec2f pos = cxVec2fv(0, 0);
-            cxSize2f size = cxSize2fv(0, 0);
-            cxBoxTex2f tex = cxBoxTex2fDefault();
-            cxColor4f color = cxColor4fv(1, 1, 1, 1);
-            pos = cxJsonVec2f(layer, "position", pos);
-            size = cxJsonSize2f(layer, "size", size);
-            cxConstChars key = cxJsonConstChars(layer, "key");
-            if(key != NULL){
-                tex = cxTextureBox(this->super.texture, key);
-            }else{
-                tex = cxJsonBoxTex2f(layer, "coord", tex);
-            }
-            if(cxSize2Zero(size) && key != NULL){
-                size = cxTextureSize(this->super.texture, key);
-            }
-            color = cxJsonColor4f(layer, "color", color);
-            cxAtlasAppendBoxPoint(this, pos, size, tex, color);
-        }
-        CX_JSON_ARRAY_EACH_END(layers, layer)
-        return;
-    }
+    
 }
+
+//void __cxAtlasInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxAtlas this = object;
+//    if(cxJsonBool(json, "scale9.enable", false)){
+//        cxAtlasSetCapacity(this, 9);
+//        this->scale9.enable = true;
+//        this->scale9.box = cxJsonBox4f(json, "scale9.box", this->scale9.box);
+//        cxAtlasUpdateScale9(this);
+//        return;
+//    }
+//    cxJson layers = cxJsonArray(json, "layers");
+//    if(layers != NULL){
+//        cxInt len = cxJsonArrayLength(layers);
+//        CX_ASSERT(len > 0, "layers empty");
+//        cxAtlasSetCapacity(this, len);
+//        CX_JSON_ARRAY_EACH_BEG(layers, layer)
+//        {
+//            cxVec2f pos = cxVec2fv(0, 0);
+//            cxSize2f size = cxSize2fv(0, 0);
+//            cxBoxTex2f tex = cxBoxTex2fDefault();
+//            cxColor4f color = cxColor4fv(1, 1, 1, 1);
+//            pos = cxJsonVec2f(layer, "position", pos);
+//            size = cxJsonSize2f(layer, "size", size);
+//            cxConstChars key = cxJsonConstChars(layer, "key");
+//            if(key != NULL){
+//                tex = cxTextureBox(this->super.texture, key);
+//            }else{
+//                tex = cxJsonBoxTex2f(layer, "coord", tex);
+//            }
+//            if(cxSize2Zero(size) && key != NULL){
+//                size = cxTextureSize(this->super.texture, key);
+//            }
+//            color = cxJsonColor4f(layer, "color", color);
+//            cxAtlasAppendBoxPoint(this, pos, size, tex, color);
+//        }
+//        CX_JSON_ARRAY_EACH_END(layers, layer)
+//        return;
+//    }
+//}
 
 CX_OBJECT_INIT(cxAtlas, cxSprite)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxAtlas);
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);

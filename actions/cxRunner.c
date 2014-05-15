@@ -25,6 +25,16 @@ static cxBool cxRunnerExit(cxAny pav)
     return this->count == 0;
 }
 
+void __cxRunnerInitType(cxAny type)
+{
+    
+}
+
+void __cxRunnerInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    
+}
+
 CX_OBJECT_INIT(cxRunner, cxAction)
 {
     CX_METHOD_SET(this->super.Init, cxRunnerInit);

@@ -36,16 +36,13 @@ static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAlpha(this->super.view, alhpa);
 }
 
-void __cxTintInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxTintInitType(cxAny type)
 {
-    cxTint this = object;
-    this->color = cxJsonColor4f(json, "color", this->color);
-    CX_OBJECT_INIT_SUPER(cxAction);
+    
 }
 
 CX_OBJECT_INIT(cxTint, cxAction)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxTint);
     CX_METHOD_SET(this->super.Init, cxTintInit);
     CX_METHOD_SET(this->super.Step, cxTintStep);
 }

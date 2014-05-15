@@ -69,6 +69,16 @@ static void cxTextureJSONBind(cxAny this)
     cxTextureBind(json->innerTexture);
 }
 
+void __cxTextureJSONInitType(cxAny type)
+{
+    
+}
+
+void __cxTextureJSONInitObject(cxAny object,cxAny json,cxAny hash)
+{
+    
+}
+
 CX_OBJECT_INIT(cxTextureJSON, cxTexture)
 {
     CX_METHOD_SET(this->super.Bind, cxTextureJSONBind);

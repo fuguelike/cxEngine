@@ -96,18 +96,22 @@ static void cxTableUpdate(cxEvent *event)
     }
 }
 
-void __cxTableInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxTableInitType(cxAny type)
 {
-    cxTable this = object;
-    this->grid = cxJsonVec2i(json, "grid", this->grid);
-    cxTableArraySubviews(this);
-    CX_OBJECT_INIT_SUPER(cxView);
+    
 }
+
+//void __cxTableInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxTable this = object;
+//    this->grid = cxJsonVec2i(json, "grid", this->grid);
+//    cxTableArraySubviews(this);
+//    CX_OBJECT_INIT_SUPER(cxView);
+//}
 
 CX_OBJECT_INIT(cxTable, cxView)
 {
     this->arrayHide = true;
-    CX_OBJECT_INIT_OVERRIDE(cxTable);
     CX_EVENT_QUICK(this->super.onResize, cxTableResize);
     CX_EVENT_QUICK(this->super.onUpdate, cxTableUpdate);
 }

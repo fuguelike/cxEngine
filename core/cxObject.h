@@ -17,9 +17,6 @@ CX_C_BEGIN
 //
 typedef void (*cxObjectFunc)(cxAny);
 
-//this,json,hash
-typedef void (*cxObjectInit)(cxAny,cxAny,cxAny);
-
 //
 typedef cxAny (*cxAnyFunc)(cxAny object);
 
@@ -42,7 +39,7 @@ CX_ATTRIBUTE_UNUSED static cxConstType _t_##TypeName=#_t_;      \
 typedef struct _t_ *_t_;                                        \
 void __##_t_##AutoInit(_t_ this);                               \
 void __##_t_##AutoFree(_t_ this);                               \
-void __##_t_##InitObject(cxAny,cxAny,cxAny);                    \
+void __##_t_##InitType(cxAny type);                             \
 struct _t_ {
 
 #define CX_OBJECT_END(_t_) };                                   \
@@ -86,7 +83,8 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 
 #define CX_INSTANCE_OF(_o_,_t_)     cxInstanceOf(_o_,_t_##TypeName)
 
-#define CX_CAST(_t_,_o_)            (_t_)(_o_);if(!CX_INSTANCE_OF(_o_,_t_))CX_ASSERT_FALSE("cast to type(%s) error",#_t_)
+//cast failed return NULL
+#define CX_CAST(_t_,_o_)            CX_INSTANCE_OF(_o_,_t_) ? ((_t_)(_o_)) : NULL
 
 //method
 
@@ -103,14 +101,7 @@ CX_OBJECT_BEG(cxObject)
     cxConstType cxType;
     cxUInt cxRefcount;
     cxObjectFunc cxFree;
-    cxObjectInit cxInit;
 CX_OBJECT_END(cxObject)
-
-//invoke super init method
-#define CX_OBJECT_INIT_SUPER(_t_)       __##_t_##InitObject(object, json, hash)
-
-//override init method
-#define CX_OBJECT_INIT_OVERRIDE(_t_)    CX_METHOD_SET(((cxObject)this)->cxInit, __##_t_##InitObject)
 
 CX_OBJECT_DEF(cxMemory, cxObject)
     cxPointer pointer;

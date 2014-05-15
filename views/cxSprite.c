@@ -101,15 +101,20 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
     }
 }
 
-void __cxSpriteInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxSpriteInitType(cxAny type)
 {
-    cxBool usetexsize = cxJsonBool(json, "usetexsize", true);
-    cxConstChars texture = cxJsonConstChars(json, "texture");
-    if(texture != NULL){
-        cxSpriteSetTextureURL(object, texture, usetexsize);
-    }
-    CX_OBJECT_INIT_SUPER(cxView);
+    
 }
+
+//void __cxSpriteInitObject(cxAny object,cxAny json,cxAny hash)
+//{
+//    cxBool usetexsize = cxJsonBool(json, "usetexsize", true);
+//    cxConstChars texture = cxJsonConstChars(json, "texture");
+//    if(texture != NULL){
+//        cxSpriteSetTextureURL(object, texture, usetexsize);
+//    }
+//    CX_OBJECT_INIT_SUPER(cxView);
+//}
 
 CX_OBJECT_INIT(cxSprite, cxView)
 {
@@ -118,7 +123,6 @@ CX_OBJECT_INIT(cxSprite, cxView)
     CX_EVENT_QUICK(this->super.onDirty, cxSpriteDirtyEvent);
     CX_METHOD_SET(this->super.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
-    CX_OBJECT_INIT_OVERRIDE(cxSprite);
 }
 CX_OBJECT_FREE(cxSprite, cxView)
 {

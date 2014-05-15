@@ -76,22 +76,13 @@ static void cxLabelBMPUpdate(cxEvent *event)
     this->isDirty = false;
 }
 
-void __cxLabelBMPInitObject(cxAny object,cxAny json,cxAny hash)
+void __cxLabelBMPInitType(cxAny type)
 {
-    cxString font = cxJsonString(json, "font.name");
-    if(cxStringOK(font)){
-        cxLabelBMPSetFont(object, font);
-    }
-    cxString text = cxJsonString(json, "text");
-    if(cxStringOK(text)){
-        cxLabelBMPSetText(object, text);
-    }
-    CX_OBJECT_INIT_SUPER(cxAtlas);
+    
 }
 
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
 {
-    CX_OBJECT_INIT_OVERRIDE(cxLabelBMP);
     CX_EVENT_QUICK(this->super.super.super.onUpdate, cxLabelBMPUpdate);
     this->isDirty = true;
 }

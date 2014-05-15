@@ -16,14 +16,9 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxController, cxObject)
     cxAny root;
-    cxHash objects;
 CX_OBJECT_END(cxController)
 
-void cxControllerAction(cxAny pc,cxConstChars key);
-
 void cxControllerInitWithFile(cxAny pc, cxConstChars file);
-
-cxAny cxControllerObject(cxAny pc,cxConstChars key);
 
 cxController cxControllerCreate(cxConstChars file);
 
