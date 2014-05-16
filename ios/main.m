@@ -1,7 +1,7 @@
 
 #import <UIKit/UIKit.h>
 #import "cxAppDelegate.h"
-#include <core/cxGlobal.h>
+#include <engine/cxGlobal.h>
 
 int main(int argc, char * argv[])
 {

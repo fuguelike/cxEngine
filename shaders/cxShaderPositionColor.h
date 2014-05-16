@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxShaderPositionColor_h
 #define cxEngine_cxShaderPositionColor_h
 
-#include <core/cxShader.h>
+#include <engine/cxShader.h>
 
 CX_C_BEGIN
 

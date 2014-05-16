@@ -7,7 +7,7 @@
 //
 
 #include <sys/xattr.h>
-#include <core/cxUtil.h>
+#include <engine/cxUtil.h>
 #import "cxAppDelegate.h"
 #import "cxEAGLView.h"
 

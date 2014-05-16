@@ -9,8 +9,7 @@
 #ifndef cxEngine_cxWindow_h
 #define cxEngine_cxWindow_h
 
-#include <core/cxView.h>
-#include <core/cxStack.h>
+#include <engine/cxView.h>
 
 CX_C_BEGIN
 

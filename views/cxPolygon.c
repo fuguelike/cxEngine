@@ -28,28 +28,27 @@ static void cxPolygonMalloc(cxPolygon this)
     this->texs = allocator->realloc(this->texs,sizeof(cxTex2f) * this->capacity);
 }
 
-void __cxPolygonInitType(cxAny type)
+CX_SETTER_DEF(cxPolygon, points)
 {
-    
+    cxJson points = cxJsonToArray(value);
+    CX_JSON_ARRAY_EACH_BEG(points, point);
+    {
+        cxPoint p = {0};
+        p.colors = cxColor4fv(1, 1, 1, 1);
+        p.texcoords = cxTex2fv(0, 0);
+        p.vertices = cxVec3fv(0, 0, 0);
+        p.vertices = cxJsonVec3f(point, "p", p.vertices);
+        p.texcoords = cxJsonTex2f(point, "t", p.texcoords);
+        p.colors = cxJsonColor4f(point, "c", p.colors);
+        cxPolygonAppend(this, p);
+    }
+    CX_JSON_ARRAY_EACH_END(points, point);
 }
 
-//void __cxPolygonInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxJson points = cxJsonArray(json, "points");
-//    CX_JSON_ARRAY_EACH_BEG(points, point);
-//    {
-//        cxPoint p = {0};
-//        p.colors = cxColor4fv(1, 1, 1, 1);
-//        p.texcoords = cxTex2fv(0, 0);
-//        p.vertices = cxVec3fv(0, 0, 0);
-//        p.vertices = cxJsonVec3f(point, "p", p.vertices);
-//        p.texcoords = cxJsonTex2f(point, "t", p.texcoords);
-//        p.colors = cxJsonColor4f(point, "c", p.colors);
-//        cxPolygonAppend(object, p);
-//    }
-//    CX_JSON_ARRAY_EACH_END(points, point);
-//    CX_OBJECT_INIT_SUPER(cxSprite);
-//}
+void __cxPolygonInitType(cxAny type)
+{
+    CX_PROPERTY_SETTER(cxPolygon, points);
+}
 
 CX_OBJECT_INIT(cxPolygon, cxSprite)
 {

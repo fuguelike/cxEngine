@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxShaderClipping_h
 #define cxEngine_cxShaderClipping_h
 
-#include <core/cxShader.h>
+#include <engine/cxShader.h>
 
 CX_C_BEGIN
 

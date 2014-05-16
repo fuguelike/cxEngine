@@ -9,8 +9,8 @@
 #ifndef cxEngine_cxTexturePKM_h
 #define cxEngine_cxTexturePKM_h
 
-#include <core/cxTexture.h>
-#include <core/cxStream.h>
+#include <engine/cxTexture.h>
+#include <engine/cxStream.h>
 
 CX_C_BEGIN
 

@@ -93,7 +93,7 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
     CX_ASSERT(texture != NULL, "texture load failed %s",path->path);
     cxSpriteSetTexture(this, texture);
     //use texture size
-    cxBool uts = cxViewZeroSize(this) || useTexSize;
+    cxBool uts = useTexSize;
     if(path->count > 1){
         cxSpriteSetTextureKey(this, path->key, uts);
     }else if(uts){
@@ -101,20 +101,24 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
     }
 }
 
-void __cxSpriteInitType(cxAny type)
+CX_SETTER_DEF(cxSprite, texture)
 {
-    
+    cxConstChars texture = NULL;
+    cxBool uts = true;
+    if(cxJsonIsString(value)){
+        texture = cxJsonToConstChars(value);
+    }else if(cxJsonIsObject(value)){
+        uts = cxJsonBool(value, "uts", uts);
+        texture = cxJsonConstChars(value, "url");
+    }
+    CX_RETURN(texture == NULL);
+    cxSpriteSetTextureURL(this, texture, uts);
 }
 
-//void __cxSpriteInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxBool usetexsize = cxJsonBool(json, "usetexsize", true);
-//    cxConstChars texture = cxJsonConstChars(json, "texture");
-//    if(texture != NULL){
-//        cxSpriteSetTextureURL(object, texture, usetexsize);
-//    }
-//    CX_OBJECT_INIT_SUPER(cxView);
-//}
+void __cxSpriteInitType(cxAny type)
+{
+    CX_PROPERTY_SETTER(cxSprite, texture);
+}
 
 CX_OBJECT_INIT(cxSprite, cxView)
 {

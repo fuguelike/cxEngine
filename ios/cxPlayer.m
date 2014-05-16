@@ -7,7 +7,7 @@
 //
 
 #import "cxAppDelegate.h"
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 
 void cxPlayMusic(cxConstChars file,cxBool loop)
 {

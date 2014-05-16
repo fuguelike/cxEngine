@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxShaderDefault_h
 #define cxEngine_cxShaderDefault_h
 
-#include <core/cxShader.h>
+#include <engine/cxShader.h>
 
 CX_C_BEGIN
 

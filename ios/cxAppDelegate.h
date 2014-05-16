@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVAudioPlayer.h>
 #import "cxViewController.h"
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 
 @interface cxAppDelegate : UIResponder <UIApplicationDelegate,AVAudioPlayerDelegate>
 {

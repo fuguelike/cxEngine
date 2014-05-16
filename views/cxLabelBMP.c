@@ -75,10 +75,25 @@ static void cxLabelBMPUpdate(cxEvent *event)
     cxLabelBMPUpdateText(this);
     this->isDirty = false;
 }
+CX_SETTER_DEF(cxLabelBMP, font)
+{
+    cxString font = cxJsonString(value, "name");
+    if(cxStringOK(font)){
+        cxLabelBMPSetFont(this, font);
+    }
+}
+CX_SETTER_DEF(cxLabelBMP, text)
+{
+    cxString text = cxJsonToString(value);
+    if(cxStringOK(text)){
+        cxLabelBMPSetText(this, text);
+    }
+}
 
 void __cxLabelBMPInitType(cxAny type)
 {
-    
+    CX_PROPERTY_SETTER(cxLabelBMP, font);
+    CX_PROPERTY_SETTER(cxLabelBMP, text);
 }
 
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)

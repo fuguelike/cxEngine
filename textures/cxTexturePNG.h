@@ -9,8 +9,8 @@
 #ifndef cxEngine_cxTexturePNG_h
 #define cxEngine_cxTexturePNG_h
 
-#include <core/cxTexture.h>
-#include <core/cxStream.h>
+#include <engine/cxTexture.h>
+#include <engine/cxStream.h>
 #include <libpng/png.h>
 
 CX_C_BEGIN

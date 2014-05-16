@@ -9,9 +9,8 @@
 #ifndef cxEngine_cxTextureTXT_h
 #define cxEngine_cxTextureTXT_h
 
-#include <core/cxTexture.h>
-#include <core/cxStream.h>
-#include <core/cxHash.h>
+#include <engine/cxTexture.h>
+#include <engine/cxStream.h>
 
 CX_C_BEGIN
 

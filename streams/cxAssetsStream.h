@@ -9,8 +9,8 @@
 #ifndef cxEngine_cxAssetsStream_h
 #define cxEngine_cxAssetsStream_h
 
-#include <core/cxBase.h>
-#include <core/cxStream.h>
+#include <cxCore/cxBase.h>
+#include <engine/cxStream.h>
 
 CX_C_BEGIN
 

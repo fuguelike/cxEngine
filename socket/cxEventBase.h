@@ -10,8 +10,7 @@
 #define cxEngine_cxEventBase_h
 
 #include <event.h>
-#include <core/cxBase.h>
-#include <core/cxHash.h>
+#include <cxCore/cxBase.h>
 
 CX_C_BEGIN
 

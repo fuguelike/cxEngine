@@ -1,7 +1,11 @@
 {
-  "src": "cxView.json",
-  "position": {
-    "x": 0,
-    "y": 0
+  "type": "cxSprite",
+  "size": {
+    "w": 300,
+    "h": 300
+  },
+  "texture": {
+    "uts": false,
+    "url": "texture.json?carrot.png"
   }
 }

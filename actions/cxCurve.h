@@ -9,8 +9,7 @@
 #ifndef cxEngine_cxCurve_h
 #define cxEngine_cxCurve_h
 
-#include <core/cxBase.h>
-#include <core/cxHash.h>
+#include <cxCore/cxBase.h>
 
 CX_C_BEGIN
 

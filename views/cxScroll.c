@@ -148,24 +148,32 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
     }
 }
 
-void __cxScrollInitType(cxAny type)
+CX_SETTER_DEF(cxScroll, layout)
 {
-    
+    cxConstChars type = cxJsonToConstChars(value);
+    this->type = type != NULL ? cxScrollMoveTypeNone : this->type;
+    if(cxConstCharsHas(type, "horizontal")){
+        this->type |= cxScrollMoveTypeHorizontal;
+    }
+    if(cxConstCharsHas(type, "vertical")){
+        this->type |= cxScrollMoveTypeVertical;
+    }
+}
+CX_SETTER_DEF(cxScroll, delta)
+{
+    this->delta = cxJsonToDouble(value, this->delta);
+}
+CX_SETTER_DEF(cxScroll, value)
+{
+    this->value = cxJsonToDouble(value, this->value);
 }
 
-//void __cxScrollInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxScroll this = object;
-//    cxConstChars type = cxJsonConstChars(json, "layout");
-//    this->type = type != NULL ? cxScrollMoveTypeNone : this->type;
-//    if(cxConstCharsHas(type, "horizontal")){
-//        this->type |= cxScrollMoveTypeHorizontal;
-//    }
-//    if(cxConstCharsHas(type, "vertical")){
-//        this->type |= cxScrollMoveTypeVertical;
-//    }
-//    CX_OBJECT_INIT_SUPER(cxView);
-//}
+void __cxScrollInitType(cxAny type)
+{
+    CX_PROPERTY_SETTER(cxScroll, layout);
+    CX_PROPERTY_SETTER(cxScroll, delta);
+    CX_PROPERTY_SETTER(cxScroll, value);
+}
 
 CX_OBJECT_INIT(cxScroll, cxView)
 {

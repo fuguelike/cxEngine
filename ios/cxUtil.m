@@ -12,7 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 
 void cxEngineTerminate()
 {

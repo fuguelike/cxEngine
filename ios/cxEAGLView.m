@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 #import "cxAppDelegate.h"
 #import "cxEAGLView.h"
 #import <regex.h>

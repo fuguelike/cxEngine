@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxTimer_h
 #define cxEngine_cxTimer_h
 
-#include <core/cxAction.h>
+#include <engine/cxAction.h>
 
 CX_C_BEGIN
 

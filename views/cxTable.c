@@ -96,18 +96,16 @@ static void cxTableUpdate(cxEvent *event)
     }
 }
 
-void __cxTableInitType(cxAny type)
+CX_SETTER_DEF(cxTable, grid)
 {
-    
+    this->grid = cxJsonToVec2i(value, this->grid);
+    cxTableArraySubviews(this);
 }
 
-//void __cxTableInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxTable this = object;
-//    this->grid = cxJsonVec2i(json, "grid", this->grid);
-//    cxTableArraySubviews(this);
-//    CX_OBJECT_INIT_SUPER(cxView);
-//}
+void __cxTableInitType(cxAny type)
+{
+    CX_PROPERTY_SETTER(cxTable, grid);
+}
 
 CX_OBJECT_INIT(cxTable, cxView)
 {
