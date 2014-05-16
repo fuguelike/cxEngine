@@ -11,7 +11,6 @@
 
 #include <cxcore/cxBase.h>
 #include "cxOpenGL.h"
-#include "cxString.h"
 
 CX_C_BEGIN
 

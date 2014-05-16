@@ -49,7 +49,6 @@
 #include <actions/cxScale.h>
 #include <actions/cxSpline.h>
 
-#include "cxNumber.h"
 #include "cxEngine.h"
 #include "cxMath.h"
 #include "cxIconv.h"
@@ -292,7 +291,7 @@ cxAny cxEngineTypeCreate(cxJson json)
     CX_ASSERT(json != NULL, "json error");
     cxConstChars type = cxJsonConstChars(json, "type");
     CX_ASSERT(type != NULL, "type field null");
-    cxObject object = cxTypeCreate(type);
+    cxObject object = cxObjectCreateWithType(type);
     CX_ASSERT(object != NULL, "type(%s) create object failed",type);
     cxTypeRunObjectSetter(object, json);
     return object;

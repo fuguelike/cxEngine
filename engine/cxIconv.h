@@ -10,7 +10,7 @@
 #define cxEngine_cxIconv_h
 
 #include <iconv.h>
-#include "cxString.h"
+#include <cxcore/cxBase.h>
 
 CX_C_BEGIN
 

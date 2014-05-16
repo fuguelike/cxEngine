@@ -244,26 +244,26 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 
 #define CX_RELEASE(_o_) cxObjectRelease(_o_)
 
-#define CX_AUTOFREE(_o_)            cxObjectAutoRelease(_o_)
+#define CX_AUTOFREE(_o_) cxObjectAutoRelease(_o_)
 
-#define CX_RETAIN_SWAP(_s_,_d_)     {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
+#define CX_RETAIN_SWAP(_s_,_d_) {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
 
-#define CX_RETAIN_SET(_n_,_v_)      {_n_ = (_v_);CX_RETAIN(_n_);}
+#define CX_RETAIN_SET(_n_,_v_) {_n_ = (_v_);CX_RETAIN(_n_);}
 
-#define CX_INSTANCE_OF(_o_,_t_)     cxInstanceOf(_o_,_t_##TypeName)
+#define CX_INSTANCE_OF(_o_,_t_) cxInstanceOf(_o_,_t_##TypeName)
 
 //cast failed return NULL
-#define CX_CAST(_t_,_o_)            CX_INSTANCE_OF(_o_,_t_) ? ((_t_)(_o_)) : NULL
+#define CX_CAST(_t_,_o_) CX_INSTANCE_OF(_o_,_t_) ? ((_t_)(_o_)) : NULL
 
 //method
 
-#define CX_METHOD_DEF(_r_,_n_,...)      _r_ (*_n_)(__VA_ARGS__)
+#define CX_METHOD_DEF(_r_,_n_,...) _r_ (*_n_)(__VA_ARGS__)
 
-#define CX_METHOD_GET(_d_,_m_,...)      (((_m_) != NULL)?((_m_)(__VA_ARGS__)):(_d_))
+#define CX_METHOD_GET(_d_,_m_,...) (((_m_) != NULL)?((_m_)(__VA_ARGS__)):(_d_))
 
-#define CX_METHOD_RUN(_m_,...)          if((_m_) != NULL)(_m_)(__VA_ARGS__)
+#define CX_METHOD_RUN(_m_,...) if((_m_) != NULL)(_m_)(__VA_ARGS__)
 
-#define CX_METHOD_SET(_m_,_f_)          _m_ = _f_
+#define CX_METHOD_SET(_m_,_f_) _m_ = _f_
 
 //signal and slot
 

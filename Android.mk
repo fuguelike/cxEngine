@@ -3,14 +3,29 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE   := cxEngine
+LOCAL_MODULE := cxEngine
 
-LOCAL_CFLAGS   := \
+LOCAL_CFLAGS := \
     -std=gnu99 -O2 -DANDROID \
     -I$(LOCAL_PATH) \
     -I$(LOCAL_PATH)/libs/android/include
 
-LOCAL_SRC_FILES := \
+LOCAL_SRC_FILES += \
+    cxcore/cxNumber.c \
+	cxcore/cxMessage.c \
+	cxcore/cxMD5.c \
+	cxcore/cxString.c \
+	cxcore/cxArray.c \
+	cxcore/cxCore.c \
+	cxcore/cxHash.c \
+	cxcore/cxList.c \
+	cxcore/cxMemPool.c \
+	cxcore/cxProperty.c \
+	cxcore/cxStack.c \
+	cxcore/cxType.c \
+	cxcore/cxMemory.c
+
+LOCAL_SRC_FILES += \
     kazmath/aabb.c \
     kazmath/mat3.c \
     kazmath/mat4.c \
@@ -82,36 +97,22 @@ LOCAL_SRC_FILES += \
     socket/cxClient.c
 
 LOCAL_SRC_FILES += \
-    core/cxConfig.c \
-    core/cxObject.c \
-    core/cxMD5.c \
-    core/cxAllocator.c \
-    core/cxArray.c \
-    core/cxAutoPool.c \
-    core/cxBase.c \
-    core/cxEventArg.c \
-    core/cxHash.c \
-    core/cxIconv.c \
-    core/cxJson.c \
-    core/cxBMPFont.c \
-    core/cxList.c \
-    core/cxNumber.c \
-    core/cxUtil.c \
-    core/cxRegex.c \
-    core/cxMessage.c \
-    core/cxStack.c \
-    core/cxString.c \
-    core/cxUrlPath.c \
-    core/cxOpenGL.c \
-    core/cxShader.c \
-    core/cxStream.c \
-    core/cxEngine.c \
-    core/cxTexture.c \
-    core/cxView.c \
-    core/cxAction.c \
-    core/cxType.c \
-    core/cxGlobal.c \
-    core/cxController.c
+    engine/cxAction.c \
+	engine/cxBMPFont.c \
+	engine/cxController.c \
+	engine/cxEngine.c \
+	engine/cxGlobal.c \
+	engine/cxIconv.c \
+	engine/cxJson.c \
+	engine/cxMath.c \
+	engine/cxOpenGL.c \
+	engine/cxRegex.c \
+	engine/cxShader.c \
+	engine/cxStream.c \
+	engine/cxTexture.c \
+	engine/cxUrlPath.c \
+	engine/cxUtil.c \
+	engine/cxView.c
     
 LOCAL_SRC_FILES += \
     algorithm/cxAStar.c

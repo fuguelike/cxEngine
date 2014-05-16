@@ -6,11 +6,10 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxString.h>
 #include <android/log.h>
 #include "cxAndroid.h"
-#include <core/cxEngine.h>
-#include <core/cxGlobal.h>
+#include <engine/cxEngine.h>
+#include <engine/cxGlobal.h>
 
 static JNIEnv *javaENV = NULL;
 static jclass javaClass = NULL;

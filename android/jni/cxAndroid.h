@@ -13,7 +13,7 @@
 #include <android/input.h>
 #include <android/asset_manager_jni.h>
 #include <unistd.h>
-#include <core/cxBase.h>
+#include <cxcore/cxBase.h>
 
 CX_C_BEGIN
 

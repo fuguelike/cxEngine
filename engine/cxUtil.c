@@ -13,7 +13,6 @@
 #include <streams/cxAssetsStream.h>
 #include <streams/cxFileStream.h>
 #include <engine/cxEngine.h>
-#include "cxBase.h"
 #include "cxUtil.h"
 
 cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)

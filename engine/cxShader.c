@@ -7,7 +7,6 @@
 //
 
 #include <kazmath/matrix.h>
-#include "cxString.h"
 #include "cxShader.h"
 
 void cxShaderInitPosColorTex(cxAny this)

@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxPlayer.h>
-#include <core/cxHash.h>
+#include <engine/cxPlayer.h>
+#include <cxcore/cxBase.h>
 #include "cxAndroid.h"
 
 CX_OBJECT_DEF(cxTrack, cxObject)
@@ -15,6 +15,9 @@ CX_OBJECT_DEF(cxTrack, cxObject)
     cxString file;
 CX_OBJECT_END(cxTrack)
 
+CX_OBJECT_TYPE(cxTrack, cxObject)
+{
+}
 CX_OBJECT_INIT(cxTrack, cxObject)
 {
     
@@ -25,6 +28,9 @@ CX_OBJECT_FREE(cxTrack, cxObject)
 }
 CX_OBJECT_TERM(cxTrack, cxObject)
 
+CX_OBJECT_TYPE(cxPlayer, cxObject)
+{
+}
 CX_OBJECT_INIT(cxPlayer, cxObject)
 {
     this->tracks = CX_ALLOC(cxHash);

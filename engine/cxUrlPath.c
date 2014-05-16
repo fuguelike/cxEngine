@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxString.h"
 #include "cxUrlPath.h"
 
 CX_OBJECT_TYPE(cxUrlPath, cxObject)

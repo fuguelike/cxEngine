@@ -86,7 +86,7 @@ cxBool cxInstanceOf(cxAny object,cxConstType type)
     return false;
 }
 
-cxAny cxTypeCreate(cxConstType type)
+cxAny cxObjectCreateWithType(cxConstType type)
 {
     CX_ASSERT(type != NULL, "type null");
     cxType ptype = cxTypesGet(type);
