@@ -47,7 +47,7 @@ CX_SETTER_DEF(cxPolygon, points)
 
 CX_OBJECT_TYPE(cxPolygon, cxSprite)
 {
-    CX_PROPERTY_SETTER(this, cxPolygon, points);
+    CX_PROPERTY_SETTER(cxPolygon, points);
 }
 CX_OBJECT_INIT(cxPolygon, cxSprite)
 {

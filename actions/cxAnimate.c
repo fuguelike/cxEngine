@@ -108,39 +108,34 @@ static void cxAnimateReset(cxAny pav)
     this->super.duration = this->duration;
 }
 
-void __cxAnimateInitType(cxAny type)
+CX_SETTER_DEF(cxAnimate, duration)
 {
-    
+    this->duration = cxJsonToDouble(value, this->duration);
+    this->super.duration = this->duration;
 }
-
-//
-//void __cxAnimateInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxAnimate this = object;
-//    this->duration = cxJsonDouble(json, "duration", this->duration);
-//    //load frames
-//    cxJson frames = cxJsonArray(json, "frames");
-//    CX_JSON_ARRAY_EACH_BEG(frames, item)
-//    {
-//        cxConstChars texture = cxJsonConstChars(item, "texture");
-//        cxConstChars key = cxJsonConstChars(item, "key");
-//        cxInt from = cxJsonInt(item, "from", 0);
-//        cxInt to = cxJsonInt(item, "to", 0);
-//        cxFloat delay = cxJsonDouble(item, "delay", 0);
-//        if((to - from) > 0){
-//            cxAnimateAppendSeries(this->list, texture, key, from, to, delay);
-//        }else{
-//            cxAnimateItemAppend(this->list, texture, key, delay);
-//        }
-//    }
-//    CX_JSON_ARRAY_EACH_END(frames, item)
-//    //
-//    CX_OBJECT_INIT_SUPER(cxAction);
-//}
+CX_SETTER_DEF(cxAnimate, frames)
+{
+    cxJson frames = cxJsonToArray(value);
+    CX_JSON_ARRAY_EACH_BEG(frames, item)
+    {
+        cxConstChars texture = cxJsonConstChars(item, "texture");
+        cxConstChars key = cxJsonConstChars(item, "key");
+        cxInt from = cxJsonInt(item, "from", 0);
+        cxInt to = cxJsonInt(item, "to", 0);
+        cxFloat delay = cxJsonDouble(item, "delay", 0);
+        if((to - from) > 0){
+            cxAnimateAppendSeries(this->list, texture, key, from, to, delay);
+        }else{
+            cxAnimateItemAppend(this->list, texture, key, delay);
+        }
+    }
+    CX_JSON_ARRAY_EACH_END(frames, item)
+}
 
 CX_OBJECT_TYPE(cxAnimate, cxAction)
 {
-    
+    CX_PROPERTY_SETTER(cxAnimate, duration);
+    CX_PROPERTY_SETTER(cxAnimate, frames);
 }
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {

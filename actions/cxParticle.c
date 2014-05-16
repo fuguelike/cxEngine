@@ -367,29 +367,29 @@ CX_SETTER_DEF(cxParticle, rotatepers)
 
 CX_OBJECT_TYPE(cxParticle, cxAction)
 {
-    CX_PROPERTY_SETTER(this, cxParticle, number);
-    CX_PROPERTY_SETTER(this, cxParticle, texture);
-    CX_PROPERTY_SETTER(this, cxParticle, emitter);
-    CX_PROPERTY_SETTER(this, cxParticle, blend);
-    CX_PROPERTY_SETTER(this, cxParticle, time);
-    CX_PROPERTY_SETTER(this, cxParticle, life);
-    CX_PROPERTY_SETTER(this, cxParticle, position);
-    CX_PROPERTY_SETTER(this, cxParticle, rate);
-    CX_PROPERTY_SETTER(this, cxParticle, angle);
-    CX_PROPERTY_SETTER(this, cxParticle, startsize);
-    CX_PROPERTY_SETTER(this, cxParticle, endsize);
-    CX_PROPERTY_SETTER(this, cxParticle, startcolor);
-    CX_PROPERTY_SETTER(this, cxParticle, endcolor);
-    CX_PROPERTY_SETTER(this, cxParticle, startspin);
-    CX_PROPERTY_SETTER(this, cxParticle, endspin);
-    CX_PROPERTY_SETTER(this, cxParticle, gravity);
-    CX_PROPERTY_SETTER(this, cxParticle, todir);
-    CX_PROPERTY_SETTER(this, cxParticle, tanaccel);
-    CX_PROPERTY_SETTER(this, cxParticle, radaccel);
-    CX_PROPERTY_SETTER(this, cxParticle, speed);
-    CX_PROPERTY_SETTER(this, cxParticle, startradius);
-    CX_PROPERTY_SETTER(this, cxParticle, endradius);
-    CX_PROPERTY_SETTER(this, cxParticle, rotatepers);
+    CX_PROPERTY_SETTER(cxParticle, number);
+    CX_PROPERTY_SETTER(cxParticle, texture);
+    CX_PROPERTY_SETTER(cxParticle, emitter);
+    CX_PROPERTY_SETTER(cxParticle, blend);
+    CX_PROPERTY_SETTER(cxParticle, time);
+    CX_PROPERTY_SETTER(cxParticle, life);
+    CX_PROPERTY_SETTER(cxParticle, position);
+    CX_PROPERTY_SETTER(cxParticle, rate);
+    CX_PROPERTY_SETTER(cxParticle, angle);
+    CX_PROPERTY_SETTER(cxParticle, startsize);
+    CX_PROPERTY_SETTER(cxParticle, endsize);
+    CX_PROPERTY_SETTER(cxParticle, startcolor);
+    CX_PROPERTY_SETTER(cxParticle, endcolor);
+    CX_PROPERTY_SETTER(cxParticle, startspin);
+    CX_PROPERTY_SETTER(cxParticle, endspin);
+    CX_PROPERTY_SETTER(cxParticle, gravity);
+    CX_PROPERTY_SETTER(cxParticle, todir);
+    CX_PROPERTY_SETTER(cxParticle, tanaccel);
+    CX_PROPERTY_SETTER(cxParticle, radaccel);
+    CX_PROPERTY_SETTER(cxParticle, speed);
+    CX_PROPERTY_SETTER(cxParticle, startradius);
+    CX_PROPERTY_SETTER(cxParticle, endradius);
+    CX_PROPERTY_SETTER(cxParticle, rotatepers);
 }
 CX_OBJECT_INIT(cxParticle, cxAction)
 {

@@ -92,8 +92,8 @@ CX_SETTER_DEF(cxLabelBMP, text)
 
 CX_OBJECT_TYPE(cxLabelBMP, cxAtlas)
 {
-    CX_PROPERTY_SETTER(this, cxLabelBMP, font);
-    CX_PROPERTY_SETTER(this, cxLabelBMP, text);
+    CX_PROPERTY_SETTER(cxLabelBMP, font);
+    CX_PROPERTY_SETTER(cxLabelBMP, text);
 }
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
 {

@@ -22,21 +22,14 @@ void cxTimerReset(cxAny timer)
     this->super.durationElapsed = 0;
 }
 
-void __cxTimerInitType(cxAny type)
+CX_SETTER_DEF(cxTimer, repeat)
 {
-    
+    this->repeat = cxJsonToInt(value, this->repeat);
 }
-
-//void __cxTimerInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxTimer this = object;
-//    this->repeat = cxJsonInt(json, "repeat", this->repeat);
-//    CX_OBJECT_INIT_SUPER(cxAction);
-//}
 
 CX_OBJECT_TYPE(cxTimer, cxAction)
 {
-    
+    CX_PROPERTY_SETTER(cxTimer, repeat);
 }
 CX_OBJECT_INIT(cxTimer, cxAction)
 {

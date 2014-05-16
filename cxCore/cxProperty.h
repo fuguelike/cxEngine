@@ -25,15 +25,15 @@ typedef cxAny (*cxPropertyGetter)(cxAny);
 
 #define CX_GETTER_DEF(_t_,_p_)     static cxAny CX_GETTER(_t_,_p_)(_t_ this)
 
-#define CX_PROPERTY_SETTER(_m_,_t_,_p_)                 \
+#define CX_PROPERTY_SETTER(_t_,_p_)                     \
 do{                                                     \
-    cxProperty p = cxTypeProperty(_m_,#_p_);            \
+    cxProperty p = cxTypeProperty(this,#_p_);           \
     p->setter = (cxPropertySetter)CX_SETTER(_t_,_p_);   \
 }while(0)
 
-#define CX_PROPERTY_GETTER(_m_,_t_,_p_)                 \
+#define CX_PROPERTY_GETTER(_t_,_p_)                     \
 do{                                                     \
-    cxProperty p = cxTypeProperty(_m_,#_p_);            \
+    cxProperty p = cxTypeProperty(this,#_p_);           \
     p->getter = (cxPropertyGetter)CX_GETTER(_t_,_p_);   \
 }while(0)
 

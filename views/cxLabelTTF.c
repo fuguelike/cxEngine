@@ -39,8 +39,8 @@ CX_SETTER_DEF(cxLabelTTF, text)
 
 CX_OBJECT_TYPE(cxLabelTTF, cxSprite)
 {
-    CX_PROPERTY_SETTER(this, cxLabelTTF, font);
-    CX_PROPERTY_SETTER(this, cxLabelTTF, text);
+    CX_PROPERTY_SETTER(cxLabelTTF, font);
+    CX_PROPERTY_SETTER(cxLabelTTF, text);
 }
 CX_OBJECT_INIT(cxLabelTTF, cxSprite)
 {

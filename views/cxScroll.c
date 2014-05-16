@@ -170,9 +170,9 @@ CX_SETTER_DEF(cxScroll, value)
 
 CX_OBJECT_TYPE(cxScroll, cxView)
 {
-    CX_PROPERTY_SETTER(this, cxScroll, layout);
-    CX_PROPERTY_SETTER(this, cxScroll, delta);
-    CX_PROPERTY_SETTER(this, cxScroll, value);
+    CX_PROPERTY_SETTER(cxScroll, layout);
+    CX_PROPERTY_SETTER(cxScroll, delta);
+    CX_PROPERTY_SETTER(cxScroll, value);
 }
 CX_OBJECT_INIT(cxScroll, cxView)
 {

@@ -8,11 +8,6 @@
 
 #include "cxFollow.h"
 
-void __cxFollowTypeInit()
-{
-    
-}
-
 cxBool cxFollowDefaultExit(cxAny pav)
 {
     cxFollow this = pav;
@@ -55,26 +50,6 @@ cxAny cxFollowTarget(cxAny pav)
     cxFollow this = pav;
     return this->target;
 }
-
-void __cxFollowInitType(cxAny type)
-{
-    
-}
-
-//void __cxFollowInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxFollow this = object;
-//    cxJson jt = cxJsonObject(json, "target");
-//    if(cxJsonIsString(jt)){
-//        cxConstChars key = cxJsonToConstChars(jt);
-//        cxAny target = cxHashGet(hash, cxHashStrKey(key));
-//        cxFollowSetTarget(this, target, false);
-//    }else{
-//        cxVec2f target = cxJsonVec2f(json, "target", cxVec2fv(0, 0));
-//        cxFollowSetVec2f(this, target);
-//    }
-//    CX_OBJECT_INIT_SUPER(cxAction);
-//}
 
 CX_OBJECT_TYPE(cxFollow, cxAction)
 {

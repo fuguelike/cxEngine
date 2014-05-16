@@ -35,20 +35,14 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetPos(this->super.view, npos);
 }
 
-void __cxMoveInitType(cxAny type)
+CX_SETTER_DEF(cxMove, to)
 {
-    
+    this->to = cxJsonToVec2f(value, this->to);
 }
-
-//void __cxMoveInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxMove this = object;
-//    this->to = cxJsonVec2f(json, "to", this->to);
-//}
 
 CX_OBJECT_TYPE(cxMove, cxAction)
 {
-    
+    CX_PROPERTY_SETTER(cxMove, to);
 }
 CX_OBJECT_INIT(cxMove, cxAction)
 {

@@ -23,21 +23,14 @@ static void cxFadeStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAlpha(this->super.view, alpha);
 }
 
-void __cxFadeInitType(cxAny type)
+CX_SETTER_DEF(cxFade, alpha)
 {
-    
+    this->alpha = cxJsonToDouble(value, this->alpha);
 }
-
-//void __cxFadeInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxFade this = object;
-//    this->alpha = cxJsonDouble(json, "alpha", this->alpha);
-//    CX_OBJECT_INIT_SUPER(cxAction);
-//}
 
 CX_OBJECT_TYPE(cxFade, cxAction)
 {
-    
+    CX_PROPERTY_SETTER(cxFade, alpha);
 }
 CX_OBJECT_INIT(cxFade, cxAction)
 {

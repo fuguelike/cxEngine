@@ -123,22 +123,22 @@ CX_SETTER_DEF(cxView, actions)
 
 CX_OBJECT_TYPE(cxView, cxObject)
 {
-    CX_PROPERTY_SETTER(this, cxView, size);
-    CX_PROPERTY_SETTER(this, cxView, position);
-    CX_PROPERTY_SETTER(this, cxView, anchor);
-    CX_PROPERTY_SETTER(this, cxView, border);
-    CX_PROPERTY_SETTER(this, cxView, color);
-    CX_PROPERTY_SETTER(this, cxView, raxis);
-    CX_PROPERTY_SETTER(this, cxView, scale);
-    CX_PROPERTY_SETTER(this, cxView, fixscale);
-    CX_PROPERTY_SETTER(this, cxView, visible);
-    CX_PROPERTY_SETTER(this, cxView, degrees);
-    CX_PROPERTY_SETTER(this, cxView, hidetop);
-    CX_PROPERTY_SETTER(this, cxView, cropping);
-    CX_PROPERTY_SETTER(this, cxView, autobox);
-    CX_PROPERTY_SETTER(this, cxView, resizing);
-    CX_PROPERTY_SETTER(this, cxView, subviews);
-    CX_PROPERTY_SETTER(this, cxView, actions);
+    CX_PROPERTY_SETTER(cxView, size);
+    CX_PROPERTY_SETTER(cxView, position);
+    CX_PROPERTY_SETTER(cxView, anchor);
+    CX_PROPERTY_SETTER(cxView, border);
+    CX_PROPERTY_SETTER(cxView, color);
+    CX_PROPERTY_SETTER(cxView, raxis);
+    CX_PROPERTY_SETTER(cxView, scale);
+    CX_PROPERTY_SETTER(cxView, fixscale);
+    CX_PROPERTY_SETTER(cxView, visible);
+    CX_PROPERTY_SETTER(cxView, degrees);
+    CX_PROPERTY_SETTER(cxView, hidetop);
+    CX_PROPERTY_SETTER(cxView, cropping);
+    CX_PROPERTY_SETTER(cxView, autobox);
+    CX_PROPERTY_SETTER(cxView, resizing);
+    CX_PROPERTY_SETTER(cxView, subviews);
+    CX_PROPERTY_SETTER(cxView, actions);
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {

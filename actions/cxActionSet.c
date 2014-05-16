@@ -98,8 +98,8 @@ CX_SETTER_DEF(cxActionSet, actions)
 
 CX_OBJECT_TYPE(cxActionSet, cxAction)
 {
-    CX_PROPERTY_SETTER(this, cxActionSet, settype);
-    CX_PROPERTY_SETTER(this, cxActionSet, actions);
+    CX_PROPERTY_SETTER(cxActionSet, settype);
+    CX_PROPERTY_SETTER(cxActionSet, actions);
 }
 CX_OBJECT_INIT(cxActionSet, cxAction)
 {

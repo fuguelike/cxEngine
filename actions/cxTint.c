@@ -8,11 +8,6 @@
 
 #include "cxTint.h"
 
-void __cxTintTypeInit()
-{
-    
-}
-
 static void cxTintInit(cxAny pav)
 {
     cxTint this = pav;
@@ -36,14 +31,14 @@ static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAlpha(this->super.view, alhpa);
 }
 
-void __cxTintInitType(cxAny type)
+CX_SETTER_DEF(cxTint, color)
 {
-    
+    this->color = cxJsonToColor4f(value, this->color);
 }
 
 CX_OBJECT_TYPE(cxTint, cxAction)
 {
-    
+    CX_PROPERTY_SETTER(cxTint, color);
 }
 CX_OBJECT_INIT(cxTint, cxAction)
 {

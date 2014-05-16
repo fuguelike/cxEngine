@@ -168,8 +168,8 @@ CX_SETTER_DEF(cxAtlas, layers)
 
 CX_OBJECT_TYPE(cxAtlas, cxSprite)
 {
-    CX_PROPERTY_SETTER(this, cxAtlas, scale9);
-    CX_PROPERTY_SETTER(this, cxAtlas, layers);
+    CX_PROPERTY_SETTER(cxAtlas, scale9);
+    CX_PROPERTY_SETTER(cxAtlas, layers);
 }
 CX_OBJECT_INIT(cxAtlas, cxSprite)
 {

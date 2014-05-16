@@ -117,7 +117,7 @@ CX_SETTER_DEF(cxSprite, texture)
 
 CX_OBJECT_TYPE(cxSprite, cxView)
 {
-    CX_PROPERTY_SETTER(this, cxSprite, texture);
+    CX_PROPERTY_SETTER(cxSprite, texture);
 }
 CX_OBJECT_INIT(cxSprite, cxView)
 {

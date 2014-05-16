@@ -24,22 +24,19 @@ static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
     cxViewSetAngle(this->super.view, angle);
 }
 
-void __cxRotateInitType(cxAny type)
+CX_SETTER_DEF(cxRotate, raxis)
 {
-    
+    this->raxis = cxJsonToVec3f(value, this->raxis);
 }
-
-//void __cxRotateInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxRotate this = object;
-//    this->raxis = cxJsonVec3f(json, "raxis", this->raxis);
-//    this->newAngle = cxJsonDouble(json, "angle", this->newAngle);
-//    CX_OBJECT_INIT_SUPER(cxAction);
-//}
+CX_SETTER_DEF(cxRotate, angle)
+{
+    this->newAngle = cxJsonToDouble(value, this->newAngle);
+}
 
 CX_OBJECT_TYPE(cxRotate, cxAction)
 {
-    
+    CX_PROPERTY_SETTER(cxRotate, raxis);
+    CX_PROPERTY_SETTER(cxRotate, angle);
 }
 CX_OBJECT_INIT(cxRotate, cxAction)
 {
