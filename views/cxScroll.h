@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxScroll_h
 #define cxEngine_cxScroll_h
 
-#include <core/cxView.h>
+#include <engine/cxView.h>
 
 CX_C_BEGIN
 

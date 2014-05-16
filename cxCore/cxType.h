@@ -36,6 +36,8 @@ do{                                                         \
     CX_RELEASE(_tmp_);                                      \
 }while(0)
 
+cxAny cxTypeCreate(cxConstType type);
+
 cxType cxTypesGet(cxConstType type);
 
 cxProperty cxTypeProperty(cxType this,cxConstChars key);

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 #include "cxPolygon.h"
 
 static void cxPolygonDraw(cxAny pview)
@@ -45,11 +45,10 @@ CX_SETTER_DEF(cxPolygon, points)
     CX_JSON_ARRAY_EACH_END(points, point);
 }
 
-void __cxPolygonInitType(cxAny type)
+CX_OBJECT_TYPE(cxPolygon, cxSprite)
 {
-    CX_PROPERTY_SETTER(cxPolygon, points);
+    CX_PROPERTY_SETTER(this, cxPolygon, points);
 }
-
 CX_OBJECT_INIT(cxPolygon, cxSprite)
 {
     CX_METHOD_SET(this->super.super.Draw, cxPolygonDraw);

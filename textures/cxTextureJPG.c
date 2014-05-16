@@ -83,16 +83,10 @@ static void cxTextureJPGBind(cxAny this)
     cxOpenGLBindTexture(0, png->super.textureId);
 }
 
-void __cxTextureJPGInitType(cxAny type)
+CX_OBJECT_TYPE(cxTextureJPG, cxTexture)
 {
     
 }
-
-void __cxTextureJPGInitObject(cxAny object,cxAny json,cxAny hash)
-{
-    
-}
-
 CX_OBJECT_INIT(cxTextureJPG, cxTexture)
 {
     CX_METHOD_SET(this->super.Bind, cxTextureJPGBind);

@@ -153,35 +153,3 @@ cxDouble cxTimestamp()
     gettimeofday(&val, NULL);
     return val.tv_sec + (cxDouble)val.tv_usec/(cxDouble)1000000.0;
 }
-
-void cxUtilInfo(cxConstChars file,int line,cxConstChars format, ...)
-{
-    va_list ap;
-    va_start(ap, format);
-    cxUtilPrint("INFO", file, line, format, ap);
-    va_end(ap);
-}
-
-void cxUtilError(cxConstChars file,int line,cxConstChars format, ...)
-{
-    va_list ap;
-    va_start(ap, format);
-    cxUtilPrint("ERROR", file, line, format, ap);
-    va_end(ap);
-}
-
-void cxUtilWarn(cxConstChars file,int line,cxConstChars format, ...)
-{
-    va_list ap;
-    va_start(ap, format);
-    cxUtilPrint("WARN", file, line, format, ap);
-    va_end(ap);
-}
-
-void cxUtilAssert(cxConstChars file,int line,cxConstChars format, ...)
-{
-    va_list ap;
-    va_start(ap, format);
-    cxUtilPrint("ASSERT", file, line, format, ap);
-    va_end(ap);
-}

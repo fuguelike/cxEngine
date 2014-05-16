@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxOpenGL.h>
-#include <core/cxEngine.h>
+#include <engine/cxOpenGL.h>
+#include <engine/cxEngine.h>
 #include "cxClipping.h"
 
 #define CX_STENCIL_MASK 0xFF
@@ -55,11 +55,10 @@ static void cxClippingDrawAfter(cxAny pview)
     glDisable(GL_STENCIL_TEST);
 }
 
-void __cxClippingInitType(cxAny type)
+CX_OBJECT_TYPE(cxClipping, cxView)
 {
     
 }
-
 CX_OBJECT_INIT(cxClipping, cxView)
 {
     this->useRef = cxStencilRefAlloc();

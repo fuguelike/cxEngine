@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxMove_h
 #define cxEngine_cxMove_h
 
-#include <core/cxAction.h>
+#include <engine/cxAction.h>
 
 CX_C_BEGIN
 

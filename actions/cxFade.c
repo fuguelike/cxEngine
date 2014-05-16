@@ -35,6 +35,10 @@ void __cxFadeInitType(cxAny type)
 //    CX_OBJECT_INIT_SUPER(cxAction);
 //}
 
+CX_OBJECT_TYPE(cxFade, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxFade, cxAction)
 {
     CX_METHOD_SET(this->super.Init, cxFadeInit);

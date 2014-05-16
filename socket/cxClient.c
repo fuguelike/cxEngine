@@ -8,6 +8,10 @@
 
 #include "cxClient.h"
 
+CX_OBJECT_TYPE(cxClient, cxObject)
+{
+    
+}
 CX_OBJECT_INIT(cxClient, cxObject)
 {
     

@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
-#include <core/cxNumber.h>
+#include <engine/cxEngine.h>
+#include <engine/cxNumber.h>
 #include "cxSpline.h"
 
 static void cxSplineInit(cxAny pav)
@@ -77,6 +77,10 @@ void __cxSplineInitType(cxAny type)
 //    CX_OBJECT_INIT_SUPER(cxAction);
 //}
 
+CX_OBJECT_TYPE(cxSpline, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxSpline, cxAction)
 {
     this->index = -1;

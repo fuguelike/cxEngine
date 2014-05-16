@@ -9,13 +9,11 @@
 
 #include <views/cxWindow.h>
 #include <actions/cxCurve.h>
-#include <cxCore/cxCore.h>
+#include <cxcore/cxBase.h>
 #include "cxInput.h"
 #include "cxUtil.h"
-#include "cxMessage.h"
 #include "cxBMPFont.h"
 #include "cxUrlPath.h"
-#include "cxType.h"
 #include "cxController.h"
 
 CX_C_BEGIN
@@ -50,7 +48,7 @@ CX_OBJECT_END(cxEngine)
 
 void cxTypeRunObjectSetter(cxObject object,cxJson json);
 
-cxAny cxTypeCreate(cxJson json);
+cxAny cxEngineTypeCreate(cxJson json);
 
 cxAny cxObjectLoadWithFile(cxConstChars file);
 
@@ -92,6 +90,8 @@ void cxEngineSetLocalized(cxString lang);
 void cxEngineBegin();
 
 void cxEngineTerminate();
+
+void cxEngineTypes();
 
 void cxEngineExit();
 

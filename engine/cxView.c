@@ -8,7 +8,7 @@
 
 #include <actions/cxTimer.h>
 #include <kazmath/matrix.h>
-#include <cxCore/cxBase.h>
+#include <cxcore/cxBase.h>
 #include "cxView.h"
 #include "cxEngine.h"
 #include "cxOpenGL.h"
@@ -121,29 +121,24 @@ CX_SETTER_DEF(cxView, actions)
     CX_JSON_ARRAY_EACH_END(actions, item)
 }
 
-void __cxViewInitType(cxAny type)
-{
-    CX_PROPERTY_SETTER(type, cxView, size);
-    CX_PROPERTY_SETTER(type, cxView, position);
-    CX_PROPERTY_SETTER(type, cxView, anchor);
-    CX_PROPERTY_SETTER(type, cxView, border);
-    CX_PROPERTY_SETTER(type, cxView, color);
-    CX_PROPERTY_SETTER(type, cxView, raxis);
-    CX_PROPERTY_SETTER(type, cxView, scale);
-    CX_PROPERTY_SETTER(type, cxView, fixscale);
-    CX_PROPERTY_SETTER(type, cxView, visible);
-    CX_PROPERTY_SETTER(type, cxView, degrees);
-    CX_PROPERTY_SETTER(type, cxView, hidetop);
-    CX_PROPERTY_SETTER(type, cxView, cropping);
-    CX_PROPERTY_SETTER(type, cxView, autobox);
-    CX_PROPERTY_SETTER(type, cxView, resizing);
-    CX_PROPERTY_SETTER(type, cxView, subviews);
-    CX_PROPERTY_SETTER(type, cxView, actions);
-}
-
 CX_OBJECT_TYPE(cxView, cxObject)
 {
-    
+    CX_PROPERTY_SETTER(this, cxView, size);
+    CX_PROPERTY_SETTER(this, cxView, position);
+    CX_PROPERTY_SETTER(this, cxView, anchor);
+    CX_PROPERTY_SETTER(this, cxView, border);
+    CX_PROPERTY_SETTER(this, cxView, color);
+    CX_PROPERTY_SETTER(this, cxView, raxis);
+    CX_PROPERTY_SETTER(this, cxView, scale);
+    CX_PROPERTY_SETTER(this, cxView, fixscale);
+    CX_PROPERTY_SETTER(this, cxView, visible);
+    CX_PROPERTY_SETTER(this, cxView, degrees);
+    CX_PROPERTY_SETTER(this, cxView, hidetop);
+    CX_PROPERTY_SETTER(this, cxView, cropping);
+    CX_PROPERTY_SETTER(this, cxView, autobox);
+    CX_PROPERTY_SETTER(this, cxView, resizing);
+    CX_PROPERTY_SETTER(this, cxView, subviews);
+    CX_PROPERTY_SETTER(this, cxView, actions);
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {

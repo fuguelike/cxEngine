@@ -10,7 +10,6 @@
 #define cxEngine_cxRegex_h
 
 #include <pcre/pcre.h>
-#include "cxBase.h"
 #include "cxString.h"
 
 CX_C_BEGIN

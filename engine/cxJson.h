@@ -10,8 +10,8 @@
 #define cxEngine_cxJson_h
 
 #include <jansson/jansson.h>
-#include "cxBase.h"
-#include "cxString.h"
+#include <cxcore/cxBase.h>
+#include "cxMath.h"
 
 CX_C_BEGIN
 

@@ -9,8 +9,7 @@
 #ifndef cxEngine_cxActionSet_h
 #define cxEngine_cxActionSet_h
 
-#include <core/cxAction.h>
-#include <core/cxArray.h>
+#include <engine/cxAction.h>
 
 CX_C_BEGIN
 

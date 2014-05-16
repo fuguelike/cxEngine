@@ -41,6 +41,10 @@ void __cxTintInitType(cxAny type)
     
 }
 
+CX_OBJECT_TYPE(cxTint, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxTint, cxAction)
 {
     CX_METHOD_SET(this->super.Init, cxTintInit);

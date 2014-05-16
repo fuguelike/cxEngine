@@ -7,7 +7,7 @@
 //
 
 #include <streams/cxAssetsStream.h>
-#include <core/cxJson.h>
+#include <engine/cxJson.h>
 #include "cxTextureJSON.h"
 #include "cxTextureFactory.h"
 
@@ -69,16 +69,10 @@ static void cxTextureJSONBind(cxAny this)
     cxTextureBind(json->innerTexture);
 }
 
-void __cxTextureJSONInitType(cxAny type)
+CX_OBJECT_TYPE(cxTextureJSON, cxTexture)
 {
     
 }
-
-void __cxTextureJSONInitObject(cxAny object,cxAny json,cxAny hash)
-{
-    
-}
-
 CX_OBJECT_INIT(cxTextureJSON, cxTexture)
 {
     CX_METHOD_SET(this->super.Bind, cxTextureJSONBind);

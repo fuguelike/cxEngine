@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
-#include <core/cxRegex.h>
+#include <engine/cxEngine.h>
+#include <engine/cxRegex.h>
 #include <streams/cxAssetsStream.h>
 #include <streams/cxMemStream.h>
 #include "cxTextureFactory.h"
@@ -36,6 +36,10 @@ static void cxTextureFactoryMemory(cxAny factory)
     cxHashClean(this->caches);
 }
 
+CX_OBJECT_TYPE(cxTextureFactory, cxObject)
+{
+    
+}
 CX_OBJECT_INIT(cxTextureFactory, cxObject)
 {
     cxEngine engine = cxEngineInstance();
@@ -45,7 +49,7 @@ CX_OBJECT_INIT(cxTextureFactory, cxObject)
     cxHashSet(this->caches, cxHashStrKey(CX_DEFAULT_GROUP), group);
     
     CX_SLOT_CONNECT(engine->onMemory, this, onMemory, cxTextureFactoryMemory);
-    CX_EVENT_QUICK(engine->onExit, cxTextureFactoryDestroy);
+    CX_EVENT_APPEND(engine->onExit, cxTextureFactoryDestroy);
 }
 CX_OBJECT_FREE(cxTextureFactory, cxObject)
 {

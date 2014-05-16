@@ -54,6 +54,10 @@ void __cxParabolaInitType(cxAny type)
 //    CX_OBJECT_INIT_SUPER(cxAction);
 //}
 
+CX_OBJECT_TYPE(cxParabola, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxParabola, cxAction)
 {
     CX_METHOD_SET(this->super.Exit, cxParabolaExit);

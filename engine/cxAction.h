@@ -10,12 +10,13 @@
 #define cxEngine_cxAction_h
 
 #include <actions/cxCurve.h>
-#include <cxCore/cxBase.h>
+#include <cxcore/cxBase.h>
 #include "cxView.h"
 
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxAction, cxObject)
+    cxAny parent;
     cxAssist4f assist;
     cxUInt actionId;
     cxFloat scale;
@@ -47,6 +48,10 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_EVENT_ALLOC(onIndex);
     CX_EVENT_ALLOC(onStep);
 CX_OBJECT_END(cxAction)
+
+cxAny cxActionParent(cxAny pav);
+
+void cxActionSetParent(cxAny pav,cxAny parent);
 
 void cxActionSetPauseTime(cxAny pav,cxFloat time);
 

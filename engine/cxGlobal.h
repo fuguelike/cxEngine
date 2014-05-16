@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxGlobal_h
 #define cxEngine_cxGlobal_h
 
-#include <cxCore/cxBase.h>
+#include <cxcore/cxBase.h>
 
 CX_C_BEGIN
 

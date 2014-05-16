@@ -8,6 +8,10 @@
 
 #include "cxListen.h"
 
+CX_OBJECT_TYPE(cxListen, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxListen, cxObject)
 {
     

@@ -9,8 +9,7 @@
 #ifndef cxEngine_cxAnimate_h
 #define cxEngine_cxAnimate_h
 
-#include <core/cxArray.h>
-#include <core/cxAction.h>
+#include <engine/cxAction.h>
 
 CX_C_BEGIN
 

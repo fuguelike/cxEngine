@@ -27,7 +27,7 @@
  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <core/cxBase.h>
+#include <cxcore/cxBase.h>
 #include "cxAStar.h"
 #include <math.h>
 #include <string.h>

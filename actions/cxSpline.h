@@ -9,8 +9,7 @@
 #ifndef cxEngine_cxSpline_h
 #define cxEngine_cxSpline_h
 
-#include <core/cxArray.h>
-#include <core/cxAction.h>
+#include <engine/cxAction.h>
 
 CX_C_BEGIN
 

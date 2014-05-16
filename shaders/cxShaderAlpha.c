@@ -25,6 +25,10 @@ static cxString cxShaderAlphaGetFragmentSource(cxAny this)
     return cxStringConstChars(fragment);
 }
 
+CX_OBJECT_TYPE(cxShaderAlpha, cxObject)
+{
+    
+}
 CX_OBJECT_INIT(cxShaderAlpha, cxShader)
 {
     CX_METHOD_SET(this->super.GetVertexSource, cxShaderDefaultGetVertexSource);

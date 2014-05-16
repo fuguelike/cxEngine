@@ -7,7 +7,7 @@
 //
 #include <unistd.h>
 #include <sys/stat.h>
-#include <core/cxUtil.h>
+#include <engine/cxUtil.h>
 #include "cxAssetsStream.h"
 
 static cxBool cxAssetsStreamOpen(cxAny this)
@@ -108,6 +108,10 @@ void __cxAssetsStreamInitObject(cxAny object,cxAny json,cxAny hash)
     
 }
 
+CX_OBJECT_TYPE(cxAssetsStream, cxStream)
+{
+    
+}
 CX_OBJECT_INIT(cxAssetsStream, cxStream)
 {
     CX_METHOD_SET(this->super.Open, cxAssetsStreamOpen);

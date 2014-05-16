@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxLabelBMP_h
 #define cxEngine_cxLabelBMP_h
 
-#include <core/cxBMPFont.h>
+#include <engine/cxBMPFont.h>
 #include "cxAtlas.h"
 
 CX_C_BEGIN

@@ -9,8 +9,7 @@
 #ifndef cxEngine_cxUtil_h
 #define cxEngine_cxUtil_h
 
-#include "cxString.h"
-#include "cxHash.h"
+#include <cxcore/cxBase.h>
 #include "cxPlayer.h"
 #include "cxMath.h"
 

@@ -141,16 +141,10 @@ static void cxTexturePVRBind(cxAny this)
     cxOpenGLBindTexture(0, pvr->super.textureId);
 }
 
-void __cxTexturePVRInitType(cxAny type)
+CX_OBJECT_TYPE(cxTexturePVR, cxTexture)
 {
     
 }
-
-void __cxTexturePVRInitObject(cxAny object,cxAny json,cxAny hash)
-{
-    
-}
-
 CX_OBJECT_INIT(cxTexturePVR, cxTexture)
 {
     CX_METHOD_SET(this->super.Bind, cxTexturePVRBind);

@@ -5,8 +5,8 @@
 //  Created by xuhua on 10/11/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
-#include <core/cxEngine.h>
-#include <core/cxOpenGL.h>
+#include <engine/cxEngine.h>
+#include <engine/cxOpenGL.h>
 #include <textures/cxTextureFactory.h>
 #include "cxSprite.h"
 
@@ -115,16 +115,15 @@ CX_SETTER_DEF(cxSprite, texture)
     cxSpriteSetTextureURL(this, texture, uts);
 }
 
-void __cxSpriteInitType(cxAny type)
+CX_OBJECT_TYPE(cxSprite, cxView)
 {
-    CX_PROPERTY_SETTER(cxSprite, texture);
+    CX_PROPERTY_SETTER(this, cxSprite, texture);
 }
-
 CX_OBJECT_INIT(cxSprite, cxView)
 {
     this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    CX_EVENT_QUICK(this->super.onDirty, cxSpriteDirtyEvent);
+    CX_EVENT_APPEND(this->super.onDirty, cxSpriteDirtyEvent);
     CX_METHOD_SET(this->super.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
 }

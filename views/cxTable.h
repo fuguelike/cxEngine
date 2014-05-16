@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxTable_h
 #define cxEngine_cxTable_h
 
-#include <core/cxView.h>
+#include <engine/cxView.h>
 
 CX_C_BEGIN
 

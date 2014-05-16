@@ -1,6 +1,6 @@
 //
 //  cxMessage.c
-//  cxEngine
+//  cxCore
 //
 //  Created by xuhua on 10/25/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.

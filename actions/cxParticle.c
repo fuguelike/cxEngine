@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 #include "cxParticle.h"
 
 static void cxActionViewDraw(cxAny pav)
@@ -311,6 +311,10 @@ void __cxParticleInitType(cxAny type)
 //    CX_OBJECT_INIT_SUPER(cxAction);
 //}
 
+CX_OBJECT_TYPE(cxParticle, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxParticle, cxAction)
 {
     this->super.duration = -1;

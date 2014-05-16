@@ -11,8 +11,7 @@
 
 #include <event.h>
 #include <evhttp.h>
-#include <core/cxBase.h>
-#include <core/cxString.h>
+#include <cxcore/cxBase.h>
 
 CX_C_BEGIN
 

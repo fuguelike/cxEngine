@@ -5,8 +5,8 @@
 //  Created by xuhua on 10/20/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
-#include <core/cxEngine.h>
-#include <core/cxUtil.h>
+#include <engine/cxEngine.h>
+#include <engine/cxUtil.h>
 #include <textures/cxTextureFactory.h>
 #include "cxLabelTTF.h"
 
@@ -37,15 +37,14 @@ CX_SETTER_DEF(cxLabelTTF, text)
     }
 }
 
-void __cxLabelTTFInitType(cxAny type)
+CX_OBJECT_TYPE(cxLabelTTF, cxSprite)
 {
-    CX_PROPERTY_SETTER(cxLabelTTF, font);
-    CX_PROPERTY_SETTER(cxLabelTTF, text);
+    CX_PROPERTY_SETTER(this, cxLabelTTF, font);
+    CX_PROPERTY_SETTER(this, cxLabelTTF, text);
 }
-
 CX_OBJECT_INIT(cxLabelTTF, cxSprite)
 {
-    CX_EVENT_QUICK(this->super.super.onUpdate,cxLabelTTFUpdate);
+    CX_EVENT_APPEND(this->super.super.onUpdate,cxLabelTTFUpdate);
     this->attr.size = 32;
     cxSpriteSetShader(this, cxShaderAlphaKey);
 }

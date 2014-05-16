@@ -9,8 +9,8 @@
 #ifndef cxEngine_cxShader_h
 #define cxEngine_cxShader_h
 
+#include <cxcore/cxBase.h>
 #include "cxOpenGL.h"
-#include "cxBase.h"
 #include "cxString.h"
 
 CX_C_BEGIN

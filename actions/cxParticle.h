@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxRunParticle_h
 #define cxEngine_cxRunParticle_h
 
-#include <core/cxAction.h>
+#include <engine/cxAction.h>
 #include <views/cxAtlas.h>
 
 CX_C_BEGIN

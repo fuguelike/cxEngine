@@ -9,10 +9,7 @@
 #ifndef cxEngine_cxPlayer_h
 #define cxEngine_cxPlayer_h
 
-#include "cxBase.h"
-#include "cxArray.h"
-#include "cxString.h"
-#include "cxHash.h"
+#include <cxcore/cxBase.h>
 
 #if (CX_TARGET_PLATFORM == CX_PLATFORM_IOS)
 #include <OpenAL/al.h>

@@ -42,6 +42,10 @@ static cxString cxShaderPositionColorGetFragmentSource(cxAny this)
     return cxStringConstChars(fragment);
 }
 
+CX_OBJECT_TYPE(cxShaderPositionColor, cxObject)
+{
+    
+}
 CX_OBJECT_INIT(cxShaderPositionColor, cxShader)
 {
     CX_METHOD_SET(this->super.Init, cxShaderPositionColorInit);

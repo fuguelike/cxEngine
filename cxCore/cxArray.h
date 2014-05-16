@@ -9,7 +9,7 @@
 #ifndef cxCore_cxArray_h
 #define cxCore_cxArray_h
 
-#include "utarray.h"
+#include <utarray.h>
 #include "cxCore.h"
 
 CX_C_BEGIN

@@ -31,6 +31,10 @@ void __cxScaleInitType(cxAny type)
     
 }
 
+CX_OBJECT_TYPE(cxScale, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxScale, cxAction)
 {
     CX_METHOD_SET(this->super.Init, cxScaleInit);

@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxOpenGL_h
 #define cxEngine_cxOpenGL_h
 
-#include <cxCore/cxBase.h>
+#include <cxcore/cxBase.h>
 #include "cxMath.h"
 
 #if (CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID)

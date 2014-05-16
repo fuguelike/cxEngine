@@ -10,13 +10,9 @@
 #define cxEngine_cxView_h
 
 #include <libgen.h>
-#include "cxBase.h"
-#include "cxList.h"
+#include <cxcore/cxBase.h>
 #include "cxInput.h"
-#include "cxHash.h"
-#include "cxString.h"
 #include "cxJson.h"
-#include "cxType.h"
 
 CX_C_BEGIN
 

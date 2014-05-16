@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
-#include <core/cxIconv.h>
+#include <engine/cxEngine.h>
+#include <engine/cxIconv.h>
 #include "cxLabelBMP.h"
 
 static void cxLabelBMPUpdateText(cxLabelBMP this)
@@ -90,15 +90,14 @@ CX_SETTER_DEF(cxLabelBMP, text)
     }
 }
 
-void __cxLabelBMPInitType(cxAny type)
+CX_OBJECT_TYPE(cxLabelBMP, cxAtlas)
 {
-    CX_PROPERTY_SETTER(cxLabelBMP, font);
-    CX_PROPERTY_SETTER(cxLabelBMP, text);
+    CX_PROPERTY_SETTER(this, cxLabelBMP, font);
+    CX_PROPERTY_SETTER(this, cxLabelBMP, text);
 }
-
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
 {
-    CX_EVENT_QUICK(this->super.super.super.onUpdate, cxLabelBMPUpdate);
+    CX_EVENT_APPEND(this->super.super.super.onUpdate, cxLabelBMPUpdate);
     this->isDirty = true;
 }
 CX_OBJECT_FREE(cxLabelBMP, cxAtlas)

@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxNumber_h
 #define cxEngine_cxNumber_h
 
-#include <cxCore/cxCore.h>
+#include <cxcore/cxCore.h>
 #include "cxMath.h"
 
 CX_C_BEGIN

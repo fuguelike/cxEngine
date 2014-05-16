@@ -10,8 +10,6 @@
 #define cxEngine_cxHttp_h
 
 #include <evhttp.h>
-#include <core/cxBase.h>
-#include <core/cxString.h>
 #include "cxHttpConn.h"
 
 CX_C_BEGIN

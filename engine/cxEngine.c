@@ -6,12 +6,52 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <kazmath/matrix.h>
+
+#include <textures/cxTextureFactory.h>
+#include <textures/cxTextureJPG.h>
+#include <textures/cxTexturePKM.h>
+#include <textures/cxTexturePNG.h>
+#include <textures/cxTexturePVR.h>
+#include <textures/cxTextureTXT.h>
+#include <textures/cxTextureJSON.h>
+
+#include <shaders/cxShaderAlpha.h>
+#include <shaders/cxShaderDefault.h>
+#include <shaders/cxShaderPositionColor.h>
+#include <shaders/cxShaderClipping.h>
+
 #include <streams/cxAssetsStream.h>
-#include <socket/cxEventBase.h>
+#include <streams/cxFileStream.h>
+#include <streams/cxMemStream.h>
+
+#include <views/cxButton.h>
+#include <views/cxLoading.h>
+#include <views/cxLabelTTF.h>
+#include <views/cxWindow.h>
+#include <views/cxScroll.h>
+#include <views/cxTable.h>
+#include <views/cxClipping.h>
+#include <views/cxLabelBMP.h>
+#include <views/cxPolygon.h>
+
+#include <actions/cxParticle.h>
+#include <actions/cxActionSet.h>
+#include <actions/cxMove.h>
+#include <actions/cxFade.h>
+#include <actions/cxJump.h>
+#include <actions/cxRotate.h>
+#include <actions/cxTimer.h>
+#include <actions/cxTint.h>
+#include <actions/cxFollow.h>
+#include <actions/cxAnimate.h>
+#include <actions/cxParabola.h>
+#include <actions/cxRunner.h>
+#include <actions/cxScale.h>
+#include <actions/cxSpline.h>
+
+#include "cxNumber.h"
 #include "cxEngine.h"
-#include "cxOpenGL.h"
-#include "cxUtil.h"
+#include "cxMath.h"
 #include "cxIconv.h"
 
 static cxEngine instance = NULL;
@@ -48,8 +88,62 @@ void cxEnginePause()
     }
 }
 
+void cxEngineTypes()
+{
+    //register core
+    CX_REGISTER_TYPE(cxStream,       cxObject);
+    CX_REGISTER_TYPE(cxString,       cxObject);
+    CX_REGISTER_TYPE(cxTexture,      cxObject);
+    CX_REGISTER_TYPE(cxNumber,       cxObject);
+    CX_REGISTER_TYPE(cxView,         cxObject);
+    CX_REGISTER_TYPE(cxAction,       cxObject);
+    
+    //register streams
+    CX_REGISTER_TYPE(cxAssetsStream, cxStream);
+    CX_REGISTER_TYPE(cxFileStream,   cxStream);
+    CX_REGISTER_TYPE(cxMemStream,    cxStream);
+    
+    //register textures
+    CX_REGISTER_TYPE(cxTextureJPG,   cxTexture);
+    CX_REGISTER_TYPE(cxTexturePKM,   cxTexture);
+    CX_REGISTER_TYPE(cxTexturePNG,   cxTexture);
+    CX_REGISTER_TYPE(cxTextureTXT,   cxTexture);
+    CX_REGISTER_TYPE(cxTexturePVR,   cxTexture);
+    CX_REGISTER_TYPE(cxTextureJSON,  cxTexture);
+    
+    //register views
+    CX_REGISTER_TYPE(cxSprite,       cxView);
+    CX_REGISTER_TYPE(cxScroll,       cxView);
+    CX_REGISTER_TYPE(cxTable,        cxView);
+    CX_REGISTER_TYPE(cxWindow,       cxView);
+    CX_REGISTER_TYPE(cxClipping,     cxView);
+    CX_REGISTER_TYPE(cxLoading,      cxView);
+    CX_REGISTER_TYPE(cxPolygon,      cxSprite);
+    CX_REGISTER_TYPE(cxAtlas,        cxSprite);
+    CX_REGISTER_TYPE(cxButton,       cxSprite);
+    CX_REGISTER_TYPE(cxLabelTTF,     cxSprite);
+    CX_REGISTER_TYPE(cxLabelBMP,     cxAtlas);
+    
+    //register actions
+    CX_REGISTER_TYPE(cxActionSet,    cxAction);
+    CX_REGISTER_TYPE(cxAnimate,      cxAction);
+    CX_REGISTER_TYPE(cxFade,         cxAction);
+    CX_REGISTER_TYPE(cxFollow,       cxAction);
+    CX_REGISTER_TYPE(cxJump,         cxAction);
+    CX_REGISTER_TYPE(cxMove,         cxAction);
+    CX_REGISTER_TYPE(cxParabola,     cxAction);
+    CX_REGISTER_TYPE(cxParticle,     cxAction);
+    CX_REGISTER_TYPE(cxRotate,       cxAction);
+    CX_REGISTER_TYPE(cxRunner,       cxAction);
+    CX_REGISTER_TYPE(cxScale,        cxAction);
+    CX_REGISTER_TYPE(cxSpline,       cxAction);
+    CX_REGISTER_TYPE(cxTimer,        cxAction);
+    CX_REGISTER_TYPE(cxTint,         cxAction);
+}
+
 void cxEngineBegin()
 {
+    cxEngineTypes();
     cxEngine engine = cxEngineInstance();
     cxEngineSetLocalized(cxLocalizedLang());
     cxPlayerOpen();
@@ -176,7 +270,6 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_SIGNAL_RELEASE(this->onPause);
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
-    cxEventBaseDestroy();
     cxCurveDestroy();
     cxOpenGLDestroy();
     cxIconvDestroy();
@@ -194,14 +287,12 @@ void cxTypeRunObjectSetter(cxObject object,cxJson json)
     CX_JSON_OBJECT_EACH_END(json, item)
 }
 
-cxAny cxTypeCreate(cxJson json)
+cxAny cxEngineTypeCreate(cxJson json)
 {
     CX_ASSERT(json != NULL, "json error");
     cxConstChars type = cxJsonConstChars(json, "type");
     CX_ASSERT(type != NULL, "type field null");
-    cxType ptype = cxTypesGet(type);
-    CX_ASSERT(ptype != NULL, "type(%s) not register",type);
-    cxObject object = CX_METHOD_GET(NULL, ptype->Create);
+    cxObject object = cxTypeCreate(type);
     CX_ASSERT(object != NULL, "type(%s) create object failed",type);
     cxTypeRunObjectSetter(object, json);
     return object;
@@ -223,7 +314,7 @@ cxAny cxObjectLoadWithJson(cxJson json)
         object = cxObjectLoadWithFile(src);
         cxTypeRunObjectSetter(object, json);
     }else {
-        object = cxTypeCreate(json);
+        object = cxEngineTypeCreate(json);
     }
     if(object == NULL){
         CX_ERROR("create object failed");

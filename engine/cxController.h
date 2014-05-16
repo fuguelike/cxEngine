@@ -9,8 +9,7 @@
 #ifndef cxEngine_cxController_h
 #define cxEngine_cxController_h
 
-#include "cxBase.h"
-#include "cxHash.h"
+#include <cxcore/cxBase.h>
 
 CX_C_BEGIN
 

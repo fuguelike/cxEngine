@@ -1,17 +1,16 @@
 //
 //  cxString.h
-//  cxEngine
+//  cxCore
 //  可以存放二进制数据
 //  Created by xuhua on 9/26/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#ifndef cxEngine_cxString_h
-#define cxEngine_cxString_h
+#ifndef cxCore_cxString_h
+#define cxCore_cxString_h
 
 #include <utstring.h>
 #include "cxBase.h"
-#include "cxArray.h"
 
 CX_C_BEGIN
 
@@ -66,6 +65,8 @@ void cxStringClean(cxString string);
 cxString cxMD5(cxString v);
 
 cxBool cxStringEqu(cxString s1,cxString s2);
+
+cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c);
 
 cxInt cxStringLength(cxString string);
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 #include "cxButton.h"
 
 cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
@@ -46,11 +46,10 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
-void __cxButtonInitType(cxAny type)
+CX_OBJECT_TYPE(cxButton, cxSprite)
 {
     
 }
-
 CX_OBJECT_INIT(cxButton, cxSprite)
 {
     this->movement = 25;

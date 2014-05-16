@@ -7,7 +7,7 @@
 //
 
 #include <textures/cxTextureFactory.h>
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 #include "cxAtlas.h"
 
 static void cxAtlasVAODraw(void *pview)
@@ -166,19 +166,18 @@ CX_SETTER_DEF(cxAtlas, layers)
     CX_JSON_ARRAY_EACH_END(layers, layer)
 }
 
-void __cxAtlasInitType(cxAny type)
+CX_OBJECT_TYPE(cxAtlas, cxSprite)
 {
-    CX_PROPERTY_SETTER(cxAtlas, scale9);
-    CX_PROPERTY_SETTER(cxAtlas, layers);
+    CX_PROPERTY_SETTER(this, cxAtlas, scale9);
+    CX_PROPERTY_SETTER(this, cxAtlas, layers);
 }
-
 CX_OBJECT_INIT(cxAtlas, cxSprite)
 {
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);
     CX_METHOD_SET(this->super.super.Draw, cxAtlasDraw);
-    CX_EVENT_QUICK(this->super.super.onResize, cxAtlasResize);
+    CX_EVENT_APPEND(this->super.super.onResize, cxAtlasResize);
     this->items = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxAtlas, cxSprite)

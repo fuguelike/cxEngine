@@ -9,8 +9,9 @@
 #ifndef cxEngine_cxBase_h
 #define cxEngine_cxBase_h
 
-#include <cxCore/cxBase.h>
+#include <cxcore/cxBase.h>
 #include <kazmath/kazmath.h>
+#include <kazmath/matrix.h>
 
 CX_C_BEGIN
 

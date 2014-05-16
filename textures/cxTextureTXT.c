@@ -5,9 +5,8 @@
 //  Created by xuhua on 10/20/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
-#include <core/cxIconv.h>
-#include <core/cxArray.h>
-#include <core/cxUtil.h>
+#include <engine/cxIconv.h>
+#include <engine/cxUtil.h>
 #include "cxTextureTXT.h"
 
 
@@ -46,16 +45,10 @@ static void cxTextureTXTBind(cxAny this)
     cxOpenGLBindTexture(0, txt->super.textureId);
 }
 
-void __cxTextureTXTInitType(cxAny type)
+CX_OBJECT_TYPE(cxTextureTXT, cxTexture)
 {
     
 }
-
-void __cxTextureTXTInitObject(cxAny object,cxAny json,cxAny hash)
-{
-    
-}
-
 CX_OBJECT_INIT(cxTextureTXT, cxTexture)
 {
     CX_METHOD_SET(this->super.Bind, cxTextureTXTBind);

@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEventArg.h>
 #include "cxTimer.h"
 
 static cxBool cxTimerExit(cxAny pav)
@@ -35,6 +34,10 @@ void __cxTimerInitType(cxAny type)
 //    CX_OBJECT_INIT_SUPER(cxAction);
 //}
 
+CX_OBJECT_TYPE(cxTimer, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
     CX_METHOD_SET(this->super.Exit, cxTimerExit);

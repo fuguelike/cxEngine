@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxBMPFont_h
 #define cxEngine_cxBMPFont_h
 
-#include <cxCore/cxBase.h>
+#include <cxcore/cxBase.h>
 #include <streams/cxAssetsStream.h>
 #include "cxTexture.h"
 

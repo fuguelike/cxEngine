@@ -102,16 +102,15 @@ CX_SETTER_DEF(cxTable, grid)
     cxTableArraySubviews(this);
 }
 
-void __cxTableInitType(cxAny type)
+CX_OBJECT_TYPE(cxTable, cxView)
 {
-    CX_PROPERTY_SETTER(cxTable, grid);
+    CX_PROPERTY_SETTER(this, cxTable, grid);
 }
-
 CX_OBJECT_INIT(cxTable, cxView)
 {
     this->arrayHide = true;
-    CX_EVENT_QUICK(this->super.onResize, cxTableResize);
-    CX_EVENT_QUICK(this->super.onUpdate, cxTableUpdate);
+    CX_EVENT_APPEND(this->super.onResize, cxTableResize);
+    CX_EVENT_APPEND(this->super.onUpdate, cxTableUpdate);
 }
 CX_OBJECT_FREE(cxTable, cxView)
 {

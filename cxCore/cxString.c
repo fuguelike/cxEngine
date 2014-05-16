@@ -7,10 +7,8 @@
 //
 
 #include <ctype.h>
-#include "cxEngine.h"
 #include "cxMD5.h"
 #include "cxString.h"
-#include "cxUtil.h"
 
 CX_OBJECT_TYPE(cxString, cxObject)
 {

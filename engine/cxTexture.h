@@ -9,7 +9,6 @@
 #ifndef cxEngine_cxTexture_h
 #define cxEngine_cxTexture_h
 
-#include "cxBase.h"
 #include "cxOpenGL.h"
 #include "cxStream.h"
 

@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxParabola_h
 #define cxEngine_cxParabola_h
 
-#include <core/cxAction.h>
+#include <engine/cxAction.h>
 
 CX_C_BEGIN
 

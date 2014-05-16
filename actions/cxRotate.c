@@ -37,6 +37,10 @@ void __cxRotateInitType(cxAny type)
 //    CX_OBJECT_INIT_SUPER(cxAction);
 //}
 
+CX_OBJECT_TYPE(cxRotate, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxRotate, cxAction)
 {
     this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);

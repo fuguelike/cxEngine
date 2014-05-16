@@ -17,5 +17,7 @@
 #include "cxStack.h"
 #include "cxType.h"
 #include "cxProperty.h"
+#include "cxString.h"
+#include "cxMessage.h"
 
 #endif

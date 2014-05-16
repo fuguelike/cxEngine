@@ -9,9 +9,9 @@
 #ifndef cxEngine_cxSprite_h
 #define cxEngine_cxSprite_h
 
-#include <core/cxView.h>
-#include <core/cxShader.h>
-#include <core/cxTexture.h>
+#include <engine/cxView.h>
+#include <engine/cxShader.h>
+#include <engine/cxTexture.h>
 
 CX_C_BEGIN
 

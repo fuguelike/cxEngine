@@ -33,11 +33,6 @@ void cxActionSetView(cxAny pav,cxAny pview)
     this->view = pview;
 }
 
-void __cxActionInitType(cxAny type)
-{
-    
-}
-
 //void __cxActionInitObject(cxAny object,cxAny json,cxAny hash)
 //{
 //    cxAction this = object;
@@ -100,6 +95,18 @@ void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
 {
     cxAction this = pav;
     CX_METHOD_SET(this->Curve, curve);
+}
+
+cxAny cxActionParent(cxAny pav)
+{
+    cxAction this = pav;
+    return this->parent;
+}
+
+void cxActionSetParent(cxAny pav,cxAny parent)
+{
+    cxAction this = pav;
+    this->parent = parent;
 }
 
 void cxActionSetPauseTime(cxAny pav,cxFloat time)

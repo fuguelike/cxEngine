@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 #include "cxEventBase.h"
 #include "cxHttpConn.h"
 
@@ -32,6 +32,10 @@ static void cxEventUpdate(cxAny base)
     event_base_loop(this->base, EVLOOP_NONBLOCK);
 }
 
+CX_OBJECT_TYPE(cxEventBase, cxObject)
+{
+    
+}
 CX_OBJECT_INIT(cxEventBase, cxObject)
 {
     cxEngine engine = cxEngineInstance();

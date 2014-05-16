@@ -46,6 +46,10 @@ void __cxMoveInitType(cxAny type)
 //    this->to = cxJsonVec2f(json, "to", this->to);
 //}
 
+CX_OBJECT_TYPE(cxMove, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxMove, cxAction)
 {
     CX_METHOD_SET(this->super.Init, cxMoveInit);

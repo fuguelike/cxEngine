@@ -45,6 +45,10 @@ void __cxJumpInitType(cxAny type)
 //    CX_OBJECT_INIT_SUPER(cxAction);
 //}
 
+CX_OBJECT_TYPE(cxJump, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxJump, cxAction)
 {
     CX_METHOD_SET(this->super.Init, cxJumpInit);

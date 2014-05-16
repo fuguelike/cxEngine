@@ -6,15 +6,14 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
-#include <core/cxEventArg.h>
+#include <engine/cxEngine.h>
 #include "cxActionSet.h"
 
 static void cxActionSetRunNext(cxAny pav);
 
 static void cxActionItemStop(cxEvent *event)
 {
-    cxActionSet this = cxEventArgToWeakRef(event->args);
+    cxActionSet this = cxActionParent(event->sender);
     CX_ASSERT(this != NULL, "event arg not set");
     this->index ++;
     if(this->type == cxActionSetTypeSequence){
@@ -27,7 +26,7 @@ static void cxActionSetRunNext(cxAny pav)
     cxActionSet this = pav;
     if(this->index >= 0 && this->index < cxArrayLength(this->items)){
         cxAction action = cxArrayAtIndex(this->items, this->index);
-        CX_EVENT_APPEND(action->onStop, cxActionItemStop, cxEventArgWeakRef(this));
+        CX_EVENT_APPEND(action->onStop, cxActionItemStop);
         cxViewAppendAction(this->super.view, action);
     }
 }
@@ -37,7 +36,7 @@ static void cxActionSetRunAll(cxAny pav)
     cxActionSet this = pav;
     CX_ARRAY_FOREACH(this->items, ele){
         cxAction action = cxArrayObject(ele);
-        CX_EVENT_APPEND(action->onStop, cxActionItemStop, cxEventArgWeakRef(this));
+        CX_EVENT_APPEND(action->onStop, cxActionItemStop);
         cxViewAppendAction(this->super.view, action);
     }
 }
@@ -103,6 +102,10 @@ void __cxActionSetInitType(cxAny type)
 //    CX_OBJECT_INIT_SUPER(cxAction);
 //}
 
+CX_OBJECT_TYPE(cxActionSet, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxActionSet, cxAction)
 {
     CX_METHOD_SET(this->super.Init, cxActionSetInit);
@@ -126,6 +129,7 @@ void cxActionSetAppend(cxAny pav,cxAny action)
 {
     cxActionSet this = pav;
     cxArrayAppend(this->items, action);
+    cxActionSetParent(action, pav);
 }
 
 

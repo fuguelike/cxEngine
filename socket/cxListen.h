@@ -9,8 +9,7 @@
 #ifndef cxEngine_cxListen_h
 #define cxEngine_cxListen_h
 
-#include <core/cxBase.h>
-#include <core/cxString.h>
+#include <cxcore/cxBase.h>
 
 CX_C_BEGIN
 

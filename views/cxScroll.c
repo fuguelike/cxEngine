@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 #include <actions/cxMove.h>
 #include "cxScroll.h"
 
@@ -168,13 +168,12 @@ CX_SETTER_DEF(cxScroll, value)
     this->value = cxJsonToDouble(value, this->value);
 }
 
-void __cxScrollInitType(cxAny type)
+CX_OBJECT_TYPE(cxScroll, cxView)
 {
-    CX_PROPERTY_SETTER(cxScroll, layout);
-    CX_PROPERTY_SETTER(cxScroll, delta);
-    CX_PROPERTY_SETTER(cxScroll, value);
+    CX_PROPERTY_SETTER(this, cxScroll, layout);
+    CX_PROPERTY_SETTER(this, cxScroll, delta);
+    CX_PROPERTY_SETTER(this, cxScroll, value);
 }
-
 CX_OBJECT_INIT(cxScroll, cxView)
 {
     cxEngine engine = cxEngineInstance();

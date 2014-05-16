@@ -62,6 +62,10 @@ static void cxHttpRequestChunked(struct evhttp_request *req,void *xhttp)
     CX_EVENT_FIRE(this, onChunked);
 }
 
+CX_OBJECT_TYPE(cxHttp, cxObject)
+{
+    
+}
 CX_OBJECT_INIT(cxHttp, cxObject)
 {
     this->data = CX_ALLOC(cxString);

@@ -345,7 +345,7 @@ struct cxEvent {
 
 #define CX_EVENT_ALLOC(name) cxEvent *name
 
-#define CX_EVENT_APPEND(_event_,_func_,_args_)                  \
+#define CX_EVENT_APPEND(_event_,_func_)                         \
 do{                                                             \
     cxEvent *_newptr_ = allocator->malloc(sizeof(cxEvent));     \
     _newptr_->func = _func_;                                    \

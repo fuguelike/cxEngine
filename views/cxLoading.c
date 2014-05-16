@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 #include <actions/cxTimer.h>
 #include "cxLoading.h"
 
@@ -47,7 +47,7 @@ static void cxLoadingArrive(cxEvent *event)
     cxLoading this = cxActionView(event->sender);
     CX_EVENT_FIRE(this, onLoading);
     cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
-    CX_EVENT_QUICK(timer->onArrive, cxFinishedArrive);
+    CX_EVENT_APPEND(timer->onArrive, cxFinishedArrive);
 }
 
 void cxLoaingFinished(cxAny pview)
@@ -61,11 +61,14 @@ void __cxLoadingInitType(cxAny type)
     
 }
 
-
+CX_OBJECT_TYPE(cxLoading, cxView)
+{
+    
+}
 CX_OBJECT_INIT(cxLoading, cxView)
 {
     this->isLoading = true;
-    CX_EVENT_QUICK(this->super.onUpdate, cxLoadingOnUpdate);
+    CX_EVENT_APPEND(this->super.onUpdate, cxLoadingOnUpdate);
     CX_METHOD_SET(this->super.Touch, cxLoadingTouch);
 }
 CX_OBJECT_FREE(cxLoading, cxView)
@@ -82,7 +85,7 @@ void cxLoadingStart(cxLoading this)
     CX_EVENT_FIRE(this, onStart);
     this->isLoading = true;
     cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
-    CX_EVENT_QUICK(timer->onArrive, cxLoadingArrive);
+    CX_EVENT_APPEND(timer->onArrive, cxLoadingArrive);
     cxViewAppend(engine->window, this);
 }
 

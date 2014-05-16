@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxFollow_h
 #define cxEngine_cxFollow_h
 
-#include <core/cxAction.h>
+#include <engine/cxAction.h>
 
 CX_C_BEGIN
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
-#include <core/cxNumber.h>
+#include <engine/cxNumber.h>
 #include "cxFollow.h"
 
 void __cxFollowTypeInit()
@@ -83,6 +83,10 @@ void __cxFollowInitType(cxAny type)
 //    CX_OBJECT_INIT_SUPER(cxAction);
 //}
 
+CX_OBJECT_TYPE(cxFollow, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxFollow, cxAction)
 {
     this->super.duration = -1;

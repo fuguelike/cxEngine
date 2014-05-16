@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <core/cxEngine.h>
+#include <engine/cxEngine.h>
 #include "cxWindow.h"
 
 static cxBool cxWindowOnKey(cxAny pview,cxKey *key)
@@ -17,11 +17,10 @@ static cxBool cxWindowOnKey(cxAny pview,cxKey *key)
     return true;
 }
 
-void __cxWindowInitType(cxAny type)
+CX_OBJECT_TYPE(cxWindow, cxView)
 {
     
 }
-
 CX_OBJECT_INIT(cxWindow, cxView)
 {
     CX_METHOD_SET(this->super.OnKey, cxWindowOnKey);

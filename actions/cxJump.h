@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxJump_h
 #define cxEngine_cxJump_h
 
-#include <core/cxAction.h>
+#include <engine/cxAction.h>
 
 CX_C_BEGIN
 

@@ -1,16 +1,15 @@
 //
 //  cxMessage.h
-//  cxEngine
+//  cxCore
 //
 //  Created by xuhua on 10/25/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#ifndef cxEngine_cxMessage_h
-#define cxEngine_cxMessage_h
+#ifndef cxCore_cxMessage_h
+#define cxCore_cxMessage_h
 
 #include "cxBase.h"
-#include "cxHash.h"
 
 CX_C_BEGIN
 

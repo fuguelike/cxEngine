@@ -9,7 +9,7 @@
 #ifndef cxEngine_cxClipping_h
 #define cxEngine_cxClipping_h
 
-#include <core/cxView.h>
+#include <engine/cxView.h>
 
 CX_C_BEGIN
 

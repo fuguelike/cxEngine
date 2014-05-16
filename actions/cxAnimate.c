@@ -8,9 +8,9 @@
 
 #include <views/cxSprite.h>
 #include <textures/cxTextureFactory.h>
-#include <core/cxTexture.h>
-#include <core/cxUtil.h>
-#include <core/cxUrlPath.h>
+#include <engine/cxTexture.h>
+#include <engine/cxUtil.h>
+#include <engine/cxUrlPath.h>
 #include "cxAnimate.h"
 
 CX_OBJECT_DEF(cxAnimateItem, cxObject)
@@ -20,6 +20,10 @@ CX_OBJECT_DEF(cxAnimateItem, cxObject)
     cxFloat time;
 CX_OBJECT_END(cxAnimateItem)
 
+CX_OBJECT_TYPE(cxAnimateItem, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxAnimateItem, cxObject)
 {
     
@@ -134,6 +138,10 @@ void __cxAnimateInitType(cxAny type)
 //    CX_OBJECT_INIT_SUPER(cxAction);
 //}
 
+CX_OBJECT_TYPE(cxAnimate, cxAction)
+{
+    
+}
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {
     CX_METHOD_SET(this->super.Init, cxAnimateInit);

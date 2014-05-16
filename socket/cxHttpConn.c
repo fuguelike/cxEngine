@@ -9,6 +9,10 @@
 #include "cxEventBase.h"
 #include "cxHttpConn.h"
 
+CX_OBJECT_TYPE(cxHttpConn, cxObject)
+{
+    
+}
 CX_OBJECT_INIT(cxHttpConn, cxObject)
 {
     
