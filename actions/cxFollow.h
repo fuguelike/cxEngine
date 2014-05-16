@@ -14,8 +14,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxFollow, cxAction)
-    cxBool isNum;
-    cxAny target;   //follow target, cxNumber(cxVec2f) or cxView
+    cxAny target;
     cxFloat angle;  //current angle
     cxFloat speed;  //current speed
     cxFloat init;   //init speed
@@ -30,13 +29,9 @@ void cxFollowSetInit(cxAny pav,cxFloat init);
 
 cxBool cxFollowDefaultExit(cxAny pav);
 
-void cxFollowSetVec2f(cxAny pav,cxVec2f pt);
+void cxFollowSetTarget(cxAny pav,cxAny target);
 
-void cxFollowSetTarget(cxAny pav,cxAny target,cxBool isNum);
-
-cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target,cxBool isNum);
-
-cxAny cxFollowTarget(cxAny pav);
+cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target);
 
 CX_C_END
 

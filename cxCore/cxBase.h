@@ -19,5 +19,7 @@
 #include "cxProperty.h"
 #include "cxString.h"
 #include "cxMessage.h"
+#include "cxMemory.h"
+#include "cxNumber.h"
 
 #endif

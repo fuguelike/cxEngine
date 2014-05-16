@@ -427,13 +427,13 @@ typedef cxAny (*cxAnyFunc)(cxAny object);
 
 cxAny cxObjectAlloc(cxConstType type,cxInt size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
 
+cxAny cxObjectCreate(cxConstType type, cxInt size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
+
 void cxObjectRetain(cxAny ptr);
 
 void cxObjectRelease(cxAny ptr);
 
 cxAny cxObjectAutoRelease(cxAny ptr);
-
-cxAny cxObjectCreate(cxConstType type, int size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
 
 //must completed cxUtilPrint function with platform
 void cxUtilPrint(cxConstChars type,cxConstChars file,cxInt line,cxConstChars format,va_list ap);

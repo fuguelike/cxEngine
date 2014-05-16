@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		833642BB1925E4E900223302 /* cxMemory.c in Sources */ = {isa = PBXBuildFile; fileRef = 833642B91925E4E900223302 /* cxMemory.c */; };
+		833642BE1925E6B600223302 /* cxNumber.c in Sources */ = {isa = PBXBuildFile; fileRef = 833642BC1925E6B600223302 /* cxNumber.c */; };
 		833CA4F11925D95C0013630A /* cxActionSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 833CA4D31925D95C0013630A /* cxActionSet.c */; };
 		833CA4F21925D95C0013630A /* cxAnimate.c in Sources */ = {isa = PBXBuildFile; fileRef = 833CA4D51925D95C0013630A /* cxAnimate.c */; };
 		833CA4F31925D95C0013630A /* cxCurve.c in Sources */ = {isa = PBXBuildFile; fileRef = 833CA4D71925D95C0013630A /* cxCurve.c */; };
@@ -94,7 +96,6 @@
 		83B995CE1925C5A100FD6BC1 /* cxIconv.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995A81925C5A100FD6BC1 /* cxIconv.c */; };
 		83B995CF1925C5A100FD6BC1 /* cxJson.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995AB1925C5A100FD6BC1 /* cxJson.c */; };
 		83B995D01925C5A100FD6BC1 /* cxMath.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995AD1925C5A100FD6BC1 /* cxMath.c */; };
-		83B995D31925C5A100FD6BC1 /* cxNumber.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995B31925C5A100FD6BC1 /* cxNumber.c */; };
 		83B995D41925C5A100FD6BC1 /* cxOpenGL.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995B51925C5A100FD6BC1 /* cxOpenGL.c */; };
 		83B995D51925C5A100FD6BC1 /* cxPlayer.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995B71925C5A100FD6BC1 /* cxPlayer.c */; };
 		83B995D61925C5A100FD6BC1 /* cxRegex.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995B91925C5A100FD6BC1 /* cxRegex.c */; };
@@ -128,6 +129,10 @@
 
 /* Begin PBXFileReference section */
 		8329627918D9C14E002AB028 /* cxEngine.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEngine.pch; sourceTree = "<group>"; };
+		833642B91925E4E900223302 /* cxMemory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMemory.c; sourceTree = "<group>"; };
+		833642BA1925E4E900223302 /* cxMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMemory.h; sourceTree = "<group>"; };
+		833642BC1925E6B600223302 /* cxNumber.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxNumber.c; sourceTree = "<group>"; };
+		833642BD1925E6B600223302 /* cxNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxNumber.h; sourceTree = "<group>"; };
 		833CA4D31925D95C0013630A /* cxActionSet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxActionSet.c; sourceTree = "<group>"; };
 		833CA4D41925D95C0013630A /* cxActionSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxActionSet.h; sourceTree = "<group>"; };
 		833CA4D51925D95C0013630A /* cxAnimate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAnimate.c; sourceTree = "<group>"; };
@@ -312,8 +317,6 @@
 		83B995AC1925C5A100FD6BC1 /* cxJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxJson.h; sourceTree = "<group>"; };
 		83B995AD1925C5A100FD6BC1 /* cxMath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMath.c; sourceTree = "<group>"; };
 		83B995AE1925C5A100FD6BC1 /* cxMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMath.h; sourceTree = "<group>"; };
-		83B995B31925C5A100FD6BC1 /* cxNumber.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxNumber.c; sourceTree = "<group>"; };
-		83B995B41925C5A100FD6BC1 /* cxNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxNumber.h; sourceTree = "<group>"; };
 		83B995B51925C5A100FD6BC1 /* cxOpenGL.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxOpenGL.c; sourceTree = "<group>"; };
 		83B995B61925C5A100FD6BC1 /* cxOpenGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxOpenGL.h; sourceTree = "<group>"; };
 		83B995B71925C5A100FD6BC1 /* cxPlayer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxPlayer.c; sourceTree = "<group>"; };
@@ -648,8 +651,6 @@
 				83B995AC1925C5A100FD6BC1 /* cxJson.h */,
 				83B995AD1925C5A100FD6BC1 /* cxMath.c */,
 				83B995AE1925C5A100FD6BC1 /* cxMath.h */,
-				83B995B31925C5A100FD6BC1 /* cxNumber.c */,
-				83B995B41925C5A100FD6BC1 /* cxNumber.h */,
 				83B995B51925C5A100FD6BC1 /* cxOpenGL.c */,
 				83B995B61925C5A100FD6BC1 /* cxOpenGL.h */,
 				83B995B71925C5A100FD6BC1 /* cxPlayer.c */,
@@ -675,6 +676,8 @@
 		83B995DE1925C6C300FD6BC1 /* cxcore */ = {
 			isa = PBXGroup;
 			children = (
+				833642BC1925E6B600223302 /* cxNumber.c */,
+				833642BD1925E6B600223302 /* cxNumber.h */,
 				833CA55C1925DFEC0013630A /* cxMessage.c */,
 				833CA55D1925DFEC0013630A /* cxMessage.h */,
 				833CA5561925DEB50013630A /* cxMD5.c */,
@@ -698,6 +701,8 @@
 				83B995EE1925C6C300FD6BC1 /* cxStack.h */,
 				83B995EF1925C6C300FD6BC1 /* cxType.c */,
 				83B995F01925C6C300FD6BC1 /* cxType.h */,
+				833642B91925E4E900223302 /* cxMemory.c */,
+				833642BA1925E4E900223302 /* cxMemory.h */,
 			);
 			path = cxcore;
 			sourceTree = "<group>";
@@ -770,6 +775,7 @@
 				8341C65318227DF30045A66F /* vec4.c in Sources */,
 				8341C65018227DF30045A66F /* utility.c in Sources */,
 				83B995D51925C5A100FD6BC1 /* cxPlayer.c in Sources */,
+				833642BB1925E4E900223302 /* cxMemory.c in Sources */,
 				833CA5491925DB5E0013630A /* cxTexturePVR.c in Sources */,
 				83B995FB1925C6C300FD6BC1 /* cxType.c in Sources */,
 				833CA5551925DB5E0013630A /* cxWindow.c in Sources */,
@@ -841,6 +847,7 @@
 				8341C64818227DF30045A66F /* mat3.c in Sources */,
 				833CA4F21925D95C0013630A /* cxAnimate.c in Sources */,
 				8341C64F18227DF30045A66F /* ray3.c in Sources */,
+				833642BE1925E6B600223302 /* cxNumber.c in Sources */,
 				83B995F81925C6C300FD6BC1 /* cxMemPool.c in Sources */,
 				833CA54C1925DB5E0013630A /* cxButton.c in Sources */,
 				833CA4F71925D95C0013630A /* cxMove.c in Sources */,
@@ -854,7 +861,6 @@
 				83B995C91925C5A100FD6BC1 /* cxAction.c in Sources */,
 				833CA4F91925D95C0013630A /* cxParticle.c in Sources */,
 				833CA5421925DB5E0013630A /* cxFileStream.c in Sources */,
-				83B995D31925C5A100FD6BC1 /* cxNumber.c in Sources */,
 				8341C64C18227DF30045A66F /* plane.c in Sources */,
 				8341C68218227FA10045A66F /* cxUtil.m in Sources */,
 				833CA5451925DB5E0013630A /* cxTextureJPG.c in Sources */,

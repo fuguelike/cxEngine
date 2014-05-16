@@ -6,7 +6,6 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
-#include <engine/cxNumber.h>
 #include "cxFollow.h"
 
 void __cxFollowTypeInit()
@@ -37,16 +36,10 @@ void cxFollowInit(cxAny pav)
     this->min = CX_MIN(ts.h, ts.w)/2.0f + CX_MIN(cs.h, cs.w)/2.0f;
 }
 
-//get target point
-static cxVec2f cxFollowTargetPos(cxFollow this)
-{
-    return this->isNum ? cxNumberToVec2f(this->target) : cxViewPosition(this->target);
-}
-
 static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxFollow this = pav;
-    cxVec2f targetPos = cxFollowTargetPos(this);
+    cxVec2f targetPos = cxViewPosition(this->target);
     cxVec2f currentPos = cxViewPosition(this->super.view);
     this->angle = cxVec2f2PAngle(targetPos,currentPos);
     this->speed = CX_METHOD_GET(this->init, this->Speed,pav,this->super.durationElapsed);
@@ -106,24 +99,11 @@ void cxFollowSetInit(cxAny pav,cxFloat init)
     this->init = init;
 }
 
-void cxFollowSetVec2f(cxAny pav,cxVec2f pt)
-{
-    cxNumber num = cxNumberVec2f(pt);
-    cxFollowSetTarget(pav, num, true);
-}
-
-void cxFollowSetTarget(cxAny pav,cxAny target,cxBool isNum)
-{
-    cxFollow this = pav;
-    this->isNum = isNum;
-    CX_RETAIN_SWAP(this->target, target);
-}
-
-cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target,cxBool isNum)
+cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target)
 {
     cxFollow this = CX_CREATE(cxFollow);
     this->init = initSpeed;
-    cxFollowSetTarget(this, target, isNum);
+    CX_RETAIN_SWAP(this->target, target);
     return this;
 }
 

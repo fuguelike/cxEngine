@@ -10,7 +10,6 @@
 #define cxEngine_cxNumber_h
 
 #include <cxcore/cxCore.h>
-#include "cxMath.h"
 
 CX_C_BEGIN
 
@@ -29,11 +28,6 @@ typedef enum {
     cxNumberTypeUInt64,
     cxNumberTypeFloat,
     cxNumberTypeDouble,
-    cxNumberTypeVec2f,
-    cxNumberTypeVec2i,
-    cxNumberTypeSize2f,
-    cxNumberTypeTex2f,
-    cxNumberTypeSize2i,
 }cxNumberType;
 
 typedef union {
@@ -50,11 +44,6 @@ typedef union {
     cxUInt64 u64;
     cxFloat vf;
     cxDouble vd;
-    cxVec2f vec2f;
-    cxVec2i vec2i;
-    cxSize2f size2f;
-    cxTex2f tex2f;
-    cxSize2i size2i;
 }cxNumberValue;
 
 CX_OBJECT_DEF(cxNumber, cxObject)
@@ -65,16 +54,6 @@ CX_OBJECT_END(cxNumber)
 cxBool cxNumberIsType(cxAny this,cxNumberType type);
 
 cxBool cxNumberToBool(cxNumber this);
-
-cxVec2i cxNumberToVec2i(cxNumber this);
-
-cxVec2f cxNumberToVec2f(cxNumber this);
-
-cxTex2f cxNumberToTex2f(cxNumber this);
-
-cxSize2f cxNumberToSize2f(cxNumber this);
-
-cxSize2i cxNumberToSize2i(cxNumber this);
 
 cxInt cxNumberToInt(cxNumber this);
 
@@ -101,16 +80,6 @@ cxFloat cxNumberToFloat(cxNumber this);
 cxDouble cxNumberToDouble(cxNumber this);
 
 cxNumber cxNumberBool(cxBool v);
-
-cxNumber cxNumberVec2i(cxVec2i v);
-
-cxNumber cxNumberVec2f(cxVec2f v);
-
-cxNumber cxNumberTex2f(cxTex2f v);
-
-cxNumber cxNumberSize2f(cxSize2f v);
-
-cxNumber cxNumberSize2i(cxSize2i v);
 
 cxNumber cxNumberInt(cxInt v);
 

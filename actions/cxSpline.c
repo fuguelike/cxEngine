@@ -7,7 +7,6 @@
 //
 
 #include <engine/cxEngine.h>
-#include <engine/cxNumber.h>
 #include "cxSpline.h"
 
 static void cxSplineInit(cxAny pav)
@@ -20,9 +19,9 @@ static void cxSplineInit(cxAny pav)
 static cxVec2f cxSplinePointAt(cxSpline this,cxInt idx)
 {
     idx = CX_MIN(cxArrayLength(this->points) - 1, CX_MAX(idx, 0));
-    cxNumber num = cxArrayAtIndex(this->points, idx);
-    CX_ASSERT(num != NULL, "num error");
-    return cxNumberToVec2f(num);
+    cxMemory data = cxArrayAtIndex(this->points, idx);
+    CX_ASSERT(data != NULL, "num error");
+    return *((cxVec2f *)data->data);
 }
 
 static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
@@ -99,5 +98,9 @@ CX_OBJECT_TERM(cxSpline, cxAction)
 void cxSplineAppend(cxAny pav,cxVec2f pos)
 {
     cxSpline this = pav;
-    cxArrayAppend(this->points, cxNumberVec2f(pos));
+    cxMemory data = cxMemoryCreate(sizeof(cxVec2f));
+    *((cxVec2f *)data->data) = pos;
+    cxArrayAppend(this->points, data);
 }
+
+
