@@ -254,66 +254,142 @@ static void cxParticleReset(cxAny pav)
     cxAtlasClean(this->atlas);
 }
 
-void __cxParticleInitType(cxAny type)
+CX_SETTER_DEF(cxParticle, number)
 {
-    
+    cxInt number = cxJsonToInt(value, this->number);
+    cxParticleInitNumber(this, number);
 }
-
-//void __cxParticleInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxParticle this = object;
-//    //
-//    cxInt number = cxJsonInt(json, "number", this->number);
-//    cxParticleInitNumber(this, number);
-//    //
-//    cxConstChars texture = cxJsonConstChars(json, "texture");
-//    if(texture != NULL){
-//        cxSpriteSetTextureURL(this->atlas, texture, true);
-//    }
-//    //
-//    cxConstChars type = cxJsonConstChars(json, "emitter");
-//    if(cxConstCharsEqu(type, "gravity")){
-//        cxParticleSetType(this, cxParticleEmitterGravity);
-//    }else if(cxConstCharsEqu(type, "radial")){
-//        cxParticleSetType(this, cxParticleEmitterRadial);
-//    }else{
-//        cxParticleSetType(this, cxParticleEmitterGravity);
-//    }
-//    //
-//    cxConstChars blend = cxJsonConstChars(json, "blend");
-//    if(cxConstCharsEqu(blend, "add")){
-//        cxParticleSetBlendMode(this, cxParticleBlendAdd);
-//    }else if(cxConstCharsEqu(blend, "multiply")){
-//        cxParticleSetBlendMode(this, cxParticleBlendMultiply);
-//    }else{
-//        cxParticleSetBlendMode(this, cxParticleBlendAdd);
-//    }
-//    //
-//    this->time = cxJsonDouble(json, "time", this->time);
-//    this->life = cxJsonFloatRangle(json, "life",this->life);
-//    this->position = cxJsonVec2fRangle(json, "position",this->position);
-//    this->rate = cxJsonDouble(json, "rate", this->rate);
-//    this->angle = cxJsonFloatRangle(json, "angle",this->angle);
-//    this->startsize = cxJsonFloatRangle(json, "startsize",this->startsize);
-//    this->endsize = cxJsonFloatRangle(json, "endsize",this->endsize);
-//    this->startcolor = cxJsonColor4fRangle(json, "startcolor",this->startcolor);
-//    this->endcolor = cxJsonColor4fRangle(json, "endcolor",this->endcolor);
-//    this->startspin = cxJsonFloatRangle(json, "startspin",this->startspin);
-//    this->endspin = cxJsonFloatRangle(json, "endspin",this->endspin);
-//    this->gravity = cxJsonVec2f(json, "gravity",this->gravity);
-//    this->todir = cxJsonBool(json, "todir", this->todir);
-//    this->speed = cxJsonFloatRangle(json, "speed",this->speed);
-//    this->tanaccel = cxJsonFloatRangle(json, "tanaccel",this->tanaccel);
-//    this->radaccel = cxJsonFloatRangle(json, "radaccel",this->radaccel);
-//    this->startradius = cxJsonFloatRangle(json, "startradius",this->startradius);
-//    this->endradius = cxJsonFloatRangle(json, "endradius",this->endradius);
-//    this->rotatepers = cxJsonFloatRangle(json, "rotatepers",this->rotatepers);
-//    CX_OBJECT_INIT_SUPER(cxAction);
-//}
+CX_SETTER_DEF(cxParticle, texture)
+{
+    cxConstChars texture = cxJsonToConstChars(value);
+    if(texture != NULL){
+        cxSpriteSetTextureURL(this->atlas, texture, true);
+    }
+}
+CX_SETTER_DEF(cxParticle, emitter)
+{
+    cxConstChars type = cxJsonToConstChars(value);
+    if(cxConstCharsEqu(type, "gravity")){
+        cxParticleSetType(this, cxParticleEmitterGravity);
+    }else if(cxConstCharsEqu(type, "radial")){
+        cxParticleSetType(this, cxParticleEmitterRadial);
+    }else{
+        cxParticleSetType(this, cxParticleEmitterGravity);
+    }
+}
+CX_SETTER_DEF(cxParticle, blend)
+{
+    cxConstChars blend = cxJsonToConstChars(value);
+    if(cxConstCharsEqu(blend, "add")){
+        cxParticleSetBlendMode(this, cxParticleBlendAdd);
+    }else if(cxConstCharsEqu(blend, "multiply")){
+        cxParticleSetBlendMode(this, cxParticleBlendMultiply);
+    }else{
+        cxParticleSetBlendMode(this, cxParticleBlendAdd);
+    }
+}
+CX_SETTER_DEF(cxParticle, time)
+{
+    this->time = cxJsonToDouble(value, this->time);
+}
+CX_SETTER_DEF(cxParticle, life)
+{
+    this->life = cxJsonToFloatRangle(value,this->life);
+}
+CX_SETTER_DEF(cxParticle, position)
+{
+    this->position = cxJsonToVec2fRangle(value,this->position);
+}
+CX_SETTER_DEF(cxParticle, rate)
+{
+    this->rate = cxJsonToDouble(value, this->rate);
+}
+CX_SETTER_DEF(cxParticle, angle)
+{
+    this->angle = cxJsonToFloatRangle(value,this->angle);
+}
+CX_SETTER_DEF(cxParticle, startsize)
+{
+    this->startsize = cxJsonToFloatRangle(value,this->startsize);
+}
+CX_SETTER_DEF(cxParticle, endsize)
+{
+    this->endsize = cxJsonToFloatRangle(value, this->endsize);
+}
+CX_SETTER_DEF(cxParticle, startcolor)
+{
+    this->startcolor = cxJsonToColor4fRangle(value,this->startcolor);
+}
+CX_SETTER_DEF(cxParticle, endcolor)
+{
+    this->endcolor = cxJsonToColor4fRangle(value,this->endcolor);
+}
+CX_SETTER_DEF(cxParticle, startspin)
+{
+    this->startspin = cxJsonToFloatRangle(value,this->startspin);
+}
+CX_SETTER_DEF(cxParticle, endspin)
+{
+    this->endspin = cxJsonToFloatRangle(value,this->endspin);
+}
+CX_SETTER_DEF(cxParticle, gravity)
+{
+    this->gravity = cxJsonToVec2f(value,this->gravity);
+}
+CX_SETTER_DEF(cxParticle, todir)
+{
+    this->todir = cxJsonToBool(value, this->todir);
+}
+CX_SETTER_DEF(cxParticle, tanaccel)
+{
+    this->tanaccel = cxJsonToFloatRangle(value,this->tanaccel);
+}
+CX_SETTER_DEF(cxParticle, radaccel)
+{
+    this->radaccel = cxJsonToFloatRangle(value,this->radaccel);
+}
+CX_SETTER_DEF(cxParticle, speed)
+{
+    this->speed = cxJsonToFloatRangle(value,this->speed);
+}
+CX_SETTER_DEF(cxParticle, startradius)
+{
+    this->startradius = cxJsonToFloatRangle(value,this->startradius);
+}
+CX_SETTER_DEF(cxParticle, endradius)
+{
+    this->endradius = cxJsonToFloatRangle(value,this->endradius);
+}
+CX_SETTER_DEF(cxParticle, rotatepers)
+{
+    this->rotatepers = cxJsonToFloatRangle(value,this->rotatepers);
+}
 
 CX_OBJECT_TYPE(cxParticle, cxAction)
 {
-    
+    CX_PROPERTY_SETTER(this, cxParticle, number);
+    CX_PROPERTY_SETTER(this, cxParticle, texture);
+    CX_PROPERTY_SETTER(this, cxParticle, emitter);
+    CX_PROPERTY_SETTER(this, cxParticle, blend);
+    CX_PROPERTY_SETTER(this, cxParticle, time);
+    CX_PROPERTY_SETTER(this, cxParticle, life);
+    CX_PROPERTY_SETTER(this, cxParticle, position);
+    CX_PROPERTY_SETTER(this, cxParticle, rate);
+    CX_PROPERTY_SETTER(this, cxParticle, angle);
+    CX_PROPERTY_SETTER(this, cxParticle, startsize);
+    CX_PROPERTY_SETTER(this, cxParticle, endsize);
+    CX_PROPERTY_SETTER(this, cxParticle, startcolor);
+    CX_PROPERTY_SETTER(this, cxParticle, endcolor);
+    CX_PROPERTY_SETTER(this, cxParticle, startspin);
+    CX_PROPERTY_SETTER(this, cxParticle, endspin);
+    CX_PROPERTY_SETTER(this, cxParticle, gravity);
+    CX_PROPERTY_SETTER(this, cxParticle, todir);
+    CX_PROPERTY_SETTER(this, cxParticle, tanaccel);
+    CX_PROPERTY_SETTER(this, cxParticle, radaccel);
+    CX_PROPERTY_SETTER(this, cxParticle, speed);
+    CX_PROPERTY_SETTER(this, cxParticle, startradius);
+    CX_PROPERTY_SETTER(this, cxParticle, endradius);
+    CX_PROPERTY_SETTER(this, cxParticle, rotatepers);
 }
 CX_OBJECT_INIT(cxParticle, cxAction)
 {

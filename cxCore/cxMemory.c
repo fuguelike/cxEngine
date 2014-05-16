@@ -18,7 +18,7 @@ CX_OBJECT_INIT(cxMemory, cxObject)
 }
 CX_OBJECT_FREE(cxMemory, cxObject)
 {
-
+    allocator->free(this->data);
 }
 CX_OBJECT_TERM(cxMemory, cxObject)
 
