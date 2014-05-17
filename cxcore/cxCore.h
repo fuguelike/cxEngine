@@ -120,7 +120,7 @@
 #include <time.h>
 #include <sys/types.h>
 
-#define CX_ENGINE_VERSION   100
+#define CX_ENGINE_VERSION   200
 
 typedef int             cxOff;
 typedef char            cxChar;

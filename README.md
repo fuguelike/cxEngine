@@ -1,8 +1,8 @@
-cxEngine V1.0
+cxEngine V2.0
+
+support json object
 
 2D game engine,base openGL ES 2.0
-
-use Xcode 5.0.2
 
 support android ios
 

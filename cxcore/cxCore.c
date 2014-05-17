@@ -37,11 +37,11 @@ cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
 #include <sys/atomics.h>
 cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x)
 {
-    return __sync_fetch_and_sub(p,x);
+    return __sync_fetch_and_add(p,x);
 }
 cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
 {
-    return __sync_fetch_and_add(p,x);
+    return __sync_fetch_and_sub(p,x);
 }
 #endif
 
