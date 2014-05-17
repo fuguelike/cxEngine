@@ -303,7 +303,6 @@ cxAny cxObjectLoadWithJson(cxJson json)
     CX_ASSERT(json != NULL, "json args error");
     cxConstChars src = NULL;
     cxObject object = NULL;
-    //link to src file
     if(cxJsonIsString(json)){
         src = cxJsonToConstChars(json);
     }else if(cxJsonIsObject(json)){
@@ -319,10 +318,13 @@ cxAny cxObjectLoadWithJson(cxJson json)
         CX_ERROR("create object failed");
         return NULL;
     }
+    cxConstChars id = cxJsonConstChars(json, "id");
+    if(id != NULL){
+        CX_LOGGER("%s %s",id,object->cxType);
+    }
     return object;
 }
 
-//save to hash with id
 cxAny cxObjectLoadWithFile(cxConstChars file)
 {
     cxUrlPath path = cxUrlPathParse(file);
@@ -345,13 +347,9 @@ cxJson cxEngineLoadJson(cxConstChars file)
         return json;
     }
     cxString data = cxAssetsData(file);
-    if(data == NULL){
-        return NULL;
-    }
+    CX_RETURN(data == NULL, NULL);
     json = cxJsonCreate(data);
-    if(json == NULL){
-        return NULL;
-    }
+    CX_RETURN(json == NULL, NULL);
     cxHashSet(this->files, cxHashStrKey(file), json);
     return json;
 }

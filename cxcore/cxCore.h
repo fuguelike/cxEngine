@@ -393,9 +393,9 @@ do{                                                             \
 }while(0)
 
 //
-cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x);
+cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x);
 
-cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x);
+cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x);
 
 typedef cxPointer (*cxMallocFunc)(cxSize size);
 
@@ -449,7 +449,7 @@ void cxUtilAssert(cxConstChars file, cxInt line, cxConstChars format, ...);
 //base type define
 CX_OBJECT_BEG(cxObject)
     cxConstType cxType;
-    cxUInt cxRefcount;
+    cxInt cxRefcount;
     cxObjectFunc cxFree;
 CX_OBJECT_END(cxObject)
 

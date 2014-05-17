@@ -1,4 +1,5 @@
 {
+  "id":"main",
   "type": "cxScroll",
   "size": {
     "w": 400,
@@ -6,8 +7,7 @@
   },
   "actions": [
     {
-      "src": "cxParticle.json",
-      "args": {}
+      "src": "cxParticle.json"
     }
   ],
   "layout": "horizontal",

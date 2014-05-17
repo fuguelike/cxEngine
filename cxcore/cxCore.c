@@ -13,33 +13,33 @@
 //MAC atomic support
 #if CX_TARGET_PLATFORM==CX_PLATFORM_MAC
 #include <libkern/OSAtomic.h>
-cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x)
+cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x)
 {
     return OSAtomicAdd32((int32_t)x, (int32_t *)p);
 }
-cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
+cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x)
 {
     return OSAtomicAdd32(-((int32_t)x), (int32_t *)p);
 }
 //IOS atomic support
 #elif CX_TARGET_PLATFORM == CX_PLATFORM_IOS
 #include <libkern/OSAtomic.h>
-cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x)
+cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x)
 {
     return OSAtomicAdd32((int32_t)x, (int32_t *)p);
 }
-cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
+cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x)
 {
     return OSAtomicAdd32(-((int32_t)x), (int32_t *)p);
 }
 //ANDROID atomic support
 #elif CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID
 #include <sys/atomics.h>
-cxUInt32 cxAtomicAddUInt32(cxUInt32 *p, cxUInt32 x)
+cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x)
 {
     return __sync_fetch_and_add(p,x);
 }
-cxUInt32 cxAtomicSubUInt32(cxUInt32 *p, cxUInt32 x)
+cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x)
 {
     return __sync_fetch_and_sub(p,x);
 }
@@ -137,7 +137,7 @@ void cxObjectRetain(cxAny ptr)
     CX_RETURN(ptr == NULL);
     cxObject object = (cxObject)ptr;
     CX_ASSERT(object->cxRefcount > 0, "retain count must > 0");
-    cxAtomicAddUInt32(&object->cxRefcount, 1);
+    cxAtomicAddInt32(&object->cxRefcount, 1);
 }
 
 void __cxObjectAutoType(cxAny type)
@@ -160,7 +160,7 @@ void cxObjectRelease(cxAny ptr)
     CX_RETURN(ptr == NULL);
     cxObject object = (cxObject)ptr;
     CX_ASSERT(object->cxRefcount > 0, "error,retain count must > 0");
-    cxAtomicSubUInt32(&object->cxRefcount, 1);
+    cxAtomicSubInt32(&object->cxRefcount, 1);
     if(object->cxRefcount == 0) {
         cxObjectDestroy(ptr);
     }
