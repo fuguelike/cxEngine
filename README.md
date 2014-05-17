@@ -40,6 +40,8 @@ CX_OBJECT_TERM(typeName, baseType)
 ```
 cxAny object1 = CX_CREATE(typeName); //对象将放入自动释放池
 cxAny object2 = CX_ALLOC(typeName);//对象不放入自动释放池，需要 CX_RELEASE释放
+//CX_RETAIN
+//
 ```
 例子
 --

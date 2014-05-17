@@ -21,6 +21,7 @@ CX_C_BEGIN
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
 CX_OBJECT_DEF(cxEngine, cxObject)
+    cxStack stack;
     cxHash files;
     cxFloat interval;
     cxSize2f winsize;   //screen size

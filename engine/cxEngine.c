@@ -96,6 +96,7 @@ void cxEngineTypes()
     CX_REGISTER_TYPE(cxNumber,       cxObject);
     CX_REGISTER_TYPE(cxView,         cxObject);
     CX_REGISTER_TYPE(cxAction,       cxObject);
+    CX_REGISTER_TYPE(cxController,   cxObject);
     
     //register streams
     CX_REGISTER_TYPE(cxAssetsStream, cxStream);
@@ -256,9 +257,11 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->scale    = cxVec2fv(1.0f, 1.0f);
     this->window   = CX_ALLOC(cxWindow);
     this->files    = CX_ALLOC(cxHash);
+    this->stack    = CX_ALLOC(cxStack);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
+    CX_RELEASE(this->stack);
     CX_RELEASE(this->files);
     CX_RELEASE(this->lang);
     CX_RELEASE(this->window);
@@ -301,6 +304,7 @@ cxAny cxEngineTypeCreate(cxJson json)
 cxAny cxObjectLoadWithJson(cxJson json)
 {
     CX_ASSERT(json != NULL, "json args error");
+    cxEngine engine = cxEngineInstance();
     cxConstChars src = NULL;
     cxObject object = NULL;
     if(cxJsonIsString(json)){
@@ -319,8 +323,9 @@ cxAny cxObjectLoadWithJson(cxJson json)
         return NULL;
     }
     cxConstChars id = cxJsonConstChars(json, "id");
-    if(id != NULL){
-        CX_LOGGER("%s %s",id,object->cxType);
+    cxController curr = cxStackTop(engine->stack);
+    if(id != NULL && curr != NULL){
+        cxHashSet(curr->objects, cxHashStrKey(id), object);
     }
     return object;
 }

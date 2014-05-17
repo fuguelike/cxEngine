@@ -16,18 +16,28 @@ CX_OBJECT_TYPE(cxController, cxObject)
 }
 CX_OBJECT_INIT(cxController, cxObject)
 {
-    //
+    this->objects = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxController, cxObject)
 {
+    CX_RELEASE(this->objects);
     CX_RELEASE(this->root);
 }
 CX_OBJECT_TERM(cxController, cxObject)
 
-void cxControllerInitWithFile(cxAny pc, cxConstChars file)
+cxAny cxControllerObject(cxAny controller,cxConstChars id)
 {
-    cxController this = pc;
+    cxController this = controller;
+    return cxHashGet(this->objects, cxHashStrKey(id));
+}
+
+void cxControllerInitWithFile(cxAny controller, cxConstChars file)
+{
+    cxEngine engine = cxEngineInstance();
+    cxController this = controller;
+    cxStackPush(engine->stack, this);
     cxAny root = cxObjectLoadWithFile(file);
+    cxStackPop(engine->stack);
     CX_ASSERT(root != NULL, "load root view %s failed",file);
     CX_RETAIN_SWAP(this->root, root);
 }
