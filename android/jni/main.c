@@ -6,23 +6,16 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 #include <engine/cxEngine.h>
-#include <actions/cxTimer.h>
 
 void cxEngineInit(cxEngine engine)
 {
-    
-    
-}
-
-static void timerArrive(cxEvent *e)
-{
-    cxEngineSendJson(UTF8("{\"json\":true}"));
+	cxEngineSetDesignSize(cxSize2fv(640, 960));   
 }
 
 void cxEngineMain(cxEngine engine)
 {
-    cxTimer timer = cxViewAppendTimer(engine->window, 1.0f, CX_TIMER_FOREVER);
-    CX_EVENT_APPEND(timer->onArrive, timerArrive);
+    cxController controller = cxControllerCreate("cxSprite.json");
+    cxWindowPushView(controller->root);
 }
 
 void cxEngineFree(cxEngine engine)

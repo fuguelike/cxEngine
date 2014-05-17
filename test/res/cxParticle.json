@@ -1,15 +1,21 @@
 {
   "type": "cxParticle",
   "time": -1,
-  "number": 100,
-  "rate": 60,
+  "number": 200,
+  "rate": -1,
   "texture": "texture.json?chilli.png",
   "life": {
-    "v": 2,
-    "r": 1
+    "v": 3,
+    "r": 0
+  },
+  "blend":"add",
+  "position": {
+    "rx": 0,
+    "ry": 0
   },
   "speed": {
-    "v": 200
+    "v": 500,
+    "r":500
   },
   "angle": {
     "r": 360
@@ -27,16 +33,10 @@
     "va": 1
   },
   "endcolor": {
-    "vr": 1,
-    "vg": 1,
-    "vb": 1,
-    "va": 1
+    "vr": 0,
+    "vg": 0,
+    "vb": 0,
+    "va": 0
   },
-  "todir": true,
-  "startspin": {
-    "v": 2000
-  },
-  "endspin": {
-    "v": 1000
-  }
+  "todir": true
 }
