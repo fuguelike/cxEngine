@@ -11,7 +11,7 @@ Email: cxuhua@gmail.com
 QQ:4575407
 
 定义一个类型
----
+------
 ```
 CX_OBJECT_DEF(typeName, baseType)
     //定义字段
@@ -19,7 +19,7 @@ CX_OBJECT_DEF(typeName, baseType)
 CX_OBJECT_END(typeName)
 ```
 实现一个类型
----
+------
 ```
 CX_OBJECT_TYPE(typeName, baseType)
 {
@@ -35,14 +35,14 @@ CX_OBJECT_FREE(typeName, baseType)
 }
 CX_OBJECT_TERM(typeName, baseType)
 ```
-创建对象,对象试用引用计数管理
----
+创建对象,对象使用引用计数管理
+---------------
 ```
 cxAny object1 = CX_CREATE(typeName); //对象将放入自动释放池
 cxAny object2 = CX_ALLOC(typeName);//对象不放入自动释放池，需要 CX_RELEASE释放
 ```
 例子
----
+--
 cxArray.h
 ```
 //
