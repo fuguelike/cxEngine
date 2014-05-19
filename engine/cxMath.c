@@ -17,9 +17,10 @@ cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFlo
     cxFloat b2 = s * (-t3 + t2) + (2 * t3 - 3 * t2 + 1);
     cxFloat b3 = s * (t3 - 2 * t2 + t) + (-2 * t3 + 3 * t2);
     cxFloat b4 = s * (t3 - t2);
-    cxFloat x = (p0.x*b1 + p1.x*b2 + p2.x*b3 + p3.x*b4);
-    cxFloat y = (p0.y*b1 + p1.y*b2 + p2.y*b3 + p3.y*b4);
-	return cxVec2fv(x, y);
+    cxVec2f rv = cxVec2fv(0, 0);
+    rv.x = (p0.x*b1 + p1.x*b2 + p2.x*b3 + p3.x*b4);
+    rv.y = (p0.y*b1 + p1.y*b2 + p2.y*b3 + p3.y*b4);
+	return rv;
 }
 
 cxRect4f cxBoxTex2fToRect4f(cxBoxTex2f box)
