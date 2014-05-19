@@ -21,13 +21,16 @@ static void cxInitTypes()
     CX_RELEASE(tmp);
     
     //register core
-    CX_REGISTER_TYPE(cxType,         cxObject);
-    CX_REGISTER_TYPE(cxProperty,     cxObject);
+    CX_REGISTER_TYPE(cxType,        cxObject);
+    CX_REGISTER_TYPE(cxProperty,    cxObject);
     CX_REGISTER_TYPE(cxMemPool,     cxObject);
-    CX_REGISTER_TYPE(cxHash,         cxObject);
-    CX_REGISTER_TYPE(cxArray,        cxObject);
-    CX_REGISTER_TYPE(cxList,         cxObject);
-    CX_REGISTER_TYPE(cxStack,        cxObject);
+    CX_REGISTER_TYPE(cxHash,        cxObject);
+    CX_REGISTER_TYPE(cxArray,       cxObject);
+    CX_REGISTER_TYPE(cxList,        cxObject);
+    CX_REGISTER_TYPE(cxStack,       cxObject);
+    CX_REGISTER_TYPE(cxNumber,      cxObject);
+    CX_REGISTER_TYPE(cxString,      cxObject);
+    CX_REGISTER_TYPE(cxMessage,     cxObject);
 }
 
 void cxTypesInit()
@@ -97,9 +100,7 @@ cxAny cxObjectCreateWithType(cxConstType type)
 }
 
 CX_OBJECT_TYPE(cxType, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxType, cxObject)
 {
     this->properties = CX_ALLOC(cxHash);

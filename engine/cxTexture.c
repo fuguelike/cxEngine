@@ -11,33 +11,15 @@
 #include "cxTexture.h"
 
 CX_OBJECT_TYPE(cxTexCoord, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxTexCoord, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxTexCoord, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_TERM(cxTexCoord, cxObject)
 
-void __cxTextureInitType(cxAny type)
-{
-    
-}
-
-void __cxTextureInitObject(cxAny object,cxAny json,cxAny hash)
-{
-    
-}
-
 CX_OBJECT_TYPE(cxTexture, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxTexture, cxObject)
 {
     this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE);

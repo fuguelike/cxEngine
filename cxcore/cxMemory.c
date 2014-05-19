@@ -9,13 +9,9 @@
 #include "cxMemory.h"
 
 CX_OBJECT_TYPE(cxMemory, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxMemory, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxMemory, cxObject)
 {
     allocator->free(this->data);

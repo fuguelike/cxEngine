@@ -9,13 +9,9 @@
 #include "cxRegex.h"
 
 CX_OBJECT_TYPE(cxRegex, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxRegex, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxRegex, cxObject)
 {
     if(this->regex != NULL){

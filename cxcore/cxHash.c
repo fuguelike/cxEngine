@@ -9,13 +9,9 @@
 #include "cxHash.h"
 
 CX_OBJECT_TYPE(cxHash, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxHash, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxHash, cxObject)
 {
     cxHashClean(this);

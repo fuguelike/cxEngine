@@ -9,17 +9,11 @@
 #include "cxUrlPath.h"
 
 CX_OBJECT_TYPE(cxUrlPath, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxUrlPath, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxUrlPath, cxObject)
-{
-
-}
+{}
 CX_OBJECT_TERM(cxUrlPath, cxObject)
 
 static cxUrlPath cxUrlPathParseKeyValueImp(cxUrlPath this)

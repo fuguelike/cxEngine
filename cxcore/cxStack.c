@@ -9,9 +9,7 @@
 #include "cxStack.h"
 
 CX_OBJECT_TYPE(cxStack, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxStack, cxObject)
 {
     this->array = CX_ALLOC(cxArray);
