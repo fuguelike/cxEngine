@@ -10,8 +10,14 @@
 #define winmine_wmMap_h
 
 #include <engine/cxView.h>
+#include "wmDefine.h"
+
+CX_C_BEGIN
 
 CX_OBJECT_DEF(wmMap, cxView)
+    cxUInt items[WM_MAP_COL][WM_MAP_ROW];
 CX_OBJECT_END(wmMap)
+
+CX_C_END
 
 #endif

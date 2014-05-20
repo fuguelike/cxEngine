@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8303C377192B538800D8B7E1 /* wmMine.c in Sources */ = {isa = PBXBuildFile; fileRef = 8303C376192B538800D8B7E1 /* wmMine.c */; };
 		83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6018D9C5D00093FF54 /* libevent.a */; };
 		83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6418D9C5D00093FF54 /* libjpeg.a */; };
 		83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6618D9C5D00093FF54 /* libpcre.a */; };
@@ -39,6 +40,9 @@
 
 /* Begin PBXFileReference section */
 		8300651F18232BE000AF680D /* winmine.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = winmine.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8303C373192B530B00D8B7E1 /* wmDefine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wmDefine.h; sourceTree = SOURCE_ROOT; };
+		8303C375192B538000D8B7E1 /* wmMine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wmMine.h; sourceTree = SOURCE_ROOT; };
+		8303C376192B538800D8B7E1 /* wmMine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = wmMine.c; sourceTree = SOURCE_ROOT; };
 		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
 		83314F6418D9C5D00093FF54 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../libs/ios/lib/libjpeg.a; sourceTree = "<group>"; };
 		83314F6618D9C5D00093FF54 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = ../libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
@@ -132,6 +136,9 @@
 				83314F7218D9C6530093FF54 /* main.c */,
 				83C3C1DA192B2275007A016E /* wmMap.h */,
 				83C3C1DC192B228F007A016E /* wmMap.c */,
+				8303C373192B530B00D8B7E1 /* wmDefine.h */,
+				8303C375192B538000D8B7E1 /* wmMine.h */,
+				8303C376192B538800D8B7E1 /* wmMine.c */,
 			);
 			name = winmine;
 			path = cxEngine;
@@ -233,6 +240,7 @@
 			files = (
 				83C3C1DD192B228F007A016E /* wmMap.c in Sources */,
 				83314F7318D9C6530093FF54 /* main.c in Sources */,
+				8303C377192B538800D8B7E1 /* wmMine.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
