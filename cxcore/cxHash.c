@@ -37,7 +37,7 @@ void cxHashDelElement(cxHash hash,cxHashElement *element)
 cxBool cxHashHas(cxHash hash,cxHashKey key)
 {
     CX_ASSERT(key.data != NULL && key.length > 0, "key keySize error");
-    CX_ASSERT(key.length < CX_HASH_MAX_KEY_LENGTH, "keySize too longer");
+    CX_ASSERT(key.length < CX_MAX_KEY, "keySize too longer");
     cxHashElement *element = NULL;
     HASH_FIND(hh, hash->hashPtr, key.data, key.length, element);
     return element != NULL;
@@ -75,7 +75,7 @@ cxAny cxHashGet(cxHash hash,cxHashKey key)
 cxHashElement *cxHashGetElement(cxHash hash,cxHashKey key)
 {
     CX_ASSERT(key.data != NULL && key.length > 0, "key length error");
-    CX_ASSERT(key.length < CX_HASH_MAX_KEY_LENGTH, "key length too longer");
+    CX_ASSERT(key.length < CX_MAX_KEY, "key length too longer");
     cxHashElement *element = NULL;
     HASH_FIND(hh, hash->hashPtr, key.data, key.length, element);
     return element;

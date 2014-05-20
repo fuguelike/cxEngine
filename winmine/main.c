@@ -6,10 +6,11 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 #include <engine/cxEngine.h>
+#include "wmMap.h"
 
 void cxEngineInit(cxEngine engine)
 {
-    
+    CX_REGISTER_TYPE(wmMap, cxView);
 }
 
 void cxEngineMain(cxEngine engine)

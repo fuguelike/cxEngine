@@ -38,6 +38,7 @@ typedef enum{
 }cxViewIsTouchType;
 
 CX_OBJECT_DEF(cxView, cxObject)
+    cxViewIsTouchType touchType;
     cxBool supportAtlasSet;
     cxViewAutoResizeMask autoMask;
     cxBox4f  autoBox;
@@ -66,7 +67,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
     cxColor4f color;
-
     CX_METHOD_DEF(cxViewIsTouchType,IsTouch,cxAny,cxTouch *);
     CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouch *);
     CX_METHOD_DEF(cxViewIsTouchType, IsOnKey, cxAny, cxKey *);
@@ -74,9 +74,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_DEF(void, Draw, cxAny);
     CX_METHOD_DEF(void, After, cxAny);
     CX_METHOD_DEF(void, Before, cxAny);
-
     CX_SIGNAL_ALLOC(onDraw);
-
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
