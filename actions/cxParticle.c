@@ -165,7 +165,7 @@ static void cxParticleStep(cxAny pav,cxFloat dt,cxFloat time)
             cxParticleAdd(this);
             this->emitcounter -= rate;
         }
-		if (this->time != -1 && this->time < this->super.durationElapsed){
+		if (this->duration != -1 && this->duration < this->super.durationElapsed){
 			cxParticleStop(pav);
         }
     }
@@ -288,9 +288,9 @@ CX_SETTER_DEF(cxParticle, blend)
         cxParticleSetBlendMode(this, cxParticleBlendAdd);
     }
 }
-CX_SETTER_DEF(cxParticle, time)
+CX_SETTER_DEF(cxParticle, duration)
 {
-    this->time = cxJsonToDouble(value, this->time);
+    this->duration = cxJsonToDouble(value, this->duration);
 }
 CX_SETTER_DEF(cxParticle, life)
 {
@@ -371,7 +371,7 @@ CX_OBJECT_TYPE(cxParticle, cxAction)
     CX_PROPERTY_SETTER(cxParticle, texture);
     CX_PROPERTY_SETTER(cxParticle, emitter);
     CX_PROPERTY_SETTER(cxParticle, blend);
-    CX_PROPERTY_SETTER(cxParticle, time);
+    CX_PROPERTY_SETTER(cxParticle, duration);
     CX_PROPERTY_SETTER(cxParticle, life);
     CX_PROPERTY_SETTER(cxParticle, position);
     CX_PROPERTY_SETTER(cxParticle, rate);
@@ -421,10 +421,10 @@ void cxParticleInitNumber(cxAny pav,cxInt number)
     cxAtlasSetCapacity(this->atlas, number);
 }
 
-cxParticle cxParticleCreate(cxFloat time,cxConstChars url,cxIndex number)
+cxParticle cxParticleCreate(cxFloat duration,cxConstChars url,cxIndex number)
 {
     cxParticle this = CX_CREATE(cxParticle);
-    this->time = time;
+    this->duration = duration;
     cxParticleInitNumber(this,number);
     cxSpriteSetTextureURL(this->atlas, url, true);
     cxSetRandSeed();
