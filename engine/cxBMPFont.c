@@ -11,39 +11,25 @@
 #include "cxBMPFont.h"
 
 CX_OBJECT_TYPE(cxBMPElement, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxBMPElement, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxBMPElement, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_TERM(cxBMPElement, cxObject)
 
 
 CX_OBJECT_TYPE(cxBMPKerning, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxBMPKerning, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxBMPKerning, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_TERM(cxBMPKerning, cxObject)
 
 
 CX_OBJECT_TYPE(cxBMPFont, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxBMPFont, cxObject)
 {
     this->textures = CX_ALLOC(cxHash);

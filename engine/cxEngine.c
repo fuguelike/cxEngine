@@ -91,9 +91,7 @@ void cxEngineTypes()
 {
     //register core
     CX_REGISTER_TYPE(cxStream,       cxObject);
-    CX_REGISTER_TYPE(cxString,       cxObject);
     CX_REGISTER_TYPE(cxTexture,      cxObject);
-    CX_REGISTER_TYPE(cxNumber,       cxObject);
     CX_REGISTER_TYPE(cxView,         cxObject);
     CX_REGISTER_TYPE(cxAction,       cxObject);
     CX_REGISTER_TYPE(cxController,   cxObject);
@@ -265,9 +263,7 @@ cxAny cxEngineTop()
 }
 
 CX_OBJECT_TYPE(cxEngine, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
     kmGLInitialize();

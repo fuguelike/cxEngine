@@ -25,17 +25,11 @@ void __cxNumberInitObject(cxAny object,cxAny json,cxAny hash)
 }
 
 CX_OBJECT_TYPE(cxNumber, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxNumber, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxNumber, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_TERM(cxNumber, cxObject)
 
 cxBool cxNumberToBool(cxNumber this)

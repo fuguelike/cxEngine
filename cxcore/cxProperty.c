@@ -10,17 +10,11 @@
 #include "cxProperty.h"
 
 CX_OBJECT_TYPE(cxProperty, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxProperty, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxProperty, cxObject)
-{
-
-}
+{}
 CX_OBJECT_TERM(cxProperty, cxObject)
 
 void cxObjectSetter(cxAny object,cxConstChars key,cxAny value)

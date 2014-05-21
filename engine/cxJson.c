@@ -43,7 +43,7 @@ static json_t *cxJsonGetJson(cxJson json,cxConstChars key)
     cxArray list = cxStringSplit(str, ".");
     json_t *pv = CX_JSON_PTR(json);
     cxInt index = 0;
-    cxChar skey[CX_HASH_MAX_KEY_LENGTH]={0};
+    cxChar skey[CX_MAX_KEY]={0};
     json_t *rv = NULL;
     CX_ARRAY_FOREACH(list, e){
         if(keyIsArray(cxArrayObject(e), skey, &index)){

@@ -9,17 +9,11 @@
 #include "cxUrlPath.h"
 
 CX_OBJECT_TYPE(cxUrlPath, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxUrlPath, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxUrlPath, cxObject)
-{
-
-}
+{}
 CX_OBJECT_TERM(cxUrlPath, cxObject)
 
 static cxUrlPath cxUrlPathParseKeyValueImp(cxUrlPath this)
@@ -46,7 +40,7 @@ cxUrlPath cxUrlPathParse(cxConstChars url)
     if(!cxConstCharsOK(url)){
         return this;
     }
-    CX_ASSERT(strlen(url) < CX_HASH_MAX_KEY_LENGTH, "url too long");
+    CX_ASSERT(strlen(url) < CX_MAX_KEY, "url too long");
     this->count = 0;
     cxInt len = strlen(url);
     cxChar *sq = strrchr(url, '?');

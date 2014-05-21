@@ -13,9 +13,7 @@
 pthread_key_t autoKey;
 
 CX_OBJECT_TYPE(cxMemPool, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxMemPool, cxObject)
 {
     this->objects = CX_ALLOC(cxArray);

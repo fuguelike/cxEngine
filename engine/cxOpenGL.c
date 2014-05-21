@@ -267,7 +267,7 @@ void cxOpenGLDestroy()
 }
 
 #define CX_GL_SUPPORT(t)                                \
-this->support_##t = strstr(extensions,#t);              \
+this->support_##t = strstr(extensions,#t) > 0;          \
 if(this->support_##t){CX_LOGGER("%s = YES",#t);}        \
 else {CX_LOGGER("%s = NO",#t);}
 

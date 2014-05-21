@@ -16,15 +16,11 @@ CX_OBJECT_DEF(cxMessageItem, cxObject)
 CX_OBJECT_END(cxMessageItem)
 
 CX_OBJECT_TYPE(cxMessageItem, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxMessageItem, cxObject)
-{
-}
+{}
 CX_OBJECT_FREE(cxMessageItem, cxObject)
-{
-}
+{}
 CX_OBJECT_TERM(cxMessageItem, cxObject)
 
 void cxMessageDestroy()
@@ -42,9 +38,7 @@ static cxMessage cxMessageInstance()
 }
 
 CX_OBJECT_TYPE(cxMessage, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxMessage, cxObject)
 {
     this->keys = CX_ALLOC(cxHash);

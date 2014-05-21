@@ -70,37 +70,28 @@ cxEAGLView *instance = nil;
 {
     self = [super initWithFrame:frame];
     instance = self;
-    
     CX_ASSERT(self != nil, "init view frame failed");
-    
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
     eaglLayer.opaque = YES;
-    
     NSMutableDictionary *properties = [[NSMutableDictionary alloc] init];
     [properties setObject:[NSNumber numberWithBool:NO] forKey:kEAGLDrawablePropertyRetainedBacking];
     [properties setObject:kEAGLColorFormatRGBA8 forKey:kEAGLDrawablePropertyColorFormat];
     eaglLayer.drawableProperties = properties;
     [properties release];
-    
     eaglCTX = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     CX_ASSERT(eaglCTX != nil,"alloc EAGL Context error");
-    
     if(![EAGLContext setCurrentContext:eaglCTX]){
         CX_ERROR("set current eagl context error");
     }
-    
     glGenFramebuffers(1, &frameBuffer);
     CX_ASSERT(frameBuffer > 0,"gl frame buffer create failed");
-    
     glGenRenderbuffers(1, &colorBuffer);
     CX_ASSERT(colorBuffer > 0,"gl color buffer create failed");
-    
     glGenRenderbuffers(1, &depthBuffer);
     CX_ASSERT(depthBuffer > 0,"gl depth buffer create failed");
     glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, colorBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorBuffer);
-    
     [self initMainLoop];
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
     [displayLink retain];
@@ -118,16 +109,12 @@ cxEAGLView *instance = nil;
 {
     glBindRenderbuffer(GL_RENDERBUFFER, colorBuffer);
     [eaglCTX renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
-    
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
-
     glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height);
-
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
-
     glBindRenderbuffer(GL_RENDERBUFFER, colorBuffer);
 }
 

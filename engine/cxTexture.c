@@ -11,33 +11,15 @@
 #include "cxTexture.h"
 
 CX_OBJECT_TYPE(cxTexCoord, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxTexCoord, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxTexCoord, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_TERM(cxTexCoord, cxObject)
 
-void __cxTextureInitType(cxAny type)
-{
-    
-}
-
-void __cxTextureInitObject(cxAny object,cxAny json,cxAny hash)
-{
-    
-}
-
 CX_OBJECT_TYPE(cxTexture, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxTexture, cxObject)
 {
     this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE);
@@ -132,12 +114,7 @@ void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstC
     vbox.lt = cxVec3fv(pos.x - wh, pos.y + hh, 0);
     vbox.rb = cxVec3fv(pos.x + wh, pos.y - hh, 0);
     vbox.rt = cxVec3fv(pos.x + wh, pos.y + hh, 0);
-    cxBoxColor4f cbox = {
-        cxColor4fv(1, 1, 1, 1),
-        cxColor4fv(1, 1, 1, 1),
-        cxColor4fv(1, 1, 1, 1),
-        cxColor4fv(1, 1, 1, 1)
-    };
+
     cxBoxTex2f tbox = cxBoxTex2fDefault();
     if(tkey != NULL){
         tbox = cxTextureBox(this, tkey);
@@ -148,7 +125,7 @@ void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstC
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
     glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), &vbox);
     glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTex2f), &tbox);
-    glVertexAttribPointer(cxVertexAttribColor,    4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), &cbox);
+    glVertexAttribPointer(cxVertexAttribColor,    4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), &cxBoxColor4fDefault);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 

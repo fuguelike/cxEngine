@@ -28,8 +28,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <assert.h>
 #include <stdio.h>
 
-#define INITIAL_SIZE 30
-#define INCREMENT 50
+#define INITIAL_SIZE 8
+#define INCREMENT 16
 
 #include "kazmath/mat4stack.h"
 

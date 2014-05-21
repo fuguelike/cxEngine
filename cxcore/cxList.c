@@ -9,13 +9,9 @@
 #include "cxList.h"
 
 CX_OBJECT_TYPE(cxList, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxList, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_FREE(cxList, cxObject)
 {
     cxListClean(this);

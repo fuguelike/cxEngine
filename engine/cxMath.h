@@ -219,6 +219,13 @@ typedef struct {
     cxColor4f rb;
 }cxBoxColor4f;
 
+static const cxBoxColor4f cxBoxColor4fDefault = {
+    cxColor4fv(1,1,1,1),
+    cxColor4fv(1,1,1,1),
+    cxColor4fv(1,1,1,1),
+    cxColor4fv(1,1,1,1)
+};
+
 typedef struct {
     cxFloat size;
     cxBool bold;

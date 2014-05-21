@@ -11,13 +11,9 @@
 #include "cxString.h"
 
 CX_OBJECT_TYPE(cxString, cxObject)
-{
-    
-}
+{}
 CX_OBJECT_INIT(cxString, cxObject)
-{
-    //
-}
+{}
 CX_OBJECT_FREE(cxString, cxObject)
 {
     utstring_done(&this->strptr);

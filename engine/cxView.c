@@ -123,7 +123,19 @@ CX_SETTER_DEF(cxView, actions)
     }
     CX_JSON_ARRAY_EACH_END(actions, item)
 }
-
+CX_SETTER_DEF(cxView, touchtype)
+{
+    cxConstChars type = cxJsonToConstChars(value);
+    if(type != NULL){
+        this->touchType = cxViewIsTouchTypeNone;
+    }
+    if(cxConstCharsHas(type, "this")){
+        this->touchType |= cxViewIsTouchTypeThis;
+    }
+    if(cxConstCharsHas(type, "subview")){
+        this->touchType |= cxViewIsTouchTypeSubview;
+    }
+}
 CX_OBJECT_TYPE(cxView, cxObject)
 {
     CX_PROPERTY_SETTER(cxView, size);
@@ -142,6 +154,7 @@ CX_OBJECT_TYPE(cxView, cxObject)
     CX_PROPERTY_SETTER(cxView, resizing);
     CX_PROPERTY_SETTER(cxView, subviews);
     CX_PROPERTY_SETTER(cxView, actions);
+    CX_PROPERTY_SETTER(cxView, touchtype);
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {
@@ -155,6 +168,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->fixscale = cxVec2fv(1.0f, 1.0f);
+    this->touchType = cxViewIsTouchTypeSubview | cxViewIsTouchTypeThis;
 
     CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
     CX_METHOD_SET(this->IsOnKey, cxViewIsOnKey);
@@ -685,7 +699,7 @@ cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch)
     if(!this->isVisible){
         return cxViewIsTouchTypeNone;
     }
-    return cxViewIsTouchTypeThis | cxViewIsTouchTypeSubview;
+    return this->touchType;
 }
 
 cxBool cxViewTouch(cxAny pview,cxTouch *touch)
