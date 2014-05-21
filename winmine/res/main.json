@@ -1,6 +1,0 @@
-{
-  "id": "map",
-  "type": "wmMap",
-  "resizing":"bottom",
-  "autobox":{"b":5}
-}
