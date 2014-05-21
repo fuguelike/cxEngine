@@ -13,6 +13,11 @@
 
 CX_C_BEGIN
 
+CX_OBJECT_DEF(wmMine, cxSprite)
+    cxAny map;
+    cxInt value;
+CX_OBJECT_END(wmMine)
+
 CX_C_END
 
 #endif

@@ -7,3 +7,11 @@
 //
 
 #include "wmMine.h"
+
+CX_OBJECT_TYPE(wmMine, cxSprite)
+{}
+CX_OBJECT_INIT(wmMine, cxSprite)
+{}
+CX_OBJECT_FREE(wmMine, cxSprite)
+{}
+CX_OBJECT_TERM(wmMine, cxSprite)
