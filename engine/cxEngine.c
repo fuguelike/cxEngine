@@ -97,6 +97,8 @@ void cxEngineTypes()
     CX_REGISTER_TYPE(cxView,         cxObject);
     CX_REGISTER_TYPE(cxAction,       cxObject);
     CX_REGISTER_TYPE(cxController,   cxObject);
+    CX_REGISTER_TYPE(cxEngine,       cxObject);
+    CX_REGISTER_TYPE(cxJson,         cxObject);
     
     //register streams
     CX_REGISTER_TYPE(cxAssetsStream, cxStream);
@@ -244,6 +246,24 @@ void cxEngineLayout(cxInt width,cxInt height)
     engine->isInit = true;
 }
 
+void cxEnginePush(cxAny object)
+{
+    CX_ASSERT(object != NULL && instance != NULL, "args error");
+    cxStackPush(instance->stack, object);
+}
+
+void cxEnginePop()
+{
+    CX_ASSERT(instance != NULL, "cxEngine instance null");
+    cxStackPop(instance->stack);
+}
+
+cxAny cxEngineTop()
+{
+    CX_ASSERT(instance != NULL, "cxEngine instance null");
+    return cxStackTop(instance->stack);
+}
+
 CX_OBJECT_TYPE(cxEngine, cxObject)
 {
     
@@ -304,7 +324,6 @@ cxAny cxEngineTypeCreate(cxJson json)
 cxAny cxObjectLoadWithJson(cxJson json)
 {
     CX_ASSERT(json != NULL, "json args error");
-    cxEngine engine = cxEngineInstance();
     cxConstChars src = NULL;
     cxObject object = NULL;
     if(cxJsonIsString(json)){
@@ -323,7 +342,7 @@ cxAny cxObjectLoadWithJson(cxJson json)
         return NULL;
     }
     cxConstChars id = cxJsonConstChars(json, "id");
-    cxController curr = cxStackTop(engine->stack);
+    cxController curr = cxEngineTop();
     if(id != NULL && curr != NULL){
         cxHashSet(curr->objects, cxHashStrKey(id), object);
     }
