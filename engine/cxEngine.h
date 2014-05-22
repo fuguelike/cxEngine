@@ -47,6 +47,12 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxString lang;
 CX_OBJECT_END(cxEngine)
 
+void cxEnginePush(cxAny object);
+
+void cxEnginePop();
+
+cxAny cxEngineTop();
+
 void cxTypeRunObjectSetter(cxObject object,cxJson json);
 
 cxAny cxEngineTypeCreate(cxJson json);

@@ -8,6 +8,64 @@
 #include <engine/cxEngine.h>
 #include "cxAction.h"
 
+CX_SETTER_DEF(cxAction, duration)
+{
+    this->duration = cxJsonToDouble(value, this->duration);
+}
+CX_SETTER_DEF(cxAction, delay)
+{
+    this->delay = cxJsonToDouble(value, this->delay);
+}
+CX_SETTER_DEF(cxAction, scale)
+{
+    this->scale = cxJsonToDouble(value, this->scale);
+}
+CX_SETTER_DEF(cxAction, curve)
+{
+    cxConstChars curve = cxJsonToConstChars(value);
+    cxCurveItem item = NULL;
+    if(curve != NULL){
+        item = cxCurveGet(curve);
+    }
+    if(item != NULL){
+        cxActionSetCurve(this, item->func);
+    }
+}
+CX_SETTER_DEF(cxAction, actionid)
+{
+    this->actionId = cxJsonToLong(value, this->actionId);
+}
+CX_SETTER_DEF(cxAction, index)
+{
+    cxInt indexnum = cxJsonToInt(value, this->indexNum);
+    cxActionSetIndex(this, indexnum);
+}
+
+CX_OBJECT_TYPE(cxAction, cxObject)
+{
+    CX_PROPERTY_SETTER(cxAction, duration);
+    CX_PROPERTY_SETTER(cxAction, delay);
+    CX_PROPERTY_SETTER(cxAction, scale);
+    CX_PROPERTY_SETTER(cxAction, curve);
+    CX_PROPERTY_SETTER(cxAction, actionid);
+    CX_PROPERTY_SETTER(cxAction, index);
+}
+CX_OBJECT_INIT(cxAction, cxObject)
+{
+    this->scale = 1.0f;
+    this->isExit = false;
+    this->index = -1;
+    this->indexNum = -1;
+}
+CX_OBJECT_FREE(cxAction, cxObject)
+{
+    CX_EVENT_RELEASE(this->onIndex);
+    CX_EVENT_RELEASE(this->onStart);
+    CX_EVENT_RELEASE(this->onStop);
+    CX_EVENT_RELEASE(this->onStep);
+}
+CX_OBJECT_TERM(cxAction, cxObject)
+
 cxBool cxActionForever(cxAny pav)
 {
     return false;
@@ -32,46 +90,6 @@ void cxActionSetView(cxAny pav,cxAny pview)
     cxAction this = pav;
     this->view = pview;
 }
-
-//void __cxActionInitObject(cxAny object,cxAny json,cxAny hash)
-//{
-//    cxAction this = object;
-//    this->duration = cxJsonDouble(json, "duration", this->duration);
-//    this->delay = cxJsonDouble(json, "delay", this->delay);
-//    this->scale = cxJsonDouble(json, "scale", this->scale);
-//    cxConstChars curve = cxJsonConstChars(json, "curve");
-//    cxCurveItem item = NULL;
-//    if(curve != NULL){
-//        item = cxCurveGet(curve);
-//    }
-//    if(item != NULL){
-//        cxActionSetCurve(this, item->func);
-//    }
-//    this->actionId = cxJsonLong(json, "actionid", this->actionId);
-//    cxInt indexnum = cxJsonInt(json, "index", this->indexNum);
-//    cxActionSetIndex(this, indexnum);
-//    CX_OBJECT_INIT_SUPER(cxObject);
-//}
-
-CX_OBJECT_TYPE(cxAction, cxObject)
-{
-    
-}
-CX_OBJECT_INIT(cxAction, cxObject)
-{
-    this->scale = 1.0f;
-    this->isExit = false;
-    this->index = -1;
-    this->indexNum = -1;
-}
-CX_OBJECT_FREE(cxAction, cxObject)
-{
-    CX_EVENT_RELEASE(this->onIndex);
-    CX_EVENT_RELEASE(this->onStart);
-    CX_EVENT_RELEASE(this->onStop);
-    CX_EVENT_RELEASE(this->onStep);
-}
-CX_OBJECT_TERM(cxAction, cxObject)
 
 void cxActionSetDuration(cxAny pav,cxFloat time)
 {

@@ -33,11 +33,10 @@ cxAny cxControllerObject(cxAny controller,cxConstChars id)
 
 void cxControllerInitWithFile(cxAny controller, cxConstChars file)
 {
-    cxEngine engine = cxEngineInstance();
     cxController this = controller;
-    cxStackPush(engine->stack, this);
+    cxEnginePush(this);
     cxAny root = cxObjectLoadWithFile(file);
-    cxStackPop(engine->stack);
+    cxEnginePop();
     CX_ASSERT(root != NULL, "load root view %s failed",file);
     CX_RETAIN_SWAP(this->root, root);
 }
