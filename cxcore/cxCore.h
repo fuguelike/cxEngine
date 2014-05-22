@@ -268,16 +268,13 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 //signal and slot
 
 typedef struct cxSignal cxSignal;
-
 typedef struct cxSlot cxSlot;
-
 struct cxSignal {
     cxSignal *prev,*next;
     cxSlot *slot;
     cxAny func;
     cxAny object;
 };
-
 struct cxSlot {
     cxSignal **signal;
     cxSignal *slot;
@@ -322,7 +319,7 @@ if(_slot_.slot != NULL && _slot_.signal != NULL){               \
 #define CX_SLOT_CONNECT(_signal_,_object_,_slot_,_func_)        \
 do{                                                             \
     CX_SLOT_RELEASE(_object_->_slot_);                          \
-    cxSignal *_new_ = allocator->calloc(1,sizeof(cxSignal));    \
+    cxSignal *_new_ = allocator->malloc(sizeof(cxSignal));      \
     _new_->func = _func_;                                       \
     _new_->object = _object_;                                   \
     _new_->slot = &_object_->_slot_;                            \

@@ -17,6 +17,7 @@ typedef void (*cxLoadingFunc)(cxAny object);
 
 CX_OBJECT_DEF(cxLoading, cxView)
     cxBool isLoading;
+    cxBool autoFinished;
     cxAny object;
     CX_EVENT_ALLOC(onFinished);
     CX_EVENT_ALLOC(onLoading);
