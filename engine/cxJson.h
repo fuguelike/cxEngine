@@ -45,6 +45,10 @@ if((_j_) != NULL){                                              \
     }                                                           \
 }
 
+void cxJsonInit();
+
+void cxJsonFree();
+
 cxJson cxJsonCreate(cxString json);
 
 cxBool cxJsonIsInt(cxJson json);
