@@ -96,11 +96,7 @@ void cxEngineTypes()
     CX_REGISTER_TYPE(cxAction,       cxObject);
     CX_REGISTER_TYPE(cxController,   cxObject);
     CX_REGISTER_TYPE(cxEngine,       cxObject);
-<<<<<<< HEAD
-=======
     CX_REGISTER_TYPE(cxJson,         cxObject);
->>>>>>> 18e40c8e6952645835a113db4348c46b1584395d
-    
     //register streams
     CX_REGISTER_TYPE(cxAssetsStream, cxStream);
     CX_REGISTER_TYPE(cxFileStream,   cxStream);
