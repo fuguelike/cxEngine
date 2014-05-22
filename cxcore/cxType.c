@@ -51,7 +51,13 @@ cxType cxTypesGet(cxConstType typeName)
 
 cxProperty cxTypeProperty(cxType this,cxConstChars key)
 {
-    cxAny p = cxHashGet(this->properties, cxHashStrKey(key));
+    cxProperty p = NULL;
+    cxType curr = this;
+    while (curr != NULL) {
+        p = cxHashGet(curr->properties, cxHashStrKey(key));
+        CX_BREAK(p != NULL);
+        curr = curr->superType;
+    }
     if(p == NULL){
         p = CX_ALLOC(cxProperty);
         cxHashSet(this->properties, cxHashStrKey(key), p);

@@ -431,6 +431,10 @@ cxAny cxObjectCreate(cxConstType type, cxInt size,cxObjectFunc initFunc,cxObject
 
 void cxObjectRetain(cxAny ptr);
 
+cxAny cxObjectType(cxAny object);
+
+cxAny cxObjectProperty(cxAny object,cxConstChars key);
+
 void cxObjectRelease(cxAny ptr);
 
 cxAny cxObjectAutoRelease(cxAny ptr);

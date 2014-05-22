@@ -95,6 +95,7 @@ void cxEngineTypes()
     CX_REGISTER_TYPE(cxView,         cxObject);
     CX_REGISTER_TYPE(cxAction,       cxObject);
     CX_REGISTER_TYPE(cxController,   cxObject);
+    CX_REGISTER_TYPE(cxEngine,       cxObject);
     
     //register streams
     CX_REGISTER_TYPE(cxAssetsStream, cxStream);

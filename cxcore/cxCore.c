@@ -140,14 +140,28 @@ void cxObjectRetain(cxAny ptr)
     cxAtomicAddInt32(&object->cxRefcount, 1);
 }
 
-void __cxObjectAutoType(cxAny type)
+cxAny cxObjectType(cxAny object)
+{
+    CX_RETURN(object == NULL, NULL);
+    cxObject this = object;
+    return cxTypesGet(this->cxType);
+}
+
+cxAny cxObjectProperty(cxAny object,cxConstChars key)
+{
+    CX_RETURN(object == NULL, NULL);
+    cxType type = cxObjectType(object);
+    return cxTypeProperty(type, key);
+}
+
+void __cxObjectAutoType(cxAny this)
 {
     
 }
 
 void __cxObjectAutoInit(cxObject this)
 {
-    
+
 }
 
 void __cxObjectAutoFree(cxObject this)
