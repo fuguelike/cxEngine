@@ -17,11 +17,11 @@ typedef void (*cxPropertySetter)(cxAny,cxAny);
 
 typedef cxAny (*cxPropertyGetter)(cxAny);
 
-#define CX_SETTER(_t_,_p_)          __##_t_##_p_##Setter
+#define CX_SETTER(_t_,_p_)          __private_##_t_##_p_##Setter
 
 #define CX_SETTER_DEF(_t_,_p_)     static void CX_SETTER(_t_,_p_)(_t_ this,cxAny value)
 
-#define CX_GETTER(_t_,_p_)          __##_t_##_p_##Getter
+#define CX_GETTER(_t_,_p_)          __private_##_t_##_p_##Getter
 
 #define CX_GETTER_DEF(_t_,_p_)     static cxAny CX_GETTER(_t_,_p_)(_t_ this)
 

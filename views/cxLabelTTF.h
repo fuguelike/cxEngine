@@ -26,7 +26,7 @@ void cxLabelTTFSetFontBold(cxAny pview,cxBool bold);
 
 void cxLabelTTFSetText(cxAny pview,cxString txt);
 
-void cxLabelTTFSetFont(cxAny pview,cxString font);
+void cxLabelTTFSetFontName(cxAny pview,cxString font);
 
 void cxLabelTTFUpdateText(cxAny pview);
 

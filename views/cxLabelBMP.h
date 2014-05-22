@@ -23,9 +23,11 @@ CX_OBJECT_END(cxLabelBMP)
 
 cxLabelBMP cxLabelBMPCreate(cxString font,cxString txt);
 
-void cxLabelBMPSetFont(cxAny pview,cxString font);
+void cxLabelBMPSetFontName(cxAny pview,cxString font);
 
 void cxLabelBMPSetText(cxAny pview,cxString txt);
+
+void cxLabelBMPSetFontSize(cxAny pview,cxFloat size);
 
 CX_C_END
 

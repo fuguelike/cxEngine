@@ -9,6 +9,18 @@
 #include "cxEngine.h"
 #include "cxJson.h"
 
+static json_t *global = NULL;
+
+void cxJsonInit()
+{
+    global = json_object();
+}
+
+void cxJsonFree()
+{
+    json_decref(global);
+}
+
 //if field is array
 static cxBool keyIsArray(cxString key,cxChar *skey,cxInt *index)
 {
@@ -304,23 +316,6 @@ cxBoxTex2f cxJsonBoxTex2f(cxJson json,cxConstChars key,cxBoxTex2f dv)
     return cxJsonToBoxTex2f(obj, dv);
 }
 
-static cxDouble cxJsonDoubleWithString(json_t *json)
-{
-    CX_ASSERT(json_is_string(json), "json must is string type");
-    cxEngine engine = cxEngineInstance();
-    cxConstChars str = json_string_value(json);
-    cxInt len = strlen(str);
-    cxChar num[16]={0};
-    if(str[len - 1] == 'w'){
-        memcpy(num, str, len - 1);
-        return atof(num) * engine->winsize.w;
-    }else if(str[len - 1] == 'h'){
-        memcpy(num, str, len - 1);
-        return atof(num) * engine->winsize.h;
-    }
-    return atof(str);
-}
-
 cxBool cxJsonExists(cxJson json,cxConstChars key)
 {
     CX_RETURN(json == NULL, false);
@@ -441,7 +436,7 @@ cxDouble cxJsonToDouble(cxJson json,cxDouble dv)
 {
     CX_ASSERT(json != NULL, "json error");
     if(json_is_string(CX_JSON_PTR(json))){
-        return cxJsonDoubleWithString(CX_JSON_PTR(json));
+        return atof(json_string_value(CX_JSON_PTR(json)));
     }
     if(!json_is_number(CX_JSON_PTR(json))){
         return dv;
@@ -524,7 +519,7 @@ cxDouble cxJsonDoubleAt(cxJson json,cxInt idx,cxDouble dv)
         return dv;
     }
     if(json_is_string(v)){
-        return cxJsonDoubleWithString(v);
+        return atof(json_string_value(v));
     }
     return json_number_value(v);
 }
@@ -651,8 +646,12 @@ cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble dv)
     if(v == NULL){
         return dv;
     }
+    if(json_is_object(v)){
+        
+        v = json_object_get(global, key);
+    }
     if(json_is_string(v)){
-        return cxJsonDoubleWithString(v);
+        return atof(json_string_value(v));
     }
     return json_number_value(v);
 }

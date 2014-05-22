@@ -66,6 +66,10 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
         cxAtlasAppend(this, &bp);
         nextpos.x += (pchar->xadvance + kerning);
     }
+    if(this->size > 0){
+        cxFloat scale = this->size / viewSize.h;
+        cxViewSetFixScale(this, cxVec2fv(scale, scale));
+    }
 }
 
 static void cxLabelBMPUpdate(cxEvent *event)
@@ -79,8 +83,10 @@ CX_SETTER_DEF(cxLabelBMP, font)
 {
     cxString font = cxJsonString(value, "name");
     if(cxStringOK(font)){
-        cxLabelBMPSetFont(this, font);
+        cxLabelBMPSetFontName(this, font);
     }
+    cxFloat size = cxJsonDouble(value, "size", this->size);
+    cxLabelBMPSetFontSize(this, size);
 }
 CX_SETTER_DEF(cxLabelBMP, text)
 {
@@ -110,12 +116,20 @@ CX_OBJECT_TERM(cxLabelBMP, cxAtlas)
 cxLabelBMP cxLabelBMPCreate(cxString font,cxString txt)
 {
     cxLabelBMP this = CX_CREATE(cxLabelBMP);
-    cxLabelBMPSetFont(this, font);
+    cxLabelBMPSetFontName(this, font);
     cxLabelBMPSetText(this, txt);
     return this;
 }
 
-void cxLabelBMPSetFont(cxAny pview,cxString font)
+void cxLabelBMPSetFontSize(cxAny pview,cxFloat size)
+{
+    cxLabelBMP this = pview;
+    CX_RETURN(cxFloatEqu(this->size,size));
+    this->size = size;
+    this->isDirty = true;
+}
+
+void cxLabelBMPSetFontName(cxAny pview,cxString font)
 {
     cxLabelBMP this = pview;
     cxBMPFont bmpfont = cxEngineLoadBMPFont(cxStringBody(font));

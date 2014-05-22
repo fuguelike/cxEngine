@@ -22,7 +22,7 @@ CX_SETTER_DEF(cxLabelTTF, font)
 {
     cxString font = cxJsonString(value, "name");
     if(cxStringOK(font)){
-        cxLabelTTFSetFont(this, font);
+        cxLabelTTFSetFontName(this, font);
     }
     cxBool bold = cxJsonBool(value, "bold", this->attr.bold);
     cxLabelTTFSetFontBold(this, bold);
@@ -58,7 +58,7 @@ CX_OBJECT_TERM(cxLabelTTF, cxSprite)
 cxLabelTTF cxLabelTTFCreate(cxString txt,cxString font,cxFloat fontsize)
 {
     cxLabelTTF this = CX_CREATE(cxLabelTTF);
-    cxLabelTTFSetFont(this, font);
+    cxLabelTTFSetFontName(this, font);
     cxLabelTTFSetText(this, txt);
     cxLabelTTFSetFontSize(this, fontsize);
     return this;
@@ -89,7 +89,7 @@ void cxLabelTTFSetFontSize(cxAny pview,cxFloat fontsize)
     this->isDirty = true;
 }
 
-void cxLabelTTFSetFont(cxAny pview,cxString font)
+void cxLabelTTFSetFontName(cxAny pview,cxString font)
 {
     cxLabelTTF this = pview;
     CX_RETURN(cxStringEqu(this->font, font));

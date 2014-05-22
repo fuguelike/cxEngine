@@ -20,30 +20,19 @@ CX_OBJECT_TERM(cxProperty, cxObject)
 void cxObjectSetter(cxAny object,cxConstChars key,cxAny value)
 {
     CX_ASSERT(key != NULL && object != NULL && value != NULL, "args error");
-    cxObject this = object;
-    cxType curr = cxTypesGet(this->cxType);
-    while(curr != NULL){
-        cxProperty p = cxHashGet(curr->properties, cxHashStrKey(key));
-        if(p != NULL && p->setter != NULL){
-            p->setter(object,value);
-            break;
-        }
-        curr = curr->superType;
+    cxProperty p = cxObjectProperty(object, key);
+    if(p != NULL && p->setter != NULL){
+        p->setter(object,value);
     }
 }
 
 cxBool cxObjectGetter(cxAny object,cxConstChars key,cxAny *value)
 {
     CX_ASSERT(key != NULL && object != NULL, "args error");
-    cxObject this = object;
-    cxType curr = cxTypesGet(this->cxType);
-    while(curr != NULL){
-        cxProperty p = cxHashGet(curr->properties, cxHashStrKey(key));
-        if(p != NULL && p->getter != NULL){
-            *value = p->getter(object);
-            return true;
-        }
-        curr = curr->superType;
+    cxProperty p = cxObjectProperty(object, key);
+    if(p != NULL && p->setter != NULL){
+        *value = p->getter(object);
+        return true;
     }
     return false;
 }

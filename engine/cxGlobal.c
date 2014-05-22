@@ -11,9 +11,11 @@
 void cxGlobalInit()
 {
     cxCoreInit();
+    cxJsonInit();
 }
 
 void cxGlobalFree()
 {
+    cxJsonFree();
     cxCoreFree();
 }
