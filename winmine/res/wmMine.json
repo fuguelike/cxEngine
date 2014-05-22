@@ -1,5 +1,13 @@
 {
   "type": "wmMine",
+  "size": {
+    "w": {
+      "_G": "ItemW"
+    },
+    "h": {
+      "_G": "ItemH"
+    }
+  },
   "subviews": [
     {
       "id": "mine",
@@ -12,9 +20,17 @@
       "type": "cxLabelBMP",
       "font": {
         "name": "number.json",
-        "size": {"global":"gridSizeHeight"}
+        "size": {
+          "_G": "ItemH"
+        }
       },
       "visible": false
+    },
+    {
+      "id": "top",
+      "type": "cxSprite",
+      "texture":"texture.json?touchup.png",
+      "resizing": "fill"
     }
   ]
 }

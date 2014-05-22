@@ -208,6 +208,8 @@ void cxEngineLayout(cxInt width,cxInt height)
     CX_LOGGER("openGL layout width=%d height=%d",width,height);
     cxEngine engine = cxEngineInstance();
     engine->winsize = cxSize2fv(width, height);
+    cxJsonRegisterDouble("WinW", width);
+    cxJsonRegisterDouble("WinH", height);
     cxViewSetSize(engine->window, engine->winsize);
     if(!cxSize2Zero(engine->dessize)){
         engine->scale.x = engine->winsize.w/engine->dessize.w;
