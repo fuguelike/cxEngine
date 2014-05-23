@@ -11,6 +11,21 @@
 
 static json_t *global = NULL;
 
+void cxJsonRegisterDouble(cxConstChars key,cxDouble value)
+{
+    json_object_set(global, key, json_real(value));
+}
+
+void cxJsonRegisterInt(cxConstChars key,cxInt value)
+{
+    json_object_set(global, key, json_integer(value));
+}
+
+void cxJsonRegisterLong(cxConstChars key,cxLong value)
+{
+    json_object_set(global, key, json_integer(value));
+}
+
 void cxJsonInit()
 {
     global = json_object();
@@ -639,6 +654,15 @@ cxString cxJsonString(cxJson json,cxConstChars key)
     return (str != NULL && strlen(str) > 0)?cxStringConstChars(str) : NULL;
 }
 
+static json_t *cxJsonGetGlobalJson(json_t *v)
+{
+    json_t *key = json_object_get(v, "_G");
+    if(key != NULL && json_is_string(key)){
+        return json_object_get(global, json_string_value(key));
+    }
+    return NULL;
+}
+
 cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble dv)
 {
     CX_ASSERT(json != NULL, "json error");
@@ -647,8 +671,7 @@ cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble dv)
         return dv;
     }
     if(json_is_object(v)){
-        
-        v = json_object_get(global, key);
+        v = cxJsonGetGlobalJson(v);
     }
     if(json_is_string(v)){
         return atof(json_string_value(v));

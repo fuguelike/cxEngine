@@ -1,0 +1,36 @@
+{
+  "type": "wmMine",
+  "size": {
+    "w": {
+      "_G": "ItemW"
+    },
+    "h": {
+      "_G": "ItemH"
+    }
+  },
+  "subviews": [
+    {
+      "id": "mine",
+      "type": "cxSprite",
+      "visible": false,
+      "resizing": "fill"
+    },
+    {
+      "id": "number",
+      "type": "cxLabelBMP",
+      "font": {
+        "name": "number.json",
+        "size": {
+          "_G": "ItemH"
+        }
+      },
+      "visible": false
+    },
+    {
+      "id": "top",
+      "type": "cxSprite",
+      "texture":"texture.json?touchup.png",
+      "resizing": "fill"
+    }
+  ]
+}
