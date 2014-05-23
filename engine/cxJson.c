@@ -65,6 +65,7 @@ void cxJsonDump()
 
 void cxJsonInit()
 {
+    json_set_alloc_funcs(cxMalloc, cxFree);
     global = json_object();
 }
 
