@@ -94,7 +94,7 @@ void cxEngineTypes()
     CX_REGISTER_TYPE(cxTexture,      cxObject);
     CX_REGISTER_TYPE(cxView,         cxObject);
     CX_REGISTER_TYPE(cxAction,       cxObject);
-    CX_REGISTER_TYPE(cxController,   cxObject);
+    CX_REGISTER_TYPE(cxViewLoader,   cxObject);
     CX_REGISTER_TYPE(cxEngine,       cxObject);
     CX_REGISTER_TYPE(cxJson,         cxObject);
     //register streams
@@ -337,7 +337,7 @@ cxAny cxObjectLoadWithJson(cxJson json)
         return NULL;
     }
     cxConstChars id = cxJsonConstChars(json, "id");
-    cxController curr = cxEngineTop();
+    cxViewLoader curr = cxEngineTop();
     if(id != NULL && curr != NULL){
         cxHashSet(curr->objects, cxHashStrKey(id), object);
     }

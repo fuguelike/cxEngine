@@ -14,7 +14,7 @@
 #include "cxUtil.h"
 #include "cxBMPFont.h"
 #include "cxUrlPath.h"
-#include "cxController.h"
+#include "cxViewLoader.h"
 
 CX_C_BEGIN
 

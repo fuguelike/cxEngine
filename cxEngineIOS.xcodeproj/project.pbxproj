@@ -90,7 +90,7 @@
 		83B08D111909FCB5005A63D2 /* value.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B08D061909FCB5005A63D2 /* value.c */; };
 		83B995C91925C5A100FD6BC1 /* cxAction.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B9959E1925C5A100FD6BC1 /* cxAction.c */; };
 		83B995CA1925C5A100FD6BC1 /* cxBMPFont.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995A01925C5A100FD6BC1 /* cxBMPFont.c */; };
-		83B995CB1925C5A100FD6BC1 /* cxController.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995A21925C5A100FD6BC1 /* cxController.c */; };
+		83B995CB1925C5A100FD6BC1 /* cxViewLoader.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995A21925C5A100FD6BC1 /* cxViewLoader.c */; };
 		83B995CC1925C5A100FD6BC1 /* cxEngine.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995A41925C5A100FD6BC1 /* cxEngine.c */; };
 		83B995CD1925C5A100FD6BC1 /* cxGlobal.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995A61925C5A100FD6BC1 /* cxGlobal.c */; };
 		83B995CE1925C5A100FD6BC1 /* cxIconv.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995A81925C5A100FD6BC1 /* cxIconv.c */; };
@@ -301,8 +301,8 @@
 		83B9959F1925C5A100FD6BC1 /* cxAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAction.h; sourceTree = "<group>"; };
 		83B995A01925C5A100FD6BC1 /* cxBMPFont.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxBMPFont.c; sourceTree = "<group>"; };
 		83B995A11925C5A100FD6BC1 /* cxBMPFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxBMPFont.h; sourceTree = "<group>"; };
-		83B995A21925C5A100FD6BC1 /* cxController.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxController.c; sourceTree = "<group>"; };
-		83B995A31925C5A100FD6BC1 /* cxController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxController.h; sourceTree = "<group>"; };
+		83B995A21925C5A100FD6BC1 /* cxViewLoader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxViewLoader.c; sourceTree = "<group>"; };
+		83B995A31925C5A100FD6BC1 /* cxViewLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxViewLoader.h; sourceTree = "<group>"; };
 		83B995A41925C5A100FD6BC1 /* cxEngine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxEngine.c; sourceTree = "<group>"; };
 		83B995A51925C5A100FD6BC1 /* cxEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEngine.h; sourceTree = "<group>"; };
 		83B995A61925C5A100FD6BC1 /* cxGlobal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxGlobal.c; sourceTree = "<group>"; };
@@ -632,8 +632,8 @@
 				83B9959F1925C5A100FD6BC1 /* cxAction.h */,
 				83B995A01925C5A100FD6BC1 /* cxBMPFont.c */,
 				83B995A11925C5A100FD6BC1 /* cxBMPFont.h */,
-				83B995A21925C5A100FD6BC1 /* cxController.c */,
-				83B995A31925C5A100FD6BC1 /* cxController.h */,
+				83B995A21925C5A100FD6BC1 /* cxViewLoader.c */,
+				83B995A31925C5A100FD6BC1 /* cxViewLoader.h */,
 				83B995A41925C5A100FD6BC1 /* cxEngine.c */,
 				83B995A51925C5A100FD6BC1 /* cxEngine.h */,
 				83B995A61925C5A100FD6BC1 /* cxGlobal.c */,
@@ -824,7 +824,7 @@
 				83B995D81925C5A100FD6BC1 /* cxStream.c in Sources */,
 				833CA55E1925DFEC0013630A /* cxMessage.c in Sources */,
 				8341C68318227FA10045A66F /* cxViewController.m in Sources */,
-				83B995CB1925C5A100FD6BC1 /* cxController.c in Sources */,
+				83B995CB1925C5A100FD6BC1 /* cxViewLoader.c in Sources */,
 				83B995DD1925C5A100FD6BC1 /* cxView.c in Sources */,
 				833CA54F1925DB5E0013630A /* cxLabelTTF.c in Sources */,
 				83B995D01925C5A100FD6BC1 /* cxMath.c in Sources */,
