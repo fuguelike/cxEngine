@@ -79,6 +79,8 @@ cxBool cxJsonIsObject(cxJson json);
 
 cxJson cxJsonAttachAlloc(json_t *json);
 
+cxJson cxJsonAttachCreate(json_t *json);;
+
 cxJson cxJsonToArray(cxJson json);
 
 cxJson cxJsonToObject(cxJson json);
@@ -183,7 +185,9 @@ cxBox4f cxJsonBox4f(cxJson json,cxConstChars key,cxBox4f dv);
 cxBoxTex2f cxJsonBoxTex2f(cxJson json,cxConstChars key,cxBoxTex2f dv);
 
 cxTex2f cxJsonTex2f(cxJson json,cxConstChars key,cxTex2f dv);
+//
 
+cxAny cxJsonDecode(cxJson json);
 
 CX_C_END
 

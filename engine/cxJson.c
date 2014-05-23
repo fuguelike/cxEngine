@@ -519,6 +519,16 @@ cxJson cxJsonCreate(cxString json)
     CX_ASSERT(this->json != NULL, "cxJson load error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
     return this;
 }
+
+cxJson cxJsonAttachCreate(json_t *json)
+{
+    CX_ASSERT(json != NULL, "args error");
+    cxJson this = CX_CREATE(cxJson);
+    this->json = json;
+    json_incref(this->json);
+    return this;
+}
+
 //alloc must release
 cxJson cxJsonAttachAlloc(json_t *json)
 {
@@ -709,6 +719,53 @@ cxInt cxJsonInt(cxJson json,cxConstChars key,cxInt dv)
     return jsonToInt(v, dv);
 }
 
+static void cxJsonDecodeToArray(cxArray array,cxJson json)
+{
+    CX_JSON_ARRAY_EACH_BEG(json, item)
+    {
+        cxAny iv = cxJsonDecode(item);
+        CX_CONTINUE(iv == NULL);
+        cxArrayAppend(array, iv);
+    }
+    CX_JSON_ARRAY_EACH_END(json, item)
+}
+
+static void cxJsonDecodeToHash(cxHash hash,cxJson json)
+{
+    CX_JSON_OBJECT_EACH_BEG(json, item)
+    {
+        cxAny iv = cxJsonDecode(item);
+        CX_CONTINUE(iv == NULL);
+        cxHashSet(hash, cxHashStrKey(key), iv);
+    }
+    CX_JSON_OBJECT_EACH_END(json, item)
+}
+
+cxAny cxJsonDecode(cxJson json)
+{
+    cxAny rv = NULL;
+    CX_RETURN(json == NULL, rv);
+    if(cxJsonIsArray(json)){
+        rv = CX_CREATE(cxArray);
+        cxJsonDecodeToArray(rv, json);
+    }else if(cxJsonIsObject(json)){
+        rv = CX_CREATE(cxHash);
+        cxJsonDecodeToHash(rv, json);
+    }else if(cxJsonIsInt(json)){
+        rv = cxNumberInt(cxJsonToInt(json, 0));
+    }else if(cxJsonIsDouble(json)){
+        rv = cxNumberDouble(cxJsonToDouble(json, 0));
+    }else if(cxJsonIsString(json)){
+        rv = cxJsonToString(json);
+    }else if(cxJsonIsBool(json)){
+        rv = cxNumberBool(cxJsonToBool(json, false));
+    }else{
+        json_t *jv = CX_JSON_PTR(json);
+        CX_WARN("json type %d not process",json_typeof(jv));
+        rv = NULL;
+    }
+    return rv;
+}
 
 
 
