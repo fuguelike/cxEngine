@@ -80,7 +80,7 @@ static cxString cxFileStreamAllBytes(cxAny this)
     cxStreamSeek(file,0,SEEK_END);
     file->length = cxStreamPosition(file);
     cxStreamSeek(file,0,SEEK_SET);
-    cxChar *bytes = allocator->malloc(file->length + 1);
+    cxChars bytes = allocator->malloc(file->length + 1);
     cxStreamRead(file,bytes,file->length);
     bytes[file->length] = '\0';
     cxString data = cxStringAttach(bytes, file->length);

@@ -58,7 +58,7 @@ CX_OBJECT_END(cxString)
 
 cxBool cxConstCharsIsNumber(cxConstChars s);
 
-cxString cxStringAttach(cxChar *d,cxInt l);
+cxString cxStringAttach(cxChars d,cxInt l);
 
 void cxStringClean(cxString string);
 
@@ -78,7 +78,7 @@ cxString cxStringAllocChars(cxConstChars str);
 
 void cxStringReplace(cxString string,cxChar s1,cxChar s2);
 
-cxString cxStringAttachChars(cxChar *str);
+cxString cxStringAttachChars(cxChars str);
 
 cxString cxStringConstChars(cxConstChars str);
 

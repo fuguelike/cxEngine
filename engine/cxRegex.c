@@ -84,7 +84,7 @@ cxString cxRegexMatch(cxRegex this,cxInt index)
     }
     cxString ret = CX_CREATE(cxString);
     if((pos.end - pos.start) > 0){
-        cxStringAppend(ret, (cxChar *)(cxStringBody(this->input) + pos.start), pos.end - pos.start);
+        cxStringAppend(ret, (cxChars)(cxStringBody(this->input) + pos.start), pos.end - pos.start);
     }
     return ret;
 }

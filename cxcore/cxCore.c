@@ -45,30 +45,30 @@ cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x)
 }
 #endif
 
-static cxPointer cxMalloc(cxSize size)
+cxPointer cxMalloc(cxSize size)
 {
     return calloc(1,size);
 }
 
-static cxPointer cxRealloc(cxPointer ptr,cxSize size)
+cxPointer cxRealloc(cxPointer ptr,cxSize size)
 {
     return realloc(ptr, size);
 }
 
-static cxPointer cxCalloc(cxSize num,cxSize size)
+cxPointer cxCalloc(cxSize num,cxSize size)
 {
     return calloc(num, size);
 }
 
-static void cxFree(cxPointer ptr)
+void cxFree(cxPointer ptr)
 {
     free(ptr);
 }
 
-static cxChar *cxStrdup(cxConstChars s)
+static cxChars cxStrdup(cxConstChars s)
 {
     cxInt len = (cxInt)strlen(s);
-    cxChar *ret = cxMalloc(len + 1);
+    cxChars ret = cxMalloc(len + 1);
     memcpy(ret, s, len);
     ret[len]='\0';
     return ret;

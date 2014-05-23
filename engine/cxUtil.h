@@ -26,9 +26,9 @@ cxArray cxFontNames();
 
 cxInt cxRand(cxInt min,cxInt max);
 
-cxUInt cxHexToUInt(const cxChar *bs);
+cxUInt cxHexToUInt(cxConstChars bs);
 
-cxUInt cxBinaryToUInt(const cxChar *bs);
+cxUInt cxBinaryToUInt(cxConstChars bs);
 
 void cxSetRandSeed();
 
@@ -44,7 +44,7 @@ cxString cxDecompress(cxString data);
 
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr);
 
-cxHash cxParseKeyValue(cxChar *query);
+cxHash cxParseKeyValue(cxChars query);
 
 cxString cxAssetsPath(cxConstChars file);
 

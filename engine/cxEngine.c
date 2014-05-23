@@ -214,10 +214,13 @@ void cxEngineLayout(cxInt width,cxInt height)
     if(!cxSize2Zero(engine->dessize)){
         engine->scale.x = engine->winsize.w/engine->dessize.w;
         engine->scale.y = engine->winsize.h/engine->dessize.h;
+        cxJsonRegisterDouble("ScaleX", engine->scale.x);
+        cxJsonRegisterDouble("ScaleY", engine->scale.y);
     }
     //
     if(!engine->isInit){
         cxOpenGLCheckFeature();
+        cxJsonDump();
         cxEngineMain(engine);
     }
     //

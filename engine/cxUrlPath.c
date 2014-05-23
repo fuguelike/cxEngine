@@ -21,7 +21,7 @@ static cxUrlPath cxUrlPathParseKeyValueImp(cxUrlPath this)
     CX_RETURN(this->count == 1, this);
     cxConstChars url = this->key;
     cxInt len = strlen(url);
-    cxChar *sq = strrchr(url, '=');
+    cxChars sq = strrchr(url, '=');
     if(sq == NULL){
         return this;
     }
@@ -43,7 +43,7 @@ cxUrlPath cxUrlPathParse(cxConstChars url)
     CX_ASSERT(strlen(url) < CX_MAX_KEY, "url too long");
     this->count = 0;
     cxInt len = strlen(url);
-    cxChar *sq = strrchr(url, '?');
+    cxChars sq = strrchr(url, '?');
     if(sq != NULL){
         cxInt cl = len - (cxInt)strlen(sq);
         memcpy(this->path, url, cl);

@@ -150,6 +150,7 @@ typedef double          cxDouble;
 
 typedef const char *    cxConstType;
 typedef const char *    cxConstChars;
+typedef char *          cxChars;
 
 #ifdef __GNUC__
     #define CX_ATTRIBUTE_UNUSED     __attribute__ ((__unused__))
@@ -394,6 +395,14 @@ cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x);
 
 cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x);
 
+cxPointer cxMalloc(cxSize size);
+
+cxPointer cxRealloc(cxPointer ptr,cxSize size);
+
+cxPointer cxCalloc(cxSize num,cxSize size);
+
+void cxFree(cxPointer ptr);
+
 typedef cxPointer (*cxMallocFunc)(cxSize size);
 
 typedef cxPointer (*cxReallocFunc)(cxPointer ptr,cxSize size);
@@ -402,7 +411,7 @@ typedef cxPointer (*cxCallocFunc)(cxSize num,cxSize size);
 
 typedef void (*cxFreeFunc)(cxPointer ptr);
 
-typedef cxChar *(*cxStrdupFunc)(cxConstChars s);
+typedef cxChars(*cxStrdupFunc)(cxConstChars s);
 
 typedef struct {
     cxMallocFunc    malloc;

@@ -11,14 +11,15 @@
 
 #include "jansson.h"
 #include "jansson_private.h"
+#include <cxcore/cxCore.h>
 
 /* C89 allows these to be macros */
 #undef malloc
 #undef free
 
 /* memory function pointers */
-static json_malloc_t do_malloc = malloc;
-static json_free_t do_free = free;
+static json_malloc_t do_malloc = cxMalloc;
+static json_free_t do_free = cxFree;
 
 void *jsonp_malloc(size_t size)
 {

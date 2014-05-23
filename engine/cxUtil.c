@@ -45,7 +45,7 @@ cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
     return true;
 }
 
-cxUInt cxBinaryToUInt(const cxChar *bs)
+cxUInt cxBinaryToUInt(cxConstChars bs)
 {
     CX_ASSERT(bs != NULL, "args error");
     cxInt len = strlen(bs);
@@ -70,7 +70,7 @@ cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c)
     return  false;
 }
 
-cxUInt cxHexToUInt(const cxChar *bs)
+cxUInt cxHexToUInt(cxConstChars bs)
 {
     CX_ASSERT(bs != NULL, "args error");
     cxInt len = strlen(bs);

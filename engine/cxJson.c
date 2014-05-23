@@ -13,38 +13,54 @@ static json_t *global = NULL;
 
 void cxJsonRegisterConstChars(cxConstChars key,cxConstChars value)
 {
+    CX_ASSERT(cxConstCharsOK(key), "key error");
     CX_ASSERT(cxConstCharsOK(value), "value error");
     json_object_set(global, key, json_string(value));
 }
 
 void cxJsonRegisterString(cxConstChars key,cxString value)
 {
+    CX_ASSERT(cxConstCharsOK(key), "key error");
     CX_ASSERT(cxStringOK(value), "value error");
     json_object_set(global, key, json_string(cxStringBody(value)));
 }
 
 void cxJsonRegisterDouble(cxConstChars key,cxDouble value)
 {
+    CX_ASSERT(cxConstCharsOK(key), "key error");
     json_object_set(global, key, json_real(value));
 }
 
 void cxJsonRegisterInt(cxConstChars key,cxInt value)
 {
+    CX_ASSERT(cxConstCharsOK(key), "key error");
     json_object_set(global, key, json_integer(value));
 }
 
 void cxJsonRegisterLong(cxConstChars key,cxLong value)
 {
+    CX_ASSERT(cxConstCharsOK(key), "key error");
     json_object_set(global, key, json_integer(value));
 }
 
 static json_t *cxJsonGetGlobalJson(json_t *v)
 {
     json_t *key = json_object_get(v, "_G");
+    CX_ASSERT(v != NULL, "v error");
     if(key != NULL && json_is_string(key)){
-        return json_object_get(global, json_string_value(key));
+        cxConstChars gKey = json_string_value(key);
+        v = json_object_get(global, gKey);
+        CX_ASSERT(v != NULL, "globale key(%s) not regster",gKey);
     }
     return v;
+}
+
+void cxJsonDump()
+{
+    cxChars json = json_dumps(global, JSON_ENCODE_ANY);
+    CX_LOGGER("_G=%s",json);
+    allocator->free(json);
+    
 }
 
 void cxJsonInit()
@@ -58,7 +74,7 @@ void cxJsonFree()
 }
 
 //if field is array
-static cxBool keyIsArray(cxString key,cxChar *skey,cxInt *index)
+static cxBool keyIsArray(cxString key,cxChars skey,cxInt *index)
 {
     CX_ASSERT(skey != NULL && key != NULL, "args error");
     cxInt s = -1;

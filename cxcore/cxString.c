@@ -63,7 +63,7 @@ cxString cxStringAllocChars(cxConstChars str)
     return rv;
 }
 
-cxString cxStringAttachChars(cxChar *str)
+cxString cxStringAttachChars(cxChars str)
 {
     CX_ASSERT(str != NULL, "str null");
     return cxStringAttach(str, strlen(str));
@@ -79,7 +79,7 @@ cxString cxStringConstChars(cxConstChars str)
 
 void cxStringReplace(cxString string,cxChar find,cxChar rep)
 {
-    cxChar *ptr = (cxChar *)cxStringBody(string);
+    cxChars ptr = (cxChars)cxStringBody(string);
     cxInt len = cxStringLength(string);
     for(cxInt i=0; i < len; i++){
         if(ptr[i] == find){
@@ -147,7 +147,7 @@ cxBool cxConstCharsIsNumber(cxConstChars s)
     return true;
 }
 
-cxString cxStringAttach(cxChar *d,cxInt l)
+cxString cxStringAttach(cxChars d,cxInt l)
 {
     cxString rv = CX_CREATE(cxString);
     rv->strptr.d = d;

@@ -48,9 +48,9 @@ static cxString cxIconvItemConvert(cxIconvItem this,const cxString string)
     cxSize allocsize = insiz * 4 + 1;
     cxSize outsiz = allocsize;
     cxSize outlen = 0;
-    cxChar *inptr = (cxChar *)cxStringBody(string);
-    cxChar *outptr = allocator->malloc(outsiz);
-    cxChar *buffer = outptr;
+    cxChars inptr = (cxChars)cxStringBody(string);
+    cxChars outptr = allocator->malloc(outsiz);
+    cxChars buffer = outptr;
     int ret = iconv(this->iconvptr, &inptr, (size_t *)&insiz, &outptr, (size_t *)&outsiz);
     if(ret == 0){
         outlen = allocsize - outsiz;

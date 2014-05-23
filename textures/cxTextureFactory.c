@@ -59,7 +59,7 @@ CX_OBJECT_FREE(cxTextureFactory, cxObject)
 CX_OBJECT_TERM(cxTextureFactory, cxObject)
 
 //@GroupName:candy.xml?green.png
-static cxHash cxTextureFactoryGroup(cxConstChars file,cxChar *files)
+static cxHash cxTextureFactoryGroup(cxConstChars file,cxChars files)
 {
     CX_ASSERT(file != NULL && files != NULL, "args error");
     cxChar group[PATH_MAX] = {0};
