@@ -45,6 +45,10 @@ if((_j_) != NULL){                                              \
     }                                                           \
 }
 
+void cxJsonRegisterConstChars(cxConstChars key,cxConstChars value);
+
+void cxJsonRegisterString(cxConstChars key,cxString value);
+
 void cxJsonRegisterDouble(cxConstChars key,cxDouble value);
 
 void cxJsonRegisterInt(cxConstChars key,cxInt value);
