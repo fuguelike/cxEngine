@@ -196,11 +196,20 @@ void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,
     cxAtlasAppend(pview, &bp);
 }
 
-cxInt cxAtlasAppendSprite(cxAny pview,cxConstChars key)
+cxInt cxAtlasAppendSpriteWithSize(cxAny pview,cxVec2f pos,cxSize2f siz,cxConstChars key)
 {
     cxAtlas this = pview;
     cxColor4f color = cxColor4fv(1, 1, 1, 1);
-    cxVec2f pos = cxVec2fv(0, 0);
+    cxBoxTex2f tbox = cxTextureBox(this->super.texture, key);
+    cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, siz, tbox, color);
+    cxAtlasAppend(pview, &bp);
+    return this->number - 1;
+}
+
+cxInt cxAtlasAppendSprite(cxAny pview,cxVec2f pos,cxConstChars key)
+{
+    cxAtlas this = pview;
+    cxColor4f color = cxColor4fv(1, 1, 1, 1);
     cxBoxTex2f tbox = cxTextureBox(this->super.texture, key);
     cxSize2f siz = cxTextureSize(this->super.texture, key);
     cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, siz, tbox, color);

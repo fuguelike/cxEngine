@@ -97,6 +97,12 @@ CX_SETTER_DEF(cxView, resizing)
     if(cxConstCharsHas(mask, "bottom")){
         this->autoMask |= cxViewAutoResizeBottom;
     }
+    if(cxConstCharsHas(mask, "width")){
+        this->autoMask |= cxViewAutoResizeWidth;
+    }
+    if(cxConstCharsHas(mask, "height")){
+        this->autoMask |= cxViewAutoResizeHeight;
+    }
     if(cxConstCharsEqu(mask, "fill")){
         this->autoMask = cxViewAutoResizeFill;
     }

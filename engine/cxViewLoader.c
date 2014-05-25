@@ -21,7 +21,7 @@ CX_OBJECT_INIT(cxViewLoader, cxObject)
 CX_OBJECT_FREE(cxViewLoader, cxObject)
 {
     CX_RELEASE(this->objects);
-    CX_RELEASE(this->root);
+    CX_RELEASE(this->view);
 }
 CX_OBJECT_TERM(cxViewLoader, cxObject)
 
@@ -35,10 +35,10 @@ void cxViewLoaderInitWithFile(cxAny controller, cxConstChars file)
 {
     cxViewLoader this = controller;
     cxEnginePush(this);
-    cxAny root = cxObjectLoadWithFile(file);
+    cxAny view = cxObjectLoadWithFile(file);
     cxEnginePop();
-    CX_ASSERT(root != NULL, "load root view %s failed",file);
-    CX_RETAIN_SWAP(this->root, root);
+    CX_ASSERT(view != NULL, "load root view %s failed",file);
+    CX_RETAIN_SWAP(this->view, view);
 }
 
 cxViewLoader cxViewLoaderCreate(cxConstChars file)

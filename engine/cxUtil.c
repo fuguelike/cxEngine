@@ -143,7 +143,7 @@ cxInt cxRand(cxInt min,cxInt max)
 
 void cxSetRandSeed()
 {
-    srand((unsigned)clock());
+    srand((unsigned)time(NULL));
 }
 
 cxDouble cxTimestamp()

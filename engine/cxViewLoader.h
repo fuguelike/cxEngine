@@ -14,7 +14,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxViewLoader, cxObject)
-    cxAny root;
+    cxAny view;
     cxHash objects;
 CX_OBJECT_END(cxViewLoader)
 

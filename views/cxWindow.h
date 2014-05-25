@@ -10,6 +10,7 @@
 #define cxEngine_cxWindow_h
 
 #include <engine/cxView.h>
+#include <engine/cxViewLoader.h>
 
 CX_C_BEGIN
 
@@ -24,6 +25,8 @@ void cxWindowPushView(cxAny pview);
 void cxWindowPopView();
 
 void cxWindowReplaceView(cxAny pview);
+
+void cxWindowSetRootLoader(cxAny loader);
 
 CX_C_END
 
