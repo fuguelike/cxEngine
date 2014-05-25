@@ -9,6 +9,7 @@
 
 #include <views/cxWindow.h>
 #include <actions/cxCurve.h>
+#include <actions/cxTimer.h>
 #include <cxcore/cxBase.h>
 #include "cxInput.h"
 #include "cxUtil.h"
@@ -70,6 +71,8 @@ void cxEngineTimeReset();
 cxJson cxEngineLoadJson(cxConstChars file);
 
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
+
+cxTimer cxEngineTimer(cxFloat freq,cxInt repeat);
 
 //extern
 void cxEngineInit(cxEngine engine);

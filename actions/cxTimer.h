@@ -22,7 +22,7 @@ CX_OBJECT_END(cxTimer)
 
 void cxTimerReset(cxAny timer);
 
-cxTimer cxTimerCreate(cxFloat time,cxInt repeat);
+cxTimer cxTimerCreate(cxFloat freq,cxInt repeat);
 
 CX_C_END
 

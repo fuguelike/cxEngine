@@ -18,6 +18,7 @@ CX_OBJECT_DEF(cxLabelBMP, cxAtlas)
     cxBMPFont font;
     cxString txt;
     cxBool isDirty;
+    cxBool isCenter;
     cxFloat size;
 CX_OBJECT_END(cxLabelBMP)
 

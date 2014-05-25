@@ -28,7 +28,9 @@ CX_OBJECT_TERM(cxViewLoader, cxObject)
 cxAny cxViewLoaderObject(cxAny controller,cxConstChars id)
 {
     cxViewLoader this = controller;
-    return cxHashGet(this->objects, cxHashStrKey(id));
+    cxAny object = cxHashGet(this->objects, cxHashStrKey(id));
+    CX_ASSERT(object != NULL, "%s object get error");
+    return object;
 }
 
 void cxViewLoaderInitWithFile(cxAny controller, cxConstChars file)

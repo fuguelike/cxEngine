@@ -248,6 +248,11 @@ void cxEngineLayout(cxInt width,cxInt height)
     engine->isInit = true;
 }
 
+cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)
+{
+    return cxViewAppendTimer(instance->window, freq, repeat);
+}
+
 void cxEnginePush(cxAny object)
 {
     CX_ASSERT(object != NULL && instance != NULL, "args error");

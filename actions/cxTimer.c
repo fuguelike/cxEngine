@@ -41,10 +41,10 @@ CX_OBJECT_FREE(cxTimer, cxAction)
 }
 CX_OBJECT_TERM(cxTimer, cxAction)
 
-cxTimer cxTimerCreate(cxFloat time,cxInt repeat)
+cxTimer cxTimerCreate(cxFloat freq,cxInt repeat)
 {
     cxTimer this = CX_CREATE(cxTimer);
-    this->super.duration  = time;
+    this->super.duration  = freq;
     this->repeat = repeat;
     return this;
 }

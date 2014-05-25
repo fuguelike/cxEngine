@@ -43,15 +43,21 @@ void cxJsonRegisterLong(cxConstChars key,cxLong value)
     json_object_set(global, key, json_integer(value));
 }
 
-static json_t *cxJsonGetGlobalJson(json_t *v)
+static json_t *cxJsonParseRegistedValue(json_t *v)
 {
-    json_t *key = json_object_get(v, "_G");
-    CX_ASSERT(v != NULL, "v error");
-    if(key != NULL && json_is_string(key)){
-        cxConstChars gKey = json_string_value(key);
-        v = json_object_get(global, gKey);
-        CX_ASSERT(v != NULL, "globale key(%s) not regster",gKey);
+    if(!json_is_string(v)){
+        return v;
     }
+    cxConstChars key = json_string_value(v);
+    if(key[0] != 'G'){
+        return v;
+    }
+    cxConstChars gkey = key + 2;
+    if(!cxConstCharsOK(gkey)){
+        return v;
+    }
+    v = json_object_get(global, gkey);
+    CX_ASSERT(v != NULL, "globale key(%s) not regster",gkey);
     return v;
 }
 
@@ -151,9 +157,7 @@ static cxJson jsonToObject(json_t *v)
 static cxInt jsonToInt(json_t *v,cxInt dv)
 {
     CX_RETURN(v == NULL,dv);
-    if(json_is_object(v)){
-        v = cxJsonGetGlobalJson(v);
-    }
+    v = cxJsonParseRegistedValue(v);
     if(json_is_string(v)){
         return atoi(json_string_value(v));
     }
@@ -164,9 +168,7 @@ static cxConstChars jsonToConstChars(json_t *v)
 {
     CX_RETURN(v == NULL, NULL);
     cxConstChars str = NULL;
-    if(json_is_object(v)){
-        v = cxJsonGetGlobalJson(v);
-    }
+    v = cxJsonParseRegistedValue(v);
     if(json_is_string(v)){
         str = json_string_value(v);
     }
@@ -183,9 +185,7 @@ static cxString jsonToString(json_t *v)
 static cxDouble jsonToDouble(json_t *v,cxDouble dv)
 {
     CX_RETURN(v == NULL,dv);
-    if(json_is_object(v)){
-        v = cxJsonGetGlobalJson(v);
-    }
+    v = cxJsonParseRegistedValue(v);
     if(json_is_string(v)){
         return atof(json_string_value(v));
     }
@@ -195,9 +195,7 @@ static cxDouble jsonToDouble(json_t *v,cxDouble dv)
 static cxLong jsonToLong(json_t *v,cxLong dv)
 {
     CX_RETURN(v == NULL,dv);
-    if(json_is_object(v)){
-        v = cxJsonGetGlobalJson(v);
-    }
+    v = cxJsonParseRegistedValue(v);
     if(json_is_string(v)){
         return atol(json_string_value(v));
     }
@@ -207,11 +205,12 @@ static cxLong jsonToLong(json_t *v,cxLong dv)
 static cxBool jsonToBool(json_t *v,cxBool dv)
 {
     CX_RETURN(v == NULL,dv);
-    if(json_is_object(v)){
-        v = cxJsonGetGlobalJson(v);
-    }
+    v = cxJsonParseRegistedValue(v);
     if(json_is_string(v)){
         return strcasecmp(json_string_value(v), "true") == 0;
+    }
+    if(json_is_integer(v)){
+        return json_integer_value(v) != 0;
     }
     return json_is_true(v);
 }

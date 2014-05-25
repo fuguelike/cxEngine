@@ -24,6 +24,7 @@ CX_OBJECT_INIT(cxTexture, cxObject)
 {
     this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE);
     this->keys = CX_ALLOC(cxHash);
+    this->scale = cxVec2fv(1.0f, 1.0f);
 }
 CX_OBJECT_FREE(cxTexture, cxObject)
 {

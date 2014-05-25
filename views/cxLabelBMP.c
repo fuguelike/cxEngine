@@ -61,7 +61,11 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
         cxColor4f color = cxViewColor(this);
         cxVec2f pos = cxVec2fv(0,0);
         pos.x = nextpos.x + pchar->xoffset + kerning + size.w/2.0f - viewSize.w/2.0f;
-        pos.y = nextpos.y + this->font->lineHeight - pchar->yoffset - size.h/2.0f - viewSize.h/2.0f;
+        if(this->isCenter){
+            pos.y = 0;
+        }else{
+            pos.y = nextpos.y + this->font->lineHeight - pchar->yoffset - size.h/2.0f - viewSize.h/2.0f;
+        }
         cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, size, tex, color);
         cxAtlasAppend(this, &bp);
         nextpos.x += (pchar->xadvance + kerning);
@@ -95,11 +99,16 @@ CX_SETTER_DEF(cxLabelBMP, text)
         cxLabelBMPSetText(this, text);
     }
 }
+CX_SETTER_DEF(cxLabelBMP, center)
+{
+    this->isCenter = cxJsonToBool(value, false);
+}
 
 CX_OBJECT_TYPE(cxLabelBMP, cxAtlas)
 {
     CX_PROPERTY_SETTER(cxLabelBMP, font);
     CX_PROPERTY_SETTER(cxLabelBMP, text);
+    CX_PROPERTY_SETTER(cxLabelBMP, center);
 }
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
 {
