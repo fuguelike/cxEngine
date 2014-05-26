@@ -43,6 +43,7 @@ CX_OBJECT_TERM(cxRunner, cxAction)
 static void cxRunnerItemStop(cxEvent *event)
 {
     cxRunner this = cxActionParent(event->sender);
+    CX_ASSERT(this != NULL, "parent null");
     this->count --;
 }
 
