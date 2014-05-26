@@ -33,13 +33,13 @@ static void cxParticleOver(cxAny pav)
     CX_SLOT_RELEASE(this->onDraw);
 }
 
-static void cxParticleInitUnit(cxParticle this,cxParticleUnit *particle)
+static void cxParticleInitUnit(cxParticle this,cxParticleUnit *particle,cxInt index)
 {
     cxParticleArgs args = {0};
     args.position = cxVec2fValue(this->position);
     args.angle = kmDegreesToRadians(cxFloatValue(this->angle));
     args.speed = cxFloatValue(this->speed);
-    CX_METHOD_RUN(this->SetUnitArgs, this, &args);
+    CX_METHOD_RUN(this->InitUnit, this, index, &args);
     
     particle->position = args.position;
     particle->life = cxFloatValue(this->life);
@@ -89,7 +89,7 @@ static cxBool cxParticleAdd(cxParticle this)
         return false;
     }
     cxParticleUnit *unit = &this->units[this->count];
-    cxParticleInitUnit(this, unit);
+    cxParticleInitUnit(this, unit,this->count);
     this->count ++;
     return true;
 }

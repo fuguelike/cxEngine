@@ -83,7 +83,7 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     cxFloatRange endradius;
     cxFloatRange rotatepers;
     CX_METHOD_DEF(cxAny, GetDrawView,cxAny);
-    CX_METHOD_DEF(void, SetUnitArgs,cxAny,cxParticleArgs *);
+    CX_METHOD_DEF(void, InitUnit,cxAny,cxInt,cxParticleArgs *);
     CX_SLOT_ALLOC(onDraw);
 CX_OBJECT_END(cxParticle)
 
