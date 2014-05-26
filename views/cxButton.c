@@ -46,9 +46,19 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
+CX_SETTER_DEF(cxButton, movement)
+{
+    this->movement = cxJsonToDouble(value, this->movement);
+}
+CX_SETTER_DEF(cxButton, enable)
+{
+    this->isEnable = cxJsonToBool(value, this->isEnable);
+}
+
 CX_OBJECT_TYPE(cxButton, cxSprite)
 {
-    
+    CX_PROPERTY_SETTER(cxButton, movement);
+    CX_PROPERTY_SETTER(cxButton, enable);
 }
 CX_OBJECT_INIT(cxButton, cxSprite)
 {

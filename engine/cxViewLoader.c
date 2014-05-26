@@ -29,7 +29,7 @@ cxAny cxViewLoaderObject(cxAny controller,cxConstChars id)
 {
     cxViewLoader this = controller;
     cxAny object = cxHashGet(this->objects, cxHashStrKey(id));
-    CX_ASSERT(object != NULL, "%s object get error");
+    CX_ASSERT(object != NULL, "%s object get error",id);
     return object;
 }
 

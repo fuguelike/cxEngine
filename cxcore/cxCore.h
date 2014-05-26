@@ -209,7 +209,7 @@ do{                                                             \
 
 #define CX_GOTO(cond,label)         if(cond)goto label
 
-#define CX_OBJECT_BEG(_t_)                                      \
+#define CX_OBJECT_BEG(_t_,_b_)                                  \
 static CX_ATTRIBUTE_UNUSED cxConstType _t_##TypeName = #_t_;    \
 typedef struct _t_ *_t_;                                        \
 void __##_t_##AutoInit(_t_ this);                               \
@@ -227,7 +227,7 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
     return CX_ALLOC(_t_);                                       \
 }
 
-#define CX_OBJECT_DEF(_t_,_b_) CX_OBJECT_BEG(_t_) struct _b_ super;
+#define CX_OBJECT_DEF(_t_,_b_) CX_OBJECT_BEG(_t_,_b_) struct _b_ super;
 
 #define CX_OBJECT_TYPE(_t_,_b_) void __##_t_##AutoType(cxAny this){
 
@@ -457,7 +457,7 @@ void cxUtilWarn(cxConstChars file, cxInt line, cxConstChars format, ...);
 void cxUtilAssert(cxConstChars file, cxInt line, cxConstChars format, ...);
 
 //base type define
-CX_OBJECT_BEG(cxObject)
+CX_OBJECT_BEG(cxObject,cxObject)
     cxConstType cxType;
     cxInt cxRefcount;
     cxObjectFunc cxFree;
