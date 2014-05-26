@@ -75,12 +75,12 @@ CX_OBJECT_FREE(cxHttp, cxObject)
     if(this->request != NULL){
         evhttp_cancel_request(this->request);
     }
+    CX_EVENT_RELEASE(this->onCompleted);
     CX_EVENT_RELEASE(this->onChunked);
     CX_RELEASE(this->data);
     if(this->uri != NULL){
         evhttp_uri_free(this->uri);
     }
-    CX_EVENT_RELEASE(this->onCompleted);
 }
 CX_OBJECT_TERM(cxHttp, cxObject)
 
