@@ -23,11 +23,11 @@ void cxMessageDestroy();
 
 void cxMessageRemove(cxAny dst);
 
-void cxMessageRemoveKey(cxAny dst,cxConstChars key);
+void cxMessageRemoveKey(cxAny dst,cxInt key);
 
-void cxMessagePost(cxConstChars key,cxAny src);
+void cxMessagePost(cxInt key,cxAny src);
 
-void cxMessageAppend(cxAny dst,cxAny func,cxConstChars key);
+void cxMessageAppend(cxAny dst,cxAny func,cxInt key);
 
 CX_C_END
 
