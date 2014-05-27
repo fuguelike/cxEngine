@@ -26,9 +26,9 @@ static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
     color.r = this->start.r + this->delta.r * time;
     color.g = this->start.g + this->delta.g * time;
     color.b = this->start.b + this->delta.b * time;
-    cxFloat alhpa = this->start.a + this->delta.a * time;
+    cxFloat alpha = this->start.a + this->delta.a * time;
     cxViewSetColor(this->super.view, color);
-    cxViewSetAlpha(this->super.view, alhpa);
+    cxViewSetAlpha(this->super.view, alpha);
 }
 
 CX_SETTER_DEF(cxTint, color)
