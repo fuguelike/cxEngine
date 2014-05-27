@@ -395,14 +395,6 @@ cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x);
 
 cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x);
 
-cxPointer cxMalloc(cxSize size);
-
-cxPointer cxRealloc(cxPointer ptr,cxSize size);
-
-cxPointer cxCalloc(cxSize num,cxSize size);
-
-void cxFree(cxPointer ptr);
-
 typedef cxPointer (*cxMallocFunc)(cxSize size);
 
 typedef cxPointer (*cxReallocFunc)(cxPointer ptr,cxSize size);
