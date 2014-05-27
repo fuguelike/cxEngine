@@ -38,6 +38,7 @@ typedef enum{
 }cxViewIsTouchType;
 
 CX_OBJECT_DEF(cxView, cxObject)
+    cxInt tag;
     cxViewIsTouchType touchType;
     cxBool supportAtlasSet;
     cxViewAutoResizeMask autoMask;
@@ -98,6 +99,10 @@ cxBool cxViewSupportAtlasSet(cxAny pview);
 cxVec2f cxViewScale(cxAny pview);
 
 cxSize2f cxViewSize(cxAny pview);
+
+cxInt cxViewTag(cxAny pview);
+
+void cxViewSetTag(cxAny pview,cxInt tag);
 
 cxInt cxViewSubviewCount(cxAny pview);
 

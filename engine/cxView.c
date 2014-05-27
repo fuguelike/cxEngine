@@ -142,6 +142,11 @@ CX_SETTER_DEF(cxView, touchtype)
         this->touchType |= cxViewIsTouchTypeSubview;
     }
 }
+CX_SETTER_DEF(cxView, tag)
+{
+    this->tag = cxJsonToInt(value, this->tag);
+}
+
 CX_OBJECT_TYPE(cxView, cxObject)
 {
     CX_PROPERTY_SETTER(cxView, size);
@@ -161,6 +166,7 @@ CX_OBJECT_TYPE(cxView, cxObject)
     CX_PROPERTY_SETTER(cxView, subviews);
     CX_PROPERTY_SETTER(cxView, actions);
     CX_PROPERTY_SETTER(cxView, touchtype);
+    CX_PROPERTY_SETTER(cxView, tag);
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {
@@ -243,6 +249,18 @@ cxList cxViewSubViews(cxAny pview)
 {
     cxView this = pview;
     return this->subViews;
+}
+
+cxInt cxViewTag(cxAny pview)
+{
+    cxView this = pview;
+    return this->tag;
+}
+
+void cxViewSetTag(cxAny pview,cxInt tag)
+{
+    cxView this = pview;
+    this->tag = tag;
 }
 
 cxSize2f cxViewSize(cxAny pview)
