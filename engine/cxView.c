@@ -46,10 +46,10 @@ CX_SETTER_DEF(cxView, fixscale)
 {
     cxEngine engine = cxEngineInstance();
     cxConstChars autofix = cxJsonToConstChars(value);
-    if(cxConstCharsHas(autofix, "horizontal")){
+    if(cxConstCharsHas(autofix, "width")){
         this->fixscale.x = engine->scale.x;
         this->fixscale.y = engine->scale.x;
-    }else if(cxConstCharsHas(autofix, "vertical")){
+    }else if(cxConstCharsHas(autofix, "height")){
         this->fixscale.x = engine->scale.y;
         this->fixscale.y = engine->scale.y;
     }else{
