@@ -18,9 +18,9 @@ CX_OBJECT_DEF(cxViewLoader, cxObject)
     cxHash objects;
 CX_OBJECT_END(cxViewLoader)
 
-cxAny cxViewLoaderObject(cxAny controller,cxConstChars id);
+cxAny cxViewLoaderObject(cxAny loader,cxConstChars id);
 
-void cxViewLoaderInitWithFile(cxAny controller, cxConstChars file);
+void cxViewLoaderInitWithFile(cxAny loader, cxConstChars file);
 
 cxViewLoader cxViewLoaderCreate(cxConstChars file);
 

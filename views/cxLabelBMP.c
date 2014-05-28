@@ -81,6 +81,7 @@ static void cxLabelBMPUpdate(cxEvent *event)
     cxLabelBMP this = event->sender;
     CX_RETURN(!this->isDirty);
     cxLabelBMPUpdateText(this);
+    cxViewAutoResizing(this);
     this->isDirty = false;
 }
 CX_SETTER_DEF(cxLabelBMP, font)

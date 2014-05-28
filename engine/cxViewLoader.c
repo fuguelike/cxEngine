@@ -25,17 +25,17 @@ CX_OBJECT_FREE(cxViewLoader, cxObject)
 }
 CX_OBJECT_TERM(cxViewLoader, cxObject)
 
-cxAny cxViewLoaderObject(cxAny controller,cxConstChars id)
+cxAny cxViewLoaderObject(cxAny loader,cxConstChars id)
 {
-    cxViewLoader this = controller;
+    cxViewLoader this = loader;
     cxAny object = cxHashGet(this->objects, cxHashStrKey(id));
     CX_ASSERT(object != NULL, "%s object get error",id);
     return object;
 }
 
-void cxViewLoaderInitWithFile(cxAny controller, cxConstChars file)
+void cxViewLoaderInitWithFile(cxAny loader, cxConstChars file)
 {
-    cxViewLoader this = controller;
+    cxViewLoader this = loader;
     cxEnginePush(this);
     cxAny view = cxObjectLoadWithFile(file);
     cxEnginePop();

@@ -15,6 +15,7 @@ static void cxLabelTTFUpdate(cxEvent *event)
     cxLabelTTF this = event->sender;
     CX_RETURN(!this->isDirty);
     cxLabelTTFUpdateText(this);
+    cxViewAutoResizing(this);
     this->isDirty = false;
 }
 
