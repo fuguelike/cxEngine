@@ -25,16 +25,55 @@ void cxJsonRegisterString(cxConstChars key,cxString value)
     json_object_set(global, key, json_string(cxStringBody(value)));
 }
 
+cxConstChars cxJsonGConstChars(cxConstChars key)
+{
+    CX_ASSERT(cxConstCharsOK(key), "key error");
+    json_t *v = json_object_get(global, key);
+    if(v == NULL){
+        return NULL;
+    }
+    if(!json_is_string(v)){
+        return NULL;
+    }
+    return json_string_value(v);
+}
+
 void cxJsonRegisterDouble(cxConstChars key,cxDouble value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
     json_object_set(global, key, json_real(value));
 }
 
+cxDouble cxJsonGDouble(cxConstChars key,cxDouble dv)
+{
+    CX_ASSERT(cxConstCharsOK(key), "key error");
+    json_t *v = json_object_get(global, key);
+    if(v == NULL){
+        return dv;
+    }
+    if(json_is_string(v)){
+        return atof(json_string_value(v));
+    }
+    return json_number_value(v);
+}
+
 void cxJsonRegisterInt(cxConstChars key,cxInt value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
     json_object_set(global, key, json_integer(value));
+}
+
+cxInt cxJsonGInt(cxConstChars key,cxInt dv)
+{
+    CX_ASSERT(cxConstCharsOK(key), "key error");
+    json_t *v = json_object_get(global, key);
+    if(v == NULL){
+        return dv;
+    }
+    if(json_is_string(v)){
+        return atoi(json_string_value(v));
+    }
+    return (cxInt)json_integer_value(v);
 }
 
 void cxJsonRegisterLong(cxConstChars key,cxLong value)

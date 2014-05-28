@@ -45,11 +45,17 @@ if((_j_) != NULL){                                              \
     }                                                           \
 }
 
+cxConstChars cxJsonGConstChars(cxConstChars key);
+
 void cxJsonRegisterConstChars(cxConstChars key,cxConstChars value);
 
 void cxJsonRegisterString(cxConstChars key,cxString value);
 
+cxDouble cxJsonGDouble(cxConstChars key,cxDouble dv);
+
 void cxJsonRegisterDouble(cxConstChars key,cxDouble value);
+
+cxInt cxJsonGInt(cxConstChars key,cxInt dv);
 
 void cxJsonRegisterInt(cxConstChars key,cxInt value);
 
