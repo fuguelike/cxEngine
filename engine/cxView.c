@@ -46,10 +46,10 @@ CX_SETTER_DEF(cxView, fixscale)
 {
     cxEngine engine = cxEngineInstance();
     cxConstChars autofix = cxJsonToConstChars(value);
-    if(cxConstCharsHas(autofix, "width")){
+    if(cxConstCharsEqu(autofix, "width")){
         this->fixscale.x = engine->scale.x;
         this->fixscale.y = engine->scale.x;
-    }else if(cxConstCharsHas(autofix, "height")){
+    }else if(cxConstCharsEqu(autofix, "height")){
         this->fixscale.x = engine->scale.y;
         this->fixscale.y = engine->scale.y;
     }else{
@@ -103,7 +103,7 @@ CX_SETTER_DEF(cxView, resizing)
     if(cxConstCharsHas(mask, "height")){
         this->autoMask |= cxViewAutoResizeHeight;
     }
-    if(cxConstCharsEqu(mask, "fill")){
+    if(cxConstCharsHas(mask, "fill")){
         this->autoMask = cxViewAutoResizeFill;
     }
 }
@@ -857,6 +857,7 @@ void cxViewDraw(cxAny pview)
     //update action and update
     CX_EVENT_FIRE(this, onUpdate);
     cxViewUpdateActions(this);
+    //
     cxViewTransform(this);
     
     kmGLPushMatrix();

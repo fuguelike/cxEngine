@@ -40,7 +40,6 @@ cxAny cxWindowTopView()
 
 void cxWindowPushView(cxAny pview)
 {
-    CX_ASSERT(pview != NULL, "new view null");
     CX_ASSERT(CX_INSTANCE_OF(pview, cxView), "pview type error");
     cxEngine engine = cxEngineInstance();
     cxView new = pview;
@@ -51,7 +50,6 @@ void cxWindowPushView(cxAny pview)
     }
     cxStackPush(engine->window->views, new);
     cxViewAppend(engine->window, new);
-    cxEngineTimeReset();
 }
 
 void cxWindowPopView()
@@ -69,12 +67,11 @@ void cxWindowPopView()
         cxViewEnter(top);
         cxViewSetVisible(top, true);
     }
-    cxEngineTimeReset();
 }
 
 void cxWindowReplaceView(cxAny pview)
 {
-    CX_ASSERT(pview != NULL, "new view null");
+    CX_ASSERT(CX_INSTANCE_OF(pview, cxView), "pview type error");
     cxEngine engine = cxEngineInstance();
     cxView top = cxStackTop(engine->window->views);
     if(top != NULL){
@@ -83,7 +80,6 @@ void cxWindowReplaceView(cxAny pview)
     }
     cxStackPush(engine->window->views, pview);
     cxViewAppend(engine->window, pview);
-    cxEngineTimeReset();
 }
 
 
