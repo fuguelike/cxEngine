@@ -30,9 +30,8 @@ static void cxTextureFactoryDestroy(cxEvent *event)
     instance = NULL;
 }
 
-static void cxTextureFactoryMemory(cxAny factory)
+static void cxTextureFactoryMemory(cxTextureFactory this)
 {
-    cxTextureFactory this = factory;
     cxHashClean(this->caches);
 }
 

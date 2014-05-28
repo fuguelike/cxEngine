@@ -116,6 +116,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <errno.h>
 #include <float.h>
 #include <time.h>
 #include <sys/types.h>
