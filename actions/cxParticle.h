@@ -95,7 +95,7 @@ void cxParticleInitNumber(cxAny pav,cxInt number);
 
 void cxParticleSetBlendMode(cxAny pav,cxParticleBlendMode mode);
 
-cxParticle cxParticleCreate(cxFloat duration,cxConstChars url,cxIndex number);
+cxParticle cxParticleCreate(cxFloat duration,cxConstChars url,cxInt number);
 
 CX_C_END
 

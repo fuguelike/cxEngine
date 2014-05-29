@@ -36,7 +36,7 @@ static cxStack cxMemPoolStack()
 
 void cxMemPoolInit()
 {
-    pthread_key_create(&autoKey, cxObjectRelease);
+    pthread_key_create(&autoKey, __cxObjectRelease);
 }
 
 void cxMemPoolFree()

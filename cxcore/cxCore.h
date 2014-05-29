@@ -121,12 +121,9 @@
 #include <time.h>
 #include <sys/types.h>
 
-#define CX_ENGINE_VERSION   200
-
 typedef int             cxOff;
 typedef char            cxChar;
 typedef int             cxInt;
-typedef int             cxIndex;
 typedef long            cxLong;
 typedef int8_t          cxInt8;
 typedef int16_t         cxInt16;
@@ -134,7 +131,7 @@ typedef int32_t         cxInt32;
 typedef int64_t         cxInt64;
 
 typedef void *          cxPointer;
-typedef cxPointer       cxAny;
+typedef void *          cxAny;
 typedef size_t          cxSize;
 
 typedef unsigned char   cxUChar;
@@ -152,6 +149,8 @@ typedef double          cxDouble;
 typedef const char *    cxConstType;
 typedef const char *    cxConstChars;
 typedef char *          cxChars;
+
+#define CX_ENGINE_VERSION   200
 
 #ifdef __GNUC__
     #define CX_ATTRIBUTE_UNUSED     __attribute__ ((__unused__))
@@ -210,8 +209,10 @@ do{                                                             \
 
 #define CX_GOTO(cond,label)         if(cond)goto label
 
+//type define
+
 #define CX_OBJECT_BEG(_t_,_b_)                                  \
-static CX_ATTRIBUTE_UNUSED cxConstType _t_##TypeName = #_t_;    \
+CX_ATTRIBUTE_UNUSED static cxConstType _t_##TypeName = #_t_;    \
 typedef struct _t_ *_t_;                                        \
 void __##_t_##AutoInit(_t_ this);                               \
 void __##_t_##AutoFree(_t_ this);                               \
@@ -228,44 +229,48 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
     return CX_ALLOC(_t_);                                       \
 }
 
-#define CX_OBJECT_DEF(_t_,_b_) CX_OBJECT_BEG(_t_,_b_) struct _b_ super;
+#define CX_OBJECT_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_,_b_) struct _b_ super;
 
-#define CX_OBJECT_TYPE(_t_,_b_) void __##_t_##AutoType(cxAny this){
+//type imp
 
-#define CX_OBJECT_INIT(_t_,_b_) };void __##_t_##AutoInit(_t_ this){__##_b_##AutoInit((_b_)this);
+#define CX_OBJECT_TYPE(_t_,_b_)     void __##_t_##AutoType(cxAny this){
 
-#define CX_OBJECT_FREE(_t_,_b_) };void __##_t_##AutoFree(_t_ this){
+#define CX_OBJECT_INIT(_t_,_b_)     };void __##_t_##AutoInit(_t_ this){__##_b_##AutoInit((_b_)this);
 
-#define CX_OBJECT_TERM(_t_,_b_) __##_b_##AutoFree((_b_)this);}
+#define CX_OBJECT_FREE(_t_,_b_)     };void __##_t_##AutoFree(_t_ this){
 
-#define CX_ALLOC(_t_) cxObjectAlloc(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)__##_t_##AutoInit,(cxObjectFunc)__##_t_##AutoFree)
+#define CX_OBJECT_TERM(_t_,_b_)     __##_b_##AutoFree((_b_)this);}
 
-#define CX_CREATE(_t_) cxObjectCreate(_t_##TypeName,sizeof(struct _t_),(cxObjectFunc)__##_t_##AutoInit,(cxObjectFunc)__##_t_##AutoFree)
+//object mem manager
 
-#define CX_RETAIN(_o_) cxObjectRetain(_o_)
+#define CX_ALLOC(_t_)               __cxObjectAlloc(_t_##TypeName,sizeof(struct _t_),(cxAny)__##_t_##AutoInit,(cxAny)__##_t_##AutoFree)
 
-#define CX_RELEASE(_o_) cxObjectRelease(_o_)
+#define CX_CREATE(_t_)              __cxObjectCreate(_t_##TypeName,sizeof(struct _t_),(cxAny)__##_t_##AutoInit,(cxAny)__##_t_##AutoFree)
 
-#define CX_AUTOFREE(_o_) cxObjectAutoRelease(_o_)
+#define CX_RETAIN(_o_)              __cxObjectRetain(_o_)
 
-#define CX_RETAIN_SWAP(_s_,_d_) {CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}
+#define CX_RELEASE(_o_)             __cxObjectRelease(_o_)
 
-#define CX_RETAIN_SET(_n_,_v_) {_n_ = (_v_);CX_RETAIN(_n_);}
+#define CX_AUTOFREE(_o_)            __cxObjectAutoRelease(_o_)
 
-#define CX_INSTANCE_OF(_o_,_t_) cxInstanceOf(_o_,_t_##TypeName)
+#define CX_RETAIN_SWAP(_s_,_d_)     do{CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}while(0)
+
+#define CX_RETAIN_SET(_n_,_v_)      do{_n_ = (_v_);CX_RETAIN(_n_);}while(0)
+
+#define CX_INSTANCE_OF(_o_,_t_)     cxInstanceOf(_o_,_t_##TypeName)
 
 //cast failed return NULL
-#define CX_CAST(_t_,_o_) CX_INSTANCE_OF(_o_,_t_) ? ((_t_)(_o_)) : NULL
+#define CX_CAST(_t_,_o_)            CX_INSTANCE_OF(_o_,_t_) ? ((_t_)(_o_)) : NULL
 
 //method
 
-#define CX_METHOD_DEF(_r_,_n_,...) _r_ (*_n_)(__VA_ARGS__)
+#define CX_METHOD_DEF(_r_,_n_,...)  _r_ (*_n_)(__VA_ARGS__)
 
-#define CX_METHOD_GET(_d_,_m_,...) (((_m_) != NULL)?((_m_)(__VA_ARGS__)):(_d_))
+#define CX_METHOD_GET(_d_,_m_,...)  (((_m_) != NULL)?((_m_)(__VA_ARGS__)):(_d_))
 
-#define CX_METHOD_RUN(_m_,...) if((_m_) != NULL)(_m_)(__VA_ARGS__)
+#define CX_METHOD_RUN(_m_,...)      if((_m_) != NULL)(_m_)(__VA_ARGS__)
 
-#define CX_METHOD_SET(_m_,_f_) _m_ = _f_
+#define CX_METHOD_SET(_m_,_f_)      _m_ = _f_
 
 //signal and slot
 
@@ -409,19 +414,15 @@ typedef void (*cxObjectFunc)(cxPointer this);
 
 typedef cxAny (*cxAnyFunc)(cxAny object);
 
-cxAny cxObjectAlloc(cxConstType type,cxInt size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
+cxAny __cxObjectAlloc(cxConstType type,cxInt size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
 
-cxAny cxObjectCreate(cxConstType type, cxInt size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
+cxAny __cxObjectCreate(cxConstType type, cxInt size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
 
-void cxObjectRetain(cxAny ptr);
+void __cxObjectRetain(cxAny ptr);
 
-cxAny cxObjectType(cxAny object);
+void __cxObjectRelease(cxAny ptr);
 
-cxAny cxObjectProperty(cxAny object,cxConstChars key);
-
-void cxObjectRelease(cxAny ptr);
-
-cxAny cxObjectAutoRelease(cxAny ptr);
+cxAny __cxObjectAutoRelease(cxAny ptr);
 
 //must completed cxUtilPrint function with platform
 void cxUtilPrint(cxConstChars type,cxConstChars file,cxInt line,cxConstChars format,va_list ap);
@@ -440,6 +441,10 @@ CX_OBJECT_BEG(cxObject,cxObject)
     cxInt cxRefcount;
     cxObjectFunc cxFree;
 CX_OBJECT_END(cxObject)
+
+cxAny cxObjectType(cxAny object);
+
+cxAny cxObjectProperty(cxAny object,cxConstChars key);
 
 void cxCoreInit();
 

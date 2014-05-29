@@ -26,7 +26,7 @@ CX_OBJECT_END(cxType)
 #define CX_REGISTER_TYPE(_t_,_b_)                               \
 do{                                                             \
     cxType superType =  cxTypesGet(#_b_);                       \
-    CX_ASSERT(superType != NULL,"super "#_b_" not register");   \
+    CX_ASSERT(superType != NULL,"type "#_b_" not register");    \
     cxType _tmp_ = CX_ALLOC(cxType);                            \
     cxTypeSetSuper(_tmp_,superType);                            \
     _tmp_->Alloc = __##_t_##AllocFunc;                          \

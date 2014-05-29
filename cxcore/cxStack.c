@@ -51,7 +51,7 @@ void cxStackPop(cxStack stack)
     cxArrayRemoveLast(stack->array);
 }
 
-cxAny cxStackObject(cxStack stack,cxIndex index)
+cxAny cxStackObject(cxStack stack,cxInt index)
 {
     return cxArrayAtIndex(stack->array, index);
 }

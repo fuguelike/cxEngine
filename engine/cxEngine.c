@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxEngine.h"
+#include "cxMath.h"
+#include "cxIconv.h"
 
 #include <textures/cxTextureFactory.h>
 #include <textures/cxTextureJPG.h>
@@ -50,12 +53,7 @@
 #include <actions/cxSpline.h>
 #include <actions/cxTimeLine.h>
 
-#include "cxEngine.h"
-#include "cxMath.h"
-#include "cxIconv.h"
-
 static cxEngine instance = NULL;
-
 static cxBool isExit = false;
 
 void cxEngineRecvJson(cxString json)
@@ -88,7 +86,7 @@ void cxEnginePause()
     }
 }
 
-void cxEngineTypes()
+static void cxEngineTypes()
 {
     //register core
     CX_REGISTER_TYPE(cxStream,       cxObject);
@@ -98,6 +96,7 @@ void cxEngineTypes()
     CX_REGISTER_TYPE(cxViewLoader,   cxObject);
     CX_REGISTER_TYPE(cxEngine,       cxObject);
     CX_REGISTER_TYPE(cxJson,         cxObject);
+    CX_REGISTER_TYPE(cxPlayer,       cxObject);
     //register streams
     CX_REGISTER_TYPE(cxAssetsStream, cxStream);
     CX_REGISTER_TYPE(cxFileStream,   cxStream);
@@ -144,10 +143,14 @@ void cxEngineTypes()
 
 void cxEngineBegin()
 {
-    cxEngineTypes();
     cxEngine engine = cxEngineInstance();
+    //register all type
+    cxEngineTypes();
+    //set localized lang
     cxEngineSetLocalized(cxLocalizedLang());
+    //open player
     cxPlayerOpen();
+    //init engine
     cxEngineInit(engine);
 }
 

@@ -13,7 +13,7 @@
 
 CX_C_BEGIN
 
-#define CX_MESSAGE_KEY_DEF(_k_) extern cxConstChars _k_
+#define CX_MESSAGE_KEY_DEF(_k_) CX_EXTERN cxConstChars _k_
 
 #define CX_MESSAGE_KEY_IMP(_k_) cxConstChars _k_ = #_k_
 

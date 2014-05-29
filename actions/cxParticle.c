@@ -421,7 +421,7 @@ void cxParticleInitNumber(cxAny pav,cxInt number)
     cxAtlasSetCapacity(this->atlas, number);
 }
 
-cxParticle cxParticleCreate(cxFloat duration,cxConstChars url,cxIndex number)
+cxParticle cxParticleCreate(cxFloat duration,cxConstChars url,cxInt number)
 {
     cxParticle this = CX_CREATE(cxParticle);
     this->duration = duration;

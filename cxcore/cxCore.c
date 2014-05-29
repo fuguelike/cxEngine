@@ -124,22 +124,6 @@ void cxUtilAssert(cxConstChars file,cxInt line,cxConstChars format, ...)
     va_end(ap);
 }
 
-static void cxObjectDestroy(cxAny ptr)
-{
-    CX_ASSERT(ptr != NULL, "point null");
-    cxObject object = (cxObject)ptr;
-    object->cxFree(object);
-    allocator->free(ptr);
-}
-
-void cxObjectRetain(cxAny ptr)
-{
-    CX_RETURN(ptr == NULL);
-    cxObject object = (cxObject)ptr;
-    CX_ASSERT(object->cxRefcount > 0, "retain count must > 0");
-    cxAtomicAddInt32(&object->cxRefcount, 1);
-}
-
 cxAny cxObjectType(cxAny object)
 {
     CX_RETURN(object == NULL, NULL);
@@ -152,6 +136,22 @@ cxAny cxObjectProperty(cxAny object,cxConstChars key)
     CX_RETURN(object == NULL, NULL);
     cxType type = cxObjectType(object);
     return cxTypeProperty(type, key);
+}
+
+static void __cxObjectDestroy(cxAny ptr)
+{
+    CX_ASSERT(ptr != NULL, "point null");
+    cxObject object = (cxObject)ptr;
+    object->cxFree(object);
+    allocator->free(ptr);
+}
+
+void __cxObjectRetain(cxAny ptr)
+{
+    CX_RETURN(ptr == NULL);
+    cxObject object = (cxObject)ptr;
+    CX_ASSERT(object->cxRefcount > 0, "retain count must > 0");
+    cxAtomicAddInt32(&object->cxRefcount, 1);
 }
 
 void __cxObjectAutoType(cxAny this)
@@ -169,29 +169,29 @@ void __cxObjectAutoFree(cxObject this)
     
 }
 
-void cxObjectRelease(cxAny ptr)
+void __cxObjectRelease(cxAny ptr)
 {
     CX_RETURN(ptr == NULL);
     cxObject object = (cxObject)ptr;
     CX_ASSERT(object->cxRefcount > 0, "error,retain count must > 0");
     cxAtomicSubInt32(&object->cxRefcount, 1);
     if(object->cxRefcount == 0) {
-        cxObjectDestroy(ptr);
+        __cxObjectDestroy(ptr);
     }
 }
 
-cxAny cxObjectAutoRelease(cxAny ptr)
+cxAny __cxObjectAutoRelease(cxAny ptr)
 {
     return cxMemPoolAppend(ptr);
 }
 
-cxAny cxObjectCreate(cxConstType type, int size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
+cxAny __cxObjectCreate(cxConstType type, int size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
 {
-    cxAny any = cxObjectAlloc(type, size, initFunc, freeFunc);
-    return cxObjectAutoRelease(any);
+    cxAny any = __cxObjectAlloc(type, size, initFunc, freeFunc);
+    return __cxObjectAutoRelease(any);
 }
 
-cxAny cxObjectAlloc(cxConstType type,cxInt size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
+cxAny __cxObjectAlloc(cxConstType type,cxInt size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
 {
     CX_ASSERT(initFunc != NULL, "init func null");
     cxAny ptr = allocator->malloc(size);

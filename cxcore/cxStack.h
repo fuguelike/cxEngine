@@ -27,7 +27,7 @@ void    cxStackReplaceTop(cxStack stack,cxAny any);
 
 void    cxStackPop(cxStack stack);
 
-cxAny   cxStackObject(cxStack stack,cxIndex index);
+cxAny   cxStackObject(cxStack stack,cxInt index);
 
 CX_C_END
 

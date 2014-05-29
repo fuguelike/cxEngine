@@ -30,7 +30,7 @@ void cxArrayClean(cxArray array)
     utarray_clear(array->utArray);
 }
 
-void cxArrayFastRemoveAtIndex(cxArray array,cxIndex index)
+void cxArrayFastRemoveAtIndex(cxArray array,cxInt index)
 {
     CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
     cxAny srcObject = cxArrayAtIndex(array, index);
@@ -42,7 +42,7 @@ void cxArrayFastRemoveAtIndex(cxArray array,cxIndex index)
     array->utArray->i--;
 }
 
-void cxArrayUpdate(cxArray array,cxAny nAny,cxIndex index)
+void cxArrayUpdate(cxArray array,cxAny nAny,cxInt index)
 {
     CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
     cxPointer *ele = (cxPointer *)utarray_eltptr(array->utArray, index);
@@ -72,12 +72,12 @@ void cxArrayAppend(cxArray array, cxAny any)
     CX_RETAIN(any);
 }
 
-cxIndex cxArrayObjectIndex(cxArray array,cxAny any)
+cxInt cxArrayObjectIndex(cxArray array,cxAny any)
 {
     CX_ARRAY_FOREACH(array, e) {
         cxAny tmp = cxArrayObject(e);
         if(tmp == any) {
-            return (cxIndex)utarray_eltidx(array->utArray,e);
+            return utarray_eltidx(array->utArray,e);
         }
     }
     return CX_INVALID_INDEX;
@@ -100,7 +100,7 @@ void cxArrayFastRemove(cxArray array,cxAny any)
     }
 }
 
-void cxArrayRemoveAtIndex(cxArray array,cxIndex index)
+void cxArrayRemoveAtIndex(cxArray array,cxInt index)
 {
     CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
     cxAny any = cxArrayAtIndex(array, index);
@@ -108,7 +108,7 @@ void cxArrayRemoveAtIndex(cxArray array,cxIndex index)
     CX_RELEASE(any);
 }
 
-cxAny cxArrayAtIndex(cxArray array,cxIndex index)
+cxAny cxArrayAtIndex(cxArray array,cxInt index)
 {
     CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
     cxPointer *e = (cxPointer *)utarray_eltptr(array->utArray, index);

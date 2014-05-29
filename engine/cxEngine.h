@@ -74,12 +74,14 @@ cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 
 cxTimer cxEngineTimer(cxFloat freq,cxInt repeat);
 
-//extern
-void cxEngineInit(cxEngine engine);
+//engine init
+CX_EXTERN void cxEngineInit(cxEngine engine);
 
-void cxEngineMain(cxEngine engine);
+//engine start draw
+CX_EXTERN void cxEngineMain(cxEngine engine);
 
-void cxEngineFree(cxEngine engine);
+//engine free
+CX_EXTERN void cxEngineFree(cxEngine engine);
 //
 cxVec2f cxEngineTouchToWindow(cxVec2f pos);
 
@@ -100,8 +102,6 @@ void cxEngineSetLocalized(cxString lang);
 void cxEngineBegin();
 
 void cxEngineTerminate();
-
-void cxEngineTypes();
 
 void cxEngineExit();
 

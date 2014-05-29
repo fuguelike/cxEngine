@@ -38,23 +38,23 @@ while((_a_) != NULL && (_e_ = (cxPointer)utarray_prev((_a_)->utArray, _e_)) != N
 
 void    cxArrayClean(cxArray array);
 
-void    cxArrayUpdate(cxArray array,cxAny any,cxIndex index);
+void    cxArrayUpdate(cxArray array,cxAny any,cxInt index);
 
 void    cxArrayAppends(cxArray array, cxArray data);
 
 void    cxArrayAppend(cxArray array, cxAny any);
 
-cxIndex cxArrayIndex(cxArray array,cxAny any);
+cxInt cxArrayIndex(cxArray array,cxAny any);
 
 void    cxArrayRemove(cxArray array,cxAny any);
 
 void    cxArrayFastRemove(cxArray array,cxAny any);
 
-void    cxArrayFastRemoveAtIndex(cxArray array,cxIndex index);
+void    cxArrayFastRemoveAtIndex(cxArray array,cxInt index);
 
-void    cxArrayRemoveAtIndex(cxArray array,cxIndex index);
+void    cxArrayRemoveAtIndex(cxArray array,cxInt index);
 
-cxAny   cxArrayAtIndex(cxArray array,cxIndex index);
+cxAny   cxArrayAtIndex(cxArray array,cxInt index);
 
 cxAny   cxArrayFirst(cxArray array);
 

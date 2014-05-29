@@ -61,6 +61,14 @@ cxBool cxJsonEnvBool(cxConstChars key,cxBool dv);
 
 void cxJsonRegisterBool(cxConstChars key,cxBool value);
 
+cxSize2f cxJsonEnvSize2f(cxConstChars key,cxSize2f dv);
+
+void cxJsonRegisterSize2f(cxConstChars key,cxSize2f size);
+
+cxVec2f cxJsonEnvVec2f(cxConstChars key,cxVec2f dv);
+
+void cxJsonRegisterVec2f(cxConstChars key,cxVec2f size);
+
 cxInt cxJsonEnvInt(cxConstChars key,cxInt dv);
 
 void cxJsonRegisterInt(cxConstChars key,cxInt value);

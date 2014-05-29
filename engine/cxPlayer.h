@@ -18,6 +18,8 @@
 
 CX_C_BEGIN
 
+#define INIT_TRACK 5
+
 typedef enum {
     cxAudioFileTypeNone,
     cxAudioFileTypeMP3,
@@ -51,8 +53,6 @@ void cxStopMusic();
 void cxPauseMusic();
 
 void cxResumeMusic();
-
-#define INIT_TRACK 5
 
 void cxPlayerOpen();
 
