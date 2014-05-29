@@ -67,18 +67,18 @@ void cxMessageRemove(cxAny dst)
     }
 }
 
-void cxMessageRemoveKey(cxAny dst,cxInt key)
+void cxMessageRemoveKey(cxAny dst,cxConstChars key)
 {
     cxMessage this = cxMessageInstance();
-    cxHash list = cxHashGet(this->keys, cxHashIntKey(key));
+    cxHash list = cxHashGet(this->keys, cxHashPtrKey(key));
     CX_RETURN(list == NULL || cxHashLength(list) == 0);
     cxHashDel(list, cxHashPtrKey(dst));
 }
 
-void cxMessagePost(cxInt key,cxAny src)
+void cxMessagePost(cxConstChars key,cxAny src)
 {
     cxMessage this = cxMessageInstance();
-    cxHash list = cxHashGet(this->keys, cxHashIntKey(key));
+    cxHash list = cxHashGet(this->keys, cxHashPtrKey(key));
     CX_RETURN(list == NULL || cxHashLength(list) == 0);
     CX_HASH_FOREACH(list, ele, tmp){
         cxMessageItem item = ele->any;
@@ -86,13 +86,14 @@ void cxMessagePost(cxInt key,cxAny src)
     }
 }
 
-void cxMessageAppend(cxAny dst,cxAny func,cxInt key)
+void cxMessageAppend(cxAny dst,cxAny func,cxConstChars key)
 {
+    cxHashKey skey = cxHashPtrKey(key);
     cxMessage this = cxMessageInstance();
-    cxHash list = cxHashGet(this->keys, cxHashIntKey(key));
+    cxHash list = cxHashGet(this->keys, skey);
     if(list == NULL){
         list = CX_ALLOC(cxHash);
-        cxHashSet(this->keys, cxHashIntKey(key), list);
+        cxHashSet(this->keys, skey, list);
         CX_RELEASE(list);
     }
     cxMessageItem item = CX_ALLOC(cxMessageItem);

@@ -11,11 +11,22 @@
 
 static json_t *global = NULL;
 
+//global use $name format
+
 void cxJsonRegisterConstChars(cxConstChars key,cxConstChars value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
     CX_ASSERT(cxConstCharsOK(value), "value error");
     json_object_set(global, key, json_string(value));
+}
+
+cxString cxJsonEnvString(cxConstChars key)
+{
+    cxConstChars str = cxJsonEnvConstChars(key);
+    if(str != NULL){
+        return NULL;
+    }
+    return cxStringConstChars(str);
 }
 
 void cxJsonRegisterString(cxConstChars key,cxString value)
@@ -25,7 +36,7 @@ void cxJsonRegisterString(cxConstChars key,cxString value)
     json_object_set(global, key, json_string(cxStringBody(value)));
 }
 
-cxConstChars cxJsonGConstChars(cxConstChars key)
+cxConstChars cxJsonEnvConstChars(cxConstChars key)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
     json_t *v = json_object_get(global, key);
@@ -44,7 +55,7 @@ void cxJsonRegisterDouble(cxConstChars key,cxDouble value)
     json_object_set(global, key, json_real(value));
 }
 
-cxDouble cxJsonGDouble(cxConstChars key,cxDouble dv)
+cxDouble cxJsonEnvDouble(cxConstChars key,cxDouble dv)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
     json_t *v = json_object_get(global, key);
@@ -63,7 +74,7 @@ void cxJsonRegisterInt(cxConstChars key,cxInt value)
     json_object_set(global, key, json_integer(value));
 }
 
-cxInt cxJsonGInt(cxConstChars key,cxInt dv)
+cxInt cxJsonEnvInt(cxConstChars key,cxInt dv)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
     json_t *v = json_object_get(global, key);
@@ -82,16 +93,45 @@ void cxJsonRegisterLong(cxConstChars key,cxLong value)
     json_object_set(global, key, json_integer(value));
 }
 
-static json_t *cxJsonParseRegistedValue(json_t *v)
+cxLong cxJsonEnvLong(cxConstChars key,cxLong dv)
+{
+    CX_ASSERT(cxConstCharsOK(key), "key error");
+    json_t *v = json_object_get(global, key);
+    if(v == NULL){
+        return dv;
+    }
+    if(json_is_string(v)){
+        return atol(json_string_value(v));
+    }
+    return (cxLong)json_integer_value(v);
+}
+
+cxBool cxJsonEnvBool(cxConstChars key,cxBool dv)
+{
+    CX_ASSERT(cxConstCharsOK(key), "key error");
+    json_t *v = json_object_get(global, key);
+    if(v == NULL){
+        return dv;
+    }
+    return json_boolean_value(v);
+}
+
+void cxJsonRegisterBool(cxConstChars key,cxBool value)
+{
+    CX_ASSERT(cxConstCharsOK(key), "key error");
+    json_object_set(global, key, json_boolean(value));
+}
+
+static json_t *cxJsonParseRegisterValue(json_t *v)
 {
     if(!json_is_string(v)){
         return v;
     }
     cxConstChars key = json_string_value(v);
-    if(key[0] != 'G'){
+    if(key[0] != '$'){
         return v;
     }
-    cxConstChars gkey = key + 2;
+    cxConstChars gkey = key + 1;
     if(!cxConstCharsOK(gkey)){
         return v;
     }
@@ -196,7 +236,7 @@ static cxJson jsonToObject(json_t *v)
 static cxInt jsonToInt(json_t *v,cxInt dv)
 {
     CX_RETURN(v == NULL,dv);
-    v = cxJsonParseRegistedValue(v);
+    v = cxJsonParseRegisterValue(v);
     if(json_is_string(v)){
         return atoi(json_string_value(v));
     }
@@ -207,7 +247,7 @@ static cxConstChars jsonToConstChars(json_t *v)
 {
     CX_RETURN(v == NULL, NULL);
     cxConstChars str = NULL;
-    v = cxJsonParseRegistedValue(v);
+    v = cxJsonParseRegisterValue(v);
     if(json_is_string(v)){
         str = json_string_value(v);
     }
@@ -224,7 +264,7 @@ static cxString jsonToString(json_t *v)
 static cxDouble jsonToDouble(json_t *v,cxDouble dv)
 {
     CX_RETURN(v == NULL,dv);
-    v = cxJsonParseRegistedValue(v);
+    v = cxJsonParseRegisterValue(v);
     if(json_is_string(v)){
         return atof(json_string_value(v));
     }
@@ -234,7 +274,7 @@ static cxDouble jsonToDouble(json_t *v,cxDouble dv)
 static cxLong jsonToLong(json_t *v,cxLong dv)
 {
     CX_RETURN(v == NULL,dv);
-    v = cxJsonParseRegistedValue(v);
+    v = cxJsonParseRegisterValue(v);
     if(json_is_string(v)){
         return atol(json_string_value(v));
     }
@@ -244,7 +284,7 @@ static cxLong jsonToLong(json_t *v,cxLong dv)
 static cxBool jsonToBool(json_t *v,cxBool dv)
 {
     CX_RETURN(v == NULL,dv);
-    v = cxJsonParseRegistedValue(v);
+    v = cxJsonParseRegisterValue(v);
     if(json_is_string(v)){
         return strcasecmp(json_string_value(v), "true") == 0;
     }

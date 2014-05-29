@@ -13,6 +13,10 @@
 
 CX_C_BEGIN
 
+#define CX_MESSAGE_KEY_DEF(_k_) extern cxConstChars _k_
+
+#define CX_MESSAGE_KEY_IMP(_k_) cxConstChars _k_ = #_k_
+
 typedef void (*cxMessageFunc)(cxAny dst,cxAny src);
 
 CX_OBJECT_DEF(cxMessage, cxObject)
@@ -23,11 +27,11 @@ void cxMessageDestroy();
 
 void cxMessageRemove(cxAny dst);
 
-void cxMessageRemoveKey(cxAny dst,cxInt key);
+void cxMessageRemoveKey(cxAny dst,cxConstChars key);
 
-void cxMessagePost(cxInt key,cxAny src);
+void cxMessagePost(cxConstChars key,cxAny src);
 
-void cxMessageAppend(cxAny dst,cxAny func,cxInt key);
+void cxMessageAppend(cxAny dst,cxAny func,cxConstChars key);
 
 CX_C_END
 

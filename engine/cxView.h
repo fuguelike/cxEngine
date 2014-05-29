@@ -53,8 +53,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool isRunning;
     cxBool isDirty;
     cxBool isVisible;
-    cxBool isShowBorder;        //if draw border
-    cxBool hideTop;         //=true hide prev view
+    cxBool isShowBorder;    //if draw border
+    cxBool hideTop;         //=true hide prev view when use cxWindowPush
     cxBool isSort;
     cxBool isCropping;
     cxSize2f size;
@@ -114,7 +114,7 @@ cxBool cxViewContainsGLBox(cxAny pview);
 
 cxRect4f cxViewGLRect(cxAny pview);
 
-void cxViewSetTop(cxAny pview,cxBool top);
+void cxViewSetHideTop(cxAny pview,cxBool hideTop);
 
 void cxViewSetDirty(cxAny pview,cxBool dirty);
 

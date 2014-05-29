@@ -45,19 +45,27 @@ if((_j_) != NULL){                                              \
     }                                                           \
 }
 
-cxConstChars cxJsonGConstChars(cxConstChars key);
+cxString cxJsonEnvString(cxConstChars key);
+
+cxConstChars cxJsonEnvConstChars(cxConstChars key);
 
 void cxJsonRegisterConstChars(cxConstChars key,cxConstChars value);
 
 void cxJsonRegisterString(cxConstChars key,cxString value);
 
-cxDouble cxJsonGDouble(cxConstChars key,cxDouble dv);
+cxDouble cxJsonEnvDouble(cxConstChars key,cxDouble dv);
 
 void cxJsonRegisterDouble(cxConstChars key,cxDouble value);
 
-cxInt cxJsonGInt(cxConstChars key,cxInt dv);
+cxBool cxJsonEnvBool(cxConstChars key,cxBool dv);
+
+void cxJsonRegisterBool(cxConstChars key,cxBool value);
+
+cxInt cxJsonEnvInt(cxConstChars key,cxInt dv);
 
 void cxJsonRegisterInt(cxConstChars key,cxInt value);
+
+cxLong cxJsonEnvLong(cxConstChars key,cxLong dv);
 
 void cxJsonRegisterLong(cxConstChars key,cxLong value);
 

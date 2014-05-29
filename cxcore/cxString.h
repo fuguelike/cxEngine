@@ -60,6 +60,14 @@ cxBool cxConstCharsIsNumber(cxConstChars s);
 
 cxString cxStringAttach(cxChars d,cxInt l);
 
+cxBool cxStringToBool(cxString str,cxBool dv);
+
+cxInt cxStringToInt(cxString str,cxInt dv);
+
+cxDouble cxStringToDouble(cxString str,cxDouble dv);
+
+cxLong cxStringToLong(cxString str,cxLong dv);
+
 void cxStringClean(cxString string);
 
 cxString cxMD5(cxString v);
@@ -85,8 +93,6 @@ cxString cxStringConstChars(cxConstChars str);
 void cxStringConcat(cxString string,cxString str);
 
 void cxStringFormat(cxString string,cxConstChars format,...);
-
-cxString cxStringCreateWithData(cxConstChars d,cxInt l);
 
 cxString cxStringCreate(cxConstChars format,...);
 

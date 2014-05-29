@@ -303,10 +303,10 @@ cxRect4f cxViewGLRect(cxAny pview)
     return cxRect4fv(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 }
 
-void cxViewSetTop(cxAny pview,cxBool top)
+void cxViewSetHideTop(cxAny pview,cxBool hideTop)
 {
     cxView this = pview;
-    this->hideTop = top;
+    this->hideTop = hideTop;
 }
 
 void cxViewSetAutoResizeBox(cxAny pview,cxBox4f box)

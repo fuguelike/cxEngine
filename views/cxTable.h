@@ -26,6 +26,8 @@ void cxTableArraySubviews(cxAny pview);
 
 void cxTableSetSpace(cxAny pview,cxVec2f space);
 
+cxTable cxTableCreate(cxVec2i grid);
+
 CX_C_END
 
 #endif

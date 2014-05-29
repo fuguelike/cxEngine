@@ -119,6 +119,16 @@ CX_OBJECT_FREE(cxTable, cxView)
 CX_OBJECT_TERM(cxTable, cxView)
 
 
+cxTable cxTableCreate(cxVec2i grid)
+{
+    cxTable this = CX_CREATE(cxTable);
+    this->grid = grid;
+    return this;
+}
+
+
+
+
 
 
 
