@@ -15,16 +15,18 @@
 
 static cxOpenGL instance = NULL;
 
-cxConstChars cxShaderPositionColorKey   = "cxShaderPositionColor";
-cxConstChars cxShaderDefaultKey         = "cxShaderDefault";
-cxConstChars cxShaderAlphaKey           = "cxShaderAlpha";
-cxConstChars cxShaderClippingKey        = "cxShaderClipping";
+CX_STRING_KEY_IMP(cxShaderPositionColorKey);
+CX_STRING_KEY_IMP(cxShaderDefaultKey);
+CX_STRING_KEY_IMP(cxShaderAlphaKey);
+CX_STRING_KEY_IMP(cxShaderClippingKey);
 
 #define CX_OPENGL_LOAD_SHADER(t)                                    \
 do{                                                                 \
     cxShader shader = CX_ALLOC(t);                                  \
     if(cxShaderInit(shader)){                                       \
-        cxHashSet(this->shaders, cxHashStrKey(#t), shader);         \
+        cxHashSet(this->shaders, cxHashStrKey(#t"Key"), shader);    \
+    }else{                                                          \
+        CX_ERROR("shader "#t" init failed");                        \
     }                                                               \
     CX_RELEASE(shader);                                             \
 }while(0)

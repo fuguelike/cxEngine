@@ -187,7 +187,6 @@ CX_OBJECT_INIT(cxView, cxObject)
     
     this->subViews = CX_ALLOC(cxList);
     this->actions = CX_ALLOC(cxHash);
-    this->caches = CX_ALLOC(cxHash);
     this->removes = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxView, cxObject)
@@ -195,7 +194,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_RELEASE(this->removes);
     CX_RELEASE(this->subViews);
     CX_RELEASE(this->actions);
-    CX_RELEASE(this->caches);
     
     CX_EVENT_RELEASE(this->onDirty);
     CX_EVENT_RELEASE(this->onEnter);
@@ -210,67 +208,63 @@ CX_OBJECT_TERM(cxView, cxObject)
 
 void cxViewSetCropping(cxAny pview,cxBool cropping)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     this->isCropping = cropping;
 }
 
 cxBool cxViewZeroSize(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return cxSize2Zero(this->size);
 }
 
-void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object)
-{
-    cxView this = pview;
-    CX_ASSERT(object != NULL, "args error");
-    cxHashSet(this->caches, cxHashStrKey(key), object);
-}
-
-cxAny cxViewGetCache(cxAny pview,cxConstChars key)
-{
-    cxView this = pview;
-    return cxHashGet(this->caches, cxHashStrKey(key));
-}
-
 cxVec2f cxViewPosition(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return this->position;
 }
 
 cxBool cxViewSupportAtlasSet(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return this->supportAtlasSet;
 }
 
 cxList cxViewSubViews(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return this->subViews;
 }
 
 cxInt cxViewTag(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return this->tag;
 }
 
 void cxViewSetTag(cxAny pview,cxInt tag)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     this->tag = tag;
 }
 
 cxSize2f cxViewSize(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return this->size;
 }
 
 cxBox4f cxViewBox(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxFloat wh = this->size.w/2.0f;
     cxFloat hh = this->size.h/2.0f;
@@ -279,12 +273,14 @@ cxBox4f cxViewBox(cxAny pview)
 
 cxColor4f cxViewColor(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return this->color;
 }
 
 cxBool cxViewContainsGLBox(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxEngine engine = cxEngineInstance();
     cxRect4f vr = cxViewGLRect(pview);
     cxRect4f gr = cxRect4fv(0, 0, engine->winsize.w, engine->winsize.h);
@@ -293,6 +289,7 @@ cxBool cxViewContainsGLBox(cxAny pview)
 
 cxRect4f cxViewGLRect(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxFloat wh = this->size.w/2.0f;
     cxFloat hh = this->size.h/2.0f;
@@ -305,30 +302,35 @@ cxRect4f cxViewGLRect(cxAny pview)
 
 void cxViewSetHideTop(cxAny pview,cxBool hideTop)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     this->hideTop = hideTop;
 }
 
 void cxViewSetAutoResizeBox(cxAny pview,cxBox4f box)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     this->autoBox = box;
 }
 
 void cxViewSetAutoResizeMask(cxAny pview,cxViewAutoResizeMask mask)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     this->autoMask = mask;
 }
 
 void cxViewSetDirty(cxAny pview,cxBool dirty)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     this->isDirty = dirty;
 }
 
 void cxViewSetShowBorder(cxAny pview,cxBool isShowBorder)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     this->isShowBorder = isShowBorder;
 }
@@ -351,18 +353,21 @@ cxVec2f cxGLPointToWindowPoint(cxVec2f glPoint)
 
 cxVec2f cxViewPointToGLPoint(cxAny pview,cxVec2f pos)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxVec2f ret = cxViewPointToWindowPoint(pview, pos);
     return cxWindowPointToGLPoint(ret);
 }
 
 cxVec2f cxGLPointToViewPoint(cxAny pview,cxVec2f pos)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxVec2f ret = cxGLPointToWindowPoint(pos);
     return cxWindowPointToViewPoint(pview,ret);
 }
 
 cxVec2f cxViewPointToWindowPoint(cxAny pview,cxVec2f vPoint)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxView pv = this;
     cxVec3f out;
@@ -377,6 +382,7 @@ cxVec2f cxViewPointToWindowPoint(cxAny pview,cxVec2f vPoint)
 
 cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxView pv = this;
     cxVec3f out;
@@ -400,6 +406,7 @@ cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
 
 void cxViewSetSize(cxAny pview,cxSize2f size)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(cxSize2fEqu(this->size, size));
     this->size = size;
@@ -416,6 +423,7 @@ static int cxViewSortByZOrder(cxListElement *lp,cxListElement *rp)
 
 void cxViewSort(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxListSort(this->subViews, cxViewSortByZOrder);
     this->isSort = false;
@@ -423,6 +431,7 @@ void cxViewSort(cxAny pview)
 
 void cxViewSetVisible(cxAny pview,cxBool visible)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     this->isVisible = visible;
 }
@@ -436,6 +445,7 @@ cxAny cxViewGetParentView(cxAny pview)
 
 void cxViewSetColor(cxAny pview,cxColor3f color)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     if(!kmAlmostEqual(this->color.r, color.r)){
         this->color.r = color.r;
@@ -453,6 +463,7 @@ void cxViewSetColor(cxAny pview,cxColor3f color)
 
 void cxViewSetAlpha(cxAny pview,cxFloat alpha)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(kmAlmostEqual(this->color.a, alpha));
     this->color.a = alpha;
@@ -461,6 +472,7 @@ void cxViewSetAlpha(cxAny pview,cxFloat alpha)
 
 void cxViewSetOrder(cxAny pview,cxInt order)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(this->zorder == order);
     this->zorder = order;
@@ -471,6 +483,7 @@ void cxViewSetOrder(cxAny pview,cxInt order)
 
 void cxViewSetPos(cxAny pview,cxVec2f pos)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(cxVec2fEqu(this->position, pos));
     this->position = pos;
@@ -479,6 +492,7 @@ void cxViewSetPos(cxAny pview,cxVec2f pos)
 
 void cxViewSetAnchor(cxAny pview,cxVec2f anchor)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(cxVec2fEqu(this->anchor, anchor));
     this->anchor = anchor;
@@ -487,6 +501,7 @@ void cxViewSetAnchor(cxAny pview,cxVec2f anchor)
 
 void cxViewSetFixScale(cxAny pview,cxVec2f scale)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(cxVec2fEqu(this->fixscale, scale));
     this->fixscale = scale;
@@ -495,6 +510,7 @@ void cxViewSetFixScale(cxAny pview,cxVec2f scale)
 
 void cxViewSetScale(cxAny pview,cxVec2f scale)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(cxVec2fEqu(this->scale, scale));
     this->scale = scale;
@@ -503,11 +519,13 @@ void cxViewSetScale(cxAny pview,cxVec2f scale)
 
 void cxViewSetDegrees(cxAny pview,cxFloat degrees)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxViewSetAngle(pview,kmDegreesToRadians(degrees));
 }
 
 void cxViewSetRaxis(cxAny pview,cxVec3f raxis)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(kmVec3AreEqual(&this->raxis, &raxis));
     this->raxis = raxis;
@@ -516,12 +534,14 @@ void cxViewSetRaxis(cxAny pview,cxVec3f raxis)
 
 cxFloat cxViewAngle(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return this->angle;
 }
 
 void cxViewSetAngle(cxAny pview,cxFloat angle)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(cxFloatEqu(this->angle,angle));
     this->angle = angle;
@@ -530,18 +550,21 @@ void cxViewSetAngle(cxAny pview,cxFloat angle)
 
 cxInt cxViewSubviewCount(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return cxListLength(this->subViews);
 }
 
 cxVec2f cxViewScale(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return cxVec2fv(this->fixscale.x * this->scale.x, this->fixscale.y * this->scale.y);
 }
 
 void cxViewTransform(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(!this->isDirty);
     cxMatrix4f transMatrix;
@@ -579,6 +602,7 @@ static void cxViewDrawBorder(cxAny pview)
 
 void cxViewEnter(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     this->isRunning = true;
     CX_EVENT_FIRE(this, onEnter);
@@ -593,6 +617,7 @@ void cxViewEnter(cxAny pview)
 
 void cxViewExit(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_LIST_FOREACH(this->subViews, ele){
         cxView view = ele->any;
@@ -622,6 +647,7 @@ void cxViewAppend(cxAny pview,cxAny newview)
 
 void cxViewAutoResizing(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(this->parentView == NULL || this->autoMask == cxViewAutoResizeNone);
     cxView parent = this->parentView;
@@ -666,6 +692,7 @@ void cxViewAutoResizing(cxAny pview)
 
 void cxViewLayout(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxViewAutoResizing(this);
     CX_LIST_FOREACH(this->subViews, ele){
@@ -678,6 +705,7 @@ void cxViewLayout(cxAny pview)
 //remove from parent
 void cxViewRemoved(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     CX_RETURN(this->parentView == NULL);
     if(this->isRunning){
@@ -693,6 +721,7 @@ void cxViewRemoved(cxAny pview)
 
 cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxVec2f pos = cxWindowPointToViewPoint(pview, wPoint);
     cxBox4f box = cxViewBox(pview);
     if(vPoint != NULL){
@@ -719,6 +748,7 @@ static cxBool cxViewTouchSubViews(cxAny pview,cxTouch *touch)
 
 cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     if(!this->isVisible){
         return cxViewIsTouchTypeNone;
@@ -728,6 +758,7 @@ cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch)
 
 cxBool cxViewTouch(cxAny pview,cxTouch *touch)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxUInt type = CX_METHOD_GET(cxViewIsTouchTypeNone, this->IsTouch,this,touch);
     if(type == cxViewIsTouchTypeNone){
@@ -744,6 +775,7 @@ cxBool cxViewTouch(cxAny pview,cxTouch *touch)
 
 static cxBool cxViewOnKeySubViews(cxAny pview,cxKey *key)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxListElement *head = cxListFirst(this->subViews);
     for(cxListElement *ele = cxListLast(this->subViews);ele != NULL && head != NULL;ele = ele->prev){
@@ -760,6 +792,7 @@ static cxBool cxViewOnKeySubViews(cxAny pview,cxKey *key)
 
 cxUInt cxViewIsOnKey(cxAny pview,cxKey *key)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     if(!this->isVisible){
         return cxViewIsTouchTypeNone;
@@ -769,6 +802,7 @@ cxUInt cxViewIsOnKey(cxAny pview,cxKey *key)
 
 cxBool cxViewOnKey(cxAny pview,cxKey *key)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxUInt type = CX_METHOD_GET(cxViewIsTouchTypeNone, this->IsOnKey,this,key);
     if(type == cxViewIsTouchTypeNone){
@@ -785,12 +819,14 @@ cxBool cxViewOnKey(cxAny pview,cxKey *key)
 
 void cxViewCleanActions(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxHashClean(this->actions);
 }
 
 cxBool cxViewHasAction(cxAny pview,cxUInt actionId)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxHashKey key = cxHashIntKey(actionId);
     return cxHashHas(this->actions, key);
@@ -798,6 +834,7 @@ cxBool cxViewHasAction(cxAny pview,cxUInt actionId)
 
 cxAny cxViewGetAction(cxAny pview,cxUInt actionId)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxHashKey key = cxHashIntKey(actionId);
     return cxHashGet(this->actions, key);
@@ -805,6 +842,7 @@ cxAny cxViewGetAction(cxAny pview,cxUInt actionId)
 
 void cxViewStopAction(cxAny pview,cxUInt actionId)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     cxHashKey key = cxHashIntKey(actionId);
     cxAny ptr = cxHashGet(this->actions, key);
@@ -815,6 +853,7 @@ void cxViewStopAction(cxAny pview,cxUInt actionId)
 
 cxAny cxViewAppendTimer(cxAny pview,cxFloat freq,cxInt repeat)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxTimer timer = cxTimerCreate(freq, repeat);
     cxViewAppendAction(pview, timer);
     return timer;
@@ -850,6 +889,7 @@ static void cxViewUpdateActions(cxView this)
 
 void cxViewDraw(cxAny pview)
 {
+    CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     if(!this->isVisible){
         goto finished;

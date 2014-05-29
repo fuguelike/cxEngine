@@ -38,10 +38,10 @@ enum {
 };
 
 //shader key define
-CX_EXTERN cxConstChars cxShaderPositionColorKey;
-CX_EXTERN cxConstChars cxShaderDefaultKey;
-CX_EXTERN cxConstChars cxShaderAlphaKey;
-CX_EXTERN cxConstChars cxShaderClippingKey;
+CX_STRING_KEY_DEF(cxShaderPositionColorKey);
+CX_STRING_KEY_DEF(cxShaderDefaultKey);
+CX_STRING_KEY_DEF(cxShaderAlphaKey);
+CX_STRING_KEY_DEF(cxShaderClippingKey);
 
 typedef struct{
     GLuint    minFilter;

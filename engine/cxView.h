@@ -43,7 +43,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool supportAtlasSet;
     cxViewAutoResizeMask autoMask;
     cxBox4f  autoBox;
-    cxHash caches;
     cxHash actions;
     cxArray removes;
     cxInt zorder;
@@ -83,10 +82,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
 CX_OBJECT_END(cxView)
-
-void cxViewSetCache(cxAny pview,cxConstChars key,cxAny object);
-
-cxAny cxViewGetCache(cxAny pview,cxConstChars key);
 
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 

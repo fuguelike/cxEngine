@@ -10,7 +10,7 @@
 #include "cxMemPool.h"
 #include "cxStack.h"
 
-pthread_key_t autoKey;
+static pthread_key_t autoPoolKey;
 
 CX_OBJECT_TYPE(cxMemPool, cxObject)
 {}
@@ -26,23 +26,23 @@ CX_OBJECT_TERM(cxMemPool, cxObject)
 
 static cxStack cxMemPoolStack()
 {
-    cxAny pool = pthread_getspecific(autoKey);
+    cxAny pool = pthread_getspecific(autoPoolKey);
     if(pool == NULL){
         pool = CX_ALLOC(cxStack);
-        pthread_setspecific(autoKey, pool);
+        pthread_setspecific(autoPoolKey, pool);
     }
     return pool;
 }
 
 void cxMemPoolInit()
 {
-    pthread_key_create(&autoKey, __cxObjectRelease);
+    pthread_key_create(&autoPoolKey, __cxObjectRelease);
 }
 
 void cxMemPoolFree()
 {
     cxMemPoolClean();
-    pthread_key_delete(autoKey);
+    pthread_key_delete(autoPoolKey);
 }
 
 static cxMemPool cxMemPoolInstance()
