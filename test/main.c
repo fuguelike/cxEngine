@@ -14,8 +14,7 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxViewLoader loader = cxViewLoaderCreate("cxScroll.json");
-    cxWindowPushView(loader->root);
+
 }
 
 void cxEngineFree(cxEngine engine)

@@ -48,6 +48,7 @@
 #include <actions/cxRunner.h>
 #include <actions/cxScale.h>
 #include <actions/cxSpline.h>
+#include <actions/cxTimeLine.h>
 
 #include "cxEngine.h"
 #include "cxMath.h"
@@ -138,6 +139,7 @@ void cxEngineTypes()
     CX_REGISTER_TYPE(cxSpline,       cxAction);
     CX_REGISTER_TYPE(cxTimer,        cxAction);
     CX_REGISTER_TYPE(cxTint,         cxAction);
+    CX_REGISTER_TYPE(cxTimeLine,     cxAction);
 }
 
 void cxEngineBegin()
