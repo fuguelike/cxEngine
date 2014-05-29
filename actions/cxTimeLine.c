@@ -27,8 +27,7 @@ static void cxTimeLineStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxTimeLine this = pav;
     cxInt count = cxArrayLength(this->times);
-    cxInt i = this->index + 1;
-    for(; i < count; i++){
+    for(cxInt i = this->index + 1; i < count; i++){
         cxNumber num = cxArrayAtIndex(this->times, i);
         cxFloat time = cxNumberToFloat(num);
         if(this->super.durationElapsed >= time){
@@ -48,8 +47,8 @@ CX_SETTER_DEF(cxTimeLine, times)
     cxJson times = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(times, item)
     {
-        CX_CONTINUE(!cxJsonIsNumber(item));
-        cxFloat time = cxJsonToDouble(item, 0);
+        cxFloat time = cxJsonToDouble(item, -1);
+        CX_CONTINUE(time < 0);
         cxTimeLineSet(this, time);
     }
     CX_JSON_ARRAY_EACH_END(times, item)

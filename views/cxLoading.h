@@ -28,7 +28,7 @@ cxAny cxLoadingObject(cxAny pview);
 
 void cxLoadingSetObject(cxAny pview,cxAny object);
 
-void cxLoadingOnUpdate(cxEvent *event);
+void cxLoadingOnUpdate(cxAny sender);
 
 cxBool cxLoadingTouch(cxAny pview,cxTouch *touch);
 

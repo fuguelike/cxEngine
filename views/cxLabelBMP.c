@@ -76,9 +76,9 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
     }
 }
 
-static void cxLabelBMPUpdate(cxEvent *event)
+static void cxLabelBMPUpdate(cxAny sender)
 {
-    cxLabelBMP this = event->sender;
+    cxLabelBMP this = sender;
     CX_RETURN(!this->isDirty);
     cxLabelBMPUpdateText(this);
     cxViewAutoResizing(this);

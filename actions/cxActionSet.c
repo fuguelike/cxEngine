@@ -11,9 +11,9 @@
 
 static void cxActionSetRunNext(cxAny pav);
 
-static void cxActionItemStop(cxEvent *event)
+static void cxActionItemStop(cxAny sender)
 {
-    cxActionSet this = cxActionParent(event->sender);
+    cxActionSet this = cxActionParent(sender);
     CX_ASSERT(this != NULL, "event arg not set");
     this->index ++;
     if(this->type == cxActionSetTypeSequence){

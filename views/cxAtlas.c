@@ -125,9 +125,9 @@ void cxAtlasUpdateScale9(cxAny pview)
     }
 }
 
-void cxAtlasResize(cxEvent *event)
+void cxAtlasResize(cxAny sender)
 {
-    cxAtlasUpdateScale9(event->sender);
+    cxAtlasUpdateScale9(sender);
 }
 
 CX_SETTER_DEF(cxAtlas, scale9)

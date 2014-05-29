@@ -10,9 +10,9 @@
 #include <actions/cxTimer.h>
 #include "cxLoading.h"
 
-void cxLoadingOnUpdate(cxEvent *event)
+void cxLoadingOnUpdate(cxAny sender)
 {
-    cxLoading this = event->sender;
+    cxLoading this = sender;
     if(!this->isLoading){
         CX_EVENT_FIRE(this, onFinished);
         cxViewRemoved(this);
@@ -36,15 +36,15 @@ cxAny cxLoadingObject(cxAny pview)
     return this->object;
 }
 
-static void cxFinishedArrive(cxEvent *event)
+static void cxFinishedArrive(cxAny sender)
 {
-    cxLoading this = cxActionView(event->sender);
+    cxLoading this = cxActionView(sender);
     cxLoaingFinished(this);
 }
 
-static void cxLoadingArrive(cxEvent *event)
+static void cxLoadingArrive(cxAny sender)
 {
-    cxLoading this = cxActionView(event->sender);
+    cxLoading this = cxActionView(sender);
     CX_EVENT_FIRE(this, onLoading);
     if(this->autoFinished){
         cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);

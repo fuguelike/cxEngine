@@ -40,9 +40,9 @@ CX_OBJECT_FREE(cxRunner, cxAction)
 }
 CX_OBJECT_TERM(cxRunner, cxAction)
 
-static void cxRunnerItemStop(cxEvent *event)
+static void cxRunnerItemStop(cxAny sender)
 {
-    cxRunner this = cxActionParent(event->sender);
+    cxRunner this = cxActionParent(sender);
     CX_ASSERT(this != NULL, "parent null");
     this->count --;
 }

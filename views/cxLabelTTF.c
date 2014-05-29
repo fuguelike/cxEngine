@@ -10,9 +10,9 @@
 #include <textures/cxTextureFactory.h>
 #include "cxLabelTTF.h"
 
-static void cxLabelTTFUpdate(cxEvent *event)
+static void cxLabelTTFUpdate(cxAny sender)
 {
-    cxLabelTTF this = event->sender;
+    cxLabelTTF this = sender;
     CX_RETURN(!this->isDirty);
     cxLabelTTFUpdateText(this);
     cxViewAutoResizing(this);

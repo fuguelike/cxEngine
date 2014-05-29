@@ -271,16 +271,8 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 
 typedef struct cxSignal cxSignal;
 typedef struct cxSlot cxSlot;
-struct cxSignal {
-    cxSignal *prev,*next;
-    cxSlot *slot;
-    cxAny func;
-    cxAny object;
-};
-struct cxSlot {
-    cxSignal **signal;
-    cxSignal *slot;
-};
+struct cxSignal {cxSignal *prev,*next;cxSlot *slot;cxAny func;cxAny object;};
+struct cxSlot{cxSignal **signal;cxSignal *slot;};
 
 #define CX_SIGNAL_ALLOC(_name_) cxSignal *_name_
 
@@ -333,16 +325,10 @@ do{                                                             \
 //event
 
 typedef struct cxEvent cxEvent;
+typedef void (*cxEventFunc)(cxAny sender);
+struct cxEvent{cxEvent *prev,*next;cxEventFunc func;};
 
-typedef void (*cxEventFunc)(cxEvent *event);
-
-struct cxEvent {
-    cxEvent *prev,*next;
-    cxEventFunc func;
-    cxAny sender;
-};
-
-#define CX_EVENT_ALLOC(name) cxEvent *name
+#define CX_EVENT_ALLOC(_n_) cxEvent *_n_
 
 #define CX_EVENT_APPEND(_event_,_func_)                         \
 do{                                                             \
@@ -386,8 +372,7 @@ do{                                                             \
     cxEvent *_ele_ = NULL;                                      \
     cxEvent *_tmp_=NULL;                                        \
     DL_FOREACH_SAFE(_sender_->_event_, _ele_,_tmp_){            \
-        _ele_->sender = _sender_;                               \
-        _ele_->func(_ele_);                                     \
+        _ele_->func(_sender_);                                  \
     }                                                           \
 }while(0)
 

@@ -30,9 +30,9 @@ void cxTableArraySubviews(cxAny pview)
     this->isArray = true;
 }
 
-static void cxTableResize(cxEvent *event)
+static void cxTableResize(cxAny sender)
 {
-    cxTableArraySubviews(event->sender);
+    cxTableArraySubviews(sender);
 }
 
 static cxInt cxTableCount(cxTable this)
@@ -48,9 +48,9 @@ static cxInt cxTableCount(cxTable this)
     return count;
 }
 
-static void cxTableUpdate(cxEvent *event)
+static void cxTableUpdate(cxAny sender)
 {
-    cxTable this = event->sender;
+    cxTable this = sender;
     CX_RETURN(!this->isArray || (this->grid.x == 0 && this->grid.y == 0));
     this->isArray = false;
     cxInt count = cxTableCount(this);

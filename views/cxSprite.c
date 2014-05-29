@@ -37,9 +37,9 @@ void cxSpriteDraw(cxAny pview)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-static void cxSpriteDirtyEvent(cxEvent *event)
+static void cxSpriteDirtyEvent(cxAny sender)
 {
-    cxSprite this = event->sender;
+    cxSprite this = sender;
     this->cbox.lb = this->super.color;
     this->cbox.rb = this->super.color;
     this->cbox.lt = this->super.color;

@@ -37,7 +37,7 @@ void cxAtlasDraw(cxAny pview);
 
 void cxAtlasDrawInit(cxAny pview);
 
-void cxAtlasResize(cxEvent *event);
+void cxAtlasResize(cxAny sender);
 
 void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color);
 
