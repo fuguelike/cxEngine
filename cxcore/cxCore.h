@@ -211,8 +211,6 @@ do{                                                             \
 
 //type define
 
-void cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxAny));
-
 #define CX_REGISTER_TYPE(_t_)  __##_t_##RegisterFunc()
 
 #define CX_OBJECT_BEG(_t_,_b_)                                  \
@@ -234,11 +232,12 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 }                                                               \
 CX_ATTRIBUTE_UNUSED static void __##_t_##RegisterFunc()         \
 {                                                               \
-    cxTypeRegisterType( #_t_, #_b_,                             \
-                        __##_t_##CreateFunc,                    \
-                        __##_t_##AllocFunc,                     \
-                        __##_t_##AutoType                       \
-    );                                                          \
+    __cxTypeRegisterType                                        \
+    (_t_##TypeName,                                             \
+    _b_##TypeName,                                              \
+    __##_t_##CreateFunc,                                        \
+    __##_t_##AllocFunc,                                         \
+    __##_t_##AutoType);                                         \
 }
 
 #define CX_OBJECT_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_,_b_) struct _b_ super;
@@ -433,6 +432,8 @@ void __cxObjectRetain(cxAny ptr);
 void __cxObjectRelease(cxAny ptr);
 
 cxAny __cxObjectAutoRelease(cxAny ptr);
+
+void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxAny));
 
 //must completed cxUtilPrint function with platform
 void cxUtilPrint(cxConstChars type,cxConstChars file,cxInt line,cxConstChars format,va_list ap);

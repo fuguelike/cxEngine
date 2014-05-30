@@ -19,7 +19,7 @@ QQ:4575407
 CX_OBJECT_DEF(typeName, baseType)
     //定义字段
     int filed;
-CX_OBJECT_END(typeName)
+CX_OBJECT_END(typeName, baseType)
 ```
 实现一个类型
 ------

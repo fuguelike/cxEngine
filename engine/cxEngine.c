@@ -146,6 +146,7 @@ void cxEngineBegin()
     cxEngine engine = cxEngineInstance();
     //register all type
     cxEngineTypes();
+    cxEngineType(engine);
     //set localized lang
     cxEngineSetLocalized(cxLocalizedLang());
     //open player

@@ -26,23 +26,6 @@ static void cxInitTypes()
     CX_REGISTER_TYPE(cxMessage);
 }
 
-void cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxAny))
-{
-    CX_ASSERT(autoType != NULL, "auto type func error");
-    cxType type = CX_ALLOC(cxType);
-    cxType superType = cxTypesGet(bb);
-    if(!(tt == cxObjectTypeName && bb == cxObjectTypeName)){
-        CX_ASSERT(superType != NULL,"type %s not register",bb);
-        cxTypeSetSuper(type,superType);
-    }
-    CX_LOGGER("%s register",tt);
-    type->Alloc = alloc;
-    type->Create = create;
-    cxTypesSet(tt,type);
-    autoType(type);
-    CX_RELEASE(type);
-}
-
 void cxTypesInit()
 {
     types = CX_ALLOC(cxHash);

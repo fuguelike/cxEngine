@@ -7,6 +7,11 @@
 //
 #include <engine/cxEngine.h>
 
+void cxEngineType(cxEngine engine)
+{
+    
+}
+
 void cxEngineInit(cxEngine engine)
 {
 	cxEngineSetDesignSize(cxSize2fv(640, 960));   

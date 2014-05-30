@@ -204,6 +204,20 @@ cxAny __cxObjectAlloc(cxConstType type,cxInt size,cxObjectFunc initFunc,cxObject
     return ptr;
 }
 
+void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxAny))
+{
+    CX_ASSERT(autoType != NULL, "auto type func error");
+    cxType type = CX_ALLOC(cxType);
+    cxType superType = cxTypesGet(bb);
+    CX_ASSERT(superType != NULL || tt == cxObjectTypeName,"type %s not register",bb);
+    cxTypeSetSuper(type,superType);
+    type->Alloc = alloc;
+    type->Create = create;
+    cxTypesSet(tt,type);
+    autoType(type);
+    CX_RELEASE(type);
+}
+
 void cxCoreInit()
 {
     cxAllocatorInit();
