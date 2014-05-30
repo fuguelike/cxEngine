@@ -77,7 +77,7 @@ cxLong cxJsonEnvLong(cxConstChars key,cxLong dv);
 
 void cxJsonRegisterLong(cxConstChars key,cxLong value);
 
-void cxJsonDump();
+cxString cxJsonDump(cxJson json);
 
 void cxJsonInit();
 
@@ -100,6 +100,8 @@ cxBool cxJsonIsArray(cxJson json);
 cxBool cxJsonIsObject(cxJson json);
 
 cxJson cxJsonAttachAlloc(json_t *json);
+
+cxJson cxJsonAttach(json_t *json);
 
 cxJson cxJsonAttachCreate(json_t *json);;
 

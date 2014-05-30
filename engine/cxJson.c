@@ -94,12 +94,11 @@ static cxJson cxJsonParseRegisterValue(cxJson json)
     return cxJsonAttachCreate(v);
 }
 
-void cxJsonDump()
+cxString cxJsonDump(cxJson json)
 {
-    cxChars json = json_dumps(global, JSON_ENCODE_ANY);
-    CX_LOGGER("$=%s",json);
-    allocator->free(json);
-    
+    CX_ASSERT(json != NULL, "args error");
+    cxChars jsonText = json_dumps(CX_JSON_PTR(json), JSON_ENCODE_ANY);
+    return cxStringAttachChars(jsonText);
 }
 
 void cxJsonInit()
@@ -632,6 +631,15 @@ cxJson cxJsonCreate(cxString json)
     }
     this->json = json_loadb(cxStringBody(json), cxStringLength(json), JSON_DECODE_ANY, &error);
     CX_ASSERT(this->json != NULL, "cxJson load error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
+    return this;
+}
+
+//use json_object make json
+cxJson cxJsonAttach(json_t *json)
+{
+    CX_ASSERT(json != NULL, "args error");
+    cxJson this = CX_CREATE(cxJson);
+    this->json = json;
     return this;
 }
 

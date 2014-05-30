@@ -225,7 +225,6 @@ void cxEngineLayout(cxInt width,cxInt height)
     //
     if(!engine->isInit){
         cxOpenGLCheckFeature();
-        cxJsonDump();
         cxEngineMain(engine);
     }
     //
