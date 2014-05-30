@@ -36,7 +36,7 @@ CX_OBJECT_DEF(cxPlayer, cxObject)
 #elif CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID
     cxHash tracks;
 #endif
-CX_OBJECT_END(cxPlayer)
+CX_OBJECT_END(cxPlayer, cxObject)
 
 void cxPauseEffect(cxAny this);
 

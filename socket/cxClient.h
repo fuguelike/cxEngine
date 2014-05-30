@@ -30,7 +30,7 @@ CX_OBJECT_DEF(cxClient, cxObject)
     CX_METHOD_DEF(void, Event,cxClient,cxInt what);
     CX_METHOD_DEF(void, Read,cxClient,struct evbuffer *);
     CX_METHOD_DEF(void, Write,cxClient,struct evbuffer *);
-CX_OBJECT_END(cxClient)
+CX_OBJECT_END(cxClient, cxObject)
 
 cxClient cxClientCreate(cxConstChars host,cxInt port);
 

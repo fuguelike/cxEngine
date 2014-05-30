@@ -22,7 +22,7 @@ CX_OBJECT_DEF(cxLoading, cxView)
     CX_EVENT_ALLOC(onFinished);
     CX_EVENT_ALLOC(onLoading);
     CX_EVENT_ALLOC(onStart);
-CX_OBJECT_END(cxLoading)
+CX_OBJECT_END(cxLoading, cxView)
 
 cxAny cxLoadingObject(cxAny pview);
 

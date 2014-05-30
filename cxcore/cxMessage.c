@@ -13,7 +13,7 @@ static cxMessage instance = NULL;
 CX_OBJECT_DEF(cxMessageItem, cxObject)
     cxMessageFunc func;
     cxAny dst;
-CX_OBJECT_END(cxMessageItem)
+CX_OBJECT_END(cxMessageItem, cxObject)
 
 CX_OBJECT_TYPE(cxMessageItem, cxObject)
 {}

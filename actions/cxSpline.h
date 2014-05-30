@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxSpline, cxAction)
     cxFloat delta;
     cxInt index;
     CX_EVENT_ALLOC(onIndex);
-CX_OBJECT_END(cxSpline)
+CX_OBJECT_END(cxSpline, cxAction)
 
 void cxSplineAppend(cxAny pav,cxVec2f pos);
 

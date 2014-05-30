@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxPolygon, cxSprite)
     cxTex2f *texs;
     cxInt capacity;
     cxInt number;
-CX_OBJECT_END(cxPolygon)
+CX_OBJECT_END(cxPolygon, cxSprite)
 
 void cxPolygonClean(cxAny pview);
 

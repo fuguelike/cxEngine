@@ -81,7 +81,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
-CX_OBJECT_END(cxView)
+CX_OBJECT_END(cxView, cxObject)
 
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 

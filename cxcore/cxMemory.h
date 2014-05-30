@@ -16,7 +16,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxMemory, cxObject)
     cxPointer data;
     cxInt size;
-CX_OBJECT_END(cxMemory)
+CX_OBJECT_END(cxMemory, cxObject)
 
 cxMemory cxMemoryCreate(cxInt size);
 

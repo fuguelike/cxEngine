@@ -27,7 +27,7 @@ CX_OBJECT_DEF(cxScroll, cxView)
     cxScrollMoveType type;
     cxBool selected;
     CX_SLOT_ALLOC(onTouch);
-CX_OBJECT_END(cxScroll)
+CX_OBJECT_END(cxScroll, cxView)
 
 cxBool cxScrollTouch(cxAny pview,cxTouch *touch);
 

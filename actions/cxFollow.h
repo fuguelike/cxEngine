@@ -21,7 +21,7 @@ CX_OBJECT_DEF(cxFollow, cxAction)
     cxFloat min;    //exit min distance
     CX_METHOD_DEF(cxBool, Exit, cxAny);
     CX_METHOD_DEF(cxFloat, Speed,cxAny,cxFloat);
-CX_OBJECT_END(cxFollow)
+CX_OBJECT_END(cxFollow, cxAction)
 
 void cxFollowInit(cxAny pav);
 

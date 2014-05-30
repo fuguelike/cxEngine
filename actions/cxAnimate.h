@@ -25,7 +25,7 @@ CX_OBJECT_DEF(cxAnimate, cxAction)
     cxArray list;
     cxFloat duration;
     CX_EVENT_ALLOC(onFrame);
-CX_OBJECT_END(cxAnimate)
+CX_OBJECT_END(cxAnimate, cxAction)
 
 cxAnimate cxAnimateCreate(cxFloat duration,cxArray list);
 

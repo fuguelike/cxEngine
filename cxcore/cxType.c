@@ -12,25 +12,35 @@ static cxHash types;
 
 static void cxInitTypes()
 {
-    //register object class
-    cxType tmp = CX_ALLOC(cxType);
-    tmp->Alloc = __cxObjectAllocFunc;
-    tmp->Create = __cxObjectCreateFunc;
-    cxTypesSet(cxObjectTypeName,tmp);
-    __cxObjectAutoType(tmp);
-    CX_RELEASE(tmp);
-    
+    CX_REGISTER_TYPE(cxObject);
     //register core
-    CX_REGISTER_TYPE(cxType,        cxObject);
-    CX_REGISTER_TYPE(cxProperty,    cxObject);
-    CX_REGISTER_TYPE(cxMemPool,     cxObject);
-    CX_REGISTER_TYPE(cxHash,        cxObject);
-    CX_REGISTER_TYPE(cxArray,       cxObject);
-    CX_REGISTER_TYPE(cxList,        cxObject);
-    CX_REGISTER_TYPE(cxStack,       cxObject);
-    CX_REGISTER_TYPE(cxNumber,      cxObject);
-    CX_REGISTER_TYPE(cxString,      cxObject);
-    CX_REGISTER_TYPE(cxMessage,     cxObject);
+    CX_REGISTER_TYPE(cxType);
+    CX_REGISTER_TYPE(cxProperty);
+    CX_REGISTER_TYPE(cxMemPool);
+    CX_REGISTER_TYPE(cxHash);
+    CX_REGISTER_TYPE(cxArray);
+    CX_REGISTER_TYPE(cxList);
+    CX_REGISTER_TYPE(cxStack);
+    CX_REGISTER_TYPE(cxNumber);
+    CX_REGISTER_TYPE(cxString);
+    CX_REGISTER_TYPE(cxMessage);
+}
+
+void cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxAny))
+{
+    CX_ASSERT(autoType != NULL, "auto type func error");
+    cxType type = CX_ALLOC(cxType);
+    cxType superType = cxTypesGet(bb);
+    if(!(tt == cxObjectTypeName && bb == cxObjectTypeName)){
+        CX_ASSERT(superType != NULL,"type %s not register",bb);
+        cxTypeSetSuper(type,superType);
+    }
+    CX_LOGGER("%s register",tt);
+    type->Alloc = alloc;
+    type->Create = create;
+    cxTypesSet(tt,type);
+    autoType(type);
+    CX_RELEASE(type);
 }
 
 void cxTypesInit()

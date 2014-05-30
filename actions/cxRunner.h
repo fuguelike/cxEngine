@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxRunner, cxAction)
     cxInt step;
     CX_METHOD_DEF(void, Init, cxAny);
     CX_METHOD_DEF(void, Exit, cxAny);
-CX_OBJECT_END(cxRunner)
+CX_OBJECT_END(cxRunner, cxAction)
 
 void cxRunnerAppend(cxAny runner,cxAny pav, cxAny pview);
 

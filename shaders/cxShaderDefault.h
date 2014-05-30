@@ -15,7 +15,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxShaderDefault, cxShader)
     
-CX_OBJECT_END(cxShaderDefault)
+CX_OBJECT_END(cxShaderDefault, cxShader)
 
 cxString cxShaderDefaultGetVertexSource(cxAny this);
 

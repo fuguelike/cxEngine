@@ -17,7 +17,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxJson, cxObject)
     json_t *json;
-CX_OBJECT_END(cxJson)
+CX_OBJECT_END(cxJson, cxObject)
 
 #define CX_JSON_PTR(j)  ((j)->json)
 

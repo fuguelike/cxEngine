@@ -17,7 +17,7 @@ CX_OBJECT_DEF(cxTimeLine, cxAction)
     cxInt index;
     cxArray times;
     CX_EVENT_ALLOC(onTime);
-CX_OBJECT_END(cxTimeLine)
+CX_OBJECT_END(cxTimeLine, cxAction)
 
 //set time event point
 void cxTimeLineSet(cxAny pav,cxFloat time);

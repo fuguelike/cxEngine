@@ -46,7 +46,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxTouch touch;
     cxKey key;
     cxString lang;
-CX_OBJECT_END(cxEngine)
+CX_OBJECT_END(cxEngine, cxObject)
 
 void cxEnginePush(cxAny object);
 

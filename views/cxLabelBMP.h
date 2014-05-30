@@ -20,7 +20,7 @@ CX_OBJECT_DEF(cxLabelBMP, cxAtlas)
     cxBool isDirty;
     cxBool isCenter;
     cxFloat size;
-CX_OBJECT_END(cxLabelBMP)
+CX_OBJECT_END(cxLabelBMP, cxAtlas)
 
 cxLabelBMP cxLabelBMPCreate(cxString font,cxString txt);
 

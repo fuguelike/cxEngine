@@ -15,7 +15,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxListen, cxObject)
 
-CX_OBJECT_END(cxListen)
+CX_OBJECT_END(cxListen, cxObject)
 
 CX_C_END
 

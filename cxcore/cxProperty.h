@@ -40,7 +40,7 @@ do{                                                     \
 CX_OBJECT_DEF(cxProperty, cxObject)
     cxPropertySetter setter;
     cxPropertyGetter getter;
-CX_OBJECT_END(cxProperty)
+CX_OBJECT_END(cxProperty, cxObject)
 
 void cxObjectSetter(cxAny object,cxConstChars key,cxAny value);
 

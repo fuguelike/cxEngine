@@ -21,7 +21,7 @@ typedef void (*cxMessageFunc)(cxAny dst,cxAny src);
 
 CX_OBJECT_DEF(cxMessage, cxObject)
     cxHash keys;
-CX_OBJECT_END(cxMessage)
+CX_OBJECT_END(cxMessage, cxObject)
 
 void cxMessageDestroy();
 

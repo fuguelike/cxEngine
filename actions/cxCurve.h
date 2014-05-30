@@ -17,11 +17,11 @@ typedef cxFloat (*cxActionCurveFunc)(cxAny pav,cxFloat time);
 
 CX_OBJECT_DEF(cxCurveItem, cxObject)
     cxActionCurveFunc func;
-CX_OBJECT_END(cxCurveItem)
+CX_OBJECT_END(cxCurveItem, cxObject)
 
 CX_OBJECT_DEF(cxCurve, cxObject)
     cxHash curves;
-CX_OBJECT_END(cxCurve)
+CX_OBJECT_END(cxCurve, cxObject)
 
 void cxCurveDestroy();
 

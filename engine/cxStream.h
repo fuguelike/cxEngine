@@ -28,7 +28,7 @@ CX_OBJECT_DEF(cxStream, cxObject)
     CX_METHOD_DEF(cxOff, Position, cxAny);
     CX_METHOD_DEF(void, Close, cxAny);
     CX_METHOD_DEF(cxString, AllBytes, cxAny);
-CX_OBJECT_END(cxStream)
+CX_OBJECT_END(cxStream, cxObject)
 
 void cxStreamBaseClose(cxAny this);
 

@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxMove, cxAction)
     cxVec2f curr;
     cxVec2f from;
     cxVec2f posDelta;
-CX_OBJECT_END(cxMove)
+CX_OBJECT_END(cxMove, cxAction)
 
 void cxMoveSetPos(cxAny pav,cxVec2f pos);
 

@@ -17,7 +17,7 @@ CX_OBJECT_DEF(cxBuffer, cxObject)
     ALuint buffer;
     ALenum format;
     ALsizei freq;
-CX_OBJECT_END(cxBuffer)
+CX_OBJECT_END(cxBuffer, cxObject)
 
 CX_OBJECT_TYPE(cxBuffer, cxObject)
 {
@@ -46,7 +46,7 @@ CX_OBJECT_DEF(cxTrack, cxObject)
     ALsizei freq;
     ALuint format;
     ALuint source;
-CX_OBJECT_END(cxTrack)
+CX_OBJECT_END(cxTrack, cxObject)
 
 CX_OBJECT_TYPE(cxTrack, cxObject)
 {

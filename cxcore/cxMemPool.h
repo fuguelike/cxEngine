@@ -16,7 +16,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxMemPool, cxObject)
     cxArray objects;
-CX_OBJECT_END(cxMemPool)
+CX_OBJECT_END(cxMemPool, cxObject)
 
 void cxMemPoolInit();
 

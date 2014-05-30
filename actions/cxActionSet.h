@@ -23,7 +23,7 @@ CX_OBJECT_DEF(cxActionSet, cxAction)
     cxActionSetType type;
     cxArray items;
     cxInt index;
-CX_OBJECT_END(cxActionSet)
+CX_OBJECT_END(cxActionSet, cxAction)
 
 void cxActionSetSetType(cxAny pav,cxActionSetType type);
 

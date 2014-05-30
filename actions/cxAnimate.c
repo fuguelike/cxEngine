@@ -18,7 +18,7 @@ CX_OBJECT_DEF(cxAnimateItem, cxObject)
     cxString key;
     cxFloat delay;
     cxFloat time;
-CX_OBJECT_END(cxAnimateItem)
+CX_OBJECT_END(cxAnimateItem, cxObject)
 
 CX_OBJECT_TYPE(cxAnimateItem, cxAction)
 {

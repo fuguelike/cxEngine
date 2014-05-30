@@ -211,6 +211,10 @@ do{                                                             \
 
 //type define
 
+void cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxAny));
+
+#define CX_REGISTER_TYPE(_t_)  __##_t_##RegisterFunc()
+
 #define CX_OBJECT_BEG(_t_,_b_)                                  \
 CX_ATTRIBUTE_UNUSED static cxConstType _t_##TypeName = #_t_;    \
 typedef struct _t_ *_t_;                                        \
@@ -219,7 +223,7 @@ void __##_t_##AutoFree(_t_ this);                               \
 void __##_t_##AutoType(cxAny this);                             \
 struct _t_ {
 
-#define CX_OBJECT_END(_t_) };                                   \
+#define CX_OBJECT_END(_t_,_b_) };                               \
 CX_ATTRIBUTE_UNUSED static cxAny __##_t_##CreateFunc()          \
 {                                                               \
     return CX_CREATE(_t_);                                      \
@@ -227,6 +231,14 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##CreateFunc()          \
 CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 {                                                               \
     return CX_ALLOC(_t_);                                       \
+}                                                               \
+CX_ATTRIBUTE_UNUSED static void __##_t_##RegisterFunc()         \
+{                                                               \
+    cxTypeRegisterType( #_t_, #_b_,                             \
+                        __##_t_##CreateFunc,                    \
+                        __##_t_##AllocFunc,                     \
+                        __##_t_##AutoType                       \
+    );                                                          \
 }
 
 #define CX_OBJECT_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_,_b_) struct _b_ super;
@@ -255,7 +267,7 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 
 #define CX_RETAIN_SWAP(_s_,_d_)     do{CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}while(0)
 
-#define CX_RETAIN_SET(_n_,_v_)      do{_n_ = (_v_);CX_RETAIN(_n_);}while(0)
+#define CX_RETAIN_SET(_f_,_v_)      do{_f_ = (_v_);CX_RETAIN(_f_);}while(0)
 
 #define CX_INSTANCE_OF(_o_,_t_)     cxInstanceOf(_o_,_t_##TypeName)
 
@@ -438,7 +450,7 @@ CX_OBJECT_BEG(cxObject,cxObject)
     cxConstType cxType;
     cxInt cxRefcount;
     cxObjectFunc cxFree;
-CX_OBJECT_END(cxObject)
+CX_OBJECT_END(cxObject,cxObject)
 
 cxAny cxObjectType(cxAny object);
 

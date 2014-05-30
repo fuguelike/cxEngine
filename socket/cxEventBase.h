@@ -18,7 +18,7 @@ CX_OBJECT_DEF(cxEventBase, cxObject)
     cxHash conns;   //host:port key
     struct event_base *base;
     CX_SLOT_ALLOC(onUpdate);
-CX_OBJECT_END(cxEventBase)
+CX_OBJECT_END(cxEventBase, cxObject)
 
 cxEventBase cxEventBaseInstance();
 

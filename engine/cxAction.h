@@ -47,7 +47,7 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_EVENT_ALLOC(onStop);
     CX_EVENT_ALLOC(onIndex);
     CX_EVENT_ALLOC(onStep);
-CX_OBJECT_END(cxAction)
+CX_OBJECT_END(cxAction, cxObject)
 
 cxAny cxActionParent(cxAny pav);
 

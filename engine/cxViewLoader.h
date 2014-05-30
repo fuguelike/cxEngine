@@ -16,7 +16,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxViewLoader, cxObject)
     cxAny view;
     cxHash objects;
-CX_OBJECT_END(cxViewLoader)
+CX_OBJECT_END(cxViewLoader, cxObject)
 
 cxAny cxViewLoaderObject(cxAny loader,cxConstChars id);
 

@@ -18,7 +18,7 @@ CX_OBJECT_DEF(cxTable, cxView)
     cxBool isArray;
     cxBool arrayHide;
     cxVec2i grid;
-CX_OBJECT_END(cxTable)
+CX_OBJECT_END(cxTable, cxView)
 
 void cxTableArrayHide(cxAny pview,cxBool arrayHide);
 

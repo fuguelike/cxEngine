@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxUrlPath, cxObject)
     cxChar key[CX_MAX_KEY];
     cxChar value[CX_MAX_KEY];
     cxInt count;
-CX_OBJECT_END(cxUrlPath)
+CX_OBJECT_END(cxUrlPath, cxObject)
 
 cxUrlPath cxUrlPathParse(cxConstChars url);
 

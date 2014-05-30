@@ -20,7 +20,7 @@ CX_OBJECT_DEF(cxTexCoord, cxObject)
     cxFloat y;
     cxFloat w;
     cxFloat h;
-CX_OBJECT_END(cxTexCoord)
+CX_OBJECT_END(cxTexCoord, cxObject)
 
 CX_OBJECT_DEF(cxTexture, cxObject)
     cxHash keys;    //cxTexCoord
@@ -35,7 +35,7 @@ CX_OBJECT_DEF(cxTexture, cxObject)
     cxVec2f scale;
     CX_METHOD_DEF(cxBool, Load, cxAny, cxStream);
     CX_METHOD_DEF(void, Bind, cxAny);
-CX_OBJECT_END(cxTexture)
+CX_OBJECT_END(cxTexture, cxObject)
 
 void cxDrawClippingTexture(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey);
 

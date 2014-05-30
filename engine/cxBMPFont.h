@@ -24,14 +24,14 @@ CX_OBJECT_DEF(cxBMPElement, cxObject)
     cxInt xadvance;
     cxInt page;
     cxInt key;
-CX_OBJECT_END(cxBMPElement)
+CX_OBJECT_END(cxBMPElement, cxObject)
 
 //key = (first<<16) | (second & 0xffff);
 CX_OBJECT_DEF(cxBMPKerning, cxObject)
     cxInt first;
     cxInt second;
     cxInt amount;
-CX_OBJECT_END(cxBMPKerning)
+CX_OBJECT_END(cxBMPKerning, cxObject)
 
 #define cxBMPKerningKey(f,s)    (((f) << 16) | ((s) & 0xffff))
 
@@ -56,7 +56,7 @@ CX_OBJECT_DEF(cxBMPFont, cxObject)
     cxHash chars;
     cxHash kernings;
     cxBool isError;
-CX_OBJECT_END(cxBMPFont)
+CX_OBJECT_END(cxBMPFont, cxObject)
 
 cxFloat cxBMPKerningAmount(cxBMPFont this, cxUInt16 prev,cxUInt16 curr);
 

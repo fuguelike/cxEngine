@@ -16,7 +16,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxString, cxObject)
     UT_string strptr;
-CX_OBJECT_END(cxString)
+CX_OBJECT_END(cxString, cxObject)
 
 //create static cxString
 

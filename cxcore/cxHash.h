@@ -43,7 +43,7 @@ typedef int (*cxHashCmpFunc)(cxHashElement *lp,cxHashElement *rp);
 
 CX_OBJECT_DEF(cxHash, cxObject)
     cxHashElement *hashPtr;
-CX_OBJECT_END(cxHash)
+CX_OBJECT_END(cxHash, cxObject)
 
 #define cxHashSort(_hash_,_cmp_)    HASH_SORT(_hash_,_cmp_)
 

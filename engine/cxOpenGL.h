@@ -70,7 +70,7 @@ CX_OBJECT_DEF(cxOpenGL, cxObject)
     cxBool enableAttribColor;
     cxBool enableAttribTexcoords;
     GLuint activeTextures[MAX_ACTIVE_TEXTURE];
-CX_OBJECT_END(cxOpenGL)
+CX_OBJECT_END(cxOpenGL, cxObject)
 
 cxOpenGL cxOpenGLInstance();
 

@@ -18,7 +18,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxTimer, cxAction)
     cxInt repeat;
     CX_EVENT_ALLOC(onArrive);
-CX_OBJECT_END(cxTimer)
+CX_OBJECT_END(cxTimer, cxObject)
 
 void cxTimerReset(cxAny timer);
 

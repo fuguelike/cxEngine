@@ -21,7 +21,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxTextureFactory, cxObject)
     cxHash caches;
     CX_SLOT_ALLOC(onMemory);
-CX_OBJECT_END(cxTextureFactory)
+CX_OBJECT_END(cxTextureFactory, cxObject)
 
 cxTextureFactory cxTextureFactoryInstance();
 

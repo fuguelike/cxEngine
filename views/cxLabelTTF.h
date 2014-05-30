@@ -18,7 +18,7 @@ CX_OBJECT_DEF(cxLabelTTF, cxSprite)
     cxString font;
     cxBool isDirty;
     cxTextAttr attr;
-CX_OBJECT_END(cxLabelTTF)
+CX_OBJECT_END(cxLabelTTF, cxSprite)
 
 void cxLabelTTFSetFontSize(cxAny pview,cxFloat fontsize);
 

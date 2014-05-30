@@ -17,7 +17,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxFileStream, cxStream)
     FILE *fd;
-CX_OBJECT_END(cxFileStream)
+CX_OBJECT_END(cxFileStream, cxStream)
 
 cxStream cxFileStreamCreate(cxConstChars file);
 

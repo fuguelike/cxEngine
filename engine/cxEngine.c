@@ -89,56 +89,56 @@ void cxEnginePause()
 static void cxEngineTypes()
 {
     //register core
-    CX_REGISTER_TYPE(cxStream,       cxObject);
-    CX_REGISTER_TYPE(cxTexture,      cxObject);
-    CX_REGISTER_TYPE(cxView,         cxObject);
-    CX_REGISTER_TYPE(cxAction,       cxObject);
-    CX_REGISTER_TYPE(cxViewLoader,   cxObject);
-    CX_REGISTER_TYPE(cxEngine,       cxObject);
-    CX_REGISTER_TYPE(cxJson,         cxObject);
-    CX_REGISTER_TYPE(cxPlayer,       cxObject);
+    CX_REGISTER_TYPE(cxStream);
+    CX_REGISTER_TYPE(cxTexture);
+    CX_REGISTER_TYPE(cxView);
+    CX_REGISTER_TYPE(cxAction);
+    CX_REGISTER_TYPE(cxViewLoader);
+    CX_REGISTER_TYPE(cxEngine);
+    CX_REGISTER_TYPE(cxJson);
+    CX_REGISTER_TYPE(cxPlayer);
     //register streams
-    CX_REGISTER_TYPE(cxAssetsStream, cxStream);
-    CX_REGISTER_TYPE(cxFileStream,   cxStream);
-    CX_REGISTER_TYPE(cxMemStream,    cxStream);
+    CX_REGISTER_TYPE(cxAssetsStream);
+    CX_REGISTER_TYPE(cxFileStream);
+    CX_REGISTER_TYPE(cxMemStream);
     
     //register textures
-    CX_REGISTER_TYPE(cxTextureJPG,   cxTexture);
-    CX_REGISTER_TYPE(cxTexturePKM,   cxTexture);
-    CX_REGISTER_TYPE(cxTexturePNG,   cxTexture);
-    CX_REGISTER_TYPE(cxTextureTXT,   cxTexture);
-    CX_REGISTER_TYPE(cxTexturePVR,   cxTexture);
-    CX_REGISTER_TYPE(cxTextureJSON,  cxTexture);
+    CX_REGISTER_TYPE(cxTextureJPG);
+    CX_REGISTER_TYPE(cxTexturePKM);
+    CX_REGISTER_TYPE(cxTexturePNG);
+    CX_REGISTER_TYPE(cxTextureTXT);
+    CX_REGISTER_TYPE(cxTexturePVR);
+    CX_REGISTER_TYPE(cxTextureJSON);
     
     //register views
-    CX_REGISTER_TYPE(cxSprite,       cxView);
-    CX_REGISTER_TYPE(cxScroll,       cxView);
-    CX_REGISTER_TYPE(cxTable,        cxView);
-    CX_REGISTER_TYPE(cxWindow,       cxView);
-    CX_REGISTER_TYPE(cxClipping,     cxView);
-    CX_REGISTER_TYPE(cxLoading,      cxView);
-    CX_REGISTER_TYPE(cxPolygon,      cxSprite);
-    CX_REGISTER_TYPE(cxAtlas,        cxSprite);
-    CX_REGISTER_TYPE(cxButton,       cxSprite);
-    CX_REGISTER_TYPE(cxLabelTTF,     cxSprite);
-    CX_REGISTER_TYPE(cxLabelBMP,     cxAtlas);
+    CX_REGISTER_TYPE(cxSprite);
+    CX_REGISTER_TYPE(cxScroll);
+    CX_REGISTER_TYPE(cxTable);
+    CX_REGISTER_TYPE(cxWindow);
+    CX_REGISTER_TYPE(cxClipping);
+    CX_REGISTER_TYPE(cxLoading);
+    CX_REGISTER_TYPE(cxPolygon);
+    CX_REGISTER_TYPE(cxAtlas);
+    CX_REGISTER_TYPE(cxButton);
+    CX_REGISTER_TYPE(cxLabelTTF);
+    CX_REGISTER_TYPE(cxLabelBMP);
     
     //register actions
-    CX_REGISTER_TYPE(cxActionSet,    cxAction);
-    CX_REGISTER_TYPE(cxAnimate,      cxAction);
-    CX_REGISTER_TYPE(cxFade,         cxAction);
-    CX_REGISTER_TYPE(cxFollow,       cxAction);
-    CX_REGISTER_TYPE(cxJump,         cxAction);
-    CX_REGISTER_TYPE(cxMove,         cxAction);
-    CX_REGISTER_TYPE(cxParabola,     cxAction);
-    CX_REGISTER_TYPE(cxParticle,     cxAction);
-    CX_REGISTER_TYPE(cxRotate,       cxAction);
-    CX_REGISTER_TYPE(cxRunner,       cxAction);
-    CX_REGISTER_TYPE(cxScale,        cxAction);
-    CX_REGISTER_TYPE(cxSpline,       cxAction);
-    CX_REGISTER_TYPE(cxTimer,        cxAction);
-    CX_REGISTER_TYPE(cxTint,         cxAction);
-    CX_REGISTER_TYPE(cxTimeLine,     cxAction);
+    CX_REGISTER_TYPE(cxActionSet);
+    CX_REGISTER_TYPE(cxAnimate);
+    CX_REGISTER_TYPE(cxFade);
+    CX_REGISTER_TYPE(cxFollow);
+    CX_REGISTER_TYPE(cxJump);
+    CX_REGISTER_TYPE(cxMove);
+    CX_REGISTER_TYPE(cxParabola);
+    CX_REGISTER_TYPE(cxParticle);
+    CX_REGISTER_TYPE(cxRotate);
+    CX_REGISTER_TYPE(cxRunner);
+    CX_REGISTER_TYPE(cxScale);
+    CX_REGISTER_TYPE(cxSpline);
+    CX_REGISTER_TYPE(cxTimer);
+    CX_REGISTER_TYPE(cxTint);
+    CX_REGISTER_TYPE(cxTimeLine);
 }
 
 void cxEngineBegin()

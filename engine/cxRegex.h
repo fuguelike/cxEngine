@@ -31,7 +31,7 @@ CX_OBJECT_DEF(cxRegex, cxObject)
     cxString input;
     int start;
     int count;
-CX_OBJECT_END(cxRegex)
+CX_OBJECT_END(cxRegex, cxObject)
 
 typedef cxString (*cxRegexReplaceFunc)(cxRegex regex,cxAny arg);
 

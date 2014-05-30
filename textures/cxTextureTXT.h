@@ -18,7 +18,7 @@ CX_OBJECT_DEF(cxTextureTXT, cxTexture)
     cxString font;
     cxString string;
     cxTextAttr attr;
-CX_OBJECT_END(cxTextureTXT)
+CX_OBJECT_END(cxTextureTXT, cxTexture)
 
 void cxTextureTXTMakeTexture(cxTextureTXT texture,cxPointer buffer,cxInt width,cxInt height);
 

@@ -14,7 +14,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxShaderClipping, cxShader)
-CX_OBJECT_END(cxShaderClipping)
+CX_OBJECT_END(cxShaderClipping, cxShader)
 
 CX_C_END
 

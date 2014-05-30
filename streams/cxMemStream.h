@@ -17,7 +17,7 @@ CX_OBJECT_DEF(cxMemStream, cxStream)
     cxOff position;
     char *data;
     cxUInt allocSize;
-CX_OBJECT_END(cxMemStream)
+CX_OBJECT_END(cxMemStream, cxStream)
 
 cxStream cxMemStreamCreateWithText(cxString txt);
 

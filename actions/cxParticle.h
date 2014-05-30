@@ -85,7 +85,7 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     CX_METHOD_DEF(cxAny, GetDrawView,cxAny);
     CX_METHOD_DEF(void, InitUnit,cxAny,cxInt,cxParticleArgs *);
     CX_SLOT_ALLOC(onDraw);
-CX_OBJECT_END(cxParticle)
+CX_OBJECT_END(cxParticle, cxAction)
 
 void cxParticleStop(cxAny pav);
 

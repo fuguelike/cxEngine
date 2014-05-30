@@ -25,7 +25,7 @@ CX_OBJECT_DEF(cxHttp, cxObject)
     struct evhttp_uri *uri;
     CX_EVENT_ALLOC(onChunked);
     CX_EVENT_ALLOC(onCompleted);
-CX_OBJECT_END(cxHttp)
+CX_OBJECT_END(cxHttp, cxObject)
 
 cxString cxHttpUriEncode(cxString uri);
 

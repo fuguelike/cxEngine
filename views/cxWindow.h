@@ -17,7 +17,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxWindow, cxView)
     cxStack views;
-CX_OBJECT_END(cxWindow)
+CX_OBJECT_END(cxWindow, cxObject)
 
 cxAny cxWindowTopView();
 

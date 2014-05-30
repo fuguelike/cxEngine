@@ -18,11 +18,11 @@ CX_OBJECT_DEF(cxIconvItem, cxObject)
     iconv_t iconvptr;
     cxString from;
     cxString to;
-CX_OBJECT_END(cxIconvItem)
+CX_OBJECT_END(cxIconvItem, cxObject)
 
 CX_OBJECT_DEF(cxIconv, cxObject)
     cxHash caches;
-CX_OBJECT_END(cxIconv)
+CX_OBJECT_END(cxIconv, cxObject)
 
 cxIconv cxIconvInstance();
 

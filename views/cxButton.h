@@ -21,7 +21,7 @@ CX_OBJECT_DEF(cxButton, cxSprite)
     CX_EVENT_ALLOC(onRelease);
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onLeave);
-CX_OBJECT_END(cxButton)
+CX_OBJECT_END(cxButton, cxSprite)
 
 cxBool cxButtonTouch(cxAny pview,cxTouch *touch);
 

@@ -29,7 +29,7 @@ CX_OBJECT_DEF(cxAtlas, cxSprite)
     cxBool isInit;
     cxAtlasScale9 scale9;
     cxHash items;
-CX_OBJECT_END(cxAtlas)
+CX_OBJECT_END(cxAtlas, cxSprite)
 
 void cxAtlasSetNumber(cxAny pview,cxInt number);
 

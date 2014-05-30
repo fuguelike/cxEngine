@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxParabola, cxAction)
     cxVec2f speed;
     cxFloat angle;
     cxFloat time;
-CX_OBJECT_END(cxParabola)
+CX_OBJECT_END(cxParabola, cxAction)
 
 cxParabola cxParabolaCreate(cxVec2f speed);
 

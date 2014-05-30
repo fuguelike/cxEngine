@@ -20,7 +20,7 @@ typedef int (*cxArrayCmpFunc)(cxPointer *lp,cxPointer *rp);
 
 CX_OBJECT_DEF(cxArray, cxObject)
     UT_array *utArray;
-CX_OBJECT_END(cxArray)
+CX_OBJECT_END(cxArray, cxObject)
 
 #define CX_ARRAY_FOREACH(_a_,_e_)                                                           \
 cxPointer *_e_ = NULL;                                                                      \
