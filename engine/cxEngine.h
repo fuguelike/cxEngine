@@ -75,7 +75,6 @@ cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 cxTimer cxEngineTimer(cxFloat freq,cxInt repeat);
 
 //type init
-
 CX_EXTERN void cxEngineType(cxEngine engine);
 
 //engine init

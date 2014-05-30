@@ -12,18 +12,18 @@ static cxHash types;
 
 static void cxInitTypes()
 {
-    CX_REGISTER_TYPE(cxObject);
+    CX_TYPE(cxObject);
     //register core
-    CX_REGISTER_TYPE(cxType);
-    CX_REGISTER_TYPE(cxProperty);
-    CX_REGISTER_TYPE(cxMemPool);
-    CX_REGISTER_TYPE(cxHash);
-    CX_REGISTER_TYPE(cxArray);
-    CX_REGISTER_TYPE(cxList);
-    CX_REGISTER_TYPE(cxStack);
-    CX_REGISTER_TYPE(cxNumber);
-    CX_REGISTER_TYPE(cxString);
-    CX_REGISTER_TYPE(cxMessage);
+    CX_TYPE(cxType);
+    CX_TYPE(cxProperty);
+    CX_TYPE(cxMemPool);
+    CX_TYPE(cxHash);
+    CX_TYPE(cxArray);
+    CX_TYPE(cxList);
+    CX_TYPE(cxStack);
+    CX_TYPE(cxNumber);
+    CX_TYPE(cxString);
+    CX_TYPE(cxMessage);
 }
 
 void cxTypesInit()
