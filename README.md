@@ -48,5 +48,11 @@ cxAny object2 = CX_ALLOC(typeName);//对象不放入自动释放池，需要 CX_
 CX_RETAIN(object1); //引用计数＋1
 
 CX_RELEASE(object2); //引用计数-1,当引用计数＝0时对象降被释放
+
+CX_AUTO(object2);//加入自动释放池
+
+CX_CAST(type,object);//类型转换 失败返回NULL
+
+CX_INSTANCE_OF(obj,type);//判断对象类型
 //
 ```

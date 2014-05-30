@@ -262,7 +262,7 @@ CX_ATTRIBUTE_UNUSED static void __##_t_##RegisterFunc()         \
 
 #define CX_RELEASE(_o_)             __cxObjectRelease(_o_)
 
-#define CX_AUTOFREE(_o_)            __cxObjectAutoRelease(_o_)
+#define CX_AUTO(_o_)                __cxObjectAutoRelease(_o_)
 
 #define CX_RETAIN_SWAP(_s_,_d_)     do{CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}while(0)
 
