@@ -9,8 +9,8 @@
 #ifndef cxCore_cxHash_h
 #define cxCore_cxHash_h
 
-#include <uthash.h>
 #include "cxCore.h"
+#include <uthash.h>
 
 CX_C_BEGIN
 

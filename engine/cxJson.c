@@ -202,7 +202,7 @@ void cxJsonRegisterConstChars(cxConstChars key,cxConstChars value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
     CX_ASSERT(cxConstCharsOK(value), "value error");
-    json_object_set(global, key, json_string(value));
+    json_object_set_new(global, key, json_string(value));
 }
 
 cxString cxJsonEnvString(cxConstChars key)
@@ -218,7 +218,7 @@ void cxJsonRegisterString(cxConstChars key,cxString value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
     CX_ASSERT(cxStringOK(value), "value error");
-    json_object_set(global, key, json_string(cxStringBody(value)));
+    json_object_set_new(global, key, json_string(cxStringBody(value)));
 }
 
 cxConstChars cxJsonEnvConstChars(cxConstChars key)
@@ -232,7 +232,7 @@ cxConstChars cxJsonEnvConstChars(cxConstChars key)
 void cxJsonRegisterDouble(cxConstChars key,cxDouble value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_object_set(global, key, json_real(value));
+    json_object_set_new(global, key, json_real(value));
 }
 
 cxDouble cxJsonEnvDouble(cxConstChars key,cxDouble dv)
@@ -246,7 +246,7 @@ cxDouble cxJsonEnvDouble(cxConstChars key,cxDouble dv)
 void cxJsonRegisterInt(cxConstChars key,cxInt value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_object_set(global, key, json_integer(value));
+    json_object_set_new(global, key, json_integer(value));
 }
 
 cxInt cxJsonEnvInt(cxConstChars key,cxInt dv)
@@ -260,7 +260,7 @@ cxInt cxJsonEnvInt(cxConstChars key,cxInt dv)
 void cxJsonRegisterLong(cxConstChars key,cxLong value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_object_set(global, key, json_integer(value));
+    json_object_set_new(global, key, json_integer(value));
 }
 
 cxLong cxJsonEnvLong(cxConstChars key,cxLong dv)
@@ -282,16 +282,16 @@ cxBool cxJsonEnvBool(cxConstChars key,cxBool dv)
 void cxJsonRegisterBool(cxConstChars key,cxBool value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_object_set(global, key, json_boolean(value));
+    json_object_set_new(global, key, json_boolean(value));
 }
 
 void cxJsonRegisterVec2f(cxConstChars key,cxVec2f value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
     json_t *json = json_object();
-    json_object_set(json, "x", json_real(value.x));
-    json_object_set(json, "y", json_real(value.y));
-    json_object_set(global, key, json);
+    json_object_set_new(json, "x", json_real(value.x));
+    json_object_set_new(json, "y", json_real(value.y));
+    json_object_set_new(global, key, json);
 }
 
 cxVec2f cxJsonEnvVec2f(cxConstChars key,cxVec2f dv)
@@ -306,9 +306,9 @@ void cxJsonRegisterSize2f(cxConstChars key,cxSize2f value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
     json_t *json = json_object();
-    json_object_set(json, "w", json_real(value.w));
-    json_object_set(json, "h", json_real(value.h));
-    json_object_set(global, key, json);
+    json_object_set_new(json, "w", json_real(value.w));
+    json_object_set_new(json, "h", json_real(value.h));
+    json_object_set_new(global, key, json);
 }
 
 cxSize2f cxJsonEnvSize2f(cxConstChars key,cxSize2f dv)

@@ -338,14 +338,14 @@ struct cxEvent{cxEvent *prev,*next;cxEventFunc func;};
 #define CX_EVENT_APPEND(_event_,_func_)                         \
 do{                                                             \
     cxEvent *_newptr_ = allocator->malloc(sizeof(cxEvent));     \
-    _newptr_->func = _func_;                                    \
+    _newptr_->func = (cxEventFunc)_func_;                       \
     DL_APPEND(_event_, _newptr_);                               \
 }while(0)
 
 #define CX_EVENT_PREPEND(_event_,_func_)                        \
 do{                                                             \
     cxEvent *_newptr_ = allocator->malloc(sizeof(cxEvent));     \
-    _newptr_->func = _func_;                                    \
+    _newptr_->func = (cxEventFunc)_func_;                       \
     DL_PREPEND(_event_, _newptr_);                              \
 }while(0)
 
@@ -372,12 +372,12 @@ do{                                                             \
     }                                                           \
 }while(0)
 
-#define CX_EVENT_FIRE(_sender_,_event_)                         \
+#define CX_EVENT_FIRE(_sender_,_event_,...)                     \
 do{                                                             \
     cxEvent *_ele_ = NULL;                                      \
     cxEvent *_tmp_=NULL;                                        \
     DL_FOREACH_SAFE(_sender_->_event_, _ele_,_tmp_){            \
-        _ele_->func(_sender_);                                  \
+        _ele_->func(_sender_,##__VA_ARGS__);                    \
     }                                                           \
 }while(0)
 
