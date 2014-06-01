@@ -48,10 +48,10 @@ static void cxAtlasVBODraw(cxAny pview)
 void cxAtlasDraw(cxAny pview)
 {
     cxAtlas this = pview;
-    CX_RETURN(this->number == 0 || this->super.texture == NULL);
-    cxOpenGLSetBlendFactor(this->super.sfactor, this->super.dfactor);
-    cxShaderUsing(this->super.shader,this->super.texture->isAtlas);
-    cxTextureBind(this->super.texture);
+    CX_RETURN(this->number == 0 || this->cxSprite.texture == NULL);
+    cxOpenGLSetBlendFactor(this->cxSprite.sfactor, this->cxSprite.dfactor);
+    cxShaderUsing(this->cxSprite.shader,this->cxSprite.texture->isAtlas);
+    cxTextureBind(this->cxSprite.texture);
     if(!this->isInit){
         this->isInit = true;
         cxAtlasDrawInit(pview);
@@ -75,11 +75,11 @@ void cxAtlasUpdateScale9(cxAny pview)
 {
     cxAtlas this = pview;
     CX_RETURN(!this->scale9.enable);
-    CX_ASSERT(!cxViewZeroSize(pview) && this->super.texture != NULL, "must set texture and size");
+    CX_ASSERT(!cxViewZeroSize(pview) && this->cxSprite.texture != NULL, "must set texture and size");
     cxAtlasClean(pview);
     cxSize2f size = cxViewSize(this);
-    cxRect4f tr = cxBoxTex2fToRect4f(this->super.texCoord);
-    cxSize2f tsize = cxSize2fv(this->super.texture->size.w * tr.w, this->super.texture->size.h * tr.h);
+    cxRect4f tr = cxBoxTex2fToRect4f(this->cxSprite.texCoord);
+    cxSize2f tsize = cxSize2fv(this->cxSprite.texture->size.w * tr.w, this->cxSprite.texture->size.h * tr.h);
     cxFloat txs[]={0.0f, this->scale9.box.l/tsize.w, (tsize.w - this->scale9.box.r)/tsize.w, 1.0f};
     cxFloat tys[]={0.0f, this->scale9.box.t/tsize.h, (tsize.h - this->scale9.box.b)/tsize.h, 1.0f};
     for(int i=0; i < 4; i++){
@@ -132,8 +132,7 @@ void cxAtlasResize(cxAny sender)
 
 CX_SETTER_DEF(cxAtlas, scale9)
 {
-    cxBool enable = cxJsonBool(value, "enable", false);
-    if(enable){
+    if(cxJsonBool(value, "enable", false)){
         cxAtlasSetCapacity(this, 9);
         this->scale9.enable = true;
         this->scale9.box = cxJsonBox4f(value, "box", this->scale9.box);
@@ -153,12 +152,12 @@ CX_SETTER_DEF(cxAtlas, layers)
         size = cxJsonSize2f(layer, "size", size);
         cxConstChars key = cxJsonConstChars(layer, "key");
         if(key != NULL){
-            tex = cxTextureBox(this->super.texture, key);
+            tex = cxTextureBox(this->cxSprite.texture, key);
         }else{
             tex = cxJsonBoxTex2f(layer, "coord", tex);
         }
         if(cxSize2Zero(size) && key != NULL){
-            size = cxTextureSize(this->super.texture, key);
+            size = cxTextureSize(this->cxSprite.texture, key);
         }
         color = cxJsonColor4f(layer, "color", color);
         cxAtlasAppendBoxPoint(this, pos, size, tex, color);
@@ -176,8 +175,8 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);
-    CX_METHOD_SET(this->super.super.Draw, cxAtlasDraw);
-    CX_EVENT_APPEND(this->super.super.onResize, cxAtlasResize);
+    CX_METHOD_SET(this->cxSprite.cxView.Draw, cxAtlasDraw);
+    CX_EVENT_APPEND(this->cxSprite.cxView.onResize, cxAtlasResize);
     this->items = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxAtlas, cxSprite)
@@ -200,7 +199,7 @@ cxInt cxAtlasAppendSpriteWithSize(cxAny pview,cxVec2f pos,cxSize2f siz,cxConstCh
 {
     cxAtlas this = pview;
     cxColor4f color = cxColor4fv(1, 1, 1, 1);
-    cxBoxTex2f tbox = cxTextureBox(this->super.texture, key);
+    cxBoxTex2f tbox = cxTextureBox(this->cxSprite.texture, key);
     cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, siz, tbox, color);
     cxAtlasAppend(pview, &bp);
     return this->number - 1;
@@ -210,8 +209,8 @@ cxInt cxAtlasAppendSprite(cxAny pview,cxVec2f pos,cxConstChars key)
 {
     cxAtlas this = pview;
     cxColor4f color = cxColor4fv(1, 1, 1, 1);
-    cxBoxTex2f tbox = cxTextureBox(this->super.texture, key);
-    cxSize2f siz = cxTextureSize(this->super.texture, key);
+    cxBoxTex2f tbox = cxTextureBox(this->cxSprite.texture, key);
+    cxSize2f siz = cxTextureSize(this->cxSprite.texture, key);
     cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, siz, tbox, color);
     cxAtlasAppend(pview, &bp);
     return this->number - 1;

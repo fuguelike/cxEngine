@@ -68,15 +68,15 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
         CX_ERROR("pvr only support 2bpp and 4bpp format");
         goto completed;
     }
-    pvr->super.size = cxSize2fv(header.width, header.height);
-    pvr->super.hasAlpha = header.bitmaskAlpha;
+    pvr->cxTexture.size = cxSize2fv(header.width, header.height);
+    pvr->cxTexture.hasAlpha = header.bitmaskAlpha;
     if(pvr->format == cxFormatPVR2BPP){
-        pvr->glFormat = pvr->super.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
+        pvr->glFormat = pvr->cxTexture.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
     }else{
-        pvr->glFormat = pvr->super.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
+        pvr->glFormat = pvr->cxTexture.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
     }
-    cxOpenGLGenTextures(1, &pvr->super.textureId);
-    cxOpenGLBindTexture(0, pvr->super.textureId);
+    cxOpenGLGenTextures(1, &pvr->cxTexture.textureId);
+    cxOpenGLBindTexture(0, pvr->cxTexture.textureId);
     cxUInt dataLen = header.dataLength;
     cxUInt dataOff = 0;
     cxUInt width = header.width;
@@ -127,7 +127,7 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
     if(i > 1){
         cxTextureSetParam((cxTexture)pvr, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     }
-    pvr->super.hasMipmap = i > 1;
+    pvr->cxTexture.hasMipmap = i > 1;
     cxOpenGLBindTexture(0, 0);
     ret = true;
 completed:
@@ -138,7 +138,7 @@ completed:
 static void cxTexturePVRBind(cxAny this)
 {
     cxTexturePVR pvr = this;
-    cxOpenGLBindTexture(0, pvr->super.textureId);
+    cxOpenGLBindTexture(0, pvr->cxTexture.textureId);
 }
 
 CX_OBJECT_TYPE(cxTexturePVR, cxTexture)
@@ -147,8 +147,8 @@ CX_OBJECT_TYPE(cxTexturePVR, cxTexture)
 }
 CX_OBJECT_INIT(cxTexturePVR, cxTexture)
 {
-    CX_METHOD_SET(this->super.Bind, cxTexturePVRBind);
-    CX_METHOD_SET(this->super.Load, cxTexturePVRLoad);
+    CX_METHOD_SET(this->cxTexture.Bind, cxTexturePVRBind);
+    CX_METHOD_SET(this->cxTexture.Load, cxTexturePVRLoad);
 }
 CX_OBJECT_FREE(cxTexturePVR, cxTexture)
 {

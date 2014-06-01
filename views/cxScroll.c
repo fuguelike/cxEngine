@@ -15,7 +15,7 @@
 cxView cxScrollContainer(cxAny pview)
 {
     cxScroll this = pview;
-    cxListElement *ele = cxListFirst(this->super.subViews);
+    cxListElement *ele = cxListFirst(this->cxView.subViews);
     CX_ASSERT(ele != NULL, "cxScroll not set conatiner,should first subviews");
     return ele->any;
 }
@@ -75,7 +75,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
     cxVec2f speed = cxVec2fv(touch->movement.x / time, touch->movement.y / time);
     cxVec2f new = cxViewPosition(view);
     if((this->type & cxScrollMoveTypeVertical) && (fabsf(speed.y) >= this->value)){
-        new.y += speed.y * this->super.size.h / this->value;
+        new.y += speed.y * this->cxView.size.h / this->value;
         if(touch->current.y < touch->start.y && new.y < this->box.b){
             new.y = this->box.b;
         }else if(touch->current.y > touch->start.y > 0 && new.y > this->box.t){
@@ -84,7 +84,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
         setpos = fabsf(touch->delta.y) > this->delta;
     }
     if((this->type & cxScrollMoveTypeHorizontal) && (fabsf(speed.x) >= this->value)){
-        new.x += speed.x * this->super.size.w / this->value;
+        new.x += speed.x * this->cxView.size.w / this->value;
         if(touch->current.x < touch->start.x && new.x < this->box.l){
             new.x = this->box.l;
         }else if(touch->current.x > touch->start.x && new.x > this->box.r){
@@ -105,16 +105,16 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
     CX_RETURN(view == NULL);
     if(touch->type == cxTouchTypeDown){
         cxViewStopAction(view, CX_SCROLL_MOVE_ACTION_ID);
-        this->box.r = (view->size.w - this->super.size.w)/2.0f;
+        this->box.r = (view->size.w - this->cxView.size.w)/2.0f;
         this->box.l = -this->box.r;
-        this->box.t = (view->size.h - this->super.size.h)/2.0f;
+        this->box.t = (view->size.h - this->cxView.size.h)/2.0f;
         this->box.b = -this->box.t;
         if(this->type & cxScrollMoveTypeVertical){
-            this->max = this->super.size.w / 8.0f;
+            this->max = this->cxView.size.w / 8.0f;
         }else if(this->type & cxScrollMoveTypeHorizontal){
-            this->max = this->super.size.h / 8.0f;
+            this->max = this->cxView.size.h / 8.0f;
         }else{
-            this->max = (this->super.size.w + this->super.size.h) / 16.0f;
+            this->max = (this->cxView.size.w + this->cxView.size.h) / 16.0f;
         }
         this->selected = cxViewHitTest(pview, touch->current, NULL);
     }else if(touch->type == cxTouchTypeMove && this->selected){
@@ -177,7 +177,7 @@ CX_OBJECT_TYPE(cxScroll, cxView)
 CX_OBJECT_INIT(cxScroll, cxView)
 {
     cxEngine engine = cxEngineInstance();
-    CX_METHOD_SET(this->super.Touch, cxScrollTouch);
+    CX_METHOD_SET(this->cxView.Touch, cxScrollTouch);
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
     //swip cond value

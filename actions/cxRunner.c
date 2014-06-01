@@ -31,8 +31,8 @@ CX_OBJECT_TYPE(cxRunner, cxAction)
 }
 CX_OBJECT_INIT(cxRunner, cxAction)
 {
-    CX_METHOD_SET(this->super.Init, cxRunnerInit);
-    CX_METHOD_SET(this->super.Exit, cxRunnerExit);
+    CX_METHOD_SET(this->cxAction.Init, cxRunnerInit);
+    CX_METHOD_SET(this->cxAction.Exit, cxRunnerExit);
 }
 CX_OBJECT_FREE(cxRunner, cxAction)
 {

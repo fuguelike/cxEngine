@@ -13,8 +13,8 @@
 static cxBool cxAssetsStreamOpen(cxAny this)
 {
     cxAssetsStream asserts = this;
-    CX_ASSERT(asserts->super.isOpen == false,"stream repeat open");
-    cxConstChars path = cxStringBody(asserts->super.path);
+    CX_ASSERT(asserts->cxStream.isOpen == false,"stream repeat open");
+    cxConstChars path = cxStringBody(asserts->cxStream.path);
     asserts->asset = fopen(path, "rb");
     if(asserts->asset == NULL){
         CX_ERROR("open assets %s stream failed",path);
@@ -25,18 +25,18 @@ static cxBool cxAssetsStreamOpen(cxAny this)
         CX_ERROR("lstat assets %s stream failed",path);
         return false;
     }
-    asserts->super.length = (cxInt)stat.st_size;
-    asserts->super.canRead = true;
-    asserts->super.canSeek = true;
-    asserts->super.canWrite = false;
-    asserts->super.isOpen = true;
+    asserts->cxStream.length = (cxInt)stat.st_size;
+    asserts->cxStream.canRead = true;
+    asserts->cxStream.canSeek = true;
+    asserts->cxStream.canWrite = false;
+    asserts->cxStream.isOpen = true;
     return true;
 }
 
 static cxInt cxAssetsStreamRead(cxAny this,cxPointer buffer,cxInt size)
 {
     cxAssetsStream asserts = this;
-    if(!asserts->super.canRead){
+    if(!asserts->cxStream.canRead){
         return 0;
     }
     return fread(buffer, 1, size, asserts->asset);
@@ -45,7 +45,7 @@ static cxInt cxAssetsStreamRead(cxAny this,cxPointer buffer,cxInt size)
 static cxInt cxAssetsStreamWrite(cxAny this,cxPointer buffer,cxInt size)
 {
     cxAssetsStream asserts = this;
-    if(!asserts->super.canWrite){
+    if(!asserts->cxStream.canWrite){
         return 0;
     }
     return 0;
@@ -54,7 +54,7 @@ static cxInt cxAssetsStreamWrite(cxAny this,cxPointer buffer,cxInt size)
 static cxOff cxAssetsStreamPosition(cxAny this)
 {
     cxAssetsStream asserts = this;
-    if(!asserts->super.canRead){
+    if(!asserts->cxStream.canRead){
         return 0;
     }
     return (cxOff)ftell(asserts->asset);
@@ -63,7 +63,7 @@ static cxOff cxAssetsStreamPosition(cxAny this)
 static cxInt cxAssetsStreamSeek(cxAny this,cxOff off,cxInt flags)
 {
     cxAssetsStream asserts = this;
-    if(!asserts->super.canSeek){
+    if(!asserts->cxStream.canSeek){
         return false;
     }
     return fseek(asserts->asset, off, flags) > 0;
@@ -114,13 +114,13 @@ CX_OBJECT_TYPE(cxAssetsStream, cxStream)
 }
 CX_OBJECT_INIT(cxAssetsStream, cxStream)
 {
-    CX_METHOD_SET(this->super.Open, cxAssetsStreamOpen);
-    CX_METHOD_SET(this->super.Read, cxAssetsStreamRead);
-    CX_METHOD_SET(this->super.Write, cxAssetsStreamWrite);
-    CX_METHOD_SET(this->super.Seek, cxAssetsStreamSeek);
-    CX_METHOD_SET(this->super.Close, cxAssetsStreamClose);
-    CX_METHOD_SET(this->super.Position,cxAssetsStreamPosition);
-    CX_METHOD_SET(this->super.AllBytes,cxAssetsStreamAllBytes);
+    CX_METHOD_SET(this->cxStream.Open, cxAssetsStreamOpen);
+    CX_METHOD_SET(this->cxStream.Read, cxAssetsStreamRead);
+    CX_METHOD_SET(this->cxStream.Write, cxAssetsStreamWrite);
+    CX_METHOD_SET(this->cxStream.Seek, cxAssetsStreamSeek);
+    CX_METHOD_SET(this->cxStream.Close, cxAssetsStreamClose);
+    CX_METHOD_SET(this->cxStream.Position,cxAssetsStreamPosition);
+    CX_METHOD_SET(this->cxStream.AllBytes,cxAssetsStreamAllBytes);
 }
 CX_OBJECT_FREE(cxAssetsStream, cxStream)
 {
@@ -136,8 +136,8 @@ cxString cxAssetsData(cxConstChars file)
 
 void cxAssetsStreamInit(cxAssetsStream this,cxConstChars file)
 {
-    CX_RETAIN_SWAP(this->super.path, cxAssetsPath(file));
-    CX_RETAIN_SWAP(this->super.file, cxStringConstChars(file));
+    CX_RETAIN_SWAP(this->cxStream.path, cxAssetsPath(file));
+    CX_RETAIN_SWAP(this->cxStream.file, cxStringConstChars(file));
 }
 
 cxStream cxAssetsStreamCreate(cxConstChars file)

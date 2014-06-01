@@ -51,7 +51,7 @@ CX_OBJECT_TYPE(cxPolygon, cxSprite)
 }
 CX_OBJECT_INIT(cxPolygon, cxSprite)
 {
-    CX_METHOD_SET(this->super.super.Draw, cxPolygonDraw);
+    CX_METHOD_SET(this->cxSprite.cxView.Draw, cxPolygonDraw);
     this->capacity = 8;
     cxPolygonMalloc(this);
 }

@@ -12,7 +12,7 @@ cxBool cxFollowDefaultExit(cxAny pav)
 {
     cxFollow this = pav;
     cxVec2f tp = cxViewPosition(this->target);
-    cxVec2f cp = cxViewPosition(this->super.view);
+    cxVec2f cp = cxViewPosition(this->cxAction.view);
     cxFloat distance = kmVec2DistanceBetween(&tp, &cp);
     if(distance < this->min){
         return true;
@@ -23,11 +23,11 @@ cxBool cxFollowDefaultExit(cxAny pav)
 void cxFollowInit(cxAny pav)
 {
     cxFollow this = pav;
-    CX_ASSERT(this->super.view != this->target, "target error,can't action'view");
-    CX_ASSERT(this->super.view != NULL, "view not set");
+    CX_ASSERT(this->cxAction.view != this->target, "target error,can't action'view");
+    CX_ASSERT(this->cxAction.view != NULL, "view not set");
     CX_ASSERT(this->target != NULL, "target view null");
     cxSize2f ts = cxViewSize(this->target);
-    cxSize2f cs = cxViewSize(this->super.view);
+    cxSize2f cs = cxViewSize(this->cxAction.view);
     this->min = CX_MIN(ts.h, ts.w)/2.0f + CX_MIN(cs.h, cs.w)/2.0f;
 }
 
@@ -35,14 +35,14 @@ static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxFollow this = pav;
     cxVec2f targetPos = cxViewPosition(this->target);
-    cxVec2f currentPos = cxViewPosition(this->super.view);
+    cxVec2f currentPos = cxViewPosition(this->cxAction.view);
     this->angle = cxVec2f2PAngle(targetPos,currentPos);
-    this->speed = CX_METHOD_GET(this->init, this->Speed,pav,this->super.durationElapsed);
+    this->speed = CX_METHOD_GET(this->init, this->Speed,pav,this->cxAction.durationElapsed);
     cxFloat s = dt * this->speed;
     currentPos.x += (s * cosf(this->angle));
     currentPos.y += (s * sinf(this->angle));
-    cxViewSetPos(this->super.view, currentPos);
-    this->super.isExit = CX_METHOD_GET(false, this->Exit, this);
+    cxViewSetPos(this->cxAction.view, currentPos);
+    this->cxAction.isExit = CX_METHOD_GET(false, this->Exit, this);
 }
 
 cxAny cxFollowTarget(cxAny pav)
@@ -57,9 +57,9 @@ CX_OBJECT_TYPE(cxFollow, cxAction)
 }
 CX_OBJECT_INIT(cxFollow, cxAction)
 {
-    this->super.duration = -1;
-    CX_METHOD_SET(this->super.Init, cxFollowInit);
-    CX_METHOD_SET(this->super.Step, cxFollowStep);
+    this->cxAction.duration = -1;
+    CX_METHOD_SET(this->cxAction.Init, cxFollowInit);
+    CX_METHOD_SET(this->cxAction.Step, cxFollowStep);
     CX_METHOD_SET(this->Exit, cxFollowDefaultExit);
 }
 CX_OBJECT_FREE(cxFollow, cxAction)

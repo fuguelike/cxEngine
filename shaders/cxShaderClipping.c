@@ -26,14 +26,14 @@ static cxString cxShaderClippingGetFragmentSource(cxAny this)
     return cxStringConstChars(fragment);
 }
 
-CX_OBJECT_TYPE(cxShaderClipping, cxObject)
+CX_OBJECT_TYPE(cxShaderClipping, cxShader)
 {
     
 }
 CX_OBJECT_INIT(cxShaderClipping, cxShader)
 {
-    CX_METHOD_SET(this->super.GetVertexSource, cxShaderDefaultGetVertexSource);
-    CX_METHOD_SET(this->super.GetFragmentSource, cxShaderClippingGetFragmentSource);
+    CX_METHOD_SET(this->cxShader.GetVertexSource, cxShaderDefaultGetVertexSource);
+    CX_METHOD_SET(this->cxShader.GetFragmentSource, cxShaderClippingGetFragmentSource);
 }
 CX_OBJECT_FREE(cxShaderClipping, cxShader)
 {

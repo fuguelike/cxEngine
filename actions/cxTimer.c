@@ -19,7 +19,7 @@ static cxBool cxTimerExit(cxAny pav)
 void cxTimerReset(cxAny timer)
 {
     cxTimer this = timer;
-    this->super.durationElapsed = 0;
+    this->cxAction.durationElapsed = 0;
 }
 
 CX_SETTER_DEF(cxTimer, repeat)
@@ -33,7 +33,7 @@ CX_OBJECT_TYPE(cxTimer, cxAction)
 }
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
-    CX_METHOD_SET(this->super.Exit, cxTimerExit);
+    CX_METHOD_SET(this->cxAction.Exit, cxTimerExit);
 }
 CX_OBJECT_FREE(cxTimer, cxAction)
 {
@@ -44,7 +44,7 @@ CX_OBJECT_TERM(cxTimer, cxAction)
 cxTimer cxTimerCreate(cxFloat freq,cxInt repeat)
 {
     cxTimer this = CX_CREATE(cxTimer);
-    this->super.duration  = freq;
+    this->cxAction.duration  = freq;
     this->repeat = repeat;
     return this;
 }

@@ -209,6 +209,7 @@ void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny 
     CX_ASSERT(autoType != NULL, "auto type func error");
     cxType type = CX_ALLOC(cxType);
     cxType superType = cxTypesGet(bb);
+    //cxObject have not super type
     CX_ASSERT(superType != NULL || tt == cxObjectTypeName,"type %s not register",bb);
     cxTypeSetSuper(type,superType);
     type->Alloc = alloc;

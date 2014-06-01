@@ -12,7 +12,7 @@
 static void cxSplineInit(cxAny pav)
 {
     cxSpline this = pav;
-    CX_ASSERT(this->super.view != NULL, "view not set");
+    CX_ASSERT(this->cxAction.view != NULL, "view not set");
     this->delta = 1.0f/((cxFloat)cxArrayLength(this->points) - 1.0f);
 }
 
@@ -45,7 +45,7 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f p2 = cxSplinePointAt(this, this->index + 1);
     cxVec2f p3 = cxSplinePointAt(this, this->index + 2);
     cxVec2f newpos = cxCardinalSplineAt(p0, p1, p2, p3, this->tension, lt);
-    cxViewSetPos(this->super.view, newpos);
+    cxViewSetPos(this->cxAction.view, newpos);
 }
 
 static void cxSplineReset(cxAny pav)
@@ -73,9 +73,9 @@ CX_OBJECT_TYPE(cxSpline, cxAction)
 CX_OBJECT_INIT(cxSpline, cxAction)
 {
     this->index = -1;
-    CX_METHOD_SET(this->super.Init, cxSplineInit);
-    CX_METHOD_SET(this->super.Step, cxSplineStep);
-    CX_METHOD_SET(this->super.Reset, cxSplineReset);
+    CX_METHOD_SET(this->cxAction.Init, cxSplineInit);
+    CX_METHOD_SET(this->cxAction.Step, cxSplineStep);
+    CX_METHOD_SET(this->cxAction.Reset, cxSplineReset);
     this->points = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxSpline, cxAction)

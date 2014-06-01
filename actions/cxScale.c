@@ -11,8 +11,8 @@
 static void cxScaleInit(cxAny pav)
 {
     cxScale this = pav;
-    CX_ASSERT(this->super.view != NULL, "view not set");
-    this->oldScale = this->super.view->scale;
+    CX_ASSERT(this->cxAction.view != NULL, "view not set");
+    this->oldScale = this->cxAction.view->scale;
     this->delta.x = this->newScale.x - this->oldScale.x;
     this->delta.y = this->newScale.y - this->oldScale.y;
 }
@@ -23,7 +23,7 @@ static void cxScaleStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f nscale;
     nscale.x = this->oldScale.x + this->delta.x * time;
     nscale.y = this->oldScale.y + this->delta.y * time;
-    cxViewSetScale(this->super.view, nscale);
+    cxViewSetScale(this->cxAction.view, nscale);
 }
 
 CX_SETTER_DEF(cxScale, scale)
@@ -37,8 +37,8 @@ CX_OBJECT_TYPE(cxScale, cxAction)
 }
 CX_OBJECT_INIT(cxScale, cxAction)
 {
-    CX_METHOD_SET(this->super.Init, cxScaleInit);
-    CX_METHOD_SET(this->super.Step, cxScaleStep);
+    CX_METHOD_SET(this->cxAction.Init, cxScaleInit);
+    CX_METHOD_SET(this->cxAction.Step, cxScaleStep);
 }
 CX_OBJECT_FREE(cxScale, cxAction)
 {
@@ -55,7 +55,7 @@ void cxScaleSetScale(cxAny pav,cxVec2f scale)
 cxScale cxScaleCreate(cxFloat duration,cxVec2f scale)
 {
     cxScale this = CX_CREATE(cxScale);
-    this->super.duration = duration;
+    this->cxAction.duration = duration;
     this->newScale = scale;
     return this;
 }

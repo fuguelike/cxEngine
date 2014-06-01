@@ -114,6 +114,7 @@
 		83B995F91925C6C300FD6BC1 /* cxProperty.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995EB1925C6C300FD6BC1 /* cxProperty.c */; };
 		83B995FA1925C6C300FD6BC1 /* cxStack.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995ED1925C6C300FD6BC1 /* cxStack.c */; };
 		83B995FB1925C6C300FD6BC1 /* cxType.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B995EF1925C6C300FD6BC1 /* cxType.c */; };
+		83CC1EC0193B1FA900426152 /* cxAlert.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CC1EBE193B1FA900426152 /* cxAlert.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -352,6 +353,8 @@
 		83B995EE1925C6C300FD6BC1 /* cxStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxStack.h; sourceTree = "<group>"; };
 		83B995EF1925C6C300FD6BC1 /* cxType.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxType.c; sourceTree = "<group>"; };
 		83B995F01925C6C300FD6BC1 /* cxType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxType.h; sourceTree = "<group>"; };
+		83CC1EBE193B1FA900426152 /* cxAlert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAlert.c; sourceTree = "<group>"; };
+		83CC1EBF193B1FA900426152 /* cxAlert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAlert.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -467,6 +470,8 @@
 		833CA5251925DB5E0013630A /* views */ = {
 			isa = PBXGroup;
 			children = (
+				83CC1EBE193B1FA900426152 /* cxAlert.c */,
+				83CC1EBF193B1FA900426152 /* cxAlert.h */,
 				833CA5261925DB5E0013630A /* cxAtlas.c */,
 				833CA5271925DB5E0013630A /* cxAtlas.h */,
 				833CA5281925DB5E0013630A /* cxButton.c */,
@@ -838,6 +843,7 @@
 				8341C64718227DF30045A66F /* aabb.c in Sources */,
 				83B995D71925C5A100FD6BC1 /* cxShader.c in Sources */,
 				833CA53D1925DB5E0013630A /* cxEventBase.c in Sources */,
+				83CC1EC0193B1FA900426152 /* cxAlert.c in Sources */,
 				833CA4FE1925D95C0013630A /* cxTimer.c in Sources */,
 				83B995D41925C5A100FD6BC1 /* cxOpenGL.c in Sources */,
 				837FEA4B1925CBBB005434C4 /* cxShaderAlpha.c in Sources */,

@@ -40,10 +40,10 @@ void cxSpriteDraw(cxAny pview)
 static void cxSpriteDirtyEvent(cxAny sender)
 {
     cxSprite this = sender;
-    this->cbox.lb = this->super.color;
-    this->cbox.rb = this->super.color;
-    this->cbox.lt = this->super.color;
-    this->cbox.rt = this->super.color;
+    this->cbox.lb = this->cxView.color;
+    this->cbox.rb = this->cxView.color;
+    this->cbox.lt = this->cxView.color;
+    this->cbox.rt = this->cxView.color;
     cxBox4f box = cxViewBox(this);
     this->vbox.lb = cxVec3fv(box.l, box.b, 0.0f);
     this->vbox.rb = cxVec3fv(box.r, box.b, 0.0f);
@@ -123,8 +123,8 @@ CX_OBJECT_INIT(cxSprite, cxView)
 {
     this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    CX_EVENT_APPEND(this->super.onDirty, cxSpriteDirtyEvent);
-    CX_METHOD_SET(this->super.Draw, cxSpriteDraw);
+    CX_EVENT_APPEND(this->cxView.onDirty, cxSpriteDirtyEvent);
+    CX_METHOD_SET(this->cxView.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
 }
 CX_OBJECT_FREE(cxSprite, cxView)
@@ -167,7 +167,7 @@ void cxSpriteSetTextureKey(cxAny pview,cxConstChars key,cxBool equSize)
     if(equSize){
         cxViewSetSize(pview, cxTextureSize(this->texture, key));
     }
-    this->super.isDirty = true;
+    this->cxView.isDirty = true;
 }
 
 void cxSpriteSetShader(cxAny pview,cxConstChars key)

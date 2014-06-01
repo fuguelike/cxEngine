@@ -11,8 +11,8 @@
 static void cxShaderPositionColorInit(cxAny this)
 {
     cxShaderPositionColor shader = this;
-    glBindAttribLocation(shader->super.program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
-    glBindAttribLocation(shader->super.program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
+    glBindAttribLocation(shader->cxShader.program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
+    glBindAttribLocation(shader->cxShader.program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
 }
 
 static cxString cxShaderPositionColorGetVertexSource(cxAny this)
@@ -42,15 +42,15 @@ static cxString cxShaderPositionColorGetFragmentSource(cxAny this)
     return cxStringConstChars(fragment);
 }
 
-CX_OBJECT_TYPE(cxShaderPositionColor, cxObject)
+CX_OBJECT_TYPE(cxShaderPositionColor, cxShader)
 {
     
 }
 CX_OBJECT_INIT(cxShaderPositionColor, cxShader)
 {
-    CX_METHOD_SET(this->super.Init, cxShaderPositionColorInit);
-    CX_METHOD_SET(this->super.GetVertexSource, cxShaderPositionColorGetVertexSource);
-    CX_METHOD_SET(this->super.GetFragmentSource, cxShaderPositionColorGetFragmentSource);
+    CX_METHOD_SET(this->cxShader.Init, cxShaderPositionColorInit);
+    CX_METHOD_SET(this->cxShader.GetVertexSource, cxShaderPositionColorGetVertexSource);
+    CX_METHOD_SET(this->cxShader.GetFragmentSource, cxShaderPositionColorGetFragmentSource);
 }
 CX_OBJECT_FREE(cxShaderPositionColor, cxShader)
 {

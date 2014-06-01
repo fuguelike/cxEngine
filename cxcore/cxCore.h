@@ -240,7 +240,7 @@ CX_ATTRIBUTE_UNUSED static void __##_t_##RegisterFunc()         \
     __##_t_##AutoType);                                         \
 }
 
-#define CX_OBJECT_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_,_b_) struct _b_ super;
+#define CX_OBJECT_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_,_b_) struct _b_ _b_;
 
 //type imp
 

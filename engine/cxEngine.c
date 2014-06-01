@@ -36,6 +36,7 @@
 #include <views/cxClipping.h>
 #include <views/cxLabelBMP.h>
 #include <views/cxPolygon.h>
+#include <views/cxAlert.h>
 
 #include <actions/cxParticle.h>
 #include <actions/cxActionSet.h>
@@ -123,6 +124,7 @@ static void cxEngineTypes()
     CX_TYPE(cxButton);
     CX_TYPE(cxLabelTTF);
     CX_TYPE(cxLabelBMP);
+    CX_TYPE(cxAlert);
     
     //register actions
     CX_TYPE(cxActionSet);

@@ -46,13 +46,13 @@ static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
     header.extHeight = CX_SWAP16(header.extHeight);
     header.orgWidth = CX_SWAP16(header.orgWidth);
     header.orgHeight = CX_SWAP16(header.orgHeight);
-    pkm->super.size = cxSize2fv(header.extWidth, header.extHeight);
+    pkm->cxTexture.size = cxSize2fv(header.extWidth, header.extHeight);
     if(header.version != CX_PKM_V1){
         CX_ERROR("PKM only use V1 version");
         goto completed;
     }
-    cxOpenGLGenTextures(1, &pkm->super.textureId);
-    cxOpenGLBindTexture(0, pkm->super.textureId);
+    cxOpenGLGenTextures(1, &pkm->cxTexture.textureId);
+    cxOpenGLBindTexture(0, pkm->cxTexture.textureId);
     cxInt bufsiz = stream->length - sizeof(cxPKMHeader);
     cxPointer buffer = allocator->malloc(bufsiz);
     cxInt readbytes = cxStreamRead(stream, buffer, bufsiz);
@@ -75,7 +75,7 @@ completed:
 static void cxTexturePKMBind(cxAny this)
 {
     cxTexturePKM pkm = this;
-    cxOpenGLBindTexture(0, pkm->super.textureId);
+    cxOpenGLBindTexture(0, pkm->cxTexture.textureId);
 }
 
 CX_OBJECT_TYPE(cxTexturePKM, cxTexture)
@@ -84,9 +84,9 @@ CX_OBJECT_TYPE(cxTexturePKM, cxTexture)
 }
 CX_OBJECT_INIT(cxTexturePKM, cxTexture)
 {
-    CX_METHOD_SET(this->super.Bind, cxTexturePKMBind);
-    CX_METHOD_SET(this->super.Load, cxTexturePKMLoad);
-    this->super.isAtlas = true;
+    CX_METHOD_SET(this->cxTexture.Bind, cxTexturePKMBind);
+    CX_METHOD_SET(this->cxTexture.Load, cxTexturePKMLoad);
+    this->cxTexture.isAtlas = true;
 }
 CX_OBJECT_FREE(cxTexturePKM, cxTexture)
 {

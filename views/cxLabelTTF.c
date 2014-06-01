@@ -45,7 +45,7 @@ CX_OBJECT_TYPE(cxLabelTTF, cxSprite)
 }
 CX_OBJECT_INIT(cxLabelTTF, cxSprite)
 {
-    CX_EVENT_APPEND(this->super.super.onUpdate,cxLabelTTFUpdate);
+    CX_EVENT_APPEND(this->cxSprite.cxView.onUpdate,cxLabelTTFUpdate);
     this->attr.size = 32;
     cxSpriteSetShader(this, cxShaderAlphaKey);
 }

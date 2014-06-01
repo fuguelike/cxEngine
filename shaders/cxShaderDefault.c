@@ -44,14 +44,14 @@ cxString cxShaderDefaultGetFragmentSource(cxAny this)
     return cxStringConstChars(fragment);
 }
 
-CX_OBJECT_TYPE(cxShaderDefault, cxObject)
+CX_OBJECT_TYPE(cxShaderDefault, cxShader)
 {
     
 }
 CX_OBJECT_INIT(cxShaderDefault, cxShader)
 {
-    CX_METHOD_SET(this->super.GetVertexSource, cxShaderDefaultGetVertexSource);
-    CX_METHOD_SET(this->super.GetFragmentSource, cxShaderDefaultGetFragmentSource);
+    CX_METHOD_SET(this->cxShader.GetVertexSource, cxShaderDefaultGetVertexSource);
+    CX_METHOD_SET(this->cxShader.GetFragmentSource, cxShaderDefaultGetFragmentSource);
 }
 CX_OBJECT_FREE(cxShaderDefault, cxShader)
 {

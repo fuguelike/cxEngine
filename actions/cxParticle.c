@@ -136,10 +136,10 @@ static void cxParticleSetBox(cxAny pav,cxParticleUnit *particle)
     box->rb.colors = color;
     box->lt.colors = color;
     box->rt.colors = color;
-    box->lb.texcoords = this->atlas->super.texCoord.lb;
-    box->rb.texcoords = this->atlas->super.texCoord.rb;
-    box->lt.texcoords = this->atlas->super.texCoord.lt;
-    box->rt.texcoords = this->atlas->super.texCoord.rt;
+    box->lb.texcoords = this->atlas->cxSprite.texCoord.lb;
+    box->rb.texcoords = this->atlas->cxSprite.texCoord.rb;
+    box->lt.texcoords = this->atlas->cxSprite.texCoord.lt;
+    box->rt.texcoords = this->atlas->cxSprite.texCoord.rt;
     box->lb.vertices = vq.lb;
     box->rb.vertices = vq.rb;
     box->lt.vertices = vq.lt;
@@ -165,7 +165,7 @@ static void cxParticleStep(cxAny pav,cxFloat dt,cxFloat time)
             cxParticleAdd(this);
             this->emitcounter -= rate;
         }
-		if (this->duration != -1 && this->duration < this->super.durationElapsed){
+		if (this->duration != -1 && this->duration < this->cxAction.durationElapsed){
 			cxParticleStop(pav);
         }
     }
@@ -393,16 +393,16 @@ CX_OBJECT_TYPE(cxParticle, cxAction)
 }
 CX_OBJECT_INIT(cxParticle, cxAction)
 {
-    this->super.duration = -1;
+    this->cxAction.duration = -1;
     this->atlas = CX_ALLOC(cxAtlas);
     this->rate = -1;
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
     cxParticleSetBlendMode(this, cxParticleBlendAdd);
-    CX_METHOD_SET(this->super.Reset, cxParticleReset);
-    CX_METHOD_SET(this->super.Init, cxParticleInit);
-    CX_METHOD_SET(this->super.Over, cxParticleOver);
-    CX_METHOD_SET(this->super.Step, cxParticleStep);
+    CX_METHOD_SET(this->cxAction.Reset, cxParticleReset);
+    CX_METHOD_SET(this->cxAction.Init, cxParticleInit);
+    CX_METHOD_SET(this->cxAction.Over, cxParticleOver);
+    CX_METHOD_SET(this->cxAction.Step, cxParticleStep);
 }
 CX_OBJECT_FREE(cxParticle, cxAction)
 {

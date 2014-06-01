@@ -19,7 +19,7 @@ static void cxTimeLineInit(cxAny pav)
         cxActionStop(this);
         return;
     }
-    this->super.duration = cxNumberToFloat(last) + 1.0f;
+    this->cxAction.duration = cxNumberToFloat(last) + 1.0f;
     this->index = -1;
 }
 
@@ -30,7 +30,7 @@ static void cxTimeLineStep(cxAny pav,cxFloat dt,cxFloat time)
     for(cxInt i = this->index + 1; i < count; i++){
         cxNumber num = cxArrayAtIndex(this->times, i);
         cxFloat time = cxNumberToFloat(num);
-        if(this->super.durationElapsed >= time){
+        if(this->cxAction.durationElapsed >= time){
             this->index = i;
             CX_EVENT_FIRE(this, onTime);
             continue;
@@ -60,8 +60,8 @@ CX_OBJECT_TYPE(cxTimeLine, cxAction)
 }
 CX_OBJECT_INIT(cxTimeLine, cxAction)
 {
-    CX_METHOD_SET(this->super.Init, cxTimeLineInit);
-    CX_METHOD_SET(this->super.Step, cxTimeLineStep);
+    CX_METHOD_SET(this->cxAction.Init, cxTimeLineInit);
+    CX_METHOD_SET(this->cxAction.Step, cxTimeLineStep);
     this->times = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxTimeLine, cxAction)

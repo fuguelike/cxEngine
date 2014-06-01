@@ -38,7 +38,7 @@ static void cxTableResize(cxAny sender)
 static cxInt cxTableCount(cxTable this)
 {
     cxInt count = 0;
-    CX_LIST_FOREACH(this->super.subViews, ele){
+    CX_LIST_FOREACH(this->cxView.subViews, ele){
         cxView view = ele->any;
         if(!view->isVisible && !this->arrayHide){
             continue;
@@ -55,26 +55,26 @@ static void cxTableUpdate(cxAny sender)
     this->isArray = false;
     cxInt count = cxTableCount(this);
     CX_RETURN(count == 0);
-    cxFloat x = -this->super.size.w / 2.0f;
-    cxFloat y = -this->super.size.h / 2.0f;
+    cxFloat x = -this->cxView.size.w / 2.0f;
+    cxFloat y = -this->cxView.size.h / 2.0f;
     cxFloat dx = 0;
     cxFloat dy = 0;
     if(this->grid.x > 0){
         count = count > this->grid.x ? count : this->grid.x;
         cxFloat hnum = ceilf((cxFloat)count/(cxFloat)this->grid.x);
         cxFloat wnum = this->grid.x;
-        dx = this->super.size.w / wnum;
-        dy = this->super.size.h / hnum;
+        dx = this->cxView.size.w / wnum;
+        dy = this->cxView.size.h / hnum;
     }
     if(this->grid.y > 0){
         count = count > this->grid.y ? count : this->grid.y;
         cxFloat hnum = ceilf((cxFloat)count/(cxFloat)this->grid.y);
         cxFloat wnum = this->grid.y;
-        dy = this->super.size.h / wnum;
-        dx = this->super.size.w / hnum;
+        dy = this->cxView.size.h / wnum;
+        dx = this->cxView.size.w / hnum;
     }
     cxInt i = 0;
-    CX_LIST_FOREACH(this->super.subViews, ele){
+    CX_LIST_FOREACH(this->cxView.subViews, ele){
         cxView view = ele->any;
         if(!view->isVisible && !this->arrayHide){
             continue;
@@ -109,8 +109,8 @@ CX_OBJECT_TYPE(cxTable, cxView)
 CX_OBJECT_INIT(cxTable, cxView)
 {
     this->arrayHide = true;
-    CX_EVENT_APPEND(this->super.onResize, cxTableResize);
-    CX_EVENT_APPEND(this->super.onUpdate, cxTableUpdate);
+    CX_EVENT_APPEND(this->cxView.onResize, cxTableResize);
+    CX_EVENT_APPEND(this->cxView.onUpdate, cxTableUpdate);
 }
 CX_OBJECT_FREE(cxTable, cxView)
 {

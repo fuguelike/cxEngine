@@ -23,7 +23,7 @@ CX_OBJECT_TYPE(cxWindow, cxView)
 }
 CX_OBJECT_INIT(cxWindow, cxView)
 {
-    CX_METHOD_SET(this->super.OnKey, cxWindowOnKey);
+    CX_METHOD_SET(this->cxView.OnKey, cxWindowOnKey);
     this->views = CX_ALLOC(cxStack);
 }
 CX_OBJECT_FREE(cxWindow, cxView)

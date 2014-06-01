@@ -64,12 +64,12 @@ static void cxAnimateInit(cxAny pav)
 {
     cxAnimate this = pav;
     this->index = 0;
-    this->super.duration = this->duration;
+    this->cxAction.duration = this->duration;
     cxFloat dt = this->duration / (cxFloat)cxArrayLength(this->list);
     cxFloat i = 0;
     CX_ARRAY_FOREACH(this->list, ele){
         cxAnimateItem item = cxArrayObject(ele);
-        this->super.duration += item->delay;
+        this->cxAction.duration += item->delay;
         i += dt  + item->delay;
         item->time = i;
     }
@@ -83,17 +83,17 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_ARRAY_FOREACH(this->list, e){
         i++;
         cxAnimateItem item = cxArrayObject(e);
-        if(this->super.durationElapsed > item->time){
+        if(this->cxAction.durationElapsed > item->time){
             continue;
         }
         if(this->index == i){
             break;
         }
         if(item->texture != NULL){
-            cxSpriteSetTexture(this->super.view, item->texture);
+            cxSpriteSetTexture(this->cxAction.view, item->texture);
         }
         if(item->texture != NULL && item->key != NULL){
-            cxSpriteSetTextureKey(this->super.view, cxStringBody(item->key), false);
+            cxSpriteSetTextureKey(this->cxAction.view, cxStringBody(item->key), false);
         }
         this->index = i;
         CX_EVENT_FIRE(this, onFrame);
@@ -105,13 +105,13 @@ static void cxAnimateReset(cxAny pav)
 {
     cxAnimate this = pav;
     this->index = 0;
-    this->super.duration = this->duration;
+    this->cxAction.duration = this->duration;
 }
 
 CX_SETTER_DEF(cxAnimate, duration)
 {
     this->duration = cxJsonToDouble(value, this->duration);
-    this->super.duration = this->duration;
+    this->cxAction.duration = this->duration;
 }
 CX_SETTER_DEF(cxAnimate, frames)
 {
@@ -139,9 +139,9 @@ CX_OBJECT_TYPE(cxAnimate, cxAction)
 }
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {
-    CX_METHOD_SET(this->super.Init, cxAnimateInit);
-    CX_METHOD_SET(this->super.Step, cxAnimateStep);
-    CX_METHOD_SET(this->super.Reset, cxAnimateReset);
+    CX_METHOD_SET(this->cxAction.Init, cxAnimateInit);
+    CX_METHOD_SET(this->cxAction.Step, cxAnimateStep);
+    CX_METHOD_SET(this->cxAction.Reset, cxAnimateReset);
     this->list = CX_ALLOC(cxArray);
     this->cached = true;
 }

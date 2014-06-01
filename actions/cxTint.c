@@ -11,8 +11,8 @@
 static void cxTintInit(cxAny pav)
 {
     cxTint this = pav;
-    CX_ASSERT(this->super.view != NULL, "view not set");
-    this->start = this->super.view->color;
+    CX_ASSERT(this->cxAction.view != NULL, "view not set");
+    this->start = this->cxAction.view->color;
     this->delta.r = this->color.r - this->start.r;
     this->delta.g = this->color.g - this->start.g;
     this->delta.b = this->color.b - this->start.b;
@@ -27,8 +27,8 @@ static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
     color.g = this->start.g + this->delta.g * time;
     color.b = this->start.b + this->delta.b * time;
     cxFloat alpha = this->start.a + this->delta.a * time;
-    cxViewSetColor(this->super.view, color);
-    cxViewSetAlpha(this->super.view, alpha);
+    cxViewSetColor(this->cxAction.view, color);
+    cxViewSetAlpha(this->cxAction.view, alpha);
 }
 
 CX_SETTER_DEF(cxTint, color)
@@ -42,8 +42,8 @@ CX_OBJECT_TYPE(cxTint, cxAction)
 }
 CX_OBJECT_INIT(cxTint, cxAction)
 {
-    CX_METHOD_SET(this->super.Init, cxTintInit);
-    CX_METHOD_SET(this->super.Step, cxTintStep);
+    CX_METHOD_SET(this->cxAction.Init, cxTintInit);
+    CX_METHOD_SET(this->cxAction.Step, cxTintStep);
 }
 CX_OBJECT_FREE(cxTint, cxAction)
 {

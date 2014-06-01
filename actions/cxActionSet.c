@@ -27,7 +27,7 @@ static void cxActionSetRunNext(cxAny pav)
     if(this->index >= 0 && this->index < cxArrayLength(this->items)){
         cxAction action = cxArrayAtIndex(this->items, this->index);
         CX_EVENT_APPEND(action->onStop, cxActionItemStop);
-        cxViewAppendAction(this->super.view, action);
+        cxViewAppendAction(this->cxAction.view, action);
     }
 }
 
@@ -37,14 +37,14 @@ static void cxActionSetRunAll(cxAny pav)
     CX_ARRAY_FOREACH(this->items, ele){
         cxAction action = cxArrayObject(ele);
         CX_EVENT_APPEND(action->onStop, cxActionItemStop);
-        cxViewAppendAction(this->super.view, action);
+        cxViewAppendAction(this->cxAction.view, action);
     }
 }
 
 static void cxActionSetInit(cxAny pav)
 {
     cxActionSet this = pav;
-    CX_ASSERT(this->super.view != NULL, "view not set");
+    CX_ASSERT(this->cxAction.view != NULL, "view not set");
     if(this->type == cxActionSetTypeSequence){
         this->index = 0;
         cxActionSetRunNext(this);
@@ -103,9 +103,9 @@ CX_OBJECT_TYPE(cxActionSet, cxAction)
 }
 CX_OBJECT_INIT(cxActionSet, cxAction)
 {
-    CX_METHOD_SET(this->super.Init, cxActionSetInit);
-    CX_METHOD_SET(this->super.Step, cxActionSetStep);
-    CX_METHOD_SET(this->super.Exit, cxActionSetExit);
+    CX_METHOD_SET(this->cxAction.Init, cxActionSetInit);
+    CX_METHOD_SET(this->cxAction.Step, cxActionSetStep);
+    CX_METHOD_SET(this->cxAction.Exit, cxActionSetExit);
     this->items = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxActionSet, cxAction)

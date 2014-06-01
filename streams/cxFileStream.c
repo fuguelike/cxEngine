@@ -14,8 +14,8 @@
 static cxBool cxFileStreamOpen(cxAny this)
 {
     cxFileStream file = this;
-    CX_ASSERT(file->super.isOpen == false,"stream repeat open");
-    cxConstChars path = cxStringBody(file->super.path);
+    CX_ASSERT(file->cxStream.isOpen == false,"stream repeat open");
+    cxConstChars path = cxStringBody(file->cxStream.path);
     file->fd = fopen(path, "wb");
     if(file->fd == NULL){
         CX_ERROR("open file %s stream failed",path);
@@ -23,18 +23,18 @@ static cxBool cxFileStreamOpen(cxAny this)
     }
     struct stat stat={0};
     lstat(path, &stat);
-    file->super.length = (cxInt)stat.st_size;
-    file->super.canRead = true;
-    file->super.canSeek = true;
-    file->super.canWrite = true;
-    file->super.isOpen = true;
+    file->cxStream.length = (cxInt)stat.st_size;
+    file->cxStream.canRead = true;
+    file->cxStream.canSeek = true;
+    file->cxStream.canWrite = true;
+    file->cxStream.isOpen = true;
     return true;
 }
 
 static cxInt cxFileStreamRead(cxAny this,cxPointer buffer,cxInt size)
 {
     cxFileStream file = this;
-    if(!file->super.canRead){
+    if(!file->cxStream.canRead){
         return 0;
     }
     return fread(buffer, 1, size, file->fd);
@@ -43,7 +43,7 @@ static cxInt cxFileStreamRead(cxAny this,cxPointer buffer,cxInt size)
 static cxInt cxFileStreamWrite(cxAny this,cxPointer buffer,cxInt size)
 {
     cxFileStream file = this;
-    if(!file->super.canWrite){
+    if(!file->cxStream.canWrite){
         return 0;
     }
     return fwrite(buffer, 1, size, file->fd);
@@ -52,7 +52,7 @@ static cxInt cxFileStreamWrite(cxAny this,cxPointer buffer,cxInt size)
 static cxOff cxFileStreamPosition(cxAny this)
 {
     cxFileStream file = this;
-    if(!file->super.canRead){
+    if(!file->cxStream.canRead){
         return 0;
     }
     return (cxOff)ftell(file->fd);
@@ -61,7 +61,7 @@ static cxOff cxFileStreamPosition(cxAny this)
 static cxInt cxFileStreamSeek(cxAny this,cxOff off,cxInt flags)
 {
     cxFileStream file = this;
-    if(!file->super.canSeek){
+    if(!file->cxStream.canSeek){
         return false;
     }
     return fseek(file->fd, off, flags) > 0;
@@ -104,13 +104,13 @@ CX_OBJECT_TYPE(cxFileStream, cxStream)
 }
 CX_OBJECT_INIT(cxFileStream, cxStream)
 {
-    CX_METHOD_SET(this->super.Open, cxFileStreamOpen);
-    CX_METHOD_SET(this->super.Read, cxFileStreamRead);
-    CX_METHOD_SET(this->super.Write, cxFileStreamWrite);
-    CX_METHOD_SET(this->super.Seek, cxFileStreamSeek);
-    CX_METHOD_SET(this->super.Close, cxFileStreamClose);
-    CX_METHOD_SET(this->super.Position,cxFileStreamPosition);
-    CX_METHOD_SET(this->super.AllBytes,cxFileStreamAllBytes);
+    CX_METHOD_SET(this->cxStream.Open, cxFileStreamOpen);
+    CX_METHOD_SET(this->cxStream.Read, cxFileStreamRead);
+    CX_METHOD_SET(this->cxStream.Write, cxFileStreamWrite);
+    CX_METHOD_SET(this->cxStream.Seek, cxFileStreamSeek);
+    CX_METHOD_SET(this->cxStream.Close, cxFileStreamClose);
+    CX_METHOD_SET(this->cxStream.Position,cxFileStreamPosition);
+    CX_METHOD_SET(this->cxStream.AllBytes,cxFileStreamAllBytes);
 }
 CX_OBJECT_FREE(cxFileStream, cxStream)
 {
@@ -122,8 +122,8 @@ cxStream cxFileStreamCreate(cxConstChars file)
 {
     cxString path = cxDocumentPath(file);
     cxFileStream rv = CX_CREATE(cxFileStream);
-    CX_RETAIN_SWAP(rv->super.path, path);
-    rv->super.file = cxStringAllocChars(file);
+    CX_RETAIN_SWAP(rv->cxStream.path, path);
+    rv->cxStream.file = cxStringAllocChars(file);
     return (cxStream)rv;
 }
 
