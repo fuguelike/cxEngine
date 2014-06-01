@@ -16,7 +16,11 @@ static cxBool cxFileStreamOpen(cxAny this)
     cxFileStream file = this;
     CX_ASSERT(file->cxStream.isOpen == false,"stream repeat open");
     cxConstChars path = cxStringBody(file->cxStream.path);
-    file->fd = fopen(path, "wb");
+    if(file->rdonly){
+        file->fd = fopen(path, "rb");
+    }else{
+        file->fd = fopen(path, "wb");
+    }
     if(file->fd == NULL){
         CX_ERROR("open file %s stream failed",path);
         return false;
@@ -118,10 +122,17 @@ CX_OBJECT_FREE(cxFileStream, cxStream)
 }
 CX_OBJECT_TERM(cxFileStream, cxStream)
 
-cxStream cxFileStreamCreate(cxConstChars file)
+cxString cxDocumentData(cxConstChars file)
+{
+    cxStream stream = cxFileStreamCreate(file, true);
+    return cxStreamAllBytes(stream);
+}
+
+cxStream cxFileStreamCreate(cxConstChars file,cxBool rdonly)
 {
     cxString path = cxDocumentPath(file);
     cxFileStream rv = CX_CREATE(cxFileStream);
+    rv->rdonly = rdonly;
     CX_RETAIN_SWAP(rv->cxStream.path, path);
     rv->cxStream.file = cxStringAllocChars(file);
     return (cxStream)rv;

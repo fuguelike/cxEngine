@@ -13,12 +13,21 @@
 #include <streams/cxAssetsStream.h>
 #include <streams/cxFileStream.h>
 #include <engine/cxEngine.h>
+#include <sys/stat.h>
 #include "cxUtil.h"
+
+cxBool cxFileExists(cxConstChars file)
+{
+    cxString path = cxAssetsPath(file);
+    CX_RETURN(path == NULL, false);
+    struct stat stat={0};
+    return lstat(cxStringBody(path), &stat) == 0;
+}
 
 cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
 {
     cxStream src = cxAssetsStreamCreate(file);
-    cxStream dst = cxFileStreamCreate(file);
+    cxStream dst = cxFileStreamCreate(file, false);
     if(!cxStreamOpen(src)){
         return false;
     }

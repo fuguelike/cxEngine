@@ -17,9 +17,12 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxFileStream, cxStream)
     FILE *fd;
+    cxBool rdonly;
 CX_OBJECT_END(cxFileStream, cxStream)
 
-cxStream cxFileStreamCreate(cxConstChars file);
+cxString cxDocumentData(cxConstChars file);
+
+cxStream cxFileStreamCreate(cxConstChars file,cxBool rdonly);
 
 CX_C_END
 

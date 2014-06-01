@@ -32,11 +32,17 @@ CX_SETTER_DEF(cxRotate, angle)
 {
     this->newAngle = cxJsonToDouble(value, this->newAngle);
 }
+CX_SETTER_DEF(cxRotate, degrees)
+{
+    cxFloat oldDegrees = kmRadiansToDegrees(this->newAngle);
+    this->newAngle = kmDegreesToRadians(cxJsonToDouble(value, oldDegrees));
+}
 
 CX_OBJECT_TYPE(cxRotate, cxAction)
 {
     CX_PROPERTY_SETTER(cxRotate, raxis);
     CX_PROPERTY_SETTER(cxRotate, angle);
+    CX_PROPERTY_SETTER(cxRotate, degrees);
 }
 CX_OBJECT_INIT(cxRotate, cxAction)
 {

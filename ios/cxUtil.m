@@ -79,6 +79,15 @@ cxBool cxAssetsExists(cxConstChars file)
     return lstat(cxStringBody(path), &stat) == 0;
 }
 
+cxBool cxWriteFile(cxString file,cxString data)
+{
+    FILE *fd = fopen(cxStringBody(file), "wb");
+    CX_RETURN(fd == NULL, -1);
+    cxInt bytes = fwrite(cxStringBody(data), cxStringLength(data), 1, fd);
+    fclose(fd);
+    return bytes > 0;
+}
+
 void cxEngineSendJson(cxString json)
 {
     cxEngineRecvJson(json);

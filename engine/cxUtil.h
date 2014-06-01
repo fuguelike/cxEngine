@@ -50,11 +50,15 @@ cxString cxAssetsPath(cxConstChars file);
 
 cxBool cxAssetsExists(cxConstChars file);
 
+cxBool cxFileExists(cxConstChars file);
+
 cxDouble cxTimestamp();
 
 cxString cxLocalizedLang();
 
 cxString cxDocumentPath(cxConstChars file);
+
+cxBool cxWriteFile(cxString file,cxString data);
 
 CX_C_END
 
