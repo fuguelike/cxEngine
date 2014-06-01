@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>93D69FEE-8777-47AD-ADC5-41168DA6914C</string>
+	<string>06D9AE4B-7281-4F69-8271-7D5FDBA5BBBF</string>
 	<key>IDESourceControlProjectName</key>
 	<string>tpl</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>3F660D44-3A53-42D1-BAA2-3A41E9B4A71A</key>
+		<key>4FB36562-3251-4038-80F1-AA7962BFAA74</key>
 		<string>https://github.com/cxuhua/cxEngine.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>tpl/tpl.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>3F660D44-3A53-42D1-BAA2-3A41E9B4A71A</key>
+		<key>4FB36562-3251-4038-80F1-AA7962BFAA74</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>3F660D44-3A53-42D1-BAA2-3A41E9B4A71A</string>
+	<string>4FB36562-3251-4038-80F1-AA7962BFAA74</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>3F660D44-3A53-42D1-BAA2-3A41E9B4A71A</string>
+			<string>4FB36562-3251-4038-80F1-AA7962BFAA74</string>
 			<key>IDESourceControlWCCName</key>
 			<string>cxEngine</string>
 		</dict>

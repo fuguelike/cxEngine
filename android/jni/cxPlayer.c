@@ -13,7 +13,7 @@
 CX_OBJECT_DEF(cxTrack, cxObject)
     cxInt soundId;
     cxString file;
-CX_OBJECT_END(cxTrack)
+CX_OBJECT_END(cxTrack, cxObject)
 
 CX_OBJECT_TYPE(cxTrack, cxObject)
 {

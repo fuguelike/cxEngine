@@ -74,7 +74,8 @@ LOCAL_SRC_FILES += \
     actions/cxSpline.c \
     actions/cxParticle.c \
     actions/cxParabola.c \
-    actions/cxFollow.c
+    actions/cxFollow.c \
+    actions/cxTimeLine.c
 
 LOCAL_SRC_FILES += \
     views/cxAtlas.c \
@@ -87,7 +88,8 @@ LOCAL_SRC_FILES += \
     views/cxScroll.c \
     views/cxLoading.c \
     views/cxLabelBMP.c \
-    views/cxPolygon.c
+    views/cxPolygon.c \
+    views/cxAlert.c
 
 LOCAL_SRC_FILES += \
     socket/cxEventBase.c \
@@ -99,7 +101,7 @@ LOCAL_SRC_FILES += \
 LOCAL_SRC_FILES += \
     engine/cxAction.c \
 	engine/cxBMPFont.c \
-	engine/cxController.c \
+	engine/cxViewLoader.c \
 	engine/cxEngine.c \
 	engine/cxGlobal.c \
 	engine/cxIconv.c \

@@ -19,8 +19,7 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxController controller = cxControllerCreate("cxSprite.json");
-    cxWindowPushView(controller->root);
+    
 }
 
 void cxEngineFree(cxEngine engine)
