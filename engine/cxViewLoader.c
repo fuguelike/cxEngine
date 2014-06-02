@@ -25,7 +25,7 @@ CX_OBJECT_FREE(cxViewLoader, cxObject)
 }
 CX_OBJECT_TERM(cxViewLoader, cxObject)
 
-cxAny cxViewLoaderObject(cxAny loader,cxConstChars id)
+cxAny cxViewLoaderGet(cxAny loader,cxConstChars id)
 {
     cxViewLoader this = loader;
     cxAny object = cxHashGet(this->objects, cxHashStrKey(id));
