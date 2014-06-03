@@ -98,6 +98,11 @@ cxAny cxObjectCreateWithType(cxConstType type)
     return object;
 }
 
+void __cxTypeRegisterName(cxConstType type,cxConstType super)
+{
+    
+}
+
 CX_OBJECT_TYPE(cxType, cxObject)
 {}
 CX_OBJECT_INIT(cxType, cxObject)

@@ -152,11 +152,9 @@ typedef char *          cxChars;
 
 #define CX_ENGINE_VERSION   200
 
-#ifdef __GNUC__
-    #define CX_ATTRIBUTE_UNUSED     __attribute__ ((__unused__))
-#else
-    #define CX_ATTRIBUTE_UNUSED
-#endif
+#define CX_ATTRIBUTE_UNUSED     __attribute__ ((__unused__))
+
+#define CX_ATTRIBUTE_TYPE       __attribute__ ((constructor))
 
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
     #define CX_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
