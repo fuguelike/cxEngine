@@ -211,7 +211,7 @@ do{                                                             \
 
 //type define
 
-#define CX_TYPE(_t_)  __##_t_##RegisterFunc()
+#define CX_TYPE_DEF(_t_)  __##_t_##RegisterFunc()
 
 #define CX_OBJECT_BEG(_t_,_b_)                                  \
 CX_ATTRIBUTE_UNUSED static cxConstType _t_##TypeName = #_t_;    \
