@@ -17,6 +17,8 @@
 #include <sys/stat.h>
 #include "cxUtil.h"
 
+#define AES_KEY_LENGTH  16
+
 cxString cxAESDecode(cxString data,cxString key)
 {
     CX_ASSERT(cxStringOK(data) && cxStringOK(key), "args error");
