@@ -33,15 +33,12 @@ static void cxParticleOver(cxAny pav)
     CX_SLOT_RELEASE(this->onDraw);
 }
 
-static void cxParticleInitUnit(cxParticle this,cxParticleUnit *particle,cxInt index)
+void cxParticleInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index)
 {
-    cxParticleArgs args = {0};
-    args.position = cxVec2fValue(this->position);
-    args.angle = kmDegreesToRadians(cxFloatValue(this->angle));
-    args.speed = cxFloatValue(this->speed);
-    CX_METHOD_RUN(this->InitUnit, this, index, &args);
-    
-    particle->position = args.position;
+    cxParticle this = pav;
+    cxFloat speed = cxFloatValue(this->speed);
+    cxFloat angle = kmDegreesToRadians(cxFloatValue(this->angle));
+    particle->position = cxVec2fValue(this->position);
     particle->life = cxFloatValue(this->life);
     
     cxColor4f startcolor = cxColor4fValue(this->startcolor);
@@ -62,8 +59,8 @@ static void cxParticleInitUnit(cxParticle this,cxParticleUnit *particle,cxInt in
     particle->deltarotation = (endspin - startspin) / particle->life;
     
     if(this->type == cxParticleEmitterGravity){
-        cxVec2f v = cxVec2fv(cosf(args.angle), sinf(args.angle));
-        kmVec2Scale(&particle->dir, &v, args.speed);
+        cxVec2f v = cxVec2fv(cosf(angle), sinf(angle));
+        kmVec2Scale(&particle->dir, &v, speed);
         particle->radaccel = cxFloatValue(this->radaccel);
         particle->tanaccel = cxFloatValue(this->tanaccel);
         if(this->todir){
@@ -78,7 +75,7 @@ static void cxParticleInitUnit(cxParticle this,cxParticleUnit *particle,cxInt in
         }else{
             particle->deltaradius = (endradius - startradius) / particle->life;
         }
-        particle->angle = args.angle;
+        particle->angle = angle;
         particle->degreespers = kmDegreesToRadians(cxFloatValue(this->rotatepers));
     }
 }
@@ -89,7 +86,7 @@ static cxBool cxParticleAdd(cxParticle this)
         return false;
     }
     cxParticleUnit *unit = &this->units[this->count];
-    cxParticleInitUnit(this, unit,this->count);
+    CX_METHOD_RUN(this->InitUnit, this, unit, this->count);
     this->count ++;
     return true;
 }
@@ -288,10 +285,22 @@ CX_SETTER_DEF(cxParticle, number)
 }
 CX_SETTER_DEF(cxParticle, texture)
 {
-    cxConstChars texture = cxJsonToConstChars(value);
-    if(texture != NULL){
-        cxSpriteSetTextureURL(this->atlas, texture, true);
+    cxConstChars texture = NULL;
+    if(cxJsonIsString(value)){
+        texture = cxJsonToConstChars(value);
+    }else if(cxJsonIsObject(value)){
+        texture = cxJsonConstChars(value, "url");
     }
+    CX_RETURN(texture == NULL);
+    cxSpriteSetTextureURL(this->atlas, texture, true);
+    cxJson coords = cxJsonArray(value, "coords");
+    CX_JSON_ARRAY_EACH_BEG(coords, item)
+    {
+        cxConstChars texKey = cxJsonToConstChars(item);
+        cxParticleAppendKey(this, texKey);
+    }
+    CX_JSON_ARRAY_EACH_END(coords, item)
+
 }
 CX_SETTER_DEF(cxParticle, emitter)
 {
@@ -391,16 +400,6 @@ CX_SETTER_DEF(cxParticle, rotatepers)
 {
     this->rotatepers = cxJsonToFloatRangle(value,this->rotatepers);
 }
-CX_SETTER_DEF(cxParticle, texcoords)
-{
-    cxJson coords = cxJsonToArray(value);
-    CX_JSON_ARRAY_EACH_BEG(coords, item)
-    {
-        cxConstChars texKey = cxJsonToConstChars(item);
-        cxParticleAppendKey(this, texKey);
-    }
-    CX_JSON_ARRAY_EACH_END(coords, item)
-}
 
 CX_OBJECT_TYPE(cxParticle, cxAction)
 {
@@ -427,7 +426,6 @@ CX_OBJECT_TYPE(cxParticle, cxAction)
     CX_PROPERTY_SETTER(cxParticle, startradius);
     CX_PROPERTY_SETTER(cxParticle, endradius);
     CX_PROPERTY_SETTER(cxParticle, rotatepers);
-    CX_PROPERTY_SETTER(cxParticle, texcoords);
 }
 CX_OBJECT_INIT(cxParticle, cxAction)
 {
@@ -437,6 +435,7 @@ CX_OBJECT_INIT(cxParticle, cxAction)
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
     cxParticleSetBlendMode(this, cxParticleBlendAdd);
+    CX_METHOD_SET(this->InitUnit, cxParticleInitUnit);
     CX_METHOD_SET(this->cxAction.Reset, cxParticleReset);
     CX_METHOD_SET(this->cxAction.Init, cxParticleInit);
     CX_METHOD_SET(this->cxAction.Over, cxParticleOver);

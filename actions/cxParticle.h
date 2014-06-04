@@ -44,12 +44,6 @@ typedef enum {
     cxParticleBlendMultiply,
 }cxParticleBlendMode;
 
-typedef struct {
-    cxVec2f position;
-    cxFloat angle;
-    cxFloat speed;
-}cxParticleArgs;
-
 CX_OBJECT_DEF(cxParticle, cxAction)
     cxFloat duration;
     cxAtlas atlas;
@@ -88,9 +82,11 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     cxFloatRange endradius;
     cxFloatRange rotatepers;
     CX_METHOD_DEF(cxAny, GetDrawView,cxAny);
-    CX_METHOD_DEF(void, InitUnit,cxAny,cxInt,cxParticleArgs *);
+    CX_METHOD_DEF(void, InitUnit,cxAny,cxParticleUnit *,cxInt);
     CX_SLOT_ALLOC(onDraw);
 CX_OBJECT_END(cxParticle, cxAction)
+
+void cxParticleInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index);
 
 void cxParticleAppendTexcoord(cxAny pav,cxBoxTex2f *tex);
 
