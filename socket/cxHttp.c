@@ -77,10 +77,11 @@ CX_OBJECT_FREE(cxHttp, cxObject)
     }
     CX_EVENT_RELEASE(this->onCompleted);
     CX_EVENT_RELEASE(this->onChunked);
-    CX_RELEASE(this->data);
     if(this->uri != NULL){
         evhttp_uri_free(this->uri);
     }
+    CX_RELEASE(this->data);
+    CX_RELEASE(this->suri);
 }
 CX_OBJECT_TERM(cxHttp, cxObject)
 
@@ -117,8 +118,10 @@ static cxString cxHttpGetUri(cxAny http)
     cxConstChars query = evhttp_uri_get_query(this->uri);
     if(query != NULL){
         return cxStringCreate("%s?%s",path,query);
-    }else{
+    }else if(cxConstCharsOK(path)){
         return cxStringCreate("%s",path);
+    }else{
+        return cxStringCreate("/");
     }
 }
 
@@ -131,8 +134,14 @@ static cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked)
         evhttp_request_set_chunked_cb(this->request, cxHttpRequestChunked);
     }
     evhttp_add_header(this->request->output_headers, "Host", evhttp_uri_get_host(this->uri));
-    evhttp_add_header(this->request->output_headers, "Referer", ".google.com");
     return true;
+}
+
+void cxHttpAddHeader(cxAny http,cxString key,cxString value)
+{
+    CX_ASSERT(cxStringOK(key) && cxStringOK(value), "error key or value");
+    cxHttp this = http;
+    evhttp_add_header(this->request->output_headers, cxStringBody(key), cxStringBody(value));
 }
 
 cxHttp cxHttpPost(cxConstChars url,cxString data,cxBool chunked)
@@ -142,20 +151,22 @@ cxHttp cxHttpPost(cxConstChars url,cxString data,cxBool chunked)
         CX_ERROR("cx http init error");
         return NULL;
     }
-    cxHttpConn conn = cxHttpGetConnect(this);
-    if(conn == NULL){
-        CX_ERROR("get http connection error");
-        return NULL;
+    if(cxStringOK(data)){
+        evbuffer_add(this->request->output_buffer, cxStringBody(data), cxStringLength(data));
     }
     cxString suri = cxHttpGetUri(this);
     if(suri == NULL){
         CX_ERROR("get uri error");
         return NULL;
     }
-    if(cxStringOK(data)){
-        evbuffer_add(this->request->output_buffer, cxStringBody(data), cxStringLength(data));
+    CX_RETAIN_SWAP(this->suri, suri);
+    //run request
+    cxHttpConn conn = cxHttpGetConnect(this);
+    if(conn == NULL){
+        CX_ERROR("get http connection error");
+        return NULL;
     }
-    if(evhttp_make_request(conn->conn, this->request, EVHTTP_REQ_POST, cxStringBody(suri)) != 0){
+    if(evhttp_make_request(conn->conn, this->request, EVHTTP_REQ_POST, cxStringBody(this->suri)) != 0){
         CX_ERROR("make request error");
         return NULL;
     }
@@ -169,17 +180,19 @@ cxHttp cxHttpGet(cxConstChars url,cxBool chunked)
         CX_ERROR("cx http init error");
         return NULL;
     }
-    cxHttpConn conn = cxHttpGetConnect(this);
-    if(conn == NULL){
-        CX_ERROR("get http connection error");
-        return NULL;
-    }
     cxString suri = cxHttpGetUri(this);
     if(suri == NULL){
         CX_ERROR("get uri error");
         return NULL;
     }
-    if(evhttp_make_request(conn->conn, this->request, EVHTTP_REQ_GET, cxStringBody(suri)) != 0){
+    CX_RETAIN_SWAP(this->suri, suri);
+    //run request
+    cxHttpConn conn = cxHttpGetConnect(this);
+    if(conn == NULL){
+        CX_ERROR("get http connection error");
+        return NULL;
+    }
+    if(evhttp_make_request(conn->conn, this->request, EVHTTP_REQ_GET, cxStringBody(this->suri)) != 0){
         CX_ERROR("make request error");
         return NULL;
     }

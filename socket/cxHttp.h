@@ -21,6 +21,7 @@ CX_OBJECT_DEF(cxHttp, cxObject)
     cxInt64 bodyBytes;
     cxInt64 readBytes;
     cxString data;
+    cxString suri;
     struct evhttp_request *request;
     struct evhttp_uri *uri;
     CX_EVENT_ALLOC(onChunked);
@@ -34,6 +35,8 @@ cxString cxHttpUriDecode(cxString uri);
 cxInt cxHttpLength(cxAny http);
 
 void cxHttpCancel(cxAny http);
+
+void cxHttpAddHeader(cxAny http,cxString key,cxString value);
 
 cxString cxHttpBody(cxAny http);
 
