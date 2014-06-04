@@ -13,8 +13,87 @@
 #include <streams/cxAssetsStream.h>
 #include <streams/cxFileStream.h>
 #include <engine/cxEngine.h>
+#include <algorithm/aes.h>
 #include <sys/stat.h>
 #include "cxUtil.h"
+
+cxString cxAESDecode(cxString data,cxString key)
+{
+    CX_ASSERT(cxStringOK(data) && cxStringOK(key), "args error");
+    cxUChar iv[AES_KEY_LENGTH]={0};
+    cxUChar ik[AES_KEY_LENGTH]={0};
+    if(cxStringLength(key) > AES_KEY_LENGTH){
+        memcpy(ik, cxStringBody(key), AES_KEY_LENGTH);
+    }else {
+        memcpy(ik, cxStringBody(key), cxStringLength(key));
+    }
+    AES_KEY dKey;
+    if(AES_set_decrypt_key((const cxUInt8 *)ik, AES_KEY_LENGTH*8, &dKey) != 0){
+        return NULL;
+    }
+    //
+    cxConstChars dataptr = cxStringBody(data);
+    cxInt length = cxStringLength(data);
+    //get iv
+    memcpy(iv, dataptr, AES_KEY_LENGTH);
+    //
+    cxInt bytessize = length - AES_KEY_LENGTH;
+    cxChars bytes = allocator->malloc(bytessize);
+    AES_cbc_encrypt((const cxUInt8 *)(dataptr + AES_KEY_LENGTH), (cxUInt8 *)bytes, bytessize, &dKey, iv, AES_DECRYPT);
+    //check cut bytes
+    cxChar bc = bytes[bytessize - 1];
+    if(bc > 0 && bc < AES_KEY_LENGTH){
+        cxChar bv[bc];
+        memset(bv, bc, bc);
+        if(memcmp(bv, bytes + bytessize - bc, bc) == 0){
+            bytessize -= bc;
+        }
+    }
+    return cxStringAttach(bytes, bytessize);
+}
+
+cxString cxAESEncode(cxString data,cxString key)
+{
+    CX_ASSERT(cxStringOK(data) && cxStringOK(key), "args error");
+    //make random iv
+    cxSetRandSeed();
+    cxUChar iv[AES_KEY_LENGTH]={0};
+    cxUChar ik[AES_KEY_LENGTH]={0};
+    for(cxInt i=0; i < AES_KEY_LENGTH; i++){
+        iv[i] = cxRand(0, 255);
+    }
+    if(cxStringLength(key) > AES_KEY_LENGTH){
+        memcpy(ik, cxStringBody(key), AES_KEY_LENGTH);
+    }else {
+        memcpy(ik, cxStringBody(key), cxStringLength(key));
+    }
+    AES_KEY eKey;
+    if(AES_set_encrypt_key((const cxUInt8 *)ik, AES_KEY_LENGTH * 8, &eKey) != 0){
+        return NULL;
+    }
+    cxInt length = cxStringLength(data);
+    cxConstChars dataptr = cxStringBody(data);
+    //
+    cxInt newsize = 0;
+    if(length % AES_KEY_LENGTH == 0){
+        newsize = length;
+    }else{
+        newsize = length + AES_KEY_LENGTH - (length % AES_KEY_LENGTH);
+    }
+    //
+    cxInt bc = newsize - length;
+    cxInt bytessize = newsize + AES_KEY_LENGTH;
+    cxChars bytes = allocator->malloc(bytessize);
+    //save iv
+    memcpy(bytes, iv, AES_KEY_LENGTH);
+    //encode data
+    cxChars ptr = bytes + AES_KEY_LENGTH;
+    memcpy(ptr, dataptr, length);
+    memset(ptr + length, bc, bc);
+    //aes cbc
+    AES_cbc_encrypt((const cxUInt8 *)ptr, (cxUInt8 *)ptr, newsize, &eKey, iv, AES_ENCRYPT);
+    return cxStringAttach(bytes, bytessize);
+}
 
 cxBool cxFileExists(cxConstChars file)
 {

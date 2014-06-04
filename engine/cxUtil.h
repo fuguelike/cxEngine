@@ -38,6 +38,12 @@ cxAudioFileType cxAudioGetType(cxConstChars file);
 
 cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c);
 
+#define AES_KEY_LENGTH  16
+
+cxString cxAESDecode(cxString data,cxString key);
+
+cxString cxAESEncode(cxString data,cxString key);
+
 cxString cxCompressed(cxString data);
 
 cxString cxDecompress(cxString data);
