@@ -57,6 +57,11 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     cxInt index;
     cxInt count;
     cxParticleUnit *units;
+    //texture coord array
+    cxBoxTex2f *texcoords;
+    cxInt texCapacity;
+    cxInt texNumber;
+    //
     cxBool isActive;
     cxFloat emitcounter;
     //base property
@@ -86,6 +91,10 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     CX_METHOD_DEF(void, InitUnit,cxAny,cxInt,cxParticleArgs *);
     CX_SLOT_ALLOC(onDraw);
 CX_OBJECT_END(cxParticle, cxAction)
+
+void cxParticleAppendTexcoord(cxAny pav,cxBoxTex2f *tex);
+
+void cxParticleAppendKey(cxAny pav,cxConstChars key);
 
 void cxParticleStop(cxAny pav);
 

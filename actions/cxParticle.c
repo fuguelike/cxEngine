@@ -136,14 +136,41 @@ static void cxParticleSetBox(cxAny pav,cxParticleUnit *particle)
     box->rb.colors = color;
     box->lt.colors = color;
     box->rt.colors = color;
-    box->lb.texcoords = this->atlas->cxSprite.texCoord.lb;
-    box->rb.texcoords = this->atlas->cxSprite.texCoord.rb;
-    box->lt.texcoords = this->atlas->cxSprite.texCoord.lt;
-    box->rt.texcoords = this->atlas->cxSprite.texCoord.rt;
+    if(this->texNumber > 0){
+        cxBoxTex2f *texCoord = &this->texcoords[this->index%this->texNumber];
+        box->lb.texcoords = texCoord->lb;
+        box->rb.texcoords = texCoord->rb;
+        box->lt.texcoords = texCoord->lt;
+        box->rt.texcoords = texCoord->rt;
+    }else{
+        box->lb.texcoords = this->atlas->cxSprite.texCoord.lb;
+        box->rb.texcoords = this->atlas->cxSprite.texCoord.rb;
+        box->lt.texcoords = this->atlas->cxSprite.texCoord.lt;
+        box->rt.texcoords = this->atlas->cxSprite.texCoord.rt;
+    }
     box->lb.vertices = vq.lb;
     box->rb.vertices = vq.rb;
     box->lt.vertices = vq.lt;
     box->rt.vertices = vq.rt;
+}
+
+void cxParticleAppendTexcoord(cxAny pav,cxBoxTex2f *tex)
+{
+    cxParticle this = pav;
+    if(this->texCapacity <= this->texNumber){
+        this->texCapacity += 8;
+        this->texcoords = allocator->realloc(this->texcoords,sizeof(cxBoxTex2f) * this->texCapacity);
+    }
+    this->texcoords[this->texNumber++] = *tex;
+}
+
+void cxParticleAppendKey(cxAny pav,cxConstChars key)
+{
+    CX_RETURN(!cxConstCharsOK(key));
+    cxParticle this = pav;
+    CX_ASSERT(this->atlas->cxSprite.texture != NULL, "must set texture");
+    cxBoxTex2f texcoord = cxTextureBox(this->atlas->cxSprite.texture, key);
+    cxParticleAppendTexcoord(this, &texcoord);
 }
 
 void cxParticleStop(cxAny pav)
@@ -364,6 +391,16 @@ CX_SETTER_DEF(cxParticle, rotatepers)
 {
     this->rotatepers = cxJsonToFloatRangle(value,this->rotatepers);
 }
+CX_SETTER_DEF(cxParticle, texcoords)
+{
+    cxJson coords = cxJsonToArray(value);
+    CX_JSON_ARRAY_EACH_BEG(coords, item)
+    {
+        cxConstChars texKey = cxJsonToConstChars(item);
+        cxParticleAppendKey(this, texKey);
+    }
+    CX_JSON_ARRAY_EACH_END(coords, item)
+}
 
 CX_OBJECT_TYPE(cxParticle, cxAction)
 {
@@ -390,6 +427,7 @@ CX_OBJECT_TYPE(cxParticle, cxAction)
     CX_PROPERTY_SETTER(cxParticle, startradius);
     CX_PROPERTY_SETTER(cxParticle, endradius);
     CX_PROPERTY_SETTER(cxParticle, rotatepers);
+    CX_PROPERTY_SETTER(cxParticle, texcoords);
 }
 CX_OBJECT_INIT(cxParticle, cxAction)
 {
@@ -406,6 +444,7 @@ CX_OBJECT_INIT(cxParticle, cxAction)
 }
 CX_OBJECT_FREE(cxParticle, cxAction)
 {
+    allocator->free(this->texcoords);
     allocator->free(this->units);
     CX_RELEASE(this->atlas);
     CX_SLOT_RELEASE(this->onDraw);

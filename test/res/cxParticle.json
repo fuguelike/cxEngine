@@ -4,7 +4,14 @@
   "duration": -1,
   "number": 200,
   "rate": -1,
-  "texture": "texture.json?chilli.png",
+  "texture": "texture.json",
+  "texcoords":[
+    "chilli.png",
+    "carrot.png",
+    "cholesterol.png",
+    "cucumber.png",
+    "leek.png"
+  ],
   "life": {
     "v": 3,
     "r": 0
