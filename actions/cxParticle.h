@@ -51,11 +51,6 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     cxInt index;
     cxInt count;
     cxParticleUnit *units;
-    //texture coord array
-    cxBoxTex2f *texcoords;
-    cxInt texCapacity;
-    cxInt texNumber;
-    //
     cxBool isActive;
     cxFloat emitcounter;
     //base property
@@ -81,16 +76,13 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     cxFloatRange startradius;
     cxFloatRange endradius;
     cxFloatRange rotatepers;
+    CX_METHOD_DEF(cxBoxTex2f *, GetBoxTex, cxAny, cxInt);
     CX_METHOD_DEF(cxAny, GetDrawView,cxAny);
     CX_METHOD_DEF(void, InitUnit,cxAny,cxParticleUnit *,cxInt);
     CX_SLOT_ALLOC(onDraw);
 CX_OBJECT_END(cxParticle, cxAction)
 
 void cxParticleInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index);
-
-void cxParticleAppendTexcoord(cxAny pav,cxBoxTex2f *tex);
-
-void cxParticleAppendKey(cxAny pav,cxConstChars key);
 
 void cxParticleStop(cxAny pav);
 
