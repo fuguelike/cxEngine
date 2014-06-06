@@ -264,10 +264,40 @@ CX_SETTER_DEF(cxParticle, number)
     cxInt number = cxJsonToInt(value, this->number);
     cxParticleInitNumber(this, number);
 }
+
+cxBoxTex2f *cxParticleGetBoxTex(cxAny pav,cxInt index)
+{
+    cxParticle this = pav;
+    CX_ASSERT(this->boxtexs != NULL, "box texs empty");
+    cxInt idx = index % this->boxtexs->number;
+    cxBoxTex2f *boxs = this->boxtexs->data;
+    return &boxs[idx];
+}
+
 CX_SETTER_DEF(cxParticle, texture)
 {
-    cxConstChars texture = cxJsonToConstChars(value);
-    cxSpriteSetTextureURL(this->atlas, texture, true);
+    cxConstChars url = NULL;
+    if(cxJsonIsString(value)){
+        url = cxJsonToConstChars(value);
+    } else {
+        url = cxJsonConstChars(value, "url");
+    }
+    CX_RETURN(url == NULL);
+    cxSpriteSetTextureURL(this->atlas, url, true);
+    cxJson keys = cxJsonArray(value, "keys");
+    cxInt keylen = cxJsonArrayLength(keys);
+    CX_RETURN(keylen == 0);
+    CX_RETAIN_SWAP(this->boxtexs, cxMemoryCreate(sizeof(cxBoxTex2f) * keylen));
+    this->boxtexs->number = keylen;
+    CX_METHOD_SET(this->GetBoxTex, cxParticleGetBoxTex);
+    CX_JSON_ARRAY_EACH_BEG(keys, item)
+    {
+        cxBoxTex2f *boxs = this->boxtexs->data;
+        cxBoxTex2f *box = &boxs[index];
+        cxConstChars key = cxJsonToConstChars(item);
+        *box = cxTextureBox(this->atlas->cxSprite.texture, key);
+    }
+    CX_JSON_ARRAY_EACH_END(keys, item)
 }
 CX_SETTER_DEF(cxParticle, emitter)
 {
@@ -410,6 +440,7 @@ CX_OBJECT_INIT(cxParticle, cxAction)
 }
 CX_OBJECT_FREE(cxParticle, cxAction)
 {
+    CX_RELEASE(this->boxtexs);
     allocator->free(this->units);
     CX_RELEASE(this->atlas);
     CX_SLOT_RELEASE(this->onDraw);

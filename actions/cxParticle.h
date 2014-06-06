@@ -76,11 +76,16 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     cxFloatRange startradius;
     cxFloatRange endradius;
     cxFloatRange rotatepers;
+    //use multiple texture
+    cxMemory boxtexs;
+    //
     CX_METHOD_DEF(cxBoxTex2f *, GetBoxTex, cxAny, cxInt);
     CX_METHOD_DEF(cxAny, GetDrawView,cxAny);
     CX_METHOD_DEF(void, InitUnit,cxAny,cxParticleUnit *,cxInt);
     CX_SLOT_ALLOC(onDraw);
 CX_OBJECT_END(cxParticle, cxAction)
+
+cxBoxTex2f *cxParticleGetBoxTex(cxAny pav,cxInt index);
 
 void cxParticleInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index);
 

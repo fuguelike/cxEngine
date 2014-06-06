@@ -6,7 +6,7 @@
   "rate": -1,
   "texture": {
     "url": "texture.json",
-    "coords": [
+    "keys": [
       "chilli.png",
       "carrot.png",
       "cholesterol.png",
