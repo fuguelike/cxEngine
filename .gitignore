@@ -6,3 +6,5 @@ obj
 xcuserdata
 xcshareddata
 winmine
+android/libs
+test/png
