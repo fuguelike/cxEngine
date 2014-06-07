@@ -77,7 +77,7 @@ cxInt cxArrayObjectIndex(cxArray array,cxAny any)
     CX_ARRAY_FOREACH(array, e) {
         cxAny tmp = cxArrayObject(e);
         if(tmp == any) {
-            return utarray_eltidx(array->utArray,e);
+            return (cxInt)utarray_eltidx(array->utArray,e);
         }
     }
     return CX_INVALID_INDEX;

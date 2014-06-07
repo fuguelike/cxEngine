@@ -14,12 +14,13 @@ void cxEngineType(cxEngine engine)
 
 void cxEngineInit(cxEngine engine)
 {
-	cxEngineSetDesignSize(cxSize2fv(640, 960));   
+    cxEngineSetDesignSize(cxSize2fv(640, 960));
 }
 
 void cxEngineMain(cxEngine engine)
 {
-    
+    cxViewLoader loader = cxViewLoaderCreate("cxScroll.json");
+    cxWindowPushView(loader->view);
 }
 
 void cxEngineFree(cxEngine engine)

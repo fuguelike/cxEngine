@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2008-2013, Troy D. Hanson   http://troydhanson.github.com/uthash/
+Copyright (c) 2008-2014, Troy D. Hanson   http://troydhanson.github.com/uthash/
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -26,14 +26,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef UTSTRING_H
 #define UTSTRING_H
 
-#define UTSTRING_VERSION 1.9.8
+#define UTSTRING_VERSION 1.9.9
 
 #ifdef __GNUC__
 #define _UNUSED_ __attribute__ ((__unused__)) 
 #else
 #define _UNUSED_ 
 #endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,7 +57,7 @@ do {                                                       \
 #define utstring_init(s)                                   \
 do {                                                       \
   (s)->n = 0; (s)->i = 0; (s)->d = NULL;                   \
-  utstring_reserve(s,64);                                  \
+  utstring_reserve(s,100);                                 \
   (s)->d[0] = '\0'; \
 } while(0)
 
@@ -128,7 +127,7 @@ _UNUSED_ static void utstring_printf_va(UT_string *s, const char *fmt, va_list a
       n = vsnprintf (&s->d[s->i], s->n-s->i, fmt, cp);
       va_end(cp);
 
-      if ((n > -1) && (n < (int)(s->n-s->i))) {
+      if ((n > -1) && ((size_t) n < (s->n-s->i))) {
         s->i += n;
         return;
       }

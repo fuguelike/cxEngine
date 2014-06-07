@@ -90,7 +90,7 @@ cxString cxStringAllocChars(cxConstChars str)
 cxString cxStringAttachChars(cxChars str)
 {
     CX_ASSERT(str != NULL, "str null");
-    return cxStringAttach(str, strlen(str));
+    return cxStringAttach(str, (cxInt)strlen(str));
 }
 
 cxString cxStringConstChars(cxConstChars str)
@@ -110,6 +110,16 @@ void cxStringReplace(cxString string,cxChar find,cxChar rep)
             ptr[i] = rep;
         }
     }
+}
+
+cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c)
+{
+    for(cxInt i=0; i < strlen(sp);i++){
+        if(sp[i] == c){
+            return true;
+        }
+    }
+    return  false;
 }
 
 cxArray cxStringSplit(cxString string,cxConstChars sp)

@@ -150,16 +150,6 @@ cxUInt cxBinaryToUInt(cxConstChars bs)
     return ret;
 }
 
-cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c)
-{
-    for(cxInt i=0; i < strlen(sp);i++){
-        if(sp[i] == c){
-            return true;
-        }
-    }
-    return  false;
-}
-
 cxUInt cxHexToUInt(cxConstChars bs)
 {
     CX_ASSERT(bs != NULL, "args error");

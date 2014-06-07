@@ -117,7 +117,14 @@ LOCAL_SRC_FILES += \
 	engine/cxView.c
     
 LOCAL_SRC_FILES += \
-    algorithm/cxAStar.c
+    algorithm/cxAStar.c \
+    algorithm/aes_cbc.c \
+ 	algorithm/aes_cfb.c \
+ 	algorithm/aes_core.c \
+ 	algorithm/aes_ctr.c \
+ 	algorithm/aes_ecb.c \
+ 	algorithm/aes_ige.c \
+ 	algorithm/aes_ofb.c
 
 LOCAL_SRC_FILES += \
     android/jni/cxAndroid.c \
