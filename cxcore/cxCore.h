@@ -99,7 +99,7 @@
 #endif
 
 #ifndef CX_SWAP
-#define CX_SWAP(v1, v2, type) {type _temp_=(v1);v1=v2;v2=_temp_;}
+#define CX_SWAP(v1, v2) {typeof(v1) _temp_=(v1);v1=v2;v2=_temp_;}
 #endif
 
 #ifndef CX_SWAP32
