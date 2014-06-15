@@ -37,9 +37,9 @@ CX_SETTER_DEF(cxPolygon, points)
         p.colors = cxColor4fv(1, 1, 1, 1);
         p.texcoords = cxTex2fv(0, 0);
         p.vertices = cxVec3fv(0, 0, 0);
-        p.vertices = cxJsonVec3f(point, "p", p.vertices);
-        p.texcoords = cxJsonTex2f(point, "t", p.texcoords);
-        p.colors = cxJsonColor4f(point, "c", p.colors);
+        p.vertices = cxJsonVec3f(point, "pos", p.vertices);
+        p.texcoords = cxJsonTex2f(point, "coord", p.texcoords);
+        p.colors = cxJsonColor4f(point, "color", p.colors);
         cxPolygonAppend(this, p);
     }
     CX_JSON_ARRAY_EACH_END(points, point);
