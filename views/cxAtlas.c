@@ -148,7 +148,7 @@ CX_SETTER_DEF(cxAtlas, layers)
         cxSize2f size = cxSize2fv(0, 0);
         cxBoxTex2f tex = cxBoxTex2fDefault();
         cxColor4f color = cxColor4fv(1, 1, 1, 1);
-        pos = cxJsonVec2f(layer, "position", pos);
+        pos = cxJsonVec2f(layer, "pos", pos);
         size = cxJsonSize2f(layer, "size", size);
         cxConstChars key = cxJsonConstChars(layer, "key");
         if(key != NULL){
