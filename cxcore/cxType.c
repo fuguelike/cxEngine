@@ -78,6 +78,7 @@ cxBool cxInstanceOf(cxAny object,cxConstType type)
     CX_RETURN(object == NULL && type == NULL,true);
     CX_RETURN(object == NULL || type == NULL, false);
     CX_RETURN(this->cxType == type, true);
+    CX_RETURN(type == cxObjectTypeName,true);
     cxType ptype = cxTypesGet(this->cxType);
     while (ptype != NULL && ptype->superType != NULL) {
         if(ptype->superType->typeName == type){

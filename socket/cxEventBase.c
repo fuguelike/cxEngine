@@ -26,9 +26,17 @@ void cxEventBaseDestroy()
     instance = NULL;
 }
 
+void cxEventBaseSetFreq(cxInt freq)
+{
+    CX_ASSERT(instance != NULL, "event base not init");
+    instance->freq = freq;
+}
+
 static void cxEventUpdate(cxAny base)
 {
     cxEventBase this = base;
+    this->counter ++;
+    CX_RETURN((this->counter % this->freq) != 0);
     event_base_loop(this->base, EVLOOP_NONBLOCK);
 }
 
@@ -42,6 +50,8 @@ CX_OBJECT_INIT(cxEventBase, cxObject)
     CX_SLOT_CONNECT(engine->onUpdate, this, onUpdate, cxEventUpdate);
     this->base = event_base_new();
     this->conns = CX_ALLOC(cxHash);
+    this->counter = 0;
+    this->freq = 1;
 }
 CX_OBJECT_FREE(cxEventBase, cxObject)
 {

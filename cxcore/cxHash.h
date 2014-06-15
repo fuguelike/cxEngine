@@ -31,15 +31,13 @@ typedef struct {
     cxChars data;
 }cxHashKey;
 
-typedef int (*cxHashCmpFunc)(cxHashElement *lp,cxHashElement *rp);
+typedef cxInt (*cxHashCmpFunc)(cxHashElement *lp,cxHashElement *rp);
 
 #define cxHashIntKey(_v_)       (cxHashKey){.length=sizeof(cxInt),.data=(cxChars)&(cxInt){_v_}}
 
 #define cxHashPtrKey(_p_)       (cxHashKey){.length=sizeof(cxAny),.data=(cxChars)&(cxLong){(cxLong)(_p_)}}
 
 #define cxHashStrKey(_s_)       (cxHashKey){.length=(cxInt)strlen(_s_),.data=(cxChars)(_s_)}
-
-#define cxHashMemKey(_d_,_l_)   (cxHashKey){.length=(_l_),.data=(cxChars)(_d_)}
 
 CX_OBJECT_DEF(cxHash, cxObject)
     cxHashElement *hashPtr;

@@ -97,9 +97,9 @@ cxString cxAESEncode(cxString data,cxString key)
     return cxStringAttach(bytes, bytessize);
 }
 
-cxBool cxFileExists(cxConstChars file)
+cxBool cxDocumentExists(cxConstChars file)
 {
-    cxString path = cxAssetsPath(file);
+    cxString path = cxDocumentPath(file);
     CX_RETURN(path == NULL, false);
     struct stat stat={0};
     return lstat(cxStringBody(path), &stat) == 0;

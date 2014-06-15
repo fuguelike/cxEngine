@@ -54,7 +54,7 @@ cxString cxAssetsPath(cxConstChars file);
 
 cxBool cxAssetsExists(cxConstChars file);
 
-cxBool cxFileExists(cxConstChars file);
+cxBool cxDocumentExists(cxConstChars file);
 
 cxDouble cxTimestamp();
 
