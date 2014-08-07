@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVAudioPlayer.h>
-#import "cxViewController.h"
+#import "cxGLViewController.h"
 #include <engine/cxEngine.h>
 
 @interface cxAppDelegate : UIResponder <UIApplicationDelegate,AVAudioPlayerDelegate>
@@ -17,7 +17,7 @@
     cxString currFile;
 }
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) cxViewController *viewController;
+@property (strong, nonatomic) cxGLViewController *glViewController;
 -(void)cxPlayMusic:(cxConstChars)file loop:(cxBool)loop;
 -(void)cxStopMusic;
 -(void)cxPauseMusic;

@@ -102,7 +102,7 @@ cxEAGLView *instance = nil;
 +(cxEAGLView *)glView
 {
     cxAppDelegate *app = (cxAppDelegate *)[[UIApplication sharedApplication] delegate];
-    return (cxEAGLView *)app.viewController.view;
+    return [app.glViewController getGLView];
 }
 
 -(void)resizeFromLayer:(CAEAGLLayer *)layer

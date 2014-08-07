@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
+#import "cxEAGLView.h"
 
-@interface cxViewController : UIViewController
-
+@interface cxGLViewController : UIViewController
+{
+    
+}
+-(cxEAGLView *)getGLView;
 @end
