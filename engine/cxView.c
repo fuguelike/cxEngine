@@ -184,16 +184,24 @@ CX_OBJECT_INIT(cxView, cxObject)
 
     CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
     CX_METHOD_SET(this->IsOnKey, cxViewIsOnKey);
+    CX_METHOD_SET(this->Append, cxViewAppendImp);
     
     this->subViews = CX_ALLOC(cxList);
     this->actions = CX_ALLOC(cxHash);
     this->removes = CX_ALLOC(cxArray);
+    this->binded = CX_ALLOC(cxHash);
+    this->bindes = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
+    //unbind binds
+    cxViewUnBindAll(this);
+    
     CX_RELEASE(this->removes);
     CX_RELEASE(this->subViews);
     CX_RELEASE(this->actions);
+    CX_RELEASE(this->bindes);
+    CX_RELEASE(this->binded);
     
     CX_EVENT_RELEASE(this->onDirty);
     CX_EVENT_RELEASE(this->onEnter);
@@ -205,6 +213,58 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
+
+void cxViewUnBindAll(cxAny pview)
+{
+    cxView this = pview;
+    CX_RETURN(this == NULL);
+    //clean bind's view
+    CX_HASH_FOREACH(this->bindes, ele1, tmp1){
+        cxView view = CX_HASH_KEY_TO_ANY(ele1);
+        cxHashDel(view->binded, cxHashIntKey((cxInt)this));
+    }
+    cxHashClean(this->bindes);
+    //clean binded view
+    CX_HASH_FOREACH(this->binded, ele2, tmp2){
+        cxView view = CX_HASH_KEY_TO_ANY(ele2);
+        cxHashDel(view->bindes, cxHashIntKey((cxInt)this));
+    }
+    cxHashClean(this->binded);
+}
+
+void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
+{
+    cxView this = pview;
+    cxView bind = bview;
+    CX_ASSERT(this != bind, "self can't bind self");
+    CX_ASSERT(cxInstanceOf(this, cxViewTypeName), "pview must is cxView");
+    CX_ASSERT(cxInstanceOf(bind, cxViewTypeName), "bview must is cxView");
+    //bind new view
+    cxHashSet(this->bindes, cxHashIntKey((cxInt)bind), bd);
+    //this binded bind
+    cxHashSet(bind->binded, cxHashIntKey((cxInt)this), bd);
+}
+
+void cxViewAppendImp(cxAny pview,cxAny newview)
+{
+    CX_ASSERT(pview != NULL && newview != NULL, "parent view or new view null");
+    cxView this = pview;
+    cxView new = newview;
+    CX_RETURN(new->parentView == pview);
+    CX_ASSERT(newview != NULL && new->subElement == NULL, "newview null or add to view");
+    new->subElement = cxListAppend(this->subViews, new);
+    new->parentView = this;
+    if(this->isRunning){
+        cxViewEnter(new);
+        cxViewLayout(new);
+    }
+}
+
+void cxViewAppend(cxAny pview,cxAny subview)
+{
+    cxView this = pview;
+    CX_METHOD_RUN(this->Append,pview,subview);
+}
 
 void cxViewSetCropping(cxAny pview,cxBool cropping)
 {
@@ -628,21 +688,6 @@ void cxViewExit(cxAny pview)
     }
     CX_EVENT_FIRE(this, onExit);
     this->isRunning = false;
-}
-
-void cxViewAppend(cxAny pview,cxAny newview)
-{
-    CX_ASSERT(pview != NULL && newview != NULL, "parent view or new view null");
-    cxView this = pview;
-    cxView new = newview;
-    CX_RETURN(new->parentView == pview);
-    CX_ASSERT(newview != NULL && new->subElement == NULL, "newview null or add to view");
-    new->subElement = cxListAppend(this->subViews, new);
-    new->parentView = this;
-    if(this->isRunning){
-        cxViewEnter(new);
-        cxViewLayout(new);
-    }
 }
 
 void cxViewAutoResizing(cxAny pview)

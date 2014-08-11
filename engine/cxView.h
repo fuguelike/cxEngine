@@ -37,7 +37,11 @@ typedef enum{
     cxViewIsTouchTypeSubview    = 1 << 1,   //touch subviews
 }cxViewIsTouchType;
 
+#define CX_HASH_KEY_TO_ANY(_e_) (cxAny)(*(cxInt *)(_e_)->key)
+
 CX_OBJECT_DEF(cxView, cxObject)
+    cxHash bindes;//bind's views bind哪些view
+    cxHash binded;//binded's views 被哪些viewbind
     cxInt tag;
     cxViewIsTouchType touchType;
     cxBool supportAtlasSet;
@@ -74,6 +78,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_DEF(void, Draw, cxAny);
     CX_METHOD_DEF(void, After, cxAny);
     CX_METHOD_DEF(void, Before, cxAny);
+    CX_METHOD_DEF(void, Append,cxAny,cxAny);
     CX_SIGNAL_ALLOC(onDraw);
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);
@@ -82,6 +87,10 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
 CX_OBJECT_END(cxView, cxObject)
+
+void cxViewUnBindAll(cxAny pview);
+
+void cxViewBind(cxAny pview,cxAny bview,cxAny bd);
 
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 
@@ -144,6 +153,8 @@ cxUInt cxViewIsOnKey(cxAny pview,cxKey *key);
 cxBool cxViewTouch(cxAny pview,cxTouch *touch);
 
 cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch);
+
+void cxViewAppendImp(cxAny pview,cxAny newview);
 
 void cxViewAppend(cxAny pview,cxAny newview);
 

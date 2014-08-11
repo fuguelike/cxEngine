@@ -43,13 +43,15 @@ cxBool cxHashHas(cxHash hash,cxHashKey key)
     return element != NULL;
 }
 
-void cxHashDel(cxHash hash,cxHashKey key)
+cxBool cxHashDel(cxHash hash,cxHashKey key)
 {
     cxHashElement *element = NULL;
     HASH_FIND(hh, hash->hashPtr, key.data, key.length, element);
     if(element != NULL){
         cxHashDelElement(hash, element);
+        return true;
     }
+    return false;
 }
 
 cxInt cxHashLength(cxHash hash)
@@ -91,15 +93,17 @@ static void cxHashSetUnsafe(cxHash hash,cxHashKey key,cxAny any)
     CX_RETAIN(new->any);
 }
 
-void cxHashSet(cxHash hash,cxHashKey key,cxAny any)
+cxBool cxHashSet(cxHash hash,cxHashKey key,cxAny any)
 {
-    CX_ASSERT(any != NULL, "any object error");
     cxHashElement *element = cxHashGetElement(hash, key);
     if(element == NULL){
         cxHashSetUnsafe(hash, key, any);
-    }else if(element->any != any){
+        return false;
+    }
+    if(element->any != any){
         CX_RETAIN_SWAP(element->any, any);
     }
+    return true;
 }
 
 
