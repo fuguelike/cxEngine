@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8301C6B719A74E0100DFD640 /* cxTile.c in Sources */ = {isa = PBXBuildFile; fileRef = 8301C6B519A74E0100DFD640 /* cxTile.c */; };
 		833642BB1925E4E900223302 /* cxMemory.c in Sources */ = {isa = PBXBuildFile; fileRef = 833642B91925E4E900223302 /* cxMemory.c */; };
 		833642BE1925E6B600223302 /* cxNumber.c in Sources */ = {isa = PBXBuildFile; fileRef = 833642BC1925E6B600223302 /* cxNumber.c */; };
 		833CA4F11925D95C0013630A /* cxActionSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 833CA4D31925D95C0013630A /* cxActionSet.c */; };
@@ -77,7 +78,6 @@
 		837FEA4C1925CBBB005434C4 /* cxShaderClipping.c in Sources */ = {isa = PBXBuildFile; fileRef = 837FEA451925CBBB005434C4 /* cxShaderClipping.c */; };
 		837FEA4D1925CBBB005434C4 /* cxShaderDefault.c in Sources */ = {isa = PBXBuildFile; fileRef = 837FEA471925CBBB005434C4 /* cxShaderDefault.c */; };
 		837FEA4E1925CBBB005434C4 /* cxShaderPositionColor.c in Sources */ = {isa = PBXBuildFile; fileRef = 837FEA491925CBBB005434C4 /* cxShaderPositionColor.c */; };
-		8380D71919985454008DC0AD /* cxTileMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 8380D71719985454008DC0AD /* cxTileMap.c */; };
 		83A78DE11936E2B5007C44FD /* cxTimeLine.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A78DDF1936E2B5007C44FD /* cxTimeLine.c */; };
 		83B08D071909FCB5005A63D2 /* dump.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B08CF51909FCB4005A63D2 /* dump.c */; };
 		83B08D081909FCB5005A63D2 /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B08CF61909FCB4005A63D2 /* error.c */; };
@@ -138,6 +138,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8301C6B519A74E0100DFD640 /* cxTile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTile.c; sourceTree = "<group>"; };
+		8301C6B619A74E0100DFD640 /* cxTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTile.h; sourceTree = "<group>"; };
 		8329627918D9C14E002AB028 /* cxEngine.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEngine.pch; sourceTree = "<group>"; };
 		833642B91925E4E900223302 /* cxMemory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMemory.c; sourceTree = "<group>"; };
 		833642BA1925E4E900223302 /* cxMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMemory.h; sourceTree = "<group>"; };
@@ -289,8 +291,6 @@
 		837FEA481925CBBB005434C4 /* cxShaderDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderDefault.h; sourceTree = "<group>"; };
 		837FEA491925CBBB005434C4 /* cxShaderPositionColor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderPositionColor.c; sourceTree = "<group>"; };
 		837FEA4A1925CBBB005434C4 /* cxShaderPositionColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderPositionColor.h; sourceTree = "<group>"; };
-		8380D71719985454008DC0AD /* cxTileMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTileMap.c; sourceTree = "<group>"; };
-		8380D71819985454008DC0AD /* cxTileMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTileMap.h; sourceTree = "<group>"; };
 		83A78DDF1936E2B5007C44FD /* cxTimeLine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTimeLine.c; sourceTree = "<group>"; };
 		83A78DE01936E2B5007C44FD /* cxTimeLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTimeLine.h; sourceTree = "<group>"; };
 		83B08CF51909FCB4005A63D2 /* dump.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dump.c; sourceTree = "<group>"; };
@@ -440,6 +440,8 @@
 				83CEB638193EB58300D3F7BF /* aes.h */,
 				833CA5011925DB3E0013630A /* cxAStar.c */,
 				833CA5021925DB3E0013630A /* cxAStar.h */,
+				8301C6B519A74E0100DFD640 /* cxTile.c */,
+				8301C6B619A74E0100DFD640 /* cxTile.h */,
 			);
 			path = algorithm;
 			sourceTree = "<group>";
@@ -522,8 +524,6 @@
 				833CA5391925DB5E0013630A /* cxTable.h */,
 				833CA53A1925DB5E0013630A /* cxWindow.c */,
 				833CA53B1925DB5E0013630A /* cxWindow.h */,
-				8380D71719985454008DC0AD /* cxTileMap.c */,
-				8380D71819985454008DC0AD /* cxTileMap.h */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -815,7 +815,6 @@
 				833CA5551925DB5E0013630A /* cxWindow.c in Sources */,
 				83B995D61925C5A100FD6BC1 /* cxRegex.c in Sources */,
 				83B08D0F1909FCB5005A63D2 /* strconv.c in Sources */,
-				8380D71919985454008DC0AD /* cxTileMap.c in Sources */,
 				8341C64918227DF30045A66F /* mat4.c in Sources */,
 				8341C68018227FA10045A66F /* cxAppDelegate.m in Sources */,
 				8344F0A618D3F3C50003E410 /* main.m in Sources */,
@@ -899,6 +898,7 @@
 				833CA5531925DB5E0013630A /* cxSprite.c in Sources */,
 				837FEA4D1925CBBB005434C4 /* cxShaderDefault.c in Sources */,
 				83B08D091909FCB5005A63D2 /* hashtable.c in Sources */,
+				8301C6B719A74E0100DFD640 /* cxTile.c in Sources */,
 				83B995CE1925C5A100FD6BC1 /* cxIconv.c in Sources */,
 				83CEB639193EB58300D3F7BF /* aes_cbc.c in Sources */,
 				83B995C91925C5A100FD6BC1 /* cxAction.c in Sources */,

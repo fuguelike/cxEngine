@@ -147,8 +147,9 @@ static void cxEngineTypes()
 void cxEngineBegin()
 {
     cxEngine engine = cxEngineInstance();
-    //register all type
+    //registe all type
     cxEngineTypes();
+    //registe other type
     cxEngineType(engine);
     //set localized lang
     cxEngineSetLocalized(cxLocalizedLang());

@@ -39,9 +39,11 @@ typedef enum{
 
 #define CX_HASH_KEY_TO_ANY(_e_) (cxAny)(*(cxInt *)(_e_)->key)
 
+typedef cxBool (*cxViewBindForeachFunc)(cxAny pview,cxAny bview,cxAny bd);
+
 CX_OBJECT_DEF(cxView, cxObject)
-    cxHash bindes;//bind's views bind哪些view
-    cxHash binded;//binded's views 被哪些viewbind
+    cxHash bindes;//bind's views
+    cxHash binded;//binded's views
     cxInt tag;
     cxViewIsTouchType touchType;
     cxBool supportAtlasSet;
@@ -87,6 +89,10 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
 CX_OBJECT_END(cxView, cxObject)
+
+void cxViewForeachBindes(cxAny pview,cxViewBindForeachFunc func);
+
+void cxViewForeachBinded(cxAny pview,cxViewBindForeachFunc func);
 
 void cxViewUnBindAll(cxAny pview);
 

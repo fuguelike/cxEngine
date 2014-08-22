@@ -214,6 +214,30 @@ CX_OBJECT_FREE(cxView, cxObject)
 }
 CX_OBJECT_TERM(cxView, cxObject)
 
+//each bindes view
+void cxViewForeachBindes(cxAny pview,cxViewBindForeachFunc func)
+{
+    cxView this = pview;
+    CX_HASH_FOREACH(this->bindes, ele, tmp){
+        cxView view = CX_HASH_KEY_TO_ANY(ele);
+        if(!func(pview,view,ele->any)){
+            break;
+        }
+    }
+}
+
+//each binded view
+void cxViewForeachBinded(cxAny pview,cxViewBindForeachFunc func)
+{
+    cxView this = pview;
+    CX_HASH_FOREACH(this->binded, ele, tmp){
+        cxView view = CX_HASH_KEY_TO_ANY(ele);
+        if(!func(pview,view,ele->any)){
+            break;
+        }
+    }
+}
+
 void cxViewUnBindAll(cxAny pview)
 {
     cxView this = pview;
