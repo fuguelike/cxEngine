@@ -251,9 +251,9 @@ cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t);
 
 cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t);
 
-cxBool cxBox2fContainPoint(const cxBox4f box,const cxVec2f pos);
+cxBool cxBox2fContainPoint(cxBox4f box,cxVec2f pos);
 
-cxBool cxPolygonContainPoint(const cxPoints *polygon,const cxVec2f tp);
+cxBool cxPolygonContainPoint(cxPoints *polygon,cxVec2f tp);
 
 //if r1 contains r2 return true
 cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2);

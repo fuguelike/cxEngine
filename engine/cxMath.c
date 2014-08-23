@@ -79,12 +79,12 @@ cxVec2f cxVec2fValue(cxVec2fRange rv)
     return pos;
 }
 
-cxBool cxBox2fContainPoint(const cxBox4f box,const cxVec2f pos)
+cxBool cxBox2fContainPoint(cxBox4f box,cxVec2f pos)
 {
     return (pos.x >= box.l && pos.x <= box.r && pos.y >= box.b && pos.y <= box.t);
 }
 
-cxBool cxPolygonContainPoint(const cxPoints *polygon,const cxVec2f tp)
+cxBool cxPolygonContainPoint(cxPoints *polygon,cxVec2f tp)
 {
     cxBool c = false;
     cxInt num = polygon->num;
