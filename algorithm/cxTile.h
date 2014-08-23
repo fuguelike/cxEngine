@@ -13,9 +13,9 @@
 
 CX_C_BEGIN
 
-cxVec2f cxTileVec2iToVec2f(cxVec2i idx,cxSize2f tileSize);
+cxVec2f cxTileVec2iToVec2f(cxVec2i idx,cxSize2f size);
 
-cxVec2i cxTileVec2fToVec2i(cxVec2f pos,cxSize2f tileSize);
+cxVec2i cxTileVec2fToVec2i(cxVec2f pos,cxSize2f size);
 
 CX_C_END
 

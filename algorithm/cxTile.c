@@ -8,19 +8,19 @@
 
 #include "cxTile.h"
 
-cxVec2f cxTileVec2iToVec2f(cxVec2i idx,cxSize2f tileSize)
+cxVec2f cxTileVec2iToVec2f(cxVec2i idx,cxSize2f size)
 {
-    cxFloat w2 = tileSize.w / 2;
-    cxFloat h2 = tileSize.h / 2;
+    cxFloat w2 = size.w / 2;
+    cxFloat h2 = size.h / 2;
     cxFloat x = idx.x * w2 - idx.y * w2;
     cxFloat y = idx.x * h2 + idx.y * h2;
     return cxVec2fv(x,y);
 }
 
-cxVec2i cxTileVec2fToVec2i(cxVec2f pos,cxSize2f tileSize)
+cxVec2i cxTileVec2fToVec2i(cxVec2f pos,cxSize2f size)
 {
-    cxFloat w2 = tileSize.w / 2;
-    cxFloat h2 = tileSize.h / 2;
+    cxFloat w2 = size.w / 2;
+    cxFloat h2 = size.h / 2;
     //边长
     cxFloat m = sqrtf(w2*w2 + h2*h2);
     //斜率
