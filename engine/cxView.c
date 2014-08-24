@@ -578,10 +578,10 @@ void cxViewSetAnchor(cxAny pview,cxVec2f anchor)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
-    if(anchor.x > 0.5f || anchor.x < 0.5f){
+    if(anchor.x > 0.5f || anchor.x < -0.5f){
         anchor.x = (anchor.x / (this->size.w/2.0f)) / 2.0f;
     }
-    if(anchor.y > 0.5f || anchor.y < 0.5f){
+    if(anchor.y > 0.5f || anchor.y < -0.5f){
         anchor.y = (anchor.y / (this->size.h/2.0f)) / 2.0f;
     }
     CX_RETURN(cxVec2fEqu(this->anchor, anchor));
