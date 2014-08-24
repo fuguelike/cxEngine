@@ -48,6 +48,18 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxString lang;
 CX_OBJECT_END(cxEngine, cxObject)
 
+//type init
+CX_EXTERN void cxEngineType(cxEngine engine);
+
+//engine init
+CX_EXTERN void cxEngineInit(cxEngine engine);
+
+//engine start draw
+CX_EXTERN void cxEngineMain(cxEngine engine);
+
+//engine free
+CX_EXTERN void cxEngineFree(cxEngine engine);
+
 void cxEnginePush(cxAny object);
 
 void cxEnginePop();
@@ -74,18 +86,6 @@ cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 
 cxTimer cxEngineTimer(cxFloat freq,cxInt repeat);
 
-//type init
-CX_EXTERN void cxEngineType(cxEngine engine);
-
-//engine init
-CX_EXTERN void cxEngineInit(cxEngine engine);
-
-//engine start draw
-CX_EXTERN void cxEngineMain(cxEngine engine);
-
-//engine free
-CX_EXTERN void cxEngineFree(cxEngine engine);
-//
 cxVec2f cxEngineTouchToWindow(cxVec2f pos);
 
 cxVec2f cxEngineWindowToTouch(cxVec2f pos);

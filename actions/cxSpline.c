@@ -85,6 +85,16 @@ CX_OBJECT_FREE(cxSpline, cxAction)
 }
 CX_OBJECT_TERM(cxSpline, cxAction)
 
+cxSpline cxSplineCreate(cxPoints *points)
+{
+    CX_ASSERT(points != NULL, "points null");
+    cxSpline this = CX_CREATE(cxSpline);
+    for(cxInt i=0; i < points->num;i++){
+        cxSplineAppend(this, points->vs[i]);
+    }
+    return this;
+}
+
 void cxSplineAppend(cxAny pav,cxVec2f pos)
 {
     cxSpline this = pav;

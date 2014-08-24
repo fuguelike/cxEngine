@@ -23,6 +23,8 @@ CX_OBJECT_END(cxSpline, cxAction)
 
 void cxSplineAppend(cxAny pav,cxVec2f pos);
 
+cxSpline cxSplineCreate(cxPoints *points);
+
 CX_C_END
 
 #endif

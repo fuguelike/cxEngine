@@ -176,7 +176,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->isDirty = true;
     this->color = cxColor4fv(1.0f, 1.0f, 1.0f, 1.0f);
     this->size = cxSize2fv(0.0f, 0.0f);
-    this->anchor = cxVec2fv(0.5f, 0.5f);
+    this->anchor = cxVec2fv(0.0f, 0.0f);
     this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->fixscale = cxVec2fv(1.0f, 1.0f);
@@ -578,6 +578,12 @@ void cxViewSetAnchor(cxAny pview,cxVec2f anchor)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
+    if(anchor.x > 0.5f || anchor.x < 0.5f){
+        anchor.x = (anchor.x / (this->size.w/2.0f)) / 2.0f;
+    }
+    if(anchor.y > 0.5f || anchor.y < 0.5f){
+        anchor.y = (anchor.y / (this->size.h/2.0f)) / 2.0f;
+    }
     CX_RETURN(cxVec2fEqu(this->anchor, anchor));
     this->anchor = anchor;
     this->isDirty = true;
@@ -664,8 +670,8 @@ void cxViewTransform(cxAny pview)
     kmMat4Multiply(&this->normalMatrix, &transMatrix, &rotateMatrix);
     kmMat4Multiply(&this->normalMatrix, &this->normalMatrix, &scaleMatrix);
     
-    cxFloat x = this->size.w * (0.5f - this->anchor.x);
-    cxFloat y = this->size.h * (0.5f - this->anchor.y);
+    cxFloat x = -this->size.w * this->anchor.x;
+    cxFloat y = -this->size.h * this->anchor.y;
     kmMat4Translation(&this->anchorMatrix, x, y, 0);
     
     CX_EVENT_FIRE(this, onDirty);
@@ -732,11 +738,11 @@ void cxViewAutoResizing(cxAny pview)
         pos.x = (this->autoBox.l - this->autoBox.r)/2.0f;
     }else if(mask & cxViewAutoResizeLeft){
         pos.x  = -parent->size.w/2.0f;
-        pos.x += size.w * this->anchor.x * scale.x;
+        pos.x += size.w * (this->anchor.x + 0.5f) * scale.x;
         pos.x += this->autoBox.l;
     }else if(mask & cxViewAutoResizeRight){
         pos.x = parent->size.w/2.0f;
-        pos.x -= size.w * (1.0f - this->anchor.x) * scale.x;
+        pos.x -= size.w * (0.5f - this->anchor.x) * scale.x;
         pos.x -= this->autoBox.r;
     }
     //top bottom
@@ -747,11 +753,11 @@ void cxViewAutoResizing(cxAny pview)
         pos.y = (this->autoBox.b - this->autoBox.t)/2.0f;
     }else if(mask & cxViewAutoResizeTop){
         pos.y = parent->size.h/2.0f;
-        pos.y -= size.h * (1.0f - this->anchor.y) * scale.y;
+        pos.y -= size.h * (0.5f - this->anchor.y) * scale.y;
         pos.y -= this->autoBox.t;
     }else if(mask & cxViewAutoResizeBottom){
         pos.y  = -parent->size.h/2.0f;
-        pos.y += size.h * this->anchor.y * scale.y;
+        pos.y += size.h * (this->anchor.y + 0.5) * scale.y;
         pos.y += this->autoBox.b;
     }
     //update pos and size

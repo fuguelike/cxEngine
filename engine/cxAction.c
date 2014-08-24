@@ -7,6 +7,7 @@
 //
 #include <engine/cxEngine.h>
 #include "cxAction.h"
+#include "cxActionMgr.h"
 
 CX_SETTER_DEF(cxAction, duration)
 {
@@ -59,12 +60,19 @@ CX_OBJECT_INIT(cxAction, cxObject)
 }
 CX_OBJECT_FREE(cxAction, cxObject)
 {
+    CX_RELEASE(this->actionMgr);
     CX_EVENT_RELEASE(this->onIndex);
     CX_EVENT_RELEASE(this->onStart);
     CX_EVENT_RELEASE(this->onStop);
     CX_EVENT_RELEASE(this->onStep);
 }
 CX_OBJECT_TERM(cxAction, cxObject)
+
+void cxActionSetMgr(cxAny pav,cxAny mgr)
+{
+    cxAction this = pav;
+    CX_RETAIN_SWAP(this->actionMgr, mgr);
+}
 
 cxBool cxActionForever(cxAny pav)
 {
@@ -137,7 +145,14 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
 {
     cxAction this = pav;
     cxBool isExit = false;
-    dt = dt * this->scale;
+    //time scale
+    if(this->actionMgr != NULL){
+        cxActionMgr mgr = this->actionMgr;
+        dt = dt * this->scale * mgr->scale;
+    }else{
+        dt = dt * this->scale;
+    }
+    //if pause
     if(this->pauseTime > 0){
         this->pauseTime -= dt;
         CX_EVENT_FIRE(this, onStep);
