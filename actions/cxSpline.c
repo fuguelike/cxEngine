@@ -19,7 +19,7 @@ static void cxSplineInit(cxAny pav)
 static cxVec2f cxSplinePointAt(cxSpline this,cxInt idx)
 {
     idx = CX_MIN(cxAnyArrayLength(this->points) - 1, CX_MAX(idx, 0));
-    return cxAnyArrayAt(this->points, idx, cxVec2f);
+    return *cxAnyArrayAt(this->points, idx, cxVec2f);
 }
 
 static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
@@ -94,7 +94,7 @@ cxSpline cxSplineCreate(cxAnyArray points)
 void cxSplineAppend(cxAny pav,cxVec2f pos)
 {
     cxSpline this = pav;
-    cxAnyArrayAppend(this->points, pos);
+    cxAnyArrayAppend(this->points, &pos);
 }
 
 

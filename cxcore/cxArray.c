@@ -66,6 +66,12 @@ void cxArrayAppends(cxArray array, cxArray data)
     }
 }
 
+void cxArrayInsert(cxArray array,cxAny any,cxInt index)
+{
+    utarray_insert(array->utArray, &any, index);
+    CX_RETAIN(any);
+}
+
 void cxArrayAppend(cxArray array, cxAny any)
 {
     utarray_push_back(array->utArray, &any);

@@ -22,13 +22,13 @@ CX_OBJECT_DEF(cxArray, cxObject)
     UT_array *utArray;
 CX_OBJECT_END(cxArray, cxObject)
 
-#define CX_ARRAY_FOREACH(_a_,_e_)                                                           \
-cxPointer *_e_ = NULL;                                                                      \
-while((_a_) != NULL && (_e_ = (cxPointer)utarray_next((_a_)->utArray, _e_)) != NULL)
+#define CX_ARRAY_FOREACH(_a_,_e_)                                               \
+cxPointer *_e_ = NULL;                                                          \
+if((_a_)!=NULL)while((_e_=(cxPointer)utarray_next((_a_)->utArray, _e_))!=NULL)
 
-#define CX_ARRAY_REVERSE(_a_,_e_)                                                           \
-cxPointer *_e_ = NULL;                                                                      \
-while((_a_) != NULL && (_e_ = (cxPointer)utarray_prev((_a_)->utArray, _e_)) != NULL)
+#define CX_ARRAY_REVERSE(_a_,_e_)                                               \
+cxPointer *_e_ = NULL;                                                          \
+if((_a_)!=NULL)while((_e_=(cxPointer)utarray_prev((_a_)->utArray, _e_))!=NULL)
 
 #define cxArrayLength(_a_) (((_a_) == NULL) ? 0 : utarray_len((_a_)->utArray))
 
@@ -43,6 +43,9 @@ void    cxArrayUpdate(cxArray array,cxAny any,cxInt index);
 void    cxArrayAppends(cxArray array, cxArray data);
 
 void    cxArrayAppend(cxArray array, cxAny any);
+
+//insert index before
+void    cxArrayInsert(cxArray array,cxAny any,cxInt index);
 
 cxInt cxArrayIndex(cxArray array,cxAny any);
 

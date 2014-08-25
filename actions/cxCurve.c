@@ -256,7 +256,7 @@ CX_OBJECT_TYPE(cxCurve, cxAction)
 CX_OBJECT_INIT(cxCurve, cxObject)
 {
     this->curves = CX_ALLOC(cxHash);
-    
+
     cxCurveRegister(this,"EaseIn",cxCurveEaseIn);
     cxCurveRegister(this,"EaseOut",cxCurveEaseOut);
     cxCurveRegister(this,"EaseInOut",cxCurveEaseInOut);

@@ -61,7 +61,7 @@ CX_OBJECT_FREE(cxJump, cxAction)
 }
 CX_OBJECT_TERM(cxJump, cxAction)
 
-cxJump cxJumpCreate(cxFloat duration,cxVec2f position,cxFloat height,cxUInt jumps)
+cxJump cxJumpCreate(cxFloat duration,cxVec2f position,cxFloat height,cxInt jumps)
 {
     cxJump this = CX_CREATE(cxJump);
     this->cxAction.duration = duration;
