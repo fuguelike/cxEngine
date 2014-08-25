@@ -64,7 +64,7 @@ CX_OBJECT_FREE(cxAction, cxObject)
     CX_EVENT_RELEASE(this->onIndex);
     CX_EVENT_RELEASE(this->onStart);
     CX_EVENT_RELEASE(this->onStop);
-    CX_EVENT_RELEASE(this->onStep);
+    CX_EVENT_RELEASE(this->onUpdate);
 }
 CX_OBJECT_TERM(cxAction, cxObject)
 
@@ -145,6 +145,8 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
 {
     cxAction this = pav;
     cxBool isExit = false;
+    //update
+    CX_EVENT_FIRE(this, onUpdate);
     //time scale
     if(this->actionMgr != NULL){
         cxActionMgr mgr = this->actionMgr;
@@ -155,11 +157,9 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //if pause
     if(this->pauseTime > 0){
         this->pauseTime -= dt;
-        CX_EVENT_FIRE(this, onStep);
         goto finished;
     }
     if(this->isPause){
-        CX_EVENT_FIRE(this, onStep);
         goto finished;
     }
     if(this->isExit){
@@ -178,7 +178,6 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //action delay
     this->delayElapsed += dt;
     if(this->delay > 0 && this->delayElapsed < this->delay){
-        CX_EVENT_FIRE(this, onStep);
         goto finished;
     }
     //for active
@@ -203,7 +202,6 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //wait exit
     if(this->duration < 0){
         CX_METHOD_RUN(this->Step,this,dt,time);
-        CX_EVENT_FIRE(this, onStep);
     }else if(this->duration == 0){
         isExit = CX_METHOD_GET(true, this->Exit, this);
     }else if(this->durationElapsed < this->duration){
@@ -211,7 +209,6 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->delta = time - this->prevTime;
         this->prevTime = time;
         CX_METHOD_RUN(this->Step,this,dt,time);
-        CX_EVENT_FIRE(this, onStep);
     }else{
         time = CX_METHOD_GET(1.0f, this->Curve,this,1.0f);
         this->delta = time - this->prevTime;
@@ -219,7 +216,6 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->durationElapsed = 0.0f;
         this->delayElapsed = 0.0f;
         CX_METHOD_RUN(this->Step,this,dt,1.0f);
-        CX_EVENT_FIRE(this, onStep);
         //check exit
         isExit = CX_METHOD_GET(true, this->Exit,this);
         this->isActive = false;

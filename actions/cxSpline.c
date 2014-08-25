@@ -13,15 +13,13 @@ static void cxSplineInit(cxAny pav)
 {
     cxSpline this = pav;
     CX_ASSERT(this->cxAction.view != NULL, "view not set");
-    this->delta = 1.0f/((cxFloat)cxArrayLength(this->points) - 1.0f);
+    this->delta = 1.0f/((cxFloat)cxAnyArrayLength(this->points) - 1.0f);
 }
 
 static cxVec2f cxSplinePointAt(cxSpline this,cxInt idx)
 {
-    idx = CX_MIN(cxArrayLength(this->points) - 1, CX_MAX(idx, 0));
-    cxMemory data = cxArrayAtIndex(this->points, idx);
-    CX_ASSERT(data != NULL, "num error");
-    return *((cxVec2f *)data->data);
+    idx = CX_MIN(cxAnyArrayLength(this->points) - 1, CX_MAX(idx, 0));
+    return cxAnyArrayAt(this->points, idx, cxVec2f);
 }
 
 static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
@@ -30,7 +28,7 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
     cxSpline this = pav;
     cxFloat lt = 0;
     if (time >= 1.0f){
-        index = cxArrayLength(this->points) - 1;
+        index = cxAnyArrayLength(this->points) - 1;
         lt = 1.0f;
     }else{
         index = time / this->delta;
@@ -52,7 +50,7 @@ static void cxSplineReset(cxAny pav)
 {
     cxSpline this = pav;
     this->index = -1;
-    cxArrayClean(this->points);
+    cxAnyArrayClean(this->points);
 }
 
 CX_SETTER_DEF(cxSpline, points)
@@ -76,7 +74,7 @@ CX_OBJECT_INIT(cxSpline, cxAction)
     CX_METHOD_SET(this->cxAction.Init, cxSplineInit);
     CX_METHOD_SET(this->cxAction.Step, cxSplineStep);
     CX_METHOD_SET(this->cxAction.Reset, cxSplineReset);
-    this->points = CX_ALLOC(cxArray);
+    this->points = cxAnyArrayAlloc(cxVec2f);
 }
 CX_OBJECT_FREE(cxSpline, cxAction)
 {
@@ -85,22 +83,18 @@ CX_OBJECT_FREE(cxSpline, cxAction)
 }
 CX_OBJECT_TERM(cxSpline, cxAction)
 
-cxSpline cxSplineCreate(cxPoints *points)
+cxSpline cxSplineCreate(cxAnyArray points)
 {
     CX_ASSERT(points != NULL, "points null");
     cxSpline this = CX_CREATE(cxSpline);
-    for(cxInt i=0; i < points->num;i++){
-        cxSplineAppend(this, points->vs[i]);
-    }
+    CX_RETAIN_SWAP(this->points, points);
     return this;
 }
 
 void cxSplineAppend(cxAny pav,cxVec2f pos)
 {
     cxSpline this = pav;
-    cxMemory data = cxMemoryCreate(sizeof(cxVec2f));
-    *((cxVec2f *)data->data) = pos;
-    cxArrayAppend(this->points, data);
+    cxAnyArrayAppend(this->points, pos);
 }
 
 

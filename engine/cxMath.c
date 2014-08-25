@@ -79,16 +79,11 @@ cxVec2f cxVec2fValue(cxVec2fRange rv)
     return pos;
 }
 
-cxBool cxBox2fContainPoint(cxBox4f box,cxVec2f pos)
-{
-    return (pos.x >= box.l && pos.x <= box.r && pos.y >= box.b && pos.y <= box.t);
-}
-
-cxBool cxPolygonContainPoint(cxPoints *polygon,cxVec2f tp)
+cxBool cxPointsContainPoint(cxAnyArray polygon,cxVec2f tp)
 {
     cxBool c = false;
-    cxInt num = polygon->num;
-    const cxVec2f *vs = polygon->vs;
+    cxInt num = cxAnyArrayLength(polygon);
+    const cxVec2f *vs = cxAnyArrayPtr(polygon, cxVec2f);
     for (int i = 0,j = num-1; i < num; j = i++) {
         if(!((vs[i].y > tp.y) != (vs[j].y>tp.y))){
             continue;
@@ -98,6 +93,11 @@ cxBool cxPolygonContainPoint(cxPoints *polygon,cxVec2f tp)
         }
     }
     return c;
+}
+
+cxBool cxBox2fContainPoint(cxBox4f box,cxVec2f pos)
+{
+    return (pos.x >= box.l && pos.x <= box.r && pos.y >= box.b && pos.y <= box.t);
 }
 
 cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t)

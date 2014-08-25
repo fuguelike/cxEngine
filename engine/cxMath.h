@@ -170,11 +170,6 @@ typedef struct {
 #define cxBoxVec2fFromBox4f(box) (cxBoxVec2f){{(box).l,(box).t},{(box).r,(box).t},{(box).r,(box).b},{(box).l,(box).b}}
 
 typedef struct {
-    cxVec2f *vs;
-    cxInt num;
-}cxPoints;
-
-typedef struct {
     cxVec3f lt;
     cxVec3f lb;
     cxVec3f rt;
@@ -245,6 +240,8 @@ typedef struct {
 cxVec2f cxVec2fValue(cxVec2fRange rv);
 #define cxVec2fRangeValue(vx,vy,rx,ry)    (cxVec2fRange){{vx,vy},{rx,ry}}
 
+cxBool cxPointsContainPoint(cxAnyArray polygon,cxVec2f tp);
+
 cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t);
 
 cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t);
@@ -252,8 +249,6 @@ cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t);
 cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t);
 
 cxBool cxBox2fContainPoint(cxBox4f box,cxVec2f pos);
-
-cxBool cxPolygonContainPoint(cxPoints *polygon,cxVec2f tp);
 
 //if r1 contains r2 return true
 cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2);

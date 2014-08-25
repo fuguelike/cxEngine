@@ -14,7 +14,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxSpline, cxAction)
-    cxArray points;
+    cxAnyArray points;
     cxFloat tension;
     cxFloat delta;
     cxInt index;
@@ -23,7 +23,7 @@ CX_OBJECT_END(cxSpline, cxAction)
 
 void cxSplineAppend(cxAny pav,cxVec2f pos);
 
-cxSpline cxSplineCreate(cxPoints *points);
+cxSpline cxSplineCreate(cxAnyArray points);
 
 CX_C_END
 

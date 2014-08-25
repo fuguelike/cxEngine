@@ -12,6 +12,7 @@
 #include "cxCore.h"
 #include "cxMemPool.h"
 #include "cxArray.h"
+#include "cxAnyArray.h"
 #include "cxHash.h"
 #include "cxList.h"
 #include "cxStack.h"

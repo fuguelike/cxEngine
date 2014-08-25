@@ -27,7 +27,6 @@ static void cxAtlasVAODraw(void *pview)
 static void cxAtlasVBODraw(cxAny pview)
 {
     cxAtlas this = pview;
-    
     glBindBuffer(GL_ARRAY_BUFFER, this->vboid[0]);
     if (this->isDirty){
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(cxBoxPoint) * this->number, this->boxes);
@@ -322,8 +321,8 @@ static void cxAtlasInitVBO(cxAny pview)
 
 void cxAtlasSetNumber(cxAny pview,cxInt number)
 {
-    CX_ASSERT(number >= 0, "number must >= 0");
     cxAtlas this = pview;
+    CX_ASSERT(number >= 0 && number <= this->capacity, "number must >= 0 < capacity");
     this->isDirty = true;
     this->number = number;
 }

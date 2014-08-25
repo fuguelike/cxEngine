@@ -16,7 +16,7 @@ CX_C_BEGIN
 
 //cxPointer element
 
-typedef int (*cxArrayCmpFunc)(cxPointer *lp,cxPointer *rp);
+typedef int (*cxArrayCmpFunc)(cxConstAny lv,cxConstAny rv);
 
 CX_OBJECT_DEF(cxArray, cxObject)
     UT_array *utArray;

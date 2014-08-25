@@ -124,6 +124,7 @@
 		83CEB63D193EB58300D3F7BF /* aes_ecb.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CEB634193EB58300D3F7BF /* aes_ecb.c */; };
 		83CEB63E193EB58300D3F7BF /* aes_ige.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CEB635193EB58300D3F7BF /* aes_ige.c */; };
 		83CEB63F193EB58300D3F7BF /* aes_ofb.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CEB637193EB58300D3F7BF /* aes_ofb.c */; };
+		83D199A419AADCA500A297A8 /* cxAnyArray.c in Sources */ = {isa = PBXBuildFile; fileRef = 83D199A219AADCA500A297A8 /* cxAnyArray.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -377,6 +378,8 @@
 		83CEB636193EB58300D3F7BF /* aes_locl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes_locl.h; sourceTree = "<group>"; };
 		83CEB637193EB58300D3F7BF /* aes_ofb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aes_ofb.c; sourceTree = "<group>"; };
 		83CEB638193EB58300D3F7BF /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
+		83D199A219AADCA500A297A8 /* cxAnyArray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAnyArray.c; sourceTree = "<group>"; };
+		83D199A319AADCA500A297A8 /* cxAnyArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAnyArray.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -742,6 +745,8 @@
 				83B995F01925C6C300FD6BC1 /* cxType.h */,
 				833642B91925E4E900223302 /* cxMemory.c */,
 				833642BA1925E4E900223302 /* cxMemory.h */,
+				83D199A219AADCA500A297A8 /* cxAnyArray.c */,
+				83D199A319AADCA500A297A8 /* cxAnyArray.h */,
 			);
 			path = cxcore;
 			sourceTree = "<group>";
@@ -815,6 +820,7 @@
 				8341C65018227DF30045A66F /* utility.c in Sources */,
 				83B995D51925C5A100FD6BC1 /* cxPlayer.c in Sources */,
 				833642BB1925E4E900223302 /* cxMemory.c in Sources */,
+				83D199A419AADCA500A297A8 /* cxAnyArray.c in Sources */,
 				833CA5491925DB5E0013630A /* cxTexturePVR.c in Sources */,
 				83B995FB1925C6C300FD6BC1 /* cxType.c in Sources */,
 				833CA5551925DB5E0013630A /* cxWindow.c in Sources */,

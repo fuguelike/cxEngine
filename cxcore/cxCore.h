@@ -130,6 +130,7 @@ typedef int16_t         cxInt16;
 typedef int32_t         cxInt32;
 typedef int64_t         cxInt64;
 
+typedef const void *    cxConstAny;
 typedef void *          cxPointer;
 typedef void *          cxAny;
 typedef size_t          cxSize;
