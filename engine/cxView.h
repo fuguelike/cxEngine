@@ -193,10 +193,10 @@ void cxViewSort(cxAny pview);
 
 void cxViewSetVisible(cxAny pview,cxBool visible);
 
-void cxViewSetPosImp(cxAny pview,cxVec2f pos);
-
 void cxViewSetPos(cxAny pview,cxVec2f pos);
 
+// -0.5 <-> +0.5
+// -width/2 <-> width/2
 void cxViewSetAnchor(cxAny pview,cxVec2f anchor);
 
 void cxViewSetScale(cxAny pview,cxVec2f scale);
