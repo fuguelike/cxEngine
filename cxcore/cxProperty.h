@@ -27,7 +27,7 @@ typedef cxAny (*cxPropertyGetter)(cxAny);
 
 #define CX_PROPERTY_SETTER(_t_,_p_)                     \
 do{                                                     \
-    cxProperty p = cxTypeProperty(this,#_p_);           \
+    cxProperty p = cxTypeSetProperty(this,#_p_);        \
     p->setter = (cxPropertySetter)CX_SETTER(_t_,_p_);   \
 }while(0)
 

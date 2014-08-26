@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxScale, cxAction)
     cxVec2f newScale;
 CX_OBJECT_END(cxScale, cxAction)
 
-cxScale cxScaleCreate(cxFloat duration,cxVec2f scale);
+cxScale cxScaleCreate(cxFloat time,cxVec2f scale);
 
 void cxScaleSetScale(cxAny pav,cxVec2f scale);
 

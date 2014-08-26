@@ -51,9 +51,10 @@ CX_OBJECT_FREE(cxTint, cxAction)
 }
 CX_OBJECT_TERM(cxTint, cxAction)
 
-cxTint cxTintCreate(cxFloat duration,cxColor4f color)
+cxTint cxTintCreate(cxFloat time,cxColor4f color)
 {
     cxTint this = CX_CREATE(cxTint);
     this->color = color;
+    this->cxAction.time = time;
     return this;
 }

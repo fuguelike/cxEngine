@@ -9,9 +9,9 @@
 #include "cxAction.h"
 #include "cxActionMgr.h"
 
-CX_SETTER_DEF(cxAction, duration)
+CX_SETTER_DEF(cxAction, time)
 {
-    this->duration = cxJsonToDouble(value, this->duration);
+    this->time = cxJsonToDouble(value, this->time);
 }
 CX_SETTER_DEF(cxAction, delay)
 {
@@ -44,7 +44,7 @@ CX_SETTER_DEF(cxAction, index)
 
 CX_OBJECT_TYPE(cxAction, cxObject)
 {
-    CX_PROPERTY_SETTER(cxAction, duration);
+    CX_PROPERTY_SETTER(cxAction, time);
     CX_PROPERTY_SETTER(cxAction, delay);
     CX_PROPERTY_SETTER(cxAction, scale);
     CX_PROPERTY_SETTER(cxAction, curve);
@@ -99,10 +99,10 @@ void cxActionSetView(cxAny pav,cxAny pview)
     this->view = pview;
 }
 
-void cxActionSetDuration(cxAny pav,cxFloat time)
+void cxActionSetTime(cxAny pav,cxFloat time)
 {
     cxAction this = pav;
-    this->duration = time;
+    this->time = time;
 }
 
 void cxActionSetScale(cxAny pav,cxFloat scale)
@@ -111,10 +111,10 @@ void cxActionSetScale(cxAny pav,cxFloat scale)
     this->scale = scale;
 }
 
-void cxActionSetDurationInit(cxAny pav,cxFloat time)
+void cxActionSetTimeInit(cxAny pav,cxFloat time)
 {
     cxAction this = pav;
-    this->durationInit = time;
+    this->timeInit = time;
 }
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
@@ -171,7 +171,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         CX_ASSERT(this->view != NULL, "action viewptr null");
         this->prevTime = 0;
         this->delayElapsed = 0;
-        this->durationElapsed = this->durationInit;
+        this->timeElapsed = this->timeInit;
         CX_METHOD_RUN(this->Init, this);
         CX_EVENT_FIRE(this, onStart);
     }
@@ -185,8 +185,8 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->isActive = true;
         CX_METHOD_RUN(this->Active, this);
     }
-    this->durationElapsed += dt;
-    cxFloat value = this->durationElapsed/CX_MAX(this->duration, FLT_EPSILON);
+    this->timeElapsed += dt;
+    cxFloat value = this->timeElapsed/CX_MAX(this->time, FLT_EPSILON);
     cxFloat time = kmClamp(value, 0.0f, 1.0f);
     //split index event fire
     cxInt index = -1;
@@ -200,11 +200,11 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         CX_EVENT_FIRE(this,onIndex);
     }
     //wait exit
-    if(this->duration < 0){
+    if(this->time < 0){
         CX_METHOD_RUN(this->Step,this,dt,time);
-    }else if(this->duration == 0){
+    }else if(this->time == 0){
         isExit = CX_METHOD_GET(true, this->Exit, this);
-    }else if(this->durationElapsed < this->duration){
+    }else if(this->timeElapsed < this->time){
         time = CX_METHOD_GET(time, this->Curve, this, time);
         this->delta = time - this->prevTime;
         this->prevTime = time;
@@ -213,7 +213,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         time = CX_METHOD_GET(1.0f, this->Curve,this,1.0f);
         this->delta = time - this->prevTime;
         this->prevTime = 0;
-        this->durationElapsed = 0.0f;
+        this->timeElapsed = 0.0f;
         this->delayElapsed = 0.0f;
         CX_METHOD_RUN(this->Step,this,dt,1.0f);
         //check exit
@@ -242,7 +242,7 @@ void cxActionReset(cxAny pav)
     this->isFirst = false;
     this->isExit = false;
     this->index = -1;
-    this->durationElapsed = 0;
+    this->timeElapsed = 0;
     this->delayElapsed = 0;
     CX_METHOD_RUN(this->Reset, this);
 }

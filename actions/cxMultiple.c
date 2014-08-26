@@ -67,7 +67,7 @@ static cxBool cxMultipleExit(cxAny pav)
 static void cxMultipleStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     //    cxActionRoot this = pav;
-    //    CX_LOGGER("%f %f",this->super.duration,time);
+    //    CX_LOGGER("%f %f",this->time,time);
 }
 
 CX_SETTER_DEF(cxMultiple, settype)

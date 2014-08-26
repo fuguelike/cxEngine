@@ -37,7 +37,7 @@ static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f targetPos = cxViewPosition(this->target);
     cxVec2f currentPos = cxViewPosition(this->cxAction.view);
     this->angle = cxVec2f2PAngle(targetPos,currentPos);
-    this->speed = CX_METHOD_GET(this->init, this->Speed,pav,this->cxAction.durationElapsed);
+    this->speed = CX_METHOD_GET(this->init, this->Speed,pav,this->cxAction.timeElapsed);
     cxFloat s = dt * this->speed;
     currentPos.x += (s * cosf(this->angle));
     currentPos.y += (s * sinf(this->angle));
@@ -57,7 +57,7 @@ CX_OBJECT_TYPE(cxFollow, cxAction)
 }
 CX_OBJECT_INIT(cxFollow, cxAction)
 {
-    this->cxAction.duration = -1;
+    this->cxAction.time = -1;
     CX_METHOD_SET(this->cxAction.Init, cxFollowInit);
     CX_METHOD_SET(this->cxAction.Step, cxFollowStep);
     CX_METHOD_SET(this->Exit, cxFollowDefaultExit);

@@ -21,7 +21,7 @@ CX_OBJECT_DEF(cxJump, cxAction)
     cxVec2f prevPos;
 CX_OBJECT_END(cxJump, cxAction)
 
-cxJump cxJumpCreate(cxFloat duration,cxVec2f position,cxFloat height,cxInt jumps);
+cxJump cxJumpCreate(cxFloat time,cxVec2f position,cxFloat height,cxInt jumps);
 
 CX_C_END
 

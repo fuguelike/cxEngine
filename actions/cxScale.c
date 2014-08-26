@@ -52,10 +52,10 @@ void cxScaleSetScale(cxAny pav,cxVec2f scale)
     this->newScale = scale;
 }
 
-cxScale cxScaleCreate(cxFloat duration,cxVec2f scale)
+cxScale cxScaleCreate(cxFloat time,cxVec2f scale)
 {
     cxScale this = CX_CREATE(cxScale);
-    this->cxAction.duration = duration;
+    this->cxAction.time = time;
     this->newScale = scale;
     return this;
 }

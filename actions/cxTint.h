@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxTint, cxAction)
     cxColor4f color;
 CX_OBJECT_END(cxTint, cxAction)
 
-cxTint cxTintCreate(cxFloat duration,cxColor4f color);
+cxTint cxTintCreate(cxFloat time,cxColor4f color);
 
 CX_C_END
 

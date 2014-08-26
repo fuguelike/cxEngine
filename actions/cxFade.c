@@ -43,10 +43,10 @@ CX_OBJECT_FREE(cxFade, cxAction)
 }
 CX_OBJECT_TERM(cxFade, cxAction)
 
-cxFade cxFadeCreate(cxFloat duration,cxFloat alpha)
+cxFade cxFadeCreate(cxFloat time,cxFloat alpha)
 {
     cxFade this = CX_CREATE(cxFade);
-    this->cxAction.duration = duration;
+    this->cxAction.time = time;
     this->alpha = alpha;
     return this;
 }

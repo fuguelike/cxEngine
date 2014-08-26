@@ -56,10 +56,10 @@ CX_OBJECT_FREE(cxRotate, cxAction)
 }
 CX_OBJECT_TERM(cxRotate, cxAction)
 
-cxRotate cxRotateCreate(cxFloat duration,cxVec3f raxis,cxFloat newAngle)
+cxRotate cxRotateCreate(cxFloat time,cxVec3f raxis,cxFloat newAngle)
 {
     cxRotate this = CX_CREATE(cxRotate);
-    this->cxAction.duration = duration;
+    this->cxAction.time = time;
     this->raxis = raxis;
     this->newAngle = newAngle;
     return this;

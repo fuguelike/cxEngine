@@ -24,9 +24,9 @@ CX_OBJECT_DEF(cxAction, cxObject)
     cxFloat prevTime;
     cxFloat delta;
     cxFloat delayElapsed;
-    cxFloat durationInit;
-    cxFloat duration;
-    cxFloat durationElapsed;
+    cxFloat timeInit;
+    cxFloat time;
+    cxFloat timeElapsed;
     cxFloat pauseTime;
     cxBool isExit;
     cxBool isPause;
@@ -68,17 +68,15 @@ void cxActionSetScale(cxAny pav,cxFloat scale);
 
 cxBool cxActionForever(cxAny pav);
 
-void cxActionSetDuration(cxAny pav,cxFloat time);
+void cxActionSetTime(cxAny pav,cxFloat time);
 
-void cxActionSetDurationInit(cxAny pav,cxFloat time);
+void cxActionSetTimeInit(cxAny pav,cxFloat time);
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve);
 
 cxUInt cxActionGetId(cxAny pav);
 
 void cxActionSetId(cxAny pav,cxUInt actionId);
-
-void cxActionSetDuration(cxAny pav,cxFloat duration);
 
 void cxActionSetDelay(cxAny pav,cxFloat delay);
 

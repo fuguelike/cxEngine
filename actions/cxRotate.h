@@ -20,7 +20,7 @@ CX_OBJECT_DEF(cxRotate, cxAction)
     cxFloat oldAngle;
 CX_OBJECT_END(cxRotate, cxAction)
 
-cxRotate cxRotateCreate(cxFloat duration,cxVec3f raxis,cxFloat newAngle);
+cxRotate cxRotateCreate(cxFloat time,cxVec3f raxis,cxFloat newAngle);
 
 CX_C_END
 

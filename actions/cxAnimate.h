@@ -23,11 +23,11 @@ CX_OBJECT_DEF(cxAnimate, cxAction)
     cxBool cached;
     cxInt index;
     cxArray list;
-    cxFloat duration;
+    cxFloat time;
     CX_EVENT_ALLOC(onFrame);
 CX_OBJECT_END(cxAnimate, cxAction)
 
-cxAnimate cxAnimateCreate(cxFloat duration,cxArray list);
+cxAnimate cxAnimateCreate(cxFloat time,cxArray list);
 
 CX_C_END
 

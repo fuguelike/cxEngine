@@ -19,7 +19,7 @@ static void cxTimeLineInit(cxAny pav)
         cxActionStop(this);
         return;
     }
-    this->cxAction.duration = cxNumberToFloat(last) + 1.0f;
+    this->cxAction.time = cxNumberToFloat(last) + 1.0f;
     this->index = -1;
 }
 
@@ -30,7 +30,7 @@ static void cxTimeLineStep(cxAny pav,cxFloat dt,cxFloat time)
     for(cxInt i = this->index + 1; i < count; i++){
         cxNumber num = cxArrayAtIndex(this->times, i);
         cxFloat time = cxNumberToFloat(num);
-        if(this->cxAction.durationElapsed >= time){
+        if(this->cxAction.timeElapsed >= time){
             this->index = i;
             CX_EVENT_FIRE(this, onTime);
             continue;

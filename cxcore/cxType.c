@@ -10,10 +10,10 @@
 
 static cxHash types;
 
-static void cxInitTypes()
+void cxTypesInit()
 {
+    types = CX_ALLOC(cxHash);
     CX_TYPE_DEF(cxObject);
-    //register core
     CX_TYPE_DEF(cxType);
     CX_TYPE_DEF(cxProperty);
     CX_TYPE_DEF(cxMemPool);
@@ -26,12 +26,6 @@ static void cxInitTypes()
     CX_TYPE_DEF(cxMessage);
 }
 
-void cxTypesInit()
-{
-    types = CX_ALLOC(cxHash);
-    cxInitTypes();
-}
-
 void cxTypesFree()
 {
     CX_RELEASE(types);
@@ -40,6 +34,14 @@ void cxTypesFree()
 cxType cxTypesGet(cxConstType typeName)
 {
     return cxHashGet(types, cxHashStrKey(typeName));
+}
+
+cxProperty cxTypeSetProperty(cxType this,cxConstChars key)
+{
+    cxProperty p = CX_ALLOC(cxProperty);
+    cxHashSet(this->properties, cxHashStrKey(key), p);
+    CX_RELEASE(p);
+    return p;
 }
 
 cxProperty cxTypeProperty(cxType this,cxConstChars key)
@@ -52,9 +54,7 @@ cxProperty cxTypeProperty(cxType this,cxConstChars key)
         curr = curr->superType;
     }
     if(p == NULL){
-        p = CX_ALLOC(cxProperty);
-        cxHashSet(this->properties, cxHashStrKey(key), p);
-        CX_RELEASE(p);
+        CX_WARN("type %s,proprty %s not register",this->typeName,key);
     }
     return p;
 }

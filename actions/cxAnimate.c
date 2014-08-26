@@ -64,12 +64,12 @@ static void cxAnimateInit(cxAny pav)
 {
     cxAnimate this = pav;
     this->index = 0;
-    this->cxAction.duration = this->duration;
-    cxFloat dt = this->duration / (cxFloat)cxArrayLength(this->list);
+    this->cxAction.time = this->time;
+    cxFloat dt = this->time / (cxFloat)cxArrayLength(this->list);
     cxFloat i = 0;
     CX_ARRAY_FOREACH(this->list, ele){
         cxAnimateItem item = cxArrayObject(ele);
-        this->cxAction.duration += item->delay;
+        this->cxAction.time += item->delay;
         i += dt  + item->delay;
         item->time = i;
     }
@@ -83,7 +83,7 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_ARRAY_FOREACH(this->list, e){
         i++;
         cxAnimateItem item = cxArrayObject(e);
-        if(this->cxAction.durationElapsed > item->time){
+        if(this->cxAction.timeElapsed > item->time){
             continue;
         }
         if(this->index == i){
@@ -105,13 +105,13 @@ static void cxAnimateReset(cxAny pav)
 {
     cxAnimate this = pav;
     this->index = 0;
-    this->cxAction.duration = this->duration;
+    this->cxAction.time = this->time;
 }
 
-CX_SETTER_DEF(cxAnimate, duration)
+CX_SETTER_DEF(cxAnimate, time)
 {
-    this->duration = cxJsonToDouble(value, this->duration);
-    this->cxAction.duration = this->duration;
+    this->time = cxJsonToDouble(value, this->time);
+    this->cxAction.time = this->time;
 }
 CX_SETTER_DEF(cxAnimate, frames)
 {
@@ -134,7 +134,7 @@ CX_SETTER_DEF(cxAnimate, frames)
 
 CX_OBJECT_TYPE(cxAnimate, cxAction)
 {
-    CX_PROPERTY_SETTER(cxAnimate, duration);
+    CX_PROPERTY_SETTER(cxAnimate, time);
     CX_PROPERTY_SETTER(cxAnimate, frames);
 }
 CX_OBJECT_INIT(cxAnimate, cxAction)
@@ -152,11 +152,11 @@ CX_OBJECT_FREE(cxAnimate, cxAction)
 }
 CX_OBJECT_TERM(cxAnimate, cxAction)
 
-cxAnimate cxAnimateCreate(cxFloat duration,cxArray list)
+cxAnimate cxAnimateCreate(cxFloat time,cxArray list)
 {
     cxAnimate this = CX_CREATE(cxAnimate);
     CX_RETAIN_SWAP(this->list, list);
-    this->duration = duration;
+    this->time = time;
     return this;
 }
 

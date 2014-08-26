@@ -32,13 +32,13 @@ static void cxParabolaStep(cxAny pav,cxFloat dt,cxFloat time)
     kmVec2Add(&tmp, &tmp, &this->pos);
     cxViewSetPos(view, tmp);
     this->time += dt;
-    this->cxAction.duration -= dt;
+    this->cxAction.time -= dt;
 }
 
 static cxBool cxParabolaExit(cxAny pav)
 {
     cxParabola this = pav;
-    return this->cxAction.duration != -1 && this->time >= this->cxAction.duration;
+    return this->cxAction.time != -1 && this->time >= this->cxAction.time;
 }
 
 CX_SETTER_DEF(cxParabola, speed)
@@ -61,7 +61,7 @@ CX_OBJECT_INIT(cxParabola, cxAction)
     CX_METHOD_SET(this->cxAction.Init, cxParabolaInit);
     CX_METHOD_SET(this->cxAction.Step, cxParabolaStep);
     this->gravity = cxVec2fv(0, -1000);
-    this->cxAction.duration = -1;
+    this->cxAction.time = -1;
 }
 CX_OBJECT_FREE(cxParabola, cxAction)
 {

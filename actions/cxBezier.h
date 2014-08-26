@@ -22,7 +22,7 @@ CX_OBJECT_DEF(cxBezier, cxAction)
     cxVec2f prev;
 CX_OBJECT_END(cxBezier, cxAction)
 
-cxBezier cxBezierCreate(cxFloat duration,cxVec2f epos,cxVec2f cpos1,cxVec2f cpos2);
+cxBezier cxBezierCreate(cxFloat time,cxVec2f epos,cxVec2f cpos1,cxVec2f cpos2);
 
 CX_C_END
 

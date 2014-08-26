@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxFade, cxAction)
     cxFloat start;
 CX_OBJECT_END(cxFade, cxAction)
 
-cxFade cxFadeCreate(cxFloat duration,cxFloat alpha);
+cxFade cxFadeCreate(cxFloat time,cxFloat alpha);
 
 CX_C_END
 

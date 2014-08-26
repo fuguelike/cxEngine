@@ -27,7 +27,7 @@ static cxBool cxTimerExit(cxAny pav)
 void cxTimerReset(cxAny timer)
 {
     cxTimer this = timer;
-    this->cxAction.durationElapsed = 0;
+    this->cxAction.timeElapsed = 0;
 }
 
 CX_SETTER_DEF(cxTimer, repeat)
@@ -64,7 +64,7 @@ void cxTimerSetBegin(cxAny pav,cxBool isBegin)
 cxTimer cxTimerCreate(cxFloat freq,cxInt repeat)
 {
     cxTimer this = CX_CREATE(cxTimer);
-    this->cxAction.duration  = freq;
+    this->cxAction.time  = freq;
     this->repeat = repeat;
     return this;
 }

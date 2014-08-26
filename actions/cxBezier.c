@@ -43,9 +43,26 @@ static void cxBezierStep(cxAny pav,cxFloat dt,cxFloat time)
     this->prev = npos;
 }
 
+CX_SETTER_DEF(cxBezier, epos)
+{
+    this->epos = cxJsonToVec2f(value, this->epos);
+}
+
+CX_SETTER_DEF(cxBezier, cpos1)
+{
+    this->cpos1 = cxJsonToVec2f(value, this->cpos1);
+}
+
+CX_SETTER_DEF(cxBezier, cpos2)
+{
+    this->cpos2 = cxJsonToVec2f(value, this->cpos2);
+}
+
 CX_OBJECT_TYPE(cxBezier, cxAction)
 {
-    
+    CX_PROPERTY_SETTER(cxBezier, epos);
+    CX_PROPERTY_SETTER(cxBezier, cpos1);
+    CX_PROPERTY_SETTER(cxBezier, cpos2);
 }
 CX_OBJECT_INIT(cxBezier, cxAction)
 {
@@ -58,10 +75,10 @@ CX_OBJECT_FREE(cxBezier, cxAction)
 }
 CX_OBJECT_TERM(cxBezier, cxAction)
 
-cxBezier cxBezierCreate(cxFloat duration,cxVec2f epos,cxVec2f cpos1,cxVec2f cpos2)
+cxBezier cxBezierCreate(cxFloat time,cxVec2f epos,cxVec2f cpos1,cxVec2f cpos2)
 {
     cxBezier this = CX_CREATE(cxBezier);
-    cxActionSetDuration(this, duration);
+    cxActionSetTime(this, time);
     this->epos = epos;
     this->cpos1 = cpos1;
     this->cpos2 = cpos2;

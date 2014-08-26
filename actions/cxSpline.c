@@ -94,11 +94,11 @@ CX_OBJECT_FREE(cxSpline, cxAction)
 }
 CX_OBJECT_TERM(cxSpline, cxAction)
 
-cxSpline cxSplineCreate(cxFloat duration,cxAnyArray points)
+cxSpline cxSplineCreate(cxFloat time,cxAnyArray points)
 {
     CX_ASSERT(points != NULL, "points null");
     cxSpline this = CX_CREATE(cxSpline);
-    cxActionSetDuration(this, duration);
+    cxActionSetTime(this, time);
     CX_RETAIN_SWAP(this->points, points);
     return this;
 }

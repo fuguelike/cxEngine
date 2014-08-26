@@ -27,6 +27,8 @@ cxAny cxObjectCreateWithType(cxConstType type);
 
 cxType cxTypesGet(cxConstType type);
 
+cxProperty cxTypeSetProperty(cxType this,cxConstChars key);
+
 cxProperty cxTypeProperty(cxType this,cxConstChars key);
 
 void cxTypeSetSuper(cxType type,cxType super);

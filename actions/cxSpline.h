@@ -25,7 +25,7 @@ CX_OBJECT_END(cxSpline, cxAction)
 
 void cxSplineAppend(cxAny pav,cxVec2f pos);
 
-cxSpline cxSplineCreate(cxFloat duration, cxAnyArray points);
+cxSpline cxSplineCreate(cxFloat time, cxAnyArray points);
 
 CX_C_END
 
