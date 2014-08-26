@@ -287,9 +287,11 @@ CX_SETTER_DEF(cxParticle, texture)
     cxJson keys = cxJsonArray(value, "keys");
     cxInt keylen = cxJsonArrayLength(keys);
     CX_RETURN(keylen == 0);
+    //
     CX_RETAIN_SWAP(this->boxtexs, cxMemoryCreate(sizeof(cxBoxTex2f) * keylen));
     this->boxtexs->number = keylen;
     CX_METHOD_SET(this->GetBoxTex, cxParticleGetBoxTex);
+    //
     CX_JSON_ARRAY_EACH_BEG(keys, item)
     {
         cxBoxTex2f *boxs = this->boxtexs->data;
