@@ -103,6 +103,9 @@ CX_SETTER_DEF(cxView, resizing)
     if(cxConstCharsHas(mask, "height")){
         this->autoMask |= cxViewAutoResizeHeight;
     }
+    if(cxConstCharsHas(mask, "outside")){
+        this->autoMask |= cxViewAutoOutside;
+    }
     if(cxConstCharsHas(mask, "fill")){
         this->autoMask = cxViewAutoResizeFill;
     }
@@ -739,11 +742,19 @@ void cxViewAutoResizing(cxAny pview)
     }else if(mask & cxViewAutoResizeLeft){
         pos.x  = -parent->size.w/2.0f;
         pos.x += size.w * (this->anchor.x + 0.5f) * scale.x;
-        pos.x += this->autoBox.l;
+        if(mask & cxViewAutoOutside){
+            pos.x -= (this->autoBox.l + size.w);
+        }else{
+            pos.x += this->autoBox.l;
+        }
     }else if(mask & cxViewAutoResizeRight){
         pos.x = parent->size.w/2.0f;
         pos.x -= size.w * (0.5f - this->anchor.x) * scale.x;
-        pos.x -= this->autoBox.r;
+        if(mask & cxViewAutoOutside){
+            pos.x += (this->autoBox.r + size.w);
+        }else{
+            pos.x -= this->autoBox.r;
+        }
     }
     //top bottom
     if((mask & cxViewAutoResizeTop) && (mask & cxViewAutoResizeBottom)){
@@ -754,11 +765,19 @@ void cxViewAutoResizing(cxAny pview)
     }else if(mask & cxViewAutoResizeTop){
         pos.y = parent->size.h/2.0f;
         pos.y -= size.h * (0.5f - this->anchor.y) * scale.y;
-        pos.y -= this->autoBox.t;
+        if(mask & cxViewAutoOutside){
+            pos.y += (this->autoBox.t + size.h);
+        }else{
+            pos.y -= this->autoBox.t;
+        }
     }else if(mask & cxViewAutoResizeBottom){
         pos.y  = -parent->size.h/2.0f;
         pos.y += size.h * (this->anchor.y + 0.5) * scale.y;
-        pos.y += this->autoBox.b;
+        if(mask & cxViewAutoOutside){
+            pos.y -= (this->autoBox.b + size.h);
+        }else{
+            pos.y += this->autoBox.b;
+        }
     }
     //update pos and size
     cxViewSetPos(this, pos);

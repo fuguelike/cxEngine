@@ -29,6 +29,7 @@ typedef enum {
     cxViewAutoResizeRightTop    = cxViewAutoResizeTop | cxViewAutoResizeRight,
     cxViewAutoResizeRightBottom = cxViewAutoResizeBottom | cxViewAutoResizeRight,
     cxViewAutoResizeFill        = cxViewAutoResizeWidth | cxViewAutoResizeHeight,
+    cxViewAutoOutside           = 1 << 16
 }cxViewAutoResizeMask;
 
 typedef enum{

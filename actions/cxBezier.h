@@ -14,9 +14,9 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxBezier, cxAction)
-    cxVec2f epos;
-    cxVec2f cpos1;
-    cxVec2f cpos2;
+    cxVec2f epos;   //end point
+    cxVec2f cpos1;  //controller point1
+    cxVec2f cpos2;  //controller point2
     cxVec2f from;
     cxVec2f diff;
     cxVec2f prev;
