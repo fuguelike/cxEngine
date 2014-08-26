@@ -27,8 +27,8 @@ static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
     kmVec2Add(&this->startPos, &diff, &this->startPos);
     cxVec2f nPos;
     kmVec2Add(&nPos, &this->startPos, &cxVec2fv(x, y));
-    this->prevPos = nPos;
     cxViewSetPos(this->cxAction.view, nPos);
+    this->prevPos = nPos;
 }
 
 CX_SETTER_DEF(cxJump, position)

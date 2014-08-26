@@ -53,6 +53,7 @@
 #include <actions/cxScale.h>
 #include <actions/cxSpline.h>
 #include <actions/cxTimeLine.h>
+#include <actions/cxBezier.h>
 
 static cxEngine instance = NULL;
 static cxBool isExit = false;
@@ -142,6 +143,7 @@ static void cxEngineTypes()
     CX_TYPE_DEF(cxTimer);
     CX_TYPE_DEF(cxTint);
     CX_TYPE_DEF(cxTimeLine);
+    CX_TYPE_DEF(cxBezier);
 }
 
 void cxEngineBegin()

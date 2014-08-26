@@ -17,19 +17,10 @@ void cxEngineInit(cxEngine engine)
     cxEngineSetDesignSize(cxSize2fv(640, 960));
 }
 
-#include <actions/cxMove.h>
-
 void cxEngineMain(cxEngine engine)
 {
-//    cxViewLoader loader = cxViewLoaderCreate("cxScroll.json");
-//    cxWindowPushView(loader->view);
-    cxView *v = CX_CREATE(cxView);
-    cxViewSetSize(v, cxSize2fv(100, 100));
-    
-    cxMove m = cxMoveCreate(3, cxVec2fv(0, 300));
-    cxViewAppendAction(v, m);
-    
-    cxWindowPushView(v);
+    cxViewLoader loader = cxViewLoaderCreate("cxScroll.json");
+    cxWindowPushView(loader->view);
 }
 
 void cxEngineFree(cxEngine engine)
