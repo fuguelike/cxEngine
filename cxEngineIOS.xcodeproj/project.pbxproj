@@ -10,7 +10,7 @@
 		8301C6B719A74E0100DFD640 /* cxTile.c in Sources */ = {isa = PBXBuildFile; fileRef = 8301C6B519A74E0100DFD640 /* cxTile.c */; };
 		833642BB1925E4E900223302 /* cxMemory.c in Sources */ = {isa = PBXBuildFile; fileRef = 833642B91925E4E900223302 /* cxMemory.c */; };
 		833642BE1925E6B600223302 /* cxNumber.c in Sources */ = {isa = PBXBuildFile; fileRef = 833642BC1925E6B600223302 /* cxNumber.c */; };
-		833CA4F11925D95C0013630A /* cxActionSet.c in Sources */ = {isa = PBXBuildFile; fileRef = 833CA4D31925D95C0013630A /* cxActionSet.c */; };
+		833CA4F11925D95C0013630A /* cxMultiple.c in Sources */ = {isa = PBXBuildFile; fileRef = 833CA4D31925D95C0013630A /* cxMultiple.c */; };
 		833CA4F21925D95C0013630A /* cxAnimate.c in Sources */ = {isa = PBXBuildFile; fileRef = 833CA4D51925D95C0013630A /* cxAnimate.c */; };
 		833CA4F31925D95C0013630A /* cxCurve.c in Sources */ = {isa = PBXBuildFile; fileRef = 833CA4D71925D95C0013630A /* cxCurve.c */; };
 		833CA4F41925D95C0013630A /* cxFade.c in Sources */ = {isa = PBXBuildFile; fileRef = 833CA4D91925D95C0013630A /* cxFade.c */; };
@@ -147,8 +147,8 @@
 		833642BA1925E4E900223302 /* cxMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMemory.h; sourceTree = "<group>"; };
 		833642BC1925E6B600223302 /* cxNumber.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxNumber.c; sourceTree = "<group>"; };
 		833642BD1925E6B600223302 /* cxNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxNumber.h; sourceTree = "<group>"; };
-		833CA4D31925D95C0013630A /* cxActionSet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxActionSet.c; sourceTree = "<group>"; };
-		833CA4D41925D95C0013630A /* cxActionSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxActionSet.h; sourceTree = "<group>"; };
+		833CA4D31925D95C0013630A /* cxMultiple.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMultiple.c; sourceTree = "<group>"; };
+		833CA4D41925D95C0013630A /* cxMultiple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMultiple.h; sourceTree = "<group>"; };
 		833CA4D51925D95C0013630A /* cxAnimate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAnimate.c; sourceTree = "<group>"; };
 		833CA4D61925D95C0013630A /* cxAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAnimate.h; sourceTree = "<group>"; };
 		833CA4D71925D95C0013630A /* cxCurve.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxCurve.c; sourceTree = "<group>"; };
@@ -398,8 +398,8 @@
 			children = (
 				83A78DDF1936E2B5007C44FD /* cxTimeLine.c */,
 				83A78DE01936E2B5007C44FD /* cxTimeLine.h */,
-				833CA4D31925D95C0013630A /* cxActionSet.c */,
-				833CA4D41925D95C0013630A /* cxActionSet.h */,
+				833CA4D31925D95C0013630A /* cxMultiple.c */,
+				833CA4D41925D95C0013630A /* cxMultiple.h */,
 				833CA4D51925D95C0013630A /* cxAnimate.c */,
 				833CA4D61925D95C0013630A /* cxAnimate.h */,
 				833CA4D71925D95C0013630A /* cxCurve.c */,
@@ -808,7 +808,7 @@
 				8341C64A18227DF30045A66F /* mat4stack.c in Sources */,
 				83B995DB1925C5A100FD6BC1 /* cxUrlPath.c in Sources */,
 				833CA54D1925DB5E0013630A /* cxClipping.c in Sources */,
-				833CA4F11925D95C0013630A /* cxActionSet.c in Sources */,
+				833CA4F11925D95C0013630A /* cxMultiple.c in Sources */,
 				833CA5411925DB5E0013630A /* cxAssetsStream.c in Sources */,
 				83B995F91925C6C300FD6BC1 /* cxProperty.c in Sources */,
 				833CA53C1925DB5E0013630A /* cxClient.c in Sources */,

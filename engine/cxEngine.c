@@ -39,7 +39,7 @@
 #include <views/cxAlert.h>
 
 #include <actions/cxParticle.h>
-#include <actions/cxActionSet.h>
+#include <actions/cxMultiple.h>
 #include <actions/cxMove.h>
 #include <actions/cxFade.h>
 #include <actions/cxJump.h>
@@ -127,7 +127,7 @@ static void cxEngineTypes()
     CX_TYPE_DEF(cxAlert);
     
     //register actions
-    CX_TYPE_DEF(cxActionSet);
+    CX_TYPE_DEF(cxMultiple);
     CX_TYPE_DEF(cxAnimate);
     CX_TYPE_DEF(cxFade);
     CX_TYPE_DEF(cxFollow);

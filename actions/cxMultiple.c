@@ -1,5 +1,5 @@
 //
-//  cxActionSet.c
+//  cxMultiple.c
 //  cxEngine
 //
 //  Created by xuhua on 10/29/13.
@@ -7,23 +7,23 @@
 //
 
 #include <engine/cxEngine.h>
-#include "cxActionSet.h"
+#include "cxMultiple.h"
 
-static void cxActionSetRunNext(cxAny pav);
+static void cxMultipleRunNext(cxAny pav);
 
 static void cxActionItemStop(cxAny sender)
 {
-    cxActionSet this = cxActionParent(sender);
+    cxMultiple this = cxActionParent(sender);
     CX_ASSERT(this != NULL, "event arg not set");
     this->index ++;
-    if(this->type == cxActionSetTypeSequence){
-        cxActionSetRunNext(this);
+    if(this->type == cxMultipleTypeSequence){
+        cxMultipleRunNext(this);
     }
 }
 
-static void cxActionSetRunNext(cxAny pav)
+static void cxMultipleRunNext(cxAny pav)
 {
-    cxActionSet this = pav;
+    cxMultiple this = pav;
     if(this->index >= 0 && this->index < cxArrayLength(this->items)){
         cxAction action = cxArrayAtIndex(this->items, this->index);
         CX_EVENT_APPEND(action->onStop, cxActionItemStop);
@@ -31,9 +31,9 @@ static void cxActionSetRunNext(cxAny pav)
     }
 }
 
-static void cxActionSetRunAll(cxAny pav)
+static void cxMultipleRunAll(cxAny pav)
 {
-    cxActionSet this = pav;
+    cxMultiple this = pav;
     CX_ARRAY_FOREACH(this->items, ele){
         cxAction action = cxArrayObject(ele);
         CX_EVENT_APPEND(action->onStop, cxActionItemStop);
@@ -41,25 +41,22 @@ static void cxActionSetRunAll(cxAny pav)
     }
 }
 
-static void cxActionSetInit(cxAny pav)
+static void cxMultipleInit(cxAny pav)
 {
-    cxActionSet this = pav;
+    cxMultiple this = pav;
     CX_ASSERT(this->cxAction.view != NULL, "view not set");
-    if(this->type == cxActionSetTypeSequence){
+    if(this->type == cxMultipleTypeSequence){
         this->index = 0;
-        cxActionSetRunNext(this);
-        return;
-    }
-    if(this->type == cxActionSetTypeMultiple){
+        cxMultipleRunNext(this);
+    }else if(this->type == cxMultipleTypeConcurrent){
         this->index = 0;
-        cxActionSetRunAll(this);
-        return;
+        cxMultipleRunAll(this);
     }
 }
 
-static cxBool cxActionSetExit(cxAny pav)
+static cxBool cxMultipleExit(cxAny pav)
 {
-    cxActionSet this = pav;
+    cxMultiple this = pav;
     if(this->index >= cxArrayLength(this->items)){
         cxArrayClean(this->items);
         return true;
@@ -67,62 +64,62 @@ static cxBool cxActionSetExit(cxAny pav)
     return false;
 }
 
-static void cxActionSetStep(cxAny pav,cxFloat dt,cxFloat time)
+static void cxMultipleStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     //    cxActionRoot this = pav;
     //    CX_LOGGER("%f %f",this->super.duration,time);
 }
 
-CX_SETTER_DEF(cxActionSet, settype)
+CX_SETTER_DEF(cxMultiple, settype)
 {
     cxConstChars setType = cxJsonToConstChars(value);
-    if(cxConstCharsEqu(setType, "multiple")){
-        this->type = cxActionSetTypeMultiple;
+    if(cxConstCharsEqu(setType, "concurrent")){
+        this->type = cxMultipleTypeConcurrent;
     }else if(cxConstCharsEqu(setType, "sequence")){
-        this->type = cxActionSetTypeSequence;
+        this->type = cxMultipleTypeSequence;
     }else{
-        this->type = cxActionSetTypeMultiple;
+        this->type = cxMultipleTypeConcurrent;
     }
 }
-CX_SETTER_DEF(cxActionSet, actions)
+CX_SETTER_DEF(cxMultiple, actions)
 {
     cxJson actions = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(actions, item)
     {
         cxAny action = cxObjectLoadWithJson(item);
         CX_ASSERT(CX_INSTANCE_OF(action, cxAction), "actions must is cxAction type");
-        cxActionSetAppend(this, action);
+        cxMultipleAppend(this, action);
     }
     CX_JSON_ARRAY_EACH_END(actions, item)
 }
 
-CX_OBJECT_TYPE(cxActionSet, cxAction)
+CX_OBJECT_TYPE(cxMultiple, cxAction)
 {
-    CX_PROPERTY_SETTER(cxActionSet, settype);
-    CX_PROPERTY_SETTER(cxActionSet, actions);
+    CX_PROPERTY_SETTER(cxMultiple, settype);
+    CX_PROPERTY_SETTER(cxMultiple, actions);
 }
-CX_OBJECT_INIT(cxActionSet, cxAction)
+CX_OBJECT_INIT(cxMultiple, cxAction)
 {
-    CX_METHOD_SET(this->cxAction.Init, cxActionSetInit);
-    CX_METHOD_SET(this->cxAction.Step, cxActionSetStep);
-    CX_METHOD_SET(this->cxAction.Exit, cxActionSetExit);
+    CX_METHOD_SET(this->cxAction.Init, cxMultipleInit);
+    CX_METHOD_SET(this->cxAction.Step, cxMultipleStep);
+    CX_METHOD_SET(this->cxAction.Exit, cxMultipleExit);
     this->items = CX_ALLOC(cxArray);
 }
-CX_OBJECT_FREE(cxActionSet, cxAction)
+CX_OBJECT_FREE(cxMultiple, cxAction)
 {
     CX_RELEASE(this->items);
 }
-CX_OBJECT_TERM(cxActionSet, cxAction)
+CX_OBJECT_TERM(cxMultiple, cxAction)
 
-void cxActionSetSetType(cxAny pav,cxActionSetType type)
+void cxMultipleSetType(cxAny pav,cxMultipleType type)
 {
-    cxActionSet this = pav;
+    cxMultiple this = pav;
     this->type = type;
 }
 
-void cxActionSetAppend(cxAny pav,cxAny action)
+void cxMultipleAppend(cxAny pav,cxAny action)
 {
-    cxActionSet this = pav;
+    cxMultiple this = pav;
     cxArrayAppend(this->items, action);
     cxActionSetParent(action, pav);
 }
