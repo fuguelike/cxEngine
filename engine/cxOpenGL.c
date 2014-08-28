@@ -185,17 +185,17 @@ static void cxOpenGLEnableVertexAttribArray (GLuint index,GLboolean enable)
 void cxOpenGLActiveAttribs(cxUInt flags)
 {
     cxOpenGL this = cxOpenGLInstance();
-    bool eposition = (flags & cxVertexAttribFlagPosition) != 0;
+    cxBool eposition = (flags & cxVertexAttribFlagPosition) != 0;
     if(eposition != this->enableAttribPosition){
         cxOpenGLEnableVertexAttribArray(cxVertexAttribPosition,eposition);
         this->enableAttribPosition = eposition;
     }
-    bool ecolor = (flags & cxVertexAttribFlagColor) != 0;
+    cxBool ecolor = (flags & cxVertexAttribFlagColor) != 0;
     if(ecolor != this->enableAttribColor){
         cxOpenGLEnableVertexAttribArray(cxVertexAttribColor,ecolor);
         this->enableAttribColor = ecolor;
     }
-    bool etexcoords = (flags & cxVertexAttribFlagTexcoord);
+    cxBool etexcoords = (flags & cxVertexAttribFlagTexcoord);
     if(etexcoords != this->enableAttribTexcoords){
         cxOpenGLEnableVertexAttribArray(cxVertexAttribTexcoord,etexcoords);
         this->enableAttribTexcoords = etexcoords;

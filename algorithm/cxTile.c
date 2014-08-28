@@ -8,7 +8,7 @@
 
 #include "cxTile.h"
 
-cxVec2f cxTileVec2iToVec2f(cxVec2i idx,cxSize2f size)
+cxVec2f cxTileIdxToPos(cxVec2f idx,cxSize2f size)
 {
     cxFloat w2 = size.w / 2;
     cxFloat h2 = size.h / 2;
@@ -20,9 +20,9 @@ cxVec2f cxTileVec2iToVec2f(cxVec2i idx,cxSize2f size)
 /*
  计算到达两斜边的平行长度，除边距获取二维索引
  */
-cxVec2i cxTileVec2fToVec2i(cxVec2f pos,cxSize2f size)
+cxVec2f cxTilePosToIdx(cxVec2f pos,cxSize2f size)
 {
-    cxVec2i idx = cxVec2iv(0, 0);
+    cxVec2f idx = cxVec2fv(0, 0);
     //格子半宽高
     cxFloat w2 = size.w / 2;
     cxFloat h2 = size.h / 2;
