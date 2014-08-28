@@ -56,7 +56,8 @@ typedef struct{
 
 CX_OBJECT_DEF(cxOpenGL, cxObject)
     cxInt max_texture_size;
-    cxInt max_texture_units;
+    cxInt max_combined_texture_units;
+    cxInt max_vertex_texture_units;
     cxBool support_GL_IMG_texture_npot;
     cxBool support_GL_IMG_texture_compression_pvrtc;
     cxBool support_GL_OES_compressed_ETC1_RGB8_texture;
@@ -69,7 +70,7 @@ CX_OBJECT_DEF(cxOpenGL, cxObject)
     cxBool enableAttribPosition;
     cxBool enableAttribColor;
     cxBool enableAttribTexcoords;
-    GLuint activeTextures[MAX_ACTIVE_TEXTURE];
+    GLuint activeTexture;
 CX_OBJECT_END(cxOpenGL, cxObject)
 
 cxOpenGL cxOpenGLInstance();
@@ -116,9 +117,9 @@ void cxOpenGLSetTexParameter(GLuint type,GLuint value);
 
 void cxOpenGLSetTexParameters(const cxTextureParams params);
 
-void cxOpenGLDeleteTexture(GLuint unit,GLuint texture);
+void cxOpenGLDeleteTexture(GLuint texture);
 
-void cxOpenGLBindTexture(GLuint unit,GLuint texture);
+void cxOpenGLBindTexture(GLuint texture);
 
 void cxOpenGLGenTextures(GLsizei n,GLuint *textures);
 

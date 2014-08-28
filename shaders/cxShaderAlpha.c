@@ -18,7 +18,6 @@ static cxString cxShaderAlphaGetFragmentSource(cxAny this)
         uniform sampler2D uTexture0;
         void main() {
             vec4 texColor = texture2D(uTexture0, vTexCoord);
-            if(kxAtlasTexture)texColor.a=texture2D(uTexture0,vec2(vTexCoord.x,vTexCoord.y+0.5)).r;
             gl_FragColor = vec4(vFragmentColor.rgb,vFragmentColor.a * texColor.a);
         }
     );

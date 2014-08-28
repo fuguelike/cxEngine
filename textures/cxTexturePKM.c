@@ -52,7 +52,7 @@ static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
         goto completed;
     }
     cxOpenGLGenTextures(1, &pkm->cxTexture.textureId);
-    cxOpenGLBindTexture(0, pkm->cxTexture.textureId);
+    cxOpenGLBindTexture(pkm->cxTexture.textureId);
     cxInt bufsiz = stream->length - sizeof(cxPKMHeader);
     cxPointer buffer = allocator->malloc(bufsiz);
     cxInt readbytes = cxStreamRead(stream, buffer, bufsiz);
@@ -66,7 +66,7 @@ static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
     ret = false;
 #endif
     allocator->free(buffer);
-    cxOpenGLBindTexture(0, 0);
+    cxOpenGLBindTexture(0);
 completed:
     cxStreamClose(stream);
     return ret;
@@ -75,7 +75,7 @@ completed:
 static void cxTexturePKMBind(cxAny this)
 {
     cxTexturePKM pkm = this;
-    cxOpenGLBindTexture(0, pkm->cxTexture.textureId);
+    cxOpenGLBindTexture(pkm->cxTexture.textureId);
 }
 
 CX_OBJECT_TYPE(cxTexturePKM, cxTexture)

@@ -140,23 +140,20 @@ void cxOpenGLGenTextures(GLsizei n,GLuint *textures)
     glGenTextures(n, textures);
 }
 
-void cxOpenGLBindTexture(GLuint unit,GLuint texture)
+void cxOpenGLBindTexture(GLuint texture)
 {
     cxOpenGL this = cxOpenGLInstance();
-    CX_ASSERT(unit < MAX_ACTIVE_TEXTURE, "textureUnit is too big");
-    if (this->activeTextures[unit] != texture){
-        this->activeTextures[unit] = texture;
-        glActiveTexture(GL_TEXTURE0 + unit);
+    if (this->activeTexture != texture){
+        this->activeTexture = texture;
         glBindTexture(GL_TEXTURE_2D, texture);
     }
 }
 
-void cxOpenGLDeleteTexture(GLuint unit,GLuint texture)
+void cxOpenGLDeleteTexture(GLuint texture)
 {
     cxOpenGL this = cxOpenGLInstance();
-    CX_ASSERT(unit < MAX_ACTIVE_TEXTURE, "textureUnit is too big");
-	if (this->activeTextures[unit] == texture){
-		this->activeTextures[unit] = -1;
+    if(this->activeTexture == texture){
+        this->activeTexture = -1;
     }
 	glDeleteTextures(1, &texture);
 }
@@ -236,9 +233,6 @@ CX_OBJECT_INIT(cxOpenGL, cxObject)
     this->blendSrc = -1;
     this->blendDst = -1;
     this->currentProgram = -1;
-    for(int i=0; i < MAX_ACTIVE_TEXTURE;i++){
-        this->activeTextures[i] = -1;
-    }
     this->shaders = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxOpenGL, cxObject)
@@ -296,9 +290,10 @@ void cxOpenGLCheckFeature()
     
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &this->max_texture_size);
     CX_LOGGER("GL_MAX_TEXTURE_SIZE: %d",this->max_texture_size);
-    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &this->max_texture_units);
-    CX_LOGGER("GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS: %d",this->max_texture_units);
-    
+    glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &this->max_combined_texture_units);
+    CX_LOGGER("GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS: %d",this->max_combined_texture_units);
+    glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &this->max_vertex_texture_units);
+    CX_LOGGER("GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS: %d",this->max_vertex_texture_units);
     cxOpenGLLoadDefaultShaders();
 }
 

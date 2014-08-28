@@ -76,7 +76,7 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
         pvr->glFormat = pvr->cxTexture.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
     }
     cxOpenGLGenTextures(1, &pvr->cxTexture.textureId);
-    cxOpenGLBindTexture(0, pvr->cxTexture.textureId);
+    cxOpenGLBindTexture(pvr->cxTexture.textureId);
     cxUInt dataLen = header.dataLength;
     cxUInt dataOff = 0;
     cxUInt width = header.width;
@@ -128,7 +128,7 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
         cxTextureSetParam((cxTexture)pvr, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     }
     pvr->cxTexture.hasMipmap = i > 1;
-    cxOpenGLBindTexture(0, 0);
+    cxOpenGLBindTexture(0);
     ret = true;
 completed:
     cxStreamClose(stream);
@@ -138,7 +138,7 @@ completed:
 static void cxTexturePVRBind(cxAny this)
 {
     cxTexturePVR pvr = this;
-    cxOpenGLBindTexture(0, pvr->cxTexture.textureId);
+    cxOpenGLBindTexture(pvr->cxTexture.textureId);
 }
 
 CX_OBJECT_TYPE(cxTexturePVR, cxTexture)

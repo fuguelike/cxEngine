@@ -28,7 +28,7 @@ CX_OBJECT_INIT(cxTexture, cxObject)
 }
 CX_OBJECT_FREE(cxTexture, cxObject)
 {
-    cxOpenGLDeleteTexture(0, this->textureId);
+    cxOpenGLDeleteTexture(this->textureId);
     CX_RELEASE(this->keys);
 }
 CX_OBJECT_TERM(cxTexture, cxObject)

@@ -65,10 +65,10 @@ static cxBool cxTextureJPGLoad(cxAny this,cxStream stream)
     glGetIntegerv(GL_UNPACK_ALIGNMENT, &unpack);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     cxOpenGLGenTextures(1, &jpg->cxTexture.textureId);
-    cxOpenGLBindTexture(0, jpg->cxTexture.textureId);
+    cxOpenGLBindTexture(jpg->cxTexture.textureId);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cinfo.image_width, cinfo.image_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glPixelStorei(GL_UNPACK_ALIGNMENT, unpack);
-    cxOpenGLBindTexture(0, 0);
+    cxOpenGLBindTexture(0);
     allocator->free(data);
     ret = true;
 finished:
@@ -80,7 +80,7 @@ finished:
 static void cxTextureJPGBind(cxAny this)
 {
     cxTextureJPG png = this;
-    cxOpenGLBindTexture(0, png->cxTexture.textureId);
+    cxOpenGLBindTexture(png->cxTexture.textureId);
 }
 
 CX_OBJECT_TYPE(cxTextureJPG, cxTexture)

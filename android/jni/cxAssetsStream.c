@@ -44,7 +44,7 @@ static cxInt cxAssetsStreamWrite(cxAny this,cxPointer buffer,cxInt size)
 {
     cxAssetsStream asserts = this;
     if(!asserts->cxStream.canWrite){
-        CX_WARN("strean not support write");
+        CX_WARN("stream not support write");
         return 0;
     }
     return 0;
@@ -54,7 +54,7 @@ static cxOff cxAssetsStreamPosition(cxAny this)
 {
     cxAssetsStream asserts = this;
     if(!asserts->cxStream.canRead){
-        CX_WARN("strean not support read");
+        CX_WARN("stream not support read");
         return 0;
     }
     return (cxOff)AAsset_seek(asserts->asset, 0, SEEK_CUR);

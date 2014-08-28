@@ -30,11 +30,11 @@ void cxTextureTXTMakeTexture(cxTextureTXT texture,cxPointer buffer,cxInt width,c
     GLint unpack = 0;
     glGetIntegerv(GL_UNPACK_ALIGNMENT, &unpack);
     cxOpenGLGenTextures(1, &texture->cxTexture.textureId);
-    cxOpenGLBindTexture(0, texture->cxTexture.textureId);
+    cxOpenGLBindTexture(texture->cxTexture.textureId);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
     glPixelStorei(GL_UNPACK_ALIGNMENT, unpack);
-    cxOpenGLBindTexture(0, 0);
+    cxOpenGLBindTexture(0);
     texture->cxTexture.hasAlpha = true;
     texture->cxTexture.size = cxSize2fv(width, height);
 }
@@ -42,7 +42,7 @@ void cxTextureTXTMakeTexture(cxTextureTXT texture,cxPointer buffer,cxInt width,c
 static void cxTextureTXTBind(cxAny this)
 {
     cxTextureTXT txt = this;
-    cxOpenGLBindTexture(0, txt->cxTexture.textureId);
+    cxOpenGLBindTexture(txt->cxTexture.textureId);
 }
 
 CX_OBJECT_TYPE(cxTextureTXT, cxTexture)

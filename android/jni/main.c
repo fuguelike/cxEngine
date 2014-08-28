@@ -19,7 +19,7 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxViewLoader loader = cxViewLoaderCreate("cxSprite.json");
+    cxViewLoader loader = cxViewLoaderCreate("cxScroll.json");
     cxWindowPushView(loader->view);
 }
 

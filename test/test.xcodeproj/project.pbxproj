@@ -26,6 +26,7 @@
 		8344F0B218D3F4A50003E410 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B118D3F4A50003E410 /* OpenAL.framework */; };
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
+		835D3B2D19AF21680004155D /* texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 835D3B2C19AF21680004155D /* texture.png */; };
 		836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 836165D518F67BC400FFF173 /* Default-568h@2x.png */; };
 		836D8DA7191B8C02000F0230 /* cxScroll.json in Resources */ = {isa = PBXBuildFile; fileRef = 836D8DA6191B8C02000F0230 /* cxScroll.json */; };
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
@@ -69,6 +70,7 @@
 		8344F0B118D3F4A50003E410 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8344F0B318D3F4A90003E410 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		835D3B2C19AF21680004155D /* texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = texture.png; path = res/texture.png; sourceTree = SOURCE_ROOT; };
 		836165D518F67BC400FFF173 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		836D8DA6191B8C02000F0230 /* cxScroll.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxScroll.json; path = res/cxScroll.json; sourceTree = SOURCE_ROOT; };
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				83DAD709191A386C000A7D1F /* cxLabelTTF.json */,
 				83DAD705191A26BF000A7D1F /* texture.json */,
 				83DAD706191A26BF000A7D1F /* texture.pvr */,
+				835D3B2C19AF21680004155D /* texture.png */,
 				83DAD6FF191A14A6000A7D1F /* ui.json */,
 				839722AC19161746006D0F89 /* font.json */,
 				839722AD19161746006D0F89 /* font.png */,
@@ -257,6 +260,7 @@
 				83DAD700191A14A6000A7D1F /* ui.json in Resources */,
 				831ABCC61924C69F001A86F1 /* cxSprite.json in Resources */,
 				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
+				835D3B2D19AF21680004155D /* texture.png in Resources */,
 				831ABCBC19249044001A86F1 /* cxParticle.json in Resources */,
 				83F3CCD0191B674D00D6BCFB /* cxAtlas.json in Resources */,
 				836D8DA7191B8C02000F0230 /* cxScroll.json in Resources */,
