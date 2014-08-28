@@ -67,7 +67,6 @@ static bool cxShaderCompile(cxShader this,GLuint *shader, GLenum type, cxString 
     }else if(type == GL_FRAGMENT_SHADER){
         const GLchar *sources[] = {
             "precision mediump float;\n",
-            "uniform bool "CX_UNIFORM_ATLAS_TEXTURE";\n",
             cxStringBody(source),
         };
         glShaderSource(*shader, sizeof(sources)/sizeof(*sources), sources, NULL);
@@ -111,14 +110,13 @@ CX_OBJECT_FREE(cxShader, cxObject)
 }
 CX_OBJECT_TERM(cxShader, cxObject)
 
-void cxShaderUsing(cxShader this,cxBool isAtlas)
+void cxShaderUsing(cxShader this)
 {
     cxOpenGLUseProgram(this->program);
 	kmGLGetMatrix(KM_GL_PROJECTION, &this->kxMatrixProject);
 	kmGLGetMatrix(KM_GL_MODELVIEW,  &this->kxMatrixModelView);
     kmMat4Multiply(&this->kxMatrix, &this->kxMatrixProject, &this->kxMatrixModelView);
     glUniformMatrix4fv(this->uniformMatrixModelviewProject, 1, GL_FALSE, this->kxMatrix.mat);
-    glUniform1i(this->uniformAtlasTexture, isAtlas);
     CX_METHOD_RUN(this->Update, this);
 }
 
@@ -152,7 +150,6 @@ bool cxShaderInit(cxShader this)
     }
     cxOpenGLUseProgram(this->program);
     this->uniformMatrixModelviewProject = glGetUniformLocation(this->program, CX_UNIFORM_MATRIX_MODELVIEW_PROJECT);
-    this->uniformAtlasTexture = glGetUniformLocation(this->program, CX_UNIFORM_ATLAS_TEXTURE);
     CX_METHOD_RUN(this->GetUniform, this);
     return true;
 }

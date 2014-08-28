@@ -52,7 +52,7 @@ void cxDrawLineLoop(const cxVec2f *vertices,int num,const cxColor3f color)
         colors[i] = color;
     }
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    cxOpenGLUsingShader(cxShaderPositionColorKey, false);
+    cxOpenGLUsingShader(cxShaderPositionColorKey);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosition|cxVertexAttribFlagColor);
     cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 2, 0, vertices);
     cxOpenGLVertexAttribPointer(cxVertexAttribColor, 3, 0, colors);
@@ -80,19 +80,19 @@ void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars ske
 {
     cxColor4f colors[4] = {color,color,color,color};
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    cxOpenGLUsingShader(skey, false);
+    cxOpenGLUsingShader(skey);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosition | cxVertexAttribFlagColor);
     glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), box);
     glVertexAttribPointer(cxVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), colors);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void cxOpenGLUsingShader(cxConstChars key,cxBool isAtlas)
+void cxOpenGLUsingShader(cxConstChars key)
 {
     cxOpenGL this = cxOpenGLInstance();
     cxShader shader = cxHashGet(this->shaders, cxHashStrKey(key));
     CX_ASSERT(shader != NULL, "shader %s not exists",key);
-    cxShaderUsing(shader, isAtlas);
+    cxShaderUsing(shader);
 }
 
 void cxOpenGLSetBlendFactor(GLenum sfactor, GLenum dfactor)

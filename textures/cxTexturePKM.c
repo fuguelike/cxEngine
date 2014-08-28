@@ -86,7 +86,6 @@ CX_OBJECT_INIT(cxTexturePKM, cxTexture)
 {
     CX_METHOD_SET(this->cxTexture.Bind, cxTexturePKMBind);
     CX_METHOD_SET(this->cxTexture.Load, cxTexturePKMLoad);
-    this->cxTexture.isAtlas = true;
 }
 CX_OBJECT_FREE(cxTexturePKM, cxTexture)
 {

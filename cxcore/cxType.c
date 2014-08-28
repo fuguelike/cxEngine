@@ -53,9 +53,6 @@ cxProperty cxTypeProperty(cxType this,cxConstChars key)
         CX_BREAK(p != NULL);
         curr = curr->superType;
     }
-    if(p == NULL){
-        CX_WARN("type %s,proprty %s not register",this->typeName,key);
-    }
     return p;
 }
 

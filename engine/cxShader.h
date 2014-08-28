@@ -31,7 +31,6 @@ enum {
 //
 ////Uniform names
 #define CX_UNIFORM_MATRIX_MODELVIEW_PROJECT         "kxMatrixModelViewProject"
-#define CX_UNIFORM_ATLAS_TEXTURE                    "kxAtlasTexture"
 
 CX_OBJECT_DEF(cxShader, cxObject)
     cxMatrix4f kxMatrixProject;
@@ -41,7 +40,6 @@ CX_OBJECT_DEF(cxShader, cxObject)
     GLuint vertexShader;
     GLuint fragmentShader;
     GLint uniformMatrixModelviewProject;
-    GLint uniformAtlasTexture;
     CX_METHOD_DEF(void,Init,cxAny);
     CX_METHOD_DEF(void,Update,cxAny);
     CX_METHOD_DEF(void,GetUniform,cxAny);
@@ -53,7 +51,7 @@ void cxShaderInitPosColorTex(cxAny this);
 
 bool cxShaderInit(cxShader this);
 
-void cxShaderUsing(cxShader this,cxBool isAtlas);
+void cxShaderUsing(cxShader this);
 
 CX_C_END
 

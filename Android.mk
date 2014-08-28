@@ -23,7 +23,8 @@ LOCAL_SRC_FILES += \
 	cxcore/cxProperty.c \
 	cxcore/cxStack.c \
 	cxcore/cxType.c \
-	cxcore/cxMemory.c
+	cxcore/cxMemory.c \
+    cxcore/cxAnyArray.c
 
 LOCAL_SRC_FILES += \
     kazmath/aabb.c \
@@ -60,7 +61,7 @@ LOCAL_SRC_FILES += \
     textures/cxTextureJPG.c
 
 LOCAL_SRC_FILES += \
-    actions/cxActionSet.c \
+    actions/cxMultiple.c \
     actions/cxCurve.c \
     actions/cxFade.c \
     actions/cxJump.c \
@@ -75,7 +76,8 @@ LOCAL_SRC_FILES += \
     actions/cxParticle.c \
     actions/cxParabola.c \
     actions/cxFollow.c \
-    actions/cxTimeLine.c
+    actions/cxTimeLine.c \
+    actions/cxBezier.c
 
 LOCAL_SRC_FILES += \
     views/cxAtlas.c \
@@ -117,6 +119,7 @@ LOCAL_SRC_FILES += \
 	engine/cxView.c
     
 LOCAL_SRC_FILES += \
+    algorithm/cxTile.c \
     algorithm/cxAStar.c \
     algorithm/aes_cbc.c \
  	algorithm/aes_cfb.c \

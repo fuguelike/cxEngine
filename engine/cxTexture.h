@@ -30,7 +30,6 @@ CX_OBJECT_DEF(cxTexture, cxObject)
     cxBool isSetParam;
     cxBool hasAlpha;
     cxBool hasMipmap;
-    cxBool isAtlas;     //for jpg pkm atlas texture
     cxSize2f size;
     cxVec2f scale;
     CX_METHOD_DEF(cxBool, Load, cxAny, cxStream);
@@ -48,8 +47,6 @@ cxBoxTex2f cxTextureBoxPixel(cxTexture this,cxConstChars key,cxFloat subPixel);
 cxRect4f cxTextureRect(cxTexture this,cxConstChars key);
 
 cxSize2f cxTextureSize(cxTexture this,cxConstChars key);
-
-void cxTextureSetAtlas(cxTexture this,cxBool isAtlas);
 
 void cxTextureLoad(cxTexture this,cxStream stream);
 

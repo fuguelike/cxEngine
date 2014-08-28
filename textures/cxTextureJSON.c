@@ -40,7 +40,6 @@ static cxBool cxTextureJSONLoad(cxAny this,cxStream stream)
     CX_RETAIN(texture->innerTexture);
     //for jpg pkm atlas texture
     cxSize2f metasiz = cxJsonSize2f(meta, "size", texture->innerTexture->size);
-    texture->cxTexture.isAtlas = cxJsonBool(meta, "atlas", false);
     texture->cxTexture.size = texture->innerTexture->size;
     texture->cxTexture.scale.x = texture->cxTexture.size.w / metasiz.w;
     texture->cxTexture.scale.y = texture->cxTexture.size.h / metasiz.h;

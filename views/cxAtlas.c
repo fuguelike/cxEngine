@@ -49,7 +49,7 @@ void cxAtlasDraw(cxAny pview)
     cxAtlas this = pview;
     CX_RETURN(this->number == 0 || this->cxSprite.texture == NULL);
     cxOpenGLSetBlendFactor(this->cxSprite.sfactor, this->cxSprite.dfactor);
-    cxShaderUsing(this->cxSprite.shader,this->cxSprite.texture->isAtlas);
+    cxShaderUsing(this->cxSprite.shader);
     cxTextureBind(this->cxSprite.texture);
     if(!this->isInit){
         this->isInit = true;

@@ -21,7 +21,7 @@ void cxSpriteBindTexture(cxAny pview)
 {
     cxSprite this = pview;
     cxOpenGLSetBlendFactor(this->sfactor, this->dfactor);
-    cxShaderUsing(this->shader,this->texture->isAtlas);
+    cxShaderUsing(this->shader);
     cxTextureBind(this->texture);
 }
 
