@@ -18,10 +18,10 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxSize2f size;      //占用的格子数
     cxVec2f idx;        //左下角格子坐标
     cxAnyArray box;
-    cxVec2f curr;
-    cxBool canSelected;//可选择
-    cxBool isSelected;
-    cxBool isValidIdx;//是否在合法的位置
+    cxVec2f curr;       //当前所在位置
+    cxBool canSelected; //可选择
+    cxBool isSelected;  //是否悬选中
+    cxBool isValidIdx;  //是否在有效的位置
     //nodes element
     cxListElement *element;
 CX_OBJECT_END(Node, cxSprite)
