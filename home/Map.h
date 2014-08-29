@@ -19,10 +19,12 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxAny *items;
     struct{
         cxAny node;     //当前选中的
-        cxVec2f prev;   //最后点击位置
+        cxVec2f prev;   //最后node点击位置
     }move;
     //node list
     cxList nodes;
+    //
+    cxBox4f box;
 CX_OBJECT_END(Map, cxAtlas)
 
 void MapAppendNode(Map this,cxAny node);
