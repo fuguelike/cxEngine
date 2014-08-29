@@ -18,14 +18,14 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxVec2i unitNum;//单元数量
     cxAny *items;
     struct{
-        cxAny node;
-        cxVec2i prev;
+        cxAny node;     //当前选中的
+        cxVec2f prev;   //最后点击位置
     }move;
+    //node list
+    cxList nodes;
 CX_OBJECT_END(Map, cxAtlas)
 
-cxBool MapSelectedNode(Map this,cxAny node,cxVec2f idx);
-
-void MapClickedNode(Map this,cxAny node);
+void MapAppendNode(Map this,cxAny node);
 
 cxInt MapOffsetIdx(Map this,cxInt x,cxInt y);
 

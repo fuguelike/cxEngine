@@ -19,12 +19,18 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxVec2f idx;        //左下角格子坐标
     cxAnyArray box;
     cxVec2f curr;
+    cxBool canSelected;//可选择
+    cxBool isSelected;
+    cxBool isValidIdx;//是否在合法的位置
+    //nodes element
+    cxListElement *element;
 CX_OBJECT_END(Node, cxSprite)
 
 cxVec2i NodeIndex(cxAny node);
 
 cxSize2i NodeSize(cxAny node);
-//
+
+//从当前坐标转换为索引坐标
 cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos);
 
 cxVec2f NodeCurrIdx(cxAny pview);

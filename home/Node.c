@@ -14,26 +14,75 @@ cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
 {
     Node this = pview;
     Map map = this->map;
-    cxSize2f size = cxViewSize(this);
-    pos.y += (size.h - map->unitSize.h)/2.0f;
-    return cxTilePosToIdx(pos, map->unitSize);
+    cxSize2f vsize = cxViewSize(this);
+    pos.y -= (vsize.h / 2.0f - (vsize.h / (2.0f * this->size.h)));
+    return MapPosToIdx(map, pos);
 }
 
 static cxBool NodeTouch(cxAny pview,cxTouch *touch)
 {
     Node this = pview;
+    Map map = this->map;
+    //不可选择?
+    if(!this->canSelected){
+        return false;
+    }
     cxVec2f pos;
-    if(!cxViewHitTest(pview, touch->current, &pos)){
+    cxBool hited = cxViewHitTest(pview, touch->current, &pos) && cxPointsContainPoint(this->box, pos);
+    Node snode = map->move.node;
+    //如果移动一个选中的node
+    if(touch->type == cxTouchTypeMove &&  map->move.node != NULL && this->isSelected){
+        cxVec2f pos = map->move.prev;
+        kmVec2Add(&pos, &pos, &touch->delta);
+        cxVec2f idx = NodePosToIdx(this,pos);
+        this->isValidIdx = NodeIdxIsValid(this, idx);
+        if(this->isValidIdx){
+            cxViewSetColor(this, cxGREEN);
+        }else{
+            cxViewSetColor(this, cxGRAY);
+        }
+        NodeSetPosition(this, idx);
+        map->move.prev = pos;
+        return true;
+    }
+    //按下的时候并选中一个node
+    if(touch->type == cxTouchTypeDown && hited){
+        map->move.prev = cxViewPosition(this);
+        this->isSelected = true;
         return false;
     }
-    if(touch->type != cxTouchTypeDown){
+    //按下得时候没选中node，有之前选中的node,并且不再一个有效的位置上
+    if(touch->type == cxTouchTypeDown && !hited && snode != NULL && snode == this){
+        if(!snode->isValidIdx){
+            NodeResetPosition(snode);
+        }
+        snode->isSelected = false;
+        map->move.node = NULL;
+        cxViewSetColor(snode, cxRED);
         return false;
     }
-    if(!cxPointsContainPoint(this->box, pos)){
+    //如果当前选中的node在按键起来的时候有效
+    if(touch->type == cxTouchTypeUp && snode != NULL && snode == this && snode->isValidIdx){
+        NodeSetIdx(snode, snode->curr);
         return false;
     }
-    cxVec2f idx = NodePosToIdx(this, pos);
-    return MapSelectedNode(this->map, this, idx);
+    //如果选中了一个node
+    if(touch->type == cxTouchTypeUp && this->isSelected && hited){
+        CX_LIST_FOREACH(map->nodes, ele){
+            Node cnode = ele->any;
+            if(cnode == this){
+                //选中
+                cxViewSetColor(ele->any, cnode->isValidIdx ? cxYELLOW : cxGRAY);
+            }else{
+                cnode->isSelected = false;
+                //反选
+                cxViewSetColor(ele->any, cxRED);
+            }
+        }
+        map->move.node = this;
+        return true;
+    }
+    return false;
 }
 
 CX_OBJECT_TYPE(Node, cxSprite)
@@ -42,6 +91,7 @@ CX_OBJECT_TYPE(Node, cxSprite)
 }
 CX_OBJECT_INIT(Node, cxSprite)
 {
+    this->canSelected = true;
     this->idx = cxVec2fv(-1, -1);
     CX_METHOD_SET(this->cxSprite.cxView.Touch, NodeTouch);
     this->box = cxAnyArrayAlloc(cxVec2f);
@@ -68,6 +118,7 @@ void NodeResetPosition(cxAny node)
 {
     Node this = node;
     NodeSetPosition(this, this->idx);
+    this->isValidIdx = true;
 }
 
 cxBool NodeSetPosition(cxAny node,cxVec2f idx)
@@ -101,10 +152,11 @@ cxBool NodeIdxIsValid(cxAny node,cxVec2f curr)
     Map map = this->map;
     cxVec2i idx = cxVec2iv(curr.x, curr.y);
     cxSize2i size = NodeSize(node);
-    if(idx.x < 1 || (idx.x + size.w + 1) > map->unitNum.x){
+    // 1 = max -1
+    if(idx.x < 0 || (idx.x + size.w) > map->unitNum.x){
         return false;
     }
-    if(idx.y < 1 || (idx.y + size.h + 1) > map->unitNum.y){
+    if(idx.y < 0 || (idx.y + size.h) > map->unitNum.y){
         return false;
     }
     for(cxInt x = idx.x; x < idx.x + size.w; x ++){
@@ -131,6 +183,7 @@ void NodeSetIdx(cxAny node,cxVec2f idx)
     MapSetNode(map, cxVec2iv(idx.x, idx.y), this);
     this->idx = idx;
     this->curr = idx;
+    this->isValidIdx = true;
 }
 
 void NodeInit(cxAny node,cxSize2f size,cxVec2f pos)

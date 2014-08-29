@@ -13,61 +13,24 @@
 #include "Map.h"
 #include "Node.h"
 
-cxBool MapSelectedNode(Map this,cxAny node,cxVec2f idx)
-{
-    if(this->move.node != NULL && this->move.node != node){
-        NodeResetPosition(this->move.node);
-    }
-    this->move.node = node;
-    return false;
-}
-
 static cxBool MapTouch(cxAny pview,cxTouch *touch)
 {
-    Map this = pview;
-    cxVec2f pos;
-    if(!cxViewHitTest(pview, touch->current, &pos)){
-        if(this->move.node != NULL){
-            NodeResetPosition(this->move.node);
-        }
-        return false;
-    }
-    if(this->move.node == NULL){
-        return false;
-    }
-    cxVec2f idx = MapPosToIdx(pview, pos);
-    if(touch->type == cxTouchTypeDown){
-        this->move.prev = cxVec2iv(idx.x, idx.y);
-        return true;
-    }
-    if(touch->type == cxTouchTypeMove){
-        cxVec2i curr = cxVec2iv(idx.x, idx.y);
-        if(cxVec2iEqu(curr, this->move.prev)){
-            return false;
-        }
-        cxVec2f dx = NodeCurrIdx(this->move.node);
-        dx.x += curr.x - this->move.prev.x;
-        dx.y += curr.y - this->move.prev.y;
-        NodeSetPosition(this->move.node, dx);
-        //如果可以放置建筑
-        if(NodeIdxIsValid(this->move.node, dx)){
-            cxViewSetColor(this->move.node, cxGREEN);
-        }else{
-            cxViewSetColor(this->move.node, cxRED);
-        }
-        this->move.prev = curr;
-        return true;
-    }
-    if(touch->type == cxTouchTypeUp){
-        Node node = this->move.node;
-        if(NodeIdxIsValid(this->move.node, node->curr)){
-            NodeSetIdx(node, node->curr);
-            //设置到网格
-            cxViewSetColor(this->move.node, cxRED);
-            this->move.node = NULL;
-            return true;
-        }
-    }
+//    Map this = pview;
+//    cxVec2f pos;
+//    if(!cxViewHitTest(pview, touch->current, &pos)){
+//        return false;
+//    }
+//    cxVec2f idx = MapPosToIdx(pview, pos);
+//    if(touch->type == cxTouchTypeDown){
+////        this->move.prev = idx;
+//        return true;
+//    }
+//    if(touch->type == cxTouchTypeMove){
+//        return MapMoveMap(this, touch);
+//    }
+//    if(touch->type == cxTouchTypeUp){
+//        MapResetNotValidNode(this);
+//    }
     return false;
 }
 
@@ -86,13 +49,14 @@ CX_OBJECT_INIT(Map, cxAtlas)
     size.h = size.w * 0.75f;
     this->unitSize = cxSize2fv(size.w/this->unitNum.x, size.h/this->unitNum.y);
     cxViewSetSize(this, size);
+    //
+    this->nodes = CX_ALLOC(cxList);
     
     //test
     for(cxInt x = 0; x < this->unitNum.x; x++){
         for (cxInt y = 0; y < this->unitNum.y; y++) {
             cxVec2f pos = MapIdxToPos(this, cxVec2fv(x, y));
             cxSprite sp = cxSpriteCreateWithURL("bg1.png");
-            cxViewSetColor(sp, cxYELLOW);
             cxViewSetSize(sp, this->unitSize);
             cxViewSetPos(sp, pos);
             cxViewAppend(this, sp);
@@ -103,7 +67,7 @@ CX_OBJECT_INIT(Map, cxAtlas)
         NodeInit(node, cxSize2fv(3, 3),cxVec2fv(5, 5));
         cxSpriteSetTextureURL(node, "bg1.png", false);
         cxViewSetColor(node, cxRED);
-        cxViewAppend(this, node);
+        MapAppendNode(this, node);
     }
     
     {
@@ -111,7 +75,7 @@ CX_OBJECT_INIT(Map, cxAtlas)
         NodeInit(node, cxSize2fv(4, 4),cxVec2fv(0, 0));
         cxSpriteSetTextureURL(node, "bg1.png", false);
         cxViewSetColor(node, cxRED);
-        cxViewAppend(this, node);
+        MapAppendNode(this, node);
     }
     
     {
@@ -119,19 +83,21 @@ CX_OBJECT_INIT(Map, cxAtlas)
         NodeInit(node, cxSize2fv(1, 1),cxVec2fv(18, 18));
         cxSpriteSetTextureURL(node, "bg1.png", false);
         cxViewSetColor(node, cxRED);
-        cxViewAppend(this, node);
+        MapAppendNode(this, node);
     }
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {
+    CX_RELEASE(this->nodes);
     allocator->free(this->items);
 }
 CX_OBJECT_TERM(Map, cxAtlas)
 
-//当点击一个node
-void MapClickedNode(Map this,cxAny node)
+void MapAppendNode(Map this,cxAny node)
 {
-    
+    Node snode = node;
+    cxViewAppend(this, snode);
+    snode->element = cxListAppend(this->nodes, snode);
 }
 
 cxInt MapOffsetIdx(Map this,cxInt x,cxInt y)
@@ -165,6 +131,10 @@ cxBool MapRemoveNode(Map this,cxAny node)
         }
     }
     n->map = NULL;
+    if(n->element != NULL){
+        cxListRemove(this->nodes, n->element);
+        n->element = NULL;
+    }
     cxViewRemoved(node);
     return true;
 }
