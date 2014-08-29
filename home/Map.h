@@ -15,17 +15,18 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(Map, cxAtlas)
     cxSize2f unitSize;  //单元格子大小
-    cxVec2i unitNum;//单元数量
-    cxAny *items;
-    struct{
-        cxAny node;     //当前选中的
-        cxVec2f prev;   //最后node点击位置
-    }move;
+    cxVec2i unitNum;    //单元数量
+    cxAny *items;       //格子node
+    cxAny node;     //当前选中的node
+    cxVec2f prev;   //最后node点击位置
     //node list
     cxList nodes;
     //
     cxBox4f box;
 CX_OBJECT_END(Map, cxAtlas)
+
+//按Y的大小重新排序
+void MapSortNode(Map this);
 
 //node 位置改变的时候
 void MapNodeIdxChanged(Map this,cxAny node);

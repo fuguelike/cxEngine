@@ -1,4 +1,15 @@
 {
-  "id": "main",
-  "type": "Map"
+  "type": "Scene",
+  "resizing":"fill",
+  "subviews": [
+    {
+      "id": "map",
+      "type": "Map"
+    },
+    {
+      "type": "cxSprite",
+      "texture": "bg1.png",
+      "resizing": "left|top"
+    }
+  ]
 }

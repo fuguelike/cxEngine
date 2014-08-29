@@ -29,10 +29,10 @@ static cxBool NodeTouch(cxAny pview,cxTouch *touch)
     }
     cxVec2f pos;
     cxBool hited = cxViewHitTest(pview, touch->current, &pos) && cxPointsContainPoint(this->box, pos);
-    Node snode = map->move.node;
+    Node snode = map->node;
     //如果移动一个选中的node
-    if(touch->type == cxTouchTypeMove &&  map->move.node != NULL && this->isSelected){
-        cxVec2f pos = map->move.prev;
+    if(touch->type == cxTouchTypeMove &&  map->node != NULL && this->isSelected){
+        cxVec2f pos = map->prev;
         kmVec2Add(&pos, &pos, &touch->delta);
         cxVec2f idx = NodePosToIdx(this,pos);
         this->isValidIdx = NodeIdxIsValid(this, idx);
@@ -42,12 +42,12 @@ static cxBool NodeTouch(cxAny pview,cxTouch *touch)
             cxViewSetColor(this, cxGRAY);
         }
         NodeSetPosition(this, idx);
-        map->move.prev = pos;
+        map->prev = pos;
         return true;
     }
     //按下的时候并选中一个node
     if(touch->type == cxTouchTypeDown && hited){
-        map->move.prev = cxViewPosition(this);
+        map->prev = cxViewPosition(this);
         this->isSelected = true;
         return false;
     }
@@ -57,7 +57,7 @@ static cxBool NodeTouch(cxAny pview,cxTouch *touch)
             NodeResetPosition(snode);
         }
         snode->isSelected = false;
-        map->move.node = NULL;
+        map->node = NULL;
         cxViewSetColor(snode, cxRED);
         return false;
     }
@@ -71,15 +71,14 @@ static cxBool NodeTouch(cxAny pview,cxTouch *touch)
         CX_LIST_FOREACH(map->nodes, ele){
             Node cnode = ele->any;
             if(cnode == this){
-                //选中
                 cxViewSetColor(ele->any, cnode->isValidIdx ? cxYELLOW : cxGRAY);
+                cxViewBringFront(map, this);
             }else{
                 cnode->isSelected = false;
-                //反选
                 cxViewSetColor(ele->any, cxRED);
             }
         }
-        map->move.node = this;
+        map->node = this;
         return true;
     }
     return false;

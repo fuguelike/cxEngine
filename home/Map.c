@@ -49,6 +49,18 @@ static cxBool MapTouch(cxAny pview,cxTouch *touch)
     return false;
 }
 
+static cxInt MapSortCmpFunc(cxListElement *lp,cxListElement *rp)
+{
+    cxView v1 = (cxView)lp->any;
+    cxView v2 = (cxView)rp->any;
+    return v2->position.y - v1->position.y;
+}
+
+void MapSortNode(Map this)
+{
+    cxListSort(this->cxAtlas.cxSprite.cxView.subViews, MapSortCmpFunc);
+}
+
 CX_OBJECT_TYPE(Map, cxAtlas)
 {
     
@@ -69,18 +81,16 @@ CX_OBJECT_INIT(Map, cxAtlas)
     //
     
     //test
+    cxSpriteSetTextureURL(this, "bg1.png", false);
     for(cxInt x = 0; x < this->unitNum.x; x++){
         for (cxInt y = 0; y < this->unitNum.y; y++) {
             cxVec2f pos = MapIdxToPos(this, cxVec2fv(x, y));
-            cxSprite sp = cxSpriteCreateWithURL("bg1.png");
-            cxViewSetSize(sp, this->unitSize);
-            cxViewSetPos(sp, pos);
-            cxViewAppend(this, sp);
+            cxAtlasAppendBoxPoint(this, pos, this->unitSize, cxBoxTex2fDefault(), cxColor4fv(1, 1, 1, 1));
         }
     }
     {
         Node node = NodeCreate(this);
-        NodeInit(node, cxSize2fv(3, 3),cxVec2fv(5, 5));
+        NodeInit(node, cxSize2fv(3, 3),cxVec2fv(8, 8));
         cxSpriteSetTextureURL(node, "bg1.png", false);
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);
@@ -109,6 +119,8 @@ CX_OBJECT_INIT(Map, cxAtlas)
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);
     }
+    
+    MapSortNode(this);
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {

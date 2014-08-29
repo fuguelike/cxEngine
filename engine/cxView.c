@@ -293,6 +293,16 @@ void cxViewAppend(cxAny pview,cxAny subview)
     CX_METHOD_RUN(this->Append,pview,subview);
 }
 
+void cxViewBringFront(cxAny pview,cxAny fview)
+{
+    cxView this = pview;
+    cxView front = fview;
+    CX_RETAIN(front);
+    cxListRemove(this->subViews, front->subElement);
+    front->subElement = cxListAppend(this->subViews, front);
+    CX_RELEASE(front);
+}
+
 void cxViewSetCropping(cxAny pview,cxBool cropping)
 {
     CX_ASSERT(pview != NULL, "pview args error");
@@ -501,7 +511,7 @@ void cxViewSetSize(cxAny pview,cxSize2f size)
     CX_EVENT_FIRE(this, onResize);
 }
 
-static int cxViewSortByZOrder(cxListElement *lp,cxListElement *rp)
+static cxInt cxViewSortByZOrder(cxListElement *lp,cxListElement *rp)
 {
     cxView v1 = (cxView)lp->any;
     cxView v2 = (cxView)rp->any;

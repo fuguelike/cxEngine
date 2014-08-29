@@ -99,6 +99,8 @@ void cxViewUnBindAll(cxAny pview);
 
 void cxViewBind(cxAny pview,cxAny bview,cxAny bd);
 
+void cxViewBringFront(cxAny pview,cxAny fview);
+
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 
 cxVec2f cxViewPosition(cxAny pview);
