@@ -222,7 +222,7 @@ void cxViewForeachBindes(cxAny pview,cxViewBindForeachFunc func)
 {
     cxView this = pview;
     CX_HASH_FOREACH(this->bindes, ele, tmp){
-        cxView view = CX_HASH_KEY_TO_ANY(ele);
+        cxView view = cxHashElementKeyToAny(ele);
         if(!func(pview,view,ele->any)){
             break;
         }
@@ -234,7 +234,7 @@ void cxViewForeachBinded(cxAny pview,cxViewBindForeachFunc func)
 {
     cxView this = pview;
     CX_HASH_FOREACH(this->binded, ele, tmp){
-        cxView view = CX_HASH_KEY_TO_ANY(ele);
+        cxView view = cxHashElementKeyToAny(ele);
         if(!func(pview,view,ele->any)){
             break;
         }
@@ -247,14 +247,14 @@ void cxViewUnBindAll(cxAny pview)
     CX_RETURN(this == NULL);
     //clean bind's view
     CX_HASH_FOREACH(this->bindes, ele1, tmp1){
-        cxView view = CX_HASH_KEY_TO_ANY(ele1);
-        cxHashDel(view->binded, cxHashIntKey((cxInt)this));
+        cxView view = cxHashElementKeyToAny(ele1);
+        cxHashDel(view->binded, cxHashAnyKey(this));
     }
     cxHashClean(this->bindes);
     //clean binded view
     CX_HASH_FOREACH(this->binded, ele2, tmp2){
-        cxView view = CX_HASH_KEY_TO_ANY(ele2);
-        cxHashDel(view->bindes, cxHashIntKey((cxInt)this));
+        cxView view = cxHashElementKeyToAny(ele2);
+        cxHashDel(view->bindes, cxHashAnyKey(this));
     }
     cxHashClean(this->binded);
 }
@@ -267,9 +267,9 @@ void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
     CX_ASSERT(cxInstanceOf(this, cxViewTypeName), "pview must is cxView");
     CX_ASSERT(cxInstanceOf(bind, cxViewTypeName), "bview must is cxView");
     //bind new view
-    cxHashSet(this->bindes, cxHashIntKey((cxInt)bind), bd);
+    cxHashSet(this->bindes, cxHashAnyKey(bind), bd);
     //this binded bind
-    cxHashSet(bind->binded, cxHashIntKey((cxInt)this), bd);
+    cxHashSet(bind->binded, cxHashAnyKey(this), bd);
 }
 
 void cxViewAppendImp(cxAny pview,cxAny newview)

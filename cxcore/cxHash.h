@@ -26,6 +26,14 @@ typedef struct {
     UT_hash_handle hh;
 }cxHashElement;
 
+#define cxHashElementKeyToAny(_e_)      (cxAny)(*(cxLong *)((_e_)->key))
+
+#define cxHashElementKeyToLong(_e_)     *(cxLong *)((_e_)->key)
+
+#define cxHashElementKeyToInt(_e_)      *(cxInt *)((_e_)->key)
+
+#define cxHashElementKeyToStr(_e_)      (_e_)->key
+
 typedef struct {
     cxInt length;
     cxChars data;
@@ -35,7 +43,9 @@ typedef cxInt (*cxHashCmpFunc)(cxHashElement *lp,cxHashElement *rp);
 
 #define cxHashIntKey(_v_)       (cxHashKey){.length=sizeof(cxInt),.data=(cxChars)&(cxInt){_v_}}
 
-#define cxHashPtrKey(_p_)       (cxHashKey){.length=sizeof(cxAny),.data=(cxChars)&(cxLong){(cxLong)(_p_)}}
+#define cxHashLongKey(_v_)      (cxHashKey){.length=sizeof(cxLong),.data=(cxChars)&(cxLong){_v_}}
+
+#define cxHashAnyKey(_p_)       (cxHashKey){.length=sizeof(cxAny),.data=(cxChars)&(cxLong){(cxLong)(_p_)}}
 
 #define cxHashStrKey(_s_)       (cxHashKey){.length=(cxInt)strlen(_s_),.data=(cxChars)(_s_)}
 

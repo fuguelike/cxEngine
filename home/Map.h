@@ -27,6 +27,9 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxBox4f box;
 CX_OBJECT_END(Map, cxAtlas)
 
+//node 位置改变的时候
+void MapNodeIdxChanged(Map this,cxAny node);
+
 void MapAppendNode(Map this,cxAny node);
 
 cxInt MapOffsetIdx(Map this,cxInt x,cxInt y);
@@ -34,8 +37,6 @@ cxInt MapOffsetIdx(Map this,cxInt x,cxInt y);
 cxVec2f MapPosToIdx(Map this,cxVec2f pos);
 
 cxVec2f MapIdxToPos(Map this,cxVec2f idx);
-
-cxHashKey MapIdxToKey(Map this,cxVec2i idx);
 
 cxAny MapItem(Map this,cxVec2f idx);
 

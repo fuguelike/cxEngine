@@ -86,21 +86,29 @@ CX_OBJECT_INIT(Map, cxAtlas)
         MapAppendNode(this, node);
     }
     
-//    {
-//        Node node = NodeCreate(this);
-//        NodeInit(node, cxSize2fv(4, 4),cxVec2fv(0, 0));
-//        cxSpriteSetTextureURL(node, "bg1.png", false);
-//        cxViewSetColor(node, cxRED);
-//        MapAppendNode(this, node);
-//    }
-//    
-//    {
-//        Node node = NodeCreate(this);
-//        NodeInit(node, cxSize2fv(1, 1),cxVec2fv(18, 18));
-//        cxSpriteSetTextureURL(node, "bg1.png", false);
-//        cxViewSetColor(node, cxRED);
-//        MapAppendNode(this, node);
-//    }
+    {
+        Node node = NodeCreate(this);
+        NodeInit(node, cxSize2fv(4, 4),cxVec2fv(0, 0));
+        cxSpriteSetTextureURL(node, "bg1.png", false);
+        cxViewSetColor(node, cxRED);
+        MapAppendNode(this, node);
+    }
+    
+    {
+        Node node = NodeCreate(this);
+        NodeInit(node, cxSize2fv(1, 1),cxVec2fv(18, 18));
+        cxSpriteSetTextureURL(node, "bg1.png", false);
+        cxViewSetColor(node, cxRED);
+        MapAppendNode(this, node);
+    }
+    
+    {
+        Node node = NodeCreate(this);
+        NodeInit(node, cxSize2fv(2, 2),cxVec2fv(7, 18));
+        cxSpriteSetTextureURL(node, "bg1.png", false);
+        cxViewSetColor(node, cxRED);
+        MapAppendNode(this, node);
+    }
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {
@@ -108,6 +116,11 @@ CX_OBJECT_FREE(Map, cxAtlas)
     allocator->free(this->items);
 }
 CX_OBJECT_TERM(Map, cxAtlas)
+
+void MapNodeIdxChanged(Map this,cxAny node)
+{
+    
+}
 
 void MapAppendNode(Map this,cxAny node)
 {
@@ -123,10 +136,10 @@ cxInt MapOffsetIdx(Map this,cxInt x,cxInt y)
                             
 cxAny MapItem(Map this,cxVec2f idx)
 {
-    cxInt off = MapOffsetIdx(this, idx.x, idx.y);
     if(!MapIsValidIdx(this, idx)){
-        return false;
+        return NULL;
     }
+    cxInt off = MapOffsetIdx(this, idx.x, idx.y);
     return this->items[off];
 }
 
@@ -190,12 +203,6 @@ cxVec2f MapPosToIdx(Map this,cxVec2f pos)
 cxBool MapIsValidIdx(Map this,cxVec2f idx)
 {
     return idx.x >= 0 && idx.x < this->unitNum.x && idx.y >= 0 && idx.y < this->unitNum.y;
-}
-
-cxHashKey MapIdxToKey(Map this,cxVec2i idx)
-{
-    cxInt key = (cxInt)idx.y * this->unitNum.x + (cxInt)idx.x;
-    return cxHashIntKey(key);
 }
 
 cxVec2f MapIdxToPos(Map this,cxVec2f idx)

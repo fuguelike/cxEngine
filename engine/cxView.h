@@ -38,7 +38,7 @@ typedef enum{
     cxViewIsTouchTypeSubview    = 1 << 1,   //touch subviews
 }cxViewIsTouchType;
 
-#define CX_HASH_KEY_TO_ANY(_e_) (cxAny)(*(cxInt *)(_e_)->key)
+#define CX_HASH_KEY_TO_ANY(_e_) (*(cxAny *)(_e_)->key)
 
 typedef cxBool (*cxViewBindForeachFunc)(cxAny pview,cxAny bview,cxAny bd);
 

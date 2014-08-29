@@ -180,10 +180,16 @@ void NodeSetIdx(cxAny node,cxVec2f idx)
 {
     Node this = node;
     Map map = this->map;
-    MapSetNode(map, cxVec2iv(idx.x, idx.y), this);
+    cxVec2i nidx = cxVec2iv(idx.x, idx.y);
+    cxVec2i oidx = NodeIndex(node);
+    if(cxVec2iEqu(nidx, oidx)){
+        return;
+    }
+    MapSetNode(map, nidx, this);
     this->idx = idx;
     this->curr = idx;
     this->isValidIdx = true;
+    MapNodeIdxChanged(map, node);
 }
 
 void NodeInit(cxAny node,cxSize2f size,cxVec2f pos)
