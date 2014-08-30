@@ -74,6 +74,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
     cxColor4f color;
+    cxColor3f borderColor;
     CX_METHOD_DEF(cxViewIsTouchType,IsTouch,cxAny,cxTouch *);
     CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouch *);
     CX_METHOD_DEF(cxViewIsTouchType, IsOnKey, cxAny, cxKey *);
@@ -132,6 +133,8 @@ void cxViewSetHideTop(cxAny pview,cxBool hideTop);
 void cxViewSetDirty(cxAny pview,cxBool dirty);
 
 void cxViewSetShowBorder(cxAny pview,cxBool isShowBorder);
+
+void cxViewSetBorderColor(cxAny pview,cxColor3f color);
 
 cxBool cxViewZeroSize(cxAny pview);
 

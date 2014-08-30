@@ -172,6 +172,8 @@ cxSize2i cxJsonToSize2i(cxJson json,cxSize2i dv);
 
 cxColor4f cxJsonToColor4f(cxJson json,cxColor4f dv);
 
+cxColor3f cxJsonToColor3f(cxJson json,cxColor3f dv);
+
 cxBox4f cxJsonToBox4f(cxJson json,cxBox4f dv);
 
 cxBoxTex2f cxJsonToBoxTex2f(cxJson json,cxBoxTex2f dv);

@@ -105,16 +105,18 @@ static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
     CX_RETURN(view == NULL);
     if(touch->type == cxTouchTypeDown){
         cxViewStopAction(view, CX_SCROLL_MOVE_ACTION_ID);
-        this->box.r = (view->size.w - this->cxView.size.w)/2.0f;
+        cxVec2f vscale = cxViewScale(view);
+        cxVec2f tscale = cxViewScale(this);
+        this->box.r = (view->size.w * vscale.x - this->cxView.size.w * tscale.x)/2.0f;
         this->box.l = -this->box.r;
-        this->box.t = (view->size.h - this->cxView.size.h)/2.0f;
+        this->box.t = (view->size.h * vscale.y - this->cxView.size.h * tscale.y)/2.0f;
         this->box.b = -this->box.t;
         if(this->type & cxScrollMoveTypeVertical){
-            this->max = this->cxView.size.w / 8.0f;
+            this->max = this->cxView.size.w * tscale.x / 10.0f;
         }else if(this->type & cxScrollMoveTypeHorizontal){
-            this->max = this->cxView.size.h / 8.0f;
+            this->max = this->cxView.size.h * tscale.y / 10.0f;
         }else{
-            this->max = (this->cxView.size.w + this->cxView.size.h) / 16.0f;
+            this->max = (this->cxView.size.w * tscale.x + this->cxView.size.h * tscale.y) / 16.0f;
         }
         this->selected = cxViewHitTest(pview, touch->current, NULL);
     }else if(touch->type == cxTouchTypeMove && this->selected){

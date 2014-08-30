@@ -436,6 +436,17 @@ cxColor4f cxJsonToColor4f(cxJson json,cxColor4f dv)
     return dv;
 }
 
+//{"r":0,"g":0,"b":0,"a":1.0}
+cxColor3f cxJsonToColor3f(cxJson json,cxColor3f dv)
+{
+    CX_ASSERT(json != NULL, "json error");
+    json = cxJsonParseRegisterValue(json);
+    dv.r = cxJsonDouble(json, "r", dv.r);
+    dv.g = cxJsonDouble(json, "g", dv.g);
+    dv.b = cxJsonDouble(json, "b", dv.b);
+    return dv;
+}
+
 //{"l":0,"r":0,"t":0,"b":0}
 cxBox4f cxJsonToBox4f(cxJson json,cxBox4f dv)
 {

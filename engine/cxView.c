@@ -149,6 +149,10 @@ CX_SETTER_DEF(cxView, tag)
 {
     this->tag = cxJsonToInt(value, this->tag);
 }
+CX_SETTER_DEF(cxView, bordercolor)
+{
+    this->borderColor = cxJsonToColor3f(value, this->borderColor);
+}
 
 CX_OBJECT_TYPE(cxView, cxObject)
 {
@@ -170,6 +174,7 @@ CX_OBJECT_TYPE(cxView, cxObject)
     CX_PROPERTY_SETTER(cxView, actions);
     CX_PROPERTY_SETTER(cxView, touchtype);
     CX_PROPERTY_SETTER(cxView, tag);
+    CX_PROPERTY_SETTER(cxView, bordercolor);
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {
@@ -183,6 +188,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->fixscale = cxVec2fv(1.0f, 1.0f);
+    this->borderColor = cxRED;
     this->touchType = cxViewIsTouchTypeSubview | cxViewIsTouchTypeThis;
 
     CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
@@ -485,19 +491,20 @@ cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
     cxVec3f out;
     cxMatrix4f matrix;
     kmVec3Fill(&out, wPoint.x, wPoint.y, 0);
-    cxArray list = CX_ALLOC(cxArray);
+    cxView vs[64];
+    cxInt num = 0;
     while (pv != NULL && pv->parentView != NULL) {
-        cxArrayAppend(list, pv);
+        vs[num++] = pv;
         pv = pv->parentView;
+        CX_ASSERT(num <= 64, "vs too small");
     }
-    CX_ARRAY_REVERSE(list, ele){
-        pv = cxArrayObject(ele);
+    for(cxInt i= num - 1; i >= 0; i--){
+        pv = vs[i];
         kmMat4Inverse(&matrix, &pv->normalMatrix);
         kmVec3Transform(&out, &out, &matrix);
         kmMat4Inverse(&matrix, &pv->anchorMatrix);
         kmVec3Transform(&out, &out, &matrix);
     }
-    CX_RELEASE(list);
     return cxVec2fv(out.x, out.y);
 }
 
@@ -680,12 +687,13 @@ void cxViewTransform(cxAny pview)
     cxMatrix4f scaleMatrix;
     kmMat4Scaling(&scaleMatrix, scale.x, scale.y, 1.0f);
     
-    kmMat4Multiply(&this->normalMatrix, &transMatrix, &rotateMatrix);
-    kmMat4Multiply(&this->normalMatrix, &this->normalMatrix, &scaleMatrix);
-    
     cxFloat x = -this->size.w * this->anchor.x;
     cxFloat y = -this->size.h * this->anchor.y;
     kmMat4Translation(&this->anchorMatrix, x, y, 0);
+    
+    //translate,rotate,scale
+    kmMat4Multiply(&this->normalMatrix, &transMatrix, &rotateMatrix);
+    kmMat4Multiply(&this->normalMatrix, &this->normalMatrix, &scaleMatrix);
     
     CX_EVENT_FIRE(this, onDirty);
     //
@@ -695,12 +703,18 @@ void cxViewTransform(cxAny pview)
     this->isDirty = false;
 }
 
+void cxViewSetBorderColor(cxAny pview,cxColor3f color)
+{
+    cxView this = pview;
+    this->borderColor = color;
+}
+
 static void cxViewDrawBorder(cxAny pview)
 {
     cxView this = pview;
     cxBox4f b = cxViewBox(this);
     cxBoxVec2f box = cxBoxVec2fFromBox4f(b);
-    cxDrawLineBox(&box, cxRED);
+    cxDrawLineBox(&box, this->borderColor);
 }
 
 void cxViewEnter(cxAny pview)
@@ -818,6 +832,7 @@ void cxViewRemoved(cxAny pview)
     cxView parent = this->parentView;
     //join to remove list
     cxArrayAppend(parent->removes, this);
+    //remove draw list
     cxListRemove(parent->subViews, this->subElement);
     this->subElement = NULL;
     this->parentView = NULL;
