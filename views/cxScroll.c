@@ -34,27 +34,25 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
         this->box.l = -this->box.r;
         this->box.t = (view->size.h * vscale.y - this->cxView.size.h * tscale.y)/2.0f;
         this->box.b = -this->box.t;
-        this->start = pos;
         return true;
     }else if(touch->type == cxTouchTypeMove){
         cxVec2f vpos = cxViewPosition(view);
-        cxVec2f delta;
-        kmVec2Subtract(&delta, &pos, &this->start);
+        cxVec2f delta = cxViewTouchDelta(this, touch);
         cxBool setpos = false;
         if(this->type & cxScrollMoveTypeVertical){
             vpos.y += delta.y;
-            if(delta.y < 0 && vpos.y < this->box.b){
+            if(CX_TOUCH_IS_DOWN(touch) && vpos.y < this->box.b){
                 vpos.y = this->box.b;
-            }else if(delta.y > 0 && vpos.y > this->box.t){
+            }else if(CX_TOUCH_IS_UP(touch) && vpos.y > this->box.t){
                 vpos.y = this->box.t;
             }
             setpos = true;
         }
         if(this->type & cxScrollMoveTypeHorizontal){
             vpos.x += delta.x;
-            if(delta.x < 0 && vpos.x < this->box.l){
+            if(CX_TOUCH_IS_LEFT(touch) && vpos.x < this->box.l){
                 vpos.x = this->box.l;
-            }else if(delta.x > 0 && vpos.x > this->box.r){
+            }else if(CX_TOUCH_IS_RIGHT(touch) && vpos.x > this->box.r){
                 vpos.x = this->box.r;
             }
             setpos = true;

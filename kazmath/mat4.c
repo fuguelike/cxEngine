@@ -36,6 +36,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "mat3.h"
 #include "quaternion.h"
 #include "plane.h"
+#include "neon_matrix_impl.h"
+
 
 /**
  * Fills a kmMat4 structure with the values from a 16
@@ -234,6 +236,17 @@ kmMat4* kmMat4Transpose(kmMat4* pOut, const kmMat4* pIn)
  */
 kmMat4* kmMat4Multiply(kmMat4* pOut, const kmMat4* pM1, const kmMat4* pM2)
 {
+#if defined(__ARM_NEON__) && !defined(__arm64__)
+
+    // It is possible to skip the memcpy() since "out" does not overwrite p1 or p2.
+    // otherwise a temp must be needed.
+    float *mat = pOut->mat;
+
+    // Invert column-order with row-order
+    NEON_Matrix4Mul( &pM2->mat[0], &pM1->mat[0], &mat[0] );
+
+#else
+
 	kmScalar mat[16];
 
 	const kmScalar *m1 = pM1->mat, *m2 = pM2->mat;
@@ -260,6 +273,7 @@ kmMat4* kmMat4Multiply(kmMat4* pOut, const kmMat4* pM1, const kmMat4* pM2)
 
 
 	memcpy(pOut->mat, mat, sizeof(kmScalar)*16);
+#endif
 
 	return pOut;
 }
@@ -420,7 +434,7 @@ kmMat4* kmMat4RotationZ(kmMat4* pOut, const kmScalar radians)
 	pOut->mat[2] = 0.0f;
 	pOut->mat[3] = 0.0f;
 
-	pOut->mat[4] = -sinf(radians);;
+	pOut->mat[4] = -sinf(radians);
 	pOut->mat[5] = cosf(radians);
 	pOut->mat[6] = 0.0f;
 	pOut->mat[7] = 0.0f;

@@ -181,20 +181,26 @@ void cxEngineMemory()
 
 void cxEngineDraw()
 {
+    CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
-    CX_RETURN(isExit || !engine->isInit || engine->isPause);
-    cxOpenGLClear();
-    cxMemPoolBegin();
     cxDouble now = cxTimestamp();
     engine->frameDelta = now - engine->lastTime;
+    engine->frameDelta = CX_MAX(0, engine->frameDelta);
+    if(!engine->isInit){
+        goto completed;
+    }
+    if(engine->isPause){
+        goto completed;
+    }
+    cxMemPoolBegin();
+    cxOpenGLClear();
     CX_SIGNAL_FIRE(engine->onUpdate, CX_FUNC_TYPE(cxAny,cxFloat),CX_SLOT_OBJECT,engine->frameDelta);
-    
     kmGLPushMatrix();
     cxViewDraw(engine->window);
     kmGLPopMatrix();
-    
-    engine->lastTime = now;
     cxMemPoolClean();
+completed:
+    engine->lastTime = now;
 }
 
 static void cxEngineLookAt(cxMatrix4f *matrix,cxFloat zeye,const cxVec2f point)
@@ -220,9 +226,10 @@ void cxEngineLayout(cxInt width,cxInt height)
     CX_LOGGER("openGL layout width=%d height=%d",width,height);
     cxEngine engine = cxEngineInstance();
     engine->winsize = cxSize2fv(width, height);
-    cxJsonRegisterDouble("WinW", width);
-    cxJsonRegisterDouble("WinH", height);
+    //$WinSize.w $WinSize.h
+    cxJsonRegisterSize2f("WinSize", engine->winsize);
     cxViewSetSize(engine->window, engine->winsize);
+    //
     if(!cxSize2Zero(engine->dessize)){
         engine->scale.x = engine->winsize.w/engine->dessize.w;
         engine->scale.y = engine->winsize.h/engine->dessize.h;
@@ -233,6 +240,7 @@ void cxEngineLayout(cxInt width,cxInt height)
     if(!engine->isInit){
         cxOpenGLCheckFeature();
         cxEngineMain(engine);
+        cxDumpGlobalJson();
     }
     //
     cxFloat zeye = engine->winsize.h / 1.1566f;
@@ -245,6 +253,7 @@ void cxEngineLayout(cxInt width,cxInt height)
     kmGLMatrixMode(KM_GL_MODELVIEW);
     kmGLLoadIdentity();
     //
+    cxOpenGLSetDepthTest(false);
     cxOpenGLViewport(cxBox4fv(0, engine->winsize.w, 0, engine->winsize.h));
     //
     cxMatrix4f matrix;
@@ -286,7 +295,6 @@ CX_OBJECT_TYPE(cxEngine, cxObject)
 {}
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
-    kmGLInitialize();
     this->interval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->isTouch = true;
@@ -494,23 +502,17 @@ cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
     if(!this->isTouch){
         return false;
     }
-    cxDouble time = cxTimestamp();
     cxVec2f cpos = cxEngineTouchToWindow(pos);
     if(type == cxTouchTypeDown){
-        this->touch.movement = cxVec2fv(0, 0);
         this->touch.delta = cxVec2fv(0, 0);
         this->touch.previous = cpos;
-        this->touch.dtime = time;
-        this->touch.start = cpos;
         this->touch.direction = cxTouchDirectionNone;
     }else if(type == cxTouchTypeMove){
         kmVec2Subtract(&this->touch.delta, &cpos, &this->touch.previous);
         this->touch.previous = cpos;
-        this->touch.movement.x += this->touch.delta.x;
-        this->touch.movement.y += this->touch.delta.y;
         this->touch.direction = cxTouchGetDirection(this->touch.delta);
     }else{
-        this->touch.utime = time;
+        this->touch.delta = cxVec2fv(0, 0);
     }
     this->touch.current = cpos;
     this->touch.type = type;

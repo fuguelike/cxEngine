@@ -32,7 +32,7 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
     if(!this->isDown){
         return false;
     }
-    if(touch->type == cxTouchTypeMove && cxVec2fMagnitude(touch->movement) > this->movement){
+    if(touch->type == cxTouchTypeMove){
         CX_EVENT_FIRE(this, onLeave);
         this->isDown = false;
         return false;

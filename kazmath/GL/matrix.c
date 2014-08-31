@@ -26,8 +26,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdlib.h>
 #include <assert.h>
 
-#include "kazmath/matrix.h"
-#include "kazmath/mat4stack.h"
+#include "kazmath/GL/matrix.h"
+#include "kazmath/GL/mat4stack.h"
 
 km_mat4_stack modelview_matrix_stack;
 km_mat4_stack projection_matrix_stack;
@@ -63,11 +63,6 @@ void lazyInitialize()
         km_mat4_stack_push(&projection_matrix_stack, &identity);
         km_mat4_stack_push(&texture_matrix_stack, &identity);
     }
-}
-
-void kmGLInitialize()
-{
-    lazyInitialize();
 }
 
 void kmGLMatrixMode(kmGLEnum mode)

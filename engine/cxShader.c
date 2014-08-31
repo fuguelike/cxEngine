@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <kazmath/matrix.h>
+#include <kazmath/GL/matrix.h>
 #include "cxShader.h"
 
 void cxShaderInitPosColorTex(cxAny this)

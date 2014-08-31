@@ -30,8 +30,8 @@ LOCAL_SRC_FILES += \
     kazmath/aabb.c \
     kazmath/mat3.c \
     kazmath/mat4.c \
-    kazmath/mat4stack.c \
-    kazmath/matrix.c \
+    kazmath/GL/mat4stack.c \
+    kazmath/GL/matrix.c \
     kazmath/plane.c \
     kazmath/quaternion.c \
     kazmath/ray2.c \
@@ -39,7 +39,8 @@ LOCAL_SRC_FILES += \
     kazmath/utility.c \
     kazmath/vec2.c \
     kazmath/vec3.c \
-    kazmath/vec4.c
+    kazmath/vec4.c \
+    kazmath/neon_matrix_impl.c
 
 LOCAL_SRC_FILES += \
     shaders/cxShaderAlpha.c \

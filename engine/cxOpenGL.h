@@ -71,15 +71,20 @@ CX_OBJECT_DEF(cxOpenGL, cxObject)
     cxBool enableAttribColor;
     cxBool enableAttribTexcoords;
     GLuint activeTexture;
+    cxColor4f clearColor;
 CX_OBJECT_END(cxOpenGL, cxObject)
 
 cxOpenGL cxOpenGLInstance();
 
 cxAny cxOpenGLShader(cxConstChars key);
 
+void cxOpenGLSetClearColor(cxColor4f color);
+
 void cxOpenGLDestroy();
 
 void cxOpenGLCheckFeature();
+
+void cxOpenGLSetDepthTest(cxBool on);
 
 void cxOpenGLViewport(const cxBox4f box);
 

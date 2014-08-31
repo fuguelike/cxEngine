@@ -25,6 +25,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "aabb.h"
 
+
 /**
     Initializes the AABB around a central point. If centre is NULL then the origin
     is used. Returns pBox.
@@ -78,7 +79,7 @@ kmAABB* kmAABBAssign(kmAABB* pOut, const kmAABB* pIn)
 kmAABB* kmAABBScale(kmAABB* pOut, const kmAABB* pIn, kmScalar s)
 {
 	assert(0 && "Not implemented");
-    return (kmAABB*)0;
+    return pOut;
 }
 
 kmBool kmAABBIntersectsTriangle(kmAABB* box, const kmVec3* p1, const kmVec3* p2, const kmVec3* p3) {
@@ -99,8 +100,9 @@ kmEnum kmAABBContainsAABB(const kmAABB* container, const kmAABB* to_check) {
     kmVec3Fill(&corners[5], to_check->max.x, to_check->min.y, to_check->max.z);
     kmVec3Fill(&corners[6], to_check->max.x, to_check->max.y, to_check->max.z);
     kmVec3Fill(&corners[7], to_check->min.x, to_check->max.y, to_check->max.z);
-        
-    for(kmUchar i = 0; i < 8; ++i) {
+
+    kmUchar i;
+    for(i = 0; i < 8; ++i) {
         if(!kmAABBContainsPoint(container, &corners[i])) {
             result = KM_CONTAINS_PARTIAL;
             if(found) {

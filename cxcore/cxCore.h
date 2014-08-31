@@ -305,6 +305,7 @@ do{                                                             \
 
 #define CX_FUNC_TYPE(...) (void (*)(__VA_ARGS__))
 
+//only use at CX_SIGNAL_FIRE micro
 #define CX_SLOT_OBJECT _ele_->object
 
 #define CX_SIGNAL_FIRE(_signal_,_ft_,...)                       \

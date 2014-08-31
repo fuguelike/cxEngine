@@ -79,6 +79,8 @@ void cxJsonRegisterLong(cxConstChars key,cxLong value);
 
 cxString cxJsonDump(cxJson json);
 
+void cxDumpGlobalJson();
+
 void cxJsonInit();
 
 void cxJsonFree();

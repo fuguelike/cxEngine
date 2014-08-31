@@ -111,6 +111,16 @@ void cxOpenGLSetBlendFactor(GLenum sfactor, GLenum dfactor)
     }
 }
 
+void cxOpenGLSetDepthTest(cxBool on)
+{
+    if (on){
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+    }else{
+        glDisable(GL_DEPTH_TEST);
+    }
+}
+
 void cxOpenGLViewport(const cxBox4f box)
 {
     glViewport(box.l, box.t, box.r - box.l, box.b - box.t);
@@ -218,9 +228,16 @@ void cxOpenGLDeleteProgram(GLuint program)
     this->currentProgram = -1;
 }
 
+void cxOpenGLSetClearColor(cxColor4f color)
+{
+    cxOpenGL this = cxOpenGLInstance();
+    this->clearColor = color;
+}
+
 void cxOpenGLClear()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    cxOpenGL this = cxOpenGLInstance();
+    glClearColor(this->clearColor.r, this->clearColor.g, this->clearColor.b, this->clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -230,6 +247,7 @@ CX_OBJECT_TYPE(cxOpenGL, cxObject)
 }
 CX_OBJECT_INIT(cxOpenGL, cxObject)
 {
+    this->clearColor = cxColor4fv(0, 0, 0, 1);
     this->blendSrc = -1;
     this->blendDst = -1;
     this->currentProgram = -1;

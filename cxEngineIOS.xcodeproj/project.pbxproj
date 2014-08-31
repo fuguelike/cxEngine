@@ -58,8 +58,6 @@
 		8341C64718227DF30045A66F /* aabb.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5A518227DF20045A66F /* aabb.c */; };
 		8341C64818227DF30045A66F /* mat3.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5A818227DF20045A66F /* mat3.c */; };
 		8341C64918227DF30045A66F /* mat4.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5AA18227DF20045A66F /* mat4.c */; };
-		8341C64A18227DF30045A66F /* mat4stack.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5AC18227DF20045A66F /* mat4stack.c */; };
-		8341C64B18227DF30045A66F /* matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5AE18227DF20045A66F /* matrix.c */; };
 		8341C64C18227DF30045A66F /* plane.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5B018227DF20045A66F /* plane.c */; };
 		8341C64D18227DF30045A66F /* quaternion.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5B218227DF20045A66F /* quaternion.c */; };
 		8341C64E18227DF30045A66F /* ray2.c in Sources */ = {isa = PBXBuildFile; fileRef = 8341C5B418227DF20045A66F /* ray2.c */; };
@@ -79,6 +77,9 @@
 		837FEA4C1925CBBB005434C4 /* cxShaderClipping.c in Sources */ = {isa = PBXBuildFile; fileRef = 837FEA451925CBBB005434C4 /* cxShaderClipping.c */; };
 		837FEA4D1925CBBB005434C4 /* cxShaderDefault.c in Sources */ = {isa = PBXBuildFile; fileRef = 837FEA471925CBBB005434C4 /* cxShaderDefault.c */; };
 		837FEA4E1925CBBB005434C4 /* cxShaderPositionColor.c in Sources */ = {isa = PBXBuildFile; fileRef = 837FEA491925CBBB005434C4 /* cxShaderPositionColor.c */; };
+		83A1189419B353AE00F8F0D5 /* mat4stack.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A1189019B353AE00F8F0D5 /* mat4stack.c */; };
+		83A1189519B353AE00F8F0D5 /* matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A1189219B353AE00F8F0D5 /* matrix.c */; };
+		83A1189819B354AD00F8F0D5 /* neon_matrix_impl.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A1189619B354AD00F8F0D5 /* neon_matrix_impl.c */; };
 		83A78DE11936E2B5007C44FD /* cxTimeLine.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A78DDF1936E2B5007C44FD /* cxTimeLine.c */; };
 		83B08D071909FCB5005A63D2 /* dump.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B08CF51909FCB4005A63D2 /* dump.c */; };
 		83B08D081909FCB5005A63D2 /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B08CF61909FCB4005A63D2 /* error.c */; };
@@ -251,10 +252,6 @@
 		8341C5A918227DF20045A66F /* mat3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat3.h; sourceTree = "<group>"; };
 		8341C5AA18227DF20045A66F /* mat4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mat4.c; sourceTree = "<group>"; };
 		8341C5AB18227DF20045A66F /* mat4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat4.h; sourceTree = "<group>"; };
-		8341C5AC18227DF20045A66F /* mat4stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mat4stack.c; sourceTree = "<group>"; };
-		8341C5AD18227DF20045A66F /* mat4stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat4stack.h; sourceTree = "<group>"; };
-		8341C5AE18227DF20045A66F /* matrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = matrix.c; sourceTree = "<group>"; };
-		8341C5AF18227DF20045A66F /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = matrix.h; sourceTree = "<group>"; };
 		8341C5B018227DF20045A66F /* plane.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = plane.c; sourceTree = "<group>"; };
 		8341C5B118227DF20045A66F /* plane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = plane.h; sourceTree = "<group>"; };
 		8341C5B218227DF20045A66F /* quaternion.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = quaternion.c; sourceTree = "<group>"; };
@@ -296,6 +293,12 @@
 		837FEA481925CBBB005434C4 /* cxShaderDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderDefault.h; sourceTree = "<group>"; };
 		837FEA491925CBBB005434C4 /* cxShaderPositionColor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderPositionColor.c; sourceTree = "<group>"; };
 		837FEA4A1925CBBB005434C4 /* cxShaderPositionColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderPositionColor.h; sourceTree = "<group>"; };
+		83A1189019B353AE00F8F0D5 /* mat4stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mat4stack.c; sourceTree = "<group>"; };
+		83A1189119B353AE00F8F0D5 /* mat4stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat4stack.h; sourceTree = "<group>"; };
+		83A1189219B353AE00F8F0D5 /* matrix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = matrix.c; sourceTree = "<group>"; };
+		83A1189319B353AE00F8F0D5 /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = matrix.h; sourceTree = "<group>"; };
+		83A1189619B354AD00F8F0D5 /* neon_matrix_impl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = neon_matrix_impl.c; sourceTree = "<group>"; };
+		83A1189719B354AD00F8F0D5 /* neon_matrix_impl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = neon_matrix_impl.h; sourceTree = "<group>"; };
 		83A78DDF1936E2B5007C44FD /* cxTimeLine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTimeLine.c; sourceTree = "<group>"; };
 		83A78DE01936E2B5007C44FD /* cxTimeLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTimeLine.h; sourceTree = "<group>"; };
 		83B08CF51909FCB4005A63D2 /* dump.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dump.c; sourceTree = "<group>"; };
@@ -588,6 +591,9 @@
 		8341C5A418227DF20045A66F /* kazmath */ = {
 			isa = PBXGroup;
 			children = (
+				83A1189619B354AD00F8F0D5 /* neon_matrix_impl.c */,
+				83A1189719B354AD00F8F0D5 /* neon_matrix_impl.h */,
+				83A1188F19B353AE00F8F0D5 /* GL */,
 				8341C5A518227DF20045A66F /* aabb.c */,
 				8341C5A618227DF20045A66F /* aabb.h */,
 				8341C5A718227DF20045A66F /* kazmath.h */,
@@ -595,10 +601,6 @@
 				8341C5A918227DF20045A66F /* mat3.h */,
 				8341C5AA18227DF20045A66F /* mat4.c */,
 				8341C5AB18227DF20045A66F /* mat4.h */,
-				8341C5AC18227DF20045A66F /* mat4stack.c */,
-				8341C5AD18227DF20045A66F /* mat4stack.h */,
-				8341C5AE18227DF20045A66F /* matrix.c */,
-				8341C5AF18227DF20045A66F /* matrix.h */,
 				8341C5B018227DF20045A66F /* plane.c */,
 				8341C5B118227DF20045A66F /* plane.h */,
 				8341C5B218227DF20045A66F /* quaternion.c */,
@@ -649,6 +651,17 @@
 				837FEA4A1925CBBB005434C4 /* cxShaderPositionColor.h */,
 			);
 			path = shaders;
+			sourceTree = "<group>";
+		};
+		83A1188F19B353AE00F8F0D5 /* GL */ = {
+			isa = PBXGroup;
+			children = (
+				83A1189019B353AE00F8F0D5 /* mat4stack.c */,
+				83A1189119B353AE00F8F0D5 /* mat4stack.h */,
+				83A1189219B353AE00F8F0D5 /* matrix.c */,
+				83A1189319B353AE00F8F0D5 /* matrix.h */,
+			);
+			path = GL;
 			sourceTree = "<group>";
 		};
 		83B08CF21909FCB4005A63D2 /* jansson */ = {
@@ -810,7 +823,6 @@
 				833CA53F1925DB5E0013630A /* cxHttpConn.c in Sources */,
 				833CA5501925DB5E0013630A /* cxLoading.c in Sources */,
 				83B995DC1925C5A100FD6BC1 /* cxUtil.c in Sources */,
-				8341C64A18227DF30045A66F /* mat4stack.c in Sources */,
 				83B995DB1925C5A100FD6BC1 /* cxUrlPath.c in Sources */,
 				833CA54D1925DB5E0013630A /* cxClipping.c in Sources */,
 				833CA4F11925D95C0013630A /* cxMultiple.c in Sources */,
@@ -851,11 +863,11 @@
 				83B08D0A1909FCB5005A63D2 /* hashtable_seed.c in Sources */,
 				83B995F41925C6C300FD6BC1 /* cxArray.c in Sources */,
 				83B08D0B1909FCB5005A63D2 /* load.c in Sources */,
+				83A1189519B353AE00F8F0D5 /* matrix.c in Sources */,
 				83B995CF1925C5A100FD6BC1 /* cxJson.c in Sources */,
 				833CA5401925DB5E0013630A /* cxListen.c in Sources */,
 				833CA4F61925D95C0013630A /* cxJump.c in Sources */,
 				833CA5541925DB5E0013630A /* cxTable.c in Sources */,
-				8341C64B18227DF30045A66F /* matrix.c in Sources */,
 				833CA5031925DB3E0013630A /* cxAStar.c in Sources */,
 				83A78DE11936E2B5007C44FD /* cxTimeLine.c in Sources */,
 				83B08D111909FCB5005A63D2 /* value.c in Sources */,
@@ -880,6 +892,7 @@
 				83B995FA1925C6C300FD6BC1 /* cxStack.c in Sources */,
 				833CA5521925DB5E0013630A /* cxScroll.c in Sources */,
 				83CEB63E193EB58300D3F7BF /* aes_ige.c in Sources */,
+				83A1189819B354AD00F8F0D5 /* neon_matrix_impl.c in Sources */,
 				83CEB63B193EB58300D3F7BF /* aes_core.c in Sources */,
 				83B995D81925C5A100FD6BC1 /* cxStream.c in Sources */,
 				833CA55E1925DFEC0013630A /* cxMessage.c in Sources */,
@@ -913,6 +926,7 @@
 				83B995DA1925C5A100FD6BC1 /* cxTexture.c in Sources */,
 				833CA4FC1925D95C0013630A /* cxScale.c in Sources */,
 				833CA5511925DB5E0013630A /* cxPolygon.c in Sources */,
+				83A1189419B353AE00F8F0D5 /* mat4stack.c in Sources */,
 				833CA5531925DB5E0013630A /* cxSprite.c in Sources */,
 				837FEA4D1925CBBB005434C4 /* cxShaderDefault.c in Sources */,
 				83B08D091909FCB5005A63D2 /* hashtable.c in Sources */,

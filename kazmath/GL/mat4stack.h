@@ -23,37 +23,29 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef KM_GL_MATRIX_H_INCLUDED
-#define KM_GL_MATRIX_H_INCLUDED
+#ifndef C_STACK_H_INCLUDED
+#define C_STACK_H_INCLUDED
 
-#define KM_GL_MODELVIEW 0x1700
-#define KM_GL_PROJECTION 0x1701
-#define KM_GL_TEXTURE 0x1702
+#include "../mat4.h"
 
-typedef unsigned int kmGLEnum;
-
-#include "mat4.h"
-#include "vec3.h"
+typedef struct km_mat4_stack {
+    int capacity; //The total item capacity
+    int item_count; //The number of items
+    kmMat4* top;
+    kmMat4* stack;
+} km_mat4_stack;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void kmGLInitialize();
-void kmGLFreeAll(void);
-void kmGLPushMatrix(void);
-void kmGLPopMatrix(void);
-void kmGLMatrixMode(kmGLEnum mode);
-void kmGLLoadIdentity(void);
-void kmGLLoadMatrix(const kmMat4* pIn);
-void kmGLMultMatrix(const kmMat4* pIn);
-void kmGLTranslatef(float x, float y, float z);
-void kmGLRotatef(float angle, float x, float y, float z);
-void kmGLScalef(float x, float y, float z);
-void kmGLGetMatrix(kmGLEnum mode, kmMat4* pOut);
+void km_mat4_stack_initialize(km_mat4_stack* stack);
+void km_mat4_stack_push(km_mat4_stack* stack, const kmMat4* item);
+void km_mat4_stack_pop(km_mat4_stack* stack, kmMat4* pOut);
+void km_mat4_stack_release(km_mat4_stack* stack);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // MATRIX_H_INCLUDED
+#endif // C_STACK_H_INCLUDED

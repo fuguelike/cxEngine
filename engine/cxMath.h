@@ -11,7 +11,7 @@
 
 #include <cxcore/cxBase.h>
 #include <kazmath/kazmath.h>
-#include <kazmath/matrix.h>
+#include <kazmath/GL/matrix.h>
 
 CX_C_BEGIN
 

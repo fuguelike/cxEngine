@@ -7,7 +7,7 @@
 //
 
 #include <actions/cxTimer.h>
-#include <kazmath/matrix.h>
+#include <kazmath/GL/matrix.h>
 #include <cxcore/cxBase.h>
 #include "cxView.h"
 #include "cxEngine.h"

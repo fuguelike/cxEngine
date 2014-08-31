@@ -23,47 +23,36 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include <stdlib.h>
-#include <memory.h>
-#include <assert.h>
-#include <stdio.h>
+#ifndef KM_GL_MATRIX_H_INCLUDED
+#define KM_GL_MATRIX_H_INCLUDED
 
-#define INITIAL_SIZE 8
-#define INCREMENT 16
+#define KM_GL_MODELVIEW 0x1700
+#define KM_GL_PROJECTION 0x1701
+#define KM_GL_TEXTURE 0x1702
 
-#include "kazmath/mat4stack.h"
+typedef unsigned int kmGLEnum;
 
-void km_mat4_stack_initialize(km_mat4_stack* stack) {
-    stack->stack = (kmMat4*)malloc(sizeof(kmMat4) * INITIAL_SIZE); //allocate the memory
-    stack->capacity = INITIAL_SIZE; //Set the capacity to 10
-    stack->top = NULL; //Set the top to NULL
-    stack->item_count = 0;
-};
+#include "../mat4.h"
+#include "../vec3.h"
 
-void km_mat4_stack_push(km_mat4_stack* stack, const kmMat4* item)
-{
-    stack->top = &stack->stack[stack->item_count];
-    kmMat4Assign(stack->top, item);
-    stack->item_count++;
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-    if(stack->item_count >= stack->capacity){
-        stack->capacity += INCREMENT;
-        stack->stack = (kmMat4*)realloc(stack->stack,stack->capacity*sizeof(kmMat4));
-        stack->top = &stack->stack[stack->item_count - 1];
-    }
+void  kmGLFreeAll(void);
+void  kmGLPushMatrix(void);
+void  kmGLPopMatrix(void);
+void  kmGLMatrixMode(kmGLEnum mode);
+void  kmGLLoadIdentity(void);
+void  kmGLLoadMatrix(const kmMat4* pIn);
+void  kmGLMultMatrix(const kmMat4* pIn);
+void  kmGLTranslatef(float x, float y, float z);
+void  kmGLRotatef(float angle, float x, float y, float z);
+void  kmGLScalef(float x, float y, float z);
+void  kmGLGetMatrix(kmGLEnum mode, kmMat4* pOut);
+
+#ifdef __cplusplus
 }
+#endif
 
-void km_mat4_stack_pop(km_mat4_stack* stack, kmMat4* pOut)
-{
-    assert(stack->item_count && "Cannot pop an empty stack");
-
-    stack->item_count--;
-    stack->top = &stack->stack[stack->item_count - 1];
-}
-
-void km_mat4_stack_release(km_mat4_stack* stack) {
-    free(stack->stack);
-    stack->top = NULL;
-    stack->item_count = 0;
-    stack->capacity = 0;
-}
+#endif // MATRIX_H_INCLUDED

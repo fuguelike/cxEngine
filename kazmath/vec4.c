@@ -26,12 +26,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <memory.h>
 #include <assert.h>
-#include <string.h>
 
 #include "utility.h"
 #include "vec4.h"
 #include "mat4.h"
 
+#include "neon_matrix_impl.h"
 
 kmVec4* kmVec4Fill(kmVec4* pOut, kmScalar x, kmScalar y, kmScalar z, kmScalar w)
 {
@@ -73,29 +73,26 @@ kmScalar kmVec4LengthSq(const kmVec4* pIn) {
 	return kmSQR(pIn->x) + kmSQR(pIn->y) + kmSQR(pIn->z) + kmSQR(pIn->w);
 }
 
-/// Returns the interpolation of 2 4D vectors based on t. Currently not implemented!
+/// Returns the interpolation of 2 4D vectors based on t.
 kmVec4* kmVec4Lerp(kmVec4* pOut, const kmVec4* pV1, const kmVec4* pV2, kmScalar t) {
-    assert(0);
+    pOut->x = pV1->x + t * ( pV2->x - pV1->x ); 
+    pOut->y = pV1->y + t * ( pV2->y - pV1->y ); 
+    pOut->z = pV1->z + t * ( pV2->z - pV1->z ); 
+    pOut->w = pV1->w + t * ( pV2->w - pV1->w ); 
     return pOut;
 }
 
 /// Normalizes a 4D vector. The result is stored in pOut. pOut is returned
 kmVec4* kmVec4Normalize(kmVec4* pOut, const kmVec4* pIn) {
-    if (!pIn->x && !pIn->y && !pIn->z && !pIn->w)
+    if (!pIn->x && !pIn->y && !pIn->z && !pIn->w){
         return kmVec4Assign(pOut, pIn);
+    }
 
 	kmScalar l = 1.0f / kmVec4Length(pIn);
-
-	kmVec4 v;
-	v.x = pIn->x * l;
-	v.y = pIn->y * l;
-	v.z = pIn->z * l;
-	v.w = pIn->w * l;
-
-	pOut->x = v.x;
-	pOut->y = v.y;
-	pOut->z = v.z;
-	pOut->w = v.w;
+    pOut->x = pIn->x * l;
+	pOut->y = pIn->y * l;
+	pOut->z = pIn->z * l;
+	pOut->w = pIn->w * l;
 
 	return pOut;
 }
@@ -121,12 +118,34 @@ kmVec4* kmVec4Subtract(kmVec4* pOut, const kmVec4* pV1, const kmVec4* pV2) {
 	return pOut;
 }
 
+kmVec4* kmVec4Mul( kmVec4* pOut,const kmVec4* pV1, const kmVec4* pV2 ) {
+    pOut->x = pV1->x * pV2->x;
+    pOut->y = pV1->y * pV2->y;
+    pOut->z = pV1->z * pV2->z;
+    pOut->w = pV1->w * pV2->w;
+    return pOut;
+}
+
+kmVec4* kmVec4Div( kmVec4* pOut,const kmVec4* pV1, const kmVec4* pV2 ) {
+    if ( pV2->x && pV2->y && pV2->z && pV2->w){
+        pOut->x = pV1->x / pV2->x;
+        pOut->y = pV1->y / pV2->y;
+        pOut->z = pV1->z / pV2->z;
+        pOut->w = pV1->w / pV2->w;
+    }
+    return pOut;
+}
+
 /// Multiplies a 4D vector by a matrix, the result is stored in pOut, and pOut is returned.
 kmVec4* kmVec4MultiplyMat4(kmVec4* pOut, const kmVec4* pV, const struct kmMat4* pM) {
+#if defined(__ARM_NEON__) && !defined(__arm64__)
+    NEON_Matrix4Vector4Mul(&pM->mat[0], (const float*)pV, (float*)pOut);
+#else
     pOut->x = pV->x * pM->mat[0] + pV->y * pM->mat[4] + pV->z * pM->mat[8] + pV->w * pM->mat[12];
     pOut->y = pV->x * pM->mat[1] + pV->y * pM->mat[5] + pV->z * pM->mat[9] + pV->w * pM->mat[13];
     pOut->z = pV->x * pM->mat[2] + pV->y * pM->mat[6] + pV->z * pM->mat[10] + pV->w * pM->mat[14];
     pOut->w = pV->x * pM->mat[3] + pV->y * pM->mat[7] + pV->z * pM->mat[11] + pV->w * pM->mat[15];
+#endif
     return pOut;
 }
 

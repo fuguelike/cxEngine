@@ -94,6 +94,14 @@ static cxJson cxJsonParseRegisterValue(cxJson json)
     return cxJsonAttachCreate(v);
 }
 
+void cxDumpGlobalJson()
+{
+    CX_ASSERT(global != NULL, "global json not init");
+    cxChars jsonText = json_dumps(global, JSON_ENCODE_ANY);
+    CX_LOGGER("GLOBAL JSON:%s",jsonText);
+    allocator->free(jsonText);
+}
+
 cxString cxJsonDump(cxJson json)
 {
     CX_ASSERT(json != NULL, "args error");

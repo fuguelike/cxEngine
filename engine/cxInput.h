@@ -31,20 +31,16 @@ typedef enum {
     cxTouchDirectionDown    = 1 << 3,
 }cxTouchDirection;
 
-#define CX_TOUCH_IS_DOWN(_t_) ((_t_)->direction & cxTouchDirectionDown)
-#define CX_TOUCH_IS_UP(_t_) ((_t_)->direction & cxTouchDirectionUp)
-#define CX_TOUCH_IS_LEFT(_t_) ((_t_)->direction & cxTouchDirectionLeft)
-#define CX_TOUCH_IS_RIGHT(_t_) ((_t_)->direction & cxTouchDirectionRight)
+#define CX_TOUCH_IS_DOWN(_t_)   ((_t_)->direction & cxTouchDirectionDown)
+#define CX_TOUCH_IS_UP(_t_)     ((_t_)->direction & cxTouchDirectionUp)
+#define CX_TOUCH_IS_LEFT(_t_)   ((_t_)->direction & cxTouchDirectionLeft)
+#define CX_TOUCH_IS_RIGHT(_t_)  ((_t_)->direction & cxTouchDirectionRight)
 
 typedef struct {
     cxVec2f previous;
-    cxVec2f delta;      //window delta
+    cxVec2f delta;      //window delta,when cxTouchTypeMove
     cxVec2f current;
     cxTouchType type;
-    cxVec2f movement;   //window movement
-    cxDouble dtime;
-    cxDouble utime;
-    cxVec2f start;
     cxTouchDirection direction;
 }cxTouch;
 

@@ -20,7 +20,6 @@ typedef enum {
 }cxScrollMoveType;
 
 CX_OBJECT_DEF(cxScroll, cxView)
-    cxVec2f start;
     cxBox4f box;
     cxScrollMoveType type;
 CX_OBJECT_END(cxScroll, cxView)
