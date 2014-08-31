@@ -468,7 +468,7 @@ cxBool cxEngineFireKey(cxKeyType type,cxInt code)
     cxEngine this = cxEngineInstance();
     this->key.type = type;
     this->key.code = code;
-    return cxViewOnKey(this->window, &this->key);
+    return cxViewKey(this->window, &this->key);
 }
 
 //get touch direction

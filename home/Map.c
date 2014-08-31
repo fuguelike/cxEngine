@@ -63,6 +63,13 @@ void MapSortNode(Map this)
     cxListSort(this->cxAtlas.cxSprite.cxView.subViews, MapSortCmpFunc);
 }
 
+void MapAppendNode(Map this,cxAny node)
+{
+    Node snode = node;
+    cxViewAppend(this, snode);
+    snode->element = cxListAppend(this->nodes, snode);
+}
+
 CX_OBJECT_TYPE(Map, cxAtlas)
 {
     
@@ -81,8 +88,8 @@ CX_OBJECT_INIT(Map, cxAtlas)
     this->unitSize = cxSize2fv(size.w/this->unitNum.x, size.h/this->unitNum.y);
     cxViewSetSize(this, size);
     
-    cxViewSetScale(this, cxVec2fv(2.0f, 2.0f));
-    cxViewSetBorderColor(this, cxYELLOW);
+//    cxViewSetScale(this, cxVec2fv(2.0f, 2.0f));
+//    cxViewSetBorderColor(this, cxYELLOW);
     //
     
     //test
@@ -138,13 +145,6 @@ CX_OBJECT_TERM(Map, cxAtlas)
 void MapNodeIdxChanged(Map this,cxAny node)
 {
     
-}
-
-void MapAppendNode(Map this,cxAny node)
-{
-    Node snode = node;
-    cxViewAppend(this, snode);
-    snode->element = cxListAppend(this->nodes, snode);
 }
 
 cxInt MapOffsetIdx(Map this,cxInt x,cxInt y)

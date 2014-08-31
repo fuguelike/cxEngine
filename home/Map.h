@@ -27,10 +27,10 @@ CX_OBJECT_END(Map, cxAtlas)
 //按Y的大小重新排序
 void MapSortNode(Map this);
 
+void MapAppendNode(Map this,cxAny node);
+
 //node 位置改变的时候
 void MapNodeIdxChanged(Map this,cxAny node);
-
-void MapAppendNode(Map this,cxAny node);
 
 cxInt MapOffsetIdx(Map this,cxInt x,cxInt y);
 

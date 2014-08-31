@@ -9,7 +9,7 @@
 #include <engine/cxEngine.h>
 #include "cxWindow.h"
 
-static cxBool cxWindowOnKey(cxAny pview,cxKey *key)
+static cxBool cxWindowKey(cxAny pview,cxKey *key)
 {
     if(key->code == CX_KEYCODE_BACK && key->type == cxKeyTypeUp){
         cxEngineExit();
@@ -23,7 +23,7 @@ CX_OBJECT_TYPE(cxWindow, cxView)
 }
 CX_OBJECT_INIT(cxWindow, cxView)
 {
-    CX_METHOD_SET(this->cxView.OnKey, cxWindowOnKey);
+    CX_METHOD_SET(this->cxView.Key, cxWindowKey);
     this->views = CX_ALLOC(cxStack);
 }
 CX_OBJECT_FREE(cxWindow, cxView)

@@ -132,19 +132,6 @@ CX_SETTER_DEF(cxView, actions)
     }
     CX_JSON_ARRAY_EACH_END(actions, item)
 }
-CX_SETTER_DEF(cxView, touchtype)
-{
-    cxConstChars type = cxJsonToConstChars(value);
-    if(type != NULL){
-        this->touchType = cxViewIsTouchTypeNone;
-    }
-    if(cxConstCharsHas(type, "this")){
-        this->touchType |= cxViewIsTouchTypeThis;
-    }
-    if(cxConstCharsHas(type, "subview")){
-        this->touchType |= cxViewIsTouchTypeSubview;
-    }
-}
 CX_SETTER_DEF(cxView, tag)
 {
     this->tag = cxJsonToInt(value, this->tag);
@@ -172,7 +159,6 @@ CX_OBJECT_TYPE(cxView, cxObject)
     CX_PROPERTY_SETTER(cxView, resizing);
     CX_PROPERTY_SETTER(cxView, subviews);
     CX_PROPERTY_SETTER(cxView, actions);
-    CX_PROPERTY_SETTER(cxView, touchtype);
     CX_PROPERTY_SETTER(cxView, tag);
     CX_PROPERTY_SETTER(cxView, bordercolor);
 }
@@ -189,17 +175,12 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->fixscale = cxVec2fv(1.0f, 1.0f);
     this->borderColor = cxRED;
-    this->touchType = cxViewIsTouchTypeSubview | cxViewIsTouchTypeThis;
-
-    CX_METHOD_SET(this->IsTouch, cxViewIsTouch);
-    CX_METHOD_SET(this->IsOnKey, cxViewIsOnKey);
-    CX_METHOD_SET(this->Append, cxViewAppendImp);
     
-    this->subViews = CX_ALLOC(cxList);
-    this->actions = CX_ALLOC(cxHash);
-    this->removes = CX_ALLOC(cxArray);
-    this->binded = CX_ALLOC(cxHash);
-    this->bindes = CX_ALLOC(cxHash);
+    this->subViews  = CX_ALLOC(cxList);
+    this->actions   = CX_ALLOC(cxHash);
+    this->removes   = CX_ALLOC(cxArray);
+    this->binded    = CX_ALLOC(cxHash);
+    this->bindes    = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
@@ -278,7 +259,7 @@ void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
     cxHashSet(bind->binded, cxHashAnyKey(this), bd);
 }
 
-void cxViewAppendImp(cxAny pview,cxAny newview)
+void cxViewAppend(cxAny pview,cxAny newview)
 {
     CX_ASSERT(pview != NULL && newview != NULL, "parent view or new view null");
     cxView this = pview;
@@ -291,12 +272,6 @@ void cxViewAppendImp(cxAny pview,cxAny newview)
         cxViewEnter(new);
         cxViewLayout(new);
     }
-}
-
-void cxViewAppend(cxAny pview,cxAny subview)
-{
-    cxView this = pview;
-    CX_METHOD_RUN(this->Append,pview,subview);
 }
 
 void cxViewBringFront(cxAny pview,cxAny fview)
@@ -870,91 +845,50 @@ cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
     return cxBox2fContainPoint(box, pos);
 }
 
-static cxBool cxViewTouchSubViews(cxAny pview,cxTouch *touch)
-{
-    cxView this = pview;
-    cxListElement *head = cxListFirst(this->subViews);
-    for(cxListElement *ele = cxListLast(this->subViews);ele != NULL && head != NULL;ele = ele->prev){
-        cxView view = ele->any;
-        if(cxViewTouch(view, touch)){
-            return true;
-        }
-        if(ele == head){
-            break;
-        }
-    }
-    return false;
-}
-
-cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch)
-{
-    CX_ASSERT(pview != NULL, "pview args error");
-    cxView this = pview;
-    if(!this->isVisible){
-        return cxViewIsTouchTypeNone;
-    }
-    return this->touchType;
-}
-
 cxBool cxViewTouch(cxAny pview,cxTouch *touch)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
-    cxUInt type = CX_METHOD_GET(cxViewIsTouchTypeNone, this->IsTouch,this,touch);
-    if(type == cxViewIsTouchTypeNone){
+    if(!this->isVisible){
         return false;
     }
-    if((type & cxViewIsTouchTypeSubview) && cxViewTouchSubViews(pview,touch)){
-        return true;
-    }
-    if(type & cxViewIsTouchTypeThis){
-        return CX_METHOD_GET(false, this->Touch,this,touch);
-    }
-    return false;
-}
-
-static cxBool cxViewOnKeySubViews(cxAny pview,cxKey *key)
-{
-    CX_ASSERT(pview != NULL, "pview args error");
-    cxView this = pview;
     cxListElement *head = cxListFirst(this->subViews);
-    for(cxListElement *ele = cxListLast(this->subViews);ele != NULL && head != NULL;ele = ele->prev){
-        cxView view = ele->any;
-        if(cxViewOnKey(view, key)){
+    if(head == NULL){
+        goto completed;
+    }
+    for(cxListElement *ele = cxListLast(this->subViews);ele != NULL;ele = ele->prev){
+        if(cxViewTouch(ele->any, touch)){
             return true;
         }
         if(ele == head){
             break;
         }
     }
-    return false;
+completed:
+    return CX_METHOD_GET(false, this->Touch,this,touch);
 }
 
-cxUInt cxViewIsOnKey(cxAny pview,cxKey *key)
+cxBool cxViewKey(cxAny pview,cxKey *key)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     if(!this->isVisible){
-        return cxViewIsTouchTypeNone;
-    }
-    return cxViewIsTouchTypeThis | cxViewIsTouchTypeSubview;
-}
-
-cxBool cxViewOnKey(cxAny pview,cxKey *key)
-{
-    CX_ASSERT(pview != NULL, "pview args error");
-    cxView this = pview;
-    cxUInt type = CX_METHOD_GET(cxViewIsTouchTypeNone, this->IsOnKey,this,key);
-    if(type == cxViewIsTouchTypeNone){
         return false;
     }
-    if((type & cxViewIsTouchTypeSubview) && cxViewOnKeySubViews(pview,key)){
-        return true;
+    cxListElement *head = cxListFirst(this->subViews);
+    if(head == NULL){
+        goto completed;
     }
-    if(type & cxViewIsTouchTypeThis){
-        return CX_METHOD_GET(false, this->OnKey,this , key);
+    for(cxListElement *ele = cxListLast(this->subViews);ele != NULL;ele = ele->prev){
+        if(cxViewKey(ele->any, key)){
+            return true;
+        }
+        if(ele == head){
+            break;
+        }
     }
-    return false;
+completed:
+    return CX_METHOD_GET(false, this->Key,this , key);
 }
 
 void cxViewCleanActions(cxAny pview)

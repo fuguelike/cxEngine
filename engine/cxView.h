@@ -32,12 +32,6 @@ typedef enum {
     cxViewAutoOutside           = 1 << 16
 }cxViewAutoResizeMask;
 
-typedef enum{
-    cxViewIsTouchTypeNone       = 0,
-    cxViewIsTouchTypeThis       = 1 << 0,   //only touch self this
-    cxViewIsTouchTypeSubview    = 1 << 1,   //touch subviews
-}cxViewIsTouchType;
-
 #define CX_HASH_KEY_TO_ANY(_e_) (*(cxAny *)(_e_)->key)
 
 typedef cxBool (*cxViewBindForeachFunc)(cxAny pview,cxAny bview,cxAny bd);
@@ -46,7 +40,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxHash bindes;//bind's views
     cxHash binded;//binded's views
     cxInt tag;
-    cxViewIsTouchType touchType;
     cxBool supportAtlasSet;
     cxViewAutoResizeMask autoMask;
     cxBox4f  autoBox;
@@ -75,15 +68,15 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f anchorMatrix;
     cxColor4f color;
     cxColor3f borderColor;
-    CX_METHOD_DEF(cxViewIsTouchType,IsTouch,cxAny,cxTouch *);
+
     CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouch *);
-    CX_METHOD_DEF(cxViewIsTouchType, IsOnKey, cxAny, cxKey *);
-    CX_METHOD_DEF(cxBool, OnKey, cxAny, cxKey *);
+    CX_METHOD_DEF(cxBool, Key, cxAny, cxKey *);
     CX_METHOD_DEF(void, Draw, cxAny);
     CX_METHOD_DEF(void, After, cxAny);
     CX_METHOD_DEF(void, Before, cxAny);
-    CX_METHOD_DEF(void, Append,cxAny,cxAny);
+
     CX_SIGNAL_ALLOC(onDraw);
+
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
@@ -162,13 +155,9 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav);
 
 void cxViewSetOrder(cxAny pview,cxInt order);
 
-cxBool cxViewOnKey(cxAny pview,cxKey *key);
-
-cxUInt cxViewIsOnKey(cxAny pview,cxKey *key);
+cxBool cxViewKey(cxAny pview,cxKey *key);
 
 cxBool cxViewTouch(cxAny pview,cxTouch *touch);
-
-cxUInt cxViewIsTouch(cxAny pview,cxTouch *touch);
 
 void cxViewAppendImp(cxAny pview,cxAny newview);
 
