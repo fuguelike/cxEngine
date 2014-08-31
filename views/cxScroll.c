@@ -10,8 +10,6 @@
 #include <actions/cxMove.h>
 #include "cxScroll.h"
 
-#define CX_SCROLL_MOVE_ACTION_ID 100000
-
 cxView cxScrollContainer(cxAny pview)
 {
     cxScroll this = pview;
@@ -20,134 +18,53 @@ cxView cxScrollContainer(cxAny pview)
     return ele->any;
 }
 
-static void cxScrollActionView(cxScroll this,cxVec2f new)
-{
-    cxView view = cxScrollContainer(this);
-    cxFloat distance = kmVec2DistanceBetween(&new, &view->position);
-    CX_RETURN(kmAlmostEqual(distance, 0));
-    cxMove move = cxMoveCreate((distance/this->value)*1.5f, new);
-    cxActionSetId(move, CX_SCROLL_MOVE_ACTION_ID);
-    cxActionSetCurve(move, cxCurveSineOut);
-    cxViewAppendAction(view, move);
-}
-
-static void cxScrollTouchMove(cxScroll this,cxView view,cxTouch *touch)
-{
-    cxVec2f pos = cxViewPosition(view);
-    cxBool setpos = false;
-    if(this->type & cxScrollMoveTypeVertical){
-        pos.y += touch->delta.y;
-        //
-        if(touch->delta.y < 0 && pos.y < (this->box.b - this->max)){
-            pos.y = this->box.b - this->max;
-        }else if(touch->delta.y > 0 && pos.y > (this->box.t + this->max)){
-            pos.y = this->box.t + this->max;
-        }
-        setpos = true;
-    }
-    if(this->type & cxScrollMoveTypeHorizontal){
-        pos.x += touch->delta.x;
-        //
-        if(touch->delta.x < 0 && pos.x < (this->box.l - this->max)){
-            pos.x = this->box.l - this->max;
-        }else if(touch->delta.x > 0 && pos.x > (this->box.r + this->max)){
-            pos.x = this->box.r + this->max;
-        }
-        setpos = true;
-    }
-    if(setpos){
-        cxViewSetPos(view, pos);
-    }
-}
-
 cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
 {
     cxScroll this = pview;
     cxView view = cxScrollContainer(this);
-    if(!cxViewHitTest(pview, touch->current, NULL)){
+    CX_RETURN(view == NULL,false);
+    cxVec2f pos;
+    if(!cxViewHitTest(pview, touch->current, &pos)){
         return false;
     }
-    if(touch->type != cxTouchTypeUp){
-        return false;
-    }
-    cxBool setpos = false;
-    cxFloat time = touch->utime - touch->dtime;
-    cxVec2f speed = cxVec2fv(touch->movement.x / time, touch->movement.y / time);
-    cxVec2f new = cxViewPosition(view);
-    if((this->type & cxScrollMoveTypeVertical) && (fabsf(speed.y) >= this->value)){
-        new.y += speed.y * this->cxView.size.h / this->value;
-        if(touch->current.y < touch->start.y && new.y < this->box.b){
-            new.y = this->box.b;
-        }else if(touch->current.y > touch->start.y > 0 && new.y > this->box.t){
-            new.y = this->box.t;
-        }
-        setpos = fabsf(touch->delta.y) > this->delta;
-    }
-    if((this->type & cxScrollMoveTypeHorizontal) && (fabsf(speed.x) >= this->value)){
-        new.x += speed.x * this->cxView.size.w / this->value;
-        if(touch->current.x < touch->start.x && new.x < this->box.l){
-            new.x = this->box.l;
-        }else if(touch->current.x > touch->start.x && new.x > this->box.r){
-            new.x = this->box.r;
-        }
-        setpos = fabsf(touch->delta.x) > this->delta;
-    }
-    if(setpos){
-        cxScrollActionView(this, new);
-    }
-    return false;
-}
-
-static void cxScrollOnTouch(cxAny pview,cxTouch *touch,cxBool *ret)
-{
-    cxScroll this = pview;
-    cxView view = cxScrollContainer(this);
-    CX_RETURN(view == NULL);
     if(touch->type == cxTouchTypeDown){
-        cxViewStopAction(view, CX_SCROLL_MOVE_ACTION_ID);
         cxVec2f vscale = cxViewScale(view);
         cxVec2f tscale = cxViewScale(this);
         this->box.r = (view->size.w * vscale.x - this->cxView.size.w * tscale.x)/2.0f;
         this->box.l = -this->box.r;
         this->box.t = (view->size.h * vscale.y - this->cxView.size.h * tscale.y)/2.0f;
         this->box.b = -this->box.t;
-        if(this->type & cxScrollMoveTypeVertical){
-            this->max = this->cxView.size.w * tscale.x / 10.0f;
-        }else if(this->type & cxScrollMoveTypeHorizontal){
-            this->max = this->cxView.size.h * tscale.y / 10.0f;
-        }else{
-            this->max = (this->cxView.size.w * tscale.x + this->cxView.size.h * tscale.y) / 16.0f;
-        }
-        this->selected = cxViewHitTest(pview, touch->current, NULL);
-    }else if(touch->type == cxTouchTypeMove && this->selected){
-        cxScrollTouchMove(this, view, touch);
-    }else if(touch->type == cxTouchTypeUp){
-        cxViewStopAction(view, CX_SCROLL_MOVE_ACTION_ID);
+        this->start = pos;
+        return true;
+    }else if(touch->type == cxTouchTypeMove){
+        cxVec2f vpos = cxViewPosition(view);
+        cxVec2f delta;
+        kmVec2Subtract(&delta, &pos, &this->start);
         cxBool setpos = false;
-        cxVec2f new = cxViewPosition(view);
         if(this->type & cxScrollMoveTypeVertical){
-            if(new.y < this->box.b){
-                new.y = this->box.b;
-                setpos = true;
-            }else if(new.y > this->box.t){
-                new.y = this->box.t;
-                setpos = true;
+            vpos.y += delta.y;
+            if(delta.y < 0 && vpos.y < this->box.b){
+                vpos.y = this->box.b;
+            }else if(delta.y > 0 && vpos.y > this->box.t){
+                vpos.y = this->box.t;
             }
+            setpos = true;
         }
         if(this->type & cxScrollMoveTypeHorizontal){
-            if(new.x < this->box.l){
-                new.x = this->box.l;
-                setpos = true;
-            }else if(new.x > this->box.r){
-                new.x = this->box.r;
-                setpos = true;
+            vpos.x += delta.x;
+            if(delta.x < 0 && vpos.x < this->box.l){
+                vpos.x = this->box.l;
+            }else if(delta.x > 0 && vpos.x > this->box.r){
+                vpos.x = this->box.r;
             }
+            setpos = true;
         }
         if(setpos){
-            cxScrollActionView(this, new);
+            cxViewSetPos(view, vpos);
         }
-        this->selected = false;
+        return setpos;
     }
+    return false;
 }
 
 CX_SETTER_DEF(cxScroll, layout)
@@ -161,35 +78,21 @@ CX_SETTER_DEF(cxScroll, layout)
         this->type |= cxScrollMoveTypeVertical;
     }
 }
-CX_SETTER_DEF(cxScroll, delta)
-{
-    this->delta = cxJsonToDouble(value, this->delta);
-}
-CX_SETTER_DEF(cxScroll, value)
-{
-    this->value = cxJsonToDouble(value, this->value);
-}
+
 
 CX_OBJECT_TYPE(cxScroll, cxView)
 {
     CX_PROPERTY_SETTER(cxScroll, layout);
-    CX_PROPERTY_SETTER(cxScroll, delta);
-    CX_PROPERTY_SETTER(cxScroll, value);
 }
 CX_OBJECT_INIT(cxScroll, cxView)
 {
-    cxEngine engine = cxEngineInstance();
     CX_METHOD_SET(this->cxView.Touch, cxScrollTouch);
     cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical;
-    //swip cond value
-    this->delta = 15;
-    this->value = 950;
-    CX_SLOT_CONNECT(engine->onTouch, this, onTouch, cxScrollOnTouch);
 }
 CX_OBJECT_FREE(cxScroll, cxView)
 {
-    CX_SLOT_RELEASE(this->onTouch);
+    
 }
 CX_OBJECT_TERM(cxScroll, cxView)
 

@@ -24,6 +24,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxBool isValidIdx;  //是否在有效的位置
     //nodes element
     cxListElement *element;
+    cxVec2f start; 
 CX_OBJECT_END(Node, cxSprite)
 
 cxVec2i NodeIndex(cxAny node);

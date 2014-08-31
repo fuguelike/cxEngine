@@ -66,6 +66,19 @@ cxEAGLView *instance = nil;
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
+-(void)tapGesture:(UITapGestureRecognizer *)tap
+{
+    CGPoint point = [tap locationInView:self];
+    cxVec2f pos = cxVec2fv(point.x * self.contentScaleFactor, point.y * self.contentScaleFactor);
+    pos = cxEngineTouchToWindow(pos);
+    CX_LOGGER("%f %f",pos.x,pos.y);
+}
+
+-(void)pinchGesture:(UIPinchGestureRecognizer *)pinch
+{
+    CX_LOGGER("%f",pinch.scale);
+}
+
 -(id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -95,6 +108,16 @@ cxEAGLView *instance = nil;
     [self initMainLoop];
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
     [displayLink retain];
+    
+//    //add tap gesture
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
+//    [self addGestureRecognizer:tap];
+//    [tap release];
+//    
+//    //add scale gesture
+//    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGesture:)];
+//    [self addGestureRecognizer:pinch];
+//    [pinch release];
     
     return self;
 }

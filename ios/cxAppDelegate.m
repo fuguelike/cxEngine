@@ -64,9 +64,7 @@ static cxBool cxDisableDocumentBackup()
     currPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     currPlayer.delegate = self;
     CX_ASSERT(error == nil, "init audio player error %s,file=%s",[[error localizedDescription] UTF8String],file);
-    if(loop){
-        [currPlayer setNumberOfLoops:-1];
-    }
+    [currPlayer setNumberOfLoops:loop ? -1 : 1];
     [currPlayer play];
     [url release];
 }

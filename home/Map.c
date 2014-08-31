@@ -17,8 +17,8 @@ static cxBool MapTouch(cxAny pview,cxTouch *touch)
 {
     cxEngine engine = cxEngineInstance();
     Map this = pview;
-    cxVec2f pos;
-    if(!cxViewHitTest(pview, touch->current, &pos)){
+    cxVec2f cpos;
+    if(!cxViewHitTest(pview, touch->current, &cpos)){
         return false;
     }
     cxSize2f msize = cxViewSize(this);
@@ -32,19 +32,20 @@ static cxBool MapTouch(cxAny pview,cxTouch *touch)
         return false;
     }
     if(touch->type == cxTouchTypeMove){
-        cxVec2f pos = cxViewPosition(this);
-        kmVec2Add(&pos, &pos, &touch->delta);
-        if(touch->delta.y < 0 && pos.y <= this->box.b){
-            pos.y = this->box.b;
-        }else if(touch->delta.y > 0 && pos.y >= this->box.t){
-            pos.y = this->box.t;
+        cxVec2f vpos = cxViewPosition(this);
+        cxVec2f delta = cxViewTouchDelta(pview, touch);
+        kmVec2Add(&vpos, &vpos, &delta);
+        if(CX_TOUCH_IS_DOWN(touch) && vpos.y <= this->box.b){
+            vpos.y = this->box.b;
+        }else if(CX_TOUCH_IS_UP(touch) && vpos.y >= this->box.t){
+            vpos.y = this->box.t;
         }
-        if(touch->delta.x < 0 && pos.x <= this->box.l){
-            pos.x = this->box.l;
-        }else if(touch->delta.x > 0 && pos.x >= this->box.r){
-            pos.x = this->box.r;
+        if(CX_TOUCH_IS_LEFT(touch) && vpos.x <= this->box.l){
+            vpos.x = this->box.l;
+        }else if(CX_TOUCH_IS_RIGHT(touch) && vpos.x >= this->box.r){
+            vpos.x = this->box.r;
         }
-        cxViewSetPos(this, pos);
+        cxViewSetPos(this, vpos);
         return true;
     }
     return false;
@@ -92,13 +93,13 @@ CX_OBJECT_INIT(Map, cxAtlas)
             cxAtlasAppendBoxPoint(this, pos, this->unitSize, cxBoxTex2fDefault(), cxColor4fv(1, 1, 1, 1));
         }
     }
-//    {
-//        Node node = NodeCreate(this);
-//        NodeInit(node, cxSize2fv(3, 3),cxVec2fv(8, 8));
-//        cxSpriteSetTextureURL(node, "bg1.png", false);
-//        cxViewSetColor(node, cxRED);
-//        MapAppendNode(this, node);
-//    }
+    {
+        Node node = NodeCreate(this);
+        NodeInit(node, cxSize2fv(3, 3),cxVec2fv(8, 8));
+        cxSpriteSetTextureURL(node, "bg1.png", false);
+        cxViewSetColor(node, cxRED);
+        MapAppendNode(this, node);
+    }
     
     {
         Node node = NodeCreate(this);
@@ -107,22 +108,22 @@ CX_OBJECT_INIT(Map, cxAtlas)
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);
     }
-//    
-//    {
-//        Node node = NodeCreate(this);
-//        NodeInit(node, cxSize2fv(1, 1),cxVec2fv(18, 18));
-//        cxSpriteSetTextureURL(node, "bg1.png", false);
-//        cxViewSetColor(node, cxRED);
-//        MapAppendNode(this, node);
-//    }
-//    
-//    {
-//        Node node = NodeCreate(this);
-//        NodeInit(node, cxSize2fv(2, 2),cxVec2fv(7, 18));
-//        cxSpriteSetTextureURL(node, "bg1.png", false);
-//        cxViewSetColor(node, cxRED);
-//        MapAppendNode(this, node);
-//    }
+    
+    {
+        Node node = NodeCreate(this);
+        NodeInit(node, cxSize2fv(1, 1),cxVec2fv(18, 18));
+        cxSpriteSetTextureURL(node, "bg1.png", false);
+        cxViewSetColor(node, cxRED);
+        MapAppendNode(this, node);
+    }
+    
+    {
+        Node node = NodeCreate(this);
+        NodeInit(node, cxSize2fv(2, 2),cxVec2fv(7, 18));
+        cxSpriteSetTextureURL(node, "bg1.png", false);
+        cxViewSetColor(node, cxRED);
+        MapAppendNode(this, node);
+    }
     
     //按Y位置排序
     MapSortNode(this);

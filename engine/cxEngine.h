@@ -40,7 +40,6 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onResume);
     CX_SIGNAL_ALLOC(onMemory);
     CX_SIGNAL_ALLOC(onUpdate);
-    CX_SIGNAL_ALLOC(onTouch);
     CX_SIGNAL_ALLOC(onRecvJson);
     CX_EVENT_ALLOC(onExit);
     cxTouch touch;

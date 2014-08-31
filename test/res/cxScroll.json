@@ -5,23 +5,32 @@
     "w": 800,
     "h": 800
   },
-  "actions": [
-    {
-      "src": "cxParticle.json"
-    }
-  ],
   "layout": "horizontal",
   "subviews": [
     {
       "type": "cxTable",
       "grid": {
-        "x": 4
+        "x": 6
       },
       "size": {
-        "w": 1000,
+        "w": 1200,
         "h": 300
       },
       "subviews": [
+        {
+          "type": "cxView",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "type": "cxView",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
         {
           "type": "cxView",
           "size": {

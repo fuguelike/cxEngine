@@ -303,7 +303,6 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->window);
     CX_EVENT_RELEASE(this->onExit);
     CX_SIGNAL_RELEASE(this->onRecvJson);
-    CX_SIGNAL_RELEASE(this->onTouch);
     CX_SIGNAL_RELEASE(this->onUpdate);
     CX_SIGNAL_RELEASE(this->onPause);
     CX_SIGNAL_RELEASE(this->onResume);
@@ -472,6 +471,23 @@ cxBool cxEngineFireKey(cxKeyType type,cxInt code)
     return cxViewOnKey(this->window, &this->key);
 }
 
+//get touch direction
+static cxTouchDirection cxTouchGetDirection(cxVec2f delta)
+{
+    cxTouchDirection ret = cxTouchDirectionNone;
+    if(delta.x < 0){
+        ret |= cxTouchDirectionLeft;
+    }else if(delta.x > 0){
+        ret |= cxTouchDirectionRight;
+    }
+    if(delta.y < 0){
+        ret |= cxTouchDirectionDown;
+    }else if(delta.y > 0){
+        ret |= cxTouchDirectionUp;
+    }
+    return ret;
+}
+
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
 {
     cxEngine this = cxEngineInstance();
@@ -486,19 +502,19 @@ cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
         this->touch.previous = cpos;
         this->touch.dtime = time;
         this->touch.start = cpos;
+        this->touch.direction = cxTouchDirectionNone;
     }else if(type == cxTouchTypeMove){
-        this->touch.delta = cxVec2fv(cpos.x - this->touch.previous.x, cpos.y - this->touch.previous.y);
+        kmVec2Subtract(&this->touch.delta, &cpos, &this->touch.previous);
         this->touch.previous = cpos;
         this->touch.movement.x += this->touch.delta.x;
         this->touch.movement.y += this->touch.delta.y;
+        this->touch.direction = cxTouchGetDirection(this->touch.delta);
     }else{
         this->touch.utime = time;
     }
     this->touch.current = cpos;
     this->touch.type = type;
-    cxBool ret = false;
-    CX_SIGNAL_FIRE(this->onTouch, CX_FUNC_TYPE(cxAny, cxTouch *, cxBool *),CX_SLOT_OBJECT, &this->touch, &ret);
-    return (ret || cxViewTouch(this->window, &this->touch));
+    return cxViewTouch(this->window, &this->touch);
 }
 
 

@@ -104,6 +104,10 @@ void cxViewBringFront(cxAny pview,cxAny fview);
 
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 
+cxAny cxViewParent(cxAny pview);
+
+cxVec2f cxViewTouchDelta(cxAny pview,cxTouch *touch);
+
 cxVec2f cxViewPosition(cxAny pview);
 
 cxList cxViewSubViews(cxAny pview);

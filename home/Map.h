@@ -18,7 +18,6 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxVec2i unitNum;    //单元数量
     cxAny *items;       //格子node
     cxAny node;     //当前选中的node
-    cxVec2f prev;   //最后node点击位置
     //node list
     cxList nodes;
     //

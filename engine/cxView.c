@@ -323,6 +323,25 @@ cxBool cxViewZeroSize(cxAny pview)
     return cxSize2Zero(this->size);
 }
 
+cxVec2f cxViewTouchDelta(cxAny pview,cxTouch *touch)
+{
+    cxVec2f delta = touch->delta;
+    cxView parent = cxViewParent(pview);
+    if(parent == NULL){
+        return delta;
+    }
+    delta.x /= parent->scale.x;
+    delta.y /= parent->scale.y;
+    return delta;
+}
+
+cxAny cxViewParent(cxAny pview)
+{
+    CX_ASSERT(pview != NULL, "pview args error");
+    cxView this = pview;
+    return this->parentView;
+}
+
 cxVec2f cxViewPosition(cxAny pview)
 {
     CX_ASSERT(pview != NULL, "pview args error");
@@ -476,8 +495,8 @@ cxVec2f cxViewPointToWindowPoint(cxAny pview,cxVec2f vPoint)
     cxVec3f out;
     kmVec3Fill(&out, vPoint.x, vPoint.y, 0);
     while (pv != NULL && pv->parentView != NULL) {
-        kmVec3Transform(&out, &out, &pv->anchorMatrix);
-        kmVec3Transform(&out, &out, &pv->normalMatrix);
+        kmVec3MultiplyMat4(&out, &out, &pv->anchorMatrix);
+        kmVec3MultiplyMat4(&out, &out, &pv->normalMatrix);
         pv = pv->parentView;
     }
     return cxVec2fv(out.x, out.y);
@@ -489,21 +508,23 @@ cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
     cxView this = pview;
     cxView pv = this;
     cxVec3f out;
-    cxMatrix4f matrix;
     kmVec3Fill(&out, wPoint.x, wPoint.y, 0);
+    //
     cxView vs[64];
     cxInt num = 0;
     while (pv != NULL && pv->parentView != NULL) {
         vs[num++] = pv;
         pv = pv->parentView;
-        CX_ASSERT(num <= 64, "vs too small");
+        CX_ASSERT(num < 64, "vs too small");
     }
-    for(cxInt i= num - 1; i >= 0; i--){
-        pv = vs[i];
+    //
+    for(cxInt i= num; i > 0; i--){
+        cxMatrix4f matrix;
+        pv = vs[i - 1];
         kmMat4Inverse(&matrix, &pv->normalMatrix);
-        kmVec3Transform(&out, &out, &matrix);
+        kmVec3MultiplyMat4(&out, &out, &matrix);
         kmMat4Inverse(&matrix, &pv->anchorMatrix);
-        kmVec3Transform(&out, &out, &matrix);
+        kmVec3MultiplyMat4(&out, &out, &matrix);
     }
     return cxVec2fv(out.x, out.y);
 }
