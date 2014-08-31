@@ -14,7 +14,7 @@
 
 CX_C_BEGIN
 
-#define CX_MAX_KEY  64
+#define CX_HASH_MAX_KEY  64
 
 #define CX_HASH_FOREACH(_hash_,_ele_,_tmp_)         \
 cxHashElement *_ele_ = NULL,*_tmp_=NULL;            \
@@ -22,7 +22,7 @@ HASH_ITER(hh, _hash_->hashPtr, _ele_, _tmp_)
 
 typedef struct {
     cxAny any;
-    cxChar key[CX_MAX_KEY+1];
+    cxChar key[CX_HASH_MAX_KEY+1];
     UT_hash_handle hh;
 }cxHashElement;
 

@@ -116,7 +116,7 @@ void cxShaderUsing(cxShader this)
 	kmGLGetMatrix(KM_GL_PROJECTION, &this->kxMatrixProject);
 	kmGLGetMatrix(KM_GL_MODELVIEW,  &this->kxMatrixModelView);
     kmMat4Multiply(&this->kxMatrix, &this->kxMatrixProject, &this->kxMatrixModelView);
-    glUniformMatrix4fv(this->uniformMatrixModelviewProject, 1, GL_FALSE, this->kxMatrix.mat);
+    glUniformMatrix4fv(this->uniformModelViewProject, 1, GL_FALSE, this->kxMatrix.mat);
     CX_METHOD_RUN(this->Update, this);
 }
 
@@ -149,7 +149,7 @@ bool cxShaderInit(cxShader this)
         return false;
     }
     cxOpenGLUseProgram(this->program);
-    this->uniformMatrixModelviewProject = glGetUniformLocation(this->program, CX_UNIFORM_MATRIX_MODELVIEW_PROJECT);
+    this->uniformModelViewProject = glGetUniformLocation(this->program, CX_UNIFORM_MATRIX_MODELVIEW_PROJECT);
     CX_METHOD_RUN(this->GetUniform, this);
     return true;
 }

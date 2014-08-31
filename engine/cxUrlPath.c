@@ -40,7 +40,7 @@ cxUrlPath cxUrlPathParse(cxConstChars url)
     if(!cxConstCharsOK(url)){
         return this;
     }
-    CX_ASSERT(strlen(url) < CX_MAX_KEY, "url too long");
+    CX_ASSERT(strlen(url) < CX_HASH_MAX_KEY, "url too long");
     this->count = 0;
     cxInt len = strlen(url);
     cxChars sq = strrchr(url, '?');

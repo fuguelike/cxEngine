@@ -295,16 +295,14 @@ cxBool cxViewZeroSize(cxAny pview)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
-    return cxSize2Zero(this->size);
+    return cxSize2fZero(this->size);
 }
 
 cxVec2f cxViewTouchDelta(cxAny pview,cxTouch *touch)
 {
     cxVec2f delta = touch->delta;
     cxView parent = cxViewParent(pview);
-    if(parent == NULL){
-        return delta;
-    }
+    CX_RETURN(parent == NULL,delta);
     delta.x /= parent->scale.x;
     delta.y /= parent->scale.y;
     return delta;

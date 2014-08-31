@@ -230,7 +230,7 @@ void cxEngineLayout(cxInt width,cxInt height)
     cxJsonRegisterSize2f("WinSize", engine->winsize);
     cxViewSetSize(engine->window, engine->winsize);
     //
-    if(!cxSize2Zero(engine->dessize)){
+    if(!cxSize2fZero(engine->dessize)){
         engine->scale.x = engine->winsize.w/engine->dessize.w;
         engine->scale.y = engine->winsize.h/engine->dessize.h;
         cxJsonRegisterDouble("ScaleX", engine->scale.x);
@@ -260,12 +260,12 @@ void cxEngineLayout(cxInt width,cxInt height)
     cxEngineLookAt(&matrix,zeye,cxVec2fv(0, 0));
     kmGLMultMatrix(&matrix);
     //
-    engine->lastTime = cxTimestamp();
     if(!engine->isInit){
         cxViewEnter(engine->window);
     }
     cxViewLayout(engine->window);
     engine->isInit = true;
+    engine->lastTime = cxTimestamp();
 }
 
 cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)

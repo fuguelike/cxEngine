@@ -39,7 +39,7 @@ CX_OBJECT_DEF(cxShader, cxObject)
     GLuint program;
     GLuint vertexShader;
     GLuint fragmentShader;
-    GLint uniformMatrixModelviewProject;
+    GLint uniformModelViewProject;
     CX_METHOD_DEF(void,Init,cxAny);
     CX_METHOD_DEF(void,Update,cxAny);
     CX_METHOD_DEF(void,GetUniform,cxAny);

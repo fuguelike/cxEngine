@@ -15,9 +15,9 @@ CX_C_BEGIN
 
 //path?key=value
 CX_OBJECT_DEF(cxUrlPath, cxObject)
-    cxChar path[CX_MAX_KEY];
-    cxChar key[CX_MAX_KEY];
-    cxChar value[CX_MAX_KEY];
+    cxChar path[CX_HASH_MAX_KEY];
+    cxChar key[CX_HASH_MAX_KEY];
+    cxChar value[CX_HASH_MAX_KEY];
     cxInt count;
 CX_OBJECT_END(cxUrlPath, cxObject)
 

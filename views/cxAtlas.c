@@ -155,7 +155,7 @@ CX_SETTER_DEF(cxAtlas, layers)
         }else{
             tex = cxJsonBoxTex2f(layer, "coord", tex);
         }
-        if(cxSize2Zero(size) && key != NULL){
+        if(cxSize2fZero(size) && key != NULL){
             size = cxTextureSize(this->cxSprite.texture, key);
         }
         color = cxJsonColor4f(layer, "color", color);

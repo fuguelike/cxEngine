@@ -53,6 +53,8 @@ typedef kmVec2 cxVec2f;
 #define cxVec2fAngle(a)         atan2f((a).y, (a).x)
 #define cxVec2fMagnitude(a)     sqrtf((a).x*(a).x + (a).y*(a).y)
 #define cxVec2f2PAngle(p1,p2)   atan2f((p1).y - (p2).y, (p1).x - (p2).x)
+#define cxVec2fZero(v)          (kmAlmostEqual((v).x, 0) && kmAlmostEqual((v).y, 0))
+#define cxVec2fOne(v)           (kmAlmostEqual((v).x, 1.0f) && kmAlmostEqual((v).y, 1.0f))
 
 typedef kmVec3 cxVec3f;
 #define cxVec3fv(x,y,z)         (cxVec3f){x,y,z}
@@ -121,7 +123,7 @@ typedef struct {
 }cxSize2f;
 #define cxSize2fv(w,h)          (cxSize2f){w,h}
 #define cxSize2fEqu(s1,s2)      (cxFloatEqu((s1).w,(s2).w) &&  cxFloatEqu((s1).h,(s2).h))
-#define cxSize2Zero(v)          (kmAlmostEqual((v).w, 0) && kmAlmostEqual((v).h, 0))
+#define cxSize2fZero(v)          (kmAlmostEqual((v).w, 0) && kmAlmostEqual((v).h, 0))
 
 typedef struct {
     cxFloat u;
