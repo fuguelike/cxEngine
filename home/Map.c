@@ -70,6 +70,14 @@ void MapAppendNode(Map this,cxAny node)
     snode->element = cxListAppend(this->nodes, snode);
 }
 
+static cxBool MapGesture(cxAny pview,cxGesture *gesture)
+{
+    for(cxInt i=0; i < gesture->pointNum; i++){
+        CX_LOGGER("%d %f %f",i, gesture->points[i].x,gesture->points[i].y);
+    }
+    return false;
+}
+
 CX_OBJECT_TYPE(Map, cxAtlas)
 {
     
@@ -77,6 +85,7 @@ CX_OBJECT_TYPE(Map, cxAtlas)
 CX_OBJECT_INIT(Map, cxAtlas)
 {
     CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Touch, MapTouch);
+    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Gesture, MapGesture);
     //set size
     cxEngine engine = cxEngineInstance();
     this->unitNum = cxVec2iv(20, 20);

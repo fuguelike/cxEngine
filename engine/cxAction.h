@@ -21,8 +21,6 @@ CX_OBJECT_DEF(cxAction, cxObject)
     cxUInt actionId;
     cxFloat scale;
     cxFloat delay;
-    cxFloat prevTime;
-    cxFloat delta;
     cxFloat delayElapsed;
     cxFloat timeInit;
     cxFloat time;

@@ -31,7 +31,7 @@
     cxEAGLView *glView = [[cxEAGLView alloc] initWithFrame:[app.window bounds]];
     [glView setFrame:app.window.frame];
     [glView setContentScaleFactor:app.window.contentScaleFactor];
-    [glView setMultipleTouchEnabled:NO];
+    [glView setMultipleTouchEnabled:YES];
     self.view = glView;
     [glView release];
 }

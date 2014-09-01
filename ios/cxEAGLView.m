@@ -66,19 +66,6 @@ cxEAGLView *instance = nil;
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 
--(void)tapGesture:(UITapGestureRecognizer *)tap
-{
-    CGPoint point = [tap locationInView:self];
-    cxVec2f pos = cxVec2fv(point.x * self.contentScaleFactor, point.y * self.contentScaleFactor);
-    pos = cxEngineTouchToWindow(pos);
-    CX_LOGGER("%f %f",pos.x,pos.y);
-}
-
--(void)pinchGesture:(UIPinchGestureRecognizer *)pinch
-{
-    CX_LOGGER("%f",pinch.scale);
-}
-
 -(id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -108,16 +95,6 @@ cxEAGLView *instance = nil;
     [self initMainLoop];
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
     [displayLink retain];
-    
-//    //add tap gesture
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
-//    [self addGestureRecognizer:tap];
-//    [tap release];
-//    
-//    //add scale gesture
-//    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGesture:)];
-//    [self addGestureRecognizer:pinch];
-//    [pinch release];
     
     return self;
 }
@@ -158,10 +135,18 @@ cxEAGLView *instance = nil;
 
 -(void)dispatcherMotionEvent:(NSSet *)touches type:(cxTouchType)type event:(UIEvent *)event
 {
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [touch locationInView:[touch view]];
-    cxVec2f pos = cxVec2fv(point.x * self.contentScaleFactor, point.y * self.contentScaleFactor);
-    cxEngineFireTouch(type, pos);
+    cxVec2f points[MAX_POINT];
+    cxInt numPoint = 0;
+    for (UITouch *touch in touches) {
+        CGPoint point = [touch locationInView:self];
+        points[numPoint++] = cxVec2fv(point.x * self.contentScaleFactor, point.y * self.contentScaleFactor);
+    }
+    if(numPoint == 1){
+        cxEngineFireTouch(type, points[0]);
+    }
+    if(numPoint > 1){
+        cxEngineFireGesture(type, points, numPoint);
+    }
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

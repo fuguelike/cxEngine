@@ -61,18 +61,27 @@ public class EngineActivity extends Activity {
     public boolean onTouchEvent(MotionEvent event){
     	final int action = event.getAction() & MotionEvent.ACTION_MASK;
 		final int pointerNumber = event.getPointerCount();
-		if(pointerNumber == 0){
-			return false;
-		}
-		final int[] ids = new int[pointerNumber];
 		final float[] xs = new float[pointerNumber];
 		final float[] ys = new float[pointerNumber];
 		for (int i = 0; i < pointerNumber; i++) {
-			ids[i] = event.getPointerId(i);
 			xs[i] = event.getX(i);
 			ys[i] = event.getY(i);
 		}
-		glView.cxEngineAsyncFireTouch(action, xs[0], ys[0]);
+		if(action == MotionEvent.ACTION_POINTER_DOWN){
+			int idx = event.getAction() >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+			float x = event.getX(idx);
+			float y = event.getY(idx);
+			glView.cxEngineAsyncFireTouch(MotionEvent.ACTION_DOWN, x, y);
+		}else if(action == MotionEvent.ACTION_POINTER_UP){
+			int idx = event.getAction() >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+			float x = event.getX(idx);
+			float y = event.getY(idx);
+			glView.cxEngineAsyncFireTouch(MotionEvent.ACTION_UP, x, y);
+		}else if(pointerNumber == 1){
+			glView.cxEngineAsyncFireTouch(action, xs[0], ys[0]);
+		}else{
+			glView.cxEngineAsyncFireGesture(action, xs, ys);
+		}
     	return super.onTouchEvent(event);
     }
 	

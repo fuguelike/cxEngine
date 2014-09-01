@@ -15,7 +15,7 @@
 
 CX_C_BEGIN
 
-#define cxFloatEqu kmAlmostEqual
+#define cxFloatEqu(v1,v2) kmAlmostEqual(v1,v2)
 
 // -1.0f <-> 1.0f
 #define CX_RAND_11f() ((2.0f*((cxFloat)rand()/(cxFloat)RAND_MAX))-1.0f)
@@ -53,7 +53,7 @@ typedef kmVec2 cxVec2f;
 #define cxVec2fAngle(a)         atan2f((a).y, (a).x)
 #define cxVec2fMagnitude(a)     sqrtf((a).x*(a).x + (a).y*(a).y)
 #define cxVec2f2PAngle(p1,p2)   atan2f((p1).y - (p2).y, (p1).x - (p2).x)
-#define cxVec2fZero(v)          (kmAlmostEqual((v).x, 0) && kmAlmostEqual((v).y, 0))
+#define cxVec2fZero(v)          (kmAlmostEqual((v).x, 0.0f) && kmAlmostEqual((v).y, 0.0f))
 #define cxVec2fOne(v)           (kmAlmostEqual((v).x, 1.0f) && kmAlmostEqual((v).y, 1.0f))
 
 typedef kmVec3 cxVec3f;

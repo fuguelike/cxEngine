@@ -23,6 +23,12 @@ typedef enum {
     cxTouchTypeCancel,
 }cxTouchType;
 
+typedef struct {
+    cxVec2f points[MAX_POINT];
+    cxInt pointNum;
+    cxTouchType type;
+}cxGesture;
+
 typedef enum {
     cxTouchDirectionNone    = 0,
     cxTouchDirectionLeft    = 1 << 0,

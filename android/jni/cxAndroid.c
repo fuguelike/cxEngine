@@ -211,6 +211,32 @@ JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireTouch(JNIEnv *
     cxEngineFireTouch(cxtype, cxVec2fv(x, y));
 }
 
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireGesture(JNIEnv * env, jclass class,jint action,jfloatArray x,jfloatArray y)
+{
+    cxTouchType cxtype = cxTouchTypeCancel;
+    if(action == AMOTION_EVENT_ACTION_DOWN){
+        cxtype = cxTouchTypeDown;
+    }else if(action == AMOTION_EVENT_ACTION_MOVE){
+        cxtype = cxTouchTypeMove;
+    }else if(action == AMOTION_EVENT_ACTION_UP){
+        cxtype = cxTouchTypeUp;
+    }else if(action == AMOTION_EVENT_ACTION_CANCEL){
+        cxtype = cxTouchTypeCancel;
+    }else{
+        CX_ASSERT(false, "gesture action error %d",action);
+    }
+    jboolean copy = false;
+    jfloat *xs = (*env)->GetFloatArrayElements(env, x, &copy);
+    jfloat *ys = (*env)->GetFloatArrayElements(env, y, &copy);
+    jint num = (*env)->GetArrayLength(env,x);
+    cxVec2f points[num];
+    for(cxInt i=0; i < num; i++){
+        points[i].x = xs[i];
+        points[i].y = ys[i];
+    }
+    cxEngineFireGesture(cxtype, points, num);
+}
+
 JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireKey(JNIEnv * env, jclass class,jint type,jint code)
 {
     cxKeyType cxtype = cxKeyTypeDown;

@@ -56,6 +56,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool hideTop;         //=true hide prev view when use cxWindowPush
     cxBool isSort;
     cxBool isCropping;
+    cxBool isTouch;     //enable touch
+    cxBool isGesture;   //enable gesture
     cxSize2f size;
     cxVec2f position;
     cxVec2f scale;
@@ -70,6 +72,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxColor3f borderColor;
 
     CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouch *);
+    CX_METHOD_DEF(cxBool, Gesture, cxAny, cxGesture *);
     CX_METHOD_DEF(cxBool, Key, cxAny, cxKey *);
     CX_METHOD_DEF(void, Draw, cxAny);
     CX_METHOD_DEF(void, After, cxAny);
@@ -158,6 +161,8 @@ void cxViewSetOrder(cxAny pview,cxInt order);
 cxBool cxViewKey(cxAny pview,cxKey *key);
 
 cxBool cxViewTouch(cxAny pview,cxTouch *touch);
+
+cxBool cxViewGesture(cxAny pview,cxGesture *gesture);
 
 void cxViewAppendImp(cxAny pview,cxAny newview);
 

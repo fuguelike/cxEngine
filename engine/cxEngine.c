@@ -298,6 +298,7 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->interval = 1.0f/60.0f;
     this->isShowBorder = true;
     this->isTouch = true;
+    this->isGesture = true;
     this->scale    = cxVec2fv(1.0f, 1.0f);
     this->window   = CX_ALLOC(cxWindow);
     this->files    = CX_ALLOC(cxHash);
@@ -496,6 +497,22 @@ static cxTouchDirection cxTouchGetDirection(cxVec2f delta)
     return ret;
 }
 
+//
+cxBool cxEngineFireGesture(cxTouchType type,cxVec2f pos[MAX_POINT],cxInt num)
+{
+    cxEngine this = cxEngineInstance();
+    if(!this->isGesture){
+        return false;
+    }
+    for(cxInt i=0; i < num; i++){
+        this->gesture.points[i] = cxEngineTouchToWindow(pos[i]);
+    }
+    this->gesture.pointNum = num;
+    this->gesture.type = type;
+    return cxViewGesture(this->window, &this->gesture);
+}
+
+//
 cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
 {
     cxEngine this = cxEngineInstance();

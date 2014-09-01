@@ -168,6 +168,8 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->isShowBorder = false;
     this->isVisible = true;
     this->isDirty = true;
+    this->isTouch = true;
+    this->isGesture = true;
     this->color = cxColor4fv(1.0f, 1.0f, 1.0f, 1.0f);
     this->size = cxSize2fv(0.0f, 0.0f);
     this->anchor = cxVec2fv(0.0f, 0.0f);
@@ -843,11 +845,34 @@ cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
     return cxBox2fContainPoint(box, pos);
 }
 
+cxBool cxViewGesture(cxAny pview,cxGesture *gesture)
+{
+    CX_ASSERT(pview != NULL, "pview args error");
+    cxView this = pview;
+    if(!this->isVisible || !this->isGesture){
+        return false;
+    }
+    cxListElement *head = cxListFirst(this->subViews);
+    if(head == NULL){
+        goto completed;
+    }
+    for(cxListElement *ele = cxListLast(this->subViews);ele != NULL;ele = ele->prev){
+        if(cxViewGesture(ele->any, gesture)){
+            return true;
+        }
+        if(ele == head){
+            break;
+        }
+    }
+completed:
+    return CX_METHOD_GET(false, this->Gesture, this, gesture);
+}
+
 cxBool cxViewTouch(cxAny pview,cxTouch *touch)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
-    if(!this->isVisible){
+    if(!this->isVisible || !this->isTouch){
         return false;
     }
     cxListElement *head = cxListFirst(this->subViews);

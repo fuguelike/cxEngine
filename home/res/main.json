@@ -8,9 +8,8 @@
       "type": "Map"
     },
     {
-      "type": "cxSprite",
-      "texture": "bg1.png",
-      "resizing": "left|top"
+      "type": "cxButton",
+      "texture": "bg1.png"
     }
   ]
 }

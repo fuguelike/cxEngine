@@ -16,29 +16,28 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
         return false;
     }
     cxBool hit = cxViewHitTest(pview, touch->current, NULL);
-    if(!hit && this->isDown){
+    //leave
+    if(touch->type == cxTouchTypeMove && this->isSelected && !hit){
         CX_EVENT_FIRE(this, onLeave);
-        this->isDown = false;
+        this->isSelected = false;
+        return false;
     }
     if(!hit){
         return false;
     }
     if(touch->type == cxTouchTypeDown){
-        this->isDown = true;
+        this->isSelected = true;
         CX_EVENT_FIRE(this, onEnter);
         CX_EVENT_FIRE(this, onPress);
         return true;
     }
-    if(!this->isDown){
-        return false;
-    }
-    if(touch->type == cxTouchTypeMove){
+    if(!this->isSelected){
         CX_EVENT_FIRE(this, onLeave);
-        this->isDown = false;
+        this->isSelected = false;
         return false;
     }
     if(touch->type == cxTouchTypeUp){
-        this->isDown = false;
+        this->isSelected = false;
         CX_EVENT_FIRE(this, onRelease);
         CX_EVENT_FIRE(this, onLeave);
         return true;

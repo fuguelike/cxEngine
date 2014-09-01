@@ -169,7 +169,6 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     if(!this->isFirst){
         this->isFirst = true;
         CX_ASSERT(this->view != NULL, "action viewptr null");
-        this->prevTime = 0;
         this->delayElapsed = 0;
         this->timeElapsed = this->timeInit;
         CX_METHOD_RUN(this->Init, this);
@@ -206,13 +205,9 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         isExit = CX_METHOD_GET(true, this->Exit, this);
     }else if(this->timeElapsed < this->time){
         time = CX_METHOD_GET(time, this->Curve, this, time);
-        this->delta = time - this->prevTime;
-        this->prevTime = time;
         CX_METHOD_RUN(this->Step,this,dt,time);
     }else{
         time = CX_METHOD_GET(1.0f, this->Curve,this,1.0f);
-        this->delta = time - this->prevTime;
-        this->prevTime = 0;
         this->timeElapsed = 0.0f;
         this->delayElapsed = 0.0f;
         CX_METHOD_RUN(this->Step,this,dt,1.0f);
