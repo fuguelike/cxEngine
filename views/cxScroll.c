@@ -18,16 +18,18 @@ cxView cxScrollContainer(cxAny pview)
     return ele->any;
 }
 
-cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
+cxBool cxScrollTouch(cxAny pview,cxInt number,cxArray points)
 {
+    CX_RETURN(number != 1,false);
+    cxTouchItem item = cxArrayAtIndex(points, 0);
     cxScroll this = pview;
     cxView view = cxScrollContainer(this);
     CX_RETURN(view == NULL,false);
     cxVec2f pos;
-    if(!cxViewHitTest(pview, touch->current, &pos)){
+    if(!cxViewHitTest(pview, item->current, &pos)){
         return false;
     }
-    if(touch->type == cxTouchTypeDown){
+    if(item->type == cxTouchTypeDown){
         cxVec2f vscale = cxViewScale(view);
         cxVec2f tscale = cxViewScale(this);
         this->box.r = (view->size.w * vscale.x - this->cxView.size.w * tscale.x)/2.0f;
@@ -35,24 +37,24 @@ cxBool cxScrollTouch(cxAny pview,cxTouch *touch)
         this->box.t = (view->size.h * vscale.y - this->cxView.size.h * tscale.y)/2.0f;
         this->box.b = -this->box.t;
         return true;
-    }else if(touch->type == cxTouchTypeMove){
+    }else if(item->type == cxTouchTypeMove){
         cxVec2f vpos = cxViewPosition(view);
-        cxVec2f delta = cxViewTouchDelta(this, touch);
+        cxVec2f delta = cxViewTouchDelta(this, item);
         cxBool setpos = false;
         if(this->type & cxScrollMoveTypeVertical){
             vpos.y += delta.y;
-            if(CX_TOUCH_IS_DOWN(touch) && vpos.y < this->box.b){
+            if(CX_TOUCH_IS_DOWN(item) && vpos.y < this->box.b){
                 vpos.y = this->box.b;
-            }else if(CX_TOUCH_IS_UP(touch) && vpos.y > this->box.t){
+            }else if(CX_TOUCH_IS_UP(item) && vpos.y > this->box.t){
                 vpos.y = this->box.t;
             }
             setpos = true;
         }
         if(this->type & cxScrollMoveTypeHorizontal){
             vpos.x += delta.x;
-            if(CX_TOUCH_IS_LEFT(touch) && vpos.x < this->box.l){
+            if(CX_TOUCH_IS_LEFT(item) && vpos.x < this->box.l){
                 vpos.x = this->box.l;
-            }else if(CX_TOUCH_IS_RIGHT(touch) && vpos.x > this->box.r){
+            }else if(CX_TOUCH_IS_RIGHT(item) && vpos.x > this->box.r){
                 vpos.x = this->box.r;
             }
             setpos = true;

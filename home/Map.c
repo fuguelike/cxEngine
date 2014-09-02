@@ -13,44 +13,6 @@
 #include "Map.h"
 #include "Node.h"
 
-static cxBool MapTouch(cxAny pview,cxTouch *touch)
-{
-    cxEngine engine = cxEngineInstance();
-    Map this = pview;
-    cxVec2f cpos;
-    if(!cxViewHitTest(pview, touch->current, &cpos)){
-        return false;
-    }
-    cxSize2f msize = cxViewSize(this);
-    cxSize2f wsize = engine->winsize;
-    if(touch->type == cxTouchTypeDown){
-        cxVec2f scale = cxViewScale(this);
-        this->box.r = (msize.w * scale.x - wsize.w)/2.0f;
-        this->box.l = -this->box.r;
-        this->box.t = (msize.h * scale.y - wsize.h)/2.0f;
-        this->box.b = -this->box.t;
-        return false;
-    }
-    if(touch->type == cxTouchTypeMove){
-        cxVec2f vpos = cxViewPosition(this);
-        cxVec2f delta = cxViewTouchDelta(pview, touch);
-        kmVec2Add(&vpos, &vpos, &delta);
-        if(CX_TOUCH_IS_DOWN(touch) && vpos.y <= this->box.b){
-            vpos.y = this->box.b;
-        }else if(CX_TOUCH_IS_UP(touch) && vpos.y >= this->box.t){
-            vpos.y = this->box.t;
-        }
-        if(CX_TOUCH_IS_LEFT(touch) && vpos.x <= this->box.l){
-            vpos.x = this->box.l;
-        }else if(CX_TOUCH_IS_RIGHT(touch) && vpos.x >= this->box.r){
-            vpos.x = this->box.r;
-        }
-        cxViewSetPos(this, vpos);
-        return true;
-    }
-    return false;
-}
-
 static cxInt MapSortCmpFunc(cxListElement *lp,cxListElement *rp)
 {
     cxView v1 = (cxView)lp->any;
@@ -70,10 +32,44 @@ void MapAppendNode(Map this,cxAny node)
     snode->element = cxListAppend(this->nodes, snode);
 }
 
-static cxBool MapGesture(cxAny pview,cxGesture *gesture)
+static cxBool MapTouch(cxAny pview,cxInt number,cxArray points)
 {
-    for(cxInt i=0; i < gesture->pointNum; i++){
-        CX_LOGGER("%d %f %f",i, gesture->points[i].x,gesture->points[i].y);
+    if(number != 1){
+        return false;
+    }
+    cxTouchItem item = cxArrayAtIndex(points, 0);
+    cxEngine engine = cxEngineInstance();
+    Map this = pview;
+    cxVec2f cpos;
+    if(!cxViewHitTest(pview, item->current, &cpos)){
+        return false;
+    }
+    cxSize2f msize = cxViewSize(this);
+    cxSize2f wsize = engine->winsize;
+    if(item->type == cxTouchTypeDown){
+        cxVec2f scale = cxViewScale(this);
+        this->box.r = (msize.w * scale.x - wsize.w)/2.0f;
+        this->box.l = -this->box.r;
+        this->box.t = (msize.h * scale.y - wsize.h)/2.0f;
+        this->box.b = -this->box.t;
+        return false;
+    }
+    if(item->type == cxTouchTypeMove){
+        cxVec2f vpos = cxViewPosition(this);
+        cxVec2f delta = cxViewTouchDelta(pview, item);
+        kmVec2Add(&vpos, &vpos, &delta);
+        if(CX_TOUCH_IS_DOWN(item) && vpos.y <= this->box.b){
+            vpos.y = this->box.b;
+        }else if(CX_TOUCH_IS_UP(item) && vpos.y >= this->box.t){
+            vpos.y = this->box.t;
+        }
+        if(CX_TOUCH_IS_LEFT(item) && vpos.x <= this->box.l){
+            vpos.x = this->box.l;
+        }else if(CX_TOUCH_IS_RIGHT(item) && vpos.x >= this->box.r){
+            vpos.x = this->box.r;
+        }
+        cxViewSetPos(this, vpos);
+        return true;
     }
     return false;
 }
@@ -85,7 +81,7 @@ CX_OBJECT_TYPE(Map, cxAtlas)
 CX_OBJECT_INIT(Map, cxAtlas)
 {
     CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Touch, MapTouch);
-    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Gesture, MapGesture);
+//    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Gesture, MapGesture);
     //set size
     cxEngine engine = cxEngineInstance();
     this->unitNum = cxVec2iv(20, 20);

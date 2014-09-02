@@ -34,16 +34,6 @@ public class EngineGLView extends GLSurfaceView {
 			}
 		});
 	}
-	//
-	public static native void cxEngineFireGesture(int action,float []x,float []y);
-	public void cxEngineAsyncFireGesture(final int action,final float []x,final float []y){
-		this.queueEvent(new Runnable(){
-			@Override
-			public void run(){
-				cxEngineFireGesture(action,x,y);
-			}
-		});
-	}
 	public static native void cxEngineFireKey(int type,int code);
 	public void cxEngineAsyncFireKey(final int type,final int code){
 		this.queueEvent(new Runnable(){

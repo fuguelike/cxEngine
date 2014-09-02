@@ -300,9 +300,9 @@ cxBool cxViewZeroSize(cxAny pview)
     return cxSize2fZero(this->size);
 }
 
-cxVec2f cxViewTouchDelta(cxAny pview,cxTouch *touch)
+cxVec2f cxViewTouchDelta(cxAny pview,cxTouchItem item)
 {
-    cxVec2f delta = touch->delta;
+    cxVec2f delta = item->delta;
     cxView parent = cxViewParent(pview);
     CX_RETURN(parent == NULL,delta);
     delta.x /= parent->scale.x;
@@ -845,30 +845,7 @@ cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
     return cxBox2fContainPoint(box, pos);
 }
 
-cxBool cxViewGesture(cxAny pview,cxGesture *gesture)
-{
-    CX_ASSERT(pview != NULL, "pview args error");
-    cxView this = pview;
-    if(!this->isVisible || !this->isGesture){
-        return false;
-    }
-    cxListElement *head = cxListFirst(this->subViews);
-    if(head == NULL){
-        goto completed;
-    }
-    for(cxListElement *ele = cxListLast(this->subViews);ele != NULL;ele = ele->prev){
-        if(cxViewGesture(ele->any, gesture)){
-            return true;
-        }
-        if(ele == head){
-            break;
-        }
-    }
-completed:
-    return CX_METHOD_GET(false, this->Gesture, this, gesture);
-}
-
-cxBool cxViewTouch(cxAny pview,cxTouch *touch)
+cxBool cxViewTouch(cxAny pview,cxInt number,cxArray points)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
@@ -880,7 +857,7 @@ cxBool cxViewTouch(cxAny pview,cxTouch *touch)
         goto completed;
     }
     for(cxListElement *ele = cxListLast(this->subViews);ele != NULL;ele = ele->prev){
-        if(cxViewTouch(ele->any, touch)){
+        if(cxViewTouch(ele->any, number, points)){
             return true;
         }
         if(ele == head){
@@ -888,7 +865,7 @@ cxBool cxViewTouch(cxAny pview,cxTouch *touch)
         }
     }
 completed:
-    return CX_METHOD_GET(false, this->Touch,this,touch);
+    return CX_METHOD_GET(false, this->Touch, this, number, points);
 }
 
 cxBool cxViewKey(cxAny pview,cxKey *key)

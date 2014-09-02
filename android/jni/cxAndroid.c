@@ -194,7 +194,7 @@ void cxEngineSendJson(cxString json)
     }
 }
 
-JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireTouch(JNIEnv * env, jclass class,jint action,jfloat x,jfloat y)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireTouch(JNIEnv * env, jclass class,jint action,jintArray ids, jfloatArray xs, jfloatArray ys)
 {
     cxTouchType cxtype = cxTouchTypeCancel;
     if(action == AMOTION_EVENT_ACTION_DOWN){
@@ -208,33 +208,23 @@ JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireTouch(JNIEnv *
     }else{
         CX_ASSERT(false, "touch action error %d",action);
     }
-    cxEngineFireTouch(cxtype, cxVec2fv(x, y));
-}
-
-JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireGesture(JNIEnv * env, jclass class,jint action,jfloatArray x,jfloatArray y)
-{
-    cxTouchType cxtype = cxTouchTypeCancel;
-    if(action == AMOTION_EVENT_ACTION_DOWN){
-        cxtype = cxTouchTypeDown;
-    }else if(action == AMOTION_EVENT_ACTION_MOVE){
-        cxtype = cxTouchTypeMove;
-    }else if(action == AMOTION_EVENT_ACTION_UP){
-        cxtype = cxTouchTypeUp;
-    }else if(action == AMOTION_EVENT_ACTION_CANCEL){
-        cxtype = cxTouchTypeCancel;
-    }else{
-        CX_ASSERT(false, "gesture action error %d",action);
+    //
+    int size = (*env)->GetArrayLength(env,ids);
+    jint id[size];
+    jfloat x[size];
+    jfloat y[size];
+    (*env)->GetIntArrayRegion(env,ids, 0, size, id);
+    (*env)->GetFloatArrayRegion(env,xs, 0, size, x);
+    (*env)->GetFloatArrayRegion(env,ys, 0, size, y);
+    //
+    cxTouchPoint points[CX_MAX_TOUCH_POINT];
+    cxInt num = 0;
+    for (cxInt i=0; i < size; i++) {
+        points[num].xy = cxVec2fv(x[i],y[i]);
+        points[num].id = id[i];
+        num ++;
     }
-    jboolean copy = false;
-    jfloat *xs = (*env)->GetFloatArrayElements(env, x, &copy);
-    jfloat *ys = (*env)->GetFloatArrayElements(env, y, &copy);
-    jint num = (*env)->GetArrayLength(env,x);
-    cxVec2f points[num];
-    for(cxInt i=0; i < num; i++){
-        points[i].x = xs[i];
-        points[i].y = ys[i];
-    }
-    cxEngineFireGesture(cxtype, points, num);
+    cxEngineFireTouch(cxtype, num, points);
 }
 
 JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireKey(JNIEnv * env, jclass class,jint type,jint code)

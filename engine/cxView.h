@@ -71,8 +71,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxColor4f color;
     cxColor3f borderColor;
 
-    CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouch *);
-    CX_METHOD_DEF(cxBool, Gesture, cxAny, cxGesture *);
+    CX_METHOD_DEF(cxBool, Touch, cxAny, cxInt, cxArray);
     CX_METHOD_DEF(cxBool, Key, cxAny, cxKey *);
     CX_METHOD_DEF(void, Draw, cxAny);
     CX_METHOD_DEF(void, After, cxAny);
@@ -102,7 +101,7 @@ void cxViewSetCropping(cxAny pview,cxBool cropping);
 
 cxAny cxViewParent(cxAny pview);
 
-cxVec2f cxViewTouchDelta(cxAny pview,cxTouch *touch);
+cxVec2f cxViewTouchDelta(cxAny pview,cxTouchItem item);
 
 cxVec2f cxViewPosition(cxAny pview);
 
@@ -160,9 +159,8 @@ void cxViewSetOrder(cxAny pview,cxInt order);
 
 cxBool cxViewKey(cxAny pview,cxKey *key);
 
-cxBool cxViewTouch(cxAny pview,cxTouch *touch);
-
-cxBool cxViewGesture(cxAny pview,cxGesture *gesture);
+//touch count,current touches
+cxBool cxViewTouch(cxAny pview,cxInt number,cxArray points);
 
 void cxViewAppendImp(cxAny pview,cxAny newview);
 

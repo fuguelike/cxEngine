@@ -13,7 +13,7 @@
 
 CX_C_BEGIN
 
-#define MAX_POINT 10
+#define CX_MAX_TOUCH_POINT 10
 
 typedef enum {
     cxTouchTypeNone = 0,
@@ -22,12 +22,6 @@ typedef enum {
     cxTouchTypeUp,
     cxTouchTypeCancel,
 }cxTouchType;
-
-typedef struct {
-    cxVec2f points[MAX_POINT];
-    cxInt pointNum;
-    cxTouchType type;
-}cxGesture;
 
 typedef enum {
     cxTouchDirectionNone    = 0,
@@ -43,17 +37,22 @@ typedef enum {
 #define CX_TOUCH_IS_RIGHT(_t_)  ((_t_)->direction & cxTouchDirectionRight)
 
 typedef struct {
+    cxLong id;
+    cxVec2f xy;
+}cxTouchPoint;
+
+CX_OBJECT_DEF(cxTouchItem, cxObject)
     cxVec2f previous;
     cxVec2f delta;      //window delta,when cxTouchTypeMove
     cxVec2f current;
     cxTouchType type;
     cxTouchDirection direction;
-}cxTouch;
+CX_OBJECT_END(cxTouchItem, cxObject)
 
 typedef enum {
-    cxKeyTypeDown = 0,
-    cxKeyTypeUp = 1,
-    cxKeyTypeMultiple = 2,
+    cxKeyTypeDown       = 0,
+    cxKeyTypeUp         = 1,
+    cxKeyTypeMultiple   = 2,
 }cxKeyType;
 
 typedef struct {

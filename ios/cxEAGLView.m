@@ -69,6 +69,10 @@ cxEAGLView *instance = nil;
 -(id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    if(self == nil){
+        CX_ERROR("init gl frame error");
+        return nil;
+    }
     instance = self;
     CX_ASSERT(self != nil, "init view frame failed");
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
@@ -82,6 +86,7 @@ cxEAGLView *instance = nil;
     CX_ASSERT(eaglCTX != nil,"alloc EAGL Context error");
     if(![EAGLContext setCurrentContext:eaglCTX]){
         CX_ERROR("set current eagl context error");
+        return nil;
     }
     glGenFramebuffers(1, &frameBuffer);
     CX_ASSERT(frameBuffer > 0,"gl frame buffer create failed");
@@ -95,7 +100,6 @@ cxEAGLView *instance = nil;
     [self initMainLoop];
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
     [displayLink retain];
-    
     return self;
 }
 
@@ -135,18 +139,16 @@ cxEAGLView *instance = nil;
 
 -(void)dispatcherMotionEvent:(NSSet *)touches type:(cxTouchType)type event:(UIEvent *)event
 {
-    cxVec2f points[MAX_POINT];
-    cxInt numPoint = 0;
+    cxTouchPoint points[CX_MAX_TOUCH_POINT];
+    cxInt num = 0;
     for (UITouch *touch in touches) {
-        CGPoint point = [touch locationInView:self];
-        points[numPoint++] = cxVec2fv(point.x * self.contentScaleFactor, point.y * self.contentScaleFactor);
+        CGPoint point = [touch locationInView:[touch view]];
+        cxVec2f pos = cxVec2fv(point.x * self.contentScaleFactor, point.y * self.contentScaleFactor);
+        points[num].xy = pos;
+        points[num].id = (cxLong)touch;
+        num ++;
     }
-    if(numPoint == 1){
-        cxEngineFireTouch(type, points[0]);
-    }
-    if(numPoint > 1){
-        cxEngineFireGesture(type, points, numPoint);
-    }
+    cxEngineFireTouch(type, num, points);
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

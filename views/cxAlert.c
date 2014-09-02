@@ -20,7 +20,7 @@ static cxBool cxAlertKey(cxAny pview,cxKey *key)
     return false;
 }
 
-static cxBool cxAlertTouch(cxAny pview,cxTouch *touch)
+static cxBool cxAlertTouch(cxAny pview,cxInt number,cxArray points)
 {
     return true;
 }

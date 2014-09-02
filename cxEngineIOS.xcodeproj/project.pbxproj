@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8301C6B719A74E0100DFD640 /* cxTile.c in Sources */ = {isa = PBXBuildFile; fileRef = 8301C6B519A74E0100DFD640 /* cxTile.c */; };
+		831A832C19B5DBAF00196AE6 /* cxInput.c in Sources */ = {isa = PBXBuildFile; fileRef = 831A832B19B5DBAF00196AE6 /* cxInput.c */; };
 		833642BB1925E4E900223302 /* cxMemory.c in Sources */ = {isa = PBXBuildFile; fileRef = 833642B91925E4E900223302 /* cxMemory.c */; };
 		833642BE1925E6B600223302 /* cxNumber.c in Sources */ = {isa = PBXBuildFile; fileRef = 833642BC1925E6B600223302 /* cxNumber.c */; };
 		833CA4F11925D95C0013630A /* cxMultiple.c in Sources */ = {isa = PBXBuildFile; fileRef = 833CA4D31925D95C0013630A /* cxMultiple.c */; };
@@ -144,6 +145,7 @@
 /* Begin PBXFileReference section */
 		8301C6B519A74E0100DFD640 /* cxTile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTile.c; sourceTree = "<group>"; };
 		8301C6B619A74E0100DFD640 /* cxTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTile.h; sourceTree = "<group>"; };
+		831A832B19B5DBAF00196AE6 /* cxInput.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxInput.c; sourceTree = "<group>"; };
 		8329627918D9C14E002AB028 /* cxEngine.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEngine.pch; sourceTree = "<group>"; };
 		833642B91925E4E900223302 /* cxMemory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMemory.c; sourceTree = "<group>"; };
 		833642BA1925E4E900223302 /* cxMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMemory.h; sourceTree = "<group>"; };
@@ -705,6 +707,7 @@
 				83B995A81925C5A100FD6BC1 /* cxIconv.c */,
 				83B995A91925C5A100FD6BC1 /* cxIconv.h */,
 				83B995AA1925C5A100FD6BC1 /* cxInput.h */,
+				831A832B19B5DBAF00196AE6 /* cxInput.c */,
 				83B995AB1925C5A100FD6BC1 /* cxJson.c */,
 				83B995AC1925C5A100FD6BC1 /* cxJson.h */,
 				83B995AD1925C5A100FD6BC1 /* cxMath.c */,
@@ -820,6 +823,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				831A832C19B5DBAF00196AE6 /* cxInput.c in Sources */,
 				833CA53F1925DB5E0013630A /* cxHttpConn.c in Sources */,
 				833CA5501925DB5E0013630A /* cxLoading.c in Sources */,
 				83B995DC1925C5A100FD6BC1 /* cxUtil.c in Sources */,

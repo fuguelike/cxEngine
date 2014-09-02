@@ -99,6 +99,7 @@ static void cxEngineTypes()
     CX_TYPE_DEF(cxEngine);
     CX_TYPE_DEF(cxJson);
     CX_TYPE_DEF(cxPlayer);
+    CX_TYPE_DEF(cxTouchItem);
     
     //register streams
     CX_TYPE_DEF(cxAssetsStream);
@@ -303,9 +304,13 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->window   = CX_ALLOC(cxWindow);
     this->files    = CX_ALLOC(cxHash);
     this->stack    = CX_ALLOC(cxStack);
+    this->items    = CX_ALLOC(cxHash);
+    this->fires    = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
+    CX_RELEASE(this->fires);
+    CX_RELEASE(this->items);
     CX_RELEASE(this->stack);
     CX_RELEASE(this->files);
     CX_RELEASE(this->lang);
@@ -497,43 +502,55 @@ static cxTouchDirection cxTouchGetDirection(cxVec2f delta)
     return ret;
 }
 
-//
-cxBool cxEngineFireGesture(cxTouchType type,cxVec2f pos[MAX_POINT],cxInt num)
+cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
 {
     cxEngine this = cxEngineInstance();
-    if(!this->isGesture){
-        return false;
-    }
+    //当前触发的点
+    cxArrayClean(this->fires);
     for(cxInt i=0; i < num; i++){
-        this->gesture.points[i] = cxEngineTouchToWindow(pos[i]);
+        cxTouchPoint p = points[i];
+        cxVec2f cpos = cxEngineTouchToWindow(p.xy);
+        cxHashKey key = cxHashLongKey(p.id);
+        if(type == cxTouchTypeDown){
+            CX_ASSERT(!cxHashHas(this->items, key), "touch id %ld exists");
+            cxTouchItem item = CX_ALLOC(cxTouchItem);
+            item->delta = cxVec2fv(0, 0);
+            item->previous = cpos;
+            item->direction = cxTouchDirectionNone;
+            item->type = type;
+            item->current = cpos;
+            cxHashSet(this->items, key, item);
+            cxArrayAppend(this->fires, item);
+            CX_RELEASE(item);
+        }else if(type == cxTouchTypeMove){
+            cxTouchItem item = cxHashGet(this->items, key);
+            CX_ASSERT(item != NULL, "touch move item malloc at cxTouchTypeDown");
+            kmVec2Subtract(&item->delta, &cpos, &item->previous);
+            item->previous = cpos;
+            item->current = cpos;
+            item->direction = cxTouchGetDirection(item->delta);
+            item->type = type;
+            cxArrayAppend(this->fires, item);
+        }else if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
+            cxTouchItem item = cxHashGet(this->items, key);
+            CX_ASSERT(item != NULL, "touch up item malloc at cxTouchTypeDown");
+            item->current = cpos;
+            item->type = type;
+            cxArrayAppend(this->fires, item);
+        }
     }
-    this->gesture.pointNum = num;
-    this->gesture.type = type;
-    return cxViewGesture(this->window, &this->gesture);
-}
-
-//
-cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos)
-{
-    cxEngine this = cxEngineInstance();
-    if(!this->isTouch){
-        return false;
+    cxBool ret = cxViewTouch(this->window, cxHashLength(this->items), this->fires);
+    //remove up cancel point
+    for(cxInt i=0; i < num; i++){
+        cxTouchPoint p = points[i];
+        cxHashKey key = cxHashLongKey(p.id);
+        if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
+            cxTouchItem item = cxHashGet(this->items, key);
+            CX_ASSERT(item != NULL, "touch up item malloc at cxTouchTypeDown");
+            cxHashDel(this->items, key);
+        }
     }
-    cxVec2f cpos = cxEngineTouchToWindow(pos);
-    if(type == cxTouchTypeDown){
-        this->touch.delta = cxVec2fv(0, 0);
-        this->touch.previous = cpos;
-        this->touch.direction = cxTouchDirectionNone;
-    }else if(type == cxTouchTypeMove){
-        kmVec2Subtract(&this->touch.delta, &cpos, &this->touch.previous);
-        this->touch.previous = cpos;
-        this->touch.direction = cxTouchGetDirection(this->touch.delta);
-    }else{
-        this->touch.delta = cxVec2fv(0, 0);
-    }
-    this->touch.current = cpos;
-    this->touch.type = type;
-    return cxViewTouch(this->window, &this->touch);
+    return ret;
 }
 
 

@@ -19,8 +19,10 @@ cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
     return MapPosToIdx(map, pos);
 }
 
-static cxBool NodeTouch(cxAny pview,cxTouch *touch)
+static cxBool NodeTouch(cxAny pview,cxInt number,cxArray points)
 {
+    CX_RETURN(number != 1,false);
+    cxTouchItem item = cxArrayAtIndex(points, 0);
     Node this = pview;
     Map map = this->map;
     //不可选择?
@@ -28,12 +30,12 @@ static cxBool NodeTouch(cxAny pview,cxTouch *touch)
         return false;
     }
     cxVec2f cpos;
-    cxBool hited = cxViewHitTest(pview, touch->current, &cpos) && cxPointsContainPoint(this->box, cpos);
+    cxBool hited = cxViewHitTest(pview, item->current, &cpos) && cxPointsContainPoint(this->box, cpos);
     Node snode = map->node;
     //如果移动一个选中的node
-    if(touch->type == cxTouchTypeMove &&  map->node != NULL && this->isSelected){
+    if(item->type == cxTouchTypeMove &&  map->node != NULL && this->isSelected){
         cxVec2f vpos = this->start;
-        cxVec2f delta = cxViewTouchDelta(pview, touch);
+        cxVec2f delta = cxViewTouchDelta(pview, item);
         kmVec2Add(&vpos, &vpos, &delta);
         cxVec2f idx = NodePosToIdx(this,vpos);
         this->isValidIdx = NodeIdxIsValid(this, idx);
@@ -51,13 +53,13 @@ static cxBool NodeTouch(cxAny pview,cxTouch *touch)
         return true;
     }
     //按下的时候并选中一个node
-    if(touch->type == cxTouchTypeDown && hited){
+    if(item->type == cxTouchTypeDown && hited){
         this->start = cxViewPosition(this);
         this->isSelected = true;
         return false;
     }
     //按下得时候没选中node，有之前选中的node,并且不再一个有效的位置上
-    if(touch->type == cxTouchTypeDown && !hited && snode != NULL && snode == this){
+    if(item->type == cxTouchTypeDown && !hited && snode != NULL && snode == this){
         if(!snode->isValidIdx){
             NodeResetPosition(snode);
         }
@@ -67,12 +69,12 @@ static cxBool NodeTouch(cxAny pview,cxTouch *touch)
         return false;
     }
     //如果当前选中的node在按键起来的时候有效
-    if(touch->type == cxTouchTypeUp && snode != NULL && snode == this && snode->isValidIdx){
+    if(item->type == cxTouchTypeUp && snode != NULL && snode == this && snode->isValidIdx){
         NodeSetIdx(snode, snode->curr);
         return false;
     }
     //如果选中了一个node
-    if(touch->type == cxTouchTypeUp && this->isSelected && hited){
+    if(item->type == cxTouchTypeUp && this->isSelected && hited){
         CX_LIST_FOREACH(map->nodes, ele){
             Node cnode = ele->any;
             if(cnode == this){

@@ -9,15 +9,17 @@
 #include <engine/cxEngine.h>
 #include "cxButton.h"
 
-cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
+cxBool cxButtonTouch(cxAny pview,cxInt number,cxArray points)
 {
+    CX_RETURN(number != 1,false);
+    cxTouchItem item = cxArrayAtIndex(points, 0);
     cxButton this = pview;
     if(!this->isEnable){
         return false;
     }
-    cxBool hit = cxViewHitTest(pview, touch->current, NULL);
+    cxBool hit = cxViewHitTest(pview, item->current, NULL);
     //leave
-    if(touch->type == cxTouchTypeMove && this->isSelected && !hit){
+    if(item->type == cxTouchTypeMove && this->isSelected && !hit){
         CX_EVENT_FIRE(this, onLeave);
         this->isSelected = false;
         return false;
@@ -25,7 +27,7 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
     if(!hit){
         return false;
     }
-    if(touch->type == cxTouchTypeDown){
+    if(item->type == cxTouchTypeDown){
         this->isSelected = true;
         CX_EVENT_FIRE(this, onEnter);
         CX_EVENT_FIRE(this, onPress);
@@ -36,13 +38,13 @@ cxBool cxButtonTouch(cxAny pview,cxTouch *touch)
         this->isSelected = false;
         return false;
     }
-    if(touch->type == cxTouchTypeUp){
+    if(item->type == cxTouchTypeUp){
         this->isSelected = false;
         CX_EVENT_FIRE(this, onRelease);
         CX_EVENT_FIRE(this, onLeave);
         return true;
     }
-    return false;
+    return this->isSelected;
 }
 
 CX_SETTER_DEF(cxButton, movement)

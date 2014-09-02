@@ -43,8 +43,9 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onUpdate);
     CX_SIGNAL_ALLOC(onRecvJson);
     CX_EVENT_ALLOC(onExit);
-    cxTouch touch;
-    cxGesture gesture;
+
+    cxHash items;       //touch items
+    cxArray fires;          //curr items
     cxKey key;
     cxString lang;
 CX_OBJECT_END(cxEngine, cxObject)
@@ -93,9 +94,7 @@ cxVec2f cxEngineWindowToTouch(cxVec2f pos);
 
 void cxEngineEnableTouch(cxBool enable);
 
-cxBool cxEngineFireGesture(cxTouchType type,cxVec2f pos[MAX_POINT],cxInt num);
-
-cxBool cxEngineFireTouch(cxTouchType type,cxVec2f pos);
+cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points);
 
 cxBool cxEngineFireKey(cxKeyType type,cxInt code);
 

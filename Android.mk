@@ -117,7 +117,8 @@ LOCAL_SRC_FILES += \
 	engine/cxTexture.c \
 	engine/cxUrlPath.c \
 	engine/cxUtil.c \
-	engine/cxView.c
+	engine/cxView.c \
+	engine/cxInput.c
     
 LOCAL_SRC_FILES += \
     algorithm/cxTile.c \

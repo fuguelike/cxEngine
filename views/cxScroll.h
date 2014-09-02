@@ -24,7 +24,7 @@ CX_OBJECT_DEF(cxScroll, cxView)
     cxScrollMoveType type;
 CX_OBJECT_END(cxScroll, cxView)
 
-cxBool cxScrollTouch(cxAny pview,cxTouch *touch);
+cxBool cxScrollTouch(cxAny pview,cxInt number,cxArray points);
 
 cxView cxScrollContainer(cxAny pview);
 
