@@ -52,6 +52,8 @@ CX_OBJECT_DEF(cxAStar, cxObject)
     cxAnyArray points;
 CX_OBJECT_END(cxAStar, cxObject)
 
+void cxAStarSetType(cxAny pobj,cxAStarType type);
+
 void cxAStarNeighbors(cxAny pbj, cxAny list, cxVec2i *node);
 
 //use at Neighbors

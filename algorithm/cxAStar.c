@@ -151,6 +151,13 @@ static cxInt cxAStarComparator(cxAny pbj, cxVec2i *lv,cxVec2i *rv)
     return memcmp(lv, rv, sizeof(cxVec2i));
 }
 
+void cxAStarSetType(cxAny pobj,cxAStarType type)
+{
+    cxAStar this = pobj;
+    cxAnyArrayClean(this->points);
+    this->type = type;
+}
+
 void cxAStarAppendNeighbors(cxAny list,cxVec2i point,cxFloat edgeCost)
 {
     ASNeighborListAdd(list, &point, edgeCost);
