@@ -25,12 +25,12 @@ public class EngineGLView extends GLSurfaceView {
 	private static EngineMusic engineMusic = null;
 	private static EngineGLView glView = null;
 	//
-	public static native void cxEngineFireTouch(int action,float x,float y);
-	public void cxEngineAsyncFireTouch(final int action,final float x,final float y){
+	public static native void cxEngineFireTouch(int action,int id[],float xs[],float ys[]);
+	public void cxEngineAsyncFireTouch(final int action,final int id[],final float xs[],final float ys[]){
 		this.queueEvent(new Runnable(){
 			@Override
 			public void run(){
-				cxEngineFireTouch(action,x,y);
+				cxEngineFireTouch(action,id,xs,ys);
 			}
 		});
 	}

@@ -27,10 +27,181 @@
  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <cxcore/cxBase.h>
 #include "cxAStar.h"
 #include <math.h>
 #include <string.h>
+
+typedef struct __ASNeighborList *ASNeighborList;
+typedef struct __ASPath *ASPath;
+
+typedef struct {
+    size_t  nodeSize;                                                                               // the size of the structure being used for the nodes - important since nodes are copied into the resulting path
+    void    (*nodeNeighbors)(ASNeighborList neighbors, void *node, void *context);                  // add nodes to the neighbor list if they are connected to this node
+    float   (*pathCostHeuristic)(void *fromNode, void *toNode, void *context);                      // estimated cost to transition from the first node to the second node -- optional, uses 0 if not specified
+    int     (*earlyExit)(size_t visitedCount, void *visitingNode, void *goalNode, void *context);   // early termination, return 1 for success, -1 for failure, 0 to continue searching -- optional
+    int     (*nodeComparator)(void *node1, void *node2, void *context);                             // must return a sort order for the nodes (-1, 0, 1) -- optional, uses memcmp if not specified
+} ASPathNodeSource;
+
+// use in the nodeNeighbors callback to return neighbors
+void ASNeighborListAdd(ASNeighborList neighbors, void *node, float edgeCost);
+
+// if goalNode is NULL, it searches the entire graph and returns the cheapest deepest path
+// context is optional and is simply passed through to the callback functions
+// startNode and nodeSource is required
+// as a path is created, the relevant nodes are copied into the path
+ASPath ASPathCreate(const ASPathNodeSource *nodeSource, void *context, void *startNode, void *goalNode);
+
+// paths created with ASPathCreate() must be destroyed or else it will leak memory
+void ASPathDestroy(ASPath path);
+
+// if you want to make a copy of a path result, this function will do the job
+// you must call ASPathDestroy() with the resulting path to clean it up or it will cause a leak
+ASPath ASPathCopy(ASPath path);
+
+// fetches the total cost of the path
+float ASPathGetCost(ASPath path);
+
+// fetches the number of nodes in the path
+size_t ASPathGetCount(ASPath path);
+
+// returns a pointer to the given node in the path
+void *ASPathGetNode(ASPath path, size_t index);
+
+static void AStarPathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
+{
+    cxAStar this = context;
+    CX_METHOD_RUN(this->Neighbors, this, neighbors, node);
+}
+
+static float AStarPathNodeHeuristic(void *fromNode, void *toNode, void *context)
+{
+    cxAStar this = context;
+    return CX_METHOD_GET(0, this->Heuristic, this, fromNode, toNode);
+}
+
+static int AStarEarlyExit(size_t visitedCount, void *visitingNode, void *goalNode, void *context)
+{
+    cxAStar this = context;
+    return CX_METHOD_GET(0, this->EarlyExit, this, visitedCount, visitingNode, goalNode);
+}
+
+static int AStarNodeComparator(void *node1, void *node2, void *context)
+{
+    cxAStar this = context;
+    cxInt dv = memcmp(node1, node2, sizeof(cxVec2i));
+    return CX_METHOD_GET(dv, this->Comparator, this, node1, node2);
+}
+
+static const ASPathNodeSource cxAStarSource =
+{
+    sizeof(cxVec2i),
+    &AStarPathNodeNeighbors,
+    &AStarPathNodeHeuristic,
+    &AStarEarlyExit,
+    &AStarNodeComparator
+};
+
+void cxAStarNeighbors(cxAny pbj, cxAny list, cxVec2i *node)
+{
+    cxAStar this = pbj;
+    cxVec2i right = cxVec2iv(node->x + 1, node->y);
+    if(CX_METHOD_GET(false, this->IsAppend, pbj, &right)){
+        cxAStarAppendNeighbors(list, right, 1);
+    }
+    cxVec2i left = cxVec2iv(node->x - 1, node->y);
+    if(CX_METHOD_GET(false, this->IsAppend, pbj, &left)){
+        cxAStarAppendNeighbors(list, left, 1);
+    }
+    cxVec2i up = cxVec2iv(node->x, node->y + 1);
+    if(CX_METHOD_GET(false, this->IsAppend, pbj, &up)){
+        cxAStarAppendNeighbors(list, up, 1);
+    }
+    cxVec2i down = cxVec2iv(node->x, node->y - 1);
+    if(CX_METHOD_GET(false, this->IsAppend, pbj, &down)){
+        cxAStarAppendNeighbors(list, down, 1);
+    }
+    if(this->type == cxAStarTypeA4){
+        return;
+    }
+    cxVec2i leftUp = cxVec2iv(node->x - 1, node->y + 1);
+    if(CX_METHOD_GET(false, this->IsAppend, pbj, &leftUp)){
+        cxAStarAppendNeighbors(list, leftUp, 1);
+    }
+    cxVec2i leftDown = cxVec2iv(node->x - 1, node->y - 1);
+    if(CX_METHOD_GET(false, this->IsAppend, pbj, &leftDown)){
+        cxAStarAppendNeighbors(list, leftDown, 1);
+    }
+    cxVec2i rightUp = cxVec2iv(node->x + 1, node->y + 1);
+    if(CX_METHOD_GET(false, this->IsAppend, pbj, &rightUp)){
+        cxAStarAppendNeighbors(list, rightUp, 1);
+    }
+    cxVec2i rightDown = cxVec2iv(node->x + 1, node->y - 1);
+    if(CX_METHOD_GET(false, this->IsAppend, pbj, &rightDown)){
+        cxAStarAppendNeighbors(list, rightDown, 1);
+    }
+}
+
+static cxFloat cxAStarHeuristic(cxAny pbj, cxVec2i *from,cxVec2i *to)
+{
+    return (fabs(from->x - to->x) + fabs(from->y - to->y));
+}
+
+static cxInt cxAStarComparator(cxAny pbj, cxVec2i *lv,cxVec2i *rv)
+{
+    return memcmp(lv, rv, sizeof(cxVec2i));
+}
+
+void cxAStarAppendNeighbors(cxAny list,cxVec2i point,cxFloat edgeCost)
+{
+    ASNeighborListAdd(list, &point, edgeCost);
+}
+
+CX_OBJECT_TYPE(cxAStar, cxObject)
+{
+}
+CX_OBJECT_INIT(cxAStar, cxObject)
+{
+    CX_METHOD_SET(this->Neighbors, cxAStarNeighbors);
+    CX_METHOD_SET(this->Heuristic, cxAStarHeuristic);
+    CX_METHOD_SET(this->Comparator, cxAStarComparator);
+    this->points = cxAnyArrayAlloc(cxVec2i);
+    this->type = cxAStarTypeA8;
+}
+CX_OBJECT_FREE(cxAStar, cxObject)
+{
+    CX_RELEASE(this->points);
+}
+CX_OBJECT_TERM(cxAStar, cxObject)
+
+void cxAStarPrintPoints(cxAny pobj)
+{
+    cxAStar this = pobj;
+    cxInt i = 0;
+    CX_ANY_ARRAY_FOREACH(this->points, point, cxVec2i){
+        CX_LOGGER("%d x=%d,y=%d",i,point->x,point->y);
+        i++;
+    }
+}
+
+cxInt cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
+{
+    cxAStar this = pobj;
+    this->data = data;
+    cxInt rv = 0;
+    ASPath path = ASPathCreate(&cxAStarSource, pobj, &from, &to);
+    rv = ASPathGetCount(path);
+    //save prev finded path
+    if(rv > 0){
+        cxAnyArrayClean(this->points);
+    }
+    for(cxInt i=0; i < rv; i++){
+        cxVec2i *p = ASPathGetNode(path, i);
+        cxAnyArrayAppend(this->points, p);
+    }
+    ASPathDestroy(path);
+    return rv;
+}
+
 
 struct __ASNeighborList {
     const ASPathNodeSource *source;

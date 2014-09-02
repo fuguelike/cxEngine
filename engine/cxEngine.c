@@ -55,6 +55,8 @@
 #include <actions/cxTimeLine.h>
 #include <actions/cxBezier.h>
 
+#include <algorithm/cxAStar.h>
+
 static cxEngine instance = NULL;
 static cxBool isExit = false;
 
@@ -100,6 +102,7 @@ static void cxEngineTypes()
     CX_TYPE_DEF(cxJson);
     CX_TYPE_DEF(cxPlayer);
     CX_TYPE_DEF(cxTouchItem);
+    CX_TYPE_DEF(cxAStar);
     
     //register streams
     CX_TYPE_DEF(cxAssetsStream);
