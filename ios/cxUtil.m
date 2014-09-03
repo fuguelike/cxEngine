@@ -58,15 +58,14 @@ static CGSize cxCalculateStringSize(NSString *str, id font, CGSize *constrainSiz
 #define ALIGN_CENTER 3
 #define ALIGN_BOTTOM 2
 
-cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxTextAlign align,cxFloat size, cxTextureTXTConfig *info)
+cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat size,cxTextAlign align,cxInt cw,cxInt ch)
 {
-    CX_ASSERT(info != NULL, "args error");
     CX_RETURN(txt == NULL, NULL);
     NSString * str = [NSString stringWithUTF8String:txt];
     NSString * fntName = nil;
     CGSize dim, constrainSize;
-    constrainSize.width = info->size.w;
-    constrainSize.height = info->size.h;
+    constrainSize.width = cw;
+    constrainSize.height = ch;
     if(fontName != NULL){
         fntName = [NSString stringWithUTF8String:fontName];
         fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
@@ -127,9 +126,6 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxTextAli
     paragraphStyle.alignment = nsAlign;
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     [attrs setObject:paragraphStyle forKey:NSParagraphStyleAttributeName];
-    if (info->stroke > 0){
-        [attrs setObject:[NSNumber numberWithFloat: info->stroke / size * 100 ] forKey:NSStrokeWidthAttributeName];
-    }
     [str drawInRect:rect withAttributes:attrs];
     [paragraphStyle release];
     

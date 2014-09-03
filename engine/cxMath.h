@@ -223,12 +223,6 @@ static const cxBoxColor4f cxBoxColor4fDefault = {
     cxColor4fv(1,1,1,1)
 };
 
-//create text texture args
-typedef struct {
-    cxSize2i size;
-    cxFloat stroke;
-} cxTextureTXTConfig;
-
 typedef enum {
     cxTextAlignCenter       = 0x33, ///< Horizontal center and vertical center.
     cxTextAlignTop          = 0x13, ///< Horizontal center and vertical top.
@@ -243,7 +237,6 @@ typedef enum {
 
 typedef struct {
     cxFloat size;
-    cxFloat stroke;
     cxTextAlign align;
     cxSize2f viewSize;
 }cxTextAttr;

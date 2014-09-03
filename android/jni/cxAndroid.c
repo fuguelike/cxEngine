@@ -21,17 +21,17 @@ JniMethodInfo engineLocalized   = {.isGet=false};
 JniMethodInfo assertManager     = {.isGet=false};
 JniMethodInfo engineRecvJson    = {.isGet=false};
 
-cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAlign align,cxFloat size, cxTextureTXTConfig *info)
+cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxFloat size,cxTextAlign align,cxInt cw,cxInt ch)
 {
     CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
-    CX_GET_METHOD(createTextBitmap,"createTextBitmap","(Ljava/lang/String;Ljava/lang/String;IIIII)[B");
+    CX_GET_METHOD(createTextBitmap,"createTextBitmap","(Ljava/lang/String;Ljava/lang/String;IIII)[B");
     cxString rv = NULL;
     jstring strText = (*javaENV)->NewStringUTF(javaENV,txt);
     jstring fontName = NULL;
     if(font != NULL){
         fontName = (*javaENV)->NewStringUTF(javaENV,font);
     }
-    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(M(createTextBitmap),strText,fontName,(jint)size,(jint)info->size.w,(jint)info->size.h,(jint)align,(jint)info->stroke);
+    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(M(createTextBitmap),strText,fontName,(jint)size,(jint)align,(jint)cw,(jint)ch);
     if(bytes != NULL){
         jboolean ok = JNI_FALSE;
         jsize length = (*javaENV)->GetArrayLength(javaENV,bytes);

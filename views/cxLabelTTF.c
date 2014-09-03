@@ -19,10 +19,6 @@ static void cxLabelTTFUpdate(cxAny sender)
     cxViewAutoResizing(this);
     this->isDirty = false;
 }
-CX_SETTER_DEF(cxLabelTTF, stroke)
-{
-    cxLabelTTFSetStrokeSize(this, cxJsonToDouble(value, this->attr.stroke));
-}
 CX_SETTER_DEF(cxLabelTTF, align)
 {
     cxConstChars str = cxJsonToConstChars(value);
@@ -74,7 +70,6 @@ CX_SETTER_DEF(cxLabelTTF, text)
 
 CX_OBJECT_TYPE(cxLabelTTF, cxSprite)
 {
-    CX_PROPERTY_SETTER(cxLabelTTF, stroke);
     CX_PROPERTY_SETTER(cxLabelTTF, align);
     CX_PROPERTY_SETTER(cxLabelTTF, font);
     CX_PROPERTY_SETTER(cxLabelTTF, text);
@@ -116,14 +111,6 @@ void cxLabelTTFSetFontSize(cxAny pview,cxFloat size)
     cxLabelTTF this = pview;
     CX_RETURN(kmAlmostEqual(this->attr.size, size));
     this->attr.size = size;
-    this->isDirty = true;
-}
-
-void cxLabelTTFSetStrokeSize(cxAny pview,cxFloat size)
-{
-    cxLabelTTF this = pview;
-    CX_RETURN(kmAlmostEqual(this->attr.stroke, size));
-    this->attr.stroke = size;
     this->isDirty = true;
 }
 

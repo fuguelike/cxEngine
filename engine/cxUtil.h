@@ -46,7 +46,7 @@ cxString cxCompressed(cxString data);
 
 cxString cxDecompress(cxString data);
 
-cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxTextAlign align,cxFloat size, cxTextureTXTConfig *info);
+cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat size,cxTextAlign align,cxInt cw,cxInt ch);
 
 cxHash cxParseKeyValue(cxChars query);
 

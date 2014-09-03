@@ -22,8 +22,6 @@ CX_OBJECT_END(cxLabelTTF, cxSprite)
 
 void cxLabelTTFSetFontSize(cxAny pview,cxFloat size);
 
-void cxLabelTTFSetStrokeSize(cxAny pview,cxFloat size);
-
 void cxLabelTTFSetAlign(cxAny pview,cxTextAlign align);
 
 void cxLabelTTFSetText(cxAny pview,cxString txt);

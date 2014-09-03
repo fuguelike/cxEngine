@@ -3,17 +3,20 @@ package com.cxengine;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Locale;
-
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 import android.graphics.Paint.FontMetricsInt;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -26,6 +29,8 @@ public class EngineGLView extends GLSurfaceView {
 	private static final int VERTICALALIGN_TOP = 1;
 	private static final int VERTICALALIGN_BOTTOM = 2;
 	private static final int VERTICALALIGN_CENTER = 3;
+	
+	private static final HashMap<String, Typeface> sTypefaceCache = new HashMap<String, Typeface>();
 	
 	private static String TAG = "EngineGLView";
 	private static EngineActivity glActivity = null;
@@ -203,20 +208,172 @@ public class EngineGLView extends GLSurfaceView {
 		System.arraycopy(hb, 0, pixels, isize + 4, 4);
 		return pixels;
 	}
-	//create ttf image
-	public byte[] createTextBitmapImp(String pString, String pFontName, int fontSize,int w,int h,int align,int stroke) {
-		Paint paint = newPaint(pFontName, fontSize);
+	private String refactorString(final String string) {
+		if (string.compareTo("") == 0) {
+			return " ";
+		}
+		StringBuilder strBuilder = new StringBuilder(string);
+		int start = 0;
+		int index = strBuilder.indexOf("\n");
+		while (index != -1) {
+			if (index == 0 || strBuilder.charAt(index - 1) == '\n') {
+				strBuilder.insert(start, " ");
+				start = index + 2;
+			} else {
+				start = index + 1;
+			}
+			if (start > strBuilder.length() || index == strBuilder.length()) {
+				break;
+			}
+			index = strBuilder.indexOf("\n", start);
+		}
+		return strBuilder.toString();
+	}
+	public synchronized Typeface getTypeface(String pAssetName) {
+		if (!sTypefaceCache.containsKey(pAssetName)) {
+			Typeface typeface = null;
+			if (pAssetName.startsWith("/")){
+				typeface = Typeface.createFromFile(pAssetName);
+			}else{
+				typeface = Typeface.createFromAsset(cxEngineAssertManager(), pAssetName);
+			}
+			sTypefaceCache.put(pAssetName, typeface);
+		}
+
+		return sTypefaceCache.get(pAssetName);
+	}
+	private Paint newPaint(String fontName,int fontSize,int horizontalAlignment) {
+		Paint paint = new Paint();
+		paint.setColor(Color.WHITE);
+		paint.setTextSize(fontSize); 
+		paint.setAntiAlias(true);
+		if (fontName != null && fontName.endsWith(".ttf")) {
+			try {
+				Typeface typeFace = getTypeface(fontName);
+				paint.setTypeface(typeFace);
+			} catch (final Exception e) {
+				paint.setTypeface(Typeface.create(fontName, Typeface.NORMAL));
+			}
+		} else if(fontName != null) {
+			paint.setTypeface(Typeface.create(fontName, Typeface.NORMAL));
+		} else {
+			paint.setTypeface(Typeface.DEFAULT);
+		}
+		switch (horizontalAlignment) {
+		case HORIZONTALALIGN_CENTER:
+			paint.setTextAlign(Align.CENTER);
+			break;
+		case HORIZONTALALIGN_RIGHT:
+			paint.setTextAlign(Align.RIGHT);
+			break;
+		case HORIZONTALALIGN_LEFT:
+		default:
+			paint.setTextAlign(Align.LEFT);
+			break;
+		}
+		return paint;
+	}
+	private class TextProperty 
+	{
+		public int mMaxWidth;
+		public int mTotalHeight;
+		public int mHeightPerLine;
+		public String[] mLines;
+	}
+	private TextProperty computeTextProperty(final String string,final int width, final int height, final Paint paint) {
+		TextProperty rv = new TextProperty();
 		FontMetricsInt fm = paint.getFontMetricsInt();
-		int height = (int) Math.ceil(fm.bottom - fm.top);
-		int width = (int) Math.ceil(paint.measureText(pString, 0, pString.length()));
-		Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		int h = (int) Math.ceil(fm.bottom - fm.top);
+		int maxContentWidth = 0;
+		String[] lines = string.split("\\n");
+		if (width != 0) {
+			maxContentWidth = width;
+		} else {
+			int temp = 0;
+			for (String line : lines) {
+				temp = (int) Math.ceil(paint.measureText(line, 0, line.length()));
+				if (temp > maxContentWidth) {
+					maxContentWidth = temp;
+				}
+			}
+		}
+		rv.mMaxWidth = width > maxContentWidth?width : maxContentWidth;
+		rv.mHeightPerLine = h;
+		rv.mTotalHeight = rv.mHeightPerLine * lines.length;
+		rv.mTotalHeight = height > rv.mTotalHeight ? height : rv.mTotalHeight;
+		rv.mLines = lines;
+		return rv;
+	}
+	private int computeX(final String text, final int maxWidth, final int horizontalAlignment) {
+		int ret = 0;
+		switch (horizontalAlignment) {
+		case HORIZONTALALIGN_CENTER:
+			ret = maxWidth / 2;
+			break;
+		case HORIZONTALALIGN_RIGHT:
+			ret = maxWidth;
+			break;
+		case HORIZONTALALIGN_LEFT:
+		default:
+			break;
+		}
+		return ret;
+	}
+
+	private int computeY(final FontMetricsInt fontMetricsInt,final int constrainHeight, final int totalHeight,final int verticalAlignment) {
+		int y = -fontMetricsInt.top;
+		if (constrainHeight > totalHeight) {
+			switch (verticalAlignment) {
+			case VERTICALALIGN_TOP:
+				y = -fontMetricsInt.top;
+				break;
+			case VERTICALALIGN_CENTER:
+				y = -fontMetricsInt.top + (constrainHeight - totalHeight) / 2;
+				break;
+			case VERTICALALIGN_BOTTOM:
+				y = -fontMetricsInt.top + (constrainHeight - totalHeight);
+				break;
+			default:
+				break;
+			}
+		}
+		return y;
+	}
+	//create ttf image
+	public byte[] createTextBitmapImp(String pString, String pFontName, int fontSize,int align,int w,int h) {
+		int hAlign = align & 0x0F;
+		int vAlign   = (align >> 4) & 0x0F;
+		pString = refactorString(pString);
+		Paint paint = newPaint(pFontName, fontSize, hAlign);
+		paint.setARGB(255, 255, 255, 255);
+		final TextProperty textProperty = computeTextProperty(pString, w, h, paint);
+		int totalHeight = (h == 0 ? textProperty.mTotalHeight: h);
+		if(h > totalHeight){
+			totalHeight = h;
+		}
+		float bitmapPaddingX   = 0.0f;
+		float bitmapPaddingY   = 0.0f;
+		float renderTextDeltaX = 0.0f;
+		float renderTextDeltaY = 0.0f;
+		if (0 == textProperty.mMaxWidth || 0 == totalHeight){
+			return null;
+		}
+		Bitmap bitmap = Bitmap.createBitmap(textProperty.mMaxWidth + (int)bitmapPaddingX,totalHeight + (int)bitmapPaddingY, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
-		canvas.drawText(pString, 0, -fm.top, paint);
+		FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
+		int x = 0;
+		int y = computeY(fontMetricsInt, h, textProperty.mTotalHeight, vAlign);
+		String[] lines = textProperty.mLines;
+		for (String line : lines) {
+			x = computeX(line, textProperty.mMaxWidth, hAlign);
+			canvas.drawText(line, x + renderTextDeltaX, y + renderTextDeltaY, paint);
+			y += textProperty.mHeightPerLine;
+		}
 		return getPixels(bitmap);
 	}
 	
-	public static byte[] createTextBitmap(String pString, String pFontName, int fontSize,int w,int h,int align,int stroke) {
-		return glView.createTextBitmapImp(pString, pFontName, fontSize, w, h,align, stroke);
+	public static byte[] createTextBitmap(String pString, String pFontName, int fontSize,int align,int w,int h) {
+		return glView.createTextBitmapImp(pString, pFontName, fontSize, align, w, h);
 	}
     public EngineGLView(Context context) {
         super(context);

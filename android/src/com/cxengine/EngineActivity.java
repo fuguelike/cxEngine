@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 public class EngineActivity extends Activity {
 	
     static {
-        System.loadLibrary("cxEngineTest");
+        System.loadLibrary("Home");
     }
 	
 	private EngineGLView glView = null;

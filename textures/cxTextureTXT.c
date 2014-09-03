@@ -15,10 +15,7 @@ static cxBool cxTextureTXTLoad(cxAny texture,cxStream stream)
     cxTextureTXT this = texture;
     cxConstChars font = this->font == NULL ? NULL : cxStringBody(this->font);
     cxConstChars text = cxStringBody(this->string);
-    cxTextureTXTConfig config={0};
-    config.stroke  = this->attr.stroke;
-    config.size = cxSize2iv(this->attr.viewSize.w, this->attr.viewSize.h);
-    cxString data = cxCreateTXTTextureData(text, font, this->attr.align, this->attr.size, &config);
+    cxString data = cxCreateTXTTextureData(text, font,this->attr.size, this->attr.align, this->attr.viewSize.w,this->attr.viewSize.h);
     CX_RETURN(data == NULL, false);
     cxInt bufsiz = cxStringLength(data);
     cxPointer buffer = (cxPointer)cxStringBody(data);
