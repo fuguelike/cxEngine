@@ -528,8 +528,10 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
             kmVec2Subtract(&item->delta, &cpos, &item->previous);
             item->previous = cpos;
             item->direction = cxTouchGetDirection(item->delta);
-        }else{
+        }else if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
             item = cxHashGet(this->items, key);
+        }else{
+            CX_ERROR("unknow touch type %d",type);
         }
         if(item != NULL){
             item->current = cpos;
