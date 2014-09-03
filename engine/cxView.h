@@ -57,7 +57,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool isSort;
     cxBool isCropping;
     cxBool isTouch;     //enable touch
-    cxBool isGesture;   //enable gesture
     cxSize2f size;
     cxVec2f position;
     cxVec2f scale;

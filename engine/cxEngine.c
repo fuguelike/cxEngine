@@ -514,29 +514,24 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
         cxTouchPoint p = points[i];
         cxVec2f cpos = cxEngineTouchToWindow(p.xy);
         cxHashKey key = cxHashLongKey(p.id);
+        cxTouchItem item = NULL;
         if(type == cxTouchTypeDown){
-            CX_ASSERT(!cxHashHas(this->items, key), "touch id %ld exists");
-            cxTouchItem item = CX_ALLOC(cxTouchItem);
+            item  = CX_ALLOC(cxTouchItem);
+            cxHashSet(this->items, key, item);
+            CX_RELEASE(item);
             item->delta = cxVec2fv(0, 0);
             item->previous = cpos;
             item->direction = cxTouchDirectionNone;
-            item->type = type;
-            item->current = cpos;
-            cxHashSet(this->items, key, item);
-            cxArrayAppend(this->fires, item);
-            CX_RELEASE(item);
         }else if(type == cxTouchTypeMove){
-            cxTouchItem item = cxHashGet(this->items, key);
-            CX_ASSERT(item != NULL, "touch move item malloc at cxTouchTypeDown");
+            item = cxHashGet(this->items, key);
+            CX_CONTINUE(item == NULL);
             kmVec2Subtract(&item->delta, &cpos, &item->previous);
             item->previous = cpos;
-            item->current = cpos;
             item->direction = cxTouchGetDirection(item->delta);
-            item->type = type;
-            cxArrayAppend(this->fires, item);
-        }else if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
-            cxTouchItem item = cxHashGet(this->items, key);
-            CX_ASSERT(item != NULL, "touch up item malloc at cxTouchTypeDown");
+        }else{
+            item = cxHashGet(this->items, key);
+        }
+        if(item != NULL){
             item->current = cpos;
             item->type = type;
             cxArrayAppend(this->fires, item);
@@ -548,8 +543,6 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
         cxTouchPoint p = points[i];
         cxHashKey key = cxHashLongKey(p.id);
         if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
-            cxTouchItem item = cxHashGet(this->items, key);
-            CX_ASSERT(item != NULL, "touch up item malloc at cxTouchTypeDown");
             cxHashDel(this->items, key);
         }
     }

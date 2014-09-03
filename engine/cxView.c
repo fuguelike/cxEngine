@@ -164,44 +164,39 @@ CX_OBJECT_TYPE(cxView, cxObject)
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {
-    this->hideTop = true;
-    this->isShowBorder = false;
-    this->isVisible = true;
-    this->isDirty = true;
-    this->isTouch = true;
-    this->isGesture = true;
-    this->color = cxColor4fv(1.0f, 1.0f, 1.0f, 1.0f);
-    this->size = cxSize2fv(0.0f, 0.0f);
-    this->anchor = cxVec2fv(0.0f, 0.0f);
-    this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
-    this->scale = cxVec2fv(1.0f, 1.0f);
-    this->fixscale = cxVec2fv(1.0f, 1.0f);
-    this->borderColor = cxRED;
-    
-    this->subViews  = CX_ALLOC(cxList);
-    this->actions   = CX_ALLOC(cxHash);
-    this->removes   = CX_ALLOC(cxArray);
-    this->binded    = CX_ALLOC(cxHash);
-    this->bindes    = CX_ALLOC(cxHash);
+    this->hideTop       = true;
+    this->isShowBorder  = false;
+    this->isVisible     = true;
+    this->isDirty       = true;
+    this->isTouch       = true;
+    this->color         = cxColor4fv(1.0f, 1.0f, 1.0f, 1.0f);
+    this->size          = cxSize2fv(0.0f, 0.0f);
+    this->anchor        = cxVec2fv(0.0f, 0.0f);
+    this->raxis         = cxVec3fv(0.0f, 0.0f, 1.0f);
+    this->scale         = cxVec2fv(1.0f, 1.0f);
+    this->fixscale      = cxVec2fv(1.0f, 1.0f);
+    this->borderColor   = cxRED;
+    this->subViews      = CX_ALLOC(cxList);
+    this->actions       = CX_ALLOC(cxHash);
+    this->removes       = CX_ALLOC(cxArray);
+    this->binded        = CX_ALLOC(cxHash);
+    this->bindes        = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
     //unbind binds
     cxViewUnBindAll(this);
-    
     CX_RELEASE(this->removes);
     CX_RELEASE(this->subViews);
     CX_RELEASE(this->actions);
     CX_RELEASE(this->bindes);
     CX_RELEASE(this->binded);
-    
     CX_EVENT_RELEASE(this->onDirty);
     CX_EVENT_RELEASE(this->onEnter);
     CX_EVENT_RELEASE(this->onExit);
     CX_EVENT_RELEASE(this->onUpdate);
     CX_EVENT_RELEASE(this->onResize);
     CX_EVENT_RELEASE(this->onLayout);
-    
     CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
