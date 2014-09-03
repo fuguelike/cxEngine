@@ -14,19 +14,53 @@ static void cxLabelTTFUpdate(cxAny sender)
 {
     cxLabelTTF this = sender;
     CX_RETURN(!this->isDirty);
+    this->attr.viewSize = cxViewSize(this);
     cxLabelTTFUpdateText(this);
     cxViewAutoResizing(this);
     this->isDirty = false;
 }
-
+CX_SETTER_DEF(cxLabelTTF, stroke)
+{
+    cxLabelTTFSetStrokeSize(this, cxJsonToDouble(value, this->attr.strokeSize));
+}
+CX_SETTER_DEF(cxLabelTTF, align)
+{
+    cxConstChars str = cxJsonToConstChars(value);
+    cxBool top = cxConstCharsHas(str, "top");
+    cxBool left = cxConstCharsHas(str, "left");
+    cxBool right = cxConstCharsHas(str, "right");
+    cxBool bottom = cxConstCharsHas(str, "bottom");
+    cxBool center = cxConstCharsHas(str, "center");
+    cxTextAlign align = cxTextAlignTopLeft;
+    if(top && right){
+        align = cxTextAlignTopRight;
+    }else if(top && left){
+        align = cxTextAlignTopLeft;
+    }else if(top){
+        align = cxTextAlignTop;
+    }else if(left){
+        align = cxTextAlignLeft;
+    }
+    if(bottom && left){
+        align = cxTextAlignBottomLeft;
+    }else if(bottom && right){
+        align = cxTextAlignBottomRight;
+    }else if(bottom){
+        align = cxTextAlignBottom;
+    }else if(right){
+        align = cxTextAlignRight;
+    }
+    if(center){
+        align = cxTextAlignCenter;
+    }
+    cxLabelTTFSetAlign(this, align);
+}
 CX_SETTER_DEF(cxLabelTTF, font)
 {
     cxString font = cxJsonString(value, "name");
     if(cxStringOK(font)){
         cxLabelTTFSetFontName(this, font);
     }
-    cxBool bold = cxJsonBool(value, "bold", this->attr.bold);
-    cxLabelTTFSetFontBold(this, bold);
     cxFloat size = cxJsonDouble(value, "size", this->attr.size);
     cxLabelTTFSetFontSize(this, size);
 }
@@ -40,6 +74,8 @@ CX_SETTER_DEF(cxLabelTTF, text)
 
 CX_OBJECT_TYPE(cxLabelTTF, cxSprite)
 {
+    CX_PROPERTY_SETTER(cxLabelTTF, stroke);
+    CX_PROPERTY_SETTER(cxLabelTTF, align);
     CX_PROPERTY_SETTER(cxLabelTTF, font);
     CX_PROPERTY_SETTER(cxLabelTTF, text);
 }
@@ -74,19 +110,27 @@ void cxLabelTTFUpdateText(cxAny pview)
     cxViewSetSize(this, texture->size);
 }
 
-void cxLabelTTFSetFontBold(cxAny pview,cxBool bold)
+void cxLabelTTFSetFontSize(cxAny pview,cxFloat size)
 {
     cxLabelTTF this = pview;
-    CX_RETURN(this->attr.bold == bold);
-    this->attr.bold = bold;
+    CX_RETURN(kmAlmostEqual(this->attr.size, size));
+    this->attr.size = size;
     this->isDirty = true;
 }
 
-void cxLabelTTFSetFontSize(cxAny pview,cxFloat fontsize)
+void cxLabelTTFSetStrokeSize(cxAny pview,cxFloat size)
 {
     cxLabelTTF this = pview;
-    CX_RETURN(kmAlmostEqual(this->attr.size, fontsize));
-    this->attr.size = fontsize;
+    CX_RETURN(kmAlmostEqual(this->attr.strokeSize, size));
+    this->attr.strokeSize = size;
+    this->isDirty = true;
+}
+
+void cxLabelTTFSetAlign(cxAny pview,cxTextAlign align)
+{
+    cxLabelTTF this = pview;
+    CX_RETURN(this->attr.align == align);
+    this->attr.align = align;
     this->isDirty = true;
 }
 

@@ -134,16 +134,25 @@ cxString cxAssetsData(cxConstChars file)
     return cxStreamAllBytes(stream);
 }
 
-void cxAssetsStreamInit(cxAssetsStream this,cxConstChars file)
+cxBool cxAssetsStreamInit(cxAssetsStream this,cxConstChars file)
 {
-    CX_RETAIN_SWAP(this->cxStream.path, cxAssetsPath(file));
+    if(cxDocumentExists(file)){
+        CX_RETAIN_SWAP(this->cxStream.path, cxDocumentExists(file));
+    }else if(cxAssetsData(file)){
+        CX_RETAIN_SWAP(this->cxStream.path, cxAssetsPath(file));
+    }else{
+        return false;
+    }
     CX_RETAIN_SWAP(this->cxStream.file, cxStringConstChars(file));
+    return true;
 }
 
 cxStream cxAssetsStreamCreate(cxConstChars file)
 {
     cxAssetsStream rv = CX_CREATE(cxAssetsStream);
-    cxAssetsStreamInit(rv,file);
+    if(!cxAssetsStreamInit(rv,file)){
+        return NULL;
+    }
     return (cxStream)rv;
 }
 

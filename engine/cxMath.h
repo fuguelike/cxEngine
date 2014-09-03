@@ -223,9 +223,36 @@ static const cxBoxColor4f cxBoxColor4fDefault = {
     cxColor4fv(1,1,1,1)
 };
 
+//create text texture args
+typedef struct {
+    cxSize2i size;
+    cxBool hasShadow;
+    cxSize2f shadowOffset;
+    cxFloat shadowBlur;
+    cxFloat shadowOpacity;
+    cxBool hasStroke;
+    cxColor3f strokeColor;
+    cxFloat strokeSize;
+    cxColor3f tintColor;
+} cxTextureTXTConfig;
+
+typedef enum {
+    cxTextAlignCenter       = 0x33, ///< Horizontal center and vertical center.
+    cxTextAlignTop          = 0x13, ///< Horizontal center and vertical top.
+    cxTextAlignTopRight     = 0x12, ///< Horizontal right and vertical top.
+    cxTextAlignRight        = 0x32, ///< Horizontal right and vertical center.
+    cxTextAlignBottomRight  = 0x22, ///< Horizontal right and vertical bottom.
+    cxTextAlignBottom       = 0x23, ///< Horizontal center and vertical bottom.
+    cxTextAlignBottomLeft   = 0x21, ///< Horizontal left and vertical bottom.
+    cxTextAlignLeft         = 0x31, ///< Horizontal left and vertical center.
+    cxTextAlignTopLeft      = 0x11, ///< Horizontal left and vertical top.
+}cxTextAlign;
+
 typedef struct {
     cxFloat size;
-    cxBool bold;
+    cxFloat strokeSize;
+    cxTextAlign align;
+    cxSize2f viewSize;
 }cxTextAttr;
 
 typedef struct {

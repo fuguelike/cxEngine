@@ -22,7 +22,7 @@ cxStream cxAssetsStreamCreate(cxConstChars file);
 
 cxString cxAssetsData(cxConstChars file);
 
-void cxAssetsStreamInit(cxAssetsStream this,cxConstChars file);
+cxBool cxAssetsStreamInit(cxAssetsStream this,cxConstChars file);
 
 CX_C_END
 

@@ -20,9 +20,11 @@ CX_OBJECT_DEF(cxLabelTTF, cxSprite)
     cxTextAttr attr;
 CX_OBJECT_END(cxLabelTTF, cxSprite)
 
-void cxLabelTTFSetFontSize(cxAny pview,cxFloat fontsize);
+void cxLabelTTFSetFontSize(cxAny pview,cxFloat size);
 
-void cxLabelTTFSetFontBold(cxAny pview,cxBool bold);
+void cxLabelTTFSetStrokeSize(cxAny pview,cxFloat size);
+
+void cxLabelTTFSetAlign(cxAny pview,cxTextAlign align);
 
 void cxLabelTTFSetText(cxAny pview,cxString txt);
 

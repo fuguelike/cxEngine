@@ -14,7 +14,7 @@
 static JNIEnv *javaENV = NULL;
 static jclass javaClass = NULL;
 
-cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr attr)
+cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAlign align,cxFloat size, cxTextureTXTConfig *info)
 {
     CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
     JniMethodInfo methodInfo;
@@ -27,7 +27,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAttr at
     if(font != NULL){
         fontName = (*javaENV)->NewStringUTF(javaENV,font);
     }
-    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(javaENV,methodInfo.classID,methodInfo.methodID,str,fontName,(jint)attr.size);
+    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(javaENV,methodInfo.classID,methodInfo.methodID,str,fontName,(jint)size);
     if(bytes != NULL){
         jboolean ok = JNI_FALSE;
         jsize length = (*javaENV)->GetArrayLength(javaENV,bytes);
@@ -213,9 +213,9 @@ JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireTouch(JNIEnv *
     jint id[size];
     jfloat x[size];
     jfloat y[size];
-    (*env)->GetIntArrayRegion(env,ids, 0, size, id);
-    (*env)->GetFloatArrayRegion(env,xs, 0, size, x);
-    (*env)->GetFloatArrayRegion(env,ys, 0, size, y);
+    (*env)->GetIntArrayRegion(env, ids, 0, size, id);
+    (*env)->GetFloatArrayRegion(env, xs, 0, size, x);
+    (*env)->GetFloatArrayRegion(env, ys, 0, size, y);
     //
     cxTouchPoint points[CX_MAX_TOUCH_POINT];
     cxInt num = 0;
