@@ -19,6 +19,14 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 public class EngineGLView extends GLSurfaceView {
+	
+	private static final int HORIZONTALALIGN_LEFT = 1;
+	private static final int HORIZONTALALIGN_RIGHT = 2;
+	private static final int HORIZONTALALIGN_CENTER = 3;
+	private static final int VERTICALALIGN_TOP = 1;
+	private static final int VERTICALALIGN_BOTTOM = 2;
+	private static final int VERTICALALIGN_CENTER = 3;
+	
 	private static String TAG = "EngineGLView";
 	private static EngineActivity glActivity = null;
 	private static EngineSound engineSound = null;
@@ -196,8 +204,8 @@ public class EngineGLView extends GLSurfaceView {
 		return pixels;
 	}
 	//create ttf image
-	public byte[] createTextBitmapImp(String pString, String pFontName, int pFontSize) {
-		Paint paint = newPaint(pFontName, pFontSize);
+	public byte[] createTextBitmapImp(String pString, String pFontName, int fontSize,int w,int h,int align,int stroke) {
+		Paint paint = newPaint(pFontName, fontSize);
 		FontMetricsInt fm = paint.getFontMetricsInt();
 		int height = (int) Math.ceil(fm.bottom - fm.top);
 		int width = (int) Math.ceil(paint.measureText(pString, 0, pString.length()));
@@ -207,8 +215,8 @@ public class EngineGLView extends GLSurfaceView {
 		return getPixels(bitmap);
 	}
 	
-	public static byte[] createTextBitmap(String pString, String pFontName, int pFontSize) {
-		return glView.createTextBitmapImp(pString, pFontName, pFontSize);
+	public static byte[] createTextBitmap(String pString, String pFontName, int fontSize,int w,int h,int align,int stroke) {
+		return glView.createTextBitmapImp(pString, pFontName, fontSize, w, h,align, stroke);
 	}
     public EngineGLView(Context context) {
         super(context);

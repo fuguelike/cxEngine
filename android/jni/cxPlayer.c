@@ -43,6 +43,15 @@ CX_OBJECT_TERM(cxPlayer, cxObject)
 
 static cxPlayer instance = NULL;
 
+JniMethodInfo pauseEffect   = {.isGet=false};
+JniMethodInfo resumeEffect  = {.isGet=false};
+JniMethodInfo stopEffect    = {.isGet=false};
+JniMethodInfo playEffect    = {.isGet=false};
+JniMethodInfo playMusic     = {.isGet=false};
+JniMethodInfo stopMusic     = {.isGet=false};
+JniMethodInfo pauseMusic    = {.isGet=false};
+JniMethodInfo resumeMusic   = {.isGet=false};
+
 cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
 {
     CX_ASSERT(false, "cxBufferCreate not use at android");
@@ -52,31 +61,22 @@ cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
 void cxPauseEffect(cxAny track)
 {
     cxTrack this = track;
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEnginePauseEffect","(I)V");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
-    (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, this->soundId);
+    CX_GET_METHOD(pauseEffect,"cxEnginePauseEffect","(I)V");
+    (*javaENV)->CallStaticVoidMethod(M(pauseEffect), this->soundId);
 }
 
 void cxResumeEffect(cxAny track)
 {
     cxTrack this = track;
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineResumeEffect","(I)V");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
-    (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, this->soundId);
+    CX_GET_METHOD(resumeEffect,"cxEngineResumeEffect","(I)V");
+    (*javaENV)->CallStaticVoidMethod(M(resumeEffect), this->soundId);
 }
 
 void cxStopEffect(cxAny track)
 {
     cxTrack this = track;
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineStopEffect","(I)V");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
-    (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, this->soundId);
+    CX_GET_METHOD(stopEffect,"cxEngineStopEffect","(I)V");
+    (*javaENV)->CallStaticVoidMethod(M(stopEffect), this->soundId);
 }
 
 cxAny cxPlayBuffer(cxAny buffer,cxBool loop)
@@ -88,13 +88,10 @@ cxAny cxPlayBuffer(cxAny buffer,cxBool loop)
 cxAny cxPlayEffect(cxConstChars file,cxBool loop)
 {
     cxPlayer this = cxPlayerInstance();
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEnginePlayEffect","(Ljava/lang/String;Z)I");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
-    jstring path = (*methodInfo.env)->NewStringUTF(methodInfo.env,file);
-    cxInt soundId = (*methodInfo.env)->CallStaticIntMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, path, loop);
-    (*methodInfo.env)->DeleteLocalRef(methodInfo.env,path);
+    CX_GET_METHOD(playEffect,"cxEnginePlayEffect","(Ljava/lang/String;Z)I");
+    jstring path = (*javaENV)->NewStringUTF(javaENV,file);
+    cxInt soundId = (*javaENV)->CallStaticIntMethod(M(playEffect), path, loop);
+    (*javaENV)->DeleteLocalRef(javaENV,path);
     if(soundId <= 0){
         CX_ERROR("play file failed %s",file);
         return NULL;
@@ -112,40 +109,28 @@ cxAny cxPlayEffect(cxConstChars file,cxBool loop)
 }
 
 void cxPlayMusic(cxConstChars file,cxBool loop){
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEnginePlayMusic","(Ljava/lang/String;Z)V");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
-    jstring path = (*methodInfo.env)->NewStringUTF(methodInfo.env,file);
-    (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, path, loop);
-    (*methodInfo.env)->DeleteLocalRef(methodInfo.env,path);
+    CX_GET_METHOD(playMusic,"cxEnginePlayMusic","(Ljava/lang/String;Z)V");
+    jstring path = (*javaENV)->NewStringUTF(javaENV,file);
+    (*javaENV)->CallStaticVoidMethod(M(playMusic), path, loop);
+    (*javaENV)->DeleteLocalRef(javaENV,path);
 }
 
 void cxStopMusic()
 {
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineStopMusic","()V");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
-    (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
+    CX_GET_METHOD(stopMusic,"cxEngineStopMusic","()V");
+    (*javaENV)->CallStaticVoidMethod(M(stopMusic));
 }
 
 void cxPauseMusic()
 {
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEnginePauseMusic","()V");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
-    (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
+    CX_GET_METHOD(pauseMusic,"cxEnginePauseMusic","()V");
+    (*javaENV)->CallStaticVoidMethod(M(pauseMusic));
 }
 
 void cxResumeMusic()
 {
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineResumeMusic","()V");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
-    (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
+    CX_GET_METHOD(resumeMusic,"cxEngineResumeMusic","()V");
+    (*javaENV)->CallStaticVoidMethod(M(resumeMusic));
 }
 
 void cxPlayerOpen()

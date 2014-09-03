@@ -62,7 +62,6 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxTextAli
 {
     CX_ASSERT(info != NULL, "args error");
     CX_RETURN(txt == NULL, NULL);
-    cxString rv = NULL;
     NSString * str = [NSString stringWithUTF8String:txt];
     NSString * fntName = nil;
     CGSize dim, constrainSize;
@@ -79,10 +78,11 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxTextAli
         font = [UIFont fontWithName:fntName size:size];
     }
     if(font == nil){
-        return NULL;
+        font = [UIFont fontWithName:fntName size:size];
     }
     NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
     [attrs setObject:font forKey:NSFontAttributeName];
+    
     dim = cxCalculateStringSize(str, font, &constrainSize, attrs);
     // compute start point
     int startH = 0;
@@ -104,66 +104,45 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxTextAli
     if (constrainSize.height > 0 && constrainSize.height > dim.height){
         dim.height = constrainSize.height;
     }
-    cxFloat shadowStrokePaddingX = 0.0f;
-    cxFloat shadowStrokePaddingY = 0.0f;
-    if ( info->hasStroke ){
-        shadowStrokePaddingX = ceilf(info->strokeSize);
-        shadowStrokePaddingY = ceilf(info->strokeSize);
-    }
-    // add the padding (this could be 0 if no shadow and no stroke)
-    dim.width  += shadowStrokePaddingX*2;
-    dim.height += shadowStrokePaddingY*2;
-    cxInt bufsiz = sizeof(cxChar) * (int)(dim.width * dim.height * 4) + sizeof(cxInt) * 2;
+    cxInt bufsiz = sizeof(cxChar) * (int)(dim.width * dim.height * 4) + sizeof(cxSize2i);
     cxChar *buffer = allocator->malloc(bufsiz);
     memset(buffer, 0, bufsiz);
     // draw text
     CGBitmapInfo bitMapInfo = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;
     CGColorSpaceRef colorSpace  = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(buffer,dim.width,dim.height,8,(int)(dim.width) * 4,colorSpace,bitMapInfo);
-    if (context == NULL){
-        CGColorSpaceRelease(colorSpace);
-        goto completed;
-    }
-    CGContextSetRGBFillColor(context, info->tintColor.r, info->tintColor.g, info->tintColor.b, 1);
-    CGContextTranslateCTM(context, 0.0f, (dim.height - shadowStrokePaddingY) );
+    CGContextSetRGBFillColor(context, 1.0f, 1.0f, 1.0f, 1.0f);
+    CGContextTranslateCTM(context, 0.0f, dim.height);
     CGContextScaleCTM(context, 1.0f, -1.0f);
+    
     UIGraphicsPushContext(context);
-    unsigned uHoriFlag = (int)align & 0x0f;
+    cxUInt uHoriFlag = (int)align & 0x0f;
     NSTextAlignment nsAlign = (2 == uHoriFlag) ? NSTextAlignmentRight : (3 == uHoriFlag) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
-    CGColorSpaceRelease(colorSpace);
-    cxFloat textOriginX  = 0;
-    cxFloat textOrigingY = startH;
-    cxFloat textWidth    = dim.width;
-    cxFloat textHeight   = dim.height;
-    CGRect rect = CGRectMake(textOriginX, textOrigingY, textWidth, textHeight);
+    
+    CGRect rect = CGRectMake(0, startH, dim.width, dim.height);
     CGContextSetShouldSubpixelQuantizeFonts(context, false);
     CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
+    
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.alignment = nsAlign;
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     [attrs setObject:paragraphStyle forKey:NSParagraphStyleAttributeName];
-    UIColor *tintColor = [UIColor colorWithRed:info->tintColor.r green:info->tintColor.g blue:info->tintColor.b alpha:1.0f];
-    [attrs setObject:tintColor forKey:NSForegroundColorAttributeName];
-    if (info->hasStroke){
-        CGContextSetTextDrawingMode(context, kCGTextStroke);
-        [attrs setObject:[NSNumber numberWithFloat: info->strokeSize / size * 100 ] forKey:NSStrokeWidthAttributeName];
-        UIColor *strokeColor = [UIColor colorWithRed:info->strokeColor.r green:info->strokeColor.g blue:info->strokeColor.b alpha:1.0f];
-        [attrs setObject:strokeColor forKey:NSStrokeColorAttributeName];
-        [str drawInRect:rect withAttributes:attrs];
+    if (info->stroke > 0){
+        [attrs setObject:[NSNumber numberWithFloat: info->stroke / size * 100 ] forKey:NSStrokeWidthAttributeName];
     }
-    [paragraphStyle release];
-    CGContextSetTextDrawingMode(context, kCGTextFill);
-    [attrs setObject:font forKey:NSFontAttributeName];
     [str drawInRect:rect withAttributes:attrs];
+    [paragraphStyle release];
+    
     CGContextEndTransparencyLayer(context);
     UIGraphicsPopContext();
+    CGColorSpaceRelease(colorSpace);
     CGContextRelease(context);
     [attrs release];
-    ((cxSize2i *)buffer)->w = dim.width;
-    ((cxSize2i *)buffer)->h = dim.height;
-    rv = cxStringAttach(buffer, bufsiz);
-completed:
-    return rv;
+    //last 8bytes save widht and height
+    cxPointer psize = buffer + bufsiz - sizeof(cxSize2i);
+    ((cxSize2i *)psize)->w = dim.width;
+    ((cxSize2i *)psize)->h = dim.height;
+    return cxStringAttach(buffer, bufsiz);
 }
 
 cxBool cxAssetsExists(cxConstChars file)

@@ -21,7 +21,7 @@ static void cxLabelTTFUpdate(cxAny sender)
 }
 CX_SETTER_DEF(cxLabelTTF, stroke)
 {
-    cxLabelTTFSetStrokeSize(this, cxJsonToDouble(value, this->attr.strokeSize));
+    cxLabelTTFSetStrokeSize(this, cxJsonToDouble(value, this->attr.stroke));
 }
 CX_SETTER_DEF(cxLabelTTF, align)
 {
@@ -83,6 +83,7 @@ CX_OBJECT_INIT(cxLabelTTF, cxSprite)
 {
     CX_EVENT_APPEND(this->cxSprite.cxView.onUpdate,cxLabelTTFUpdate);
     this->attr.size = 32;
+    this->attr.align = cxTextAlignTopLeft;
     cxSpriteSetShader(this, cxShaderAlphaKey);
 }
 CX_OBJECT_FREE(cxLabelTTF, cxSprite)
@@ -121,8 +122,8 @@ void cxLabelTTFSetFontSize(cxAny pview,cxFloat size)
 void cxLabelTTFSetStrokeSize(cxAny pview,cxFloat size)
 {
     cxLabelTTF this = pview;
-    CX_RETURN(kmAlmostEqual(this->attr.strokeSize, size));
-    this->attr.strokeSize = size;
+    CX_RETURN(kmAlmostEqual(this->attr.stroke, size));
+    this->attr.stroke = size;
     this->isDirty = true;
 }
 

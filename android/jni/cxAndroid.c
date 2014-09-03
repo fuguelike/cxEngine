@@ -11,23 +11,27 @@
 #include <engine/cxEngine.h>
 #include <engine/cxGlobal.h>
 
-static JNIEnv *javaENV = NULL;
-static jclass javaClass = NULL;
+JNIEnv *javaENV = NULL;
+jclass javaClass = NULL;
+
+JniMethodInfo createTextBitmap  = {.isGet=false};
+JniMethodInfo engineTerminate   = {.isGet=false};
+JniMethodInfo documentPath      = {.isGet=false};
+JniMethodInfo engineLocalized   = {.isGet=false};
+JniMethodInfo assertManager     = {.isGet=false};
+JniMethodInfo engineRecvJson    = {.isGet=false};
 
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAlign align,cxFloat size, cxTextureTXTConfig *info)
 {
     CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "createTextBitmap","(Ljava/lang/String;Ljava/lang/String;I)[B");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
+    CX_GET_METHOD(createTextBitmap,"createTextBitmap","(Ljava/lang/String;Ljava/lang/String;IIIII)[B");
     cxString rv = NULL;
-    jstring str = (*javaENV)->NewStringUTF(javaENV,txt);
+    jstring strText = (*javaENV)->NewStringUTF(javaENV,txt);
     jstring fontName = NULL;
     if(font != NULL){
         fontName = (*javaENV)->NewStringUTF(javaENV,font);
     }
-    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(javaENV,methodInfo.classID,methodInfo.methodID,str,fontName,(jint)size);
+    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(M(createTextBitmap),strText,fontName,(jint)size,(jint)info->size.w,(jint)info->size.h,(jint)align,(jint)info->stroke);
     if(bytes != NULL){
         jboolean ok = JNI_FALSE;
         jsize length = (*javaENV)->GetArrayLength(javaENV,bytes);
@@ -38,8 +42,8 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAlign a
     if(fontName != NULL){
         (*javaENV)->DeleteLocalRef(javaENV,fontName);
     }
-    if(str != NULL){
-        (*javaENV)->DeleteLocalRef(javaENV,str);
+    if(strText != NULL){
+        (*javaENV)->DeleteLocalRef(javaENV,strText);
     }
     return rv;
 }
@@ -47,11 +51,8 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxTextAlign a
 void cxEngineTerminate()
 {
     CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineTerminate","()V");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
-    (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
+    CX_GET_METHOD(engineTerminate,"cxEngineTerminate","()V");
+    (*javaENV)->CallStaticVoidMethod(M(engineTerminate));
     (*javaENV)->DeleteGlobalRef(javaENV,javaClass);
     javaENV = NULL;
     javaClass = NULL;
@@ -62,21 +63,18 @@ void cxEngineTerminate()
 cxString cxDocumentPath(cxConstChars file)
 {
     CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineDocumentPath","(Ljava/lang/String;)Ljava/lang/String;");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
+    CX_GET_METHOD(documentPath,"cxEngineDocumentPath","(Ljava/lang/String;)Ljava/lang/String;");
     jstring path = NULL;
     if(file != NULL){
-        path = (*methodInfo.env)->NewStringUTF(methodInfo.env,file);
+        path = (*javaENV)->NewStringUTF(javaENV,file);
     }
-    jstring docPath = (*methodInfo.env)->CallStaticObjectMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID, path);
+    jstring docPath = (*javaENV)->CallStaticObjectMethod(M(documentPath), path);
     cxString rv = jstringTocxString(docPath);
     if(docPath != NULL){
-        (*methodInfo.env)->DeleteLocalRef(methodInfo.env,docPath);
+        (*javaENV)->DeleteLocalRef(javaENV,docPath);
     }
     if(path != NULL){
-        (*methodInfo.env)->DeleteLocalRef(methodInfo.env,path);
+        (*javaENV)->DeleteLocalRef(javaENV,path);
     }
     return rv;
 }
@@ -85,15 +83,12 @@ cxString cxDocumentPath(cxConstChars file)
 cxString cxLocalizedLang()
 {
     CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
-    JniMethodInfo methodInfo;
-    cxBool ret = cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineLocalized","()Ljava/lang/String;");
-    CX_ASSERT(ret, "get static method info failed");
-    CX_UNUSED_PARAM(ret);
+    CX_GET_METHOD(engineLocalized,"cxEngineLocalized","()Ljava/lang/String;");
     cxString lngcode = NULL;
-    jstring lang = (*methodInfo.env)->CallStaticObjectMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
+    jstring lang = (*javaENV)->CallStaticObjectMethod(M(engineLocalized));
     CX_ASSERT(lang != NULL, "get lang code failed");
     lngcode = jstringTocxString(lang);
-    (*methodInfo.env)->DeleteLocalRef(methodInfo.env,lang);
+    (*javaENV)->DeleteLocalRef(javaENV,lang);
     CX_LOGGER("current localized lang:%s",cxStringBody(lngcode));
     return lngcode;
 }
@@ -162,8 +157,7 @@ cxBool cxGetStaticMethodInfo(JniMethodInfo *methodinfo,cxConstChars className,cx
         CX_ERROR("Failed to find static method id of %s", methodName);
         return false;
     }
-    methodinfo->classID = javaClass;
-    methodinfo->env = javaENV;
+    methodinfo->isGet = true;
     methodinfo->methodID = methodID;
     return true;
 }
@@ -174,24 +168,20 @@ AAssetManager *cxEngineGetAssetManager()
     if(assetManager != NULL){
         return assetManager;
     }
-    JniMethodInfo methodInfo;
-    if(cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineAssertManager","()Landroid/content/res/AssetManager;")){
-        jobject assetObject = (*methodInfo.env)->CallStaticObjectMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID);
-        assetManager = AAssetManager_fromJava(javaENV, assetObject);
-        (*methodInfo.env)->DeleteLocalRef(methodInfo.env,assetObject);
-    }
+    CX_GET_METHOD(assertManager,"cxEngineAssertManager","()Landroid/content/res/AssetManager;");
+    jobject assetObject = (*javaENV)->CallStaticObjectMethod(M(assertManager));
+    assetManager = AAssetManager_fromJava(javaENV, assetObject);
+    (*javaENV)->DeleteLocalRef(javaENV,assetObject);
     return assetManager;
 }
 
 void cxEngineSendJson(cxString json)
 {
-    CX_ASSERT(json != NULL, "json args error");
-    JniMethodInfo methodInfo;
-    if(cxGetStaticMethodInfo(&methodInfo, CLASS_NAME, "cxEngineRecvJson","(Ljava/lang/String;)V")){
-        jstring str = cxStringTojstring(json);
-        (*methodInfo.env)->CallStaticVoidMethod(methodInfo.env, methodInfo.classID, methodInfo.methodID,str);
-        (*methodInfo.env)->DeleteLocalRef(methodInfo.env,str);
-    }
+    CX_ASSERT(javaENV != NULL && json != NULL, "json args error");
+    CX_GET_METHOD(engineRecvJson,"cxEngineRecvJson","(Ljava/lang/String;)V");
+    jstring str = cxStringTojstring(json);
+    (*javaENV)->CallStaticVoidMethod(M(engineRecvJson),str);
+    (*javaENV)->DeleteLocalRef(javaENV,str);
 }
 
 JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineFireTouch(JNIEnv * env, jclass class,jint action,jintArray ids, jfloatArray xs, jfloatArray ys)

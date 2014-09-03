@@ -16,14 +16,13 @@ static cxBool cxTextureTXTLoad(cxAny texture,cxStream stream)
     cxConstChars font = this->font == NULL ? NULL : cxStringBody(this->font);
     cxConstChars text = cxStringBody(this->string);
     cxTextureTXTConfig config={0};
-    config.hasStroke = this->attr.strokeSize > 0;
-    config.strokeSize  = this->attr.strokeSize;
+    config.stroke  = this->attr.stroke;
     config.size = cxSize2iv(this->attr.viewSize.w, this->attr.viewSize.h);
     cxString data = cxCreateTXTTextureData(text, font, this->attr.align, this->attr.size, &config);
-    //cxString data = cxCreateTXTTextureData(text, font, this->attr);
     CX_RETURN(data == NULL, false);
+    cxInt bufsiz = cxStringLength(data);
     cxPointer buffer = (cxPointer)cxStringBody(data);
-    cxSize2i *psize = (cxSize2i *)buffer;
+    cxSize2i *psize = (cxSize2i *)(buffer + bufsiz - sizeof(cxSize2i));
     cxPointer tdata = buffer + sizeof(cxSize2i);
     cxTextureTXTMakeTexture(this, tdata, psize->w, psize->h);
     return true;

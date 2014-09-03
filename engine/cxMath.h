@@ -226,14 +226,7 @@ static const cxBoxColor4f cxBoxColor4fDefault = {
 //create text texture args
 typedef struct {
     cxSize2i size;
-    cxBool hasShadow;
-    cxSize2f shadowOffset;
-    cxFloat shadowBlur;
-    cxFloat shadowOpacity;
-    cxBool hasStroke;
-    cxColor3f strokeColor;
-    cxFloat strokeSize;
-    cxColor3f tintColor;
+    cxFloat stroke;
 } cxTextureTXTConfig;
 
 typedef enum {
@@ -250,7 +243,7 @@ typedef enum {
 
 typedef struct {
     cxFloat size;
-    cxFloat strokeSize;
+    cxFloat stroke;
     cxTextAlign align;
     cxSize2f viewSize;
 }cxTextAttr;
