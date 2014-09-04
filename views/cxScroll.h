@@ -20,6 +20,9 @@ typedef enum {
 }cxScrollMoveType;
 
 CX_OBJECT_DEF(cxScroll, cxView)
+    //move data
+    cxFloat speed;
+    cxFloat limit;
     cxFloat time;
     cxBool isEnable;
     cxBox4f box;

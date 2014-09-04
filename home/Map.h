@@ -29,9 +29,6 @@ void MapSortNode(Map this);
 
 void MapAppendNode(Map this,cxAny node);
 
-//node 位置改变的时候
-void MapNodeIdxChanged(Map this,cxAny node);
-
 cxInt MapOffsetIdx(Map this,cxInt x,cxInt y);
 
 cxVec2f MapPosToIdx(Map this,cxVec2f pos);

@@ -49,11 +49,6 @@ CX_OBJECT_INIT(Map, cxAtlas)
     this->unitSize = cxSize2fv(size.w/this->unitNum.x, size.h/this->unitNum.y);
     cxViewSetSize(this, size);
     
-//    cxViewSetScale(this, cxVec2fv(2.0f, 2.0f));
-//    cxViewSetBorderColor(this, cxYELLOW);
-//    cxViewSetAnchor(this, cxVec2fv(0.1f, 0.2f));
-    //
-    
     //test
     cxSpriteSetTextureURL(this, "bg1.png", false);
     for(cxInt x = 0; x < this->unitNum.x; x++){
@@ -103,11 +98,6 @@ CX_OBJECT_FREE(Map, cxAtlas)
     allocator->free(this->items);
 }
 CX_OBJECT_TERM(Map, cxAtlas)
-
-void MapNodeIdxChanged(Map this,cxAny node)
-{
-    
-}
 
 cxInt MapOffsetIdx(Map this,cxInt x,cxInt y)
 {

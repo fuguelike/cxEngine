@@ -98,24 +98,6 @@ cxBool cxScrollCheckPos(cxScroll this,cxVec2f *pos)
     return fix;
 }
 
-static cxBool cxScrollUseValue(cxAny pav,cxVec2f pos)
-{
-    cxAny body = cxActionView(pav);
-    CX_ASSERT(body != NULL, "body null");
-    cxVec2f opos = cxViewPosition(body);
-    cxScroll this = cxViewParent(body);
-    CX_ASSERT(this != NULL, "scroll null");
-    cxBool fix = cxScrollCheckPos(this, &pos);
-    if(this->type & cxScrollMoveTypeHorizontal){
-        opos.x = pos.x;
-    }
-    if(this->type & cxScrollMoveTypeVertical){
-        opos.y = pos.y;
-    }
-    cxViewSetPos(body, opos);
-    return fix;
-}
-
 void cxScrollUpdateBox(cxAny pview)
 {
     cxScroll this = pview;
@@ -129,6 +111,12 @@ void cxScrollUpdateBox(cxAny pview)
     cxFloat mh = (msize.h - psize.h) / 2.0f;
     this->box.b = -mh + anchor.y * msize.h;
     this->box.t =  mh + anchor.y * msize.h;
+}
+
+static cxFloat cxScrollMoveCurve(cxAny pav,cxFloat time)
+{
+    time = time - 1.0f;
+    return (powf(time, 3.0f) + 1.0f);
 }
 
 cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
@@ -168,21 +156,22 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
         return true;
     }
     if(item->type == cxTouchTypeUp){
-        cxVec2f aspeed = cxVec2fv(0, 0);
-        if(this->type & cxScrollMoveTypeHorizontal){
-            aspeed.x = -item->speed.x / (this->time * this->time);
-        }
-        if(this->type & cxScrollMoveTypeVertical){
-            aspeed.y = -item->speed.y / (this->time * this->time);
-        }
-        if(!cxVec2fZero(aspeed)){
-            cxSpeed a = cxSpeedCreate(item->speed, aspeed);
-            cxActionSetId(a, CX_SCROLL_MOVE_ACTION_ID);
-            cxActionSetTime(a, this->time);
-            CX_METHOD_SET(a->UseValue, cxScrollUseValue);
-            cxViewAppendAction(body, a);
-        }
         this->isEnable = false;
+        if(fabsf(item->speed.y) < this->limit && fabsf(item->speed.x) < this->limit){
+            return false;
+        }
+        cxVec2f new = cxViewPosition(this->body);
+        if(this->type & cxScrollMoveTypeVertical){
+            new.y += (item->speed.y / this->limit) * this->cxView.size.h * this->speed;
+        }
+        if(this->type & cxScrollMoveTypeHorizontal){
+            new.x += (item->speed.x / this->limit) * this->cxView.size.w * this->speed;
+        }
+        cxScrollCheckPos(this, &new);
+        cxMove m = cxMoveCreate(this->time, new);
+        cxActionSetId(m, CX_SCROLL_MOVE_ACTION_ID);
+        cxActionSetCurve(m, cxScrollMoveCurve);
+        cxViewAppendAction(body, m);
     }
     return false;
 }
@@ -232,9 +221,11 @@ CX_OBJECT_TYPE(cxScroll, cxView)
 }
 CX_OBJECT_INIT(cxScroll, cxView)
 {
+    this->limit = 1200;
+    this->speed = 0.1f;
     this->scaling = 0.05f;
     this->range = cxRange2fv(0.5f, 1.5f);
-    this->time = 0.3f;
+    this->time = 1.0f;
     this->scalable = true;
     CX_METHOD_SET(this->cxView.Touch, cxScrollTouch);
     cxViewSetCropping(this, true);

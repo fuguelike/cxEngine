@@ -52,6 +52,11 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
         this->start = vpos;
         return true;
     }
+    //选中区域但没选中node
+    if(item->type == cxTouchTypeMove && map->node == NULL && this->isSelected){
+        this->isSelected = false;
+        return false;
+    }
     //按下的时候并选中一个node
     if(item->type == cxTouchTypeDown && hited){
         this->start = cxViewPosition(this);
@@ -195,7 +200,6 @@ void NodeSetIdx(cxAny node,cxVec2f idx)
     this->idx = idx;
     this->curr = idx;
     this->isValidIdx = true;
-    MapNodeIdxChanged(map, node);
 }
 
 void NodeInit(cxAny node,cxSize2f size,cxVec2f pos)
