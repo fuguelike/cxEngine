@@ -1,11 +1,13 @@
 {
   "type": "Scene",
-  "layout":"horizontal|vertical",
-  "resizing":"fill",
-  "subviews": [
-    {
-      "id": "map",
-      "type": "Map"
-    }
-  ]
+  "layout": "horizontal|vertical",
+  "resizing": "fill",
+  "body": {
+    "id": "map",
+    "type": "Map"
+  },
+  "range": {
+    "min": 1.0,
+    "max": 1.6
+  }
 }

@@ -9,13 +9,13 @@
 #ifndef Home_Scene_h
 #define Home_Scene_h
 
-#include <engine/cxView.h>
+#include <views/cxScroll.h>
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(Scene, cxView)
+CX_OBJECT_DEF(Scene, cxScroll)
     cxAny map;
-CX_OBJECT_END(Scene, cxView)
+CX_OBJECT_END(Scene, cxScroll)
 
 CX_C_END
 

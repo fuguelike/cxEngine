@@ -9,16 +9,16 @@
 #include <engine/cxEngine.h>
 #include "Scene.h"
 
-CX_OBJECT_TYPE(Scene, cxView)
+CX_OBJECT_TYPE(Scene, cxScroll)
 {
     
 }
-CX_OBJECT_INIT(Scene, cxView)
+CX_OBJECT_INIT(Scene, cxScroll)
 {
     
 }
-CX_OBJECT_FREE(Scene, cxView)
+CX_OBJECT_FREE(Scene, cxScroll)
 {
 
 }
-CX_OBJECT_TERM(Scene, cxView)
+CX_OBJECT_TERM(Scene, cxScroll)

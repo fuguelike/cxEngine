@@ -19,10 +19,10 @@ cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
     return MapPosToIdx(map, pos);
 }
 
-static cxBool NodeTouch(cxAny pview,cxInt number,cxTouchItem *points)
+static cxBool NodeTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
 {
-    CX_RETURN(number != 1,false);
-    cxTouchItem item = points[0];
+    CX_RETURN(CX_TOUCH_SIZE(points) != 1,false);
+    cxTouchItem item = CX_TOUCH_ITEM(fires, 0);
     Node this = pview;
     Map map = this->map;
     //不可选择?
