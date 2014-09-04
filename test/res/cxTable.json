@@ -1,0 +1,61 @@
+{
+  "type": "cxSprite",
+  "texture": "t.png",
+  "size": {
+    "w": 4096,
+    "h": 4096
+  },
+  "subviews": [
+    {
+      "type": "cxTable",
+      "grid": {
+        "x": 6
+      },
+      "resizing": "fill",
+      "subviews": [
+        {
+          "type": "cxView",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "type": "cxView",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "type": "cxView",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "type": "cxView",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "type": "cxView",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "type": "cxView",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        }
+      ]
+    }
+  ]
+}

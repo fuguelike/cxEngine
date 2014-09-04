@@ -70,7 +70,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxColor4f color;
     cxColor3f borderColor;
 
-    CX_METHOD_DEF(cxBool, Touch, cxAny, cxInt, cxArray);
+    CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouchItems *, cxTouchItems *);
     CX_METHOD_DEF(cxBool, Key, cxAny, cxKey *);
     CX_METHOD_DEF(void, Draw, cxAny);
     CX_METHOD_DEF(void, After, cxAny);
@@ -109,6 +109,8 @@ cxList cxViewSubViews(cxAny pview);
 cxBool cxViewSupportAtlasSet(cxAny pview);
 
 cxVec2f cxViewScale(cxAny pview);
+
+cxSize2f cxViewContentSize(cxAny pview);
 
 cxSize2f cxViewSize(cxAny pview);
 
@@ -159,7 +161,7 @@ void cxViewSetOrder(cxAny pview,cxInt order);
 cxBool cxViewKey(cxAny pview,cxKey *key);
 
 //touch count,current touches
-cxBool cxViewTouch(cxAny pview,cxInt number,cxArray points);
+cxBool cxViewTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points);
 
 void cxViewAppendImp(cxAny pview,cxAny newview);
 
@@ -204,6 +206,8 @@ void cxViewSetScale(cxAny pview,cxVec2f scale);
 void cxViewSetFixScale(cxAny pview,cxVec2f scale);
 
 void cxViewSetRaxis(cxAny pview,cxVec3f raxis);
+
+cxVec2f cxViewAnchor(cxAny pview);
 
 cxFloat cxViewAngle(cxAny pview);
 

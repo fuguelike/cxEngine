@@ -42,12 +42,26 @@ typedef struct {
 }cxTouchPoint;
 
 CX_OBJECT_DEF(cxTouchItem, cxObject)
+    cxLong key;
     cxVec2f previous;
     cxVec2f delta;      //window delta,when cxTouchTypeMove
+    cxVec2f speed;      //move speed unit:pixel/s
+    cxDouble prevTime;
     cxVec2f current;
     cxTouchType type;
     cxTouchDirection direction;
 CX_OBJECT_END(cxTouchItem, cxObject)
+
+typedef struct {
+    cxTouchItem items[CX_MAX_TOUCH_POINT];
+    cxInt number;
+}cxTouchItems;
+
+//only use at touch method
+//touch point count
+#define CX_TOUCH_SIZE(_ps_)         ((_ps_)->number)
+//get point item
+#define CX_TOUCH_ITEM(_ps_,_idx_)   (_ps_)->items[_idx_]
 
 typedef enum {
     cxKeyTypeDown       = 0,

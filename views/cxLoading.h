@@ -30,7 +30,7 @@ void cxLoadingSetObject(cxAny pview,cxAny object);
 
 void cxLoadingOnUpdate(cxAny sender);
 
-cxBool cxLoadingTouch(cxAny pview,cxInt number,cxArray points);
+cxBool cxLoadingTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points);
 
 void cxLoadingStart(cxLoading this);
 

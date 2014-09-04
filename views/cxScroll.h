@@ -20,13 +20,19 @@ typedef enum {
 }cxScrollMoveType;
 
 CX_OBJECT_DEF(cxScroll, cxView)
+    cxFloat time;
+    cxBool isEnable;
     cxBox4f box;
     cxScrollMoveType type;
+    cxAny body;
+    cxBool scalable;         //suppot body scale
 CX_OBJECT_END(cxScroll, cxView)
 
-cxBool cxScrollTouch(cxAny pview,cxInt number,cxArray points);
+cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points);
 
-cxView cxScrollContainer(cxAny pview);
+void cxScrollSetBody(cxAny pview,cxAny cview);
+
+cxView cxScrollBody(cxAny pview);
 
 CX_C_END
 

@@ -32,44 +32,114 @@ void MapAppendNode(Map this,cxAny node)
     snode->element = cxListAppend(this->nodes, snode);
 }
 
-static cxBool MapTouch(cxAny pview,cxInt number,cxArray points)
+cxFloat d1 = 0;
+cxFloat d2 = 0;
+cxVec2f center;
+
+static cxBool MapScale(cxAny pview,cxInt number,cxTouchItem *points)
 {
+    cxTouchItem t1 = points[0];
+    cxTouchItem t2 = points[1];
+    if(t1->type == cxTouchTypeDown && t2->type == cxTouchTypeDown){
+        cxVec2f p1 = cxWindowPointToViewPoint(pview, t1->current);
+        cxVec2f p2 = cxWindowPointToViewPoint(pview, t2->current);
+        d1 = kmVec2DistanceBetween(&p1, &p2);
+        d2 = d1;
+        kmVec2MidPointBetween(&center, &p1, &p2);
+        return true;
+    }
+    if(t1->type == cxTouchTypeMove || t2->type == cxTouchTypeMove){
+        cxVec2f p1 = cxWindowPointToViewPoint(pview, t1->current);
+        cxVec2f p2 = cxWindowPointToViewPoint(pview, t2->current);
+        d2 = kmVec2DistanceBetween(&p1, &p2);
+        cxFloat x1 = cxVec2fMagnitude(t1->delta);
+        cxFloat x2 = cxVec2fMagnitude(t2->delta);
+        if(fabsf(x1) > 10 || fabsf(x2) > 10){
+            cxViewSetPos(pview, center);
+            cxViewSetAnchor(pview, center);
+            cxVec2f scale = cxViewScale(pview);
+            if(d2 > d1){
+                scale.x += 0.05f;
+                scale.y += 0.05f;
+            }else{
+                scale.x -= 0.05f;
+                scale.y -= 0.05f;
+            }
+            cxViewSetScale(pview, scale);
+        }
+        d1 = d2;
+    }
+    return false;
+}
+
+#include <actions/cxScale.h>
+#include <actions/cxMove.h>
+
+static bool xx = false;
+
+static cxBool MapTouch(cxAny pview,cxInt number,cxTouchItem *points)
+{
+//    if(number == 2){
+//        return MapScale(pview, number, points);
+//    }
     if(number != 1){
         return false;
     }
-    cxTouchItem item = cxArrayAtIndex(points, 0);
+    cxTouchItem item = points[0];
     cxEngine engine = cxEngineInstance();
     Map this = pview;
     cxVec2f cpos;
     if(!cxViewHitTest(pview, item->current, &cpos)){
         return false;
     }
-    cxSize2f msize = cxViewSize(this);
-    cxSize2f wsize = engine->winsize;
     if(item->type == cxTouchTypeDown){
+        cxSize2f msize = cxViewSize(this);
+//        cxSize2f wsize = engine->winsize;
+        
+        cxVec2f oAnchor = cxViewAnchor(this);
+        cxViewSetAnchor(this, cpos);
+        cxVec2f nAnchor = cxViewAnchor(this);
+        cxVec2f anchorDelta;
+        kmVec2Subtract(&anchorDelta, &nAnchor, &oAnchor);
+        
+        cxVec2f opos = cxViewPosition(this);
         cxVec2f scale = cxViewScale(this);
-        this->box.r = (msize.w * scale.x - wsize.w)/2.0f;
-        this->box.l = -this->box.r;
-        this->box.t = (msize.h * scale.y - wsize.h)/2.0f;
-        this->box.b = -this->box.t;
+        
+        opos.x += msize.w * anchorDelta.x * scale.x;
+        opos.y += msize.h * anchorDelta.y * scale.y;
+        
+        cxScale a = cxScaleCreate(1.0f, !xx ? cxVec2fv(1.5, 1.5) : cxVec2fv(1.0f, 1.0f));
+        cxViewSetPos(this, opos);
+        
+        xx = !xx;
+        cxViewAppendAction(this, a);
+        
+
+        
+//        cxFloat mw = (msize.w * scale.x - wsize.w) / 2.0f;
+//        this->box.l = -mw + anchor.x * msize.w * scale.x;
+//        this->box.r = mw + anchor.x * msize.w * scale.x;
+//        cxFloat mh = (msize.h * scale.y - wsize.h) / 2.0f;
+//        this->box.b = -mh + anchor.y * msize.h * scale.y;
+//        this->box.t = mh + anchor.y * msize.h * scale.y;
         return false;
     }
     if(item->type == cxTouchTypeMove){
-        cxVec2f vpos = cxViewPosition(this);
-        cxVec2f delta = cxViewTouchDelta(pview, item);
-        kmVec2Add(&vpos, &vpos, &delta);
-        if(CX_TOUCH_IS_DOWN(item) && vpos.y <= this->box.b){
-            vpos.y = this->box.b;
-        }else if(CX_TOUCH_IS_UP(item) && vpos.y >= this->box.t){
-            vpos.y = this->box.t;
-        }
-        if(CX_TOUCH_IS_LEFT(item) && vpos.x <= this->box.l){
-            vpos.x = this->box.l;
-        }else if(CX_TOUCH_IS_RIGHT(item) && vpos.x >= this->box.r){
-            vpos.x = this->box.r;
-        }
-        cxViewSetPos(this, vpos);
-        return true;
+//        cxVec2f vpos = cxViewPosition(this);
+//        cxVec2f delta = cxViewTouchDelta(pview, item);
+//        kmVec2Add(&vpos, &vpos, &delta);
+//        if(CX_TOUCH_IS_DOWN(item) && vpos.y < this->box.b){
+//            vpos.y = this->box.b;
+//        }else if(CX_TOUCH_IS_UP(item) && vpos.y > this->box.t){
+//            vpos.y = this->box.t;
+//        }
+//        if(CX_TOUCH_IS_LEFT(item) && vpos.x < this->box.l){
+//            vpos.x = this->box.l;
+//        }else if(CX_TOUCH_IS_RIGHT(item) && vpos.x > this->box.r){
+//            vpos.x = this->box.r;
+//        }
+//        cxViewSetPos(this, vpos);
+//        return true;
     }
     return false;
 }
@@ -95,6 +165,7 @@ CX_OBJECT_INIT(Map, cxAtlas)
     
 //    cxViewSetScale(this, cxVec2fv(2.0f, 2.0f));
 //    cxViewSetBorderColor(this, cxYELLOW);
+//    cxViewSetAnchor(this, cxVec2fv(0.1f, 0.2f));
     //
     
     //test

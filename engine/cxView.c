@@ -354,6 +354,14 @@ cxSize2f cxViewSize(cxAny pview)
     return this->size;
 }
 
+cxSize2f cxViewContentSize(cxAny pview)
+{
+    CX_ASSERT(pview != NULL, "pview args error");
+    cxView this = pview;
+    cxVec2f scale = cxViewScale(pview);
+    return cxSize2fv(this->size.w * scale.x, this->size.h * scale.y);
+}
+
 cxBox4f cxViewBox(cxAny pview)
 {
     CX_ASSERT(pview != NULL, "pview args error");
@@ -633,6 +641,13 @@ void cxViewSetRaxis(cxAny pview,cxVec3f raxis)
     this->isDirty = true;
 }
 
+cxVec2f cxViewAnchor(cxAny pview)
+{
+    CX_ASSERT(pview != NULL, "pview args error");
+    cxView this = pview;
+    return this->anchor;
+}
+
 cxFloat cxViewAngle(cxAny pview)
 {
     CX_ASSERT(pview != NULL, "pview args error");
@@ -840,7 +855,7 @@ cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
     return cxBox2fContainPoint(box, pos);
 }
 
-cxBool cxViewTouch(cxAny pview,cxInt number,cxArray points)
+cxBool cxViewTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
@@ -852,7 +867,7 @@ cxBool cxViewTouch(cxAny pview,cxInt number,cxArray points)
         goto completed;
     }
     for(cxListElement *ele = cxListLast(this->subViews);ele != NULL;ele = ele->prev){
-        if(cxViewTouch(ele->any, number, points)){
+        if(cxViewTouch(ele->any, fires, points)){
             return true;
         }
         if(ele == head){
@@ -860,7 +875,7 @@ cxBool cxViewTouch(cxAny pview,cxInt number,cxArray points)
         }
     }
 completed:
-    return CX_METHOD_GET(false, this->Touch, this, number, points);
+    return CX_METHOD_GET(false, this->Touch, this, fires, points);
 }
 
 cxBool cxViewKey(cxAny pview,cxKey *key)

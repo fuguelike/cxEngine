@@ -138,7 +138,7 @@ cxBool cxAssetsStreamInit(cxAssetsStream this,cxConstChars file)
 {
     if(cxDocumentExists(file)){
         CX_RETAIN_SWAP(this->cxStream.path, cxDocumentExists(file));
-    }else if(cxAssetsData(file)){
+    }else if(cxAssetsExists(file)){
         CX_RETAIN_SWAP(this->cxStream.path, cxAssetsPath(file));
     }else{
         return false;

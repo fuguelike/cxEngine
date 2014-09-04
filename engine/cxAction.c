@@ -145,8 +145,6 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
 {
     cxAction this = pav;
     cxBool isExit = false;
-    //update
-    CX_EVENT_FIRE(this, onUpdate);
     //time scale
     if(this->actionMgr != NULL){
         cxActionMgr mgr = this->actionMgr;
@@ -217,6 +215,8 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     }
     //check action exit
 finished:
+    //update
+    CX_EVENT_FIRE(this, onUpdate);
     //force exit or auto exit
     if(this->isExit || isExit){
         CX_EVENT_FIRE(this, onStop);

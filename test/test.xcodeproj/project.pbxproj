@@ -19,6 +19,10 @@
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
 		8341C69F182280E20045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69E182280E20045A66F /* libz.dylib */; };
 		8341C6A3182280ED0045A66F /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A2182280ED0045A66F /* libiconv.dylib */; };
+		834327B619B8011900B4927F /* cxTable.json in Resources */ = {isa = PBXBuildFile; fileRef = 834327B519B8011900B4927F /* cxTable.json */; };
+		834327BB19B8034400B4927F /* red.png in Resources */ = {isa = PBXBuildFile; fileRef = 834327B819B8034400B4927F /* red.png */; };
+		834327BC19B8034400B4927F /* t.png in Resources */ = {isa = PBXBuildFile; fileRef = 834327B919B8034400B4927F /* t.png */; };
+		834327BD19B8034400B4927F /* yellow.png in Resources */ = {isa = PBXBuildFile; fileRef = 834327BA19B8034400B4927F /* yellow.png */; };
 		8344F0AB18D3F46C0003E410 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0AA18D3F46C0003E410 /* OpenGLES.framework */; };
 		8344F0AC18D3F47A0003E410 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0A818D3F4380003E410 /* UIKit.framework */; };
 		8344F0AE18D3F4830003E410 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0AD18D3F4830003E410 /* QuartzCore.framework */; };
@@ -63,6 +67,10 @@
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8341C69E182280E20045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8341C6A2182280ED0045A66F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		834327B519B8011900B4927F /* cxTable.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxTable.json; path = res/cxTable.json; sourceTree = SOURCE_ROOT; };
+		834327B819B8034400B4927F /* red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = red.png; path = res/red.png; sourceTree = SOURCE_ROOT; };
+		834327B919B8034400B4927F /* t.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = t.png; path = res/t.png; sourceTree = SOURCE_ROOT; };
+		834327BA19B8034400B4927F /* yellow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = yellow.png; path = res/yellow.png; sourceTree = SOURCE_ROOT; };
 		8344F0A818D3F4380003E410 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8344F0AA18D3F46C0003E410 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		8344F0AD18D3F4830003E410 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -163,6 +171,10 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				834327B819B8034400B4927F /* red.png */,
+				834327B919B8034400B4927F /* t.png */,
+				834327BA19B8034400B4927F /* yellow.png */,
+				834327B519B8011900B4927F /* cxTable.json */,
 				831ABCC219249D23001A86F1 /* cxView.json */,
 				831ABCC51924C69F001A86F1 /* cxSprite.json */,
 				831ABCBB19249044001A86F1 /* cxParticle.json */,
@@ -258,6 +270,7 @@
 				83DAD708191A26BF000A7D1F /* texture.pvr in Resources */,
 				839722AE19161746006D0F89 /* font.json in Resources */,
 				83DAD700191A14A6000A7D1F /* ui.json in Resources */,
+				834327BB19B8034400B4927F /* red.png in Resources */,
 				831ABCC61924C69F001A86F1 /* cxSprite.json in Resources */,
 				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
 				835D3B2D19AF21680004155D /* texture.png in Resources */,
@@ -266,8 +279,11 @@
 				836D8DA7191B8C02000F0230 /* cxScroll.json in Resources */,
 				83DAD707191A26BF000A7D1F /* texture.json in Resources */,
 				839722AF19161746006D0F89 /* font.png in Resources */,
+				834327BC19B8034400B4927F /* t.png in Resources */,
 				831ABCC319249D23001A86F1 /* cxView.json in Resources */,
+				834327BD19B8034400B4927F /* yellow.png in Resources */,
 				83DAD70A191A386C000A7D1F /* cxLabelTTF.json in Resources */,
+				834327B619B8011900B4927F /* cxTable.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

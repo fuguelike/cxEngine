@@ -32,7 +32,6 @@ static void cxParabolaStep(cxAny pav,cxFloat dt,cxFloat time)
     kmVec2Add(&tmp, &tmp, &this->pos);
     cxViewSetPos(view, tmp);
     this->time += dt;
-    this->cxAction.time -= dt;
 }
 
 static cxBool cxParabolaExit(cxAny pav)

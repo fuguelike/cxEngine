@@ -54,6 +54,7 @@
 #include <actions/cxSpline.h>
 #include <actions/cxTimeLine.h>
 #include <actions/cxBezier.h>
+#include <actions/cxSpeed.h>
 
 #include <algorithm/cxAStar.h>
 
@@ -148,6 +149,7 @@ static void cxEngineTypes()
     CX_TYPE_DEF(cxTint);
     CX_TYPE_DEF(cxTimeLine);
     CX_TYPE_DEF(cxBezier);
+    CX_TYPE_DEF(cxSpeed);
 }
 
 void cxEngineBegin()
@@ -308,11 +310,9 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->files    = CX_ALLOC(cxHash);
     this->stack    = CX_ALLOC(cxStack);
     this->items    = CX_ALLOC(cxHash);
-    this->fires    = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
-    CX_RELEASE(this->fires);
     CX_RELEASE(this->items);
     CX_RELEASE(this->stack);
     CX_RELEASE(this->files);
@@ -505,48 +505,76 @@ static cxTouchDirection cxTouchGetDirection(cxVec2f delta)
     return ret;
 }
 
+static void cxEngineComputeTouchItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
+{
+    kmVec2Subtract(&item->delta, &cpos, &item->previous);
+    item->previous = cpos;
+    item->direction = cxTouchGetDirection(item->delta);
+    //get move speed
+    cxDouble dt = now - item->prevTime;
+    if(dt > 0){
+        kmVec2Scale(&item->speed, &item->delta, 1.0f / dt);
+    }
+    item->prevTime = now;
+}
+
+static void cxEngineInitTouchItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
+{
+    item->delta = cxVec2fv(0, 0);
+    item->previous = cpos;
+    item->direction = cxTouchDirectionNone;
+    item->prevTime = now;
+    item->speed = cxVec2fv(0, 0);
+}
+
 cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
 {
     cxEngine this = cxEngineInstance();
-    //当前触发的点
-    cxArrayClean(this->fires);
+    //current fires point
+    this->fires.number = 0;
+    this->points.number = 0;
+    cxDouble now = cxTimestamp();
+    cxTouchItems delItems = {.number = 0};
+    cxTouchItem item = NULL;
+    //save point
     for(cxInt i=0; i < num; i++){
         cxTouchPoint p = points[i];
         cxVec2f cpos = cxEngineTouchToWindow(p.xy);
         cxHashKey key = cxHashLongKey(p.id);
-        cxTouchItem item = NULL;
         if(type == cxTouchTypeDown){
             item  = CX_ALLOC(cxTouchItem);
             cxHashSet(this->items, key, item);
             CX_RELEASE(item);
-            item->delta = cxVec2fv(0, 0);
-            item->previous = cpos;
-            item->direction = cxTouchDirectionNone;
+            cxEngineInitTouchItem(now, item, cpos);
         }else if(type == cxTouchTypeMove){
             item = cxHashGet(this->items, key);
             CX_CONTINUE(item == NULL);
-            kmVec2Subtract(&item->delta, &cpos, &item->previous);
-            item->previous = cpos;
-            item->direction = cxTouchGetDirection(item->delta);
+            cxEngineComputeTouchItem(now, item, cpos);
         }else if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
             item = cxHashGet(this->items, key);
+            CX_CONTINUE(item == NULL);
+            delItems.items[delItems.number++] = item;
         }else{
             CX_ERROR("unknow touch type %d",type);
+            continue;
         }
         if(item != NULL){
             item->current = cpos;
             item->type = type;
-            cxArrayAppend(this->fires, item);
+            item->key = p.id;
+            this->fires.items[this->fires.number++] = item;
         }
     }
-    cxBool ret = cxViewTouch(this->window, cxHashLength(this->items), this->fires);
+    //get all points
+    CX_HASH_FOREACH(this->items, ele, tmp){
+        this->points.items[this->points.number++] = ele->any;
+    }
+    cxBool ret = cxViewTouch(this->window, &this->fires, &this->points);
     //remove up cancel point
-    for(cxInt i=0; i < num; i++){
-        cxTouchPoint p = points[i];
-        cxHashKey key = cxHashLongKey(p.id);
-        if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
-            cxHashDel(this->items, key);
-        }
+    for(cxInt i=0; i < delItems.number; i++){
+        item = delItems.items[i];
+        cxHashKey key = cxHashLongKey(item->key);
+        cxHashDel(this->items, key);
     }
     return ret;
 }

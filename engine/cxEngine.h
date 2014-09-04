@@ -44,8 +44,9 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onRecvJson);
     CX_EVENT_ALLOC(onExit);
 
-    cxHash items;       //touch items
-    cxArray fires;          //curr items
+    cxHash items;           //touch items
+    cxTouchItems points;    //all touch points
+    cxTouchItems fires;     //current fire touch points
     cxKey key;
     cxString lang;
 CX_OBJECT_END(cxEngine, cxObject)

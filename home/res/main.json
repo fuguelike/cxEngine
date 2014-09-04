@@ -6,10 +6,6 @@
     {
       "id": "map",
       "type": "Map"
-    },
-    {
-      "type": "cxButton",
-      "texture": "bg1.png"
     }
   ]
 }

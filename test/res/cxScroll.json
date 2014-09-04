@@ -1,65 +1,14 @@
 {
-  "id":"main",
+  "id": "main",
   "type": "cxScroll",
   "size": {
-    "w": 800,
-    "h": 800
+    "w": 1400,
+    "h": 1200
   },
-  "layout": "horizontal",
-  "subviews": [
-    {
-      "type": "cxTable",
-      "grid": {
-        "x": 6
-      },
-      "size": {
-        "w": 1200,
-        "h": 300
-      },
-      "subviews": [
-        {
-          "type": "cxView",
-          "size": {
-            "w": 200,
-            "h": 200
-          }
-        },
-        {
-          "type": "cxView",
-          "size": {
-            "w": 200,
-            "h": 200
-          }
-        },
-        {
-          "type": "cxView",
-          "size": {
-            "w": 200,
-            "h": 200
-          }
-        },
-        {
-          "type": "cxView",
-          "size": {
-            "w": 200,
-            "h": 200
-          }
-        },
-        {
-          "type": "cxView",
-          "size": {
-            "w": 200,
-            "h": 200
-          }
-        },
-        {
-          "type": "cxView",
-          "size": {
-            "w": 200,
-            "h": 200
-          }
-        }
-      ]
-    }
-  ]
+  "scalable": true,
+  "layout": "horizontal|vertical",
+  "body": {
+    "src": "cxTable.json",
+    "scale":{"x":1.2,"y":1.2}
+  }
 }
