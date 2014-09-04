@@ -136,7 +136,10 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
     }
     return false;
 }
-
+CX_SETTER_DEF(cxScroll, time)
+{
+    this->time = cxJsonToDouble(value, this->time);
+}
 CX_SETTER_DEF(cxScroll, body)
 {
     cxAny body = cxObjectLoadWithJson(value);
@@ -161,6 +164,7 @@ CX_SETTER_DEF(cxScroll, layout)
 
 CX_OBJECT_TYPE(cxScroll, cxView)
 {
+    CX_PROPERTY_SETTER(cxScroll, time);
     CX_PROPERTY_SETTER(cxScroll, scalable);
     CX_PROPERTY_SETTER(cxScroll, body);
     CX_PROPERTY_SETTER(cxScroll, layout);
@@ -171,7 +175,7 @@ CX_OBJECT_INIT(cxScroll, cxView)
     this->scalable = true;
     CX_METHOD_SET(this->cxView.Touch, cxScrollTouch);
     cxViewSetCropping(this, true);
-    this->type = cxScrollMoveTypeVertical;
+    this->type = cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal;
 }
 CX_OBJECT_FREE(cxScroll, cxView)
 {

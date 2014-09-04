@@ -29,7 +29,7 @@ static void cxSpeedStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f gv;
     cxFloat tv = dt * dt / 2.0f;
     kmVec2Scale(&np, &this->speed, dt);
-    kmVec2Scale(&gv, &this->acce, tv);
+    kmVec2Scale(&gv, &this->accele, tv);
     kmVec2Add(&np, &np, &gv);
     kmVec2Add(&np, &np, &pos);
     //use and check is set position
@@ -47,9 +47,20 @@ static cxBool cxSpeedExit(cxAny pav)
     return this->cxAction.time != -1 && this->time >= this->cxAction.time;
 }
 
+CX_SETTER_DEF(cxSpeed, accele)
+{
+    this->accele = cxJsonToVec2f(value, this->accele);
+}
+
+CX_SETTER_DEF(cxSpeed, speed)
+{
+    this->speed = cxJsonToVec2f(value, this->speed);
+}
+
 CX_OBJECT_TYPE(cxSpeed, cxAction)
 {
-    
+    CX_PROPERTY_SETTER(cxSpeed, accele);
+    CX_PROPERTY_SETTER(cxSpeed, speed);
 }
 CX_OBJECT_INIT(cxSpeed, cxAction)
 {
@@ -64,10 +75,10 @@ CX_OBJECT_FREE(cxSpeed, cxAction)
 }
 CX_OBJECT_TERM(cxSpeed, cxAction)
 
-cxSpeed cxSpeedCreate(cxVec2f speed,cxVec2f acce)
+cxSpeed cxSpeedCreate(cxVec2f speed,cxVec2f accele)
 {
     cxSpeed this = CX_CREATE(cxSpeed);
-    this->acce = acce;
+    this->accele = accele;
     this->speed = speed;
     //compute time Vt = V0 + at^2
     return this;

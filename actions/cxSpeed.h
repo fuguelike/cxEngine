@@ -15,13 +15,13 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxSpeed, cxAction)
     cxVec2f speed;      //begin speed
-    cxVec2f acce;       //acceleration speed
+    cxVec2f accele;       //acceleration speed
     cxFloat angle;      //move angle
     cxFloat time;       //cost time
     CX_METHOD_DEF(cxBool, UseValue,cxAny,cxVec2f);
 CX_OBJECT_END(cxSpeed, cxAction)
 
-cxSpeed cxSpeedCreate(cxVec2f speed,cxVec2f acce);
+cxSpeed cxSpeedCreate(cxVec2f speed,cxVec2f accele);
 
 CX_C_END
 

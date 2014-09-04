@@ -78,7 +78,8 @@ LOCAL_SRC_FILES += \
     actions/cxParabola.c \
     actions/cxFollow.c \
     actions/cxTimeLine.c \
-    actions/cxBezier.c
+    actions/cxBezier.c \
+    actions/cxSpeed.c \
 
 LOCAL_SRC_FILES += \
     views/cxAtlas.c \
