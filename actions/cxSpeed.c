@@ -18,8 +18,6 @@ static void cxSpeedInit(cxAny pav)
     this->time = 0;
 }
 
-//s = v0*t + a*t*t/2
-
 static void cxSpeedStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxSpeed this = pav;
@@ -33,10 +31,10 @@ static void cxSpeedStep(cxAny pav,cxFloat dt,cxFloat time)
     kmVec2Add(&np, &np, &gv);
     kmVec2Add(&np, &np, &pos);
     //use and check is set position
-    cxBool isExit = CX_METHOD_GET(true, this->UseValue, this, np);
-    if(isExit){
+    if(this->UseValue == NULL){
+        cxViewSetPos(this->cxAction.view, np);
+    }else if(CX_METHOD_GET(false, this->UseValue, this, np)){
         cxActionStop(this);
-        return;
     }
     this->time += dt;
 }
@@ -51,7 +49,6 @@ CX_SETTER_DEF(cxSpeed, accele)
 {
     this->accele = cxJsonToVec2f(value, this->accele);
 }
-
 CX_SETTER_DEF(cxSpeed, speed)
 {
     this->speed = cxJsonToVec2f(value, this->speed);

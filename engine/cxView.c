@@ -593,7 +593,7 @@ void cxViewSetPos(cxAny pview,cxVec2f pos)
     this->isDirty = true;
 }
 
-void cxViewSetAnchor(cxAny pview,cxVec2f anchor)
+cxVec2f cxViewSetAnchor(cxAny pview,cxVec2f anchor)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
@@ -603,9 +603,16 @@ void cxViewSetAnchor(cxAny pview,cxVec2f anchor)
     if(anchor.y > 0.5f || anchor.y < -0.5f){
         anchor.y = (anchor.y / (this->size.h/2.0f)) / 2.0f;
     }
-    CX_RETURN(cxVec2fEqu(this->anchor, anchor));
+    CX_RETURN(cxVec2fEqu(this->anchor, anchor),this->position);
+    cxSize2f size = cxViewContentSize(this);
+    cxVec2f delta;
+    kmVec2Subtract(&delta, &anchor, &this->anchor);
+    cxVec2f opos = cxViewPosition(this);
+    opos.x += size.w * delta.x;
+    opos.y += size.h * delta.y;
     this->anchor = anchor;
     this->isDirty = true;
+    return opos;
 }
 
 void cxViewSetFixScale(cxAny pview,cxVec2f scale)

@@ -31,6 +31,19 @@ typedef struct {
 #define cxFloatRangeValue(v,r) (cxFloatRange){v,r}
 
 typedef struct {
+    cxFloat min;
+    cxFloat max;
+}cxRange2f;
+#define cxRange2fv(min,max) (cxRange2f){min,max}
+
+typedef struct {
+    cxInt min;
+    cxInt max;
+}cxRange2i;
+#define cxRange2iv(min,max) (cxRange2i){min,max}
+#define cxRange2iEqu(p1,p2)   ((p1).min == (p2).min && (p1).max == (p2).max)
+
+typedef struct {
     cxInt x;
     cxInt y;
 }cxVec2i;

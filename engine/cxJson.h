@@ -63,6 +63,10 @@ void cxJsonRegisterBool(cxConstChars key,cxBool value);
 
 cxSize2f cxJsonEnvSize2f(cxConstChars key,cxSize2f dv);
 
+void cxJsonRegisterRange2f(cxConstChars key,cxRange2f range);
+
+cxRange2f cxJsonEnvRange2f(cxConstChars key,cxRange2f dv);
+
 void cxJsonRegisterSize2f(cxConstChars key,cxSize2f size);
 
 cxVec2f cxJsonEnvVec2f(cxConstChars key,cxVec2f dv);
@@ -164,6 +168,8 @@ cxInt cxJsonObjectLength(cxJson json);
 
 cxVec2f cxJsonToVec2f(cxJson json,cxVec2f dv);
 
+cxRange2f cxJsonToRange2f(cxJson json,cxRange2f dv);
+
 cxVec2i cxJsonToVec2i(cxJson json,cxVec2i dv);
 
 cxVec3f cxJsonToVec3f(cxJson json,cxVec3f dv);
@@ -197,6 +203,8 @@ cxFloatRange cxJsonFloatRangle(cxJson json,cxConstChars key,cxFloatRange dv);
 cxColor4fRange cxJsonColor4fRangle(cxJson json,cxConstChars key,cxColor4fRange dv);
 
 cxVec2f cxJsonVec2f(cxJson json,cxConstChars key,cxVec2f dv);
+
+cxRange2f cxJsonRange2f(cxJson json,cxConstChars key,cxRange2f dv);
 
 cxVec2i cxJsonVec2i(cxJson json,cxConstChars key,cxVec2i dv);
 

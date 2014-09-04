@@ -29,10 +29,54 @@ cxView cxScrollBody(cxAny pview)
 
 static cxBool cxScrollScale(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
 {
+    cxScroll this = pview;
+    cxVec2f cp0;
+    cxVec2f cp1;
+    cxTouchItem item0 = CX_TOUCH_ITEM(points, 0);
+    cxTouchItem item1 = CX_TOUCH_ITEM(points, 1);
+    bool hited = cxViewHitTest(this->body, item0->current, &cp0) && cxViewHitTest(this->body, item1->current, &cp1);
+    if(hited && item0->type == cxTouchTypeDown && item1->type == cxTouchTypeDown){
+        //disable move
+        this->isEnable = false;
+        this->startDis = kmVec2DistanceBetween(&item0->current, &item1->current);
+        kmVec2MidPointBetween(&this->center, &cp0, &cp1);
+        return true;
+    }
+    if(this->startDis == 0){
+        return false;
+    }
+    if(item0->type == cxTouchTypeMove || item1->type == cxTouchTypeMove){
+        cxFloat dis = kmVec2DistanceBetween(&item0->current, &item1->current);
+        cxFloat delta = (dis - this->startDis);
+        this->startDis = dis;
+        if(fabsf(delta) < 2 || delta == 0){
+            return false;
+        }
+        cxVec2f scale = cxViewScale(this->body);
+        if(delta > 0){
+            scale.x += this->scaling;
+            scale.y += this->scaling;
+        }else if(delta < 0){
+            scale.x -= this->scaling;
+            scale.y -= this->scaling;
+        }
+        scale.x = kmClamp(scale.x, this->range.min, this->range.max);
+        scale.y = kmClamp(scale.y, this->range.min, this->range.max);
+        cxViewSetScale(this->body, scale);
+        //fix position
+        cxVec2f npos = cxViewSetAnchor(this->body, this->center);
+        cxScrollUpdateBox(this);
+        cxScrollCheckPos(this, &npos);
+        cxViewSetPos(this->body, npos);
+        return true;
+    }
+    if(item0->type == cxTouchTypeUp || item1->type == cxTouchTypeUp){
+        this->startDis = 0;
+    }
     return false;
 }
 
-static cxBool cxScrollCheckPos(cxScroll this,cxVec2f *pos)
+cxBool cxScrollCheckPos(cxScroll this,cxVec2f *pos)
 {
     cxBool fix = false;
     if(pos->y < this->box.b){
@@ -72,6 +116,21 @@ static cxBool cxScrollUseValue(cxAny pav,cxVec2f pos)
     return fix;
 }
 
+void cxScrollUpdateBox(cxAny pview)
+{
+    cxScroll this = pview;
+    cxView body = cxScrollBody(this);
+    cxSize2f msize = cxViewContentSize(body);
+    cxSize2f psize = cxViewSize(this);
+    cxFloat mw = (msize.w - psize.w) / 2.0f;
+    cxVec2f anchor = cxViewAnchor(body);
+    this->box.l = -mw + anchor.x * msize.w;
+    this->box.r =  mw + anchor.x * msize.w;
+    cxFloat mh = (msize.h - psize.h) / 2.0f;
+    this->box.b = -mh + anchor.y * msize.h;
+    this->box.t =  mh + anchor.y * msize.h;
+}
+
 cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
 {
     cxScroll this = pview;
@@ -89,15 +148,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
     if(item->type == cxTouchTypeDown){
         this->isEnable = hited;
         cxViewStopAction(body, CX_SCROLL_MOVE_ACTION_ID);
-        cxSize2f msize = cxViewContentSize(body);
-        cxSize2f psize = cxViewSize(this);
-        cxFloat mw = (msize.w - psize.w) / 2.0f;
-        cxVec2f anchor = cxViewAnchor(body);
-        this->box.l = -mw + anchor.x * msize.w;
-        this->box.r =  mw + anchor.x * msize.w;
-        cxFloat mh = (msize.h - psize.h) / 2.0f;
-        this->box.b = -mh + anchor.y * msize.h;
-        this->box.t =  mh + anchor.y * msize.h;
+        cxScrollUpdateBox(this);
         return hited;
     }
     if(!this->isEnable){
@@ -118,7 +169,6 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
     }
     if(item->type == cxTouchTypeUp){
         cxVec2f aspeed = cxVec2fv(0, 0);
-        CX_LOGGER("speed:%f %f",item->speed.x,item->speed.y);
         if(this->type & cxScrollMoveTypeHorizontal){
             aspeed.x = -item->speed.x / (this->time * this->time);
         }
@@ -135,6 +185,15 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
         this->isEnable = false;
     }
     return false;
+}
+
+CX_SETTER_DEF(cxScroll, range)
+{
+    this->range = cxJsonToRange2f(value, this->range);
+}
+CX_SETTER_DEF(cxScroll, scaling)
+{
+    this->scaling = cxJsonToDouble(value, this->scaling);
 }
 CX_SETTER_DEF(cxScroll, time)
 {
@@ -164,6 +223,8 @@ CX_SETTER_DEF(cxScroll, layout)
 
 CX_OBJECT_TYPE(cxScroll, cxView)
 {
+    CX_PROPERTY_SETTER(cxScroll, scaling);
+    CX_PROPERTY_SETTER(cxScroll, range);
     CX_PROPERTY_SETTER(cxScroll, time);
     CX_PROPERTY_SETTER(cxScroll, scalable);
     CX_PROPERTY_SETTER(cxScroll, body);
@@ -171,6 +232,8 @@ CX_OBJECT_TYPE(cxScroll, cxView)
 }
 CX_OBJECT_INIT(cxScroll, cxView)
 {
+    this->scaling = 0.05f;
+    this->range = cxRange2fv(0.5f, 1.5f);
     this->time = 0.3f;
     this->scalable = true;
     CX_METHOD_SET(this->cxView.Touch, cxScrollTouch);

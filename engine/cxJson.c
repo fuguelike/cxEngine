@@ -309,6 +309,23 @@ cxVec2f cxJsonEnvVec2f(cxConstChars key,cxVec2f dv)
     return cxJsonToVec2f(cxJsonAttachCreate(v), dv);
 }
 
+void cxJsonRegisterRange2f(cxConstChars key,cxRange2f range)
+{
+    CX_ASSERT(cxConstCharsOK(key), "key error");
+    json_t *json = json_object();
+    json_object_set_new(json, "min", json_real(range.min));
+    json_object_set_new(json, "max", json_real(range.max));
+    json_object_set_new(global, key, json);
+}
+
+cxRange2f cxJsonEnvRange2f(cxConstChars key,cxRange2f dv)
+{
+    CX_ASSERT(cxConstCharsOK(key), "key error");
+    json_t *v = jsonGetJson(global, key);
+    CX_RETURN(v == NULL, dv);
+    return cxJsonToRange2f(cxJsonAttachCreate(v), dv);
+}
+
 void cxJsonRegisterSize2f(cxConstChars key,cxSize2f value)
 {
     CX_ASSERT(cxConstCharsOK(key), "key error");
@@ -403,6 +420,16 @@ cxVec2i cxJsonToVec2i(cxJson json,cxVec2i dv)
     json = cxJsonParseRegisterValue(json);
     dv.x = cxJsonInt(json, "x", dv.x);
     dv.y = cxJsonInt(json, "y", dv.y);
+    return dv;
+}
+
+//{"min":0,"max":0}
+cxRange2f cxJsonToRange2f(cxJson json,cxRange2f dv)
+{
+    CX_ASSERT(json != NULL, "json error");
+    json = cxJsonParseRegisterValue(json);
+    dv.min = cxJsonDouble(json, "min", dv.min);
+    dv.max = cxJsonDouble(json, "max", dv.max);
     return dv;
 }
 
@@ -537,6 +564,14 @@ cxVec2i cxJsonVec2i(cxJson json,cxConstChars key,cxVec2i dv)
     cxJson obj = cxJsonObject(json, key);
     CX_RETURN(!cxJsonIsObject(obj),dv);
     return cxJsonToVec2i(obj, dv);
+}
+
+cxRange2f cxJsonRange2f(cxJson json,cxConstChars key,cxRange2f dv)
+{
+    CX_ASSERT(json != NULL, "json error");
+    cxJson obj = cxJsonObject(json, key);
+    CX_RETURN(!cxJsonIsObject(obj),dv);
+    return cxJsonToRange2f(obj, dv);
 }
 
 cxVec2f cxJsonVec2f(cxJson json,cxConstChars key,cxVec2f dv)
