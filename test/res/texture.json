@@ -1,8 +1,56 @@
 {"frames": [
 
 {
+	"filename": "1.png",
+	"frame": {"x":2,"y":362,"w":70,"h":70},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
+	"sourceSize": {"w":70,"h":70}
+},
+{
+	"filename": "2.png",
+	"frame": {"x":2,"y":290,"w":70,"h":70},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
+	"sourceSize": {"w":70,"h":70}
+},
+{
+	"filename": "3.png",
+	"frame": {"x":2,"y":218,"w":70,"h":70},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
+	"sourceSize": {"w":70,"h":70}
+},
+{
+	"filename": "4.png",
+	"frame": {"x":2,"y":146,"w":70,"h":70},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
+	"sourceSize": {"w":70,"h":70}
+},
+{
+	"filename": "5.png",
+	"frame": {"x":2,"y":74,"w":70,"h":70},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
+	"sourceSize": {"w":70,"h":70}
+},
+{
+	"filename": "6.png",
+	"frame": {"x":2,"y":2,"w":70,"h":70},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":70},
+	"sourceSize": {"w":70,"h":70}
+},
+{
 	"filename": "artichoke.png",
-	"frame": {"x":152,"y":52,"w":48,"h":48},
+	"frame": {"x":74,"y":252,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -10,7 +58,7 @@
 },
 {
 	"filename": "carrot.png",
-	"frame": {"x":102,"y":52,"w":48,"h":48},
+	"frame": {"x":74,"y":202,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -18,7 +66,7 @@
 },
 {
 	"filename": "chilli.png",
-	"frame": {"x":52,"y":202,"w":48,"h":48},
+	"frame": {"x":74,"y":152,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -26,7 +74,7 @@
 },
 {
 	"filename": "cholesterol-2.png",
-	"frame": {"x":52,"y":152,"w":48,"h":48},
+	"frame": {"x":74,"y":102,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -34,7 +82,7 @@
 },
 {
 	"filename": "cholesterol.png",
-	"frame": {"x":52,"y":102,"w":48,"h":48},
+	"frame": {"x":74,"y":52,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -42,7 +90,7 @@
 },
 {
 	"filename": "cucumber.png",
-	"frame": {"x":52,"y":52,"w":48,"h":48},
+	"frame": {"x":452,"y":2,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -50,7 +98,7 @@
 },
 {
 	"filename": "egg-plant.png",
-	"frame": {"x":202,"y":2,"w":48,"h":48},
+	"frame": {"x":402,"y":2,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -58,7 +106,7 @@
 },
 {
 	"filename": "leek.png",
-	"frame": {"x":152,"y":2,"w":48,"h":48},
+	"frame": {"x":352,"y":2,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -66,7 +114,7 @@
 },
 {
 	"filename": "mushroom.png",
-	"frame": {"x":102,"y":2,"w":48,"h":48},
+	"frame": {"x":302,"y":2,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -74,7 +122,7 @@
 },
 {
 	"filename": "peas.png",
-	"frame": {"x":52,"y":2,"w":48,"h":48},
+	"frame": {"x":252,"y":2,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -82,7 +130,7 @@
 },
 {
 	"filename": "potato.png",
-	"frame": {"x":2,"y":202,"w":48,"h":48},
+	"frame": {"x":202,"y":2,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -90,7 +138,7 @@
 },
 {
 	"filename": "pumpkin.png",
-	"frame": {"x":2,"y":152,"w":48,"h":48},
+	"frame": {"x":152,"y":2,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -98,7 +146,7 @@
 },
 {
 	"filename": "radish.png",
-	"frame": {"x":2,"y":102,"w":48,"h":48},
+	"frame": {"x":102,"y":2,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -106,7 +154,7 @@
 },
 {
 	"filename": "tomato.png",
-	"frame": {"x":2,"y":52,"w":48,"h":48},
+	"frame": {"x":52,"y":434,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -114,7 +162,7 @@
 },
 {
 	"filename": "turnip.png",
-	"frame": {"x":2,"y":2,"w":48,"h":48},
+	"frame": {"x":2,"y":434,"w":48,"h":48},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
@@ -123,10 +171,10 @@
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker ",
 	"version": "1.0",
-	"image": "texture.png",
+	"image": "texture.pvr",
 	"format": "PVRTC4",
-	"size": {"w":256,"h":256},
+	"size": {"w":512,"h":512},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:5ab3c8af9bc4520b6026d785d3c1d709$"
+	"smartupdate": "$TexturePacker:SmartUpdate:07f89855f7942ec37fe082afee92fd73$"
 }
 }

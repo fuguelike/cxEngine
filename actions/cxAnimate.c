@@ -51,6 +51,7 @@ CX_OBJECT_TERM(cxAnimateItem, cxObject)
 static void cxAnimateInit(cxAny pav)
 {
     cxAnimate this = pav;
+    CX_ASSERT(CX_INSTANCE_OF(this->cxAction.view, cxSprite), "cxAnimate action view must is cxSprite");
     this->index = 0;
     this->cxAction.time = this->time;
     cxArray list = cxAnimateGroup(this,NULL);
@@ -116,7 +117,7 @@ CX_SETTER_DEF(cxAnimate, time)
 CX_SETTER_DEF(cxAnimate, frames)
 {
     cxJson frames = cxJsonToArray(value);
-    cxArray list = cxAnimateGroup(this,NULL);
+    cxArray list = cxAnimateGroup(this,CX_ANIMATE_DEFAULT_GROUP);
     CX_JSON_ARRAY_EACH_BEG(frames, item)
     {
         cxObjectCreateResult ret = cxObjectCreateBegin(item);
@@ -138,14 +139,21 @@ CX_SETTER_DEF(cxAnimate, groups)
         CX_ASSERT(cxJsonIsArray(item), "must is array");
         cxArray list = cxAnimateGroup(this,key);
         cxJson frames = cxJsonToArray(item);
-        CX_JSON_ARRAY_EACH_BEG(frames, item)
+        CX_JSON_ARRAY_EACH_BEG(frames, ats)
         {
-            cxObjectCreateResult ret = cxObjectCreateBegin(item);
-            CX_ASSERT(CX_INSTANCE_OF(ret.object, cxAnimateItem), "type error");
-            cxArrayAppend(list, ret.object);
-            cxObjectCreateEnd(&ret);
+            if(cxJsonIsNumber(ats)){
+                cxInt idx = cxJsonToInt(ats, -1);
+                cxAny frame = cxAnimateItemAt(this, idx);
+                CX_CONTINUE(frame == NULL);
+                cxArrayAppend(list, frame);
+            }else{
+                cxObjectCreateResult ret = cxObjectCreateBegin(ats);
+                CX_ASSERT(CX_INSTANCE_OF(ret.object, cxAnimateItem), "type error");
+                cxArrayAppend(list, ret.object);
+                cxObjectCreateEnd(&ret);
+            }
         }
-        CX_JSON_ARRAY_EACH_END(frames, item)
+        CX_JSON_ARRAY_EACH_END(frames, ats)
     }
     CX_JSON_OBJECT_EACH_END(groups, item)
 }
@@ -156,6 +164,15 @@ CX_SETTER_DEF(cxAnimate, name)
         key = CX_ANIMATE_DEFAULT_GROUP;
     }
     cxAnimateSetGroupName(this, key);
+}
+
+cxAnimateItem cxAnimateItemAt(cxAny pav,cxInt idx)
+{
+    cxArray list = cxAnimateGroup(pav, CX_ANIMATE_DEFAULT_GROUP);
+    if(idx < 0 || idx >= cxArrayLength(list)){
+        return NULL;
+    }
+    return cxArrayAtIndex(list, idx);
 }
 
 cxArray cxAnimateGroup(cxAny pav,cxConstChars name)

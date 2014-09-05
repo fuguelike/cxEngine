@@ -31,6 +31,8 @@ CX_OBJECT_DEF(cxAnimate, cxAction)
     CX_EVENT_ALLOC(onFrame);
 CX_OBJECT_END(cxAnimate, cxAction)
 
+cxAnimateItem cxAnimateItemAt(cxAny pav,cxInt idx);
+
 cxArray cxAnimateGroup(cxAny pav,cxConstChars name);
 
 void cxAnimateSetGroupName(cxAny pav,cxConstChars name);
