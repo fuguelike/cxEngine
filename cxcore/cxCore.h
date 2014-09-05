@@ -231,9 +231,7 @@ CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
 }                                                               \
 CX_ATTRIBUTE_UNUSED static void __##_t_##RegisterFunc()         \
 {                                                               \
-    __cxTypeRegisterType                                        \
-    (_t_##TypeName,                                             \
-    _b_##TypeName,                                              \
+    __cxTypeRegisterType(_t_##TypeName,_b_##TypeName,           \
     __##_t_##CreateFunc,                                        \
     __##_t_##AllocFunc,                                         \
     __##_t_##AutoType);                                         \

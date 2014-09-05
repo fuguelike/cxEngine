@@ -6,7 +6,7 @@
   },
   "actionmgr": {
     "type": "cxActionMgr",
-    "scale": 10.0
+    "scale": 4.0
   },
   "position": {
     "y": -300

@@ -134,6 +134,7 @@ static void cxEngineTypes()
     
     //register actions
     CX_TYPE_DEF(cxMultiple);
+    CX_TYPE_DEF(cxAnimateItem);
     CX_TYPE_DEF(cxAnimate);
     CX_TYPE_DEF(cxFade);
     CX_TYPE_DEF(cxFollow);

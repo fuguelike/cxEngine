@@ -13,21 +13,29 @@
 
 CX_C_BEGIN
 
-//use at cxSprite View
+CX_OBJECT_DEF(cxAnimateItem, cxObject)
+    cxTexture texture;
+    cxString key;
+    cxFloat time;
+    cxFloat value;
+CX_OBJECT_END(cxAnimateItem, cxObject)
 
-void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars keyfmt,cxFloat delay);
-
-void cxAnimateAppendSeries(cxArray list,cxConstChars file,cxConstChars keyfmt,cxInt from,cxInt to,cxFloat delay);
+#define CX_ANIMATE_DEFAULT_GROUP "__cxAnimateDefaultGroup__"
 
 CX_OBJECT_DEF(cxAnimate, cxAction)
-    cxBool cached;
+    cxString groupName;
+    cxHash groups;
     cxInt index;
-    cxArray list;
     cxFloat time;
+    cxBool forever;
     CX_EVENT_ALLOC(onFrame);
 CX_OBJECT_END(cxAnimate, cxAction)
 
-cxAnimate cxAnimateCreate(cxFloat time,cxArray list);
+cxArray cxAnimateGroup(cxAny pav,cxConstChars name);
+
+void cxAnimateSetGroupName(cxAny pav,cxConstChars name);
+
+cxAnimate cxAnimateCreate(cxFloat time,cxConstChars name);
 
 CX_C_END
 

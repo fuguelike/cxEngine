@@ -137,12 +137,15 @@ cxObjectCreateResult cxObjectCreateBegin(cxJson json)
         src = cxJsonConstChars(json, "src");
     }
     //from src get json
+    cxConstChars type = NULL;
     if(src != NULL){
         CX_ASSERT(cxJsonReader !=NULL, "please set cxJsonReader");
         ret.njson = cxJsonReader(src);
+        CX_ASSERT(ret.njson != NULL, "read json failed from %s",src);
+        type = cxJsonConstChars(ret.njson, "type");
+    }else{
+        type = cxJsonConstChars(ret.ojson, "type");
     }
-    //create object
-    cxConstChars type = cxJsonConstChars(json, "type");
     CX_ASSERT(type != NULL, "json type property null");
     ret.object = cxObjectCreateWithType(type);
     CX_ASSERT(ret.object != NULL,"create object %s failed", type);

@@ -33,6 +33,7 @@
 		835D3B2D19AF21680004155D /* texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 835D3B2C19AF21680004155D /* texture.png */; };
 		836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 836165D518F67BC400FFF173 /* Default-568h@2x.png */; };
 		836D8DA7191B8C02000F0230 /* cxScroll.json in Resources */ = {isa = PBXBuildFile; fileRef = 836D8DA6191B8C02000F0230 /* cxScroll.json */; };
+		83732B4219B9BF740049D09A /* cxAnimate.json in Resources */ = {isa = PBXBuildFile; fileRef = 83732B4119B9BF740049D09A /* cxAnimate.json */; };
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		839722AE19161746006D0F89 /* font.json in Resources */ = {isa = PBXBuildFile; fileRef = 839722AC19161746006D0F89 /* font.json */; };
 		839722AF19161746006D0F89 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 839722AD19161746006D0F89 /* font.png */; };
@@ -81,6 +82,7 @@
 		835D3B2C19AF21680004155D /* texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = texture.png; path = res/texture.png; sourceTree = SOURCE_ROOT; };
 		836165D518F67BC400FFF173 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		836D8DA6191B8C02000F0230 /* cxScroll.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxScroll.json; path = res/cxScroll.json; sourceTree = SOURCE_ROOT; };
+		83732B4119B9BF740049D09A /* cxAnimate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxAnimate.json; path = res/cxAnimate.json; sourceTree = SOURCE_ROOT; };
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		839722AC19161746006D0F89 /* font.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = font.json; path = res/font.json; sourceTree = SOURCE_ROOT; };
 		839722AD19161746006D0F89 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = res/font.png; sourceTree = SOURCE_ROOT; };
@@ -171,6 +173,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				83732B4119B9BF740049D09A /* cxAnimate.json */,
 				834327B819B8034400B4927F /* red.png */,
 				834327B919B8034400B4927F /* t.png */,
 				834327BA19B8034400B4927F /* yellow.png */,
@@ -275,6 +278,7 @@
 				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
 				835D3B2D19AF21680004155D /* texture.png in Resources */,
 				831ABCBC19249044001A86F1 /* cxParticle.json in Resources */,
+				83732B4219B9BF740049D09A /* cxAnimate.json in Resources */,
 				83F3CCD0191B674D00D6BCFB /* cxAtlas.json in Resources */,
 				836D8DA7191B8C02000F0230 /* cxScroll.json in Resources */,
 				83DAD707191A26BF000A7D1F /* texture.json in Resources */,

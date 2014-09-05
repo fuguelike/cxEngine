@@ -206,11 +206,11 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         CX_METHOD_RUN(this->Step,this,dt,time);
     }else{
         time = CX_METHOD_GET(1.0f, this->Curve,this,1.0f);
-        this->timeElapsed = 0.0f;
-        this->delayElapsed = 0.0f;
         CX_METHOD_RUN(this->Step,this,dt,1.0f);
         //check exit
         isExit = CX_METHOD_GET(true, this->Exit,this);
+        this->timeElapsed = 0.0f;
+        this->delayElapsed = 0.0f;
         this->isActive = false;
     }
     //check action exit

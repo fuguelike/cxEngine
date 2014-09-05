@@ -9,6 +9,9 @@
     "url": "texture.json?carrot.png"
   },
   "actions": [
-    "cxParticle.json"
+    {
+      "id": "action",
+      "src": "cxAnimate.json"
+    }
   ]
 }

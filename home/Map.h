@@ -10,10 +10,12 @@
 #define Home_Map_h
 
 #include <views/cxAtlas.h>
+#include "Define.h"
 
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Map, cxAtlas)
+    MapMode mode;
     cxSize2f unitSize;  //单元格子大小
     cxVec2i unitNum;    //单元数量
     cxAny *items;       //格子node
@@ -23,6 +25,9 @@ CX_OBJECT_DEF(Map, cxAtlas)
     //
     cxBox4f box;
 CX_OBJECT_END(Map, cxAtlas)
+
+//init map
+cxBool MapInit(Map this,cxJson data);
 
 //按Y的大小重新排序
 void MapSortNode(Map this);

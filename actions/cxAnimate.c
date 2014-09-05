@@ -13,20 +13,33 @@
 #include <engine/cxUrlPath.h>
 #include "cxAnimate.h"
 
-CX_OBJECT_DEF(cxAnimateItem, cxObject)
-    cxTexture texture;
-    cxString key;
-    cxFloat delay;
-    cxFloat time;
-CX_OBJECT_END(cxAnimateItem, cxObject)
+CX_SETTER_DEF(cxAnimateItem, key)
+{
+    cxString key = cxJsonToString(value);
+    CX_RETAIN_SET(this->key, key);
+}
+CX_SETTER_DEF(cxAnimateItem, texture)
+{
+    cxConstChars file = cxJsonToConstChars(value);
+    CX_ASSERT(file != NULL, "cxAnimateItem must set texture");
+    cxAny texture = cxTextureFactoryLoadFile(file);
+    CX_RETURN(texture == NULL);
+    CX_RETAIN_SET(this->texture, texture);
+}
+CX_SETTER_DEF(cxAnimateItem, time)
+{
+    this->time = cxJsonToDouble(value, this->time);
+}
 
 CX_OBJECT_TYPE(cxAnimateItem, cxAction)
 {
-    
+    CX_PROPERTY_SETTER(cxAnimateItem, key);
+    CX_PROPERTY_SETTER(cxAnimateItem, texture);
+    CX_PROPERTY_SETTER(cxAnimateItem, time);
 }
 CX_OBJECT_INIT(cxAnimateItem, cxObject)
 {
-    
+    this->time = 0;
 }
 CX_OBJECT_FREE(cxAnimateItem, cxObject)
 {
@@ -35,55 +48,32 @@ CX_OBJECT_FREE(cxAnimateItem, cxObject)
 }
 CX_OBJECT_TERM(cxAnimateItem, cxObject)
 
-//texture.json?blue.png
-void cxAnimateItemAppend(cxArray list,cxConstChars file,cxConstChars keyfmt,cxFloat delay)
-{
-    cxAnimateItem this = CX_CREATE(cxAnimateItem);
-    if(file != NULL){
-        CX_RETAIN_SET(this->texture, cxTextureFactoryLoadFile(file));
-    }
-    if(keyfmt != NULL){
-        this->key = cxStringAllocChars(keyfmt);
-    }
-    this->delay = delay;
-    cxArrayAppend(list, this);
-}
-
-//texture.json
-void cxAnimateAppendSeries(cxArray list,cxConstChars file,cxConstChars keyfmt,cxInt from,cxInt to,cxFloat delay)
-{
-    for(cxInt i = from; i <= to ; i++){
-        cxConstChars sfile = CX_CONST_STRING(file,i);
-        cxUrlPath path = cxUrlPathParse(sfile);
-        cxConstChars skey = keyfmt != NULL ? CX_CONST_STRING(keyfmt, i) : NULL;
-        cxAnimateItemAppend(list, path->path, path->count == 2 ? path->key : skey, delay);
-    }
-}
-
 static void cxAnimateInit(cxAny pav)
 {
     cxAnimate this = pav;
     this->index = 0;
     this->cxAction.time = this->time;
-    cxFloat dt = this->time / (cxFloat)cxArrayLength(this->list);
+    cxArray list = cxAnimateGroup(this,NULL);
+    cxFloat dt = this->time / (cxFloat)cxArrayLength(list);
     cxFloat i = 0;
-    CX_ARRAY_FOREACH(this->list, ele){
+    CX_ARRAY_FOREACH(list, ele){
         cxAnimateItem item = cxArrayObject(ele);
-        this->cxAction.time += item->delay;
-        i += dt  + item->delay;
-        item->time = i;
+        this->cxAction.time += item->time;
+        i += dt  + item->time;
+        item->value = i;
     }
 }
 
 static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxAnimate this = pav;
+    cxArray list = cxAnimateGroup(this,NULL);
     cxInt i = 0;
-    CX_RETURN(this->index >= cxArrayLength(this->list));
-    CX_ARRAY_FOREACH(this->list, e){
+    CX_RETURN(this->index >= cxArrayLength(list));
+    CX_ARRAY_FOREACH(list, e){
         i++;
         cxAnimateItem item = cxArrayObject(e);
-        if(this->cxAction.timeElapsed > item->time){
+        if(this->cxAction.timeElapsed > item->value){
             continue;
         }
         if(this->index == i){
@@ -108,6 +98,16 @@ static void cxAnimateReset(cxAny pav)
     this->cxAction.time = this->time;
 }
 
+static cxBool cxAnimateExit(cxAny pav)
+{
+    cxAnimate this = pav;
+    if(this->forever){
+        cxActionReset(pav);
+        return false;
+    }
+    return true;
+}
+
 CX_SETTER_DEF(cxAnimate, time)
 {
     this->time = cxJsonToDouble(value, this->time);
@@ -116,47 +116,105 @@ CX_SETTER_DEF(cxAnimate, time)
 CX_SETTER_DEF(cxAnimate, frames)
 {
     cxJson frames = cxJsonToArray(value);
+    cxArray list = cxAnimateGroup(this,NULL);
     CX_JSON_ARRAY_EACH_BEG(frames, item)
     {
-        cxConstChars texture = cxJsonConstChars(item, "texture");
-        cxConstChars key = cxJsonConstChars(item, "key");
-        cxInt from = cxJsonInt(item, "from", 0);
-        cxInt to = cxJsonInt(item, "to", 0);
-        cxFloat delay = cxJsonDouble(item, "delay", 0);
-        if((to - from) > 0){
-            cxAnimateAppendSeries(this->list, texture, key, from, to, delay);
-        }else{
-            cxAnimateItemAppend(this->list, texture, key, delay);
-        }
+        cxObjectCreateResult ret = cxObjectCreateBegin(item);
+        CX_ASSERT(CX_INSTANCE_OF(ret.object, cxAnimateItem), "type error");
+        cxArrayAppend(list, ret.object);
+        cxObjectCreateEnd(&ret);
     }
     CX_JSON_ARRAY_EACH_END(frames, item)
+}
+CX_SETTER_DEF(cxAnimate, forever)
+{
+    this->forever = cxJsonToBool(value, this->forever);
+}
+CX_SETTER_DEF(cxAnimate, groups)
+{
+    cxJson groups = value;
+    CX_JSON_OBJECT_EACH_BEG(groups, item)
+    {
+        CX_ASSERT(cxJsonIsArray(item), "must is array");
+        cxArray list = cxAnimateGroup(this,key);
+        cxJson frames = cxJsonToArray(item);
+        CX_JSON_ARRAY_EACH_BEG(frames, item)
+        {
+            cxObjectCreateResult ret = cxObjectCreateBegin(item);
+            CX_ASSERT(CX_INSTANCE_OF(ret.object, cxAnimateItem), "type error");
+            cxArrayAppend(list, ret.object);
+            cxObjectCreateEnd(&ret);
+        }
+        CX_JSON_ARRAY_EACH_END(frames, item)
+    }
+    CX_JSON_OBJECT_EACH_END(groups, item)
+}
+CX_SETTER_DEF(cxAnimate, name)
+{
+    cxConstChars key = cxJsonToConstChars(value);
+    if(key == NULL){
+        key = CX_ANIMATE_DEFAULT_GROUP;
+    }
+    cxAnimateSetGroupName(this, key);
+}
+
+cxArray cxAnimateGroup(cxAny pav,cxConstChars name)
+{
+    cxAnimate this = pav;
+    if(name == NULL){
+        name = cxStringBody(this->groupName);
+    }
+    cxArray list = cxHashGet(this->groups, cxHashStrKey(name));
+    if(list == NULL){
+        list = CX_ALLOC(cxArray);
+        cxHashSet(this->groups, cxHashStrKey(name), list);
+        CX_RELEASE(list);
+    }
+    return list;
 }
 
 CX_OBJECT_TYPE(cxAnimate, cxAction)
 {
+    CX_PROPERTY_SETTER(cxAnimate, forever);
     CX_PROPERTY_SETTER(cxAnimate, time);
+    CX_PROPERTY_SETTER(cxAnimate, name);
     CX_PROPERTY_SETTER(cxAnimate, frames);
+    CX_PROPERTY_SETTER(cxAnimate, groups);
 }
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {
+    this->forever = true;
+    CX_METHOD_SET(this->cxAction.Exit, cxAnimateExit);
     CX_METHOD_SET(this->cxAction.Init, cxAnimateInit);
     CX_METHOD_SET(this->cxAction.Step, cxAnimateStep);
     CX_METHOD_SET(this->cxAction.Reset, cxAnimateReset);
-    this->list = CX_ALLOC(cxArray);
-    this->cached = true;
+    this->groups = CX_ALLOC(cxHash);
+    this->groupName = cxStringAllocChars(CX_ANIMATE_DEFAULT_GROUP);
 }
 CX_OBJECT_FREE(cxAnimate, cxAction)
 {
+    CX_RELEASE(this->groupName);
+    CX_RELEASE(this->groups);
     CX_EVENT_RELEASE(this->onFrame);
-    CX_RELEASE(this->list);
 }
 CX_OBJECT_TERM(cxAnimate, cxAction)
 
-cxAnimate cxAnimateCreate(cxFloat time,cxArray list)
+void cxAnimateSetGroupName(cxAny pav,cxConstChars name)
+{
+    cxAnimate this = pav;
+    cxActionReset(this);
+    cxString str = cxStringConstChars(name);
+    CX_RETAIN_SWAP(this->groupName, str);
+}
+
+cxAnimate cxAnimateCreate(cxFloat time,cxConstChars name)
 {
     cxAnimate this = CX_CREATE(cxAnimate);
-    CX_RETAIN_SWAP(this->list, list);
     this->time = time;
+    if(name == NULL){
+        name = CX_ANIMATE_DEFAULT_GROUP;
+    }
+    cxAnimateSetGroupName(this, name);
     return this;
 }
 

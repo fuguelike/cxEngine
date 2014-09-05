@@ -32,11 +32,7 @@ void MapAppendNode(Map this,cxAny node)
     snode->element = cxListAppend(this->nodes, snode);
 }
 
-CX_OBJECT_TYPE(Map, cxAtlas)
-{
-    
-}
-CX_OBJECT_INIT(Map, cxAtlas)
+cxBool MapInit(Map this,cxJson data)
 {
     //set size
     cxEngine engine = cxEngineInstance();
@@ -91,6 +87,16 @@ CX_OBJECT_INIT(Map, cxAtlas)
     
     //按Y位置排序
     MapSortNode(this);
+    return true;
+}
+
+CX_OBJECT_TYPE(Map, cxAtlas)
+{
+    
+}
+CX_OBJECT_INIT(Map, cxAtlas)
+{
+    this->mode = MapModeNormal;
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {

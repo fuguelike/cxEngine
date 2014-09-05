@@ -214,7 +214,7 @@ CX_OBJECT_FREE(cxView, cxObject)
 }
 CX_OBJECT_TERM(cxView, cxObject)
 
-cxActionMgr cxViewActionMgr(cxAny pview)
+cxActionMgr cxViewActionFind(cxAny pview)
 {
     cxView pv = pview;
     if(pv != NULL && pv->actionMgr != NULL){
@@ -994,7 +994,8 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
     if(ptr != NULL){
         cxActionStop(ptr);
     }
-    cxActionMgr mgr = cxViewActionMgr(pview);
+    //set not null actionmgr
+    cxActionMgr mgr = cxViewActionFind(pview);
     cxActionSetMgr(action, mgr);
     cxHashSet(this->actions, key, action);
     return actionId;
