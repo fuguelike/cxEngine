@@ -7,7 +7,6 @@
 //
 
 #include <streams/cxAssetsStream.h>
-#include <engine/cxJson.h>
 #include "cxTextureJSON.h"
 #include "cxTextureFactory.h"
 

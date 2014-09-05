@@ -6,10 +6,13 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxEngine.h"
+#include "cxNumber.h"
 #include "cxJson.h"
+#include "cxHash.h"
 
 static json_t *global = NULL;
+
+cxJsonReaderFunc cxJsonReader = NULL;
 
 //if field is array
 static cxBool keyIsArray(cxString key,cxChars skey,cxInt *index)

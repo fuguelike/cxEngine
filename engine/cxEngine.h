@@ -15,14 +15,12 @@
 #include "cxUtil.h"
 #include "cxBMPFont.h"
 #include "cxUrlPath.h"
-#include "cxViewLoader.h"
 
 CX_C_BEGIN
 
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
 CX_OBJECT_DEF(cxEngine, cxObject)
-    cxStack stack;
     cxHash files;
     cxFloat interval;
     cxSize2f winsize;   //screen size
@@ -63,27 +61,15 @@ CX_EXTERN void cxEngineMain(cxEngine engine);
 //engine free
 CX_EXTERN void cxEngineFree(cxEngine engine);
 
-void cxEnginePush(cxAny object);
-
-void cxEnginePop();
-
-cxAny cxEngineTop();
-
-void cxTypeRunObjectSetter(cxObject object,cxJson json);
-
-cxAny cxEngineTypeCreate(cxJson json);
-
-cxAny cxObjectLoadWithFile(cxConstChars file);
-
-cxAny cxObjectLoadWithJson(cxJson json);
-
 cxEngine cxEngineInstance();
+
+cxJson cxEngineJsonReader(cxConstChars src);
+
+cxJson cxEngineLoadJson(cxConstChars file);
 
 void cxEngineSetDesignSize(cxSize2f dessize);
 
 void cxEngineTimeReset();
-
-cxJson cxEngineLoadJson(cxConstChars file);
 
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 

@@ -457,6 +457,12 @@ cxAny cxObjectType(cxAny object);
 
 cxAny cxObjectProperty(cxAny object,cxConstChars key);
 
+void cxCorePush(cxAny object);
+
+void cxCorePop();
+
+cxAny cxCoreTop();
+
 void cxCoreInit();
 
 void cxCoreFree();

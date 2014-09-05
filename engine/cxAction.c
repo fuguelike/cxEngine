@@ -60,7 +60,6 @@ CX_OBJECT_INIT(cxAction, cxObject)
 }
 CX_OBJECT_FREE(cxAction, cxObject)
 {
-    CX_RELEASE(this->actionMgr);
     CX_EVENT_RELEASE(this->onIndex);
     CX_EVENT_RELEASE(this->onStart);
     CX_EVENT_RELEASE(this->onStop);
@@ -71,7 +70,7 @@ CX_OBJECT_TERM(cxAction, cxObject)
 void cxActionSetMgr(cxAny pav,cxAny mgr)
 {
     cxAction this = pav;
-    CX_RETAIN_SWAP(this->actionMgr, mgr);
+    this->actionMgr = mgr;
 }
 
 cxBool cxActionForever(cxAny pav)
@@ -81,6 +80,7 @@ cxBool cxActionForever(cxAny pav)
 
 void cxActionSetIndex(cxAny pav,cxInt indexNum)
 {
+    CX_ASSERT(indexNum > 1, "indexNum small");
     cxAction this = pav;
     CX_RETURN(this->indexNum == indexNum);
     this->indexNum = indexNum;

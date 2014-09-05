@@ -7,7 +7,6 @@
 //
 
 #include <textures/cxTextureFactory.h>
-#include "cxJson.h"
 #include "cxBMPFont.h"
 
 CX_OBJECT_TYPE(cxBMPElement, cxObject)

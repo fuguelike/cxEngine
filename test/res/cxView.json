@@ -4,7 +4,13 @@
     "w": 800,
     "h": 800
   },
-  "position":{"y":-300},
+  "actionmgr": {
+    "type": "cxActionMgr",
+    "scale": 10.0
+  },
+  "position": {
+    "y": -300
+  },
   "subviews": [
     {
       "type": "cxView",
@@ -17,6 +23,16 @@
         "b": 0.0,
         "g": 1.0
       },
+      "actions": [
+        {
+          "type": "cxMove",
+          "to": {
+            "x": 400,
+            "y": 400
+          },
+          "time": 4
+        }
+      ],
       "scale": {
         "x": 1.2,
         "y": 1.2

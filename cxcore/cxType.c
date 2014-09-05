@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxBase.h"
 #include "cxType.h"
 
 static cxHash types;
@@ -24,6 +25,7 @@ void cxTypesInit()
     CX_TYPE_DEF(cxNumber);
     CX_TYPE_DEF(cxString);
     CX_TYPE_DEF(cxMessage);
+    CX_TYPE_DEF(cxLoader);
 }
 
 void cxTypesFree()
@@ -86,6 +88,33 @@ cxBool cxInstanceOf(cxAny object,cxConstType type)
     return false;
 }
 
+void cxTypeRunObjectSetter(cxObject object,cxJson json)
+{
+    CX_ASSERT(object != NULL, "object args error");
+    CX_JSON_OBJECT_EACH_BEG(json, item)
+    cxObjectSetter(object, key, item);
+    CX_JSON_OBJECT_EACH_END(json, item)
+}
+
+void cxObjectCreateEnd(cxObjectCreateResult *ret)
+{
+    CX_ASSERT(ret != NULL, "ret null");
+    cxConstChars id = NULL;
+    cxObject object = ret->object;
+    if(ret->njson != NULL){
+        id = cxJsonConstChars(ret->njson, "id");
+        cxTypeRunObjectSetter(object, ret->njson);
+    }
+    if(ret->njson != ret->ojson){
+        id = cxJsonConstChars(ret->ojson, "id");
+        cxTypeRunObjectSetter(object, ret->ojson);
+    }
+    cxLoader curr = cxCoreTop();
+    if(id != NULL && CX_INSTANCE_OF(curr, cxLoader)){
+        cxHashSet(curr->objects, cxHashStrKey(id), object);
+    }
+}
+
 cxAny cxObjectCreateWithType(cxConstType type)
 {
     CX_ASSERT(type != NULL, "type null");
@@ -94,6 +123,30 @@ cxAny cxObjectCreateWithType(cxConstType type)
     cxObject object = ptype->Create();
     CX_ASSERT(object != NULL, "type(%s) create object failed",type);
     return object;
+}
+
+cxObjectCreateResult cxObjectCreateBegin(cxJson json)
+{
+    CX_ASSERT(json != NULL, "json args error");
+    cxObjectCreateResult ret = {NULL};
+    ret.ojson = json;
+    cxConstChars src = NULL;
+    if(cxJsonIsString(json)){
+        src = cxJsonToConstChars(json);
+    }else if(cxJsonIsObject(json)){
+        src = cxJsonConstChars(json, "src");
+    }
+    //from src get json
+    if(src != NULL){
+        CX_ASSERT(cxJsonReader !=NULL, "please set cxJsonReader");
+        ret.njson = cxJsonReader(src);
+    }
+    //create object
+    cxConstChars type = cxJsonConstChars(json, "type");
+    CX_ASSERT(type != NULL, "json type property null");
+    ret.object = cxObjectCreateWithType(type);
+    CX_ASSERT(ret.object != NULL,"create object %s failed", type);
+    return ret;
 }
 
 void __cxTypeRegisterName(cxConstType type,cxConstType super)

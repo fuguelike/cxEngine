@@ -9,8 +9,8 @@
 #ifndef cxCore_cxInitType_h
 #define cxCore_cxInitType_h
 
-#include "cxBase.h"
 #include "cxHash.h"
+#include "cxJson.h"
 #include "cxProperty.h"
 
 CX_C_BEGIN
@@ -23,7 +23,14 @@ CX_OBJECT_DEF(cxType, cxObject)
     cxHash properties;
 CX_OBJECT_END(cxType, cxObject)
 
-cxAny cxObjectCreateWithType(cxConstType type);
+typedef struct
+{
+    cxAny object;
+    cxJson ojson;
+    cxJson njson;
+}cxObjectCreateResult;
+
+typedef cxJson (*cxObjectCreateReaderFunc)(cxConstChars src);
 
 cxType cxTypesGet(cxConstType type);
 
@@ -36,6 +43,14 @@ void cxTypeSetSuper(cxType type,cxType super);
 cxBool cxInstanceOf(cxAny object,cxConstType type);
 
 void cxTypesSet(cxConstType typeName,cxType type);
+
+void cxTypeRunObjectSetter(cxObject object,cxJson json);
+//
+cxAny cxObjectCreateWithType(cxConstType type);
+//
+void cxObjectCreateEnd(cxObjectCreateResult *ret);
+//use end set object property
+cxObjectCreateResult cxObjectCreateBegin(cxJson json);
 
 void cxTypesInit();
 

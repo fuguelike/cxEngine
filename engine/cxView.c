@@ -115,9 +115,10 @@ CX_SETTER_DEF(cxView, subviews)
     cxJson subviews = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(subviews, item)
     {
-        cxAny subview = cxObjectLoadWithJson(item);
-        CX_ASSERT(CX_INSTANCE_OF(subview, cxView), "subview must is cxView type");
-        cxViewAppend(this, subview);
+        cxObjectCreateResult ret = cxObjectCreateBegin(item);
+        CX_ASSERT(CX_INSTANCE_OF(ret.object, cxView), "subview must is cxView type");
+        cxViewAppend(this, ret.object);
+        cxObjectCreateEnd(&ret);
     }
     CX_JSON_ARRAY_EACH_END(subviews, item)
 }
@@ -126,9 +127,10 @@ CX_SETTER_DEF(cxView, actions)
     cxJson actions = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(actions, item)
     {
-        cxAny action = cxObjectLoadWithJson(item);
-        CX_ASSERT(CX_INSTANCE_OF(action, cxAction), "actions must is cxAction type");
-        cxViewAppendAction(this, action);
+        cxObjectCreateResult ret = cxObjectCreateBegin(item);
+        CX_ASSERT(CX_INSTANCE_OF(ret.object, cxAction), "actions must is cxAction type");
+        cxViewAppendAction(this, ret.object);
+        cxObjectCreateEnd(&ret);
     }
     CX_JSON_ARRAY_EACH_END(actions, item)
 }
@@ -139,6 +141,13 @@ CX_SETTER_DEF(cxView, tag)
 CX_SETTER_DEF(cxView, bordercolor)
 {
     this->borderColor = cxJsonToColor3f(value, this->borderColor);
+}
+CX_SETTER_DEF(cxView, actionmgr)
+{
+    cxObjectCreateResult ret = cxObjectCreateBegin(value);
+    CX_ASSERT(CX_INSTANCE_OF(ret.object, cxActionMgr), "actionmgr must is cxActionMgr type");
+    cxViewSetActionMgr(this, ret.object);
+    cxObjectCreateEnd(&ret);
 }
 
 CX_OBJECT_TYPE(cxView, cxObject)
@@ -161,6 +170,7 @@ CX_OBJECT_TYPE(cxView, cxObject)
     CX_PROPERTY_SETTER(cxView, actions);
     CX_PROPERTY_SETTER(cxView, tag);
     CX_PROPERTY_SETTER(cxView, bordercolor);
+    CX_PROPERTY_SETTER(cxView, actionmgr);
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {
@@ -191,15 +201,37 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_RELEASE(this->actions);
     CX_RELEASE(this->bindes);
     CX_RELEASE(this->binded);
+    CX_RELEASE(this->actionMgr);
+    //
     CX_EVENT_RELEASE(this->onDirty);
     CX_EVENT_RELEASE(this->onEnter);
     CX_EVENT_RELEASE(this->onExit);
     CX_EVENT_RELEASE(this->onUpdate);
     CX_EVENT_RELEASE(this->onResize);
     CX_EVENT_RELEASE(this->onLayout);
+    //
     CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
+
+cxActionMgr cxViewActionMgr(cxAny pview)
+{
+    cxView pv = pview;
+    if(pv != NULL && pv->actionMgr != NULL){
+        return pv->actionMgr;
+    }
+    while (pv != NULL && pv->actionMgr == NULL) {
+        pv = pv->parentView;
+    }
+    return pv != NULL ? pv->actionMgr : NULL;
+}
+
+void cxViewSetActionMgr(cxAny pview,cxActionMgr mgr)
+{
+    CX_ASSERT(pview != NULL && mgr != NULL, "args null");
+    cxView this = pview;
+    CX_RETAIN_SWAP(this->actionMgr, mgr);
+}
 
 //each bindes view
 void cxViewForeachBindes(cxAny pview,cxViewBindForeachFunc func)
@@ -962,6 +994,8 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
     if(ptr != NULL){
         cxActionStop(ptr);
     }
+    cxActionMgr mgr = cxViewActionMgr(pview);
+    cxActionSetMgr(action, mgr);
     cxHashSet(this->actions, key, action);
     return actionId;
 }

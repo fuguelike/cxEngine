@@ -10,7 +10,8 @@
 #define cxCore_cxString_h
 
 #include <utstring.h>
-#include "cxBase.h"
+#include "cxCore.h"
+#include "cxArray.h"
 
 CX_C_BEGIN
 

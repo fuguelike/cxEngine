@@ -15,13 +15,8 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxActionMgr, cxObject)
     cxFloat scale;
+    cxHash actions;
 CX_OBJECT_END(cxActionMgr, cxObject)
-
-cxActionMgr cxActionMgrCreate();
-
-void cxActionMgrAppend(cxActionMgr this,cxAny pav, cxAny pview);
-
-cxAny cxActionMgrTimer(cxActionMgr this,cxAny pview,cxFloat freq,cxInt repeat);
 
 CX_C_END
 

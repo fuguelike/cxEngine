@@ -24,7 +24,10 @@ LOCAL_SRC_FILES += \
 	cxcore/cxStack.c \
 	cxcore/cxType.c \
 	cxcore/cxMemory.c \
-    cxcore/cxAnyArray.c
+    cxcore/cxAnyArray.c \
+    cxcore/cxJson.c \
+    cxcore/cxMath.c \
+    cxcore/cxLoader.c
 
 LOCAL_SRC_FILES += \
     kazmath/aabb.c \
@@ -105,12 +108,9 @@ LOCAL_SRC_FILES += \
 LOCAL_SRC_FILES += \
     engine/cxAction.c \
 	engine/cxBMPFont.c \
-	engine/cxViewLoader.c \
 	engine/cxEngine.c \
 	engine/cxGlobal.c \
 	engine/cxIconv.c \
-	engine/cxJson.c \
-	engine/cxMath.c \
 	engine/cxOpenGL.c \
 	engine/cxRegex.c \
 	engine/cxShader.c \
@@ -119,7 +119,8 @@ LOCAL_SRC_FILES += \
 	engine/cxUrlPath.c \
 	engine/cxUtil.c \
 	engine/cxView.c \
-	engine/cxInput.c
+	engine/cxInput.c \
+	engine/cxActionMgr.c
     
 LOCAL_SRC_FILES += \
     algorithm/cxTile.c \

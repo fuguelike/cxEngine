@@ -10,7 +10,8 @@
 #define cxEngine_cxJson_h
 
 #include <jansson/jansson.h>
-#include <cxcore/cxBase.h>
+#include "cxCore.h"
+#include "cxString.h"
 #include "cxMath.h"
 
 CX_C_BEGIN
@@ -44,6 +45,11 @@ if((_j_) != NULL){                                              \
         CX_RELEASE(_v_);                                        \
     }                                                           \
 }
+
+typedef cxJson (*cxJsonReaderFunc)(cxConstChars src);
+
+//must set json reader callback
+extern cxJsonReaderFunc cxJsonReader;
 
 cxString cxJsonEnvString(cxConstChars key);
 

@@ -6,12 +6,13 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#ifndef cxEngine_cxBase_h
-#define cxEngine_cxBase_h
+#ifndef cxEngine_cxMath_h
+#define cxEngine_cxMath_h
 
-#include <cxcore/cxBase.h>
 #include <kazmath/kazmath.h>
 #include <kazmath/GL/matrix.h>
+#include "cxCore.h"
+#include "cxAnyArray.h"
 
 CX_C_BEGIN
 
@@ -61,6 +62,7 @@ typedef struct {
 typedef kmMat4 cxMatrix4f;
 
 typedef kmVec2 cxVec2f;
+#define cxVec2fx(x)             (cxVec2f){x,x}
 #define cxVec2fv(x,y)           (cxVec2f){x,y}
 #define cxVec2fEqu(p1,p2)       (cxFloatEqu((p1).x,(p2).x) && cxFloatEqu((p1).y,(p2).y))
 #define cxVec2fAngle(a)         atan2f((a).y, (a).x)

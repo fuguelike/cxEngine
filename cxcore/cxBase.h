@@ -22,5 +22,8 @@
 #include "cxMessage.h"
 #include "cxMemory.h"
 #include "cxNumber.h"
+#include "cxMath.h"
+#include "cxJson.h"
+#include "cxLoader.h"
 
 #endif

@@ -12,7 +12,7 @@
 #include <libgen.h>
 #include <cxcore/cxBase.h>
 #include "cxInput.h"
-#include "cxJson.h"
+#include "cxActionMgr.h"
 
 CX_C_BEGIN
 
@@ -43,6 +43,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool supportAtlasSet;
     cxViewAutoResizeMask autoMask;
     cxBox4f  autoBox;
+    cxActionMgr actionMgr;
     cxHash actions;
     cxArray removes;
     cxInt zorder;
@@ -85,6 +86,10 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
 CX_OBJECT_END(cxView, cxObject)
+
+cxActionMgr cxViewActionMgr(cxAny pview);
+
+void cxViewSetActionMgr(cxAny pview,cxActionMgr mgr);
 
 void cxViewForeachBindes(cxAny pview,cxViewBindForeachFunc func);
 
@@ -199,7 +204,7 @@ void cxViewSetPos(cxAny pview,cxVec2f pos);
 
 // -0.5 <-> +0.5
 // -width/2 <-> width/2
-//return fix pos
+//return fix pos,for keep view state
 cxVec2f cxViewSetAnchor(cxAny pview,cxVec2f anchor);
 
 void cxViewSetScale(cxAny pview,cxVec2f scale);

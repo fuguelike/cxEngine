@@ -219,14 +219,36 @@ void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny 
     CX_RELEASE(type);
 }
 
+cxStack gstack = NULL;
+
+void cxCorePush(cxAny object)
+{
+    CX_ASSERT(gstack != NULL, "global stack null");
+    cxStackPush(gstack, object);
+}
+
+cxAny cxCoreTop()
+{
+    CX_ASSERT(gstack != NULL, "global stack null");
+    return cxStackTop(gstack);
+}
+
+void cxCorePop()
+{
+    CX_ASSERT(gstack != NULL, "global stack null");
+    cxStackPop(gstack);
+}
+
 void cxCoreInit()
 {
     cxAllocatorInit();
     cxTypesInit();
+    gstack = CX_ALLOC(cxStack);
 }
 
 void cxCoreFree()
 {
+    CX_RELEASE(gstack);
     cxTypesFree();
     cxAllocatorFree();
 }

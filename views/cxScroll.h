@@ -23,12 +23,14 @@ CX_OBJECT_DEF(cxScroll, cxView)
     //move data
     cxFloat speed;
     cxFloat limit;
-    cxFloat time;
+    cxFloat moveTime;
     cxBool isEnable;
     cxBox4f box;
     cxScrollMoveType type;
     cxAny body;
     //scale data
+    cxFloat scaleTime;
+    cxFloat scaleinc;       //increase scale
     cxBool scalable;         //suppot body scale
     cxFloat scaling;
     cxRange2f range;

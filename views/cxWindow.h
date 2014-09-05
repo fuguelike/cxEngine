@@ -10,7 +10,6 @@
 #define cxEngine_cxWindow_h
 
 #include <engine/cxView.h>
-#include <engine/cxViewLoader.h>
 #include <engine/cxAction.h>
 
 CX_C_BEGIN

@@ -7,8 +7,8 @@
 //
 
 #include "cxEngine.h"
-#include "cxMath.h"
 #include "cxIconv.h"
+#include "cxActionMgr.h"
 
 #include <textures/cxTextureFactory.h>
 #include <textures/cxTextureJPG.h>
@@ -98,12 +98,12 @@ static void cxEngineTypes()
     CX_TYPE_DEF(cxTexture);
     CX_TYPE_DEF(cxView);
     CX_TYPE_DEF(cxAction);
-    CX_TYPE_DEF(cxViewLoader);
     CX_TYPE_DEF(cxEngine);
     CX_TYPE_DEF(cxJson);
     CX_TYPE_DEF(cxPlayer);
     CX_TYPE_DEF(cxTouchItem);
     CX_TYPE_DEF(cxAStar);
+    CX_TYPE_DEF(cxActionMgr);
     
     //register streams
     CX_TYPE_DEF(cxAssetsStream);
@@ -164,6 +164,9 @@ void cxEngineBegin()
     //open player
     cxPlayerOpen();
     //init engine
+    //set cxjsonReader
+    cxJsonReader = cxEngineJsonReader;
+    //
     cxEngineInit(engine);
 }
 
@@ -279,24 +282,6 @@ cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)
     return cxViewAppendTimer(instance->window, freq, repeat);
 }
 
-void cxEnginePush(cxAny object)
-{
-    CX_ASSERT(object != NULL && instance != NULL, "args error");
-    cxStackPush(instance->stack, object);
-}
-
-void cxEnginePop()
-{
-    CX_ASSERT(instance != NULL, "cxEngine instance null");
-    cxStackPop(instance->stack);
-}
-
-cxAny cxEngineTop()
-{
-    CX_ASSERT(instance != NULL, "cxEngine instance null");
-    return cxStackTop(instance->stack);
-}
-
 CX_OBJECT_TYPE(cxEngine, cxObject)
 {}
 CX_OBJECT_INIT(cxEngine, cxObject)
@@ -308,13 +293,11 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->scale    = cxVec2fv(1.0f, 1.0f);
     this->window   = CX_ALLOC(cxWindow);
     this->files    = CX_ALLOC(cxHash);
-    this->stack    = CX_ALLOC(cxStack);
     this->items    = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
     CX_RELEASE(this->items);
-    CX_RELEASE(this->stack);
     CX_RELEASE(this->files);
     CX_RELEASE(this->lang);
     CX_RELEASE(this->window);
@@ -333,65 +316,17 @@ CX_OBJECT_FREE(cxEngine, cxObject)
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
 
-void cxTypeRunObjectSetter(cxObject object,cxJson json)
+//cxTypeRunObjectSetter(object, json);
+cxJson cxEngineJsonReader(cxConstChars src)
 {
-    CX_ASSERT(object != NULL, "object args error");
-    CX_JSON_OBJECT_EACH_BEG(json, item)
-    cxObjectSetter(object, key, item);
-    CX_JSON_OBJECT_EACH_END(json, item)
-}
-
-cxAny cxEngineTypeCreate(cxJson json)
-{
-    CX_ASSERT(json != NULL, "json error");
-    cxConstChars type = cxJsonConstChars(json, "type");
-    CX_ASSERT(type != NULL, "type field null");
-    cxObject object = cxObjectCreateWithType(type);
-    CX_ASSERT(object != NULL, "type(%s) create object failed",type);
-    cxTypeRunObjectSetter(object, json);
-    return object;
-}
-
-//parse type id subview property
-cxAny cxObjectLoadWithJson(cxJson json)
-{
-    CX_ASSERT(json != NULL, "json args error");
-    cxConstChars src = NULL;
-    cxObject object = NULL;
-    if(cxJsonIsString(json)){
-        src = cxJsonToConstChars(json);
-    }else if(cxJsonIsObject(json)){
-        src = cxJsonConstChars(json, "src");
-    }
-    if(src != NULL){
-        object = cxObjectLoadWithFile(src);
-        cxTypeRunObjectSetter(object, json);
-    }else {
-        object = cxEngineTypeCreate(json);
-    }
-    if(object == NULL){
-        CX_ERROR("create object failed");
-        return NULL;
-    }
-    cxConstChars id = cxJsonConstChars(json, "id");
-    cxViewLoader curr = cxEngineTop();
-    if(id != NULL && curr != NULL){
-        cxHashSet(curr->objects, cxHashStrKey(id), object);
-    }
-    return object;
-}
-
-cxAny cxObjectLoadWithFile(cxConstChars file)
-{
-    cxUrlPath path = cxUrlPathParse(file);
+    cxUrlPath path = cxUrlPathParse(src);
     cxJson json = cxEngineLoadJson(path->path);
     CX_RETURN(json == NULL, NULL);
     //get file.json?key
     if(path->count == 2){
         json = cxJsonObject(json, path->key);
     }
-    CX_RETURN(json == NULL, NULL);
-    return cxObjectLoadWithJson(json);
+    return json;
 }
 
 cxJson cxEngineLoadJson(cxConstChars file)

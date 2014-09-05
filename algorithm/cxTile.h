@@ -9,7 +9,7 @@
 #ifndef cxCore_cxTile_h
 #define cxCore_cxTile_h
 
-#include <engine/cxMath.h>
+#include <cxcore/cxBase.h>
 
 CX_C_BEGIN
 

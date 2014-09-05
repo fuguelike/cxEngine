@@ -11,7 +11,6 @@
 
 #include <cxcore/cxBase.h>
 #include "cxPlayer.h"
-#include "cxMath.h"
 
 CX_C_BEGIN
 

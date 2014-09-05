@@ -9,9 +9,14 @@
 #include "cxAction.h"
 #include "cxActionMgr.h"
 
+CX_SETTER_DEF(cxActionMgr, scale)
+{
+    this->scale = cxJsonToDouble(value, this->scale);
+}
+
 CX_OBJECT_TYPE(cxActionMgr, cxObject)
 {
-    
+    CX_PROPERTY_SETTER(cxActionMgr, scale);
 }
 CX_OBJECT_INIT(cxActionMgr, cxObject)
 {
@@ -19,28 +24,9 @@ CX_OBJECT_INIT(cxActionMgr, cxObject)
 }
 CX_OBJECT_FREE(cxActionMgr, cxObject)
 {
-
+    
 }
 CX_OBJECT_TERM(cxActionMgr, cxObject)
 
-cxActionMgr cxActionMgrCreate()
-{
-    cxActionMgr this = CX_CREATE(cxActionMgr);
-    return this;
-}
 
-cxAny cxActionMgrTimer(cxActionMgr this,cxAny pview,cxFloat freq,cxInt repeat)
-{
-    CX_ASSERT(this != NULL && pview != NULL, "args empty");
-    cxAny timer = cxViewAppendTimer(pview, freq, repeat);
-    cxActionSetMgr(timer, this);
-    return timer;
-}
-
-void cxActionMgrAppend(cxActionMgr this,cxAny pav, cxAny pview)
-{
-    CX_ASSERT(this != NULL && pav != NULL && pview != NULL, "args empty");
-    cxActionSetMgr(pav, this);
-    cxViewAppendAction(pview, pav);
-}
 

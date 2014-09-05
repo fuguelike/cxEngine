@@ -10,7 +10,7 @@
 #define cxCore_cxAnyArray_h
 
 #include <utarray.h>
-#include "cxBase.h"
+#include "cxCore.h"
 
 CX_C_BEGIN
 

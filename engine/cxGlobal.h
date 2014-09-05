@@ -10,7 +10,7 @@
 #define cxEngine_cxGlobal_h
 
 #include <cxcore/cxBase.h>
-#include "cxJson.h"
+
 CX_C_BEGIN
 
 void cxGlobalInit();

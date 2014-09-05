@@ -10,7 +10,6 @@
 #define cxEngine_cxOpenGL_h
 
 #include <cxcore/cxBase.h>
-#include "cxMath.h"
 
 #if (CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID)
     #include <GLES2/gl2.h>

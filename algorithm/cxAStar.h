@@ -31,7 +31,6 @@
 #define AStar_h
 
 #include <cxcore/cxBase.h>
-#include <engine/cxMath.h>
 
 CX_C_BEGIN
 
