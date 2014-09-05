@@ -45,7 +45,7 @@ void cxArrayFastRemoveAtIndex(cxArray array,cxInt index)
 void cxArrayUpdate(cxArray array,cxAny nAny,cxInt index)
 {
     CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
-    cxPointer *ele = (cxPointer *)utarray_eltptr(array->utArray, index);
+    cxAny *ele = (cxAny *)utarray_eltptr(array->utArray, index);
     if(ele == NULL){
         return;
     }
@@ -117,19 +117,19 @@ void cxArrayRemoveAtIndex(cxArray array,cxInt index)
 cxAny cxArrayAtIndex(cxArray array,cxInt index)
 {
     CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
-    cxPointer *e = (cxPointer *)utarray_eltptr(array->utArray, index);
+    cxAny *e = (cxAny *)utarray_eltptr(array->utArray, index);
     return cxArrayObject(e);
 }
 
 cxAny cxArrayFirst(cxArray array)
 {
-    cxPointer *e = (cxPointer *)utarray_front(array->utArray);
+    cxAny *e = (cxAny *)utarray_front(array->utArray);
     return e != NULL ? cxArrayObject(e): NULL;
 }
 
 cxAny cxArrayLast(cxArray array)
 {
-    cxPointer *e = (cxPointer *)utarray_back(array->utArray);
+    cxAny *e = (cxAny *)utarray_back(array->utArray);
     return e != NULL ? cxArrayObject(e): NULL;
 }
 

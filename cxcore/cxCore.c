@@ -45,22 +45,22 @@ cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x)
 }
 #endif
 
-static cxPointer cxMalloc(cxSize size)
+static cxAny cxMalloc(cxInt size)
 {
     return calloc(1,size);
 }
 
-static cxPointer cxRealloc(cxPointer ptr,cxSize size)
+static cxAny cxRealloc(cxAny ptr,cxInt size)
 {
     return realloc(ptr, size);
 }
 
-static cxPointer cxCalloc(cxSize num,cxSize size)
+static cxAny cxCalloc(cxInt num,cxInt size)
 {
     return calloc(num, size);
 }
 
-static void cxFree(cxPointer ptr)
+static void cxFree(cxAny ptr)
 {
     free(ptr);
 }

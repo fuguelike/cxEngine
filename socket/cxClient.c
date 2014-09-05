@@ -93,10 +93,10 @@ cxInt cxClientWriteString(cxClient this,cxString data)
     if(!cxStringOK(data)){
         return 0;
     }
-    return cxClientWriteBytes(this, (cxPointer)cxStringBody(data), cxStringLength(data));
+    return cxClientWriteBytes(this, (cxAny)cxStringBody(data), cxStringLength(data));
 }
 
-cxInt cxClientWriteBytes(cxClient this,cxPointer buffer,cxInt size)
+cxInt cxClientWriteBytes(cxClient this,cxAny buffer,cxInt size)
 {
     struct evbuffer *output = bufferevent_get_output(this->bufevent);
     return evbuffer_add(output, buffer, size);

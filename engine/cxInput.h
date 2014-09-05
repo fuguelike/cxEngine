@@ -42,12 +42,12 @@ typedef struct {
 }cxTouchPoint;
 
 CX_OBJECT_DEF(cxTouchItem, cxObject)
-    cxLong key;
+    cxLong  key;
     cxVec2f previous;
     cxVec2f delta;      //window delta,when cxTouchTypeMove
     cxVec2f speed;      //move speed unit:pixel/s
     cxDouble prevTime;
-    cxVec2f current;
+    cxVec2f position;
     cxTouchType type;
     cxTouchDirection direction;
 CX_OBJECT_END(cxTouchItem, cxObject)

@@ -14,7 +14,7 @@
 
 CX_C_BEGIN
 
-//cxPointer element
+//cxAny element
 
 typedef cxInt (*cxArrayCmpFunc)(cxConstAny lv,cxConstAny rv);
 
@@ -23,12 +23,12 @@ CX_OBJECT_DEF(cxArray, cxObject)
 CX_OBJECT_END(cxArray, cxObject)
 
 #define CX_ARRAY_FOREACH(_a_,_e_)                                               \
-cxPointer *_e_ = NULL;                                                          \
-if((_a_)!=NULL)while((_e_=(cxPointer)utarray_next((_a_)->utArray, _e_))!=NULL)
+cxAny *_e_ = NULL;                                                              \
+if((_a_)!=NULL)while((_e_=(cxAny)utarray_next((_a_)->utArray, _e_))!=NULL)
 
 #define CX_ARRAY_REVERSE(_a_,_e_)                                               \
-cxPointer *_e_ = NULL;                                                          \
-if((_a_)!=NULL)while((_e_=(cxPointer)utarray_prev((_a_)->utArray, _e_))!=NULL)
+cxAny *_e_ = NULL;                                                              \
+if((_a_)!=NULL)while((_e_=(cxAny)utarray_prev((_a_)->utArray, _e_))!=NULL)
 
 #define cxArrayLength(_a_) (((_a_) == NULL) ? 0 : utarray_len((_a_)->utArray))
 

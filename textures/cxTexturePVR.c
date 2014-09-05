@@ -86,7 +86,7 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
     cxUInt widthBlocks = 0;
     cxUInt heightBlocks = 0;
     cxInt i = 0;
-    cxPointer buffer = NULL;
+    cxAny buffer = NULL;
     cxInt bufBytes = 0;
     while (dataOff< dataLen){
         if (pvr->format == cxFormatPVR4BPP){

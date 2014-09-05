@@ -99,7 +99,7 @@ cxString cxStringCreate(cxConstChars format,...);
 
 void cxStringAppend(cxString string,cxConstChars d,cxInt l);
 
-cxString cxStringBinary(cxPointer d,cxInt l);
+cxString cxStringBinary(cxAny d,cxInt l);
 
 CX_C_END
 

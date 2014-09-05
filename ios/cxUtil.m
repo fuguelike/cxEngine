@@ -135,7 +135,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat s
     CGContextRelease(context);
     [attrs release];
     //last 8bytes save widht and height
-    cxPointer psize = buffer + bufsiz - sizeof(cxSize2i);
+    cxAny psize = buffer + bufsiz - sizeof(cxSize2i);
     ((cxSize2i *)psize)->w = dim.width;
     ((cxSize2i *)psize)->h = dim.height;
     return cxStringAttach(buffer, bufsiz);
@@ -173,7 +173,7 @@ cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
     UInt64 fileDataSize = 0;
     UInt32 thePropertySize = sizeof(UInt64);
     AudioFileID afid = NULL;
-    cxPointer theData = NULL;
+    cxAny theData = NULL;
     if(AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, &afid)){
         CX_ERROR("open url %s error",file);
         goto completed;

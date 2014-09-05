@@ -27,7 +27,7 @@ static cxBool cxTexturePNGLoad(cxAny this,cxStream stream)
     image.format = PNG_FORMAT_RGBA;
     png->cxTexture.size = cxSize2fv(image.width, image.height);
     png->cxTexture.hasAlpha = true;
-    cxPointer buffer = allocator->malloc(PNG_IMAGE_SIZE(image));
+    cxAny buffer = allocator->malloc(PNG_IMAGE_SIZE(image));
     if(png_image_finish_read(&image, NULL, buffer, 0, NULL)){
         cxOpenGLGenTextures(1, &png->cxTexture.textureId);
         cxOpenGLBindTexture(png->cxTexture.textureId);

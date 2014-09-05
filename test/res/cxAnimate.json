@@ -2,7 +2,7 @@
   "type": "cxAnimate",
   "time": 0,
   "forever": true,
-  "name": "run",
+  "key": "run",
   "frames": [
     {
       "type": "cxAnimateItem",

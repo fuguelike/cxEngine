@@ -22,8 +22,8 @@ CX_OBJECT_DEF(cxStream, cxObject)
     cxBool canSeek;
     cxBool isOpen;
     CX_METHOD_DEF(cxBool, Open, cxAny);
-    CX_METHOD_DEF(cxInt, Read, cxAny, cxPointer, cxInt);
-    CX_METHOD_DEF(cxInt, Write, cxAny, cxPointer, cxInt);
+    CX_METHOD_DEF(cxInt, Read, cxAny, cxAny, cxInt);
+    CX_METHOD_DEF(cxInt, Write, cxAny, cxAny, cxInt);
     CX_METHOD_DEF(cxInt, Seek, cxAny, cxOff, cxInt);
     CX_METHOD_DEF(cxOff, Position, cxAny);
     CX_METHOD_DEF(void, Close, cxAny);
@@ -36,9 +36,9 @@ cxString cxStreamFileDir(cxAny this);
 
 cxBool cxStreamOpen(cxAny this);
 
-cxInt cxStreamRead(cxAny this,cxPointer buffer,cxInt size);
+cxInt cxStreamRead(cxAny this,cxAny buffer,cxInt size);
 
-cxInt cxStreamWrite(cxAny this,cxPointer buffer,cxInt size);
+cxInt cxStreamWrite(cxAny this,cxAny buffer,cxInt size);
 
 cxInt cxStreamSeek(cxAny this,cxOff off,cxInt flags);
 

@@ -53,7 +53,7 @@ static cxBool cxTextureJPGLoad(cxAny this,cxStream stream)
         goto finished;
     }
     int row_stride = cinfo.output_width * cinfo.output_components;
-    cxPointer data = allocator->malloc(row_stride * cinfo.output_height);
+    cxAny data = allocator->malloc(row_stride * cinfo.output_height);
     JSAMPARRAY buffer = (*cinfo.mem->alloc_sarray)((j_common_ptr) &cinfo, JPOOL_IMAGE, row_stride, 1);
     int line = 0;
     while(cinfo.output_scanline < cinfo.output_height){

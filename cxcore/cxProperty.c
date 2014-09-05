@@ -30,7 +30,7 @@ cxBool cxObjectGetter(cxAny object,cxConstChars key,cxAny *value)
 {
     CX_ASSERT(key != NULL && object != NULL, "args error");
     cxProperty p = cxObjectProperty(object, key);
-    if(p != NULL && p->setter != NULL){
+    if(p != NULL && p->getter != NULL){
         *value = p->getter(object);
         return true;
     }

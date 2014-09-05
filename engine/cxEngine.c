@@ -495,7 +495,7 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
             continue;
         }
         if(item != NULL){
-            item->current = cpos;
+            item->position = cpos;
             item->type = type;
             item->key = p.id;
             this->fires.items[this->fires.number++] = item;

@@ -36,7 +36,7 @@ cxClient cxClientCreate(cxConstChars host,cxInt port);
 
 cxBool cxClientConnect(cxClient this);
 
-cxInt cxClientWriteBytes(cxClient this,cxPointer buffer,cxInt size);
+cxInt cxClientWriteBytes(cxClient this,cxAny buffer,cxInt size);
 
 cxInt cxClientWriteString(cxClient this,cxString data);
 

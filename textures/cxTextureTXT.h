@@ -20,7 +20,7 @@ CX_OBJECT_DEF(cxTextureTXT, cxTexture)
     cxTextAttr attr;
 CX_OBJECT_END(cxTextureTXT, cxTexture)
 
-void cxTextureTXTMakeTexture(cxTextureTXT texture,cxPointer buffer,cxInt width,cxInt height);
+void cxTextureTXTMakeTexture(cxTextureTXT texture,cxAny buffer,cxInt width,cxInt height);
 
 CX_C_END
 

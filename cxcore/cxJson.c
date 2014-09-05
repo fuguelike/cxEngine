@@ -114,7 +114,7 @@ cxString cxJsonDump(cxJson json)
 
 void cxJsonInit()
 {
-    json_set_alloc_funcs(allocator->malloc, allocator->free);
+    json_set_alloc_funcs((json_malloc_t)allocator->malloc, (json_free_t)allocator->free);
     global = json_object();
 }
 

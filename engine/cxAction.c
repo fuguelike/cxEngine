@@ -67,7 +67,7 @@ CX_OBJECT_FREE(cxAction, cxObject)
 }
 CX_OBJECT_TERM(cxAction, cxObject)
 
-void cxActionSetMgr(cxAny pav,cxAny mgr)
+void cxActionSetMgr(cxAny pav,cxAny *mgr)
 {
     cxAction this = pav;
     this->actionMgr = mgr;
@@ -146,8 +146,11 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     cxAction this = pav;
     cxBool isExit = false;
     //time scale
+    cxActionMgr mgr = NULL;
     if(this->actionMgr != NULL){
-        cxActionMgr mgr = this->actionMgr;
+        mgr = *(cxActionMgr *)this->actionMgr;
+    }
+    if(mgr != NULL){
         dt = dt * this->scale * mgr->scale;
     }else{
         dt = dt * this->scale;

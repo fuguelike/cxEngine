@@ -172,7 +172,7 @@ CX_OBJECT_INIT(cxAStar, cxObject)
     CX_METHOD_SET(this->Heuristic, cxAStarHeuristic);
     CX_METHOD_SET(this->Comparator, cxAStarComparator);
     this->points = cxAnyArrayAlloc(cxVec2i);
-    this->type = cxAStarTypeA8;
+    this->type = cxAStarTypeA4;
 }
 CX_OBJECT_FREE(cxAStar, cxObject)
 {
@@ -194,13 +194,10 @@ cxInt cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
 {
     cxAStar this = pobj;
     this->data = data;
+    cxAnyArrayClean(this->points);
     cxInt rv = 0;
     ASPath path = ASPathCreate(&cxAStarSource, pobj, &from, &to);
     rv = ASPathGetCount(path);
-    //save prev finded path
-    if(rv > 0){
-        cxAnyArrayClean(this->points);
-    }
     for(cxInt i=0; i < rv; i++){
         cxVec2i *p = ASPathGetNode(path, i);
         cxAnyArrayAppend(this->points, p);

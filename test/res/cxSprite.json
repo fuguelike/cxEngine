@@ -7,11 +7,5 @@
   "texture": {
     "uts": false,
     "url": "texture.json?carrot.png"
-  },
-  "actions": [
-    {
-      "id": "action",
-      "src": "cxAnimate.json"
-    }
-  ]
+  }
 }

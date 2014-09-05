@@ -157,18 +157,19 @@ CX_SETTER_DEF(cxAnimate, groups)
     }
     CX_JSON_OBJECT_EACH_END(groups, item)
 }
-CX_SETTER_DEF(cxAnimate, name)
+CX_SETTER_DEF(cxAnimate, key)
 {
     cxConstChars key = cxJsonToConstChars(value);
-    if(key == NULL){
-        key = CX_ANIMATE_DEFAULT_GROUP;
+    if(key != NULL){
+        cxAnimateSetGroupName(this, key);
     }
-    cxAnimateSetGroupName(this, key);
 }
 
+//from default group get item
 cxAnimateItem cxAnimateItemAt(cxAny pav,cxInt idx)
 {
     cxArray list = cxAnimateGroup(pav, CX_ANIMATE_DEFAULT_GROUP);
+    CX_ASSERT(list == NULL, "group %s not exists",CX_ANIMATE_DEFAULT_GROUP);
     if(idx < 0 || idx >= cxArrayLength(list)){
         return NULL;
     }
@@ -194,7 +195,7 @@ CX_OBJECT_TYPE(cxAnimate, cxAction)
 {
     CX_PROPERTY_SETTER(cxAnimate, forever);
     CX_PROPERTY_SETTER(cxAnimate, time);
-    CX_PROPERTY_SETTER(cxAnimate, name);
+    CX_PROPERTY_SETTER(cxAnimate, key);
     CX_PROPERTY_SETTER(cxAnimate, frames);
     CX_PROPERTY_SETTER(cxAnimate, groups);
 }

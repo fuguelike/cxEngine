@@ -18,15 +18,15 @@ static cxBool cxTextureTXTLoad(cxAny texture,cxStream stream)
     cxString data = cxCreateTXTTextureData(text, font,this->attr.size, this->attr.align, this->attr.viewSize.w,this->attr.viewSize.h);
     CX_RETURN(data == NULL, false);
     cxInt bufsiz = cxStringLength(data);
-    cxPointer buffer = (cxPointer)cxStringBody(data);
+    cxAny buffer = (cxAny)cxStringBody(data);
     cxSize2i *psize = (cxSize2i *)(buffer + bufsiz - sizeof(cxSize2i));
-    cxPointer tdata = buffer + sizeof(cxSize2i);
+    cxAny tdata = buffer + sizeof(cxSize2i);
     cxTextureTXTMakeTexture(this, tdata, psize->w, psize->h);
     return true;
 }
 
 //bind alpha texture data
-void cxTextureTXTMakeTexture(cxTextureTXT texture,cxPointer buffer,cxInt width,cxInt height)
+void cxTextureTXTMakeTexture(cxTextureTXT texture,cxAny buffer,cxInt width,cxInt height)
 {
     GLint unpack = 0;
     glGetIntegerv(GL_UNPACK_ALIGNMENT, &unpack);

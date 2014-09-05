@@ -131,9 +131,7 @@ typedef int32_t         cxInt32;
 typedef int64_t         cxInt64;
 
 typedef const void *    cxConstAny;
-typedef void *          cxPointer;
 typedef void *          cxAny;
-typedef size_t          cxSize;
 
 typedef unsigned char   cxUChar;
 typedef unsigned int    cxUInt;
@@ -153,9 +151,7 @@ typedef char *          cxChars;
 
 #define CX_ENGINE_VERSION   200
 
-#define CX_ATTRIBUTE_UNUSED     __attribute__ ((__unused__))
-
-#define CX_ATTRIBUTE_TYPE       __attribute__ ((constructor))
+#define CX_ATTR_UNUSED     __attribute__ ((__unused__))
 
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
     #define CX_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
@@ -213,7 +209,7 @@ do{                                                             \
 #define CX_TYPE_DEF(_t_)  __##_t_##RegisterFunc()
 
 #define CX_OBJECT_BEG(_t_,_b_)                                  \
-CX_ATTRIBUTE_UNUSED static cxConstType _t_##TypeName = #_t_;    \
+CX_ATTR_UNUSED static cxConstType _t_##TypeName = #_t_;         \
 typedef struct _t_ *_t_;                                        \
 void __##_t_##AutoInit(_t_ this);                               \
 void __##_t_##AutoFree(_t_ this);                               \
@@ -221,15 +217,15 @@ void __##_t_##AutoType(cxAny this);                             \
 struct _t_ {
 
 #define CX_OBJECT_END(_t_,_b_) };                               \
-CX_ATTRIBUTE_UNUSED static cxAny __##_t_##CreateFunc()          \
+CX_ATTR_UNUSED static cxAny __##_t_##CreateFunc()               \
 {                                                               \
     return CX_CREATE(_t_);                                      \
 }                                                               \
-CX_ATTRIBUTE_UNUSED static cxAny __##_t_##AllocFunc()           \
+CX_ATTR_UNUSED static cxAny __##_t_##AllocFunc()                \
 {                                                               \
     return CX_ALLOC(_t_);                                       \
 }                                                               \
-CX_ATTRIBUTE_UNUSED static void __##_t_##RegisterFunc()         \
+CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 {                                                               \
     __cxTypeRegisterType(_t_##TypeName,_b_##TypeName,           \
     __##_t_##CreateFunc,                                        \
@@ -393,13 +389,13 @@ cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x);
 
 cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x);
 
-typedef cxPointer (*cxMallocFunc)(cxSize size);
+typedef cxAny (*cxMallocFunc)(cxInt size);
 
-typedef cxPointer (*cxReallocFunc)(cxPointer ptr,cxSize size);
+typedef cxAny (*cxReallocFunc)(cxAny ptr,cxInt size);
 
-typedef cxPointer (*cxCallocFunc)(cxSize num,cxSize size);
+typedef cxAny (*cxCallocFunc)(cxInt num,cxInt size);
 
-typedef void (*cxFreeFunc)(cxPointer ptr);
+typedef void (*cxFreeFunc)(cxAny ptr);
 
 typedef cxChars(*cxStrdupFunc)(cxConstChars s);
 
@@ -417,7 +413,7 @@ void cxAllocatorInit();
 
 void cxAllocatorFree();
 
-typedef void (*cxObjectFunc)(cxPointer this);
+typedef void (*cxObjectFunc)(cxAny this);
 
 typedef cxAny (*cxAnyFunc)(cxAny object);
 

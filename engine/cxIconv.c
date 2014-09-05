@@ -44,10 +44,10 @@ static cxIconvItem cxIconvItemCreate(cxConstChars from,cxConstChars to)
 static cxString cxIconvItemConvert(cxIconvItem this,const cxString string)
 {
     CX_RETURN(string == NULL, NULL);
-    cxSize insiz = cxStringLength(string);
-    cxSize allocsize = insiz * 4 + 1;
-    cxSize outsiz = allocsize;
-    cxSize outlen = 0;
+    cxInt insiz = cxStringLength(string);
+    cxInt allocsize = insiz * 4 + 1;
+    cxInt outsiz = allocsize;
+    cxInt outlen = 0;
     cxChars inptr = (cxChars)cxStringBody(string);
     cxChars outptr = allocator->malloc(outsiz);
     cxChars buffer = outptr;

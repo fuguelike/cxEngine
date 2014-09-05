@@ -21,8 +21,6 @@ CX_OBJECT_DEF(cxTimer, cxAction)
     CX_EVENT_ALLOC(onArrive);
 CX_OBJECT_END(cxTimer, cxObject)
 
-void cxTimerReset(cxAny timer);
-
 void cxTimerSetBegin(cxAny pav,cxBool isBegin);
 
 cxTimer cxTimerCreate(cxFloat freq,cxInt repeat);

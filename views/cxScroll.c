@@ -52,11 +52,11 @@ static cxBool cxScrollScale(cxAny pview,cxTouchItems *fires,cxTouchItems *points
     cxTouchItem item0 = CX_TOUCH_ITEM(points, 0);
     cxTouchItem item1 = CX_TOUCH_ITEM(points, 1);
     cxView body = cxScrollBody(this);
-    bool hited = cxViewHitTest(body, item0->current, &cp0) && cxViewHitTest(body, item1->current, &cp1);
+    bool hited = cxViewHitTest(body, item0->position, &cp0) && cxViewHitTest(body, item1->position, &cp1);
     if(hited && item0->type == cxTouchTypeDown && item1->type == cxTouchTypeDown){
         //disable move
         this->isEnable = false;
-        this->startDis = kmVec2DistanceBetween(&item0->current, &item1->current);
+        this->startDis = kmVec2DistanceBetween(&item0->position, &item1->position);
         kmVec2MidPointBetween(&this->center, &cp0, &cp1);
         return true;
     }
@@ -68,7 +68,7 @@ static cxBool cxScrollScale(cxAny pview,cxTouchItems *fires,cxTouchItems *points
         return false;
     }
     if(item0->type == cxTouchTypeMove || item1->type == cxTouchTypeMove){
-        cxFloat dis = kmVec2DistanceBetween(&item0->current, &item1->current);
+        cxFloat dis = kmVec2DistanceBetween(&item0->position, &item1->position);
         cxFloat delta = (dis - this->startDis);
         this->startDis = dis;
         cxVec2f scale = body->scale;
@@ -145,7 +145,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
     cxView body = cxScrollBody(this);
     cxTouchItem item = CX_TOUCH_ITEM(fires, 0);
     cxVec2f cpos;
-    cxBool hited = cxViewHitTest(this, item->current, &cpos);
+    cxBool hited = cxViewHitTest(this, item->position, &cpos);
     if(item->type == cxTouchTypeDown){
         this->isEnable = hited;
         cxViewStopAction(body, CX_SCROLL_MOVE_ACTION_ID);

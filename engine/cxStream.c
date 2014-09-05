@@ -46,13 +46,13 @@ cxBool cxStreamOpen(cxAny this)
     return CX_METHOD_GET(false, stream->Open, this);
 }
 
-cxInt cxStreamRead(cxAny this,cxPointer buffer,cxInt size)
+cxInt cxStreamRead(cxAny this,cxAny buffer,cxInt size)
 {
     cxStream stream = this;
     return CX_METHOD_GET(0, stream->Read,this,buffer,size);
 }
 
-cxInt cxStreamWrite(cxAny this,cxPointer buffer,cxInt size)
+cxInt cxStreamWrite(cxAny this,cxAny buffer,cxInt size)
 {
     cxStream stream = this;
     return CX_METHOD_GET(0, stream->Write,this,buffer,size);

@@ -35,7 +35,7 @@ static cxBool cxFileStreamOpen(cxAny this)
     return true;
 }
 
-static cxInt cxFileStreamRead(cxAny this,cxPointer buffer,cxInt size)
+static cxInt cxFileStreamRead(cxAny this,cxAny buffer,cxInt size)
 {
     cxFileStream file = this;
     if(!file->cxStream.canRead){
@@ -44,7 +44,7 @@ static cxInt cxFileStreamRead(cxAny this,cxPointer buffer,cxInt size)
     return fread(buffer, 1, size, file->fd);
 }
 
-static cxInt cxFileStreamWrite(cxAny this,cxPointer buffer,cxInt size)
+static cxInt cxFileStreamWrite(cxAny this,cxAny buffer,cxInt size)
 {
     cxFileStream file = this;
     if(!file->cxStream.canWrite){

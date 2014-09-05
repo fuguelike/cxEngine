@@ -20,7 +20,7 @@ CX_OBJECT_DEF(cxAnimateItem, cxObject)
     cxFloat value;
 CX_OBJECT_END(cxAnimateItem, cxObject)
 
-#define CX_ANIMATE_DEFAULT_GROUP "__cxAnimateDefaultGroup__"
+#define CX_ANIMATE_DEFAULT_GROUP "__DefaultGroupName__"
 
 CX_OBJECT_DEF(cxAnimate, cxAction)
     cxString groupName;

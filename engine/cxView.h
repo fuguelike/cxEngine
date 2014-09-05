@@ -87,7 +87,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onDirty);
 CX_OBJECT_END(cxView, cxObject)
 
-cxActionMgr cxViewActionFind(cxAny pview);
+cxAny *cxViewActionFind(cxAny pview);
 
 void cxViewSetActionMgr(cxAny pview,cxActionMgr mgr);
 

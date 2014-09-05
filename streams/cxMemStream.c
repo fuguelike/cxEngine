@@ -21,7 +21,7 @@ static cxBool cxMemStreamOpen(cxAny this)
     return true;
 }
 
-static cxInt cxMemStreamRead(cxAny this,cxPointer buffer,cxInt size)
+static cxInt cxMemStreamRead(cxAny this,cxAny buffer,cxInt size)
 {
     cxMemStream stream = this;
     if(!stream->cxStream.canRead){
@@ -39,7 +39,7 @@ static cxInt cxMemStreamRead(cxAny this,cxPointer buffer,cxInt size)
     return bytes;
 }
 
-static cxInt cxMemStreamWrite(cxAny this,cxPointer buffer,cxInt size)
+static cxInt cxMemStreamWrite(cxAny this,cxAny buffer,cxInt size)
 {
     cxMemStream stream = this;
     if(!stream->cxStream.canWrite){
@@ -131,7 +131,7 @@ cxStream cxMemStreamCreateWithText(cxString txt)
         return NULL;
     }
     if(txt != NULL){
-        cxStreamWrite(stream,(cxPointer)cxStringBody(txt),cxStringLength(txt));
+        cxStreamWrite(stream,(cxAny)cxStringBody(txt),cxStringLength(txt));
     }
     return stream;
 }

@@ -24,12 +24,6 @@ static cxBool cxTimerExit(cxAny pav)
     return this->repeat == 0;
 }
 
-void cxTimerReset(cxAny timer)
-{
-    cxTimer this = timer;
-    this->cxAction.timeElapsed = 0;
-}
-
 CX_SETTER_DEF(cxTimer, repeat)
 {
     this->repeat = cxJsonToInt(value, this->repeat);
@@ -46,6 +40,7 @@ CX_OBJECT_TYPE(cxTimer, cxAction)
 }
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
+    this->isBegin = false;
     CX_METHOD_SET(this->cxAction.Init, cxTimerInit);
     CX_METHOD_SET(this->cxAction.Exit, cxTimerExit);
 }
