@@ -169,7 +169,7 @@ CX_SETTER_DEF(cxAnimate, key)
 cxAnimateItem cxAnimateItemAt(cxAny pav,cxInt idx)
 {
     cxArray list = cxAnimateGroup(pav, CX_ANIMATE_DEFAULT_GROUP);
-    CX_ASSERT(list == NULL, "group %s not exists",CX_ANIMATE_DEFAULT_GROUP);
+    CX_ASSERT(list != NULL, "group %s not exists",CX_ANIMATE_DEFAULT_GROUP);
     if(idx < 0 || idx >= cxArrayLength(list)){
         return NULL;
     }

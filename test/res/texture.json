@@ -171,10 +171,10 @@
 "meta": {
 	"app": "http://www.codeandweb.com/texturepacker ",
 	"version": "1.0",
-	"image": "texture.pvr",
-	"format": "PVRTC4",
+	"image": "texture.png",
+	"format": "RGBA8888",
 	"size": {"w":512,"h":512},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:07f89855f7942ec37fe082afee92fd73$"
+	"smartupdate": "$TexturePacker:SmartUpdate:9c42a279f6b8ce15b5a92b125f25c8bb$"
 }
 }

@@ -8,13 +8,16 @@
 
 #include "cxLayer.h"
 
-void cxLayerSpriteOnTransform(cxAny pview)
+static void cxLayerSpriteOnTransform(cxAny pview)
 {
     cxLayer layer = cxViewParent(pview);
     cxSprite this  = pview;
     cxBoxTex2f coord = cxSpriteBoxTex(this);
     cxColor4f color = cxViewColor(this);
     CX_ASSERT(this->data != NULL, "data error");
+    if(!this->cxView.isVisible){
+        color.a = 0;
+    }
     cxBoxPoint *bp = this->data;
     
     bp->lb.colors = color;
@@ -53,16 +56,25 @@ void cxLayerSpriteOnTransform(cxAny pview)
     cxAtlasSetDirty(layer, true);
 }
 
-void cxLayerAppend(cxAny pview,cxAny subview)
+static void cxLayerOnRemove(cxAny pview,cxAny oldview)
 {
-    CX_ASSERT(pview != NULL && subview != NULL, "args null");
-    CX_ASSERT(CX_INSTANCE_OF(subview, cxSprite), "subview only support cxSprite type");
+    cxLayer this  = pview;
+    cxSprite sprite = oldview;
+    CX_ASSERT(sprite->data != NULL, "data null");
+    cxBoxPoint *bp = sprite->data;
+    cxAtlasRemovePoint(this, bp);
+}
+
+static void cxLayerOnAppend(cxAny pview,cxAny newview)
+{
+    CX_ASSERT(pview != NULL && newview != NULL, "args null");
+    CX_ASSERT(CX_INSTANCE_OF(newview, cxSprite), "subview only support cxSprite type");
     cxLayer this = pview;
-    cxSprite sprite = subview;
-    cxViewAppendImp(this, sprite);
+    cxSprite sprite = newview;
     //atlas will draw sprite use VAO or VBO
     cxViewSetOnlyTransform(sprite, true);
     CX_EVENT_APPEND(sprite->cxView.onTransform, cxLayerSpriteOnTransform);
+    //
     cxVec2f pos = cxViewPosition(sprite);
     cxSize2f size = cxViewSize(sprite);
     cxBoxTex2f coord = cxSpriteBoxTex(sprite);
@@ -71,15 +83,6 @@ void cxLayerAppend(cxAny pview,cxAny subview)
     sprite->data = cxAtlasAppend(this, &bp);
 }
 
-void cxLayerRemove(cxAny pview)
-{
-    cxSprite this  = pview;
-    CX_ASSERT(this->data != NULL, "data null");
-    cxBoxPoint *bp = this->data;
-    cxLayer layer = cxViewParent(pview);
-    cxAtlasRemovePoint(layer, bp);
-    cxViewRemove(this);
-}
 
 CX_OBJECT_TYPE(cxLayer, cxAtlas)
 {
@@ -87,11 +90,20 @@ CX_OBJECT_TYPE(cxLayer, cxAtlas)
 }
 CX_OBJECT_INIT(cxLayer, cxAtlas)
 {
-    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Append,cxLayerAppend);
-    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Remove, cxLayerRemove);
+    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.onRemove, cxLayerOnRemove);
+    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.onAppend, cxLayerOnAppend);
 }
 CX_OBJECT_FREE(cxLayer, cxAtlas)
 {
 
 }
 CX_OBJECT_TERM(cxLayer, cxAtlas)
+
+
+
+
+
+
+
+
+

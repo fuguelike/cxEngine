@@ -14,13 +14,10 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxLayer, cxAtlas)
+    CX_SLOT_ALLOC(onRemove);
+    CX_SLOT_ALLOC(onAppend);
 CX_OBJECT_END(cxLayer, cxAtlas)
 
-void cxLayerDraw(cxAny pview);
-
-void cxLayerAppend(cxAny pview,cxAny subview);
-
-void cxLayerRemove(cxAny subview);
 
 CX_C_END
 

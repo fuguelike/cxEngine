@@ -138,36 +138,10 @@ CX_SETTER_DEF(cxAtlas, scale9)
         cxAtlasUpdateScale9(this);
     }
 }
-CX_SETTER_DEF(cxAtlas, layers)
-{
-    cxJson layers = cxJsonToArray(value);
-    CX_JSON_ARRAY_EACH_BEG(layers, layer)
-    {
-        cxVec2f pos = cxVec2fv(0, 0);
-        cxSize2f size = cxSize2fv(0, 0);
-        cxBoxTex2f tex = cxBoxTex2fDefault();
-        cxColor4f color = cxColor4fv(1, 1, 1, 1);
-        pos = cxJsonVec2f(layer, "pos", pos);
-        size = cxJsonSize2f(layer, "size", size);
-        cxConstChars key = cxJsonConstChars(layer, "key");
-        if(key != NULL){
-            tex = cxTextureBox(this->cxSprite.texture, key);
-        }else{
-            tex = cxJsonBoxTex2f(layer, "coord", tex);
-        }
-        if(cxSize2fZero(size) && key != NULL){
-            size = cxTextureSize(this->cxSprite.texture, key);
-        }
-        color = cxJsonColor4f(layer, "color", color);
-        cxAtlasAppendBoxPoint(this, pos, size, tex, color);
-    }
-    CX_JSON_ARRAY_EACH_END(layers, layer)
-}
 
 CX_OBJECT_TYPE(cxAtlas, cxSprite)
 {
     CX_PROPERTY_SETTER(cxAtlas, scale9);
-    CX_PROPERTY_SETTER(cxAtlas, layers);
 }
 CX_OBJECT_INIT(cxAtlas, cxSprite)
 {
@@ -192,40 +166,6 @@ void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,
 {
     cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, size, tex, color);
     cxAtlasAppend(pview, &bp);
-}
-
-cxInt cxAtlasAppendSpriteWithSize(cxAny pview,cxVec2f pos,cxSize2f siz,cxConstChars key)
-{
-    cxAtlas this = pview;
-    cxColor4f color = cxColor4fv(1, 1, 1, 1);
-    cxBoxTex2f tbox = cxTextureBox(this->cxSprite.texture, key);
-    cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, siz, tbox, color);
-    cxAtlasAppend(pview, &bp);
-    return this->number - 1;
-}
-
-cxInt cxAtlasAppendSprite(cxAny pview,cxVec2f pos,cxConstChars key)
-{
-    cxAtlas this = pview;
-    cxColor4f color = cxColor4fv(1, 1, 1, 1);
-    cxBoxTex2f tbox = cxTextureBox(this->cxSprite.texture, key);
-    cxSize2f siz = cxTextureSize(this->cxSprite.texture, key);
-    cxBoxPoint bp = cxAtlasCreateBoxPoint(pos, siz, tbox, color);
-    cxAtlasAppend(pview, &bp);
-    return this->number - 1;
-}
-
-void cxAtlasSetItemPos(cxAny pview,cxInt idx,cxVec2f pos)
-{
-    cxAtlas this = pview;
-    cxBoxPoint *bp = &this->boxes[idx];
-    cxFloat wh = (bp->rb.vertices.x - bp->lt.vertices.x) / 2.0f;
-    cxFloat hh = (bp->lt.vertices.y - bp->rb.vertices.y) / 2.0f;
-    bp->lb.vertices = cxVec3fv(pos.x - wh, pos.y - hh, 0.0f);
-    bp->lt.vertices = cxVec3fv(pos.x - wh, pos.y + hh, 0.0f);
-    bp->rt.vertices = cxVec3fv(pos.x + wh, pos.y + hh, 0.0f);
-    bp->rb.vertices = cxVec3fv(pos.x + wh, pos.y - hh, 0.0f);
-    this->isDirty = true;
 }
 
 cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color)

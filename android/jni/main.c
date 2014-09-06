@@ -19,8 +19,8 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxLoader loader = cxEngineLoaderCreate("cxView.json");
-    cxWindowPushView(loader->object);
+	cxLoader loader = cxLoaderCreate("cxLayer.json");
+	cxWindowPushView(loader->object);
 }
 
 void cxEngineFree(cxEngine engine)

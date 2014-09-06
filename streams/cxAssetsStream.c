@@ -131,6 +131,7 @@ CX_OBJECT_TERM(cxAssetsStream, cxStream)
 cxString cxAssetsData(cxConstChars file)
 {
     cxStream stream = cxAssetsStreamCreate(file);
+    CX_RETURN(stream == NULL, NULL);
     return cxStreamAllBytes(stream);
 }
 
@@ -151,6 +152,7 @@ cxStream cxAssetsStreamCreate(cxConstChars file)
 {
     cxAssetsStream rv = CX_CREATE(cxAssetsStream);
     if(!cxAssetsStreamInit(rv,file)){
+        CX_ERROR("assets file %s create failed",file);
         return NULL;
     }
     return (cxStream)rv;

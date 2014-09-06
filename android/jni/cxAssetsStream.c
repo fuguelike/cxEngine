@@ -31,7 +31,7 @@ static cxBool cxAssetsStreamOpen(cxAny this)
     return true;
 }
 
-static cxInt cxAssetsStreamRead(cxAny this,cxPointer buffer,cxInt size)
+static cxInt cxAssetsStreamRead(cxAny this,cxAny buffer,cxInt size)
 {
     cxAssetsStream asserts = this;
     if(!asserts->cxStream.canRead){
@@ -40,7 +40,7 @@ static cxInt cxAssetsStreamRead(cxAny this,cxPointer buffer,cxInt size)
     return AAsset_read(asserts->asset, buffer, size);
 }
 
-static cxInt cxAssetsStreamWrite(cxAny this,cxPointer buffer,cxInt size)
+static cxInt cxAssetsStreamWrite(cxAny this,cxAny buffer,cxInt size)
 {
     cxAssetsStream asserts = this;
     if(!asserts->cxStream.canWrite){

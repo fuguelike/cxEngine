@@ -96,7 +96,8 @@ LOCAL_SRC_FILES += \
     views/cxLoading.c \
     views/cxLabelBMP.c \
     views/cxPolygon.c \
-    views/cxAlert.c
+    views/cxAlert.c \
+    views/cxLayer.c
 
 LOCAL_SRC_FILES += \
     socket/cxEventBase.c \

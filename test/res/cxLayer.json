@@ -1,0 +1,69 @@
+{
+  "type": "cxLayer",
+  "size": {
+    "w": 800,
+    "h": 800
+  },
+  "texture": "texture.json",
+  "subviews": [
+    {
+      "type": "cxSprite",
+      "texture": "texture.json?leek.png",
+      "size": {
+        "w": 200,
+        "h": 200
+      },
+      "actions": [
+        "cxAnimate.json"
+      ],
+      "resizing": "left|bottom"
+    },
+    {
+      "type": "cxSprite",
+      "texture": "texture.json?leek.png",
+      "size": {
+        "w": 200,
+        "h": 200
+      },
+      "actions": [
+        "cxAnimate.json"
+      ],
+      "resizing": "right|bottom"
+    },
+    {
+      "type": "cxSprite",
+      "texture": "texture.json?leek.png",
+      "size": {
+        "w": 200,
+        "h": 200
+      },
+      "actions": [
+        "cxAnimate.json"
+      ],
+      "resizing": "left|top"
+    },
+    {
+      "type": "cxSprite",
+      "texture": "texture.json?leek.png",
+      "size": {
+        "w": 200,
+        "h": 200
+      },
+      "actions": [
+        "cxAnimate.json"
+      ],
+      "resizing": "right|top"
+    },
+    {
+      "type": "cxSprite",
+      "texture": "texture.json?leek.png",
+      "size": {
+        "w": 200,
+        "h": 200
+      },
+      "actions": [
+        "cxAnimate.json"
+      ]
+    }
+  ]
+}

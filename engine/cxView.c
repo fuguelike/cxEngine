@@ -192,9 +192,6 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->removes       = CX_ALLOC(cxArray);
     this->binded        = CX_ALLOC(cxHash);
     this->bindes        = CX_ALLOC(cxHash);
-    //
-    CX_METHOD_SET(this->Append, cxViewAppendImp);
-    CX_METHOD_SET(this->Remove, cxViewRemove);
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
@@ -213,7 +210,7 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_EVENT_RELEASE(this->onUpdate);
     CX_EVENT_RELEASE(this->onResize);
     CX_EVENT_RELEASE(this->onLayout);
-    //
+
     CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
@@ -300,12 +297,6 @@ void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
 
 void cxViewAppend(cxAny pview,cxAny newview)
 {
-    cxView this = pview;
-    CX_METHOD_RUN(this->Append,pview,newview);
-}
-
-void cxViewAppendImp(cxAny pview,cxAny newview)
-{
     CX_ASSERT(pview != NULL && newview != NULL, "parent view or new view null");
     cxView this = pview;
     cxView new = newview;
@@ -317,6 +308,7 @@ void cxViewAppendImp(cxAny pview,cxAny newview)
         cxViewEnter(new);
         cxViewLayout(new);
     }
+    CX_METHOD_RUN(this->onAppend, this, newview);
 }
 
 void cxViewBringFront(cxAny pview,cxAny fview)
@@ -888,18 +880,12 @@ void cxViewRemove(cxAny pview)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
-    CX_METHOD_RUN(this->Remove,pview);
-}
-
-void cxViewRemoveImp(cxAny pview)
-{
-    CX_ASSERT(pview != NULL, "pview args error");
-    cxView this = pview;
     CX_RETURN(this->parentView == NULL);
     if(this->isRunning){
         cxViewExit(this);
     }
     cxView parent = this->parentView;
+    CX_METHOD_RUN(parent->onRemove,parent,pview);
     //join to remove list
     cxArrayAppend(parent->removes, this);
     //remove draw list

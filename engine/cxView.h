@@ -77,13 +77,16 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_DEF(void, Draw, cxAny);
     CX_METHOD_DEF(void, After, cxAny);
     CX_METHOD_DEF(void, Before, cxAny);
-    CX_METHOD_DEF(void, Append, cxAny, cxAny);  //add view
-    CX_METHOD_DEF(void, Remove, cxAny);         //remove view
 
-    CX_SIGNAL_ALLOC(onDraw);
+    //method event
+    CX_METHOD_DEF(void, onAppend,cxAny,cxAny);
+    CX_METHOD_DEF(void, onRemove,cxAny,cxAny);
 
-    CX_EVENT_ALLOC(onEnter);
-    CX_EVENT_ALLOC(onExit);
+    CX_SIGNAL_ALLOC(onDraw);        //(cxAny pview)
+
+    CX_EVENT_ALLOC(onEnter);    //when view appended
+    CX_EVENT_ALLOC(onExit);     //when view removed
+    //
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
@@ -171,8 +174,6 @@ cxBool cxViewKey(cxAny pview,cxKey *key);
 //touch count,current touches
 cxBool cxViewTouch(cxAny pview,cxTouchItems *points);
 
-void cxViewAppendImp(cxAny pview,cxAny newview);
-
 void cxViewAppend(cxAny pview,cxAny newview);
 
 void cxViewLayout(cxAny pview);
@@ -233,8 +234,6 @@ void cxViewEnter(cxAny pview);
 void cxViewExit(cxAny pview);
 
 void cxViewRemove(cxAny pview);
-
-void cxViewRemoveImp(cxAny pview);
 
 void cxViewTransform(cxAny pview);
 
