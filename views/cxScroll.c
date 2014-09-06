@@ -44,13 +44,13 @@ static void cxScrollResetScale(cxScroll this)
     }
 }
 
-static cxBool cxScrollScale(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
+static cxBool cxScrollScale(cxAny pview,cxTouchItems *points)
 {
     cxScroll this = pview;
     cxVec2f cp0;
     cxVec2f cp1;
-    cxTouchItem item0 = CX_TOUCH_ITEM(points, 0);
-    cxTouchItem item1 = CX_TOUCH_ITEM(points, 1);
+    cxTouchItem item0 = points->items[0];
+    cxTouchItem item1 = points->items[1];
     cxView body = cxScrollBody(this);
     bool hited = cxViewHitTest(body, item0->position, &cp0) && cxViewHitTest(body, item1->position, &cp1);
     if(hited && item0->type == cxTouchTypeDown && item1->type == cxTouchTypeDown){
@@ -131,19 +131,18 @@ void cxScrollUpdateBox(cxAny pview)
     this->box.t =  mh + anchor.y * msize.h;
 }
 
-cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
+cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
 {
     cxScroll this = pview;
     CX_RETURN(this->body == NULL,false);
-    if(this->scalable && CX_TOUCH_SIZE(points) == 2){
-        return cxScrollScale(pview, fires, points);
+    if(this->scalable && points->number == 2){
+        return cxScrollScale(pview, points);
     }
-    if(CX_TOUCH_SIZE(points) != 1){
+    if(points->number != 1){
         return false;
     }
-    
     cxView body = cxScrollBody(this);
-    cxTouchItem item = CX_TOUCH_ITEM(fires, 0);
+    cxTouchItem item = points->items[0];
     cxVec2f cpos;
     cxBool hited = cxViewHitTest(this, item->position, &cpos);
     if(item->type == cxTouchTypeDown){

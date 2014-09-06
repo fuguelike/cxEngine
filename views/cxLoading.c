@@ -15,11 +15,11 @@ void cxLoadingOnUpdate(cxAny sender)
     cxLoading this = sender;
     if(!this->isLoading){
         CX_EVENT_FIRE(this, onFinished);
-        cxViewRemoved(this);
+        cxViewRemove(this);
     }
 }
 
-cxBool cxLoadingTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
+cxBool cxLoadingTouch(cxAny pview,cxTouchItems *points)
 {
     return true;
 }

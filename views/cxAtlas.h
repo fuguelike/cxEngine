@@ -35,6 +35,8 @@ void cxAtlasSetNumber(cxAny pview,cxInt number);
 
 void cxAtlasDraw(cxAny pview);
 
+void cxAtlasSetDirty(cxAny pview,cxBool v);
+
 void cxAtlasDrawInit(cxAny pview);
 
 void cxAtlasResize(cxAny sender);
@@ -55,9 +57,16 @@ void cxAtlasUpdateScale9(cxAny pview);
 
 void cxAtlasClean(cxAny pview);
 
-void cxAtlasAppend(cxAny pview,cxBoxPoint *point);
+cxBoxPoint *cxAtlasAppend(cxAny pview,cxBoxPoint *point);
 
-void cxAtlasUpdate(cxAny pview,cxInt index, cxBoxPoint *point);
+//point cxAtlasAppend return
+cxInt cxAtlasIndex(cxAny pview,cxBoxPoint *point);
+
+void cxAtlasRemovePoint(cxAny pview,cxBoxPoint *point);
+
+void cxAtlasRemoveAt(cxAny pview,cxInt index);
+
+void cxAtlasUpdateAt(cxAny pview,cxInt index, cxBoxPoint *point);
 
 CX_C_END
 

@@ -26,6 +26,7 @@ CX_OBJECT_DEF(cxSprite, cxView)
     cxBool          isFlipX;
     cxBool          isFlipY;
     cxBoxTex2f      texCoord;
+    cxAny data;     //cxLayer use
 CX_OBJECT_END(cxSprite, cxView)
 
 void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box);

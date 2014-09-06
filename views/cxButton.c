@@ -9,10 +9,10 @@
 #include <engine/cxEngine.h>
 #include "cxButton.h"
 
-cxBool cxButtonTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
+cxBool cxButtonTouch(cxAny pview,cxTouchItems *points)
 {
-    CX_RETURN(CX_TOUCH_SIZE(points) != 1,false);
-    cxTouchItem item = CX_TOUCH_ITEM(fires, 0);
+    CX_RETURN(points->number != 1,false);
+    cxTouchItem item = points->items[0];
     cxButton this = pview;
     if(!this->isEnable){
         return false;

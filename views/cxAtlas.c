@@ -259,7 +259,7 @@ void cxAtlasClean(cxAny pview)
     this->isDirty = true;
 }
 
-void cxAtlasAppend(cxAny pview,cxBoxPoint *point)
+cxBoxPoint *cxAtlasAppend(cxAny pview,cxBoxPoint *point)
 {
     cxAtlas this = pview;
     //realloc
@@ -267,11 +267,41 @@ void cxAtlasAppend(cxAny pview,cxBoxPoint *point)
         cxAtlasSetCapacity(pview, this->capacity + 8);
     }
     CX_ASSERT(this->number < this->capacity, "atlas number > boxNumber");
-    this->boxes[this->number++] = *point;
+    this->boxes[this->number] = *point;
+    this->isDirty = true;
+    cxBoxPoint *ret = &this->boxes[this->number];
+    this->number ++;
+    return ret;
+}
+
+void cxAtlasRemovePoint(cxAny pview,cxBoxPoint *point)
+{
+    cxInt idx = cxAtlasIndex(pview,point);
+    cxAtlasRemoveAt(pview, idx);
+}
+
+void cxAtlasRemoveAt(cxAny pview,cxInt index)
+{
+    cxAtlas this = pview;
+    CX_RETURN(index < 0 || index >= this->number);
+    cxInt count = this->number - index - 1;
+    cxAny dst = &this->boxes[index];
+    cxAny src = &this->boxes[index + 1];
+    memmove(dst, src, sizeof(cxBoxPoint) * count);
+    dst = &this->indices[index];
+    src = &this->indices[index + 1];
+    memmove(dst, src, sizeof(GLushort) * 6 * count);
+    this->number --;
     this->isDirty = true;
 }
 
-void cxAtlasUpdate(cxAny pview,cxInt index, cxBoxPoint *point)
+cxInt cxAtlasIndex(cxAny pview,cxBoxPoint *point)
+{
+    cxAtlas this = pview;
+    return ((cxAny)point - (cxAny)this->boxes) / sizeof(cxBoxPoint);
+}
+
+void cxAtlasUpdateAt(cxAny pview,cxInt index, cxBoxPoint *point)
 {
     cxAtlas this = pview;
     CX_ASSERT(index >= 0 && index < this->capacity, "index > boxNumber");
@@ -327,6 +357,12 @@ void cxAtlasSetNumber(cxAny pview,cxInt number)
     this->number = number;
 }
 
+void cxAtlasSetDirty(cxAny pview,cxBool v)
+{
+    cxAtlas this = pview;
+    this->isDirty = v;
+}
+
 void cxAtlasDrawInit(cxAny pview)
 {
     if(cxOpenGLInstance()->support_GL_OES_vertex_array_object){
@@ -340,13 +376,16 @@ void cxAtlasSetCapacity(cxAny pview,cxInt capacity)
 {
     cxAtlas this = pview;
     CX_RETURN(this->capacity >= capacity);
-    this->capacity = capacity;
+    this->capacity = capacity + 8;
     cxInt size = this->capacity * sizeof(cxBoxPoint);
+    //
     this->boxes = allocator->realloc(this->boxes,size);
     CX_ASSERT(this->boxes != NULL, "out of memory");
+    //
     size = this->capacity * 6 * sizeof(GLushort);
     this->indices = allocator->realloc(this->indices,size);
     CX_ASSERT(this->indices != NULL, "out of memory");
+    //
     for(int i=0; i < this->capacity;i++){
         this->indices[i*6+0] = i*4+0;
         this->indices[i*6+1] = i*4+1;

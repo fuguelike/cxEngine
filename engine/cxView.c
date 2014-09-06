@@ -174,6 +174,7 @@ CX_OBJECT_TYPE(cxView, cxObject)
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {
+    this->onlyTransform = false;
     this->hideTop       = true;
     this->isShowBorder  = false;
     this->isVisible     = true;
@@ -191,6 +192,9 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->removes       = CX_ALLOC(cxArray);
     this->binded        = CX_ALLOC(cxHash);
     this->bindes        = CX_ALLOC(cxHash);
+    //
+    CX_METHOD_SET(this->Append, cxViewAppendImp);
+    CX_METHOD_SET(this->Remove, cxViewRemove);
 }
 CX_OBJECT_FREE(cxView, cxObject)
 {
@@ -203,7 +207,7 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_RELEASE(this->binded);
     CX_RELEASE(this->actionMgr);
     //
-    CX_EVENT_RELEASE(this->onDirty);
+    CX_EVENT_RELEASE(this->onTransform);
     CX_EVENT_RELEASE(this->onEnter);
     CX_EVENT_RELEASE(this->onExit);
     CX_EVENT_RELEASE(this->onUpdate);
@@ -213,6 +217,12 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
+
+void cxViewSetOnlyTransform(cxAny pview,cxBool v)
+{
+    cxView this = pview;
+    this->onlyTransform = v;
+}
 
 cxAny *cxViewActionFind(cxAny pview)
 {
@@ -289,6 +299,12 @@ void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
 }
 
 void cxViewAppend(cxAny pview,cxAny newview)
+{
+    cxView this = pview;
+    CX_METHOD_RUN(this->Append,pview,newview);
+}
+
+void cxViewAppendImp(cxAny pview,cxAny newview)
 {
     CX_ASSERT(pview != NULL && newview != NULL, "parent view or new view null");
     cxView this = pview;
@@ -629,19 +645,21 @@ cxVec2f cxViewSetAnchor(cxAny pview,cxVec2f anchor)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
-    if(anchor.x > 0.5f || anchor.x < -0.5f){
+    if((anchor.x > 0.5f || anchor.x < -0.5f) && !kmAlmostEqual(this->size.w, 0)){
         anchor.x = (anchor.x / (this->size.w/2.0f)) / 2.0f;
     }
-    if(anchor.y > 0.5f || anchor.y < -0.5f){
+    if((anchor.y > 0.5f || anchor.y < -0.5f) && !kmAlmostEqual(this->size.h, 0)){
         anchor.y = (anchor.y / (this->size.h/2.0f)) / 2.0f;
     }
     CX_RETURN(cxVec2fEqu(this->anchor, anchor),this->position);
-    cxSize2f size = cxViewContentSize(this);
-    cxVec2f delta;
-    kmVec2Subtract(&delta, &anchor, &this->anchor);
     cxVec2f opos = cxViewPosition(this);
-    opos.x += size.w * delta.x;
-    opos.y += size.h * delta.y;
+    if(!cxViewZeroSize(this)){
+        cxSize2f size = cxViewContentSize(this);
+        cxVec2f delta;
+        kmVec2Subtract(&delta, &anchor, &this->anchor);
+        opos.x += size.w * delta.x;
+        opos.y += size.h * delta.y;
+    }
     this->anchor = anchor;
     this->isDirty = true;
     return opos;
@@ -740,7 +758,7 @@ void cxViewTransform(cxAny pview)
     kmMat4Multiply(&this->normalMatrix, &transMatrix, &rotateMatrix);
     kmMat4Multiply(&this->normalMatrix, &this->normalMatrix, &scaleMatrix);
     
-    CX_EVENT_FIRE(this, onDirty);
+    CX_EVENT_FIRE(this, onTransform);
     //
     if(this->isCropping){
         this->scissor = cxViewGLRect(pview);
@@ -866,7 +884,14 @@ void cxViewLayout(cxAny pview)
 }
 
 //remove from parent
-void cxViewRemoved(cxAny pview)
+void cxViewRemove(cxAny pview)
+{
+    CX_ASSERT(pview != NULL, "pview args error");
+    cxView this = pview;
+    CX_METHOD_RUN(this->Remove,pview);
+}
+
+void cxViewRemoveImp(cxAny pview)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
@@ -894,7 +919,7 @@ cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
     return cxBox2fContainPoint(box, pos);
 }
 
-cxBool cxViewTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
+cxBool cxViewTouch(cxAny pview,cxTouchItems *points)
 {
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
@@ -906,7 +931,7 @@ cxBool cxViewTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
         goto completed;
     }
     for(cxListElement *ele = cxListLast(this->subViews);ele != NULL;ele = ele->prev){
-        if(cxViewTouch(ele->any, fires, points)){
+        if(cxViewTouch(ele->any,points)){
             return true;
         }
         if(ele == head){
@@ -914,7 +939,7 @@ cxBool cxViewTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
         }
     }
 completed:
-    return CX_METHOD_GET(false, this->Touch, this, fires, points);
+    return CX_METHOD_GET(false, this->Touch, this, points);
 }
 
 cxBool cxViewKey(cxAny pview,cxKey *key)
@@ -1023,9 +1048,11 @@ void cxViewDraw(cxAny pview)
     //update action and update
     CX_EVENT_FIRE(this, onUpdate);
     cxViewUpdateActions(this);
-    //
     cxViewTransform(this);
-    
+    if(this->onlyTransform){
+        goto finished;
+    }
+    //
     kmGLPushMatrix();
     kmGLMultMatrix(&this->normalMatrix);
     kmGLMultMatrix(&this->anchorMatrix);

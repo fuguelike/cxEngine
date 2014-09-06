@@ -44,7 +44,6 @@ CX_OBJECT_DEF(cxEngine, cxObject)
 
     cxHash items;           //touch items
     cxTouchItems points;    //all touch points
-    cxTouchItems fires;     //current fire touch points
     cxKey key;
     cxString lang;
 CX_OBJECT_END(cxEngine, cxObject)

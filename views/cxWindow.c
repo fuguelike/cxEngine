@@ -62,7 +62,7 @@ void cxWindowPopView()
     cxView top = cxStackTop(engine->window->views);
     if(prev != NULL){
         hideTop = prev->hideTop;
-        cxViewRemoved(prev);
+        cxViewRemove(prev);
     }
     if(top != NULL && hideTop){
         cxViewEnter(top);
@@ -77,7 +77,7 @@ void cxWindowReplaceView(cxAny pview)
     cxEngine engine = cxEngineInstance();
     cxView top = cxStackTop(engine->window->views);
     if(top != NULL){
-        cxViewRemoved(top);
+        cxViewRemove(top);
         cxStackPop(engine->window->views);
     }
     cxStackPush(engine->window->views, pview);

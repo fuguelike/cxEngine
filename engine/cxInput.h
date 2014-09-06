@@ -57,12 +57,6 @@ typedef struct {
     cxInt number;
 }cxTouchItems;
 
-//only use at touch method
-//touch point count
-#define CX_TOUCH_SIZE(_ps_)         ((_ps_)->number)
-//get point item
-#define CX_TOUCH_ITEM(_ps_,_idx_)   (_ps_)->items[_idx_]
-
 typedef enum {
     cxKeyTypeDown       = 0,
     cxKeyTypeUp         = 1,

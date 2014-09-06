@@ -37,25 +37,29 @@ void cxSpriteDraw(cxAny pview)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-static void cxSpriteDirtyEvent(cxAny sender)
+static void cxSpriteTransformEvent(cxAny sender)
 {
     cxSprite this = sender;
+    //set color
     this->cbox.lb = this->cxView.color;
     this->cbox.rb = this->cxView.color;
     this->cbox.lt = this->cxView.color;
     this->cbox.rt = this->cxView.color;
+    //set pos
     cxBox4f box = cxViewBox(this);
     this->vbox.lb = cxVec3fv(box.l, box.b, 0.0f);
     this->vbox.rb = cxVec3fv(box.r, box.b, 0.0f);
     this->vbox.lt = cxVec3fv(box.l, box.t, 0.0f);
     this->vbox.rt = cxVec3fv(box.r, box.t, 0.0f);
     this->tbox = this->texCoord;
+    //set flipX type
     if(this->isFlipX){
         this->tbox.lb.u = this->texCoord.rb.u;
         this->tbox.rb.u = this->texCoord.lb.u;
         this->tbox.lt.u = this->texCoord.rt.u;
         this->tbox.rt.u = this->texCoord.lt.u;
     }
+    //set flipY type
     if(this->isFlipY){
         this->tbox.lb.v = this->texCoord.lt.v;
         this->tbox.rb.v = this->texCoord.rt.v;
@@ -123,7 +127,7 @@ CX_OBJECT_INIT(cxSprite, cxView)
 {
     this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    CX_EVENT_APPEND(this->cxView.onDirty, cxSpriteDirtyEvent);
+    CX_EVENT_APPEND(this->cxView.onTransform, cxSpriteTransformEvent);
     CX_METHOD_SET(this->cxView.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
 }

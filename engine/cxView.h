@@ -53,6 +53,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool isRunning;
     cxBool isDirty;
     cxBool isVisible;
+    cxBool onlyTransform;   //only process transform
     cxBool isShowBorder;    //if draw border
     cxBool hideTop;         //=true hide prev view when use cxWindowPush
     cxBool isSort;
@@ -71,11 +72,13 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxColor4f color;
     cxColor3f borderColor;
 
-    CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouchItems *, cxTouchItems *);
+    CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouchItems *);
     CX_METHOD_DEF(cxBool, Key, cxAny, cxKey *);
     CX_METHOD_DEF(void, Draw, cxAny);
     CX_METHOD_DEF(void, After, cxAny);
     CX_METHOD_DEF(void, Before, cxAny);
+    CX_METHOD_DEF(void, Append, cxAny, cxAny);  //add view
+    CX_METHOD_DEF(void, Remove, cxAny);         //remove view
 
     CX_SIGNAL_ALLOC(onDraw);
 
@@ -84,7 +87,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
-    CX_EVENT_ALLOC(onDirty);
+    CX_EVENT_ALLOC(onTransform);
 CX_OBJECT_END(cxView, cxObject)
 
 cxAny *cxViewActionFind(cxAny pview);
@@ -166,7 +169,7 @@ void cxViewSetOrder(cxAny pview,cxInt order);
 cxBool cxViewKey(cxAny pview,cxKey *key);
 
 //touch count,current touches
-cxBool cxViewTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points);
+cxBool cxViewTouch(cxAny pview,cxTouchItems *points);
 
 void cxViewAppendImp(cxAny pview,cxAny newview);
 
@@ -202,6 +205,8 @@ void cxViewSetVisible(cxAny pview,cxBool visible);
 
 void cxViewSetPos(cxAny pview,cxVec2f pos);
 
+void cxViewSetOnlyTransform(cxAny pview,cxBool v);
+
 // -0.5 <-> +0.5
 // -width/2 <-> width/2
 //return fix pos,for keep view state
@@ -227,7 +232,9 @@ void cxViewEnter(cxAny pview);
 
 void cxViewExit(cxAny pview);
 
-void cxViewRemoved(cxAny pview);
+void cxViewRemove(cxAny pview);
+
+void cxViewRemoveImp(cxAny pview);
 
 void cxViewTransform(cxAny pview);
 

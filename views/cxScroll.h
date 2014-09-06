@@ -27,6 +27,7 @@ CX_OBJECT_DEF(cxScroll, cxView)
     cxBool isEnable;
     cxBox4f box;
     cxScrollMoveType type;
+    //can move view
     cxAny body;
     //scale data
     cxFloat scaleTime;
@@ -40,7 +41,7 @@ CX_OBJECT_END(cxScroll, cxView)
 
 void cxScrollUpdateBox(cxAny pview);
 
-cxBool cxScrollTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points);
+cxBool cxScrollTouch(cxAny pview,cxTouchItems *points);
 
 void cxScrollSetBody(cxAny pview,cxAny cview);
 

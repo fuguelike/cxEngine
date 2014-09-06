@@ -37,6 +37,7 @@
 #include <views/cxLabelBMP.h>
 #include <views/cxPolygon.h>
 #include <views/cxAlert.h>
+#include <views/cxLayer.h>
 
 #include <actions/cxParticle.h>
 #include <actions/cxMultiple.h>
@@ -131,6 +132,7 @@ static void cxEngineTypes()
     CX_TYPE_DEF(cxLabelTTF);
     CX_TYPE_DEF(cxLabelBMP);
     CX_TYPE_DEF(cxAlert);
+    CX_TYPE_DEF(cxLayer);
     
     //register actions
     CX_TYPE_DEF(cxMultiple);
@@ -467,7 +469,6 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
 {
     cxEngine this = cxEngineInstance();
     //current fires point
-    this->fires.number = 0;
     this->points.number = 0;
     cxDouble now = cxTimestamp();
     cxTouchItems delItems = {.number = 0};
@@ -490,22 +491,17 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
             item = cxHashGet(this->items, key);
             CX_CONTINUE(item == NULL);
             delItems.items[delItems.number++] = item;
-        }else{
-            CX_ERROR("unknow touch type %d",type);
-            continue;
         }
-        if(item != NULL){
-            item->position = cpos;
-            item->type = type;
-            item->key = p.id;
-            this->fires.items[this->fires.number++] = item;
-        }
+        CX_CONTINUE(item == NULL);
+        item->position = cpos;
+        item->type = type;
+        item->key = p.id;
     }
     //get all points
     CX_HASH_FOREACH(this->items, ele, tmp){
         this->points.items[this->points.number++] = ele->any;
     }
-    cxBool ret = cxViewTouch(this->window, &this->fires, &this->points);
+    cxBool ret = cxViewTouch(this->window, &this->points);
     //remove up cancel point
     for(cxInt i=0; i < delItems.number; i++){
         item = delItems.items[i];

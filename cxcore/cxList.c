@@ -27,6 +27,11 @@ cxListElement *cxListAppend(cxList list,cxAny any)
     return element;
 }
 
+cxBool cxListEmpty(cxList list)
+{
+    return list->listptr == NULL;
+}
+
 cxListElement *cxListPrepend(cxList list,cxAny any)
 {
     cxListElement *element = allocator->malloc(sizeof(cxListElement));

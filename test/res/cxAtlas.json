@@ -11,7 +11,7 @@
   },
   "layers": [
     {
-      "position": {
+      "pos": {
         "x": 0,
         "y": 100
       },
@@ -22,7 +22,7 @@
       "key": "artichoke.png"
     },
     {
-      "position": {
+      "pos": {
         "x": 0,
         "y": 200
       },

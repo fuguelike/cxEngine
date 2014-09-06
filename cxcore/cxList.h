@@ -36,6 +36,8 @@ CX_OBJECT_END(cxList, cxObject)
 
 cxInt cxListLength(cxList list);
 
+cxBool cxListEmpty(cxList list);
+
 cxListElement *cxListAppend(cxList list,cxAny any);
 
 cxListElement *cxListPrepend(cxList list,cxAny any);

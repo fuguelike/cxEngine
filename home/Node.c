@@ -19,10 +19,10 @@ cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
     return MapPosToIdx(map, pos);
 }
 
-static cxBool NodeTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
+static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
 {
-    CX_RETURN(CX_TOUCH_SIZE(points) != 1,false);
-    cxTouchItem item = CX_TOUCH_ITEM(fires, 0);
+    CX_RETURN(points->number != 1,false);
+    cxTouchItem item = points->items[0];
     Node this = pview;
     Map map = this->map;
     //不可选择?
@@ -30,7 +30,7 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *fires,cxTouchItems *points)
         return false;
     }
     cxVec2f cpos;
-    cxBool hited = cxViewHitTest(pview, item->current, &cpos) && cxPointsContainPoint(this->box, cpos);
+    cxBool hited = cxViewHitTest(pview, item->position, &cpos) && cxPointsContainPoint(this->box, cpos);
     Node snode = map->node;
     //如果移动一个选中的node
     if(item->type == cxTouchTypeMove &&  map->node != NULL && this->isSelected){
