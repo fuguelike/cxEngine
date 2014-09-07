@@ -283,7 +283,7 @@ CX_SETTER_DEF(cxParticle, texture)
         url = cxJsonConstChars(value, "url");
     }
     CX_RETURN(url == NULL);
-    cxSpriteSetTextureURL(this->atlas, url, true);
+    cxSpriteSetTextureURL(this->atlas, url);
     cxJson keys = cxJsonArray(value, "keys");
     cxInt keylen = cxJsonArrayLength(keys);
     CX_RETURN(keylen == 0);
@@ -295,7 +295,7 @@ CX_SETTER_DEF(cxParticle, texture)
     CX_JSON_ARRAY_EACH_BEG(keys, item)
     {
         cxBoxTex2f *boxs = this->boxtexs->data;
-        cxBoxTex2f *box = &boxs[index];
+        cxBoxTex2f *box = &boxs[itemIndex];
         cxConstChars key = cxJsonToConstChars(item);
         *box = cxTextureBox(this->atlas->cxSprite.texture, key);
     }
@@ -463,7 +463,7 @@ cxParticle cxParticleCreate(cxFloat time,cxConstChars url,cxInt number)
     cxParticle this = CX_CREATE(cxParticle);
     this->time = time;
     cxParticleInitNumber(this,number);
-    cxSpriteSetTextureURL(this->atlas, url, true);
+    cxSpriteSetTextureURL(this->atlas, url);
     cxSetRandSeed();
     return this;
 }

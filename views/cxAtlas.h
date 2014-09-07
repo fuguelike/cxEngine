@@ -18,6 +18,10 @@ typedef struct {
     cxBox4f box;
 }cxAtlasScale9;
 
+typedef struct {
+    GLushort indices[6];
+}cxIndices6u;
+
 CX_OBJECT_DEF(cxAtlas, cxSprite)
     GLuint vaoid;
     GLuint vboid[2];

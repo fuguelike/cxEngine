@@ -14,6 +14,10 @@
       "leek.png"
     ]
   },
+  "gravity": {
+    "x": 0,
+    "y": -1000
+  },
   "startspin":{
       "v":1000
     },

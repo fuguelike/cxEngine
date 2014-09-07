@@ -13,9 +13,14 @@
 
 CX_C_BEGIN
 
+CX_OBJECT_DEF(cxLayerSprite, cxSprite)
+    cxBoxPoint *layerBox;
+CX_OBJECT_END(cxLayerSprite, cxSprite)
+
+void cxLayerSpriteUpdateBoxPoint(cxAny pview,cxBoxPoint *bp);
+
 CX_OBJECT_DEF(cxLayer, cxAtlas)
-    CX_SLOT_ALLOC(onRemove);
-    CX_SLOT_ALLOC(onAppend);
+    
 CX_OBJECT_END(cxLayer, cxAtlas)
 
 

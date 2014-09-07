@@ -215,10 +215,9 @@ CX_SETTER_DEF(cxScroll, scaleinc)
 }
 CX_SETTER_DEF(cxScroll, body)
 {
-    cxObjectCreateResult ret = cxObjectCreateBegin(value);
-    CX_ASSERT(CX_INSTANCE_OF(ret.object, cxView), "body must is cxView type");
-    cxScrollSetBody(this, ret.object);
-    cxObjectCreateEnd(&ret);
+    cxAny object = cxObjectCreateWithJson(value);
+    CX_ASSERT(CX_INSTANCE_OF(object, cxView), "body must is cxView type");
+    cxScrollSetBody(this, object);
 }
 CX_SETTER_DEF(cxScroll, scalable)
 {

@@ -84,10 +84,10 @@ void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
 
 void cxSpriteSetImage(cxAny pview,cxConstChars url)
 {
-    cxSpriteSetTextureURL(pview, url, false);
+    cxSpriteSetTextureURL(pview, url);
 }
 
-void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
+void cxSpriteSetTextureURL(cxAny pview,cxConstChars url)
 {
     CX_RETURN(url == NULL);
     cxSprite this = pview;
@@ -96,27 +96,13 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize)
     cxTexture texture = cxTextureFactoryLoadFile(path->path);
     CX_ASSERT(texture != NULL, "texture load failed %s",path->path);
     cxSpriteSetTexture(this, texture);
-    //use texture size
-    cxBool uts = useTexSize;
-    if(path->count > 1){
-        cxSpriteSetTextureKey(this, path->key, uts);
-    }else if(uts){
-        cxViewSetSize(this, texture->size);
-    }
 }
 
 CX_SETTER_DEF(cxSprite, texture)
 {
-    cxConstChars texture = NULL;
-    cxBool uts = true;
-    if(cxJsonIsString(value)){
-        texture = cxJsonToConstChars(value);
-    }else if(cxJsonIsObject(value)){
-        uts = cxJsonBool(value, "uts", uts);
-        texture = cxJsonConstChars(value, "url");
-    }
+    cxConstChars texture = cxJsonToConstChars(value);
     CX_RETURN(texture == NULL);
-    cxSpriteSetTextureURL(this, texture, uts);
+    cxSpriteSetTextureURL(this, texture);
 }
 
 CX_OBJECT_TYPE(cxSprite, cxView)
@@ -141,7 +127,7 @@ CX_OBJECT_TERM(cxSprite, cxView)
 cxSprite cxSpriteCreateWithURL(cxConstChars url)
 {
     cxSprite this = CX_CREATE(cxSprite);
-    cxSpriteSetTextureURL(this, url, true);
+    cxSpriteSetTextureURL(this, url);
     return this;
 }
 
@@ -158,7 +144,7 @@ cxBoxTex2f cxSpriteBoxTex(cxAny pview)
     return this->texCoord;
 }
 
-void cxSpriteSetTextureKey(cxAny pview,cxConstChars key,cxBool equSize)
+void cxSpriteSetTextureKey(cxAny pview,cxConstChars key)
 {
     cxSprite this = pview;
     if(this->texture == NULL){
@@ -168,9 +154,6 @@ void cxSpriteSetTextureKey(cxAny pview,cxConstChars key,cxBool equSize)
         this->texCoord = cxTextureBox(this->texture, key);
     }
     CX_ASSERT(this->texture != NULL, "sprite texture not load");
-    if(equSize){
-        cxViewSetSize(pview, cxTextureSize(this->texture, key));
-    }
     this->cxView.isDirty = true;
 }
 

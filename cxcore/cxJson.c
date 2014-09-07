@@ -134,6 +134,14 @@ static cxJson jsonToArray(json_t *v)
     return rv;
 }
 
+static cxJson jsonToAny(json_t *v)
+{
+    CX_RETURN(v == NULL,NULL);
+    cxJson rv = CX_CREATE(cxJson);
+    rv->json = json_incref(v);
+    return rv;
+}
+
 static cxJson jsonToObject(json_t *v)
 {
     CX_RETURN(v == NULL,NULL);
@@ -836,6 +844,13 @@ cxInt cxJsonArrayLength(cxJson json)
     return json_array_size(CX_JSON_PTR(json));
 }
 
+cxJson cxJsonAnyAt(cxJson json,cxInt idx)
+{
+    CX_ASSERT(json != NULL, "json error");
+    json_t *v = json_array_get(CX_JSON_PTR(json), idx);
+    return jsonToAny(v);
+}
+
 cxJson cxJsonObjectAt(cxJson json,cxInt idx)
 {
     CX_ASSERT(json != NULL, "json error");
@@ -916,7 +931,7 @@ static void cxJsonDecodeToHash(cxHash hash,cxJson json)
     {
         cxAny iv = cxJsonDecode(item);
         CX_CONTINUE(iv == NULL);
-        cxHashSet(hash, cxHashStrKey(key), iv);
+        cxHashSet(hash, cxHashStrKey(itemKey), iv);
     }
     CX_JSON_OBJECT_EACH_END(json, item)
 }

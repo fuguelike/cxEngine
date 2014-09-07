@@ -20,30 +20,32 @@ CX_OBJECT_DEF(cxJson, cxObject)
     json_t *json;
 CX_OBJECT_END(cxJson, cxObject)
 
-#define CX_JSON_PTR(j)  ((j)->json)
+#define CX_JSON_PTR(_j_)  ((_j_)->json)
 
-#define CX_JSON_ARRAY_EACH_BEG(_j_,_v_)                         \
-if((_j_) != NULL){                                              \
-    json_t *_value_ = NULL;                                     \
-    cxInt index = 0;                                            \
-    json_array_foreach(CX_JSON_PTR(_j_), index, _value_){       \
-        cxJson _v_ = cxJsonAttachAlloc(_value_);
+#define CX_JSON_ARRAY_EACH_BEG(_j_,_v_)                             \
+if((_j_) != NULL){                                                  \
+    json_t *_v_##_value_ = NULL;                                    \
+    json_t *_v_##_json_= CX_JSON_PTR(_j_);                          \
+    cxInt _v_##Index = 0;                                           \
+    json_array_foreach(_v_##_json_, _v_##Index, _v_##_value_){      \
+        cxJson _v_ = cxJsonAttachAlloc(_v_##_value_);
 
-#define CX_JSON_ARRAY_EACH_END(_j_,_v_)                         \
-        CX_RELEASE(_v_);                                        \
-    }                                                           \
+#define CX_JSON_ARRAY_EACH_END(_j_,_v_)                             \
+        CX_RELEASE(_v_);                                            \
+    }                                                               \
 }
 
-#define CX_JSON_OBJECT_EACH_BEG(_j_,_v_)                        \
-if((_j_) != NULL){                                              \
-    json_t *_value_ = NULL;                                     \
-    cxConstChars key = NULL;                                    \
-    json_object_foreach(CX_JSON_PTR(_j_), key, _value_){        \
-        cxJson _v_ = cxJsonAttachAlloc(_value_);
+#define CX_JSON_OBJECT_EACH_BEG(_j_,_v_)                            \
+if((_j_) != NULL){                                                  \
+    json_t *_v_##_value_ = NULL;                                    \
+    json_t *_v_##_json_= CX_JSON_PTR(_j_);                          \
+    cxConstChars _v_##Key = NULL;                                   \
+    json_object_foreach(_v_##_json_, _v_##Key, _v_##_value_){       \
+        cxJson _v_ = cxJsonAttachAlloc(_v_##_value_);
 
-#define CX_JSON_OBJECT_EACH_END(_j_,_v_)                        \
-        CX_RELEASE(_v_);                                        \
-    }                                                           \
+#define CX_JSON_OBJECT_EACH_END(_j_,_v_)                            \
+        CX_RELEASE(_v_);                                            \
+    }                                                               \
 }
 
 typedef cxJson (*cxJsonReaderFunc)(cxConstChars src);
@@ -166,6 +168,8 @@ cxLong cxJsonLongAt(cxJson json,cxInt idx,cxLong dv);
 cxJson cxJsonArrayAt(cxJson json,cxInt idx);
 
 cxJson cxJsonObjectAt(cxJson json,cxInt idx);
+
+cxJson cxJsonAnyAt(cxJson json,cxInt idx);
 
 cxInt cxJsonArrayLength(cxJson json);
 

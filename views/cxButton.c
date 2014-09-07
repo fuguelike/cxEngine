@@ -79,7 +79,7 @@ CX_OBJECT_TERM(cxButton, cxSprite)
 cxButton cxButtonCreate(cxConstChars url)
 {
     cxButton this = CX_CREATE(cxButton);
-    cxSpriteSetTextureURL(this, url, true);
+    cxSpriteSetTextureURL(this, url);
     return this;
 }
 

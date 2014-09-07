@@ -92,25 +92,16 @@ void cxTypeRunObjectSetter(cxObject object,cxJson json)
 {
     CX_ASSERT(object != NULL, "object args error");
     CX_JSON_OBJECT_EACH_BEG(json, item)
-    cxObjectSetter(object, key, item);
+    cxObjectSetter(object, itemKey, item);
     CX_JSON_OBJECT_EACH_END(json, item)
 }
 
-void cxObjectCreateEnd(cxObjectCreateResult *ret)
+static void cxLoaderSaveObject(cxAny object,cxJson json)
 {
-    CX_ASSERT(ret != NULL, "ret null");
-    cxConstChars id = NULL;
-    cxObject object = ret->object;
-    if(ret->njson != NULL){
-        id = cxJsonConstChars(ret->njson, "id");
-        cxTypeRunObjectSetter(object, ret->njson);
-    }
-    if(ret->njson != ret->ojson){
-        id = cxJsonConstChars(ret->ojson, "id");
-        cxTypeRunObjectSetter(object, ret->ojson);
-    }
+    cxConstChars id = cxJsonConstChars(json, "id");
+    CX_RETURN(id == NULL);
     cxLoader curr = cxCoreTop();
-    if(id != NULL && CX_INSTANCE_OF(curr, cxLoader)){
+    if(CX_INSTANCE_OF(curr, cxLoader)){
         cxHashSet(curr->objects, cxHashStrKey(id), object);
     }
 }
@@ -125,7 +116,7 @@ cxAny cxObjectCreateWithType(cxConstType type)
     return object;
 }
 
-cxObjectCreateResult cxObjectCreateBegin(cxJson json)
+cxAny cxObjectCreateWithJson(cxJson json)
 {
     CX_ASSERT(json != NULL, "json args error");
     cxObjectCreateResult ret = {NULL};
@@ -149,7 +140,17 @@ cxObjectCreateResult cxObjectCreateBegin(cxJson json)
     CX_ASSERT(type != NULL, "json type property null");
     ret.object = cxObjectCreateWithType(type);
     CX_ASSERT(ret.object != NULL,"create object %s failed", type);
-    return ret;
+    //read new json property
+    if(ret.njson != NULL){
+        cxTypeRunObjectSetter(ret.object, ret.njson);
+        cxLoaderSaveObject(ret.object, ret.njson);
+    }
+    //read old json property
+    if(cxJsonIsObject(ret.ojson)) {
+        cxTypeRunObjectSetter(ret.object, ret.ojson);
+        cxLoaderSaveObject(ret.object, ret.ojson);
+    }
+    return ret.object;
 }
 
 void __cxTypeRegisterName(cxConstType type,cxConstType super)

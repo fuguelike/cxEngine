@@ -20,24 +20,23 @@ CX_OBJECT_DEF(cxAnimateItem, cxObject)
     cxFloat value;
 CX_OBJECT_END(cxAnimateItem, cxObject)
 
-#define CX_ANIMATE_DEFAULT_GROUP "__DefaultGroupName__"
-
 CX_OBJECT_DEF(cxAnimate, cxAction)
-    cxString groupName;
     cxHash groups;
+    cxHash frames;
     cxInt index;
     cxFloat time;
     cxBool forever;
+    cxString key;
     CX_EVENT_ALLOC(onFrame);
 CX_OBJECT_END(cxAnimate, cxAction)
 
-cxAnimateItem cxAnimateItemAt(cxAny pav,cxInt idx);
+cxAnimateItem cxAnimateGetFrame(cxAny pav,cxConstChars key);
 
-cxArray cxAnimateGroup(cxAny pav,cxConstChars name);
+cxHash cxAnimateGetGroup(cxAny pav,cxString key);
 
-void cxAnimateSetGroupName(cxAny pav,cxConstChars name);
+void cxAnimateSetKey(cxAny pav,cxConstChars name);
 
-cxAnimate cxAnimateCreate(cxFloat time,cxConstChars name);
+cxAnimate cxAnimateCreate(cxFloat time,cxConstChars key);
 
 CX_C_END
 

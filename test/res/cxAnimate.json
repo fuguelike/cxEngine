@@ -2,7 +2,6 @@
   "type": "cxAnimate",
   "time": 0,
   "forever": true,
-  "key": "run",
   "frames": [
     {
       "type": "cxAnimateItem",
@@ -78,6 +77,14 @@
     }
   ],
   "groups": {
+    "cry": [
+      "1.png",
+      "2.png",
+      "3.png",
+      "4.png",
+      "5.png",
+      "6.png"
+    ],
     "run": [
       {
         "type": "cxAnimateItem",
@@ -97,14 +104,6 @@
         "texture": "texture.json",
         "time": 1
       }
-    ],
-    "cry": [
-      6,
-      7,
-      8,
-      9,
-      10,
-      11
     ]
   }
 }

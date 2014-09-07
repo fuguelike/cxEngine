@@ -9,6 +9,12 @@
   "layout": "horizontal|vertical",
   "body": {
     "src": "cxTable.json",
-    "scale":{"x":1.2,"y":1.2}
-  }
+    "scale": {
+      "x": 1.2,
+      "y": 1.2
+    }
+  },
+  "actions": [
+    "cxParticle.json"
+  ]
 }

@@ -133,6 +133,7 @@ static void cxEngineTypes()
     CX_TYPE_DEF(cxLabelBMP);
     CX_TYPE_DEF(cxAlert);
     CX_TYPE_DEF(cxLayer);
+    CX_TYPE_DEF(cxLayerSprite);
     
     //register actions
     CX_TYPE_DEF(cxMultiple);
@@ -392,6 +393,7 @@ void cxEngineTimeReset()
 {
     cxEngine this = cxEngineInstance();
     this->lastTime = cxTimestamp();
+    this->frameDelta = 0;
 }
 
 cxVec2f cxEngineTouchToWindow(cxVec2f pos)

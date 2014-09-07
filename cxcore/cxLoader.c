@@ -46,9 +46,8 @@ cxLoader cxLoaderCreate(cxConstChars path)
     CX_ASSERT(json != NULL, "json file %s read error",path);
     cxLoader this = CX_CREATE(cxLoader);
     cxCorePush(this);
-    cxObjectCreateResult ret = cxObjectCreateBegin(json);
-    cxObjectCreateEnd(&ret);
+    cxAny object = cxObjectCreateWithJson(json);
     cxCorePop();
-    CX_RETAIN_SWAP(this->object, ret.object);
+    CX_RETAIN_SWAP(this->object, object);
     return this;
 }

@@ -43,7 +43,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool supportAtlasSet;
     cxViewAutoResizeMask autoMask;
     cxBox4f  autoBox;
-    cxActionMgr actionMgr;
     cxHash actions;
     cxArray removes;
     cxInt zorder;
@@ -93,9 +92,9 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onTransform);
 CX_OBJECT_END(cxView, cxObject)
 
-cxAny *cxViewActionFind(cxAny pview);
+cxMatrix4f *cxViewNormalMatrix(cxAny pview);
 
-void cxViewSetActionMgr(cxAny pview,cxActionMgr mgr);
+cxMatrix4f *cxViewAnchorMatrix(cxAny pview);
 
 void cxViewForeachBindes(cxAny pview,cxViewBindForeachFunc func);
 

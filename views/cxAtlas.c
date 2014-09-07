@@ -230,7 +230,7 @@ void cxAtlasRemoveAt(cxAny pview,cxInt index)
     memmove(dst, src, sizeof(cxBoxPoint) * count);
     dst = &this->indices[index];
     src = &this->indices[index + 1];
-    memmove(dst, src, sizeof(GLushort) * 6 * count);
+    memmove(dst, src, sizeof(cxIndices6u) * count);
     this->number --;
     this->isDirty = true;
 }
@@ -268,7 +268,7 @@ static void cxAtlasInitVAO(cxAny pview)
     glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, texcoords));
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vboid[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort)*this->capacity*6, this->indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices6u)*this->capacity, this->indices, GL_STATIC_DRAW);
     
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -283,7 +283,7 @@ static void cxAtlasInitVBO(cxAny pview)
     glBufferData(GL_ARRAY_BUFFER, sizeof(cxBoxPoint) * this->capacity, this->boxes, GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vboid[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * this->capacity * 6, this->indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices6u) * this->capacity, this->indices, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -316,13 +316,13 @@ void cxAtlasSetCapacity(cxAny pview,cxInt capacity)
 {
     cxAtlas this = pview;
     CX_RETURN(this->capacity >= capacity);
-    this->capacity = capacity + 8;
+    this->capacity = capacity;
     cxInt size = this->capacity * sizeof(cxBoxPoint);
     //
     this->boxes = allocator->realloc(this->boxes,size);
     CX_ASSERT(this->boxes != NULL, "out of memory");
     //
-    size = this->capacity * 6 * sizeof(GLushort);
+    size = this->capacity * sizeof(cxIndices6u);
     this->indices = allocator->realloc(this->indices,size);
     CX_ASSERT(this->indices != NULL, "out of memory");
     //

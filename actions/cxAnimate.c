@@ -48,17 +48,31 @@ CX_OBJECT_FREE(cxAnimateItem, cxObject)
 }
 CX_OBJECT_TERM(cxAnimateItem, cxObject)
 
+static cxAnimateItem cxAnimateItemGet(cxAny pav,cxAny any)
+{
+    cxAnimate this = pav;
+    if(CX_INSTANCE_OF(any, cxAnimateItem)){
+        return any;
+    }
+    if(CX_INSTANCE_OF(any, cxString)){
+        cxConstChars key = cxStringBody(any);
+        return cxHashGet(this->frames, cxHashStrKey(key));
+    }
+    return NULL;
+}
+
 static void cxAnimateInit(cxAny pav)
 {
     cxAnimate this = pav;
     CX_ASSERT(CX_INSTANCE_OF(this->cxAction.view, cxSprite), "cxAnimate action view must is cxSprite");
     this->index = 0;
     this->cxAction.time = this->time;
-    cxArray list = cxAnimateGroup(this,NULL);
-    cxFloat dt = this->time / (cxFloat)cxArrayLength(list);
+    cxHash items = cxAnimateGetGroup(this,this->key);
+    cxFloat dt = this->time / (cxFloat)cxHashLength(items);
     cxFloat i = 0;
-    CX_ARRAY_FOREACH(list, ele){
-        cxAnimateItem item = cxArrayObject(ele);
+    CX_HASH_FOREACH(items, ele, tmp){
+        cxAnimateItem item = cxAnimateItemGet(this,ele->any);
+        CX_ASSERT(item != NULL, "get item error");
         this->cxAction.time += item->time;
         i += dt  + item->time;
         item->value = i;
@@ -68,12 +82,13 @@ static void cxAnimateInit(cxAny pav)
 static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxAnimate this = pav;
-    cxArray list = cxAnimateGroup(this,NULL);
+    cxHash items = cxAnimateGetGroup(this,this->key);
     cxInt i = 0;
-    CX_RETURN(this->index >= cxArrayLength(list));
-    CX_ARRAY_FOREACH(list, e){
+    CX_RETURN(this->index >= cxHashLength(items));
+    CX_HASH_FOREACH(items, ele, tmp){
         i++;
-        cxAnimateItem item = cxArrayObject(e);
+        cxAnimateItem item = cxAnimateItemGet(this,ele->any);
+        CX_ASSERT(item != NULL, "get item error");
         if(this->cxAction.timeElapsed > item->value){
             continue;
         }
@@ -84,7 +99,7 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
             cxSpriteSetTexture(this->cxAction.view, item->texture);
         }
         if(item->texture != NULL && item->key != NULL){
-            cxSpriteSetTextureKey(this->cxAction.view, cxStringBody(item->key), false);
+            cxSpriteSetTextureKey(this->cxAction.view, cxStringBody(item->key));
         }
         this->index = i;
         CX_EVENT_FIRE(this, onFrame);
@@ -117,13 +132,12 @@ CX_SETTER_DEF(cxAnimate, time)
 CX_SETTER_DEF(cxAnimate, frames)
 {
     cxJson frames = cxJsonToArray(value);
-    cxArray list = cxAnimateGroup(this,CX_ANIMATE_DEFAULT_GROUP);
     CX_JSON_ARRAY_EACH_BEG(frames, item)
     {
-        cxObjectCreateResult ret = cxObjectCreateBegin(item);
-        CX_ASSERT(CX_INSTANCE_OF(ret.object, cxAnimateItem), "type error");
-        cxArrayAppend(list, ret.object);
-        cxObjectCreateEnd(&ret);
+        cxConstChars ik = cxJsonConstChars(item, "key");
+        cxAny frame = cxObjectCreateWithJson(item);
+        CX_ASSERT(CX_INSTANCE_OF(frame, cxAnimateItem), "type error");
+        cxHashSet(this->frames, cxHashStrKey(ik), frame);
     }
     CX_JSON_ARRAY_EACH_END(frames, item)
 }
@@ -137,23 +151,25 @@ CX_SETTER_DEF(cxAnimate, groups)
     CX_JSON_OBJECT_EACH_BEG(groups, item)
     {
         CX_ASSERT(cxJsonIsArray(item), "must is array");
-        cxArray list = cxAnimateGroup(this,key);
+        cxString key = cxStringAllocChars(itemKey);
+        cxHash items = cxAnimateGetGroup(this,key);
         cxJson frames = cxJsonToArray(item);
         CX_JSON_ARRAY_EACH_BEG(frames, ats)
         {
-            if(cxJsonIsNumber(ats)){
-                cxInt idx = cxJsonToInt(ats, -1);
-                cxAny frame = cxAnimateItemAt(this, idx);
-                CX_CONTINUE(frame == NULL);
-                cxArrayAppend(list, frame);
+            if(cxJsonIsString(ats)){
+                cxConstChars ik = cxJsonToConstChars(ats);
+                cxString im = cxStringAllocChars(ik);
+                cxHashSet(items, cxHashStrKey(ik), im);
+                CX_RELEASE(im);
             }else{
-                cxObjectCreateResult ret = cxObjectCreateBegin(ats);
-                CX_ASSERT(CX_INSTANCE_OF(ret.object, cxAnimateItem), "type error");
-                cxArrayAppend(list, ret.object);
-                cxObjectCreateEnd(&ret);
+                cxConstChars ik = cxJsonConstChars(ats, "key");
+                cxAny frame = cxObjectCreateWithJson(ats);
+                CX_ASSERT(CX_INSTANCE_OF(frame, cxAnimateItem), "type error");
+                cxHashSet(items, cxHashStrKey(ik), frame);
             }
         }
         CX_JSON_ARRAY_EACH_END(frames, ats)
+        CX_RELEASE(key);
     }
     CX_JSON_OBJECT_EACH_END(groups, item)
 }
@@ -161,34 +177,29 @@ CX_SETTER_DEF(cxAnimate, key)
 {
     cxConstChars key = cxJsonToConstChars(value);
     if(key != NULL){
-        cxAnimateSetGroupName(this, key);
+        cxAnimateSetKey(this, key);
     }
 }
 
 //from default group get item
-cxAnimateItem cxAnimateItemAt(cxAny pav,cxInt idx)
-{
-    cxArray list = cxAnimateGroup(pav, CX_ANIMATE_DEFAULT_GROUP);
-    CX_ASSERT(list != NULL, "group %s not exists",CX_ANIMATE_DEFAULT_GROUP);
-    if(idx < 0 || idx >= cxArrayLength(list)){
-        return NULL;
-    }
-    return cxArrayAtIndex(list, idx);
-}
-
-cxArray cxAnimateGroup(cxAny pav,cxConstChars name)
+cxAnimateItem cxAnimateGetFrame(cxAny pav,cxConstChars key)
 {
     cxAnimate this = pav;
-    if(name == NULL){
-        name = cxStringBody(this->groupName);
+    return cxHashGet(this->frames, cxHashStrKey(key));
+}
+
+cxHash cxAnimateGetGroup(cxAny pav,cxString key)
+{
+    cxAnimate this = pav;
+    CX_RETURN(key == NULL, this->frames);
+    cxConstChars name = cxStringBody(key);
+    cxHash items = cxHashGet(this->groups, cxHashStrKey(name));
+    if(items == NULL){
+        items = CX_ALLOC(cxHash);
+        cxHashSet(this->groups, cxHashStrKey(name), items);
+        CX_RELEASE(items);
     }
-    cxArray list = cxHashGet(this->groups, cxHashStrKey(name));
-    if(list == NULL){
-        list = CX_ALLOC(cxArray);
-        cxHashSet(this->groups, cxHashStrKey(name), list);
-        CX_RELEASE(list);
-    }
-    return list;
+    return items;
 }
 
 CX_OBJECT_TYPE(cxAnimate, cxAction)
@@ -207,32 +218,31 @@ CX_OBJECT_INIT(cxAnimate, cxAction)
     CX_METHOD_SET(this->cxAction.Step, cxAnimateStep);
     CX_METHOD_SET(this->cxAction.Reset, cxAnimateReset);
     this->groups = CX_ALLOC(cxHash);
-    this->groupName = cxStringAllocChars(CX_ANIMATE_DEFAULT_GROUP);
+    this->frames = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxAnimate, cxAction)
 {
-    CX_RELEASE(this->groupName);
+    CX_RELEASE(this->frames);
     CX_RELEASE(this->groups);
+    CX_RELEASE(this->key);
     CX_EVENT_RELEASE(this->onFrame);
 }
 CX_OBJECT_TERM(cxAnimate, cxAction)
 
-void cxAnimateSetGroupName(cxAny pav,cxConstChars name)
+void cxAnimateSetKey(cxAny pav,cxConstChars name)
 {
     cxAnimate this = pav;
     cxActionReset(this);
+    CX_RETURN(name == NULL);
     cxString str = cxStringConstChars(name);
-    CX_RETAIN_SWAP(this->groupName, str);
+    CX_RETAIN_SWAP(this->key, str);
 }
 
-cxAnimate cxAnimateCreate(cxFloat time,cxConstChars name)
+cxAnimate cxAnimateCreate(cxFloat time,cxConstChars key)
 {
     cxAnimate this = CX_CREATE(cxAnimate);
     this->time = time;
-    if(name == NULL){
-        name = CX_ANIMATE_DEFAULT_GROUP;
-    }
-    cxAnimateSetGroupName(this, name);
+    cxAnimateSetKey(this, key);
     return this;
 }
 

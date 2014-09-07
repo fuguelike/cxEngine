@@ -26,7 +26,6 @@ CX_OBJECT_DEF(cxSprite, cxView)
     cxBool          isFlipX;
     cxBool          isFlipY;
     cxBoxTex2f      texCoord;
-    cxAny data;     //cxLayer use
 CX_OBJECT_END(cxSprite, cxView)
 
 void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box);
@@ -49,11 +48,11 @@ void cxSpriteSetShader(cxAny pview,cxConstChars key);
 
 void cxSpriteSetImage(cxAny pview,cxConstChars url);
 
-void cxSpriteSetTextureURL(cxAny pview,cxConstChars url,cxBool useTexSize);
+void cxSpriteSetTextureURL(cxAny pview,cxConstChars url);
 
 void cxSpriteSetTexture(cxAny pview,cxTexture texture);
 
-void cxSpriteSetTextureKey(cxAny pview,cxConstChars key,cxBool equSize);
+void cxSpriteSetTextureKey(cxAny pview,cxConstChars key);
 
 CX_C_END
 
