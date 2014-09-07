@@ -50,8 +50,9 @@ if((_j_) != NULL){                                                  \
 
 typedef cxJson (*cxJsonReaderFunc)(cxConstChars src);
 
-//must set json reader callback
-extern cxJsonReaderFunc cxJsonReader;
+void cxJsonSetReader(cxJsonReaderFunc func);
+
+cxJson cxJsonRead(cxConstChars src);
 
 cxString cxJsonEnvString(cxConstChars key);
 

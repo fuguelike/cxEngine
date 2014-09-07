@@ -1,6 +1,6 @@
 {
-  "id": "v0",
-  "type": "cxAtlas",
+  "cxId": "v0",
+  "cxType": "cxAtlas",
   "texture": "texture.json",
   "size": {
     "w": 200,

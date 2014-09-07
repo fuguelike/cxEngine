@@ -1,5 +1,5 @@
 {
-  "type": "cxLayer",
+  "cxType": "cxLayer",
   "size": {
     "w": 800,
     "h": 800
@@ -7,7 +7,7 @@
   "texture": "texture.json",
   "subviews": [
     {
-      "type": "cxLayerSprite",
+      "cxType": "cxLayerSprite",
       "texture": "texture.json?leek.png",
       "size": {
         "w": 200,
@@ -15,14 +15,14 @@
       },
       "actions": [
         {
-          "src":"cxAnimate.json",
+          "cxSrc":"cxAnimate.json",
           "key":"cry"
         }
       ],
       "resizing": "left|bottom"
     },
     {
-      "type": "cxLayerSprite",
+      "cxType": "cxLayerSprite",
       "texture": "texture.json?leek.png",
       "size": {
         "w": 200,
@@ -34,7 +34,7 @@
       "resizing": "right|bottom"
     },
     {
-      "type": "cxLayerSprite",
+      "cxType": "cxLayerSprite",
       "texture": "texture.json?leek.png",
       "size": {
         "w": 200,
@@ -46,7 +46,7 @@
       "resizing": "left|top"
     },
     {
-      "type": "cxLayerSprite",
+      "cxType": "cxLayerSprite",
       "texture": "texture.json?leek.png",
       "size": {
         "w": 200,
@@ -58,7 +58,7 @@
       "resizing": "right|top"
     },
     {
-      "type": "cxLayerSprite",
+      "cxType": "cxLayerSprite",
       "texture": "texture.json?leek.png",
       "size": {
         "w": 200,

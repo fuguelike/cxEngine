@@ -1,6 +1,6 @@
 {
-  "id": "particle",
-  "type": "cxParticle",
+  "cxId": "particle",
+  "cxType": "cxParticle",
   "time": -1,
   "number": 200,
   "rate": -1,

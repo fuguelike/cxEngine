@@ -14,18 +14,18 @@ static cxHash types;
 void cxTypesInit()
 {
     types = CX_ALLOC(cxHash);
-    CX_TYPE_DEF(cxObject);
-    CX_TYPE_DEF(cxType);
-    CX_TYPE_DEF(cxProperty);
-    CX_TYPE_DEF(cxMemPool);
-    CX_TYPE_DEF(cxHash);
-    CX_TYPE_DEF(cxArray);
-    CX_TYPE_DEF(cxList);
-    CX_TYPE_DEF(cxStack);
-    CX_TYPE_DEF(cxNumber);
-    CX_TYPE_DEF(cxString);
-    CX_TYPE_DEF(cxMessage);
-    CX_TYPE_DEF(cxLoader);
+    CX_TYPE_REG(cxObject);
+    CX_TYPE_REG(cxType);
+    CX_TYPE_REG(cxProperty);
+    CX_TYPE_REG(cxMemPool);
+    CX_TYPE_REG(cxHash);
+    CX_TYPE_REG(cxArray);
+    CX_TYPE_REG(cxList);
+    CX_TYPE_REG(cxStack);
+    CX_TYPE_REG(cxNumber);
+    CX_TYPE_REG(cxString);
+    CX_TYPE_REG(cxMessage);
+    CX_TYPE_REG(cxLoader);
 }
 
 void cxTypesFree()
@@ -96,13 +96,13 @@ void cxTypeRunObjectSetter(cxObject object,cxJson json)
     CX_JSON_OBJECT_EACH_END(json, item)
 }
 
-static void cxLoaderSaveObject(cxAny object,cxJson json)
+static void cxObjectSave(cxAny object,cxJson json)
 {
-    cxConstChars id = cxJsonConstChars(json, "id");
-    CX_RETURN(id == NULL);
+    cxConstChars cxId = cxJsonConstChars(json, "cxId");
+    CX_RETURN(cxId == NULL);
     cxLoader curr = cxCoreTop();
     if(CX_INSTANCE_OF(curr, cxLoader)){
-        cxHashSet(curr->objects, cxHashStrKey(id), object);
+        cxHashSet(curr->objects, cxHashStrKey(cxId), object);
     }
 }
 
@@ -111,9 +111,7 @@ cxAny cxObjectCreateWithType(cxConstType type)
     CX_ASSERT(type != NULL, "type null");
     cxType ptype = cxTypesGet(type);
     CX_ASSERT(ptype != NULL, "type(%s) not register",type);
-    cxObject object = ptype->Create();
-    CX_ASSERT(object != NULL, "type(%s) create object failed",type);
-    return object;
+    return ptype->Create();
 }
 
 cxAny cxObjectCreateWithJson(cxJson json)
@@ -125,17 +123,16 @@ cxAny cxObjectCreateWithJson(cxJson json)
     if(cxJsonIsString(json)){
         src = cxJsonToConstChars(json);
     }else if(cxJsonIsObject(json)){
-        src = cxJsonConstChars(json, "src");
+        src = cxJsonConstChars(json, "cxSrc");
     }
     //from src get json
     cxConstChars type = NULL;
     if(src != NULL){
-        CX_ASSERT(cxJsonReader !=NULL, "please set cxJsonReader");
-        ret.njson = cxJsonReader(src);
+        ret.njson = cxJsonRead(src);
         CX_ASSERT(ret.njson != NULL, "read json failed from %s",src);
-        type = cxJsonConstChars(ret.njson, "type");
+        type = cxJsonConstChars(ret.njson, "cxType");
     }else{
-        type = cxJsonConstChars(ret.ojson, "type");
+        type = cxJsonConstChars(ret.ojson, "cxType");
     }
     CX_ASSERT(type != NULL, "json type property null");
     ret.object = cxObjectCreateWithType(type);
@@ -143,12 +140,12 @@ cxAny cxObjectCreateWithJson(cxJson json)
     //read new json property
     if(ret.njson != NULL){
         cxTypeRunObjectSetter(ret.object, ret.njson);
-        cxLoaderSaveObject(ret.object, ret.njson);
+        cxObjectSave(ret.object, ret.njson);
     }
     //read old json property
     if(cxJsonIsObject(ret.ojson)) {
         cxTypeRunObjectSetter(ret.object, ret.ojson);
-        cxLoaderSaveObject(ret.object, ret.ojson);
+        cxObjectSave(ret.object, ret.ojson);
     }
     return ret.object;
 }

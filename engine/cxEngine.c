@@ -95,65 +95,65 @@ void cxEnginePause()
 static void cxEngineTypes()
 {
     //register core
-    CX_TYPE_DEF(cxStream);
-    CX_TYPE_DEF(cxTexture);
-    CX_TYPE_DEF(cxView);
-    CX_TYPE_DEF(cxAction);
-    CX_TYPE_DEF(cxEngine);
-    CX_TYPE_DEF(cxJson);
-    CX_TYPE_DEF(cxPlayer);
-    CX_TYPE_DEF(cxTouchItem);
-    CX_TYPE_DEF(cxAStar);
-    CX_TYPE_DEF(cxActionMgr);
+    CX_TYPE_REG(cxStream);
+    CX_TYPE_REG(cxTexture);
+    CX_TYPE_REG(cxView);
+    CX_TYPE_REG(cxAction);
+    CX_TYPE_REG(cxEngine);
+    CX_TYPE_REG(cxJson);
+    CX_TYPE_REG(cxPlayer);
+    CX_TYPE_REG(cxTouchItem);
+    CX_TYPE_REG(cxAStar);
+    CX_TYPE_REG(cxActionMgr);
     
     //register streams
-    CX_TYPE_DEF(cxAssetsStream);
-    CX_TYPE_DEF(cxFileStream);
-    CX_TYPE_DEF(cxMemStream);
+    CX_TYPE_REG(cxAssetsStream);
+    CX_TYPE_REG(cxFileStream);
+    CX_TYPE_REG(cxMemStream);
     
     //register textures
-    CX_TYPE_DEF(cxTextureJPG);
-    CX_TYPE_DEF(cxTexturePKM);
-    CX_TYPE_DEF(cxTexturePNG);
-    CX_TYPE_DEF(cxTextureTXT);
-    CX_TYPE_DEF(cxTexturePVR);
-    CX_TYPE_DEF(cxTextureJSON);
+    CX_TYPE_REG(cxTextureJPG);
+    CX_TYPE_REG(cxTexturePKM);
+    CX_TYPE_REG(cxTexturePNG);
+    CX_TYPE_REG(cxTextureTXT);
+    CX_TYPE_REG(cxTexturePVR);
+    CX_TYPE_REG(cxTextureJSON);
     
     //register views
-    CX_TYPE_DEF(cxSprite);
-    CX_TYPE_DEF(cxScroll);
-    CX_TYPE_DEF(cxTable);
-    CX_TYPE_DEF(cxWindow);
-    CX_TYPE_DEF(cxClipping);
-    CX_TYPE_DEF(cxLoading);
-    CX_TYPE_DEF(cxPolygon);
-    CX_TYPE_DEF(cxAtlas);
-    CX_TYPE_DEF(cxButton);
-    CX_TYPE_DEF(cxLabelTTF);
-    CX_TYPE_DEF(cxLabelBMP);
-    CX_TYPE_DEF(cxAlert);
-    CX_TYPE_DEF(cxLayer);
-    CX_TYPE_DEF(cxLayerSprite);
+    CX_TYPE_REG(cxSprite);
+    CX_TYPE_REG(cxScroll);
+    CX_TYPE_REG(cxTable);
+    CX_TYPE_REG(cxWindow);
+    CX_TYPE_REG(cxClipping);
+    CX_TYPE_REG(cxLoading);
+    CX_TYPE_REG(cxPolygon);
+    CX_TYPE_REG(cxAtlas);
+    CX_TYPE_REG(cxButton);
+    CX_TYPE_REG(cxLabelTTF);
+    CX_TYPE_REG(cxLabelBMP);
+    CX_TYPE_REG(cxAlert);
+    CX_TYPE_REG(cxLayer);
+    CX_TYPE_REG(cxLayerSprite);
     
     //register actions
-    CX_TYPE_DEF(cxMultiple);
-    CX_TYPE_DEF(cxAnimateItem);
-    CX_TYPE_DEF(cxAnimate);
-    CX_TYPE_DEF(cxFade);
-    CX_TYPE_DEF(cxFollow);
-    CX_TYPE_DEF(cxJump);
-    CX_TYPE_DEF(cxMove);
-    CX_TYPE_DEF(cxParabola);
-    CX_TYPE_DEF(cxParticle);
-    CX_TYPE_DEF(cxRotate);
-    CX_TYPE_DEF(cxRunner);
-    CX_TYPE_DEF(cxScale);
-    CX_TYPE_DEF(cxSpline);
-    CX_TYPE_DEF(cxTimer);
-    CX_TYPE_DEF(cxTint);
-    CX_TYPE_DEF(cxTimeLine);
-    CX_TYPE_DEF(cxBezier);
-    CX_TYPE_DEF(cxSpeed);
+    CX_TYPE_REG(cxMultiple);
+    CX_TYPE_REG(cxAnimateItem);
+    CX_TYPE_REG(cxAnimate);
+    CX_TYPE_REG(cxFade);
+    CX_TYPE_REG(cxFollow);
+    CX_TYPE_REG(cxJump);
+    CX_TYPE_REG(cxMove);
+    CX_TYPE_REG(cxParabola);
+    CX_TYPE_REG(cxParticle);
+    CX_TYPE_REG(cxRotate);
+    CX_TYPE_REG(cxRunner);
+    CX_TYPE_REG(cxScale);
+    CX_TYPE_REG(cxSpline);
+    CX_TYPE_REG(cxTimer);
+    CX_TYPE_REG(cxTint);
+    CX_TYPE_REG(cxTimeLine);
+    CX_TYPE_REG(cxBezier);
+    CX_TYPE_REG(cxSpeed);
 }
 
 void cxEngineBegin()
@@ -169,8 +169,8 @@ void cxEngineBegin()
     cxPlayerOpen();
     //init engine
     //set cxjsonReader
-    cxJsonReader = cxEngineJsonReader;
-    //
+    cxJsonSetReader(cxEngineJsonReader);
+    //use init engine
     cxEngineInit(engine);
 }
 

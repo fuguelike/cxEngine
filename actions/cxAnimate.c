@@ -51,10 +51,11 @@ CX_OBJECT_TERM(cxAnimateItem, cxObject)
 static cxAnimateItem cxAnimateItemGet(cxAny pav,cxAny any)
 {
     cxAnimate this = pav;
-    if(CX_INSTANCE_OF(any, cxAnimateItem)){
+    cxObject item = any;
+    if(item->cxType == cxAnimateItemTypeName){
         return any;
     }
-    if(CX_INSTANCE_OF(any, cxString)){
+    if(item->cxType == cxStringTypeName){
         cxConstChars key = cxStringBody(any);
         return cxHashGet(this->frames, cxHashStrKey(key));
     }
@@ -134,10 +135,14 @@ CX_SETTER_DEF(cxAnimate, frames)
     cxJson frames = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(frames, item)
     {
+        //first id
+        cxConstChars id = cxJsonConstChars(item, "id");
         cxConstChars ik = cxJsonConstChars(item, "key");
+        CX_ASSERT(ik != NULL, "key must set");
+        cxHashKey key = id != NULL ? cxHashStrKey(id) : cxHashStrKey(ik);
         cxAny frame = cxObjectCreateWithJson(item);
         CX_ASSERT(CX_INSTANCE_OF(frame, cxAnimateItem), "type error");
-        cxHashSet(this->frames, cxHashStrKey(ik), frame);
+        cxHashSet(this->frames, key, frame);
     }
     CX_JSON_ARRAY_EACH_END(frames, item)
 }
@@ -161,8 +166,9 @@ CX_SETTER_DEF(cxAnimate, groups)
                 cxString im = cxStringAllocChars(ik);
                 cxHashSet(items, cxHashStrKey(ik), im);
                 CX_RELEASE(im);
-            }else{
+            }else if(cxJsonIsObject(ats)){
                 cxConstChars ik = cxJsonConstChars(ats, "key");
+                CX_ASSERT(ik != NULL, "key must set");
                 cxAny frame = cxObjectCreateWithJson(ats);
                 CX_ASSERT(CX_INSTANCE_OF(frame, cxAnimateItem), "type error");
                 cxHashSet(items, cxHashStrKey(ik), frame);

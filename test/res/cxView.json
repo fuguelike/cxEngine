@@ -1,11 +1,11 @@
 {
-  "type": "cxView",
+  "cxType": "cxView",
   "size": {
     "w": 800,
     "h": 800
   },
   "actionmgr": {
-    "type": "cxActionMgr",
+    "cxType": "cxActionMgr",
     "scale": 1.0
   },
   "position": {
@@ -13,7 +13,7 @@
   },
   "subviews": [
     {
-      "type": "cxView",
+      "cxType": "cxView",
       "size": {
         "w": 500,
         "h": 500
@@ -25,7 +25,7 @@
       },
       "actions": [
         {
-          "type": "cxMove",
+          "cxType": "cxMove",
           "to": {
             "x": 400,
             "y": 400

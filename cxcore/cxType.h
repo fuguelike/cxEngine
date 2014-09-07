@@ -1,7 +1,7 @@
 //
 //  cxInitType.h
 //  cxCore
-//
+//  system key: cxId cxType cxSrc
 //  Created by xuhua on 12/24/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //

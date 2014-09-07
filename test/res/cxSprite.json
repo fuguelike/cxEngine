@@ -1,5 +1,5 @@
 {
-  "type": "cxSprite",
+  "cxType": "cxSprite",
   "size": {
     "w": 300,
     "h": 300

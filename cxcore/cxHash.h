@@ -26,9 +26,9 @@ typedef struct {
     UT_hash_handle hh;
 }cxHashElement;
 
-#define cxHashElementKeyToAny(_e_)      (cxAny)(*(cxLong *)((_e_)->key))
-
 #define cxHashElementKeyToLong(_e_)     *(cxLong *)((_e_)->key)
+
+#define cxHashElementKeyToAny(_e_)      (cxAny)cxHashElementKeyToLong(_e_)
 
 #define cxHashElementKeyToInt(_e_)      *(cxInt *)((_e_)->key)
 

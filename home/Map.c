@@ -46,7 +46,7 @@ cxBool MapInit(Map this,cxJson data)
     cxViewSetSize(this, size);
     
     //test
-    cxSpriteSetTextureURL(this, "bg1.png", false);
+    cxSpriteSetTextureURL(this, "bg1.png");
     for(cxInt x = 0; x < this->unitNum.x; x++){
         for (cxInt y = 0; y < this->unitNum.y; y++) {
             cxVec2f pos = MapIdxToPos(this, cxVec2fv(x, y));
@@ -56,7 +56,7 @@ cxBool MapInit(Map this,cxJson data)
     {
         Node node = NodeCreate(this);
         NodeInit(node, cxSize2fv(3, 3),cxVec2fv(8, 8));
-        cxSpriteSetTextureURL(node, "bg1.png", false);
+        cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);
     }
@@ -64,7 +64,7 @@ cxBool MapInit(Map this,cxJson data)
     {
         Node node = NodeCreate(this);
         NodeInit(node, cxSize2fv(4, 4),cxVec2fv(0, 0));
-        cxSpriteSetTextureURL(node, "bg1.png", false);
+        cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);
     }
@@ -72,7 +72,7 @@ cxBool MapInit(Map this,cxJson data)
     {
         Node node = NodeCreate(this);
         NodeInit(node, cxSize2fv(1, 1),cxVec2fv(18, 18));
-        cxSpriteSetTextureURL(node, "bg1.png", false);
+        cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);
     }
@@ -80,7 +80,7 @@ cxBool MapInit(Map this,cxJson data)
     {
         Node node = NodeCreate(this);
         NodeInit(node, cxSize2fv(2, 2),cxVec2fv(7, 18));
-        cxSpriteSetTextureURL(node, "bg1.png", false);
+        cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);
     }
@@ -140,7 +140,7 @@ cxBool MapRemoveNode(Map this,cxAny node)
         cxListRemove(this->nodes, n->element);
         n->element = NULL;
     }
-    cxViewRemoved(node);
+    cxViewRemove(node);
     return true;
 }
 

@@ -23,31 +23,19 @@ CX_OBJECT_FREE(cxLoader, cxObject)
 }
 CX_OBJECT_TERM(cxLoader, cxObject)
 
-cxAny cxLoaderEnd(cxAny object,cxConstChars id)
-{
-    cxLoader curr = cxCoreTop();
-    if(id != NULL && curr != NULL){
-        cxHashSet(curr->objects, cxHashStrKey(id), object);
-    }
-    return object;
-}
-
 cxAny cxLoaderGet(cxAny loader,cxConstChars id)
 {
     cxLoader this = loader;
-    cxAny object = cxHashGet(this->objects, cxHashStrKey(id));
-    CX_ASSERT(object != NULL, "%s object get error",id);
-    return object;
+    return cxHashGet(this->objects, cxHashStrKey(id));
 }
 
 cxLoader cxLoaderCreate(cxConstChars path)
 {
-    cxJson json = cxJsonReader(path);
+    cxJson json = cxJsonRead(path);
     CX_ASSERT(json != NULL, "json file %s read error",path);
     cxLoader this = CX_CREATE(cxLoader);
     cxCorePush(this);
-    cxAny object = cxObjectCreateWithJson(json);
+    CX_RETAIN_SWAP(this->object, cxObjectCreateWithJson(json));
     cxCorePop();
-    CX_RETAIN_SWAP(this->object, object);
     return this;
 }

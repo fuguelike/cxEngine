@@ -20,8 +20,6 @@ CX_OBJECT_DEF(cxLoader, cxObject)
     cxHash objects;
 CX_OBJECT_END(cxLoader, cxObject)
 
-cxAny cxLoaderEnd(cxAny object,cxConstChars id);
-
 cxAny cxLoaderGet(cxAny loader,cxConstChars id);
 
 cxLoader cxLoaderCreate(cxConstChars path);

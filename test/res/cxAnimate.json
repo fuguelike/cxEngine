@@ -1,76 +1,77 @@
 {
-  "type": "cxAnimate",
+  "cxType": "cxAnimate",
   "time": 0,
   "forever": true,
   "frames": [
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
+      "id":"testid",
       "key": "artichoke.png",
       "texture": "texture.json",
       "time": 1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "carrot.png",
       "texture": "texture.json",
       "time": 1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "chilli.png",
       "texture": "texture.json",
       "time": 1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "cholesterol.png",
       "texture": "texture.json",
       "time": 0.1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "cucumber.png",
       "texture": "texture.json",
       "time": 0.1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "leek.png",
       "texture": "texture.json",
       "time": 0.1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "1.png",
       "texture": "texture.json",
       "time": 1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "2.png",
       "texture": "texture.json",
       "time": 1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "3.png",
       "texture": "texture.json",
       "time": 1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "4.png",
       "texture": "texture.json",
       "time": 1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "5.png",
       "texture": "texture.json",
       "time": 1
     },
     {
-      "type": "cxAnimateItem",
+      "cxType": "cxAnimateItem",
       "key": "6.png",
       "texture": "texture.json",
       "time": 1
@@ -87,19 +88,19 @@
     ],
     "run": [
       {
-        "type": "cxAnimateItem",
+        "cxType": "cxAnimateItem",
         "key": "artichoke.png",
         "texture": "texture.json",
         "time": 1
       },
       {
-        "type": "cxAnimateItem",
+        "cxType": "cxAnimateItem",
         "key": "carrot.png",
         "texture": "texture.json",
         "time": 1
       },
       {
-        "type": "cxAnimateItem",
+        "cxType": "cxAnimateItem",
         "key": "chilli.png",
         "texture": "texture.json",
         "time": 1

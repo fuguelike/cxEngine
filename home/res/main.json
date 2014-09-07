@@ -1,10 +1,10 @@
 {
-  "type": "Scene",
+  "cxType": "Scene",
   "layout": "horizontal|vertical",
   "resizing": "fill",
   "body": {
-    "id": "map",
-    "type": "Map"
+    "cxId": "map",
+    "cxType": "Map"
   },
   "range": {
     "min": 1.0,

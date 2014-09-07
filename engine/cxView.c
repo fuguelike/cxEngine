@@ -266,11 +266,14 @@ void cxViewUnBindAll(cxAny pview)
 
 void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
 {
+    CX_ASSERT(pview != bview, "self can't bind self");
+    CX_ASSERT(CX_INSTANCE_OF(pview, cxView), "pview must is cxView");
+    CX_ASSERT(CX_INSTANCE_OF(bview, cxView), "bview must is cxView");
+    if(bd == NULL){
+        bd = cxStringCreate("%p bind %p",pview,bview);
+    }
     cxView this = pview;
     cxView bind = bview;
-    CX_ASSERT(this != bind, "self can't bind self");
-    CX_ASSERT(cxInstanceOf(this, cxViewTypeName), "pview must is cxView");
-    CX_ASSERT(cxInstanceOf(bind, cxViewTypeName), "bview must is cxView");
     //bind new view
     cxHashSet(this->bindes, cxHashAnyKey(bind), bd);
     //this binded bind
@@ -339,13 +342,6 @@ cxVec2f cxViewPosition(cxAny pview)
     CX_ASSERT(pview != NULL, "pview args error");
     cxView this = pview;
     return this->position;
-}
-
-cxBool cxViewSupportAtlasSet(cxAny pview)
-{
-    CX_ASSERT(pview != NULL, "pview args error");
-    cxView this = pview;
-    return this->supportAtlasSet;
 }
 
 cxList cxViewSubViews(cxAny pview)

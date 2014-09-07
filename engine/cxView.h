@@ -40,7 +40,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxHash bindes;//bind's views
     cxHash binded;//binded's views
     cxInt tag;
-    cxBool supportAtlasSet;
     cxViewAutoResizeMask autoMask;
     cxBox4f  autoBox;
     cxHash actions;
@@ -115,8 +114,6 @@ cxVec2f cxViewTouchDelta(cxAny pview,cxTouchItem item);
 cxVec2f cxViewPosition(cxAny pview);
 
 cxList cxViewSubViews(cxAny pview);
-
-cxBool cxViewSupportAtlasSet(cxAny pview);
 
 cxVec2f cxViewScale(cxAny pview);
 

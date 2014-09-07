@@ -11,8 +11,18 @@
 #include "cxHash.h"
 
 static json_t *global = NULL;
+static cxJsonReaderFunc cxJsonReader = NULL;
 
-cxJsonReaderFunc cxJsonReader = NULL;
+void cxJsonSetReader(cxJsonReaderFunc func)
+{
+    cxJsonReader = func;
+}
+
+cxJson cxJsonRead(cxConstChars src)
+{
+    CX_ASSERT(cxJsonReader , "not set cxJsonReader");
+    return cxJsonReader(src);
+}
 
 //if field is array
 static cxBool keyIsArray(cxString key,cxChars skey,cxInt *index)
