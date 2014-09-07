@@ -202,8 +202,6 @@ do{                                                             \
 
 #define CX_CONTINUE(cond)           if(cond)continue
 
-#define CX_GOTO(cond,label)         if(cond)goto label
-
 //type define
 
 #define CX_TYPE_REG(_t_)            __##_t_##RegisterFunc()

@@ -16,27 +16,26 @@ CX_C_BEGIN
 CX_OBJECT_DEF(cxAnimateItem, cxObject)
     cxTexture texture;
     cxString key;
+    cxString id;
     cxFloat time;
     cxFloat value;
 CX_OBJECT_END(cxAnimateItem, cxObject)
 
 CX_OBJECT_DEF(cxAnimate, cxAction)
-    cxHash groups;
+    cxHash groups;              //array item
     cxHash frames;
     cxInt index;
     cxFloat time;
     cxBool forever;
-    cxString key;
-    CX_EVENT_ALLOC(onFrame);
+    cxString name;              //group name
+    CX_EVENT_ALLOC(onFrame);    //play frame competed 1 - n
 CX_OBJECT_END(cxAnimate, cxAction)
 
-cxAnimateItem cxAnimateGetFrame(cxAny pav,cxConstChars key);
+cxArray cxAnimateGetGroup(cxAny pav,cxString name);
 
-cxHash cxAnimateGetGroup(cxAny pav,cxString key);
+void cxAnimateSetGroupName(cxAny pav,cxConstChars name);
 
-void cxAnimateSetKey(cxAny pav,cxConstChars name);
-
-cxAnimate cxAnimateCreate(cxFloat time,cxConstChars key);
+cxAnimate cxAnimateCreate(cxFloat time,cxConstChars name);
 
 CX_C_END
 

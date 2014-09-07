@@ -92,10 +92,10 @@ static void cxLayerOnRemove(cxAny pview,cxAny oldview)
 static void cxLayerOnAppend(cxAny pview,cxAny newview)
 {
     CX_ASSERT(pview != NULL && newview != NULL, "args null");
-    CX_ASSERT(CX_INSTANCE_OF(newview, cxLayerSprite), "subview only support cxLayerSprite type");
+    CX_ASSERT(CX_INSTANCE_OF(newview, cxLayerSprite), "subview only support base cxLayerSprite type");
     cxLayer this = pview;
     cxLayerSprite sprite = newview;
-    //atlas will draw sprite use VAO or VBO
+    //atlas will draw cxLayerSprite, use VAO or VBO
     cxViewSetOnlyTransform(sprite, true);
     CX_EVENT_APPEND(sprite->cxSprite.cxView.onTransform, cxLayerSpriteOnTransform);
     cxBoxPoint bp = {0};

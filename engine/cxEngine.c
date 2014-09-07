@@ -338,14 +338,15 @@ cxJson cxEngineLoadJson(cxConstChars file)
     cxEngine this = cxEngineInstance();
     cxJson json = cxHashGet(this->files, cxHashStrKey(file));
     if(json != NULL){
-        CX_ASSERT(CX_INSTANCE_OF(json, cxJson), "%s type error",file);
-        return json;
+        goto completed;
     }
     cxString data = cxAssetsData(file);
     CX_RETURN(data == NULL, NULL);
     json = cxJsonCreate(data);
     CX_RETURN(json == NULL, NULL);
     cxHashSet(this->files, cxHashStrKey(file), json);
+completed:
+    CX_ASSERT(CX_INSTANCE_OF(json, cxJson), "%s type error",file);
     return json;
 }
 

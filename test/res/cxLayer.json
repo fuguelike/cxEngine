@@ -16,7 +16,7 @@
       "actions": [
         {
           "cxSrc":"cxAnimate.json",
-          "key":"cry"
+          "name":"cry"
         }
       ],
       "resizing": "left|bottom"

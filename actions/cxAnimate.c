@@ -12,7 +12,11 @@
 #include <engine/cxUtil.h>
 #include <engine/cxUrlPath.h>
 #include "cxAnimate.h"
-
+CX_SETTER_DEF(cxAnimateItem, id)
+{
+    cxString id = cxJsonToString(value);
+    CX_RETAIN_SET(this->id, id);
+}
 CX_SETTER_DEF(cxAnimateItem, key)
 {
     cxString key = cxJsonToString(value);
@@ -33,6 +37,7 @@ CX_SETTER_DEF(cxAnimateItem, time)
 
 CX_OBJECT_TYPE(cxAnimateItem, cxAction)
 {
+    CX_PROPERTY_SETTER(cxAnimateItem, id);
     CX_PROPERTY_SETTER(cxAnimateItem, key);
     CX_PROPERTY_SETTER(cxAnimateItem, texture);
     CX_PROPERTY_SETTER(cxAnimateItem, time);
@@ -40,26 +45,51 @@ CX_OBJECT_TYPE(cxAnimateItem, cxAction)
 CX_OBJECT_INIT(cxAnimateItem, cxObject)
 {
     this->time = 0;
+    this->value = 0;
 }
 CX_OBJECT_FREE(cxAnimateItem, cxObject)
 {
+    CX_RELEASE(this->id);
     CX_RELEASE(this->key);
     CX_RELEASE(this->texture);
 }
 CX_OBJECT_TERM(cxAnimateItem, cxObject)
 
-static cxAnimateItem cxAnimateItemGet(cxAny pav,cxAny any)
+static cxAnimateItem cxAnimateItemCopy(cxAnimateItem this)
 {
-    cxAnimate this = pav;
+    cxAnimateItem cp = CX_CREATE(cxAnimateItem);
+    CX_RETAIN_SET(cp->id, this->id);
+    CX_RETAIN_SET(cp->key, this->key);
+    CX_RETAIN_SET(cp->texture, this->texture);
+    cp->time = this->time;
+    return cp;
+}
+
+static cxHashKey cxAnimateItemKey(cxAnimateItem this)
+{
+    CX_ASSERT(this->key != NULL, "must set cxAnimateItem key");
+    cxConstChars key = this->id != NULL ? cxStringBody(this->id) : cxStringBody(this->key);
+    return cxHashStrKey(key);
+}
+
+static cxAnimateItem cxAnimateItemGet(cxAnimate this,cxArray items, cxAny any, cxInt index)
+{
     cxObject item = any;
     if(item->cxType == cxAnimateItemTypeName){
         return any;
     }
-    if(item->cxType == cxStringTypeName){
-        cxConstChars key = cxStringBody(any);
-        return cxHashGet(this->frames, cxHashStrKey(key));
+    if(item->cxType != cxStringTypeName){
+        return NULL;
     }
-    return NULL;
+    cxConstChars key = cxStringBody(any);
+    cxAnimateItem frame = cxHashGet(this->frames, cxHashStrKey(key));
+    if(frame == NULL){
+        return NULL;
+    }
+    //update frame at array index
+    frame = cxAnimateItemCopy(frame);
+    cxArrayUpdate(items, frame, index);
+    return frame;
 }
 
 static void cxAnimateInit(cxAny pav)
@@ -68,28 +98,32 @@ static void cxAnimateInit(cxAny pav)
     CX_ASSERT(CX_INSTANCE_OF(this->cxAction.view, cxSprite), "cxAnimate action view must is cxSprite");
     this->index = 0;
     this->cxAction.time = this->time;
-    cxHash items = cxAnimateGetGroup(this,this->key);
-    cxFloat dt = this->time / (cxFloat)cxHashLength(items);
-    cxFloat i = 0;
-    CX_HASH_FOREACH(items, ele, tmp){
-        cxAnimateItem item = cxAnimateItemGet(this,ele->any);
-        CX_ASSERT(item != NULL, "get item error");
+    cxArray items = cxAnimateGetGroup(this,this->name);
+    CX_ASSERT(items != NULL, "group name not found");
+    cxFloat dt = this->time / (cxFloat)cxArrayLength(items);
+    cxFloat value = 0;
+    cxInt i = 0;
+    CX_ARRAY_FOREACH(items, e){
+        cxAnimateItem item = cxAnimateItemGet(this,items,cxArrayObject(e),i);
+        CX_ASSERT(item != NULL, "frame item null,check file");
         this->cxAction.time += item->time;
-        i += dt  + item->time;
-        item->value = i;
+        value += dt  + item->time;
+        item->value = value;
+        i++;
     }
 }
 
 static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxAnimate this = pav;
-    cxHash items = cxAnimateGetGroup(this,this->key);
+    cxArray items = cxAnimateGetGroup(this,this->name);
+    CX_ASSERT(items != NULL, "group name not found ");
     cxInt i = 0;
-    CX_RETURN(this->index >= cxHashLength(items));
-    CX_HASH_FOREACH(items, ele, tmp){
+    CX_RETURN(this->index >= cxArrayLength(items));
+    CX_ARRAY_FOREACH(items, e){
         i++;
-        cxAnimateItem item = cxAnimateItemGet(this,ele->any);
-        CX_ASSERT(item != NULL, "get item error");
+        cxAnimateItem item = cxArrayObject(e);
+        CX_ASSERT(CX_INSTANCE_OF(item, cxAnimateItem), "item type error,must cxAnimateItem");
         if(this->cxAction.timeElapsed > item->value){
             continue;
         }
@@ -135,13 +169,10 @@ CX_SETTER_DEF(cxAnimate, frames)
     cxJson frames = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(frames, item)
     {
-        //first id
-        cxConstChars id = cxJsonConstChars(item, "id");
-        cxConstChars ik = cxJsonConstChars(item, "key");
-        CX_ASSERT(ik != NULL, "key must set");
-        cxHashKey key = id != NULL ? cxHashStrKey(id) : cxHashStrKey(ik);
-        cxAny frame = cxObjectCreateWithJson(item);
+        cxAnimateItem frame = cxObjectCreateWithJson(item);
         CX_ASSERT(CX_INSTANCE_OF(frame, cxAnimateItem), "type error");
+        cxHashKey key = cxAnimateItemKey(frame);
+        CX_LOGGER("%s",key.data);
         cxHashSet(this->frames, key, frame);
     }
     CX_JSON_ARRAY_EACH_END(frames, item)
@@ -157,21 +188,22 @@ CX_SETTER_DEF(cxAnimate, groups)
     {
         CX_ASSERT(cxJsonIsArray(item), "must is array");
         cxString key = cxStringAllocChars(itemKey);
-        cxHash items = cxAnimateGetGroup(this,key);
+        cxArray items = cxAnimateGetGroup(this,key);
         cxJson frames = cxJsonToArray(item);
         CX_JSON_ARRAY_EACH_BEG(frames, ats)
         {
+            if(cxJsonIsObject(ats)){
+                cxAnimateItem frame = cxObjectCreateWithJson(ats);
+                CX_ASSERT(CX_INSTANCE_OF(frame, cxAnimateItem), "type error");
+                cxArrayAppend(items, frame);
+                continue;
+            }
             if(cxJsonIsString(ats)){
                 cxConstChars ik = cxJsonToConstChars(ats);
-                cxString im = cxStringAllocChars(ik);
-                cxHashSet(items, cxHashStrKey(ik), im);
-                CX_RELEASE(im);
-            }else if(cxJsonIsObject(ats)){
-                cxConstChars ik = cxJsonConstChars(ats, "key");
-                CX_ASSERT(ik != NULL, "key must set");
-                cxAny frame = cxObjectCreateWithJson(ats);
-                CX_ASSERT(CX_INSTANCE_OF(frame, cxAnimateItem), "type error");
-                cxHashSet(items, cxHashStrKey(ik), frame);
+                cxString frameKey = cxStringAllocChars(ik);
+                cxArrayAppend(items, frameKey);
+                CX_RELEASE(frameKey);
+                continue;
             }
         }
         CX_JSON_ARRAY_EACH_END(frames, ats)
@@ -179,30 +211,24 @@ CX_SETTER_DEF(cxAnimate, groups)
     }
     CX_JSON_OBJECT_EACH_END(groups, item)
 }
-CX_SETTER_DEF(cxAnimate, key)
+CX_SETTER_DEF(cxAnimate, name)
 {
-    cxConstChars key = cxJsonToConstChars(value);
-    if(key != NULL){
-        cxAnimateSetKey(this, key);
+    cxConstChars name = cxJsonToConstChars(value);
+    if(name != NULL){
+        cxAnimateSetGroupName(this, name);
     }
 }
 
-//from default group get item
-cxAnimateItem cxAnimateGetFrame(cxAny pav,cxConstChars key)
+cxArray cxAnimateGetGroup(cxAny pav,cxString name)
 {
+    CX_ASSERT(name != NULL, "must set group name");
     cxAnimate this = pav;
-    return cxHashGet(this->frames, cxHashStrKey(key));
-}
-
-cxHash cxAnimateGetGroup(cxAny pav,cxString key)
-{
-    cxAnimate this = pav;
-    CX_RETURN(key == NULL, this->frames);
-    cxConstChars name = cxStringBody(key);
-    cxHash items = cxHashGet(this->groups, cxHashStrKey(name));
+    CX_RETURN(name == NULL, NULL);
+    cxConstChars cname = cxStringBody(name);
+    cxArray items = cxHashGet(this->groups, cxHashStrKey(cname));
     if(items == NULL){
-        items = CX_ALLOC(cxHash);
-        cxHashSet(this->groups, cxHashStrKey(name), items);
+        items = CX_ALLOC(cxArray);
+        cxHashSet(this->groups, cxHashStrKey(cname), items);
         CX_RELEASE(items);
     }
     return items;
@@ -212,7 +238,7 @@ CX_OBJECT_TYPE(cxAnimate, cxAction)
 {
     CX_PROPERTY_SETTER(cxAnimate, forever);
     CX_PROPERTY_SETTER(cxAnimate, time);
-    CX_PROPERTY_SETTER(cxAnimate, key);
+    CX_PROPERTY_SETTER(cxAnimate, name);
     CX_PROPERTY_SETTER(cxAnimate, frames);
     CX_PROPERTY_SETTER(cxAnimate, groups);
 }
@@ -230,25 +256,25 @@ CX_OBJECT_FREE(cxAnimate, cxAction)
 {
     CX_RELEASE(this->frames);
     CX_RELEASE(this->groups);
-    CX_RELEASE(this->key);
+    CX_RELEASE(this->name);
     CX_EVENT_RELEASE(this->onFrame);
 }
 CX_OBJECT_TERM(cxAnimate, cxAction)
 
-void cxAnimateSetKey(cxAny pav,cxConstChars name)
+void cxAnimateSetGroupName(cxAny pav,cxConstChars name)
 {
     cxAnimate this = pav;
     cxActionReset(this);
     CX_RETURN(name == NULL);
     cxString str = cxStringConstChars(name);
-    CX_RETAIN_SWAP(this->key, str);
+    CX_RETAIN_SWAP(this->name, str);
 }
 
-cxAnimate cxAnimateCreate(cxFloat time,cxConstChars key)
+cxAnimate cxAnimateCreate(cxFloat time,cxConstChars name)
 {
     cxAnimate this = CX_CREATE(cxAnimate);
     this->time = time;
-    cxAnimateSetKey(this, key);
+    cxAnimateSetGroupName(this, name);
     return this;
 }
 

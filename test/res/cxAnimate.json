@@ -5,7 +5,7 @@
   "frames": [
     {
       "cxType": "cxAnimateItem",
-      "id":"testid",
+      "id": "testid",
       "key": "artichoke.png",
       "texture": "texture.json",
       "time": 1
@@ -78,14 +78,6 @@
     }
   ],
   "groups": {
-    "cry": [
-      "1.png",
-      "2.png",
-      "3.png",
-      "4.png",
-      "5.png",
-      "6.png"
-    ],
     "run": [
       {
         "cxType": "cxAnimateItem",
@@ -105,6 +97,16 @@
         "texture": "texture.json",
         "time": 1
       }
+    ],
+    "cry": [
+      "testid",
+      "2.png",
+      "3.png",
+      "4.png",
+      "5.png",
+      "6.png",
+      "testid"
     ]
-  }
+  },
+  "name":"run"
 }

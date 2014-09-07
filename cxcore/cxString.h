@@ -19,41 +19,19 @@ CX_OBJECT_DEF(cxString, cxObject)
     UT_string strptr;
 CX_OBJECT_END(cxString, cxObject)
 
-//create static cxString
+#define cxStringNumber(v,t)         cxStringData(&(t){v},sizeof(t))
 
-#define cxStringStatic(_s_)             \
-(&(struct cxString){                    \
-    .super.cxType=cxStringTypeName,     \
-    .super.cxBase=cxBaseTypeObject,     \
-    .super.cxRefcount=1,                \
-    .strptr.d=(char *)(_s_),            \
-    .strptr.n=0,                        \
-    .strptr.i=strlen(_s_)               \
-})
-
-#define cxStringData(_d_,_l_)           \
-(&(struct cxString){                    \
-    .super.cxType=cxStringTypeName,     \
-    .super.cxBase=cxBaseTypeObject,     \
-    .super.cxRefcount=1,                \
-    .strptr.d=(char *)(_d_),            \
-    .strptr.n=0,                        \
-    .strptr.i=(_l_)                     \
-})
-
-#define cxStringNumber(v,t)     cxStringData(&(t){v},sizeof(t))
-
-#define cxConstCharsEqu(s1,s2) ((s1) != NULL && (s2) != NULL && strcmp(s1,s2) == 0)
+#define cxConstCharsEqu(s1,s2)      ((s1) != NULL && (s2) != NULL && strcmp(s1,s2) == 0)
 
 #define cxConstCharsHas(str,sub)    (str != NULL && sub != NULL && strstr(str,sub))
 
-#define cxConstCaseCharsEqu(s1,s2) ((s1) != NULL && (s2) != NULL && strcasecmp(s1,s2) == 0)
+#define cxConstCaseCharsEqu(s1,s2)  ((s1) != NULL && (s2) != NULL && strcasecmp(s1,s2) == 0)
 
-#define cxConstCharsOK(s)       ((s) != NULL && strlen(s) > 0)
+#define cxConstCharsOK(s)           ((s) != NULL && strlen(s) > 0)
 
-#define cxStringOK(s)   ((s) != NULL && cxStringLength(s) > 0)
+#define cxStringOK(s)               ((s) != NULL && cxStringLength(s) > 0)
 
-#define CX_CONST_STRING(f,...) cxStringBody(cxStringCreate(f,##__VA_ARGS__))
+#define CX_CONST_STRING(f,...)      cxStringBody(cxStringCreate(f,##__VA_ARGS__))
 
 #define UTF8(f,...)  cxStringCreate(f,##__VA_ARGS__)
 
