@@ -13,7 +13,7 @@ cxBool cxButtonTouch(cxAny pview,cxTouchItems *points)
 {
     CX_RETURN(points->number != 1,false);
     cxTouchItem item = points->items[0];
-    cxButton this = pview;
+    CX_ASSERT_THIS(pview, cxButton);
     if(!this->isEnable){
         return false;
     }
@@ -85,7 +85,7 @@ cxButton cxButtonCreate(cxConstChars url)
 
 void cxButtonEnable(cxAny pview,cxBool enable)
 {
-    cxButton this = pview;
+    CX_ASSERT_THIS(pview, cxButton);
     this->isEnable = enable;
 }
 

@@ -10,8 +10,8 @@
 
 static void cxRotateInit(cxAny pav)
 {
-    cxRotate this = pav;
-    CX_ASSERT(this->cxAction.view != NULL, "view not set");
+    CX_ASSERT_THIS(pav, cxRotate);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
     this->oldAngle = this->cxAction.view->angle;
     this->delta = this->newAngle - this->oldAngle;
     cxViewSetRaxis(this->cxAction.view, this->raxis);
@@ -19,7 +19,7 @@ static void cxRotateInit(cxAny pav)
 
 static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
 {
-    cxRotate this = pav;
+    CX_ASSERT_THIS(pav, cxRotate);
     cxFloat angle = this->oldAngle + this->delta * time;
     cxViewSetAngle(this->cxAction.view, angle);
 }

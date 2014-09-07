@@ -27,26 +27,26 @@ CX_OBJECT_DEF(Map, cxAtlas)
 CX_OBJECT_END(Map, cxAtlas)
 
 //init map
-cxBool MapInit(Map this,cxJson data);
+cxBool MapInit(cxAny pmap,cxJson data);
 
 //按Y的大小重新排序
-void MapSortNode(Map this);
+void MapSortNode(cxAny pmap);
 
-void MapAppendNode(Map this,cxAny node);
+void MapAppendNode(cxAny pmap,cxAny node);
 
-cxInt MapOffsetIdx(Map this,cxInt x,cxInt y);
+cxInt MapOffsetIdx(cxAny pmap,cxInt x,cxInt y);
 
-cxVec2f MapPosToIdx(Map this,cxVec2f pos);
+cxVec2f MapPosToIdx(cxAny pmap,cxVec2f pos);
 
-cxVec2f MapIdxToPos(Map this,cxVec2f idx);
+cxVec2f MapIdxToPos(cxAny pmap,cxVec2f idx);
 
-cxAny MapItem(Map this,cxVec2f idx);
+cxAny MapItem(cxAny pmap,cxVec2f idx);
 
-void MapSetNode(Map this,cxVec2i idx,cxAny node);
+void MapSetNode(cxAny pmap,cxVec2i idx,cxAny node);
 
-cxBool MapRemoveNode(Map this,cxAny node);
+cxBool MapRemoveNode(cxAny pmap,cxAny node);
 
-cxBool MapIsValidIdx(Map this,cxVec2f idx);
+cxBool MapIsValidIdx(cxAny pmap,cxVec2f idx);
 
 CX_C_END
 

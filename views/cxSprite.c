@@ -12,14 +12,14 @@
 
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor)
 {
-    cxSprite this = pview;
+    CX_ASSERT_THIS(pview, cxSprite);
     this->sfactor = sfactor;
     this->dfactor = dfactor;
 }
 
 void cxSpriteBindTexture(cxAny pview)
 {
-    cxSprite this = pview;
+    CX_ASSERT_THIS(pview, cxSprite);
     cxOpenGLSetBlendFactor(this->sfactor, this->dfactor);
     cxShaderUsing(this->shader);
     cxTextureBind(this->texture);
@@ -27,7 +27,7 @@ void cxSpriteBindTexture(cxAny pview)
 
 void cxSpriteDraw(cxAny pview)
 {
-    cxSprite this = pview;
+    CX_ASSERT_THIS(pview, cxSprite);
     CX_RETURN(this->texture == NULL);
     cxSpriteBindTexture(pview);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
@@ -39,7 +39,7 @@ void cxSpriteDraw(cxAny pview)
 
 static void cxSpriteTransformEvent(cxAny sender)
 {
-    cxSprite this = sender;
+    CX_ASSERT_THIS(sender, cxSprite);
     //set color
     this->cbox.lb = this->cxView.color;
     this->cbox.rb = this->cxView.color;
@@ -70,14 +70,14 @@ static void cxSpriteTransformEvent(cxAny sender)
 
 void cxSpriteSetFlipX(cxAny pview,cxBool flipx)
 {
-    cxSprite this = pview;
+    CX_ASSERT_THIS(pview, cxSprite);
     this->isFlipX = flipx;
     cxViewSetDirty(pview, true);
 }
 
 void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
 {
-    cxSprite this = pview;
+    CX_ASSERT_THIS(pview, cxSprite);
     this->isFlipY = flipy;
     cxViewSetDirty(pview, true);
 }
@@ -133,20 +133,20 @@ cxSprite cxSpriteCreateWithURL(cxConstChars url)
 
 void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box)
 {
-    cxSprite this = pview;
+    CX_ASSERT_THIS(pview, cxSprite);
     this->texCoord = box;
     cxViewSetDirty(this, true);
 }
 
 cxBoxTex2f cxSpriteBoxTex(cxAny pview)
 {
-    cxSprite this = pview;
+    CX_ASSERT_THIS(pview, cxSprite);
     return this->texCoord;
 }
 
 void cxSpriteSetTextureKey(cxAny pview,cxConstChars key)
 {
-    cxSprite this = pview;
+    CX_ASSERT_THIS(pview, cxSprite);
     if(this->texture == NULL){
         cxTexture texture = cxTextureFactoryLoadFile(key);
         cxSpriteSetTexture(pview, texture);
@@ -159,16 +159,16 @@ void cxSpriteSetTextureKey(cxAny pview,cxConstChars key)
 
 void cxSpriteSetShader(cxAny pview,cxConstChars key)
 {
+    CX_ASSERT_THIS(pview, cxSprite);
     CX_RETURN(key == NULL);
     cxShader shader = cxOpenGLShader(key);
     CX_RETURN(shader == NULL);
-    cxSprite this = pview;
     CX_RETAIN_SWAP(this->shader, shader);
 }
 
 void cxSpriteSetTexture(cxAny pview,cxTexture texture)
 {
-    cxSprite this = pview;
+    CX_ASSERT_THIS(pview, cxSprite);
     CX_RETAIN_SWAP(this->texture, texture);
 }
 

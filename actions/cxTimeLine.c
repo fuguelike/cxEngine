@@ -73,13 +73,13 @@ CX_OBJECT_TERM(cxTimeLine, cxAction)
 
 void cxTimeLineSet(cxAny pav,cxFloat time)
 {
-    cxTimeLine this = pav;
+    CX_ASSERT_THIS(pav, cxTimeLine);
     cxArrayAppend(this->times, cxNumberFloat(time));
 }
 
 void cxTimeLineAdd(cxAny pav,cxFloat add)
 {
-    cxTimeLine this = pav;
+    CX_ASSERT_THIS(pav, cxTimeLine);
     cxFloat time = add;
     cxNumber last = cxArrayLast(this->times);
     if(last != NULL){

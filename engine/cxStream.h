@@ -30,25 +30,25 @@ CX_OBJECT_DEF(cxStream, cxObject)
     CX_METHOD_DEF(cxString, AllBytes, cxAny);
 CX_OBJECT_END(cxStream, cxObject)
 
-void cxStreamBaseClose(cxAny this);
+void cxStreamBaseClose(cxAny pstream);
 
-cxString cxStreamFileDir(cxAny this);
+cxString cxStreamFileDir(cxAny pstream);
 
-cxBool cxStreamOpen(cxAny this);
+cxBool cxStreamOpen(cxAny pstream);
 
-cxInt cxStreamRead(cxAny this,cxAny buffer,cxInt size);
+cxInt cxStreamRead(cxAny pstream,cxAny buffer,cxInt size);
 
-cxInt cxStreamWrite(cxAny this,cxAny buffer,cxInt size);
+cxInt cxStreamWrite(cxAny pstream,cxAny buffer,cxInt size);
 
-cxInt cxStreamSeek(cxAny this,cxOff off,cxInt flags);
+cxInt cxStreamSeek(cxAny pstream,cxOff off,cxInt flags);
 
-cxOff cxStreamPosition(cxAny this);
+cxOff cxStreamPosition(cxAny pstream);
 
-cxInt cxStreamLength(cxAny this);
+cxInt cxStreamLength(cxAny pstream);
 
-void cxStreamClose(cxAny this);
+void cxStreamClose(cxAny pstream);
 
-cxString cxStreamAllBytes(cxAny this);
+cxString cxStreamAllBytes(cxAny pstream);
 
 CX_C_END
 

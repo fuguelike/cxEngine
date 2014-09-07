@@ -10,21 +10,21 @@
 
 static void cxMoveInit(cxAny pav)
 {
-    cxMove this = pav;
-    CX_ASSERT(this->cxAction.view != NULL, "view not set");
+    CX_ASSERT_THIS(pav, cxMove);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
     this->prev = this->from = this->cxAction.view->position;
     kmVec2Subtract(&this->posDelta, &this->to, &this->from);
 }
 
 void cxMoveSetPos(cxAny pav,cxVec2f pos)
 {
-    cxMove this = pav;
+    CX_ASSERT_THIS(pav, cxMove);
     this->to = pos;
 }
 
 static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
 {
-    cxMove this = pav;
+    CX_ASSERT_THIS(pav, cxMove);
     cxVec2f npos;
     cxVec2f diff;
     kmVec2Subtract(&diff, &this->cxAction.view->position, &this->prev);

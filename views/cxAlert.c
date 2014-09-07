@@ -84,14 +84,14 @@ CX_OBJECT_TERM(cxAlert, cxAtlas)
 
 void cxAlertShow(cxAny pview)
 {
-    cxAlert this = pview;
+    CX_ASSERT_THIS(pview, cxAlert);
     cxWindowPushView(this);
     CX_METHOD_RUN(this->Show,this);
 }
 
 void cxAlertHide(cxAny pview)
 {
-    cxAlert this = pview;
+    CX_ASSERT_THIS(pview, cxAlert);
     CX_METHOD_RUN(this->Hide,this);
 }
 

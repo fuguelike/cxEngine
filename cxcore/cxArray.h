@@ -36,36 +36,36 @@ if((_a_)!=NULL)while((_e_=(cxAny)utarray_prev((_a_)->utArray, _e_))!=NULL)
 
 #define cxArrayObject(_e_)   (*_e_)
 
-void    cxArrayClean(cxArray array);
+void    cxArrayClean(cxAny array);
 
-void    cxArrayUpdate(cxArray array,cxAny any,cxInt index);
+void    cxArrayUpdate(cxAny array,cxAny any,cxInt index);
 
-void    cxArrayAppends(cxArray array, cxArray data);
+void    cxArrayAppends(cxAny array, cxArray data);
 
-void    cxArrayAppend(cxArray array, cxAny any);
+void    cxArrayAppend(cxAny array, cxAny any);
 
 //insert index before
-void    cxArrayInsert(cxArray array,cxAny any,cxInt index);
+void    cxArrayInsert(cxAny array,cxAny any,cxInt index);
 
-cxInt cxArrayIndex(cxArray array,cxAny any);
+cxInt cxArrayIndex(cxAny array,cxAny any);
 
-void    cxArrayRemove(cxArray array,cxAny any);
+void    cxArrayRemove(cxAny array,cxAny any);
 
-void    cxArrayFastRemove(cxArray array,cxAny any);
+void    cxArrayFastRemove(cxAny array,cxAny any);
 
-void    cxArrayFastRemoveAtIndex(cxArray array,cxInt index);
+void    cxArrayFastRemoveAtIndex(cxAny array,cxInt index);
 
-void    cxArrayRemoveAtIndex(cxArray array,cxInt index);
+void    cxArrayRemoveAtIndex(cxAny array,cxInt index);
 
-cxAny   cxArrayAtIndex(cxArray array,cxInt index);
+cxAny   cxArrayAtIndex(cxAny array,cxInt index);
 
-cxAny   cxArrayFirst(cxArray array);
+cxAny   cxArrayFirst(cxAny array);
 
-cxAny   cxArrayLast(cxArray array);
+cxAny   cxArrayLast(cxAny array);
 
-void    cxArrayRemoveFirst(cxArray array);
+void    cxArrayRemoveFirst(cxAny array);
 
-void    cxArrayRemoveLast(cxArray array);
+void    cxArrayRemoveLast(cxAny array);
 
 CX_C_END
 

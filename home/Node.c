@@ -12,7 +12,7 @@
 
 cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
 {
-    Node this = pview;
+    CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     cxSize2f vsize = cxViewSize(this);
     pos.y -= (vsize.h / 2.0f - (vsize.h / (2.0f * this->size.h)));
@@ -21,9 +21,9 @@ cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
 
 static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
 {
+    CX_ASSERT_THIS(pview, Node);
     CX_RETURN(points->number != 1,false);
     cxTouchItem item = points->items[0];
-    Node this = pview;
     Map map = this->map;
     //不可选择?
     if(!this->canSelected){
@@ -52,11 +52,11 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
         this->start = vpos;
         return true;
     }
-    //选中区域但没选中node
-    if(item->type == cxTouchTypeMove && map->node == NULL && this->isSelected){
-        this->isSelected = false;
-        return false;
-    }
+//    //选中区域但没选中node
+//    if(item->type == cxTouchTypeMove && map->node == NULL && this->isSelected){
+//        this->isSelected = false;
+//        return false;
+//    }
     //按下的时候并选中一个node
     if(item->type == cxTouchTypeDown && hited){
         this->start = cxViewPosition(this);
@@ -79,7 +79,7 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
         return false;
     }
     //如果选中了一个node
-    if(item->type == cxTouchTypeUp && this->isSelected && hited){
+    if(item->type == cxTouchTypeUp && this->isSelected && hited && map->node == NULL){
         CX_LIST_FOREACH(map->nodes, ele){
             Node cnode = ele->any;
             if(cnode == this){
@@ -113,28 +113,28 @@ CX_OBJECT_FREE(Node, cxSprite)
 }
 CX_OBJECT_TERM(Node, cxSprite)
 
-cxVec2i NodeIndex(cxAny node)
+cxVec2i NodeIndex(cxAny pview)
 {
-    Node this = node;
+    CX_ASSERT_THIS(pview, Node);
     return cxVec2iv(this->idx.x, this->idx.y);
 }
 
-cxSize2i NodeSize(cxAny node)
+cxSize2i NodeSize(cxAny pview)
 {
-    Node this = node;
+    CX_ASSERT_THIS(pview, Node);
     return cxSize2iv(this->size.w, this->size.h);
 }
 
-void NodeResetPosition(cxAny node)
+void NodeResetPosition(cxAny pview)
 {
-    Node this = node;
+    CX_ASSERT_THIS(pview, Node);
     NodeSetPosition(this, this->idx);
     this->isValidIdx = true;
 }
 
-cxBool NodeSetPosition(cxAny node,cxVec2f idx)
+cxBool NodeSetPosition(cxAny pview,cxVec2f idx)
 {
-    Node this = node;
+    CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     this->curr = idx;
     idx.x += (this->size.w - 1.0f)/2.0f;
@@ -143,12 +143,12 @@ cxBool NodeSetPosition(cxAny node,cxVec2f idx)
     return true;
 }
 
-void NodeSetSize(cxAny node,cxSize2f size)
+void NodeSetSize(cxAny pview,cxSize2f size)
 {
-    Node this = node;
+    CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     cxSize2f vsize = cxSize2fv(map->unitSize.w * size.w, map->unitSize.h * size.h);
-    cxViewSetSize(node, vsize);
+    cxViewSetSize(this, vsize);
     this->size = size;
     cxAnyArrayClean(this->box);
     cxAnyArrayAppend(this->box, &(cxVec2fv(vsize.w/2.0f, 0)));
@@ -157,12 +157,12 @@ void NodeSetSize(cxAny node,cxSize2f size)
     cxAnyArrayAppend(this->box, &(cxVec2fv(0, -vsize.h/2.0f)));
 }
 
-cxBool NodeIdxIsValid(cxAny node,cxVec2f curr)
+cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
 {
-    Node this = node;
+    CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     cxVec2i idx = cxVec2iv(curr.x, curr.y);
-    cxSize2i size = NodeSize(node);
+    cxSize2i size = NodeSize(this);
     // 1 = max -1
     if(idx.x < 0 || (idx.x + size.w) > map->unitNum.x){
         return false;
@@ -187,12 +187,12 @@ cxVec2f NodeCurrIdx(cxAny pview)
     return this->curr;
 }
 
-void NodeSetIdx(cxAny node,cxVec2f idx)
+void NodeSetIdx(cxAny pview,cxVec2f idx)
 {
-    Node this = node;
+    CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     cxVec2i nidx = cxVec2iv(idx.x, idx.y);
-    cxVec2i oidx = NodeIndex(node);
+    cxVec2i oidx = NodeIndex(this);
     if(cxVec2iEqu(nidx, oidx)){
         return;
     }
@@ -202,12 +202,12 @@ void NodeSetIdx(cxAny node,cxVec2f idx)
     this->isValidIdx = true;
 }
 
-void NodeInit(cxAny node,cxSize2f size,cxVec2f pos)
+void NodeInit(cxAny pview,cxSize2f size,cxVec2f pos)
 {
-    Node this = node;
-    NodeSetSize(node, size);
+    CX_ASSERT_THIS(pview, Node);
+    NodeSetSize(this, size);
     NodeSetIdx(this, pos);
-    NodeSetPosition(node, pos);
+    NodeSetPosition(this, pos);
 }
 
 cxAny NodeCreate(cxAny map)

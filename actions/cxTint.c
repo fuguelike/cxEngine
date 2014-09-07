@@ -10,8 +10,8 @@
 
 static void cxTintInit(cxAny pav)
 {
-    cxTint this = pav;
-    CX_ASSERT(this->cxAction.view != NULL, "view not set");
+    CX_ASSERT_THIS(pav, cxTint);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
     this->start = this->cxAction.view->color;
     this->delta.r = this->color.r - this->start.r;
     this->delta.g = this->color.g - this->start.g;
@@ -21,7 +21,7 @@ static void cxTintInit(cxAny pav)
 
 static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
 {
-    cxTint this = pav;
+    CX_ASSERT_THIS(pav, cxTint);
     cxColor3f color;
     color.r = this->start.r + this->delta.r * time;
     color.g = this->start.g + this->delta.g * time;

@@ -105,6 +105,13 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxTouchItem);
     CX_TYPE_REG(cxAStar);
     CX_TYPE_REG(cxActionMgr);
+    CX_TYPE_REG(cxShader);
+    
+    //register shader
+    CX_TYPE_REG(cxShaderAlpha);
+    CX_TYPE_REG(cxShaderClipping);
+    CX_TYPE_REG(cxShaderDefault);
+    CX_TYPE_REG(cxShaderPositionColor);
     
     //register streams
     CX_TYPE_REG(cxAssetsStream);
@@ -502,7 +509,8 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
     }
     //get all points
     CX_HASH_FOREACH(this->items, ele, tmp){
-        this->points.items[this->points.number++] = ele->any;
+        item = ele->any;
+        this->points.items[this->points.number++] = item;
     }
     cxBool ret = cxViewTouch(this->window, &this->points);
     //remove up cancel point

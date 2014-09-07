@@ -12,7 +12,7 @@
 
 static void cxAtlasVAODraw(void *pview)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     if (this->isDirty){
         glBindBuffer(GL_ARRAY_BUFFER, this->vboid[0]);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(cxBoxPoint) * this->number, this->boxes);
@@ -26,7 +26,7 @@ static void cxAtlasVAODraw(void *pview)
 
 static void cxAtlasVBODraw(cxAny pview)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     glBindBuffer(GL_ARRAY_BUFFER, this->vboid[0]);
     if (this->isDirty){
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(cxBoxPoint) * this->number, this->boxes);
@@ -46,7 +46,7 @@ static void cxAtlasVBODraw(cxAny pview)
 
 void cxAtlasDraw(cxAny pview)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     CX_RETURN(this->number == 0 || this->cxSprite.texture == NULL);
     cxOpenGLSetBlendFactor(this->cxSprite.sfactor, this->cxSprite.dfactor);
     cxShaderUsing(this->cxSprite.shader);
@@ -64,7 +64,7 @@ void cxAtlasDraw(cxAny pview)
 
 void cxAtlasSetScale9(cxAny pview,cxBox4f box)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     this->scale9.box = box;
     this->scale9.enable = true;
     cxAtlasUpdateScale9(pview);
@@ -72,7 +72,7 @@ void cxAtlasSetScale9(cxAny pview,cxBox4f box)
 
 void cxAtlasUpdateScale9(cxAny pview)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     CX_RETURN(!this->scale9.enable);
     CX_ASSERT(!cxViewZeroSize(pview) && this->cxSprite.texture != NULL, "must set texture and size");
     cxAtlasClean(pview);
@@ -194,14 +194,14 @@ cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColo
 
 void cxAtlasClean(cxAny pview)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     this->number = 0;
     this->isDirty = true;
 }
 
 cxBoxPoint *cxAtlasAppend(cxAny pview,cxBoxPoint *point)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     //realloc
     if(this->capacity <= this->number){
         cxAtlasSetCapacity(pview, this->capacity + 8);
@@ -216,13 +216,14 @@ cxBoxPoint *cxAtlasAppend(cxAny pview,cxBoxPoint *point)
 
 void cxAtlasRemovePoint(cxAny pview,cxBoxPoint *point)
 {
-    cxInt idx = cxAtlasIndex(pview,point);
-    cxAtlasRemoveAt(pview, idx);
+    CX_ASSERT_THIS(pview, cxAtlas);
+    cxInt idx = cxAtlasIndex(this,point);
+    cxAtlasRemoveAt(this, idx);
 }
 
 void cxAtlasRemoveAt(cxAny pview,cxInt index)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     CX_RETURN(index < 0 || index >= this->number);
     cxInt count = this->number - index - 1;
     cxAny dst = &this->boxes[index];
@@ -237,13 +238,13 @@ void cxAtlasRemoveAt(cxAny pview,cxInt index)
 
 cxInt cxAtlasIndex(cxAny pview,cxBoxPoint *point)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     return ((cxAny)point - (cxAny)this->boxes) / sizeof(cxBoxPoint);
 }
 
 void cxAtlasUpdateAt(cxAny pview,cxInt index, cxBoxPoint *point)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     CX_ASSERT(index >= 0 && index < this->capacity, "index > boxNumber");
     this->boxes[index] = *point;
     this->isDirty = true;
@@ -251,7 +252,7 @@ void cxAtlasUpdateAt(cxAny pview,cxInt index, cxBoxPoint *point)
 
 static void cxAtlasInitVAO(cxAny pview)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     
     glBindVertexArray(this->vaoid);
     glBindBuffer(GL_ARRAY_BUFFER, this->vboid[0]);
@@ -277,7 +278,7 @@ static void cxAtlasInitVAO(cxAny pview)
 
 static void cxAtlasInitVBO(cxAny pview)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     
     glBindBuffer(GL_ARRAY_BUFFER, this->vboid[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(cxBoxPoint) * this->capacity, this->boxes, GL_DYNAMIC_DRAW);
@@ -291,7 +292,7 @@ static void cxAtlasInitVBO(cxAny pview)
 
 void cxAtlasSetNumber(cxAny pview,cxInt number)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     CX_ASSERT(number >= 0 && number <= this->capacity, "number must >= 0 < capacity");
     this->isDirty = true;
     this->number = number;
@@ -299,22 +300,23 @@ void cxAtlasSetNumber(cxAny pview,cxInt number)
 
 void cxAtlasSetDirty(cxAny pview,cxBool v)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     this->isDirty = v;
 }
 
 void cxAtlasDrawInit(cxAny pview)
 {
+    CX_ASSERT_THIS(pview, cxAtlas);
     if(cxOpenGLInstance()->support_GL_OES_vertex_array_object){
-        cxAtlasInitVAO(pview);
+        cxAtlasInitVAO(this);
     }else{
-        cxAtlasInitVBO(pview);
+        cxAtlasInitVBO(this);
     }
 }
 
 void cxAtlasSetCapacity(cxAny pview,cxInt capacity)
 {
-    cxAtlas this = pview;
+    CX_ASSERT_THIS(pview, cxAtlas);
     CX_RETURN(this->capacity >= capacity);
     this->capacity = capacity;
     cxInt size = this->capacity * sizeof(cxBoxPoint);

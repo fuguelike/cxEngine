@@ -11,13 +11,14 @@
 
 static void cxActionViewDraw(cxAny pav)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
     cxAtlasDraw(this->atlas);
 }
 
 static void cxParticleInit(cxAny pav)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
     cxView view = cxActionView(pav);
     view = CX_METHOD_GET(view, this->GetDrawView, this);
     CX_ASSERT(view != NULL, "draw view must not null");
@@ -26,7 +27,7 @@ static void cxParticleInit(cxAny pav)
 
 static void cxParticleOver(cxAny pav)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
     this->isActive = false;
     this->emitcounter = 0;
     cxAtlasClean(this->atlas);
@@ -35,7 +36,7 @@ static void cxParticleOver(cxAny pav)
 
 void cxParticleInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
     cxFloat speed = cxFloatValue(this->speed);
     cxFloat angle = kmDegreesToRadians(cxFloatValue(this->angle));
     particle->position = cxVec2fValue(this->position);
@@ -124,7 +125,7 @@ static void cxParticleUnitToBoxVec3f(cxParticleUnit *particle,cxBoxVec3f *vq)
 
 static void cxParticleSetBox(cxAny pav,cxParticleUnit *particle)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
     cxBoxVec3f vq={0};
     cxColor4f color = particle->color;
     cxParticleUnitToBoxVec3f(particle, &vq);
@@ -153,14 +154,14 @@ static void cxParticleSetBox(cxAny pav,cxParticleUnit *particle)
 
 void cxParticleStop(cxAny pav)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
     this->isActive = false;
     this->emitcounter = 0;
 }
 
 static void cxParticleStep(cxAny pav,cxFloat dt,cxFloat time)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
     if(this->isActive){
         cxFloat rate = 1.0f / this->rate;
         if(this->count < this->number){
@@ -230,15 +231,15 @@ static void cxParticleStep(cxAny pav,cxFloat dt,cxFloat time)
     cxAtlasSetNumber(this->atlas, this->count);
 }
 
-void cxParticleSetType(cxAny pview,cxParticleEmitterType type)
+void cxParticleSetType(cxAny pav,cxParticleEmitterType type)
 {
-    cxParticle this = pview;
+    CX_ASSERT_THIS(pav, cxParticle);
     this->type = type;
 }
 
 void cxParticleSetBlendMode(cxAny pav,cxParticleBlendMode mode)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
     if(mode == cxParticleBlendAdd){
         cxSpriteSetBlendFactor(this->atlas, GL_SRC_ALPHA, GL_ONE);
     }else{
@@ -249,7 +250,7 @@ void cxParticleSetBlendMode(cxAny pav,cxParticleBlendMode mode)
 
 static void cxParticleReset(cxAny pav)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
     this->isActive = true;
     this->emitcounter = 0;
     for(this->index = 0; this->index < this->count; this->index++){
@@ -267,7 +268,7 @@ CX_SETTER_DEF(cxParticle, number)
 
 cxBoxTex2f *cxParticleGetBoxTex(cxAny pav,cxInt index)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
     CX_ASSERT(this->boxtexs != NULL, "box texs empty");
     cxInt idx = index % this->boxtexs->number;
     cxBoxTex2f *boxs = this->boxtexs->data;
@@ -451,7 +452,7 @@ CX_OBJECT_TERM(cxParticle, cxAction)
 
 void cxParticleInitNumber(cxAny pav,cxInt number)
 {
-    cxParticle this = pav;
+    CX_ASSERT_THIS(pav, cxParticle);
     CX_RETURN(this->number >= number);
     this->number = number;
     this->units = allocator->realloc(this->units,sizeof(cxParticleUnit)*number);

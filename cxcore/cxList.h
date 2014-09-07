@@ -34,21 +34,21 @@ CX_OBJECT_END(cxList, cxObject)
 
 #define cxListSort(_list_,_cmp_)    DL_SORT((_list_)->listptr, _cmp_)
 
-cxInt cxListLength(cxList list);
+cxInt cxListLength(cxAny plist);
 
-cxBool cxListEmpty(cxList list);
+cxBool cxListEmpty(cxAny plist);
 
-cxListElement *cxListAppend(cxList list,cxAny any);
+cxListElement *cxListAppend(cxAny plist,cxAny any);
 
-cxListElement *cxListPrepend(cxList list,cxAny any);
+cxListElement *cxListPrepend(cxAny plist,cxAny any);
 
-cxListElement *cxListFirst(cxList list);
+cxListElement *cxListFirst(cxAny plist);
 
-cxListElement *cxListLast(cxList list);
+cxListElement *cxListLast(cxAny plist);
 
-void cxListRemove(cxList list,cxListElement *element);
+void cxListRemove(cxAny plist,cxListElement *element);
 
-void cxListClean(cxList list);
+void cxListClean(cxAny plist);
 
 CX_C_END
 

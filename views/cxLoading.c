@@ -12,7 +12,7 @@
 
 void cxLoadingOnUpdate(cxAny sender)
 {
-    cxLoading this = sender;
+    CX_ASSERT_THIS(sender, cxLoading);
     if(!this->isLoading){
         CX_EVENT_FIRE(this, onFinished);
         cxViewRemove(this);
@@ -26,13 +26,13 @@ cxBool cxLoadingTouch(cxAny pview,cxTouchItems *points)
 
 void cxLoadingSetObject(cxAny pview,cxAny object)
 {
-    cxLoading this = pview;
+    CX_ASSERT_THIS(pview, cxLoading);
     CX_RETAIN_SWAP(this->object, object);
 }
 
 cxAny cxLoadingObject(cxAny pview)
 {
-    cxLoading this = pview;
+    CX_ASSERT_THIS(pview, cxLoading);
     return this->object;
 }
 
@@ -54,7 +54,7 @@ static void cxLoadingArrive(cxAny sender)
 
 void cxLoaingFinished(cxAny pview)
 {
-    cxLoading this = pview;
+    CX_ASSERT_THIS(pview, cxLoading);
     this->isLoading = false;
 }
 
@@ -77,8 +77,9 @@ CX_OBJECT_FREE(cxLoading, cxView)
 }
 CX_OBJECT_TERM(cxLoading, cxView)
 
-void cxLoadingStart(cxLoading this)
+void cxLoadingStart(cxAny pview)
 {
+    CX_ASSERT_THIS(pview, cxLoading);
     cxEngine engine = cxEngineInstance();
     CX_EVENT_FIRE(this, onStart);
     this->isLoading = true;

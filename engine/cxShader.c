@@ -9,12 +9,12 @@
 #include <kazmath/GL/matrix.h>
 #include "cxShader.h"
 
-void cxShaderInitPosColorTex(cxAny this)
+void cxShaderInitPosColorTex(cxAny pshader)
 {
-    cxShader shader = this;
-    glBindAttribLocation(shader->program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
-    glBindAttribLocation(shader->program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
-    glBindAttribLocation(shader->program, cxVertexAttribTexcoord, CX_ATTRIBUTE_NAME_TEXCOORD);
+    CX_ASSERT_THIS(pshader, cxShader);
+    glBindAttribLocation(this->program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
+    glBindAttribLocation(this->program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
+    glBindAttribLocation(this->program, cxVertexAttribTexcoord, CX_ATTRIBUTE_NAME_TEXCOORD);
 }
 
 typedef void (*cxOpenGLInfoFunc)(GLuint program, GLenum pname, GLint *params);
@@ -34,26 +34,30 @@ static char* cxShaderLogFunc(GLuint object, cxOpenGLInfoFunc infoFunc, cxOpenGLL
     return logBytes;
 }
 
-static cxString cxShaderVertexLog(cxShader this)
+static cxString cxShaderVertexLog(cxAny pshader)
 {
+    CX_ASSERT_THIS(pshader, cxShader);
     char *log = cxShaderLogFunc(this->vertexShader, (cxOpenGLInfoFunc)&glGetShaderiv, (cxOpenGLLogFunc)&glGetShaderInfoLog);
     return cxStringAttach(log, (cxInt)strlen(log));
 }
 
-static cxString cxShaderFragmentLog(cxShader this)
+static cxString cxShaderFragmentLog(cxAny pshader)
 {
+    CX_ASSERT_THIS(pshader, cxShader);
     char *log = cxShaderLogFunc(this->fragmentShader, (cxOpenGLInfoFunc)&glGetShaderiv, (cxOpenGLLogFunc)&glGetShaderInfoLog);
     return cxStringAttach(log, (cxInt)strlen(log));
 }
 
-static cxString cxShaderProgramLog(cxShader this)
+static cxString cxShaderProgramLog(cxAny pshader)
 {
+    CX_ASSERT_THIS(pshader, cxShader);
     char *log = cxShaderLogFunc(this->program, (cxOpenGLInfoFunc)&glGetProgramiv, (cxOpenGLLogFunc)&glGetProgramInfoLog);
     return cxStringAttach(log, (cxInt)strlen(log));
 }
 
-static bool cxShaderCompile(cxShader this,GLuint *shader, GLenum type, cxString source)
+static bool cxShaderCompile(cxAny pshader,GLuint *shader, GLenum type, cxString source)
 {
+    CX_ASSERT_THIS(pshader, cxShader);
     GLint status = 0;
     CX_ASSERT(source != NULL,"shader sources NULL");
     *shader = glCreateShader(type);
@@ -110,8 +114,9 @@ CX_OBJECT_FREE(cxShader, cxObject)
 }
 CX_OBJECT_TERM(cxShader, cxObject)
 
-void cxShaderUsing(cxShader this)
+void cxShaderUsing(cxAny pshader)
 {
+    CX_ASSERT_THIS(pshader, cxShader);
     cxOpenGLUseProgram(this->program);
 	kmGLGetMatrix(KM_GL_PROJECTION, &this->kxMatrixProject);
 	kmGLGetMatrix(KM_GL_MODELVIEW,  &this->kxMatrixModelView);
@@ -120,8 +125,9 @@ void cxShaderUsing(cxShader this)
     CX_METHOD_RUN(this->Update, this);
 }
 
-bool cxShaderInit(cxShader this)
+bool cxShaderInit(cxAny pshader)
 {
+    CX_ASSERT_THIS(pshader, cxShader);
     GLint status = 0;
     cxString vbytes = CX_METHOD_GET(NULL, this->GetVertexSource, this);
     CX_ASSERT(vbytes != NULL, "get vertex shader source failed");

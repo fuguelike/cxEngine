@@ -10,15 +10,15 @@
 
 static void cxFadeInit(cxAny pav)
 {
-    cxFade this = pav;
-    CX_ASSERT(this->cxAction.view != NULL, "view not set");
+    CX_ASSERT_THIS(pav, cxFade);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
     this->start = this->cxAction.view->color.a;
     this->delta = this->alpha - this->start;
 }
 
 static void cxFadeStep(cxAny pav,cxFloat dt,cxFloat time)
 {
-    cxFade this = pav;
+    CX_ASSERT_THIS(pav, cxFade);
     cxFloat alpha = this->start + time * this->delta;
     cxViewSetAlpha(this->cxAction.view, alpha);
 }

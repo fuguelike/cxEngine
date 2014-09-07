@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxType.h"
 #include "cxList.h"
 
 CX_OBJECT_TYPE(cxList, cxObject)
@@ -18,59 +19,67 @@ CX_OBJECT_FREE(cxList, cxObject)
 }
 CX_OBJECT_TERM(cxList, cxObject)
 
-cxListElement *cxListAppend(cxList list,cxAny any)
+cxListElement *cxListAppend(cxAny plist,cxAny any)
 {
+    CX_ASSERT_THIS(plist, cxList);
     cxListElement *element = allocator->malloc(sizeof(cxListElement));
     element->any = any;
-    DL_APPEND(list->listptr, element);
+    DL_APPEND(this->listptr, element);
     CX_RETAIN(any);
     return element;
 }
 
-cxBool cxListEmpty(cxList list)
+cxBool cxListEmpty(cxAny plist)
 {
-    return list->listptr == NULL;
+    CX_ASSERT_THIS(plist, cxList);
+    return this->listptr == NULL;
 }
 
-cxListElement *cxListPrepend(cxList list,cxAny any)
+cxListElement *cxListPrepend(cxAny plist,cxAny any)
 {
+    CX_ASSERT_THIS(plist, cxList);
     cxListElement *element = allocator->malloc(sizeof(cxListElement));
     element->any = any;
-    DL_PREPEND(list->listptr, element);
+    DL_PREPEND(this->listptr, element);
     CX_RETAIN(any);
     return element;
 }
 
-cxInt cxListLength(cxList list)
+cxInt cxListLength(cxAny plist)
 {
+    CX_ASSERT_THIS(plist, cxList);
     cxInt count = 0;
     cxListElement *ele = NULL;
-    DL_COUNT(list->listptr, ele, count);
+    DL_COUNT(this->listptr, ele, count);
     return count;
 }
 
-cxListElement *cxListFirst(cxList list)
+cxListElement *cxListFirst(cxAny plist)
 {
-    return list->listptr;
+    CX_ASSERT_THIS(plist, cxList);
+    return this->listptr;
 }
 
-cxListElement *cxListLast(cxList list)
+cxListElement *cxListLast(cxAny plist)
 {
-    return list->listptr == NULL ? NULL : list->listptr->prev;
+    CX_ASSERT_THIS(plist, cxList);
+    return this->listptr == NULL ? NULL : this->listptr->prev;
 }
 
-void cxListRemove(cxList list,cxListElement *element)
+void cxListRemove(cxAny plist,cxListElement *element)
 {
-    DL_DELETE(list->listptr, element);
+    CX_ASSERT_THIS(plist, cxList);
+    DL_DELETE(this->listptr, element);
     CX_RELEASE(element->any);
     allocator->free(element);
 }
 
-void cxListClean(cxList list)
+void cxListClean(cxAny plist)
 {
+    CX_ASSERT_THIS(plist, cxList);
     cxListElement *ele = NULL,*tmp=NULL;
-    DL_FOREACH_SAFE(list->listptr,ele,tmp){
-        cxListRemove(list, ele);
+    DL_FOREACH_SAFE(this->listptr,ele,tmp){
+        cxListRemove(this, ele);
     }
 }
 

@@ -10,8 +10,8 @@
 
 static void cxSpeedInit(cxAny pav)
 {
-    cxSpeed this = pav;
-    CX_ASSERT(this->cxAction.view != NULL, "view not set");
+    CX_ASSERT_THIS(pav, cxSpeed);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
     cxVec2f n;
     kmVec2Normalize(&n, &this->speed);
     this->angle = cxVec2fAngle(n);

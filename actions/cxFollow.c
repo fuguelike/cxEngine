@@ -10,7 +10,8 @@
 
 cxBool cxFollowDefaultExit(cxAny pav)
 {
-    cxFollow this = pav;
+    CX_ASSERT_THIS(pav, cxFollow);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
     cxVec2f tp = cxViewPosition(this->target);
     cxVec2f cp = cxViewPosition(this->cxAction.view);
     cxFloat distance = kmVec2DistanceBetween(&tp, &cp);
@@ -22,7 +23,7 @@ cxBool cxFollowDefaultExit(cxAny pav)
 
 void cxFollowInit(cxAny pav)
 {
-    cxFollow this = pav;
+    CX_ASSERT_THIS(pav, cxFollow);
     CX_ASSERT(this->cxAction.view != this->target, "target error,can't action'view");
     CX_ASSERT(this->cxAction.view != NULL, "view not set");
     CX_ASSERT(this->target != NULL, "target view null");
@@ -33,7 +34,7 @@ void cxFollowInit(cxAny pav)
 
 static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
 {
-    cxFollow this = pav;
+    CX_ASSERT_THIS(pav, cxFollow);
     cxVec2f targetPos = cxViewPosition(this->target);
     cxVec2f currentPos = cxViewPosition(this->cxAction.view);
     this->angle = cxVec2f2PAngle(targetPos,currentPos);
@@ -47,7 +48,7 @@ static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
 
 cxAny cxFollowTarget(cxAny pav)
 {
-    cxFollow this = pav;
+    CX_ASSERT_THIS(pav, cxFollow);
     return this->target;
 }
 
@@ -70,7 +71,7 @@ CX_OBJECT_TERM(cxFollow, cxAction)
 
 void cxFollowSetInit(cxAny pav,cxFloat init)
 {
-    cxFollow this = pav;
+    CX_ASSERT_THIS(pav, cxFollow);
     this->init = init;
 }
 

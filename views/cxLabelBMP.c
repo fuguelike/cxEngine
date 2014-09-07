@@ -133,7 +133,7 @@ cxLabelBMP cxLabelBMPCreate(cxString font,cxString txt)
 
 void cxLabelBMPSetFontSize(cxAny pview,cxFloat size)
 {
-    cxLabelBMP this = pview;
+    CX_ASSERT_THIS(pview, cxLabelBMP);
     CX_RETURN(cxFloatEqu(this->size,size));
     this->size = size;
     this->isDirty = true;
@@ -141,7 +141,7 @@ void cxLabelBMPSetFontSize(cxAny pview,cxFloat size)
 
 void cxLabelBMPSetFontName(cxAny pview,cxString font)
 {
-    cxLabelBMP this = pview;
+    CX_ASSERT_THIS(pview, cxLabelBMP);
     cxBMPFont bmpfont = cxEngineLoadBMPFont(cxStringBody(font));
     CX_ASSERT(bmpfont != NULL, "%s font not load",font);
     CX_RETURN(bmpfont == this->font);
@@ -151,7 +151,7 @@ void cxLabelBMPSetFontName(cxAny pview,cxString font)
 
 void cxLabelBMPSetText(cxAny pview,cxString txt)
 {
-    cxLabelBMP this = pview;
+    CX_ASSERT_THIS(pview, cxLabelBMP);
     CX_RETURN(cxStringEqu(this->txt, txt));
     CX_RETAIN_SWAP(this->txt, txt);
     this->isDirty = true;

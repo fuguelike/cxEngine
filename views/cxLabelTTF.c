@@ -12,7 +12,7 @@
 
 static void cxLabelTTFUpdate(cxAny sender)
 {
-    cxLabelTTF this = sender;
+    CX_ASSERT_THIS(sender, cxLabelTTF);
     CX_RETURN(!this->isDirty);
     this->attr.viewSize = cxViewSize(this);
     cxLabelTTFUpdateText(this);
@@ -99,7 +99,7 @@ cxLabelTTF cxLabelTTFCreate(cxString txt,cxString font,cxFloat fontsize)
 
 void cxLabelTTFUpdateText(cxAny pview)
 {
-    cxLabelTTF this = pview;
+    CX_ASSERT_THIS(pview, cxLabelTTF);
     cxTexture texture = cxTextureFactoryLoadText(this->text, this->font, this->attr);
     CX_RETURN(texture == NULL);
     cxSpriteSetTexture(this, texture);
@@ -108,7 +108,7 @@ void cxLabelTTFUpdateText(cxAny pview)
 
 void cxLabelTTFSetFontSize(cxAny pview,cxFloat size)
 {
-    cxLabelTTF this = pview;
+    CX_ASSERT_THIS(pview, cxLabelTTF);
     CX_RETURN(kmAlmostEqual(this->attr.size, size));
     this->attr.size = size;
     this->isDirty = true;
@@ -116,7 +116,7 @@ void cxLabelTTFSetFontSize(cxAny pview,cxFloat size)
 
 void cxLabelTTFSetAlign(cxAny pview,cxTextAlign align)
 {
-    cxLabelTTF this = pview;
+    CX_ASSERT_THIS(pview, cxLabelTTF);
     CX_RETURN(this->attr.align == align);
     this->attr.align = align;
     this->isDirty = true;
@@ -124,7 +124,7 @@ void cxLabelTTFSetAlign(cxAny pview,cxTextAlign align)
 
 void cxLabelTTFSetFontName(cxAny pview,cxString font)
 {
-    cxLabelTTF this = pview;
+    CX_ASSERT_THIS(pview, cxLabelTTF);
     CX_RETURN(cxStringEqu(this->font, font));
     CX_RETAIN_SWAP(this->font, font);
     this->isDirty = true;
@@ -132,7 +132,7 @@ void cxLabelTTFSetFontName(cxAny pview,cxString font)
 
 void cxLabelTTFSetText(cxAny pview,cxString txt)
 {
-    cxLabelTTF this = pview;
+    CX_ASSERT_THIS(pview, cxLabelTTF);
     CX_RETURN(cxStringEqu(this->text, txt));
     CX_RETAIN_SWAP(this->text, txt);
     this->isDirty = true;

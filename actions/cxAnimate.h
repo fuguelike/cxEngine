@@ -33,9 +33,7 @@ CX_OBJECT_END(cxAnimate, cxAction)
 
 cxArray cxAnimateGetGroup(cxAny pav,cxString name);
 
-void cxAnimateSetGroupName(cxAny pav,cxConstChars name);
-
-cxAnimate cxAnimateCreate(cxFloat time,cxConstChars name);
+void cxAnimateRunGroup(cxAny pav,cxConstChars name);
 
 CX_C_END
 

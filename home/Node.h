@@ -27,29 +27,29 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxVec2f start; 
 CX_OBJECT_END(Node, cxSprite)
 
-cxVec2i NodeIndex(cxAny node);
+cxVec2i NodeIndex(cxAny pview);
 
-cxSize2i NodeSize(cxAny node);
+cxSize2i NodeSize(cxAny pview);
 
 //从当前坐标转换为索引坐标
 cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos);
 
 cxVec2f NodeCurrIdx(cxAny pview);
 //设置并放置
-void NodeSetIdx(cxAny node,cxVec2f idx);
+void NodeSetIdx(cxAny pview,cxVec2f idx);
 
 //重置到旧位置
-void NodeResetPosition(cxAny node);
+void NodeResetPosition(cxAny pview);
 
 //检测新索引是否可以放置
-cxBool NodeIdxIsValid(cxAny node,cxVec2f curr);
+cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr);
 
 //移动成功返回true
-cxBool NodeSetPosition(cxAny node,cxVec2f idx);
+cxBool NodeSetPosition(cxAny pview,cxVec2f idx);
 
-void NodeSetSize(cxAny node,cxSize2f size);
+void NodeSetSize(cxAny pview,cxSize2f size);
 
-void NodeInit(cxAny node,cxSize2f size,cxVec2f pos);
+void NodeInit(cxAny pview,cxSize2f size,cxVec2f pos);
 
 cxAny NodeCreate(cxAny map);
 

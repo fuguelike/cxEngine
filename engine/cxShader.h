@@ -47,11 +47,11 @@ CX_OBJECT_DEF(cxShader, cxObject)
     CX_METHOD_DEF(cxString, GetFragmentSource, cxAny);
 CX_OBJECT_END(cxShader, cxObject)
 
-void cxShaderInitPosColorTex(cxAny this);
+void cxShaderInitPosColorTex(cxAny pshader);
 
-bool cxShaderInit(cxShader this);
+bool cxShaderInit(cxAny pshader);
 
-void cxShaderUsing(cxShader this);
+void cxShaderUsing(cxAny pshader);
 
 CX_C_END
 

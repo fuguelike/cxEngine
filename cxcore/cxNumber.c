@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxType.h"
 #include "cxNumber.h"
 
 cxBool cxNumberIsType(cxAny this,cxNumberType type)
@@ -32,80 +33,93 @@ CX_OBJECT_FREE(cxNumber, cxObject)
 {}
 CX_OBJECT_TERM(cxNumber, cxObject)
 
-cxBool cxNumberToBool(cxNumber this)
+cxBool cxNumberToBool(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeBool, "type error");
     return this->value.bv;
 }
 
-cxInt cxNumberToInt(cxNumber this)
+cxInt cxNumberToInt(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeInt, "type error");
     return this->value.vi;
 }
 
-cxInt8 cxNumberToInt8(cxNumber this)
+cxInt8 cxNumberToInt8(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeInt8, "type error");
     return this->value.i8;
 }
 
-cxInt16 cxNumberToInt16(cxNumber this)
+cxInt16 cxNumberToInt16(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeInt16, "type error");
     return this->value.i16;
 }
 
-cxInt32 cxNumberToInt32(cxNumber this)
+cxInt32 cxNumberToInt32(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeInt32, "type error");
     return this->value.i32;
 }
 
-cxInt64 cxNumberToInt64(cxNumber this)
+cxInt64 cxNumberToInt64(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeInt64, "type error");
     return this->value.i64;
 }
 
-cxUInt cxNumberToUInt(cxNumber this)
+cxUInt cxNumberToUInt(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeUInt, "type error");
     return this->value.vu;
 }
 
-cxUInt8 cxNumberToUInt8(cxNumber this)
+cxUInt8 cxNumberToUInt8(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeUInt8, "type error");
     return this->value.u8;
 }
 
-cxUInt16 cxNumberToUInt16(cxNumber this)
+cxUInt16 cxNumberToUInt16(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeUInt16, "type error");
     return this->value.u16;
 }
 
-cxUInt32 cxNumberToUInt32(cxNumber this)
+cxUInt32 cxNumberToUInt32(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeUInt32, "type error");
     return this->value.u32;
 }
 
-cxUInt64 cxNumberToUInt64(cxNumber this)
+cxUInt64 cxNumberToUInt64(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeUInt64, "type error");
     return this->value.u64;
 }
 
-cxFloat cxNumberToFloat(cxNumber this)
+cxFloat cxNumberToFloat(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeFloat, "type error");
     return this->value.vf;
 }
 
-cxDouble cxNumberToDouble(cxNumber this)
+cxDouble cxNumberToDouble(cxAny pnum)
 {
+    CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeDouble, "type error");
     return this->value.vd;
 }

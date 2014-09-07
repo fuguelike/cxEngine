@@ -36,23 +36,23 @@ CX_OBJECT_DEF(cxTexture, cxObject)
     CX_METHOD_DEF(void, Bind, cxAny);
 CX_OBJECT_END(cxTexture, cxObject)
 
-void cxDrawClippingTexture(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey);
+void cxDrawClippingTexture(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars tkey);
 
-void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey,cxConstChars skey);
+void cxTextureDraw(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars tkey,cxConstChars skey);
 
-cxBoxTex2f cxTextureBox(cxTexture this,cxConstChars key);
+cxBoxTex2f cxTextureBox(cxAny ptex,cxConstChars key);
 
-cxBoxTex2f cxTextureBoxPixel(cxTexture this,cxConstChars key,cxFloat subPixel);
+cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat subPixel);
 
-cxRect4f cxTextureRect(cxTexture this,cxConstChars key);
+cxRect4f cxTextureRect(cxAny ptex,cxConstChars key);
 
-cxSize2f cxTextureSize(cxTexture this,cxConstChars key);
+cxSize2f cxTextureSize(cxAny ptex,cxConstChars key);
 
-void cxTextureLoad(cxTexture this,cxStream stream);
+void cxTextureLoad(cxAny ptex,cxStream stream);
 
-void cxTextureBind(cxTexture this);
+void cxTextureBind(cxAny ptex);
 
-void cxTextureSetParam(cxTexture this,GLuint type,GLuint value);
+void cxTextureSetParam(cxAny ptex,GLuint type,GLuint value);
 
 CX_C_END
 

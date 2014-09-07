@@ -40,71 +40,71 @@ CX_OBJECT_FREE(cxStream, cxObject)
 }
 CX_OBJECT_TERM(cxStream, cxObject)
 
-cxBool cxStreamOpen(cxAny this)
+cxBool cxStreamOpen(cxAny pstream)
 {
-    cxStream stream = this;
-    return CX_METHOD_GET(false, stream->Open, this);
+    CX_ASSERT_THIS(pstream, cxStream);
+    return CX_METHOD_GET(false, this->Open, this);
 }
 
-cxInt cxStreamRead(cxAny this,cxAny buffer,cxInt size)
+cxInt cxStreamRead(cxAny pstream,cxAny buffer,cxInt size)
 {
-    cxStream stream = this;
-    return CX_METHOD_GET(0, stream->Read,this,buffer,size);
+    CX_ASSERT_THIS(pstream, cxStream);
+    return CX_METHOD_GET(0, this->Read,this,buffer,size);
 }
 
-cxInt cxStreamWrite(cxAny this,cxAny buffer,cxInt size)
+cxInt cxStreamWrite(cxAny pstream,cxAny buffer,cxInt size)
 {
-    cxStream stream = this;
-    return CX_METHOD_GET(0, stream->Write,this,buffer,size);
+    CX_ASSERT_THIS(pstream, cxStream);
+    return CX_METHOD_GET(0, this->Write,this,buffer,size);
 }
 
-cxInt cxStreamSeek(cxAny this,cxOff off,cxInt flags)
+cxInt cxStreamSeek(cxAny pstream,cxOff off,cxInt flags)
 {
-    cxStream stream = this;
-    return CX_METHOD_GET(0, stream->Seek,this,off,flags);
+    CX_ASSERT_THIS(pstream, cxStream);
+    return CX_METHOD_GET(0, this->Seek,this,off,flags);
 }
 
-cxOff cxStreamPosition(cxAny this)
+cxOff cxStreamPosition(cxAny pstream)
 {
-    cxStream stream = this;
-    return CX_METHOD_GET(0, stream->Position, this);
+    CX_ASSERT_THIS(pstream, cxStream);
+    return CX_METHOD_GET(0, this->Position, this);
 }
 
-cxInt cxStreamLength(cxAny this)
+cxInt cxStreamLength(cxAny pstream)
 {
-    cxStream stream = this;
-    return stream->length;
+    CX_ASSERT_THIS(pstream, cxStream);
+    return this->length;
 }
 
-void cxStreamClose(cxAny this)
+void cxStreamClose(cxAny pstream)
 {
-    cxStream stream = this;
-    CX_METHOD_RUN(stream->Close,this);
+    CX_ASSERT_THIS(pstream, cxStream);
+    CX_METHOD_RUN(this->Close,this);
 }
 
-cxString cxStreamAllBytes(cxAny this)
+cxString cxStreamAllBytes(cxAny pstream)
 {
-    cxStream stream = this;
-    return CX_METHOD_GET(NULL, stream->AllBytes,this);
+    CX_ASSERT_THIS(pstream, cxStream);
+    return CX_METHOD_GET(NULL, this->AllBytes,this);
 }
 
-void cxStreamBaseClose(cxAny this)
+void cxStreamBaseClose(cxAny pstream)
 {
-    cxStream stream = this;
-    stream->length = 0;
-    stream->canRead = false;
-    stream->canWrite = false;
-    stream->canSeek = false;
-    stream->isOpen = false;
+    CX_ASSERT_THIS(pstream, cxStream);
+    this->length = 0;
+    this->canRead = false;
+    this->canWrite = false;
+    this->canSeek = false;
+    this->isOpen = false;
 }
 
-cxString cxStreamFileDir(cxAny this)
+cxString cxStreamFileDir(cxAny pstream)
 {
-    cxStream stream = this;
-    if(stream->path == NULL){
+    CX_ASSERT_THIS(pstream, cxStream);
+    if(this->path == NULL){
         return cxStringCreate(".");
     }
-    char *dir = dirname((char *)cxStringBody(stream->file));
+    char *dir = dirname((char *)cxStringBody(this->file));
     return cxStringCreate("%s",dir);
 }
 

@@ -11,7 +11,7 @@
 
 static void cxPolygonDraw(cxAny pview)
 {
-    cxPolygon this = pview;
+    CX_ASSERT_THIS(pview, cxPolygon);
     CX_RETURN(this->number < 3);
     cxSpriteBindTexture(pview);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
@@ -65,13 +65,13 @@ CX_OBJECT_TERM(cxPolygon, cxSprite)
 
 void cxPolygonClean(cxAny pview)
 {
-    cxPolygon this = pview;
+    CX_ASSERT_THIS(pview, cxPolygon);
     this->number = 0;
 }
 
 void cxPolygonAppend(cxAny pview,cxPoint point)
 {
-    cxPolygon this = pview;
+    CX_ASSERT_THIS(pview, cxPolygon);
     if((this->capacity - 1) <= this->number){
         cxPolygonResize(pview, 8);
     }
@@ -83,7 +83,7 @@ void cxPolygonAppend(cxAny pview,cxPoint point)
 
 void cxPolygonResize(cxAny pview,cxInt add)
 {
-    cxPolygon this = pview;
+    CX_ASSERT_THIS(pview, cxPolygon);
     this->capacity = this->capacity + add;
     cxPolygonMalloc(this);
 }

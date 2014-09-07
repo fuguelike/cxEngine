@@ -10,13 +10,13 @@
 
 static void cxRunnerInit(cxAny pav)
 {
-    cxRunner this = pav;
+    CX_ASSERT_THIS(pav, cxRunner);
     CX_METHOD_RUN(this->Init, this);
 }
 
 static cxBool cxRunnerExit(cxAny pav)
 {
-    cxRunner this = pav;
+    CX_ASSERT_THIS(pav, cxRunner);
     if(this->count == 0){
         this->step ++;
         CX_METHOD_RUN(this->Exit, this);
@@ -42,7 +42,9 @@ CX_OBJECT_TERM(cxRunner, cxAction)
 
 static void cxRunnerItemStop(cxAny sender)
 {
-    cxRunner this = cxActionParent(sender);
+    CX_ASSERT_TYPE(sender, cxAction);
+    cxAny parent = cxActionParent(sender);
+    CX_ASSERT_THIS(parent, cxRunner);
     CX_ASSERT(this != NULL, "parent null");
     this->count --;
 }
@@ -56,8 +58,10 @@ cxRunner cxRunnerCreate(cxAny data)
 
 void cxRunnerAppend(cxAny runner,cxAny pav, cxAny pview)
 {
+    CX_ASSERT_THIS(runner, cxRunner);
+    CX_ASSERT_TYPE(pav, cxAction);
+    CX_ASSERT_TYPE(pview, cxView);
     cxAction action = pav;
-    cxRunner this = runner;
     this->count ++;
     CX_EVENT_APPEND(action->onStop, cxRunnerItemStop);
     cxViewAppendAction(pview, pav);

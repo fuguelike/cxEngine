@@ -20,20 +20,24 @@ static cxInt MapSortCmpFunc(cxListElement *lp,cxListElement *rp)
     return v2->position.y - v1->position.y;
 }
 
-void MapSortNode(Map this)
+void MapSortNode(cxAny pmap)
 {
+    CX_ASSERT_THIS(pmap, Map);
     cxListSort(this->cxAtlas.cxSprite.cxView.subViews, MapSortCmpFunc);
 }
 
-void MapAppendNode(Map this,cxAny node)
+void MapAppendNode(cxAny pmap,cxAny node)
 {
+    CX_ASSERT_THIS(pmap, Map);
+    CX_ASSERT_TYPE(node, Node);
     Node snode = node;
     cxViewAppend(this, snode);
     snode->element = cxListAppend(this->nodes, snode);
 }
 
-cxBool MapInit(Map this,cxJson data)
+cxBool MapInit(cxAny pmap,cxJson data)
 {
+    CX_ASSERT_THIS(pmap, Map);
     //set size
     cxEngine engine = cxEngineInstance();
     this->unitNum = cxVec2iv(20, 20);
@@ -105,13 +109,15 @@ CX_OBJECT_FREE(Map, cxAtlas)
 }
 CX_OBJECT_TERM(Map, cxAtlas)
 
-cxInt MapOffsetIdx(Map this,cxInt x,cxInt y)
+cxInt MapOffsetIdx(cxAny pmap,cxInt x,cxInt y)
 {
+    CX_ASSERT_THIS(pmap, Map);
     return y * this->unitNum.x + x;
 }
                             
-cxAny MapItem(Map this,cxVec2f idx)
+cxAny MapItem(cxAny pmap,cxVec2f idx)
 {
+    CX_ASSERT_THIS(pmap, Map);
     if(!MapIsValidIdx(this, idx)){
         return NULL;
     }
@@ -119,9 +125,10 @@ cxAny MapItem(Map this,cxVec2f idx)
     return this->items[off];
 }
 
-cxBool MapRemoveNode(Map this,cxAny node)
+cxBool MapRemoveNode(cxAny pmap,cxAny node)
 {
-    CX_ASSERT(node != NULL, "node null");
+    CX_ASSERT_THIS(pmap, Map);
+    CX_ASSERT_TYPE(node, Node);
     Node n = node;
     if(n->map != this){
         return false;
@@ -144,8 +151,10 @@ cxBool MapRemoveNode(Map this,cxAny node)
     return true;
 }
 
-void MapSetNode(Map this,cxVec2i idx,cxAny node)
+void MapSetNode(cxAny pmap,cxVec2i idx,cxAny node)
 {
+    CX_ASSERT_THIS(pmap, Map);
+    CX_ASSERT_TYPE(node, Node);
     Node snode = node;
     cxSize2i size = NodeSize(node);
     if(!MapIsValidIdx(this, snode->idx)){
@@ -169,20 +178,23 @@ setnewpos:
     }
 }
 
-cxVec2f MapPosToIdx(Map this,cxVec2f pos)
+cxVec2f MapPosToIdx(cxAny pmap,cxVec2f pos)
 {
+    CX_ASSERT_THIS(pmap, Map);
     cxSize2f size = cxViewSize(this);
     pos.y += (size.h - this->unitSize.h)/2.0f;
     return cxTilePosToIdx(pos, this->unitSize);
 }
 
-cxBool MapIsValidIdx(Map this,cxVec2f idx)
+cxBool MapIsValidIdx(cxAny pmap,cxVec2f idx)
 {
+    CX_ASSERT_THIS(pmap, Map);
     return idx.x >= 0 && idx.x < this->unitNum.x && idx.y >= 0 && idx.y < this->unitNum.y;
 }
 
-cxVec2f MapIdxToPos(Map this,cxVec2f idx)
+cxVec2f MapIdxToPos(cxAny pmap,cxVec2f idx)
 {
+    CX_ASSERT_THIS(pmap, Map);
     cxSize2f size = cxViewSize(this);
     cxVec2f pos = cxTileIdxToPos(idx, this->unitSize);
     pos.y -= (size.h - this->unitSize.h)/2.0f;

@@ -11,8 +11,8 @@
 
 static void cxSplineInit(cxAny pav)
 {
-    cxSpline this = pav;
-    CX_ASSERT(this->cxAction.view != NULL, "view not set");
+    CX_ASSERT_THIS(pav, cxSpline);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
     this->delta = 1.0f/((cxFloat)cxAnyArrayLength(this->points) - 1.0f);
     this->diff = cxVec2fv(0, 0);
     this->prev = this->cxAction.view->position;
@@ -27,7 +27,7 @@ static cxVec2f cxSplinePointAt(cxSpline this,cxInt idx)
 static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxInt index = 0;
-    cxSpline this = pav;
+    CX_ASSERT_THIS(pav, cxSpline);
     cxFloat lt = 0;
     if (time >= 1.0f){
         index = cxAnyArrayLength(this->points) - 1;
@@ -59,7 +59,7 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
 
 static void cxSplineReset(cxAny pav)
 {
-    cxSpline this = pav;
+    CX_ASSERT_THIS(pav, cxSpline);
     this->index = -1;
     cxAnyArrayClean(this->points);
 }
@@ -105,7 +105,7 @@ cxSpline cxSplineCreate(cxFloat time,cxAnyArray points)
 
 void cxSplineAppend(cxAny pav,cxVec2f pos)
 {
-    cxSpline this = pav;
+    CX_ASSERT_THIS(pav, cxSpline);
     cxAnyArrayAppend(this->points, &pos);
 }
 

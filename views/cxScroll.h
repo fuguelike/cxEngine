@@ -47,7 +47,7 @@ void cxScrollSetBody(cxAny pview,cxAny cview);
 
 cxView cxScrollBody(cxAny pview);
 
-cxBool cxScrollCheckPos(cxScroll this,cxVec2f *pos);
+cxBool cxScrollCheckPos(cxAny pview,cxVec2f *pos);
 
 CX_C_END
 

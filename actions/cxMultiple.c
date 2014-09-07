@@ -13,8 +13,9 @@ static void cxMultipleRunNext(cxAny pav);
 
 static void cxActionItemStop(cxAny sender)
 {
-    cxMultiple this = cxActionParent(sender);
-    CX_ASSERT(this != NULL, "event arg not set");
+    CX_ASSERT_TYPE(sender, cxAction);
+    cxAny parent = cxActionParent(sender);
+    CX_ASSERT_THIS(parent, cxMultiple);
     this->index ++;
     if(this->type == cxMultipleTypeSequence){
         cxMultipleRunNext(this);
@@ -23,7 +24,7 @@ static void cxActionItemStop(cxAny sender)
 
 static void cxMultipleRunNext(cxAny pav)
 {
-    cxMultiple this = pav;
+    CX_ASSERT_THIS(pav, cxMultiple);
     if(this->index >= 0 && this->index < cxArrayLength(this->items)){
         cxAction action = cxArrayAtIndex(this->items, this->index);
         CX_EVENT_APPEND(action->onStop, cxActionItemStop);
@@ -33,7 +34,7 @@ static void cxMultipleRunNext(cxAny pav)
 
 static void cxMultipleRunAll(cxAny pav)
 {
-    cxMultiple this = pav;
+    CX_ASSERT_THIS(pav, cxMultiple);
     CX_ARRAY_FOREACH(this->items, ele){
         cxAction action = cxArrayObject(ele);
         CX_EVENT_APPEND(action->onStop, cxActionItemStop);
@@ -43,7 +44,7 @@ static void cxMultipleRunAll(cxAny pav)
 
 static void cxMultipleInit(cxAny pav)
 {
-    cxMultiple this = pav;
+    CX_ASSERT_THIS(pav, cxMultiple);
     CX_ASSERT(this->cxAction.view != NULL, "view not set");
     if(this->type == cxMultipleTypeSequence){
         this->index = 0;
@@ -56,7 +57,7 @@ static void cxMultipleInit(cxAny pav)
 
 static cxBool cxMultipleExit(cxAny pav)
 {
-    cxMultiple this = pav;
+    CX_ASSERT_THIS(pav, cxMultiple);
     if(this->index >= cxArrayLength(this->items)){
         cxArrayClean(this->items);
         return true;
@@ -113,13 +114,13 @@ CX_OBJECT_TERM(cxMultiple, cxAction)
 
 void cxMultipleSetType(cxAny pav,cxMultipleType type)
 {
-    cxMultiple this = pav;
+    CX_ASSERT_THIS(pav, cxMultiple);
     this->type = type;
 }
 
 void cxMultipleAppend(cxAny pav,cxAny action)
 {
-    cxMultiple this = pav;
+    CX_ASSERT_THIS(pav, cxMultiple);
     cxArrayAppend(this->items, action);
     cxActionSetParent(action, pav);
 }

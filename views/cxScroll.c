@@ -16,7 +16,7 @@
 
 void cxScrollSetBody(cxAny pview,cxAny cview)
 {
-    cxScroll this = pview;
+    CX_ASSERT_THIS(pview, cxScroll);
     CX_ASSERT(this->body == NULL, "container already set");
     cxViewAppend(this, cview);
     this->body = cview;
@@ -24,7 +24,7 @@ void cxScrollSetBody(cxAny pview,cxAny cview)
 
 cxView cxScrollBody(cxAny pview)
 {
-    cxScroll this = pview;
+    CX_ASSERT_THIS(pview, cxScroll);
     return this->body;
 }
 
@@ -46,14 +46,14 @@ static void cxScrollResetScale(cxScroll this)
 
 static cxBool cxScrollScale(cxAny pview,cxTouchItems *points)
 {
-    cxScroll this = pview;
+    CX_ASSERT_THIS(pview, cxScroll);
     cxVec2f cp0;
     cxVec2f cp1;
     cxTouchItem item0 = points->items[0];
     cxTouchItem item1 = points->items[1];
     cxView body = cxScrollBody(this);
     bool hited = cxViewHitTest(body, item0->position, &cp0) && cxViewHitTest(body, item1->position, &cp1);
-    if(hited && item0->type == cxTouchTypeDown && item1->type == cxTouchTypeDown){
+    if(hited && (item0->type == cxTouchTypeDown || item1->type == cxTouchTypeDown)){
         //disable move
         this->isEnable = false;
         this->startDis = kmVec2DistanceBetween(&item0->position, &item1->position);
@@ -94,8 +94,9 @@ static cxBool cxScrollScale(cxAny pview,cxTouchItems *points)
     return false;
 }
 
-cxBool cxScrollCheckPos(cxScroll this,cxVec2f *pos)
+cxBool cxScrollCheckPos(cxAny pview,cxVec2f *pos)
 {
+    CX_ASSERT_THIS(pview, cxScroll);
     cxBool fix = false;
     if(pos->y < this->box.b){
         pos->y = this->box.b;
@@ -118,7 +119,7 @@ cxBool cxScrollCheckPos(cxScroll this,cxVec2f *pos)
 
 void cxScrollUpdateBox(cxAny pview)
 {
-    cxScroll this = pview;
+    CX_ASSERT_THIS(pview, cxScroll);
     cxView body = cxScrollBody(this);
     cxSize2f msize = cxViewContentSize(body);
     cxSize2f psize = cxViewSize(this);
@@ -133,7 +134,7 @@ void cxScrollUpdateBox(cxAny pview)
 
 cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
 {
-    cxScroll this = pview;
+    CX_ASSERT_THIS(pview, cxScroll);
     CX_RETURN(this->body == NULL,false);
     if(this->scalable && points->number == 2){
         return cxScrollScale(pview, points);
@@ -248,7 +249,7 @@ CX_OBJECT_TYPE(cxScroll, cxView)
 }
 CX_OBJECT_INIT(cxScroll, cxView)
 {
-    this->scaleinc = 0.3f;
+    this->scaleinc = 0.5f;
     this->limit = 1200;
     this->speed = 0.1f;
     this->scaling = 0.05f;

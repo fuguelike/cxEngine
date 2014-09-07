@@ -10,7 +10,8 @@
 
 static void cxParabolaInit(cxAny pav)
 {
-    cxParabola this = pav;
+    CX_ASSERT_THIS(pav, cxParabola);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
     cxAny view = cxActionView(pav);
     cxVec2f n;
     kmVec2Normalize(&n, &this->speed);
@@ -21,7 +22,7 @@ static void cxParabolaInit(cxAny pav)
 
 static void cxParabolaStep(cxAny pav,cxFloat dt,cxFloat time)
 {
-    cxParabola this = pav;
+    CX_ASSERT_THIS(pav, cxParabola);
     cxView view = cxActionView(pav);
     cxVec2f tmp;
     cxVec2f gv;
@@ -36,7 +37,7 @@ static void cxParabolaStep(cxAny pav,cxFloat dt,cxFloat time)
 
 static cxBool cxParabolaExit(cxAny pav)
 {
-    cxParabola this = pav;
+    CX_ASSERT_THIS(pav, cxParabola);
     return this->cxAction.time != -1 && this->time >= this->cxAction.time;
 }
 

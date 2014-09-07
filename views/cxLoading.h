@@ -32,7 +32,7 @@ void cxLoadingOnUpdate(cxAny sender);
 
 cxBool cxLoadingTouch(cxAny pview,cxTouchItems *points);
 
-void cxLoadingStart(cxLoading this);
+void cxLoadingStart(cxAny pview);
 
 void cxLoaingFinished(cxAny pview);
 

@@ -35,19 +35,19 @@ CX_OBJECT_END(cxRegex, cxObject)
 
 typedef cxString (*cxRegexReplaceFunc)(cxRegex regex,cxAny arg);
 
-cxString cxRegexReplace(cxRegex this,cxRegexReplaceFunc replaceFunc,cxAny arg);
+cxString cxRegexReplace(cxAny preg,cxRegexReplaceFunc replaceFunc,cxAny arg);
 
 cxRegex cxRegexCreate(cxConstChars regex, cxString input,cxUInt flags);
 
-cxInt cxRegexLength(cxRegex this);
+cxInt cxRegexLength(cxAny preg);
 
-cxArray cxRegexMatchAll(cxRegex this);
+cxArray cxRegexMatchAll(cxAny preg);
 
-cxString cxRegexMatch(cxRegex this,cxInt index);
+cxString cxRegexMatch(cxAny preg,cxInt index);
 
-cxRegexPos cxRegexPosition(cxRegex this,cxInt index);
+cxRegexPos cxRegexPosition(cxAny preg,cxInt index);
 
-cxBool cxRegexNext(cxRegex this);
+cxBool cxRegexNext(cxAny preg);
 
 CX_C_END
 

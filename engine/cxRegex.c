@@ -21,8 +21,9 @@ CX_OBJECT_FREE(cxRegex, cxObject)
 }
 CX_OBJECT_TERM(cxRegex, cxObject)
 
-cxString cxRegexReplace(cxRegex this,cxRegexReplaceFunc replaceFunc,cxAny arg)
+cxString cxRegexReplace(cxAny preg,cxRegexReplaceFunc replaceFunc,cxAny arg)
 {
+    CX_ASSERT_THIS(preg, cxRegex);
     CX_ASSERT(replaceFunc != NULL, "args error");
     cxString ret = CX_CREATE(cxString);
     cxInt start = 0;
@@ -57,13 +58,15 @@ cxRegex cxRegexCreate(cxConstChars regex, cxString input,cxUInt flags)
     return this;
 }
 
-cxInt cxRegexLength(cxRegex this)
+cxInt cxRegexLength(cxAny preg)
 {
+    CX_ASSERT_THIS(preg, cxRegex);
     return this->count;
 }
 
-cxArray cxRegexMatchAll(cxRegex this)
+cxArray cxRegexMatchAll(cxAny preg)
 {
+    CX_ASSERT_THIS(preg, cxRegex);
     cxArray rv = CX_CREATE(cxArray);
     for(cxInt i=0; i < this->count;i++){
         cxString item = cxRegexMatch(this, i);
@@ -73,8 +76,9 @@ cxArray cxRegexMatchAll(cxRegex this)
     return rv;
 }
 
-cxString cxRegexMatch(cxRegex this,cxInt index)
+cxString cxRegexMatch(cxAny preg,cxInt index)
 {
+    CX_ASSERT_THIS(preg, cxRegex);
     if(index < 0 || index >= this->count){
         return NULL;
     }
@@ -89,16 +93,18 @@ cxString cxRegexMatch(cxRegex this,cxInt index)
     return ret;
 }
 
-cxRegexPos cxRegexPosition(cxRegex this,cxInt index)
+cxRegexPos cxRegexPosition(cxAny preg,cxInt index)
 {
+    CX_ASSERT_THIS(preg, cxRegex);
     if(index < 0 || index >= this->count){
         return (cxRegexPos){-1 ,-1};
     }
     return (cxRegexPos){this->offsets[index*2],this->offsets[index*2 + 1]};
 }
 
-cxBool cxRegexNext(cxRegex this)
+cxBool cxRegexNext(cxAny preg)
 {
+    CX_ASSERT_THIS(preg, cxRegex);
     CX_ASSERT(this->input != NULL, "input string error");
     cxConstChars body = cxStringBody(this->input);
     cxInt length = cxStringLength(this->input);

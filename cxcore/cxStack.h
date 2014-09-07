@@ -17,17 +17,17 @@ CX_OBJECT_DEF(cxStack, cxObject)
     cxArray array;
 CX_OBJECT_END(cxStack, cxObject)
 
-void    cxStackPush(cxStack stack,cxAny any);
+void    cxStackPush(cxAny pstack,cxAny any);
 
-cxAny   cxStackTop(cxStack stack);
+cxAny   cxStackTop(cxAny pstack);
 
-cxInt   cxStackLength(cxStack stack);
+cxInt   cxStackLength(cxAny pstack);
 
-void    cxStackReplaceTop(cxStack stack,cxAny any);
+void    cxStackReplaceTop(cxAny pstack,cxAny any);
 
-void    cxStackPop(cxStack stack);
+void    cxStackPop(cxAny pstack);
 
-cxAny   cxStackObject(cxStack stack,cxInt index);
+cxAny   cxStackObject(cxAny pstack,cxInt index);
 
 CX_C_END
 

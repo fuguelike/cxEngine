@@ -91,7 +91,7 @@ void cxParticleInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index);
 
 void cxParticleStop(cxAny pav);
 
-void cxParticleSetType(cxAny pview,cxParticleEmitterType type);
+void cxParticleSetType(cxAny pav,cxParticleEmitterType type);
 
 void cxParticleInitNumber(cxAny pav,cxInt number);
 

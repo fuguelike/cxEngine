@@ -95,7 +95,7 @@ static cxAnimateItem cxAnimateItemGet(cxAnimate this,cxArray items, cxAny any, c
 static void cxAnimateInit(cxAny pav)
 {
     cxAnimate this = pav;
-    CX_ASSERT(CX_INSTANCE_OF(this->cxAction.view, cxSprite), "cxAnimate action view must is cxSprite");
+    CX_ASSERT_TYPE(this->cxAction.view, cxSprite);
     this->index = 0;
     this->cxAction.time = this->time;
     cxArray items = cxAnimateGetGroup(this,this->name);
@@ -215,14 +215,14 @@ CX_SETTER_DEF(cxAnimate, name)
 {
     cxConstChars name = cxJsonToConstChars(value);
     if(name != NULL){
-        cxAnimateSetGroupName(this, name);
+        cxAnimateRunGroup(this, name);
     }
 }
 
 cxArray cxAnimateGetGroup(cxAny pav,cxString name)
 {
+    CX_ASSERT_THIS(pav, cxAnimate);
     CX_ASSERT(name != NULL, "must set group name");
-    cxAnimate this = pav;
     CX_RETURN(name == NULL, NULL);
     cxConstChars cname = cxStringBody(name);
     cxArray items = cxHashGet(this->groups, cxHashStrKey(cname));
@@ -261,22 +261,15 @@ CX_OBJECT_FREE(cxAnimate, cxAction)
 }
 CX_OBJECT_TERM(cxAnimate, cxAction)
 
-void cxAnimateSetGroupName(cxAny pav,cxConstChars name)
+void cxAnimateRunGroup(cxAny pav,cxConstChars name)
 {
-    cxAnimate this = pav;
+    CX_ASSERT_THIS(pav, cxAnimate);
     cxActionReset(this);
     CX_RETURN(name == NULL);
     cxString str = cxStringConstChars(name);
     CX_RETAIN_SWAP(this->name, str);
 }
 
-cxAnimate cxAnimateCreate(cxFloat time,cxConstChars name)
-{
-    cxAnimate this = CX_CREATE(cxAnimate);
-    this->time = time;
-    cxAnimateSetGroupName(this, name);
-    return this;
-}
 
 
 

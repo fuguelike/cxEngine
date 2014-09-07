@@ -33,8 +33,9 @@ CX_OBJECT_FREE(cxTexture, cxObject)
 }
 CX_OBJECT_TERM(cxTexture, cxObject)
 
-void cxTextureLoad(cxTexture this,cxStream stream)
+void cxTextureLoad(cxAny ptex,cxStream stream)
 {
+    CX_ASSERT_THIS(ptex, cxTexture);
     CX_RETURN(this->isLoad);
     this->isLoad = CX_METHOD_GET(false, this->Load,this,stream);
     if(!this->isLoad){
@@ -42,8 +43,9 @@ void cxTextureLoad(cxTexture this,cxStream stream)
     }
 }
 
-cxBoxTex2f cxTextureBoxPixel(cxTexture this,cxConstChars key,cxFloat subPixel)
+cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat subPixel)
 {
+    CX_ASSERT_THIS(ptex, cxTexture);
     CX_ASSERT(this != NULL, "texture null");
     cxBoxTex2f rv = cxBoxTex2fDefault();
     CX_RETURN(key == NULL, rv);
@@ -62,13 +64,15 @@ cxBoxTex2f cxTextureBoxPixel(cxTexture this,cxConstChars key,cxFloat subPixel)
     return rv;
 }
 
-cxBoxTex2f cxTextureBox(cxTexture this,cxConstChars key)
+cxBoxTex2f cxTextureBox(cxAny ptex,cxConstChars key)
 {
+    CX_ASSERT_THIS(ptex, cxTexture);
     return cxTextureBoxPixel(this, key, 0);
 }
 
-cxRect4f cxTextureRect(cxTexture this,cxConstChars key)
+cxRect4f cxTextureRect(cxAny ptex,cxConstChars key)
 {
+    CX_ASSERT_THIS(ptex, cxTexture);
     cxRect4f rv = cxRect4fv(0.0f, 0.0f, 1.0f, 1.0f);
     CX_RETURN(key == NULL, rv);
     cxTexCoord texCoord = cxHashGet(this->keys, cxHashStrKey(key));
@@ -82,8 +86,9 @@ cxRect4f cxTextureRect(cxTexture this,cxConstChars key)
     return rv;
 }
 
-cxSize2f cxTextureSize(cxTexture this,cxConstChars key)
+cxSize2f cxTextureSize(cxAny ptex,cxConstChars key)
 {
+    CX_ASSERT_THIS(ptex, cxTexture);
     cxSize2f rv = cxSize2fv(0, 0);
     CX_RETURN(key == NULL, rv);
     rv = this->size;
@@ -96,13 +101,15 @@ cxSize2f cxTextureSize(cxTexture this,cxConstChars key)
     return rv;
 }
 
-void cxDrawClippingTexture(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey)
+void cxDrawClippingTexture(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars tkey)
 {
+    CX_ASSERT_THIS(ptex, cxTexture);
     cxTextureDraw(this, pos, size, tkey, cxShaderClippingKey);
 }
 
-void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstChars tkey,cxConstChars skey)
+void cxTextureDraw(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars tkey,cxConstChars skey)
 {
+    CX_ASSERT_THIS(ptex, cxTexture);
     cxBoxVec3f vbox;
     cxFloat wh = size.w / 2.0f;
     cxFloat hh = size.h / 2.0f;
@@ -125,9 +132,9 @@ void cxTextureDraw(cxTexture this,const cxVec2f pos,const cxSize2f size,cxConstC
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void cxTextureBind(cxTexture this)
+void cxTextureBind(cxAny ptex)
 {
-    CX_ASSERT(this != NULL, "bind texture null");
+    CX_ASSERT_THIS(ptex, cxTexture);
     CX_METHOD_RUN(this->Bind,this);
     if(!this->isSetParam){
         cxOpenGLSetTexParameters(this->texParam);
@@ -135,8 +142,9 @@ void cxTextureBind(cxTexture this)
     }
 }
 
-void cxTextureSetParam(cxTexture this,GLuint type,GLuint value)
+void cxTextureSetParam(cxAny ptex,GLuint type,GLuint value)
 {
+    CX_ASSERT_THIS(ptex, cxTexture);
     if(type == GL_TEXTURE_MIN_FILTER && this->texParam.minFilter != value){
         this->texParam.minFilter = value;
         this->isSetParam = false;

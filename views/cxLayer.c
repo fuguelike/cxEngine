@@ -24,8 +24,8 @@ CX_OBJECT_TERM(cxLayerSprite, cxSprite)
 
 void cxLayerSpriteUpdateBoxPoint(cxAny pview,cxBoxPoint *bp)
 {
-    CX_ASSERT(pview != NULL && bp != NULL, "args null");
-    cxLayerSprite this  = pview;
+    CX_ASSERT_THIS(pview, cxLayerSprite);
+    CX_ASSERT(bp != NULL, "args null");
     
     cxBoxTex2f coord = cxSpriteBoxTex(this);
     cxColor4f color = cxViewColor(this);

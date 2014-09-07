@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxType.h"
 #include "cxStack.h"
 
 CX_OBJECT_TYPE(cxStack, cxObject)
@@ -20,38 +21,44 @@ CX_OBJECT_FREE(cxStack, cxObject)
 }
 CX_OBJECT_TERM(cxStack, cxObject)
 
-void cxStackPush(cxStack stack,cxAny any)
+void cxStackPush(cxAny pstack,cxAny any)
 {
-    cxArrayAppend(stack->array, any);
+    CX_ASSERT_THIS(pstack, cxStack);
+    cxArrayAppend(this->array, any);
 }
 
-cxAny cxStackTop(cxStack stack)
+cxAny cxStackTop(cxAny pstack)
 {
-    return cxArrayLast(stack->array);
+    CX_ASSERT_THIS(pstack, cxStack);
+    return cxArrayLast(this->array);
 }
 
-cxInt cxStackLength(cxStack stack)
+cxInt cxStackLength(cxAny pstack)
 {
-    return cxArrayLength(stack->array);
+    CX_ASSERT_THIS(pstack, cxStack);
+    return cxArrayLength(this->array);
 }
 
-void cxStackReplaceTop(cxStack stack,cxAny any)
+void cxStackReplaceTop(cxAny pstack,cxAny any)
 {
-    cxInt last = cxArrayLength(stack->array) - 1;
+    CX_ASSERT_THIS(pstack, cxStack);
+    cxInt last = cxArrayLength(this->array) - 1;
     if(last < 0){
-        cxStackPush(stack, any);
+        cxStackPush(this, any);
     }else{
-        cxArrayUpdate(stack->array, any, last);
+        cxArrayUpdate(this->array, any, last);
     }
 }
 
-void cxStackPop(cxStack stack)
+void cxStackPop(cxAny pstack)
 {
-    CX_RETURN(cxArrayLength(stack->array) == 0);
-    cxArrayRemoveLast(stack->array);
+    CX_ASSERT_THIS(pstack, cxStack);
+    CX_RETURN(cxArrayLength(this->array) == 0);
+    cxArrayRemoveLast(this->array);
 }
 
-cxAny cxStackObject(cxStack stack,cxInt index)
+cxAny cxStackObject(cxAny pstack,cxInt index)
 {
-    return cxArrayAtIndex(stack->array, index);
+    CX_ASSERT_THIS(pstack, cxStack);
+    return cxArrayAtIndex(this->array, index);
 }

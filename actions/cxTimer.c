@@ -10,14 +10,14 @@
 
 static void cxTimerInit(cxAny pav)
 {
-    cxTimer this = pav;
+    CX_ASSERT_THIS(pav, cxTimer);
     CX_RETURN(!this->isBegin);
     CX_EVENT_FIRE(this, onArrive);
 }
 
 static cxBool cxTimerExit(cxAny pav)
 {
-    cxTimer this = pav;
+    CX_ASSERT_THIS(pav, cxTimer);
     this->repeat --;
     CX_RETURN(this->repeat == 0 && this->isBegin, true);
     CX_EVENT_FIRE(this, onArrive);
@@ -52,7 +52,7 @@ CX_OBJECT_TERM(cxTimer, cxAction)
 
 void cxTimerSetBegin(cxAny pav,cxBool isBegin)
 {
-    cxTimer this = pav;
+    CX_ASSERT_THIS(pav, cxTimer);
     this->isBegin = isBegin;
 }
 

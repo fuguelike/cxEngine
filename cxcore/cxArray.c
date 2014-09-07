@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxType.h"
 #include "cxArray.h"
 
 CX_OBJECT_TYPE(cxArray, cxObject)
@@ -21,31 +22,34 @@ CX_OBJECT_FREE(cxArray, cxObject)
 }
 CX_OBJECT_TERM(cxArray, cxObject)
 
-void cxArrayClean(cxArray array)
+void cxArrayClean(cxAny array)
 {
-    CX_ARRAY_FOREACH(array, e) {
+    CX_ASSERT_THIS(array, cxArray);
+    CX_ARRAY_FOREACH(this, e) {
         cxAny any = cxArrayObject(e);
         CX_RELEASE(any);
     }
-    utarray_clear(array->utArray);
+    utarray_clear(this->utArray);
 }
 
-void cxArrayFastRemoveAtIndex(cxArray array,cxInt index)
+void cxArrayFastRemoveAtIndex(cxAny array,cxInt index)
 {
-    CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
+    CX_ASSERT_THIS(array, cxArray);
+    CX_ASSERT(index >= 0 && index < cxArrayLength(this), "index invalid");
     cxAny srcObject = cxArrayAtIndex(array, index);
     CX_RELEASE(srcObject);
-    cxInt last = cxArrayLength(array) - 1;
-    void *dst = array->utArray->d + array->utArray->icd.sz * index;
-    void *src = array->utArray->d + array->utArray->icd.sz * last;
-    memcpy(dst, src, array->utArray->icd.sz);
-    array->utArray->i--;
+    cxInt last = cxArrayLength(this) - 1;
+    void *dst = this->utArray->d + this->utArray->icd.sz * index;
+    void *src = this->utArray->d + this->utArray->icd.sz * last;
+    memcpy(dst, src, this->utArray->icd.sz);
+    this->utArray->i--;
 }
 
-void cxArrayUpdate(cxArray array,cxAny nAny,cxInt index)
+void cxArrayUpdate(cxAny array,cxAny nAny,cxInt index)
 {
-    CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
-    cxAny *ele = (cxAny *)utarray_eltptr(array->utArray, index);
+    CX_ASSERT_THIS(array, cxArray);
+    CX_ASSERT(index >= 0 && index < cxArrayLength(this), "index invalid");
+    cxAny *ele = (cxAny *)utarray_eltptr(this->utArray, index);
     if(ele == NULL){
         return;
     }
@@ -58,95 +62,107 @@ void cxArrayUpdate(cxArray array,cxAny nAny,cxInt index)
     CX_RETAIN(nAny);
 }
 
-void cxArrayAppends(cxArray array, cxArray data)
+void cxArrayAppends(cxAny array, cxArray data)
 {
+    CX_ASSERT_THIS(array, cxArray);
     CX_ARRAY_FOREACH(data, ele) {
         cxAny obj = cxArrayObject(ele);
-        cxArrayAppend(array, obj);
+        cxArrayAppend(this, obj);
     }
 }
 
-void cxArrayInsert(cxArray array,cxAny any,cxInt index)
+void cxArrayInsert(cxAny array,cxAny any,cxInt index)
 {
-    utarray_insert(array->utArray, &any, index);
+    CX_ASSERT_THIS(array, cxArray);
+    utarray_insert(this->utArray, &any, index);
     CX_RETAIN(any);
 }
 
-void cxArrayAppend(cxArray array, cxAny any)
+void cxArrayAppend(cxAny array, cxAny any)
 {
-    utarray_push_back(array->utArray, &any);
+    CX_ASSERT_THIS(array, cxArray);
+    utarray_push_back(this->utArray, &any);
     CX_RETAIN(any);
 }
 
-cxInt cxArrayObjectIndex(cxArray array,cxAny any)
+cxInt cxArrayObjectIndex(cxAny array,cxAny any)
 {
-    CX_ARRAY_FOREACH(array, e) {
+    CX_ASSERT_THIS(array, cxArray);
+    CX_ARRAY_FOREACH(this, e) {
         cxAny tmp = cxArrayObject(e);
         if(tmp == any) {
-            return (cxInt)utarray_eltidx(array->utArray,e);
+            return (cxInt)utarray_eltidx(this->utArray,e);
         }
     }
     return CX_INVALID_INDEX;
 }
 
-void cxArrayRemove(cxArray array,cxAny any)
+void cxArrayRemove(cxAny array,cxAny any)
 {
+    CX_ASSERT_THIS(array, cxArray);
     cxInt index = cxArrayObjectIndex(array, any);
     if(index != CX_INVALID_INDEX) {
-        utarray_erase(array->utArray, index, 1);
+        utarray_erase(this->utArray, index, 1);
         CX_RELEASE(any);
     }
 }
 
-void cxArrayFastRemove(cxArray array,cxAny any)
+void cxArrayFastRemove(cxAny array,cxAny any)
 {
-    cxInt index = cxArrayObjectIndex(array, any);
+    CX_ASSERT_THIS(array, cxArray);
+    cxInt index = cxArrayObjectIndex(this, any);
     if(index != CX_INVALID_INDEX) {
-        cxArrayFastRemoveAtIndex(array, index);
+        cxArrayFastRemoveAtIndex(this, index);
     }
 }
 
-void cxArrayRemoveAtIndex(cxArray array,cxInt index)
+void cxArrayRemoveAtIndex(cxAny array,cxInt index)
 {
-    CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
-    cxAny any = cxArrayAtIndex(array, index);
-    utarray_erase(array->utArray, index, 1);
+    CX_ASSERT_THIS(array, cxArray);
+    CX_ASSERT(index >= 0 && index < cxArrayLength(this), "index invalid");
+    cxAny any = cxArrayAtIndex(this, index);
+    utarray_erase(this->utArray, index, 1);
     CX_RELEASE(any);
 }
 
-cxAny cxArrayAtIndex(cxArray array,cxInt index)
+cxAny cxArrayAtIndex(cxAny array,cxInt index)
 {
-    CX_ASSERT(index >= 0 && index < cxArrayLength(array), "index invalid");
-    cxAny *e = (cxAny *)utarray_eltptr(array->utArray, index);
+    CX_ASSERT_THIS(array, cxArray);
+    CX_ASSERT(index >= 0 && index < cxArrayLength(this), "index invalid");
+    cxAny *e = (cxAny *)utarray_eltptr(this->utArray, index);
     return cxArrayObject(e);
 }
 
-cxAny cxArrayFirst(cxArray array)
+cxAny cxArrayFirst(cxAny array)
 {
-    cxAny *e = (cxAny *)utarray_front(array->utArray);
+    CX_ASSERT_THIS(array, cxArray);
+    cxAny *e = (cxAny *)utarray_front(this->utArray);
     return e != NULL ? cxArrayObject(e): NULL;
 }
 
-cxAny cxArrayLast(cxArray array)
+cxAny cxArrayLast(cxAny array)
 {
-    cxAny *e = (cxAny *)utarray_back(array->utArray);
+    CX_ASSERT_THIS(array, cxArray);
+    cxAny *e = (cxAny *)utarray_back(this->utArray);
     return e != NULL ? cxArrayObject(e): NULL;
 }
 
-void cxArrayRemoveFirst(cxArray array)
+void cxArrayRemoveFirst(cxAny array)
 {
-    cxAny any = cxArrayFirst(array);
+    CX_ASSERT_THIS(array, cxArray);
+    cxAny any = cxArrayFirst(this);
     if(any != NULL) {
-        utarray_erase(array->utArray, 0, 1);
+        utarray_erase(this->utArray, 0, 1);
         CX_RELEASE(any);
     }
 }
 
-void cxArrayRemoveLast(cxArray array)
+void cxArrayRemoveLast(cxAny array)
 {
-    cxAny any = cxArrayLast(array);
+    CX_ASSERT_THIS(array, cxArray);
+    cxAny any = cxArrayLast(this);
     if(any != NULL) {
-        utarray_pop_back(array->utArray);
+        utarray_pop_back(this->utArray);
         CX_RELEASE(any);
     }
 }

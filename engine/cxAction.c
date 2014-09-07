@@ -69,19 +69,21 @@ CX_OBJECT_TERM(cxAction, cxObject)
 
 void cxActionSetMgr(cxAny pav,cxAny *mgr)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->actionMgr = mgr;
 }
 
 cxBool cxActionForever(cxAny pav)
 {
+    CX_ASSERT_THIS(pav, cxAction);
+    CX_UNUSED_PARAM(this);
     return false;
 }
 
 void cxActionSetIndex(cxAny pav,cxInt indexNum)
 {
+    CX_ASSERT_THIS(pav, cxAction);
     CX_ASSERT(indexNum > 1, "indexNum small");
-    cxAction this = pav;
     CX_RETURN(this->indexNum == indexNum);
     this->indexNum = indexNum;
     this->indexDelta = 1.0f / (cxFloat)(indexNum - 1);
@@ -89,61 +91,61 @@ void cxActionSetIndex(cxAny pav,cxInt indexNum)
 
 cxAny cxActionView(cxAny pav)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     return this->view;
 }
 
 void cxActionSetView(cxAny pav,cxAny pview)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->view = pview;
 }
 
 void cxActionSetTime(cxAny pav,cxFloat time)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->time = time;
 }
 
 void cxActionSetScale(cxAny pav,cxFloat scale)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->scale = scale;
 }
 
 void cxActionSetTimeInit(cxAny pav,cxFloat time)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->timeInit = time;
 }
 
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     CX_METHOD_SET(this->Curve, curve);
 }
 
 cxAny cxActionParent(cxAny pav)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     return this->parent;
 }
 
 void cxActionSetParent(cxAny pav,cxAny parent)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->parent = parent;
 }
 
 void cxActionSetPauseTime(cxAny pav,cxFloat time)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->pauseTime = time;
 }
 
 cxBool cxActionUpdate(cxAny pav,cxFloat dt)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     cxBool isExit = false;
     //time scale
     cxActionMgr mgr = NULL;
@@ -230,13 +232,13 @@ finished:
 
 void cxActionPause(cxAny pav)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->isPause = true;
 }
 
 void cxActionReset(cxAny pav)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->isFirst = false;
     this->isExit = false;
     this->index = -1;
@@ -247,34 +249,34 @@ void cxActionReset(cxAny pav)
 
 void cxActionResume(cxAny pav)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->pauseTime = 0.0f;
     this->isPause = false;
 }
 
 void cxActionStop(cxAny pav)
 {
+    CX_ASSERT_THIS(pav, cxAction);
     cxEngine engine = cxEngineInstance();
-    cxAction this = pav;
     this->isExit = true;
     cxActionUpdate(this, engine->frameDelta);
 }
 
 cxUInt cxActionGetId(cxAny pav)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     return this->actionId != 0 ? this->actionId : (cxUInt)pav;
 }
 
 void cxActionSetDelay(cxAny pav,cxFloat delay)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->delay = delay;
 }
 
 void cxActionSetId(cxAny pav,cxUInt actionId)
 {
-    cxAction this = pav;
+    CX_ASSERT_THIS(pav, cxAction);
     this->actionId = actionId;
 }
 

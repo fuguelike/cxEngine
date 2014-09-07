@@ -4,7 +4,6 @@ package com.cxengine;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Locale;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -16,7 +15,6 @@ import android.graphics.Paint.Align;
 import android.graphics.Typeface;
 import android.graphics.Paint.FontMetricsInt;
 import android.opengl.GLSurfaceView;
-import android.util.Log;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;

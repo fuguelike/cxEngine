@@ -51,33 +51,33 @@ CX_OBJECT_DEF(cxNumber, cxObject)
     cxNumberType type;
 CX_OBJECT_END(cxNumber, cxObject)
 
-cxBool cxNumberIsType(cxAny this,cxNumberType type);
+cxBool cxNumberIsType(cxAny pnum,cxNumberType type);
 
-cxBool cxNumberToBool(cxNumber this);
+cxBool cxNumberToBool(cxAny pnum);
 
-cxInt cxNumberToInt(cxNumber this);
+cxInt cxNumberToInt(cxAny pnum);
 
-cxInt8 cxNumberToInt8(cxNumber this);
+cxInt8 cxNumberToInt8(cxAny pnum);
 
-cxInt16 cxNumberToInt16(cxNumber this);
+cxInt16 cxNumberToInt16(cxAny pnum);
 
-cxInt32 cxNumberToInt32(cxNumber this);
+cxInt32 cxNumberToInt32(cxAny pnum);
 
-cxInt64 cxNumberToInt64(cxNumber this);
+cxInt64 cxNumberToInt64(cxAny pnum);
 
-cxUInt cxNumberToUInt(cxNumber this);
+cxUInt cxNumberToUInt(cxAny pnum);
 
-cxUInt8 cxNumberToUInt8(cxNumber this);
+cxUInt8 cxNumberToUInt8(cxAny pnum);
 
-cxUInt16 cxNumberToUInt16(cxNumber this);
+cxUInt16 cxNumberToUInt16(cxAny pnum);
 
-cxUInt32 cxNumberToUInt32(cxNumber this);
+cxUInt32 cxNumberToUInt32(cxAny pnum);
 
-cxUInt64 cxNumberToUInt64(cxNumber this);
+cxUInt64 cxNumberToUInt64(cxAny pnum);
 
-cxFloat cxNumberToFloat(cxNumber this);
+cxFloat cxNumberToFloat(cxAny pnum);
 
-cxDouble cxNumberToDouble(cxNumber this);
+cxDouble cxNumberToDouble(cxAny pnum);
 
 cxNumber cxNumberBool(cxBool v);
 

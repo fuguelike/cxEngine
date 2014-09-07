@@ -40,7 +40,7 @@ cxAny cxWindowTopView()
 
 void cxWindowPushView(cxAny pview)
 {
-    CX_ASSERT(CX_INSTANCE_OF(pview, cxView), "pview type error,maybe not registe");
+    CX_ASSERT_TYPE(pview, cxView);
     cxEngine engine = cxEngineInstance();
     cxView new = pview;
     cxView top = cxStackTop(engine->window->views);
@@ -73,7 +73,7 @@ void cxWindowPopView()
 
 void cxWindowReplaceView(cxAny pview)
 {
-    CX_ASSERT(CX_INSTANCE_OF(pview, cxView), "pview type error");
+    CX_ASSERT_TYPE(pview, cxView);
     cxEngine engine = cxEngineInstance();
     cxView top = cxStackTop(engine->window->views);
     if(top != NULL){

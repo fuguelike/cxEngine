@@ -25,7 +25,7 @@ CX_OBJECT_TERM(cxLoader, cxObject)
 
 cxAny cxLoaderGet(cxAny loader,cxConstChars id)
 {
-    cxLoader this = loader;
+    CX_ASSERT_THIS(loader, cxLoader);
     return cxHashGet(this->objects, cxHashStrKey(id));
 }
 

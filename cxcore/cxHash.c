@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxType.h"
 #include "cxHash.h"
 
 CX_OBJECT_TYPE(cxHash, cxObject)
@@ -20,84 +21,94 @@ CX_OBJECT_TERM(cxHash, cxObject)
 
 #define CX_HASH_KEY_OK(_k_) ((_k_).data != NULL && (_k_).length > 0 && (_k_).length < CX_HASH_MAX_KEY)
 
-void cxHashClean(cxHash hash)
+void cxHashClean(cxAny phash)
 {
+    CX_ASSERT_THIS(phash, cxHash);
     cxHashElement *ele = NULL, *tmp = NULL;
-    HASH_ITER(hh, hash->hashPtr, ele, tmp){
+    HASH_ITER(hh, this->hashPtr, ele, tmp){
         CX_RELEASE(ele->any);
     }
-    HASH_CLEAR(hh, hash->hashPtr);
+    HASH_CLEAR(hh, this->hashPtr);
 }
 
-void cxHashDelElement(cxHash hash,cxHashElement *element)
+void cxHashDelElement(cxAny phash,cxHashElement *element)
 {
-    HASH_DEL(hash->hashPtr, element);
+    CX_ASSERT_THIS(phash, cxHash);
+    HASH_DEL(this->hashPtr, element);
     CX_RELEASE(element->any);
     allocator->free(element);
 }
 
-cxBool cxHashHas(cxHash hash,cxHashKey key)
+cxBool cxHashHas(cxAny phash,cxHashKey key)
 {
+    CX_ASSERT_THIS(phash, cxHash);
     CX_ASSERT(CX_HASH_KEY_OK(key), "hash key error");
     cxHashElement *element = NULL;
-    HASH_FIND(hh, hash->hashPtr, key.data, key.length, element);
+    HASH_FIND(hh, this->hashPtr, key.data, key.length, element);
     return element != NULL;
 }
 
-cxBool cxHashDel(cxHash hash,cxHashKey key)
+cxBool cxHashDel(cxAny phash,cxHashKey key)
 {
+    CX_ASSERT_THIS(phash, cxHash);
     cxHashElement *element = NULL;
-    HASH_FIND(hh, hash->hashPtr, key.data, key.length, element);
+    HASH_FIND(hh, this->hashPtr, key.data, key.length, element);
     if(element != NULL){
-        cxHashDelElement(hash, element);
+        cxHashDelElement(this, element);
         return true;
     }
     return false;
 }
 
-cxInt cxHashLength(cxHash hash)
+cxInt cxHashLength(cxAny phash)
 {
-    return HASH_COUNT(hash->hashPtr);
+    CX_ASSERT_THIS(phash, cxHash);
+    return HASH_COUNT(this->hashPtr);
 }
 
-cxAny cxHashFirst(cxHash hash)
+cxAny cxHashFirst(cxAny phash)
 {
+    CX_ASSERT_THIS(phash, cxHash);
     cxHashElement *ele = NULL, *tmp = NULL;
-    HASH_ITER(hh, hash->hashPtr, ele, tmp){
+    HASH_ITER(hh, this->hashPtr, ele, tmp){
         return ele->any;
     }
     return NULL;
 }
 
-cxAny cxHashGet(cxHash hash,cxHashKey key)
+cxAny cxHashGet(cxAny phash,cxHashKey key)
 {
-    cxHashElement *element = cxHashGetElement(hash, key);
+    CX_ASSERT_THIS(phash, cxHash);
+    cxHashElement *element = cxHashGetElement(this, key);
     return element == NULL ? NULL : element->any;
 }
 
-cxHashElement *cxHashGetElement(cxHash hash,cxHashKey key)
+cxHashElement *cxHashGetElement(cxAny phash,cxHashKey key)
 {
+    CX_ASSERT_THIS(phash, cxHash);
     CX_ASSERT(CX_HASH_KEY_OK(key), "hash key error");
     cxHashElement *element = NULL;
-    HASH_FIND(hh, hash->hashPtr, key.data, key.length, element);
+    HASH_FIND(hh, this->hashPtr, key.data, key.length, element);
     return element;
 }
 
-static void cxHashSetUnsafe(cxHash hash,cxHashKey key,cxAny any)
+static void cxHashSetUnsafe(cxAny phash,cxHashKey key,cxAny any)
 {
+    CX_ASSERT_THIS(phash, cxHash);
     cxHashElement *new = allocator->malloc(sizeof(cxHashElement));
     memcpy(new->key, key.data, key.length);
     new->key[key.length] = '\0';
     new->any = any;
-    HASH_ADD(hh, hash->hashPtr, key, key.length, new);
+    HASH_ADD(hh, this->hashPtr, key, key.length, new);
     CX_RETAIN(new->any);
 }
 
-cxBool cxHashSet(cxHash hash,cxHashKey key,cxAny any)
+cxBool cxHashSet(cxAny phash,cxHashKey key,cxAny any)
 {
-    cxHashElement *element = cxHashGetElement(hash, key);
+    CX_ASSERT_THIS(phash, cxHash);
+    cxHashElement *element = cxHashGetElement(this, key);
     if(element == NULL){
-        cxHashSetUnsafe(hash, key, any);
+        cxHashSetUnsafe(this, key, any);
         return false;
     }
     if(element->any != any){

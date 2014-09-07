@@ -10,8 +10,8 @@
 
 static void cxBezierInit(cxAny pav)
 {
-    cxBezier this = pav;
-    CX_ASSERT(this->cxAction.view != NULL, "view not set");
+    CX_ASSERT_THIS(pav, cxBezier);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
     this->from = this->prev = this->cxAction.view->position;
 }
 
