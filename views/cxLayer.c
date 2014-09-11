@@ -8,23 +8,23 @@
 
 #include "cxLayer.h"
 
-CX_OBJECT_TYPE(cxLayerSprite, cxSprite)
+CX_OBJECT_TYPE(cxElement, cxSprite)
 {
     
 }
-CX_OBJECT_INIT(cxLayerSprite, cxSprite)
+CX_OBJECT_INIT(cxElement, cxSprite)
 {
     
 }
-CX_OBJECT_FREE(cxLayerSprite, cxSprite)
+CX_OBJECT_FREE(cxElement, cxSprite)
 {
     
 }
-CX_OBJECT_TERM(cxLayerSprite, cxSprite)
+CX_OBJECT_TERM(cxElement, cxSprite)
 
-void cxLayerSpriteUpdateBoxPoint(cxAny pview,cxBoxPoint *bp)
+void cxElementUpdateBoxPoint(cxAny pview,cxBoxPoint *bp)
 {
-    CX_ASSERT_THIS(pview, cxLayerSprite);
+    CX_ASSERT_THIS(pview, cxElement);
     CX_ASSERT(bp != NULL, "args null");
     
     cxBoxTex2f coord = cxSpriteBoxTex(this);
@@ -71,19 +71,19 @@ void cxLayerSpriteUpdateBoxPoint(cxAny pview,cxBoxPoint *bp)
     bp->rt.vertices = pos;
 }
 
-static void cxLayerSpriteOnTransform(cxAny pview)
+static void cxElementOnTransform(cxAny pview)
 {
     cxLayer layer = cxViewParent(pview);
-    cxLayerSprite this  = pview;
+    cxElement this  = pview;
     CX_ASSERT(this->layerBox != NULL, "data error");
-    cxLayerSpriteUpdateBoxPoint(this, this->layerBox);
+    cxElementUpdateBoxPoint(this, this->layerBox);
     cxAtlasSetDirty(layer, true);
 }
 
 static void cxLayerOnRemove(cxAny pview,cxAny oldview)
 {
     cxLayer this  = pview;
-    cxLayerSprite sprite = oldview;
+    cxElement sprite = oldview;
     CX_ASSERT(sprite->layerBox != NULL, "data null");
     cxBoxPoint *bp = sprite->layerBox;
     cxAtlasRemovePoint(this, bp);
@@ -92,14 +92,14 @@ static void cxLayerOnRemove(cxAny pview,cxAny oldview)
 static void cxLayerOnAppend(cxAny pview,cxAny newview)
 {
     CX_ASSERT(pview != NULL && newview != NULL, "args null");
-    CX_ASSERT(CX_INSTANCE_OF(newview, cxLayerSprite), "subview only support base cxLayerSprite type");
+    CX_ASSERT(CX_INSTANCE_OF(newview, cxElement), "subview only support base cxElement type");
     cxLayer this = pview;
-    cxLayerSprite sprite = newview;
-    //atlas will draw cxLayerSprite, use VAO or VBO
+    cxElement sprite = newview;
+    //atlas will draw cxElement, use VAO or VBO
     cxViewSetOnlyTransform(sprite, true);
-    CX_EVENT_APPEND(sprite->cxSprite.cxView.onTransform, cxLayerSpriteOnTransform);
+    CX_EVENT_APPEND(sprite->cxSprite.cxView.onTransform, cxElementOnTransform);
     cxBoxPoint bp = {0};
-    cxLayerSpriteUpdateBoxPoint(sprite, &bp);
+    cxElementUpdateBoxPoint(sprite, &bp);
     sprite->layerBox = cxAtlasAppend(this, &bp);
 }
 

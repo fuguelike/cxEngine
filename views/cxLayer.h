@@ -13,11 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxLayerSprite, cxSprite)
+CX_OBJECT_DEF(cxElement, cxSprite)
     cxBoxPoint *layerBox;
-CX_OBJECT_END(cxLayerSprite, cxSprite)
+CX_OBJECT_END(cxElement, cxSprite)
 
-void cxLayerSpriteUpdateBoxPoint(cxAny pview,cxBoxPoint *bp);
+void cxElementUpdateBoxPoint(cxAny pview,cxBoxPoint *bp);
 
 CX_OBJECT_DEF(cxLayer, cxAtlas)
     

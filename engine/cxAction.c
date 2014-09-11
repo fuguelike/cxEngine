@@ -61,8 +61,8 @@ CX_OBJECT_INIT(cxAction, cxObject)
 CX_OBJECT_FREE(cxAction, cxObject)
 {
     CX_EVENT_RELEASE(this->onIndex);
-    CX_EVENT_RELEASE(this->onStart);
-    CX_EVENT_RELEASE(this->onStop);
+    CX_EVENT_RELEASE(this->onInit);
+    CX_EVENT_RELEASE(this->onExit);
     CX_EVENT_RELEASE(this->onUpdate);
 }
 CX_OBJECT_TERM(cxAction, cxObject)
@@ -152,7 +152,14 @@ static void cxActionInit(cxAny pav)
     //find actionmgr
     this->actionMgr = cxViewFindActionMgr(this->view);
     CX_METHOD_RUN(this->Init, this);
-    CX_EVENT_FIRE(this, onStart);
+    CX_EVENT_FIRE(this, onInit);
+}
+
+static void cxActionExit(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    CX_EVENT_FIRE(this, onExit);
+    CX_METHOD_RUN(this->Over,this);
 }
 
 cxBool cxActionUpdate(cxAny pav,cxFloat dt)
@@ -162,10 +169,9 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //time scale
     cxActionMgr mgr = this->actionMgr;
     if(mgr != NULL){
-        CX_ASSERT(CX_INSTANCE_OF(mgr, cxActionMgr), "action manager type error");
-        dt = dt * this->scale * mgr->scale;
+        dt *= this->scale * mgr->scale;
     }else{
-        dt = dt * this->scale;
+        dt *= this->scale;
     }
     //if pause
     if(this->pauseTime > 0){
@@ -230,8 +236,7 @@ finished:
     CX_EVENT_FIRE(this, onUpdate);
     //force exit or auto exit
     if(this->isExit || isExit){
-        CX_EVENT_FIRE(this, onStop);
-        CX_METHOD_RUN(this->Over,this);
+        cxActionExit(this);
     }
     return (this->isExit || isExit);
 }

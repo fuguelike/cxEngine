@@ -19,7 +19,7 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxLoader loader = cxLoaderCreate("cxView.json");
+    cxLoader loader = cxLoaderCreate("cxLayer.json");
     cxWindowPushView(loader->object);
 }
 

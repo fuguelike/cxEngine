@@ -139,7 +139,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxLabelBMP);
     CX_TYPE_REG(cxAlert);
     CX_TYPE_REG(cxLayer);
-    CX_TYPE_REG(cxLayerSprite);
+    CX_TYPE_REG(cxElement);
     
     //register actions
     CX_TYPE_REG(cxMultiple);

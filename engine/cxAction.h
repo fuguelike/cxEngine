@@ -42,8 +42,8 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_METHOD_DEF(void, Reset, cxAny);
     CX_METHOD_DEF(void, Step,cxAny, cxFloat, cxFloat);
     CX_METHOD_DEF(cxBool, Exit, cxAny);
-    CX_EVENT_ALLOC(onStart);
-    CX_EVENT_ALLOC(onStop);
+    CX_EVENT_ALLOC(onInit);
+    CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onIndex);
     CX_EVENT_ALLOC(onUpdate);
 CX_OBJECT_END(cxAction, cxObject)
