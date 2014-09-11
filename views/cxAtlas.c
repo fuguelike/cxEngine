@@ -224,7 +224,7 @@ void cxAtlasRemovePoint(cxAny pview,cxBoxPoint *point)
 void cxAtlasRemoveAt(cxAny pview,cxInt index)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
-    CX_RETURN(index < 0 || index >= this->number);
+    CX_ASSERT(index >=0 && index < this->number, "index error");
     cxInt count = this->number - index - 1;
     cxAny dst = &this->boxes[index];
     cxAny src = &this->boxes[index + 1];

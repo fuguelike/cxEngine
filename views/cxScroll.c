@@ -174,16 +174,17 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
         return true;
     }
     if(item->type == cxTouchTypeUp){
+        cxSize2f winsize = cxEngineInstance()->winsize;
         this->isEnable = false;
         if(fabsf(item->speed.y) < this->limit && fabsf(item->speed.x) < this->limit){
             return false;
         }
         cxVec2f npos = cxViewPosition(body);
         if(this->type & cxScrollMoveTypeVertical){
-            npos.y += (item->speed.y / this->limit) * this->cxView.size.h * this->speed;
+            npos.y += (item->speed.y / this->limit) * winsize.h * this->speed;
         }
         if(this->type & cxScrollMoveTypeHorizontal){
-            npos.x += (item->speed.x / this->limit) * this->cxView.size.w * this->speed;
+            npos.x += (item->speed.x / this->limit) * winsize.w * this->speed;
         }
         cxScrollCheckPos(this, &npos);
         cxMove m = cxMoveCreate(this->moveTime, npos);
@@ -250,8 +251,8 @@ CX_OBJECT_TYPE(cxScroll, cxView)
 CX_OBJECT_INIT(cxScroll, cxView)
 {
     this->scaleinc = 0.5f;
-    this->limit = 1200;
-    this->speed = 0.1f;
+    this->limit = 300;
+    this->speed = 0.05f;
     this->scaling = 0.05f;
     this->range = cxRange2fv(0.5f, 1.5f);
     this->moveTime = 1.0f;

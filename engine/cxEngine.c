@@ -252,8 +252,11 @@ void cxEngineLayout(cxInt width,cxInt height)
     if(!cxSize2fZero(engine->dessize)){
         engine->scale.x = engine->winsize.w/engine->dessize.w;
         engine->scale.y = engine->winsize.h/engine->dessize.h;
-        cxJsonRegisterDouble("ScaleX", engine->scale.x);
-        cxJsonRegisterDouble("ScaleY", engine->scale.y);
+        cxJsonRegisterVec2f("Scale", engine->scale);
+    }else{
+        engine->scale.x = 1.0f;
+        engine->scale.y = 1.0f;
+        cxJsonRegisterVec2f("Scale", engine->scale);
     }
     //
     if(!engine->isInit){

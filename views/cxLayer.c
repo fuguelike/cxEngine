@@ -30,10 +30,6 @@ void cxElementUpdateBoxPoint(cxAny pview,cxBoxPoint *bp)
     cxBoxTex2f coord = cxSpriteBoxTex(this);
     cxColor4f color = cxViewColor(this);
     
-    if(!this->cxSprite.cxView.isVisible){
-        color.a = 0;
-    }
-    
     cxMatrix4f *normalMatrix = cxViewNormalMatrix(this);
     cxMatrix4f *anchorMatrix = cxViewAnchorMatrix(this);
     
