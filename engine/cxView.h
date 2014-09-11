@@ -69,6 +69,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f anchorMatrix;
     cxColor4f color;
     cxColor3f borderColor;
+    cxActionMgr actionMgr;
 
     CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouchItems *);
     CX_METHOD_DEF(cxBool, Key, cxAny, cxKey *);
@@ -90,6 +91,10 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onTransform);
 CX_OBJECT_END(cxView, cxObject)
+
+void cxViewSetActionMgr(cxAny pview,cxActionMgr mgr);
+
+cxActionMgr cxViewFindActionMgr(cxAny pview);
 
 cxMatrix4f *cxViewNormalMatrix(cxAny pview);
 

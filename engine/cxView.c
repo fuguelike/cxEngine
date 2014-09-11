@@ -140,6 +140,12 @@ CX_SETTER_DEF(cxView, bordercolor)
 {
     this->borderColor = cxJsonToColor3f(value, this->borderColor);
 }
+CX_SETTER_DEF(cxView, actionmgr)
+{
+    cxAny object = cxObjectCreateWithJson(value);
+    CX_ASSERT(CX_INSTANCE_OF(object, cxActionMgr), "actionmgr must is cxActionMgr type");
+    cxViewSetActionMgr(this, object);
+}
 
 CX_OBJECT_TYPE(cxView, cxObject)
 {
@@ -161,6 +167,7 @@ CX_OBJECT_TYPE(cxView, cxObject)
     CX_PROPERTY_SETTER(cxView, actions);
     CX_PROPERTY_SETTER(cxView, tag);
     CX_PROPERTY_SETTER(cxView, bordercolor);
+    CX_PROPERTY_SETTER(cxView, actionmgr);
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {
@@ -192,6 +199,7 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_RELEASE(this->actions);
     CX_RELEASE(this->bindes);
     CX_RELEASE(this->binded);
+    CX_RELEASE(this->actionMgr);
     //
     CX_EVENT_RELEASE(this->onTransform);
     CX_EVENT_RELEASE(this->onEnter);
@@ -203,6 +211,29 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
+
+void cxViewSetActionMgr(cxAny pview,cxActionMgr mgr)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    CX_RETAIN_SWAP(this->actionMgr, mgr);
+}
+
+cxActionMgr cxViewFindActionMgr(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    if(this->actionMgr != NULL){
+        return this->actionMgr;
+    }
+    cxView pv = this->parentView;
+    while (pv != NULL && pv->actionMgr == NULL) {
+        pv = pv->parentView;
+    }
+    cxActionMgr ret = pv != NULL ? pv->actionMgr : NULL;
+    if(ret != NULL){
+        cxViewSetActionMgr(this, ret);
+    }
+    return ret;
+}
 
 void cxViewSetOnlyTransform(cxAny pview,cxBool v)
 {
@@ -495,8 +526,8 @@ cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
         CX_ASSERT(num < 64, "vs too small");
     }
     //
+    cxMatrix4f matrix;
     for(cxInt i= num; i > 0; i--){
-        cxMatrix4f matrix;
         pv = vs[i - 1];
         kmMat4Inverse(&matrix, &pv->normalMatrix);
         kmVec3MultiplyMat4(&out, &out, &matrix);
@@ -894,21 +925,21 @@ void cxViewCleanActions(cxAny pview)
 cxBool cxViewHasAction(cxAny pview,cxUInt actionId)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxHashKey key = cxHashIntKey(actionId);
+    cxHashKey key = cxHashLongKey(actionId);
     return cxHashHas(this->actions, key);
 }
 
 cxAny cxViewGetAction(cxAny pview,cxUInt actionId)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxHashKey key = cxHashIntKey(actionId);
+    cxHashKey key = cxHashLongKey(actionId);
     return cxHashGet(this->actions, key);
 }
 
 void cxViewStopAction(cxAny pview,cxUInt actionId)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxHashKey key = cxHashIntKey(actionId);
+    cxHashKey key = cxHashLongKey(actionId);
     cxAny ptr = cxHashGet(this->actions, key);
     if(ptr != NULL){
         cxActionStop(ptr);
@@ -930,7 +961,7 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
     cxAction action = pav;
     cxActionSetView(action, pview);
     cxUInt actionId = cxActionGetId(action);
-    cxHashKey key = cxHashIntKey(actionId);
+    cxHashKey key = cxHashLongKey(actionId);
     cxAny ptr = cxHashGet(this->actions, key);
     if(ptr != NULL){
         cxActionStop(ptr);

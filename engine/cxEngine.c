@@ -8,7 +8,6 @@
 
 #include "cxEngine.h"
 #include "cxIconv.h"
-#include "cxActionMgr.h"
 
 #include <textures/cxTextureFactory.h>
 #include <textures/cxTextureJPG.h>

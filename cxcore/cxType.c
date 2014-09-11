@@ -100,7 +100,7 @@ static void cxObjectSave(cxAny object,cxJson json)
 {
     cxConstChars cxId = cxJsonConstChars(json, "cxId");
     CX_RETURN(cxId == NULL);
-    cxLoader curr = cxCoreTop();
+    cxLoader curr = cxCoreTop(cxCoreStackTypeLoader);
     if(CX_INSTANCE_OF(curr, cxLoader)){
         cxHashSet(curr->objects, cxHashStrKey(cxId), object);
     }

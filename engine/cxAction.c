@@ -67,12 +67,6 @@ CX_OBJECT_FREE(cxAction, cxObject)
 }
 CX_OBJECT_TERM(cxAction, cxObject)
 
-void cxActionSetMgr(cxAny pav,cxAny *mgr)
-{
-    CX_ASSERT_THIS(pav, cxAction);
-    this->actionMgr = mgr;
-}
-
 cxBool cxActionForever(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxAction);
@@ -125,6 +119,12 @@ void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
     CX_METHOD_SET(this->Curve, curve);
 }
 
+void cxActionSetMgr(cxAny pav,cxActionMgr mgr)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    this->actionMgr = mgr;
+}
+
 cxAny cxActionParent(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxAction);
@@ -143,16 +143,26 @@ void cxActionSetPauseTime(cxAny pav,cxFloat time)
     this->pauseTime = time;
 }
 
+static void cxActionInit(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    CX_ASSERT(this->view != NULL, "action viewptr null");
+    this->delayElapsed = 0;
+    this->timeElapsed = this->timeInit;
+    //find actionmgr
+    this->actionMgr = cxViewFindActionMgr(this->view);
+    CX_METHOD_RUN(this->Init, this);
+    CX_EVENT_FIRE(this, onStart);
+}
+
 cxBool cxActionUpdate(cxAny pav,cxFloat dt)
 {
     CX_ASSERT_THIS(pav, cxAction);
     cxBool isExit = false;
     //time scale
-    cxActionMgr mgr = NULL;
-    if(this->actionMgr != NULL){
-        mgr = *(cxActionMgr *)this->actionMgr;
-    }
+    cxActionMgr mgr = this->actionMgr;
     if(mgr != NULL){
+        CX_ASSERT(CX_INSTANCE_OF(mgr, cxActionMgr), "action manager type error");
         dt = dt * this->scale * mgr->scale;
     }else{
         dt = dt * this->scale;
@@ -171,11 +181,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //init event
     if(!this->isFirst){
         this->isFirst = true;
-        CX_ASSERT(this->view != NULL, "action viewptr null");
-        this->delayElapsed = 0;
-        this->timeElapsed = this->timeInit;
-        CX_METHOD_RUN(this->Init, this);
-        CX_EVENT_FIRE(this, onStart);
+        cxActionInit(pav);
     }
     //action delay
     this->delayElapsed += dt;

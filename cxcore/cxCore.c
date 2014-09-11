@@ -219,36 +219,47 @@ void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny 
     CX_RELEASE(type);
 }
 
-cxStack gstack = NULL;
+static cxHash groups = NULL;
 
-void cxCorePush(cxAny object)
+void cxCorePush(cxCoreStackType type,cxAny object)
 {
-    CX_ASSERT(gstack != NULL, "global stack null");
-    cxStackPush(gstack, object);
+    CX_ASSERT(groups != NULL, "global stack null");
+    cxHashKey key = cxHashIntKey(type);
+    cxAny stack = cxHashGet(groups, key);
+    if(stack == NULL){
+        stack = CX_ALLOC(cxStack);
+        cxHashSet(groups, key, stack);
+        CX_RELEASE(stack);
+    }
+    cxStackPush(stack, object);
 }
 
-cxAny cxCoreTop()
+cxAny cxCoreTop(cxCoreStackType type)
 {
-    CX_ASSERT(gstack != NULL, "global stack null");
-    return cxStackTop(gstack);
+    CX_ASSERT(groups != NULL, "global stack null");
+    cxAny stack = cxHashGet(groups, cxHashIntKey(type));
+    return stack != NULL ? cxStackTop(stack) : NULL;
 }
 
-void cxCorePop()
+void cxCorePop(cxCoreStackType type)
 {
-    CX_ASSERT(gstack != NULL, "global stack null");
-    cxStackPop(gstack);
+    CX_ASSERT(groups != NULL, "global stack null");
+    cxAny stack = cxHashGet(groups, cxHashIntKey(type));
+    if(stack != NULL){
+        cxStackPop(stack);
+    }
 }
 
 void cxCoreInit()
 {
     cxAllocatorInit();
     cxTypesInit();
-    gstack = CX_ALLOC(cxStack);
+    groups = CX_ALLOC(cxHash);
 }
 
 void cxCoreFree()
 {
-    CX_RELEASE(gstack);
+    CX_RELEASE(groups);
     cxTypesFree();
     cxAllocatorFree();
 }

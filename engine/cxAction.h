@@ -34,7 +34,7 @@ CX_OBJECT_DEF(cxAction, cxObject)
     cxInt indexNum;
     cxInt index;
     cxFloat indexDelta;
-    cxAny *actionMgr;
+    cxActionMgr actionMgr;
     CX_METHOD_DEF(cxFloat, Curve, cxAny, cxFloat);
     CX_METHOD_DEF(void, Init, cxAny);
     CX_METHOD_DEF(void, Active, cxAny);
@@ -48,7 +48,7 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_EVENT_ALLOC(onUpdate);
 CX_OBJECT_END(cxAction, cxObject)
 
-void cxActionSetMgr(cxAny pav,cxAny *mgr);
+void cxActionSetMgr(cxAny pav,cxActionMgr mgr);
 
 cxAny cxActionParent(cxAny pav);
 

@@ -184,7 +184,7 @@ do{                                                             \
 
 #define CX_ASSERT_TYPE(_o_,_t_)     CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"type error",_o_)
 
-#define CX_ASSERT_THIS(_o_,_t_)     CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"type error",_o_);_t_ this = (_t_)(_o_)
+#define CX_ASSERT_THIS(_o_,_t_)     CX_ASSERT_TYPE(_o_,_t_);_t_ this = (_t_)(_o_)
 
 #else
 
@@ -457,11 +457,17 @@ cxAny cxObjectType(cxAny object);
 
 cxAny cxObjectProperty(cxAny object,cxConstChars key);
 
-void cxCorePush(cxAny object);
+typedef enum {
+    cxCoreStackTypeLoader = 1,
+    cxCoreStackTypeActionMgr,
+    cxCoreStackTypeUser = 10000
+}cxCoreStackType;
 
-void cxCorePop();
+void cxCorePush(cxCoreStackType type,cxAny object);
 
-cxAny cxCoreTop();
+void cxCorePop(cxCoreStackType type);
+
+cxAny cxCoreTop(cxCoreStackType type);
 
 void cxCoreInit();
 

@@ -15,7 +15,6 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxActionMgr, cxObject)
     cxFloat scale;
-    cxHash actions;
 CX_OBJECT_END(cxActionMgr, cxObject)
 
 CX_C_END

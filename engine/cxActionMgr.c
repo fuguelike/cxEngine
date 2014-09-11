@@ -13,7 +13,6 @@ CX_SETTER_DEF(cxActionMgr, scale)
 {
     this->scale = cxJsonToDouble(value, this->scale);
 }
-
 CX_OBJECT_TYPE(cxActionMgr, cxObject)
 {
     CX_PROPERTY_SETTER(cxActionMgr, scale);
@@ -24,7 +23,7 @@ CX_OBJECT_INIT(cxActionMgr, cxObject)
 }
 CX_OBJECT_FREE(cxActionMgr, cxObject)
 {
-    
+    //
 }
 CX_OBJECT_TERM(cxActionMgr, cxObject)
 
