@@ -34,8 +34,6 @@ typedef enum {
 
 #define CX_HASH_KEY_TO_ANY(_e_) (*(cxAny *)(_e_)->key)
 
-typedef cxBool (*cxViewBindForeachFunc)(cxAny pview,cxAny bview,cxAny bd);
-
 CX_OBJECT_DEF(cxView, cxObject)
     cxHash bindes;//bind's views
     cxHash binded;//binded's views
@@ -96,10 +94,6 @@ CX_OBJECT_END(cxView, cxObject)
 cxMatrix4f *cxViewNormalMatrix(cxAny pview);
 
 cxMatrix4f *cxViewAnchorMatrix(cxAny pview);
-
-void cxViewForeachBindes(cxAny pview,cxViewBindForeachFunc func);
-
-void cxViewForeachBinded(cxAny pview,cxViewBindForeachFunc func);
 
 void cxViewUnBindAll(cxAny pview);
 
@@ -187,6 +181,8 @@ cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint);
 cxVec2f cxGLPointToWindowPoint(cxVec2f glPoint);
 
 cxVec2f cxViewPointToGLPoint(cxAny pview,cxVec2f pos);
+
+void cxViewSortWithFunc(cxAny pview,cxCmpFunc func);
 
 cxVec2f cxGLPointToViewPoint(cxAny pview,cxVec2f pos);
 

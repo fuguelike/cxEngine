@@ -13,24 +13,26 @@
 #include "Map.h"
 #include "Node.h"
 
-static cxInt MapSortCmpFunc(cxListElement *lp,cxListElement *rp)
+static cxInt MapSortCmpFunc(cxConstAny lv,cxConstAny rv)
 {
-    cxView v1 = (cxView)lp->any;
-    cxView v2 = (cxView)rp->any;
+    cxListElement *lp = (cxListElement *)lv;
+    cxListElement *rp = (cxListElement *)rv;
+    cxView v1 = CX_TYPE_CAST(cxView, lp->any);
+    cxView v2 = CX_TYPE_CAST(cxView, rp->any);
     return v2->position.y - v1->position.y;
 }
 
 void MapNodeOnNewIdx(cxAny pmap,cxAny pnode)
 {
-    CX_ASSERT_THIS(pmap, Map);
-    Node node = CX_CAST(Node, pnode);
+//    CX_ASSERT_THIS(pmap, Map);
+    Node node = CX_TYPE_CAST(Node, pnode);
     CX_LOGGER("%p new idx=%f idx.y=%f",pnode,node->idx.x,node->idx.y);
 }
 
 void MapSortNode(cxAny pmap)
 {
     CX_ASSERT_THIS(pmap, Map);
-    cxListSort(this->cxAtlas.cxSprite.cxView.subViews, MapSortCmpFunc);
+    this->isSort = true;
 }
 
 void MapAppendNode(cxAny pmap,cxAny node)
@@ -138,14 +140,25 @@ cxBool MapInit(cxAny pmap,cxJson data)
     return true;
 }
 
+static void MapUpdate(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Map);
+    if(this->isSort){
+        cxViewSortWithFunc(this, MapSortCmpFunc);
+        this->isSort = false;
+    }
+}
+
 CX_OBJECT_TYPE(Map, cxAtlas)
 {
     
 }
 CX_OBJECT_INIT(Map, cxAtlas)
 {
-    this->mode = MapModeNormal;
     CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Touch,MapTouch);
+    CX_EVENT_APPEND(this->cxAtlas.cxSprite.cxView.onUpdate, MapUpdate);
+    this->mode = MapModeNormal;
+    this->isSort = true;
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {

@@ -16,7 +16,7 @@ CX_C_BEGIN
 //地图模式
 typedef enum {
     MapModeNone = 0,
-    MapModeNormal,      //普通模式
+    MapModeNormal,          //普通模式
     MapModeFight,           //战斗模式
 }MapMode;
 

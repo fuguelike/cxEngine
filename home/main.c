@@ -27,7 +27,7 @@ void cxEngineInit(cxEngine engine)
 void cxEngineMain(cxEngine engine)
 {
     cxLoader loader = cxLoaderCreate("main.json");
-    Scene scene = CX_CAST(Scene, loader->object);
+    Scene scene = CX_TYPE_CAST(Scene, loader->object);
     CX_ASSERT(scene != NULL, "get main scene failed");
     scene->map = cxLoaderGet(loader, "map");
     CX_ASSERT(scene->map != NULL, "map null");

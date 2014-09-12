@@ -222,30 +222,6 @@ cxMatrix4f *cxViewAnchorMatrix(cxAny pview)
     return &this->anchorMatrix;
 }
 
-//each bindes view
-void cxViewForeachBindes(cxAny pview,cxViewBindForeachFunc func)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    CX_HASH_FOREACH(this->bindes, ele, tmp){
-        cxView view = cxHashElementKeyToAny(ele);
-        if(!func(pview,view,ele->any)){
-            break;
-        }
-    }
-}
-
-//each binded view
-void cxViewForeachBinded(cxAny pview,cxViewBindForeachFunc func)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    CX_HASH_FOREACH(this->binded, ele, tmp){
-        cxView view = cxHashElementKeyToAny(ele);
-        if(!func(pview,view,ele->any)){
-            break;
-        }
-    }
-}
-
 void cxViewUnBindAll(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
@@ -267,11 +243,10 @@ void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
 {
     CX_ASSERT(pview != bview, "self can't bind self");
     CX_ASSERT_THIS(pview, cxView);
-    CX_ASSERT_TYPE(bview, cxView);
     if(bd == NULL){
         bd = cxStringCreate("%p bind %p",pview,bview);
     }
-    cxView bind = bview;
+    cxView bind = CX_TYPE_CAST(cxView, bview);
     //bind new view
     cxHashSet(this->bindes, cxHashAnyKey(bind), bd);
     //this binded bind
@@ -525,6 +500,12 @@ static cxInt cxViewSortByZOrder(cxListElement *lp,cxListElement *rp)
     cxView v1 = (cxView)lp->any;
     cxView v2 = (cxView)rp->any;
     return v1->zorder - v2->zorder;
+}
+
+void cxViewSortWithFunc(cxAny pview,cxCmpFunc func)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    cxListSort(this->subViews, func);
 }
 
 void cxViewSort(cxAny pview)
@@ -931,8 +912,7 @@ cxAny cxViewAppendTimer(cxAny pview,cxFloat freq,cxInt repeat)
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
 {
     CX_ASSERT_THIS(pview, cxView);
-    CX_ASSERT_TYPE(pav, cxAction);
-    cxAction action = pav;
+    cxAction action = CX_TYPE_CAST(cxAction, pav);
     cxActionSetView(action, pview);
     cxUInt actionId = cxActionGetId(action);
     cxHashKey key = cxHashLongKey(actionId);

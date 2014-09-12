@@ -256,7 +256,6 @@ CX_OBJECT_INIT(cxScroll, cxView)
     this->scaleTime = 0.5f;
     this->scalable = true;
     CX_METHOD_SET(this->cxView.Touch, cxScrollTouch);
-    cxViewSetCropping(this, true);
     this->type = cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal;
 }
 CX_OBJECT_FREE(cxScroll, cxView)

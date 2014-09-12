@@ -122,37 +122,38 @@ cxAny cxObjectCreateWithType(cxConstType type)
 cxAny cxObjectCreateWithJson(cxJson json)
 {
     CX_ASSERT(json != NULL, "json args error");
-    cxObjectCreateResult ret = {NULL};
-    ret.ojson = json;
+    cxAny object = NULL;
+    cxJson ojson = json;
+    cxJson njson = NULL;
     cxConstChars src = NULL;
+    cxConstChars type = NULL;
     if(cxJsonIsString(json)){
         src = cxJsonToConstChars(json);
     }else if(cxJsonIsObject(json)){
         src = cxJsonConstChars(json, "cxSrc");
     }
     //from src get json
-    cxConstChars type = NULL;
     if(src != NULL){
-        ret.njson = cxJsonRead(src);
-        CX_ASSERT(ret.njson != NULL, "read json failed from %s",src);
-        type = cxJsonConstChars(ret.njson, "cxType");
+        njson = cxJsonRead(src);
+        CX_ASSERT(njson != NULL, "read json failed from %s",src);
+        type = cxJsonConstChars(njson, "cxType");
     }else{
-        type = cxJsonConstChars(ret.ojson, "cxType");
+        type = cxJsonConstChars(ojson, "cxType");
     }
-    CX_ASSERT(type != NULL, "json type property null");
-    ret.object = cxObjectCreateWithType(type);
-    CX_ASSERT(ret.object != NULL,"create object %s failed", type);
+    CX_ASSERT(type != NULL, "json cxType property null");
+    object = cxObjectCreateWithType(type);
+    CX_ASSERT(object != NULL,"create object %s failed", type);
     //read new json property
-    if(ret.njson != NULL){
-        cxTypeRunObjectSetter(ret.object, ret.njson);
-        cxObjectSave(ret.object, ret.njson);
+    if(njson != NULL){
+        cxTypeRunObjectSetter(object, njson);
+        cxObjectSave(object, njson);
     }
     //read old json property
-    if(cxJsonIsObject(ret.ojson)) {
-        cxTypeRunObjectSetter(ret.object, ret.ojson);
-        cxObjectSave(ret.object, ret.ojson);
+    if(cxJsonIsObject(ojson)){
+        cxTypeRunObjectSetter(object, ojson);
+        cxObjectSave(object, ojson);
     }
-    return ret.object;
+    return object;
 }
 
 CX_OBJECT_TYPE(cxType, cxObject)

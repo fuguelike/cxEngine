@@ -52,7 +52,7 @@ void NodeResetPosition(cxAny pview);
 cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr);
 
 //移动成功返回true
-cxBool NodeSetPosition(cxAny pview,cxVec2f idx);
+cxBool NodeSetPosition(cxAny pview,cxVec2f idx,cxBool animate);
 
 void NodeSetSize(cxAny pview,cxSize2f size);
 

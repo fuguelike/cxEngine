@@ -23,13 +23,6 @@ CX_OBJECT_DEF(cxType, cxObject)
     cxHash properties;
 CX_OBJECT_END(cxType, cxObject)
 
-typedef struct
-{
-    cxAny object;
-    cxJson ojson;
-    cxJson njson;
-}cxObjectCreateResult;
-
 typedef cxJson (*cxObjectCreateReaderFunc)(cxConstChars src);
 
 cxType cxTypesGet(cxConstType type);

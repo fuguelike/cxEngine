@@ -8,6 +8,7 @@
 
 #include <algorithm/cxTile.h>
 #include <views/cxScroll.h>
+#include <actions/cxMove.h>
 #include "Node.h"
 #include "Map.h"
 
@@ -40,6 +41,9 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
     CX_RETURN(points->number != 1,false);
     cxTouchItem item = points->items[0];
     Map map = this->map;
+    if(map->mode != MapModeNormal){
+        return false;
+    }
     if(!this->canSelected){
         return false;
     }
@@ -56,7 +60,7 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
         }else{
             cxViewSetColor(this, cxGRAY);
         }
-        NodeSetPosition(this, idx);
+        NodeSetPosition(this, idx, false);
         this->start = vpos;
         return true;
     }
@@ -114,18 +118,24 @@ void NodeResetPosition(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     CX_RETURN(this->isValidIdx);
-    NodeSetPosition(this, this->idx);
+    NodeSetPosition(this, this->idx, true);
     this->isValidIdx = true;
 }
 
-cxBool NodeSetPosition(cxAny pview,cxVec2f idx)
+cxBool NodeSetPosition(cxAny pview,cxVec2f idx,cxBool animate)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     this->curr = idx;
     idx.x += (this->size.w - 1.0f)/2.0f;
     idx.y += (this->size.h - 1.0f)/2.0f;
-    cxViewSetPos(this, MapIdxToPos(map, idx));
+    cxVec2f npos = MapIdxToPos(map, idx);
+    if(!animate){
+        cxViewSetPos(this, npos);
+    }else{
+        cxMove m = cxMoveCreate(0.1f, npos);
+        cxViewAppendAction(pview, m);
+    }
     return true;
 }
 
@@ -169,7 +179,7 @@ cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
 
 cxVec2f NodeCurrIdx(cxAny pview)
 {
-    Node this = pview;
+    CX_ASSERT_THIS(pview, Node);
     return this->curr;
 }
 
@@ -200,7 +210,7 @@ void NodeInit(cxAny pview,cxSize2f size,cxVec2f pos,NodeType type)
     CX_ASSERT_THIS(pview, Node);
     NodeSetSize(this, size);
     NodeSetIdx(this, pos);
-    NodeSetPosition(this, pos);
+    NodeSetPosition(this, pos, false);
     this->type = type;
 }
 

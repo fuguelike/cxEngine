@@ -16,6 +16,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(Map, cxAtlas)
     MapMode mode;
+    cxBool isSort;
     cxSize2f unitSize;  //单元格子大小
     cxVec2i unitNum;    //单元数量
     cxAny *items;       //格子node
