@@ -14,9 +14,10 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxButton, cxSprite)
+    cxFloat movement;
+    cxBool isPass;
     cxBool isEnable;
     cxBool isSelected;
-    cxFloat movement;           //when touch move > movement will fire onLeave,but don't fire onRelease
     CX_EVENT_ALLOC(onPress);
     CX_EVENT_ALLOC(onRelease);
     CX_EVENT_ALLOC(onEnter);
@@ -26,6 +27,8 @@ CX_OBJECT_END(cxButton, cxSprite)
 cxBool cxButtonTouch(cxAny pview,cxTouchItems *points);
 
 void cxButtonEnable(cxAny pview,cxBool enable);
+
+void cxButtonPass(cxAny pview,cxBool pass);
 
 cxButton cxButtonCreate(cxConstChars url);
 

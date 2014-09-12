@@ -438,43 +438,27 @@ cxBool cxEngineFireKey(cxKeyType type,cxInt code)
     return cxViewKey(this->window, &this->key);
 }
 
-//get touch direction
-static cxTouchDirection cxTouchGetDirection(cxVec2f delta)
-{
-    cxTouchDirection ret = cxTouchDirectionNone;
-    if(delta.x < 0){
-        ret |= cxTouchDirectionLeft;
-    }else if(delta.x > 0){
-        ret |= cxTouchDirectionRight;
-    }
-    if(delta.y < 0){
-        ret |= cxTouchDirectionDown;
-    }else if(delta.y > 0){
-        ret |= cxTouchDirectionUp;
-    }
-    return ret;
-}
-
 static void cxEngineComputeTouchItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
 {
     kmVec2Subtract(&item->delta, &cpos, &item->previous);
     item->previous = cpos;
-    item->direction = cxTouchGetDirection(item->delta);
     //get move speed
-    cxDouble dt = now - item->prevTime;
-    if(dt > 0){
-        kmVec2Scale(&item->speed, &item->delta, 1.0f / dt);
-    }
-    item->prevTime = now;
+    cxDouble dt = now - item->startTime;
+    dt = CX_MAX(dt, FLT_EPSILON);
+    item->speed.x = (cpos.x - item->startPos.x) / dt;
+    item->speed.y = (cpos.y - item->startPos.y) / dt;
+    //get movement
+    item->movement += cxVec2fMagnitude(item->delta);
 }
 
 static void cxEngineInitTouchItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
 {
     item->delta = cxVec2fv(0, 0);
     item->previous = cpos;
-    item->direction = cxTouchDirectionNone;
-    item->prevTime = now;
+    item->startTime = now;
     item->speed = cxVec2fv(0, 0);
+    item->movement = 0;
+    item->startPos = cpos;
 }
 
 cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
@@ -502,6 +486,7 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
         }else if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
             item = cxHashGet(this->items, key);
             CX_CONTINUE(item == NULL);
+            cxEngineComputeTouchItem(now, item, cpos);
             delItems.items[delItems.number++] = item;
         }
         CX_CONTINUE(item == NULL);

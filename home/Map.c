@@ -20,6 +20,13 @@ static cxInt MapSortCmpFunc(cxListElement *lp,cxListElement *rp)
     return v2->position.y - v1->position.y;
 }
 
+void MapNodeOnNewIdx(cxAny pmap,cxAny pnode)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    Node node = CX_CAST(Node, pnode);
+    CX_LOGGER("%p new idx=%f idx.y=%f",pnode,node->idx.x,node->idx.y);
+}
+
 void MapSortNode(cxAny pmap)
 {
     CX_ASSERT_THIS(pmap, Map);
@@ -33,6 +40,42 @@ void MapAppendNode(cxAny pmap,cxAny node)
     Node snode = node;
     cxViewAppend(this, snode);
     snode->element = cxListAppend(this->nodes, snode);
+}
+
+static cxBool hasSelectNode(Map this)
+{
+    CX_LIST_FOREACH(this->nodes, ele){
+        Node node = ele->any;
+        if(node->isSelected){
+            return true;
+        }
+    }
+    return false;
+}
+
+static cxBool MapTouch(cxAny pview,cxTouchItems *points)
+{
+    CX_ASSERT_THIS(pview, Map);
+    if(points->number != 1){
+        return false;
+    }
+    cxTouchItem item = points->items[0];
+    Node snode = this->node;
+    if(item->type == cxTouchTypeMove){
+        return false;
+    }
+    if(snode == NULL){
+        return false;
+    }
+    if(item->type == cxTouchTypeUp && snode->isValidIdx){
+        NodeUpdateIdx(snode);
+    }
+    cxBool isSelected = hasSelectNode(this);
+    if(item->type == cxTouchTypeUp && !isSelected){
+        NodeResetPosition(snode);
+        this->node = NULL;
+    }
+    return false;
 }
 
 cxBool MapInit(cxAny pmap,cxJson data)
@@ -101,6 +144,7 @@ CX_OBJECT_TYPE(Map, cxAtlas)
 CX_OBJECT_INIT(Map, cxAtlas)
 {
     this->mode = MapModeNormal;
+    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Touch,MapTouch);
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {

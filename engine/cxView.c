@@ -328,12 +328,9 @@ void cxViewAppend(cxAny pview,cxAny newview)
 void cxViewBringFront(cxAny pview,cxAny fview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    CX_ASSERT_TYPE(fview, cxView);
-    cxView front = fview;
-    CX_RETAIN(front);
-    cxListRemove(this->subViews, front->subElement);
-    front->subElement = cxListAppend(this->subViews, front);
-    CX_RELEASE(front);
+    cxView front = CX_CAST(cxView, fview);
+    CX_ASSERT(front != NULL, "front error");
+    cxListToTail(this->subViews, front->subElement);
 }
 
 void cxViewSetCropping(cxAny pview,cxBool cropping)
@@ -602,9 +599,8 @@ void cxViewSetOrder(cxAny pview,cxInt order)
     CX_ASSERT_THIS(pview, cxView);
     CX_RETURN(this->zorder == order);
     this->zorder = order;
-    if(this->parentView != NULL){
-        this->parentView->isSort = true;
-    }
+    CX_RETURN(this->parentView == NULL);
+    this->parentView->isSort = true;
 }
 
 void cxViewSetPos(cxAny pview,cxVec2f pos)

@@ -60,6 +60,24 @@ cxListElement *cxListFirst(cxAny plist)
     return this->listptr;
 }
 
+cxListElement *cxListToHead(cxAny plist,cxListElement *element)
+{
+    CX_ASSERT_THIS(plist, cxList);
+    CX_RETURN(cxListFirst(plist) == element,element);
+    DL_DELETE(this->listptr, element);
+    DL_PREPEND(this->listptr, element);
+    return element;
+}
+
+cxListElement *cxListToTail(cxAny plist,cxListElement *element)
+{
+    CX_ASSERT_THIS(plist, cxList);
+    CX_RETURN(cxListLast(plist) == element,element);
+    DL_DELETE(this->listptr, element);
+    DL_APPEND(this->listptr, element);
+    return element;
+}
+
 cxListElement *cxListLast(cxAny plist)
 {
     CX_ASSERT_THIS(plist, cxList);

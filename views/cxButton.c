@@ -27,15 +27,16 @@ cxBool cxButtonTouch(cxAny pview,cxTouchItems *points)
     if(!hit){
         return false;
     }
+    //movement > 5
+    if(this->isSelected && item->movement > this->movement){
+        CX_EVENT_FIRE(this, onLeave);
+        this->isSelected = false;
+        return false;
+    }
     if(item->type == cxTouchTypeDown){
         this->isSelected = true;
         CX_EVENT_FIRE(this, onEnter);
         CX_EVENT_FIRE(this, onPress);
-        return false;
-    }
-    if(!this->isSelected){
-        CX_EVENT_FIRE(this, onLeave);
-        this->isSelected = false;
         return false;
     }
     if(item->type == cxTouchTypeUp){
@@ -63,7 +64,7 @@ CX_OBJECT_TYPE(cxButton, cxSprite)
 }
 CX_OBJECT_INIT(cxButton, cxSprite)
 {
-    this->movement = 25;
+    this->movement = 20;
     this->isEnable = true;
     CX_METHOD_SET(this->cxSprite.cxView.Touch, cxButtonTouch);
 }
@@ -81,6 +82,12 @@ cxButton cxButtonCreate(cxConstChars url)
     cxButton this = CX_CREATE(cxButton);
     cxSpriteSetTextureURL(this, url);
     return this;
+}
+
+void cxButtonPass(cxAny pview,cxBool pass)
+{
+    CX_ASSERT_THIS(pview, cxButton);
+    this->isPass = pass;
 }
 
 void cxButtonEnable(cxAny pview,cxBool enable)

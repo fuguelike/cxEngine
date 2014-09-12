@@ -24,6 +24,7 @@ CX_OBJECT_DEF(cxScroll, cxView)
     cxFloat speed;
     cxFloat limit;
     cxFloat moveTime;
+    cxFloat movement;
     cxBool isEnable;
     cxBox4f box;
     cxScrollMoveType type;
@@ -46,6 +47,8 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points);
 void cxScrollSetBody(cxAny pview,cxAny cview);
 
 cxView cxScrollBody(cxAny pview);
+
+void cxScrollSetEnable(cxAny pview,cxBool enable);
 
 cxBool cxScrollCheckPos(cxAny pview,cxVec2f *pos);
 

@@ -34,6 +34,9 @@ cxSize2i NodeSize(cxAny pview);
 //从当前坐标转换为索引坐标
 cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos);
 
+//update to curr
+void NodeUpdateIdx(cxAny pview);
+
 cxVec2f NodeCurrIdx(cxAny pview);
 //设置并放置
 void NodeSetIdx(cxAny pview,cxVec2f idx);

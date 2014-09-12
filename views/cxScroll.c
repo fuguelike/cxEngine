@@ -148,6 +148,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
     cxBool hited = cxViewHitTest(this, item->position, &cpos);
     if(item->type == cxTouchTypeDown){
         this->isEnable = hited;
+        this->movement = 0;
         cxViewStopAction(body, CX_SCROLL_MOVE_ACTION_ID);
         cxScrollUpdateBox(this);
         return hited;
@@ -158,6 +159,10 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
     if(item->type == cxTouchTypeMove){
         cxVec2f vpos = cxViewPosition(body);
         cxVec2f delta = cxViewTouchDelta(body, item);
+        if(fabsf(item->speed.x) < this->limit && fabsf(item->speed.y) < this->limit){
+            return false;
+        }
+        this->movement += cxVec2fMagnitude(delta);
         cxBool setPos = false;
         if(this->type & cxScrollMoveTypeHorizontal){
             vpos.x += delta.x;
@@ -173,18 +178,14 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
         }
         return true;
     }
-    if(item->type == cxTouchTypeUp){
-        cxSize2f winsize = cxEngineInstance()->winsize;
+    if(item->type == cxTouchTypeUp && this->movement > 0){
         this->isEnable = false;
-        if(fabsf(item->speed.y) < this->limit && fabsf(item->speed.x) < this->limit){
-            return false;
-        }
         cxVec2f npos = cxViewPosition(body);
         if(this->type & cxScrollMoveTypeVertical){
-            npos.y += (item->speed.y / this->limit) * winsize.h * this->speed;
+            npos.y += item->speed.y * this->speed;
         }
         if(this->type & cxScrollMoveTypeHorizontal){
-            npos.x += (item->speed.x / this->limit) * winsize.w * this->speed;
+            npos.x += item->speed.x * this->speed;
         }
         cxScrollCheckPos(this, &npos);
         cxMove m = cxMoveCreate(this->moveTime, npos);
@@ -225,6 +226,10 @@ CX_SETTER_DEF(cxScroll, scalable)
 {
     this->scalable = cxJsonToBool(value, this->scalable);
 }
+CX_SETTER_DEF(cxScroll, limit)
+{
+    this->limit = cxJsonToDouble(value, this->limit);
+}
 CX_SETTER_DEF(cxScroll, layout)
 {
     cxConstChars type = cxJsonToConstChars(value);
@@ -247,13 +252,14 @@ CX_OBJECT_TYPE(cxScroll, cxView)
     CX_PROPERTY_SETTER(cxScroll, scaleinc);
     CX_PROPERTY_SETTER(cxScroll, body);
     CX_PROPERTY_SETTER(cxScroll, layout);
+    CX_PROPERTY_SETTER(cxScroll, limit);
 }
 CX_OBJECT_INIT(cxScroll, cxView)
 {
+    this->limit = 50;
     this->scaleinc = 0.5f;
-    this->limit = 300;
-    this->speed = 0.05f;
-    this->scaling = 0.05f;
+    this->speed = 0.1f;
+    this->scaling = 0.06f;
     this->range = cxRange2fv(0.5f, 1.5f);
     this->moveTime = 1.0f;
     this->scaleTime = 0.5f;
@@ -268,6 +274,11 @@ CX_OBJECT_FREE(cxScroll, cxView)
 }
 CX_OBJECT_TERM(cxScroll, cxView)
 
+void cxScrollSetEnable(cxAny pview,cxBool enable)
+{
+    CX_ASSERT_THIS(pview, cxScroll);
+    this->isEnable = enable;
+}
 
 
 

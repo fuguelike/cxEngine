@@ -29,6 +29,8 @@ CX_OBJECT_END(Map, cxAtlas)
 //init map
 cxBool MapInit(cxAny pmap,cxJson data);
 
+void MapNodeOnNewIdx(cxAny pmap,cxAny pnode);
+
 //按Y的大小重新排序
 void MapSortNode(cxAny pmap);
 

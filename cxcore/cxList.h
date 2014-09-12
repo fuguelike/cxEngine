@@ -44,6 +44,10 @@ cxListElement *cxListPrepend(cxAny plist,cxAny any);
 
 cxListElement *cxListFirst(cxAny plist);
 
+cxListElement *cxListToHead(cxAny plist,cxListElement *element);
+
+cxListElement *cxListToTail(cxAny plist,cxListElement *element);
+
 cxListElement *cxListLast(cxAny plist);
 
 void cxListRemove(cxAny plist,cxListElement *element);

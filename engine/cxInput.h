@@ -23,33 +23,21 @@ typedef enum {
     cxTouchTypeCancel,
 }cxTouchType;
 
-typedef enum {
-    cxTouchDirectionNone    = 0,
-    cxTouchDirectionLeft    = 1 << 0,
-    cxTouchDirectionRight   = 1 << 1,
-    cxTouchDirectionUp      = 1 << 2,
-    cxTouchDirectionDown    = 1 << 3,
-}cxTouchDirection;
-
-#define CX_TOUCH_IS_DOWN(_t_)   ((_t_)->direction & cxTouchDirectionDown)
-#define CX_TOUCH_IS_UP(_t_)     ((_t_)->direction & cxTouchDirectionUp)
-#define CX_TOUCH_IS_LEFT(_t_)   ((_t_)->direction & cxTouchDirectionLeft)
-#define CX_TOUCH_IS_RIGHT(_t_)  ((_t_)->direction & cxTouchDirectionRight)
-
 typedef struct {
     cxLong id;
     cxVec2f xy;
 }cxTouchPoint;
 
 CX_OBJECT_DEF(cxTouchItem, cxObject)
-    cxLong  key;
-    cxVec2f previous;
+    cxLong  key;        //item key
+    cxVec2f previous;   //prev position
     cxVec2f delta;      //window delta,when cxTouchTypeMove
+    cxFloat movement;   //movement
     cxVec2f speed;      //move speed unit:pixel/s
-    cxDouble prevTime;
-    cxVec2f position;
+    cxDouble startTime; //start down time
+    cxVec2f startPos;   //start position
+    cxVec2f position;   //current position
     cxTouchType type;
-    cxTouchDirection direction;
 CX_OBJECT_END(cxTouchItem, cxObject)
 
 typedef struct {
