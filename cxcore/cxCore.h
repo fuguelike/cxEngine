@@ -251,7 +251,7 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 
 #define CX_OBJECT_TERM(_t_,_b_)     __##_b_##AutoFree((_b_)this);}
 
-//object mem manager
+//object mem manage
 
 #define CX_ALLOC(_t_)               __cxObjectAlloc(_t_##TypeName,sizeof(struct _t_),(cxAny)__##_t_##AutoInit,(cxAny)__##_t_##AutoFree)
 

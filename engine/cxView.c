@@ -140,12 +140,6 @@ CX_SETTER_DEF(cxView, bordercolor)
 {
     this->borderColor = cxJsonToColor3f(value, this->borderColor);
 }
-CX_SETTER_DEF(cxView, actionmgr)
-{
-    cxAny object = cxObjectCreateWithJson(value);
-    CX_ASSERT(CX_INSTANCE_OF(object, cxActionMgr), "actionmgr must is cxActionMgr type");
-    cxViewSetActionMgr(this, object);
-}
 
 CX_OBJECT_TYPE(cxView, cxObject)
 {
@@ -167,7 +161,6 @@ CX_OBJECT_TYPE(cxView, cxObject)
     CX_PROPERTY_SETTER(cxView, actions);
     CX_PROPERTY_SETTER(cxView, tag);
     CX_PROPERTY_SETTER(cxView, bordercolor);
-    CX_PROPERTY_SETTER(cxView, actionmgr);
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {
@@ -199,7 +192,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_RELEASE(this->actions);
     CX_RELEASE(this->bindes);
     CX_RELEASE(this->binded);
-    CX_RELEASE(this->actionMgr);
     //
     CX_EVENT_RELEASE(this->onTransform);
     CX_EVENT_RELEASE(this->onEnter);
@@ -211,29 +203,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
-
-void cxViewSetActionMgr(cxAny pview,cxActionMgr mgr)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    CX_RETAIN_SWAP(this->actionMgr, mgr);
-}
-
-cxActionMgr cxViewFindActionMgr(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    if(this->actionMgr != NULL){
-        return this->actionMgr;
-    }
-    cxView pv = this->parentView;
-    while (pv != NULL && pv->actionMgr == NULL) {
-        pv = pv->parentView;
-    }
-    cxActionMgr ret = pv != NULL ? pv->actionMgr : NULL;
-    if(ret != NULL){
-        cxViewSetActionMgr(this, ret);
-    }
-    return ret;
-}
 
 void cxViewSetOnlyTransform(cxAny pview,cxBool v)
 {
@@ -325,12 +294,20 @@ void cxViewAppend(cxAny pview,cxAny newview)
     CX_METHOD_RUN(this->onAppend, this, newview);
 }
 
-void cxViewBringFront(cxAny pview,cxAny fview)
+void cxViewBringFront(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxView front = CX_CAST(cxView, fview);
-    CX_ASSERT(front != NULL, "front error");
-    cxListToTail(this->subViews, front->subElement);
+    this->isFront = true;
+}
+
+void cxViewCheckFront(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    CX_RETURN(!this->isFront);
+    cxView parent = this->parentView;
+    CX_RETURN(parent == NULL);
+    cxListToTail(parent->subViews, this->subElement);
+    this->isFront = false;
 }
 
 void cxViewSetCropping(cxAny pview,cxBool cropping)
@@ -554,6 +531,7 @@ void cxViewSort(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxListSort(this->subViews, cxViewSortByZOrder);
+    CX_METHOD_RUN(this->onSort,this);
     this->isSort = false;
 }
 
@@ -982,17 +960,22 @@ static void cxViewUpdateActions(cxView pview)
 void cxViewDraw(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    if(!this->isVisible){
+    if(!this->isVisible || this->onlyTransform){
         goto finished;
     }
     //update action and update
     CX_EVENT_FIRE(this, onUpdate);
     cxViewUpdateActions(this);
     cxViewTransform(this);
+    if(this->isSort){
+        cxViewSort(this);
+    }
+    if(this->isFront){
+        cxViewCheckFront(this);
+    }
     if(this->onlyTransform){
         goto finished;
     }
-    //
     kmGLPushMatrix();
     kmGLMultMatrix(&this->normalMatrix);
     kmGLMultMatrix(&this->anchorMatrix);
@@ -1000,13 +983,9 @@ void cxViewDraw(cxAny pview)
     if(this->isCropping){
         cxOpenGLEnableScissor(this->scissor);
     }
-    //check sort
-    if(this->isSort){
-        cxViewSort(this);
-    }
     CX_METHOD_RUN(this->Before, this);
     CX_METHOD_RUN(this->Draw, this);
-    CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
+    CX_LIST_FOREACH(this->subViews, ele){
         cxView view = ele->any;
         cxViewDraw(view);
     }

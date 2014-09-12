@@ -10,6 +10,7 @@
 #define Home_Node_h
 
 #include <views/cxSprite.h>
+#include "Define.h"
 
 CX_C_BEGIN
 
@@ -21,10 +22,13 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxVec2f curr;       //当前所在位置
     cxBool canSelected; //可选择
     cxBool isSelected;  //是否悬选中
+    cxBool isTouch;     //按下时是否悬选中
     cxBool isValidIdx;  //是否在有效的位置
     //nodes element
     cxListElement *element;
-    cxVec2f start; 
+    cxVec2f start;
+    //
+    NodeType type;
 CX_OBJECT_END(Node, cxSprite)
 
 cxVec2i NodeIndex(cxAny pview);
@@ -52,7 +56,7 @@ cxBool NodeSetPosition(cxAny pview,cxVec2f idx);
 
 void NodeSetSize(cxAny pview,cxSize2f size);
 
-void NodeInit(cxAny pview,cxSize2f size,cxVec2f pos);
+void NodeInit(cxAny pview,cxSize2f size,cxVec2f pos,NodeType type);
 
 cxAny NodeCreate(cxAny map);
 

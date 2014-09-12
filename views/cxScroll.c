@@ -159,9 +159,6 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
     if(item->type == cxTouchTypeMove){
         cxVec2f vpos = cxViewPosition(body);
         cxVec2f delta = cxViewTouchDelta(body, item);
-        if(fabsf(item->speed.x) < this->limit && fabsf(item->speed.y) < this->limit){
-            return false;
-        }
         this->movement += cxVec2fMagnitude(delta);
         cxBool setPos = false;
         if(this->type & cxScrollMoveTypeHorizontal){
@@ -226,10 +223,6 @@ CX_SETTER_DEF(cxScroll, scalable)
 {
     this->scalable = cxJsonToBool(value, this->scalable);
 }
-CX_SETTER_DEF(cxScroll, limit)
-{
-    this->limit = cxJsonToDouble(value, this->limit);
-}
 CX_SETTER_DEF(cxScroll, layout)
 {
     cxConstChars type = cxJsonToConstChars(value);
@@ -252,11 +245,9 @@ CX_OBJECT_TYPE(cxScroll, cxView)
     CX_PROPERTY_SETTER(cxScroll, scaleinc);
     CX_PROPERTY_SETTER(cxScroll, body);
     CX_PROPERTY_SETTER(cxScroll, layout);
-    CX_PROPERTY_SETTER(cxScroll, limit);
 }
 CX_OBJECT_INIT(cxScroll, cxView)
 {
-    this->limit = 50;
     this->scaleinc = 0.5f;
     this->speed = 0.1f;
     this->scaling = 0.06f;

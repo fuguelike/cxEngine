@@ -73,6 +73,7 @@ static cxBool MapTouch(cxAny pview,cxTouchItems *points)
     cxBool isSelected = hasSelectNode(this);
     if(item->type == cxTouchTypeUp && !isSelected){
         NodeResetPosition(snode);
+        cxViewSetColor(snode, cxRED);
         this->node = NULL;
     }
     return false;
@@ -102,7 +103,7 @@ cxBool MapInit(cxAny pmap,cxJson data)
     }
     {
         Node node = NodeCreate(this);
-        NodeInit(node, cxSize2fv(3, 3),cxVec2fv(8, 8));
+        NodeInit(node, cxSize2fv(3, 3),cxVec2fv(8, 8),NodeTypeNone);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);
@@ -110,7 +111,7 @@ cxBool MapInit(cxAny pmap,cxJson data)
     
     {
         Node node = NodeCreate(this);
-        NodeInit(node, cxSize2fv(4, 4),cxVec2fv(0, 0));
+        NodeInit(node, cxSize2fv(4, 4),cxVec2fv(0, 0),NodeTypeNone);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);
@@ -118,7 +119,7 @@ cxBool MapInit(cxAny pmap,cxJson data)
     
     {
         Node node = NodeCreate(this);
-        NodeInit(node, cxSize2fv(1, 1),cxVec2fv(18, 18));
+        NodeInit(node, cxSize2fv(1, 1),cxVec2fv(18, 18),NodeTypeNone);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);
@@ -126,7 +127,7 @@ cxBool MapInit(cxAny pmap,cxJson data)
     
     {
         Node node = NodeCreate(this);
-        NodeInit(node, cxSize2fv(2, 2),cxVec2fv(7, 18));
+        NodeInit(node, cxSize2fv(2, 2),cxVec2fv(7, 18),NodeTypeNone);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendNode(this, node);

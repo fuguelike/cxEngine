@@ -33,7 +33,7 @@ do{                                                     \
 
 #define CX_PROPERTY_GETTER(_t_,_p_)                     \
 do{                                                     \
-    cxProperty p = cxTypeProperty(this,#_p_);           \
+    cxProperty p = cxTypeSetProperty(this,#_p_);        \
     p->getter = (cxPropertyGetter)CX_GETTER(_t_,_p_);   \
 }while(0)
 

@@ -38,11 +38,16 @@ cxType cxTypesGet(cxConstType typeName)
     return cxHashGet(types, cxHashStrKey(typeName));
 }
 
+//replace property if same name
 cxProperty cxTypeSetProperty(cxType this,cxConstChars key)
 {
-    cxProperty p = CX_ALLOC(cxProperty);
-    cxHashSet(this->properties, cxHashStrKey(key), p);
-    CX_RELEASE(p);
+    cxHashKey ikey = cxHashStrKey(key);
+    cxProperty p = cxHashGet(this->properties, ikey);
+    if(p == NULL){
+        p = CX_ALLOC(cxProperty);
+        cxHashSet(this->properties, ikey, p);
+        CX_RELEASE(p);
+    }
     return p;
 }
 
@@ -148,11 +153,6 @@ cxAny cxObjectCreateWithJson(cxJson json)
         cxObjectSave(ret.object, ret.ojson);
     }
     return ret.object;
-}
-
-void __cxTypeRegisterName(cxConstType type,cxConstType super)
-{
-    
 }
 
 CX_OBJECT_TYPE(cxType, cxObject)

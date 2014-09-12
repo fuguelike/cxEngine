@@ -22,7 +22,6 @@ typedef enum {
 CX_OBJECT_DEF(cxScroll, cxView)
     //move data
     cxFloat speed;
-    cxFloat limit;
     cxFloat moveTime;
     cxFloat movement;
     cxBool isEnable;

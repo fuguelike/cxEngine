@@ -4,10 +4,6 @@
     "w": 800,
     "h": 800
   },
-  "actionmgr": {
-    "cxType": "cxActionMgr",
-    "scale": 1.0
-  },
   "position": {
     "y": -300
   },

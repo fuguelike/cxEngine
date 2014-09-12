@@ -27,7 +27,6 @@ cxBool cxButtonTouch(cxAny pview,cxTouchItems *points)
     if(!hit){
         return false;
     }
-    //movement > 5
     if(this->isSelected && item->movement > this->movement){
         CX_EVENT_FIRE(this, onLeave);
         this->isSelected = false;
@@ -45,7 +44,7 @@ cxBool cxButtonTouch(cxAny pview,cxTouchItems *points)
         CX_EVENT_FIRE(this, onLeave);
         return true;
     }
-    return this->isSelected;
+    return false;
 }
 
 CX_SETTER_DEF(cxButton, movement)

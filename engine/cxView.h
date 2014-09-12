@@ -48,6 +48,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxListElement *subElement;
     cxList subViews;
     cxView parentView;      //parent view
+    cxBool isFront;    //
     cxBool isRunning;
     cxBool isDirty;
     cxBool isVisible;
@@ -69,7 +70,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f anchorMatrix;
     cxColor4f color;
     cxColor3f borderColor;
-    cxActionMgr actionMgr;
 
     CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouchItems *);
     CX_METHOD_DEF(cxBool, Key, cxAny, cxKey *);
@@ -80,6 +80,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     //method event
     CX_METHOD_DEF(void, onAppend,cxAny,cxAny);
     CX_METHOD_DEF(void, onRemove,cxAny,cxAny);
+    CX_METHOD_DEF(void, onSort,cxAny);
 
     CX_SIGNAL_ALLOC(onDraw);        //(cxAny pview)
 
@@ -91,10 +92,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onTransform);
 CX_OBJECT_END(cxView, cxObject)
-
-void cxViewSetActionMgr(cxAny pview,cxActionMgr mgr);
-
-cxActionMgr cxViewFindActionMgr(cxAny pview);
 
 cxMatrix4f *cxViewNormalMatrix(cxAny pview);
 
@@ -108,7 +105,9 @@ void cxViewUnBindAll(cxAny pview);
 
 void cxViewBind(cxAny pview,cxAny bview,cxAny bd);
 
-void cxViewBringFront(cxAny pview,cxAny fview);
+void cxViewBringFront(cxAny pview);
+
+void cxViewCheckFront(cxAny pview);
 
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 

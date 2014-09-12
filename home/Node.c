@@ -20,6 +20,20 @@ cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
     return MapPosToIdx(map, pos);
 }
 
+static cxBool NodeSelected(Node this)
+{
+    Map map = this->map;
+    CX_LIST_FOREACH(map->nodes, ele){
+        if(ele->any == this){
+            cxViewSetColor(ele->any, cxYELLOW);
+        }else{
+            cxViewSetColor(ele->any, cxRED);
+        }
+    }
+    map->node = this;
+    return true;
+}
+
 static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -31,7 +45,7 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
     }
     cxVec2f cpos;
     cxBool hited = cxViewHitTest(pview, item->position, &cpos) && cxPointsContainPoint(this->box, cpos);
-    if(item->type == cxTouchTypeMove &&  map->node == this){
+    if(item->type == cxTouchTypeMove &&  map->node == this && this->isTouch){
         cxVec2f vpos = this->start;
         cxVec2f delta = cxViewTouchDelta(pview, item);
         kmVec2Add(&vpos, &vpos, &delta);
@@ -47,9 +61,10 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
         return true;
     }
     if(item->type == cxTouchTypeDown){
+        this->isTouch = hited;
         this->start = cxViewPosition(this);
         if(hited){
-            cxViewBringFront(map, this);
+            cxViewBringFront(this);
         }
         return false;
     }
@@ -59,10 +74,7 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
             NodeResetPosition(map->node);
         }
         if(this->isSelected){
-            cxViewSetColor(this,cxYELLOW);
-            map->node = this;
-        }else{
-            cxViewSetColor(this, cxRED);
+            return NodeSelected(this);
         }
         return false;
     }
@@ -183,12 +195,13 @@ void NodeSetIdx(cxAny pview,cxVec2f idx)
     MapNodeOnNewIdx(map, this);
 }
 
-void NodeInit(cxAny pview,cxSize2f size,cxVec2f pos)
+void NodeInit(cxAny pview,cxSize2f size,cxVec2f pos,NodeType type)
 {
     CX_ASSERT_THIS(pview, Node);
     NodeSetSize(this, size);
     NodeSetIdx(this, pos);
     NodeSetPosition(this, pos);
+    this->type = type;
 }
 
 cxAny NodeCreate(cxAny map)

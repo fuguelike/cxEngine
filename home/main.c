@@ -30,6 +30,7 @@ void cxEngineMain(cxEngine engine)
     Scene scene = CX_CAST(Scene, loader->object);
     CX_ASSERT(scene != NULL, "get main scene failed");
     scene->map = cxLoaderGet(loader, "map");
+    CX_ASSERT(scene->map != NULL, "map null");
     MapInit(scene->map,NULL);
     cxWindowPushView(scene);
 }

@@ -149,8 +149,6 @@ static void cxActionInit(cxAny pav)
     CX_ASSERT(this->view != NULL, "action viewptr null");
     this->delayElapsed = 0;
     this->timeElapsed = this->timeInit;
-    //find actionmgr
-    this->actionMgr = cxViewFindActionMgr(this->view);
     CX_METHOD_RUN(this->Init, this);
     CX_EVENT_FIRE(this, onInit);
 }
