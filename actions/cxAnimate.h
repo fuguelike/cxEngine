@@ -19,6 +19,8 @@ CX_OBJECT_DEF(cxAnimateItem, cxObject)
     cxString id;
     cxFloat time;
     cxFloat value;
+    cxBool flipx;
+    cxBool flipy;
 CX_OBJECT_END(cxAnimateItem, cxObject)
 
 CX_OBJECT_DEF(cxAnimate, cxAction)

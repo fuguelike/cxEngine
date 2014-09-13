@@ -60,7 +60,7 @@ cxListElement *cxListFirst(cxAny plist)
     return this->listptr;
 }
 
-cxListElement *cxListToHead(cxAny plist,cxListElement *element)
+cxListElement *cxListMoveToHead(cxAny plist,cxListElement *element)
 {
     CX_ASSERT_THIS(plist, cxList);
     CX_RETURN(cxListFirst(plist) == element,element);
@@ -69,7 +69,7 @@ cxListElement *cxListToHead(cxAny plist,cxListElement *element)
     return element;
 }
 
-cxListElement *cxListToTail(cxAny plist,cxListElement *element)
+cxListElement *cxListMoveToTail(cxAny plist,cxListElement *element)
 {
     CX_ASSERT_THIS(plist, cxList);
     CX_RETURN(cxListLast(plist) == element,element);

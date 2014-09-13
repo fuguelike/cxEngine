@@ -10,13 +10,13 @@
 #include <engine/cxUtil.h>
 #include "cxAssetsStream.h"
 
-static cxBool cxAssetsStreamOpen(cxAny this)
+static cxBool cxAssetsStreamOpen(cxAny ps)
 {
-    cxAssetsStream asserts = this;
-    CX_ASSERT(asserts->cxStream.isOpen == false,"stream repeat open");
-    cxConstChars path = cxStringBody(asserts->cxStream.path);
-    asserts->asset = fopen(path, "rb");
-    if(asserts->asset == NULL){
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
+    cxConstChars path = cxStringBody(this->cxStream.path);
+    this->asset = fopen(path, "rb");
+    if(this->asset == NULL){
         CX_ERROR("open assets %s stream failed",path);
         return false;
     }
@@ -25,66 +25,66 @@ static cxBool cxAssetsStreamOpen(cxAny this)
         CX_ERROR("lstat assets %s stream failed",path);
         return false;
     }
-    asserts->cxStream.length = (cxInt)stat.st_size;
-    asserts->cxStream.canRead = true;
-    asserts->cxStream.canSeek = true;
-    asserts->cxStream.canWrite = false;
-    asserts->cxStream.isOpen = true;
+    this->cxStream.length = (cxInt)stat.st_size;
+    this->cxStream.canRead = true;
+    this->cxStream.canSeek = true;
+    this->cxStream.canWrite = false;
+    this->cxStream.isOpen = true;
     return true;
 }
 
-static cxInt cxAssetsStreamRead(cxAny this,cxAny buffer,cxInt size)
+static cxInt cxAssetsStreamRead(cxAny ps,cxAny buffer,cxInt size)
 {
-    cxAssetsStream asserts = this;
-    if(!asserts->cxStream.canRead){
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    if(!this->cxStream.canRead){
         return 0;
     }
-    return fread(buffer, 1, size, asserts->asset);
+    return fread(buffer, 1, size, this->asset);
 }
 
-static cxInt cxAssetsStreamWrite(cxAny this,cxAny buffer,cxInt size)
+static cxInt cxAssetsStreamWrite(cxAny ps,cxAny buffer,cxInt size)
 {
-    cxAssetsStream asserts = this;
-    if(!asserts->cxStream.canWrite){
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    if(!this->cxStream.canWrite){
         return 0;
     }
     return 0;
 }
 
-static cxOff cxAssetsStreamPosition(cxAny this)
+static cxOff cxAssetsStreamPosition(cxAny ps)
 {
-    cxAssetsStream asserts = this;
-    if(!asserts->cxStream.canRead){
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    if(!this->cxStream.canRead){
         return 0;
     }
-    return (cxOff)ftell(asserts->asset);
+    return (cxOff)ftell(this->asset);
 }
 
-static cxInt cxAssetsStreamSeek(cxAny this,cxOff off,cxInt flags)
+static cxInt cxAssetsStreamSeek(cxAny ps,cxOff off,cxInt flags)
 {
-    cxAssetsStream asserts = this;
-    if(!asserts->cxStream.canSeek){
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    if(!this->cxStream.canSeek){
         return false;
     }
-    return fseek(asserts->asset, off, flags) > 0;
+    return fseek(this->asset, off, flags) > 0;
 }
 
-static cxString cxAssetsStreamAllBytes(cxAny this)
+static cxString cxAssetsStreamAllBytes(cxAny ps)
 {
-    cxStream asserts = this;
-    if(!asserts->canRead){
-        cxStreamOpen(asserts);
+    CX_ASSERT_THIS(ps, cxStream);
+    if(!this->canRead){
+        cxStreamOpen(this);
     }
-    if(!asserts->canRead){
-        CX_ERROR("file %s stream can't read",cxStringBody(asserts->file));
+    if(!this->canRead){
+        CX_ERROR("file %s stream can't read",cxStringBody(this->path));
         return NULL;
     }
-    cxStreamSeek(asserts,0,SEEK_SET);
-    cxChars bytes = allocator->malloc(asserts->length + 1);
-    cxStreamRead(asserts,bytes,asserts->length);
-    bytes[asserts->length] = '\0';
-    cxString data = cxStringAttach(bytes, asserts->length);
-    cxStreamClose(asserts);
+    cxStreamSeek(this,0,SEEK_SET);
+    cxChars bytes = allocator->malloc(this->length + 1);
+    cxStreamRead(this,bytes,this->length);
+    bytes[this->length] = '\0';
+    cxString data = cxStringAttachMem(bytes, this->length);
+    cxStreamClose(this);
     return data;
 }
 
@@ -96,16 +96,6 @@ static void cxAssetsStreamClose(cxAny this)
         asserts->asset = NULL;
     }
     cxStreamBaseClose(this);
-}
-
-void __cxAssetsStreamInitType(cxAny type)
-{
-    
-}
-
-void __cxAssetsStreamInitObject(cxAny object,cxAny json,cxAny hash)
-{
-    
 }
 
 CX_OBJECT_TYPE(cxAssetsStream, cxStream)
@@ -135,27 +125,11 @@ cxString cxAssetsData(cxConstChars file)
     return cxStreamAllBytes(stream);
 }
 
-cxBool cxAssetsStreamInit(cxAssetsStream this,cxConstChars file)
-{
-    if(cxDocumentExists(file)){
-        CX_RETAIN_SWAP(this->cxStream.path, cxDocumentExists(file));
-    }else if(cxAssetsExists(file)){
-        CX_RETAIN_SWAP(this->cxStream.path, cxAssetsPath(file));
-    }else{
-        return false;
-    }
-    CX_RETAIN_SWAP(this->cxStream.file, cxStringConstChars(file));
-    return true;
-}
-
 cxStream cxAssetsStreamCreate(cxConstChars file)
 {
-    cxAssetsStream rv = CX_CREATE(cxAssetsStream);
-    if(!cxAssetsStreamInit(rv,file)){
-        CX_ERROR("assets file %s create failed",file);
-        return NULL;
-    }
-    return (cxStream)rv;
+    cxAssetsStream this = CX_CREATE(cxAssetsStream);
+    CX_RETAIN_SWAP(this->cxStream.path, cxAssetsPath(file));
+    return (cxStream)this;
 }
 
 

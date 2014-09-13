@@ -130,6 +130,7 @@
 		83CEB63F193EB58300D3F7BF /* aes_ofb.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CEB637193EB58300D3F7BF /* aes_ofb.c */; };
 		83D199A419AADCA500A297A8 /* cxAnyArray.c in Sources */ = {isa = PBXBuildFile; fileRef = 83D199A219AADCA500A297A8 /* cxAnyArray.c */; };
 		83E1BE7A19AC99F00071FC97 /* cxBezier.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E1BE7819AC99F00071FC97 /* cxBezier.c */; };
+		83FBEE0819C3E4D700292E0A /* cxMMapStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 83FBEE0619C3E4D700292E0A /* cxMMapStream.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -394,6 +395,8 @@
 		83D199A319AADCA500A297A8 /* cxAnyArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAnyArray.h; sourceTree = "<group>"; };
 		83E1BE7819AC99F00071FC97 /* cxBezier.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxBezier.c; sourceTree = "<group>"; };
 		83E1BE7919AC99F00071FC97 /* cxBezier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxBezier.h; sourceTree = "<group>"; };
+		83FBEE0619C3E4D700292E0A /* cxMMapStream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMMapStream.c; sourceTree = "<group>"; };
+		83FBEE0719C3E4D700292E0A /* cxMMapStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMMapStream.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,6 +499,8 @@
 				833CA5131925DB5E0013630A /* cxFileStream.h */,
 				833CA5141925DB5E0013630A /* cxMemStream.c */,
 				833CA5151925DB5E0013630A /* cxMemStream.h */,
+				83FBEE0619C3E4D700292E0A /* cxMMapStream.c */,
+				83FBEE0719C3E4D700292E0A /* cxMMapStream.h */,
 			);
 			path = streams;
 			sourceTree = "<group>";
@@ -882,6 +887,7 @@
 				83A1189519B353AE00F8F0D5 /* matrix.c in Sources */,
 				833CA5401925DB5E0013630A /* cxListen.c in Sources */,
 				833CA4F61925D95C0013630A /* cxJump.c in Sources */,
+				83FBEE0819C3E4D700292E0A /* cxMMapStream.c in Sources */,
 				833CA5541925DB5E0013630A /* cxTable.c in Sources */,
 				833CA5031925DB3E0013630A /* cxAStar.c in Sources */,
 				83A78DE11936E2B5007C44FD /* cxTimeLine.c in Sources */,

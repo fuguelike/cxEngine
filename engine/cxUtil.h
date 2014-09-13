@@ -49,11 +49,19 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat s
 
 cxHash cxParseKeyValue(cxChars query);
 
+cxInt cxFileFD(cxConstChars file,cxInt *off,cxInt *length);
+
+cxInt cxDocumentFD(cxConstChars file,cxInt *off,cxInt *length);
+
+cxInt cxAssertsFD(cxConstChars file,cxInt *off,cxInt *length);
+
 cxString cxAssetsPath(cxConstChars file);
 
 cxBool cxAssetsExists(cxConstChars file);
 
 cxBool cxDocumentExists(cxConstChars file);
+
+cxBool cxFileExists(cxConstChars file);
 
 cxDouble cxTimestamp();
 

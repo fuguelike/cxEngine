@@ -11,84 +11,84 @@
 #include <engine/cxUtil.h>
 #include "cxFileStream.h"
 
-static cxBool cxFileStreamOpen(cxAny this)
+static cxBool cxFileStreamOpen(cxAny ps)
 {
-    cxFileStream file = this;
-    CX_ASSERT(file->cxStream.isOpen == false,"stream repeat open");
-    cxConstChars path = cxStringBody(file->cxStream.path);
-    if(file->rdonly){
-        file->fd = fopen(path, "rb");
+    CX_ASSERT_THIS(ps, cxFileStream);
+    CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
+    cxConstChars path = cxStringBody(this->cxStream.path);
+    if(this->rdonly){
+        this->fd = fopen(path, "rb");
     }else{
-        file->fd = fopen(path, "wb");
+        this->fd = fopen(path, "wb");
     }
-    if(file->fd == NULL){
+    if(this->fd == NULL){
         CX_ERROR("open file %s stream failed",path);
         return false;
     }
     struct stat stat={0};
     lstat(path, &stat);
-    file->cxStream.length = (cxInt)stat.st_size;
-    file->cxStream.canRead = true;
-    file->cxStream.canSeek = true;
-    file->cxStream.canWrite = true;
-    file->cxStream.isOpen = true;
+    this->cxStream.length = (cxInt)stat.st_size;
+    this->cxStream.canRead = true;
+    this->cxStream.canSeek = true;
+    this->cxStream.canWrite = true;
+    this->cxStream.isOpen = true;
     return true;
 }
 
-static cxInt cxFileStreamRead(cxAny this,cxAny buffer,cxInt size)
+static cxInt cxFileStreamRead(cxAny ps,cxAny buffer,cxInt size)
 {
-    cxFileStream file = this;
-    if(!file->cxStream.canRead){
+    CX_ASSERT_THIS(ps, cxFileStream);
+    if(!this->cxStream.canRead){
         return 0;
     }
-    return fread(buffer, 1, size, file->fd);
+    return fread(buffer, 1, size, this->fd);
 }
 
-static cxInt cxFileStreamWrite(cxAny this,cxAny buffer,cxInt size)
+static cxInt cxFileStreamWrite(cxAny ps,cxAny buffer,cxInt size)
 {
-    cxFileStream file = this;
-    if(!file->cxStream.canWrite){
+    CX_ASSERT_THIS(ps, cxFileStream);
+    if(!this->cxStream.canWrite){
         return 0;
     }
-    return fwrite(buffer, 1, size, file->fd);
+    return fwrite(buffer, 1, size, this->fd);
 }
 
-static cxOff cxFileStreamPosition(cxAny this)
+static cxOff cxFileStreamPosition(cxAny ps)
 {
-    cxFileStream file = this;
-    if(!file->cxStream.canRead){
+    CX_ASSERT_THIS(ps, cxFileStream);
+    if(!this->cxStream.canRead){
         return 0;
     }
-    return (cxOff)ftell(file->fd);
+    return (cxOff)ftell(this->fd);
 }
 
-static cxInt cxFileStreamSeek(cxAny this,cxOff off,cxInt flags)
+static cxInt cxFileStreamSeek(cxAny ps,cxOff off,cxInt flags)
 {
-    cxFileStream file = this;
-    if(!file->cxStream.canSeek){
+    CX_ASSERT_THIS(ps, cxFileStream);
+    if(!this->cxStream.canSeek){
         return false;
     }
-    return fseek(file->fd, off, flags) > 0;
+    return fseek(this->fd, off, flags) > 0;
 }
 
-static cxString cxFileStreamAllBytes(cxAny this)
+static cxString cxFileStreamAllBytes(cxAny ps)
 {
-    cxStream file = this;
-    if(!file->canRead){
-        cxStreamOpen(file);
+    CX_ASSERT_THIS(ps, cxStream);
+    if(!this->canRead){
+        cxStreamOpen(this);
     }
-    if(!file->canRead){
+    if(!this->canRead){
         CX_ERROR("file stream can't read");
         return NULL;
     }
-    cxStreamSeek(file,0,SEEK_END);
-    file->length = cxStreamPosition(file);
-    cxStreamSeek(file,0,SEEK_SET);
-    cxChars bytes = allocator->malloc(file->length + 1);
-    cxStreamRead(file,bytes,file->length);
-    bytes[file->length] = '\0';
-    cxString data = cxStringAttach(bytes, file->length);
-    cxStreamClose(file);
+    cxStreamSeek(this,0,SEEK_END);
+    this->length = cxStreamPosition(this);
+    cxStreamSeek(this,0,SEEK_SET);
+    cxChars bytes = allocator->malloc(this->length + 1);
+    cxStreamRead(this,bytes,this->length);
+    bytes[this->length] = '\0';
+    cxString data = cxStringAttachMem(bytes, this->length);
+    cxStreamClose(this);
     return data;
 }
 
@@ -134,7 +134,6 @@ cxStream cxFileStreamCreate(cxConstChars file,cxBool rdonly)
     cxFileStream rv = CX_CREATE(cxFileStream);
     rv->rdonly = rdonly;
     CX_RETAIN_SWAP(rv->cxStream.path, path);
-    rv->cxStream.file = cxStringAllocChars(file);
     return (cxStream)rv;
 }
 

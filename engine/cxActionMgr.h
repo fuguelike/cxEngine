@@ -17,6 +17,8 @@ CX_OBJECT_DEF(cxActionMgr, cxObject)
     cxFloat scale;
 CX_OBJECT_END(cxActionMgr, cxObject)
 
+cxAny cxActionMgrCreate(cxActionMgr this,cxJson json);
+
 CX_C_END
 
 #endif

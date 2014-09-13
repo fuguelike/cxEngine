@@ -137,7 +137,8 @@ LOCAL_SRC_FILES += \
 LOCAL_SRC_FILES += \
     android/jni/cxAndroid.c \
     android/jni/cxAssetsStream.c \
-    android/jni/cxPlayer.c
+    android/jni/cxPlayer.c \
+    android/jni/cxMMapStream.c
     
 LOCAL_SRC_FILES += \
     jansson/dump.c \

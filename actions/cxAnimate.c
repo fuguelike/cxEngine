@@ -34,6 +34,14 @@ CX_SETTER_DEF(cxAnimateItem, time)
 {
     this->time = cxJsonToDouble(value, this->time);
 }
+CX_SETTER_DEF(cxAnimateItem, flipx)
+{
+    this->flipx = cxJsonToBool(value, this->flipx);
+}
+CX_SETTER_DEF(cxAnimateItem, flipy)
+{
+    this->flipy = cxJsonToBool(value, this->flipy);
+}
 
 CX_OBJECT_TYPE(cxAnimateItem, cxAction)
 {
@@ -41,6 +49,8 @@ CX_OBJECT_TYPE(cxAnimateItem, cxAction)
     CX_PROPERTY_SETTER(cxAnimateItem, key);
     CX_PROPERTY_SETTER(cxAnimateItem, texture);
     CX_PROPERTY_SETTER(cxAnimateItem, time);
+    CX_PROPERTY_SETTER(cxAnimateItem, flipx);
+    CX_PROPERTY_SETTER(cxAnimateItem, flipy);
 }
 CX_OBJECT_INIT(cxAnimateItem, cxObject)
 {
@@ -136,6 +146,8 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
         if(item->texture != NULL && item->key != NULL){
             cxSpriteSetTextureKey(this->cxAction.view, cxStringBody(item->key));
         }
+        cxSpriteSetFlipX(this->cxAction.view, item->flipx);
+        cxSpriteSetFlipY(this->cxAction.view, item->flipy);
         this->index = i;
         CX_EVENT_FIRE(this, onFrame);
         break;
@@ -172,7 +184,6 @@ CX_SETTER_DEF(cxAnimate, frames)
         cxAnimateItem frame = cxObjectCreateWithJson(item);
         CX_ASSERT(CX_INSTANCE_OF(frame, cxAnimateItem), "type error");
         cxHashKey key = cxAnimateItemKey(frame);
-        CX_LOGGER("%s",key.data);
         cxHashSet(this->frames, key, frame);
     }
     CX_JSON_ARRAY_EACH_END(frames, item)

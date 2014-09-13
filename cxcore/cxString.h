@@ -16,6 +16,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxString, cxObject)
+    cxBool nocopy;
     UT_string strptr;
 CX_OBJECT_END(cxString, cxObject)
 
@@ -37,7 +38,9 @@ CX_OBJECT_END(cxString, cxObject)
 
 cxBool cxConstCharsIsNumber(cxConstChars s);
 
-cxString cxStringAttach(cxChars d,cxInt l);
+cxString cxStringAttachMem(cxChars d,cxInt l);
+
+cxString cxStringAttachMap(cxAny d,cxInt l);
 
 cxBool cxStringToBool(cxString str,cxBool dv);
 

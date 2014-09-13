@@ -15,7 +15,6 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxStream, cxObject)
     cxString path;
-    cxString file;
     cxInt length;
     cxBool canRead;
     cxBool canWrite;
@@ -31,8 +30,6 @@ CX_OBJECT_DEF(cxStream, cxObject)
 CX_OBJECT_END(cxStream, cxObject)
 
 void cxStreamBaseClose(cxAny pstream);
-
-cxString cxStreamFileDir(cxAny pstream);
 
 cxBool cxStreamOpen(cxAny pstream);
 

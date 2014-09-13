@@ -112,6 +112,24 @@ cxString cxAssetsPath(cxConstChars file)
     return cxStringConstChars(file);
 }
 
+cxInt cxAssertsFD(cxConstChars file,cxInt *off,cxInt *length)
+{
+    CX_ASSERT(off != NULL && length != NULL && file != NULL, "args error");
+    cxString path = cxAssetsPath(file);
+    AAssetManager *assetMgr = cxEngineGetAssetManager();
+    AAsset *asset = AAssetManager_open(assetMgr, cxStringBody(path), AASSET_MODE_UNKNOWN);
+    if(asset == NULL){
+        return -1;
+    }
+    off_t outStart = 0;
+    off_t outLength = 0;
+    cxInt fd = AAsset_openFileDescriptor(asset,&outStart,&outLength);
+    *off = (cxInt)outStart;
+    *length = (cxInt)outLength;
+    AAsset_close(asset);
+    return fd;
+}
+
 cxBool cxAssetsExists(cxConstChars file)
 {
     cxBool ret = false;

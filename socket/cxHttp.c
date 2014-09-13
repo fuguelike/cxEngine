@@ -15,7 +15,7 @@ cxString cxHttpUriEncode(cxString uri)
     CX_RETURN(uri == NULL, NULL);
     cxChars data = evhttp_uriencode(cxStringBody(uri), cxStringLength(uri), 0);
     CX_RETURN(data == NULL, NULL);
-    return cxStringAttach(data, strlen(data));
+    return cxStringAttachMem(data, strlen(data));
 }
 
 cxString cxHttpUriDecode(cxString uri)
@@ -23,7 +23,7 @@ cxString cxHttpUriDecode(cxString uri)
     cxInt size = 0;
     cxChars data = evhttp_uridecode(cxStringBody(uri), 0, (size_t *)&size);
     CX_RETURN(data == NULL, NULL);
-    return cxStringAttach(data, size);
+    return cxStringAttachMem(data, size);
 }
 
 static void cxHttpReadData(cxHttp this)

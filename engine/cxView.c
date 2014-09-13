@@ -281,7 +281,7 @@ void cxViewCheckFront(cxAny pview)
     CX_RETURN(!this->isFront);
     cxView parent = this->parentView;
     CX_RETURN(parent == NULL);
-    cxListToTail(parent->subViews, this->subElement);
+    cxListMoveToTail(parent->subViews, this->subElement);
     this->isFront = false;
 }
 
@@ -940,7 +940,7 @@ static void cxViewUpdateActions(cxView pview)
 void cxViewDraw(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    if(!this->isVisible || this->onlyTransform){
+    if(!this->isVisible){
         goto finished;
     }
     //update action and update

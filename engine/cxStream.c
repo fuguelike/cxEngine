@@ -11,6 +11,7 @@
 #include <streams/cxMemStream.h>
 #include <streams/cxFileStream.h>
 #include "cxStream.h"
+#include "cxUtil.h"
 
 void __cxStreamInitType(cxAny type)
 {
@@ -36,7 +37,6 @@ CX_OBJECT_FREE(cxStream, cxObject)
         cxStreamClose(this);
     }
     CX_RELEASE(this->path);
-    CX_RELEASE(this->file);
 }
 CX_OBJECT_TERM(cxStream, cxObject)
 
@@ -96,16 +96,6 @@ void cxStreamBaseClose(cxAny pstream)
     this->canWrite = false;
     this->canSeek = false;
     this->isOpen = false;
-}
-
-cxString cxStreamFileDir(cxAny pstream)
-{
-    CX_ASSERT_THIS(pstream, cxStream);
-    if(this->path == NULL){
-        return cxStringCreate(".");
-    }
-    char *dir = dirname((char *)cxStringBody(this->file));
-    return cxStringCreate("%s",dir);
 }
 
 

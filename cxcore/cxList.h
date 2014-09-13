@@ -44,9 +44,9 @@ cxListElement *cxListPrepend(cxAny plist,cxAny any);
 
 cxListElement *cxListFirst(cxAny plist);
 
-cxListElement *cxListToHead(cxAny plist,cxListElement *element);
+cxListElement *cxListMoveToHead(cxAny plist,cxListElement *element);
 
-cxListElement *cxListToTail(cxAny plist,cxListElement *element);
+cxListElement *cxListMoveToTail(cxAny plist,cxListElement *element);
 
 cxListElement *cxListLast(cxAny plist);
 

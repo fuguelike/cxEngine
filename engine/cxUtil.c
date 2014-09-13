@@ -10,6 +10,9 @@
 #include <evhttp.h>
 #include <sys/time.h>
 #include <ctype.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <streams/cxAssetsStream.h>
 #include <streams/cxFileStream.h>
 #include <engine/cxEngine.h>
@@ -51,7 +54,7 @@ cxString cxAESDecode(cxString data,cxString key)
             bytessize -= bc;
         }
     }
-    return cxStringAttach(bytes, bytessize);
+    return cxStringAttachMem(bytes, bytessize);
 }
 
 cxString cxAESEncode(cxString data,cxString key)
@@ -94,15 +97,43 @@ cxString cxAESEncode(cxString data,cxString key)
     memset(ptr + length, bc, bc);
     //aes cbc
     AES_cbc_encrypt((const cxUInt8 *)ptr, (cxUInt8 *)ptr, newsize, &eKey, iv, AES_ENCRYPT);
-    return cxStringAttach(bytes, bytessize);
+    return cxStringAttachMem(bytes, bytessize);
+}
+
+
+cxInt cxFileFD(cxConstChars file,cxInt *off,cxInt *length)
+{
+    CX_ASSERT(off != NULL && length != NULL && file != NULL, "args error");
+    struct stat stat={0};
+    cxConstChars body = file;
+    if(lstat(body, &stat) != 0){
+        return -1;
+    }
+    *length = (cxInt)stat.st_size;
+    *off = 0;
+    return open(file, O_RDONLY,00644);
+}
+
+cxInt cxDocumentFD(cxConstChars file,cxInt *off,cxInt *length)
+{
+    CX_ASSERT(off != NULL && length != NULL && file != NULL, "args error");
+    cxString path = cxDocumentPath(file);
+    CX_ASSERT(path != NULL, "get file %s path failed",file);
+    return cxFileFD(cxStringBody(path), off, length);
 }
 
 cxBool cxDocumentExists(cxConstChars file)
 {
     cxString path = cxDocumentPath(file);
-    CX_RETURN(path == NULL, false);
+    CX_ASSERT(path != NULL, "get file %s path failed",file);
     struct stat stat={0};
     return lstat(cxStringBody(path), &stat) == 0;
+}
+
+cxBool cxFileExists(cxConstChars file)
+{
+    struct stat stat={0};
+    return lstat(file, &stat) == 0;
 }
 
 cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
@@ -190,7 +221,7 @@ cxString cxCompressed(cxString data)
     uLongf size = compressBound(datasiz);
     char *cv = allocator->malloc(size);
     if(compress((Bytef *)cv, &size, (Bytef *)cxStringBody(data), datasiz) == Z_OK){
-        return cxStringAttach(cv, size);
+        return cxStringAttachMem(cv, size);
     }
     allocator->free(cv);
     return NULL;
@@ -209,7 +240,7 @@ cxString cxDecompress(cxString data)
         ret = uncompress((Bytef *)cv, &size, (Bytef *)cxStringBody(data), (uLongf)datasiz);
     }
     if(ret == Z_OK){
-        return cxStringAttach(cv, size);
+        return cxStringAttachMem(cv, size);
     }
     allocator->free(cv);
     return NULL;

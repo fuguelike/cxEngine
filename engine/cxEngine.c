@@ -25,6 +25,7 @@
 #include <streams/cxAssetsStream.h>
 #include <streams/cxFileStream.h>
 #include <streams/cxMemStream.h>
+#include <streams/cxMMapStream.h>
 
 #include <views/cxButton.h>
 #include <views/cxLoading.h>
@@ -116,6 +117,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxAssetsStream);
     CX_TYPE_REG(cxFileStream);
     CX_TYPE_REG(cxMemStream);
+    CX_TYPE_REG(cxMMapStream);
     
     //register textures
     CX_TYPE_REG(cxTextureJPG);
@@ -329,7 +331,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
 
-//cxTypeRunObjectSetter(object, json);
+//a.json?key
 cxJson cxEngineJsonReader(cxConstChars src)
 {
     cxUrlPath path = cxUrlPathParse(src);
@@ -344,18 +346,16 @@ cxJson cxEngineJsonReader(cxConstChars src)
 
 cxJson cxEngineLoadJson(cxConstChars file)
 {
+    cxHashKey key = cxHashStrKey(file);
     cxEngine this = cxEngineInstance();
-    cxJson json = cxHashGet(this->files, cxHashStrKey(file));
-    if(json != NULL){
-        goto completed;
+    cxJson json = cxHashGet(this->files, key);
+    if(json == NULL){
+        cxString data = cxAssetsData(file);
+        CX_ASSERT(data != NULL, "load json file %s failed");
+        json = cxJsonCreate(data);
+        cxHashSet(this->files, key, json);
     }
-    cxString data = cxAssetsData(file);
-    CX_RETURN(data == NULL, NULL);
-    json = cxJsonCreate(data);
-    CX_RETURN(json == NULL, NULL);
-    cxHashSet(this->files, cxHashStrKey(file), json);
-completed:
-    CX_ASSERT(CX_INSTANCE_OF(json, cxJson), "%s type error",file);
+    CX_ASSERT_TYPE(json, cxJson);
     return json;
 }
 
@@ -363,15 +363,12 @@ cxBMPFont cxEngineLoadBMPFont(cxConstChars file)
 {
     cxEngine this = cxEngineInstance();
     cxBMPFont font = cxHashGet(this->files, cxHashStrKey(file));
-    if(font != NULL){
-        CX_ASSERT(CX_INSTANCE_OF(font, cxBMPFont), "%s type error",file);
-        return font;
-    }
-    font = cxBMPFontCreate(file);
     if(font == NULL){
-        return NULL;
+        font = cxBMPFontCreate(file);
+        CX_ASSERT(font != NULL, "create bmp %s font failed",file);
+        cxHashSet(this->files, cxHashStrKey(file), font);
     }
-    cxHashSet(this->files, cxHashStrKey(file), font);
+    CX_ASSERT_TYPE(font, cxBMPFont);
     return font;
 }
 

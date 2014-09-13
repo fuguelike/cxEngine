@@ -60,6 +60,7 @@ CX_OBJECT_INIT(cxAction, cxObject)
 }
 CX_OBJECT_FREE(cxAction, cxObject)
 {
+    CX_RELEASE(this->actionMgr);
     CX_EVENT_RELEASE(this->onIndex);
     CX_EVENT_RELEASE(this->onInit);
     CX_EVENT_RELEASE(this->onExit);
@@ -122,7 +123,7 @@ void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
 void cxActionSetMgr(cxAny pav,cxActionMgr mgr)
 {
     CX_ASSERT_THIS(pav, cxAction);
-    this->actionMgr = mgr;
+    CX_RETAIN_SWAP(this->actionMgr, mgr);
 }
 
 cxAny cxActionParent(cxAny pav)
@@ -165,9 +166,8 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     CX_ASSERT_THIS(pav, cxAction);
     cxBool isExit = false;
     //time scale
-    cxActionMgr mgr = this->actionMgr;
-    if(mgr != NULL){
-        dt *= this->scale * mgr->scale;
+    if(this->actionMgr != NULL){
+        dt *= this->scale * this->actionMgr->scale;
     }else{
         dt *= this->scale;
     }
@@ -228,7 +228,6 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->delayElapsed = 0.0f;
         this->isActive = false;
     }
-    //check action exit
 finished:
     //update
     CX_EVENT_FIRE(this, onUpdate);

@@ -13,87 +13,87 @@
 #include <streams/cxAssetsStream.h>
 #include "cxAndroid.h"
 
-static cxBool cxAssetsStreamOpen(cxAny this)
+static cxBool cxAssetsStreamOpen(cxAny ps)
 {
-    cxAssetsStream asserts = this;
-    CX_ASSERT(asserts->cxStream.isOpen == false,"stream repeat open");
-    cxConstChars path = cxStringBody(asserts->cxStream.path);
-    asserts->asset = AAssetManager_open(cxEngineGetAssetManager(), path, AASSET_MODE_UNKNOWN);
-    if(asserts->asset == NULL){
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
+    cxConstChars path = cxStringBody(this->cxStream.path);
+    this->asset = AAssetManager_open(cxEngineGetAssetManager(), path, AASSET_MODE_UNKNOWN);
+    if(this->asset == NULL){
         CX_ERROR("open asset file %s failed",path);
         return false;
     }
-    asserts->cxStream.length = (cxInt)AAsset_getLength(asserts->asset);
-    asserts->cxStream.canRead = true;
-    asserts->cxStream.canSeek = true;
-    asserts->cxStream.canWrite = false;
-    asserts->cxStream.isOpen = true;
+    this->cxStream.length = (cxInt)AAsset_getLength(this->asset);
+    this->cxStream.canRead = true;
+    this->cxStream.canSeek = true;
+    this->cxStream.canWrite = false;
+    this->cxStream.isOpen = true;
     return true;
 }
 
-static cxInt cxAssetsStreamRead(cxAny this,cxAny buffer,cxInt size)
+static cxInt cxAssetsStreamRead(cxAny ps,cxAny buffer,cxInt size)
 {
-    cxAssetsStream asserts = this;
-    if(!asserts->cxStream.canRead){
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    if(!this->cxStream.canRead){
         return 0;
     }
-    return AAsset_read(asserts->asset, buffer, size);
+    return AAsset_read(this->asset, buffer, size);
 }
 
-static cxInt cxAssetsStreamWrite(cxAny this,cxAny buffer,cxInt size)
+static cxInt cxAssetsStreamWrite(cxAny ps,cxAny buffer,cxInt size)
 {
-    cxAssetsStream asserts = this;
-    if(!asserts->cxStream.canWrite){
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    if(!this->cxStream.canWrite){
         CX_WARN("stream not support write");
         return 0;
     }
     return 0;
 }
 
-static cxOff cxAssetsStreamPosition(cxAny this)
+static cxOff cxAssetsStreamPosition(cxAny ps)
 {
-    cxAssetsStream asserts = this;
-    if(!asserts->cxStream.canRead){
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    if(!this->cxStream.canRead){
         CX_WARN("stream not support read");
         return 0;
     }
-    return (cxOff)AAsset_seek(asserts->asset, 0, SEEK_CUR);
+    return (cxOff)AAsset_seek(this->asset, 0, SEEK_CUR);
 }
 
-static cxInt cxAssetsStreamSeek(cxAny this,cxOff off,cxInt flags)
+static cxInt cxAssetsStreamSeek(cxAny ps,cxOff off,cxInt flags)
 {
-    cxAssetsStream asserts = this;
-    if(!asserts->cxStream.canSeek){
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    if(!this->cxStream.canSeek){
         return false;
     }
-    return AAsset_seek(asserts->asset, off, flags) > 0;
+    return AAsset_seek(this->asset, off, flags) > 0;
 }
 
-static cxString cxAssetsStreamAllBytes(cxAny this)
+static cxString cxAssetsStreamAllBytes(cxAny ps)
 {
-    cxStream asserts = this;
-    if(!asserts->canRead){
-        cxStreamOpen(asserts);
+    CX_ASSERT_THIS(ps, cxStream);
+    if(!this->canRead){
+        cxStreamOpen(this);
     }
-    if(!asserts->canRead){
+    if(!this->canRead){
         CX_ERROR("file stream can't read");
         return NULL;
     }
-    cxStreamSeek(asserts,0,SEEK_SET);
-    cxChar *bytes = allocator->malloc(asserts->length + 1);
-    cxStreamRead(asserts,bytes,asserts->length);
-    bytes[asserts->length] = '\0';
-    cxString data = cxStringAttach(bytes, asserts->length);
-    cxStreamClose(asserts);
+    cxStreamSeek(this,0,SEEK_SET);
+    cxChar *bytes = allocator->malloc(this->length + 1);
+    cxStreamRead(this,bytes,this->length);
+    bytes[this->length] = '\0';
+    cxString data = cxStringAttachMem(bytes, this->length);
+    cxStreamClose(this);
     return data;
 }
 
-static void cxAssetsStreamClose(cxAny this)
+static void cxAssetsStreamClose(cxAny ps)
 {
-    cxAssetsStream asserts = this;
-    if(asserts->asset != NULL){
-        AAsset_close(asserts->asset);
-        asserts->asset = NULL;
+    CX_ASSERT_THIS(ps, cxAssetsStream);
+    if(this->asset != NULL){
+        AAsset_close(this->asset);
+        this->asset = NULL;
     }
     cxStreamBaseClose(this);
 }
@@ -128,7 +128,6 @@ cxStream cxAssetsStreamCreate(cxConstChars file)
     cxString path = cxAssetsPath(file);
     cxAssetsStream rv = CX_CREATE(cxAssetsStream);
     CX_RETAIN_SWAP(rv->cxStream.path, path);
-    rv->cxStream.file = cxStringAllocChars(file);
     return (cxStream)rv;
 }
 

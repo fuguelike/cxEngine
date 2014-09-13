@@ -16,7 +16,9 @@ CX_OBJECT_INIT(cxString, cxObject)
 {}
 CX_OBJECT_FREE(cxString, cxObject)
 {
-    utstring_done(&this->strptr);
+    if(!this->nocopy){
+        utstring_done(&this->strptr);
+    }
 }
 CX_OBJECT_TERM(cxString, cxObject)
 
@@ -70,6 +72,9 @@ void cxStringClean(cxString string)
 
 cxBool cxStringEqu(cxString s1,cxString s2)
 {
+    if(s1 == NULL && s2 == NULL){
+        return true;
+    }
     if(s1 == NULL || s2 == NULL){
         return false;
     }
@@ -90,7 +95,7 @@ cxString cxStringAllocChars(cxConstChars str)
 cxString cxStringAttachChars(cxChars str)
 {
     CX_ASSERT(str != NULL, "str null");
-    return cxStringAttach(str, (cxInt)strlen(str));
+    return cxStringAttachMem(str, (cxInt)strlen(str));
 }
 
 cxString cxStringConstChars(cxConstChars str)
@@ -181,7 +186,17 @@ cxBool cxConstCharsIsNumber(cxConstChars s)
     return true;
 }
 
-cxString cxStringAttach(cxChars d,cxInt l)
+cxString cxStringAttachMap(cxAny d,cxInt l)
+{
+    cxString rv = CX_CREATE(cxString);
+    rv->strptr.d = d;
+    rv->strptr.i = l;
+    rv->strptr.n = l;
+    rv->nocopy = true;
+    return rv;
+}
+
+cxString cxStringAttachMem(cxChars d,cxInt l)
 {
     cxString rv = CX_CREATE(cxString);
     rv->strptr.d = d;

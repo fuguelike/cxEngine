@@ -9,6 +9,14 @@
 #include "cxAction.h"
 #include "cxActionMgr.h"
 
+cxAny cxActionMgrCreate(cxActionMgr this,cxJson json)
+{
+    cxAny pav = cxObjectCreateWithJson(json);
+    CX_ASSERT_TYPE(pav, cxAction);
+    cxActionSetMgr(pav, this);
+    return pav;
+}
+
 CX_SETTER_DEF(cxActionMgr, scale)
 {
     this->scale = cxJsonToDouble(value, this->scale);

@@ -38,21 +38,21 @@ static cxString cxShaderVertexLog(cxAny pshader)
 {
     CX_ASSERT_THIS(pshader, cxShader);
     char *log = cxShaderLogFunc(this->vertexShader, (cxOpenGLInfoFunc)&glGetShaderiv, (cxOpenGLLogFunc)&glGetShaderInfoLog);
-    return cxStringAttach(log, (cxInt)strlen(log));
+    return cxStringAttachMem(log, (cxInt)strlen(log));
 }
 
 static cxString cxShaderFragmentLog(cxAny pshader)
 {
     CX_ASSERT_THIS(pshader, cxShader);
     char *log = cxShaderLogFunc(this->fragmentShader, (cxOpenGLInfoFunc)&glGetShaderiv, (cxOpenGLLogFunc)&glGetShaderInfoLog);
-    return cxStringAttach(log, (cxInt)strlen(log));
+    return cxStringAttachMem(log, (cxInt)strlen(log));
 }
 
 static cxString cxShaderProgramLog(cxAny pshader)
 {
     CX_ASSERT_THIS(pshader, cxShader);
     char *log = cxShaderLogFunc(this->program, (cxOpenGLInfoFunc)&glGetProgramiv, (cxOpenGLLogFunc)&glGetProgramInfoLog);
-    return cxStringAttach(log, (cxInt)strlen(log));
+    return cxStringAttachMem(log, (cxInt)strlen(log));
 }
 
 static bool cxShaderCompile(cxAny pshader,GLuint *shader, GLenum type, cxString source)

@@ -8,99 +8,99 @@
 
 #include "cxMemStream.h"
 
-static cxBool cxMemStreamOpen(cxAny this)
+static cxBool cxMemStreamOpen(cxAny ps)
 {
-    cxMemStream stream = this;
-    CX_ASSERT(stream->cxStream.isOpen == false,"stream repeat open");
-    stream->allocSize = 128;
-    stream->data = allocator->malloc(stream->allocSize);
-    stream->cxStream.canRead = true;
-    stream->cxStream.canWrite = true;
-    stream->cxStream.canSeek = true;
-    stream->cxStream.isOpen = true;
+    CX_ASSERT_THIS(ps, cxMemStream);
+    CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
+    this->allocSize = 128;
+    this->data = allocator->malloc(this->allocSize);
+    this->cxStream.canRead = true;
+    this->cxStream.canWrite = true;
+    this->cxStream.canSeek = true;
+    this->cxStream.isOpen = true;
     return true;
 }
 
-static cxInt cxMemStreamRead(cxAny this,cxAny buffer,cxInt size)
+static cxInt cxMemStreamRead(cxAny ps,cxAny buffer,cxInt size)
 {
-    cxMemStream stream = this;
-    if(!stream->cxStream.canRead){
+    CX_ASSERT_THIS(ps, cxMemStream);
+    if(!this->cxStream.canRead){
         return 0;
     }
-    cxInt bytes = (cxInt)(stream->cxStream.length - stream->position);
+    cxInt bytes = (cxInt)(this->cxStream.length - this->position);
     if(bytes <= 0){
         return 0;
     }
     if(bytes > size){
         bytes = size;
     }
-    memcpy(buffer, stream->data + stream->position, bytes);
-    stream->position += bytes;
+    memcpy(buffer, this->data + this->position, bytes);
+    this->position += bytes;
     return bytes;
 }
 
-static cxInt cxMemStreamWrite(cxAny this,cxAny buffer,cxInt size)
+static cxInt cxMemStreamWrite(cxAny ps,cxAny buffer,cxInt size)
 {
-    cxMemStream stream = this;
-    if(!stream->cxStream.canWrite){
+    CX_ASSERT_THIS(ps, cxMemStream);
+    if(!this->cxStream.canWrite){
         return 0;
     }
-    cxInt bytes = (cxInt)(stream->allocSize - stream->position);
+    cxInt bytes = (cxInt)(this->allocSize - this->position);
     if(bytes < size){
-        stream->allocSize += (size + 128);
-        stream->data = allocator->realloc(stream->data,stream->allocSize);
-        CX_ASSERT(stream->data != NULL, "memory realloc failed");
+        this->allocSize += (size + 128);
+        this->data = allocator->realloc(this->data,this->allocSize);
+        CX_ASSERT(this->data != NULL, "memory realloc failed");
     }
-    memcpy(stream->data + stream->position, buffer, size);
-    stream->position += size;
-    stream->cxStream.length += size;
+    memcpy(this->data + this->position, buffer, size);
+    this->position += size;
+    this->cxStream.length += size;
     return size;
 }
 
-static cxOff cxMemStreamPosition(cxAny this)
+static cxOff cxMemStreamPosition(cxAny ps)
 {
-    cxMemStream stream = this;
-    return stream->position;
+    CX_ASSERT_THIS(ps, cxMemStream);
+    return this->position;
 }
 
-static cxInt cxMemStreamSeek(cxAny this,cxOff off,cxInt flags)
+static cxInt cxMemStreamSeek(cxAny ps,cxOff off,cxInt flags)
 {
-    cxMemStream stream = this;
-    if(!stream->cxStream.canSeek){
+    CX_ASSERT_THIS(ps, cxMemStream);
+    if(!this->cxStream.canSeek){
         return 0;
     }
-    if(flags == SEEK_SET && off < stream->cxStream.length){
-        stream->position = off;
-        return stream->position;
+    if(flags == SEEK_SET && off < this->cxStream.length){
+        this->position = off;
+        return this->position;
     }
-    cxInt seek = (cxInt)(stream->cxStream.length - stream->position);
+    cxInt seek = (cxInt)(this->cxStream.length - this->position);
     if(flags == SEEK_CUR && off < seek){
-        stream->position += off;
-        return stream->position;
+        this->position += off;
+        return this->position;
     }
-    seek = (cxInt)(stream->cxStream.length + off);
-    if(flags == SEEK_END && seek < stream->cxStream.length){
-        stream->position = seek;
-        return stream->position;
+    seek = (cxInt)(this->cxStream.length + off);
+    if(flags == SEEK_END && seek < this->cxStream.length){
+        this->position = seek;
+        return this->position;
     }
     return 0;
 }
 
-static cxString cxMemStreamAllBytes(cxAny this)
+static cxString cxMemStreamAllBytes(cxAny ps)
 {
-    cxMemStream stream = this;
+    CX_ASSERT_THIS(ps, cxMemStream);
     cxString rv = CX_CREATE(cxString);
-    cxStringAppend(rv, stream->data, stream->cxStream.length);
+    cxStringAppend(rv, this->data, this->cxStream.length);
     return rv;
 }
 
-static void cxMemStreamClose(cxAny this)
+static void cxMemStreamClose(cxAny ps)
 {
-    cxMemStream stream = this;
-    stream->allocSize = 0;
-    allocator->free(stream->data);
-    stream->data = NULL;
-    stream->position = 0;
+    CX_ASSERT_THIS(ps, cxMemStream);
+    this->allocSize = 0;
+    allocator->free(this->data);
+    this->data = NULL;
+    this->position = 0;
     cxStreamBaseClose(this);
 }
 

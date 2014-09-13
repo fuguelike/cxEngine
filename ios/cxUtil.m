@@ -138,7 +138,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat s
     cxAny psize = buffer + bufsiz - sizeof(cxSize2i);
     ((cxSize2i *)psize)->w = dim.width;
     ((cxSize2i *)psize)->h = dim.height;
-    return cxStringAttach(buffer, bufsiz);
+    return cxStringAttachMem(buffer, bufsiz);
 }
 
 cxBool cxAssetsExists(cxConstChars file)
@@ -147,6 +147,14 @@ cxBool cxAssetsExists(cxConstChars file)
     CX_RETURN(path == NULL, false);
     struct stat stat={0};
     return lstat(cxStringBody(path), &stat) == 0;
+}
+
+cxInt cxAssertsFD(cxConstChars file,cxInt *off,cxInt *length)
+{
+    CX_ASSERT(off != NULL && length != NULL && file != NULL, "args error");
+    cxString path = cxAssetsPath(file);
+    CX_ASSERT(path != NULL, "get file %s path failed",file);
+    return cxFileFD(cxStringBody(path), off, length);
 }
 
 cxBool cxWriteFile(cxString file,cxString data)
@@ -197,7 +205,7 @@ completed:
     if(theData == NULL){
         return NULL;
     }
-    return cxStringAttach(theData, (UInt32)fileDataSize);
+    return cxStringAttachMem(theData, (UInt32)fileDataSize);
 }
 
 void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars format,va_list ap)

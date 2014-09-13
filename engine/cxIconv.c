@@ -55,7 +55,7 @@ static cxString cxIconvItemConvert(cxIconvItem this,const cxString string)
     if(ret == 0){
         outlen = allocsize - outsiz;
         outptr[outlen] = '\0';
-        return cxStringAttach(buffer, outlen);
+        return cxStringAttachMem(buffer, outlen);
     }
     CX_ERROR("convert failed");
     allocator->free(buffer);
