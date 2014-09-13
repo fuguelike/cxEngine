@@ -6,16 +6,9 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
+#include "cxEngine.h"
 #include "cxAction.h"
 #include "cxActionMgr.h"
-
-cxAny cxActionMgrCreate(cxActionMgr this,cxJson json)
-{
-    cxAny pav = cxObjectCreateWithJson(json);
-    CX_ASSERT_TYPE(pav, cxAction);
-    cxActionSetMgr(pav, this);
-    return pav;
-}
 
 CX_SETTER_DEF(cxActionMgr, scale)
 {
@@ -34,6 +27,18 @@ CX_OBJECT_FREE(cxActionMgr, cxObject)
     //
 }
 CX_OBJECT_TERM(cxActionMgr, cxObject)
+
+cxActionMgr cxActionMgrGet(cxConstChars name)
+{
+    cxEngine this = cxEngineInstance();
+    return cxHashGet(this->actionMgrs, cxHashStrKey(name));
+}
+
+void cxActionMgrSet(cxConstChars name,cxActionMgr mgr)
+{
+    cxEngine this = cxEngineInstance();
+    cxHashSet(this->actionMgrs, cxHashStrKey(name), mgr);
+}
 
 
 

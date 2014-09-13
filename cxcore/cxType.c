@@ -106,7 +106,8 @@ static void cxObjectSave(cxAny object,cxJson json)
     cxConstChars cxId = cxJsonConstChars(json, "cxId");
     CX_RETURN(cxId == NULL);
     cxLoader curr = cxCoreTop(cxCoreStackTypeLoader);
-    if(CX_INSTANCE_OF(curr, cxLoader)){
+    if(curr != NULL){
+        CX_ASSERT_TYPE(curr, cxLoader);
         cxHashSet(curr->objects, cxHashStrKey(cxId), object);
     }
 }
@@ -121,7 +122,7 @@ cxAny cxObjectCreateWithType(cxConstType type)
 
 cxAny cxObjectCreateWithJson(cxJson json)
 {
-    CX_ASSERT(json != NULL, "json args error");
+    CX_ASSERT_TYPE(json, cxJson);
     cxAny object = NULL;
     cxJson ojson = json;
     cxJson njson = NULL;

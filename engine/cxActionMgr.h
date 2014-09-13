@@ -1,7 +1,7 @@
 //
 //  cxActionMgr.h
 //  cxengine
-//
+//  cxAction group mgr
 //  Created by xuhua on 8/24/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
@@ -17,7 +17,9 @@ CX_OBJECT_DEF(cxActionMgr, cxObject)
     cxFloat scale;
 CX_OBJECT_END(cxActionMgr, cxObject)
 
-cxAny cxActionMgrCreate(cxActionMgr this,cxJson json);
+cxActionMgr cxActionMgrGet(cxConstChars name);
+
+void cxActionMgrSet(cxConstChars name,cxActionMgr mgr);
 
 CX_C_END
 

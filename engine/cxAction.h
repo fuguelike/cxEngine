@@ -48,6 +48,8 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_EVENT_ALLOC(onUpdate);
 CX_OBJECT_END(cxAction, cxObject)
 
+void cxActionSetGroup(cxAny pav,cxConstChars name);
+
 void cxActionSetMgr(cxAny pav,cxActionMgr mgr);
 
 cxAny cxActionParent(cxAny pav);

@@ -32,6 +32,8 @@ void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box);
 
 cxBoxTex2f cxSpriteBoxTex(cxAny pview);
 
+cxBoxColor4f cxSpriteBoxColor(cxAny pview);
+
 cxSprite cxSpriteCreateWithURL(cxConstChars url);
 
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor);

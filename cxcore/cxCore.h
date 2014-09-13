@@ -459,7 +459,6 @@ cxAny cxObjectProperty(cxAny object,cxConstChars key);
 
 typedef enum {
     cxCoreStackTypeLoader = 1,
-    cxCoreStackTypeActionMgr,
     cxCoreStackTypeUser = 10000
 }cxCoreStackType;
 

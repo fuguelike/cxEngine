@@ -71,6 +71,7 @@ static void cxSpriteTransformEvent(cxAny sender)
 void cxSpriteSetFlipX(cxAny pview,cxBool flipx)
 {
     CX_ASSERT_THIS(pview, cxSprite);
+    CX_RETURN(this->isFlipX == flipx);
     this->isFlipX = flipx;
     cxViewSetDirty(pview, true);
 }
@@ -78,6 +79,7 @@ void cxSpriteSetFlipX(cxAny pview,cxBool flipx)
 void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
 {
     CX_ASSERT_THIS(pview, cxSprite);
+    CX_RETURN(this->isFlipY == flipy);
     this->isFlipY = flipy;
     cxViewSetDirty(pview, true);
 }
@@ -138,10 +140,16 @@ void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box)
     cxViewSetDirty(this, true);
 }
 
+cxBoxColor4f cxSpriteBoxColor(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxSprite);
+    return this->cbox;
+}
+
 cxBoxTex2f cxSpriteBoxTex(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxSprite);
-    return this->texCoord;
+    return this->tbox;
 }
 
 void cxSpriteSetTextureKey(cxAny pview,cxConstChars key)

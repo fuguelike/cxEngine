@@ -83,19 +83,22 @@
         "cxType": "cxAnimateItem",
         "key": "artichoke.png",
         "texture": "texture.json",
-        "time": 1
+        "time": 1,
+        "flipx":true
       },
       {
         "cxType": "cxAnimateItem",
         "key": "carrot.png",
         "texture": "texture.json",
-        "time": 1
+        "time": 1,
+        "flipx":true
       },
       {
         "cxType": "cxAnimateItem",
         "key": "chilli.png",
         "texture": "texture.json",
-        "time": 1
+        "time": 1,
+        "flipx":true
       }
     ],
     "cry": [

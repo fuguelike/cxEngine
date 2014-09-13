@@ -305,13 +305,15 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->isShowBorder = true;
     this->isTouch = true;
     this->isGesture = true;
-    this->scale    = cxVec2fv(1.0f, 1.0f);
-    this->window   = CX_ALLOC(cxWindow);
-    this->files    = CX_ALLOC(cxHash);
-    this->items    = CX_ALLOC(cxHash);
+    this->scale = cxVec2fv(1.0f, 1.0f);
+    this->window = CX_ALLOC(cxWindow);
+    this->files = CX_ALLOC(cxHash);
+    this->items = CX_ALLOC(cxHash);
+    this->actionMgrs = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
+    CX_RELEASE(this->actionMgrs);
     CX_RELEASE(this->items);
     CX_RELEASE(this->files);
     CX_RELEASE(this->lang);

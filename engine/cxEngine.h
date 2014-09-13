@@ -42,11 +42,11 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onUpdate);
     CX_SIGNAL_ALLOC(onRecvJson);
     CX_EVENT_ALLOC(onExit);
-
     cxHash items;           //touch items
     cxTouchItems points;    //all touch points
     cxKey key;
     cxString lang;
+    cxHash actionMgrs;
 CX_OBJECT_END(cxEngine, cxObject)
 
 //type init

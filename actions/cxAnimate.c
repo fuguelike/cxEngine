@@ -56,6 +56,8 @@ CX_OBJECT_INIT(cxAnimateItem, cxObject)
 {
     this->time = 0;
     this->value = 0;
+    this->flipx = false;
+    this->flipy = false;
 }
 CX_OBJECT_FREE(cxAnimateItem, cxObject)
 {

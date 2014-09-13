@@ -28,15 +28,15 @@ void cxElementUpdateBoxPoint(cxAny pview,cxBoxPoint *bp)
     CX_ASSERT(bp != NULL, "args null");
     
     cxBoxTex2f coord = cxSpriteBoxTex(this);
-    cxColor4f color = cxViewColor(this);
+    cxBoxColor4f color = cxSpriteBoxColor(this);
     
     cxMatrix4f *normalMatrix = cxViewNormalMatrix(this);
     cxMatrix4f *anchorMatrix = cxViewAnchorMatrix(this);
     
-    bp->lb.colors = color;
-    bp->lt.colors = color;
-    bp->rb.colors = color;
-    bp->rt.colors = color;
+    bp->lb.colors = color.lb;
+    bp->lt.colors = color.lt;
+    bp->rb.colors = color.rb;
+    bp->rt.colors = color.rt;
     
     bp->lb.texcoords = coord.lb;
     bp->lt.texcoords = coord.lt;

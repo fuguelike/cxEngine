@@ -41,6 +41,13 @@ CX_SETTER_DEF(cxAction, index)
     cxInt indexnum = cxJsonToInt(value, this->indexNum);
     cxActionSetIndex(this, indexnum);
 }
+CX_SETTER_DEF(cxAction, group)
+{
+    CX_ASSERT(cxJsonIsString(value), "set action mgr group name");
+    cxConstChars name = cxJsonToConstChars(value);
+    CX_ASSERT(name != NULL, "name null");
+    cxActionSetGroup(this, name);
+}
 
 CX_OBJECT_TYPE(cxAction, cxObject)
 {
@@ -50,6 +57,7 @@ CX_OBJECT_TYPE(cxAction, cxObject)
     CX_PROPERTY_SETTER(cxAction, curve);
     CX_PROPERTY_SETTER(cxAction, actionid);
     CX_PROPERTY_SETTER(cxAction, index);
+    CX_PROPERTY_SETTER(cxAction, group);
 }
 CX_OBJECT_INIT(cxAction, cxObject)
 {
@@ -118,6 +126,14 @@ void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
 {
     CX_ASSERT_THIS(pav, cxAction);
     CX_METHOD_SET(this->Curve, curve);
+}
+
+void cxActionSetGroup(cxAny pav,cxConstChars name)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    cxActionMgr mgr = cxActionMgrGet(name);
+    CX_ASSERT(mgr != NULL, "action mgr name %s not exists",name);
+    cxActionSetMgr(this, mgr);
 }
 
 void cxActionSetMgr(cxAny pav,cxActionMgr mgr)
