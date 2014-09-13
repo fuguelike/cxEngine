@@ -932,7 +932,9 @@ static void cxJsonDecodeToArray(cxArray array,cxJson json)
     CX_JSON_ARRAY_EACH_BEG(this, item)
     {
         cxAny iv = cxJsonDecode(item);
-        CX_CONTINUE(iv == NULL);
+        if(iv == NULL){
+            continue;
+        }
         cxArrayAppend(array, iv);
     }
     CX_JSON_ARRAY_EACH_END(this, item)
@@ -944,7 +946,9 @@ static void cxJsonDecodeToHash(cxHash hash,cxJson json)
     CX_JSON_OBJECT_EACH_BEG(this, item)
     {
         cxAny iv = cxJsonDecode(item);
-        CX_CONTINUE(iv == NULL);
+        if(iv == NULL){
+            continue;
+        }
         cxHashSet(hash, cxHashStrKey(itemKey), iv);
     }
     CX_JSON_OBJECT_EACH_END(this, item)

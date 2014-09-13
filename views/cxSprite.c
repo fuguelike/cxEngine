@@ -115,7 +115,7 @@ CX_OBJECT_INIT(cxSprite, cxView)
 {
     this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    CX_EVENT_APPEND(this->cxView.onTransform, cxSpriteTransformEvent);
+    CX_EVENT_APPEND(CX_TYPE(cxView, this)->onTransform, cxSpriteTransformEvent);
     CX_METHOD_SET(this->cxView.Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
 }
@@ -162,7 +162,7 @@ void cxSpriteSetTextureKey(cxAny pview,cxConstChars key)
         this->texCoord = cxTextureBox(this->texture, key);
     }
     CX_ASSERT(this->texture != NULL, "sprite texture not load");
-    this->cxView.isDirty = true;
+    cxViewSetDirty(this, true);
 }
 
 void cxSpriteSetShader(cxAny pview,cxConstChars key)
@@ -177,7 +177,9 @@ void cxSpriteSetShader(cxAny pview,cxConstChars key)
 void cxSpriteSetTexture(cxAny pview,cxTexture texture)
 {
     CX_ASSERT_THIS(pview, cxSprite);
+    CX_RETURN(this->texture == texture);
     CX_RETAIN_SWAP(this->texture, texture);
+    cxViewSetDirty(this, true);
 }
 
 

@@ -57,7 +57,9 @@ cxProperty cxTypeProperty(cxType this,cxConstChars key)
     cxType curr = this;
     while (curr != NULL) {
         p = cxHashGet(curr->properties, cxHashStrKey(key));
-        CX_BREAK(p != NULL);
+        if(p != NULL){
+            break;
+        }
         curr = curr->superType;
     }
     return p;
@@ -84,6 +86,7 @@ cxBool cxInstanceOf(cxAny object,cxConstType type)
     CX_RETURN(this->cxType == type, true);
     CX_RETURN(type == cxObjectTypeName,true);
     cxType ptype = cxTypesGet(this->cxType);
+    CX_ASSERT(ptype != NULL, "type %s not register",this->cxType);
     while (ptype != NULL && ptype->superType != NULL) {
         if(ptype->superType->typeName == type){
             return true;

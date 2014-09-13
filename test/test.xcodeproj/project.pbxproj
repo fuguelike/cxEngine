@@ -32,6 +32,13 @@
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
 		835D3B2D19AF21680004155D /* texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 835D3B2C19AF21680004155D /* texture.png */; };
+		835DB19919C44C650037DA5B /* spineboy.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 835DB19519C44C650037DA5B /* spineboy.atlas */; };
+		835DB19A19C44C650037DA5B /* spineboy.json in Resources */ = {isa = PBXBuildFile; fileRef = 835DB19619C44C650037DA5B /* spineboy.json */; };
+		835DB19B19C44C650037DA5B /* spineboy.png in Resources */ = {isa = PBXBuildFile; fileRef = 835DB19719C44C650037DA5B /* spineboy.png */; };
+		835DB19C19C44C650037DA5B /* t.pkm in Resources */ = {isa = PBXBuildFile; fileRef = 835DB19819C44C650037DA5B /* t.pkm */; };
+		835DB1C419C4A0F80037DA5B /* goblins.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 835DB1C119C4A0F80037DA5B /* goblins.atlas */; };
+		835DB1C519C4A0F80037DA5B /* goblins.json in Resources */ = {isa = PBXBuildFile; fileRef = 835DB1C219C4A0F80037DA5B /* goblins.json */; };
+		835DB1C619C4A0F80037DA5B /* goblins.png in Resources */ = {isa = PBXBuildFile; fileRef = 835DB1C319C4A0F80037DA5B /* goblins.png */; };
 		836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 836165D518F67BC400FFF173 /* Default-568h@2x.png */; };
 		836D8DA7191B8C02000F0230 /* cxScroll.json in Resources */ = {isa = PBXBuildFile; fileRef = 836D8DA6191B8C02000F0230 /* cxScroll.json */; };
 		83732B4219B9BF740049D09A /* cxAnimate.json in Resources */ = {isa = PBXBuildFile; fileRef = 83732B4119B9BF740049D09A /* cxAnimate.json */; };
@@ -82,6 +89,13 @@
 		8344F0B318D3F4A90003E410 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		835D3B2C19AF21680004155D /* texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = texture.png; path = res/texture.png; sourceTree = SOURCE_ROOT; };
+		835DB19519C44C650037DA5B /* spineboy.atlas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = spineboy.atlas; path = res/spineboy.atlas; sourceTree = SOURCE_ROOT; };
+		835DB19619C44C650037DA5B /* spineboy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = spineboy.json; path = res/spineboy.json; sourceTree = SOURCE_ROOT; };
+		835DB19719C44C650037DA5B /* spineboy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = spineboy.png; path = res/spineboy.png; sourceTree = SOURCE_ROOT; };
+		835DB19819C44C650037DA5B /* t.pkm */ = {isa = PBXFileReference; lastKnownFileType = file; name = t.pkm; path = res/t.pkm; sourceTree = SOURCE_ROOT; };
+		835DB1C119C4A0F80037DA5B /* goblins.atlas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = goblins.atlas; path = res/goblins.atlas; sourceTree = SOURCE_ROOT; };
+		835DB1C219C4A0F80037DA5B /* goblins.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = goblins.json; path = res/goblins.json; sourceTree = SOURCE_ROOT; };
+		835DB1C319C4A0F80037DA5B /* goblins.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = goblins.png; path = res/goblins.png; sourceTree = SOURCE_ROOT; };
 		836165D518F67BC400FFF173 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		836D8DA6191B8C02000F0230 /* cxScroll.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxScroll.json; path = res/cxScroll.json; sourceTree = SOURCE_ROOT; };
 		83732B4119B9BF740049D09A /* cxAnimate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxAnimate.json; path = res/cxAnimate.json; sourceTree = SOURCE_ROOT; };
@@ -175,6 +189,13 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				835DB1C119C4A0F80037DA5B /* goblins.atlas */,
+				835DB1C219C4A0F80037DA5B /* goblins.json */,
+				835DB1C319C4A0F80037DA5B /* goblins.png */,
+				835DB19519C44C650037DA5B /* spineboy.atlas */,
+				835DB19619C44C650037DA5B /* spineboy.json */,
+				835DB19719C44C650037DA5B /* spineboy.png */,
+				835DB19819C44C650037DA5B /* t.pkm */,
 				8339302319BB2ED000FC098E /* cxLayer.json */,
 				83732B4119B9BF740049D09A /* cxAnimate.json */,
 				834327B819B8034400B4927F /* red.png */,
@@ -277,20 +298,27 @@
 				839722AE19161746006D0F89 /* font.json in Resources */,
 				83DAD700191A14A6000A7D1F /* ui.json in Resources */,
 				834327BB19B8034400B4927F /* red.png in Resources */,
+				835DB19B19C44C650037DA5B /* spineboy.png in Resources */,
 				831ABCC61924C69F001A86F1 /* cxSprite.json in Resources */,
 				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
 				835D3B2D19AF21680004155D /* texture.png in Resources */,
 				831ABCBC19249044001A86F1 /* cxParticle.json in Resources */,
+				835DB19A19C44C650037DA5B /* spineboy.json in Resources */,
 				83732B4219B9BF740049D09A /* cxAnimate.json in Resources */,
 				83F3CCD0191B674D00D6BCFB /* cxAtlas.json in Resources */,
+				835DB19919C44C650037DA5B /* spineboy.atlas in Resources */,
 				836D8DA7191B8C02000F0230 /* cxScroll.json in Resources */,
+				835DB1C619C4A0F80037DA5B /* goblins.png in Resources */,
 				83DAD707191A26BF000A7D1F /* texture.json in Resources */,
+				835DB19C19C44C650037DA5B /* t.pkm in Resources */,
 				839722AF19161746006D0F89 /* font.png in Resources */,
 				834327BC19B8034400B4927F /* t.png in Resources */,
 				831ABCC319249D23001A86F1 /* cxView.json in Resources */,
 				834327BD19B8034400B4927F /* yellow.png in Resources */,
 				8339302419BB2ED000FC098E /* cxLayer.json in Resources */,
 				83DAD70A191A386C000A7D1F /* cxLabelTTF.json in Resources */,
+				835DB1C419C4A0F80037DA5B /* goblins.atlas in Resources */,
+				835DB1C519C4A0F80037DA5B /* goblins.json in Resources */,
 				834327B619B8011900B4927F /* cxTable.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,25 +12,20 @@ void cxEngineType(cxEngine engine)
     
 }
 
-#include <streams/cxMMapStream.h>
+#include <views/cxSpine.h>
 
 void cxEngineInit(cxEngine engine)
 {
     cxEngineSetDesignSize(cxSize2fv(640, 960));
     
-    cxStream s = cxMMapStreamCreate("cxView.json");
-    cxString data = cxStreamAllBytes(s);
-    if(data != NULL){
-        CX_LOGGER("test mmap data %d %s",cxStringLength(data),cxStringBody(data));
-    }else{
-        CX_ERROR("test mmap error");
-    }
 }
 
 void cxEngineMain(cxEngine engine)
 {
-	cxLoader loader = cxLoaderCreate("cxLayer.json");
-	cxWindowPushView(loader->object);
+    cxSpine sp = CX_CREATE(cxSpine);
+    cxViewSetSize(sp, cxSize2fv(500, 500));
+    //    cxLoader loader = cxLoaderCreate("cxLayer.json");
+    cxWindowPushView(sp);
 }
 
 void cxEngineFree(cxEngine engine)

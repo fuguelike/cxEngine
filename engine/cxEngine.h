@@ -23,6 +23,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash files;
+    cxHash assets;
     cxFloat interval;
     cxSize2f winsize;   //screen size
     cxSize2f dessize;   //design size
@@ -64,6 +65,8 @@ CX_EXTERN void cxEngineFree(cxEngine engine);
 cxEngine cxEngineInstance();
 
 cxJson cxEngineJsonReader(cxConstChars src);
+
+cxString cxEngineAssetsData(cxConstChars file);
 
 cxJson cxEngineLoadJson(cxConstChars file);
 

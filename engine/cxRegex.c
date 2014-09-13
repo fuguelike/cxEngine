@@ -70,7 +70,9 @@ cxArray cxRegexMatchAll(cxAny preg)
     cxArray rv = CX_CREATE(cxArray);
     for(cxInt i=0; i < this->count;i++){
         cxString item = cxRegexMatch(this, i);
-        CX_CONTINUE(item == NULL);
+        if(item == NULL){
+            continue;
+        }
         cxArrayAppend(rv, item);
     }
     return rv;

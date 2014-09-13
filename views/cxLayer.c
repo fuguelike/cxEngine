@@ -99,15 +99,14 @@ static void cxLayerOnAppend(cxAny pview,cxAny newview)
     sprite->layerBox = cxAtlasAppend(this, &bp);
 }
 
-
 CX_OBJECT_TYPE(cxLayer, cxAtlas)
 {
     
 }
 CX_OBJECT_INIT(cxLayer, cxAtlas)
 {
-    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.onRemove, cxLayerOnRemove);
-    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.onAppend, cxLayerOnAppend);
+    CX_METHOD_SET(CX_TYPE(cxView, this)->onRemove, cxLayerOnRemove);
+    CX_METHOD_SET(CX_TYPE(cxView, this)->onAppend, cxLayerOnAppend);
 }
 CX_OBJECT_FREE(cxLayer, cxAtlas)
 {

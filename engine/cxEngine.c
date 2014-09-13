@@ -38,6 +38,7 @@
 #include <views/cxPolygon.h>
 #include <views/cxAlert.h>
 #include <views/cxLayer.h>
+#include <views/cxSpine.h>
 
 #include <actions/cxParticle.h>
 #include <actions/cxMultiple.h>
@@ -142,6 +143,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxAlert);
     CX_TYPE_REG(cxLayer);
     CX_TYPE_REG(cxElement);
+    CX_TYPE_REG(cxSpine);
     
     //register actions
     CX_TYPE_REG(cxMultiple);
@@ -310,12 +312,14 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->files = CX_ALLOC(cxHash);
     this->items = CX_ALLOC(cxHash);
     this->actionMgrs = CX_ALLOC(cxHash);
+    this->assets = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
     CX_RELEASE(this->actionMgrs);
     CX_RELEASE(this->items);
     CX_RELEASE(this->files);
+    CX_RELEASE(this->assets);
     CX_RELEASE(this->lang);
     CX_RELEASE(this->window);
     CX_EVENT_RELEASE(this->onExit);
@@ -344,6 +348,19 @@ cxJson cxEngineJsonReader(cxConstChars src)
         json = cxJsonObject(json, path->key);
     }
     return json;
+}
+
+cxString cxEngineAssetsData(cxConstChars file)
+{
+    cxHashKey key = cxHashStrKey(file);
+    cxEngine this = cxEngineInstance();
+    cxString data = cxHashGet(this->assets, key);
+    if(data == NULL){
+        data = cxAssetsData(file);
+        CX_ASSERT(data != NULL, "load assets data %s failed",file);
+        cxHashSet(this->assets, key, data);
+    }
+    return data;
 }
 
 cxJson cxEngineLoadJson(cxConstChars file)
@@ -480,15 +497,21 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
             cxEngineInitTouchItem(now, item, cpos);
         }else if(type == cxTouchTypeMove){
             item = cxHashGet(this->items, key);
-            CX_CONTINUE(item == NULL);
+            if(item == NULL){
+                continue;
+            }
             cxEngineComputeTouchItem(now, item, cpos);
         }else if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
             item = cxHashGet(this->items, key);
-            CX_CONTINUE(item == NULL);
+            if(item == NULL){
+                continue;
+            }
             cxEngineComputeTouchItem(now, item, cpos);
             delItems.items[delItems.number++] = item;
         }
-        CX_CONTINUE(item == NULL);
+        if(item == NULL){
+            continue;
+        }
         item->position = cpos;
         item->type = type;
         item->key = p.id;

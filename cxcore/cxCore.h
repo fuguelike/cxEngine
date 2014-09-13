@@ -206,10 +206,6 @@ do{                                                             \
 
 #define CX_RETURN(cond,...)         if(cond)return __VA_ARGS__
 
-#define CX_BREAK(cond)              if(cond)break
-
-#define CX_CONTINUE(cond)           if(cond)continue
-
 //type define
 
 #define CX_TYPE_REG(_t_)            __##_t_##RegisterFunc()
@@ -240,6 +236,8 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 }
 
 #define CX_OBJECT_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_,_b_) struct _b_ _b_;
+
+#define CX_TYPE(_t_,_o_)            ((_t_)(_o_))
 
 //type imp
 

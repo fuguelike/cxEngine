@@ -48,7 +48,9 @@ CX_SETTER_DEF(cxTimeLine, times)
     CX_JSON_ARRAY_EACH_BEG(times, item)
     {
         cxFloat time = cxJsonToDouble(item, -1);
-        CX_CONTINUE(time < 0);
+        if(time < 0){
+            continue;
+        }
         cxTimeLineSet(this, time);
     }
     CX_JSON_ARRAY_EACH_END(times, item)
