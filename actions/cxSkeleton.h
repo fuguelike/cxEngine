@@ -18,6 +18,14 @@ CX_OBJECT_DEF(cxSkeleton, cxAction)
     cxFloat time;
     spAnimationState *state;
     cxJson tracks;
+
+    //event dat
+    spTrackEntry *track;
+    cxInt index;
+    spEventType type;
+    spEvent *event;
+    cxInt count;        //loop count
+    CX_EVENT_ALLOC(onEvent);
 CX_OBJECT_END(cxSkeleton, cxAction)
 
 CX_C_END

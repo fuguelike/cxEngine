@@ -11,6 +11,38 @@ LOCAL_CFLAGS := \
     -I$(LOCAL_PATH)/libs/android/include
 
 LOCAL_SRC_FILES += \
+    chipmunk/chipmunk.c \
+    chipmunk/cpArbiter.c \
+    chipmunk/cpArray.c \
+    chipmunk/cpBB.c \
+    chipmunk/cpBBTree.c \
+    chipmunk/cpBody.c \
+    chipmunk/cpCollision.c \
+    chipmunk/cpHashSet.c \
+    chipmunk/cpPolyShape.c \
+    chipmunk/cpShape.c \
+    chipmunk/cpSpace.c \
+    chipmunk/cpSpaceComponent.c \
+    chipmunk/cpSpaceHash.c \
+    chipmunk/cpSpaceQuery.c \
+    chipmunk/cpSpaceStep.c \
+    chipmunk/cpSpatialIndex.c \
+    chipmunk/cpSweep1D.c \
+    chipmunk/cpVect.c \
+    chipmunk/constraints/cpConstraint.c \
+    chipmunk/constraints/cpDampedRotarySpring.c \
+    chipmunk/constraints/cpDampedSpring.c \
+    chipmunk/constraints/cpGearJoint.c \
+    chipmunk/constraints/cpGrooveJoint.c \
+    chipmunk/constraints/cpPinJoint.c \
+    chipmunk/constraints/cpPivotJoint.c \
+    chipmunk/constraints/cpRatchetJoint.c \
+    chipmunk/constraints/cpRotaryLimitJoint.c \
+    chipmunk/constraints/cpSimpleMotor.c \
+    chipmunk/constraints/cpSlideJoint.c
+
+
+LOCAL_SRC_FILES += \
 	spine/Animation.c \
 	spine/AnimationState.c \
 	spine/AnimationStateData.c \

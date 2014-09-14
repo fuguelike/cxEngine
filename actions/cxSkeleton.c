@@ -99,10 +99,13 @@ static void cxSkeletionFree(cxSkeleton this)
 
 static void cxSkeletonStateListener(spAnimationState* state, int trackIndex, spEventType type, spEvent* event,int loopCount)
 {
-    cxSkeleton this = state->rendererObject;
-    spTrackEntry *entry = spAnimationState_getCurrent(state, trackIndex);
-    
-    CX_LOGGER("%p,trackIndex=%d type=%d loopCount=%d",entry,trackIndex,type,loopCount);
+    CX_ASSERT_THIS(state->rendererObject, cxSkeleton);
+    this->track = spAnimationState_getCurrent(state, trackIndex);
+    this->index = trackIndex;
+    this->type = type;
+    this->event = event;
+    this->count = loopCount;
+    CX_EVENT_FIRE(this, onEvent);
 }
 
 static void cxSkeletonInit(cxAny pav)
@@ -163,6 +166,7 @@ CX_OBJECT_INIT(cxSkeleton, cxAction)
 }
 CX_OBJECT_FREE(cxSkeleton, cxAction)
 {
+    CX_EVENT_RELEASE(this->onEvent);
     CX_RELEASE(this->tracks);
     cxSkeletionFree(this);
 }
