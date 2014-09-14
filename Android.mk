@@ -111,6 +111,7 @@ LOCAL_SRC_FILES += \
     actions/cxTimeLine.c \
     actions/cxBezier.c \
     actions/cxSpeed.c \
+    actions/cxSkeleton.c
 
 LOCAL_SRC_FILES += \
     views/cxAtlas.c \
