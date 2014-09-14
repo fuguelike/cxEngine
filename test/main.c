@@ -22,10 +22,8 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxSpine sp = CX_CREATE(cxSpine);
-    cxViewSetSize(sp, cxSize2fv(500, 500));
-//    cxLoader loader = cxLoaderCreate("cxLayer.json");
-    cxWindowPushView(sp);
+    cxLoader loader = cxLoaderCreate("cxSpine.json");
+    cxWindowPushView(loader->object);
 }
 
 void cxEngineFree(cxEngine engine)

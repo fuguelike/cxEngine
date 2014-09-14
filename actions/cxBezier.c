@@ -17,7 +17,7 @@ static void cxBezierInit(cxAny pav)
 
 static void cxBezierStep(cxAny pav,cxFloat dt,cxFloat time)
 {
-    cxBezier this = pav;
+    CX_ASSERT_THIS(pav, cxBezier);
     
     cxFloat xa = 0;
     cxFloat xb = this->cpos1.x;

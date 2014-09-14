@@ -14,14 +14,20 @@
 
 CX_C_BEGIN
 
+#define CX_SPINE_MAX_VERTICES (SP_VERTEX_Y4 + 1)
+
 CX_OBJECT_DEF(cxSpine, cxAtlas)
     spAtlas *atlas;
     spSkeleton *skeleton;
     spSkeletonData* skeletonData;
     spBone *rootBone;
-    cxFloat *worldVertices;
-    spAnimationState *state;
+    spAnimationStateData *stateData;
+    cxFloat vertices[CX_SPINE_MAX_VERTICES];
 CX_OBJECT_END(cxSpine, cxAtlas)
+
+void cxSpineSetMixs(cxAny pview,cxJson mixs);
+
+cxBool cxSpineInit(cxAny pview, cxConstChars atlas,cxConstChars json,cxJson mixs,cxFloat scale);
 
 CX_C_END
 

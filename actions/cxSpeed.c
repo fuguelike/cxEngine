@@ -20,7 +20,7 @@ static void cxSpeedInit(cxAny pav)
 
 static void cxSpeedStep(cxAny pav,cxFloat dt,cxFloat time)
 {
-    cxSpeed this = pav;
+    CX_ASSERT_THIS(pav, cxSpeed);
     CX_ASSERT(this->cxAction.view != NULL, "view not set");
     cxVec2f pos = cxViewPosition(this->cxAction.view);
     cxVec2f np;
@@ -41,7 +41,7 @@ static void cxSpeedStep(cxAny pav,cxFloat dt,cxFloat time)
 
 static cxBool cxSpeedExit(cxAny pav)
 {
-    cxSpeed this = pav;
+    CX_ASSERT_THIS(pav, cxSpeed);
     return this->cxAction.time != -1 && this->time >= this->cxAction.time;
 }
 

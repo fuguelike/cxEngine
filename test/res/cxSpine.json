@@ -1,0 +1,47 @@
+{
+  "cxType": "cxSpine",
+  "size": {
+    "w": 400,
+    "h": 400
+  },
+  "spine": {
+    "atlas": "spineboy.atlas",
+    "json": "spineboy.json",
+    "mix": [
+      {
+        "from": "walk",
+        "to": "jump",
+        "time": 0.2
+      },
+      {
+        "from": "jump",
+        "to": "run",
+        "time": 0.4
+      }
+    ]
+  },
+  "actions": [
+    {
+      "cxType": "cxSkeleton",
+      "tracks": [
+        {
+          "id": 1,
+          "name": "walk",
+          "loop": true,
+          "add": [
+            {
+              "name": "jump",
+              "loop": false,
+              "delay": 0
+            },
+            {
+              "name": "run",
+              "loop": true,
+              "delay": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

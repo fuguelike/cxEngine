@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <spine/extension.h>
 #include "cxEngine.h"
 #include "cxIconv.h"
 
@@ -57,6 +58,7 @@
 #include <actions/cxTimeLine.h>
 #include <actions/cxBezier.h>
 #include <actions/cxSpeed.h>
+#include <actions/cxSkeleton.h>
 
 #include <algorithm/cxAStar.h>
 
@@ -164,6 +166,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxTimeLine);
     CX_TYPE_REG(cxBezier);
     CX_TYPE_REG(cxSpeed);
+    CX_TYPE_REG(cxSkeleton);
 }
 
 void cxEngineBegin()
@@ -180,6 +183,10 @@ void cxEngineBegin()
     //init engine
     //set cxjsonReader
     cxJsonSetReader(cxEngineJsonReader);
+    //set spine malloc
+    _setMalloc(allocator->malloc);
+    _setDebugMalloc(NULL);
+    _setFree(allocator->free);
     //use init engine
     cxEngineInit(engine);
 }
@@ -497,19 +504,14 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
             cxEngineInitTouchItem(now, item, cpos);
         }else if(type == cxTouchTypeMove){
             item = cxHashGet(this->items, key);
-            if(item == NULL){
-                continue;
-            }
+            CX_ASSERT(item != NULL, "item error");
             cxEngineComputeTouchItem(now, item, cpos);
         }else if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
             item = cxHashGet(this->items, key);
-            if(item == NULL){
-                continue;
-            }
+            CX_ASSERT(item != NULL, "item error");
             cxEngineComputeTouchItem(now, item, cpos);
             delItems.items[delItems.number++] = item;
-        }
-        if(item == NULL){
+        }else{
             continue;
         }
         item->position = cpos;

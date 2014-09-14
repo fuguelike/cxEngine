@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		830EEB4A19C55A6500C81EA5 /* cxSpine.json in Resources */ = {isa = PBXBuildFile; fileRef = 830EEB4919C55A6500C81EA5 /* cxSpine.json */; };
 		831ABCBC19249044001A86F1 /* cxParticle.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCBB19249044001A86F1 /* cxParticle.json */; };
 		831ABCC319249D23001A86F1 /* cxView.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCC219249D23001A86F1 /* cxView.json */; };
 		831ABCC61924C69F001A86F1 /* cxSprite.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCC51924C69F001A86F1 /* cxSprite.json */; };
@@ -64,6 +65,7 @@
 
 /* Begin PBXFileReference section */
 		8300651F18232BE000AF680D /* test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		830EEB4919C55A6500C81EA5 /* cxSpine.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxSpine.json; path = res/cxSpine.json; sourceTree = SOURCE_ROOT; };
 		831ABCBB19249044001A86F1 /* cxParticle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxParticle.json; path = res/cxParticle.json; sourceTree = SOURCE_ROOT; };
 		831ABCC219249D23001A86F1 /* cxView.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxView.json; path = res/cxView.json; sourceTree = SOURCE_ROOT; };
 		831ABCC51924C69F001A86F1 /* cxSprite.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxSprite.json; path = res/cxSprite.json; sourceTree = SOURCE_ROOT; };
@@ -189,6 +191,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				830EEB4919C55A6500C81EA5 /* cxSpine.json */,
 				835DB1C119C4A0F80037DA5B /* goblins.atlas */,
 				835DB1C219C4A0F80037DA5B /* goblins.json */,
 				835DB1C319C4A0F80037DA5B /* goblins.png */,
@@ -311,6 +314,7 @@
 				835DB1C619C4A0F80037DA5B /* goblins.png in Resources */,
 				83DAD707191A26BF000A7D1F /* texture.json in Resources */,
 				835DB19C19C44C650037DA5B /* t.pkm in Resources */,
+				830EEB4A19C55A6500C81EA5 /* cxSpine.json in Resources */,
 				839722AF19161746006D0F89 /* font.png in Resources */,
 				834327BC19B8034400B4927F /* t.png in Resources */,
 				831ABCC319249D23001A86F1 /* cxView.json in Resources */,

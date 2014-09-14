@@ -943,9 +943,10 @@ void cxViewDraw(cxAny pview)
     if(!this->isVisible){
         goto finished;
     }
-    //update action and update
-    CX_EVENT_FIRE(this, onUpdate);
+    //update all action
     cxViewUpdateActions(this);
+    //do update event
+    CX_EVENT_FIRE(this, onUpdate);
     cxViewTransform(this);
     if(this->isSort){
         cxViewSort(this);

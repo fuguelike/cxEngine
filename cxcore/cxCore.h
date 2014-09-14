@@ -120,6 +120,7 @@
 #include <float.h>
 #include <time.h>
 #include <sys/types.h>
+#include <stddef.h>
 
 typedef int             cxOff;
 typedef char            cxChar;
@@ -132,6 +133,7 @@ typedef int64_t         cxInt64;
 
 typedef const void *    cxConstAny;
 typedef void *          cxAny;
+typedef size_t          cxSize;
 
 typedef unsigned char   cxUChar;
 typedef unsigned int    cxUInt;
@@ -393,11 +395,11 @@ cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x);
 
 cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x);
 
-typedef cxAny (*cxMallocFunc)(cxInt size);
+typedef cxAny (*cxMallocFunc)(cxSize size);
 
-typedef cxAny (*cxReallocFunc)(cxAny ptr,cxInt size);
+typedef cxAny (*cxReallocFunc)(cxAny ptr,cxSize size);
 
-typedef cxAny (*cxCallocFunc)(cxInt num,cxInt size);
+typedef cxAny (*cxCallocFunc)(cxInt num,cxSize size);
 
 typedef void (*cxFreeFunc)(cxAny ptr);
 
