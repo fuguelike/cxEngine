@@ -10,6 +10,10 @@
 #include "cxType.h"
 #include "cxMemPool.h"
 
+#ifdef CX_HAS_BLOCKS
+void * _NSConcreteGlobalBlock[32]={0};
+#endif
+
 //MAC atomic support
 #if CX_TARGET_PLATFORM==CX_PLATFORM_MAC
 #include <libkern/OSAtomic.h>

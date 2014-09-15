@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		830EEB4A19C55A6500C81EA5 /* cxSpine.json in Resources */ = {isa = PBXBuildFile; fileRef = 830EEB4919C55A6500C81EA5 /* cxSpine.json */; };
+		830EEBB819C5CB4500C81EA5 /* cxLabelBMP.json in Resources */ = {isa = PBXBuildFile; fileRef = 830EEBB719C5CB4500C81EA5 /* cxLabelBMP.json */; };
 		831ABCBC19249044001A86F1 /* cxParticle.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCBB19249044001A86F1 /* cxParticle.json */; };
 		831ABCC319249D23001A86F1 /* cxView.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCC219249D23001A86F1 /* cxView.json */; };
 		831ABCC61924C69F001A86F1 /* cxSprite.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCC51924C69F001A86F1 /* cxSprite.json */; };
@@ -66,6 +67,7 @@
 /* Begin PBXFileReference section */
 		8300651F18232BE000AF680D /* test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		830EEB4919C55A6500C81EA5 /* cxSpine.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxSpine.json; path = res/cxSpine.json; sourceTree = SOURCE_ROOT; };
+		830EEBB719C5CB4500C81EA5 /* cxLabelBMP.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxLabelBMP.json; path = res/cxLabelBMP.json; sourceTree = SOURCE_ROOT; };
 		831ABCBB19249044001A86F1 /* cxParticle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxParticle.json; path = res/cxParticle.json; sourceTree = SOURCE_ROOT; };
 		831ABCC219249D23001A86F1 /* cxView.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxView.json; path = res/cxView.json; sourceTree = SOURCE_ROOT; };
 		831ABCC51924C69F001A86F1 /* cxSprite.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxSprite.json; path = res/cxSprite.json; sourceTree = SOURCE_ROOT; };
@@ -211,6 +213,7 @@
 				836D8DA6191B8C02000F0230 /* cxScroll.json */,
 				83F3CCCF191B674D00D6BCFB /* cxAtlas.json */,
 				83DAD709191A386C000A7D1F /* cxLabelTTF.json */,
+				830EEBB719C5CB4500C81EA5 /* cxLabelBMP.json */,
 				83DAD705191A26BF000A7D1F /* texture.json */,
 				83DAD706191A26BF000A7D1F /* texture.pvr */,
 				835D3B2C19AF21680004155D /* texture.png */,
@@ -322,6 +325,7 @@
 				8339302419BB2ED000FC098E /* cxLayer.json in Resources */,
 				83DAD70A191A386C000A7D1F /* cxLabelTTF.json in Resources */,
 				835DB1C419C4A0F80037DA5B /* goblins.atlas in Resources */,
+				830EEBB819C5CB4500C81EA5 /* cxLabelBMP.json in Resources */,
 				835DB1C519C4A0F80037DA5B /* goblins.json in Resources */,
 				834327B619B8011900B4927F /* cxTable.json in Resources */,
 			);

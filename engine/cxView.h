@@ -74,7 +74,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_METHOD_DEF(void, Draw, cxAny);
     CX_METHOD_DEF(void, After, cxAny);
     CX_METHOD_DEF(void, Before, cxAny);
-
     //method event
     CX_METHOD_DEF(void, onAppend,cxAny,cxAny);
     CX_METHOD_DEF(void, onRemove,cxAny,cxAny);
@@ -84,7 +83,6 @@ CX_OBJECT_DEF(cxView, cxObject)
 
     CX_EVENT_ALLOC(onEnter);    //when view appended
     CX_EVENT_ALLOC(onExit);     //when view removed
-    //
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);

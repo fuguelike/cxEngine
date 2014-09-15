@@ -1,23 +1,7 @@
 {
-  "ttf1": {
     "cxType": "cxLabelTTF",
     "font": {
-      "size": 64
+        "size": 64
     },
-    "text": "美国啊1"
-  },
-  "ttf2": {
-    "cxType": "cxLabelTTF",
-    "font": {
-      "size": 64
-    },
-    "text": "美国啊2"
-  },
-  "ttf3": {
-    "cxType": "cxLabelTTF",
-    "font": {
-      "size": 64
-    },
-    "text": "美国啊3"
-  }
+    "text": "a美国啊1"
 }

@@ -6,9 +6,15 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := cxEngine
 
 LOCAL_CFLAGS := \
-    -std=gnu99 -O2 -DANDROID \
+    -std=gnu99 -O2 -DANDROID -fblocks \
     -I$(LOCAL_PATH) \
     -I$(LOCAL_PATH)/libs/android/include
+
+LOCAL_SRC_FILES += \
+    lzma/LzFind.c \
+    lzma/LzmaDec.c \
+    lzma/LzmaEnc.c \
+    lzma/LzmaLib.c
 
 LOCAL_SRC_FILES += \
     chipmunk/chipmunk.c \
@@ -183,7 +189,8 @@ LOCAL_SRC_FILES += \
 	engine/cxUtil.c \
 	engine/cxView.c \
 	engine/cxInput.c \
-	engine/cxActionMgr.c
+	engine/cxActionMgr.c \
+    engine/cxSpatial.c
     
 LOCAL_SRC_FILES += \
     algorithm/cxTile.c \
