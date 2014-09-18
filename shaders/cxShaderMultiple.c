@@ -32,12 +32,11 @@ cxString cxShaderMultipleGetFragmentSource(cxAny this)
     GLSL(
          varying mediump vec4 vFragmentColor;
          varying highp vec2 vTexCoord;
-         uniform sampler2D uTexture0;
          uniform sampler2D uTexture1;
+         uniform sampler2D uTexture2;
          void main() {
-             vec4 color = texture2D(uTexture1, vTexCoord);
-             gl_FragColor = vFragmentColor * texture2D(uTexture0, vTexCoord);
-             gl_FragColor.a = color.r;
+             gl_FragColor = vFragmentColor * texture2D(uTexture1, vTexCoord);
+             gl_FragColor.a = texture2D(uTexture2, vTexCoord).r;
          }
     );
     return cxStringConstChars(fragment);
@@ -46,14 +45,12 @@ cxString cxShaderMultipleGetFragmentSource(cxAny this)
 static void cxShaderMultipleGetUniform(cxAny ps)
 {
     CX_ASSERT_THIS(ps, cxShaderMultiple);
-    this->texture1 = glGetUniformLocation(this->cxShader.program, "uTexture0");
-    if(this->texture1 > 0){
-        glUniform1i(this->texture1, 1);
-    }
-    this->texture2 = glGetUniformLocation(this->cxShader.program, "uTexture1");
-    if(this->texture2){
-        glUniform1i(this->texture2, 2);
-    }
+    this->texture1 = glGetUniformLocation(this->cxShader.program, "uTexture1");
+    CX_ASSERT(this->texture1 > 0, "uTexture1 not define");
+    glUniform1i(this->texture1, 1);
+    this->texture2 = glGetUniformLocation(this->cxShader.program, "uTexture2");
+    CX_ASSERT(this->texture2 > 0, "uTexture2 not define");
+    glUniform1i(this->texture2, 2);
 }
 
 CX_OBJECT_TYPE(cxShaderMultiple, cxShader)
