@@ -30,7 +30,7 @@ enum {
 #define CX_ATTRIBUTE_NAME_VERTEX                    "aVertex"
 //
 ////Uniform names
-#define CX_UNIFORM_MATRIX_MODELVIEW_PROJECT         "kxMatrixModelViewProject"
+#define CX_UNIFORM_MATRIX_MODELVIEW_PROJECT         "cxMatrixModelViewProject"
 
 CX_OBJECT_DEF(cxShader, cxObject)
     cxMatrix4f kxMatrixProject;
@@ -40,6 +40,8 @@ CX_OBJECT_DEF(cxShader, cxObject)
     GLuint vertexShader;
     GLuint fragmentShader;
     GLint uniformModelViewProject;
+    GLint texture1;
+    GLint texture2;
     CX_METHOD_DEF(void,Init,cxAny);
     CX_METHOD_DEF(void,Update,cxAny);
     CX_METHOD_DEF(void,GetUniform,cxAny);

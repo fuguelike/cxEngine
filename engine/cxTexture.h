@@ -11,6 +11,7 @@
 
 #include "cxOpenGL.h"
 #include "cxStream.h"
+#include "cxShader.h"
 
 CX_C_BEGIN
 

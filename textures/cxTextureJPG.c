@@ -20,10 +20,10 @@ static void cxJPGErrorExit(j_common_ptr cinfo)
     error->error = 1;
 }
 
-static cxBool cxTextureJPGLoad(cxAny this,cxStream stream)
+static cxBool cxTextureJPGLoad(cxAny ptex,cxStream stream)
 {
     cxBool ret = false;
-    cxTextureJPG jpg = this;
+    CX_ASSERT_THIS(ptex, cxTextureJPG);
     struct jpeg_decompress_struct cinfo;
     cxJPEGError error;
     cinfo.err = jpeg_std_error(&error.pub);
@@ -45,8 +45,8 @@ static cxBool cxTextureJPGLoad(cxAny this,cxStream stream)
         CX_ERROR("jpg read head failed");
         goto finished;
     }
-    jpg->cxTexture.size = cxSize2fv(cinfo.image_width, cinfo.image_height);
-    jpg->cxTexture.hasAlpha = false;
+    this->cxTexture.size = cxSize2fv(cinfo.image_width, cinfo.image_height);
+    this->cxTexture.hasAlpha = false;
     jpeg_start_decompress(&cinfo);
     if(error.error){
         CX_ERROR("jpg start decompress failed");
@@ -64,11 +64,12 @@ static cxBool cxTextureJPGLoad(cxAny this,cxStream stream)
     GLint unpack = 0;
     glGetIntegerv(GL_UNPACK_ALIGNMENT, &unpack);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    cxOpenGLGenTextures(1, &jpg->cxTexture.textureId);
-    cxOpenGLBindTexture(jpg->cxTexture.textureId);
+    cxOpenGLGenTextures(1, &this->cxTexture.textureId);
+    cxOpenGLBindTexture(this->cxTexture.textureId, 0);
+    cxOpenGLSetTexParameters(this->cxTexture.texParam);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cinfo.image_width, cinfo.image_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
     glPixelStorei(GL_UNPACK_ALIGNMENT, unpack);
-    cxOpenGLBindTexture(0);
+    cxOpenGLBindTexture(0, 0);
     allocator->free(data);
     ret = true;
 finished:
@@ -80,7 +81,7 @@ finished:
 static void cxTextureJPGBind(cxAny this)
 {
     cxTextureJPG png = this;
-    cxOpenGLBindTexture(png->cxTexture.textureId);
+    cxOpenGLBindTexture(png->cxTexture.textureId, 0);
 }
 
 CX_OBJECT_TYPE(cxTextureJPG, cxTexture)

@@ -8,10 +8,10 @@
 
 #include "cxTexturePNG.h"
 
-static cxBool cxTexturePNGLoad(cxAny this,cxStream stream)
+static cxBool cxTexturePNGLoad(cxAny ptex,cxStream stream)
 {
     cxBool ret = false;
-    cxTexturePNG png = this;
+    CX_ASSERT_THIS(ptex, cxTexturePNG);
     CX_ASSERT(stream != NULL, "pvr stream not set");
     cxString data = cxStreamAllBytes(stream);
     if(data == NULL){
@@ -25,14 +25,15 @@ static cxBool cxTexturePNGLoad(cxAny this,cxStream stream)
         return false;
     }
     image.format = PNG_FORMAT_RGBA;
-    png->cxTexture.size = cxSize2fv(image.width, image.height);
-    png->cxTexture.hasAlpha = true;
+    this->cxTexture.size = cxSize2fv(image.width, image.height);
+    this->cxTexture.hasAlpha = true;
     cxAny buffer = allocator->malloc(PNG_IMAGE_SIZE(image));
     if(png_image_finish_read(&image, NULL, buffer, 0, NULL)){
-        cxOpenGLGenTextures(1, &png->cxTexture.textureId);
-        cxOpenGLBindTexture(png->cxTexture.textureId);
+        cxOpenGLGenTextures(1, &this->cxTexture.textureId);
+        cxOpenGLBindTexture(this->cxTexture.textureId, 0);
+        cxOpenGLSetTexParameters(this->cxTexture.texParam);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.width, image.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-        cxOpenGLBindTexture(0);
+        cxOpenGLBindTexture(0, 0);
         ret = true;
     }
     allocator->free(buffer);
@@ -43,7 +44,7 @@ static cxBool cxTexturePNGLoad(cxAny this,cxStream stream)
 static void cxTexturePNGBind(cxAny this)
 {
     cxTexturePNG png = this;
-    cxOpenGLBindTexture(png->cxTexture.textureId);
+    cxOpenGLBindTexture(png->cxTexture.textureId, 0);
 }
 
 CX_OBJECT_TYPE(cxTexturePNG, cxTexture)

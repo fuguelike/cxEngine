@@ -106,10 +106,26 @@ CX_SETTER_DEF(cxSprite, texture)
     CX_RETURN(texture == NULL);
     cxSpriteSetTextureURL(this, texture);
 }
+CX_SETTER_DEF(cxSprite, shader)
+{
+    cxConstChars shader = cxJsonToConstChars(value);
+    if(shader == NULL || cxConstCharsEqu(shader, "default")){
+        cxSpriteSetShader(this, cxShaderDefaultKey);
+    }else if(cxConstCharsEqu(shader, "positioncolor")){
+        cxSpriteSetShader(this, cxShaderPositionColorKey);
+    }else if(cxConstCharsEqu(shader, "clipping")){
+        cxSpriteSetShader(this, cxShaderClippingKey);
+    }else if(cxConstCharsEqu(shader, "alpha")){
+        cxSpriteSetShader(this, cxShaderAlphaKey);
+    }else if(cxConstCharsEqu(shader, "multiple")){
+        cxSpriteSetShader(this, cxShaderMultipleKey);
+    }
+}
 
 CX_OBJECT_TYPE(cxSprite, cxView)
 {
     CX_PROPERTY_SETTER(cxSprite, texture);
+    CX_PROPERTY_SETTER(cxSprite, shader);
 }
 CX_OBJECT_INIT(cxSprite, cxView)
 {

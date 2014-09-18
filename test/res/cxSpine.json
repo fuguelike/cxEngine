@@ -1,5 +1,6 @@
 {
   "cxType": "cxSpine",
+    "position":{"y":-400},
   "size": {
     "w": 400,
     "h": 400

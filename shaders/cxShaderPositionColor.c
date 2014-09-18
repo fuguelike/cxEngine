@@ -23,7 +23,7 @@ static cxString cxShaderPositionColorGetVertexSource(cxAny this)
         attribute mediump vec4 aColor;
         varying mediump vec4 vColor;
         void main() {
-            gl_Position = kxMatrixModelViewProject * aPosition;
+            gl_Position = cxMatrixModelViewProject * aPosition;
             vColor = aColor;
         }
     );

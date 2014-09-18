@@ -10,6 +10,7 @@
 #include <shaders/cxShaderDefault.h>
 #include <shaders/cxShaderAlpha.h>
 #include <shaders/cxShaderClipping.h>
+#include <shaders/cxShaderMultiple.h>
 #include "cxUtil.h"
 #include "cxOpenGL.h"
 
@@ -19,6 +20,7 @@ CX_STRING_KEY_IMP(cxShaderPositionColorKey);
 CX_STRING_KEY_IMP(cxShaderDefaultKey);
 CX_STRING_KEY_IMP(cxShaderAlphaKey);
 CX_STRING_KEY_IMP(cxShaderClippingKey);
+CX_STRING_KEY_IMP(cxShaderMultipleKey);
 
 #define CX_OPENGL_LOAD_SHADER(t)                                    \
 do{                                                                 \
@@ -38,6 +40,7 @@ static void cxOpenGLLoadDefaultShaders()
     CX_OPENGL_LOAD_SHADER(cxShaderPositionColor);
     CX_OPENGL_LOAD_SHADER(cxShaderAlpha);
     CX_OPENGL_LOAD_SHADER(cxShaderClipping);
+    CX_OPENGL_LOAD_SHADER(cxShaderMultiple);
 }
 
 void cxDrawLineBox(const cxBoxVec2f *box,const cxColor3f color)
@@ -150,20 +153,21 @@ void cxOpenGLGenTextures(GLsizei n,GLuint *textures)
     glGenTextures(n, textures);
 }
 
-void cxOpenGLBindTexture(GLuint texture)
+void cxOpenGLBindTexture(GLuint texture,cxInt idx)
 {
     cxOpenGL this = cxOpenGLInstance();
-    if (this->activeTexture != texture){
-        this->activeTexture = texture;
+    if (this->activeTextures[idx] != texture){
+        this->activeTextures[idx] = texture;
+        glActiveTexture(GL_TEXTURE0 + idx);
         glBindTexture(GL_TEXTURE_2D, texture);
     }
 }
 
-void cxOpenGLDeleteTexture(GLuint texture)
+void cxOpenGLDeleteTexture(GLuint texture,cxInt idx)
 {
     cxOpenGL this = cxOpenGLInstance();
-    if(this->activeTexture == texture){
-        this->activeTexture = -1;
+    if(this->activeTextures[idx] == texture){
+        this->activeTextures[idx] = -1;
     }
 	glDeleteTextures(1, &texture);
 }
@@ -252,6 +256,9 @@ CX_OBJECT_INIT(cxOpenGL, cxObject)
     this->blendDst = -1;
     this->currentProgram = -1;
     this->shaders = CX_ALLOC(cxHash);
+    for(cxInt i=0; i < MAX_ACTIVE_TEXTURE;i++){
+        this->activeTextures[i] = -1;
+    }
 }
 CX_OBJECT_FREE(cxOpenGL, cxObject)
 {

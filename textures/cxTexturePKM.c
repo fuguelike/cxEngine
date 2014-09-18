@@ -6,7 +6,9 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <engine/cxUtil.h>
 #include "cxTexturePKM.h"
+#include "cxTextureFactory.h"
 
 typedef struct{
 	cxUInt32 pkmTag;
@@ -22,10 +24,10 @@ typedef struct{
 #define CX_PKM_V1   (*(cxUInt16 *)("10"))
 #define CX_PKM_V2   (*(cxUInt16 *)("20"))
 
-static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
+static cxBool cxTexturePKMLoad(cxAny ptex,cxStream stream)
 {
+    CX_ASSERT_THIS(ptex, cxTexturePKM);
     cxBool ret = false;
-    cxTexturePKM pkm = this;
     CX_ASSERT(stream != NULL, "pkm stream not set");
     if(!cxOpenGLInstance()->support_GL_OES_compressed_ETC1_RGB8_texture){
         CX_ERROR("platform not support etc1 texture");
@@ -46,13 +48,14 @@ static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
     header.extHeight = CX_SWAP16(header.extHeight);
     header.orgWidth = CX_SWAP16(header.orgWidth);
     header.orgHeight = CX_SWAP16(header.orgHeight);
-    pkm->cxTexture.size = cxSize2fv(header.extWidth, header.extHeight);
+    this->cxTexture.size = cxSize2fv(header.extWidth, header.extHeight);
     if(header.version != CX_PKM_V1){
         CX_ERROR("PKM only use V1 version");
         goto completed;
     }
-    cxOpenGLGenTextures(1, &pkm->cxTexture.textureId);
-    cxOpenGLBindTexture(pkm->cxTexture.textureId);
+    cxOpenGLGenTextures(1, &this->cxTexture.textureId);
+    cxOpenGLBindTexture(this->cxTexture.textureId, 0);
+    cxOpenGLSetTexParameters(this->cxTexture.texParam);
     cxInt bufsiz = stream->length - sizeof(cxPKMHeader);
     cxAny buffer = allocator->malloc(bufsiz);
     cxInt readbytes = cxStreamRead(stream, buffer, bufsiz);
@@ -66,16 +69,29 @@ static cxBool cxTexturePKMLoad(cxAny this,cxStream stream)
     ret = false;
 #endif
     allocator->free(buffer);
-    cxOpenGLBindTexture(0);
+    cxOpenGLBindTexture(0, 0);
 completed:
     cxStreamClose(stream);
+    if(!ret){
+        return ret;
+    }
+    cxString alpha = cxStringCreate("%s.alpha",cxStringBody(stream->path));
+    cxConstChars file = cxStringBody(alpha);
+    if(cxAssetsExists(file)){
+        CX_RETAIN_SET(this->alpha, cxTextureFactoryLoadFile(file));
+    }
     return ret;
 }
 
 static void cxTexturePKMBind(cxAny this)
 {
     cxTexturePKM pkm = this;
-    cxOpenGLBindTexture(pkm->cxTexture.textureId);
+    if(pkm->alpha != NULL){
+        cxOpenGLBindTexture(pkm->cxTexture.textureId, 1);
+        cxOpenGLBindTexture(pkm->alpha->textureId, 2);
+    }else{
+        cxOpenGLBindTexture(pkm->cxTexture.textureId, 0);
+    }
 }
 
 CX_OBJECT_TYPE(cxTexturePKM, cxTexture)
@@ -89,7 +105,7 @@ CX_OBJECT_INIT(cxTexturePKM, cxTexture)
 }
 CX_OBJECT_FREE(cxTexturePKM, cxTexture)
 {
-    //
+    CX_RELEASE(this->alpha);
 }
 CX_OBJECT_TERM(cxTexturePKM, cxTexture)
 

@@ -15,7 +15,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxTexturePKM, cxTexture)
-
+    cxTexture alpha;
 CX_OBJECT_END(cxTexturePKM, cxTexture)
 
 cxTexture cxTexturePKMLoadStream(cxStream stream);

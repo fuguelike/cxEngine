@@ -41,6 +41,7 @@ CX_STRING_KEY_DEF(cxShaderPositionColorKey);
 CX_STRING_KEY_DEF(cxShaderDefaultKey);
 CX_STRING_KEY_DEF(cxShaderAlphaKey);
 CX_STRING_KEY_DEF(cxShaderClippingKey);
+CX_STRING_KEY_DEF(cxShaderMultipleKey);
 
 typedef struct{
     GLuint    minFilter;
@@ -69,7 +70,7 @@ CX_OBJECT_DEF(cxOpenGL, cxObject)
     cxBool enableAttribPosition;
     cxBool enableAttribColor;
     cxBool enableAttribTexcoords;
-    GLuint activeTexture;
+    GLuint activeTextures[MAX_ACTIVE_TEXTURE];
     cxColor4f clearColor;
 CX_OBJECT_END(cxOpenGL, cxObject)
 
@@ -121,9 +122,9 @@ void cxOpenGLSetTexParameter(GLuint type,GLuint value);
 
 void cxOpenGLSetTexParameters(const cxTextureParams params);
 
-void cxOpenGLDeleteTexture(GLuint texture);
+void cxOpenGLDeleteTexture(GLuint texture,cxInt idx);
 
-void cxOpenGLBindTexture(GLuint texture);
+void cxOpenGLBindTexture(GLuint texture,cxInt idx);
 
 void cxOpenGLGenTextures(GLsizei n,GLuint *textures);
 

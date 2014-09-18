@@ -1,8 +1,9 @@
 {
   "cxType": "cxSprite",
   "size": {
-    "w": 300,
-    "h": 300
+    "w": 600,
+    "h": 600
   },
-  "texture": "texture.json?carrot.png"
+  "shader":"multiple",
+  "texture": "odus_cutout.pkm"
 }

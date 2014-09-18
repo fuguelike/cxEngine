@@ -40,10 +40,10 @@ enum{
 
 #pragma pack()
 
-static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
+static cxBool cxTexturePVRLoad(cxAny ptex,cxStream stream)
 {
     cxBool ret = false;
-    cxTexturePVR pvr = this;
+    CX_ASSERT_THIS(ptex, cxTexturePVR);
     CX_ASSERT(stream != NULL, "pvr stream not set");
     if(!cxOpenGLInstance()->support_GL_IMG_texture_compression_pvrtc){
         CX_ERROR("platform not support pvr texture");
@@ -63,20 +63,21 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
         goto completed;
     }
     cxUInt32 flags = header.flags;
-    pvr->format = flags & CX_PVR_TEXTURE_FLAG_TYPE_MASK;
-    if(pvr->format != cxFormatPVR2BPP && pvr->format != cxFormatPVR4BPP){
+    this->format = flags & CX_PVR_TEXTURE_FLAG_TYPE_MASK;
+    if(this->format != cxFormatPVR2BPP && this->format != cxFormatPVR4BPP){
         CX_ERROR("pvr only support 2bpp and 4bpp format");
         goto completed;
     }
-    pvr->cxTexture.size = cxSize2fv(header.width, header.height);
-    pvr->cxTexture.hasAlpha = header.bitmaskAlpha;
-    if(pvr->format == cxFormatPVR2BPP){
-        pvr->glFormat = pvr->cxTexture.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
+    this->cxTexture.size = cxSize2fv(header.width, header.height);
+    this->cxTexture.hasAlpha = header.bitmaskAlpha;
+    if(this->format == cxFormatPVR2BPP){
+        this->glFormat = this->cxTexture.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
     }else{
-        pvr->glFormat = pvr->cxTexture.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
+        this->glFormat = this->cxTexture.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
     }
-    cxOpenGLGenTextures(1, &pvr->cxTexture.textureId);
-    cxOpenGLBindTexture(pvr->cxTexture.textureId);
+    cxOpenGLGenTextures(1, &this->cxTexture.textureId);
+    cxOpenGLBindTexture(this->cxTexture.textureId, 0);
+    cxOpenGLSetTexParameters(this->cxTexture.texParam);
     cxUInt dataLen = header.dataLength;
     cxUInt dataOff = 0;
     cxUInt width = header.width;
@@ -89,7 +90,7 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
     cxAny buffer = NULL;
     cxInt bufBytes = 0;
     while (dataOff< dataLen){
-        if (pvr->format == cxFormatPVR4BPP){
+        if (this->format == cxFormatPVR4BPP){
             blockSize = 4 * 4;
             widthBlocks = width / 4;
             heightBlocks = height / 4;
@@ -114,7 +115,7 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
         }
         cxInt size = cxStreamRead(stream,buffer,bufSize);
         if(size == bufSize){
-            glCompressedTexImage2D(GL_TEXTURE_2D, i, pvr->glFormat, width, height, 0, bufSize, buffer);
+            glCompressedTexImage2D(GL_TEXTURE_2D, i, this->glFormat, width, height, 0, bufSize, buffer);
         }else{
             CX_WARN("pvr read stream data failed");
         }
@@ -125,10 +126,10 @@ static cxBool cxTexturePVRLoad(cxAny this,cxStream stream)
     }
     allocator->free(buffer);
     if(i > 1){
-        cxTextureSetParam((cxTexture)pvr, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+        cxTextureSetParam((cxTexture)this, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     }
-    pvr->cxTexture.hasMipmap = i > 1;
-    cxOpenGLBindTexture(0);
+    this->cxTexture.hasMipmap = i > 1;
+    cxOpenGLBindTexture(0,0);
     ret = true;
 completed:
     cxStreamClose(stream);
@@ -138,7 +139,7 @@ completed:
 static void cxTexturePVRBind(cxAny this)
 {
     cxTexturePVR pvr = this;
-    cxOpenGLBindTexture(pvr->cxTexture.textureId);
+    cxOpenGLBindTexture(pvr->cxTexture.textureId,0);
 }
 
 CX_OBJECT_TYPE(cxTexturePVR, cxTexture)
