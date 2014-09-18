@@ -78,6 +78,8 @@ cxOpenGL cxOpenGLInstance();
 
 cxAny cxOpenGLShader(cxConstChars key);
 
+cxAny cxOpenGLShaderByName(cxConstChars name);
+
 void cxOpenGLSetClearColor(cxColor4f color);
 
 void cxOpenGLDestroy();

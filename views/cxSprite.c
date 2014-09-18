@@ -92,12 +92,18 @@ void cxSpriteSetImage(cxAny pview,cxConstChars url)
 void cxSpriteSetTextureURL(cxAny pview,cxConstChars url)
 {
     CX_RETURN(url == NULL);
-    cxSprite this = pview;
+    CX_ASSERT_THIS(pview, cxSprite);
     cxUrlPath path = cxUrlPathParse(url);
     CX_RETURN(path == NULL);
     cxTexture texture = cxTextureFactoryLoadFile(path->path);
     CX_ASSERT(texture != NULL, "texture load failed %s",path->path);
     cxSpriteSetTexture(this, texture);
+    if(path->count == 2){
+        this->texCoord = cxTextureBox(this->texture, path->key);
+    }
+    if(texture->shader != NULL){
+        CX_RETAIN_SWAP(this->shader, texture->shader);
+    }
 }
 
 CX_SETTER_DEF(cxSprite, texture)
@@ -108,18 +114,9 @@ CX_SETTER_DEF(cxSprite, texture)
 }
 CX_SETTER_DEF(cxSprite, shader)
 {
-    cxConstChars shader = cxJsonToConstChars(value);
-    if(shader == NULL || cxConstCharsEqu(shader, "default")){
-        cxSpriteSetShader(this, cxShaderDefaultKey);
-    }else if(cxConstCharsEqu(shader, "positioncolor")){
-        cxSpriteSetShader(this, cxShaderPositionColorKey);
-    }else if(cxConstCharsEqu(shader, "clipping")){
-        cxSpriteSetShader(this, cxShaderClippingKey);
-    }else if(cxConstCharsEqu(shader, "alpha")){
-        cxSpriteSetShader(this, cxShaderAlphaKey);
-    }else if(cxConstCharsEqu(shader, "multiple")){
-        cxSpriteSetShader(this, cxShaderMultipleKey);
-    }
+    cxConstChars name = cxJsonToConstChars(value);
+    cxShader shader = cxOpenGLShaderByName(name);
+    CX_RETAIN_SWAP(this->shader, shader);
 }
 
 CX_OBJECT_TYPE(cxSprite, cxView)

@@ -273,6 +273,26 @@ cxAny cxOpenGLShader(cxConstChars key)
     return cxHashGet(this->shaders, cxHashStrKey(key));
 }
 
+cxAny cxOpenGLShaderByName(cxConstChars name)
+{
+    if(cxConstCharsEqu(name, "default")){
+        return cxOpenGLShader(cxShaderDefaultKey);
+    }
+    if(cxConstCharsEqu(name, "positioncolor")){
+        return cxOpenGLShader(cxShaderPositionColorKey);
+    }
+    if(cxConstCharsEqu(name, "clipping")){
+        return cxOpenGLShader(cxShaderClippingKey);
+    }
+    if(cxConstCharsEqu(name, "alpha")){
+        return cxOpenGLShader(cxShaderAlphaKey);
+    }
+    if(cxConstCharsEqu(name, "multiple")){
+        return cxOpenGLShader(cxShaderMultipleKey);
+    }
+    return cxOpenGLShader(cxShaderDefaultKey);
+}
+
 cxOpenGL cxOpenGLInstance()
 {
     if(instance == NULL){

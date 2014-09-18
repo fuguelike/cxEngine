@@ -72,26 +72,13 @@ static cxBool cxTexturePKMLoad(cxAny ptex,cxStream stream)
     cxOpenGLBindTexture(0, 0);
 completed:
     cxStreamClose(stream);
-    if(!ret){
-        return ret;
-    }
-    cxString alpha = cxStringCreate("%s.alpha",cxStringBody(stream->path));
-    cxConstChars file = cxStringBody(alpha);
-    if(cxAssetsExists(file)){
-        CX_RETAIN_SET(this->alpha, cxTextureFactoryLoadFile(file));
-    }
     return ret;
 }
 
 static void cxTexturePKMBind(cxAny this)
 {
     cxTexturePKM pkm = this;
-    if(pkm->alpha != NULL){
-        cxOpenGLBindTexture(pkm->cxTexture.textureId, 1);
-        cxOpenGLBindTexture(pkm->alpha->textureId, 2);
-    }else{
-        cxOpenGLBindTexture(pkm->cxTexture.textureId, 0);
-    }
+    cxOpenGLBindTexture(pkm->cxTexture.textureId, 0);
 }
 
 CX_OBJECT_TYPE(cxTexturePKM, cxTexture)
@@ -105,7 +92,7 @@ CX_OBJECT_INIT(cxTexturePKM, cxTexture)
 }
 CX_OBJECT_FREE(cxTexturePKM, cxTexture)
 {
-    CX_RELEASE(this->alpha);
+
 }
 CX_OBJECT_TERM(cxTexturePKM, cxTexture)
 

@@ -31,6 +31,7 @@ CX_OBJECT_FREE(cxTexture, cxObject)
 {
     cxOpenGLDeleteTexture(this->textureId, 0);
     CX_RELEASE(this->keys);
+    CX_RELEASE(this->shader);
 }
 CX_OBJECT_TERM(cxTexture, cxObject)
 

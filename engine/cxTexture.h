@@ -35,6 +35,7 @@ CX_OBJECT_DEF(cxTexture, cxObject)
     cxVec2f scale;
     CX_METHOD_DEF(cxBool, Load, cxAny, cxStream);
     CX_METHOD_DEF(void, Bind, cxAny);
+    cxShader shader;
 CX_OBJECT_END(cxTexture, cxObject)
 
 void cxDrawClippingTexture(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars tkey);

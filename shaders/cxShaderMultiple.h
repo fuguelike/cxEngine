@@ -14,6 +14,8 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxShaderMultiple, cxShader)
+    GLint texture1;
+    GLint texture2;
 CX_OBJECT_END(cxShaderMultiple, cxShader)
 
 cxString cxShaderMultipleGetVertexSource(cxAny this);

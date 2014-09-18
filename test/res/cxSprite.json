@@ -4,6 +4,5 @@
     "w": 600,
     "h": 600
   },
-  "shader":"multiple",
-  "texture": "odus_cutout.pkm"
+  "texture": "pkm.json?carrot.png"
 }

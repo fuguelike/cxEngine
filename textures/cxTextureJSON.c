@@ -10,10 +10,10 @@
 #include "cxTextureJSON.h"
 #include "cxTextureFactory.h"
 
-static cxBool cxTextureJSONLoad(cxAny this,cxStream stream)
+static cxBool cxTextureJSONLoad(cxAny ptex,cxStream stream)
 {
     cxBool ret = false;
-    cxTextureJSON texture = this;
+    CX_ASSERT_THIS(ptex, cxTextureJSON);
     CX_ASSERT(stream != NULL, "stream not set");
     cxString data = cxStreamAllBytes(stream);
     if(data == NULL){
@@ -30,18 +30,22 @@ static cxBool cxTextureJSONLoad(cxAny this,cxStream stream)
         CX_ERROR("read json meta object error");
         return ret;
     }
+    cxConstChars alphaPath = cxJsonConstChars(meta, "alpha");
+    if(alphaPath != NULL){
+        CX_RETAIN_SET(this->alphaTexture, cxTextureFactoryLoadFile(alphaPath));
+    }
     cxConstChars simagePath = cxJsonConstChars(meta, "image");
-    CX_ASSERT(simagePath != NULL, "json image null");
-    //make texture
-    texture->innerTexture = cxTextureFactoryLoadFile(simagePath);
-    ret = (texture->innerTexture != NULL);
+    if(simagePath != NULL){
+        this->innerTexture = cxTextureFactoryLoadFile(simagePath);
+    }
+    ret = (this->innerTexture != NULL);
     CX_ASSERT(ret, "get innerTexture error");
-    CX_RETAIN(texture->innerTexture);
+    CX_RETAIN(this->innerTexture);
     //for jpg pkm atlas texture
-    cxSize2f metasiz = cxJsonSize2f(meta, "size", texture->innerTexture->size);
-    texture->cxTexture.size = texture->innerTexture->size;
-    texture->cxTexture.scale.x = texture->cxTexture.size.w / metasiz.w;
-    texture->cxTexture.scale.y = texture->cxTexture.size.h / metasiz.h;
+    cxSize2f metasiz = cxJsonSize2f(meta, "size", this->innerTexture->size);
+    this->cxTexture.size = this->innerTexture->size;
+    this->cxTexture.scale.x = this->cxTexture.size.w / metasiz.w;
+    this->cxTexture.scale.y = this->cxTexture.size.h / metasiz.h;
     //parse frames
     cxJson frames = cxJsonArray(json, "frames");
     CX_JSON_ARRAY_EACH_BEG(frames, item)
@@ -52,22 +56,28 @@ static cxBool cxTextureJSONLoad(cxAny this,cxStream stream)
         e->isRotation = cxJsonBool(item, "rotated", false);
         cxJson frame = cxJsonObject(item, "frame");
         CX_ASSERT(frame != NULL, "frame node miss");
-        e->x = cxJsonDouble(frame, "x", 0) / texture->cxTexture.scale.x;
-        e->y = cxJsonDouble(frame, "y", 0) / texture->cxTexture.scale.y;
-        e->w = cxJsonDouble(frame, "w", 0) / texture->cxTexture.scale.x;
-        e->h = cxJsonDouble(frame, "h", 0) / texture->cxTexture.scale.y;
-        cxHashSet(texture->cxTexture.keys, cxHashStrKey(sn), e);
+        e->x = cxJsonDouble(frame, "x", 0) / this->cxTexture.scale.x;
+        e->y = cxJsonDouble(frame, "y", 0) / this->cxTexture.scale.y;
+        e->w = cxJsonDouble(frame, "w", 0) / this->cxTexture.scale.x;
+        e->h = cxJsonDouble(frame, "h", 0) / this->cxTexture.scale.y;
+        cxHashSet(this->cxTexture.keys, cxHashStrKey(sn), e);
         CX_RELEASE(e);
     }
     CX_JSON_ARRAY_EACH_END(frames, item);
+    cxConstChars shader = cxJsonConstChars(meta, "shader");
+    CX_RETAIN_SET(this->cxTexture.shader, cxOpenGLShaderByName(shader));
     return ret;
 }
 
 static void cxTextureJSONBind(cxAny this)
 {
     cxTextureJSON json = this;
-    CX_ASSERT(json->innerTexture != NULL, "xml inner texture error");
-    cxTextureBind(json->innerTexture);
+    if(json->alphaTexture != NULL){
+        cxOpenGLBindTexture(json->innerTexture->textureId, 1);
+        cxOpenGLBindTexture(json->alphaTexture->textureId, 2);
+    }else{
+        cxOpenGLBindTexture(json->innerTexture->textureId, 0);
+    }
 }
 
 CX_OBJECT_TYPE(cxTextureJSON, cxTexture)
@@ -81,6 +91,7 @@ CX_OBJECT_INIT(cxTextureJSON, cxTexture)
 }
 CX_OBJECT_FREE(cxTextureJSON, cxTexture)
 {
+    CX_RELEASE(this->alphaTexture);
     CX_RELEASE(this->innerTexture);
 }
 CX_OBJECT_TERM(cxTextureJSON, cxTexture)
