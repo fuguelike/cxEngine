@@ -59,10 +59,17 @@ cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat subPixel)
     cxFloat y = (texCoord->y + subPixel) / this->size.h;
     cxFloat w = (texCoord->w - subPixel*2.0f) / this->size.w;
     cxFloat h = (texCoord->h - subPixel*2.0f) / this->size.h;
-    rv.lb = cxTex2fv(x, y + h);
-    rv.rb = cxTex2fv(x + w, y + h);
-    rv.lt = cxTex2fv(x, y);
-    rv.rt = cxTex2fv(x + w, y);
+    if(texCoord->isRotation){
+        rv.lb = cxTex2fv(x, y);
+        rv.rb = cxTex2fv(x, y + h);
+        rv.lt = cxTex2fv(x + w, y);
+        rv.rt = cxTex2fv(x + w, y + h);
+    }else{
+        rv.lb = cxTex2fv(x, y + h);
+        rv.rb = cxTex2fv(x + w, y + h);
+        rv.lt = cxTex2fv(x, y);
+        rv.rt = cxTex2fv(x + w, y);
+    }
     return rv;
 }
 
@@ -70,22 +77,6 @@ cxBoxTex2f cxTextureBox(cxAny ptex,cxConstChars key)
 {
     CX_ASSERT_THIS(ptex, cxTexture);
     return cxTextureBoxPixel(this, key, 0);
-}
-
-cxRect4f cxTextureRect(cxAny ptex,cxConstChars key)
-{
-    CX_ASSERT_THIS(ptex, cxTexture);
-    cxRect4f rv = cxRect4fv(0.0f, 0.0f, 1.0f, 1.0f);
-    CX_RETURN(key == NULL, rv);
-    cxTexCoord texCoord = cxHashGet(this->keys, cxHashStrKey(key));
-    if(texCoord == NULL){
-        return rv;
-    }
-    rv.x = texCoord->x / this->size.w;
-    rv.y = texCoord->y / this->size.h;
-    rv.w = texCoord->w / this->size.w;
-    rv.h = texCoord->h / this->size.h;
-    return rv;
 }
 
 cxSize2f cxTextureSize(cxAny ptex,cxConstChars key)

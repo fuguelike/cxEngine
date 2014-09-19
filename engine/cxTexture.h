@@ -46,8 +46,6 @@ cxBoxTex2f cxTextureBox(cxAny ptex,cxConstChars key);
 
 cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat subPixel);
 
-cxRect4f cxTextureRect(cxAny ptex,cxConstChars key);
-
 cxSize2f cxTextureSize(cxAny ptex,cxConstChars key);
 
 void cxTextureLoad(cxAny ptex,cxStream stream);

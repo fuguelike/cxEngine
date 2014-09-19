@@ -12,6 +12,8 @@
 		831ABCBC19249044001A86F1 /* cxParticle.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCBB19249044001A86F1 /* cxParticle.json */; };
 		831ABCC319249D23001A86F1 /* cxView.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCC219249D23001A86F1 /* cxView.json */; };
 		831ABCC61924C69F001A86F1 /* cxSprite.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCC51924C69F001A86F1 /* cxSprite.json */; };
+		8321071219CC746900B1AA1E /* candy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8321071019CC746900B1AA1E /* candy.json */; };
+		8321071319CC746900B1AA1E /* candy.png in Resources */ = {isa = PBXBuildFile; fileRef = 8321071119CC746900B1AA1E /* candy.png */; };
 		83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6018D9C5D00093FF54 /* libevent.a */; };
 		83314F6C18D9C5D00093FF54 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6318D9C5D00093FF54 /* libjansson.a */; };
 		83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6418D9C5D00093FF54 /* libjpeg.a */; };
@@ -50,7 +52,7 @@
 		83D9FFA019CB32B400F0EAB2 /* odus_cutout.pkm in Resources */ = {isa = PBXBuildFile; fileRef = 83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */; };
 		83D9FFA119CB32B400F0EAB2 /* odus_cutout.pkm.alpha in Resources */ = {isa = PBXBuildFile; fileRef = 83D9FF9F19CB32B400F0EAB2 /* odus_cutout.pkm.alpha */; };
 		83DAD700191A14A6000A7D1F /* ui.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD6FF191A14A6000A7D1F /* ui.json */; };
-		83DAD707191A26BF000A7D1F /* texture.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD705191A26BF000A7D1F /* texture.json */; };
+		83DAD707191A26BF000A7D1F /* pvr.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD705191A26BF000A7D1F /* pvr.json */; };
 		83DAD708191A26BF000A7D1F /* texture.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD706191A26BF000A7D1F /* texture.pvr */; };
 		83DAD70A191A386C000A7D1F /* cxLabelTTF.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD709191A386C000A7D1F /* cxLabelTTF.json */; };
 		83F3CCD0191B674D00D6BCFB /* cxAtlas.json in Resources */ = {isa = PBXBuildFile; fileRef = 83F3CCCF191B674D00D6BCFB /* cxAtlas.json */; };
@@ -73,6 +75,8 @@
 		831ABCBB19249044001A86F1 /* cxParticle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxParticle.json; path = res/cxParticle.json; sourceTree = SOURCE_ROOT; };
 		831ABCC219249D23001A86F1 /* cxView.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxView.json; path = res/cxView.json; sourceTree = SOURCE_ROOT; };
 		831ABCC51924C69F001A86F1 /* cxSprite.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxSprite.json; path = res/cxSprite.json; sourceTree = SOURCE_ROOT; };
+		8321071019CC746900B1AA1E /* candy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = candy.json; path = res/candy.json; sourceTree = SOURCE_ROOT; };
+		8321071119CC746900B1AA1E /* candy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = candy.png; path = res/candy.png; sourceTree = SOURCE_ROOT; };
 		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
 		83314F6318D9C5D00093FF54 /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = ../libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
 		83314F6418D9C5D00093FF54 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../libs/ios/lib/libjpeg.a; sourceTree = "<group>"; };
@@ -111,7 +115,7 @@
 		83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */ = {isa = PBXFileReference; lastKnownFileType = file; name = odus_cutout.pkm; path = res/odus_cutout.pkm; sourceTree = SOURCE_ROOT; };
 		83D9FF9F19CB32B400F0EAB2 /* odus_cutout.pkm.alpha */ = {isa = PBXFileReference; lastKnownFileType = file; name = odus_cutout.pkm.alpha; path = res/odus_cutout.pkm.alpha; sourceTree = SOURCE_ROOT; };
 		83DAD6FF191A14A6000A7D1F /* ui.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = ui.json; path = res/ui.json; sourceTree = SOURCE_ROOT; };
-		83DAD705191A26BF000A7D1F /* texture.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = texture.json; path = res/texture.json; sourceTree = SOURCE_ROOT; };
+		83DAD705191A26BF000A7D1F /* pvr.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = pvr.json; path = res/pvr.json; sourceTree = SOURCE_ROOT; };
 		83DAD706191A26BF000A7D1F /* texture.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = texture.pvr; path = res/texture.pvr; sourceTree = SOURCE_ROOT; };
 		83DAD709191A386C000A7D1F /* cxLabelTTF.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxLabelTTF.json; path = res/cxLabelTTF.json; sourceTree = SOURCE_ROOT; };
 		83F3CCCF191B674D00D6BCFB /* cxAtlas.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxAtlas.json; path = res/cxAtlas.json; sourceTree = SOURCE_ROOT; };
@@ -197,6 +201,8 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8321071019CC746900B1AA1E /* candy.json */,
+				8321071119CC746900B1AA1E /* candy.png */,
 				83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */,
 				83D9FF9F19CB32B400F0EAB2 /* odus_cutout.pkm.alpha */,
 				830EEB4919C55A6500C81EA5 /* cxSpine.json */,
@@ -220,7 +226,7 @@
 				83F3CCCF191B674D00D6BCFB /* cxAtlas.json */,
 				83DAD709191A386C000A7D1F /* cxLabelTTF.json */,
 				830EEBB719C5CB4500C81EA5 /* cxLabelBMP.json */,
-				83DAD705191A26BF000A7D1F /* texture.json */,
+				83DAD705191A26BF000A7D1F /* pvr.json */,
 				83DAD706191A26BF000A7D1F /* texture.pvr */,
 				835D3B2C19AF21680004155D /* texture.png */,
 				83DAD6FF191A14A6000A7D1F /* ui.json */,
@@ -317,15 +323,17 @@
 				835D3B2D19AF21680004155D /* texture.png in Resources */,
 				831ABCBC19249044001A86F1 /* cxParticle.json in Resources */,
 				835DB19A19C44C650037DA5B /* spineboy.json in Resources */,
+				8321071319CC746900B1AA1E /* candy.png in Resources */,
 				83732B4219B9BF740049D09A /* cxAnimate.json in Resources */,
 				83F3CCD0191B674D00D6BCFB /* cxAtlas.json in Resources */,
 				835DB19919C44C650037DA5B /* spineboy.atlas in Resources */,
 				836D8DA7191B8C02000F0230 /* cxScroll.json in Resources */,
 				835DB1C619C4A0F80037DA5B /* goblins.png in Resources */,
-				83DAD707191A26BF000A7D1F /* texture.json in Resources */,
+				83DAD707191A26BF000A7D1F /* pvr.json in Resources */,
 				835DB19C19C44C650037DA5B /* t.pkm in Resources */,
 				830EEB4A19C55A6500C81EA5 /* cxSpine.json in Resources */,
 				839722AF19161746006D0F89 /* font.png in Resources */,
+				8321071219CC746900B1AA1E /* candy.json in Resources */,
 				834327BC19B8034400B4927F /* t.png in Resources */,
 				831ABCC319249D23001A86F1 /* cxView.json in Resources */,
 				834327BD19B8034400B4927F /* yellow.png in Resources */,
