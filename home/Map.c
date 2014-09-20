@@ -41,18 +41,23 @@ void MapAppendNode(cxAny pmap,cxAny node)
     CX_ASSERT_TYPE(node, Node);
     Node snode = node;
     cxViewAppend(this, snode);
-    snode->element = cxListAppend(this->nodes, snode);
+    cxSpatialInsert(this->nodes, snode);
 }
 
+static void MapNodesEach(cxAny ps,cxAny pview,cxAny data)
+{
+    Node node = pview;
+    cxBool *has = data;
+    if(!(*has) && node->isSelected){
+        *has = true;
+    }
+    
+}
 static cxBool hasSelectNode(Map this)
 {
-    CX_LIST_FOREACH(this->nodes, ele){
-        Node node = ele->any;
-        if(node->isSelected){
-            return true;
-        }
-    }
-    return false;
+    cxBool has = false;
+    cxSpatialEach(this->nodes, MapNodesEach, &has);
+    return has;
 }
 
 static cxBool MapTouch(cxAny pview,cxTouchItems *points)
@@ -86,9 +91,9 @@ cxBool MapInit(cxAny pmap,cxJson data)
     CX_ASSERT_THIS(pmap, Map);
     //set size
     cxEngine engine = cxEngineInstance();
-    this->unitNum = cxVec2iv(20, 20);
+    this->unitNum = cxVec2iv(MAP_ROW, MAP_COL);
     this->items = allocator->calloc(this->unitNum.x * this->unitNum.y,sizeof(cxAny));
-    this->nodes = CX_ALLOC(cxList);
+    this->nodes = CX_ALLOC(cxSpatial);
     
     cxSize2f size = cxSize2fv(engine->winsize.w * 1.2f, 0);
     size.h = size.w * 0.75f;
@@ -201,10 +206,7 @@ cxBool MapRemoveNode(cxAny pmap,cxAny node)
         }
     }
     n->map = NULL;
-    if(n->element != NULL){
-        cxListRemove(this->nodes, n->element);
-        n->element = NULL;
-    }
+    cxSpatialRemove(this->node, n);
     cxViewRemove(node);
     return true;
 }

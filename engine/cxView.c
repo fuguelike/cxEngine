@@ -40,7 +40,12 @@ CX_SETTER_DEF(cxView, raxis)
 }
 CX_SETTER_DEF(cxView, scale)
 {
-    this->scale = cxJsonToVec2f(value, this->scale);
+    if(cxJsonIsNumber(value)){
+        cxFloat d = cxJsonToDouble(value, 1.0);
+        this->scale = cxVec2fv(d, d);
+    }else{
+        this->scale = cxJsonToVec2f(value, this->scale);
+    }
 }
 CX_SETTER_DEF(cxView, fixscale)
 {

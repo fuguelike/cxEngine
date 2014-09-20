@@ -21,18 +21,31 @@ cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
     return MapPosToIdx(map, pos);
 }
 
+static void MapNodesEachSelected(cxAny ps,cxAny pview,cxAny data)
+{
+    if(pview == data){
+        //选中
+        cxViewSetColor(pview, cxYELLOW);
+    }else{
+        //未选中
+        cxViewSetColor(pview, cxRED);
+    }
+}
 static cxBool NodeSelected(Node this)
 {
     Map map = this->map;
-    CX_LIST_FOREACH(map->nodes, ele){
-        if(ele->any == this){
-            cxViewSetColor(ele->any, cxYELLOW);
-        }else{
-            cxViewSetColor(ele->any, cxRED);
-        }
-    }
+    cxSpatialEach(map->nodes, MapNodesEachSelected, this);
     map->node = this;
     return true;
+}
+
+static void NodeMoveIsValid(Node this,cxBool valid)
+{
+    if(valid){
+        cxViewSetColor(this, cxGREEN);
+    }else{
+        cxViewSetColor(this, cxGRAY);
+    }
 }
 
 static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
@@ -55,11 +68,7 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
         kmVec2Add(&vpos, &vpos, &delta);
         cxVec2f idx = NodePosToIdx(this,vpos);
         this->isValidIdx = NodeIdxIsValid(this, idx);
-        if(this->isValidIdx){
-            cxViewSetColor(this, cxGREEN);
-        }else{
-            cxViewSetColor(this, cxGRAY);
-        }
+        NodeMoveIsValid(this,this->isValidIdx);
         NodeSetPosition(this, idx, false);
         this->start = vpos;
         return true;
@@ -85,6 +94,13 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
     return false;
 }
 
+static void NodeOnTransform(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    Map map = this->map;
+    cxSpatialReindexView(map->nodes, this);
+}
+
 CX_OBJECT_TYPE(Node, cxSprite)
 {
     
@@ -94,6 +110,7 @@ CX_OBJECT_INIT(Node, cxSprite)
     this->canSelected = true;
     this->idx = cxVec2fv(-1, -1);
     CX_METHOD_SET(this->cxSprite.cxView.Touch, NodeTouch);
+    CX_EVENT_APPEND(CX_TYPE(cxView, this)->onTransform, NodeOnTransform);
     this->box = cxAnyArrayAlloc(cxVec2f);
 }
 CX_OBJECT_FREE(Node, cxSprite)
@@ -160,10 +177,10 @@ cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
     cxVec2i idx = cxVec2iv(curr.x, curr.y);
     cxSize2i size = NodeSize(this);
     // 1 = max -1
-    if(idx.x < 0 || (idx.x + size.w) > map->unitNum.x){
+    if(idx.x < MAP_BORDER || (idx.x + size.w) > (map->unitNum.x - MAP_BORDER)){
         return false;
     }
-    if(idx.y < 0 || (idx.y + size.h) > map->unitNum.y){
+    if(idx.y < MAP_BORDER || (idx.y + size.h) > (map->unitNum.y - MAP_BORDER)){
         return false;
     }
     for(cxInt x = idx.x; x < idx.x + size.w; x ++){

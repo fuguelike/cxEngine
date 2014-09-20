@@ -13,6 +13,10 @@
 
 CX_C_BEGIN
 
+#define MAP_ROW         42
+#define MAP_COL         42
+#define MAP_BORDER      1
+
 //地图模式
 typedef enum {
     MapModeNone = 0,

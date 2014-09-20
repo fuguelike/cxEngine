@@ -9,6 +9,7 @@
 #ifndef Home_Map_h
 #define Home_Map_h
 
+#include <engine/cxSpatial.h>
 #include <views/cxAtlas.h>
 #include "Define.h"
 
@@ -22,7 +23,7 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxAny *items;       //格子node
     cxAny node;     //当前选中的node
     //node list
-    cxList nodes;
+    cxSpatial nodes;
     //
     cxBox4f box;
 CX_OBJECT_END(Map, cxAtlas)

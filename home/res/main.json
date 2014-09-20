@@ -6,6 +6,7 @@
     "cxId": "map",
     "cxType": "Map"
   },
+  "scale":1.2,
   "range": {
     "min": 1.0,
     "max": 2.4
