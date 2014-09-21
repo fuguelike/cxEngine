@@ -16,6 +16,7 @@ CX_OBJECT_FREE(cxUrlPath, cxObject)
 {}
 CX_OBJECT_TERM(cxUrlPath, cxObject)
 
+//parse url?key=value
 static cxUrlPath cxUrlPathParseKeyValueImp(cxUrlPath this)
 {
     CX_RETURN(this->count == 1, this);
@@ -34,6 +35,7 @@ static cxUrlPath cxUrlPathParseKeyValueImp(cxUrlPath this)
     return this;
 }
 
+//parse url?key
 cxUrlPath cxUrlPathParse(cxConstChars url)
 {
     cxUrlPath this = CX_CREATE(cxUrlPath);

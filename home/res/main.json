@@ -4,7 +4,8 @@
   "resizing": "fill",
   "body": {
     "cxId": "map",
-    "cxType": "Map"
+    "cxType": "Map",
+    "mode":"fight"
   },
   "scale":1.2,
   "range": {

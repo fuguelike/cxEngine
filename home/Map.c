@@ -35,13 +35,22 @@ void MapSortNode(cxAny pmap)
     this->isSort = true;
 }
 
-void MapAppendNode(cxAny pmap,cxAny node)
+void MapAppendAttack(cxAny pmap,cxAny node)
 {
     CX_ASSERT_THIS(pmap, Map);
     CX_ASSERT_TYPE(node, Node);
     Node snode = node;
     cxViewAppend(this, snode);
-    cxSpatialInsert(this->nodes, snode);
+    cxSpatialInsert(this->attacks, snode);
+}
+
+void MapAppendDefence(cxAny pmap,cxAny node)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    CX_ASSERT_TYPE(node, Node);
+    Node snode = node;
+    cxViewAppend(this, snode);
+    cxSpatialInsert(this->defences, snode);
 }
 
 static void MapNodesEach(cxAny ps,cxAny pview,cxAny data)
@@ -56,11 +65,11 @@ static void MapNodesEach(cxAny ps,cxAny pview,cxAny data)
 static cxBool hasSelectNode(Map this)
 {
     cxBool has = false;
-    cxSpatialEach(this->nodes, MapNodesEach, &has);
+    cxSpatialEach(this->defences, MapNodesEach, &has);
     return has;
 }
 
-static cxBool MapTouch(cxAny pview,cxTouchItems *points)
+static cxBool MapEditTouch(cxAny pview,cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, Map);
     if(points->number != 1){
@@ -89,23 +98,22 @@ static cxBool MapTouch(cxAny pview,cxTouchItems *points)
 cxBool MapInit(cxAny pmap,cxJson data)
 {
     CX_ASSERT_THIS(pmap, Map);
-    //set size
+
     cxEngine engine = cxEngineInstance();
-    this->unitNum = cxVec2iv(MAP_ROW, MAP_COL);
-    this->items = allocator->calloc(this->unitNum.x * this->unitNum.y,sizeof(cxAny));
-    this->nodes = CX_ALLOC(cxSpatial);
+
+    this->items = allocator->calloc(global.unitNum.x * global.unitNum.y,sizeof(cxAny));
     
     cxSize2f size = cxSize2fv(engine->winsize.w * 1.2f, 0);
     size.h = size.w * 0.75f;
-    this->unitSize = cxSize2fv(size.w/this->unitNum.x, size.h/this->unitNum.y);
+    global.unitSize = cxSize2fv(size.w/global.unitNum.x, size.h/global.unitNum.y);
     cxViewSetSize(this, size);
     
     //test
     cxSpriteSetTextureURL(this, "bg1.png");
-    for(cxInt x = 0; x < this->unitNum.x; x++){
-        for (cxInt y = 0; y < this->unitNum.y; y++) {
+    for(cxInt x = 0; x < global.unitNum.x; x++){
+        for (cxInt y = 0; y < global.unitNum.y; y++) {
             cxVec2f pos = MapIdxToPos(this, cxVec2fv(x, y));
-            cxAtlasAppendBoxPoint(this, pos, this->unitSize, cxBoxTex2fDefault(), cxColor4fv(1, 1, 1, 1));
+            cxAtlasAppendBoxPoint(this, pos, cxSize2fv(global.unitSize.w - 2, global.unitSize.h - 2), cxBoxTex2fDefault(), cxColor4fv(1, 1, 1, 1));
         }
     }
     {
@@ -113,7 +121,7 @@ cxBool MapInit(cxAny pmap,cxJson data)
         NodeInit(node, cxSize2fv(3, 3),cxVec2fv(8, 8),NodeTypeNone);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
-        MapAppendNode(this, node);
+        MapAppendDefence(this, node);
     }
     
     {
@@ -121,7 +129,7 @@ cxBool MapInit(cxAny pmap,cxJson data)
         NodeInit(node, cxSize2fv(4, 4),cxVec2fv(0, 0),NodeTypeNone);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
-        MapAppendNode(this, node);
+        MapAppendDefence(this, node);
     }
     
     {
@@ -129,7 +137,7 @@ cxBool MapInit(cxAny pmap,cxJson data)
         NodeInit(node, cxSize2fv(1, 1),cxVec2fv(18, 18),NodeTypeNone);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
-        MapAppendNode(this, node);
+        MapAppendDefence(this, node);
     }
     
     {
@@ -137,7 +145,7 @@ cxBool MapInit(cxAny pmap,cxJson data)
         NodeInit(node, cxSize2fv(2, 2),cxVec2fv(7, 18),NodeTypeNone);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
-        MapAppendNode(this, node);
+        MapAppendDefence(this, node);
     }
     
     //按Y位置排序
@@ -154,28 +162,87 @@ static void MapUpdate(cxAny pview)
     }
 }
 
+//士兵搜索算法
+static void NodeAttackSearch(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    Map map = this->map;
+    cxVec2f pos = cxViewPosition(this);
+    NodeNearestInfo info = NodeNearest(map->defences, pos, 10000 , NULL);
+    if(info.node != NULL){
+        cxViewSetScale(info.node, cxVec2fv(2, 2));
+    }
+}
+
+static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
+{
+    CX_ASSERT_THIS(pview, Map);
+    if(points->number != 1){
+        return false;
+    }
+    cxTouchItem item = points->items[0];
+    cxVec2f cpos;
+    if(!cxViewHitTest(pview, item->position, &cpos)){
+        return false;
+    }
+    if(item->type == cxTouchTypeDown){
+        this->isSelectUnit = true;
+        return false;
+    }
+    if(item->type == cxTouchTypeUp && item->movement < 10){
+        cxVec2f idx = MapPosToIdx(this, cpos);
+        CX_LOGGER("fight mode selected:%f %f",idx.x,idx.y);
+        
+        //test
+        Node node = NodeCreate(this);
+        NodeInit(node, cxSize2fv(1, 1),cxVec2fv(idx.x, idx.y),NodeTypeAttack);
+        cxSpriteSetTextureURL(node, "bg1.png");
+        cxViewSetColor(node, cxORANGE);
+        MapAppendAttack(this, node);
+        NodeSearchRun(node, 0.3f);
+        CX_METHOD_SET(node->Search, NodeAttackSearch);
+        
+        return true;
+    }
+    return false;
+}
+
+CX_SETTER_DEF(Map, mode)
+{
+    cxConstChars mode = cxJsonToConstChars(value);
+    if(cxConstCharsHas(mode, "normal")){
+        this->mode = MapModeNormal;
+        CX_METHOD_SET(CX_TYPE(cxView, this)->Touch, MapEditTouch);
+    }else if(cxConstCharsHas(mode, "fight")){
+        this->mode = MapModeFight;
+        CX_METHOD_SET(CX_TYPE(cxView, this)->Touch, MapFightTouch);
+    }
+}
+
 CX_OBJECT_TYPE(Map, cxAtlas)
 {
-    
+    CX_PROPERTY_SETTER(Map, mode);
 }
 CX_OBJECT_INIT(Map, cxAtlas)
 {
-    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Touch,MapTouch);
-    CX_EVENT_APPEND(this->cxAtlas.cxSprite.cxView.onUpdate, MapUpdate);
+    
+    CX_EVENT_APPEND(CX_TYPE(cxView, this)->onUpdate, MapUpdate);
     this->mode = MapModeNormal;
     this->isSort = true;
+    this->defences = CX_ALLOC(cxSpatial);
+    this->attacks = CX_ALLOC(cxSpatial);
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {
-    CX_RELEASE(this->nodes);
+    CX_RELEASE(this->attacks);
+    CX_RELEASE(this->defences);
     allocator->free(this->items);
 }
 CX_OBJECT_TERM(Map, cxAtlas)
 
 cxInt MapOffsetIdx(cxAny pmap,cxInt x,cxInt y)
 {
-    CX_ASSERT_THIS(pmap, Map);
-    return y * this->unitNum.x + x;
+    return y * global.unitNum.x + x;
 }
                             
 cxAny MapItem(cxAny pmap,cxVec2f idx)
@@ -242,22 +309,21 @@ cxVec2f MapPosToIdx(cxAny pmap,cxVec2f pos)
 {
     CX_ASSERT_THIS(pmap, Map);
     cxSize2f size = cxViewSize(this);
-    pos.y += (size.h - this->unitSize.h)/2.0f;
-    return cxTilePosToIdx(pos, this->unitSize);
+    pos.y += (size.h - global.unitSize.h)/2.0f;
+    return cxTilePosToIdx(pos, global.unitSize);
 }
 
 cxBool MapIsValidIdx(cxAny pmap,cxVec2f idx)
 {
-    CX_ASSERT_THIS(pmap, Map);
-    return idx.x >= 0 && idx.x < this->unitNum.x && idx.y >= 0 && idx.y < this->unitNum.y;
+    return idx.x >= 0 && idx.x < global.unitNum.x && idx.y >= 0 && idx.y < global.unitNum.y;
 }
 
 cxVec2f MapIdxToPos(cxAny pmap,cxVec2f idx)
 {
     CX_ASSERT_THIS(pmap, Map);
     cxSize2f size = cxViewSize(this);
-    cxVec2f pos = cxTileIdxToPos(idx, this->unitSize);
-    pos.y -= (size.h - this->unitSize.h)/2.0f;
+    cxVec2f pos = cxTileIdxToPos(idx, global.unitSize);
+    pos.y -= (size.h - global.unitSize.h)/2.0f;
     return pos;
 }
 

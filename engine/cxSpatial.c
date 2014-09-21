@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
-#include <chipmunk/chipmunk.h>
+
 #include "cxView.h"
 #include "cxSpatial.h"
 
@@ -33,7 +33,8 @@ CX_OBJECT_TYPE(cxSpatial, cxObject)
 }
 CX_OBJECT_INIT(cxSpatial, cxObject)
 {
-    this->index = cpBBTreeNew(cxSpatialIndexBB, NULL);
+    CX_METHOD_SET(this->IndexBB, cxSpatialIndexBB);
+    this->index = cpBBTreeNew(this->IndexBB, NULL);
 }
 CX_OBJECT_FREE(cxSpatial, cxObject)
 {

@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxTimer, cxAction)
     cxInt repeat;
     cxBool isBegin;
     CX_EVENT_ALLOC(onArrive);
-CX_OBJECT_END(cxTimer, cxObject)
+CX_OBJECT_END(cxTimer, cxAction)
 
 void cxTimerSetBegin(cxAny pav,cxBool isBegin);
 

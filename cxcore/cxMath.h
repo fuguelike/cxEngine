@@ -220,6 +220,8 @@ typedef struct {
 #define cxBoxTex2fDefault() (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, 1.0f),cxTex2fv(1.0f, 0.0f),cxTex2fv(1.0f, 1.0f)}
 #define cxBoxTex2Scale(v)   (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, v),cxTex2fv(v, 0.0f),cxTex2fv(v, v)}
 
+cxBoxTex2f cxBoxTex2fFlip(cxBoxTex2f tex,cxBool flipx,cxBool flipy);
+
 cxRect4f cxBoxTex2fToRect4f(cxBoxTex2f box);
 
 cxBoxTex2f cxRect4fToBoxTex2f(cxRect4f box,cxSize2f texsize);

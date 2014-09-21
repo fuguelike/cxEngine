@@ -10,6 +10,7 @@
 #include "Node.h"
 #include "Scene.h"
 #include "Button.h"
+#include "Range.h"
 
 void cxEngineType(cxEngine engine)
 {
@@ -17,6 +18,7 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Node);
     CX_TYPE_REG(Scene);
     CX_TYPE_REG(Button);
+    CX_TYPE_REG(Range);
 }
 
 void cxEngineInit(cxEngine engine)
@@ -26,6 +28,8 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
+    GlobalInit(engine);
+    
     cxLoader loader = cxLoaderCreate("main.json");
     Scene scene = CX_TYPE_CAST(Scene, loader->object);
     CX_ASSERT(scene != NULL, "get main scene failed");
@@ -33,6 +37,11 @@ void cxEngineMain(cxEngine engine)
     CX_ASSERT(scene->map != NULL, "map null");
     MapInit(scene->map,NULL);
     cxWindowPushView(scene);
+    
+//    Range r = CX_CREATE(Range);
+//    RangeSetMax(r, 11);
+//    RangeSetMin(r, 4);
+//    cxViewAppend(scene->map, r);
 }
 
 void cxEngineFree(cxEngine engine)

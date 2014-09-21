@@ -17,6 +17,16 @@ CX_C_BEGIN
 #define MAP_COL         42
 #define MAP_BORDER      1
 
+typedef struct {
+    cxVec2i unitNum;    //单元数量
+    cxSize2f unitSize;  //单元大小
+    cxFloat sideLen;    //菱形单元边长
+    cxFloat angle;      //大角度
+}Global;
+
+extern Global global;
+void GlobalInit(cxEngine engine);
+
 //地图模式
 typedef enum {
     MapModeNone = 0,
@@ -24,10 +34,20 @@ typedef enum {
     MapModeFight,           //战斗模式
 }MapMode;
 
-//节点类型
+//节点主类型
 typedef enum {
     NodeTypeNone = 0,
+    NodeTypeResource,       //资源类型
+    NodeTypeDefence,        //主动防御类型
+    NodeTypeAttack,         //主动攻击类型
+    NodeTypeOther,          //其他，包括，辅助，军营
 }NodeType;
+
+//节点子类型
+typedef enum {
+    NodeSubTypeNone = 0,
+    NodeSubTypeSoldier,       //近身攻击的士兵
+}NodeSubType;
 
 CX_C_END
 

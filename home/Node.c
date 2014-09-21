@@ -34,7 +34,7 @@ static void MapNodesEachSelected(cxAny ps,cxAny pview,cxAny data)
 static cxBool NodeSelected(Node this)
 {
     Map map = this->map;
-    cxSpatialEach(map->nodes, MapNodesEachSelected, this);
+    cxSpatialEach(map->defences, MapNodesEachSelected, this);
     map->node = this;
     return true;
 }
@@ -98,7 +98,12 @@ static void NodeOnTransform(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
-    cxSpatialReindexView(map->nodes, this);
+    //update idx
+    cxVec2f pos = cxViewPosition(this);
+    cxVec2f idx = MapPosToIdx(map, pos);
+    
+    cxSpatialReindexView(map->defences, this);
+    cxSpatialReindexView(map->attacks, this);
 }
 
 CX_OBJECT_TYPE(Node, cxSprite)
@@ -118,6 +123,143 @@ CX_OBJECT_FREE(Node, cxSprite)
     CX_RELEASE(this->box);
 }
 CX_OBJECT_TERM(Node, cxSprite)
+
+//idx与node的最近距离，按格子算
+cxVec2f NodeNearestIdx(cxAny pview,cxVec2f idx,cxFloat *d)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxVec2f ret = idx;
+    *d = INT32_MAX;
+    for(cxInt x=this->idx.x; x <= (this->idx.x + this->size.w); x ++){
+        for(cxInt y=this->idx.y; y <= (this->idx.y + this->size.h); y ++){
+            cxVec2f p = cxVec2fv(x, y);
+            cxFloat dis = kmVec2DistanceBetween(&p, &idx);
+            if(dis < *d){
+                ret = p;
+                *d = dis;
+            }
+        }
+    }
+    return ret;
+}
+
+static cpCollisionID cxSpatialIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
+{
+    NodeNearestInfo *info = data;
+    Node node = CX_TYPE_CAST(Node, pview);
+    if(info->filter != NULL && !info->filter(node)){
+        return id;
+    }
+    cxVec2f sp = MapPosToIdx(node->map, info->p);
+    cxFloat d = 0;
+    NodeNearestIdx(node, sp, &d);
+    if(d < info->d){
+        info->node = node;
+        info->d = d;
+    }
+    return id;
+}
+
+NodeNearestInfo NodeNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNearestFilter filter)
+{
+    CX_ASSERT_THIS(ps, cxSpatial);
+    NodeNearestInfo ret = {0};
+    ret.p = p;
+    ret.d = INT32_MAX;
+    ret.node = NULL;
+    ret.m = max;
+    ret.filter = filter;
+    cpBB bb = cpBBNewForCircle(cpv(p.x,p.y), cpfmax(max, 0.0f));
+    cpSpatialIndexQuery(this->index, this, bb, cxSpatialIndexQueryFunc, &ret);
+    return ret;
+}
+
+//搜索附近的
+static void NodeSearchArrive(cxAny pav)
+{
+    cxAny pview = cxActionView(pav);
+    CX_ASSERT_THIS(pview, Node);
+    CX_METHOD_RUN(this->Search,this);
+}
+
+void NodePauseSearch(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    CX_RETURN(this->searchTimer == NULL);
+    cxActionPause(this->searchTimer);
+}
+
+void NodeResumeSearch(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    CX_RETURN(this->searchTimer == NULL);
+    cxActionReset(this->searchTimer);
+    cxActionResume(this->searchTimer);
+}
+
+void NodeSearchRun(cxAny pview,cxFloat freq)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->searchTimer = cxViewAppendTimer(this, freq, CX_TIMER_FOREVER);
+    CX_EVENT_APPEND(this->searchTimer->onArrive, NodeSearchArrive);
+}
+
+//暂停攻击
+void NodePauseAttack(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    CX_RETURN(this->attackTimer == NULL);
+    cxActionPause(this->attackTimer);
+}
+
+//重新启动攻击
+void NodeResumeAttack(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    CX_RETURN(this->attackTimer == NULL);
+    cxActionReset(this->attackTimer);
+    cxActionResume(this->attackTimer);
+}
+
+//搜索附近的
+static void NodeAttackArrive(cxAny pav)
+{
+    cxAny pview = cxActionView(pav);
+    CX_ASSERT_THIS(pview, Node);
+    CX_METHOD_RUN(this->Attack,this);
+}
+
+//启动攻击定时器
+void NodeAttackRun(cxAny pview,cxFloat freq)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->attackTimer = cxViewAppendTimer(this, freq, CX_TIMER_FOREVER);
+    CX_EVENT_APPEND(this->attackTimer->onArrive, NodeAttackArrive);
+}
+
+cxRange2f NodeRange(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->range;
+}
+
+cxFloat NodeAttack(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->attack;
+}
+
+cxFloat NodeLife(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->life;
+}
+
+cxInt NodeLevel(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->level;
+}
 
 cxVec2i NodeIndex(cxAny pview)
 {
@@ -159,8 +301,7 @@ cxBool NodeSetPosition(cxAny pview,cxVec2f idx,cxBool animate)
 void NodeSetSize(cxAny pview,cxSize2f size)
 {
     CX_ASSERT_THIS(pview, Node);
-    Map map = this->map;
-    cxSize2f vsize = cxSize2fv(map->unitSize.w * size.w, map->unitSize.h * size.h);
+    cxSize2f vsize = cxSize2fv(global.unitSize.w * size.w, global.unitSize.h * size.h);
     cxViewSetSize(this, vsize);
     this->size = size;
     cxAnyArrayClean(this->box);
@@ -177,10 +318,10 @@ cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
     cxVec2i idx = cxVec2iv(curr.x, curr.y);
     cxSize2i size = NodeSize(this);
     // 1 = max -1
-    if(idx.x < MAP_BORDER || (idx.x + size.w) > (map->unitNum.x - MAP_BORDER)){
+    if(idx.x < MAP_BORDER || (idx.x + size.w) > (global.unitNum.x - MAP_BORDER)){
         return false;
     }
-    if(idx.y < MAP_BORDER || (idx.y + size.h) > (map->unitNum.y - MAP_BORDER)){
+    if(idx.y < MAP_BORDER || (idx.y + size.h) > (global.unitNum.y - MAP_BORDER)){
         return false;
     }
     for(cxInt x = idx.x; x < idx.x + size.w; x ++){

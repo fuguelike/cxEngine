@@ -23,6 +23,24 @@ cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFlo
 	return rv;
 }
 
+cxBoxTex2f cxBoxTex2fFlip(cxBoxTex2f tex,cxBool flipx,cxBool flipy)
+{
+    cxBoxTex2f ret = tex;
+    if(flipx){
+        ret.lb.u = tex.rb.u;
+        ret.rb.u = tex.lb.u;
+        ret.lt.u = tex.rt.u;
+        ret.rt.u = tex.lt.u;
+    }
+    if(flipy){
+        ret.lb.v = tex.lt.v;
+        ret.rb.v = tex.rt.v;
+        ret.lt.v = tex.lb.v;
+        ret.rt.v = tex.rb.v;
+    }
+    return ret;
+}
+
 cxRect4f cxBoxTex2fToRect4f(cxBoxTex2f box)
 {
     cxFloat x = box.lt.u;

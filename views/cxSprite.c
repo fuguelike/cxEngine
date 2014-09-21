@@ -96,9 +96,12 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url)
     cxUrlPath path = cxUrlPathParse(url);
     CX_RETURN(path == NULL);
     cxTexture texture = cxTextureFactoryLoadFile(path->path);
-    CX_ASSERT(texture != NULL, "texture load failed %s",path->path);
+    if(texture == NULL){
+        CX_ERROR("set texture null");
+        return;
+    }
     cxSpriteSetTexture(this, texture);
-    if(path->count == 2){
+    if(path->count >= 2){
         this->texCoord = cxTextureBox(this->texture, path->key);
     }
     if(texture->shader != NULL){

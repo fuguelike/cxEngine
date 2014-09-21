@@ -18,14 +18,16 @@ CX_C_BEGIN
 CX_OBJECT_DEF(Map, cxAtlas)
     MapMode mode;
     cxBool isSort;
-    cxSize2f unitSize;  //单元格子大小
-    cxVec2i unitNum;    //单元数量
     cxAny *items;       //格子node
     cxAny node;     //当前选中的node
-    //node list
-    cxSpatial nodes;
+    //防御方建筑
+    cxSpatial defences;
+    //攻击方建筑，攻击时有效
+    cxSpatial attacks;
     //
     cxBox4f box;
+    //fight var
+    cxBool isSelectUnit;
 CX_OBJECT_END(Map, cxAtlas)
 
 //init map
@@ -36,7 +38,9 @@ void MapNodeOnNewIdx(cxAny pmap,cxAny pnode);
 //按Y的大小重新排序
 void MapSortNode(cxAny pmap);
 
-void MapAppendNode(cxAny pmap,cxAny node);
+void MapAppendAttack(cxAny pmap,cxAny node);
+
+void MapAppendDefence(cxAny pmap,cxAny node);
 
 cxInt MapOffsetIdx(cxAny pmap,cxInt x,cxInt y);
 

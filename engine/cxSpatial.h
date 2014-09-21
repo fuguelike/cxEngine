@@ -9,6 +9,7 @@
 #ifndef cxEngine_cxSpatial_h
 #define cxEngine_cxSpatial_h
 
+#include <chipmunk/chipmunk.h>
 #include <cxcore/cxCore.h>
 
 CX_C_BEGIN
@@ -28,6 +29,7 @@ typedef struct {
 CX_OBJECT_DEF(cxSpatial, cxObject)
     cxAny index;
     CX_METHOD_DEF(cxUInt, HashValue, cxAny);
+    CX_METHOD_DEF(cpBB, IndexBB,cxAny);
 CX_OBJECT_END(cxSpatial, cxObject)
 
 void cxSpatialEach(cxAny ps,cxSpatialEachFunc func,cxAny data);
