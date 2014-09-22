@@ -48,6 +48,10 @@ CX_SETTER_DEF(cxAction, group)
     CX_ASSERT(name != NULL, "name null");
     cxActionSetGroup(this, name);
 }
+CX_SETTER_DEF(cxAction, tag)
+{
+    this->tag = cxJsonToLong(value, this->tag);
+}
 
 CX_OBJECT_TYPE(cxAction, cxObject)
 {
@@ -58,6 +62,7 @@ CX_OBJECT_TYPE(cxAction, cxObject)
     CX_PROPERTY_SETTER(cxAction, actionid);
     CX_PROPERTY_SETTER(cxAction, index);
     CX_PROPERTY_SETTER(cxAction, group);
+    CX_PROPERTY_SETTER(cxAction, tag);
 }
 CX_OBJECT_INIT(cxAction, cxObject)
 {
@@ -134,6 +139,18 @@ void cxActionSetGroup(cxAny pav,cxConstChars name)
     cxActionMgr mgr = cxActionMgrGet(name);
     CX_ASSERT(mgr != NULL, "action mgr name %s not exists",name);
     cxActionSetMgr(this, mgr);
+}
+
+cxLong cxActionTag(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    return this->tag;
+}
+
+void cxActionSetTag(cxAny pav,cxLong tag)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    this->tag = tag;
 }
 
 void cxActionSetMgr(cxAny pav,cxActionMgr mgr)

@@ -46,7 +46,7 @@ CX_OBJECT_TYPE(cxRotate, cxAction)
 }
 CX_OBJECT_INIT(cxRotate, cxAction)
 {
-    this->raxis = cxVec3fv(0.0f, 0.0f, 1.0f);
+    this->raxis = cxVec3fZ;
     CX_METHOD_SET(this->cxAction.Init, cxRotateInit);
     CX_METHOD_SET(this->cxAction.Step, cxRotateStep);
 }

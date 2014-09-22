@@ -122,40 +122,27 @@ cxBool MapInit(cxAny pmap,cxJson data)
     cxViewSetSize(this, size);
     
     //test
-    cxSpriteSetTextureURL(this, "bg1.png");
-    for(cxInt x = 0; x < global.unitNum.x; x++){
-        for (cxInt y = 0; y < global.unitNum.y; y++) {
-            cxVec2f pos = MapIdxToPos(this, cxVec2fv(x, y));
-            cxAtlasAppendBoxPoint(this, pos, cxSize2fv(global.unitSize.w - 2, global.unitSize.h - 2), cxBoxTex2fDefault(), cxColor4fv(1, 1, 1, 1));
-        }
-    }
-    {
-        Node node = CX_CREATE(Node);
-        NodeInit(node, this, cxSize2fv(3, 3),cxVec2fv(8, 8),NodeTypeOther);
-        cxSpriteSetTextureURL(node, "bg1.png");
-        cxViewSetColor(node, cxRED);
-        MapAppendDefence(this, node);
-    }
+    cxSpriteSetTextureURL(this, "bg3.png");
+    cxBoxTex2f tex = cxBoxTex2fDefault();
+    cxVec2f pos = cxVec2fv(size.w / 4, size.h / 4);
+    cxColor4f color = cxColor4fv(1, 1, 1, 1);
+    cxAtlasAppendBoxPoint(this, pos, cxSize2fv(size.w/2.0f, size.h/2.0f), tex, color);
+    
+    cxBoxTex2f tex1 = cxBoxTex2fFlip(tex, true, false);
+    pos = cxVec2fv(-size.w / 4, size.h / 4);
+    cxAtlasAppendBoxPoint(this, pos, cxSize2fv(size.w/2.0f, size.h/2.0f), tex1, color);
+
+    cxBoxTex2f tex2 = cxBoxTex2fFlip(tex, true, true);
+    pos = cxVec2fv(-size.w / 4, -size.h / 4);
+    cxAtlasAppendBoxPoint(this, pos, cxSize2fv(size.w/2.0f, size.h/2.0f), tex2, color);
+
+    cxBoxTex2f tex3 = cxBoxTex2fFlip(tex, false, true);
+    pos = cxVec2fv(size.w / 4, -size.h / 4);
+    cxAtlasAppendBoxPoint(this, pos, cxSize2fv(size.w/2.0f, size.h/2.0f), tex3, color);
     
     {
         Node node = CX_CREATE(Node);
-        NodeInit(node, this, cxSize2fv(4, 4),cxVec2fv(0, 0),NodeTypeDefence);
-        cxSpriteSetTextureURL(node, "bg1.png");
-        cxViewSetColor(node, cxRED);
-        MapAppendDefence(this, node);
-    }
-    
-    {
-        Node node = CX_CREATE(Node);
-        NodeInit(node, this, cxSize2fv(1, 1),cxVec2fv(18, 18),NodeTypeResource);
-        cxSpriteSetTextureURL(node, "bg1.png");
-        cxViewSetColor(node, cxRED);
-        MapAppendDefence(this, node);
-    }
-    
-    {
-        Node node = CX_CREATE(Node);
-        NodeInit(node, this, cxSize2fv(2, 2),cxVec2fv(7, 18),NodeTypeAttack);
+        NodeInit(node, this, cxSize2fv(2, 2),cxVec2fv(20, 20),NodeTypeOther);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendDefence(this, node);
@@ -175,6 +162,18 @@ static void MapUpdate(cxAny pview)
     }
 }
 
+static void NodeOnAngle(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, Move);
+    Node node = CX_TYPE_CAST(Node, this->cxAction.view);
+    cxInt index = 0;
+    cxFloat angle = MoveAngleIndex(this,&index);
+    
+    cxConstChars n = CX_CONST_STRING("%d.png",index);
+    cxSpriteSetTextureURL(node, n);
+    cxViewSetDegrees(node, angle);
+}
+
 //士兵搜索算法
 static void NodeAttackSearch(cxAny pview)
 {
@@ -186,12 +185,19 @@ static void NodeAttackSearch(cxAny pview)
         Node node = info.node;
         Move m = CX_CREATE(Move);
         MoveAppendPoint(m, this->idx);
-        MoveAppendPoint(m, cxVec2fv(0, 0));
-        MoveAppendPoint(m, cxVec2fv(40, 0));
-        MoveAppendPoint(m, cxVec2fv(0, 40));
-        MoveAppendPoint(m, cxVec2fv(40, 40));
+        for(cxFloat a = 0; a < 360; a+=22.5f){
+            cxInt x = 20 * sinf(kmDegreesToRadians(a)) + 20;
+            cxInt y = 20 * cosf(kmDegreesToRadians(a)) + 20;
+            MoveAppendPoint(m, cxVec2fv(x, y));
+        }
+//        for(cxFloat a = 0; a < 360; a+=10){
+//            cxInt x = 20 * sinf(kmDegreesToRadians(a)) + 20;
+//            cxInt y = 20 * cosf(kmDegreesToRadians(a)) + 20;
+//            MoveAppendPoint(m, cxVec2fv(x, y));
+//        }
         MoveAppendPoint(m, info.idx);
         MoveSetTarget(m, node);
+        CX_EVENT_APPEND(m->OnAngle, NodeOnAngle);
         
         cxViewAppendAction(pview, m);
         NodePauseSearch(pview);
@@ -218,16 +224,15 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         CX_LOGGER("fight mode selected:%f %f",idx.x,idx.y);
         //test
         Node node = CX_CREATE(Node);
-        NodeInit(node, this, cxSize2fv(1, 1),cxVec2fv(idx.x, idx.y),NodeTypeAttack);
+        NodeInit(node, this, cxSize2fv(2, 2),cxVec2fv(idx.x, idx.y),NodeTypeAttack);
         NodeSetSubType(node, NodeSubTypeSoldier);
         cxSpriteSetTextureURL(node, "bg1.png");
-        cxViewSetColor(node, cxORANGE);
         MapAppendAttack(this, node);
         NodeSearchRun(node, SEARCH_DELAY);
         CX_METHOD_SET(node->Search, NodeAttackSearch);
-        
         return true;
     }
+
     return false;
 }
 

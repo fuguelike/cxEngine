@@ -25,7 +25,7 @@ void cxEngineType(cxEngine engine)
 
 void cxEngineInit(cxEngine engine)
 {
-//    engine->isShowBorder = false;
+    engine->isShowBorder = false;
 }
 
 void cxEngineMain(cxEngine engine)

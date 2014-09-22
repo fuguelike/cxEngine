@@ -16,6 +16,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxAction, cxObject)
+    cxLong tag;
     cxAny parent;
     cxAssist4f assist;
     cxUInt actionId;
@@ -47,6 +48,10 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_EVENT_ALLOC(onIndex);
     CX_EVENT_ALLOC(onUpdate);
 CX_OBJECT_END(cxAction, cxObject)
+
+cxLong cxActionTag(cxAny pav);
+
+void cxActionSetTag(cxAny pav,cxLong tag);
 
 void cxActionSetGroup(cxAny pav,cxConstChars name);
 

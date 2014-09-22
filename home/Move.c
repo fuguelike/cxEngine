@@ -24,14 +24,21 @@ static void MoveSetNextIndex(Move this)
     this->to = MapIdxToPos(map, *to);
     kmVec2Subtract(&this->delta, &this->to, &this->from);
     this->angle = cxVec2fAngle(this->delta);
-    CX_LOGGER("angle %f",MoveAngle(this));
-    CX_EVENT_FIRE(this, OnChange);
+    CX_EVENT_FIRE(this, OnAngle);
 }
 
-cxFloat MoveAngle(cxAny pav)
+//8方向使用 22.5 45.0角度
+cxFloat MoveAngleIndex(cxAny pav,cxInt *index)
 {
     CX_ASSERT_THIS(pav, Move);
-    return fmodf(kmRadiansToDegrees(this->angle) + 360, 360);
+    cxFloat angle = fmodf(kmRadiansToDegrees(this->angle) + 360, 360);
+    cxInt idx = angle/22.5f;
+    cxInt m = (idx / 2) + (idx % 2);
+    if(m > 7) m = 0;
+    if(index != NULL){
+        *index = m;
+    }
+    return (angle - m * 45.0f);
 }
 
 void MoveSetTarget(cxAny pav,cxAny pview)
@@ -86,7 +93,7 @@ CX_OBJECT_INIT(Move, cxAction)
 }
 CX_OBJECT_FREE(Move, cxAction)
 {
-    CX_EVENT_RELEASE(this->OnChange);
+    CX_EVENT_RELEASE(this->OnAngle);
     CX_RELEASE(this->target);
     CX_RELEASE(this->points);
 }
