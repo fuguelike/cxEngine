@@ -11,6 +11,7 @@
 #include "Scene.h"
 #include "Button.h"
 #include "Range.h"
+#include "Move.h"
 
 void cxEngineType(cxEngine engine)
 {
@@ -19,6 +20,7 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Scene);
     CX_TYPE_REG(Button);
     CX_TYPE_REG(Range);
+    CX_TYPE_REG(Move);
 }
 
 void cxEngineInit(cxEngine engine)
@@ -28,6 +30,7 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
+    //全局数据初始化
     GlobalInit(engine);
     
     cxLoader loader = cxLoaderCreate("main.json");

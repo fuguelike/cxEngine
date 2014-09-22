@@ -27,6 +27,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxBool isValidIdx;  //是否在有效的位置
     cxVec2f start;
     NodeType type;
+    NodeState state;
     cxRange2f range;    //攻击范围
     cxFloat attack;     //攻击力
     cxFloat life;       //生命值
@@ -42,8 +43,11 @@ typedef struct {
     cxVec2f p;      //与此点的
     cxFloat d;      //距离
     cxFloat m;      //max
+    cxVec2f idx;      //node最近点
     cxSpatialNearestFilter filter;
 } NodeNearestInfo;
+
+void NodeSetState(cxAny pview,NodeState state);
 
 NodeNearestInfo NodeNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNearestFilter filter);
 

@@ -203,6 +203,9 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
         this->isFirst = true;
         cxActionInit(pav);
     }
+    if(this->isExit){
+        goto finished;
+    }
     //action delay
     this->delayElapsed += dt;
     if(this->delay > 0 && this->delayElapsed < this->delay){

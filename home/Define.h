@@ -16,6 +16,7 @@ CX_C_BEGIN
 #define MAP_ROW         42
 #define MAP_COL         42
 #define MAP_BORDER      1
+#define SEARCH_DELAY    0.1f    //搜索延迟
 
 typedef struct {
     cxVec2i unitNum;    //单元数量
@@ -26,6 +27,13 @@ typedef struct {
 
 extern Global global;
 void GlobalInit(cxEngine engine);
+
+//node 状态
+typedef enum {
+    NodeStateNormal,    //一般状态
+    NodeStateMove,      //移动状态
+    NodeStateFight      //战斗状态
+}NodeState;
 
 //地图模式
 typedef enum {

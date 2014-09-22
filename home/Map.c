@@ -12,6 +12,7 @@
 #include <engine/cxEngine.h>
 #include "Map.h"
 #include "Node.h"
+#include "Move.h"
 
 static cxInt MapSortCmpFunc(cxConstAny lv,cxConstAny rv)
 {
@@ -51,6 +52,16 @@ void MapAppendDefence(cxAny pmap,cxAny node)
     Node snode = node;
     cxViewAppend(this, snode);
     cxSpatialInsert(this->defences, snode);
+}
+
+void MapRemoveAttack(cxAny pmap,cxAny node)
+{
+    
+}
+
+void MapRemoveDefence(cxAny pmap,cxAny node)
+{
+    
 }
 
 static void MapNodesEach(cxAny ps,cxAny pview,cxAny data)
@@ -170,7 +181,12 @@ static void NodeAttackSearch(cxAny pview)
     cxVec2f pos = cxViewPosition(this);
     NodeNearestInfo info = NodeNearest(map->defences, pos, 10000 , NULL);
     if(info.node != NULL){
-        cxViewSetScale(info.node, cxVec2fv(2, 2));
+        Node node = info.node;
+        Move m = CX_CREATE(Move);
+        MoveAppendPoint(m, this->idx);
+        MoveAppendPoint(m, info.idx);
+        cxViewAppendAction(pview, m);
+        NodePauseSearch(pview);
     }
 }
 
@@ -192,14 +208,13 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
     if(item->type == cxTouchTypeUp && item->movement < 10){
         cxVec2f idx = MapPosToIdx(this, cpos);
         CX_LOGGER("fight mode selected:%f %f",idx.x,idx.y);
-        
         //test
         Node node = NodeCreate(this);
         NodeInit(node, cxSize2fv(1, 1),cxVec2fv(idx.x, idx.y),NodeTypeAttack);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxORANGE);
         MapAppendAttack(this, node);
-        NodeSearchRun(node, 0.3f);
+        NodeSearchRun(node, SEARCH_DELAY);
         CX_METHOD_SET(node->Search, NodeAttackSearch);
         
         return true;

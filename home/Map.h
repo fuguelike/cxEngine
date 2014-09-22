@@ -17,15 +17,15 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(Map, cxAtlas)
     MapMode mode;
+    //
     cxBool isSort;
+    //
     cxAny *items;       //格子node
     cxAny node;     //当前选中的node
-    //防御方建筑
+    //防御单位空间索引
     cxSpatial defences;
-    //攻击方建筑，攻击时有效
+    //攻击单位空间索引
     cxSpatial attacks;
-    //
-    cxBox4f box;
     //fight var
     cxBool isSelectUnit;
 CX_OBJECT_END(Map, cxAtlas)
@@ -41,6 +41,10 @@ void MapSortNode(cxAny pmap);
 void MapAppendAttack(cxAny pmap,cxAny node);
 
 void MapAppendDefence(cxAny pmap,cxAny node);
+
+void MapRemoveAttack(cxAny pmap,cxAny node);
+
+void MapRemoveDefence(cxAny pmap,cxAny node);
 
 cxInt MapOffsetIdx(cxAny pmap,cxInt x,cxInt y);
 

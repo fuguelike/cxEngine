@@ -99,9 +99,9 @@ static void NodeOnTransform(cxAny pview)
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     //update idx
-    cxVec2f pos = cxViewPosition(this);
-    cxVec2f idx = MapPosToIdx(map, pos);
-    
+//    cxVec2f pos = cxViewPosition(this);
+//    cxVec2f idx = NodePosToIdx(map, pos);
+//    
     cxSpatialReindexView(map->defences, this);
     cxSpatialReindexView(map->attacks, this);
 }
@@ -152,10 +152,11 @@ static cpCollisionID cxSpatialIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionI
     }
     cxVec2f sp = MapPosToIdx(node->map, info->p);
     cxFloat d = 0;
-    NodeNearestIdx(node, sp, &d);
+    cxVec2f idx = NodeNearestIdx(node, sp, &d);
     if(d < info->d){
         info->node = node;
         info->d = d;
+        info->idx = idx;
     }
     return id;
 }
@@ -180,6 +181,12 @@ static void NodeSearchArrive(cxAny pav)
     cxAny pview = cxActionView(pav);
     CX_ASSERT_THIS(pview, Node);
     CX_METHOD_RUN(this->Search,this);
+}
+
+void NodeSetState(cxAny pview,NodeState state)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->state = state;
 }
 
 void NodePauseSearch(cxAny pview)

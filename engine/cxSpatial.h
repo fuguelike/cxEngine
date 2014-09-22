@@ -10,7 +10,7 @@
 #define cxEngine_cxSpatial_h
 
 #include <chipmunk/chipmunk.h>
-#include <cxcore/cxCore.h>
+#include <cxcore/cxBase.h>
 
 CX_C_BEGIN
 
