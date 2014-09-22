@@ -26,8 +26,8 @@ static cxInt MapSortCmpFunc(cxConstAny lv,cxConstAny rv)
 void MapNodeOnNewIdx(cxAny pmap,cxAny pnode)
 {
 //    CX_ASSERT_THIS(pmap, Map);
-    Node node = CX_TYPE_CAST(Node, pnode);
-    CX_LOGGER("%p new idx=%f idx.y=%f",pnode,node->idx.x,node->idx.y);
+//    Node node = CX_TYPE_CAST(Node, pnode);
+//    CX_LOGGER("%p new idx=%f idx.y=%f",pnode,node->idx.x,node->idx.y);
 }
 
 void MapSortNode(cxAny pmap)
@@ -39,8 +39,7 @@ void MapSortNode(cxAny pmap)
 void MapAppendAttack(cxAny pmap,cxAny node)
 {
     CX_ASSERT_THIS(pmap, Map);
-    CX_ASSERT_TYPE(node, Node);
-    Node snode = node;
+    Node snode = CX_TYPE_CAST(Node, node);
     cxViewAppend(this, snode);
     cxSpatialInsert(this->attacks, snode);
 }
@@ -48,20 +47,23 @@ void MapAppendAttack(cxAny pmap,cxAny node)
 void MapAppendDefence(cxAny pmap,cxAny node)
 {
     CX_ASSERT_THIS(pmap, Map);
-    CX_ASSERT_TYPE(node, Node);
-    Node snode = node;
+    Node snode = CX_TYPE_CAST(Node, node);
     cxViewAppend(this, snode);
     cxSpatialInsert(this->defences, snode);
 }
 
 void MapRemoveAttack(cxAny pmap,cxAny node)
 {
-    
+    CX_ASSERT_THIS(pmap, Map);
+    cxSpatialRemove(this->attacks, node);
+    cxViewRemove(node);
 }
 
 void MapRemoveDefence(cxAny pmap,cxAny node)
 {
-    
+    CX_ASSERT_THIS(pmap, Map);
+    cxSpatialRemove(this->defences, node);
+    cxViewRemove(node);
 }
 
 static void MapNodesEach(cxAny ps,cxAny pview,cxAny data)
@@ -128,32 +130,32 @@ cxBool MapInit(cxAny pmap,cxJson data)
         }
     }
     {
-        Node node = NodeCreate(this);
-        NodeInit(node, cxSize2fv(3, 3),cxVec2fv(8, 8),NodeTypeNone);
+        Node node = CX_CREATE(Node);
+        NodeInit(node, this, cxSize2fv(3, 3),cxVec2fv(8, 8),NodeTypeOther);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendDefence(this, node);
     }
     
     {
-        Node node = NodeCreate(this);
-        NodeInit(node, cxSize2fv(4, 4),cxVec2fv(0, 0),NodeTypeNone);
+        Node node = CX_CREATE(Node);
+        NodeInit(node, this, cxSize2fv(4, 4),cxVec2fv(0, 0),NodeTypeDefence);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendDefence(this, node);
     }
     
     {
-        Node node = NodeCreate(this);
-        NodeInit(node, cxSize2fv(1, 1),cxVec2fv(18, 18),NodeTypeNone);
+        Node node = CX_CREATE(Node);
+        NodeInit(node, this, cxSize2fv(1, 1),cxVec2fv(18, 18),NodeTypeResource);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendDefence(this, node);
     }
     
     {
-        Node node = NodeCreate(this);
-        NodeInit(node, cxSize2fv(2, 2),cxVec2fv(7, 18),NodeTypeNone);
+        Node node = CX_CREATE(Node);
+        NodeInit(node, this, cxSize2fv(2, 2),cxVec2fv(7, 18),NodeTypeAttack);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
         MapAppendDefence(this, node);
@@ -179,12 +181,18 @@ static void NodeAttackSearch(cxAny pview)
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     cxVec2f pos = cxViewPosition(this);
-    NodeNearestInfo info = NodeNearest(map->defences, pos, 10000 , NULL);
+    NodeNearestInfo info = NodeNearest(map->defences, pos, 10000 , NodeTypeNone, NodeSubTypeNone);
     if(info.node != NULL){
         Node node = info.node;
         Move m = CX_CREATE(Move);
         MoveAppendPoint(m, this->idx);
+        MoveAppendPoint(m, cxVec2fv(0, 0));
+        MoveAppendPoint(m, cxVec2fv(40, 0));
+        MoveAppendPoint(m, cxVec2fv(0, 40));
+        MoveAppendPoint(m, cxVec2fv(40, 40));
         MoveAppendPoint(m, info.idx);
+        MoveSetTarget(m, node);
+        
         cxViewAppendAction(pview, m);
         NodePauseSearch(pview);
     }
@@ -209,8 +217,9 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         cxVec2f idx = MapPosToIdx(this, cpos);
         CX_LOGGER("fight mode selected:%f %f",idx.x,idx.y);
         //test
-        Node node = NodeCreate(this);
-        NodeInit(node, cxSize2fv(1, 1),cxVec2fv(idx.x, idx.y),NodeTypeAttack);
+        Node node = CX_CREATE(Node);
+        NodeInit(node, this, cxSize2fv(1, 1),cxVec2fv(idx.x, idx.y),NodeTypeAttack);
+        NodeSetSubType(node, NodeSubTypeSoldier);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxORANGE);
         MapAppendAttack(this, node);

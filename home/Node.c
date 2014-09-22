@@ -143,11 +143,16 @@ cxVec2f NodeNearestIdx(cxAny pview,cxVec2f idx,cxFloat *d)
     return ret;
 }
 
-static cpCollisionID cxSpatialIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
+static cpCollisionID NodeQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
 {
     NodeNearestInfo *info = data;
     Node node = CX_TYPE_CAST(Node, pview);
-    if(info->filter != NULL && !info->filter(node)){
+    //不匹配类型
+    if(info->type > 0 && info->type != node->type){
+        return id;
+    }
+    //不匹配子类型
+    if(info->subType > 0 && info->subType != node->subType){
         return id;
     }
     cxVec2f sp = MapPosToIdx(node->map, info->p);
@@ -161,7 +166,7 @@ static cpCollisionID cxSpatialIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionI
     return id;
 }
 
-NodeNearestInfo NodeNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNearestFilter filter)
+NodeNearestInfo NodeNearest(cxAny ps,cxVec2f p,cxFloat max,NodeType type,NodeSubType subType)
 {
     CX_ASSERT_THIS(ps, cxSpatial);
     NodeNearestInfo ret = {0};
@@ -169,9 +174,10 @@ NodeNearestInfo NodeNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNearestFilte
     ret.d = INT32_MAX;
     ret.node = NULL;
     ret.m = max;
-    ret.filter = filter;
+    ret.type = type;
+    ret.subType = subType;
     cpBB bb = cpBBNewForCircle(cpv(p.x,p.y), cpfmax(max, 0.0f));
-    cpSpatialIndexQuery(this->index, this, bb, cxSpatialIndexQueryFunc, &ret);
+    cpSpatialIndexQuery(this->index, this, bb, NodeQueryFunc, &ret);
     return ret;
 }
 
@@ -318,6 +324,12 @@ void NodeSetSize(cxAny pview,cxSize2f size)
     cxAnyArrayAppend(this->box, &(cxVec2fv(0, -vsize.h/2.0f)));
 }
 
+void NodeSetSubType(cxAny pview,NodeSubType type)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->subType = type;
+}
+
 cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -370,18 +382,12 @@ void NodeSetIdx(cxAny pview,cxVec2f idx)
     MapNodeOnNewIdx(map, this);
 }
 
-void NodeInit(cxAny pview,cxSize2f size,cxVec2f pos,NodeType type)
+void NodeInit(cxAny pview,cxAny map, cxSize2f size,cxVec2f pos,NodeType type)
 {
     CX_ASSERT_THIS(pview, Node);
+    this->map = map;
     NodeSetSize(this, size);
     NodeSetIdx(this, pos);
     NodeSetPosition(this, pos, false);
     this->type = type;
-}
-
-cxAny NodeCreate(cxAny map)
-{
-    Node this = CX_CREATE(Node);
-    this->map = map;
-    return this;
 }

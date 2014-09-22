@@ -17,6 +17,7 @@ CX_C_BEGIN
 #define MAP_COL         42
 #define MAP_BORDER      1
 #define SEARCH_DELAY    0.1f    //搜索延迟
+#define ARRIVE_MIN_DIS  (15)      //到达点最小距离
 
 typedef struct {
     cxVec2i unitNum;    //单元数量

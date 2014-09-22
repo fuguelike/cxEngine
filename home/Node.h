@@ -23,11 +23,12 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxVec2f curr;       //当前所在位置
     cxBool canSelected; //可选择
     cxBool isSelected;  //是否悬选中
-    cxBool isTouch;     //按下时是否悬选中
+    cxBool isTouch;     //按下时是否选中
     cxBool isValidIdx;  //是否在有效的位置
     cxVec2f start;
-    NodeType type;
-    NodeState state;
+    NodeSubType subType;//子类型
+    NodeType type;      //主类型
+    NodeState state;    //当前状态
     cxRange2f range;    //攻击范围
     cxFloat attack;     //攻击力
     cxFloat life;       //生命值
@@ -43,13 +44,14 @@ typedef struct {
     cxVec2f p;      //与此点的
     cxFloat d;      //距离
     cxFloat m;      //max
-    cxVec2f idx;      //node最近点
-    cxSpatialNearestFilter filter;
+    cxVec2f idx;    //node最近点
+    NodeType type;      //搜索的类型
+    NodeSubType subType;//搜索子类型
 } NodeNearestInfo;
 
 void NodeSetState(cxAny pview,NodeState state);
 
-NodeNearestInfo NodeNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNearestFilter filter);
+NodeNearestInfo NodeNearest(cxAny ps,cxVec2f p,cxFloat max,NodeType type,NodeSubType subType);
 
 //暂停搜索
 void NodePauseSearch(cxAny pview);
@@ -105,9 +107,9 @@ cxBool NodeSetPosition(cxAny pview,cxVec2f idx,cxBool animate);
 
 void NodeSetSize(cxAny pview,cxSize2f size);
 
-void NodeInit(cxAny pview,cxSize2f size,cxVec2f pos,NodeType type);
+void NodeInit(cxAny pview,cxAny map,cxSize2f size,cxVec2f pos,NodeType type);
 
-cxAny NodeCreate(cxAny map);
+void NodeSetSubType(cxAny pview,NodeSubType type);
 
 CX_C_END
 

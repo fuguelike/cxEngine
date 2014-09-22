@@ -23,7 +23,13 @@ CX_OBJECT_DEF(Move, cxAction)
     cxVec2f delta;
     cxVec2f to;
     cxFloat angle;
+    cxAny target;
+    CX_EVENT_ALLOC(OnChange);
 CX_OBJECT_END(Move, cxAction)
+
+cxFloat MoveAngle(cxAny pav);
+
+void MoveSetTarget(cxAny pav,cxAny pview);
 
 void MoveAppendPoint(cxAny pav,cxVec2f point);
 

@@ -12,6 +12,7 @@
 
 static void MoveSetNextIndex(Move this)
 {
+    this->index ++;
     cxInt len = cxAnyArrayLength(this->points);
     if(this->index >= len){
         cxActionStop(this);
@@ -23,12 +24,26 @@ static void MoveSetNextIndex(Move this)
     this->to = MapIdxToPos(map, *to);
     kmVec2Subtract(&this->delta, &this->to, &this->from);
     this->angle = cxVec2fAngle(this->delta);
-    CX_LOGGER("angle %f",kmRadiansToDegrees(this->angle));
+    CX_LOGGER("angle %f",MoveAngle(this));
+    CX_EVENT_FIRE(this, OnChange);
+}
+
+cxFloat MoveAngle(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, Move);
+    return fmodf(kmRadiansToDegrees(this->angle) + 360, 360);
+}
+
+void MoveSetTarget(cxAny pav,cxAny pview)
+{
+    CX_ASSERT_THIS(pav, Move);
+    CX_RETAIN_SWAP(this->target, pview);
 }
 
 static void MoveInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
+    CX_ASSERT(this->target != this->cxAction.view,"target error");
     cxInt num = cxAnyArrayLength(this->points);
     if(num < 2){
         cxActionStop(pav);
@@ -36,7 +51,7 @@ static void MoveInit(cxAny pav)
     }
     Node node = CX_TYPE_CAST(Node, this->cxAction.view);
     NodeSetState(node, NodeStateMove);
-    this->index = 1;
+    this->index = 0;
     this->from = cxViewPosition(this->cxAction.view);
     MoveSetNextIndex(this);
 }
@@ -46,16 +61,14 @@ static void MoveStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_ASSERT_THIS(pav, Move);
     Node node = CX_TYPE_CAST(Node, this->cxAction.view);
     this->from = cxViewPosition(node);
+    this->from.x += this->speed * dt * cosf(this->angle);
+    this->from.y += this->speed * dt * sinf(this->angle);
     cxFloat d = kmVec2DistanceBetween(&this->from, &this->to);
-    cxVec2f pos = cxViewPosition(node);
-    pos.x += this->speed * dt * cosf(this->angle);
-    pos.y += this->speed * dt * sinf(this->angle);
-    if(d < global.unitSize.w){
-        this->index ++;
+    if(d < ARRIVE_MIN_DIS){
         MoveSetNextIndex(this);
-    }else{
-        cxViewSetPos(node, pos);
+        return;
     }
+    cxViewSetPos(node, this->from);
 }
 
 CX_OBJECT_TYPE(Move, cxAction)
@@ -73,6 +86,8 @@ CX_OBJECT_INIT(Move, cxAction)
 }
 CX_OBJECT_FREE(Move, cxAction)
 {
+    CX_EVENT_RELEASE(this->OnChange);
+    CX_RELEASE(this->target);
     CX_RELEASE(this->points);
 }
 CX_OBJECT_TERM(Move, cxAction)
