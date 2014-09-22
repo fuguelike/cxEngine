@@ -30,14 +30,20 @@ CX_OBJECT_DEF(Node, cxSprite)
     NodeType type;      //主类型
     NodeState state;    //当前状态
     cxRange2f range;    //攻击范围
-    cxFloat attack;     //攻击力
-    cxFloat life;       //生命值
+    cxInt attack;       //攻击力
+    cxInt life;         //生命值
     cxInt level;        //等级
     cxTimer searchTimer;      //搜索用定时器
     CX_METHOD_DEF(void, Search,cxAny);
     cxTimer attackTimer;    //攻击用定时器
     CX_METHOD_DEF(void, Attack,cxAny);
 CX_OBJECT_END(Node, cxSprite)
+
+//设置生命 等级 攻击力
+void NodeSetLife(cxAny pview,cxInt life);
+void NodeAddLife(cxAny pview,cxInt life);
+void NodeSetLevel(cxAny pview,cxInt level);
+void NodeSetAttack(cxAny pview,cxInt attack);
 
 typedef struct {
     cxAny node;     //最近的view
@@ -49,6 +55,10 @@ typedef struct {
     NodeSubType subType;//搜索子类型
 } NodeNearestInfo;
 
+//节点死亡
+cxBool NodeIsDie(cxAny pview);
+
+//设置状态
 void NodeSetState(cxAny pview,NodeState state);
 
 NodeNearestInfo NodeNearest(cxAny ps,cxVec2f p,cxFloat max,NodeType type,NodeSubType subType);

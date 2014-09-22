@@ -77,6 +77,7 @@ void cxFollowSetInit(cxAny pav,cxFloat init)
 
 cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target)
 {
+    CX_ASSERT_TYPE(target, cxView);
     cxFollow this = CX_CREATE(cxFollow);
     this->init = initSpeed;
     CX_RETAIN_SWAP(this->target, target);

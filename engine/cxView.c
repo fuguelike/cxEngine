@@ -244,6 +244,18 @@ void cxViewUnBindAll(cxAny pview)
     cxHashClean(this->binded);
 }
 
+cxHash cxViewBindes(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    return this->bindes;
+}
+
+cxHash cxViewBinded(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    return this->binded;
+}
+
 void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
 {
     CX_ASSERT(pview != bview, "self can't bind self");
@@ -959,7 +971,7 @@ void cxViewDraw(cxAny pview)
     if(this->isFront){
         cxViewCheckFront(this);
     }
-    if(this->onlyTransform){
+    if(this->onlyTransform || !this->isVisible){
         goto finished;
     }
     kmGLPushMatrix();
@@ -971,7 +983,7 @@ void cxViewDraw(cxAny pview)
     }
     CX_METHOD_RUN(this->Before, this);
     CX_METHOD_RUN(this->Draw, this);
-    CX_LIST_FOREACH(this->subViews, ele){
+    CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
         cxView view = ele->any;
         cxViewDraw(view);
     }

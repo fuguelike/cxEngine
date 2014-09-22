@@ -217,7 +217,7 @@ void cxEngineDraw()
     cxEngine engine = cxEngineInstance();
     cxDouble now = cxTimestamp();
     engine->frameDelta = now - engine->lastTime;
-    engine->frameDelta = CX_MAX(0, engine->frameDelta);
+    engine->frameDelta = kmClamp(engine->frameDelta, engine->interval, engine->interval * 2.0f);
     if(!engine->isInit){
         goto completed;
     }

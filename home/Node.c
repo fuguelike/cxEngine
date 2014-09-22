@@ -242,6 +242,36 @@ static void NodeAttackArrive(cxAny pav)
     CX_METHOD_RUN(this->Attack,this);
 }
 
+void NodeSetLife(cxAny pview,cxInt life)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->life = life;
+}
+
+void NodeAddLife(cxAny pview,cxInt life)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->life += life;
+}
+
+void NodeSetLevel(cxAny pview,cxInt level)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->level = level;
+}
+
+void NodeSetAttack(cxAny pview,cxInt attack)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->attack = attack;
+}
+
+cxBool NodeIsDie(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->life <= 0;
+}
+
 //启动攻击定时器
 void NodeAttackRun(cxAny pview,cxFloat freq)
 {

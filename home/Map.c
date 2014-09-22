@@ -108,6 +108,63 @@ static cxBool MapEditTouch(cxAny pview,cxTouchItems *points)
     return false;
 }
 
+#include <actions/cxFollow.h>
+
+static void shellExit(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxFollow);
+    //target 被 sp击中
+    Node target = CX_TYPE_CAST(Node, this->target);
+    cxHash binded = cxViewBinded(target);
+    cxLong tag = cxActionTag(pav);
+    if(cxHashHas(binded, cxHashLongKey(tag))){
+        Node firer = (Node)tag;
+        CX_LOGGER("%p",firer);
+    }
+    
+
+    cxSprite sp = CX_TYPE_CAST(cxSprite, this->cxAction.view);
+    
+    //隐藏子弹
+    cxViewSetVisible(sp, false);
+    cxViewRemove(sp);
+}
+
+static void NodeDefenceAttackRun(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxHash bindes = cxViewBindes(this);
+    CX_HASH_FOREACH(bindes, ele, tmp){
+        //制造子弹
+        cxSprite sp = cxSpriteCreateWithURL("shell.png");
+        cxViewSetSize(sp, cxSize2fv(20, 20));
+        cxViewAppend(this->map, sp);
+        //获取bind的目标
+        cxView v = cxHashElementKeyToAny(ele);
+        //
+        cxFollow f = cxFollowCreate(500, v);
+        //设置开火者
+        cxActionSetTag(f, (cxLong)this);
+        CX_EVENT_APPEND(f->cxAction.onExit, shellExit);
+        cxViewAppendAction(sp, f);
+    }
+}
+
+static void NodeDefenceSearch(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    Map map = this->map;
+    cxVec2f pos = cxViewPosition(this);
+    NodeNearestInfo info = NodeNearest(map->attacks, pos, 10000 , NodeTypeAttack, NodeSubTypeNone);
+    if(info.node != NULL){
+        //bind目标
+        CX_METHOD_SET(this->Attack, NodeDefenceAttackRun);
+        cxViewBind(this, info.node, NULL);
+        NodeAttackRun(this, 0.3f);
+        NodePauseSearch(this);
+    }
+}
+
 cxBool MapInit(cxAny pmap,cxJson data)
 {
     CX_ASSERT_THIS(pmap, Map);
@@ -142,10 +199,13 @@ cxBool MapInit(cxAny pmap,cxJson data)
     
     {
         Node node = CX_CREATE(Node);
-        NodeInit(node, this, cxSize2fv(2, 2),cxVec2fv(20, 20),NodeTypeOther);
+        NodeInit(node, this, cxSize2fv(2, 2),cxVec2fv(20, 20),NodeTypeDefence);
         cxSpriteSetTextureURL(node, "bg1.png");
         cxViewSetColor(node, cxRED);
+        NodeSetLife(node, 1000);
         MapAppendDefence(this, node);
+        CX_METHOD_SET(node->Search, NodeDefenceSearch);
+        NodeSearchRun(node, 0.1f);
     }
     
     //按Y位置排序
