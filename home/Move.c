@@ -22,8 +22,10 @@ static void MoveSetNextIndex(Move this)
     Map map = node->map;
     cxVec2f *to = cxAnyArrayAt(this->points, this->index, cxVec2f);
     this->to = MapIdxToPos(map, *to);
-    kmVec2Subtract(&this->delta, &this->to, &this->from);
-    this->angle = cxVec2fAngle(this->delta);
+    
+    cxVec2f delta;
+    kmVec2Subtract(&delta, &this->to, &this->from);
+    this->angle = cxVec2RadiansBetween(this->to, this->from);
     CX_EVENT_FIRE(this, OnAngle);
 }
 
@@ -56,10 +58,11 @@ static void MoveStep(cxAny pav,cxFloat dt,cxFloat time)
     this->from = cxViewPosition(node);
     this->from.x += this->speed * dt * cosf(this->angle);
     this->from.y += this->speed * dt * sinf(this->angle);
-    cxFloat d = kmVec2DistanceBetween(&this->from, &this->to);
-    if(d < ARRIVE_MIN_DIS){
+    cxFloat angle = cxVec2RadiansBetween(this->to, this->from);
+    //如果方向相反
+    if(cxFloatInverse(angle,this->angle)){
+        this->from = this->to;
         MoveSetNextIndex(this);
-        return;
     }
     cxViewSetPos(node, this->from);
     CX_EVENT_FIRE(this, OnMoving);

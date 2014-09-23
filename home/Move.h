@@ -20,7 +20,6 @@ CX_OBJECT_DEF(Move, cxAction)
     cxInt index;
     cxFloat speed;
     cxVec2f from;
-    cxVec2f delta;
     cxVec2f to;
     cxFloat angle;
     cxAny target;
