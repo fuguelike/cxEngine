@@ -230,13 +230,15 @@ static void NodeAttackArrive(cxAny pav)
 void NodeSetLife(cxAny pview,cxInt life)
 {
     CX_ASSERT_THIS(pview, Node);
-    this->life = life;
+    this->life = cxRange2iv(life, life);
+    CX_METHOD_RUN(this->LifeChanged,this);
 }
 
 void NodeAddLife(cxAny pview,cxInt life)
 {
     CX_ASSERT_THIS(pview, Node);
-    this->life += life;
+    this->life.min += life;
+    CX_METHOD_RUN(this->LifeChanged,this);
 }
 
 void NodeSetLevel(cxAny pview,cxInt level)
@@ -273,7 +275,7 @@ cxAny NodeMap(cxAny pview)
 cxBool NodeIsDie(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    return this->life <= 0;
+    return this->life.min <= 0;
 }
 
 cxBool NodeAtRange(cxAny pview,cxAny node)
@@ -306,7 +308,7 @@ cxFloat NodeAttack(cxAny pview)
     return this->attack;
 }
 
-cxFloat NodeLife(cxAny pview)
+cxRange2i NodeLife(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     return this->life;

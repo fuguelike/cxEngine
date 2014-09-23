@@ -32,7 +32,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxRange2f range;    //攻击范围
     cxFloat attackRate; //攻击频率
     cxInt attack;       //攻击力
-    cxInt life;         //生命值
+    cxRange2i life;     //生命
     cxInt level;        //等级
     cxBool isArrive;    //到达攻击点
     cxTimer searchTimer;      //搜索用定时器
@@ -43,6 +43,8 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(void, OnLock,cxAny,cxAny);
     //当解锁
     CX_METHOD_DEF(void, UnLock,cxAny,cxAny);
+    //生命值变化
+    CX_METHOD_DEF(void, LifeChanged, cxAny);
 CX_OBJECT_END(Node, cxSprite)
 
 //设置生命 等级 攻击力
@@ -101,7 +103,7 @@ cxRange2f NodeRange(cxAny pview);
 
 cxFloat NodeAttack(cxAny pview);
 
-cxFloat NodeLife(cxAny pview);
+cxRange2i NodeLife(cxAny pview);
 
 cxInt NodeLevel(cxAny pview);
 

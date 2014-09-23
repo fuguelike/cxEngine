@@ -47,7 +47,7 @@ static void SoldierAttack(cxAny pview)
         Node node = CX_TYPE_CAST(Node, items.items[i]);
         cxViewUnBind(this, node);
         CX_METHOD_RUN(node->UnLock, node, this);
-        //死去的防御者移除
+        //死去的防御移除
         MapRemoveDefence(map, node);
     }
 }

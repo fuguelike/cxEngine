@@ -287,6 +287,7 @@ void cxViewPrepend(cxAny pview,cxAny newview)
     cxView nview = CX_TYPE_CAST(cxView, newview);
     nview->isPrepend = true;
     cxArrayAppend(this->appends, newview);
+    nview->parentView = pview;
 }
 
 void cxViewAppend(cxAny pview,cxAny newview)
@@ -295,6 +296,7 @@ void cxViewAppend(cxAny pview,cxAny newview)
     cxView nview = CX_TYPE_CAST(cxView, newview);
     nview->isPrepend = false;
     cxArrayAppend(this->appends, newview);
+    nview->parentView = pview;
 }
 
 void cxViewBringFront(cxAny pview)
@@ -838,6 +840,7 @@ void cxViewRemove(cxAny pview)
     CX_METHOD_RUN(parent->onRemove,parent,pview);
     //join to remove list
     cxArrayAppend(parent->removes, this);
+    this->parentView = NULL;
 }
 
 cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
@@ -973,9 +976,9 @@ static void cxViewCleanRemoves(cxView this)
 {
     CX_ARRAY_FOREACH(this->removes, ele){
         cxView view = cxArrayObject(ele);
+        CX_ASSERT(view->parentView == NULL, "add to remove set NULL");
         cxListRemove(this->subViews, view->subElement);
         view->subElement = NULL;
-        view->parentView = NULL;
     }
     cxArrayClean(this->removes);
 }
@@ -985,18 +988,14 @@ static void cxViewCleanAppends(cxAny pview)
     CX_ASSERT_THIS(pview, cxView);
     CX_ARRAY_FOREACH(this->appends, ele){
         cxView nview = cxArrayObject(ele);
-        if(nview->parentView != NULL){
-            continue;
-        }
+        CX_ASSERT(nview->parentView != NULL, "append set");
         if(nview->subElement != NULL){
             continue;
         }
         if(nview->isPrepend){
             nview->subElement = cxListPrepend(this->subViews, nview);
-            nview->parentView = this;
         }else{
             nview->subElement = cxListAppend(this->subViews, nview);
-            nview->parentView = this;
         }
         if(this->isRunning){
             cxViewEnter(nview);
