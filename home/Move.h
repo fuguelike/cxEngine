@@ -25,7 +25,7 @@ CX_OBJECT_DEF(Move, cxAction)
     cxFloat angle;
     cxAny target;
     CX_EVENT_ALLOC(OnAngle);    //当角度变化时需要更换纹理动画
-    CX_EVENT_ALLOC(OnMove);     //当移动时
+    CX_EVENT_ALLOC(OnMoving);   //当移动时
 CX_OBJECT_END(Move, cxAction)
 
 void MoveSetTarget(cxAny pav,cxAny pview);

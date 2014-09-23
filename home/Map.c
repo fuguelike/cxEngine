@@ -171,7 +171,7 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         this->isSelectUnit = true;
         return false;
     }
-    if(item->type == cxTouchTypeUp && item->movement < 10){
+    if(item->type == cxTouchTypeUp && item->movement < 30){
         cxVec2f idx = MapPosToIdx(this, cpos);
         CX_LOGGER("fight mode selected:%f %f",idx.x,idx.y);
         //test
@@ -179,6 +179,7 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
             
             Soldier node = SoldierCreate(this, cxSize2fv(2, 2), idx);
             NodeSetLife(node, 20000);
+            NodeSetAttack(node, 20);
             //加入攻击系统
             MapAppendAttack(this, node);
             //开始搜索
@@ -187,7 +188,8 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         }else if(this->tag == 2){
             Turret node = TurretCreate(this, cxSize2fv(2, 2), idx);
             cxViewSetColor(node, cxRED);
-            NodeSetLife(node, 100);
+            NodeSetLife(node, 200);
+            
             //加入防御系统
             MapAppendDefence(this, node);
             //开始搜索

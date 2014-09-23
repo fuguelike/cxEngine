@@ -36,7 +36,7 @@ void RangeUpdateValue(cxAny pview)
         cxViewSetSize(this, cxSize2fv(w, h));
         
         cxBoxTex2f tex = (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, 1.0f),cxTex2fv(1.0f, 0.0f),cxTex2fv(1.0f, 1.0f)};
-        cxColor4f color = cxColor4fv(0, 1, 0, 1);
+        cxColor4f color = cxColor4fv(1, 1, 1, 1);
         cxSize2f size = cxSize2fv(w/2.0f,h/2.0f);
         
         cxVec2f pos = cxVec2fv(w/4, h/4);

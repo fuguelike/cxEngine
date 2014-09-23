@@ -62,7 +62,7 @@ static void MoveStep(cxAny pav,cxFloat dt,cxFloat time)
         return;
     }
     cxViewSetPos(node, this->from);
-    CX_EVENT_FIRE(this, OnMove);
+    CX_EVENT_FIRE(this, OnMoving);
 }
 
 CX_OBJECT_TYPE(Move, cxAction)
@@ -82,7 +82,7 @@ CX_OBJECT_INIT(Move, cxAction)
 }
 CX_OBJECT_FREE(Move, cxAction)
 {
-    CX_EVENT_RELEASE(this->OnMove);
+    CX_EVENT_RELEASE(this->OnMoving);
     CX_EVENT_RELEASE(this->OnAngle);
     CX_RELEASE(this->target);
     CX_RELEASE(this->points);

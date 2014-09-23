@@ -104,9 +104,12 @@ static void NodeOnTransform(cxAny pview)
     }
     //更新node索引位置
     cxVec2f pos = cxViewPosition(this);
-    this->idx = NodePosToIdx(this, pos);
-    cxSpatialReindexView(map->defences, this);
-    cxSpatialReindexView(map->attacks, this);
+    cxVec2f idx = NodePosToIdx(this, pos);
+    if(!cxVec2fEqu(this->idx, idx)){
+        this->idx = idx;
+        cxSpatialReindexView(map->defences, this);
+        cxSpatialReindexView(map->attacks, this);
+    }
 }
 
 CX_OBJECT_TYPE(Node, cxSprite)

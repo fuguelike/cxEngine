@@ -34,7 +34,7 @@ static void SoldierAttack(cxAny pview)
         //获取bind的目标
         Node target = cxHashElementKeyToAny(ele);
         //模拟攻击一下
-        NodeAddLife(target, -20);
+        NodeAddLife(target, -this->attack);
         CX_LOGGER("Turret life = %d",target->life);
         //死去的目标
         if(NodeIsDie(target)){
@@ -56,6 +56,16 @@ static void SoldierMoveExit(cxAny pav)
 {
     Node node = cxActionView(pav);
     node->isArrive = true;
+}
+
+static void SoldierMoving(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, Move);
+    //如果目标死亡停止移动
+    Node target = CX_TYPE_CAST(Node, this->target);
+    if(NodeIsDie(target)){
+        cxActionStop(pav);
+    }
 }
 
 //搜索算法
@@ -89,6 +99,7 @@ static void SoldierSearch(cxAny pview)
     //移动结束时到达攻击点
     CX_EVENT_APPEND(m->cxAction.onExit, SoldierMoveExit);
     CX_EVENT_APPEND(m->OnAngle, SoldierOnAngle);
+    CX_EVENT_APPEND(m->OnMoving, SoldierMoving);
     cxViewAppendAction(this, m);
     
     cxViewBind(this, node, NULL);
