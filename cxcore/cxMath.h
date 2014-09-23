@@ -273,9 +273,11 @@ typedef struct {
 cxVec2f cxVec2fValue(cxVec2fRange rv);
 #define cxVec2fRangeValue(vx,vy,rx,ry)    (cxVec2fRange){{vx,vy},{rx,ry}}
 
-cxBool cxFloatInverse(cxFloat v1,cxFloat v2);
+cxBool cxVec2fIsInverse(cxVec2f v1,cxVec2f v2);
 
-cxFloat cxVec2RadiansBetween(cxVec2f v1, cxVec2f v2);
+cxBool cxFloatIsInverse(cxFloat v1,cxFloat v2);
+
+cxFloat cxVec2fRadiansBetween(cxVec2f v1, cxVec2f v2);
 
 cxBool cxPointsContainPoint(cxAnyArray polygon,cxVec2f tp);
 

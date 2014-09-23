@@ -69,25 +69,25 @@ void *ASPathGetNode(ASPath path, size_t index);
 
 static void AStarPathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
 {
-    cxAStar this = context;
+    CX_ASSERT_THIS(context, cxAStar);
     CX_METHOD_RUN(this->Neighbors, this, neighbors, node);
 }
 
 static float AStarPathNodeHeuristic(void *fromNode, void *toNode, void *context)
 {
-    cxAStar this = context;
+    CX_ASSERT_THIS(context, cxAStar);
     return CX_METHOD_GET(0, this->Heuristic, this, fromNode, toNode);
 }
 
 static int AStarEarlyExit(size_t visitedCount, void *visitingNode, void *goalNode, void *context)
 {
-    cxAStar this = context;
+    CX_ASSERT_THIS(context, cxAStar);
     return CX_METHOD_GET(0, this->EarlyExit, this, visitedCount, visitingNode, goalNode);
 }
 
 static int AStarNodeComparator(void *node1, void *node2, void *context)
 {
-    cxAStar this = context;
+    CX_ASSERT_THIS(context, cxAStar);
     cxInt dv = memcmp(node1, node2, sizeof(cxVec2i));
     return CX_METHOD_GET(dv, this->Comparator, this, node1, node2);
 }
@@ -101,42 +101,42 @@ static const ASPathNodeSource cxAStarSource =
     &AStarNodeComparator
 };
 
-void cxAStarNeighbors(cxAny pbj, cxAny list, cxVec2i *node)
+void cxAStarNeighbors(cxAny pobj, cxAny list, cxVec2i *node)
 {
-    cxAStar this = pbj;
+    CX_ASSERT_THIS(pobj, cxAStar);
     cxVec2i right = cxVec2iv(node->x + 1, node->y);
-    if(CX_METHOD_GET(false, this->IsAppend, pbj, &right)){
+    if(CX_METHOD_GET(false, this->IsAppend, this, &right)){
         cxAStarAppendNeighbors(list, right, 1);
     }
     cxVec2i left = cxVec2iv(node->x - 1, node->y);
-    if(CX_METHOD_GET(false, this->IsAppend, pbj, &left)){
+    if(CX_METHOD_GET(false, this->IsAppend, this, &left)){
         cxAStarAppendNeighbors(list, left, 1);
     }
     cxVec2i up = cxVec2iv(node->x, node->y + 1);
-    if(CX_METHOD_GET(false, this->IsAppend, pbj, &up)){
+    if(CX_METHOD_GET(false, this->IsAppend, this, &up)){
         cxAStarAppendNeighbors(list, up, 1);
     }
     cxVec2i down = cxVec2iv(node->x, node->y - 1);
-    if(CX_METHOD_GET(false, this->IsAppend, pbj, &down)){
+    if(CX_METHOD_GET(false, this->IsAppend, this, &down)){
         cxAStarAppendNeighbors(list, down, 1);
     }
     if(this->type == cxAStarTypeA4){
         return;
     }
     cxVec2i leftUp = cxVec2iv(node->x - 1, node->y + 1);
-    if(CX_METHOD_GET(false, this->IsAppend, pbj, &leftUp)){
+    if(CX_METHOD_GET(false, this->IsAppend, this, &leftUp)){
         cxAStarAppendNeighbors(list, leftUp, 1);
     }
     cxVec2i leftDown = cxVec2iv(node->x - 1, node->y - 1);
-    if(CX_METHOD_GET(false, this->IsAppend, pbj, &leftDown)){
+    if(CX_METHOD_GET(false, this->IsAppend, this, &leftDown)){
         cxAStarAppendNeighbors(list, leftDown, 1);
     }
     cxVec2i rightUp = cxVec2iv(node->x + 1, node->y + 1);
-    if(CX_METHOD_GET(false, this->IsAppend, pbj, &rightUp)){
+    if(CX_METHOD_GET(false, this->IsAppend, this, &rightUp)){
         cxAStarAppendNeighbors(list, rightUp, 1);
     }
     cxVec2i rightDown = cxVec2iv(node->x + 1, node->y - 1);
-    if(CX_METHOD_GET(false, this->IsAppend, pbj, &rightDown)){
+    if(CX_METHOD_GET(false, this->IsAppend, this, &rightDown)){
         cxAStarAppendNeighbors(list, rightDown, 1);
     }
 }
@@ -190,7 +190,7 @@ void cxAStarPrintPoints(cxAny pobj)
     }
 }
 
-cxInt cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
+cxAnyArray cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
 {
     cxAStar this = pobj;
     this->data = data;
@@ -203,7 +203,7 @@ cxInt cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
         cxAnyArrayAppend(this->points, p);
     }
     ASPathDestroy(path);
-    return rv;
+    return this->points;
 }
 
 

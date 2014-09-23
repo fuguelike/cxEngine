@@ -227,6 +227,27 @@ CX_SETTER_DEF(Map, mode)
     }
 }
 
+static cxBool MapIsAppend(cxAny pstar,cxVec2i *idx)
+{
+    CX_ASSERT_THIS(pstar, cxAStar);
+    MapSearchInfo *info = this->data;
+    //如果是Node中的点
+    if(NodeHasPoint(info->snode, *idx)){
+        return true;
+    }
+    if(NodeHasPoint(info->dnode, *idx)){
+        return true;
+    }
+    Map map = info->map;
+    cxVec2f index = cxVec2fv(idx->x, idx->y);
+    if(!MapIsValidIdx(map, index)){
+        return false;
+    }
+    cxInt off = MapOffsetIdx(this, idx->x, idx->y);
+    Node node = map->items[off];
+    return node == NULL;
+}
+
 CX_OBJECT_TYPE(Map, cxAtlas)
 {
     CX_PROPERTY_SETTER(Map, mode);
@@ -239,6 +260,9 @@ CX_OBJECT_INIT(Map, cxAtlas)
     CX_EVENT_APPEND(CX_TYPE(cxView, this)->onUpdate, MapUpdate);
     this->mode = MapModeNormal;
     this->isSort = true;
+    this->astar = CX_ALLOC(cxAStar);
+    cxAStarSetType(this->astar, cxAStarTypeA8);
+    CX_METHOD_SET(this->astar->IsAppend, MapIsAppend);
     
     CX_RETAIN_SET(this->defences, cxSpatialCreate(NodeIndexBB));
     CX_RETAIN_SET(this->attacks, cxSpatialCreate(NodeIndexBB));
@@ -247,11 +271,21 @@ CX_OBJECT_FREE(Map, cxAtlas)
 {
     cxMessageRemove(this);
     
+    CX_RELEASE(this->astar);
     CX_RELEASE(this->attacks);
     CX_RELEASE(this->defences);
     allocator->free(this->items);
 }
 CX_OBJECT_TERM(Map, cxAtlas)
+
+cxAnyArray MapSearchPath(cxAny pmap,cxAny snode,cxAny dnode)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    MapSearchInfo info = {pmap, snode, dnode};
+    cxVec2i s = NodeIndex(snode);
+    cxVec2i d = NodeIndex(dnode);
+    return cxAStarRun(this->astar, s, d, &info);
+}
 
 cxInt MapOffsetIdx(cxAny pmap,cxInt x,cxInt y)
 {

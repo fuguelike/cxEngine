@@ -19,13 +19,11 @@ static void MoveSetNextIndex(Move this)
         return;
     }
     Node node = CX_TYPE_CAST(Node, this->cxAction.view);
-    Map map = node->map;
+    Map map = NodeMap(node);
     cxVec2f *to = cxAnyArrayAt(this->points, this->index, cxVec2f);
     this->to = MapIdxToPos(map, *to);
-    
-    cxVec2f delta;
-    kmVec2Subtract(&delta, &this->to, &this->from);
-    this->angle = cxVec2RadiansBetween(this->to, this->from);
+    kmVec2Subtract(&this->delta, &this->to, &this->from);
+    this->angle = cxVec2fAngle(this->delta);
     CX_EVENT_FIRE(this, OnAngle);
 }
 
@@ -58,9 +56,10 @@ static void MoveStep(cxAny pav,cxFloat dt,cxFloat time)
     this->from = cxViewPosition(node);
     this->from.x += this->speed * dt * cosf(this->angle);
     this->from.y += this->speed * dt * sinf(this->angle);
-    cxFloat angle = cxVec2RadiansBetween(this->to, this->from);
+    cxVec2f delta;
+    kmVec2Subtract(&delta, &this->to, &this->from);
     //如果方向相反
-    if(cxFloatInverse(angle,this->angle)){
+    if(cxVec2fIsInverse(delta,this->delta)){
         this->from = this->to;
         MoveSetNextIndex(this);
     }
@@ -91,6 +90,14 @@ CX_OBJECT_FREE(Move, cxAction)
     CX_RELEASE(this->points);
 }
 CX_OBJECT_TERM(Move, cxAction)
+
+void MoveAppendArray(cxAny pav,cxAnyArray points)
+{
+    CX_ASSERT_TYPE(points, cxAnyArray);
+    CX_ANY_ARRAY_FOREACH(points, point, cxVec2i){
+        MoveAppendPoint(pav, cxVec2fv(point->x, point->y));
+    }
+}
 
 void MoveAppendPoint(cxAny pav,cxVec2f point)
 {

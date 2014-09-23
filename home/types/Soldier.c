@@ -79,22 +79,28 @@ static void SoldierSearch(cxAny pview)
         return;
     }
     this->Node.isArrive = false;
-    //动态搜索一个目标
+    //动态搜索一个最近的目标
     NodeNearestInfo info = NodeNearest(map->defences, this->Node.idx, cxRange2fv(0, 100), NodeTypeNone, NodeSubTypeNone);
     if(info.node == NULL){
         return;
     }
     Node node = info.node;
     
+    //搜索
+    cxAnyArray points = MapSearchPath(map, this, node);
+    //show path
+//    CX_ANY_ARRAY_FOREACH(points, idx, cxVec2i){
+//        cxVec2f p = cxVec2fv(idx->x, idx->y);
+//        Soldier node = SoldierCreate(map, cxSize2fv(1, 1), p);
+//        cxViewSetColor(node, cxBLACK);
+//        MapAppendAttack(map, node);
+//    }
+    
     //路劲算法移动到攻击点
     Move m = CX_CREATE(Move);
-    MoveAppendPoint(m, this->Node.idx);
-//    for(cxFloat a = 0; a < 360; a+=22.5f){
-//        cxInt x = 20 * sinf(kmDegreesToRadians(a)) + 20;
-//        cxInt y = 20 * cosf(kmDegreesToRadians(a)) + 20;
-//        MoveAppendPoint(m, cxVec2fv(x, y));
-//    }
-    MoveAppendPoint(m, node->idx);
+    if(cxAnyArrayLength(points) > 0){
+        MoveAppendArray(m, points);
+    }
     MoveSetTarget(m, node);
     //移动结束时到达攻击点
     CX_EVENT_APPEND(m->cxAction.onExit, SoldierMoveExit);

@@ -18,6 +18,7 @@ CX_C_BEGIN
 CX_OBJECT_DEF(Move, cxAction)
     cxAnyArray points;
     cxInt index;
+    cxVec2f delta;
     cxFloat speed;
     cxVec2f from;
     cxVec2f to;
@@ -30,6 +31,8 @@ CX_OBJECT_END(Move, cxAction)
 void MoveSetTarget(cxAny pav,cxAny pview);
 
 void MoveAppendPoint(cxAny pav,cxVec2f point);
+
+void MoveAppendArray(cxAny pav,cxAnyArray points);
 
 CX_C_END
 

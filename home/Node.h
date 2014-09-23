@@ -105,6 +105,8 @@ cxFloat NodeAttack(cxAny pview);
 
 cxRange2i NodeLife(cxAny pview);
 
+cxBool NodeHasPoint(cxAny pview,cxVec2i idx);
+
 cxInt NodeLevel(cxAny pview);
 
 cxVec2i NodeIndex(cxAny pview);
@@ -132,7 +134,7 @@ cxBool NodeSetPosition(cxAny pview,cxVec2f idx,cxBool animate);
 
 void NodeSetSize(cxAny pview,cxSize2f size);
 
-void NodeInit(cxAny pview,cxAny map,cxSize2f size,cxVec2f pos,NodeType type,NodeSubType subType);
+void NodeInit(cxAny pview,cxAny map,cxSize2f size,cxVec2f idx,NodeType type,NodeSubType subType);
 
 CX_C_END
 

@@ -311,6 +311,15 @@ cxFloat NodeAttack(cxAny pview)
     return this->attack;
 }
 
+cxBool NodeHasPoint(cxAny pview,cxVec2i idx)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return idx.x >= this->idx.x &&
+    idx.x < (this->idx.x + this->size.w) &&
+    idx.y >= this->idx.y &&
+    idx.y < (this->idx.y + this->size.h);
+}
+
 cxRange2i NodeLife(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -428,13 +437,13 @@ void NodeSetIdx(cxAny pview,cxVec2f idx)
     MapNodeOnNewIdx(map, this);
 }
 
-void NodeInit(cxAny pview,cxAny map, cxSize2f size,cxVec2f pos,NodeType type,NodeSubType subType)
+void NodeInit(cxAny pview,cxAny map, cxSize2f size,cxVec2f idx,NodeType type,NodeSubType subType)
 {
     CX_ASSERT_THIS(pview, Node);
     this->map = map;
     this->type = type;
     this->subType = subType;
     NodeSetSize(this, size);
-    NodeSetIdx(this, pos);
-    NodeSetPosition(this, pos, false);
+    NodeSetIdx(this, idx);
+    NodeSetPosition(this, idx, false);
 }

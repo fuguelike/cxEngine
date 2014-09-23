@@ -8,7 +8,7 @@
 
 #include "cxMath.h"
 
-cxBool cxFloatInverse(cxFloat v1,cxFloat v2)
+cxBool cxFloatIsInverse(cxFloat v1,cxFloat v2)
 {
     if(v1 > 0 && v2 < 0){
         return true;
@@ -19,13 +19,22 @@ cxBool cxFloatInverse(cxFloat v1,cxFloat v2)
     return false;
 }
 
-cxFloat cxVec2RadiansBetween(cxVec2f v1, cxVec2f v2)
+cxBool cxVec2fIsInverse(cxVec2f v1,cxVec2f v2)
+{
+    if(cxFloatIsInverse(v1.x, v2.x)){
+        return true;
+    }
+    if(cxFloatIsInverse(v1.y, v2.y)){
+        return true;
+    }
+    return false;
+}
+
+cxFloat cxVec2fRadiansBetween(cxVec2f v1, cxVec2f v2)
 {
     cxVec2f delta;
     kmVec2Subtract(&delta, &v1, &v2);
-    if(delta.x == 0 || delta.y == 0){
-        return 0;
-    }
+    CX_LOGGER("%f %f",delta.x,delta.y);
     return cxVec2fAngle(delta);
 }
 

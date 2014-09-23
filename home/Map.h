@@ -11,6 +11,7 @@
 
 #include <engine/cxSpatial.h>
 #include <views/cxAtlas.h>
+#include <algorithm/cxAStar.h>
 #include "Define.h"
 
 CX_C_BEGIN
@@ -22,15 +23,24 @@ CX_OBJECT_DEF(Map, cxAtlas)
     //
     cxAny *items;       //格子node
     cxAny node;     //当前选中的node
-    //防御单位空间索引
+    //防御方单位空间索引
     cxSpatial defences;
-    //攻击单位空间索引
+    //攻击方单位空间索引
     cxSpatial attacks;
     //fight var
     cxBool isSelectUnit;
-    //
+//path search algorithm
+    cxAStar astar;
+    //Test
     cxInt tag;
 CX_OBJECT_END(Map, cxAtlas)
+
+typedef struct {
+    cxAny map;
+    cxAny snode;
+    cxAny dnode;
+}MapSearchInfo;
+cxAnyArray MapSearchPath(cxAny pmap,cxAny snode,cxAny dnode);
 
 //init map
 cxBool MapInit(cxAny pmap,cxJson data);
