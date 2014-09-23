@@ -18,7 +18,7 @@ void cxScrollSetBody(cxAny pview,cxAny cview)
 {
     CX_ASSERT_THIS(pview, cxScroll);
     CX_ASSERT(this->body == NULL, "container already set");
-    cxViewAppend(this, cview);
+    cxViewPrepend(this, cview);
     this->body = cview;
 }
 

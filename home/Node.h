@@ -30,6 +30,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     NodeType type;      //主类型
     NodeState state;    //当前状态
     cxRange2f range;    //攻击范围
+    cxFloat attackRate; //攻击频率
     cxInt attack;       //攻击力
     cxInt life;         //生命值
     cxInt level;        //等级
@@ -37,6 +38,10 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(void, Search,cxAny);
     cxTimer attackTimer;    //攻击用定时器
     CX_METHOD_DEF(void, Attack,cxAny);
+    //当node被锁定和解锁
+    CX_METHOD_DEF(void, OnLock,cxAny,cxAny);
+    //当解锁
+    CX_METHOD_DEF(void, UnLock,cxAny,cxAny);
 CX_OBJECT_END(Node, cxSprite)
 
 //设置生命 等级 攻击力
@@ -45,15 +50,25 @@ void NodeAddLife(cxAny pview,cxInt life);
 void NodeSetLevel(cxAny pview,cxInt level);
 void NodeSetAttack(cxAny pview,cxInt attack);
 
+//设置攻击范围
+void NodeSetRange(cxAny pview,cxRange2f range);
+
+//是否在node的索引范围内
+cxBool NodeAtRange(cxAny pview,cxAny node);
+
+//设置攻击频率
+void NodeSetAttackRate(cxAny pview,cxFloat rate);
+
 typedef struct {
-    cxAny node;     //最近的view
-    cxVec2f p;      //与此点的
-    cxFloat d;      //距离
-    cxFloat m;      //max
-    cxVec2f idx;    //node最近点
+    cxAny node;         //最近的view
+    cxVec2f idx;        //与此点的
+    cxFloat dis;        //距离
+    cxRange2f range;    //范围内
     NodeType type;      //搜索的类型
     NodeSubType subType;//搜索子类型
 } NodeNearestInfo;
+
+cxAny NodeMap(cxAny pview);
 
 //节点死亡
 cxBool NodeIsDie(cxAny pview);
@@ -61,7 +76,7 @@ cxBool NodeIsDie(cxAny pview);
 //设置状态
 void NodeSetState(cxAny pview,NodeState state);
 
-NodeNearestInfo NodeNearest(cxAny ps,cxVec2f p,cxFloat max,NodeType type,NodeSubType subType);
+NodeNearestInfo NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType subType);
 
 //暂停搜索
 void NodePauseSearch(cxAny pview);
@@ -70,7 +85,7 @@ void NodePauseSearch(cxAny pview);
 void NodeResumeSearch(cxAny pview);
 
 //启动搜索定时器
-void NodeSearchRun(cxAny pview,cxFloat freq);
+void NodeSearchRun(cxAny pview);
 
 //暂停攻击
 void NodePauseAttack(cxAny pview);
@@ -79,10 +94,7 @@ void NodePauseAttack(cxAny pview);
 void NodeResumeAttack(cxAny pview);
 
 //启动攻击定时器
-void NodeAttackRun(cxAny pview,cxFloat freq);
-
-//idx与node的最近格子索引
-cxVec2f NodeNearestIdx(cxAny pview,cxVec2f idx, cxFloat *d);
+void NodeAttackRun(cxAny pview);
 
 cxRange2f NodeRange(cxAny pview);
 
@@ -117,9 +129,7 @@ cxBool NodeSetPosition(cxAny pview,cxVec2f idx,cxBool animate);
 
 void NodeSetSize(cxAny pview,cxSize2f size);
 
-void NodeInit(cxAny pview,cxAny map,cxSize2f size,cxVec2f pos,NodeType type);
-
-void NodeSetSubType(cxAny pview,NodeSubType type);
+void NodeInit(cxAny pview,cxAny map,cxSize2f size,cxVec2f pos,NodeType type,NodeSubType subType);
 
 CX_C_END
 

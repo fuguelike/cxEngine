@@ -256,6 +256,15 @@ cxHash cxViewBinded(cxAny pview)
     return this->binded;
 }
 
+//解除bind关系
+void cxViewUnBind(cxAny pview,cxAny bview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    cxView view = CX_TYPE_CAST(cxView, bview);
+    cxHashDel(this->bindes, cxHashAnyKey(bview));
+    cxHashDel(view->binded, cxHashAnyKey(pview));
+}
+
 void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
 {
     CX_ASSERT(pview != bview, "self can't bind self");
@@ -270,20 +279,30 @@ void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
     cxHashSet(bind->binded, cxHashAnyKey(this), bd);
 }
 
-void cxViewAppend(cxAny pview,cxAny newview)
+static inline void cxViewAppendImp(cxAny pview,cxAny newview,cxBool prepend)
 {
     CX_ASSERT_THIS(pview, cxView);
     CX_ASSERT_TYPE(newview, cxView);
     cxView new = newview;
     CX_RETURN(new->parentView == pview);
     CX_ASSERT(newview != NULL && new->subElement == NULL, "newview null or add to view");
-    new->subElement = cxListAppend(this->subViews, new);
+    new->subElement = prepend ? cxListPrepend(this->subViews, new) : cxListAppend(this->subViews, new);
     new->parentView = this;
     if(this->isRunning){
         cxViewEnter(new);
         cxViewLayout(new);
     }
     CX_METHOD_RUN(this->onAppend, this, newview);
+}
+
+void cxViewPrepend(cxAny pview,cxAny newview)
+{
+    cxViewAppendImp(pview, newview, true);
+}
+
+void cxViewAppend(cxAny pview,cxAny newview)
+{
+    cxViewAppendImp(pview, newview, false);
 }
 
 void cxViewBringFront(cxAny pview)
@@ -854,7 +873,11 @@ cxBool cxViewTouch(cxAny pview,cxTouchItems *points)
     if(head == NULL){
         goto completed;
     }
-    for(cxListElement *ele = cxListLast(this->subViews);ele != NULL;ele = ele->prev){
+    cxListElement *tail = cxListLast(this->subViews);
+    if(tail == NULL){
+        goto completed;
+    }
+    for(cxListElement *ele = tail;ele != NULL;ele = ele->prev){
         if(cxViewTouch(ele->any,points)){
             return true;
         }
@@ -876,7 +899,11 @@ cxBool cxViewKey(cxAny pview,cxKey *key)
     if(head == NULL){
         goto completed;
     }
-    for(cxListElement *ele = cxListLast(this->subViews);ele != NULL;ele = ele->prev){
+    cxListElement *tail = cxListLast(this->subViews);
+    if(tail == NULL){
+        goto completed;
+    }
+    for(cxListElement *ele = tail;ele != NULL;ele = ele->prev){
         if(cxViewKey(ele->any, key)){
             return true;
         }

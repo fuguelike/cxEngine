@@ -45,6 +45,17 @@ CX_OBJECT_FREE(cxSpatial, cxObject)
 }
 CX_OBJECT_TERM(cxSpatial, cxObject)
 
+cxSpatial cxSpatialCreate(cpBB (*func)(cxAny))
+{
+    cxSpatial this = CX_CREATE(cxSpatial);
+    if(this->index != NULL){
+        cxSpatialClean(this);
+        cpSpatialIndexDestroy(this->index);
+    }
+    this->index = cpBBTreeNew(func, NULL);
+    return this;
+}
+
 typedef struct {
     cxAny ps;
     cxAny data;

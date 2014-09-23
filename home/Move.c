@@ -27,20 +27,6 @@ static void MoveSetNextIndex(Move this)
     CX_EVENT_FIRE(this, OnAngle);
 }
 
-//8方向使用 22.5 45.0角度
-cxFloat MoveAngleIndex(cxAny pav,cxInt *index)
-{
-    CX_ASSERT_THIS(pav, Move);
-    cxFloat angle = fmodf(kmRadiansToDegrees(this->angle) + 360, 360);
-    cxInt idx = angle/22.5f;
-    cxInt m = (idx / 2) + (idx % 2);
-    if(m > 7) m = 0;
-    if(index != NULL){
-        *index = m;
-    }
-    return (angle - m * 45.0f);
-}
-
 void MoveSetTarget(cxAny pav,cxAny pview)
 {
     CX_ASSERT_THIS(pav, Move);
@@ -76,6 +62,7 @@ static void MoveStep(cxAny pav,cxFloat dt,cxFloat time)
         return;
     }
     cxViewSetPos(node, this->from);
+    CX_EVENT_FIRE(this, OnMove);
 }
 
 CX_OBJECT_TYPE(Move, cxAction)
@@ -90,9 +77,12 @@ CX_OBJECT_INIT(Move, cxAction)
     this->speed = 200;
     this->cxAction.time = -1;
     this->points = cxAnyArrayAlloc(cxVec2f);
+    
+    cxActionSetGroup(this, "fight");
 }
 CX_OBJECT_FREE(Move, cxAction)
 {
+    CX_EVENT_RELEASE(this->OnMove);
     CX_EVENT_RELEASE(this->OnAngle);
     CX_RELEASE(this->target);
     CX_RELEASE(this->points);

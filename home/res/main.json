@@ -5,12 +5,97 @@
   "body": {
     "cxId": "map",
     "cxType": "Map",
-    "mode":"fight"
+    "mode": "fight"
   },
-  "scale":1.2,
+  "scale": 1.2,
   "range": {
     "min": 1.0,
     "max": 2.4
   },
-  "subviews": []
+  "subviews": [
+    {
+      "cxType": "cxTable",
+      "grid": {
+        "x": 9
+      },
+      "size": {
+        "h": 200
+      },
+      "resizing": "width|bottom",
+      "subviews": [
+        {
+          "cxId":"btnSelectTurret",
+          "cxType": "Button",
+          "size": {
+            "w": 200,
+            "h": 200
+          },
+          "tag":2,
+          "title":"炮塔"
+        },
+        {
+          "cxId":"btnSelectSoldier",
+          "cxType": "Button",
+          "size": {
+            "w": 200,
+            "h": 200
+          },
+          "tag":1,
+          "title":"士兵"
+        },
+        {
+          "cxId":"btnSelectArcher",
+          "cxType": "Button",
+          "size": {
+            "w": 200,
+            "h": 200
+          },
+          "tag":3,
+          "title":"弓箭手"
+        },
+        {
+          "cxType": "Button",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "cxType": "Button",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "cxType": "Button",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "cxType": "Button",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "cxType": "Button",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        },
+        {
+          "cxType": "Button",
+          "size": {
+            "w": 200,
+            "h": 200
+          }
+        }
+      ]
+    }
+  ]
 }

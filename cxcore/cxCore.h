@@ -192,7 +192,7 @@ do{                                                             \
 
 #define CX_ASSERT_FALSE(format,...) CX_ASSERT(false,format,##__VA_ARGS__)
 
-#define CX_ASSERT_TYPE(_o_,_t_)     CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"type error",_o_)
+#define CX_ASSERT_TYPE(_o_,_t_)     CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type error,should is %s",_o_,#_t_)
 
 #define CX_ASSERT_THIS(_o_,_t_)     CX_ASSERT_TYPE(_o_,_t_);_t_ this = (_t_)(_o_)
 

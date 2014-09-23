@@ -27,9 +27,9 @@ void RangeUpdateValue(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Range);
     cxAtlasClean(this);
-    if(this->value.max > 0){
+    if(this->range.max > 0){
 
-        cxFloat d = global.sideLen * this->value.max * 2.75f;
+        cxFloat d = global.sideLen * this->range.max * 2.75f;
         cxFloat h = cosf(global.angle) * d;
         cxFloat w = sinf(global.angle) * d;
         
@@ -59,8 +59,8 @@ void RangeUpdateValue(cxAny pview)
         cxAtlasAppend(this, &bp);
         
     }
-    if(this->value.min > 0){
-        cxFloat d = global.sideLen * this->value.min * 2.75f;
+    if(this->range.min > 0){
+        cxFloat d = global.sideLen * this->range.min * 2.75f;
         cxFloat h = cosf(global.angle) * d;
         cxFloat w = sinf(global.angle) * d;
         
@@ -89,20 +89,13 @@ void RangeUpdateValue(cxAny pview)
     }
 }
 
-void RangeSetMin(cxAny pview,cxFloat min)
+void RangeSetRange(cxAny pview,cxRange2f range)
 {
     CX_ASSERT_THIS(pview, Range);
-    CX_RETURN(cxFloatEqu(this->value.min, min));
-    this->value.min = min;
+    CX_RETURN(cxRange2fEqu(this->range, range));
+    this->range = range;
     RangeUpdateValue(pview);
 }
 
-void RangeSetMax(cxAny pview,cxFloat max)
-{
-    CX_ASSERT_THIS(pview, Range);
-    CX_RETURN(cxFloatEqu(this->value.max, max));
-    this->value.max = max;
-    RangeUpdateValue(pview);
-}
 
 

@@ -66,6 +66,8 @@ cxEngine cxEngineInstance();
 
 cxJson cxEngineJsonReader(cxConstChars src);
 
+cxAny cxEngineCreateObject(cxConstChars src);
+
 cxString cxEngineAssetsData(cxConstChars file);
 
 cxJson cxEngineLoadJson(cxConstChars file);

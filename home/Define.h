@@ -16,8 +16,15 @@ CX_C_BEGIN
 #define MAP_ROW         42
 #define MAP_COL         42
 #define MAP_BORDER      1
-#define SEARCH_DELAY    0.1f    //搜索延迟
-#define ARRIVE_MIN_DIS  (15)      //到达点最小距离
+#define ARRIVE_MIN_DIS  (15)    //到达点最小距离
+
+//固定数量数组
+typedef struct {
+    cxAny items[64];
+    cxInt number;
+}FixArray;
+
+#define FixArrayAppend(_a_,_i_) (_a_).items[(_a_).number++] = _i_
 
 typedef struct {
     cxVec2i unitNum;    //单元数量
@@ -28,6 +35,11 @@ typedef struct {
 
 extern Global global;
 void GlobalInit(cxEngine engine);
+
+cxFloat SideDistance(cxInt sideNum);
+
+//8方向使用 22.5 45.0角度
+cxFloat AngleToIndex(cxFloat angle,cxInt *index);
 
 //node 状态
 typedef enum {
@@ -48,14 +60,16 @@ typedef enum {
     NodeTypeNone = 0,
     NodeTypeResource,       //资源类型
     NodeTypeDefence,        //主动防御类型
-    NodeTypeAttack,         //主动攻击类型
+    NodeTypeAttack,         //进攻单位类型
     NodeTypeOther,          //其他，包括，辅助，军营
 }NodeType;
 
 //节点子类型
 typedef enum {
     NodeSubTypeNone = 0,
-    NodeSubTypeSoldier,       //近身攻击的士兵
+    NodeSubTypeSoldier,     //近身攻击的士兵
+    NodeSubTypeTurret,      //炮塔
+    NodeSubTypeArcher,      //弓箭手
 }NodeSubType;
 
 CX_C_END

@@ -14,14 +14,12 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Range, cxAtlas)
-    cxRange2f value;
+    cxRange2f range;
 CX_OBJECT_END(Range, cxAtlas)
 
 void RangeUpdateValue(cxAny pview);
 
-void RangeSetMin(cxAny pview,cxFloat min);
-
-void RangeSetMax(cxAny pview,cxFloat max);
+void RangeSetRange(cxAny pview,cxRange2f range);
 
 CX_C_END
 

@@ -10,6 +10,19 @@
 
 Global global={0};
 
+//8方向使用 22.5 45.0角度
+cxFloat AngleToIndex(cxFloat angle,cxInt *index)
+{
+    angle = fmodf(kmRadiansToDegrees(angle) + 360, 360);
+    cxInt idx = angle/22.5f;
+    cxInt m = (idx / 2) + (idx % 2);
+    if(m > 7) m = 0;
+    if(index != NULL){
+        *index = m;
+    }
+    return (angle - m * 45.0f);
+}
+
 void GlobalInit(cxEngine engine)
 {
     global.unitNum = cxVec2iv(MAP_ROW, MAP_COL);
@@ -24,4 +37,9 @@ void GlobalInit(cxEngine engine)
     global.sideLen = sqrtf(w2*w2 + h2*h2);
     
     global.angle = asinf(w2 / global.sideLen);
+}
+
+cxFloat SideDistance(cxInt sideNum)
+{
+    return global.sideLen * sideNum;
 }

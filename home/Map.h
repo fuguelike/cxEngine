@@ -28,6 +28,8 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxSpatial attacks;
     //fight var
     cxBool isSelectUnit;
+    //
+    cxInt tag;
 CX_OBJECT_END(Map, cxAtlas)
 
 //init map

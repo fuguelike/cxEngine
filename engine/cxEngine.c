@@ -359,6 +359,13 @@ cxJson cxEngineJsonReader(cxConstChars src)
     return json;
 }
 
+cxAny cxEngineCreateObject(cxConstChars src)
+{
+    cxJson json = cxEngineJsonReader(src);
+    CX_ASSERT(json != NULL, "read json error");
+    return cxObjectCreateWithJson(json);
+}
+
 cxString cxEngineAssetsData(cxConstChars file)
 {
     cxHashKey key = cxHashStrKey(file);
@@ -383,7 +390,6 @@ cxJson cxEngineLoadJson(cxConstChars file)
         json = cxJsonCreate(data);
         cxHashSet(this->files, key, json);
     }
-    CX_ASSERT_TYPE(json, cxJson);
     return json;
 }
 

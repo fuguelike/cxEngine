@@ -10,11 +10,13 @@
 #define Home_Button_h
 
 #include <views/cxButton.h>
+#include <views/cxLabelTTF.h>
 
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Button, cxButton)
     CX_EVENT_ALLOC(onTap);
+    cxLabelTTF ttf;
 CX_OBJECT_END(Button, cxButton)
 
 CX_C_END

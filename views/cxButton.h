@@ -14,6 +14,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxButton, cxSprite)
+    cxVec2f touchPos;
     cxFloat movement;
     cxBool isPass;
     cxBool isEnable;

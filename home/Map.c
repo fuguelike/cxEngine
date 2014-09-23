@@ -13,6 +13,8 @@
 #include "Map.h"
 #include "Node.h"
 #include "Move.h"
+#include <types/Soldier.h>
+#include <types/Turret.h>
 
 static cxInt MapSortCmpFunc(cxConstAny lv,cxConstAny rv)
 {
@@ -108,63 +110,6 @@ static cxBool MapEditTouch(cxAny pview,cxTouchItems *points)
     return false;
 }
 
-#include <actions/cxFollow.h>
-
-static void shellExit(cxAny pav)
-{
-    CX_ASSERT_THIS(pav, cxFollow);
-    //target 被 sp击中
-    Node target = CX_TYPE_CAST(Node, this->target);
-    cxHash binded = cxViewBinded(target);
-    cxLong tag = cxActionTag(pav);
-    if(cxHashHas(binded, cxHashLongKey(tag))){
-        Node firer = (Node)tag;
-        CX_LOGGER("%p",firer);
-    }
-    
-
-    cxSprite sp = CX_TYPE_CAST(cxSprite, this->cxAction.view);
-    
-    //隐藏子弹
-    cxViewSetVisible(sp, false);
-    cxViewRemove(sp);
-}
-
-static void NodeDefenceAttackRun(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    cxHash bindes = cxViewBindes(this);
-    CX_HASH_FOREACH(bindes, ele, tmp){
-        //制造子弹
-        cxSprite sp = cxSpriteCreateWithURL("shell.png");
-        cxViewSetSize(sp, cxSize2fv(20, 20));
-        cxViewAppend(this->map, sp);
-        //获取bind的目标
-        cxView v = cxHashElementKeyToAny(ele);
-        //
-        cxFollow f = cxFollowCreate(500, v);
-        //设置开火者
-        cxActionSetTag(f, (cxLong)this);
-        CX_EVENT_APPEND(f->cxAction.onExit, shellExit);
-        cxViewAppendAction(sp, f);
-    }
-}
-
-static void NodeDefenceSearch(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    Map map = this->map;
-    cxVec2f pos = cxViewPosition(this);
-    NodeNearestInfo info = NodeNearest(map->attacks, pos, 10000 , NodeTypeAttack, NodeSubTypeNone);
-    if(info.node != NULL){
-        //bind目标
-        CX_METHOD_SET(this->Attack, NodeDefenceAttackRun);
-        cxViewBind(this, info.node, NULL);
-        NodeAttackRun(this, 0.3f);
-        NodePauseSearch(this);
-    }
-}
-
 cxBool MapInit(cxAny pmap,cxJson data)
 {
     CX_ASSERT_THIS(pmap, Map);
@@ -196,18 +141,7 @@ cxBool MapInit(cxAny pmap,cxJson data)
     cxBoxTex2f tex3 = cxBoxTex2fFlip(tex, false, true);
     pos = cxVec2fv(size.w / 4, -size.h / 4);
     cxAtlasAppendBoxPoint(this, pos, cxSize2fv(size.w/2.0f, size.h/2.0f), tex3, color);
-    
-    {
-        Node node = CX_CREATE(Node);
-        NodeInit(node, this, cxSize2fv(2, 2),cxVec2fv(20, 20),NodeTypeDefence);
-        cxSpriteSetTextureURL(node, "bg1.png");
-        cxViewSetColor(node, cxRED);
-        NodeSetLife(node, 1000);
-        MapAppendDefence(this, node);
-        CX_METHOD_SET(node->Search, NodeDefenceSearch);
-        NodeSearchRun(node, 0.1f);
-    }
-    
+
     //按Y位置排序
     MapSortNode(this);
     return true;
@@ -219,48 +153,6 @@ static void MapUpdate(cxAny pview)
     if(this->isSort){
         cxViewSortWithFunc(this, MapSortCmpFunc);
         this->isSort = false;
-    }
-}
-
-static void NodeOnAngle(cxAny pav)
-{
-    CX_ASSERT_THIS(pav, Move);
-    Node node = CX_TYPE_CAST(Node, this->cxAction.view);
-    cxInt index = 0;
-    cxFloat angle = MoveAngleIndex(this,&index);
-    
-    cxConstChars n = CX_CONST_STRING("%d.png",index);
-    cxSpriteSetTextureURL(node, n);
-    cxViewSetDegrees(node, angle);
-}
-
-//士兵搜索算法
-static void NodeAttackSearch(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    Map map = this->map;
-    cxVec2f pos = cxViewPosition(this);
-    NodeNearestInfo info = NodeNearest(map->defences, pos, 10000 , NodeTypeNone, NodeSubTypeNone);
-    if(info.node != NULL){
-        Node node = info.node;
-        Move m = CX_CREATE(Move);
-        MoveAppendPoint(m, this->idx);
-        for(cxFloat a = 0; a < 360; a+=22.5f){
-            cxInt x = 20 * sinf(kmDegreesToRadians(a)) + 20;
-            cxInt y = 20 * cosf(kmDegreesToRadians(a)) + 20;
-            MoveAppendPoint(m, cxVec2fv(x, y));
-        }
-//        for(cxFloat a = 0; a < 360; a+=10){
-//            cxInt x = 20 * sinf(kmDegreesToRadians(a)) + 20;
-//            cxInt y = 20 * cosf(kmDegreesToRadians(a)) + 20;
-//            MoveAppendPoint(m, cxVec2fv(x, y));
-//        }
-        MoveAppendPoint(m, info.idx);
-        MoveSetTarget(m, node);
-        CX_EVENT_APPEND(m->OnAngle, NodeOnAngle);
-        
-        cxViewAppendAction(pview, m);
-        NodePauseSearch(pview);
     }
 }
 
@@ -283,17 +175,42 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         cxVec2f idx = MapPosToIdx(this, cpos);
         CX_LOGGER("fight mode selected:%f %f",idx.x,idx.y);
         //test
-        Node node = CX_CREATE(Node);
-        NodeInit(node, this, cxSize2fv(2, 2),cxVec2fv(idx.x, idx.y),NodeTypeAttack);
-        NodeSetSubType(node, NodeSubTypeSoldier);
-        cxSpriteSetTextureURL(node, "bg1.png");
-        MapAppendAttack(this, node);
-        NodeSearchRun(node, SEARCH_DELAY);
-        CX_METHOD_SET(node->Search, NodeAttackSearch);
+        if(this->tag == 1){
+            
+            Soldier node = SoldierCreate(this, cxSize2fv(2, 2), idx);
+            NodeSetLife(node, 20000);
+            //加入攻击系统
+            MapAppendAttack(this, node);
+            //开始搜索
+            NodeSearchRun(node);
+
+        }else if(this->tag == 2){
+            Turret node = TurretCreate(this, cxSize2fv(2, 2), idx);
+            cxViewSetColor(node, cxRED);
+            NodeSetLife(node, 100);
+            //加入防御系统
+            MapAppendDefence(this, node);
+            //开始搜索
+            NodeSearchRun(node);
+            
+        }else if(this->tag == 3){
+            
+        }
         return true;
     }
-
     return false;
+}
+
+static void mapSubType(cxAny dst,cxAny src)
+{
+    CX_ASSERT_THIS(dst, Map);
+    this->tag = cxViewTag(src);
+}
+
+static cpBB NodeIndexBB(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return cpBBNew(this->idx.x, this->idx.y, this->idx.x + this->size.w, this->idx.y + this->size.h);
 }
 
 CX_SETTER_DEF(Map, mode)
@@ -314,15 +231,20 @@ CX_OBJECT_TYPE(Map, cxAtlas)
 }
 CX_OBJECT_INIT(Map, cxAtlas)
 {
+    //当选中按钮执行
+    cxMessageAppend(this, mapSubType, "selectSubType");
     
     CX_EVENT_APPEND(CX_TYPE(cxView, this)->onUpdate, MapUpdate);
     this->mode = MapModeNormal;
     this->isSort = true;
-    this->defences = CX_ALLOC(cxSpatial);
-    this->attacks = CX_ALLOC(cxSpatial);
+    
+    CX_RETAIN_SET(this->defences, cxSpatialCreate(NodeIndexBB));
+    CX_RETAIN_SET(this->attacks, cxSpatialCreate(NodeIndexBB));
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {
+    cxMessageRemove(this);
+    
     CX_RELEASE(this->attacks);
     CX_RELEASE(this->defences);
     allocator->free(this->items);

@@ -101,6 +101,8 @@ cxHash cxViewBinded(cxAny pview);
 
 void cxViewBind(cxAny pview,cxAny bview,cxAny bd);
 
+void cxViewUnBind(cxAny pview,cxAny bview);
+
 void cxViewBringFront(cxAny pview);
 
 void cxViewCheckFront(cxAny pview);
@@ -171,6 +173,8 @@ cxBool cxViewKey(cxAny pview,cxKey *key);
 cxBool cxViewTouch(cxAny pview,cxTouchItems *points);
 
 void cxViewAppend(cxAny pview,cxAny newview);
+
+void cxViewPrepend(cxAny pview,cxAny newview);
 
 void cxViewLayout(cxAny pview);
 

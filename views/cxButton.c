@@ -17,9 +17,9 @@ cxBool cxButtonTouch(cxAny pview,cxTouchItems *points)
     if(!this->isEnable){
         return false;
     }
-    cxBool hit = cxViewHitTest(pview, item->position, NULL);
+    cxBool hit = cxViewHitTest(pview, item->position, &this->touchPos);
     //leave
-    if(item->type == cxTouchTypeMove && this->isSelected && !hit){
+    if(item->type != cxTouchTypeDown && this->isSelected && !hit){
         CX_EVENT_FIRE(this, onLeave);
         this->isSelected = false;
         return false;
@@ -27,24 +27,26 @@ cxBool cxButtonTouch(cxAny pview,cxTouchItems *points)
     if(!hit){
         return false;
     }
-    if(this->isSelected && item->movement > this->movement){
-        CX_EVENT_FIRE(this, onLeave);
-        this->isSelected = false;
-        return false;
-    }
     if(item->type == cxTouchTypeDown){
         this->isSelected = true;
         CX_EVENT_FIRE(this, onEnter);
         CX_EVENT_FIRE(this, onPress);
+        return true;
+    }
+    if(!this->isSelected){
+        return false;
+    }
+    if(item->movement > this->movement){
+        CX_EVENT_FIRE(this, onLeave);
+        this->isSelected = false;
         return false;
     }
     if(item->type == cxTouchTypeUp){
         this->isSelected = false;
         CX_EVENT_FIRE(this, onRelease);
         CX_EVENT_FIRE(this, onLeave);
-        return true;
     }
-    return false;
+    return true;
 }
 
 CX_SETTER_DEF(cxButton, movement)
@@ -63,7 +65,7 @@ CX_OBJECT_TYPE(cxButton, cxSprite)
 }
 CX_OBJECT_INIT(cxButton, cxSprite)
 {
-    this->movement = 20;
+    this->movement = 30;
     this->isEnable = true;
     CX_METHOD_SET(this->cxSprite.cxView.Touch, cxButtonTouch);
 }

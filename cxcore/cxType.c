@@ -55,8 +55,9 @@ cxProperty cxTypeProperty(cxType this,cxConstChars key)
 {
     cxProperty p = NULL;
     cxType curr = this;
+    cxHashKey ikey = cxHashStrKey(key);
     while (curr != NULL) {
-        p = cxHashGet(curr->properties, cxHashStrKey(key));
+        p = cxHashGet(curr->properties, ikey);
         if(p != NULL){
             break;
         }
