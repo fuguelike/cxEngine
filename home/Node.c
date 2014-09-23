@@ -140,9 +140,10 @@ static cpCollisionID NodeQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void
         return id;
     }
     cxFloat d = kmVec2DistanceBetween(&info->idx, &node->idx);
-    if(d < info->dis){
-        info->dis = d;
+    if(d > info->dis){
+        return id;
     }
+    info->dis = d;
     if(info->dis >= info->range.min && info->dis <= info->range.max){
         info->node = node;
     }

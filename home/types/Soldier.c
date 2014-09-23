@@ -23,19 +23,19 @@ static void SoldierOnAngle(cxAny pav)
 static void SoldierAttack(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
+    //如果未到达攻击点
+    if(!this->isArrive){
+        return;
+    }
     Map map = NodeMap(this);
     cxHash bindes = cxViewBindes(this);
     FixArray items = {0};
     CX_HASH_FOREACH(bindes, ele, tmp){
         //获取bind的目标
         Node target = cxHashElementKeyToAny(ele);
-        //如果目标在范围外
-        if(!NodeAtRange(this, target)){
-            continue;
-        }
-        //攻击一下
-        CX_LOGGER("Turret life = %d",target->life);
+        //模拟攻击一下
         NodeAddLife(target, -20);
+        CX_LOGGER("Turret life = %d",target->life);
         //死去的目标
         if(NodeIsDie(target)){
             FixArrayAppend(items, target);
@@ -52,6 +52,12 @@ static void SoldierAttack(cxAny pview)
     }
 }
 
+static void SoldierMoveExit(cxAny pav)
+{
+    Node node = cxActionView(pav);
+    node->isArrive = true;
+}
+
 //搜索算法
 static void SoldierSearch(cxAny pview)
 {
@@ -62,6 +68,7 @@ static void SoldierSearch(cxAny pview)
     if(cxHashLength(bindes) >= this->attackNum){
         return;
     }
+    this->Node.isArrive = false;
     //动态搜索一个目标
     NodeNearestInfo info = NodeNearest(map->defences, this->Node.idx, cxRange2fv(0, 100), NodeTypeNone, NodeSubTypeNone);
     if(info.node == NULL){
@@ -69,18 +76,20 @@ static void SoldierSearch(cxAny pview)
     }
     Node node = info.node;
     
-    //路劲算法移动到可攻击的范围
+    //路劲算法移动到攻击点
     Move m = CX_CREATE(Move);
     MoveAppendPoint(m, this->Node.idx);
-    for(cxFloat a = 0; a < 360; a+=22.5f){
-        cxInt x = 20 * sinf(kmDegreesToRadians(a)) + 20;
-        cxInt y = 20 * cosf(kmDegreesToRadians(a)) + 20;
-        MoveAppendPoint(m, cxVec2fv(x, y));
-    }
+//    for(cxFloat a = 0; a < 360; a+=22.5f){
+//        cxInt x = 20 * sinf(kmDegreesToRadians(a)) + 20;
+//        cxInt y = 20 * cosf(kmDegreesToRadians(a)) + 20;
+//        MoveAppendPoint(m, cxVec2fv(x, y));
+//    }
     MoveAppendPoint(m, node->idx);
     MoveSetTarget(m, node);
+    //移动结束时到达攻击点
+    CX_EVENT_APPEND(m->cxAction.onExit, SoldierMoveExit);
     CX_EVENT_APPEND(m->OnAngle, SoldierOnAngle);
-    cxViewAppendAction(pview, m);
+    cxViewAppendAction(this, m);
     
     cxViewBind(this, node, NULL);
     //node被this锁定
@@ -94,7 +103,7 @@ CX_OBJECT_TYPE(Soldier, Node)
 CX_OBJECT_INIT(Soldier, Node)
 {
     this->attackNum = 1;
-    NodeSetRange(this, cxRange2fv(0, 1));
+    NodeSetRange(this, cxRange2fv(0, 2));
     NodeSetAttackRate(this, 0.2f);
     cxSpriteSetTextureURL(this, "bg1.png");
     CX_METHOD_SET(this->Node.Search, SoldierSearch);

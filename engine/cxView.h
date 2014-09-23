@@ -42,10 +42,12 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBox4f  autoBox;
     cxHash actions;
     cxArray removes;
+    cxArray appends;
     cxInt zorder;
     cxListElement *subElement;
     cxList subViews;
     cxView parentView;      //parent view
+    cxBool isPrepend;
     cxBool isFront;    //
     cxBool isRunning;
     cxBool isDirty;

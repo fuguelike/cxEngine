@@ -34,6 +34,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxInt attack;       //攻击力
     cxInt life;         //生命值
     cxInt level;        //等级
+    cxBool isArrive;    //到达攻击点
     cxTimer searchTimer;      //搜索用定时器
     CX_METHOD_DEF(void, Search,cxAny);
     cxTimer attackTimer;    //攻击用定时器

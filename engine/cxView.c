@@ -185,6 +185,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->subViews      = CX_ALLOC(cxList);
     this->actions       = CX_ALLOC(cxHash);
     this->removes       = CX_ALLOC(cxArray);
+    this->appends       = CX_ALLOC(cxArray);
     this->binded        = CX_ALLOC(cxHash);
     this->bindes        = CX_ALLOC(cxHash);
 }
@@ -192,6 +193,7 @@ CX_OBJECT_FREE(cxView, cxObject)
 {
     //unbind binds
     cxViewUnBindAll(this);
+    CX_RELEASE(this->appends);
     CX_RELEASE(this->removes);
     CX_RELEASE(this->subViews);
     CX_RELEASE(this->actions);
@@ -279,30 +281,20 @@ void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
     cxHashSet(bind->binded, cxHashAnyKey(this), bd);
 }
 
-static inline void cxViewAppendImp(cxAny pview,cxAny newview,cxBool prepend)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    CX_ASSERT_TYPE(newview, cxView);
-    cxView new = newview;
-    CX_RETURN(new->parentView == pview);
-    CX_ASSERT(newview != NULL && new->subElement == NULL, "newview null or add to view");
-    new->subElement = prepend ? cxListPrepend(this->subViews, new) : cxListAppend(this->subViews, new);
-    new->parentView = this;
-    if(this->isRunning){
-        cxViewEnter(new);
-        cxViewLayout(new);
-    }
-    CX_METHOD_RUN(this->onAppend, this, newview);
-}
-
 void cxViewPrepend(cxAny pview,cxAny newview)
 {
-    cxViewAppendImp(pview, newview, true);
+    CX_ASSERT_THIS(pview, cxView);
+    cxView nview = CX_TYPE_CAST(cxView, newview);
+    nview->isPrepend = true;
+    cxArrayAppend(this->appends, newview);
 }
 
 void cxViewAppend(cxAny pview,cxAny newview)
 {
-    cxViewAppendImp(pview, newview, false);
+    CX_ASSERT_THIS(pview, cxView);
+    cxView nview = CX_TYPE_CAST(cxView, newview);
+    nview->isPrepend = false;
+    cxArrayAppend(this->appends, newview);
 }
 
 void cxViewBringFront(cxAny pview)
@@ -846,10 +838,6 @@ void cxViewRemove(cxAny pview)
     CX_METHOD_RUN(parent->onRemove,parent,pview);
     //join to remove list
     cxArrayAppend(parent->removes, this);
-    //remove draw list
-    cxListRemove(parent->subViews, this->subElement);
-    this->subElement = NULL;
-    this->parentView = NULL;
 }
 
 cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
@@ -981,9 +969,49 @@ static void cxViewUpdateActions(cxView pview)
     }
 }
 
+static void cxViewCleanRemoves(cxView this)
+{
+    CX_ARRAY_FOREACH(this->removes, ele){
+        cxView view = cxArrayObject(ele);
+        cxListRemove(this->subViews, view->subElement);
+        view->subElement = NULL;
+        view->parentView = NULL;
+    }
+    cxArrayClean(this->removes);
+}
+
+static void cxViewCleanAppends(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    CX_ARRAY_FOREACH(this->appends, ele){
+        cxView nview = cxArrayObject(ele);
+        if(nview->parentView != NULL){
+            continue;
+        }
+        if(nview->subElement != NULL){
+            continue;
+        }
+        if(nview->isPrepend){
+            nview->subElement = cxListPrepend(this->subViews, nview);
+            nview->parentView = this;
+        }else{
+            nview->subElement = cxListAppend(this->subViews, nview);
+            nview->parentView = this;
+        }
+        if(this->isRunning){
+            cxViewEnter(nview);
+            cxViewLayout(nview);
+        }
+        CX_METHOD_RUN(this->onAppend, this , nview);
+    }
+    cxArrayClean(this->appends);
+}
+
 void cxViewDraw(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
+    //process append view
+    cxViewCleanAppends(this);
     if(!this->isVisible){
         goto finished;
     }
@@ -1010,7 +1038,7 @@ void cxViewDraw(cxAny pview)
     }
     CX_METHOD_RUN(this->Before, this);
     CX_METHOD_RUN(this->Draw, this);
-    CX_LIST_FOREACH_SAFE(this->subViews, ele, tmp){
+    CX_LIST_FOREACH(this->subViews, ele){
         cxView view = ele->any;
         cxViewDraw(view);
     }
@@ -1025,8 +1053,8 @@ void cxViewDraw(cxAny pview)
     }
     kmGLPopMatrix();
 finished:
-    //remove subview
-    cxArrayClean(this->removes);
+    //process remove view
+    cxViewCleanRemoves(this);
 }
 
 
