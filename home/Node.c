@@ -191,13 +191,17 @@ static cpFloat NodeSegmentQueryFunc(cxAny ps, cxAny pview, void *data)
     if(info->subType != NodeSubTypeNone && !(info->subType & node->subType)){
         return info->exit;
     }
-    //计算a点距离
     cxVec2f tidx = SCALE_VEC2F(node->idx);
-    cxFloat d = kmVec2DistanceBetween(&info->a, &tidx) + kmVec2DistanceBetween(&info->b, &tidx);
-    if(d > info->dis){
+    //计算a点距离
+    cxFloat ad = kmVec2DistanceBetween(&info->a, &tidx);
+    //计算b点距离
+    cxFloat bd = kmVec2DistanceBetween(&info->b, &tidx);
+    //距离和
+    cxFloat dis = ad + bd;
+    if(dis > info->dis){
         return info->exit;
     }
-    info->dis = d;
+    info->dis = dis;
     info->node = node;
     return info->exit;
 }
@@ -208,7 +212,6 @@ cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeType type,NodeSubType subType
     NodeSegmentInfo ret = {0};
     ret.a = SCALE_VEC2F(a);
     ret.b = SCALE_VEC2F(b);
-    ret.ab = kmVec2DistanceBetween(&ret.a, &ret.b);
     ret.dis = INT32_MAX;
     ret.type = type;
     ret.subType = subType;
