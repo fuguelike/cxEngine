@@ -1,5 +1,5 @@
 //
-//  Turret.c
+//  Defence.c
 //  Home
 //
 //  Created by xuhua on 9/23/14.
@@ -8,28 +8,23 @@
 
 #include <actions/cxFollow.h>
 #include <Map.h>
-#include "Turret.h"
+#include "Defence.h"
 #include <Range.h>
 #include "Bullet.h"
 
-static void TurretAttackExit(cxAny pav)
+static void DefenceAttackExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFollow);
     //target 被 sp击中
     Node target = CX_TYPE_CAST(Node, this->target);
-    //获取攻击者
-    cxHash binded = cxViewBinded(target);
-    cxLong tag = cxActionTag(pav);
-    Node firer = NULL;
-    if(cxHashHas(binded, cxHashLongKey(tag))){
-        firer = (Node)tag;
-    }
-    cxSprite sp = CX_TYPE_CAST(cxSprite, this->cxAction.view);
+    Bullet sp = CX_TYPE_CAST(Bullet, this->cxAction.view);
     //模拟攻击
-    NodeAddLife(target, -20);
+    NodeAddLife(target, -sp->power);
     CX_LOGGER("soldier life = %d",target->life);
+
+    //目标死亡
     if(NodeIsDie(target)){
-        //死去的攻击者移除
+        cxViewUnBindAll(target);
         NodeRemove(target);
     }
     //隐藏子弹
@@ -37,7 +32,7 @@ static void TurretAttackExit(cxAny pav)
     cxViewRemove(sp);
 }
 
-void TurretAttack(cxAny pview)
+void DefenceAttack(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeMap(this);
@@ -54,16 +49,12 @@ void TurretAttack(cxAny pview)
         
         //制造子弹 bullet
         Bullet sp = CX_CREATE(Bullet);
-        cxSpriteSetTextureURL(sp, "bullet.json?shell.png");
-        cxViewSetSize(sp, cxSize2fv(20, 20));
-        cxViewSetPos(sp, cxViewPosition(this));
+        BulletInit(sp, map, cxSize2fv(20, 20), cxViewPosition(this));
+        BulletSetPower(sp, this->power);
         cxViewAppend(map->bullet, sp);
-
-        //
+        //设定目标
         cxFollow f = cxFollowCreate(800, target);
-        //设置开火者
-        cxActionSetTag(f, (cxLong)this);
-        CX_EVENT_APPEND(f->cxAction.onExit, TurretAttackExit);
+        CX_EVENT_APPEND(f->cxAction.onExit, DefenceAttackExit);
         cxViewAppendAction(sp, f);
     }
     //移除范围外的
@@ -73,9 +64,9 @@ void TurretAttack(cxAny pview)
     }
 }
 
-void TurretSearch(cxAny pview)
+void DefenceSearch(cxAny pview)
 {
-    CX_ASSERT_THIS(pview, Turret);
+    CX_ASSERT_THIS(pview, Defence);
     Map map = NodeMap(this);
     cxHash bindes = cxViewBindes(this);
     //如果同时攻击数量到达
@@ -83,24 +74,25 @@ void TurretSearch(cxAny pview)
         return;
     }
     //搜索新目标
-    NodeNearestInfo info = NodeNearest(map->attacks, this->Node.idx, this->Node.range , NodeTypeAttack, NodeSubTypeNone);
-    if(info.node == NULL){
+    Node node = NodeNearest(map->attacks, this->Node.idx, this->Node.range , NodeTypeAttack, NodeSubTypeNone);
+    if(node == NULL){
         return;
     }
     //bind范围内的目标
-    Node node = info.node;
     if(!NodeAtRange(this, node)){
         return;
     }
     cxViewBind(this, node, NULL);
 }
 
-CX_OBJECT_TYPE(Turret, Node)
+CX_OBJECT_TYPE(Defence, Node)
 {
     
 }
-CX_OBJECT_INIT(Turret, Node)
+CX_OBJECT_INIT(Defence, Node)
 {
+    this->Node.type = NodeTypeDefence;
+    
     this->attackNum = 1;
     NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(2, 15));
@@ -109,23 +101,23 @@ CX_OBJECT_INIT(Turret, Node)
     CX_METHOD_SET(this->Node.Remove, MapRemoveDefence);
     CX_METHOD_SET(this->Node.Append, MapAppendDefence);
     
-    CX_METHOD_SET(this->Node.Search, TurretSearch);
-    CX_METHOD_SET(this->Node.Attack, TurretAttack);
+    CX_METHOD_SET(this->Node.Search, DefenceSearch);
+    CX_METHOD_SET(this->Node.Attack, DefenceAttack);
     
     Range range = CX_CREATE(Range);
     RangeSetRange(range, this->Node.range);
     cxViewAppend(this, range);
 }
-CX_OBJECT_FREE(Turret, Node)
+CX_OBJECT_FREE(Defence, Node)
 {
-
+    
 }
-CX_OBJECT_TERM(Turret, Node)
+CX_OBJECT_TERM(Defence, Node)
 
-Turret TurretCreate(cxAny map,cxSize2f size,cxVec2f pos)
+Defence DefenceCreate(cxAny map,cxSize2f size,cxVec2f pos)
 {
-    Turret this = CX_CREATE(Turret);
-    NodeInit(this, map, size, pos, NodeTypeDefence, NodeSubTypeTurret);
+    Defence this = CX_CREATE(Defence);
+    NodeInit(this, map, size, pos);
     NodeSearchRun(this);
     return this;
 }

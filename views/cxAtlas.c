@@ -199,7 +199,7 @@ void cxAtlasClean(cxAny pview)
     this->isDirty = true;
 }
 
-cxInt cxAtlasAppend(cxAny pview,cxBoxPoint *point)
+void cxAtlasAppend(cxAny pview,cxBoxPoint *point)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
     //realloc
@@ -209,32 +209,6 @@ cxInt cxAtlasAppend(cxAny pview,cxBoxPoint *point)
     CX_ASSERT(this->number < this->capacity, "atlas number > boxNumber");
     this->boxes[this->number++] = *point;
     this->isDirty = true;
-    return this->number - 1;
-}
-
-//fast move
-cxBool cxAtlasRemovePoint(cxAny pview,cxInt index)
-{
-    CX_ASSERT_THIS(pview, cxAtlas);
-    CX_ASSERT(index >= 0 && index < this->number, "index > boxNumber");
-    cxBoxPoint *point = &this->boxes[index];
-    cxBoxPoint *last = &this->boxes[this->number - 1];
-    cxBool ret = false;
-    if(last != point){
-        memcpy(point, last, sizeof(cxBoxPoint));
-        ret = true;
-    }
-    this->number --;
-    return ret;
-}
-
-cxBoxPoint *cxAtlasAt(cxAny pview,cxInt index)
-{
-    CX_ASSERT_THIS(pview, cxAtlas);
-    if(index < 0 || index >= this->number){
-        return NULL;
-    }
-    return &this->boxes[index];
 }
 
 void cxAtlasUpdateAt(cxAny pview,cxInt index, cxBoxPoint *point)

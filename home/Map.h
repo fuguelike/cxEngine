@@ -22,12 +22,12 @@ CX_OBJECT_DEF(Map, cxAtlas)
     MapMode mode;
     //
     cxBool isSort;
+    cxHash nodes;
     //
-    cxAny *items;       //格子node
     cxAny node;         //当前选中的node
-    //防御方单位空间索引
+    //静态防御方单位空间索引
     cxSpatial defences;
-    //攻击方单位空间索引
+    //动态攻击方单位空间索引
     cxSpatial attacks;
     //阻挡单位空间索引
     cxSpatial blocks;
@@ -69,7 +69,11 @@ void MapRemoveDefence(cxAny node);
 
 void MapRemoveBlock(cxAny node);
 
-cxInt MapOffSetIdx(cxInt x,cxInt y);
+void MapDelNode(cxAny pmap,cxInt x,cxInt y);
+
+void MapSetNode(cxAny pmap,cxInt x,cxInt y,cxAny node);
+
+cxAny MapNode(cxAny pview,cxInt x,cxInt y);
 
 cxVec2f MapPosToIdx(cxAny pmap,cxVec2f pos);
 
@@ -77,7 +81,7 @@ cxVec2f MapIdxToPos(cxAny pmap,cxVec2f idx);
 
 cxAny MapItem(cxAny pmap,cxVec2f idx);
 
-void MapSetNode(cxAny pmap,cxVec2i idx,cxAny node);
+void MapFillNode(cxAny pmap,cxVec2i idx,cxAny node);
 
 cxBool MapIsValidIdx(cxAny pmap,cxVec2f idx);
 

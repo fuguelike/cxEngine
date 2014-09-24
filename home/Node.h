@@ -32,7 +32,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxRange2f range;    //攻击范围
     cxFloat attackRate; //攻击频率
     cxFloat speed;      //移动速度
-    cxInt attack;       //攻击力
+    cxFloat power;       //攻击力
     cxRange2i life;     //生命
     cxInt level;        //等级
     cxBool isArrive;    //到达攻击点
@@ -55,7 +55,7 @@ void NodeRemove(cxAny pview);
 void NodeSetLife(cxAny pview,cxInt life);
 void NodeAddLife(cxAny pview,cxInt life);
 void NodeSetLevel(cxAny pview,cxInt level);
-void NodeSetAttack(cxAny pview,cxInt attack);
+void NodeSetPower(cxAny pview,cxFloat power);
 void NodeSetSpeed(cxAny pview,cxFloat speed);
 
 //设置攻击范围
@@ -76,6 +76,15 @@ typedef struct {
     NodeSubType subType;//搜索子类型
 } NodeNearestInfo;
 
+typedef struct {
+    cxAny node;         //最近的view
+    cxVec2f a;        //第1点
+    cxVec2f b;        //第2点
+    cxFloat dis;        //距离
+    NodeType type;      //搜索的类型
+    NodeSubType subType;//搜索子类型
+} NodeSegmentInfo;
+
 cxAny NodeMap(cxAny pview);
 
 //节点死亡
@@ -84,8 +93,12 @@ cxBool NodeIsDie(cxAny pview);
 //设置状态
 void NodeSetState(cxAny pview,NodeState state);
 
+
+//搜索离a点最近的线段上的单位
+cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeType type,NodeSubType subType);
+
 //搜索最近的单位，可设置多种类型组合 
-NodeNearestInfo NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType subType);
+cxAny NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType subType);
 
 //暂停搜索
 void NodePauseSearch(cxAny pview);
@@ -107,7 +120,7 @@ void NodeAttackRun(cxAny pview);
 
 cxRange2f NodeRange(cxAny pview);
 
-cxFloat NodeAttack(cxAny pview);
+cxFloat NodePower(cxAny pview);
 
 cxRange2i NodeLife(cxAny pview);
 
@@ -118,6 +131,9 @@ cxInt NodeLevel(cxAny pview);
 cxVec2i NodeIndex(cxAny pview);
 
 cxSize2i NodeSize(cxAny pview);
+
+//获取Node当前位置索引
+cxVec2f NodePosIndex(cxAny pview);
 
 //从当前坐标转换为索引坐标
 cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos);
@@ -140,7 +156,7 @@ cxBool NodeSetPosition(cxAny pview,cxVec2f idx,cxBool animate);
 
 void NodeSetSize(cxAny pview,cxSize2f size);
 
-void NodeInit(cxAny pview,cxAny map,cxSize2f size,cxVec2f idx,NodeType type,NodeSubType subType);
+void NodeInit(cxAny pview,cxAny map,cxSize2f size,cxVec2f idx);
 
 CX_C_END
 

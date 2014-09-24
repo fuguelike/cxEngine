@@ -13,8 +13,8 @@
 #include "Button.h"
 #include "Range.h"
 #include "Move.h"
-#include <types/Soldier.h>
-#include <types/Turret.h>
+#include <types/Attack.h>
+#include <types/Defence.h>
 #include <types/Wall.h>
 #include <types/Bullet.h>
 
@@ -28,9 +28,8 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Move);
     
     CX_TYPE_REG(Bullet);
-    
-    CX_TYPE_REG(Soldier);
-    CX_TYPE_REG(Turret);
+    CX_TYPE_REG(Attack);
+    CX_TYPE_REG(Defence);
     CX_TYPE_REG(Wall);
 }
 

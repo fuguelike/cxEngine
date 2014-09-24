@@ -94,6 +94,13 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
     return false;
 }
 
+cxVec2f NodePosIndex(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxVec2f pos = cxViewPosition(this);
+    return NodePosToIdx(this, pos);
+}
+
 static void NodeOnTransform(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -102,12 +109,13 @@ static void NodeOnTransform(cxAny pview)
     if(map->mode != MapModeFight){
         return;
     }
-    //更新node索引位置
-    cxVec2f pos = cxViewPosition(this);
-    cxVec2f idx = NodePosToIdx(this, pos);
+    //只更新攻击单位位置
+    if(this->type != NodeTypeAttack){
+        return;
+    }
+    cxVec2f idx = NodePosIndex(this);
     if(!cxVec2fEqu(this->idx, idx)){
         this->idx = idx;
-        cxSpatialReindexView(map->defences, this);
         cxSpatialReindexView(map->attacks, this);
     }
 }
@@ -145,7 +153,7 @@ void NodeRemove(cxAny pview)
     CX_METHOD_RUN(this->Remove,this);
 }
 
-static cpCollisionID NodeQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
+static cpCollisionID NodeIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
 {
     NodeNearestInfo *info = data;
     Node node = CX_TYPE_CAST(Node, pview);
@@ -170,19 +178,53 @@ static cpCollisionID NodeQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void
     return id;
 }
 
-NodeNearestInfo NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType subType)
+static cpFloat NodeSegmentQueryFunc(cxAny ps, cxAny pview, void *data)
+{
+    NodeSegmentInfo *info = data;
+    Node node = CX_TYPE_CAST(Node, pview);
+    //不匹配类型
+    if(info->type != NodeTypeNone && !(info->type & node->type)){
+        return 1.0f;
+    }
+    //不匹配子类型
+    if(info->subType != NodeSubTypeNone && !(info->subType & node->subType)){
+        return 1.0f;
+    }
+    //计算a点距离
+    cxFloat d = kmVec2DistanceBetween(&info->a, &node->idx);
+    if(d > info->dis){
+        return 1.0f;
+    }
+    info->dis = d;
+    info->node = node;
+    return 1.0f;
+}
+
+cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeType type,NodeSubType subType)
+{
+    CX_ASSERT_THIS(ps, cxSpatial);
+    NodeSegmentInfo ret = {0};
+    ret.a = a;
+    ret.b = b;
+    ret.dis = INT32_MAX;
+    ret.type = type;
+    ret.subType = subType;
+    cpSpatialIndexSegmentQuery(this->index, this, cpv(a.x, a.y), cpv(b.x, b.y), 1.0f, NodeSegmentQueryFunc, &ret);
+    return ret.node;
+}
+
+cxAny NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType subType)
 {
     CX_ASSERT_THIS(ps, cxSpatial);
     NodeNearestInfo ret = {0};
     ret.idx = idx;
     ret.dis = INT32_MAX;
-    ret.node = NULL;
     ret.range = range;
     ret.type = type;
     ret.subType = subType;
     cpBB bb = cpBBNewForCircle(cpv(idx.x,idx.y), cpfmax(range.max, 0.0f));
-    cpSpatialIndexQuery(this->index, this, bb, NodeQueryFunc, &ret);
-    return ret;
+    cpSpatialIndexQuery(this->index, this, bb, NodeIndexQueryFunc, &ret);
+    return ret.node;
 }
 
 //搜索附近的
@@ -276,10 +318,10 @@ void NodeSetAttackRate(cxAny pview,cxFloat rate)
     }
 }
 
-void NodeSetAttack(cxAny pview,cxInt attack)
+void NodeSetPower(cxAny pview,cxFloat power)
 {
     CX_ASSERT_THIS(pview, Node);
-    this->attack = attack;
+    this->power = power;
 }
 
 void NodeSetSpeed(cxAny pview,cxFloat speed)
@@ -330,10 +372,10 @@ cxRange2f NodeRange(cxAny pview)
     return this->range;
 }
 
-cxFloat NodeAttack(cxAny pview)
+cxFloat NodePower(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    return this->attack;
+    return this->power;
 }
 
 cxBool NodeHasPoint(cxAny pview,cxVec2i idx)
@@ -422,7 +464,7 @@ cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
     }
     for(cxInt x = idx.x; x < idx.x + size.w; x ++){
         for (cxInt y = idx.y; y < idx.y + size.h; y++) {
-            cxAny item = map->items[MapOffSetIdx(x, y)];
+            cxAny item = MapNode(map, x, y);
             if(item != NULL && item != this){
                 return false;
             }
@@ -452,9 +494,9 @@ void NodeSetIdx(cxAny pview,cxVec2f idx)
     if(cxVec2iEqu(nidx, oidx)){
         return;
     }
-    //攻击者不放入A*搜索数据中
+    //攻击活动单位不放入A*搜索数据中
     if(this->type != NodeTypeAttack){
-        MapSetNode(map, nidx, this);
+        MapFillNode(map, nidx, this);
     }
     this->idx = idx;
     this->curr = idx;
@@ -462,12 +504,10 @@ void NodeSetIdx(cxAny pview,cxVec2f idx)
     MapNodeOnNewIdx(map, this);
 }
 
-void NodeInit(cxAny pview,cxAny map, cxSize2f size,cxVec2f idx,NodeType type,NodeSubType subType)
+void NodeInit(cxAny pview,cxAny map, cxSize2f size,cxVec2f idx)
 {
     CX_ASSERT_THIS(pview, Node);
     this->map = map;
-    this->type = type;
-    this->subType = subType;
     NodeSetSize(this, size);
     NodeSetIdx(this, idx);
     NodeSetPosition(this, idx, false);

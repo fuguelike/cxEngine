@@ -15,6 +15,9 @@ CX_OBJECT_TYPE(Wall, Node)
 }
 CX_OBJECT_INIT(Wall, Node)
 {
+    this->Node.type = NodeTypeBlock;
+    this->Node.subType = NodeSubTypeWall;
+    
     CX_METHOD_SET(this->Node.Remove, MapRemoveBlock);
     CX_METHOD_SET(this->Node.Append, MapAppendBlock);
     
@@ -22,13 +25,13 @@ CX_OBJECT_INIT(Wall, Node)
 }
 CX_OBJECT_FREE(Wall, Node)
 {
-
+    
 }
 CX_OBJECT_TERM(Wall, Node)
 
 Wall WallCreate(cxAny map,cxSize2f size,cxVec2f pos)
 {
     Wall this = CX_CREATE(Wall);
-    NodeInit(this, map, size, pos, NodeTypeBlock, NodeSubTypeWall);
+    NodeInit(this, map, size, pos);
     return this;
 }

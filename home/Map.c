@@ -13,8 +13,8 @@
 #include "Map.h"
 #include "Node.h"
 #include "Move.h"
-#include <types/Soldier.h>
-#include <types/Turret.h>
+#include <types/Attack.h>
+#include <types/Defence.h>
 #include <types/Wall.h>
 
 static cxInt MapSortCmpFunc(cxConstAny lv,cxConstAny rv)
@@ -142,8 +142,6 @@ cxBool MapInit(cxAny pmap,cxJson data)
     CX_ASSERT_THIS(pmap, Map);
 
     cxEngine engine = cxEngineInstance();
-
-    this->items = allocator->calloc(global.unitNum.x * global.unitNum.y,sizeof(cxAny));
     
     cxSize2f size = cxSize2fv(engine->winsize.w * 1.2f, 0);
     size.h = size.w * 0.75f;
@@ -205,12 +203,12 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         CX_LOGGER("fight mode selected:%f %f",idx.x,idx.y);
         //test
         if(this->tag == 1){
-            Soldier node = SoldierCreate(this, cxSize2fv(1, 1), idx);
+            Attack node = AttackCreate(this, cxSize2fv(1, 1), idx);
             NodeSetLife(node, 20000);
-            NodeSetAttack(node, 20);
+            NodeSetPower(node, 20);
             NodeAppend(node);
         }else if(this->tag == 2){
-            Turret node = TurretCreate(this, cxSize2fv(2, 2), idx);
+            Defence node = DefenceCreate(this, cxSize2fv(2, 2), idx);
             cxViewSetColor(node, cxRED);
             NodeSetLife(node, 200);
             NodeAppend(node);
@@ -255,11 +253,13 @@ static cxBool MapIsAppend(cxAny pstar,cxVec2i *idx)
     MapSearchInfo *info = this->data;
     Map map = info->map;
     cxVec2f index = cxVec2fv(idx->x, idx->y);
+    //如果索引超出最大范围
     if(!MapIsValidIdx(map, index)){
         return false;
     }
-    cxInt off = MapOffSetIdx(idx->x, idx->y);
-    Node node = map->items[off];
+    //如果索引不在人眼视角范围
+    
+    Node node = MapNode(map, idx->x, idx->y);
     if(node == NULL){
         return true;
     }
@@ -295,6 +295,8 @@ CX_OBJECT_INIT(Map, cxAtlas)
     
     this->bullet = CX_CREATE(cxView);
     cxViewAppend(this, this->bullet);
+    
+    this->nodes = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {
@@ -304,7 +306,7 @@ CX_OBJECT_FREE(Map, cxAtlas)
     CX_RELEASE(this->astar);
     CX_RELEASE(this->attacks);
     CX_RELEASE(this->defences);
-    allocator->free(this->items);
+    CX_RELEASE(this->nodes);
 }
 CX_OBJECT_TERM(Map, cxAtlas)
 
@@ -317,9 +319,25 @@ cxAnyArray MapSearchPath(cxAny snode,cxAny dnode)
     return cxAStarRun(map->astar, s, d, &info);
 }
 
-cxInt MapOffSetIdx(cxInt x,cxInt y)
+void MapDelNode(cxAny pmap,cxInt x,cxInt y)
 {
-    return y * global.unitNum.x + x;
+    CX_ASSERT_THIS(pmap, Map);
+    cxHashKey key = cxHashIntKey(y * global.unitNum.x + x);
+    cxHashDel(this->nodes, key);
+}
+
+void MapSetNode(cxAny pmap,cxInt x,cxInt y,cxAny node)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    cxHashKey key = cxHashIntKey(y * global.unitNum.x + x);
+    cxHashSet(this->nodes, key, node);
+}
+
+cxAny MapNode(cxAny pmap,cxInt x,cxInt y)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    cxHashKey key = cxHashIntKey(y * global.unitNum.x + x);
+    return cxHashGet(this->nodes, key);
 }
                             
 cxAny MapItem(cxAny pmap,cxVec2f idx)
@@ -328,11 +346,10 @@ cxAny MapItem(cxAny pmap,cxVec2f idx)
     if(!MapIsValidIdx(this, idx)){
         return NULL;
     }
-    cxInt off = MapOffSetIdx(idx.x, idx.y);
-    return this->items[off];
+    return MapNode(pmap, idx.x, idx.y);
 }
 
-void MapSetNode(cxAny pmap,cxVec2i idx,cxAny node)
+void MapFillNode(cxAny pmap,cxVec2i idx,cxAny node)
 {
     CX_ASSERT_THIS(pmap, Map);
     CX_ASSERT_TYPE(node, Node);
@@ -345,14 +362,14 @@ void MapSetNode(cxAny pmap,cxVec2i idx,cxAny node)
     cxVec2i curr = NodeIndex(node);
     for(cxInt x = curr.x; x < curr.x + size.w; x ++){
         for (cxInt y = curr.y; y < curr.y + size.h; y++) {
-            this->items[MapOffSetIdx(x, y)] = NULL;
+            MapDelNode(this, x, y);
         }
     }
 setnewpos:
     //将建筑设置到新位置
     for(cxInt x = idx.x; x < idx.x + size.w; x ++){
         for (cxInt y = idx.y; y < idx.y + size.h; y++) {
-            this->items[MapOffSetIdx(x, y)] = node;
+            MapSetNode(this, x, y, node);
         }
     }
 }
