@@ -117,7 +117,7 @@ static void cxAnimateInit(cxAny pav)
     cxInt i = 0;
     CX_ARRAY_FOREACH(items, e){
         cxAnimateItem item = cxAnimateItemGet(this,items,cxArrayObject(e),i);
-        CX_ASSERT(item != NULL, "frame item null,check file");
+        CX_ASSERT_TYPE(item, cxAnimateItem);
         this->cxAction.time += item->time;
         value += dt  + item->time;
         item->value = value;
@@ -135,7 +135,7 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_ARRAY_FOREACH(items, e){
         i++;
         cxAnimateItem item = cxArrayObject(e);
-        CX_ASSERT(CX_INSTANCE_OF(item, cxAnimateItem), "item type error,must cxAnimateItem");
+        CX_ASSERT_TYPE(item, cxAnimateItem);
         if(this->cxAction.timeElapsed > item->value){
             continue;
         }
@@ -184,7 +184,7 @@ CX_SETTER_DEF(cxAnimate, frames)
     CX_JSON_ARRAY_EACH_BEG(frames, item)
     {
         cxAnimateItem frame = cxObjectCreateWithJson(item);
-        CX_ASSERT(CX_INSTANCE_OF(frame, cxAnimateItem), "type error");
+        CX_ASSERT_TYPE(frame, cxAnimateItem);
         cxHashKey key = cxAnimateItemKey(frame);
         cxHashSet(this->frames, key, frame);
     }
@@ -207,7 +207,7 @@ CX_SETTER_DEF(cxAnimate, groups)
         {
             if(cxJsonIsObject(ats)){
                 cxAnimateItem frame = cxObjectCreateWithJson(ats);
-                CX_ASSERT(CX_INSTANCE_OF(frame, cxAnimateItem), "type error");
+                CX_ASSERT_TYPE(frame, cxAnimateItem);
                 cxArrayAppend(items, frame);
                 continue;
             }

@@ -3,13 +3,13 @@
     "cxType": "cxTimer",
     "actionid": 10000,
     "group": "fight",
-    "time":0.1,
+    "time":0.3,
     "repeat": -1
   },
   "attackTimer": {
     "cxType": "cxTimer",
     "actionid": 10001,
-    "time":0.1,
+    "time":0.5,
     "group": "fight",
     "repeat": -1
   }

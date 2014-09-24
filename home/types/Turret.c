@@ -16,7 +16,6 @@ static void TurretAttackExit(cxAny pav)
     CX_ASSERT_THIS(pav, cxFollow);
     //target 被 sp击中
     Node target = CX_TYPE_CAST(Node, this->target);
-    Map map = NodeMap(target);
     //获取攻击者
     cxHash binded = cxViewBinded(target);
     cxLong tag = cxActionTag(pav);
@@ -30,7 +29,7 @@ static void TurretAttackExit(cxAny pav)
     CX_LOGGER("soldier life = %d",target->life);
     if(NodeIsDie(target)){
         //死去的攻击者移除
-        MapRemoveAttack(map, target);
+        NodeRemove(target);
     }
     //隐藏子弹
     cxViewSetVisible(sp, false);
@@ -68,8 +67,6 @@ static void TurretAttack(cxAny pview)
     for(cxInt i=0; i < items.number; i++){
         Node node = CX_TYPE_CAST(Node, items.items[i]);
         cxViewUnBind(this, node);
-        //node被lock解锁
-        CX_METHOD_RUN(node->UnLock, node, this);
     }
 }
 
@@ -93,8 +90,6 @@ static void TurretSearch(cxAny pview)
         return;
     }
     cxViewBind(this, node, NULL);
-    //node被this锁定
-    CX_METHOD_RUN(node->OnLock,node,this);
 }
 
 CX_OBJECT_TYPE(Turret, Node)
@@ -104,9 +99,12 @@ CX_OBJECT_TYPE(Turret, Node)
 CX_OBJECT_INIT(Turret, Node)
 {
     this->attackNum = 3;
-    NodeSetAttackRate(this, 0.3f);
+    NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(5, 14));
     cxSpriteSetTextureURL(this, "bg1.png");
+    
+    CX_METHOD_SET(this->Node.Remove, MapRemoveDefence);
+    CX_METHOD_SET(this->Node.Append, MapAppendDefence);
     
     CX_METHOD_SET(this->Node.Search, TurretSearch);
     CX_METHOD_SET(this->Node.Attack, TurretAttack);
@@ -125,6 +123,7 @@ Turret TurretCreate(cxAny map,cxSize2f size,cxVec2f pos)
 {
     Turret this = CX_CREATE(Turret);
     NodeInit(this, map, size, pos, NodeTypeDefence, NodeSubTypeTurret);
+    NodeSearchRun(this);
     return this;
 }
 

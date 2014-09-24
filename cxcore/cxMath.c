@@ -34,7 +34,6 @@ cxFloat cxVec2fRadiansBetween(cxVec2f v1, cxVec2f v2)
 {
     cxVec2f delta;
     kmVec2Subtract(&delta, &v1, &v2);
-    CX_LOGGER("%f %f",delta.x,delta.y);
     return cxVec2fAngle(delta);
 }
 

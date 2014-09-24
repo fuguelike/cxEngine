@@ -9,19 +9,31 @@
 #include <engine/cxEngine.h>
 #include "cxSpline.h"
 
-static void cxSplineInit(cxAny pav)
-{
-    CX_ASSERT_THIS(pav, cxSpline);
-    CX_ASSERT_TYPE(this->cxAction.view, cxView);
-    this->delta = 1.0f/((cxFloat)cxAnyArrayLength(this->points) - 1.0f);
-    this->diff = cxVec2fv(0, 0);
-    this->prev = this->cxAction.view->position;
-}
-
 static cxVec2f cxSplinePointAt(cxSpline this,cxInt idx)
 {
     idx = CX_MIN(cxAnyArrayLength(this->points) - 1, CX_MAX(idx, 0));
     return *cxAnyArrayAt(this->points, idx, cxVec2f);
+}
+
+static void cxSplineInit(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxSpline);
+    CX_ASSERT_TYPE(this->cxAction.view, cxView);
+    cxInt num = cxAnyArrayLength(this->points);
+    if(num < 2){
+        cxActionStop(pav);
+        return;
+    }
+    this->delta = 1.0f/((cxFloat)num - 1.0f);
+    this->diff = cxVec2fv(0, 0);
+    this->prev = this->cxAction.view->position;
+    cxVec2f p0 = cxSplinePointAt(this, 0);
+    cxVec2f p1 = cxSplinePointAt(this, num - 1);
+    cxFloat angle = cxVec2fRadiansBetween(p1, p0);
+    if(!cxFloatEqu(angle, this->angle)){
+        this->angle = angle;
+        CX_EVENT_FIRE(this, onAngle);
+    }
 }
 
 static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
@@ -40,19 +52,22 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
         this->index = index;
         CX_EVENT_FIRE(this, onIndex);
     }
-    cxVec2f p0 = cxSplinePointAt(this, this->index - 1);
-    cxVec2f p1 = cxSplinePointAt(this, this->index + 0);
-    cxVec2f p2 = cxSplinePointAt(this, this->index + 1);
-    cxVec2f p3 = cxSplinePointAt(this, this->index + 2);
+    cxVec2f p0 = cxSplinePointAt(this, index - 1);
+    cxVec2f p1 = cxSplinePointAt(this, index + 0);
+    cxVec2f p2 = cxSplinePointAt(this, index + 1);
+    cxVec2f p3 = cxSplinePointAt(this, index + 2);
     cxVec2f newpos = cxCardinalSplineAt(p0, p1, p2, p3, this->tension, lt);
-    //
     cxVec2f diff;
     kmVec2Subtract(&diff, &this->cxAction.view->position, &this->prev);
     if(diff.x != 0 || diff.y != 0){
         kmVec2Add(&this->diff, &this->diff, &diff);
         kmVec2Add(&newpos, &newpos, &this->diff);
     }
-    //
+    cxFloat angle = cxVec2fRadiansBetween(newpos, this->prev);
+    if(!cxFloatEqu(angle, this->angle)){
+        this->angle = angle;
+        CX_EVENT_FIRE(this, onAngle);
+    }
     cxViewSetPos(this->cxAction.view, newpos);
     this->prev = newpos;
 }
@@ -61,6 +76,7 @@ static void cxSplineReset(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxSpline);
     this->index = -1;
+    this->angle = INT32_MAX;
     cxAnyArrayClean(this->points);
 }
 
@@ -82,6 +98,7 @@ CX_OBJECT_TYPE(cxSpline, cxAction)
 CX_OBJECT_INIT(cxSpline, cxAction)
 {
     this->index = -1;
+    this->angle = INT32_MAX;
     CX_METHOD_SET(this->cxAction.Init, cxSplineInit);
     CX_METHOD_SET(this->cxAction.Step, cxSplineStep);
     CX_METHOD_SET(this->cxAction.Reset, cxSplineReset);
@@ -89,6 +106,7 @@ CX_OBJECT_INIT(cxSpline, cxAction)
 }
 CX_OBJECT_FREE(cxSpline, cxAction)
 {
+    CX_EVENT_RELEASE(this->onAngle);
     CX_EVENT_RELEASE(this->onIndex);
     CX_RELEASE(this->points);
 }

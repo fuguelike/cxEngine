@@ -121,7 +121,7 @@ CX_SETTER_DEF(cxView, subviews)
     CX_JSON_ARRAY_EACH_BEG(subviews, item)
     {
         cxAny object = cxObjectCreateWithJson(item);
-        CX_ASSERT(CX_INSTANCE_OF(object, cxView), "subview must is cxView type");
+        CX_ASSERT_TYPE(object, cxView);
         cxViewAppend(this, object);
     }
     CX_JSON_ARRAY_EACH_END(subviews, item)
@@ -132,7 +132,7 @@ CX_SETTER_DEF(cxView, actions)
     CX_JSON_ARRAY_EACH_BEG(actions, item)
     {
         cxAny object = cxObjectCreateWithJson(item);
-        CX_ASSERT(CX_INSTANCE_OF(object, cxAction), "actions must is cxAction type");
+        CX_ASSERT_TYPE(object, cxAction);
         cxViewAppendAction(this, object);
     }
     CX_JSON_ARRAY_EACH_END(actions, item)

@@ -57,19 +57,21 @@ typedef enum {
 
 //节点主类型
 typedef enum {
-    NodeTypeNone = 0,
-    NodeTypeResource,       //资源类型
-    NodeTypeDefence,        //主动防御类型
-    NodeTypeAttack,         //进攻单位类型
-    NodeTypeOther,          //其他，包括，辅助，军营
+    NodeTypeNone        = 0,
+    NodeTypeResource    = 1 << 0,       //资源类型
+    NodeTypeDefence     = 1 << 1,       //主动防御类型
+    NodeTypeAttack      = 1 << 2,       //进攻单位类型
+    NodeTypeBlock       = 1 << 3,       //可阻挡进攻类,如城墙，城门
+    NodeTypeBuilding    = 1 << 4,       //非攻击建筑类型
 }NodeType;
 
 //节点子类型
 typedef enum {
-    NodeSubTypeNone = 0,
-    NodeSubTypeSoldier,     //近身攻击的士兵
-    NodeSubTypeTurret,      //炮塔
-    NodeSubTypeArcher,      //弓箭手
+    NodeSubTypeNone     = 0,
+    NodeSubTypeSoldier  = 1 << 0,      //近身攻击的士兵
+    NodeSubTypeTurret   = 1 << 1,      //炮塔
+    NodeSubTypeArcher   = 1 << 2,      //弓箭手
+    NodeSubTypeWall     = 1 << 3,       //城墙
 }NodeSubType;
 
 CX_C_END

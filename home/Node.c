@@ -123,6 +123,7 @@ CX_OBJECT_INIT(Node, cxSprite)
     CX_METHOD_SET(this->cxSprite.cxView.Touch, NodeTouch);
     CX_EVENT_APPEND(CX_TYPE(cxView, this)->onTransform, NodeOnTransform);
     this->box = cxAnyArrayAlloc(cxVec2f);
+    this->speed = 100;
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
@@ -130,23 +131,39 @@ CX_OBJECT_FREE(Node, cxSprite)
 }
 CX_OBJECT_TERM(Node, cxSprite)
 
+void NodeAppend(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    CX_ASSERT(this->Append != NULL, "not set append method");
+    CX_METHOD_RUN(this->Append,this);
+}
+
+void NodeRemove(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    CX_ASSERT(this->Remove != NULL, "not set remove method");
+    CX_METHOD_RUN(this->Remove,this);
+}
+
 static cpCollisionID NodeQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
 {
     NodeNearestInfo *info = data;
     Node node = CX_TYPE_CAST(Node, pview);
     //不匹配类型
-    if(info->type > 0 && info->type != node->type){
+    if(info->type != NodeTypeNone && !(info->type & node->type)){
         return id;
     }
     //不匹配子类型
-    if(info->subType > 0 && info->subType != node->subType){
+    if(info->subType != NodeSubTypeNone && !(info->subType & node->subType)){
         return id;
     }
+    //计算距离
     cxFloat d = kmVec2DistanceBetween(&info->idx, &node->idx);
     if(d > info->dis){
         return id;
     }
     info->dis = d;
+    //在范围内
     if(info->dis >= info->range.min && info->dis <= info->range.max){
         info->node = node;
     }
@@ -254,13 +271,21 @@ void NodeSetAttackRate(cxAny pview,cxFloat rate)
 {
     CX_ASSERT_THIS(pview, Node);
     this->attackRate = rate;
-    NodeAttackRun(this);
+    if(rate > 0){
+        NodeAttackRun(this);
+    }
 }
 
 void NodeSetAttack(cxAny pview,cxInt attack)
 {
     CX_ASSERT_THIS(pview, Node);
     this->attack = attack;
+}
+
+void NodeSetSpeed(cxAny pview,cxFloat speed)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->speed = speed;
 }
 
 void NodeSetRange(cxAny pview,cxRange2f range)
@@ -397,7 +422,7 @@ cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
     }
     for(cxInt x = idx.x; x < idx.x + size.w; x ++){
         for (cxInt y = idx.y; y < idx.y + size.h; y++) {
-            cxAny item = map->items[MapOffsetIdx(map, x, y)];
+            cxAny item = map->items[MapOffSetIdx(x, y)];
             if(item != NULL && item != this){
                 return false;
             }

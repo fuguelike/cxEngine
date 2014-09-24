@@ -88,7 +88,7 @@ static void cxLayerOnRemove(cxAny pview,cxAny oldview)
 static void cxLayerOnAppend(cxAny pview,cxAny newview)
 {
     CX_ASSERT(pview != NULL && newview != NULL, "args null");
-    CX_ASSERT(CX_INSTANCE_OF(newview, cxElement), "subview only support base cxElement type");
+    CX_ASSERT_TYPE(newview, cxElement);
     cxLayer this = pview;
     cxElement sprite = newview;
     //atlas will draw cxElement, use VAO or VBO

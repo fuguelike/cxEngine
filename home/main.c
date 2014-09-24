@@ -15,6 +15,7 @@
 #include "Move.h"
 #include <types/Soldier.h>
 #include <types/Turret.h>
+#include <types/Wall.h>
 
 void cxEngineType(cxEngine engine)
 {
@@ -27,6 +28,7 @@ void cxEngineType(cxEngine engine)
     
     CX_TYPE_REG(Soldier);
     CX_TYPE_REG(Turret);
+    CX_TYPE_REG(Wall);
 }
 
 static void selectButton(cxAny pview)

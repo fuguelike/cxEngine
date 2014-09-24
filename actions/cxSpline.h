@@ -20,7 +20,9 @@ CX_OBJECT_DEF(cxSpline, cxAction)
     cxFloat tension;
     cxFloat delta;
     cxInt index;
+    cxFloat angle;
     CX_EVENT_ALLOC(onIndex);
+    CX_EVENT_ALLOC(onAngle);
 CX_OBJECT_END(cxSpline, cxAction)
 
 void cxSplineAppend(cxAny pav,cxVec2f pos);

@@ -27,6 +27,8 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxSpatial defences;
     //攻击方单位空间索引
     cxSpatial attacks;
+    //阻挡单位空间索引
+    cxSpatial blocks;
     //fight var
     cxBool isSelectUnit;
 //path search algorithm
@@ -40,7 +42,7 @@ typedef struct {
     cxAny snode;
     cxAny dnode;
 }MapSearchInfo;
-cxAnyArray MapSearchPath(cxAny pmap,cxAny snode,cxAny dnode);
+cxAnyArray MapSearchPath(cxAny snode,cxAny dnode);
 
 //init map
 cxBool MapInit(cxAny pmap,cxJson data);
@@ -50,15 +52,22 @@ void MapNodeOnNewIdx(cxAny pmap,cxAny pnode);
 //按Y的大小重新排序
 void MapSortNode(cxAny pmap);
 
-void MapAppendAttack(cxAny pmap,cxAny node);
+//加入攻击单位
+void MapAppendAttack(cxAny node);
 
-void MapAppendDefence(cxAny pmap,cxAny node);
+//加入防御单位
+void MapAppendDefence(cxAny node);
 
-void MapRemoveAttack(cxAny pmap,cxAny node);
+//加入阻挡单位，如城墙
+void MapAppendBlock(cxAny node);
 
-void MapRemoveDefence(cxAny pmap,cxAny node);
+void MapRemoveAttack(cxAny node);
 
-cxInt MapOffsetIdx(cxAny pmap,cxInt x,cxInt y);
+void MapRemoveDefence(cxAny node);
+
+void MapRemoveBlock(cxAny node);
+
+cxInt MapOffSetIdx(cxInt x,cxInt y);
 
 cxVec2f MapPosToIdx(cxAny pmap,cxVec2f pos);
 
@@ -67,8 +76,6 @@ cxVec2f MapIdxToPos(cxAny pmap,cxVec2f idx);
 cxAny MapItem(cxAny pmap,cxVec2f idx);
 
 void MapSetNode(cxAny pmap,cxVec2i idx,cxAny node);
-
-cxBool MapRemoveNode(cxAny pmap,cxAny node);
 
 cxBool MapIsValidIdx(cxAny pmap,cxVec2f idx);
 

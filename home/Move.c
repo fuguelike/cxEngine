@@ -10,98 +10,92 @@
 #include "Move.h"
 #include "Map.h"
 
-static void MoveSetNextIndex(Move this)
+static void MoveOnIndex(cxAny pav)
 {
-    this->index ++;
-    cxInt len = cxAnyArrayLength(this->points);
-    if(this->index >= len){
-        cxActionStop(this);
-        return;
+    CX_ASSERT_THIS(pav, Move);
+    //如果目标死亡停止移动
+    Node target = CX_TYPE_CAST(Node, this->target);
+    if(NodeIsDie(target)){
+        cxActionStop(pav);
     }
-    Node node = CX_TYPE_CAST(Node, this->cxAction.view);
-    Map map = NodeMap(node);
-    cxVec2f *to = cxAnyArrayAt(this->points, this->index, cxVec2f);
-    this->to = MapIdxToPos(map, *to);
-    kmVec2Subtract(&this->delta, &this->to, &this->from);
-    this->angle = cxVec2fAngle(this->delta);
-    CX_EVENT_FIRE(this, OnAngle);
 }
 
-void MoveSetTarget(cxAny pav,cxAny pview)
+static void MoveOnAngle(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    CX_RETAIN_SWAP(this->target, pview);
+    cxInt index = -1;
+    cxFloat angle = AngleToIndex(this->cxSpline.angle, &index);
+    if(this->index != index){
+        this->angle = angle;
+        this->index = index;
+        CX_EVENT_FIRE(this, OnDegrees);
+    }
 }
 
-static void MoveInit(cxAny pav)
+static void MoveOnExit(cxAny pav)
+{
+    Node node = cxActionView(pav);
+    node->isArrive = true;
+}
+
+static void MoveOnInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    CX_ASSERT(this->target != this->cxAction.view,"target error");
-    cxInt num = cxAnyArrayLength(this->points);
+    cxFloat d = 0;
+    cxAnyArray points = this->cxSpline.points;
+    cxInt num = cxAnyArrayLength(points);
     if(num < 2){
         cxActionStop(pav);
         return;
     }
-    Node node = CX_TYPE_CAST(Node, this->cxAction.view);
-    NodeSetState(node, NodeStateMove);
-    this->index = 0;
-    this->from = cxViewPosition(this->cxAction.view);
-    MoveSetNextIndex(this);
-}
-
-static void MoveStep(cxAny pav,cxFloat dt,cxFloat time)
-{
-    CX_ASSERT_THIS(pav, Move);
-    Node node = CX_TYPE_CAST(Node, this->cxAction.view);
-    this->from = cxViewPosition(node);
-    this->from.x += this->speed * dt * cosf(this->angle);
-    this->from.y += this->speed * dt * sinf(this->angle);
-    cxVec2f delta;
-    kmVec2Subtract(&delta, &this->to, &this->from);
-    //如果方向相反
-    if(cxVec2fIsInverse(delta,this->delta)){
-        this->from = this->to;
-        MoveSetNextIndex(this);
+    cxVec2f *p1 = cxAnyArrayAt(points, 0, cxVec2f);
+    for(cxInt i=1; i < num;i++){
+        cxVec2f *p2 = cxAnyArrayAt(points, i, cxVec2f);
+        d += kmVec2DistanceBetween(p1, p2);
+        p1 = p2;
     }
-    cxViewSetPos(node, this->from);
-    CX_EVENT_FIRE(this, OnMoving);
+    cxActionSetTime(pav, d / this->speed);
 }
 
-CX_OBJECT_TYPE(Move, cxAction)
+CX_OBJECT_TYPE(Move, cxSpline)
 {
     
 }
-CX_OBJECT_INIT(Move, cxAction)
+CX_OBJECT_INIT(Move, cxSpline)
 {
-    CX_METHOD_SET(this->cxAction.Init, MoveInit);
-    CX_METHOD_SET(this->cxAction.Step, MoveStep);
-    this->index = 0;
-    this->speed = 200;
-    this->cxAction.time = -1;
-    this->points = cxAnyArrayAlloc(cxVec2f);
-    
+    this->speed = 100;
+    this->index = -1;
+    this->angle = 0;
     cxActionSetGroup(this, "fight");
+    CX_EVENT_APPEND(CX_TYPE(cxSpline, this)->onIndex, MoveOnIndex);
+    CX_EVENT_APPEND(CX_TYPE(cxSpline, this)->onAngle, MoveOnAngle);
+    CX_EVENT_APPEND(CX_TYPE(cxAction, this)->onExit, MoveOnExit);
+    CX_EVENT_APPEND(CX_TYPE(cxAction, this)->onInit, MoveOnInit);
 }
-CX_OBJECT_FREE(Move, cxAction)
+CX_OBJECT_FREE(Move, cxSpline)
 {
-    CX_EVENT_RELEASE(this->OnMoving);
-    CX_EVENT_RELEASE(this->OnAngle);
+    CX_EVENT_RELEASE(this->OnDegrees);
     CX_RELEASE(this->target);
-    CX_RELEASE(this->points);
 }
-CX_OBJECT_TERM(Move, cxAction)
+CX_OBJECT_TERM(Move, cxSpline)
 
-void MoveAppendArray(cxAny pav,cxAnyArray points)
+Move MoveCreate(cxAny target,cxAnyArray points)
 {
-    CX_ASSERT_TYPE(points, cxAnyArray);
-    CX_ANY_ARRAY_FOREACH(points, point, cxVec2i){
-        MoveAppendPoint(pav, cxVec2fv(point->x, point->y));
+    Node node = CX_TYPE_CAST(Node, target);
+    Move this = CX_CREATE(Move);
+    this->speed = node->speed;
+    MoveSetTarget(this, target);
+    Map map = NodeMap(target);
+    CX_ANY_ARRAY_FOREACH(points, idx, cxVec2i){
+        cxVec2f pos = MapIdxToPos(map,cxVec2fv(idx->x, idx->y));
+        cxSplineAppend(this, pos);
     }
+    return this;
 }
 
-void MoveAppendPoint(cxAny pav,cxVec2f point)
+void MoveSetTarget(cxAny pav,cxAny target)
 {
     CX_ASSERT_THIS(pav, Move);
-    cxAnyArrayAppend(this->points, &point);
+    CX_RETAIN_SWAP(this->target, target);
 }
 

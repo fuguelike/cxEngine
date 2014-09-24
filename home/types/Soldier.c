@@ -9,15 +9,13 @@
 #include <Map.h>
 #include "Soldier.h"
 
-static void SoldierOnAngle(cxAny pav)
+static void SoldierOnDegrees(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    Node node = CX_TYPE_CAST(Node, this->cxAction.view);
-    cxInt index = 0;
-    cxFloat angle = AngleToIndex(this->angle, &index);
-    cxConstChars n = CX_CONST_STRING("%d.png",index);
+    Node node = CX_TYPE_CAST(Node, cxActionView(pav));
+    cxConstChars n = CX_CONST_STRING("%d.png",this->index);
     cxSpriteSetTextureURL(node, n);
-    cxViewSetDegrees(node, angle);
+    cxViewSetDegrees(node, this->angle);
 }
 
 static void SoldierAttack(cxAny pview)
@@ -27,7 +25,6 @@ static void SoldierAttack(cxAny pview)
     if(!this->isArrive){
         return;
     }
-    Map map = NodeMap(this);
     cxHash bindes = cxViewBindes(this);
     FixArray items = {0};
     CX_HASH_FOREACH(bindes, ele, tmp){
@@ -46,25 +43,8 @@ static void SoldierAttack(cxAny pview)
     for(cxInt i=0; i < items.number; i++){
         Node node = CX_TYPE_CAST(Node, items.items[i]);
         cxViewUnBind(this, node);
-        CX_METHOD_RUN(node->UnLock, node, this);
         //死去的防御移除
-        MapRemoveDefence(map, node);
-    }
-}
-
-static void SoldierMoveExit(cxAny pav)
-{
-    Node node = cxActionView(pav);
-    node->isArrive = true;
-}
-
-static void SoldierMoving(cxAny pav)
-{
-    CX_ASSERT_THIS(pav, Move);
-    //如果目标死亡停止移动
-    Node target = CX_TYPE_CAST(Node, this->target);
-    if(NodeIsDie(target)){
-        cxActionStop(pav);
+        NodeRemove(node);
     }
 }
 
@@ -79,38 +59,47 @@ static void SoldierSearch(cxAny pview)
         return;
     }
     this->Node.isArrive = false;
-    //动态搜索一个最近的目标
-    NodeNearestInfo info = NodeNearest(map->defences, this->Node.idx, cxRange2fv(0, 100), NodeTypeNone, NodeSubTypeNone);
+    //动态搜索一个最近的防御单位
+    NodeNearestInfo info = NodeNearest(map->defences, this->Node.idx, cxRange2fv(0, 100), NodeTypeDefence, NodeSubTypeNone);
+    if(info.node == NULL){
+        //搜索一个城墙
+        info = NodeNearest(map->blocks, this->Node.idx, cxRange2fv(0, 100), NodeTypeBlock, NodeSubTypeNone);
+    }
     if(info.node == NULL){
         return;
     }
+    
     Node node = info.node;
     
     //搜索
-    cxAnyArray points = MapSearchPath(map, this, node);
+    
+    cxAnyArray points = MapSearchPath(this, node);
+    
     //show path
-//    CX_ANY_ARRAY_FOREACH(points, idx, cxVec2i){
-//        cxVec2f p = cxVec2fv(idx->x, idx->y);
-//        Soldier node = SoldierCreate(map, cxSize2fv(1, 1), p);
-//        cxViewSetColor(node, cxBLACK);
-//        MapAppendAttack(map, node);
-//    }
+    cxView mp = (cxView)map;
+    CX_LIST_FOREACH(mp->subViews, ele){
+        cxView tmp = ele->any;
+        if(tmp->tag == 1000){
+            cxViewRemove(tmp);
+        }
+    }
+    CX_ANY_ARRAY_FOREACH(points, idx, cxVec2i){
+        cxVec2f p = cxVec2fv(idx->x, idx->y);
+        cxVec2f pos = MapIdxToPos(map, p);
+        cxSprite sp = cxSpriteCreateWithURL("shell.png");
+        cxViewSetColor(sp, cxRED);
+        cxViewSetPos(sp, pos);
+        cxViewSetSize(sp, cxSize2fv(10, 10));
+        cxViewSetTag(sp, 1000);
+        cxViewAppend(map, sp);
+    }
     
     //路劲算法移动到攻击点
-    Move m = CX_CREATE(Move);
-    if(cxAnyArrayLength(points) > 0){
-        MoveAppendArray(m, points);
-    }
-    MoveSetTarget(m, node);
-    //移动结束时到达攻击点
-    CX_EVENT_APPEND(m->cxAction.onExit, SoldierMoveExit);
-    CX_EVENT_APPEND(m->OnAngle, SoldierOnAngle);
-    CX_EVENT_APPEND(m->OnMoving, SoldierMoving);
+    Move m = MoveCreate(node, points);
+    CX_EVENT_APPEND(m->OnDegrees, SoldierOnDegrees);
     cxViewAppendAction(this, m);
     
     cxViewBind(this, node, NULL);
-    //node被this锁定
-    CX_METHOD_RUN(node->OnLock,node,this);
 }
 
 CX_OBJECT_TYPE(Soldier, Node)
@@ -121,8 +110,12 @@ CX_OBJECT_INIT(Soldier, Node)
 {
     this->attackNum = 1;
     NodeSetRange(this, cxRange2fv(0, 2));
-    NodeSetAttackRate(this, 0.2f);
+    NodeSetAttackRate(this, 0.5f);
     cxSpriteSetTextureURL(this, "bg1.png");
+    
+    CX_METHOD_SET(this->Node.Remove, MapRemoveAttack);
+    CX_METHOD_SET(this->Node.Append, MapAppendAttack);
+    
     CX_METHOD_SET(this->Node.Search, SoldierSearch);
     CX_METHOD_SET(this->Node.Attack, SoldierAttack);
 }
@@ -136,5 +129,6 @@ Soldier SoldierCreate(cxAny map, cxSize2f size,cxVec2f pos)
 {
     Soldier this = CX_CREATE(Soldier);
     NodeInit(this, map, size, pos, NodeTypeAttack, NodeSubTypeSoldier);
+    NodeSearchRun(this);
     return this;
 }

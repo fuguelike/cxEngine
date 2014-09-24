@@ -31,6 +31,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     NodeState state;    //当前状态
     cxRange2f range;    //攻击范围
     cxFloat attackRate; //攻击频率
+    cxFloat speed;      //移动速度
     cxInt attack;       //攻击力
     cxRange2i life;     //生命
     cxInt level;        //等级
@@ -39,19 +40,23 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(void, Search,cxAny);
     cxTimer attackTimer;    //攻击用定时器
     CX_METHOD_DEF(void, Attack,cxAny);
-    //当node被锁定和解锁
-    CX_METHOD_DEF(void, OnLock,cxAny,cxAny);
-    //当解锁
-    CX_METHOD_DEF(void, UnLock,cxAny,cxAny);
     //生命值变化
     CX_METHOD_DEF(void, LifeChanged, cxAny);
+    //移除或加入时
+    CX_METHOD_DEF(void, Remove,cxAny);
+    CX_METHOD_DEF(void, Append,cxAny);
 CX_OBJECT_END(Node, cxSprite)
+
+void NodeAppend(cxAny pview);
+
+void NodeRemove(cxAny pview);
 
 //设置生命 等级 攻击力
 void NodeSetLife(cxAny pview,cxInt life);
 void NodeAddLife(cxAny pview,cxInt life);
 void NodeSetLevel(cxAny pview,cxInt level);
 void NodeSetAttack(cxAny pview,cxInt attack);
+void NodeSetSpeed(cxAny pview,cxFloat speed);
 
 //设置攻击范围
 void NodeSetRange(cxAny pview,cxRange2f range);
@@ -79,6 +84,7 @@ cxBool NodeIsDie(cxAny pview);
 //设置状态
 void NodeSetState(cxAny pview,NodeState state);
 
+//搜索最近的单位，可设置多种类型组合 
 NodeNearestInfo NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType subType);
 
 //暂停搜索

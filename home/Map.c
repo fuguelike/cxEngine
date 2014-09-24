@@ -15,6 +15,7 @@
 #include "Move.h"
 #include <types/Soldier.h>
 #include <types/Turret.h>
+#include <types/Wall.h>
 
 static cxInt MapSortCmpFunc(cxConstAny lv,cxConstAny rv)
 {
@@ -38,34 +39,60 @@ void MapSortNode(cxAny pmap)
     this->isSort = true;
 }
 
-void MapAppendAttack(cxAny pmap,cxAny node)
+static void MapAppendNode(cxAny pmap,cxSpatial sp,cxAny node)
 {
     CX_ASSERT_THIS(pmap, Map);
     Node snode = CX_TYPE_CAST(Node, node);
     cxViewAppend(this, snode);
-    cxSpatialInsert(this->attacks, snode);
+    cxSpatialInsert(sp, snode);
 }
 
-void MapAppendDefence(cxAny pmap,cxAny node)
+static void MapRemoveNode(cxSpatial sp,cxAny node)
 {
-    CX_ASSERT_THIS(pmap, Map);
-    Node snode = CX_TYPE_CAST(Node, node);
-    cxViewAppend(this, snode);
-    cxSpatialInsert(this->defences, snode);
-}
-
-void MapRemoveAttack(cxAny pmap,cxAny node)
-{
-    CX_ASSERT_THIS(pmap, Map);
-    cxSpatialRemove(this->attacks, node);
+    cxSpatialRemove(sp, node);
     cxViewRemove(node);
 }
 
-void MapRemoveDefence(cxAny pmap,cxAny node)
+void MapAppendAttack(cxAny node)
 {
-    CX_ASSERT_THIS(pmap, Map);
-    cxSpatialRemove(this->defences, node);
-    cxViewRemove(node);
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapAppendNode(map, map->attacks, node);
+}
+
+void MapAppendDefence(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapAppendNode(map, map->defences, node);
+}
+
+void MapAppendBlock(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapAppendNode(map, map->blocks, node);
+}
+
+void MapRemoveAttack(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapRemoveNode(map->attacks, node);
+}
+
+void MapRemoveDefence(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapRemoveNode(map->defences, node);
+}
+
+void MapRemoveBlock(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapRemoveNode(map->blocks, node);
 }
 
 static void MapNodesEach(cxAny ps,cxAny pview,cxAny data)
@@ -176,27 +203,20 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         CX_LOGGER("fight mode selected:%f %f",idx.x,idx.y);
         //test
         if(this->tag == 1){
-            
-            Soldier node = SoldierCreate(this, cxSize2fv(2, 2), idx);
+            Soldier node = SoldierCreate(this, cxSize2fv(1, 1), idx);
             NodeSetLife(node, 20000);
             NodeSetAttack(node, 20);
-            //加入攻击系统
-            MapAppendAttack(this, node);
-            //开始搜索
-            NodeSearchRun(node);
-
+            NodeAppend(node);
         }else if(this->tag == 2){
             Turret node = TurretCreate(this, cxSize2fv(2, 2), idx);
             cxViewSetColor(node, cxRED);
             NodeSetLife(node, 200);
-            
-            //加入防御系统
-            MapAppendDefence(this, node);
-            //开始搜索
-            NodeSearchRun(node);
-            
+            NodeAppend(node);
         }else if(this->tag == 3){
-            
+            Wall node = WallCreate(this, cxSize2fv(1, 1), idx);
+            cxViewSetColor(node, cxBLACK);
+            NodeSetLife(node, 100);
+            NodeAppend(node);
         }
         return true;
     }
@@ -231,21 +251,24 @@ static cxBool MapIsAppend(cxAny pstar,cxVec2i *idx)
 {
     CX_ASSERT_THIS(pstar, cxAStar);
     MapSearchInfo *info = this->data;
-    //如果是Node中的点
-    if(NodeHasPoint(info->snode, *idx)){
-        return true;
-    }
-    if(NodeHasPoint(info->dnode, *idx)){
-        return true;
-    }
     Map map = info->map;
     cxVec2f index = cxVec2fv(idx->x, idx->y);
     if(!MapIsValidIdx(map, index)){
         return false;
     }
-    cxInt off = MapOffsetIdx(this, idx->x, idx->y);
+    cxInt off = MapOffSetIdx(idx->x, idx->y);
     Node node = map->items[off];
-    return node == NULL;
+    if(node == NULL){
+        return true;
+    }
+    if(node == info->snode || node == info->dnode){
+        return true;
+    }
+    //如果是阻挡类型
+    if(node->type == NodeTypeBlock && !NodeIsDie(node)){
+        return false;
+    }
+    return true;
 }
 
 CX_OBJECT_TYPE(Map, cxAtlas)
@@ -264,13 +287,15 @@ CX_OBJECT_INIT(Map, cxAtlas)
     cxAStarSetType(this->astar, cxAStarTypeA8);
     CX_METHOD_SET(this->astar->IsAppend, MapIsAppend);
     
-    CX_RETAIN_SET(this->defences, cxSpatialCreate(NodeIndexBB));
-    CX_RETAIN_SET(this->attacks, cxSpatialCreate(NodeIndexBB));
+    this->defences  = cxSpatialAlloc(NodeIndexBB);
+    this->attacks   = cxSpatialAlloc(NodeIndexBB);
+    this->blocks    = cxSpatialAlloc(NodeIndexBB);
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {
     cxMessageRemove(this);
     
+    CX_RELEASE(this->blocks);
     CX_RELEASE(this->astar);
     CX_RELEASE(this->attacks);
     CX_RELEASE(this->defences);
@@ -278,16 +303,16 @@ CX_OBJECT_FREE(Map, cxAtlas)
 }
 CX_OBJECT_TERM(Map, cxAtlas)
 
-cxAnyArray MapSearchPath(cxAny pmap,cxAny snode,cxAny dnode)
+cxAnyArray MapSearchPath(cxAny snode,cxAny dnode)
 {
-    CX_ASSERT_THIS(pmap, Map);
-    MapSearchInfo info = {pmap, snode, dnode};
+    Map map = NodeMap(snode);
+    MapSearchInfo info = {map, snode, dnode};
     cxVec2i s = NodeIndex(snode);
     cxVec2i d = NodeIndex(dnode);
-    return cxAStarRun(this->astar, s, d, &info);
+    return cxAStarRun(map->astar, s, d, &info);
 }
 
-cxInt MapOffsetIdx(cxAny pmap,cxInt x,cxInt y)
+cxInt MapOffSetIdx(cxInt x,cxInt y)
 {
     return y * global.unitNum.x + x;
 }
@@ -298,32 +323,32 @@ cxAny MapItem(cxAny pmap,cxVec2f idx)
     if(!MapIsValidIdx(this, idx)){
         return NULL;
     }
-    cxInt off = MapOffsetIdx(this, idx.x, idx.y);
+    cxInt off = MapOffSetIdx(idx.x, idx.y);
     return this->items[off];
 }
 
-cxBool MapRemoveNode(cxAny pmap,cxAny node)
-{
-    CX_ASSERT_THIS(pmap, Map);
-    CX_ASSERT_TYPE(node, Node);
-    Node n = node;
-    if(n->map != this){
-        return false;
-    }
-    cxInt off = 0;
-    cxSize2i size = NodeSize(node);
-    cxVec2i curr = NodeIndex(node);
-    for(cxInt x = curr.x; x < curr.x + size.w; x ++){
-        for (cxInt y = curr.y; y < curr.y + size.h; y++) {
-            off = MapOffsetIdx(this, x, y);
-            this->items[off] = NULL;
-        }
-    }
-    n->map = NULL;
-    cxSpatialRemove(this->node, n);
-    cxViewRemove(node);
-    return true;
-}
+//cxBool MapRemoveNode(cxAny pmap,cxAny node)
+//{
+//    CX_ASSERT_THIS(pmap, Map);
+//    CX_ASSERT_TYPE(node, Node);
+//    Node n = node;
+//    if(n->map != this){
+//        return false;
+//    }
+//    cxInt off = 0;
+//    cxSize2i size = NodeSize(node);
+//    cxVec2i curr = NodeIndex(node);
+//    for(cxInt x = curr.x; x < curr.x + size.w; x ++){
+//        for (cxInt y = curr.y; y < curr.y + size.h; y++) {
+//            off = MapOffSetIdx(x, y);
+//            this->items[off] = NULL;
+//        }
+//    }
+//    n->map = NULL;
+//    cxSpatialRemove(this->node, n);
+//    cxViewRemove(node);
+//    return true;
+//}
 
 void MapSetNode(cxAny pmap,cxVec2i idx,cxAny node)
 {
@@ -334,20 +359,18 @@ void MapSetNode(cxAny pmap,cxVec2i idx,cxAny node)
     if(!MapIsValidIdx(this, snode->idx)){
         goto setnewpos;
     }
-    //清楚旧位置上的建筑
+    //清除旧位置上的建筑
     cxVec2i curr = NodeIndex(node);
     for(cxInt x = curr.x; x < curr.x + size.w; x ++){
         for (cxInt y = curr.y; y < curr.y + size.h; y++) {
-            cxInt off = MapOffsetIdx(this, x, y);
-            this->items[off] = NULL;
+            this->items[MapOffSetIdx(x, y)] = NULL;
         }
     }
 setnewpos:
     //将建筑设置到新位置
     for(cxInt x = idx.x; x < idx.x + size.w; x ++){
         for (cxInt y = idx.y; y < idx.y + size.h; y++) {
-            cxInt off = MapOffsetIdx(this, x, y);
-            this->items[off] = node;
+            this->items[MapOffSetIdx(x, y)] = node;
         }
     }
 }
