@@ -256,7 +256,7 @@ CX_SETTER_DEF(Map, mode)
     }
 }
 
-static cxBool MapIsAppend(cxAny pstar,cxVec2i *idx)
+static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
 {
     CX_ASSERT_THIS(pstar, cxAStar);
     MapSearchInfo *info = this->data;
@@ -268,6 +268,16 @@ static cxBool MapIsAppend(cxAny pstar,cxVec2i *idx)
     }
     Node sx = info->snode;
     Node dx = info->dnode;
+    //超过搜索范围
+    cxFloat dis = kmVec2DistanceBetween(&sx->idx, &index);
+    if(dis > sx->searchMax){
+        return false;
+    }
+    //背面的点不参与搜索
+    dis = kmVec2DistanceBetween(&dx->idx, &index);
+    if(dis > info->dis){
+        return false;
+    }
     //
     Node node = MapNode(map, idx->x, idx->y);
     if(node == NULL){
@@ -283,6 +293,19 @@ static cxBool MapIsAppend(cxAny pstar,cxVec2i *idx)
     return true;
 }
 
+static void MapSearchVisited(cxAny pstar,cxVec2i *idx)
+{
+    CX_ASSERT_THIS(pstar, cxAStar);
+    MapSearchInfo *info = this->data;
+    cxVec2f index = cxVec2fv(idx->x, idx->y);
+    Node dx = info->dnode;
+    cxFloat d = kmVec2DistanceBetween(&index, &dx->idx);
+    if(d < info->vdis){
+        info->vidx = index;
+        info->vdis = d;
+    }
+}
+
 CX_OBJECT_TYPE(Map, cxAtlas)
 {
     CX_PROPERTY_SETTER(Map, mode);
@@ -295,17 +318,23 @@ CX_OBJECT_INIT(Map, cxAtlas)
     CX_EVENT_APPEND(CX_TYPE(cxView, this)->onUpdate, MapUpdate);
     this->mode = MapModeNormal;
     this->isSort = true;
+    
+    //路劲搜索算法
     this->astar = CX_ALLOC(cxAStar);
     cxAStarSetType(this->astar, cxAStarTypeA8);
-    CX_METHOD_SET(this->astar->IsAppend, MapIsAppend);
+    CX_METHOD_SET(this->astar->IsAppend, MapSearchIsAppend);
+    CX_METHOD_SET(this->astar->Visited, MapSearchVisited);
     
+    //类型搜索索引
     this->defences  = cxSpatialAlloc(NodeIndexBB);
     this->attacks   = cxSpatialAlloc(NodeIndexBB);
     this->blocks    = cxSpatialAlloc(NodeIndexBB);
     
+    //弹药效果层
     this->bullet = CX_CREATE(cxView);
     cxViewAppend(this, this->bullet);
     
+    //所有节点存储
     this->nodes = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(Map, cxAtlas)
@@ -320,18 +349,38 @@ CX_OBJECT_FREE(Map, cxAtlas)
 }
 CX_OBJECT_TERM(Map, cxAtlas)
 
-cxAnyArray MapSearchPath(cxAny snode,cxAny dnode)
+cxAnyArray MapVisiedPoints(cxAny pmap)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    return this->astar->visits;
+}
+
+cxAnyArray MapSearchPoints(cxAny pmap)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    return this->astar->points;
+}
+
+cxBool MapSearchPath(cxAny snode,cxAny dnode)
 {
     Map map = NodeMap(snode);
     Node sx = CX_TYPE_CAST(Node, snode);
     Node dx = CX_TYPE_CAST(Node, dnode);
     MapSearchInfo info = {NULL};
     //设置参数
+    info.dis = kmVec2DistanceBetween(&sx->idx, &dx->idx);
     info.map = map;
     info.snode = snode;
     info.dnode = dnode;
+    info.vdis = INT32_MAX;
+    info.vidx = cxVec2fv(-1, -1);
     //开始搜索
-    return cxAStarRun(map->astar, cxVec2iv(sx->idx.x, sx->idx.y), cxVec2iv(dx->idx.x, dx->idx.y), &info);
+    cxBool ret = cxAStarRun(map->astar, cxVec2iv(sx->idx.x, sx->idx.y), cxVec2iv(dx->idx.x, dx->idx.y), &info);
+    if(!ret && info.vidx.x >=0 && info.vidx.y >= 0){
+        info.vdis = INT32_MAX;
+        ret = cxAStarRun(map->astar, cxVec2iv(sx->idx.x, sx->idx.y), cxVec2iv(info.vidx.x, info.vidx.y), &info);
+    }
+    return ret;
 }
 
 void MapDelNode(cxAny pmap,cxInt x,cxInt y)

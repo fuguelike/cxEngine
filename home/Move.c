@@ -24,18 +24,11 @@ static void MoveOnAngle(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
     cxInt index = -1;
-    cxFloat angle = AngleToIndex(this->cxSpline.angle, &index);
+    this->angle = AngleToIndex(this->cxSpline.angle, &index);
     if(this->index != index){
-        this->angle = angle;
         this->index = index;
         CX_EVENT_FIRE(this, OnDegrees);
     }
-}
-
-static void MoveOnExit(cxAny pav)
-{
-    Node node = cxActionView(pav);
-    node->isArrive = true;
 }
 
 static void MoveOnInit(cxAny pav)
@@ -69,7 +62,6 @@ CX_OBJECT_INIT(Move, cxSpline)
     cxActionSetGroup(this, "fight");
     CX_EVENT_APPEND(CX_TYPE(cxSpline, this)->onIndex, MoveOnIndex);
     CX_EVENT_APPEND(CX_TYPE(cxSpline, this)->onAngle, MoveOnAngle);
-    CX_EVENT_APPEND(CX_TYPE(cxAction, this)->onExit, MoveOnExit);
     CX_EVENT_APPEND(CX_TYPE(cxAction, this)->onInit, MoveOnInit);
 }
 CX_OBJECT_FREE(Move, cxSpline)
@@ -86,7 +78,7 @@ Move MoveCreate(cxAny target,cxAnyArray points)
     this->speed = node->speed;
     MoveSetTarget(this, target);
     Map map = NodeMap(target);
-    CX_ANY_ARRAY_FOREACH(points, idx, cxVec2i){
+    CX_ASTAR_POINTS_FOREACH(points, idx){
         cxVec2f pos = MapIdxToPos(map,cxVec2fv(idx->x, idx->y));
         cxSplineAppend(this, pos);
     }

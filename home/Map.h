@@ -43,8 +43,16 @@ typedef struct {
     cxAny map;
     cxAny snode;
     cxAny dnode;
+    cxFloat dis;//两点间距离
+    cxFloat vdis;//访问到得最小距离
+    cxVec2f vidx;//最靠近的店
 }MapSearchInfo;
-cxAnyArray MapSearchPath(cxAny snode,cxAny dnode);
+
+cxAnyArray MapVisiedPoints(cxAny pmap);
+
+cxAnyArray MapSearchPoints(cxAny pmap);
+
+cxBool MapSearchPath(cxAny snode,cxAny dnode);
 
 //init map
 cxBool MapInit(cxAny pmap,cxJson data);

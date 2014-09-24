@@ -49,7 +49,7 @@ void ASNeighborListAdd(ASNeighborList neighbors, void *node, float edgeCost);
 // context is optional and is simply passed through to the callback functions
 // startNode and nodeSource is required
 // as a path is created, the relevant nodes are copied into the path
-ASPath ASPathCreate(const ASPathNodeSource *nodeSource, void *context, void *startNode, void *goalNode);
+cxBool ASPathCreate(const ASPathNodeSource *nodeSource, void *context, void *startNode, void *goalNode,cxAnyArray points);
 
 // paths created with ASPathCreate() must be destroyed or else it will leak memory
 void ASPathDestroy(ASPath path);
@@ -82,7 +82,8 @@ static float AStarPathNodeHeuristic(void *fromNode, void *toNode, void *context)
 static int AStarEarlyExit(size_t visitedCount, void *visitingNode, void *goalNode, void *context)
 {
     CX_ASSERT_THIS(context, cxAStar);
-    CX_METHOD_RUN(this->Visiting, this, visitingNode);
+    cxAnyArrayAppend(this->visits, visitingNode);
+    CX_METHOD_RUN(this->Visited,this,visitingNode);
     return CX_METHOD_GET(0, this->EarlyExit, this, visitedCount, visitingNode, goalNode);
 }
 
@@ -173,10 +174,12 @@ CX_OBJECT_INIT(cxAStar, cxObject)
     CX_METHOD_SET(this->Heuristic, cxAStarHeuristic);
     CX_METHOD_SET(this->Comparator, cxAStarComparator);
     this->points = cxAnyArrayAlloc(cxVec2i);
+    this->visits = cxAnyArrayAlloc(cxVec2i);
     this->type = cxAStarTypeA4;
 }
 CX_OBJECT_FREE(cxAStar, cxObject)
 {
+    CX_RELEASE(this->visits);
     CX_RELEASE(this->points);
 }
 CX_OBJECT_TERM(cxAStar, cxObject)
@@ -191,20 +194,13 @@ void cxAStarPrintPoints(cxAny pobj)
     }
 }
 
-cxAnyArray cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
+cxBool cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
 {
     cxAStar this = pobj;
     this->data = data;
     cxAnyArrayClean(this->points);
-    cxInt rv = 0;
-    ASPath path = ASPathCreate(&cxAStarSource, pobj, &from, &to);
-    rv = ASPathGetCount(path);
-    for(cxInt i=0; i < rv; i++){
-        cxVec2i *p = ASPathGetNode(path, i);
-        cxAnyArrayAppend(this->points, p);
-    }
-    ASPathDestroy(path);
-    return this->points;
+    cxAnyArrayClean(this->visits);
+    return ASPathCreate(&cxAStarSource, pobj, &from, &to, this->points);
 }
 
 
@@ -581,23 +577,19 @@ void ASNeighborListAdd(ASNeighborList list, void *node, float edgeCost)
     list->count++;
 }
 
-ASPath ASPathCreate(const ASPathNodeSource *source, void *context, void *startNodeKey, void *goalNodeKey)
+cxBool ASPathCreate(const ASPathNodeSource *source, void *context, void *startNodeKey, void *goalNodeKey,cxAnyArray points)
 {
+    cxBool ret = false;
     if (!startNodeKey || !source || !source->nodeNeighbors || source->nodeSize == 0) {
-        return NULL;
+        return ret;
     }
-    
     VisitedNodes visitedNodes = VisitedNodesCreate(source, context);
     ASNeighborList neighborList = NeighborListCreate(source);
     Node current = GetNode(visitedNodes, startNodeKey);
     Node goalNode = GetNode(visitedNodes, goalNodeKey);
-    ASPath path = NULL;
-    
     SetNodeIsGoal(goalNode);
-    
     SetNodeEstimatedCost(current,  GetPathCostHeuristic(current, goalNode));
     AddNodeToOpenSet(current, 0, NodeNull);
-    
     while (HasOpenNode(visitedNodes) && !NodeIsGoal((current = GetOpenNode(visitedNodes)))) {
         if (source->earlyExit) {
             const int shouldExit = source->earlyExit(visitedNodes->nodeRecordsCount, GetNodeKey(current), goalNodeKey, context);
@@ -637,36 +629,19 @@ ASPath ASPathCreate(const ASPathNodeSource *source, void *context, void *startNo
             }
         }
     }
-    
     if (NodeIsNull(goalNode)) {
         SetNodeIsGoal(current);
     }
-    
-    if (NodeIsGoal(current)) {
-        size_t count = 0;
-        Node n = current;
-        
-        while (!NodeIsNull(n)) {
-            count++;
-            n = GetParentNode(n);
-        }
-        
-        path = allocator->malloc(sizeof(struct __ASPath) + (count * source->nodeSize));
-        path->nodeSize = source->nodeSize;
-        path->count = count;
-        path->cost = GetNodeCost(current);
-        
-        n = current;
-        for (size_t i=count; i>0; i--) {
-            memcpy(path->nodeKeys + ((i - 1) * source->nodeSize), GetNodeKey(n), source->nodeSize);
-            n = GetParentNode(n);
-        }
+    ret = NodeIsGoal(current);
+    Node n = current;
+    while (!NodeIsNull(n)) {
+        cxVec2i *p = GetNodeKey(n);
+        cxAnyArrayAppend(points, p);
+        n = GetParentNode(n);
     }
-    
     NeighborListDestroy(neighborList);
     VisitedNodesDestroy(visitedNodes);
-
-    return path;
+    return ret;
 }
 
 void ASPathDestroy(ASPath path)

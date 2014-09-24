@@ -13,7 +13,7 @@ Global global={0};
 //8方向使用 22.5 45.0角度
 cxFloat AngleToIndex(cxFloat angle,cxInt *index)
 {
-    angle = fmodf(kmRadiansToDegrees(angle) + 360, 360);
+    angle = fmodf(kmRadiansToDegrees(angle) + 360.0f, 360.0f);
     cxInt idx = angle/22.5f;
     cxInt m = (idx / 2) + (idx % 2);
     if(m > 7) m = 0;

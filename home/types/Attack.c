@@ -15,19 +15,19 @@ static void AttackOnDegrees(cxAny pav)
     Node node = CX_TYPE_CAST(Node, cxActionView(pav));
     cxConstChars n = CX_CONST_STRING("%d.png",this->index);
     cxSpriteSetTextureURL(node, n);
-    cxViewSetDegrees(node, this->angle);
 }
 
 static void AttackAttack(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    //如果未到达攻击点
-    if(!this->isArrive){
-        return;
-    }
     cxHash bindes = cxViewBindes(this);
     FixArray items = {0};
     CX_HASH_FOREACH(bindes, ele, tmp){
+        cxNumber data = CX_TYPE_CAST(cxNumber, ele->any);
+        //为设定标记无法攻击
+        if(!data->value.bv){
+            continue;
+        }
         //获取bind的目标
         Node target = cxHashElementKeyToAny(ele);
         //模拟攻击一下
@@ -48,6 +48,31 @@ static void AttackAttack(cxAny pview)
     }
 }
 
+static void AttackMoveOnExit(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, Move);
+    Node node = cxActionView(this);
+    FixArray items = {0};
+    //移动到指定位置后bind攻击
+    cxHash bindes = cxViewBindes(node);
+    CX_HASH_FOREACH(bindes, ele, tmp){
+        //获取bind的目标
+        cxNumber data = CX_TYPE_CAST(cxNumber, ele->any);
+        Node target = cxHashElementKeyToAny(ele);
+        cxFloat d = kmVec2DistanceBetween(&node->idx, &target->idx);
+        if(d < node->range.max){
+            data->value.bv = true;
+            continue;
+        }
+        FixArrayAppend(items, target);
+    }
+    //为到达攻击距离需要继续寻路,所以解除bind
+    for(cxInt i=0; i < items.number; i++){
+        Node target = CX_TYPE_CAST(Node, items.items[i]);
+        cxViewUnBind(node, target);
+    }
+}
+
 static void AttackAttackNode(cxAny pview,cxAny node,cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Attack);
@@ -60,7 +85,7 @@ static void AttackAttackNode(cxAny pview,cxAny node,cxAnyArray points)
             cxViewRemove(tmp);
         }
     }
-    CX_ANY_ARRAY_FOREACH(points, idx, cxVec2i){
+    CX_ASTAR_POINTS_FOREACH(points, idx){
         cxVec2f p = cxVec2fv(idx->x, idx->y);
         cxVec2f pos = MapIdxToPos(map, p);
         cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
@@ -73,9 +98,10 @@ static void AttackAttackNode(cxAny pview,cxAny node,cxAnyArray points)
     //路劲算法移动到攻击点
     Move m = MoveCreate(node, points);
     CX_EVENT_APPEND(m->OnDegrees, AttackOnDegrees);
+    CX_EVENT_APPEND(CX_TYPE(cxAction, m)->onExit, AttackMoveOnExit);
     cxViewAppendAction(this, m);
-    //
-    cxViewBind(this, node, NULL);
+    
+    cxViewBind(this, node, cxNumberBool(false));
 }
 
 //搜索算法
@@ -88,26 +114,42 @@ static void AttackSearch(cxAny pview)
     if(cxHashLength(bindes) >= this->attackNum){
         return;
     }
-    cxAnyArray points = NULL;
-    this->Node.isArrive = false;
     //动态搜索一个最近的防御单位
     Node node = NodeNearest(map->defences, this->Node.idx, cxRange2fv(0, 100), NodeTypeDefence, NodeSubTypeNone);
     if(node != NULL){
-        points = MapSearchPath(this, node);
-        if(cxAnyArrayLength(points) > 0){
-            AttackAttackNode(this, node, points);
-            return;
+        if(MapSearchPath(this, node)){
+            AttackAttackNode(this, node, MapSearchPoints(map));
+        }else{
+            //show visit points
+            cxList subviews = cxViewSubViews(map);
+            CX_LIST_FOREACH(subviews, ele){
+                cxView tmp = ele->any;
+                if(tmp->tag == 1000){
+                    cxViewRemove(tmp);
+                }
+            }
+            cxAnyArray points = MapVisiedPoints(map);
+            CX_ASTAR_POINTS_FOREACH(points, idx){
+                cxVec2f p = cxVec2fv(idx->x, idx->y);
+                cxVec2f pos = MapIdxToPos(map, p);
+                cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
+                cxViewSetColor(sp, cxRED);
+                cxViewSetPos(sp, pos);
+                cxViewSetSize(sp, cxSize2fv(10, 10));
+                cxViewSetTag(sp, 1000);
+                cxViewAppend(map, sp);
+            }
         }
         //如果没有路到达目标，搜索之间的阻挡物攻击
-        node = NodeSegment(map->blocks, this->Node.idx, node->idx, NodeTypeBlock, NodeSubTypeNone);
-        if(node == NULL){
-            return;
-        }
-        cxViewSetColor(node, cxRED);
-        points = MapSearchPath(this, node);
-        if(cxAnyArrayLength(points) > 0){
-            AttackAttackNode(this, node, points);
-        }
+//        node = NodeSegment(map->blocks, this->Node.idx, node->idx, NodeTypeBlock, NodeSubTypeNone);
+//        if(node == NULL){
+//            return;
+//        }
+//        cxViewSetColor(node, cxRED);
+//        points = MapSearchPath(this, node);
+//        if(cxAnyArrayLength(points) > 0){
+//            AttackAttackNode(this, node, points);
+//        }
     }
 }
 

@@ -33,9 +33,9 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxFloat attackRate; //攻击频率
     cxFloat speed;      //移动速度
     cxFloat power;       //攻击力
+    cxFloat searchMax;      //路劲搜索最大范围
     cxRange2i life;     //生命
     cxInt level;        //等级
-    cxBool isArrive;    //到达攻击点
     cxTimer searchTimer;      //搜索用定时器
     CX_METHOD_DEF(void, Search,cxAny);
     cxTimer attackTimer;    //攻击用定时器
@@ -50,6 +50,9 @@ CX_OBJECT_END(Node, cxSprite)
 void NodeAppend(cxAny pview);
 
 void NodeRemove(cxAny pview);
+
+//设置路劲搜索最大范围
+void NodeSetSearchMax(cxAny pview,cxFloat max);
 
 //设置生命 等级 攻击力
 void NodeSetLife(cxAny pview,cxInt life);

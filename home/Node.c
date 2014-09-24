@@ -126,6 +126,7 @@ CX_OBJECT_TYPE(Node, cxSprite)
 }
 CX_OBJECT_INIT(Node, cxSprite)
 {
+    this->searchMax = 10;
     this->canSelected = true;
     this->idx = cxVec2fv(-1, -1);
     CX_METHOD_SET(this->cxSprite.cxView.Touch, NodeTouch);
@@ -294,6 +295,12 @@ static void NodeAttackArrive(cxAny pav)
     cxAny pview = cxActionView(pav);
     CX_ASSERT_THIS(pview, Node);
     CX_METHOD_RUN(this->Attack,this);
+}
+
+void NodeSetSearchMax(cxAny pview,cxFloat max)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->searchMax = max;
 }
 
 void NodeSetLife(cxAny pview,cxInt life)
@@ -469,12 +476,11 @@ cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
     if(idx.y < MAP_BORDER || (idx.y + size.h) > (global.unitNum.y - MAP_BORDER)){
         return false;
     }
-    for(cxInt x = idx.x; x < idx.x + size.w; x ++){
-        for (cxInt y = idx.y; y < idx.y + size.h; y++) {
-            cxAny item = MapNode(map, x, y);
-            if(item != NULL && item != this){
-                return false;
-            }
+    for(cxInt x = idx.x; x < idx.x + size.w; x ++)
+    for(cxInt y = idx.y; y < idx.y + size.h; y++){
+        cxAny item = MapNode(map, x, y);
+        if(item != NULL && item != this){
+            return false;
         }
     }
     return true;

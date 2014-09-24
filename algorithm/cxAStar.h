@@ -40,6 +40,8 @@ typedef enum {
     cxAStarTypeA4   //4 angle
 }cxAStarType;
 
+#define CX_ASTAR_POINTS_FOREACH(_p_, _i_)    CX_ANY_ARRAY_REVERSE(_p_, _i_, cxVec2i)
+
 CX_OBJECT_DEF(cxAStar, cxObject)
     cxAStarType type;
     CX_METHOD_DEF(void, Neighbors, cxAny, cxAny list, cxVec2i *node);
@@ -47,9 +49,10 @@ CX_OBJECT_DEF(cxAStar, cxObject)
     CX_METHOD_DEF(cxInt, EarlyExit, cxAny, cxInt vcount, cxVec2i *vnode,cxVec2i *gnode);
     CX_METHOD_DEF(cxInt, Comparator, cxAny, cxVec2i *lv,cxVec2i *rv);
     CX_METHOD_DEF(cxBool, IsAppend, cxAny, cxVec2i *node);
-    CX_METHOD_DEF(void, Visiting, cxAny, cxVec2i *node);
+    CX_METHOD_DEF(void, Visited,cxAny,cxVec2i *node);
     cxAny data;
     cxAnyArray points;
+    cxAnyArray visits;
 CX_OBJECT_END(cxAStar, cxObject)
 
 void cxAStarSetType(cxAny pobj,cxAStarType type);
@@ -61,7 +64,7 @@ void cxAStarAppendNeighbors(cxAny list,cxVec2i point,cxFloat edgeCost);
 
 void cxAStarPrintPoints(cxAny pobj);
 
-cxAnyArray cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data);
+cxBool cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data);
 
 CX_C_END
 
