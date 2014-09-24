@@ -271,10 +271,8 @@ void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
 {
     CX_ASSERT(pview != bview, "self can't bind self");
     CX_ASSERT_THIS(pview, cxView);
-    if(bd == NULL){
-        bd = cxStringCreate("%p bind %p",pview,bview);
-    }
     cxView bind = CX_TYPE_CAST(cxView, bview);
+    bd = (bd == NULL?cxStringCreate("%s bind %s",TYPE(this),TYPE(bind)): bd);
     //bind new view
     cxHashSet(this->bindes, cxHashAnyKey(bind), bd);
     //this binded bind

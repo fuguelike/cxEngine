@@ -101,6 +101,7 @@ cxHash cxViewBindes(cxAny pview);
 
 cxHash cxViewBinded(cxAny pview);
 
+//bd pview and bview bind data
 void cxViewBind(cxAny pview,cxAny bview,cxAny bd);
 
 void cxViewUnBind(cxAny pview,cxAny bview);
