@@ -184,20 +184,20 @@ static cpFloat NodeSegmentQueryFunc(cxAny ps, cxAny pview, void *data)
     Node node = CX_TYPE_CAST(Node, pview);
     //不匹配类型
     if(info->type != NodeTypeNone && !(info->type & node->type)){
-        return 1.0f;
+        return info->exit;
     }
     //不匹配子类型
     if(info->subType != NodeSubTypeNone && !(info->subType & node->subType)){
-        return 1.0f;
+        return info->exit;
     }
     //计算a点距离
     cxFloat d = kmVec2DistanceBetween(&info->a, &node->idx);
     if(d > info->dis){
-        return 1.0f;
+        return info->exit;
     }
     info->dis = d;
     info->node = node;
-    return 1.0f;
+    return info->exit;
 }
 
 cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeType type,NodeSubType subType)
@@ -209,7 +209,8 @@ cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeType type,NodeSubType subType
     ret.dis = INT32_MAX;
     ret.type = type;
     ret.subType = subType;
-    cpSpatialIndexSegmentQuery(this->index, this, cpv(a.x, a.y), cpv(b.x, b.y), 1.0f, NodeSegmentQueryFunc, &ret);
+    ret.exit = 8.0f;
+    cpSpatialIndexSegmentQuery(this->index, this, cpv(a.x, a.y), cpv(b.x, b.y), ret.exit, NodeSegmentQueryFunc, &ret);
     return ret.node;
 }
 

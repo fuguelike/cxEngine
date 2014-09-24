@@ -82,6 +82,7 @@ static float AStarPathNodeHeuristic(void *fromNode, void *toNode, void *context)
 static int AStarEarlyExit(size_t visitedCount, void *visitingNode, void *goalNode, void *context)
 {
     CX_ASSERT_THIS(context, cxAStar);
+    CX_METHOD_RUN(this->Visiting, this, visitingNode);
     return CX_METHOD_GET(0, this->EarlyExit, this, visitedCount, visitingNode, goalNode);
 }
 

@@ -251,19 +251,34 @@ static cxBool MapIsAppend(cxAny pstar,cxVec2i *idx)
 {
     CX_ASSERT_THIS(pstar, cxAStar);
     MapSearchInfo *info = this->data;
-    Map map = info->map;
+    Map map = CX_TYPE_CAST(Map, info->map);
     cxVec2f index = cxVec2fv(idx->x, idx->y);
     //如果索引超出最大范围
     if(!MapIsValidIdx(map, index)){
         return false;
     }
+    Node sx = info->snode;
+    Node dx = info->dnode;
     //如果索引不在人眼视角范围
-    
+    cxFloat d = kmVec2DistanceBetween(&index, &sx->idx);
+    if(d > info->r){
+        return false;
+    }
+    cxVec2f dp,xp;
+    kmVec2Subtract(&dp, &dx->idx, &sx->idx);
+    kmVec2Subtract(&xp, &index, &sx->idx);
+    cxFloat ad = cxVec2fAngle(dp);
+    cxFloat ax = cxVec2fAngle(xp);
+    cxFloat vx = fmodf(kmRadiansToDegrees(fabsf(ad - ax)) + 360.0f, 360.0f);
+    if(vx > 30.0f){
+        return false;
+    }
+    //
     Node node = MapNode(map, idx->x, idx->y);
     if(node == NULL){
         return true;
     }
-    if(node == info->snode || node == info->dnode){
+    if(node == sx || node == dx){
         return true;
     }
     //如果是阻挡类型
@@ -313,10 +328,27 @@ CX_OBJECT_TERM(Map, cxAtlas)
 cxAnyArray MapSearchPath(cxAny snode,cxAny dnode)
 {
     Map map = NodeMap(snode);
-    MapSearchInfo info = {map, snode, dnode};
-    cxVec2i s = NodeIndex(snode);
-    cxVec2i d = NodeIndex(dnode);
-    return cxAStarRun(map->astar, s, d, &info);
+    
+    cxList subviews = cxViewSubViews(map);
+    CX_LIST_FOREACH(subviews, ele){
+        cxView tmp = ele->any;
+        if(tmp->tag == 1001){
+            cxViewRemove(tmp);
+        }
+    }
+    
+    Node sx = CX_TYPE_CAST(Node, snode);
+    Node dx = CX_TYPE_CAST(Node, dnode);
+    MapSearchInfo info = {NULL};
+    //设置参数
+    info.map = map;
+    info.snode = snode;
+    info.dnode = dnode;
+    //确定60度视角范围
+    cxFloat d = kmVec2DistanceBetween(&sx->idx, &dx->idx);
+    info.r = d / cosf(kmDegreesToRadians(30.0f));
+    //开始搜索
+    return cxAStarRun(map->astar, cxVec2iv(sx->idx.x, sx->idx.y), cxVec2iv(dx->idx.x, dx->idx.y), &info);
 }
 
 void MapDelNode(cxAny pmap,cxInt x,cxInt y)
