@@ -78,9 +78,10 @@ typedef struct {
 
 typedef struct {
     cxAny node;         //最近的view
-    cxVec2f a;        //第1点
-    cxVec2f b;        //第2点
+    cxVec2f a;          //第1点
+    cxVec2f b;          //第2点
     cxFloat dis;        //距离
+    cxFloat ab;         //ab距离
     cxFloat exit;       //退出值
     NodeType type;      //搜索的类型
     NodeSubType subType;//搜索子类型

@@ -54,11 +54,14 @@
           "title":"城墙"
         },
         {
+          "cxId":"btnTest",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
-          }
+          },
+          "tag":4,
+          "title":"Test"
         },
         {
           "cxType": "Button",

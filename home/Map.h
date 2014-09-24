@@ -43,7 +43,6 @@ typedef struct {
     cxAny map;
     cxAny snode;
     cxAny dnode;
-    cxFloat r;  //视野范围半径
 }MapSearchInfo;
 cxAnyArray MapSearchPath(cxAny snode,cxAny dnode);
 

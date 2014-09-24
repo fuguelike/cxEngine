@@ -166,7 +166,8 @@ static cpCollisionID NodeIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionID id,
         return id;
     }
     //计算距离
-    cxFloat d = kmVec2DistanceBetween(&info->idx, &node->idx);
+    cxVec2f tidx = cxVec2fv(node->idx.x * global.sideLen, node->idx.y * global.sideLen);
+    cxFloat d = kmVec2DistanceBetween(&info->idx, &tidx);
     if(d > info->dis){
         return id;
     }
@@ -191,11 +192,16 @@ static cpFloat NodeSegmentQueryFunc(cxAny ps, cxAny pview, void *data)
         return info->exit;
     }
     //计算a点距离
-    cxFloat d = kmVec2DistanceBetween(&info->a, &node->idx);
-    if(d > info->dis){
+    cxVec2f tidx = cxVec2fv(node->idx.x * global.sideLen, node->idx.y * global.sideLen);
+    cxFloat ad = kmVec2DistanceBetween(&info->a, &tidx);
+    cxFloat ab = kmVec2DistanceBetween(&info->b, &tidx);
+    if(ab > info->ab){
         return info->exit;
     }
-    info->dis = d;
+    if(ad > info->dis){
+        return info->exit;
+    }
+    info->dis = ad;
     info->node = node;
     return info->exit;
 }
@@ -204,13 +210,14 @@ cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeType type,NodeSubType subType
 {
     CX_ASSERT_THIS(ps, cxSpatial);
     NodeSegmentInfo ret = {0};
-    ret.a = a;
-    ret.b = b;
+    ret.a = cxVec2fv(a.x * global.sideLen, a.y * global.sideLen);
+    ret.b = cxVec2fv(b.x * global.sideLen, b.y * global.sideLen);
+    ret.ab = kmVec2DistanceBetween(&ret.a, &ret.b);
     ret.dis = INT32_MAX;
     ret.type = type;
     ret.subType = subType;
-    ret.exit = 8.0f;
-    cpSpatialIndexSegmentQuery(this->index, this, cpv(a.x, a.y), cpv(b.x, b.y), ret.exit, NodeSegmentQueryFunc, &ret);
+    ret.exit = 1.0f;
+    cpSpatialIndexSegmentQuery(this->index, this, cpv(ret.a.x, ret.a.y), cpv(ret.b.x, ret.b.y), ret.exit, NodeSegmentQueryFunc, &ret);
     return ret.node;
 }
 
@@ -218,12 +225,12 @@ cxAny NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType
 {
     CX_ASSERT_THIS(ps, cxSpatial);
     NodeNearestInfo ret = {0};
-    ret.idx = idx;
+    ret.idx = cxVec2fv(idx.x * global.sideLen, idx.y * global.sideLen);
     ret.dis = INT32_MAX;
-    ret.range = range;
+    ret.range = cxRange2fv(range.min * global.sideLen, range.max * global.sideLen);
     ret.type = type;
     ret.subType = subType;
-    cpBB bb = cpBBNewForCircle(cpv(idx.x,idx.y), cpfmax(range.max, 0.0f));
+    cpBB bb = cpBBNewForCircle(cpv(ret.idx.x,ret.idx.y), cpfmax(range.max * global.sideLen, 0.0f));
     cpSpatialIndexQuery(this->index, this, bb, NodeIndexQueryFunc, &ret);
     return ret.node;
 }

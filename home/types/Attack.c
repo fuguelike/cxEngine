@@ -93,11 +93,11 @@ static void AttackSearch(cxAny pview)
     //动态搜索一个最近的防御单位
     Node node = NodeNearest(map->defences, this->Node.idx, cxRange2fv(0, 100), NodeTypeDefence, NodeSubTypeNone);
     if(node != NULL){
-//        points = MapSearchPath(this, node);
-//        if(cxAnyArrayLength(points) > 0){
-//            AttackAttackNode(this, node, points);
-//            return;
-//        }
+        points = MapSearchPath(this, node);
+        if(cxAnyArrayLength(points) > 0){
+            AttackAttackNode(this, node, points);
+            return;
+        }
         //如果没有路到达目标，搜索之间的阻挡物攻击
         node = NodeSegment(map->blocks, this->Node.idx, node->idx, NodeTypeBlock, NodeSubTypeNone);
         if(node == NULL){

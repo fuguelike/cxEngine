@@ -67,6 +67,10 @@ void cxEngineMain(cxEngine engine)
     Button btnSelectArcher = cxLoaderGet(loader, "btnSelectArcher");
     CX_EVENT_APPEND(btnSelectArcher->onTap, selectButton);
     
+    Button btnTest = cxLoaderGet(loader, "btnTest");
+    CX_EVENT_APPEND(btnTest->onTap, selectButton);
+    
+    
     
     MapInit(scene->map,NULL);
     cxWindowPushView(scene);
