@@ -14,7 +14,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Scene, cxScroll)
-    cxAny map;
+    cxAny map;      //地图
 CX_OBJECT_END(Scene, cxScroll)
 
 CX_C_END

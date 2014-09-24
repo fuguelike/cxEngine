@@ -38,6 +38,10 @@ cxInt cxListLength(cxAny plist);
 
 cxBool cxListEmpty(cxAny plist);
 
+cxAny cxListTail(cxAny plist);
+
+cxAny cxListHead(cxAny plist);
+
 cxListElement *cxListAppend(cxAny plist,cxAny any);
 
 cxListElement *cxListPrepend(cxAny plist,cxAny any);

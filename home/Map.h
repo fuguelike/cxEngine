@@ -17,12 +17,14 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Map, cxAtlas)
+    cxView bullet;             //弹药效果层
+    //mode
     MapMode mode;
     //
     cxBool isSort;
     //
     cxAny *items;       //格子node
-    cxAny node;     //当前选中的node
+    cxAny node;         //当前选中的node
     //防御方单位空间索引
     cxSpatial defences;
     //攻击方单位空间索引
@@ -31,7 +33,7 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxSpatial blocks;
     //fight var
     cxBool isSelectUnit;
-//path search algorithm
+    //path search algorithm
     cxAStar astar;
     //Test
     cxInt tag;

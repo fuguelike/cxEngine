@@ -16,6 +16,7 @@
 #include <types/Soldier.h>
 #include <types/Turret.h>
 #include <types/Wall.h>
+#include <types/Bullet.h>
 
 void cxEngineType(cxEngine engine)
 {
@@ -25,6 +26,8 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Button);
     CX_TYPE_REG(Range);
     CX_TYPE_REG(Move);
+    
+    CX_TYPE_REG(Bullet);
     
     CX_TYPE_REG(Soldier);
     CX_TYPE_REG(Turret);

@@ -20,7 +20,7 @@ typedef struct {
 
 typedef struct {
     GLushort indices[6];
-}cxIndices6u;
+}cxIndices;
 
 CX_OBJECT_DEF(cxAtlas, cxSprite)
     GLuint vaoid;
@@ -57,14 +57,11 @@ void cxAtlasUpdateScale9(cxAny pview);
 
 void cxAtlasClean(cxAny pview);
 
-cxBoxPoint *cxAtlasAppend(cxAny pview,cxBoxPoint *point);
+cxInt cxAtlasAppend(cxAny pview,cxBoxPoint *point);
 
-//point cxAtlasAppend return
-cxInt cxAtlasIndex(cxAny pview,cxBoxPoint *point);
+cxBoxPoint *cxAtlasAt(cxAny pview,cxInt index);
 
-void cxAtlasRemovePoint(cxAny pview,cxBoxPoint *point);
-
-void cxAtlasRemoveAt(cxAny pview,cxInt index);
+cxBool cxAtlasRemovePoint(cxAny pview,cxInt index);
 
 void cxAtlasUpdateAt(cxAny pview,cxInt index, cxBoxPoint *point);
 

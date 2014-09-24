@@ -1,6 +1,6 @@
 //
 //  Wall.c
-//  cxCore
+//  Home
 //
 //  Created by xuhua on 9/24/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.

@@ -39,7 +39,6 @@
 #include <views/cxLabelBMP.h>
 #include <views/cxPolygon.h>
 #include <views/cxAlert.h>
-#include <views/cxLayer.h>
 #include <views/cxSpine.h>
 
 #include <actions/cxParticle.h>
@@ -145,8 +144,6 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxLabelTTF);
     CX_TYPE_REG(cxLabelBMP);
     CX_TYPE_REG(cxAlert);
-    CX_TYPE_REG(cxLayer);
-    CX_TYPE_REG(cxElement);
     CX_TYPE_REG(cxSpine);
     
     //register actions

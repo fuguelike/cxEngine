@@ -71,7 +71,7 @@ typedef enum {
     NodeSubTypeSoldier  = 1 << 0,      //近身攻击的士兵
     NodeSubTypeTurret   = 1 << 1,      //炮塔
     NodeSubTypeArcher   = 1 << 2,      //弓箭手
-    NodeSubTypeWall     = 1 << 3,       //城墙
+    NodeSubTypeWall     = 1 << 3,      //城墙
 }NodeSubType;
 
 CX_C_END

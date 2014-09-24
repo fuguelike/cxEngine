@@ -199,7 +199,7 @@ void cxAtlasClean(cxAny pview)
     this->isDirty = true;
 }
 
-cxBoxPoint *cxAtlasAppend(cxAny pview,cxBoxPoint *point)
+cxInt cxAtlasAppend(cxAny pview,cxBoxPoint *point)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
     //realloc
@@ -207,39 +207,34 @@ cxBoxPoint *cxAtlasAppend(cxAny pview,cxBoxPoint *point)
         cxAtlasSetCapacity(pview, this->capacity + 8);
     }
     CX_ASSERT(this->number < this->capacity, "atlas number > boxNumber");
-    this->boxes[this->number] = *point;
+    this->boxes[this->number++] = *point;
     this->isDirty = true;
-    cxBoxPoint *ret = &this->boxes[this->number];
-    this->number ++;
+    return this->number - 1;
+}
+
+//fast move
+cxBool cxAtlasRemovePoint(cxAny pview,cxInt index)
+{
+    CX_ASSERT_THIS(pview, cxAtlas);
+    CX_ASSERT(index >= 0 && index < this->number, "index > boxNumber");
+    cxBoxPoint *point = &this->boxes[index];
+    cxBoxPoint *last = &this->boxes[this->number - 1];
+    cxBool ret = false;
+    if(last != point){
+        memcpy(point, last, sizeof(cxBoxPoint));
+        ret = true;
+    }
+    this->number --;
     return ret;
 }
 
-void cxAtlasRemovePoint(cxAny pview,cxBoxPoint *point)
+cxBoxPoint *cxAtlasAt(cxAny pview,cxInt index)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
-    cxInt idx = cxAtlasIndex(this,point);
-    cxAtlasRemoveAt(this, idx);
-}
-
-void cxAtlasRemoveAt(cxAny pview,cxInt index)
-{
-    CX_ASSERT_THIS(pview, cxAtlas);
-    CX_ASSERT(index >=0 && index < this->number, "index error");
-    cxInt count = this->number - index - 1;
-    cxAny dst = &this->boxes[index];
-    cxAny src = &this->boxes[index + 1];
-    memmove(dst, src, sizeof(cxBoxPoint) * count);
-    dst = &this->indices[index];
-    src = &this->indices[index + 1];
-    memmove(dst, src, sizeof(cxIndices6u) * count);
-    this->number --;
-    this->isDirty = true;
-}
-
-cxInt cxAtlasIndex(cxAny pview,cxBoxPoint *point)
-{
-    CX_ASSERT_THIS(pview, cxAtlas);
-    return ((cxAny)point - (cxAny)this->boxes) / sizeof(cxBoxPoint);
+    if(index < 0 || index >= this->number){
+        return NULL;
+    }
+    return &this->boxes[index];
 }
 
 void cxAtlasUpdateAt(cxAny pview,cxInt index, cxBoxPoint *point)
@@ -269,7 +264,7 @@ static void cxAtlasInitVAO(cxAny pview)
     glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, texcoords));
     
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vboid[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices6u)*this->capacity, this->indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices)*this->capacity, this->indices, GL_STATIC_DRAW);
     
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -284,7 +279,7 @@ static void cxAtlasInitVBO(cxAny pview)
     glBufferData(GL_ARRAY_BUFFER, sizeof(cxBoxPoint) * this->capacity, this->boxes, GL_DYNAMIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vboid[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices6u) * this->capacity, this->indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices) * this->capacity, this->indices, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -324,7 +319,7 @@ void cxAtlasSetCapacity(cxAny pview,cxInt capacity)
     this->boxes = allocator->realloc(this->boxes,size);
     CX_ASSERT(this->boxes != NULL, "out of memory");
     //
-    size = this->capacity * sizeof(cxIndices6u);
+    size = this->capacity * sizeof(cxIndices);
     this->indices = allocator->realloc(this->indices,size);
     CX_ASSERT(this->indices != NULL, "out of memory");
     //

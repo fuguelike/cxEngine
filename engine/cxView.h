@@ -58,6 +58,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool isSort;
     cxBool isCropping;
     cxBool isTouch;     //enable touch
+    cxBool isRemoved;   //if remove
     cxSize2f size;
     cxVec2f position;
     cxVec2f scale;
@@ -90,6 +91,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onTransform);
 CX_OBJECT_END(cxView, cxObject)
+
+cxBool cxViewIsRunning(cxAny pview);
 
 cxMatrix4f *cxViewNormalMatrix(cxAny pview);
 

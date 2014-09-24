@@ -78,6 +78,18 @@ cxListElement *cxListMoveToTail(cxAny plist,cxListElement *element)
     return element;
 }
 
+cxAny cxListTail(cxAny plist)
+{
+    cxListElement *element = cxListLast(plist);
+    return element != NULL ? element->any : NULL;
+}
+
+cxAny cxListHead(cxAny plist)
+{
+    cxListElement *element = cxListFirst(plist);
+    return element != NULL ? element->any : NULL;
+}
+
 cxListElement *cxListLast(cxAny plist)
 {
     CX_ASSERT_THIS(plist, cxList);

@@ -10,6 +10,7 @@
 #include <Map.h>
 #include "Turret.h"
 #include <Range.h>
+#include "Bullet.h"
 
 static void TurretAttackExit(cxAny pav)
 {
@@ -36,25 +37,27 @@ static void TurretAttackExit(cxAny pav)
     cxViewRemove(sp);
 }
 
-static void TurretAttack(cxAny pview)
+void TurretAttack(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
+    Map map = NodeMap(this);
     cxHash bindes = cxViewBindes(this);
     FixArray items = {0};
     CX_HASH_FOREACH(bindes, ele, tmp){
         //获取bind的目标
         Node target = cxHashElementKeyToAny(ele);
-        //如果目标在范围外
-        if(!NodeAtRange(this, target)){
+        //如果目标在范围外或者死亡
+        if(!NodeAtRange(this, target) || NodeIsDie(target)){
             FixArrayAppend(items, target);
             continue;
         }
         
         //制造子弹 bullet
-        cxSprite sp = cxSpriteCreateWithURL("shell.png");
+        Bullet sp = CX_CREATE(Bullet);
+        cxSpriteSetTextureURL(sp, "bullet.json?shell.png");
         cxViewSetSize(sp, cxSize2fv(20, 20));
-        cxViewSetPos(sp, this->cxSprite.cxView.position);
-        cxViewAppend(this->map, sp);
+        cxViewSetPos(sp, cxViewPosition(this));
+        cxViewAppend(map->bullet, sp);
 
         //
         cxFollow f = cxFollowCreate(800, target);
@@ -70,7 +73,7 @@ static void TurretAttack(cxAny pview)
     }
 }
 
-static void TurretSearch(cxAny pview)
+void TurretSearch(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Turret);
     Map map = NodeMap(this);
@@ -98,9 +101,9 @@ CX_OBJECT_TYPE(Turret, Node)
 }
 CX_OBJECT_INIT(Turret, Node)
 {
-    this->attackNum = 3;
+    this->attackNum = 1;
     NodeSetAttackRate(this, 0.5f);
-    NodeSetRange(this, cxRange2fv(5, 14));
+    NodeSetRange(this, cxRange2fv(2, 15));
     cxSpriteSetTextureURL(this, "bg1.png");
     
     CX_METHOD_SET(this->Node.Remove, MapRemoveDefence);

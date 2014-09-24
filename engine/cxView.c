@@ -217,6 +217,12 @@ void cxViewSetOnlyTransform(cxAny pview,cxBool v)
     this->onlyTransform = v;
 }
 
+cxBool cxViewIsRunning(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    return this->isRunning;
+}
+
 cxMatrix4f *cxViewNormalMatrix(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
@@ -284,6 +290,7 @@ void cxViewPrepend(cxAny pview,cxAny newview)
     CX_ASSERT_THIS(pview, cxView);
     cxView nview = CX_TYPE_CAST(cxView, newview);
     nview->isPrepend = true;
+    nview->isRemoved = false;
     cxArrayAppend(this->appends, newview);
     nview->parentView = pview;
 }
@@ -293,8 +300,23 @@ void cxViewAppend(cxAny pview,cxAny newview)
     CX_ASSERT_THIS(pview, cxView);
     cxView nview = CX_TYPE_CAST(cxView, newview);
     nview->isPrepend = false;
+    nview->isRemoved = false;
     cxArrayAppend(this->appends, newview);
     nview->parentView = pview;
+}
+
+void cxViewRemove(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    if(this->isRemoved || this->parentView == NULL){
+        return;
+    }
+    if(this->isRunning){
+        cxViewExit(this);
+    }
+    cxView parent = this->parentView;
+    cxArrayAppend(parent->removes, this);
+    this->isRemoved = true;
 }
 
 void cxViewBringFront(cxAny pview)
@@ -826,21 +848,6 @@ void cxViewLayout(cxAny pview)
     CX_EVENT_FIRE(this, onLayout);
 }
 
-//remove from parent
-void cxViewRemove(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    CX_RETURN(this->parentView == NULL);
-    if(this->isRunning){
-        cxViewExit(this);
-    }
-    cxView parent = this->parentView;
-    CX_METHOD_RUN(parent->onRemove,parent,pview);
-    //join to remove list
-    cxArrayAppend(parent->removes, this);
-    this->parentView = NULL;
-}
-
 cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
 {
     CX_ASSERT_THIS(pview, cxView);
@@ -974,9 +981,12 @@ static void cxViewCleanRemoves(cxView this)
 {
     CX_ARRAY_FOREACH(this->removes, ele){
         cxView view = cxArrayObject(ele);
-        CX_ASSERT(view->parentView == NULL, "add to remove set NULL");
+        CX_ASSERT_TYPE(view, cxView);
+        cxView parent = view->parentView;
+        CX_METHOD_RUN(parent->onRemove, parent, view);
         cxListRemove(this->subViews, view->subElement);
         view->subElement = NULL;
+        view->parentView = NULL;
     }
     cxArrayClean(this->removes);
 }

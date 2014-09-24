@@ -149,6 +149,8 @@ cxBool MapInit(cxAny pmap,cxJson data)
     size.h = size.w * 0.75f;
     global.unitSize = cxSize2fv(size.w/global.unitNum.x, size.h/global.unitNum.y);
     cxViewSetSize(this, size);
+    cxViewSetSize(this->bullet, size);
+
     
     //test
     cxSpriteSetTextureURL(this, "bg3.png");
@@ -290,11 +292,14 @@ CX_OBJECT_INIT(Map, cxAtlas)
     this->defences  = cxSpatialAlloc(NodeIndexBB);
     this->attacks   = cxSpatialAlloc(NodeIndexBB);
     this->blocks    = cxSpatialAlloc(NodeIndexBB);
+    
+    this->bullet = CX_CREATE(cxView);
+    cxViewAppend(this, this->bullet);
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {
     cxMessageRemove(this);
-    
+    CX_RELEASE(this->bullet);
     CX_RELEASE(this->blocks);
     CX_RELEASE(this->astar);
     CX_RELEASE(this->attacks);
@@ -326,29 +331,6 @@ cxAny MapItem(cxAny pmap,cxVec2f idx)
     cxInt off = MapOffSetIdx(idx.x, idx.y);
     return this->items[off];
 }
-
-//cxBool MapRemoveNode(cxAny pmap,cxAny node)
-//{
-//    CX_ASSERT_THIS(pmap, Map);
-//    CX_ASSERT_TYPE(node, Node);
-//    Node n = node;
-//    if(n->map != this){
-//        return false;
-//    }
-//    cxInt off = 0;
-//    cxSize2i size = NodeSize(node);
-//    cxVec2i curr = NodeIndex(node);
-//    for(cxInt x = curr.x; x < curr.x + size.w; x ++){
-//        for (cxInt y = curr.y; y < curr.y + size.h; y++) {
-//            off = MapOffSetIdx(x, y);
-//            this->items[off] = NULL;
-//        }
-//    }
-//    n->map = NULL;
-//    cxSpatialRemove(this->node, n);
-//    cxViewRemove(node);
-//    return true;
-//}
 
 void MapSetNode(cxAny pmap,cxVec2i idx,cxAny node)
 {
