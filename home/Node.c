@@ -192,16 +192,12 @@ static cpFloat NodeSegmentQueryFunc(cxAny ps, cxAny pview, void *data)
         return info->exit;
     }
     //计算a点距离
-    cxVec2f tidx = cxVec2fv(node->idx.x * global.sideLen, node->idx.y * global.sideLen);
-    cxFloat ad = kmVec2DistanceBetween(&info->a, &tidx);
-    cxFloat ab = kmVec2DistanceBetween(&info->b, &tidx);
-    if(ab > info->ab){
+    cxVec2f tidx = SCALE_VEC2F(node->idx);
+    cxFloat d = kmVec2DistanceBetween(&info->a, &tidx) + kmVec2DistanceBetween(&info->b, &tidx);
+    if(d > info->dis){
         return info->exit;
     }
-    if(ad > info->dis){
-        return info->exit;
-    }
-    info->dis = ad;
+    info->dis = d;
     info->node = node;
     return info->exit;
 }
@@ -210,8 +206,8 @@ cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeType type,NodeSubType subType
 {
     CX_ASSERT_THIS(ps, cxSpatial);
     NodeSegmentInfo ret = {0};
-    ret.a = cxVec2fv(a.x * global.sideLen, a.y * global.sideLen);
-    ret.b = cxVec2fv(b.x * global.sideLen, b.y * global.sideLen);
+    ret.a = SCALE_VEC2F(a);
+    ret.b = SCALE_VEC2F(b);
     ret.ab = kmVec2DistanceBetween(&ret.a, &ret.b);
     ret.dis = INT32_MAX;
     ret.type = type;
@@ -225,12 +221,12 @@ cxAny NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType
 {
     CX_ASSERT_THIS(ps, cxSpatial);
     NodeNearestInfo ret = {0};
-    ret.idx = cxVec2fv(idx.x * global.sideLen, idx.y * global.sideLen);
+    ret.idx = SCALE_VEC2F(idx);
     ret.dis = INT32_MAX;
-    ret.range = cxRange2fv(range.min * global.sideLen, range.max * global.sideLen);
+    ret.range = SCALE_RANGE(range);
     ret.type = type;
     ret.subType = subType;
-    cpBB bb = cpBBNewForCircle(cpv(ret.idx.x,ret.idx.y), cpfmax(range.max * global.sideLen, 0.0f));
+    cpBB bb = cpBBNewForCircle(cpv(ret.idx.x,ret.idx.y), cpfmax(ret.range.max, 0.0f));
     cpSpatialIndexQuery(this->index, this, bb, NodeIndexQueryFunc, &ret);
     return ret.node;
 }
