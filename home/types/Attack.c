@@ -64,9 +64,10 @@ static void AttackMoveOnExit(cxAny pav)
             data->value.bv = true;
             continue;
         }
+        //未到达攻击范围需要继续寻路
         FixArrayAppend(items, target);
     }
-    //为到达攻击距离需要继续寻路,所以解除bind
+    //未到达攻击距离需要继续寻路,所以解除bind
     for(cxInt i=0; i < items.number; i++){
         Node target = CX_TYPE_CAST(Node, items.items[i]);
         cxViewUnBind(node, target);
@@ -104,6 +105,7 @@ static void AttackAttackNode(cxAny pview,cxAny node,cxAnyArray points)
     cxViewBind(this, node, cxNumberBool(false));
 }
 
+
 //搜索算法
 static void AttackSearch(cxAny pview)
 {
@@ -115,31 +117,39 @@ static void AttackSearch(cxAny pview)
         return;
     }
     //动态搜索一个最近的防御单位
-    Node node = NodeNearest(map->defences, this->Node.idx, cxRange2fv(0, 100), NodeTypeDefence, NodeSubTypeNone);
-    if(node != NULL){
-        if(MapSearchPath(this, node)){
-            AttackAttackNode(this, node, MapSearchPoints(map));
-        }else{
-            //show visit points
-            cxList subviews = cxViewSubViews(map);
-            CX_LIST_FOREACH(subviews, ele){
-                cxView tmp = ele->any;
-                if(tmp->tag == 1000){
-                    cxViewRemove(tmp);
-                }
-            }
-            cxAnyArray points = MapVisiedPoints(map);
-            CX_ASTAR_POINTS_FOREACH(points, idx){
-                cxVec2f p = cxVec2fv(idx->x, idx->y);
-                cxVec2f pos = MapIdxToPos(map, p);
-                cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
-                cxViewSetColor(sp, cxRED);
-                cxViewSetPos(sp, pos);
-                cxViewSetSize(sp, cxSize2fv(10, 10));
-                cxViewSetTag(sp, 1000);
-                cxViewAppend(map, sp);
-            }
+    Node node = MapNearestDefences(this, cxRange2fv(0, 200), NodeSubTypeNone);
+    if(node == NULL){
+        return;
+    }
+    
+    cxVec2f npos;
+    //路径搜索到达
+    if(MapSearchPath(this, node, &npos)){
+        AttackAttackNode(this, node, MapSearchPoints(map));
+        return;
+    }
+    //未成功获取路径显示搜索点位置
+    cxList subviews = cxViewSubViews(map);
+    CX_LIST_FOREACH(subviews, ele){
+        cxView tmp = ele->any;
+        if(tmp->tag == (int)this){
+            cxViewRemove(tmp);
         }
+    }
+    cxAnyArray points = MapVisiedPoints(map);
+    CX_ASTAR_POINTS_FOREACH(points, idx){
+        cxVec2f p = cxVec2fv(idx->x, idx->y);
+        cxVec2f pos = MapIdxToPos(map, p);
+        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
+        cxViewSetColor(sp, cxRED);
+        cxViewSetPos(sp, pos);
+        cxViewSetSize(sp, cxSize2fv(10, 10));
+        cxViewSetTag(sp, (int)this);
+        cxViewAppend(map, sp);
+    }
+    
+    if(node != NULL){
+
         //如果没有路到达目标，搜索之间的阻挡物攻击
 //        node = NodeSegment(map->blocks, this->Node.idx, node->idx, NodeTypeBlock, NodeSubTypeNone);
 //        if(node == NULL){

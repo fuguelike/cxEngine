@@ -47,6 +47,9 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(void, Append,cxAny);
 CX_OBJECT_END(Node, cxSprite)
 
+//离idx最近的node本地坐标点
+cxVec2f NodeNearestPoint(cxAny pview,cxVec2f idx);
+
 void NodeAppend(cxAny pview);
 
 void NodeRemove(cxAny pview);

@@ -32,7 +32,6 @@
 #include <string.h>
 
 typedef struct __ASNeighborList *ASNeighborList;
-typedef struct __ASPath *ASPath;
 
 typedef struct {
     size_t  nodeSize;                                                                               // the size of the structure being used for the nodes - important since nodes are copied into the resulting path
@@ -50,22 +49,6 @@ void ASNeighborListAdd(ASNeighborList neighbors, void *node, float edgeCost);
 // startNode and nodeSource is required
 // as a path is created, the relevant nodes are copied into the path
 cxBool ASPathCreate(const ASPathNodeSource *nodeSource, void *context, void *startNode, void *goalNode,cxAnyArray points);
-
-// paths created with ASPathCreate() must be destroyed or else it will leak memory
-void ASPathDestroy(ASPath path);
-
-// if you want to make a copy of a path result, this function will do the job
-// you must call ASPathDestroy() with the resulting path to clean it up or it will cause a leak
-ASPath ASPathCopy(ASPath path);
-
-// fetches the total cost of the path
-float ASPathGetCost(ASPath path);
-
-// fetches the number of nodes in the path
-size_t ASPathGetCount(ASPath path);
-
-// returns a pointer to the given node in the path
-void *ASPathGetNode(ASPath path, size_t index);
 
 static void AStarPathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
 {
@@ -588,16 +571,20 @@ cxBool ASPathCreate(const ASPathNodeSource *source, void *context, void *startNo
     Node current = GetNode(visitedNodes, startNodeKey);
     Node goalNode = GetNode(visitedNodes, goalNodeKey);
     SetNodeIsGoal(goalNode);
+    
     SetNodeEstimatedCost(current,  GetPathCostHeuristic(current, goalNode));
     AddNodeToOpenSet(current, 0, NodeNull);
+    
     while (HasOpenNode(visitedNodes) && !NodeIsGoal((current = GetOpenNode(visitedNodes)))) {
+        //退出回调
         if (source->earlyExit) {
             const int shouldExit = source->earlyExit(visitedNodes->nodeRecordsCount, GetNodeKey(current), goalNodeKey, context);
-
+            //成功
             if (shouldExit > 0) {
                 SetNodeIsGoal(current);
                 break;
             } else if (shouldExit < 0) {
+                //失败退出
                 break;
             }
         }
@@ -632,7 +619,9 @@ cxBool ASPathCreate(const ASPathNodeSource *source, void *context, void *startNo
     if (NodeIsNull(goalNode)) {
         SetNodeIsGoal(current);
     }
+    //到达目标点
     ret = NodeIsGoal(current);
+    //返回获取路径，使用时反向获取
     Node n = current;
     while (!NodeIsNull(n)) {
         cxVec2i *p = GetNodeKey(n);
@@ -642,36 +631,4 @@ cxBool ASPathCreate(const ASPathNodeSource *source, void *context, void *startNo
     NeighborListDestroy(neighborList);
     VisitedNodesDestroy(visitedNodes);
     return ret;
-}
-
-void ASPathDestroy(ASPath path)
-{
-    allocator->free(path);
-}
-
-ASPath ASPathCopy(ASPath path)
-{
-    if (path) {
-        const size_t size = sizeof(struct __ASPath) + (path->count * path->nodeSize);
-        ASPath newPath = allocator->malloc(size);
-        memcpy(newPath, path, size);
-        return newPath;
-    } else {
-        return NULL;
-    }
-}
-
-float ASPathGetCost(ASPath path)
-{
-    return path? path->cost : INFINITY;
-}
-
-size_t ASPathGetCount(ASPath path)
-{
-    return path? path->count : 0;
-}
-
-void *ASPathGetNode(ASPath path, size_t index)
-{
-    return (path && index < path->count)? (path->nodeKeys + (index * path->nodeSize)) : NULL;
 }

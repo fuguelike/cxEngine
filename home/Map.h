@@ -48,11 +48,51 @@ typedef struct {
     cxVec2f vidx;//最靠近的店
 }MapSearchInfo;
 
+//加入防御单位
+void MapAppendDefence(cxAny node);
+
+//移除防御单位
+void MapRemoveDefence(cxAny node);
+
+//搜索离curr最近的防御类单位
+cxAny MapNearestDefences(cxAny curr,cxRange2f range,NodeSubType subType);
+
+//搜索src dst之间的防御类单位
+cxAny MapSegmentDefences(cxAny src,cxAny dst,NodeSubType subType);
+
+
+//加入攻击单位
+void MapAppendAttack(cxAny node);
+
+//移除攻击单位
+void MapRemoveAttack(cxAny node);
+
+//搜索离curr最近的攻击类单位
+cxAny MapNearestAttacks(cxAny curr,cxRange2f range,NodeSubType subType);
+
+//搜索src dst之间的攻击类单位
+cxAny MapSegmentAttacks(cxAny src,cxAny dst,NodeSubType subType);
+
+
+//加入阻挡单位，如城墙
+void MapAppendBlock(cxAny node);
+
+//移除阻挡单位
+void MapRemoveBlock(cxAny node);
+
+//搜索离curr最近的阻挡类单位
+cxAny MapNearestBlocks(cxAny curr,cxRange2f range,NodeSubType subType);
+
+//搜索src dst之间的阻挡类单位
+cxAny MapSegmentBlocks(cxAny src,cxAny dst,NodeSubType subType);
+
+
 cxAnyArray MapVisiedPoints(cxAny pmap);
 
 cxAnyArray MapSearchPoints(cxAny pmap);
 
-cxBool MapSearchPath(cxAny snode,cxAny dnode);
+//寻路失败时返回离目标最近的坐标
+cxBool MapSearchPath(cxAny snode,cxAny dnode,cxVec2f *npos);
 
 //init map
 cxBool MapInit(cxAny pmap,cxJson data);
@@ -61,21 +101,6 @@ void MapNodeOnNewIdx(cxAny pmap,cxAny pnode);
 
 //按Y的大小重新排序
 void MapSortNode(cxAny pmap);
-
-//加入攻击单位
-void MapAppendAttack(cxAny node);
-
-//加入防御单位
-void MapAppendDefence(cxAny node);
-
-//加入阻挡单位，如城墙
-void MapAppendBlock(cxAny node);
-
-void MapRemoveAttack(cxAny node);
-
-void MapRemoveDefence(cxAny node);
-
-void MapRemoveBlock(cxAny node);
 
 void MapDelNode(cxAny pmap,cxInt x,cxInt y);
 

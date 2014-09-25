@@ -120,6 +120,27 @@ static void NodeOnTransform(cxAny pview)
     }
 }
 
+cxVec2f NodeNearestPoint(cxAny pview,cxVec2f idx)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxVec2f ret = this->idx;
+    if(this->size.h == 1 && this->size.w == 1){
+        return ret;
+    }
+    cxFloat dis = INT32_MAX;
+    for(cxFloat x = this->idx.x; x < this->idx.x + this->size.w; x++)
+    for(cxFloat y = this->idx.y; y < this->idx.y + this->size.h; y++){
+        cxVec2f c = cxVec2fv(x, y);
+        cxFloat d = kmVec2DistanceBetween(&c, &idx);
+        //获取最近的点
+        if(d < dis){
+            ret = c;
+            dis = d;
+        }
+    }
+    return ret;
+}
+
 CX_OBJECT_TYPE(Node, cxSprite)
 {
     

@@ -39,61 +39,6 @@ void MapSortNode(cxAny pmap)
     this->isSort = true;
 }
 
-static void MapAppendNode(cxAny pmap,cxSpatial sp,cxAny node)
-{
-    CX_ASSERT_THIS(pmap, Map);
-    Node snode = CX_TYPE_CAST(Node, node);
-    cxViewAppend(this, snode);
-    cxSpatialInsert(sp, snode);
-}
-
-static void MapRemoveNode(cxSpatial sp,cxAny node)
-{
-    cxSpatialRemove(sp, node);
-    cxViewRemove(node);
-}
-
-void MapAppendAttack(cxAny node)
-{
-    CX_ASSERT_THIS(node, Node);
-    Map map = CX_TYPE_CAST(Map, this->map);
-    MapAppendNode(map, map->attacks, node);
-}
-
-void MapAppendDefence(cxAny node)
-{
-    CX_ASSERT_THIS(node, Node);
-    Map map = CX_TYPE_CAST(Map, this->map);
-    MapAppendNode(map, map->defences, node);
-}
-
-void MapAppendBlock(cxAny node)
-{
-    CX_ASSERT_THIS(node, Node);
-    Map map = CX_TYPE_CAST(Map, this->map);
-    MapAppendNode(map, map->blocks, node);
-}
-
-void MapRemoveAttack(cxAny node)
-{
-    CX_ASSERT_THIS(node, Node);
-    Map map = CX_TYPE_CAST(Map, this->map);
-    MapRemoveNode(map->attacks, node);
-}
-
-void MapRemoveDefence(cxAny node)
-{
-    CX_ASSERT_THIS(node, Node);
-    Map map = CX_TYPE_CAST(Map, this->map);
-    MapRemoveNode(map->defences, node);
-}
-
-void MapRemoveBlock(cxAny node)
-{
-    CX_ASSERT_THIS(node, Node);
-    Map map = CX_TYPE_CAST(Map, this->map);
-    MapRemoveNode(map->blocks, node);
-}
 
 static void MapNodesEach(cxAny ps,cxAny pview,cxAny data)
 {
@@ -349,6 +294,113 @@ CX_OBJECT_FREE(Map, cxAtlas)
 }
 CX_OBJECT_TERM(Map, cxAtlas)
 
+static void MapAppendNode(cxAny pmap,cxSpatial sp,cxAny node)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    Node snode = CX_TYPE_CAST(Node, node);
+    cxViewAppend(this, snode);
+    cxSpatialInsert(sp, snode);
+}
+
+static void MapRemoveNode(cxSpatial sp,cxAny node)
+{
+    cxSpatialRemove(sp, node);
+    cxViewRemove(node);
+}
+
+void MapAppendAttack(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapAppendNode(map, map->attacks, node);
+}
+
+void MapAppendDefence(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapAppendNode(map, map->defences, node);
+}
+
+void MapAppendBlock(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapAppendNode(map, map->blocks, node);
+}
+
+void MapRemoveAttack(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapRemoveNode(map->attacks, node);
+}
+
+void MapRemoveDefence(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapRemoveNode(map->defences, node);
+}
+
+void MapRemoveBlock(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapRemoveNode(map->blocks, node);
+}
+
+//搜索离node最近的防御类单位
+cxAny MapNearestDefences(cxAny curr,cxRange2f range,NodeSubType subType)
+{
+    CX_ASSERT_THIS(curr, Node);
+    Map map = NodeMap(this);
+    return NodeNearest(map->defences, this->idx, range, NodeTypeDefence, subType);
+}
+
+//搜索离node最近的攻击类单位
+cxAny MapNearestAttacks(cxAny curr,cxRange2f range,NodeSubType subType)
+{
+    CX_ASSERT_THIS(curr, Node);
+    Map map = NodeMap(this);
+    return NodeNearest(map->attacks, this->idx, range, NodeTypeAttack, subType);
+}
+
+//搜索离node最近的阻挡类单位
+cxAny MapNearestBlocks(cxAny curr,cxRange2f range,NodeSubType subType)
+{
+    CX_ASSERT_THIS(curr, Node);
+    Map map = NodeMap(this);
+    return NodeNearest(map->attacks, this->idx, range, NodeTypeBlock, subType);
+}
+
+//搜索src dst之间的防御类单位
+cxAny MapSegmentDefences(cxAny src,cxAny dst,NodeSubType subType)
+{
+    Node sp = CX_TYPE_CAST(Node, src);
+    Node dp = CX_TYPE_CAST(Node, dst);
+    Map map = NodeMap(sp);
+    return NodeSegment(map->defences, sp->idx, dp->idx, NodeTypeDefence, subType);
+}
+
+//搜索src dst之间的攻击类单位
+cxAny MapSegmentAttacks(cxAny src,cxAny dst,NodeSubType subType)
+{
+    Node sp = CX_TYPE_CAST(Node, src);
+    Node dp = CX_TYPE_CAST(Node, dst);
+    Map map = NodeMap(sp);
+    return NodeSegment(map->attacks, sp->idx, dp->idx, NodeTypeAttack, subType);
+}
+
+//搜索src dst之间的阻挡类单位
+cxAny MapSegmentBlocks(cxAny src,cxAny dst,NodeSubType subType)
+{
+    Node sp = CX_TYPE_CAST(Node, src);
+    Node dp = CX_TYPE_CAST(Node, dst);
+    Map map = NodeMap(sp);
+    return NodeSegment(map->blocks, sp->idx, dp->idx, NodeTypeBlock, subType);
+}
+
 cxAnyArray MapVisiedPoints(cxAny pmap)
 {
     CX_ASSERT_THIS(pmap, Map);
@@ -361,7 +413,7 @@ cxAnyArray MapSearchPoints(cxAny pmap)
     return this->astar->points;
 }
 
-cxBool MapSearchPath(cxAny snode,cxAny dnode)
+cxBool MapSearchPath(cxAny snode,cxAny dnode,cxVec2f *npos)
 {
     Map map = NodeMap(snode);
     Node sx = CX_TYPE_CAST(Node, snode);
@@ -374,11 +426,13 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
     info.dnode = dnode;
     info.vdis = INT32_MAX;
     info.vidx = cxVec2fv(-1, -1);
+    //获取离snode最近的dnode本地点
+    cxVec2f didx = NodeNearestPoint(dnode, sx->idx);
     //开始搜索
-    cxBool ret = cxAStarRun(map->astar, cxVec2iv(sx->idx.x, sx->idx.y), cxVec2iv(dx->idx.x, dx->idx.y), &info);
-    if(!ret && info.vidx.x >=0 && info.vidx.y >= 0){
-        info.vdis = INT32_MAX;
-        ret = cxAStarRun(map->astar, cxVec2iv(sx->idx.x, sx->idx.y), cxVec2iv(info.vidx.x, info.vidx.y), &info);
+    cxBool ret = cxAStarRun(map->astar, cxVec2iv(sx->idx.x, sx->idx.y), cxVec2iv(didx.x, didx.y), &info);
+    //未成功时返回最近点
+    if(!ret && npos != NULL){
+        *npos = info.vidx;
     }
     return ret;
 }

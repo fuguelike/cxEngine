@@ -9,7 +9,7 @@
   "attackTimer": {
     "cxType": "cxTimer",
     "actionid": 10001,
-    "time":0.5,
+    "time":0.3,
     "group": "fight",
     "repeat": -1
   }
