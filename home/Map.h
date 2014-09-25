@@ -25,16 +25,8 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxHash nodes;
     //
     cxAny node;         //当前选中的node
-    //静态防御方单位空间索引
-    cxSpatial defences;
-    //动态攻击方单位空间索引
-    cxSpatial attacks;
-    //阻挡单位空间索引
-    cxSpatial blocks;
-    //资源类空间索引
-    cxSpatial resources;
-    //装饰类空间索引
-    cxSpatial decorations;
+    //所有单位空间索引
+    cxSpatial items;
     //fight var
     cxBool isSelectUnit;
     //path search algorithm
@@ -50,77 +42,24 @@ typedef struct {
     cxAny snode;
     cxAny dnode;
     cxFloat dis;//两点间距离
-    cxFloat vdis;//访问到得最小距离
-    cxVec2f vidx;//最靠近的店
+    cxAny block;//第一个阻挡物
 }MapSearchInfo;
 
-//加入防御单位
-void MapAppendDefence(cxAny node);
+//加入单位
+void MapAppendNode(cxAny node);
 
-//移除防御单位
-void MapRemoveDefence(cxAny node);
+//移除单位
+void MapRemoveNode(cxAny node);
 
-//搜索离curr最近的防御类单位
-cxAny MapNearestDefences(cxAny curr,cxRange2f range,NodeSubType subType);
+//搜索离curr最近的单位
+cxAny MapNearestQuery(cxAny curr,cxRange2f range,NodeType type,NodeSubType subType);
 
-//搜索src dst之间的防御类单位
-cxAny MapSegmentDefences(cxAny src,cxAny dst,NodeSubType subType);
-
-
-//加入攻击单位
-void MapAppendAttack(cxAny node);
-
-//移除攻击单位
-void MapRemoveAttack(cxAny node);
-
-//搜索离curr最近的攻击类单位
-cxAny MapNearestAttacks(cxAny curr,cxRange2f range,NodeSubType subType);
-
-//搜索src dst之间的攻击类单位
-cxAny MapSegmentAttacks(cxAny src,cxAny dst,NodeSubType subType);
-
-
-//加入阻挡单位，如城墙
-void MapAppendBlock(cxAny node);
-
-//移除阻挡单位
-void MapRemoveBlock(cxAny node);
-
-//搜索离curr最近的阻挡类单位
-cxAny MapNearestBlocks(cxAny curr,cxRange2f range,NodeSubType subType);
-
-//搜索src dst之间的阻挡类单位
-cxAny MapSegmentBlocks(cxAny src,cxAny dst,NodeSubType subType);
-
-//加入资源类型
-void MapAppendResource(cxAny node);
-
-//移除资源类型
-void MapRemoveResource(cxAny node);
-
-//搜索离curr最近的资源类单位
-cxAny MapNearestResources(cxAny curr,cxRange2f range,NodeSubType subType);
-
-//搜索src dst之间的资源类单位
-cxAny MapSegmentResources(cxAny src,cxAny dst,NodeSubType subType);
-
-//加入装饰类型
-void MapAppendDecoration(cxAny node);
-
-//移除装饰类型
-void MapRemoveDecoration(cxAny node);
-
-//搜索离curr最近的装饰类单位
-cxAny MapNearestDecorations(cxAny curr,cxRange2f range,NodeSubType subType);
-
-//搜索src dst之间的装饰类单位
-cxAny MapSegmentDecorations(cxAny src,cxAny dst,NodeSubType subType);
-
+//搜索src dst之间的单位
+cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeType type, NodeSubType subType);
 
 cxAnyArray MapVisiedPoints(cxAny pmap);
 
 cxAnyArray MapSearchPoints(cxAny pmap);
-
 
 //删除缓存路径
 void MapCacheDelPath(cxAny pmap,cxVec2i a,cxVec2i b);
@@ -132,7 +71,8 @@ void MapCacheSetPath(cxAny pmap,cxVec2i a,cxVec2i b,cxAnyArray path);
 cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b);
 
 //寻路失败时返回离目标最近的坐标
-cxBool MapSearchPath(cxAny snode,cxAny dnode,cxVec2f *npos);
+//如果返回阻挡标识搜索失败
+cxAny MapSearchPath(cxAny snode,cxAny dnode);
 
 //init map
 cxBool MapInit(cxAny pmap,cxJson data);

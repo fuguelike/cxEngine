@@ -17,10 +17,6 @@ CX_OBJECT_INIT(Wall, Node)
 {
     this->Node.type = NodeTypeBlock;
     this->Node.subType = NodeSubTypeWall;
-    
-    CX_METHOD_SET(this->Node.Remove, MapRemoveBlock);
-    CX_METHOD_SET(this->Node.Append, MapAppendBlock);
-    
     cxSpriteSetTextureURL(this, "bg1.png");
 }
 CX_OBJECT_FREE(Wall, Node)

@@ -61,8 +61,8 @@ static CGSize cxCalculateStringSize(NSString *str, id font, CGSize *constrainSiz
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat size,cxTextAlign align,cxInt cw,cxInt ch)
 {
     CX_RETURN(txt == NULL, NULL);
-    NSString * str = [NSString stringWithUTF8String:txt];
-    NSString * fntName = nil;
+    NSString *str = [NSString stringWithUTF8String:txt];
+    NSString *fntName = nil;
     CGSize dim, constrainSize;
     constrainSize.width = cw;
     constrainSize.height = ch;
@@ -85,6 +85,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat s
     dim = cxCalculateStringSize(str, font, &constrainSize, attrs);
     // compute start point
     int startH = 0;
+    int startW = 0;
     if (constrainSize.height > dim.height){
         // vertical alignment
         unsigned int vAlignment = ((int)align >> 4) & 0x0F;
@@ -118,16 +119,19 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat s
     cxUInt uHoriFlag = (int)align & 0x0f;
     NSTextAlignment nsAlign = (2 == uHoriFlag) ? NSTextAlignmentRight : (3 == uHoriFlag) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
     
-    CGRect rect = CGRectMake(0, startH, dim.width, dim.height);
+    CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
     CGContextSetShouldSubpixelQuantizeFonts(context, false);
     CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
     
-    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    paragraphStyle.alignment = nsAlign;
-    paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
-    [attrs setObject:paragraphStyle forKey:NSParagraphStyleAttributeName];
+    NSMutableParagraphStyle *parastyle = [[NSMutableParagraphStyle alloc] init];
+    parastyle.alignment = nsAlign;
+    parastyle.firstLineHeadIndent = 2;
+    parastyle.lineBreakMode = NSLineBreakByCharWrapping;
+    [attrs setObject:parastyle forKey:NSParagraphStyleAttributeName];
+    
     [str drawInRect:rect withAttributes:attrs];
-    [paragraphStyle release];
+    
+    [parastyle release];
     
     CGContextEndTransparencyLayer(context);
     UIGraphicsPopContext();

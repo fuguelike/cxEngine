@@ -33,8 +33,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxFloat attackRate; //攻击频率
     cxFloat speed;      //移动速度
     cxFloat power;       //攻击力
-    cxFloat searchMax;      //路劲搜索最大范围
-    cxRange2i life;     //生命
+    cxRange2i life;     //min当前生命，max最大生命
     cxInt level;        //等级
     cxTimer searchTimer;      //搜索用定时器
     CX_METHOD_DEF(void, Search,cxAny);
@@ -42,20 +41,10 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(void, Attack,cxAny);
     //生命值变化
     CX_METHOD_DEF(void, LifeChanged, cxAny);
-    //移除或加入时
-    CX_METHOD_DEF(void, Remove,cxAny);
-    CX_METHOD_DEF(void, Append,cxAny);
 CX_OBJECT_END(Node, cxSprite)
 
 //离idx最近的node本地坐标点
 cxVec2f NodeNearestPoint(cxAny pview,cxVec2f idx);
-
-void NodeAppend(cxAny pview);
-
-void NodeRemove(cxAny pview);
-
-//设置路劲搜索最大范围
-void NodeSetSearchMax(cxAny pview,cxFloat max);
 
 //设置生命 等级 攻击力
 void NodeSetLife(cxAny pview,cxInt life);

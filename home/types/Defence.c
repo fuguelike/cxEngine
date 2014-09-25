@@ -25,7 +25,7 @@ static void DefenceAttackExit(cxAny pav)
     //目标死亡
     if(NodeIsDie(target)){
         cxViewUnBindAll(target);
-        NodeRemove(target);
+        MapRemoveNode(target);
     }
     //隐藏子弹
     cxViewSetVisible(sp, false);
@@ -74,7 +74,7 @@ void DefenceSearch(cxAny pview)
         return;
     }
     //搜索新目标
-    Node node = NodeNearest(map->attacks, this->Node.idx, this->Node.range , NodeTypeAttack, NodeSubTypeNone);
+    Node node = NodeNearest(map->items, this->Node.idx, this->Node.range , NodeTypeAttack, NodeSubTypeNone);
     if(node == NULL){
         return;
     }
@@ -97,10 +97,6 @@ CX_OBJECT_INIT(Defence, Node)
     NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(2, 15));
     cxSpriteSetTextureURL(this, "bg1.png");
-    
-    CX_METHOD_SET(this->Node.Remove, MapRemoveDefence);
-    CX_METHOD_SET(this->Node.Append, MapAppendDefence);
-    
     CX_METHOD_SET(this->Node.Search, DefenceSearch);
     CX_METHOD_SET(this->Node.Attack, DefenceAttack);
     

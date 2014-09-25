@@ -23,18 +23,19 @@ cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
 
 static void MapNodesEachSelected(cxAny ps,cxAny pview,cxAny data)
 {
-    if(pview == data){
+    Node node = CX_TYPE_CAST(Node, pview);
+    if(node == data){
         //选中
-        cxViewSetColor(pview, cxYELLOW);
+        cxViewSetColor(node, cxYELLOW);
     }else{
         //未选中
-        cxViewSetColor(pview, cxRED);
+        cxViewSetColor(node, cxRED);
     }
 }
 static cxBool NodeSelected(Node this)
 {
     Map map = this->map;
-    cxSpatialEach(map->defences, MapNodesEachSelected, this);
+    cxSpatialEach(map->items, MapNodesEachSelected, this);
     map->node = this;
     return true;
 }
@@ -105,18 +106,10 @@ static void NodeOnTransform(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
-    //战斗模式下
-    if(map->mode != MapModeFight){
-        return;
-    }
-    //只更新攻击单位位置
-    if(this->type != NodeTypeAttack){
-        return;
-    }
     cxVec2f idx = NodePosIndex(this);
     if(!cxVec2fEqu(this->idx, idx)){
         this->idx = idx;
-        cxSpatialReindexView(map->attacks, this);
+        cxSpatialReindexView(map->items, this);
     }
 }
 
@@ -147,7 +140,6 @@ CX_OBJECT_TYPE(Node, cxSprite)
 }
 CX_OBJECT_INIT(Node, cxSprite)
 {
-    this->searchMax = 10;
     this->canSelected = true;
     this->idx = cxVec2fv(-1, -1);
     CX_METHOD_SET(this->cxSprite.cxView.Touch, NodeTouch);
@@ -160,20 +152,6 @@ CX_OBJECT_FREE(Node, cxSprite)
     CX_RELEASE(this->box);
 }
 CX_OBJECT_TERM(Node, cxSprite)
-
-void NodeAppend(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    CX_ASSERT(this->Append != NULL, "not set append method");
-    CX_METHOD_RUN(this->Append,this);
-}
-
-void NodeRemove(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    CX_ASSERT(this->Remove != NULL, "not set remove method");
-    CX_METHOD_RUN(this->Remove,this);
-}
 
 static cpCollisionID NodeIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
 {
@@ -217,7 +195,7 @@ static cpFloat NodeSegmentQueryFunc(cxAny ps, cxAny pview, void *data)
     //计算a点距离
     cxFloat ad = kmVec2DistanceBetween(&info->a, &tidx);
     //计算b点距离
-    cxFloat bd = kmVec2DistanceBetween(&info->b, &tidx);
+    cxFloat bd = 0;//kmVec2DistanceBetween(&info->b, &tidx);
     //距离和
     cxFloat dis = ad + bd;
     if(dis > info->dis){
@@ -316,12 +294,6 @@ static void NodeAttackArrive(cxAny pav)
     cxAny pview = cxActionView(pav);
     CX_ASSERT_THIS(pview, Node);
     CX_METHOD_RUN(this->Attack,this);
-}
-
-void NodeSetSearchMax(cxAny pview,cxFloat max)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->searchMax = max;
 }
 
 void NodeSetLife(cxAny pview,cxInt life)

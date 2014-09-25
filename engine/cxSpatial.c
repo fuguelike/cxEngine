@@ -45,20 +45,20 @@ CX_OBJECT_FREE(cxSpatial, cxObject)
 }
 CX_OBJECT_TERM(cxSpatial, cxObject)
 
-cxSpatial cxSpatialAlloc(cpBB (*func)(cxAny))
+cxSpatial cxSpatialAlloc(cxFloat dim,cxInt cells, cpBB (*func)(cxAny))
 {
     cxSpatial this = CX_ALLOC(cxSpatial);
     if(this->index != NULL){
         cxSpatialClean(this);
         cpSpatialIndexDestroy(this->index);
     }
-    this->index = cpBBTreeNew(func, NULL);
+    this->index = cpSpaceHashNew(dim, cells, func, NULL);
     return this;
 }
 
-cxSpatial cxSpatialCreate(cpBB (*func)(cxAny))
+cxSpatial cxSpatialCreate(cxFloat dim,cxInt cells, cpBB (*func)(cxAny))
 {
-    cxSpatial this = cxSpatialAlloc(func);
+    cxSpatial this = cxSpatialAlloc(dim,cells,func);
     return CX_AUTO(this);
 }
 

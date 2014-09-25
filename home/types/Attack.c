@@ -44,7 +44,7 @@ static void AttackAttack(cxAny pview)
         Node node = CX_TYPE_CAST(Node, items.items[i]);
         cxViewUnBind(this, node);
         //死去的防御移除
-        NodeRemove(node);
+        MapRemoveNode(node);
     }
 }
 
@@ -82,7 +82,7 @@ static void AttackAttackNode(cxAny pview,cxAny node,cxAnyArray points)
     cxList subviews = cxViewSubViews(map);
     CX_LIST_FOREACH(subviews, ele){
         cxView tmp = ele->any;
-        if(tmp->tag == 1000){
+        if(tmp->tag == 1001){
             cxViewRemove(tmp);
         }
     }
@@ -90,10 +90,10 @@ static void AttackAttackNode(cxAny pview,cxAny node,cxAnyArray points)
         cxVec2f p = cxVec2fv(idx->x, idx->y);
         cxVec2f pos = MapIdxToPos(map, p);
         cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
-        cxViewSetColor(sp, cxRED);
+        cxViewSetColor(sp, cxYELLOW);
         cxViewSetPos(sp, pos);
         cxViewSetSize(sp, cxSize2fv(10, 10));
-        cxViewSetTag(sp, 1000);
+        cxViewSetTag(sp, 1001);
         cxViewAppend(map, sp);
     }
     //路劲算法移动到攻击点
@@ -117,49 +117,22 @@ static void AttackSearch(cxAny pview)
         return;
     }
     //动态搜索一个最近的防御单位
-    Node node = MapNearestDefences(this, cxRange2fv(0, 200), NodeSubTypeNone);
+    Node node = MapNearestQuery(this, cxRange2fv(0, 200),NodeTypeDefence , NodeSubTypeNone);
     if(node == NULL){
         return;
     }
-    cxVec2f npos;
-    //路径搜索到达
-    if(MapSearchPath(this, node, &npos)){
+    //搜索路径
+    cxAny block = MapSearchPath(this, node);
+    //无阻挡物
+    if(block == NULL){
         AttackAttackNode(this, node, MapSearchPoints(map));
         return;
     }
-    //未成功获取路径显示搜索点位置
-    cxList subviews = cxViewSubViews(map);
-    CX_LIST_FOREACH(subviews, ele){
-        cxView tmp = ele->any;
-        if(tmp->tag == (int)this){
-            cxViewRemove(tmp);
-        }
-    }
-    cxAnyArray points = MapVisiedPoints(map);
-    CX_ASTAR_POINTS_FOREACH(points, idx){
-        cxVec2f p = cxVec2fv(idx->x, idx->y);
-        cxVec2f pos = MapIdxToPos(map, p);
-        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
-        cxViewSetColor(sp, cxRED);
-        cxViewSetPos(sp, pos);
-        cxViewSetSize(sp, cxSize2fv(10, 10));
-        cxViewSetTag(sp, (int)this);
-        cxViewAppend(map, sp);
-    }
-    
-    if(node != NULL){
-
-        //如果没有路到达目标，搜索之间的阻挡物攻击
-//        node = NodeSegment(map->blocks, this->Node.idx, node->idx, NodeTypeBlock, NodeSubTypeNone);
-//        if(node == NULL){
-//            return;
-//        }
-//        cxViewSetColor(node, cxRED);
-//        points = MapSearchPath(this, node);
-//        if(cxAnyArrayLength(points) > 0){
-//            AttackAttackNode(this, node, points);
-//        }
-    }
+    cxViewSetColor(block, cxRED);
+    //搜索阻挡物体
+    cxAny ret = MapSearchPath(this,block);
+    CX_ASSERT(ret == NULL, "block item search path failed");
+    AttackAttackNode(this, block, MapSearchPoints(map));
 }
 
 CX_OBJECT_TYPE(Attack, Node)
@@ -173,10 +146,6 @@ CX_OBJECT_INIT(Attack, Node)
     NodeSetRange(this, cxRange2fv(0, 2));
     NodeSetAttackRate(this, 0.5f);
     cxSpriteSetTextureURL(this, "bg1.png");
-    
-    CX_METHOD_SET(this->Node.Remove, MapRemoveAttack);
-    CX_METHOD_SET(this->Node.Append, MapAppendAttack);
-    
     CX_METHOD_SET(this->Node.Search, AttackSearch);
     CX_METHOD_SET(this->Node.Attack, AttackAttack);
 }
