@@ -258,6 +258,15 @@ cxHash cxViewBindes(cxAny pview)
     return this->bindes;
 }
 
+cxAny cxViewBindesFirst(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    if(this->bindes->hashPtr == NULL){
+        return NULL;
+    }
+    return cxHashElementKeyToAny(this->bindes->hashPtr);
+}
+
 cxHash cxViewBinded(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);

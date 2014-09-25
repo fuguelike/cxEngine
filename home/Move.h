@@ -17,15 +17,9 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(Move, cxSpline)
     cxFloat speed;
-    cxFloat angle;
-    cxInt index;
-    cxAny target;
-    CX_EVENT_ALLOC(OnDegrees);
 CX_OBJECT_END(Move, cxSpline)
 
-void MoveSetTarget(cxAny pav,cxAny target);
-
-Move MoveCreate(cxAny target,cxAnyArray points);
+Move MoveCreate(cxAny pmap,cxAnyArray points);
 
 CX_C_END
 

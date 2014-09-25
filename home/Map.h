@@ -55,10 +55,10 @@ void MapAppendNode(cxAny node);
 void MapRemoveNode(cxAny node);
 
 //搜索离curr最近的单位
-cxAny MapNearestQuery(cxAny curr,cxRange2f range,NodeType type,NodeSubType subType);
+cxAny MapNearestQuery(cxAny curr,cxRange2f range,NodeCombined type);
 
 //搜索src dst之间的单位
-cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeType type, NodeSubType subType);
+cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type);
 
 cxAnyArray MapVisiedPoints(cxAny pmap);
 
@@ -75,7 +75,7 @@ cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b);
 
 //寻路失败时返回离目标最近的坐标
 //如果返回阻挡标识搜索失败
-cxBool MapSearchPath(cxAny snode,cxAny dnode,cxAny *block);
+PathResult MapSearchPath(cxAny snode,cxAny dnode);
 
 //init map
 cxBool MapInit(cxAny pmap,cxJson data);

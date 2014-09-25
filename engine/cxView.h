@@ -100,6 +100,8 @@ cxMatrix4f *cxViewAnchorMatrix(cxAny pview);
 
 void cxViewUnBindAll(cxAny pview);
 
+cxAny cxViewBindesFirst(cxAny pview);
+
 cxHash cxViewBindes(cxAny pview);
 
 cxHash cxViewBinded(cxAny pview);

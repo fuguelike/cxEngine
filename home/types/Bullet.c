@@ -18,7 +18,7 @@ CX_OBJECT_INIT(Bullet, cxSprite)
 }
 CX_OBJECT_FREE(Bullet, cxSprite)
 {
-
+    
 }
 CX_OBJECT_TERM(Bullet, cxSprite)
 

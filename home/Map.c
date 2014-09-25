@@ -232,7 +232,7 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
         return true;
     }
     //如果是阻挡类型
-    if(node->type == NodeTypeBlock && !NodeIsDie(node)){
+    if(node->type.mainType == NodeTypeBlock && !NodeIsDie(node)){
         //记录第一个阻挡物
         if(info->block == NULL)info->block = node;
         return false;
@@ -317,21 +317,121 @@ void MapRemoveNode(cxAny node)
     cxViewRemove(node);
 }
 
+typedef struct {
+    cxAny node;         //最近的view
+    cxVec2f idx;        //与此点的
+    cxFloat dis;        //距离
+    cxRange2f range;    //范围内
+    NodeCombined type;
+} NodeNearestInfo;
+
+typedef struct {
+    cxAny node;         //最近的view
+    cxVec2f a;          //第1点
+    cxVec2f b;          //第2点
+    cxFloat dis;        //距离
+    cxFloat exit;       //退出值
+    NodeCombined type;  //搜索的类型
+} NodeSegmentInfo;
+
+static cpCollisionID NodeIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
+{
+    NodeNearestInfo *info = data;
+    Node node = CX_TYPE_CAST(Node, pview);
+    //不匹配类型
+    if(info->type.mainType != NodeTypeNone && !(info->type.mainType & node->type.mainType)){
+        return id;
+    }
+    //不匹配子类型
+    if(info->type.subType != NodeSubTypeNone && !(info->type.subType & node->type.subType)){
+        return id;
+    }
+    //死了的不参与搜索
+    if(NodeIsDie(node)){
+        return id;
+    }
+    //计算距离
+    cxVec2f tidx = cxVec2fv(node->idx.x * global.sideLen, node->idx.y * global.sideLen);
+    cxFloat d = kmVec2DistanceBetween(&info->idx, &tidx);
+    if(d > info->dis){
+        return id;
+    }
+    info->dis = d;
+    //在范围内
+    if(info->dis >= info->range.min && info->dis <= info->range.max){
+        info->node = node;
+    }
+    return id;
+}
+
+static cpFloat NodeSegmentQueryFunc(cxAny ps, cxAny pview, void *data)
+{
+    NodeSegmentInfo *info = data;
+    Node node = CX_TYPE_CAST(Node, pview);
+    //不匹配类型
+    if(info->type.mainType != NodeTypeNone && !(info->type.mainType & node->type.mainType)){
+        return info->exit;
+    }
+    //不匹配子类型
+    if(info->type.subType != NodeSubTypeNone && !(info->type.subType & node->type.subType)){
+        return info->exit;
+    }
+    cxVec2f tidx = SCALE_VEC2F(node->idx);
+    //计算a点距离
+    cxFloat ad = kmVec2DistanceBetween(&info->a, &tidx);
+    //计算b点距离
+    cxFloat bd = 0;//kmVec2DistanceBetween(&info->b, &tidx);
+    //距离和
+    cxFloat dis = ad + bd;
+    if(dis > info->dis){
+        return info->exit;
+    }
+    info->dis = dis;
+    info->node = node;
+    return info->exit;
+}
+
+static cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeCombined type)
+{
+    CX_ASSERT_THIS(ps, cxSpatial);
+    NodeSegmentInfo ret = {0};
+    ret.a = SCALE_VEC2F(a);
+    ret.b = SCALE_VEC2F(b);
+    ret.dis = INT32_MAX;
+    ret.type = type;
+    ret.exit = 1.0f;
+    cpSpatialIndexSegmentQuery(this->index, this, ret.a, ret.b, ret.exit, NodeSegmentQueryFunc, &ret);
+    return ret.node;
+}
+
+static cxAny NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeCombined type)
+{
+    CX_ASSERT_THIS(ps, cxSpatial);
+    NodeNearestInfo ret = {0};
+    ret.idx = SCALE_VEC2F(idx);
+    ret.dis = INT32_MAX;
+    ret.range = SCALE_RANGE(range);
+    ret.type = type;
+    cpBB bb = cpBBNewForCircle(ret.idx, cpfmax(ret.range.max, 0.0f));
+    cpSpatialIndexQuery(this->index, this, bb, NodeIndexQueryFunc, &ret);
+    return ret.node;
+}
+
 //搜索离curr最近的单位
-cxAny MapNearestQuery(cxAny curr,cxRange2f range,NodeType type,NodeSubType subType)
+cxAny MapNearestQuery(cxAny curr,cxRange2f range,NodeCombined type)
 {
     CX_ASSERT_THIS(curr, Node);
     Map map = NodeMap(this);
-    return NodeNearest(map->items, this->idx, range, type, subType);
+    return NodeNearest(map->items, this->idx, range, type);
 }
 
 //搜索src dst之间的单位
-cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeType type, NodeSubType subType)
+cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type)
 {
     Node sp = CX_TYPE_CAST(Node, src);
     Node dp = CX_TYPE_CAST(Node, dst);
     Map map = NodeMap(sp);
-    return NodeSegment(map->items, sp->idx, dp->idx, type, subType);
+    return NodeSegment(map->items, sp->idx, dp->idx, type);
 }
 
 cxAnyArray MapVisiedPoints(cxAny pmap)
@@ -380,8 +480,9 @@ cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b)
     return true;
 }
 
-cxBool MapSearchPath(cxAny snode,cxAny dnode,cxAny *block)
+PathResult MapSearchPath(cxAny snode,cxAny dnode)
 {
+    PathResult ret = {false,NULL};
     Map map = NodeMap(snode);
     Node sx = CX_TYPE_CAST(Node, snode);
     Node dx = CX_TYPE_CAST(Node, dnode);
@@ -392,7 +493,8 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode,cxAny *block)
     //获取缓存路径
     if(MapCachePath(map, a, b)){
         CX_LOGGER("path cache hit:a(%d,%d)b(%d,%d)",a.x,a.y,b.x,b.y);
-        return true;
+        ret.success = true;
+        goto completed;
     }
     //
     MapSearchInfo info = {NULL};
@@ -404,11 +506,12 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode,cxAny *block)
     //开始搜索,如果成功保存路径到缓存
     if(cxAStarRun(map->astar, a, b, &info)) {
         MapCacheSetPath(map, a, b, map->astar->points);
-        if(block != NULL)*block = NULL;
-        return true;
+        ret.success = true;
+        goto completed;
     }
-    if(block != NULL)*block = info.block;
-    return false;
+    ret.block = info.block;
+completed:
+    return ret;
 }
 
 void MapDelNode(cxAny pmap,cxInt x,cxInt y)

@@ -9,7 +9,9 @@
 #include <algorithm/cxTile.h>
 #include <views/cxScroll.h>
 #include <actions/cxMove.h>
+#include <types/Bullet.h>
 #include "Node.h"
+#include "Move.h"
 #include "Map.h"
 
 cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
@@ -104,8 +106,8 @@ cxBool NodeArriveAttack(cxAny pattacker,cxAny ptarget)
     //到达攻击距离
     cxFloat d = kmVec2DistanceBetween(&p1, &p2) - (attacker->body + target->body) * global.sideLen;
     d = CX_MAX(d, 0);
-    cxFloat max = attacker->range.max * global.sideLen;
-    cxFloat min = attacker->range.min * global.sideLen;
+    cxFloat max = attacker->attackRange.max * global.sideLen;
+    cxFloat min = attacker->attackRange.min * global.sideLen;
     return d >= min && d <= max;
 }
 
@@ -127,10 +129,18 @@ static void NodeOnTransform(cxAny pview)
     }
 }
 
-void NodeHitTarget(cxAny pview,cxAny node)
+void NodeSearchOrderAdd(cxAny pview,NodeType type,NodeSubType subType)
 {
     CX_ASSERT_THIS(pview, Node);
-    NodeAddLife(node, -this->power);
+    NodeCombined *ptype = &this->orders.types[this->orders.number++];
+    ptype->mainType = type;
+    ptype->subType = subType;
+}
+//清空搜索
+void NodeSearchOrderClear(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->orders.number = 0;
 }
 
 void NodeMomentDie(cxAny pview)
@@ -164,6 +174,19 @@ cxVec2f NodeNearestPoint(cxAny pview,cxVec2f idx)
     return ret;
 }
 
+void NodeAttacked(cxAny pview,cxAny attacker,AttackType type)
+{
+    CX_ASSERT_THIS(pview, Node);
+    //如果是直接攻击
+    if(type == AttackTypeDirect){
+        Node a = CX_TYPE_CAST(Node, attacker);
+        NodeAddLife(this, -a->power);
+    }else if(type == AttackTypeBullet){
+        Bullet a = CX_TYPE_CAST(Bullet, attacker);
+        NodeAddLife(this, -a->power);
+    }
+}
+
 CX_OBJECT_TYPE(Node, cxSprite)
 {
     
@@ -176,6 +199,10 @@ CX_OBJECT_INIT(Node, cxSprite)
     CX_EVENT_APPEND(CX_TYPE(cxView, this)->onTransform, NodeOnTransform);
     this->box = cxAnyArrayAlloc(cxVec2f);
     this->speed = 100;
+    this->attackNum = 1;
+    this->searchIndex = 0;
+    this->dirIndex = 0;
+    CX_METHOD_SET(this->Attacked, NodeAttacked);
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
@@ -185,89 +212,125 @@ CX_OBJECT_FREE(Node, cxSprite)
 }
 CX_OBJECT_TERM(Node, cxSprite)
 
-static cpCollisionID NodeIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
+void NodeSetDirAngle(cxAny pview,cxFloat angle)
 {
-    NodeNearestInfo *info = data;
-    Node node = CX_TYPE_CAST(Node, pview);
-    //不匹配类型
-    if(info->type != NodeTypeNone && !(info->type & node->type)){
-        return id;
+    CX_ASSERT_THIS(pview, Node);
+    cxInt dirIndex;
+    this->dirAngle = AngleToIndex(angle, &dirIndex);
+    if(dirIndex != this->dirIndex){
+        this->dirIndex = dirIndex;
+        CX_METHOD_RUN(this->Direction,this);
+        cxConstChars n = CX_CONST_STRING("%d.png",this->dirIndex);
+        cxSpriteSetTextureURL(this, n);
     }
-    //不匹配子类型
-    if(info->subType != NodeSubTypeNone && !(info->subType & node->subType)){
-        return id;
-    }
-    //死了的不参与搜索
-    if(NodeIsDie(node)){
-        return id;
-    }
-    //计算距离
-    cxVec2f tidx = cxVec2fv(node->idx.x * global.sideLen, node->idx.y * global.sideLen);
-    cxFloat d = kmVec2DistanceBetween(&info->idx, &tidx);
-    if(d > info->dis){
-        return id;
-    }
-    info->dis = d;
-    //在范围内
-    if(info->dis >= info->range.min && info->dis <= info->range.max){
-        info->node = node;
-    }
-    return id;
 }
 
-static cpFloat NodeSegmentQueryFunc(cxAny ps, cxAny pview, void *data)
+static void NodeMoveOnExit(cxAny pav)
 {
-    NodeSegmentInfo *info = data;
-    Node node = CX_TYPE_CAST(Node, pview);
-    //不匹配类型
-    if(info->type != NodeTypeNone && !(info->type & node->type)){
-        return info->exit;
+    CX_ASSERT_THIS(pav, Move);
+    Node node = CX_TYPE_CAST(Node, cxActionView(this));
+    cxHash bindes = cxViewBindes(node);
+    CX_HASH_FOREACH(bindes, ele, tmp){
+        cxNumber data = CX_TYPE_CAST(cxNumber, ele->any);
+        Node target = cxHashElementKeyToAny(ele);
+        if(NodeIsDie(target)){
+            cxViewUnBind(node, target);
+            continue;
+        }
+        //回调处理返回
+        cxBool ret = CX_METHOD_GET(true, node->MoveExit, node, target);
+        cxNumberSetBool(data, ret);
+        if(!ret){
+            cxViewUnBind(node, target);
+        }
     }
-    //不匹配子类型
-    if(info->subType != NodeSubTypeNone && !(info->subType & node->subType)){
-        return info->exit;
-    }
-    cxVec2f tidx = SCALE_VEC2F(node->idx);
-    //计算a点距离
-    cxFloat ad = kmVec2DistanceBetween(&info->a, &tidx);
-    //计算b点距离
-    cxFloat bd = 0;//kmVec2DistanceBetween(&info->b, &tidx);
-    //距离和
-    cxFloat dis = ad + bd;
-    if(dis > info->dis){
-        return info->exit;
-    }
-    info->dis = dis;
-    info->node = node;
-    return info->exit;
 }
 
-cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeType type,NodeSubType subType)
+void NodeMoveTo(cxAny pview,cxAnyArray points)
 {
-    CX_ASSERT_THIS(ps, cxSpatial);
-    NodeSegmentInfo ret = {0};
-    ret.a = SCALE_VEC2F(a);
-    ret.b = SCALE_VEC2F(b);
-    ret.dis = INT32_MAX;
-    ret.type = type;
-    ret.subType = subType;
-    ret.exit = 1.0f;
-    cpSpatialIndexSegmentQuery(this->index, this, ret.a, ret.b, ret.exit, NodeSegmentQueryFunc, &ret);
-    return ret.node;
+    CX_ASSERT_THIS(pview, Node);
+    Map map = NodeMap(this);
+    
+    cxList subviews = cxViewSubViews(map);
+    CX_LIST_FOREACH(subviews, ele){
+        cxView tmp = ele->any;
+        if(tmp->tag == 1001){
+            cxViewRemove(tmp);
+        }
+    }
+    CX_ASTAR_POINTS_FOREACH(points, idx){
+        cxVec2f p = cxVec2fv(idx->x, idx->y);
+        cxVec2f pos = MapIdxToPos(map, p);
+        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
+        cxViewSetColor(sp, cxYELLOW);
+        cxViewSetPos(sp, pos);
+        cxViewSetSize(sp, cxSize2fv(10, 10));
+        cxViewSetTag(sp, 1001);
+        cxViewAppend(map, sp);
+    }
+    
+    Move move = MoveCreate(map, points);
+    CX_EVENT_APPEND(CX_TYPE(cxAction, move)->onExit, NodeMoveOnExit);
+    cxViewAppendAction(this, move);
 }
 
-cxAny NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType subType)
+static void NodeProcessSearch(Node this)
 {
-    CX_ASSERT_THIS(ps, cxSpatial);
-    NodeNearestInfo ret = {0};
-    ret.idx = SCALE_VEC2F(idx);
-    ret.dis = INT32_MAX;
-    ret.range = SCALE_RANGE(range);
-    ret.type = type;
-    ret.subType = subType;
-    cpBB bb = cpBBNewForCircle(ret.idx, cpfmax(ret.range.max, 0.0f));
-    cpSpatialIndexQuery(this->index, this, bb, NodeIndexQueryFunc, &ret);
-    return ret.node;
+    cxHash bindes = cxViewBindes(this);
+    //如果同时攻击数量到达
+    if(cxHashLength(bindes) >= this->attackNum){
+        return;
+    }
+    //如果未定义搜索
+    if(this->orders.number == 0){
+        return;
+    }
+    if(this->searchIndex >= this->orders.number){
+        this->searchIndex = 0;
+    }
+    //获取当前搜索类型
+    NodeCombined type = this->orders.types[this->searchIndex++];
+    Node target = MapNearestQuery(this, this->searchRange, type);
+    if(target == NULL){
+        return;
+    }
+    //立即面向目标
+    cxFloat angle = cxVec2fRadiansBetween(cxViewPosition(target),cxViewPosition(this));
+    NodeSetDirAngle(this, angle);
+    cxBool isAttack = false;
+    //返回bind的目标
+    cxAny bind = CX_METHOD_GET(NULL,this->Finded,this,target, &isAttack);
+    if(bind != NULL){
+        cxViewBind(this, target, cxNumberBool(isAttack));
+    }
+}
+
+void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type)
+{
+    CX_ASSERT_THIS(target, Node);
+    CX_METHOD_RUN(this->Attacked,this,attacker,type);
+    if(NodeIsDie(this)){
+        NodeMomentDie(target);
+    }
+}
+
+static void NodeProcessAttack(Node this)
+{
+    cxHash bindes = cxViewBindes(this);
+    CX_HASH_FOREACH(bindes, ele, tmp){
+        Node target = cxHashElementKeyToAny(ele);
+        //未设定标记无法攻击
+        if(!cxNumberToBool(ele->any)){
+            continue;
+        }
+        //超过攻击范围取消bind,将导致重新搜索目标
+        if(!NodeArriveAttack(this, target)){
+            cxViewUnBind(this, target);
+            continue;
+        }
+        //攻击时处理攻击方式，直接攻击或者投掷物体攻击
+        CX_METHOD_RUN(this->Attack,this,target);
+    }
 }
 
 //搜索附近的
@@ -275,7 +338,7 @@ static void NodeSearchArrive(cxAny pav)
 {
     cxAny pview = cxActionView(pav);
     CX_ASSERT_THIS(pview, Node);
-    CX_METHOD_RUN(this->Search,this);
+    NodeProcessSearch(this);
 }
 
 void NodeSetState(cxAny pview,NodeState state)
@@ -329,7 +392,7 @@ static void NodeAttackArrive(cxAny pav)
 {
     cxAny pview = cxActionView(pav);
     CX_ASSERT_THIS(pview, Node);
-    CX_METHOD_RUN(this->Attack,this);
+    NodeProcessAttack(this);
 }
 
 void NodeSetLife(cxAny pview,cxInt life)
@@ -344,10 +407,6 @@ void NodeAddLife(cxAny pview,cxInt life)
     CX_ASSERT_THIS(pview, Node);
     this->life.min += life;
     CX_EVENT_FIRE(this, onLife);
-    if(this->life.min > 0){
-        return;
-    }
-    NodeMomentDie(pview);
 }
 
 void NodeSetLevel(cxAny pview,cxInt level)
@@ -356,13 +415,39 @@ void NodeSetLevel(cxAny pview,cxInt level)
     this->level = level;
 }
 
+void NodeSetBody(cxAny pview,cxFloat body)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->body  = body;
+}
+
+void NodeSetType(cxAny pview,NodeType type)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->type.mainType = type;
+}
+
+void NodeSetSubType(cxAny pview,NodeSubType subType)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->type.subType = subType;
+}
+
 void NodeSetAttackRate(cxAny pview,cxFloat rate)
 {
     CX_ASSERT_THIS(pview, Node);
     this->attackRate = rate;
     if(rate > 0){
         NodeAttackRun(this);
+    }else{
+        NodePauseAttack(this);
     }
+}
+
+cxFloat NodePower(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->power * this->attackRate;
 }
 
 void NodeSetPower(cxAny pview,cxFloat power)
@@ -377,10 +462,16 @@ void NodeSetSpeed(cxAny pview,cxFloat speed)
     this->speed = speed;
 }
 
-void NodeSetRange(cxAny pview,cxRange2f range)
+void NodeSetSearchRange(cxAny pview,cxRange2f range)
 {
     CX_ASSERT_THIS(pview, Node);
-    this->range = range;
+    this->searchRange = range;
+}
+
+void NodeSetAttackRange(cxAny pview,cxRange2f range)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->attackRange = range;
 }
 
 cxAny NodeMap(cxAny pview)
@@ -403,18 +494,6 @@ void NodeAttackRun(cxAny pview)
     cxActionSetTime(this->attackTimer, this->attackRate);
     CX_EVENT_APPEND(this->attackTimer->onArrive, NodeAttackArrive);
     cxViewAppendAction(this, this->attackTimer);
-}
-
-cxRange2f NodeRange(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->range;
-}
-
-cxFloat NodePower(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->power;
 }
 
 cxBool NodeHasPoint(cxAny pview,cxVec2i idx)
@@ -533,7 +612,7 @@ void NodeSetIdx(cxAny pview,cxVec2f idx)
         return;
     }
     //攻击活动单位不放入A*搜索数据中
-    if(this->type != NodeTypeAttack){
+    if(this->type.mainType!= NodeTypeAttack){
         MapFillNode(map, nidx, this);
     }
     this->idx = idx;

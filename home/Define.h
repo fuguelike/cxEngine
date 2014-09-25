@@ -44,6 +44,11 @@ cxFloat SideDistance(cxInt sideNum);
 //8方向使用 22.5 45.0角度
 cxFloat AngleToIndex(cxFloat angle,cxInt *index);
 
+typedef struct {
+    cxBool success;     //是否成功
+    cxAny block;        //失败时返回被阻挡的单位
+}PathResult;
+
 //node 状态
 typedef enum {
     NodeStateNormal,    //一般状态
@@ -76,6 +81,25 @@ typedef enum {
     NodeSubTypeArcher   = 1 << 2,      //弓箭手
     NodeSubTypeWall     = 1 << 3,      //城墙
 }NodeSubType;
+
+//组合类型
+typedef struct {
+    NodeType mainType;
+    NodeSubType subType;
+}NodeCombined;
+
+//搜索顺序最大32
+#define MAX_ORDERS 32
+typedef struct {
+    NodeCombined types[MAX_ORDERS];
+    cxInt number;
+}NodeSearchOrder;
+
+typedef enum {
+    AttackTypeNone = 0,     //
+    AttackTypeDirect,       //直接攻击
+    AttackTypeBullet,     //间接攻击 使用bullet基类
+}AttackType;
 
 CX_C_END
 

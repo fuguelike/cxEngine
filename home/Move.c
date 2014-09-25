@@ -13,17 +13,14 @@
 static void MoveOnAngle(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    cxInt index = -1;
-    this->angle = AngleToIndex(this->cxSpline.angle, &index);
-    if(this->index != index){
-        this->index = index;
-        CX_EVENT_FIRE(this, OnDegrees);
-    }
+    Node node = CX_TYPE_CAST(Node, cxActionView(this));
+    NodeSetDirAngle(node, this->cxSpline.angle);
 }
 
 static void MoveOnInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
+    Node node = CX_TYPE_CAST(Node, cxActionView(this));
     cxFloat d = 0;
     cxAnyArray points = this->cxSpline.points;
     cxInt num = cxAnyArrayLength(points);
@@ -37,14 +34,20 @@ static void MoveOnInit(cxAny pav)
         d += kmVec2DistanceBetween(p1, p2);
         p1 = p2;
     }
-    cxActionSetTime(pav, d / this->speed);
+    cxActionSetTime(pav, d / node->speed);
 }
 
 static void MoveOnUpdate(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
     Node attacker = CX_TYPE_CAST(Node, cxActionView(this));
-    Node target = CX_TYPE_CAST(Node, this->target);
+    //第一个bind的一定是目标,如果为空目标可能已经死亡
+    Node target = cxViewBindesFirst(attacker);
+    if(target == NULL){
+        cxActionStop(this);
+        return;
+    }
+    CX_ASSERT_TYPE(target, Node);
     //如果目标死亡停止移动
     if(NodeIsDie(target)){
         cxActionStop(pav);
@@ -64,8 +67,6 @@ CX_OBJECT_TYPE(Move, cxSpline)
 CX_OBJECT_INIT(Move, cxSpline)
 {
     this->speed = 100;
-    this->index = -1;
-    this->angle = 0;
     cxActionSetGroup(this, "fight");
     CX_EVENT_APPEND(CX_TYPE(cxSpline, this)->onAngle, MoveOnAngle);
     CX_EVENT_APPEND(CX_TYPE(cxAction, this)->onInit, MoveOnInit);
@@ -73,31 +74,20 @@ CX_OBJECT_INIT(Move, cxSpline)
 }
 CX_OBJECT_FREE(Move, cxSpline)
 {
-    CX_EVENT_RELEASE(this->OnDegrees);
-    CX_RELEASE(this->target);
+    
 }
 CX_OBJECT_TERM(Move, cxSpline)
 
-Move MoveCreate(cxAny target,cxAnyArray points)
+Move MoveCreate(cxAny pmap,cxAnyArray points)
 {
-    Node node = CX_TYPE_CAST(Node, target);
-    Map map = NodeMap(node);
     Move move = CX_CREATE(Move);
-    //设置速度
-    move->speed = node->speed;
-    //设置目标
-    MoveSetTarget(move, node);
+    CX_ASSERT_THIS(pmap, Map);
     //加入路径点
     CX_ASTAR_POINTS_FOREACH(points, idx){
-        cxVec2f pos = MapIdxToPos(map,cxVec2fv(idx->x, idx->y));
+        cxVec2f pos = MapIdxToPos(this,cxVec2fv(idx->x, idx->y));
         cxSplineAppend(move, pos);
     }
     return move;
 }
 
-void MoveSetTarget(cxAny pav,cxAny target)
-{
-    CX_ASSERT_THIS(pav, Move);
-    CX_RETAIN_SWAP(this->target, target);
-}
 

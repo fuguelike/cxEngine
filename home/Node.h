@@ -26,33 +26,58 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxBool isTouch;     //按下时是否选中
     cxBool isValidIdx;  //是否在有效的位置
     cxVec2f start;
-    NodeSubType subType;//子类型
-    NodeType type;      //主类型
+    NodeCombined type;  //node组合类型
     NodeState state;    //当前状态
-    cxRange2f range;    //攻击范围
+    cxRange2f attackRange;  //攻击范围
+    cxRange2f searchRange;  //搜索范围
     cxFloat body;       //可攻击半径
     cxFloat attackRate; //攻击频率
     cxFloat speed;      //移动速度
-    cxFloat power;       //攻击力
+    cxFloat power;       //攻击力,每秒的攻击力，实际效果和攻击频率(attackRate)有关系
     cxRange2i life;     //min当前生命，max最大生命
     cxInt level;        //等级
     cxTimer searchTimer;      //搜索用定时器
-    CX_METHOD_DEF(void, Search,cxAny);
-    cxTimer attackTimer;    //攻击用定时器
-    CX_METHOD_DEF(void, Attack,cxAny);
+    cxInt searchIndex;
+    cxTimer attackTimer;      //攻击用定时器
     //生命值变化
     CX_EVENT_ALLOC(onLife);
     //死亡时
     CX_EVENT_ALLOC(onDie);
-    //搜索到目标,返回false不继续处理
-    CX_METHOD_DEF(cxBool, Finded, cxAny, cxAny);
+    NodeSearchOrder orders;
+    //搜索到目标,返回bind哪个目标 seacher,target
+    CX_METHOD_DEF(cxAny, Finded, cxAny seacher, cxAny target,cxBool *);
+    cxInt attackNum;    //同时攻击的数量
+    //方向发生变化
+    cxInt   dirIndex;    //当前方向索引
+    cxFloat dirAngle;    //方向偏转角
+    CX_METHOD_DEF(void, Direction,cxAny);
+    //攻击一个目标 attcker攻击target
+    CX_METHOD_DEF(void, Attack,cxAny attcker,cxAny target);
+    //被一个目标攻击 pview 被attacker攻击 attacktype可能是 弓箭或者node
+    CX_METHOD_DEF(void, Attacked,cxAny pview,cxAny attacker,AttackType type);
+    //当Node MoveTo target结束时 attcker target,返回 false表示解除bind
+    CX_METHOD_DEF(cxBool, MoveExit,cxAny,cxAny);
 CX_OBJECT_END(Node, cxSprite)
+
+//使用点集合移动到bind的node,移动结束触发 MoveExit 回调
+void NodeMoveTo(cxAny pview,cxAnyArray points);
+
+//node被攻击
+void NodeAttacked(cxAny pview,cxAny attacker,AttackType type);
+
+//攻击一个目标
+void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type);
+
+//设置node方向并触发事件
+void NodeSetDirAngle(cxAny pview,cxFloat angle);
+
+//添加搜索顺序
+void NodeSearchOrderAdd(cxAny pview,NodeType type,NodeSubType subType);
+//清空搜索
+void NodeSearchOrderClear(cxAny pview);
 
 //处死Node
 void NodeMomentDie(cxAny pview);
-
-//pview打一下node
-void NodeHitTarget(cxAny pview,cxAny node);
 
 //离idx最近的node本地坐标点
 cxVec2f NodeNearestPoint(cxAny pview,cxVec2f idx);
@@ -64,33 +89,22 @@ cxBool NodeArriveAttack(cxAny pattacker,cxAny ptarget);
 void NodeSetLife(cxAny pview,cxInt life);
 void NodeAddLife(cxAny pview,cxInt life);
 void NodeSetLevel(cxAny pview,cxInt level);
+void NodeSetBody(cxAny pview,cxFloat body);
 void NodeSetPower(cxAny pview,cxFloat power);
 void NodeSetSpeed(cxAny pview,cxFloat speed);
+void NodeSetType(cxAny pview,NodeType type);
+void NodeSetSubType(cxAny pview,NodeSubType subType);
+//获取攻击力
+cxFloat NodePower(cxAny pview);
 
 //设置攻击范围
-void NodeSetRange(cxAny pview,cxRange2f range);
+void NodeSetAttackRange(cxAny pview,cxRange2f range);
+
+//设置搜索范围
+void NodeSetSearchRange(cxAny pview,cxRange2f range);
 
 //设置攻击频率
 void NodeSetAttackRate(cxAny pview,cxFloat rate);
-
-typedef struct {
-    cxAny node;         //最近的view
-    cxVec2f idx;        //与此点的
-    cxFloat dis;        //距离
-    cxRange2f range;    //范围内
-    NodeType type;      //搜索的类型
-    NodeSubType subType;//搜索子类型
-} NodeNearestInfo;
-
-typedef struct {
-    cxAny node;         //最近的view
-    cxVec2f a;          //第1点
-    cxVec2f b;          //第2点
-    cxFloat dis;        //距离
-    cxFloat exit;       //退出值
-    NodeType type;      //搜索的类型
-    NodeSubType subType;//搜索子类型
-} NodeSegmentInfo;
 
 cxAny NodeMap(cxAny pview);
 
@@ -99,13 +113,6 @@ cxBool NodeIsDie(cxAny pview);
 
 //设置状态
 void NodeSetState(cxAny pview,NodeState state);
-
-
-//搜索离a点最近的线段上的单位
-cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeType type,NodeSubType subType);
-
-//搜索最近的单位，可设置多种类型组合 
-cxAny NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType subType);
 
 //暂停搜索
 void NodePauseSearch(cxAny pview);
@@ -124,10 +131,6 @@ void NodeResumeAttack(cxAny pview);
 
 //启动攻击定时器
 void NodeAttackRun(cxAny pview);
-
-cxRange2f NodeRange(cxAny pview);
-
-cxFloat NodePower(cxAny pview);
 
 cxRange2i NodeLife(cxAny pview);
 

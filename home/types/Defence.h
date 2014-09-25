@@ -14,19 +14,8 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Defence, Node)
-    cxInt attackNum;        //同时攻击数量
 
-    //移动方向变化时
-    cxInt index;                //当前的角度索引
-    CX_EVENT_ALLOC(onIndex);
-    //攻击目标时
-    cxAny target;               //当前攻击的目标
-    CX_EVENT_ALLOC(onAttack);
 CX_OBJECT_END(Defence, Node)
-
-void DefenceSearch(cxAny pview);
-
-void DefenceAttack(cxAny pview);
 
 Defence DefenceCreate(cxAny map,cxSize2f size,cxVec2f pos);
 

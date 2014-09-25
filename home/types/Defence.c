@@ -12,83 +12,51 @@
 #include <Range.h>
 #include "Bullet.h"
 
-static void DefenceSetAngleIndex(Defence this,Node target)
-{
-    cxInt index;
-    cxFloat angle = cxVec2fRadiansBetween(cxViewPosition(target),cxViewPosition(this));
-    AngleToIndex(angle, &index);
-    if(this->index != index){
-        this->index = index;
-        CX_EVENT_FIRE(this, onIndex);
-    }
-    //Test
-    cxConstChars n = CX_CONST_STRING("%d.png",this->index);
-    cxSpriteSetTextureURL(this, n);
-}
-
+//
 static void DefenceAttackExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFollow);
-    //target 被 sp击中
-    Node target = CX_TYPE_CAST(Node, this->target);
-    Bullet sp = CX_TYPE_CAST(Bullet, this->cxAction.view);
-    
-    //模拟攻击
-    NodeAddLife(target, -sp->power);
-    CX_LOGGER("soldier life = %d",target->life);
-
-    //隐藏子弹
-    cxViewSetVisible(sp, false);
-    cxViewRemove(sp);
+    Bullet bullet = CX_TYPE_CAST(Bullet, this->cxAction.view);
+    //如果有bind的目标就攻击他
+    cxHash bindes = cxViewBindes(bullet);
+    CX_HASH_FOREACH(bindes, ele, tmp){
+        Node target = cxHashElementKeyToAny(ele);
+        //攻击目标
+        NodeAttackTarget(bullet, target, AttackTypeBullet);
+    }
+    cxViewRemove(bullet);
 }
 
-void DefenceAttack(cxAny pview)
+static void DefenceAttacked(cxAny pview,cxAny attacker,AttackType type)
+{
+    NodeAttacked(pview, attacker, type);
+}
+
+static void DefenceAttack(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Defence);
     Map map = NodeMap(this);
-    cxHash bindes = cxViewBindes(this);
-    CX_HASH_FOREACH(bindes, ele, tmp){
-        //获取bind的目标
-        Node target = cxHashElementKeyToAny(ele);
-        DefenceSetAngleIndex(this,target);
-        //如果目标在范围外或者死亡
-        if(!NodeArriveAttack(this, target)){
-            cxViewUnBind(this, target);
-            continue;
-        }
-        //制造子弹 bullet
-        Bullet sp = CX_CREATE(Bullet);
-        BulletInit(sp, map, cxSize2fv(20, 20), cxViewPosition(this));
-        BulletSetPower(sp, this->Node.power);
-        cxViewAppend(map->bullet, sp);
-        //设定目标
-        cxFollow f = cxFollowCreate(800, target);
-        CX_EVENT_APPEND(f->cxAction.onExit, DefenceAttackExit);
-        cxViewAppendAction(sp, f);
-    }
+    Bullet bullet = CX_CREATE(Bullet);
+    BulletInit(bullet, map, cxSize2fv(20, 20), cxViewPosition(this));
+    BulletSetPower(bullet, NodePower(this));
+    cxViewAppend(map->bullet, bullet);
+    //设定目标
+    cxFollow f = cxFollowCreate(800, target);
+    CX_EVENT_APPEND(f->cxAction.onExit, DefenceAttackExit);
+    cxViewAppendAction(bullet, f);
+    //子弹bind目标
+    cxViewBind(bullet, target, NULL);
 }
 
-void DefenceSearch(cxAny pview)
+static cxAny DefenceFinded(cxAny pview,cxAny target,cxBool *isAttack)
 {
     CX_ASSERT_THIS(pview, Defence);
-    cxHash bindes = cxViewBindes(this);
-    //如果同时攻击数量到达
-    if(cxHashLength(bindes) >= this->attackNum){
-        return;
-    }
-    //搜索最近的目标
-    Node target = MapNearestQuery(this, this->Node.range, NodeTypeAttack, NodeSubTypeNone);
-    if(target == NULL){
-        return;
-    }
-    DefenceSetAngleIndex(this,target);
-    if(!CX_METHOD_GET(true, this->Node.Finded,this,target)) {
-        return;
-    }
+    //未达到攻击范围
     if(!NodeArriveAttack(this, target)){
-        return;
+        return NULL;
     }
-    cxViewBind(this, target, NULL);
+    *isAttack = true;
+    return target;
 }
 
 CX_OBJECT_TYPE(Defence, Node)
@@ -97,25 +65,27 @@ CX_OBJECT_TYPE(Defence, Node)
 }
 CX_OBJECT_INIT(Defence, Node)
 {
-    this->index = INT32_MAX;
-    this->Node.type = NodeTypeDefence;
-    this->Node.body = 1.5f;
-    this->attackNum = 1;
+    NodeSetType(this, NodeTypeDefence);
+    NodeSetBody(this, 1.5f);
     NodeSetAttackRate(this, 0.5f);
-    NodeSetRange(this, cxRange2fv(0, 15));
+    NodeSetAttackRange(this, cxRange2fv(0, 15));
+    NodeSetSearchRange(this, cxRange2fv(0, 15));
+    
+    NodeSearchOrderAdd(this, NodeTypeAttack, NodeSubTypeNone);
     
     cxSpriteSetTextureURL(this, "bg1.png");
-    CX_METHOD_SET(this->Node.Search, DefenceSearch);
-    CX_METHOD_SET(this->Node.Attack, DefenceAttack);
     
     Range range = CX_CREATE(Range);
-    RangeSetRange(range, this->Node.range);
+    RangeSetRange(range, this->Node.attackRange);
     cxViewAppend(this, range);
+    
+    CX_METHOD_SET(this->Node.Finded, DefenceFinded);
+    CX_METHOD_SET(this->Node.Attack, DefenceAttack);
+    CX_METHOD_SET(this->Node.Attacked, DefenceAttacked);
 }
 CX_OBJECT_FREE(Defence, Node)
 {
-    CX_EVENT_RELEASE(this->onAttack);
-    CX_EVENT_RELEASE(this->onIndex);
+    
 }
 CX_OBJECT_TERM(Defence, Node)
 
