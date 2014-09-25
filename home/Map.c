@@ -492,7 +492,6 @@ PathResult MapSearchPath(cxAny snode,cxAny dnode)
     cxVec2i b = cxVec2iv(didx.x, didx.y);
     //获取缓存路径
     if(MapCachePath(map, a, b)){
-        CX_LOGGER("path cache hit:a(%d,%d)b(%d,%d)",a.x,a.y,b.x,b.y);
         ret.success = true;
         goto completed;
     }

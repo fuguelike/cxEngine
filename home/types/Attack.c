@@ -20,19 +20,24 @@ static cxAny AttackFinded(cxAny pview,cxAny target,cxBool *isAttack)
     CX_ASSERT_THIS(pview, Attack);
     Map map = NodeMap(this);
     PathResult ret = MapSearchPath(this, target);
+    //搜索目标路径成功
     if(ret.success){
         NodeMoveTo(this, MapSearchPoints(map));
         return target;
     }
-    if(ret.block == NULL){
+    //失败获取阻挡物
+    Node block = ret.block;
+    if(block == NULL){
         return NULL;
     }
-    ret = MapSearchPath(this, ret.block);
-    if(ret.success){
-        NodeMoveTo(this, MapSearchPoints(map));
-        return ret.block;
+    ret = MapSearchPath(this, block);
+    //搜索阻挡物失败
+    if(!ret.success){
+        return NULL;
     }
-    return NULL;
+    //移动到阻挡物
+    NodeMoveTo(this, MapSearchPoints(map));
+    return block;
 }
 
 CX_OBJECT_TYPE(Attack, Node)
