@@ -66,11 +66,11 @@ CX_OBJECT_TYPE(Defence, Node)
 CX_OBJECT_INIT(Defence, Node)
 {
     NodeSetType(this, NodeTypeDefence);
-    NodeSetBody(this, 2);
+    NodeSetBody(this, 1.5f);
     NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(0, 15));
     
-    NodeSearchOrderAdd(this, NodeTypeAttack, NodeSubTypeNone,cxRange2fv(0, 15));
+    NodeSetSearchOrder(this, NodeTypeAttack, NodeSubTypeNone,cxRange2fv(0, 15));
     
     cxSpriteSetTextureURL(this, "bg1.png");
     

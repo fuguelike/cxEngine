@@ -112,8 +112,9 @@ cxBool NodeArriveAttackWithPoint(cxAny psx,cxAny pdx,cxVec2f p1,cxVec2f p2)
     //到达攻击距离
     cxFloat d = kmVec2DistanceBetween(&p1, &p2) - (sx->body + dx->body) * global.sideLen;
     d = CX_MAX(d, 0);
-    cxFloat max = sx->range.max * global.sideLen;
-    cxFloat min = dx->range.min * global.sideLen;
+    cxRange2f range = NodeRange(sx);
+    cxFloat max = range.max * global.sideLen;
+    cxFloat min = range.min * global.sideLen;
     return d >= min && d <= max;
 }
 
@@ -135,7 +136,8 @@ static void NodeOnTransform(cxAny pview)
     }
 }
 
-void NodeSearchOrderAdd(cxAny pview,NodeType type,NodeSubType subType,cxRange2f range)
+//设置优先攻击顺序
+void NodeSetSearchOrder(cxAny pview,NodeType type,NodeSubType subType,cxRange2f range)
 {
     CX_ASSERT_THIS(pview, Node);
     NodeCombined *ptype = &this->orders.types[this->orders.number++];
@@ -259,7 +261,7 @@ static void NodeMoveOnExit(cxAny pav)
 cxRange2f NodeRange(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    return this->range;
+    return this->type.range;
 }
 
 void NodeMoveTo(cxAny pview,cxAnyArray points)
@@ -493,7 +495,7 @@ void NodeSetSpeed(cxAny pview,cxFloat speed)
 void NodeSetRange(cxAny pview,cxRange2f range)
 {
     CX_ASSERT_THIS(pview, Node);
-    this->range = range;
+    this->type.range = range;
 }
 
 cxAny NodeMap(cxAny pview)

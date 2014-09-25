@@ -34,6 +34,7 @@ static void MoveOnInit(cxAny pav)
         d += kmVec2DistanceBetween(p1, p2);
         p1 = p2;
     }
+    CX_ASSERT(node->speed > 0, "node speed not set");
     cxActionSetTime(pav, d / node->speed);
 }
 
@@ -66,7 +67,6 @@ CX_OBJECT_TYPE(Move, cxSpline)
 }
 CX_OBJECT_INIT(Move, cxSpline)
 {
-    this->speed = 100;
     cxActionSetGroup(this, "fight");
     CX_EVENT_APPEND(CX_TYPE(cxSpline, this)->onAngle, MoveOnAngle);
     CX_EVENT_APPEND(CX_TYPE(cxAction, this)->onInit, MoveOnInit);

@@ -26,9 +26,8 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxBool isTouch;     //按下时是否选中
     cxBool isValidIdx;  //是否在有效的位置
     cxVec2f start;
-    NodeCombined type;  //node组合类型
+    NodeCombined type;  //node组合类型,攻击范围
     NodeState state;    //当前状态
-    cxRange2f range;  //攻击范围
     cxFloat body;       //可攻击半径
     cxFloat attackRate; //攻击频率
     cxFloat speed;      //移动速度
@@ -77,7 +76,7 @@ void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type);
 void NodeSetDirAngle(cxAny pview,cxFloat angle);
 
 //添加搜索顺序
-void NodeSearchOrderAdd(cxAny pview,NodeType type,NodeSubType subType,cxRange2f range);
+void NodeSetSearchOrder(cxAny pview,NodeType type,NodeSubType subType,cxRange2f range);
 //清空搜索
 void NodeSearchOrderClear(cxAny pview);
 
