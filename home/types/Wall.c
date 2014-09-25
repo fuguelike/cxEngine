@@ -15,8 +15,8 @@ CX_OBJECT_TYPE(Wall, Node)
 }
 CX_OBJECT_INIT(Wall, Node)
 {
-    this->Node.type.mainType = NodeTypeBlock;
-    this->Node.body = 1;
+    NodeSetType(this, NodeTypeBlock);
+    NodeSetBody(this, 1);
     cxSpriteSetTextureURL(this, "bg1.png");
 }
 CX_OBJECT_FREE(Wall, Node)

@@ -82,8 +82,12 @@ void NodeMomentDie(cxAny pview);
 //离idx最近的node本地坐标点
 cxVec2f NodeNearestPoint(cxAny pview,cxVec2f idx);
 
+//朝向target
+void NodeFaceTarget(cxAny pview,cxAny target);
+
 //攻击者是否到达目标的攻击范围
 cxBool NodeArriveAttack(cxAny pattacker,cxAny ptarget);
+cxBool NodeArriveAttackWithPoint(cxAny psx,cxAny pdx,cxVec2f p1,cxVec2f p2);
 
 //设置生命 等级 攻击力
 void NodeSetLife(cxAny pview,cxInt life);

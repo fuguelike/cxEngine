@@ -97,17 +97,23 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
     return false;
 }
 
-cxBool NodeArriveAttack(cxAny pattacker,cxAny ptarget)
+cxBool NodeArriveAttack(cxAny psx,cxAny pdx)
 {
-    Node attacker = CX_TYPE_CAST(Node, pattacker);
-    Node target = CX_TYPE_CAST(Node, ptarget);
-    cxVec2f p1 = cxViewPosition(pattacker);
-    cxVec2f p2 = cxViewPosition(ptarget);
+    Node sx = CX_TYPE_CAST(Node, psx);
+    Node dx = CX_TYPE_CAST(Node, pdx);
+    cxVec2f p1 = cxViewPosition(sx);
+    cxVec2f p2 = cxViewPosition(dx);
+    return NodeArriveAttackWithPoint(psx, pdx, p1, p2);
+}
+cxBool NodeArriveAttackWithPoint(cxAny psx,cxAny pdx,cxVec2f p1,cxVec2f p2)
+{
+    Node sx = CX_TYPE_CAST(Node, psx);
+    Node dx = CX_TYPE_CAST(Node, pdx);
     //到达攻击距离
-    cxFloat d = kmVec2DistanceBetween(&p1, &p2) - (attacker->body + target->body) * global.sideLen;
+    cxFloat d = kmVec2DistanceBetween(&p1, &p2) - (sx->body + dx->body) * global.sideLen;
     d = CX_MAX(d, 0);
-    cxFloat max = attacker->attackRange.max * global.sideLen;
-    cxFloat min = attacker->attackRange.min * global.sideLen;
+    cxFloat max = sx->attackRange.max * global.sideLen;
+    cxFloat min = dx->attackRange.min * global.sideLen;
     return d >= min && d <= max;
 }
 
@@ -242,7 +248,10 @@ static void NodeMoveOnExit(cxAny pav)
         cxNumberSetBool(data, ret);
         if(!ret){
             cxViewUnBind(node, target);
+            continue;
         }
+        //朝向target
+        NodeFaceTarget(node, target);
     }
 }
 
@@ -274,6 +283,13 @@ void NodeMoveTo(cxAny pview,cxAnyArray points)
     cxViewAppendAction(this, move);
 }
 
+void NodeFaceTarget(cxAny pview,cxAny target)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxFloat angle = cxVec2fRadiansBetween(cxViewPosition(target),cxViewPosition(this));
+    NodeSetDirAngle(this, angle);
+}
+
 static void NodeProcessSearch(Node this)
 {
     cxHash bindes = cxViewBindes(this);
@@ -295,13 +311,12 @@ static void NodeProcessSearch(Node this)
         return;
     }
     //立即面向目标
-    cxFloat angle = cxVec2fRadiansBetween(cxViewPosition(target),cxViewPosition(this));
-    NodeSetDirAngle(this, angle);
+    NodeFaceTarget(this,target);
     cxBool isAttack = false;
     //返回bind的目标
     cxAny bind = CX_METHOD_GET(NULL,this->Finded,this,target, &isAttack);
     if(bind != NULL){
-        cxViewBind(this, target, cxNumberBool(isAttack));
+        cxViewBind(this, bind, cxNumberBool(isAttack));
     }
 }
 

@@ -154,7 +154,7 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         }else if(this->tag == 2){
             Defence node = DefenceCreate(this, cxSize2fv(2, 2), idx);
             cxViewSetColor(node, cxRED);
-            NodeSetPower(node, 40);
+            NodeSetPower(node, 0);
             NodeSetLife(node, 200);
             MapAppendNode(node);
         }else if(this->tag == 3){
@@ -240,6 +240,21 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
     return true;
 }
 
+static cxInt MapEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *vnode,cxVec2i *gnode)
+{
+    CX_ASSERT_THIS(pstar, cxAStar);
+    MapSearchInfo *info = this->data;
+    Map map = CX_TYPE_CAST(Map, info->map);
+    Node sx = info->snode;
+    Node dx = info->dnode;
+    cxVec2f p1 = MapIdxToPos(map, cxVec2fv(vnode->x, vnode->y));
+    cxVec2f p2 = cxViewPosition(dx);
+    if(NodeArriveAttackWithPoint(sx, dx, p1, p2)){
+        return 1;
+    }
+    return 0;
+}
+
 CX_OBJECT_TYPE(Map, cxAtlas)
 {
     CX_PROPERTY_SETTER(Map, mode);
@@ -257,6 +272,7 @@ CX_OBJECT_INIT(Map, cxAtlas)
     this->astar = CX_ALLOC(cxAStar);
     cxAStarSetType(this->astar, cxAStarTypeA8);
     CX_METHOD_SET(this->astar->IsAppend, MapSearchIsAppend);
+    CX_METHOD_SET(this->astar->EarlyExit, MapEarlyExit);
     //类型搜索索引
     cxInt cells = global.unitNum.x * global.unitNum.y * 2;
     cxFloat dim = global.sideLen;
