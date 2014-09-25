@@ -9,8 +9,9 @@
 #include <engine/cxEngine.h>
 #include "cxSpline.h"
 
-static cxVec2f cxSplinePointAt(cxSpline this,cxInt idx)
+cxVec2f cxSplinePointAt(cxAny pav,cxInt idx)
 {
+    CX_ASSERT_THIS(pav, cxSpline);
     idx = CX_MIN(cxAnyArrayLength(this->points) - 1, CX_MAX(idx, 0));
     return *cxAnyArrayAt(this->points, idx, cxVec2f);
 }
@@ -27,6 +28,7 @@ static void cxSplineInit(cxAny pav)
     this->delta = 1.0f/((cxFloat)num - 1.0f);
     this->diff = cxVec2fv(0, 0);
     this->prev = this->cxAction.view->position;
+    
     cxVec2f p0 = cxSplinePointAt(this, 0);
     cxVec2f p1 = cxSplinePointAt(this, num - 1);
     cxFloat angle = cxVec2fRadiansBetween(p1, p0);
@@ -119,6 +121,17 @@ cxSpline cxSplineCreate(cxFloat time,cxAnyArray points)
     cxActionSetTime(this, time);
     CX_RETAIN_SWAP(this->points, points);
     return this;
+}
+
+void cxSplineRemove(cxAny pav,cxInt num)
+{
+    CX_ASSERT_THIS(pav, cxSpline);
+    if(num > cxAnyArrayLength(this->points) || num == 0){
+        return;
+    }
+    for(cxInt i=0; i < num; i++){
+        cxAnyArrayPop(this->points);
+    }
 }
 
 void cxSplineAppend(cxAny pav,cxVec2f pos)

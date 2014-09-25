@@ -45,6 +45,9 @@ typedef struct {
     cxAny block;//第一个阻挡物
 }MapSearchInfo;
 
+//检测是否能加入地图
+cxBool MapCanSetNode(cxAny node);
+
 //加入单位
 void MapAppendNode(cxAny node);
 
@@ -72,7 +75,7 @@ cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b);
 
 //寻路失败时返回离目标最近的坐标
 //如果返回阻挡标识搜索失败
-cxAny MapSearchPath(cxAny snode,cxAny dnode);
+cxBool MapSearchPath(cxAny snode,cxAny dnode,cxAny *block);
 
 //init map
 cxBool MapInit(cxAny pmap,cxJson data);
@@ -93,6 +96,9 @@ cxVec2f MapPosToIdx(cxAny pmap,cxVec2f pos);
 cxVec2f MapIdxToPos(cxAny pmap,cxVec2f idx);
 
 cxAny MapItem(cxAny pmap,cxVec2f idx);
+
+//分离Node
+void MapDetachNode(cxAny node);
 
 void MapFillNode(cxAny pmap,cxVec2i idx,cxAny node);
 

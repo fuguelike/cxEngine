@@ -32,6 +32,86 @@ CX_OBJECT_INIT(cxNumber, cxObject)
 CX_OBJECT_FREE(cxNumber, cxObject)
 {}
 CX_OBJECT_TERM(cxNumber, cxObject)
+//
+void cxNumberSetBool(cxAny pnum,cxBool v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeBool, "type error");
+    this->value.bv = v;
+}
+void cxNumberSetInt(cxAny pnum, cxInt v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeInt, "type error");
+    this->value.vi = v;
+}
+void cxNumberSetInt8(cxAny pnum,cxInt8 v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeInt8, "type error");
+    this->value.i8 = v;
+}
+void cxNumberSetInt16(cxAny pnum,cxInt16 v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeInt16, "type error");
+    this->value.i16 = v;
+}
+void cxNumberSetInt32(cxAny pnum,cxInt32 v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeInt32, "type error");
+    this->value.i32 = v;
+}
+void cxNumberSetInt64(cxAny pnum,cxInt64 v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeInt64, "type error");
+    this->value.i64 = v;
+}
+void cxNumberSetUInt(cxAny pnum,cxUInt v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeUInt, "type error");
+    this->value.vu = v;
+}
+void cxNumberSetUInt8(cxAny pnum,cxUInt8 v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeUInt8, "type error");
+    this->value.u8 = v;
+}
+void cxNumberSetUInt16(cxAny pnum,cxUInt16 v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeUInt16, "type error");
+    this->value.u16 = v;
+}
+void cxNumberSetUInt32(cxAny pnum,cxUInt32 v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeUInt32, "type error");
+    this->value.u32 = v;
+}
+void cxNumberSetUInt64(cxAny pnum,cxUInt64 v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeUInt64, "type error");
+    this->value.u64 = v;
+}
+void cxNumberSetFloat(cxAny pnum,cxFloat v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeFloat, "type error");
+    this->value.vf = v;
+}
+void cxNumberSetDouble(cxAny pnum,cxDouble v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeDouble, "type error");
+    this->value.vd = v;
+}
+//
 
 cxBool cxNumberToBool(cxAny pnum)
 {

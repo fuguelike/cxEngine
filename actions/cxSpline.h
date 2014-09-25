@@ -25,6 +25,11 @@ CX_OBJECT_DEF(cxSpline, cxAction)
     CX_EVENT_ALLOC(onAngle);
 CX_OBJECT_END(cxSpline, cxAction)
 
+cxVec2f cxSplinePointAt(cxAny pav,cxInt idx);
+
+//remove last num point
+void cxSplineRemove(cxAny pav,cxInt num);
+
 void cxSplineAppend(cxAny pav,cxVec2f pos);
 
 cxSpline cxSplineCreate(cxFloat time, cxAnyArray points);

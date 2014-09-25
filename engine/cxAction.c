@@ -301,9 +301,7 @@ void cxActionResume(cxAny pav)
 void cxActionStop(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxAction);
-    cxEngine engine = cxEngineInstance();
     this->isExit = true;
-    cxActionUpdate(this, engine->frameDelta);
 }
 
 cxUInt cxActionGetId(cxAny pav)

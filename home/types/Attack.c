@@ -9,75 +9,63 @@
 #include <Map.h>
 #include "Attack.h"
 
+//设置动画帧索引
 static void AttackOnDegrees(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    Node node = CX_TYPE_CAST(Node, cxActionView(pav));
+    Attack attack = CX_TYPE_CAST(Attack, cxActionView(pav));
+    attack->index = this->index;
+    CX_EVENT_FIRE(attack, onIndex);
+    
+    //Test
     cxConstChars n = CX_CONST_STRING("%d.png",this->index);
-    cxSpriteSetTextureURL(node, n);
+    cxSpriteSetTextureURL(attack, n);
 }
 
 static void AttackAttack(cxAny pview)
 {
-    CX_ASSERT_THIS(pview, Node);
+    CX_ASSERT_THIS(pview, Attack);
     cxHash bindes = cxViewBindes(this);
-    FixArray items = {0};
+
     CX_HASH_FOREACH(bindes, ele, tmp){
-        cxNumber data = CX_TYPE_CAST(cxNumber, ele->any);
-        //为设定标记无法攻击
-        if(!data->value.bv){
+        //未设定标记无法攻击
+        if(!cxNumberToBool(ele->any)){
             continue;
         }
-        //获取bind的目标
+        //获取攻击目标
         Node target = cxHashElementKeyToAny(ele);
-        //模拟攻击一下
-        NodeAddLife(target, -this->power);
-        CX_LOGGER("Turret life = %d",target->life);
-        //死去的目标
-        if(NodeIsDie(target)){
-            FixArrayAppend(items, target);
-            continue;
-        }
-    }
-    //移除死去的
-    for(cxInt i=0; i < items.number; i++){
-        Node node = CX_TYPE_CAST(Node, items.items[i]);
-        cxViewUnBind(this, node);
-        //死去的防御移除
-        MapRemoveNode(node);
+
+        NodeAddLife(target, -this->Node.power);
+        CX_LOGGER("target life = %d",target->life);
+        
+        this->target = target;
+        CX_EVENT_FIRE(this, onAttack);
     }
 }
 
 static void AttackMoveOnExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    Node node = cxActionView(this);
-    FixArray items = {0};
+    Node attacker = cxActionView(this);
     //移动到指定位置后bind攻击
-    cxHash bindes = cxViewBindes(node);
+    cxHash bindes = cxViewBindes(attacker);
     CX_HASH_FOREACH(bindes, ele, tmp){
-        //获取bind的目标
         cxNumber data = CX_TYPE_CAST(cxNumber, ele->any);
         Node target = cxHashElementKeyToAny(ele);
-        cxFloat d = kmVec2DistanceBetween(&node->idx, &target->idx);
-        if(d < node->range.max){
-            data->value.bv = true;
+        //目标死了移除
+        if(NodeIsDie(target)){
+            cxViewUnBind(attacker, target);
             continue;
         }
-        //未到达攻击范围需要继续寻路
-        FixArrayAppend(items, target);
-    }
-    //未到达攻击距离需要继续寻路,所以解除bind
-    for(cxInt i=0; i < items.number; i++){
-        Node target = CX_TYPE_CAST(Node, items.items[i]);
-        cxViewUnBind(node, target);
+        //开始攻击
+        cxNumberSetBool(data, true);
     }
 }
 
-static void AttackAttackNode(cxAny pview,cxAny node,cxAnyArray points)
+static void AttackNode(cxAny pview,cxAny target,cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Attack);
-    //show path
+    //显示测试路径点
     Map map = NodeMap(this);
     cxList subviews = cxViewSubViews(map);
     CX_LIST_FOREACH(subviews, ele){
@@ -97,14 +85,13 @@ static void AttackAttackNode(cxAny pview,cxAny node,cxAnyArray points)
         cxViewAppend(map, sp);
     }
     //路劲算法移动到攻击点
-    Move m = MoveCreate(node, points);
+    Move m = MoveCreate(target, points);
     CX_EVENT_APPEND(m->OnDegrees, AttackOnDegrees);
     CX_EVENT_APPEND(CX_TYPE(cxAction, m)->onExit, AttackMoveOnExit);
     cxViewAppendAction(this, m);
-    
-    cxViewBind(this, node, cxNumberBool(false));
+    //bind node use bool data
+    cxViewBind(this, target, cxNumberBool(false));
 }
-
 
 //搜索算法
 static void AttackSearch(cxAny pview)
@@ -117,22 +104,26 @@ static void AttackSearch(cxAny pview)
         return;
     }
     //动态搜索一个最近的防御单位
-    Node node = MapNearestQuery(this, cxRange2fv(0, 200),NodeTypeDefence , NodeSubTypeNone);
-    if(node == NULL){
+    Node target = MapNearestQuery(this, cxRange2fv(0, 200),NodeTypeDefence , NodeSubTypeNone);
+    if(target == NULL){
         return;
     }
     //搜索路径
-    cxAny block = MapSearchPath(this, node);
-    //无阻挡物
-    if(block == NULL){
-        AttackAttackNode(this, node, MapSearchPoints(map));
+    cxAny block = NULL;
+    cxBool ret = MapSearchPath(this, target, &block);
+    //寻路成功
+    if(ret){
+        AttackNode(this, target, MapSearchPoints(map));
         return;
     }
-    cxViewSetColor(block, cxRED);
+    //没发现阻挡物
+    if(block == NULL){
+        return;
+    }
     //搜索阻挡物体
-    cxAny ret = MapSearchPath(this,block);
-    CX_ASSERT(ret == NULL, "block item search path failed");
-    AttackAttackNode(this, block, MapSearchPoints(map));
+    if(MapSearchPath(this,block, NULL)){
+        AttackNode(this, block, MapSearchPoints(map));
+    }
 }
 
 CX_OBJECT_TYPE(Attack, Node)
@@ -142,8 +133,10 @@ CX_OBJECT_TYPE(Attack, Node)
 CX_OBJECT_INIT(Attack, Node)
 {
     this->Node.type = NodeTypeAttack;
+    this->Node.body = 0.3f;
     this->attackNum = 1;
-    NodeSetRange(this, cxRange2fv(0, 2));
+    //近身攻击00
+    NodeSetRange(this, cxRange2fv(0, 0));
     NodeSetAttackRate(this, 0.5f);
     cxSpriteSetTextureURL(this, "bg1.png");
     CX_METHOD_SET(this->Node.Search, AttackSearch);
@@ -151,7 +144,8 @@ CX_OBJECT_INIT(Attack, Node)
 }
 CX_OBJECT_FREE(Attack, Node)
 {
-
+    CX_EVENT_RELEASE(this->onIndex);
+    CX_EVENT_RELEASE(this->onAttack);
 }
 CX_OBJECT_TERM(Attack, Node)
 

@@ -95,6 +95,19 @@ static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
     return false;
 }
 
+cxBool NodeArriveAttack(cxAny pattacker,cxAny ptarget)
+{
+    Node attacker = CX_TYPE_CAST(Node, pattacker);
+    Node target = CX_TYPE_CAST(Node, ptarget);
+    cxVec2f p1 = cxViewPosition(pattacker);
+    cxVec2f p2 = cxViewPosition(ptarget);
+    //到达攻击距离
+    cxFloat d = kmVec2DistanceBetween(&p1, &p2) - (attacker->body + target->body) * global.sideLen;
+    cxFloat max = attacker->range.max * global.sideLen;
+    cxFloat min = attacker->range.min * global.sideLen;
+    return d >= min && d <= max;
+}
+
 cxVec2f NodePosIndex(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -111,6 +124,22 @@ static void NodeOnTransform(cxAny pview)
         this->idx = idx;
         cxSpatialReindexView(map->items, this);
     }
+}
+
+void NodeHitTarget(cxAny pview,cxAny node)
+{
+    CX_ASSERT_THIS(pview, Node);
+    NodeAddLife(node, -this->power);
+}
+
+void NodeMomentDie(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->life.min = 0;
+    CX_EVENT_FIRE(this, onLife);
+    CX_EVENT_FIRE(this, onDie);
+    cxViewUnBindAll(pview);
+    MapRemoveNode(pview);
 }
 
 cxVec2f NodeNearestPoint(cxAny pview,cxVec2f idx)
@@ -149,6 +178,8 @@ CX_OBJECT_INIT(Node, cxSprite)
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
+    CX_EVENT_RELEASE(this->onDie);
+    CX_EVENT_RELEASE(this->onLife);
     CX_RELEASE(this->box);
 }
 CX_OBJECT_TERM(Node, cxSprite)
@@ -163,6 +194,10 @@ static cpCollisionID NodeIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionID id,
     }
     //不匹配子类型
     if(info->subType != NodeSubTypeNone && !(info->subType & node->subType)){
+        return id;
+    }
+    //死了的不参与搜索
+    if(NodeIsDie(node)){
         return id;
     }
     //计算距离
@@ -300,14 +335,18 @@ void NodeSetLife(cxAny pview,cxInt life)
 {
     CX_ASSERT_THIS(pview, Node);
     this->life = cxRange2iv(life, life);
-    CX_METHOD_RUN(this->LifeChanged,this);
+    CX_EVENT_FIRE(this, onLife);
 }
 
 void NodeAddLife(cxAny pview,cxInt life)
 {
     CX_ASSERT_THIS(pview, Node);
     this->life.min += life;
-    CX_METHOD_RUN(this->LifeChanged,this);
+    CX_EVENT_FIRE(this, onLife);
+    if(this->life.min > 0){
+        return;
+    }
+    NodeMomentDie(pview);
 }
 
 void NodeSetLevel(cxAny pview,cxInt level)
@@ -353,14 +392,6 @@ cxBool NodeIsDie(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     return this->life.min <= 0;
-}
-
-cxBool NodeAtRange(cxAny pview,cxAny node)
-{
-    CX_ASSERT_THIS(pview, Node);
-    Node snode = CX_TYPE_CAST(Node, node);
-    cxFloat d = kmVec2DistanceBetween(&this->idx, &snode->idx);
-    return (d >= this->range.min && d <= this->range.max);
 }
 
 //启动攻击定时器

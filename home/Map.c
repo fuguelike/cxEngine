@@ -148,12 +148,13 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         //test
         if(this->tag == 1){
             Attack node = AttackCreate(this, cxSize2fv(1, 1), idx);
-            NodeSetLife(node, 20000);
+            NodeSetLife(node, 200);
             NodeSetPower(node, 20);
             MapAppendNode(node);
         }else if(this->tag == 2){
             Defence node = DefenceCreate(this, cxSize2fv(2, 2), idx);
             cxViewSetColor(node, cxRED);
+            NodeSetPower(node, 40);
             NodeSetLife(node, 200);
             MapAppendNode(node);
         }else if(this->tag == 3){
@@ -282,6 +283,22 @@ CX_OBJECT_FREE(Map, cxAtlas)
 }
 CX_OBJECT_TERM(Map, cxAtlas)
 
+//是否可以放置node
+cxBool MapCanSetNode(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = NodeMap(this);
+    cxVec2i idx = NodeIndex(this);
+    cxSize2i size = NodeSize(this);
+    for(cxInt x = idx.x; x < idx.x + size.w; x++)
+    for(cxInt y = idx.y; y < idx.y + size.h; y++) {
+        if(MapItem(map, cxVec2fv(x, y)) != NULL){
+            return false;
+        }
+    }
+    return true;
+}
+
 void MapAppendNode(cxAny node)
 {
     CX_ASSERT_THIS(node, Node);
@@ -295,6 +312,8 @@ void MapRemoveNode(cxAny node)
     CX_ASSERT_THIS(node, Node);
     Map map = NodeMap(this);
     cxSpatialRemove(map->items, node);
+    //从nodes列表分离
+    MapDetachNode(node);
     cxViewRemove(node);
 }
 
@@ -361,7 +380,7 @@ cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b)
     return true;
 }
 
-cxAny MapSearchPath(cxAny snode,cxAny dnode)
+cxBool MapSearchPath(cxAny snode,cxAny dnode,cxAny *block)
 {
     Map map = NodeMap(snode);
     Node sx = CX_TYPE_CAST(Node, snode);
@@ -373,7 +392,7 @@ cxAny MapSearchPath(cxAny snode,cxAny dnode)
     //获取缓存路径
     if(MapCachePath(map, a, b)){
         CX_LOGGER("path cache hit:a(%d,%d)b(%d,%d)",a.x,a.y,b.x,b.y);
-        return NULL;
+        return true;
     }
     //
     MapSearchInfo info = {NULL};
@@ -385,9 +404,11 @@ cxAny MapSearchPath(cxAny snode,cxAny dnode)
     //开始搜索,如果成功保存路径到缓存
     if(cxAStarRun(map->astar, a, b, &info)) {
         MapCacheSetPath(map, a, b, map->astar->points);
-        return NULL;
+        if(block != NULL)*block = NULL;
+        return true;
     }
-    return info.block;
+    if(block != NULL)*block = info.block;
+    return false;
 }
 
 void MapDelNode(cxAny pmap,cxInt x,cxInt y)
@@ -420,6 +441,18 @@ cxAny MapItem(cxAny pmap,cxVec2f idx)
     return MapNode(pmap, idx.x, idx.y);
 }
 
+void MapDetachNode(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    cxSize2i size = NodeSize(node);
+    cxVec2i curr = NodeIndex(node);
+    for(cxInt x = curr.x; x < curr.x + size.w; x++)
+    for(cxInt y = curr.y; y < curr.y + size.h; y++){
+        MapDelNode(map, x, y);
+    }
+}
+
 void MapFillNode(cxAny pmap,cxVec2i idx,cxAny node)
 {
     CX_ASSERT_THIS(pmap, Map);
@@ -429,19 +462,12 @@ void MapFillNode(cxAny pmap,cxVec2i idx,cxAny node)
     if(!MapIsValidIdx(this, snode->idx)){
         goto setnewpos;
     }
-    //清除旧位置上的建筑
-    cxVec2i curr = NodeIndex(node);
-    for(cxInt x = curr.x; x < curr.x + size.w; x ++){
-        for (cxInt y = curr.y; y < curr.y + size.h; y++) {
-            MapDelNode(this, x, y);
-        }
-    }
+    MapDetachNode(node);
 setnewpos:
     //将建筑设置到新位置
-    for(cxInt x = idx.x; x < idx.x + size.w; x ++){
-        for (cxInt y = idx.y; y < idx.y + size.h; y++) {
-            MapSetNode(this, x, y, node);
-        }
+    for(cxInt x = idx.x; x < idx.x + size.w; x++)
+    for(cxInt y = idx.y; y < idx.y + size.h; y++) {
+        MapSetNode(this, x, y, node);
     }
 }
 

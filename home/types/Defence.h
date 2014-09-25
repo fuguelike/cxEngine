@@ -1,7 +1,7 @@
 //
 //  Defence.h
 //  Home
-//  炮塔，防御单位
+//  被动防御单位炮塔，防御单位
 //  Created by xuhua on 9/23/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //

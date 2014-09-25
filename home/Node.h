@@ -30,6 +30,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     NodeType type;      //主类型
     NodeState state;    //当前状态
     cxRange2f range;    //攻击范围
+    cxFloat body;       //可攻击半径
     cxFloat attackRate; //攻击频率
     cxFloat speed;      //移动速度
     cxFloat power;       //攻击力
@@ -40,11 +41,22 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxTimer attackTimer;    //攻击用定时器
     CX_METHOD_DEF(void, Attack,cxAny);
     //生命值变化
-    CX_METHOD_DEF(void, LifeChanged, cxAny);
+    CX_EVENT_ALLOC(onLife);
+    //死亡时
+    CX_EVENT_ALLOC(onDie);
 CX_OBJECT_END(Node, cxSprite)
+
+//处死Node
+void NodeMomentDie(cxAny pview);
+
+//pview打一下node
+void NodeHitTarget(cxAny pview,cxAny node);
 
 //离idx最近的node本地坐标点
 cxVec2f NodeNearestPoint(cxAny pview,cxVec2f idx);
+
+//攻击者是否到达目标的攻击范围
+cxBool NodeArriveAttack(cxAny pattacker,cxAny ptarget);
 
 //设置生命 等级 攻击力
 void NodeSetLife(cxAny pview,cxInt life);
@@ -55,9 +67,6 @@ void NodeSetSpeed(cxAny pview,cxFloat speed);
 
 //设置攻击范围
 void NodeSetRange(cxAny pview,cxRange2f range);
-
-//是否在node的索引范围内
-cxBool NodeAtRange(cxAny pview,cxAny node);
 
 //设置攻击频率
 void NodeSetAttackRate(cxAny pview,cxFloat rate);

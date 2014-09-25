@@ -10,16 +10,6 @@
 #include "Move.h"
 #include "Map.h"
 
-static void MoveOnIndex(cxAny pav)
-{
-    CX_ASSERT_THIS(pav, Move);
-    //如果目标死亡停止移动
-    Node target = CX_TYPE_CAST(Node, this->target);
-    if(NodeIsDie(target)){
-        cxActionStop(pav);
-    }
-}
-
 static void MoveOnAngle(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
@@ -50,6 +40,23 @@ static void MoveOnInit(cxAny pav)
     cxActionSetTime(pav, d / this->speed);
 }
 
+static void MoveOnUpdate(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, Move);
+    Node attacker = CX_TYPE_CAST(Node, cxActionView(this));
+    Node target = CX_TYPE_CAST(Node, this->target);
+    //如果目标死亡停止移动
+    if(NodeIsDie(target)){
+        cxActionStop(pav);
+        return;
+    }
+    //如果到达攻击距离
+    if(NodeArriveAttack(attacker, target)){
+        cxActionStop(pav);
+        return;
+    }
+}
+
 CX_OBJECT_TYPE(Move, cxSpline)
 {
     
@@ -60,9 +67,9 @@ CX_OBJECT_INIT(Move, cxSpline)
     this->index = -1;
     this->angle = 0;
     cxActionSetGroup(this, "fight");
-    CX_EVENT_APPEND(CX_TYPE(cxSpline, this)->onIndex, MoveOnIndex);
     CX_EVENT_APPEND(CX_TYPE(cxSpline, this)->onAngle, MoveOnAngle);
     CX_EVENT_APPEND(CX_TYPE(cxAction, this)->onInit, MoveOnInit);
+    CX_EVENT_APPEND(CX_TYPE(cxAction, this)->onUpdate, MoveOnUpdate);
 }
 CX_OBJECT_FREE(Move, cxSpline)
 {
@@ -74,15 +81,18 @@ CX_OBJECT_TERM(Move, cxSpline)
 Move MoveCreate(cxAny target,cxAnyArray points)
 {
     Node node = CX_TYPE_CAST(Node, target);
-    Move this = CX_CREATE(Move);
-    this->speed = node->speed;
-    MoveSetTarget(this, target);
-    Map map = NodeMap(target);
+    Map map = NodeMap(node);
+    Move move = CX_CREATE(Move);
+    //设置速度
+    move->speed = node->speed;
+    //设置目标
+    MoveSetTarget(move, node);
+    //加入路径点
     CX_ASTAR_POINTS_FOREACH(points, idx){
         cxVec2f pos = MapIdxToPos(map,cxVec2fv(idx->x, idx->y));
-        cxSplineAppend(this, pos);
+        cxSplineAppend(move, pos);
     }
-    return this;
+    return move;
 }
 
 void MoveSetTarget(cxAny pav,cxAny target)

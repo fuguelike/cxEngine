@@ -14,7 +14,7 @@
 static void ButtonEnter(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Button);
-    cxScale scale = cxScaleCreate(0.1f, cxVec2fv(0.8f, 0.8f));
+    cxScale scale = cxScaleCreate(0.1f, cxVec2fv(0.9f, 0.9f));
     cxActionSetId(scale, BUTTON_SCALE_ACTIION_ID);
     cxViewAppendAction(this, scale);
 }

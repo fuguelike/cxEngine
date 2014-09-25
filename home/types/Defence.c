@@ -18,15 +18,11 @@ static void DefenceAttackExit(cxAny pav)
     //target 被 sp击中
     Node target = CX_TYPE_CAST(Node, this->target);
     Bullet sp = CX_TYPE_CAST(Bullet, this->cxAction.view);
+    
     //模拟攻击
     NodeAddLife(target, -sp->power);
     CX_LOGGER("soldier life = %d",target->life);
 
-    //目标死亡
-    if(NodeIsDie(target)){
-        cxViewUnBindAll(target);
-        MapRemoveNode(target);
-    }
     //隐藏子弹
     cxViewSetVisible(sp, false);
     cxViewRemove(sp);
@@ -37,13 +33,12 @@ void DefenceAttack(cxAny pview)
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeMap(this);
     cxHash bindes = cxViewBindes(this);
-    FixArray items = {0};
     CX_HASH_FOREACH(bindes, ele, tmp){
         //获取bind的目标
         Node target = cxHashElementKeyToAny(ele);
         //如果目标在范围外或者死亡
-        if(!NodeAtRange(this, target) || NodeIsDie(target)){
-            FixArrayAppend(items, target);
+        if(!NodeArriveAttack(this, target) || NodeIsDie(target)){
+            cxViewUnBind(this, target);
             continue;
         }
         
@@ -57,29 +52,22 @@ void DefenceAttack(cxAny pview)
         CX_EVENT_APPEND(f->cxAction.onExit, DefenceAttackExit);
         cxViewAppendAction(sp, f);
     }
-    //移除范围外的
-    for(cxInt i=0; i < items.number; i++){
-        Node node = CX_TYPE_CAST(Node, items.items[i]);
-        cxViewUnBind(this, node);
-    }
 }
 
 void DefenceSearch(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Defence);
-    Map map = NodeMap(this);
     cxHash bindes = cxViewBindes(this);
     //如果同时攻击数量到达
     if(cxHashLength(bindes) >= this->attackNum){
         return;
     }
-    //搜索新目标
-    Node node = NodeNearest(map->items, this->Node.idx, this->Node.range , NodeTypeAttack, NodeSubTypeNone);
+    //搜索最近的目标
+    Node node = MapNearestQuery(this, this->Node.range, NodeTypeAttack, NodeSubTypeNone);
     if(node == NULL){
         return;
     }
-    //bind范围内的目标
-    if(!NodeAtRange(this, node)){
+    if(!NodeArriveAttack(this, node)){
         return;
     }
     cxViewBind(this, node, NULL);
@@ -92,10 +80,11 @@ CX_OBJECT_TYPE(Defence, Node)
 CX_OBJECT_INIT(Defence, Node)
 {
     this->Node.type = NodeTypeDefence;
-    
+    this->Node.body = 1.5f;
     this->attackNum = 1;
     NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(2, 15));
+    
     cxSpriteSetTextureURL(this, "bg1.png");
     CX_METHOD_SET(this->Node.Search, DefenceSearch);
     CX_METHOD_SET(this->Node.Attack, DefenceAttack);
