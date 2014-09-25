@@ -103,6 +103,7 @@ cxBool NodeArriveAttack(cxAny pattacker,cxAny ptarget)
     cxVec2f p2 = cxViewPosition(ptarget);
     //到达攻击距离
     cxFloat d = kmVec2DistanceBetween(&p1, &p2) - (attacker->body + target->body) * global.sideLen;
+    d = CX_MAX(d, 0);
     cxFloat max = attacker->range.max * global.sideLen;
     cxFloat min = attacker->range.min * global.sideLen;
     return d >= min && d <= max;

@@ -12,6 +12,20 @@
 #include <Range.h>
 #include "Bullet.h"
 
+static void DefenceSetAngleIndex(Defence this,Node target)
+{
+    cxInt index;
+    cxFloat angle = cxVec2fRadiansBetween(cxViewPosition(target),cxViewPosition(this));
+    AngleToIndex(angle, &index);
+    if(this->index != index){
+        this->index = index;
+        CX_EVENT_FIRE(this, onIndex);
+    }
+    //Test
+    cxConstChars n = CX_CONST_STRING("%d.png",this->index);
+    cxSpriteSetTextureURL(this, n);
+}
+
 static void DefenceAttackExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFollow);
@@ -30,22 +44,22 @@ static void DefenceAttackExit(cxAny pav)
 
 void DefenceAttack(cxAny pview)
 {
-    CX_ASSERT_THIS(pview, Node);
+    CX_ASSERT_THIS(pview, Defence);
     Map map = NodeMap(this);
     cxHash bindes = cxViewBindes(this);
     CX_HASH_FOREACH(bindes, ele, tmp){
         //获取bind的目标
         Node target = cxHashElementKeyToAny(ele);
+        DefenceSetAngleIndex(this,target);
         //如果目标在范围外或者死亡
-        if(!NodeArriveAttack(this, target) || NodeIsDie(target)){
+        if(!NodeArriveAttack(this, target)){
             cxViewUnBind(this, target);
             continue;
         }
-        
         //制造子弹 bullet
         Bullet sp = CX_CREATE(Bullet);
         BulletInit(sp, map, cxSize2fv(20, 20), cxViewPosition(this));
-        BulletSetPower(sp, this->power);
+        BulletSetPower(sp, this->Node.power);
         cxViewAppend(map->bullet, sp);
         //设定目标
         cxFollow f = cxFollowCreate(800, target);
@@ -63,14 +77,18 @@ void DefenceSearch(cxAny pview)
         return;
     }
     //搜索最近的目标
-    Node node = MapNearestQuery(this, this->Node.range, NodeTypeAttack, NodeSubTypeNone);
-    if(node == NULL){
+    Node target = MapNearestQuery(this, this->Node.range, NodeTypeAttack, NodeSubTypeNone);
+    if(target == NULL){
         return;
     }
-    if(!NodeArriveAttack(this, node)){
+    DefenceSetAngleIndex(this,target);
+    if(!CX_METHOD_GET(true, this->Node.Finded,this,target)) {
         return;
     }
-    cxViewBind(this, node, NULL);
+    if(!NodeArriveAttack(this, target)){
+        return;
+    }
+    cxViewBind(this, target, NULL);
 }
 
 CX_OBJECT_TYPE(Defence, Node)
@@ -79,11 +97,12 @@ CX_OBJECT_TYPE(Defence, Node)
 }
 CX_OBJECT_INIT(Defence, Node)
 {
+    this->index = INT32_MAX;
     this->Node.type = NodeTypeDefence;
     this->Node.body = 1.5f;
     this->attackNum = 1;
     NodeSetAttackRate(this, 0.5f);
-    NodeSetRange(this, cxRange2fv(2, 15));
+    NodeSetRange(this, cxRange2fv(0, 15));
     
     cxSpriteSetTextureURL(this, "bg1.png");
     CX_METHOD_SET(this->Node.Search, DefenceSearch);
@@ -95,7 +114,8 @@ CX_OBJECT_INIT(Defence, Node)
 }
 CX_OBJECT_FREE(Defence, Node)
 {
-    
+    CX_EVENT_RELEASE(this->onAttack);
+    CX_EVENT_RELEASE(this->onIndex);
 }
 CX_OBJECT_TERM(Defence, Node)
 

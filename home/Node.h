@@ -44,6 +44,8 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_EVENT_ALLOC(onLife);
     //死亡时
     CX_EVENT_ALLOC(onDie);
+    //搜索到目标,返回false不继续处理
+    CX_METHOD_DEF(cxBool, Finded, cxAny, cxAny);
 CX_OBJECT_END(Node, cxSprite)
 
 //处死Node

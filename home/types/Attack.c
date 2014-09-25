@@ -108,6 +108,9 @@ static void AttackSearch(cxAny pview)
     if(target == NULL){
         return;
     }
+    if(!CX_METHOD_GET(true, this->Node.Finded,this,target)) {
+        return;
+    }
     //搜索路径
     cxAny block = NULL;
     cxBool ret = MapSearchPath(this, target, &block);
