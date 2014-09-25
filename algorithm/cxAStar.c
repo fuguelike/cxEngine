@@ -177,12 +177,18 @@ void cxAStarPrintPoints(cxAny pobj)
     }
 }
 
-cxBool cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
+void cxAStarCleanPath(cxAny pobj)
 {
-    cxAStar this = pobj;
-    this->data = data;
+    CX_ASSERT_THIS(pobj, cxAStar);
     cxAnyArrayClean(this->points);
     cxAnyArrayClean(this->visits);
+}
+
+cxBool cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
+{
+    CX_ASSERT_THIS(pobj, cxAStar);
+    this->data = data;
+    cxAStarCleanPath(this);
     return ASPathCreate(&cxAStarSource, pobj, &from, &to, this->points);
 }
 

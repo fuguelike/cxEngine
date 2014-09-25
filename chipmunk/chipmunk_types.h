@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <float.h>
+#include <cxcore/cxBase.h>
 
 #ifdef __APPLE__
    #include "TargetConditionals.h"
@@ -208,7 +209,9 @@ typedef uint32_t cpCollisionID;
 
 // CGPoints are structurally the same, and allow
 // easy interoperability with other Cocoa libraries
-#if CP_USE_CGPOINTS
+#if CX_ENGINE_VERSION
+    typedef cxVec2f cpVect;
+#elif CP_USE_CGPOINTS
 	typedef CGPoint cpVect;
 #else
 /// Chipmunk's 2D vector type.

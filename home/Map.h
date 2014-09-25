@@ -31,10 +31,16 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxSpatial attacks;
     //阻挡单位空间索引
     cxSpatial blocks;
+    //资源类空间索引
+    cxSpatial resources;
+    //装饰类空间索引
+    cxSpatial decorations;
     //fight var
     cxBool isSelectUnit;
     //path search algorithm
     cxAStar astar;
+    //路径索引
+    cxHash paths;
     //Test
     cxInt tag;
 CX_OBJECT_END(Map, cxAtlas)
@@ -86,10 +92,44 @@ cxAny MapNearestBlocks(cxAny curr,cxRange2f range,NodeSubType subType);
 //搜索src dst之间的阻挡类单位
 cxAny MapSegmentBlocks(cxAny src,cxAny dst,NodeSubType subType);
 
+//加入资源类型
+void MapAppendResource(cxAny node);
+
+//移除资源类型
+void MapRemoveResource(cxAny node);
+
+//搜索离curr最近的资源类单位
+cxAny MapNearestResources(cxAny curr,cxRange2f range,NodeSubType subType);
+
+//搜索src dst之间的资源类单位
+cxAny MapSegmentResources(cxAny src,cxAny dst,NodeSubType subType);
+
+//加入装饰类型
+void MapAppendDecoration(cxAny node);
+
+//移除装饰类型
+void MapRemoveDecoration(cxAny node);
+
+//搜索离curr最近的装饰类单位
+cxAny MapNearestDecorations(cxAny curr,cxRange2f range,NodeSubType subType);
+
+//搜索src dst之间的装饰类单位
+cxAny MapSegmentDecorations(cxAny src,cxAny dst,NodeSubType subType);
+
 
 cxAnyArray MapVisiedPoints(cxAny pmap);
 
 cxAnyArray MapSearchPoints(cxAny pmap);
+
+
+//删除缓存路径
+void MapCacheDelPath(cxAny pmap,cxVec2i a,cxVec2i b);
+
+//保存路径缓存点
+void MapCacheSetPath(cxAny pmap,cxVec2i a,cxVec2i b,cxAnyArray path);
+
+//查询 a b两点是否有缓存路径
+cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b);
 
 //寻路失败时返回离目标最近的坐标
 cxBool MapSearchPath(cxAny snode,cxAny dnode,cxVec2f *npos);

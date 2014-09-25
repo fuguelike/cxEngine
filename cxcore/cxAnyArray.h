@@ -28,6 +28,10 @@ CX_OBJECT_DEF(cxAnyArray, cxObject)
     UT_icd icd;
 CX_OBJECT_END(cxAnyArray, cxObject)
 
+cxAnyArray cxAnyArrayClone(cxAnyArray arr);
+
+void cxAnyArrayAppends(cxAnyArray arr,cxAnyArray dst);
+
 cxAnyArray cxAnyArrayAllocImp(cxInt size);
 
 cxAnyArray cxAnyArrayCreateImp(cxInt size);

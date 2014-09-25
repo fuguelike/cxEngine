@@ -121,7 +121,6 @@ static void AttackSearch(cxAny pview)
     if(node == NULL){
         return;
     }
-    
     cxVec2f npos;
     //路径搜索到达
     if(MapSearchPath(this, node, &npos)){

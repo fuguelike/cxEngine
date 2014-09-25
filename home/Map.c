@@ -271,9 +271,11 @@ CX_OBJECT_INIT(Map, cxAtlas)
     CX_METHOD_SET(this->astar->Visited, MapSearchVisited);
     
     //类型搜索索引
-    this->defences  = cxSpatialAlloc(NodeIndexBB);
-    this->attacks   = cxSpatialAlloc(NodeIndexBB);
-    this->blocks    = cxSpatialAlloc(NodeIndexBB);
+    this->defences      = cxSpatialAlloc(NodeIndexBB);
+    this->attacks       = cxSpatialAlloc(NodeIndexBB);
+    this->blocks        = cxSpatialAlloc(NodeIndexBB);
+    this->resources     = cxSpatialAlloc(NodeIndexBB);
+    this->decorations   = cxSpatialAlloc(NodeIndexBB);
     
     //弹药效果层
     this->bullet = CX_CREATE(cxView);
@@ -281,10 +283,16 @@ CX_OBJECT_INIT(Map, cxAtlas)
     
     //所有节点存储
     this->nodes = CX_ALLOC(cxHash);
+    
+    //路径索引
+    this->paths = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {
     cxMessageRemove(this);
+    CX_RELEASE(this->paths);
+    CX_RELEASE(this->resources);
+    CX_RELEASE(this->decorations);
     CX_RELEASE(this->bullet);
     CX_RELEASE(this->blocks);
     CX_RELEASE(this->astar);
@@ -350,6 +358,72 @@ void MapRemoveBlock(cxAny node)
     MapRemoveNode(map->blocks, node);
 }
 
+//加入资源类型
+void MapAppendResource(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapAppendNode(map, map->resources, node);
+}
+
+//移除资源类型
+void MapRemoveResource(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapRemoveNode(map->resources, node);
+}
+
+//搜索离curr最近的资源类单位
+cxAny MapNearestResources(cxAny curr,cxRange2f range,NodeSubType subType)
+{
+    CX_ASSERT_THIS(curr, Node);
+    Map map = NodeMap(this);
+    return NodeNearest(map->resources, this->idx, range, NodeTypeResource, subType);
+}
+
+//搜索src dst之间的资源类单位
+cxAny MapSegmentResources(cxAny src,cxAny dst,NodeSubType subType)
+{
+    Node sp = CX_TYPE_CAST(Node, src);
+    Node dp = CX_TYPE_CAST(Node, dst);
+    Map map = NodeMap(sp);
+    return NodeSegment(map->resources, sp->idx, dp->idx, NodeTypeResource, subType);
+}
+
+//加入装饰类型
+void MapAppendDecoration(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapAppendNode(map, map->decorations, node);
+}
+
+//移除装饰类型
+void MapRemoveDecoration(cxAny node)
+{
+    CX_ASSERT_THIS(node, Node);
+    Map map = CX_TYPE_CAST(Map, this->map);
+    MapRemoveNode(map->decorations, node);
+}
+
+//搜索离curr最近的装饰类单位
+cxAny MapNearestDecorations(cxAny curr,cxRange2f range,NodeSubType subType)
+{
+    CX_ASSERT_THIS(curr, Node);
+    Map map = NodeMap(this);
+    return NodeNearest(map->decorations, this->idx, range, NodeTypeDecoration, subType);
+}
+
+//搜索src dst之间的装饰类单位
+cxAny MapSegmentDecorations(cxAny src,cxAny dst,NodeSubType subType)
+{
+    Node sp = CX_TYPE_CAST(Node, src);
+    Node dp = CX_TYPE_CAST(Node, dst);
+    Map map = NodeMap(sp);
+    return NodeSegment(map->decorations, sp->idx, dp->idx, NodeTypeDecoration, subType);
+}
+
 //搜索离node最近的防御类单位
 cxAny MapNearestDefences(cxAny curr,cxRange2f range,NodeSubType subType)
 {
@@ -413,26 +487,71 @@ cxAnyArray MapSearchPoints(cxAny pmap)
     return this->astar->points;
 }
 
+#define CACHE_PATH_IDX(a,b) ((a.y * global.unitNum.x + a.x) << 16) + (b.y * global.unitNum.x + b.x)
+
+void MapCacheDelPath(cxAny pmap,cxVec2i a,cxVec2i b)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    cxInt idx = CACHE_PATH_IDX(a,b);
+    cxHashKey key = cxHashLongKey(idx);
+    cxHashDel(this->paths, key);
+}
+
+void MapCacheSetPath(cxAny pmap,cxVec2i a,cxVec2i b,cxAnyArray path)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    CX_ASSERT(cxAnyArrayLength(path) > 0, "save empty path points");
+    cxInt idx = CACHE_PATH_IDX(a,b);
+    cxHashKey key = cxHashLongKey(idx);
+    //复制一份保存
+    cxHashSet(this->paths, key, cxAnyArrayClone(path));
+}
+
+cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    cxInt idx = CACHE_PATH_IDX(a,b);
+    cxHashKey key = cxHashLongKey(idx);
+    cxAnyArray path = cxHashGet(this->paths, key);
+    if(path == NULL){
+        return false;
+    }
+    cxAStarCleanPath(this->astar);
+    cxAnyArrayAppends(this->astar->points, path);
+    return true;
+}
+
 cxBool MapSearchPath(cxAny snode,cxAny dnode,cxVec2f *npos)
 {
     Map map = NodeMap(snode);
     Node sx = CX_TYPE_CAST(Node, snode);
     Node dx = CX_TYPE_CAST(Node, dnode);
+    //获取离snode最近的dnode本地点
+    cxVec2f didx = NodeNearestPoint(dnode, sx->idx);
+    //
+    cxVec2i a = cxVec2iv(sx->idx.x, sx->idx.y);
+    cxVec2i b = cxVec2iv(didx.x, didx.y);
+    //获取缓存路径
+    if(MapCachePath(map, a, b)){
+        return true;
+    }
+    //
     MapSearchInfo info = {NULL};
-    //设置参数
+    //设置搜索参数
     info.dis = kmVec2DistanceBetween(&sx->idx, &dx->idx);
     info.map = map;
     info.snode = snode;
     info.dnode = dnode;
     info.vdis = INT32_MAX;
     info.vidx = cxVec2fv(-1, -1);
-    //获取离snode最近的dnode本地点
-    cxVec2f didx = NodeNearestPoint(dnode, sx->idx);
     //开始搜索
-    cxBool ret = cxAStarRun(map->astar, cxVec2iv(sx->idx.x, sx->idx.y), cxVec2iv(didx.x, didx.y), &info);
-    //未成功时返回最近点
-    if(!ret && npos != NULL){
-        *npos = info.vidx;
+    cxBool ret = cxAStarRun(map->astar, a, b, &info);
+    if(!ret){
+        //未成功时返回最近点
+        if(npos != NULL)*npos = info.vidx;
+    }else{
+        //保存到缓存
+        MapCacheSetPath(map, a, b, map->astar->points);
     }
     return ret;
 }

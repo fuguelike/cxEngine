@@ -110,7 +110,7 @@ cxSpatialNearestInfo cxSpatialNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNe
     ret.view = NULL;
     ret.m = max;
     ret.filter = filter;
-    cpBB bb = cpBBNewForCircle(cpv(p.x,p.y), cpfmax(max, 0.0f));
+    cpBB bb = cpBBNewForCircle(p, cpfmax(max, 0.0f));
     cpSpatialIndexQuery(this->index, this, bb, cxSpatialIndexQueryFunc, &ret);
     return ret;
 }

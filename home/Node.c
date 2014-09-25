@@ -238,7 +238,7 @@ cxAny NodeSegment(cxAny ps,cxVec2f a,cxVec2f b,NodeType type,NodeSubType subType
     ret.type = type;
     ret.subType = subType;
     ret.exit = 1.0f;
-    cpSpatialIndexSegmentQuery(this->index, this, cpv(ret.a.x, ret.a.y), cpv(ret.b.x, ret.b.y), ret.exit, NodeSegmentQueryFunc, &ret);
+    cpSpatialIndexSegmentQuery(this->index, this, ret.a, ret.b, ret.exit, NodeSegmentQueryFunc, &ret);
     return ret.node;
 }
 
@@ -251,7 +251,7 @@ cxAny NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeType type,NodeSubType
     ret.range = SCALE_RANGE(range);
     ret.type = type;
     ret.subType = subType;
-    cpBB bb = cpBBNewForCircle(cpv(ret.idx.x,ret.idx.y), cpfmax(ret.range.max, 0.0f));
+    cpBB bb = cpBBNewForCircle(ret.idx, cpfmax(ret.range.max, 0.0f));
     cpSpatialIndexQuery(this->index, this, bb, NodeIndexQueryFunc, &ret);
     return ret.node;
 }

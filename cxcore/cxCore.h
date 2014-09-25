@@ -159,7 +159,7 @@ typedef const char *    cxConstType;
 typedef const char *    cxConstChars;
 typedef char *          cxChars;
 
-#define CX_ENGINE_VERSION   200
+#define CX_ENGINE_VERSION   201
 
 #define CX_ATTR_UNUSED     __attribute__ ((__unused__))
 

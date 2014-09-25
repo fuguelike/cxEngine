@@ -412,7 +412,11 @@ void cxEngineSetLocalized(cxString lang)
 cxEngine cxEngineInstance()
 {
     if(instance == NULL) {
-        CX_LOGGER("cxEngine Version: %d",CX_ENGINE_VERSION);
+#if !defined(NDEBUG)
+        CX_LOGGER("cxEngine Version: %d,Run Mode:DEBUG",CX_ENGINE_VERSION);
+#else
+        CX_LOGGER("cxEngine Version: %d,Run Mode:RELEASE",CX_ENGINE_VERSION);
+#endif
         instance = CX_ALLOC(cxEngine);
     }
     return instance;
