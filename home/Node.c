@@ -112,8 +112,8 @@ cxBool NodeArriveAttackWithPoint(cxAny psx,cxAny pdx,cxVec2f p1,cxVec2f p2)
     //到达攻击距离
     cxFloat d = kmVec2DistanceBetween(&p1, &p2) - (sx->body + dx->body) * global.sideLen;
     d = CX_MAX(d, 0);
-    cxFloat max = sx->attackRange.max * global.sideLen;
-    cxFloat min = dx->attackRange.min * global.sideLen;
+    cxFloat max = sx->range.max * global.sideLen;
+    cxFloat min = dx->range.min * global.sideLen;
     return d >= min && d <= max;
 }
 
@@ -135,12 +135,13 @@ static void NodeOnTransform(cxAny pview)
     }
 }
 
-void NodeSearchOrderAdd(cxAny pview,NodeType type,NodeSubType subType)
+void NodeSearchOrderAdd(cxAny pview,NodeType type,NodeSubType subType,cxRange2f range)
 {
     CX_ASSERT_THIS(pview, Node);
     NodeCombined *ptype = &this->orders.types[this->orders.number++];
     ptype->mainType = type;
     ptype->subType = subType;
+    ptype->range = range;
 }
 //清空搜索
 void NodeSearchOrderClear(cxAny pview)
@@ -208,7 +209,7 @@ CX_OBJECT_INIT(Node, cxSprite)
     this->attackNum = 1;
     this->searchIndex = 0;
     this->dirIndex = 0;
-    CX_METHOD_SET(this->Attacked, NodeAttacked);
+    CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
@@ -225,7 +226,7 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
     this->dirAngle = AngleToIndex(angle, &dirIndex);
     if(dirIndex != this->dirIndex){
         this->dirIndex = dirIndex;
-        CX_METHOD_RUN(this->Direction,this);
+        CX_METHOD_RUN(this->NodeDirection,this);
         cxConstChars n = CX_CONST_STRING("%d.png",this->dirIndex);
         cxSpriteSetTextureURL(this, n);
     }
@@ -255,11 +256,17 @@ static void NodeMoveOnExit(cxAny pav)
     }
 }
 
+cxRange2f NodeRange(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->range;
+}
+
 void NodeMoveTo(cxAny pview,cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeMap(this);
-    
+    //Test
     cxList subviews = cxViewSubViews(map);
     CX_LIST_FOREACH(subviews, ele){
         cxView tmp = ele->any;
@@ -306,15 +313,21 @@ static void NodeProcessSearch(Node this)
     }
     //获取当前搜索类型
     NodeCombined type = this->orders.types[this->searchIndex++];
-    Node target = MapNearestQuery(this, this->searchRange, type);
+    Node target = MapNearestQuery(this, type);
     if(target == NULL){
         return;
     }
     //立即面向目标
     NodeFaceTarget(this,target);
     cxBool isAttack = false;
+    //target被this发现,返回false表示target不能被攻击
+    isAttack = CX_METHOD_GET(true, target->NodeFinded,target,this);
+    if(!isAttack){
+        return;
+    }
     //返回bind的目标
-    cxAny bind = CX_METHOD_GET(NULL,this->Finded,this,target, &isAttack);
+    isAttack = false;   //默认不设置攻击标识
+    cxAny bind = CX_METHOD_GET(NULL,this->FindTarget,this,target, &isAttack);
     if(bind != NULL){
         cxViewBind(this, bind, cxNumberBool(isAttack));
     }
@@ -323,7 +336,7 @@ static void NodeProcessSearch(Node this)
 void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type)
 {
     CX_ASSERT_THIS(target, Node);
-    CX_METHOD_RUN(this->Attacked,this,attacker,type);
+    CX_METHOD_RUN(this->NodeAttacked,this,attacker,type);
     if(NodeIsDie(this)){
         NodeMomentDie(target);
     }
@@ -344,7 +357,7 @@ static void NodeProcessAttack(Node this)
             continue;
         }
         //攻击时处理攻击方式，直接攻击或者投掷物体攻击
-        CX_METHOD_RUN(this->Attack,this,target);
+        CX_METHOD_RUN(this->AttackTarget,this,target);
     }
 }
 
@@ -477,16 +490,10 @@ void NodeSetSpeed(cxAny pview,cxFloat speed)
     this->speed = speed;
 }
 
-void NodeSetSearchRange(cxAny pview,cxRange2f range)
+void NodeSetRange(cxAny pview,cxRange2f range)
 {
     CX_ASSERT_THIS(pview, Node);
-    this->searchRange = range;
-}
-
-void NodeSetAttackRange(cxAny pview,cxRange2f range)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->attackRange = range;
+    this->range = range;
 }
 
 cxAny NodeMap(cxAny pview)

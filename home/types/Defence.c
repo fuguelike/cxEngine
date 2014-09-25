@@ -27,12 +27,12 @@ static void DefenceAttackExit(cxAny pav)
     cxViewRemove(bullet);
 }
 
-static void DefenceAttacked(cxAny pview,cxAny attacker,AttackType type)
+static void DefenceNodeAttacked(cxAny pview,cxAny attacker,AttackType type)
 {
     NodeAttacked(pview, attacker, type);
 }
 
-static void DefenceAttack(cxAny pview,cxAny target)
+static void DefenceAttackTarget(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Defence);
     Map map = NodeMap(this);
@@ -48,7 +48,7 @@ static void DefenceAttack(cxAny pview,cxAny target)
     cxViewBind(bullet, target, NULL);
 }
 
-static cxAny DefenceFinded(cxAny pview,cxAny target,cxBool *isAttack)
+static cxAny DefenceFindTarget(cxAny pview,cxAny target,cxBool *isAttack)
 {
     CX_ASSERT_THIS(pview, Defence);
     //未达到攻击范围
@@ -66,22 +66,21 @@ CX_OBJECT_TYPE(Defence, Node)
 CX_OBJECT_INIT(Defence, Node)
 {
     NodeSetType(this, NodeTypeDefence);
-    NodeSetBody(this, 1.5f);
+    NodeSetBody(this, 2);
     NodeSetAttackRate(this, 0.5f);
-    NodeSetAttackRange(this, cxRange2fv(0, 15));
-    NodeSetSearchRange(this, cxRange2fv(0, 15));
+    NodeSetRange(this, cxRange2fv(0, 15));
     
-    NodeSearchOrderAdd(this, NodeTypeAttack, NodeSubTypeNone);
+    NodeSearchOrderAdd(this, NodeTypeAttack, NodeSubTypeNone,cxRange2fv(0, 15));
     
     cxSpriteSetTextureURL(this, "bg1.png");
     
     Range range = CX_CREATE(Range);
-    RangeSetRange(range, this->Node.attackRange);
+    RangeSetRange(range, NodeRange(this));
     cxViewAppend(this, range);
     
-    CX_METHOD_SET(this->Node.Finded, DefenceFinded);
-    CX_METHOD_SET(this->Node.Attack, DefenceAttack);
-    CX_METHOD_SET(this->Node.Attacked, DefenceAttacked);
+    CX_METHOD_SET(this->Node.FindTarget,   DefenceFindTarget);
+    CX_METHOD_SET(this->Node.AttackTarget, DefenceAttackTarget);
+    CX_METHOD_SET(this->Node.NodeAttacked, DefenceNodeAttacked);
 }
 CX_OBJECT_FREE(Defence, Node)
 {

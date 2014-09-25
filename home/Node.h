@@ -28,14 +28,14 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxVec2f start;
     NodeCombined type;  //node组合类型
     NodeState state;    //当前状态
-    cxRange2f attackRange;  //攻击范围
-    cxRange2f searchRange;  //搜索范围
+    cxRange2f range;  //攻击范围
     cxFloat body;       //可攻击半径
     cxFloat attackRate; //攻击频率
     cxFloat speed;      //移动速度
     cxFloat power;       //攻击力,每秒的攻击力，实际效果和攻击频率(attackRate)有关系
     cxRange2i life;     //min当前生命，max最大生命
     cxInt level;        //等级
+    //自动搜索
     cxTimer searchTimer;      //搜索用定时器
     cxInt searchIndex;
     cxTimer attackTimer;      //攻击用定时器
@@ -45,19 +45,24 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_EVENT_ALLOC(onDie);
     NodeSearchOrder orders;
     //搜索到目标,返回bind哪个目标 seacher,target
-    CX_METHOD_DEF(cxAny, Finded, cxAny seacher, cxAny target,cxBool *);
+    CX_METHOD_DEF(cxAny, FindTarget, cxAny seacher, cxAny target,cxBool *);
+    //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
+    CX_METHOD_DEF(cxBool, NodeFinded,cxAny node,cxAny finder);
     cxInt attackNum;    //同时攻击的数量
     //方向发生变化
     cxInt   dirIndex;    //当前方向索引
     cxFloat dirAngle;    //方向偏转角
-    CX_METHOD_DEF(void, Direction,cxAny);
+    CX_METHOD_DEF(void, NodeDirection,cxAny);
     //攻击一个目标 attcker攻击target
-    CX_METHOD_DEF(void, Attack,cxAny attcker,cxAny target);
+    CX_METHOD_DEF(void, AttackTarget,cxAny attcker,cxAny target);
     //被一个目标攻击 pview 被attacker攻击 attacktype可能是 弓箭或者node
-    CX_METHOD_DEF(void, Attacked,cxAny pview,cxAny attacker,AttackType type);
+    CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);
     //当Node MoveTo target结束时 attcker target,返回 false表示解除bind
     CX_METHOD_DEF(cxBool, MoveExit,cxAny,cxAny);
 CX_OBJECT_END(Node, cxSprite)
+
+//获取攻击范围
+cxRange2f NodeRange(cxAny pview);
 
 //使用点集合移动到bind的node,移动结束触发 MoveExit 回调
 void NodeMoveTo(cxAny pview,cxAnyArray points);
@@ -72,7 +77,7 @@ void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type);
 void NodeSetDirAngle(cxAny pview,cxFloat angle);
 
 //添加搜索顺序
-void NodeSearchOrderAdd(cxAny pview,NodeType type,NodeSubType subType);
+void NodeSearchOrderAdd(cxAny pview,NodeType type,NodeSubType subType,cxRange2f range);
 //清空搜索
 void NodeSearchOrderClear(cxAny pview);
 
@@ -102,10 +107,7 @@ void NodeSetSubType(cxAny pview,NodeSubType subType);
 cxFloat NodePower(cxAny pview);
 
 //设置攻击范围
-void NodeSetAttackRange(cxAny pview,cxRange2f range);
-
-//设置搜索范围
-void NodeSetSearchRange(cxAny pview,cxRange2f range);
+void NodeSetRange(cxAny pview,cxRange2f range);
 
 //设置攻击频率
 void NodeSetAttackRate(cxAny pview,cxFloat rate);

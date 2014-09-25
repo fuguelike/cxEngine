@@ -9,13 +9,13 @@
 #include <Map.h>
 #include "Attack.h"
 
-static void AttackAttack(cxAny pview,cxAny target)
+static void AttackAttackTarget(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Attack);
     NodeAttackTarget(this, target, AttackTypeDirect);
 }
 
-static cxAny AttackFinded(cxAny pview,cxAny target,cxBool *isAttack)
+static cxAny AttackFindTarget(cxAny pview,cxAny target,cxBool *isAttack)
 {
     CX_ASSERT_THIS(pview, Attack);
     Map map = NodeMap(this);
@@ -47,16 +47,15 @@ CX_OBJECT_TYPE(Attack, Node)
 CX_OBJECT_INIT(Attack, Node)
 {
     NodeSetType(this, NodeTypeAttack);
-    NodeSearchOrderAdd(this, NodeTypeDefence, NodeSubTypeNone);
+    NodeSearchOrderAdd(this, NodeTypeDefence, NodeSubTypeNone, MAX_RANGE);
     NodeSetBody(this, 0.3f);
     //近身攻击00
-    NodeSetAttackRange(this, cxRange2fv(0, 0));
-    NodeSetSearchRange(this, cxRange2fv(0, 60));
+    NodeSetRange(this, cxRange2fv(0, 5));
     NodeSetAttackRate(this, 0.5f);
     cxSpriteSetTextureURL(this, "bg1.png");
     
-    CX_METHOD_SET(this->Node.Finded, AttackFinded);
-    CX_METHOD_SET(this->Node.Attack, AttackAttack);
+    CX_METHOD_SET(this->Node.FindTarget, AttackFindTarget);
+    CX_METHOD_SET(this->Node.AttackTarget, AttackAttackTarget);
 }
 CX_OBJECT_FREE(Attack, Node)
 {

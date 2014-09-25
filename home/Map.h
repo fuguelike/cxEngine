@@ -55,7 +55,7 @@ void MapAppendNode(cxAny node);
 void MapRemoveNode(cxAny node);
 
 //搜索离curr最近的单位
-cxAny MapNearestQuery(cxAny curr,cxRange2f range,NodeCombined type);
+cxAny MapNearestQuery(cxAny curr,NodeCombined type);
 
 //搜索src dst之间的单位
 cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type);

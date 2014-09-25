@@ -154,7 +154,7 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         }else if(this->tag == 2){
             Defence node = DefenceCreate(this, cxSize2fv(2, 2), idx);
             cxViewSetColor(node, cxRED);
-            NodeSetPower(node, 0);
+            NodeSetPower(node, 40);
             NodeSetLife(node, 200);
             MapAppendNode(node);
         }else if(this->tag == 3){
@@ -434,11 +434,11 @@ static cxAny NodeNearest(cxAny ps,cxVec2f idx,cxRange2f range,NodeCombined type)
 }
 
 //搜索离curr最近的单位
-cxAny MapNearestQuery(cxAny curr,cxRange2f range,NodeCombined type)
+cxAny MapNearestQuery(cxAny curr,NodeCombined type)
 {
     CX_ASSERT_THIS(curr, Node);
     Map map = NodeMap(this);
-    return NodeNearest(map->items, this->idx, range, type);
+    return NodeNearest(map->items, this->idx, type.range, type);
 }
 
 //搜索src dst之间的单位

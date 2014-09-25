@@ -86,7 +86,10 @@ typedef enum {
 typedef struct {
     NodeType mainType;
     NodeSubType subType;
+    cxRange2f range;        //搜索这个组合使用的范围
 }NodeCombined;
+
+#define MAX_RANGE   cxRange2fv(0, 60)
 
 //搜索顺序最大32
 #define MAX_ORDERS 32
