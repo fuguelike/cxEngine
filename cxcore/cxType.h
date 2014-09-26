@@ -19,7 +19,7 @@ CX_OBJECT_DEF(cxType, cxObject)
     cxAny (*Create)();
     cxAny (*Alloc)();
     cxConstType typeName;
-    cxHash signatures;    //a.b.c
+    cxChars signature;    //a.b.c
     cxType superType;
     cxHash properties;
 CX_OBJECT_END(cxType, cxObject)
