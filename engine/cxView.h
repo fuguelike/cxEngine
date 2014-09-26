@@ -92,6 +92,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onTransform);
 CX_OBJECT_END(cxView, cxObject)
 
+void cxViewEnableTouch(cxAny pview,cxBool enable);
+
 cxBool cxViewIsRunning(cxAny pview);
 
 cxMatrix4f *cxViewNormalMatrix(cxAny pview);

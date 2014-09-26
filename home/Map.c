@@ -13,6 +13,7 @@
 #include "Map.h"
 #include "Node.h"
 #include "Move.h"
+#include "Bullet.h"
 #include <types/Attack.h>
 #include <types/Defence.h>
 #include <types/Wall.h>
@@ -91,7 +92,8 @@ cxBool MapInit(cxAny pmap,cxJson data)
     size.h = size.w * 0.75f;
     global.unitSize = cxSize2fv(size.w/global.unitNum.x, size.h/global.unitNum.y);
     cxViewSetSize(this, size);
-    cxViewSetSize(this->bullet, size);
+    cxViewSetSize(this->bulletLayer, size);
+    cxViewSetSize(this->nodesLayer, size);
 
     
     //test
@@ -278,9 +280,14 @@ CX_OBJECT_INIT(Map, cxAtlas)
     cxFloat dim = global.sideLen;
     this->items = cxSpatialAlloc(dim, cells, NodeIndexBB);
     
-    //弹药效果层
-    this->bullet = CX_CREATE(cxView);
-    cxViewAppend(this, this->bullet);
+    //node层
+    this->nodesLayer = CX_CREATE(cxView);
+    cxViewAppend(this, this->nodesLayer);
+    
+    //弹药效果层禁止touch事件
+    this->bulletLayer = CX_CREATE(cxView);
+    cxViewEnableTouch(this->bulletLayer, false);
+    cxViewAppend(this, this->bulletLayer);
     
     //所有节点存储
     this->nodes = CX_ALLOC(cxHash);
@@ -293,7 +300,6 @@ CX_OBJECT_FREE(Map, cxAtlas)
     cxMessageRemove(this);
     CX_RELEASE(this->paths);
     CX_RELEASE(this->items);
-    CX_RELEASE(this->bullet);
     CX_RELEASE(this->astar);
     CX_RELEASE(this->nodes);
 }
@@ -315,11 +321,24 @@ cxBool MapCanSetNode(cxAny node)
     return true;
 }
 
+void MapAppendBullet(cxAny bullet)
+{
+    CX_ASSERT_THIS(bullet, Bullet);
+    Map map = BulletMap(this);
+    cxViewAppend(map->bulletLayer, bullet);
+}
+
+void MapRemoveBullet(cxAny bullet)
+{
+    CX_ASSERT_THIS(bullet, Bullet);
+    cxViewRemove(this);
+}
+
 void MapAppendNode(cxAny node)
 {
     CX_ASSERT_THIS(node, Node);
     Map map = NodeMap(this);
-    cxViewAppend(map, node);
+    cxViewAppend(map->nodesLayer, node);
     cxSpatialInsert(map->items, node);
 }
 

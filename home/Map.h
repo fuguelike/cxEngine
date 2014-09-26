@@ -17,7 +17,8 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Map, cxAtlas)
-    cxView bullet;             //弹药效果层
+    cxView bulletLayer; //弹药效果层
+    cxView nodesLayer;  //nodes节点层
     //mode
     MapMode mode;
     //
@@ -47,6 +48,12 @@ typedef struct {
 
 //检测是否能加入地图
 cxBool MapCanSetNode(cxAny node);
+
+//加入攻击
+void MapAppendBullet(cxAny bullet);
+
+//移除攻击物
+void MapRemoveBullet(cxAny bullet);
 
 //加入单位
 void MapAppendNode(cxAny node);

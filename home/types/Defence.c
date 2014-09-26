@@ -13,7 +13,7 @@
 #include "Bullet.h"
 
 //
-static void DefenceAttackExit(cxAny pav)
+static void BulletAttackArrive(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFollow);
     Bullet bullet = CX_TYPE_CAST(Bullet, this->cxAction.view);
@@ -24,38 +24,39 @@ static void DefenceAttackExit(cxAny pav)
         //攻击目标
         NodeAttackTarget(bullet, target, AttackTypeBullet);
     }
-    cxViewRemove(bullet);
+    MapRemoveBullet(bullet);
 }
 
-static void DefenceNodeAttacked(cxAny pview,cxAny attacker,AttackType type)
-{
-    NodeAttacked(pview, attacker, type);
-}
-
+//启动攻击
 static void DefenceAttackTarget(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Defence);
     Map map = NodeMap(this);
-    Bullet bullet = CX_CREATE(Bullet);
-    BulletInit(bullet, map, cxSize2fv(20, 20), cxViewPosition(this));
-    BulletSetPower(bullet, NodePower(this));
-    cxViewAppend(map->bullet, bullet);
-    //设定目标
-    cxFollow f = cxFollowCreate(800, target);
-    CX_EVENT_APPEND(f->cxAction.onExit, DefenceAttackExit);
-    cxViewAppendAction(bullet, f);
-    //子弹bind目标
-    cxViewBind(bullet, target, NULL);
+    cxHash bindes = cxViewBindes(this);
+    CX_HASH_FOREACH(bindes, ele, tmp){
+        //获取目标
+        Node target = cxHashElementKeyToAny(ele);
+        //开火
+        Bullet bullet = CX_CREATE(Bullet);
+        BulletInit(bullet, map, cxSize2fv(20, 20), cxViewPosition(this));
+        BulletSetPower(bullet, NodePower(this));
+        MapAppendBullet(bullet);
+        //设定目标
+        cxFollow f = cxFollowCreate(800, target);
+        CX_EVENT_APPEND(f->cxAction.onExit, BulletAttackArrive);
+        cxViewAppendAction(bullet, f);
+        //子弹bind目标
+        cxViewBind(bullet, target, cxNumberInt(NodeBindReasonShoot));
+    }
 }
 
-static cxAny DefenceFindTarget(cxAny pview,cxAny target,cxBool *isAttack)
+static cxAny DefenceFindTarget(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Defence);
     //未达到攻击范围
     if(!NodeArriveAttack(this, target)){
         return NULL;
     }
-    *isAttack = true;
     return target;
 }
 
@@ -80,7 +81,6 @@ CX_OBJECT_INIT(Defence, Node)
     
     CX_METHOD_SET(this->Node.FindTarget,   DefenceFindTarget);
     CX_METHOD_SET(this->Node.AttackTarget, DefenceAttackTarget);
-    CX_METHOD_SET(this->Node.NodeAttacked, DefenceNodeAttacked);
 }
 CX_OBJECT_FREE(Defence, Node)
 {

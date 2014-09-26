@@ -18,11 +18,11 @@ CX_OBJECT_DEF(Bullet, cxSprite)
     cxFloat power;  //子弹携带的攻击力
 CX_OBJECT_END(Bullet, cxSprite)
 
+cxAny BulletMap(cxAny pview);
+
 void BulletSetPower(cxAny pview,cxFloat power);
 
 void BulletInit(cxAny pview,cxAny map,cxSize2f size,cxVec2f pos);
-
-cxAny BulletMap(cxAny pview);
 
 CX_C_END
 

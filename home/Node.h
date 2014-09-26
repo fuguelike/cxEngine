@@ -27,7 +27,6 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxBool isValidIdx;  //是否在有效的位置
     cxVec2f start;
     NodeCombined type;  //node组合类型,攻击范围
-    NodeState state;    //当前状态
     cxFloat body;       //可攻击半径
     cxFloat attackRate; //攻击频率
     cxFloat speed;      //移动速度
@@ -37,14 +36,13 @@ CX_OBJECT_DEF(Node, cxSprite)
     //自动搜索
     cxTimer searchTimer;      //搜索用定时器
     cxInt searchIndex;
-    cxTimer attackTimer;      //攻击用定时器
     //生命值变化
     CX_EVENT_ALLOC(onLife);
     //死亡时
     CX_EVENT_ALLOC(onDie);
     NodeSearchOrder orders;
     //搜索到目标,返回bind哪个目标 seacher,target
-    CX_METHOD_DEF(cxAny, FindTarget, cxAny seacher, cxAny target,cxBool *);
+    CX_METHOD_DEF(cxAny, FindTarget, cxAny seacher, cxAny target);
     //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
     CX_METHOD_DEF(cxBool, NodeFinded,cxAny node,cxAny finder);
     cxInt attackNum;    //同时攻击的数量
@@ -60,11 +58,14 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(cxBool, MoveExit,cxAny,cxAny);
 CX_OBJECT_END(Node, cxSprite)
 
+//启动攻击定时器
+void NodeStartupAttackTimer(cxAny pview);
+
 //获取攻击范围
 cxRange2f NodeRange(cxAny pview);
 
-//使用点集合移动到bind的node,移动结束触发 MoveExit 回调
-void NodeMoveTo(cxAny pview,cxAnyArray points);
+//使用点集合移动移动到目标,移动结束触发 MoveExit 回调
+void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points);
 
 //node被攻击
 void NodeAttacked(cxAny pview,cxAny attacker,AttackType type);
@@ -108,34 +109,22 @@ cxFloat NodePower(cxAny pview);
 //设置攻击范围
 void NodeSetRange(cxAny pview,cxRange2f range);
 
-//设置攻击频率
+//设置获取攻击频率
+cxFloat NodeAttackRate(cxAny pview);
 void NodeSetAttackRate(cxAny pview,cxFloat rate);
 
 cxAny NodeMap(cxAny pview);
 
+void NodeSearchRun(cxAny pview);
+
 //节点死亡
 cxBool NodeIsDie(cxAny pview);
-
-//设置状态
-void NodeSetState(cxAny pview,NodeState state);
 
 //暂停搜索
 void NodePauseSearch(cxAny pview);
 
 //重新启动搜索
 void NodeResumeSearch(cxAny pview);
-
-//启动搜索定时器
-void NodeSearchRun(cxAny pview);
-
-//暂停攻击
-void NodePauseAttack(cxAny pview);
-
-//重新启动攻击
-void NodeResumeAttack(cxAny pview);
-
-//启动攻击定时器
-void NodeAttackRun(cxAny pview);
 
 cxRange2i NodeLife(cxAny pview);
 

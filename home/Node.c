@@ -9,7 +9,7 @@
 #include <algorithm/cxTile.h>
 #include <views/cxScroll.h>
 #include <actions/cxMove.h>
-#include <types/Bullet.h>
+#include "Bullet.h"
 #include "Node.h"
 #include "Move.h"
 #include "Map.h"
@@ -196,6 +196,45 @@ void NodeAttacked(cxAny pview,cxAny attacker,AttackType type)
     }
 }
 
+static void NodeAttackTimerArrive(cxAny pav)
+{
+    Node this = CX_TYPE_CAST(Node, cxActionView(pav));
+    cxHash bindes = cxViewBindes(this);
+    CX_HASH_FOREACH(bindes, ele, tmp){
+        //获取目标
+        Node target = cxHashElementKeyToAny(ele);
+        //攻击前已死
+        if(NodeIsDie(target)){
+            NodeMomentDie(target);
+            continue;
+        }
+        //离开攻击范围
+        if(!NodeArriveAttack(this, target)){
+            continue;
+        }
+        CX_METHOD_RUN(this->AttackTarget,this,target);
+        //攻击后死亡
+        if(NodeIsDie(target)){
+            NodeMomentDie(target);
+            continue;
+        }
+    }
+    //如果没有目标停止攻击定时器
+    if(cxHashLength(bindes) == 0){
+        cxActionStop(pav);
+    }
+}
+
+void NodeStartupAttackTimer(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxTimer timer = cxEngineCreateObject("fights.json?attackTimer");
+    CX_ASSERT_TYPE(timer, cxTimer);
+    cxActionSetTime(timer, NodeAttackRate(this));
+    CX_EVENT_APPEND(timer->onArrive, NodeAttackTimerArrive);
+    cxViewAppendAction(this, timer);
+}
+
 CX_OBJECT_TYPE(Node, cxSprite)
 {
     
@@ -207,7 +246,6 @@ CX_OBJECT_INIT(Node, cxSprite)
     CX_METHOD_SET(this->cxSprite.cxView.Touch, NodeTouch);
     CX_EVENT_APPEND(CX_TYPE(cxView, this)->onTransform, NodeOnTransform);
     this->box = cxAnyArrayAlloc(cxVec2f);
-    this->speed = 100;
     this->attackNum = 1;
     this->searchIndex = 0;
     this->dirIndex = 0;
@@ -234,13 +272,13 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
     }
 }
 
-static void NodeMoveOnExit(cxAny pav)
+//到达指定位置
+static void NodeMoveArrive(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
     Node node = CX_TYPE_CAST(Node, cxActionView(this));
     cxHash bindes = cxViewBindes(node);
     CX_HASH_FOREACH(bindes, ele, tmp){
-        cxNumber data = CX_TYPE_CAST(cxNumber, ele->any);
         Node target = cxHashElementKeyToAny(ele);
         if(NodeIsDie(target)){
             cxViewUnBind(node, target);
@@ -248,13 +286,15 @@ static void NodeMoveOnExit(cxAny pav)
         }
         //回调处理返回
         cxBool ret = CX_METHOD_GET(true, node->MoveExit, node, target);
-        cxNumberSetBool(data, ret);
         if(!ret){
             cxViewUnBind(node, target);
             continue;
         }
         //朝向target
         NodeFaceTarget(node, target);
+        //发动攻击 目标已经bind到node
+        cxViewBind(node, target, cxNumberInt(NodeBindReasonAttack));
+        NodeStartupAttackTimer(node);
     }
 }
 
@@ -264,7 +304,7 @@ cxRange2f NodeRange(cxAny pview)
     return this->type.range;
 }
 
-void NodeMoveTo(cxAny pview,cxAnyArray points)
+void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeMap(this);
@@ -286,9 +326,10 @@ void NodeMoveTo(cxAny pview,cxAnyArray points)
         cxViewSetTag(sp, 1001);
         cxViewAppend(map, sp);
     }
-    
+    //bind 目标 移动
+    cxViewBind(pview, target, cxNumberInt(NodeBindReasonMove));
     Move move = MoveCreate(map, points);
-    CX_EVENT_APPEND(CX_TYPE(cxAction, move)->onExit, NodeMoveOnExit);
+    CX_EVENT_APPEND(CX_TYPE(cxAction, move)->onExit, NodeMoveArrive);
     cxViewAppendAction(this, move);
 }
 
@@ -328,38 +369,23 @@ static void NodeProcessSearch(Node this)
         return;
     }
     //返回bind的目标
-    isAttack = false;   //默认不设置攻击标识
-    cxAny bind = CX_METHOD_GET(NULL,this->FindTarget,this,target, &isAttack);
-    if(bind != NULL){
-        cxViewBind(this, bind, cxNumberBool(isAttack));
+    target = CX_METHOD_GET(NULL,this->FindTarget,this,target);
+    if(target == NULL){
+        return;
     }
+    //bind目标
+    cxViewBind(this, target, cxNumberInt(NodeBindReasonAttack));
+    //目标已经bind到this,启动攻击定器
+    NodeStartupAttackTimer(this);
 }
 
 void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type)
 {
     CX_ASSERT_THIS(target, Node);
     CX_METHOD_RUN(this->NodeAttacked,this,attacker,type);
-    if(NodeIsDie(this)){
+    //处死
+    if(NodeIsDie(target)){
         NodeMomentDie(target);
-    }
-}
-
-static void NodeProcessAttack(Node this)
-{
-    cxHash bindes = cxViewBindes(this);
-    CX_HASH_FOREACH(bindes, ele, tmp){
-        Node target = cxHashElementKeyToAny(ele);
-        //未设定标记无法攻击
-        if(!cxNumberToBool(ele->any)){
-            continue;
-        }
-        //超过攻击范围取消bind,将导致重新搜索目标
-        if(!NodeArriveAttack(this, target)){
-            cxViewUnBind(this, target);
-            continue;
-        }
-        //攻击时处理攻击方式，直接攻击或者投掷物体攻击
-        CX_METHOD_RUN(this->AttackTarget,this,target);
     }
 }
 
@@ -369,12 +395,6 @@ static void NodeSearchArrive(cxAny pav)
     cxAny pview = cxActionView(pav);
     CX_ASSERT_THIS(pview, Node);
     NodeProcessSearch(this);
-}
-
-void NodeSetState(cxAny pview,NodeState state)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->state = state;
 }
 
 void NodePauseSearch(cxAny pview)
@@ -398,31 +418,6 @@ void NodeSearchRun(cxAny pview)
     this->searchTimer = cxEngineCreateObject("fights.json?searchTimer");
     CX_EVENT_APPEND(this->searchTimer->onArrive, NodeSearchArrive);
     cxViewAppendAction(this, this->searchTimer);
-}
-
-//暂停攻击
-void NodePauseAttack(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    CX_RETURN(this->attackTimer == NULL);
-    cxActionPause(this->attackTimer);
-}
-
-//重新启动攻击
-void NodeResumeAttack(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    CX_RETURN(this->attackTimer == NULL);
-    cxActionReset(this->attackTimer);
-    cxActionResume(this->attackTimer);
-}
-
-//搜索附近的
-static void NodeAttackArrive(cxAny pav)
-{
-    cxAny pview = cxActionView(pav);
-    CX_ASSERT_THIS(pview, Node);
-    NodeProcessAttack(this);
 }
 
 void NodeSetLife(cxAny pview,cxInt life)
@@ -463,15 +458,16 @@ void NodeSetSubType(cxAny pview,NodeSubType subType)
     this->type.subType = subType;
 }
 
+cxFloat NodeAttackRate(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->attackRate;
+}
+
 void NodeSetAttackRate(cxAny pview,cxFloat rate)
 {
     CX_ASSERT_THIS(pview, Node);
     this->attackRate = rate;
-    if(rate > 0){
-        NodeAttackRun(this);
-    }else{
-        NodePauseAttack(this);
-    }
 }
 
 cxFloat NodePower(cxAny pview)
@@ -508,16 +504,6 @@ cxBool NodeIsDie(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     return this->life.min <= 0;
-}
-
-//启动攻击定时器
-void NodeAttackRun(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->attackTimer = cxEngineCreateObject("fights.json?attackTimer");
-    cxActionSetTime(this->attackTimer, this->attackRate);
-    CX_EVENT_APPEND(this->attackTimer->onArrive, NodeAttackArrive);
-    cxViewAppendAction(this, this->attackTimer);
 }
 
 cxBool NodeHasPoint(cxAny pview,cxVec2i idx)

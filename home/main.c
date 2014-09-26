@@ -13,10 +13,10 @@
 #include "Button.h"
 #include "Range.h"
 #include "Move.h"
+#include "Bullet.h"
 #include <types/Attack.h>
 #include <types/Defence.h>
 #include <types/Wall.h>
-#include <types/Bullet.h>
 
 void cxEngineType(cxEngine engine)
 {

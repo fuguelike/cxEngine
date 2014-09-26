@@ -19,6 +19,7 @@ CX_OBJECT_DEF(cxType, cxObject)
     cxAny (*Create)();
     cxAny (*Alloc)();
     cxConstType typeName;
+    cxHash signatures;    //a.b.c
     cxType superType;
     cxHash properties;
 CX_OBJECT_END(cxType, cxObject)
@@ -30,6 +31,8 @@ cxType cxTypesGet(cxConstType type);
 cxProperty cxTypeSetProperty(cxType this,cxConstChars key);
 
 cxProperty cxTypeProperty(cxType this,cxConstChars key);
+
+void cxTypeSignature(cxType type,cxType super);
 
 void cxTypeSetSuper(cxType type,cxType super);
 

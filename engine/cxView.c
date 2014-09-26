@@ -217,6 +217,12 @@ void cxViewSetOnlyTransform(cxAny pview,cxBool v)
     this->onlyTransform = v;
 }
 
+void cxViewEnableTouch(cxAny pview,cxBool enable)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    this->isTouch = enable;
+}
+
 cxBool cxViewIsRunning(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
@@ -897,7 +903,7 @@ completed:
 cxBool cxViewKey(cxAny pview,cxKey *key)
 {
     CX_ASSERT_THIS(pview, cxView);
-    if(!this->isVisible){
+    if(!this->isVisible || !this->isTouch){
         return false;
     }
     cxListElement *head = cxListFirst(this->subViews);

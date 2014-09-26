@@ -215,10 +215,11 @@ void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny 
     cxType superType = cxTypesGet(bb);
     //cxObject have not super type
     CX_ASSERT(superType != NULL || tt == cxObjectTypeName,"type %s not register",bb);
+    cxTypesSet(tt,type);
     cxTypeSetSuper(type,superType);
+    cxTypeSignature(type,superType);
     type->Alloc = alloc;
     type->Create = create;
-    cxTypesSet(tt,type);
     autoType(type);
     CX_RELEASE(type);
 }

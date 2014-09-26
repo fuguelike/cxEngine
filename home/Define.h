@@ -49,12 +49,13 @@ typedef struct {
     cxAny block;        //失败时返回被阻挡的单位
 }PathResult;
 
-//node 状态
+//node Bind原因
 typedef enum {
-    NodeStateNormal,    //一般状态
-    NodeStateMove,      //移动状态
-    NodeStateFight      //战斗状态
-}NodeState;
+    NodeBindReasonNone = 0,   //未知
+    NodeBindReasonMove,       //bind朝目标移动移动状态
+    NodeBindReasonAttack,     //bind攻击目标战斗状态
+    NodeBindReasonShoot       //bind射击状态
+}NodeBindReason;
 
 //地图模式
 typedef enum {

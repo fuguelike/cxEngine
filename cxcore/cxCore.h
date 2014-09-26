@@ -194,7 +194,9 @@ do{                                                             \
 
 #define CX_ASSERT_TYPE(_o_,_t_)     CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type error,should is "#_t_,_o_)
 
-#define CX_ASSERT_THIS(_o_,_t_)     CX_ASSERT_TYPE(_o_,_t_);_t_ this = (_t_)(_o_)
+#define CX_ASSERT_THIS(_o_,_t_)     _t_ this = (_t_)(_o_);CX_ASSERT_TYPE(_o_,_t_)
+
+#define CX_TYPE_CAST(_t_,_o_)       (_t_)(_o_);CX_ASSERT_TYPE(_o_,_t_)
 
 #else
 
@@ -205,6 +207,8 @@ do{                                                             \
 #define CX_ASSERT_TYPE(_o_,_t_)
 
 #define CX_ASSERT_THIS(_o_,_t_)     _t_ this = (_t_)(_o_)
+
+#define CX_TYPE_CAST(_t_,_o_)       (_t_)(_o_)
 
 #define CX_ASSERT_FALSE(format,...)
 
@@ -278,9 +282,6 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 #define CX_INSTANCE_OF(_o_,_t_)     cxInstanceOf(_o_,_t_##TypeName)
 
 #define TYPE(_o_)                   ((cxObject)_o_)->cxType
-
-//cast failed return NULL
-#define CX_TYPE_CAST(_t_,_o_)       (_t_)(_o_);CX_ASSERT_TYPE(_o_,_t_)
 
 //method
 

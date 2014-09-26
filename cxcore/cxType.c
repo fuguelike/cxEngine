@@ -73,6 +73,20 @@ void cxTypesSet(cxConstType typeName,cxType type)
     cxHashSet(types, cxHashStrKey(typeName), type);
 }
 
+//a.b.c
+void cxTypeSignature(cxType type,cxType super)
+{
+    CX_ASSERT(type != NULL, "args error");
+    cxHashKey key = (super == NULL) ? cxHashStrKey(cxObjectTypeName):cxHashStrKey(type->typeName);
+    cxHashSet(type->signatures, key, super);
+    if(super == NULL){
+        return;
+    }
+    CX_HASH_FOREACH(super->signatures, ele, tmp){
+        cxHashSet(type->signatures, cxHashStrKey(ele->key), ele->any);
+    }
+}
+
 void cxTypeSetSuper(cxType type,cxType super)
 {
     CX_ASSERT(type != NULL, "type arsg error");
@@ -88,13 +102,7 @@ cxBool cxInstanceOf(cxAny object,cxConstType type)
     CX_RETURN(type == cxObjectTypeName,true);
     cxType ptype = cxTypesGet(this->cxType);
     CX_ASSERT(ptype != NULL, "type %s not register",this->cxType);
-    while (ptype != NULL && ptype->superType != NULL) {
-        if(ptype->superType->typeName == type){
-            return true;
-        }
-        ptype = ptype->superType;
-    }
-    return false;
+    return cxHashHas(ptype->signatures, cxHashStrKey(type));
 }
 
 void cxTypeRunObjectSetter(cxObject object,cxJson json)
@@ -168,9 +176,11 @@ CX_OBJECT_TYPE(cxType, cxObject)
 CX_OBJECT_INIT(cxType, cxObject)
 {
     this->properties = CX_ALLOC(cxHash);
+    this->signatures = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxType, cxObject)
 {
+    CX_RELEASE(this->signatures);
     CX_RELEASE(this->properties);
     CX_RELEASE(this->superType);
 }

@@ -15,14 +15,14 @@ static void AttackAttackTarget(cxAny pview,cxAny target)
     NodeAttackTarget(this, target, AttackTypeDirect);
 }
 
-static cxAny AttackFindTarget(cxAny pview,cxAny target,cxBool *isAttack)
+static cxAny AttackFindTarget(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Attack);
     Map map = NodeMap(this);
     PathResult ret = MapSearchPath(this, target);
     //搜索目标路径成功
     if(ret.success){
-        NodeMoveTo(this, MapSearchPoints(map));
+        NodeMovingToTarget(this, target, MapSearchPoints(map));
         return target;
     }
     //失败获取阻挡物
@@ -36,8 +36,8 @@ static cxAny AttackFindTarget(cxAny pview,cxAny target,cxBool *isAttack)
         return NULL;
     }
     //移动到阻挡物
-    NodeMoveTo(this, MapSearchPoints(map));
-    return block;
+    NodeMovingToTarget(this, block, MapSearchPoints(map));
+    return NULL;
 }
 
 CX_OBJECT_TYPE(Attack, Node)
