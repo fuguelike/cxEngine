@@ -175,6 +175,8 @@ typedef char *          cxChars;
 
 #define CX_MAX_LOGGER_LENGTH        1024
 
+//#define NDEBUG 1
+
 #if !defined(NDEBUG)
 
 #define CX_LOGGER(format,...)       cxUtilInfo(__FILE__,__LINE__,format, ##__VA_ARGS__)

@@ -36,9 +36,6 @@ typedef struct {
 extern Global global;
 void GlobalInit(cxEngine engine);
 
-#define SCALE_VEC2F(_i_)      cxVec2fv((_i_).x * global.sideLen, (_i_).y * global.sideLen)
-#define SCALE_RANGE(_i_)      cxRange2fv((_i_).min * global.sideLen, (_i_).max * global.sideLen)
-
 cxFloat SideDistance(cxInt sideNum);
 
 //8方向使用 22.5 45.0角度
@@ -90,7 +87,9 @@ typedef struct {
     cxRange2f range;        //搜索这个组合使用的范围
 }NodeCombined;
 
-#define MAX_RANGE   cxRange2fv(0, 60)
+#define NodeCombinedMake(t,s) (NodeCombined){t,s,{0,0}}
+
+#define MAX_RANGE   cxRange2fv(0, MAP_ROW*2)
 
 //搜索顺序最大32
 #define MAX_ORDERS 32

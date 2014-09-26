@@ -14,126 +14,13 @@
 #include "Move.h"
 #include "Map.h"
 
-cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos)
-{
-    CX_ASSERT_THIS(pview, Node);
-    Map map = this->map;
-    cxSize2f vsize = cxViewSize(this);
-    pos.y -= (vsize.h / 2.0f - (vsize.h / (2.0f * this->size.h)));
-    return MapPosToIdx(map, pos);
-}
-
-static void MapNodesEachSelected(cxAny ps,cxAny pview,cxAny data)
-{
-    Node node = CX_TYPE_CAST(Node, pview);
-    if(node == data){
-        //选中
-        cxViewSetColor(node, cxYELLOW);
-    }else{
-        //未选中
-        cxViewSetColor(node, cxRED);
-    }
-}
-static cxBool NodeSelected(Node this)
-{
-    Map map = this->map;
-    cxSpatialEach(map->items, MapNodesEachSelected, this);
-    map->node = this;
-    return true;
-}
-
-static void NodeMoveIsValid(Node this,cxBool valid)
-{
-    if(valid){
-        cxViewSetColor(this, cxGREEN);
-    }else{
-        cxViewSetColor(this, cxGRAY);
-    }
-}
-
-static cxBool NodeTouch(cxAny pview,cxTouchItems *points)
-{
-    CX_ASSERT_THIS(pview, Node);
-    CX_RETURN(points->number != 1,false);
-    cxTouchItem item = points->items[0];
-    Map map = this->map;
-    if(map->mode != MapModeNormal){
-        return false;
-    }
-    if(!this->canSelected){
-        return false;
-    }
-    cxVec2f cpos;
-    cxBool hited = cxViewHitTest(pview, item->position, &cpos) && cxPointsContainPoint(this->box, cpos);
-    if(item->type == cxTouchTypeMove &&  map->node == this && this->isTouch){
-        cxVec2f vpos = this->start;
-        cxVec2f delta = cxViewTouchDelta(pview, item);
-        kmVec2Add(&vpos, &vpos, &delta);
-        cxVec2f idx = NodePosToIdx(this,vpos);
-        this->isValidIdx = NodeIdxIsValid(this, idx);
-        NodeMoveIsValid(this,this->isValidIdx);
-        NodeSetPosition(this, idx, false);
-        this->start = vpos;
-        return true;
-    }
-    if(item->type == cxTouchTypeDown){
-        this->isTouch = hited;
-        this->start = cxViewPosition(this);
-        if(hited){
-            cxViewBringFront(this);
-        }
-        return false;
-    }
-    if(item->type == cxTouchTypeUp && item->movement < 20){
-        this->isSelected = hited;
-        if(this->isSelected && map->node != NULL){
-            NodeResetPosition(map->node);
-        }
-        if(this->isSelected){
-            return NodeSelected(this);
-        }
-        return false;
-    }
-    return false;
-}
-
-cxBool NodeArriveAttack(cxAny psx,cxAny pdx)
-{
-    Node sx = CX_TYPE_CAST(Node, psx);
-    Node dx = CX_TYPE_CAST(Node, pdx);
-    cxVec2f p1 = cxViewPosition(sx);
-    cxVec2f p2 = cxViewPosition(dx);
-    return NodeArriveAttackWithPoint(psx, pdx, p1, p2);
-}
-cxBool NodeArriveAttackWithPoint(cxAny psx,cxAny pdx,cxVec2f p1,cxVec2f p2)
-{
-    Node sx = CX_TYPE_CAST(Node, psx);
-    Node dx = CX_TYPE_CAST(Node, pdx);
-    //到达攻击距离
-    cxFloat d = kmVec2DistanceBetween(&p1, &p2) - (sx->body + dx->body) * global.sideLen;
-    d = CX_MAX(d, 0);
-    cxRange2f range = NodeRange(sx);
-    cxFloat max = range.max * global.sideLen;
-    cxFloat min = range.min * global.sideLen;
-    return d >= min && d <= max;
-}
-
-cxVec2f NodePosIndex(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    cxVec2f pos = cxViewPosition(this);
-    return NodePosToIdx(this, pos);
-}
-
 static void NodeOnTransform(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
-    cxVec2f idx = NodePosIndex(this);
-    if(!cxVec2fEqu(this->idx, idx)){
-        this->idx = idx;
-        cxSpatialReindexView(map->items, this);
-    }
+    cxVec2f pos = cxViewPosition(this);
+    this->floatIndex = MapPosToFloat(map, pos);
+    cxSpatialReindexView(map->items, this);
 }
 
 //设置优先攻击顺序
@@ -150,37 +37,6 @@ void NodeSearchOrderClear(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     this->orders.number = 0;
-}
-
-void NodeMomentDie(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->life.min = 0;
-    CX_EVENT_FIRE(this, onLife);
-    CX_EVENT_FIRE(this, onDie);
-    cxViewUnBindAll(pview);
-    MapRemoveNode(pview);
-}
-
-cxVec2f NodeNearestPoint(cxAny pview,cxVec2f idx)
-{
-    CX_ASSERT_THIS(pview, Node);
-    cxVec2f ret = this->idx;
-    if(this->size.h == 1 && this->size.w == 1){
-        return ret;
-    }
-    cxFloat dis = INT32_MAX;
-    for(cxFloat x = this->idx.x; x < this->idx.x + this->size.w; x++)
-    for(cxFloat y = this->idx.y; y < this->idx.y + this->size.h; y++){
-        cxVec2f c = cxVec2fv(x, y);
-        cxFloat d = kmVec2DistanceBetween(&c, &idx);
-        //获取最近的点
-        if(d < dis){
-            ret = c;
-            dis = d;
-        }
-    }
-    return ret;
 }
 
 void NodeAttacked(cxAny pview,cxAny attacker,AttackType type)
@@ -204,18 +60,17 @@ static void NodeAttackTimerArrive(cxAny pav)
         //获取目标
         Node target = cxHashElementKeyToAny(ele);
         //攻击前已死
-        if(NodeIsDie(target)){
-            NodeMomentDie(target);
+        if(NodeCheckDie(target)){
             continue;
         }
-        //离开攻击范围
-        if(!NodeArriveAttack(this, target)){
+        //是否可以攻击
+        cxBool ret = CX_METHOD_GET(true, this->IsAttackTarget,this,target);
+        if(!ret){
             continue;
         }
         CX_METHOD_RUN(this->AttackTarget,this,target);
         //攻击后死亡
-        if(NodeIsDie(target)){
-            NodeMomentDie(target);
+        if(NodeCheckDie(target)){
             continue;
         }
     }
@@ -235,27 +90,37 @@ void NodeStartupAttackTimer(cxAny pview)
     cxViewAppendAction(this, timer);
 }
 
+static cxBool NodeIsAttackTarget(cxAny psx,cxAny pdx)
+{
+    Node sx = CX_TYPE_CAST(Node, psx);
+    Node dx = CX_TYPE_CAST(Node, pdx);
+    cxVec2f sidx = NodeFloatIndex(sx);
+    cxVec2f didx = NodeFloatIndex(dx);
+    cxFloat d = kmVec2DistanceBetween(&sidx, &didx) - (sx->body + dx->body);
+    d = CX_MAX(d, 0);
+    cxRange2f range = NodeRange(sx);
+    return d >= range.min && d <= range.max;
+}
+
 CX_OBJECT_TYPE(Node, cxSprite)
 {
     
 }
 CX_OBJECT_INIT(Node, cxSprite)
 {
-    this->canSelected = true;
-    this->idx = cxVec2fv(-1, -1);
-    CX_METHOD_SET(this->cxSprite.cxView.Touch, NodeTouch);
     CX_EVENT_APPEND(CX_TYPE(cxView, this)->onTransform, NodeOnTransform);
-    this->box = cxAnyArrayAlloc(cxVec2f);
     this->attackNum = 1;
     this->searchIndex = 0;
     this->dirIndex = 0;
+    this->isDie = false;
+    this->floatIndex = cxVec2fv(-1, -1);
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
+    CX_METHOD_SET(this->IsAttackTarget, NodeIsAttackTarget);
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
     CX_EVENT_RELEASE(this->onDie);
     CX_EVENT_RELEASE(this->onLife);
-    CX_RELEASE(this->box);
 }
 CX_OBJECT_TERM(Node, cxSprite)
 
@@ -267,8 +132,8 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
     if(dirIndex != this->dirIndex){
         this->dirIndex = dirIndex;
         CX_METHOD_RUN(this->NodeDirection,this);
-        cxConstChars n = CX_CONST_STRING("%d.png",this->dirIndex);
-        cxSpriteSetTextureURL(this, n);
+        cxFloat angle = dirIndex * 45.0f;
+        cxViewSetDegrees(this->array, angle);
     }
 }
 
@@ -280,8 +145,7 @@ static void NodeMoveArrive(cxAny pav)
     cxHash bindes = cxViewBindes(node);
     CX_HASH_FOREACH(bindes, ele, tmp){
         Node target = cxHashElementKeyToAny(ele);
-        if(NodeIsDie(target)){
-            cxViewUnBind(node, target);
+        if(NodeCheckDie(target)){
             continue;
         }
         //回调处理返回
@@ -309,23 +173,23 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeMap(this);
     //Test
-    cxList subviews = cxViewSubViews(map);
-    CX_LIST_FOREACH(subviews, ele){
-        cxView tmp = ele->any;
-        if(tmp->tag == 1001){
-            cxViewRemove(tmp);
-        }
-    }
-    CX_ASTAR_POINTS_FOREACH(points, idx){
-        cxVec2f p = cxVec2fv(idx->x, idx->y);
-        cxVec2f pos = MapIdxToPos(map, p);
-        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
-        cxViewSetColor(sp, cxYELLOW);
-        cxViewSetPos(sp, pos);
-        cxViewSetSize(sp, cxSize2fv(10, 10));
-        cxViewSetTag(sp, 1001);
-        cxViewAppend(map, sp);
-    }
+//    cxList subviews = cxViewSubViews(map);
+//    CX_LIST_FOREACH(subviews, ele){
+//        cxView tmp = ele->any;
+//        if(tmp->tag == 1001){
+//            cxViewRemove(tmp);
+//        }
+//    }
+//    CX_ASTAR_POINTS_FOREACH(points, idx){
+//        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
+//        cxVec2f pos = MapIndexToPos(map, p);
+//        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
+//        cxViewSetColor(sp, cxRED);
+//        cxViewSetPos(sp, pos);
+//        cxViewSetSize(sp, cxSize2fv(10, 10));
+//        cxViewSetTag(sp, 1001);
+//        cxViewAppend(map, sp);
+//    }
     //bind 目标 移动
     cxViewBind(pview, target, cxNumberInt(NodeBindReasonMove));
     Move move = MoveCreate(map, points);
@@ -383,10 +247,7 @@ void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type)
 {
     CX_ASSERT_THIS(target, Node);
     CX_METHOD_RUN(this->NodeAttacked,this,attacker,type);
-    //处死
-    if(NodeIsDie(target)){
-        NodeMomentDie(target);
-    }
+    NodeCheckDie(target);
 }
 
 //搜索附近的
@@ -500,19 +361,26 @@ cxAny NodeMap(cxAny pview)
     return this->map;
 }
 
-cxBool NodeIsDie(cxAny pview)
+cxBool NodeIsStatic(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    return this->life.min <= 0;
+    return this->isStatic;
 }
 
-cxBool NodeHasPoint(cxAny pview,cxVec2i idx)
+cxBool NodeCheckDie(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    return idx.x >= this->idx.x &&
-    idx.x < (this->idx.x + this->size.w) &&
-    idx.y >= this->idx.y &&
-    idx.y < (this->idx.y + this->size.h);
+    cxBool die = (this->life.min <= 0);
+    if(die && !this->isDie){
+        CX_LOGGER("node die %f %f",this->floatIndex.x,this->floatIndex.y);
+        this->isDie = true;
+        this->life.min = 0;
+        CX_EVENT_FIRE(this, onLife);
+        CX_EVENT_FIRE(this, onDie);
+        cxViewUnBindAll(pview);
+        MapRemoveNode(pview);
+    }
+    return die;
 }
 
 cxRange2i NodeLife(cxAny pview)
@@ -527,54 +395,16 @@ cxInt NodeLevel(cxAny pview)
     return this->level;
 }
 
-cxVec2i NodeIndex(cxAny pview)
+cxVec2f NodeFloatIndex(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    return cxVec2iv(this->idx.x, this->idx.y);
+    return this->floatIndex;
 }
 
 cxSize2i NodeSize(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     return cxSize2iv(this->size.w, this->size.h);
-}
-
-void NodeResetPosition(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    CX_RETURN(this->isValidIdx);
-    NodeSetPosition(this, this->idx, true);
-    this->isValidIdx = true;
-}
-
-cxBool NodeSetPosition(cxAny pview,cxVec2f idx,cxBool animate)
-{
-    CX_ASSERT_THIS(pview, Node);
-    Map map = this->map;
-    this->curr = idx;
-    idx.x += (this->size.w - 1.0f)/2.0f;
-    idx.y += (this->size.h - 1.0f)/2.0f;
-    cxVec2f npos = MapIdxToPos(map, idx);
-    if(!animate){
-        cxViewSetPos(this, npos);
-    }else{
-        cxMove m = cxMoveCreate(0.1f, npos);
-        cxViewAppendAction(pview, m);
-    }
-    return true;
-}
-
-void NodeSetSize(cxAny pview,cxSize2f size)
-{
-    CX_ASSERT_THIS(pview, Node);
-    cxSize2f vsize = cxSize2fv(global.unitSize.w * size.w, global.unitSize.h * size.h);
-    cxViewSetSize(this, vsize);
-    this->size = size;
-    cxAnyArrayClean(this->box);
-    cxAnyArrayAppend(this->box, &(cxVec2fv(vsize.w/2.0f, 0)));
-    cxAnyArrayAppend(this->box, &(cxVec2fv(0, vsize.h/2.0f)));
-    cxAnyArrayAppend(this->box, &(cxVec2fv(-vsize.w/2.0f, 0)));
-    cxAnyArrayAppend(this->box, &(cxVec2fv(0, -vsize.h/2.0f)));
 }
 
 cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
@@ -600,42 +430,52 @@ cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
     return true;
 }
 
-cxVec2f NodeCurrIdx(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->curr;
-}
-
-void NodeUpdateIdx(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    NodeSetIdx(pview, this->curr);
-}
-
-void NodeSetIdx(cxAny pview,cxVec2f idx)
+void NodeSetIndex(cxAny pview,cxVec2i idx)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
-    cxVec2i nidx = cxVec2iv(idx.x, idx.y);
-    cxVec2i oidx = NodeIndex(this);
-    if(cxVec2iEqu(nidx, oidx)){
-        return;
-    }
-    //攻击活动单位不放入A*搜索数据中
-    if(this->type.mainType!= NodeTypeAttack){
-        MapFillNode(map, nidx, this);
-    }
-    this->idx = idx;
-    this->curr = idx;
-    this->isValidIdx = true;
-    MapNodeOnNewIdx(map, this);
+    cxVec2f p = cxVec2fv(idx.x + this->size.w/2.0f, idx.y + this->size.h/2.0f);
+    cxVec2f npos = MapIndexToPos(map, p);
+    cxViewSetPos(this, npos);
+    this->floatIndex = MapPosToFloat(map, npos);
 }
 
-void NodeInit(cxAny pview,cxAny map, cxSize2f size,cxVec2f idx)
+void NodeSetSize(cxAny pview,cxSize2f size)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxSize2f vsize = cxSize2fv(global.unitSize.w * size.w, global.unitSize.h * size.h);
+    cxViewSetSize(this, vsize);
+    this->size = size;
+}
+
+void NodeInit(cxAny pview,cxAny map, cxSize2f size,cxVec2i idx,cxBool isStatic)
 {
     CX_ASSERT_THIS(pview, Node);
     this->map = map;
+    this->initIdx = idx;
+    this->isStatic = isStatic;
     NodeSetSize(this, size);
-    NodeSetIdx(this, idx);
-    NodeSetPosition(this, idx, false);
+    NodeSetIndex(this, idx);
+    MapFillNode(map, idx, this);
+    
+    cxSize2f ns = cxViewSize(this);
+    cxFloat w = CX_MIN(ns.w, ns.h);
+    this->array = cxSpriteCreateWithURL("bullet.json?array.png");
+    cxViewSetColor(this->array, cxWHITE);
+    cxViewSetAnchor(this->array, cxVec2fv(-0.5f, 0.0f));
+    cxViewSetSize(this->array, cxSize2fv(w/2, w/3));
+    cxViewAppend(this, this->array);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

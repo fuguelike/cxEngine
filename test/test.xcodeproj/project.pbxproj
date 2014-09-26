@@ -20,7 +20,6 @@
 		83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6618D9C5D00093FF54 /* libpcre.a */; };
 		83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6718D9C5D00093FF54 /* libpng.a */; };
 		83314F7318D9C6530093FF54 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 83314F7218D9C6530093FF54 /* main.c */; };
-		8339302419BB2ED000FC098E /* cxLayer.json in Resources */ = {isa = PBXBuildFile; fileRef = 8339302319BB2ED000FC098E /* cxLayer.json */; };
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
 		8341C69F182280E20045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69E182280E20045A66F /* libz.dylib */; };
 		8341C6A3182280ED0045A66F /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A2182280ED0045A66F /* libiconv.dylib */; };
@@ -83,7 +82,6 @@
 		83314F6618D9C5D00093FF54 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = ../libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		83314F6718D9C5D00093FF54 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../libs/ios/lib/libpng.a; sourceTree = "<group>"; };
 		83314F7218D9C6530093FF54 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = SOURCE_ROOT; };
-		8339302319BB2ED000FC098E /* cxLayer.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxLayer.json; path = res/cxLayer.json; sourceTree = SOURCE_ROOT; };
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8341C69E182280E20045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8341C6A2182280ED0045A66F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
@@ -213,7 +211,6 @@
 				835DB19619C44C650037DA5B /* spineboy.json */,
 				835DB19719C44C650037DA5B /* spineboy.png */,
 				835DB19819C44C650037DA5B /* t.pkm */,
-				8339302319BB2ED000FC098E /* cxLayer.json */,
 				83732B4119B9BF740049D09A /* cxAnimate.json */,
 				834327B819B8034400B4927F /* red.png */,
 				834327B919B8034400B4927F /* t.png */,
@@ -337,7 +334,6 @@
 				834327BC19B8034400B4927F /* t.png in Resources */,
 				831ABCC319249D23001A86F1 /* cxView.json in Resources */,
 				834327BD19B8034400B4927F /* yellow.png in Resources */,
-				8339302419BB2ED000FC098E /* cxLayer.json in Resources */,
 				83DAD70A191A386C000A7D1F /* cxLabelTTF.json in Resources */,
 				83D9FFA119CB32B400F0EAB2 /* odus_cutout.pkm.alpha in Resources */,
 				835DB1C419C4A0F80037DA5B /* goblins.atlas in Resources */,

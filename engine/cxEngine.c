@@ -306,7 +306,9 @@ cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)
 }
 
 CX_OBJECT_TYPE(cxEngine, cxObject)
-{}
+{
+    
+}
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
     this->interval = 1.0f/60.0f;

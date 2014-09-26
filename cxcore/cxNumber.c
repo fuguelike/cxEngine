@@ -45,6 +45,12 @@ void cxNumberSetInt(cxAny pnum, cxInt v)
     CX_ASSERT(this->type == cxNumberTypeInt, "type error");
     this->value.vi = v;
 }
+void cxNumberSetLong(cxAny pnum, cxLong v)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeLong, "type error");
+    this->value.vl = v;
+}
 void cxNumberSetInt8(cxAny pnum,cxInt8 v)
 {
     CX_ASSERT_THIS(pnum, cxNumber);
@@ -125,6 +131,13 @@ cxInt cxNumberToInt(cxAny pnum)
     CX_ASSERT_THIS(pnum, cxNumber);
     CX_ASSERT(this->type == cxNumberTypeInt, "type error");
     return this->value.vi;
+}
+
+cxLong cxNumberToLong(cxAny pnum)
+{
+    CX_ASSERT_THIS(pnum, cxNumber);
+    CX_ASSERT(this->type == cxNumberTypeLong, "type error");
+    return this->value.vl;
 }
 
 cxInt8 cxNumberToInt8(cxAny pnum)
@@ -217,6 +230,14 @@ cxNumber cxNumberInt(cxInt v)
     cxNumber rv = CX_CREATE(cxNumber);
     rv->type = cxNumberTypeInt;
     rv->value.vi = v;
+    return rv;
+}
+
+cxNumber cxNumberLong(cxLong v)
+{
+    cxNumber rv = CX_CREATE(cxNumber);
+    rv->type = cxNumberTypeLong;
+    rv->value.vl = v;
     return rv;
 }
 

@@ -17,7 +17,7 @@ CX_OBJECT_DEF(Wall, Node)
 
 CX_OBJECT_END(Wall, Node)
 
-Wall WallCreate(cxAny map,cxSize2f size,cxVec2f pos);
+Wall WallCreate(cxAny map,cxSize2f size,cxVec2i pos);
 
 CX_C_END
 

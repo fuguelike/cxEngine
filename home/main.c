@@ -40,7 +40,12 @@ static void selectButton(cxAny pview)
 
 void cxEngineInit(cxEngine engine)
 {
+#if !defined(NDEBUG)
     engine->isShowBorder = true;
+#else
+    engine->isShowBorder = false;
+#endif
+    
     //战斗用动画管理器
     cxActionMgr fight = CX_CREATE(cxActionMgr);
     fight->scale = 1.0f;

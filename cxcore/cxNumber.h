@@ -17,6 +17,7 @@ typedef enum {
     cxNumberTypeNone = 0,
     cxNumberTypeBool,
     cxNumberTypeInt,
+    cxNumberTypeLong,
     cxNumberTypeInt8,
     cxNumberTypeInt16,
     cxNumberTypeInt32,
@@ -33,6 +34,7 @@ typedef enum {
 typedef union {
     cxBool bv;
     cxInt vi;
+    cxLong vl;
     cxInt8  i8;
     cxInt16 i16;
     cxInt32 i32;
@@ -57,6 +59,8 @@ cxBool cxNumberIsType(cxAny pnum,cxNumberType type);
 cxBool cxNumberToBool(cxAny pnum);
 
 cxInt cxNumberToInt(cxAny pnum);
+
+cxLong cxNumberToLong(cxAny pnum);
 
 cxInt8 cxNumberToInt8(cxAny pnum);
 
@@ -84,6 +88,8 @@ void cxNumberSetBool(cxAny pnum,cxBool v);
 
 void cxNumberSetInt(cxAny pnum, cxInt v);
 
+void cxNumberSetLong(cxAny pnum, cxLong v);
+
 void cxNumberSetInt8(cxAny pnum,cxInt8 v);
 
 void cxNumberSetInt16(cxAny pnum,cxInt16 v);
@@ -109,6 +115,8 @@ void cxNumberSetDouble(cxAny pnum,cxDouble v);
 cxNumber cxNumberBool(cxBool v);
 
 cxNumber cxNumberInt(cxInt v);
+
+cxNumber cxNumberLong(cxLong v);
 
 cxNumber cxNumberInt8(cxInt8 v);
 

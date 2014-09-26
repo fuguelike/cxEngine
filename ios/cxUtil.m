@@ -85,7 +85,8 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat s
     dim = cxCalculateStringSize(str, font, &constrainSize, attrs);
     // compute start point
     int startH = 0;
-    int startW = 0;
+    int startW = 2;
+    dim.width += 2;
     if (constrainSize.height > dim.height){
         // vertical alignment
         unsigned int vAlignment = ((int)align >> 4) & 0x0F;
@@ -125,7 +126,6 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat s
     
     NSMutableParagraphStyle *parastyle = [[NSMutableParagraphStyle alloc] init];
     parastyle.alignment = nsAlign;
-    parastyle.firstLineHeadIndent = 2;
     parastyle.lineBreakMode = NSLineBreakByCharWrapping;
     [attrs setObject:parastyle forKey:NSParagraphStyleAttributeName];
     

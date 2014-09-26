@@ -52,7 +52,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool isRunning;
     cxBool isDirty;
     cxBool isVisible;
-    cxBool onlyTransform;   //only process transform
     cxBool isShowBorder;    //if draw border
     cxBool hideTop;         //=true hide prev view when use cxWindowPush
     cxBool isSort;
@@ -217,8 +216,6 @@ void cxViewSort(cxAny pview);
 void cxViewSetVisible(cxAny pview,cxBool visible);
 
 void cxViewSetPos(cxAny pview,cxVec2f pos);
-
-void cxViewSetOnlyTransform(cxAny pview,cxBool v);
 
 // -0.5 <-> +0.5
 // -width/2 <-> width/2

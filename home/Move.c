@@ -50,12 +50,13 @@ static void MoveOnUpdate(cxAny pav)
     }
     CX_ASSERT_TYPE(target, Node);
     //如果目标死亡停止移动
-    if(NodeIsDie(target)){
+    if(NodeCheckDie(target)){
         cxActionStop(pav);
         return;
     }
     //如果到达攻击距离
-    if(NodeArriveAttack(attacker, target)){
+    cxBool ret = CX_METHOD_GET(false, attacker->IsAttackTarget, attacker, target);
+    if(ret){
         cxActionStop(pav);
         return;
     }
@@ -84,7 +85,8 @@ Move MoveCreate(cxAny pmap,cxAnyArray points)
     CX_ASSERT_THIS(pmap, Map);
     //加入路径点
     CX_ASTAR_POINTS_FOREACH(points, idx){
-        cxVec2f pos = MapIdxToPos(this,cxVec2fv(idx->x, idx->y));
+        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
+        cxVec2f pos = MapIndexToPos(this,p);
         cxSplineAppend(move, pos);
     }
     return move;

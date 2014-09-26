@@ -26,10 +26,11 @@ static cxAny AttackFindTarget(cxAny pview,cxAny target)
         return target;
     }
     //失败获取阻挡物
-    Node block = ret.block;
+    Node block = MapSegmentQuery(this, target, NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
     if(block == NULL){
         return NULL;
     }
+    cxViewSetColor(block, cxRED);
     ret = MapSearchPath(this, block);
     //搜索阻挡物失败
     if(!ret.success){
@@ -48,12 +49,12 @@ CX_OBJECT_INIT(Attack, Node)
 {
     NodeSetType(this, NodeTypeAttack);
     NodeSetSearchOrder(this, NodeTypeDefence, NodeSubTypeNone, MAX_RANGE);
-    NodeSetBody(this, 0.3f);
+    NodeSetBody(this, 0.5f);
     NodeSetSpeed(this, 100);
-    //近身攻击00
+    //近身攻击01
     NodeSetRange(this, cxRange2fv(0, 0));
     NodeSetAttackRate(this, 0.5f);
-    cxSpriteSetTextureURL(this, "bg1.png");
+    cxSpriteSetTextureURL(this, "bullet.json?shell.png");
     
     CX_METHOD_SET(this->Node.FindTarget, AttackFindTarget);
     CX_METHOD_SET(this->Node.AttackTarget, AttackAttackTarget);
@@ -64,10 +65,10 @@ CX_OBJECT_FREE(Attack, Node)
 }
 CX_OBJECT_TERM(Attack, Node)
 
-Attack AttackCreate(cxAny map, cxSize2f size,cxVec2f pos)
+Attack AttackCreate(cxAny map, cxSize2f size,cxVec2i pos)
 {
     Attack this = CX_CREATE(Attack);
-    NodeInit(this, map, size, pos);
+    NodeInit(this, map, size, pos, false);
     NodeSearchRun(this);
     return this;
 }

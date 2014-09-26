@@ -54,7 +54,8 @@ static cxAny DefenceFindTarget(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Defence);
     //未达到攻击范围
-    if(!NodeArriveAttack(this, target)){
+    cxBool ret = CX_METHOD_GET(false, this->Node.IsAttackTarget, this,target);
+    if(!ret){
         return NULL;
     }
     return target;
@@ -67,13 +68,13 @@ CX_OBJECT_TYPE(Defence, Node)
 CX_OBJECT_INIT(Defence, Node)
 {
     NodeSetType(this, NodeTypeDefence);
-    NodeSetBody(this, 1.5f);
+    NodeSetBody(this, 1.0f);
     NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(0, 15));
     
     NodeSetSearchOrder(this, NodeTypeAttack, NodeSubTypeNone,cxRange2fv(0, 15));
     
-    cxSpriteSetTextureURL(this, "bg1.png");
+    cxSpriteSetTextureURL(this, "bullet.json?shell.png");
     
     Range range = CX_CREATE(Range);
     RangeSetRange(range, NodeRange(this));
@@ -88,10 +89,10 @@ CX_OBJECT_FREE(Defence, Node)
 }
 CX_OBJECT_TERM(Defence, Node)
 
-Defence DefenceCreate(cxAny map,cxSize2f size,cxVec2f pos)
+Defence DefenceCreate(cxAny map,cxSize2f size,cxVec2i pos)
 {
     Defence this = CX_CREATE(Defence);
-    NodeInit(this, map, size, pos);
+    NodeInit(this, map, size, pos, true);
     NodeSearchRun(this);
     return this;
 }

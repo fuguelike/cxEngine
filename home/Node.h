@@ -16,15 +16,13 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Node, cxSprite)
+    cxSprite array;     //Test
     cxAny map;
+    cxVec2f floatIndex; //浮点格子坐标
+    cxBool isStatic;    //node 是否可移动，移动的node不加入nodes,不参与路径搜索
+    cxVec2i initIdx;    //初始化放置的位置,对于静态物不会变化
     cxSize2f size;      //占用的格子数
-    cxVec2f idx;        //左下角格子坐标
-    cxAnyArray box;
-    cxVec2f curr;       //当前所在位置
-    cxBool canSelected; //可选择
-    cxBool isSelected;  //是否悬选中
-    cxBool isTouch;     //按下时是否选中
-    cxBool isValidIdx;  //是否在有效的位置
+    cxBool isDie;       //是否死去
     cxVec2f start;
     NodeCombined type;  //node组合类型,攻击范围
     cxFloat body;       //可攻击半径
@@ -41,6 +39,8 @@ CX_OBJECT_DEF(Node, cxSprite)
     //死亡时
     CX_EVENT_ALLOC(onDie);
     NodeSearchOrder orders;
+    //是否能攻击目标
+    CX_METHOD_DEF(cxBool, IsAttackTarget,cxAny attacker,cxAny target);
     //搜索到目标,返回bind哪个目标 seacher,target
     CX_METHOD_DEF(cxAny, FindTarget, cxAny seacher, cxAny target);
     //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
@@ -81,18 +81,12 @@ void NodeSetSearchOrder(cxAny pview,NodeType type,NodeSubType subType,cxRange2f 
 //清空搜索
 void NodeSearchOrderClear(cxAny pview);
 
-//处死Node
-void NodeMomentDie(cxAny pview);
-
-//离idx最近的node本地坐标点
-cxVec2f NodeNearestPoint(cxAny pview,cxVec2f idx);
-
 //朝向target
 void NodeFaceTarget(cxAny pview,cxAny target);
 
-//攻击者是否到达目标的攻击范围
-cxBool NodeArriveAttack(cxAny pattacker,cxAny ptarget);
-cxBool NodeArriveAttackWithPoint(cxAny psx,cxAny pdx,cxVec2f p1,cxVec2f p2);
+////攻击者是否到达目标的攻击范围
+//cxBool NodeArriveAttack(cxAny pattacker,cxAny ptarget);
+//cxBool NodeArriveAttackWithPoint(cxAny psx,cxAny pdx,cxVec2f p1,cxVec2f p2);
 
 //设置生命 等级 攻击力
 void NodeSetLife(cxAny pview,cxInt life);
@@ -115,10 +109,12 @@ void NodeSetAttackRate(cxAny pview,cxFloat rate);
 
 cxAny NodeMap(cxAny pview);
 
+cxBool NodeIsStatic(cxAny pview);
+
 void NodeSearchRun(cxAny pview);
 
 //节点死亡
-cxBool NodeIsDie(cxAny pview);
+cxBool NodeCheckDie(cxAny pview);
 
 //暂停搜索
 void NodePauseSearch(cxAny pview);
@@ -128,39 +124,18 @@ void NodeResumeSearch(cxAny pview);
 
 cxRange2i NodeLife(cxAny pview);
 
-cxBool NodeHasPoint(cxAny pview,cxVec2i idx);
-
 cxInt NodeLevel(cxAny pview);
 
-cxVec2i NodeIndex(cxAny pview);
+cxVec2f NodeFloatIndex(cxAny pview);
 
 cxSize2i NodeSize(cxAny pview);
 
-//获取Node当前位置索引
-cxVec2f NodePosIndex(cxAny pview);
-
-//从当前坐标转换为索引坐标
-cxVec2f NodePosToIdx(cxAny pview,cxVec2f pos);
-
-//update to curr
-void NodeUpdateIdx(cxAny pview);
-
-cxVec2f NodeCurrIdx(cxAny pview);
-//设置并放置
-void NodeSetIdx(cxAny pview,cxVec2f idx);
-
-//重置到旧位置
-void NodeResetPosition(cxAny pview);
-
-//检测新索引是否可以放置
-cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr);
-
-//移动成功返回true
-cxBool NodeSetPosition(cxAny pview,cxVec2f idx,cxBool animate);
+//根据网格坐标设置位置，与左下角格子中心为铆合点
+void NodeSetIndex(cxAny pview,cxVec2i idx);
 
 void NodeSetSize(cxAny pview,cxSize2f size);
 
-void NodeInit(cxAny pview,cxAny map,cxSize2f size,cxVec2f idx);
+void NodeInit(cxAny pview,cxAny map,cxSize2f size,cxVec2i idx,cxBool isStatic);
 
 CX_C_END
 

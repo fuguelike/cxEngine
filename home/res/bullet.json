@@ -1,8 +1,16 @@
 {"frames": [
 
 {
+	"filename": "array.png",
+	"frame": {"x":2,"y":2,"w":172,"h":59},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":172,"h":59},
+	"sourceSize": {"w":172,"h":59}
+},
+{
 	"filename": "shell.png",
-	"frame": {"x":2,"y":2,"w":100,"h":100},
+	"frame": {"x":2,"y":63,"w":100,"h":100},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
@@ -13,8 +21,8 @@
 	"version": "1.0",
 	"image": "bullet.png",
 	"format": "RGBA8888",
-	"size": {"w":128,"h":128},
+	"size": {"w":256,"h":256},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:12d25333875007d6f8789485ec5e9603$"
+	"smartupdate": "$TexturePacker:SmartUpdate:c42c405c5db80fed1b43084af8a47779$"
 }
 }

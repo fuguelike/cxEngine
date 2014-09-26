@@ -46,9 +46,6 @@ typedef struct {
     cxAny block;//第一个阻挡物
 }MapSearchInfo;
 
-//检测是否能加入地图
-cxBool MapCanSetNode(cxAny node);
-
 //加入攻击
 void MapAppendBullet(cxAny bullet);
 
@@ -87,8 +84,6 @@ PathResult MapSearchPath(cxAny snode,cxAny dnode);
 //init map
 cxBool MapInit(cxAny pmap,cxJson data);
 
-void MapNodeOnNewIdx(cxAny pmap,cxAny pnode);
-
 //按Y的大小重新排序
 void MapSortNode(cxAny pmap);
 
@@ -98,18 +93,33 @@ void MapSetNode(cxAny pmap,cxInt x,cxInt y,cxAny node);
 
 cxAny MapNode(cxAny pview,cxInt x,cxInt y);
 
-cxVec2f MapPosToIdx(cxAny pmap,cxVec2f pos);
+cxVec2f MapPosToFloat(cxAny pmap,cxVec2f pos);
 
-cxVec2f MapIdxToPos(cxAny pmap,cxVec2f idx);
+cxVec2i MapPosToIndex(cxAny pmap,cxVec2f pos);
 
-cxAny MapItem(cxAny pmap,cxVec2f idx);
+/*
+idx索引位置在边上,所以要使一个格子内容居中，
+idx.x or idx.y 一般需要加上0.5f,两格子内容居中加上1.0f
+1,0   1,1
+--------
+|      |
+|      |
+|      |
+|      |
+--------
+0,0   1,0
+*/
+cxVec2f MapIndexToPos(cxAny pmap,cxVec2f idx);
+
+cxAny MapItem(cxAny pmap,cxVec2i idx);
 
 //分离Node
 void MapDetachNode(cxAny node);
 
+//将node放到idx位置
 void MapFillNode(cxAny pmap,cxVec2i idx,cxAny node);
 
-cxBool MapIsValidIdx(cxAny pmap,cxVec2f idx);
+cxBool MapIsValidIdx(cxAny pmap,cxVec2i idx);
 
 CX_C_END
 

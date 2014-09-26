@@ -25,9 +25,9 @@ CX_OBJECT_FREE(Wall, Node)
 }
 CX_OBJECT_TERM(Wall, Node)
 
-Wall WallCreate(cxAny map,cxSize2f size,cxVec2f pos)
+Wall WallCreate(cxAny map,cxSize2f size,cxVec2i pos)
 {
     Wall this = CX_CREATE(Wall);
-    NodeInit(this, map, size, pos);
+    NodeInit(this, map, size, pos, true);
     return this;
 }

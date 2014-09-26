@@ -15,6 +15,7 @@ CX_C_BEGIN
 
 cxVec2f cxTileIdxToPos(cxVec2f idx,cxSize2f size);
 
+//对齐到网格
 cxVec2f cxTilePosToIdx(cxVec2f pos,cxSize2f size);
 
 CX_C_END

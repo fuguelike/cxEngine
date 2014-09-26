@@ -169,7 +169,6 @@ CX_OBJECT_TYPE(cxView, cxObject)
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {
-    this->onlyTransform = false;
     this->hideTop       = true;
     this->isShowBorder  = false;
     this->isVisible     = true;
@@ -210,12 +209,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
-
-void cxViewSetOnlyTransform(cxAny pview,cxBool v)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    this->onlyTransform = v;
-}
 
 void cxViewEnableTouch(cxAny pview,cxBool enable)
 {
@@ -1048,7 +1041,7 @@ void cxViewDraw(cxAny pview)
     if(this->isFront){
         cxViewCheckFront(this);
     }
-    if(this->onlyTransform || !this->isVisible){
+    if(!this->isVisible){
         goto finished;
     }
     kmGLPushMatrix();
