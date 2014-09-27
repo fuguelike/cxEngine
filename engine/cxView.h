@@ -32,6 +32,13 @@ typedef enum {
     cxViewAutoOutside           = 1 << 16
 }cxViewAutoResizeMask;
 
+
+typedef enum {
+    cxViewTouchFlagsNone = 0,
+    cxViewTouchFlagsSelf = 1 << 0,
+    cxViewTouchFlagsSubviews = 1 << 1
+}cxViewTouchFlags;
+
 #define CX_HASH_KEY_TO_ANY(_e_) (*(cxAny *)(_e_)->key)
 
 CX_OBJECT_DEF(cxView, cxObject)
@@ -56,7 +63,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool hideTop;         //=true hide prev view when use cxWindowPush
     cxBool isSort;
     cxBool isCropping;
-    cxBool isTouch;     //enable touch
+    cxViewTouchFlags touchFlags;     //enable touch
     cxBool isRemoved;   //if remove
     cxSize2f size;
     cxVec2f position;
@@ -91,7 +98,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onTransform);
 CX_OBJECT_END(cxView, cxObject)
 
-void cxViewEnableTouch(cxAny pview,cxBool enable);
+void cxViewSetTouchFlags(cxAny pview,cxViewTouchFlags flags);
 
 cxBool cxViewIsRunning(cxAny pview);
 
@@ -181,6 +188,10 @@ cxBool cxViewKey(cxAny pview,cxKey *key);
 //touch count,current touches
 cxBool cxViewTouch(cxAny pview,cxTouchItems *points);
 
+cxAny cxViewAppendTypeImp(cxAny pview,cxConstType type);
+
+#define cxViewAppendType(_p_,_t_)   cxViewAppendTypeImp(_p_,_t_##TypeName)
+
 void cxViewAppend(cxAny pview,cxAny newview);
 
 void cxViewPrepend(cxAny pview,cxAny newview);
@@ -211,7 +222,7 @@ void cxViewSetAutoResizeMask(cxAny pview,cxViewAutoResizeMask mask);
 
 void cxViewSetSize(cxAny pview,cxSize2f size);
 
-void cxViewSort(cxAny pview);
+void cxViewCheckSort(cxAny pview);
 
 void cxViewSetVisible(cxAny pview,cxBool visible);
 

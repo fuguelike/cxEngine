@@ -17,15 +17,13 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Map, cxAtlas)
-    cxView bulletLayer; //弹药效果层
-    cxView nodesLayer;  //nodes节点层
+    cxView bLayer;  //效果层
+    cxView nLayer;  //nodes节点层
     //mode
     MapMode mode;
     //
     cxBool isSort;
     cxHash nodes;
-    //
-    cxAny node;         //当前选中的node
     //所有单位空间索引
     cxSpatial items;
     //fight var
@@ -72,17 +70,19 @@ cxAnyArray MapSearchPoints(cxAny pmap);
 void MapCacheDelPath(cxAny pmap,cxVec2i a,cxVec2i b);
 
 //保存路径缓存点
-void MapCacheSetPath(cxAny pmap,cxVec2i a,cxVec2i b,cxAnyArray path);
+cxBool MapCacheSavePath(cxAny pmap,cxVec2i a,cxVec2i b);
 
 //查询 a b两点是否有缓存路径
 cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b);
 
 //寻路失败时返回离目标最近的坐标
 //如果返回阻挡标识搜索失败
-PathResult MapSearchPath(cxAny snode,cxAny dnode);
+cxBool MapSearchPath(cxAny snode,cxAny dnode);
 
 //init map
-cxBool MapInit(cxAny pmap,cxJson data);
+cxBool MapInit(cxAny pmap);
+
+void MapSetMode(cxAny pmap,MapMode mode);
 
 //按Y的大小重新排序
 void MapSortNode(cxAny pmap);
@@ -90,8 +90,6 @@ void MapSortNode(cxAny pmap);
 void MapDelNode(cxAny pmap,cxInt x,cxInt y);
 
 void MapSetNode(cxAny pmap,cxInt x,cxInt y,cxAny node);
-
-cxAny MapNode(cxAny pview,cxInt x,cxInt y);
 
 cxVec2f MapPosToFloat(cxAny pmap,cxVec2f pos);
 

@@ -13,9 +13,8 @@
 
 CX_C_BEGIN
 
-#define MAP_ROW         42
-#define MAP_COL         42
-#define MAP_BORDER      1
+#define MAP_ROW         40
+#define MAP_COL         40
 #define ARRIVE_MIN_DIS  (15)    //到达点最小距离
 
 //固定数量数组
@@ -31,6 +30,7 @@ typedef struct {
     cxSize2f unitSize;  //单元大小
     cxFloat sideLen;    //菱形单元边长
     cxFloat angle;      //大角度
+    cxFloat mapRate;    //地图宽度比例
 }Global;
 
 extern Global global;
@@ -40,11 +40,6 @@ cxFloat SideDistance(cxInt sideNum);
 
 //8方向使用 22.5 45.0角度
 cxFloat AngleToIndex(cxFloat angle,cxInt *index);
-
-typedef struct {
-    cxBool success;     //是否成功
-    cxAny block;        //失败时返回被阻挡的单位
-}PathResult;
 
 //node Bind原因
 typedef enum {
@@ -103,6 +98,23 @@ typedef enum {
     AttackTypeDirect,       //直接攻击
     AttackTypeBullet,     //间接攻击 使用bullet基类
 }AttackType;
+
+//附近点搜索信息
+typedef struct {
+    cxAny node;         //最近的view
+    cxVec2f idx;        //与此点的
+    cxFloat dis;        //距离
+    NodeCombined type;
+} NodeNearestInfo;
+
+//两点搜索信息
+typedef struct {
+    cxAny node;         //最近的view
+    cxVec2f a;          //第1点
+    cxVec2f b;          //第2点
+    cxFloat dis;        //距离
+    NodeCombined type;  //搜索的类型
+} NodeSegmentInfo;
 
 CX_C_END
 

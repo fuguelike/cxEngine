@@ -173,7 +173,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->isShowBorder  = false;
     this->isVisible     = true;
     this->isDirty       = true;
-    this->isTouch       = true;
+    this->touchFlags    = cxViewTouchFlagsSubviews | cxViewTouchFlagsSelf;
     this->color         = cxColor4fv(1.0f, 1.0f, 1.0f, 1.0f);
     this->size          = cxSize2fv(0.0f, 0.0f);
     this->anchor        = cxVec2fv(0.0f, 0.0f);
@@ -210,10 +210,10 @@ CX_OBJECT_FREE(cxView, cxObject)
 }
 CX_OBJECT_TERM(cxView, cxObject)
 
-void cxViewEnableTouch(cxAny pview,cxBool enable)
+void cxViewSetTouchFlags(cxAny pview,cxViewTouchFlags flags)
 {
     CX_ASSERT_THIS(pview, cxView);
-    this->isTouch = enable;
+    this->touchFlags = flags;
 }
 
 cxBool cxViewIsRunning(cxAny pview)
@@ -303,6 +303,14 @@ void cxViewPrepend(cxAny pview,cxAny newview)
     nview->parentView = pview;
 }
 
+cxAny cxViewAppendTypeImp(cxAny pview,cxConstType type)
+{
+    cxAny nview = cxObjectCreateWithType(type);
+    CX_ASSERT_TYPE(nview, cxView);
+    cxViewAppend(pview, nview);
+    return nview;
+}
+
 void cxViewAppend(cxAny pview,cxAny newview)
 {
     CX_ASSERT_THIS(pview, cxView);
@@ -319,9 +327,6 @@ void cxViewRemove(cxAny pview)
     if(this->isRemoved || this->parentView == NULL){
         return;
     }
-    if(this->isRunning){
-        cxViewExit(this);
-    }
     cxView parent = this->parentView;
     cxArrayAppend(parent->removes, this);
     this->isRemoved = true;
@@ -337,10 +342,10 @@ void cxViewCheckFront(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     CX_RETURN(!this->isFront);
+    this->isFront = false;
     cxView parent = this->parentView;
     CX_RETURN(parent == NULL);
     cxListMoveToTail(parent->subViews, this->subElement);
-    this->isFront = false;
 }
 
 void cxViewSetCropping(cxAny pview,cxBool cropping)
@@ -566,12 +571,13 @@ void cxViewSortWithFunc(cxAny pview,cxCmpFunc func)
     cxListSort(this->subViews, func);
 }
 
-void cxViewSort(cxAny pview)
+void cxViewCheckSort(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
+    CX_RETURN(!this->isSort);
+    this->isSort = false;
     cxListSort(this->subViews, cxViewSortByZOrder);
     CX_METHOD_RUN(this->onSort,this);
-    this->isSort = false;
 }
 
 void cxViewSetVisible(cxAny pview,cxBool visible)
@@ -870,8 +876,14 @@ cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
 cxBool cxViewTouch(cxAny pview,cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, cxView);
-    if(!this->isVisible || !this->isTouch){
+    if(!this->isVisible){
         return false;
+    }
+    if(this->touchFlags == cxViewTouchFlagsNone){
+        return false;
+    }
+    if(!(this->touchFlags & cxViewTouchFlagsSubviews)){
+        goto completed;
     }
     cxListElement *head = cxListFirst(this->subViews);
     if(head == NULL){
@@ -896,8 +908,14 @@ completed:
 cxBool cxViewKey(cxAny pview,cxKey *key)
 {
     CX_ASSERT_THIS(pview, cxView);
-    if(!this->isVisible || !this->isTouch){
+    if(!this->isVisible){
         return false;
+    }
+    if(this->touchFlags == cxViewTouchFlagsNone){
+        return false;
+    }
+    if(!(this->touchFlags & cxViewTouchFlagsSubviews)){
+        goto completed;
     }
     cxListElement *head = cxListFirst(this->subViews);
     if(head == NULL){
@@ -990,6 +1008,9 @@ static void cxViewCleanRemoves(cxView this)
     CX_ARRAY_FOREACH(this->removes, ele){
         cxView view = cxArrayObject(ele);
         CX_ASSERT_TYPE(view, cxView);
+        if(view->isRunning){
+            cxViewExit(view);
+        }
         cxView parent = view->parentView;
         CX_METHOD_RUN(parent->onRemove, parent, view);
         cxListRemove(this->subViews, view->subElement);
@@ -1009,8 +1030,10 @@ static void cxViewCleanAppends(cxAny pview)
             continue;
         }
         if(nview->isPrepend){
+            //append head
             nview->subElement = cxListPrepend(this->subViews, nview);
         }else{
+            //append tail
             nview->subElement = cxListAppend(this->subViews, nview);
         }
         if(this->isRunning){
@@ -1027,21 +1050,15 @@ void cxViewDraw(cxAny pview)
     CX_ASSERT_THIS(pview, cxView);
     //process append view
     cxViewCleanAppends(this);
-    if(!this->isVisible){
+    if(!this->isVisible || this->isRemoved){
         goto finished;
     }
-    //update all action
-    cxViewUpdateActions(this);
-    //do update event
     CX_EVENT_FIRE(this, onUpdate);
+    cxViewUpdateActions(this);
     cxViewTransform(this);
-    if(this->isSort){
-        cxViewSort(this);
-    }
-    if(this->isFront){
-        cxViewCheckFront(this);
-    }
-    if(!this->isVisible){
+    cxViewCheckSort(this);
+    cxViewCheckFront(this);
+    if(!this->isVisible || this->isRemoved){
         goto finished;
     }
     kmGLPushMatrix();

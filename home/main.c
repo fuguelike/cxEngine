@@ -14,6 +14,7 @@
 #include "Range.h"
 #include "Move.h"
 #include "Bullet.h"
+#include "FightMap.h"
 #include <types/Attack.h>
 #include <types/Defence.h>
 #include <types/Wall.h>
@@ -26,6 +27,8 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Button);
     CX_TYPE_REG(Range);
     CX_TYPE_REG(Move);
+    
+    CX_TYPE_REG(FightMap);
     
     CX_TYPE_REG(Bullet);
     CX_TYPE_REG(Attack);
@@ -59,8 +62,8 @@ void cxEngineMain(cxEngine engine)
     
     cxLoader loader = cxLoaderCreate("main.json");
     Scene scene = CX_TYPE_CAST(Scene, loader->object);
-    scene->map = cxLoaderGet(loader, "map");
-    CX_ASSERT(scene->map != NULL, "map null");
+    scene->fightMap = cxLoaderGet(loader, "map");
+    CX_ASSERT_TYPE(scene->fightMap, FightMap);
     
     //test code
     Button btnSelectTurret = cxLoaderGet(loader, "btnSelectTurret");
@@ -75,9 +78,11 @@ void cxEngineMain(cxEngine engine)
     Button btnTest = cxLoaderGet(loader, "btnTest");
     CX_EVENT_APPEND(btnTest->onTap, selectButton);
     
+    Button btnLonger = cxLoaderGet(loader, "btnLonger");
+    CX_EVENT_APPEND(btnLonger->onTap, selectButton);
     
     
-    MapInit(scene->map,NULL);
+    FightMapInit(scene->fightMap);
     cxWindowPushView(scene);
 }
 

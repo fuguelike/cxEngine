@@ -17,6 +17,7 @@ CX_OBJECT_INIT(Wall, Node)
 {
     NodeSetType(this, NodeTypeBlock);
     NodeSetBody(this, 1);
+    NodeSetSize(this, cxSize2iv(1, 1));
     cxSpriteSetTextureURL(this, "bg1.png");
 }
 CX_OBJECT_FREE(Wall, Node)
@@ -25,9 +26,9 @@ CX_OBJECT_FREE(Wall, Node)
 }
 CX_OBJECT_TERM(Wall, Node)
 
-Wall WallCreate(cxAny map,cxSize2f size,cxVec2i pos)
+Wall WallCreate(cxAny map,cxVec2i pos)
 {
     Wall this = CX_CREATE(Wall);
-    NodeInit(this, map, size, pos, true);
+    NodeInit(this, map, pos, true);
     return this;
 }

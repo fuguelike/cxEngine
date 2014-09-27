@@ -25,6 +25,7 @@ cxFloat AngleToIndex(cxFloat angle,cxInt *index)
 
 void GlobalInit(cxEngine engine)
 {
+    global.mapRate = 1.2f;
     global.unitNum = cxVec2iv(MAP_ROW, MAP_COL);
     
     cxSize2f size = cxSize2fv(engine->winsize.w * 1.2f, 0);

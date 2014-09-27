@@ -69,6 +69,7 @@ CX_OBJECT_INIT(Defence, Node)
 {
     NodeSetType(this, NodeTypeDefence);
     NodeSetBody(this, 1.0f);
+    NodeSetSize(this, cxSize2iv(2, 2));
     NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(0, 15));
     
@@ -89,10 +90,10 @@ CX_OBJECT_FREE(Defence, Node)
 }
 CX_OBJECT_TERM(Defence, Node)
 
-Defence DefenceCreate(cxAny map,cxSize2f size,cxVec2i pos)
+Defence DefenceCreate(cxAny map,cxVec2i pos)
 {
     Defence this = CX_CREATE(Defence);
-    NodeInit(this, map, size, pos, true);
+    NodeInit(this, map, pos, true);
     NodeSearchRun(this);
     return this;
 }

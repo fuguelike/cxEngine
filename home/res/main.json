@@ -4,8 +4,7 @@
   "resizing": "fill",
   "body": {
     "cxId": "map",
-    "cxType": "Map",
-    "mode": "fight"
+    "cxType": "FightMap"
   },
   "scale": 1.2,
   "range": {
@@ -54,21 +53,24 @@
           "title":"城墙"
         },
         {
-          "cxId":"btnTest",
+          "cxId":"btnLonger",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
           },
           "tag":4,
-          "title":"Test"
+          "title":"远程"
         },
         {
+          "cxId":"btnTest",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
-          }
+          },
+          "tag":5,
+          "title":"Test"
         },
         {
           "cxType": "Button",

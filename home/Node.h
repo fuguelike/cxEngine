@@ -18,12 +18,11 @@ CX_C_BEGIN
 CX_OBJECT_DEF(Node, cxSprite)
     cxSprite array;     //Test
     cxAny map;
-    cxVec2f floatIndex; //浮点格子坐标
+    cxVec2f index;      //更精确的浮点格子坐标,根据node当前位置计算
     cxBool isStatic;    //node 是否可移动，移动的node不加入nodes,不参与路径搜索
     cxVec2i initIdx;    //初始化放置的位置,对于静态物不会变化
-    cxSize2f size;      //占用的格子数
+    cxSize2i size;      //占用的格子数
     cxBool isDie;       //是否死去
-    cxVec2f start;
     NodeCombined type;  //node组合类型,攻击范围
     cxFloat body;       //可攻击半径
     cxFloat attackRate; //攻击频率
@@ -61,9 +60,6 @@ CX_OBJECT_END(Node, cxSprite)
 //启动攻击定时器
 void NodeStartupAttackTimer(cxAny pview);
 
-//获取攻击范围
-cxRange2f NodeRange(cxAny pview);
-
 //使用点集合移动移动到目标,移动结束触发 MoveExit 回调
 void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points);
 
@@ -84,28 +80,31 @@ void NodeSearchOrderClear(cxAny pview);
 //朝向target
 void NodeFaceTarget(cxAny pview,cxAny target);
 
-////攻击者是否到达目标的攻击范围
-//cxBool NodeArriveAttack(cxAny pattacker,cxAny ptarget);
-//cxBool NodeArriveAttackWithPoint(cxAny psx,cxAny pdx,cxVec2f p1,cxVec2f p2);
+//获取攻击范围
+cxRange2f NodeRange(cxAny pview);
+//根据网格坐标设置位置，与左下角格子中心为铆合点
+void NodeSetIndex(cxAny pview,cxVec2i idx);
 
+void NodeSetSize(cxAny pview,cxSize2i size);
+cxSize2i NodeSize(cxAny pview);
 //设置生命 等级 攻击力
 void NodeSetLife(cxAny pview,cxInt life);
 void NodeAddLife(cxAny pview,cxInt life);
+cxRange2i NodeLife(cxAny pview);
 void NodeSetLevel(cxAny pview,cxInt level);
+cxInt NodeLevel(cxAny pview);
 void NodeSetBody(cxAny pview,cxFloat body);
 void NodeSetPower(cxAny pview,cxFloat power);
 void NodeSetSpeed(cxAny pview,cxFloat speed);
 void NodeSetType(cxAny pview,NodeType type);
 void NodeSetSubType(cxAny pview,NodeSubType subType);
-//获取攻击力
-cxFloat NodePower(cxAny pview);
-
-//设置攻击范围
-void NodeSetRange(cxAny pview,cxRange2f range);
-
 //设置获取攻击频率
 cxFloat NodeAttackRate(cxAny pview);
 void NodeSetAttackRate(cxAny pview,cxFloat rate);
+//获取攻击力
+cxFloat NodePower(cxAny pview);
+//设置攻击范围
+void NodeSetRange(cxAny pview,cxRange2f range);
 
 cxAny NodeMap(cxAny pview);
 
@@ -122,20 +121,9 @@ void NodePauseSearch(cxAny pview);
 //重新启动搜索
 void NodeResumeSearch(cxAny pview);
 
-cxRange2i NodeLife(cxAny pview);
-
-cxInt NodeLevel(cxAny pview);
-
 cxVec2f NodeFloatIndex(cxAny pview);
 
-cxSize2i NodeSize(cxAny pview);
-
-//根据网格坐标设置位置，与左下角格子中心为铆合点
-void NodeSetIndex(cxAny pview,cxVec2i idx);
-
-void NodeSetSize(cxAny pview,cxSize2f size);
-
-void NodeInit(cxAny pview,cxAny map,cxSize2f size,cxVec2i idx,cxBool isStatic);
+void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic);
 
 CX_C_END
 

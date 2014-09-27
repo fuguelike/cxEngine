@@ -19,7 +19,7 @@ static void NodeOnTransform(cxAny pview)
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     cxVec2f pos = cxViewPosition(this);
-    this->floatIndex = MapPosToFloat(map, pos);
+    this->index = MapPosToFloat(map, pos);
     cxSpatialReindexView(map->items, this);
 }
 
@@ -113,7 +113,7 @@ CX_OBJECT_INIT(Node, cxSprite)
     this->searchIndex = 0;
     this->dirIndex = 0;
     this->isDie = false;
-    this->floatIndex = cxVec2fv(-1, -1);
+    this->index = cxVec2fv(-1, -1);
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
     CX_METHOD_SET(this->IsAttackTarget, NodeIsAttackTarget);
 }
@@ -172,24 +172,24 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeMap(this);
-    //Test
-//    cxList subviews = cxViewSubViews(map);
-//    CX_LIST_FOREACH(subviews, ele){
-//        cxView tmp = ele->any;
-//        if(tmp->tag == 1001){
-//            cxViewRemove(tmp);
-//        }
-//    }
-//    CX_ASTAR_POINTS_FOREACH(points, idx){
-//        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
-//        cxVec2f pos = MapIndexToPos(map, p);
-//        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
-//        cxViewSetColor(sp, cxRED);
-//        cxViewSetPos(sp, pos);
-//        cxViewSetSize(sp, cxSize2fv(10, 10));
-//        cxViewSetTag(sp, 1001);
-//        cxViewAppend(map, sp);
-//    }
+    //Test show point position
+    cxList subviews = cxViewSubViews(map);
+    CX_LIST_FOREACH(subviews, ele){
+        cxView tmp = ele->any;
+        if(tmp->tag == 1001){
+            cxViewRemove(tmp);
+        }
+    }
+    CX_ASTAR_POINTS_FOREACH(points, idx){
+        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
+        cxVec2f pos = MapIndexToPos(map, p);
+        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
+        cxViewSetColor(sp, cxYELLOW);
+        cxViewSetPos(sp, pos);
+        cxViewSetSize(sp, cxSize2fv(8, 8));
+        cxViewSetTag(sp, 1001);
+        cxViewAppend(map, sp);
+    }
     //bind 目标 移动
     cxViewBind(pview, target, cxNumberInt(NodeBindReasonMove));
     Move move = MoveCreate(map, points);
@@ -372,7 +372,7 @@ cxBool NodeCheckDie(cxAny pview)
     CX_ASSERT_THIS(pview, Node);
     cxBool die = (this->life.min <= 0);
     if(die && !this->isDie){
-        CX_LOGGER("node die %f %f",this->floatIndex.x,this->floatIndex.y);
+        CX_LOGGER("node die at(%f %f)",this->index.x,this->index.y);
         this->isDie = true;
         this->life.min = 0;
         CX_EVENT_FIRE(this, onLife);
@@ -398,7 +398,7 @@ cxInt NodeLevel(cxAny pview)
 cxVec2f NodeFloatIndex(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    return this->floatIndex;
+    return this->index;
 }
 
 cxSize2i NodeSize(cxAny pview)
@@ -407,40 +407,20 @@ cxSize2i NodeSize(cxAny pview)
     return cxSize2iv(this->size.w, this->size.h);
 }
 
-cxBool NodeIdxIsValid(cxAny pview,cxVec2f curr)
-{
-    CX_ASSERT_THIS(pview, Node);
-    Map map = this->map;
-    cxVec2i idx = cxVec2iv(curr.x, curr.y);
-    cxSize2i size = NodeSize(this);
-    // 1 = max -1
-    if(idx.x < MAP_BORDER || (idx.x + size.w) > (global.unitNum.x - MAP_BORDER)){
-        return false;
-    }
-    if(idx.y < MAP_BORDER || (idx.y + size.h) > (global.unitNum.y - MAP_BORDER)){
-        return false;
-    }
-    for(cxInt x = idx.x; x < idx.x + size.w; x ++)
-    for(cxInt y = idx.y; y < idx.y + size.h; y++){
-        cxAny item = MapNode(map, x, y);
-        if(item != NULL && item != this){
-            return false;
-        }
-    }
-    return true;
-}
-
 void NodeSetIndex(cxAny pview,cxVec2i idx)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
-    cxVec2f p = cxVec2fv(idx.x + this->size.w/2.0f, idx.y + this->size.h/2.0f);
-    cxVec2f npos = MapIndexToPos(map, p);
+    //为了对齐格子加上node大小
+    cxVec2f fidx = cxVec2fv(idx.x + this->size.w/2.0f, idx.y + this->size.h/2.0f);
+    
+    cxVec2f npos = MapIndexToPos(map, fidx);
     cxViewSetPos(this, npos);
-    this->floatIndex = MapPosToFloat(map, npos);
+    //获取精确的格子坐标
+    this->index = MapPosToFloat(map, npos);
 }
 
-void NodeSetSize(cxAny pview,cxSize2f size)
+void NodeSetSize(cxAny pview,cxSize2i size)
 {
     CX_ASSERT_THIS(pview, Node);
     cxSize2f vsize = cxSize2fv(global.unitSize.w * size.w, global.unitSize.h * size.h);
@@ -448,16 +428,15 @@ void NodeSetSize(cxAny pview,cxSize2f size)
     this->size = size;
 }
 
-void NodeInit(cxAny pview,cxAny map, cxSize2f size,cxVec2i idx,cxBool isStatic)
+void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic)
 {
     CX_ASSERT_THIS(pview, Node);
     this->map = map;
     this->initIdx = idx;
     this->isStatic = isStatic;
-    NodeSetSize(this, size);
     NodeSetIndex(this, idx);
     MapFillNode(map, idx, this);
-    
+    //show test array
     cxSize2f ns = cxViewSize(this);
     cxFloat w = CX_MIN(ns.w, ns.h);
     this->array = cxSpriteCreateWithURL("bullet.json?array.png");
