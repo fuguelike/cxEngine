@@ -46,7 +46,7 @@ CX_OBJECT_DEF(cxAStar, cxObject)
     cxAStarType type;
     CX_METHOD_DEF(void, Neighbors, cxAny, cxAny list, cxVec2i *node);
     CX_METHOD_DEF(cxFloat, Heuristic, cxAny, cxVec2i *from,cxVec2i *to);
-    CX_METHOD_DEF(cxInt, EarlyExit, cxAny, cxInt vcount, cxVec2i *vnode,cxVec2i *gnode);
+    CX_METHOD_DEF(cxInt, EarlyExit, cxAny, cxInt vcount, cxVec2i *curr,cxVec2i *target);
     CX_METHOD_DEF(cxInt, Comparator, cxAny, cxVec2i *lv,cxVec2i *rv);
     CX_METHOD_DEF(cxBool, IsAppend, cxAny, cxVec2i *node);
     CX_METHOD_DEF(void, Visited,cxAny,cxVec2i *node);

@@ -61,26 +61,28 @@ void cxEngineMain(cxEngine engine)
     GlobalInit(engine);
     
     cxLoader loader = cxLoaderCreate("main.json");
-    Scene scene = CX_TYPE_CAST(Scene, loader->object);
+    Scene scene = CX_TYPE_CAST(loader->object,Scene);
     scene->fightMap = cxLoaderGet(loader, "map");
     CX_ASSERT_TYPE(scene->fightMap, FightMap);
     
     //test code
-    Button btnSelectTurret = cxLoaderGet(loader, "btnSelectTurret");
+    CX_LOADER_DEF(loader, Button, btnSelectTurret);
     CX_EVENT_APPEND(btnSelectTurret->onTap, selectButton);
     
-    Button btnSelectSoldier = cxLoaderGet(loader, "btnSelectSoldier");
+    CX_LOADER_DEF(loader, Button, btnSelectSoldier);
     CX_EVENT_APPEND(btnSelectSoldier->onTap, selectButton);
     
-    Button btnSelectArcher = cxLoaderGet(loader, "btnSelectArcher");
+    CX_LOADER_DEF(loader, Button, btnSelectArcher);
     CX_EVENT_APPEND(btnSelectArcher->onTap, selectButton);
     
-    Button btnTest = cxLoaderGet(loader, "btnTest");
+    CX_LOADER_DEF(loader, Button, btnTest);
     CX_EVENT_APPEND(btnTest->onTap, selectButton);
     
-    Button btnLonger = cxLoaderGet(loader, "btnLonger");
+    CX_LOADER_DEF(loader, Button, btnLonger);
     CX_EVENT_APPEND(btnLonger->onTap, selectButton);
     
+    CX_LOADER_DEF(loader, Button, btnClear);
+    CX_EVENT_APPEND(btnClear->onTap, selectButton);
     
     FightMapInit(scene->fightMap);
     cxWindowPushView(scene);

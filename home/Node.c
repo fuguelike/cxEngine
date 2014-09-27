@@ -44,22 +44,22 @@ void NodeAttacked(cxAny pview,cxAny attacker,AttackType type)
     CX_ASSERT_THIS(pview, Node);
     //如果是直接攻击
     if(type == AttackTypeDirect){
-        Node a = CX_TYPE_CAST(Node, attacker);
+        Node a = CX_TYPE_CAST(attacker,Node);
         NodeAddLife(this, -a->power);
     }else if(type == AttackTypeBullet){
-        Bullet a = CX_TYPE_CAST(Bullet, attacker);
+        Bullet a = CX_TYPE_CAST(attacker,Bullet);
         NodeAddLife(this, -a->power);
     }
 }
 
 static void NodeAttackTimerArrive(cxAny pav)
 {
-    Node this = CX_TYPE_CAST(Node, cxActionView(pav));
+    Node this = CX_TYPE_CAST(cxActionView(pav),Node);
     cxHash bindes = cxViewBindes(this);
     CX_HASH_FOREACH(bindes, ele, tmp){
         //获取目标
         Node target = cxHashElementKeyToAny(ele);
-        //攻击前已死
+        //攻击前目标已死
         if(NodeCheckDie(target)){
             continue;
         }
@@ -69,7 +69,7 @@ static void NodeAttackTimerArrive(cxAny pav)
             continue;
         }
         CX_METHOD_RUN(this->AttackTarget,this,target);
-        //攻击后死亡
+        //攻击后目标死亡
         if(NodeCheckDie(target)){
             continue;
         }
@@ -90,15 +90,15 @@ void NodeStartupAttackTimer(cxAny pview)
     cxViewAppendAction(this, timer);
 }
 
-static cxBool NodeIsAttackTarget(cxAny psx,cxAny pdx)
+cxBool NodeIsAttackTarget(cxAny pattacker,cxAny ptarget)
 {
-    Node sx = CX_TYPE_CAST(Node, psx);
-    Node dx = CX_TYPE_CAST(Node, pdx);
-    cxVec2f sidx = NodeFloatIndex(sx);
-    cxVec2f didx = NodeFloatIndex(dx);
-    cxFloat d = kmVec2DistanceBetween(&sidx, &didx) - (sx->body + dx->body);
-    d = CX_MAX(d, 0);
-    cxRange2f range = NodeRange(sx);
+    Node attacker = CX_TYPE_CAST(pattacker,Node);
+    Node target = CX_TYPE_CAST(ptarget,Node);
+    //获取攻击者作战范围
+    cxRange2f range = NodeRange(attacker);
+    //计算作战距离
+    cxFloat d = NodeDistance(attacker, target);
+    //检测是否在作战范围内
     return d >= range.min && d <= range.max;
 }
 
@@ -141,16 +141,16 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
 static void NodeMoveArrive(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    Node node = CX_TYPE_CAST(Node, cxActionView(this));
+    Node node = CX_TYPE_CAST(cxActionView(this),Node);
     cxHash bindes = cxViewBindes(node);
     CX_HASH_FOREACH(bindes, ele, tmp){
         Node target = cxHashElementKeyToAny(ele);
+        //目标死了用不着移动了
         if(NodeCheckDie(target)){
             continue;
         }
-        //回调处理返回
-        cxBool ret = CX_METHOD_GET(true, node->MoveExit, node, target);
-        if(!ret){
+        //回调处理返回,返回false表示无需攻击目标
+        if(!CX_METHOD_GET(true, node->MoveExit, node, target)){
             cxViewUnBind(node, target);
             continue;
         }
@@ -168,12 +168,23 @@ cxRange2f NodeRange(cxAny pview)
     return this->type.range;
 }
 
+cxFloat NodeDistance(cxAny src,cxAny dst)
+{
+    Node snode = CX_TYPE_CAST(src,Node);
+    Node dnode = CX_TYPE_CAST(dst,Node);
+    cxVec2f sidx = NodeFloatIndex(snode);
+    cxVec2f didx = NodeFloatIndex(dnode);
+    cxFloat d = kmVec2DistanceBetween(&sidx, &didx) - (snode->body + dnode->body);
+    d = CX_MAX(d, 0);
+    return d;
+}
+
 void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeMap(this);
     //Test show point position
-    cxList subviews = cxViewSubViews(map);
+    cxList subviews = cxViewSubViews(map->bLayer);
     CX_LIST_FOREACH(subviews, ele){
         cxView tmp = ele->any;
         if(tmp->tag == 1001){
@@ -184,11 +195,11 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
         cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
         cxVec2f pos = MapIndexToPos(map, p);
         cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
-        cxViewSetColor(sp, cxYELLOW);
+        cxViewSetColor(sp, cxWHITE);
         cxViewSetPos(sp, pos);
         cxViewSetSize(sp, cxSize2fv(8, 8));
         cxViewSetTag(sp, 1001);
-        cxViewAppend(map, sp);
+        cxViewAppend(map->bLayer, sp);
     }
     //bind 目标 移动
     cxViewBind(pview, target, cxNumberInt(NodeBindReasonMove));
@@ -247,6 +258,7 @@ void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type)
 {
     CX_ASSERT_THIS(target, Node);
     CX_METHOD_RUN(this->NodeAttacked,this,attacker,type);
+    //攻击后死亡了
     NodeCheckDie(target);
 }
 
@@ -301,6 +313,12 @@ void NodeSetLevel(cxAny pview,cxInt level)
     this->level = level;
 }
 
+cxFloat NodeBody(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->body;
+}
+
 void NodeSetBody(cxAny pview,cxFloat body)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -343,6 +361,12 @@ void NodeSetPower(cxAny pview,cxFloat power)
     this->power = power;
 }
 
+cxFloat NodeSpeed(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->speed;
+}
+
 void NodeSetSpeed(cxAny pview,cxFloat speed)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -370,9 +394,11 @@ cxBool NodeIsStatic(cxAny pview)
 cxBool NodeCheckDie(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    cxBool die = (this->life.min <= 0);
-    if(die && !this->isDie){
-        CX_LOGGER("node die at(%f %f)",this->index.x,this->index.y);
+    //当前生命值太小表示死掉了
+    cxBool die = this->life.min <= 0;
+    if(this->life.min <= 0 && !this->isDie){
+        CX_LOGGER("Node (type=%s) die At(%f %f)",CX_TYPE(cxObject, this)->cxType,this->index.x,this->index.y);
+        //防止死的次数太多
         this->isDie = true;
         this->life.min = 0;
         CX_EVENT_FIRE(this, onLife);

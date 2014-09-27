@@ -171,9 +171,11 @@ typedef char *          cxChars;
     #define CX_DEPRECATED_ATTRIBUTE
 #endif
 
-#define CX_INVALID_INDEX            -1
-
+//max logger length
 #define CX_MAX_LOGGER_LENGTH        1024
+
+//max type signature name length
+#define MAX_TYPE_SIGNATURE_SIZE     1024
 
 //#define NDEBUG 1
 
@@ -198,7 +200,7 @@ do{                                                             \
 
 #define CX_ASSERT_THIS(_o_,_t_)     _t_ this = (_t_)(_o_);CX_ASSERT_TYPE(_o_,_t_)
 
-#define CX_TYPE_CAST(_t_,_o_)       (_t_)(_o_);CX_ASSERT_TYPE(_o_,_t_)
+#define CX_TYPE_CAST(_o_,_t_)       (_t_)(_o_);CX_ASSERT_TYPE(_o_,_t_)
 
 #else
 
@@ -210,7 +212,7 @@ do{                                                             \
 
 #define CX_ASSERT_THIS(_o_,_t_)     _t_ this = (_t_)(_o_)
 
-#define CX_TYPE_CAST(_t_,_o_)       (_t_)(_o_)
+#define CX_TYPE_CAST(_o_,_t_)       (_t_)(_o_)
 
 #define CX_ASSERT_FALSE(format,...)
 

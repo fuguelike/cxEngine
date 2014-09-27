@@ -21,7 +21,7 @@ static cpBB cxSpatialIndexBB(cxAny pview)
 static void cxSpatialIndexIterator(void *obj, void *data)
 {
     CX_ASSERT_THIS(data, cxSpatial);
-    cxView view = CX_TYPE_CAST(cxView, obj);
+    cxView view = CX_TYPE_CAST(obj,cxView);
     cpHashValue hv = CX_METHOD_GET((cpHashValue)view, this->HashValue, view);
     cpSpatialIndexRemove(this->index, view, hv);
     CX_RELEASE(view);
@@ -89,7 +89,7 @@ void cxSpatialEach(cxAny ps,cxSpatialEachFunc func,cxAny data)
 static cpCollisionID cxSpatialIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
 {
     cxSpatialNearestInfo *info = data;
-    cxView view = CX_TYPE_CAST(cxView, pview);
+    cxView view = CX_TYPE_CAST(pview,cxView);
     if(info->filter != NULL && !info->filter(view)){
         return id;
     }

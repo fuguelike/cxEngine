@@ -276,7 +276,7 @@ cxHash cxViewBinded(cxAny pview)
 void cxViewUnBind(cxAny pview,cxAny bview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxView view = CX_TYPE_CAST(cxView, bview);
+    cxView view = CX_TYPE_CAST(bview,cxView);
     cxHashDel(this->bindes, cxHashAnyKey(bview));
     cxHashDel(view->binded, cxHashAnyKey(pview));
 }
@@ -285,7 +285,7 @@ void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
 {
     CX_ASSERT(pview != bview, "self can't bind self");
     CX_ASSERT_THIS(pview, cxView);
-    cxView bind = CX_TYPE_CAST(cxView, bview);
+    cxView bind = CX_TYPE_CAST(bview,cxView);
     bd = (bd == NULL?cxStringCreate("%s bind %s",TYPE(this),TYPE(bind)): bd);
     //bind new view
     cxHashSet(this->bindes, cxHashAnyKey(bind), bd);
@@ -296,7 +296,7 @@ void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
 void cxViewPrepend(cxAny pview,cxAny newview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxView nview = CX_TYPE_CAST(cxView, newview);
+    cxView nview = CX_TYPE_CAST(newview,cxView);
     nview->isPrepend = true;
     nview->isRemoved = false;
     cxArrayAppend(this->appends, newview);
@@ -314,7 +314,7 @@ cxAny cxViewAppendTypeImp(cxAny pview,cxConstType type)
 void cxViewAppend(cxAny pview,cxAny newview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxView nview = CX_TYPE_CAST(cxView, newview);
+    cxView nview = CX_TYPE_CAST(newview,cxView);
     nview->isPrepend = false;
     nview->isRemoved = false;
     cxArrayAppend(this->appends, newview);
@@ -978,7 +978,7 @@ cxAny cxViewAppendTimer(cxAny pview,cxFloat freq,cxInt repeat)
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxAction action = CX_TYPE_CAST(cxAction, pav);
+    cxAction action = CX_TYPE_CAST(pav,cxAction);
     cxActionSetView(action, pview);
     cxUInt actionId = cxActionGetId(action);
     cxHashKey key = cxHashLongKey(actionId);

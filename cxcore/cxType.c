@@ -78,11 +78,11 @@ void cxTypeSignature(cxType type,cxType super)
 {
     CX_ASSERT(type != NULL, "args error");
     CX_ASSERT(type->signature == NULL, "error repeat reg type");
-    cxChar maxs[1024]={0};
+    cxChar maxs[MAX_TYPE_SIGNATURE_SIZE]={0};
     if(super == NULL){
-        snprintf(maxs, 1024, "%s",cxObjectTypeName);
+        snprintf(maxs, MAX_TYPE_SIGNATURE_SIZE, "%s",cxObjectTypeName);
     }else{
-        snprintf(maxs, 1024, "%s.%s",type->typeName,super->signature);
+        snprintf(maxs, MAX_TYPE_SIGNATURE_SIZE, "%s.%s",type->typeName,super->signature);
     }
     type->signature = allocator->strdup(maxs);
 }

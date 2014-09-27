@@ -94,14 +94,14 @@ cxInt cxArrayObjectIndex(cxAny array,cxAny any)
             return (cxInt)utarray_eltidx(this->utArray,e);
         }
     }
-    return CX_INVALID_INDEX;
+    return -1;
 }
 
 void cxArrayRemove(cxAny array,cxAny any)
 {
     CX_ASSERT_THIS(array, cxArray);
     cxInt index = cxArrayObjectIndex(array, any);
-    if(index != CX_INVALID_INDEX) {
+    if(index != -1) {
         utarray_erase(this->utArray, index, 1);
         CX_RELEASE(any);
     }
@@ -111,7 +111,7 @@ void cxArrayFastRemove(cxAny array,cxAny any)
 {
     CX_ASSERT_THIS(array, cxArray);
     cxInt index = cxArrayObjectIndex(this, any);
-    if(index != CX_INVALID_INDEX) {
+    if(index != -1) {
         cxArrayFastRemoveAtIndex(this, index);
     }
 }

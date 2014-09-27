@@ -18,7 +18,9 @@ CX_OBJECT_INIT(Wall, Node)
     NodeSetType(this, NodeTypeBlock);
     NodeSetBody(this, 1);
     NodeSetSize(this, cxSize2iv(1, 1));
+    
     cxSpriteSetTextureURL(this, "bg1.png");
+    cxViewSetColor(this, cxBLACK);
 }
 CX_OBJECT_FREE(Wall, Node)
 {

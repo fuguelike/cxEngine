@@ -53,6 +53,9 @@ void MapRemoveBullet(cxAny bullet);
 //加入单位
 void MapAppendNode(cxAny node);
 
+//移除所有的nodes
+void MapRemoveNodes(cxAny pmap);
+
 //移除单位
 void MapRemoveNode(cxAny node);
 

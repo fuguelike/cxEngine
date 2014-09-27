@@ -111,7 +111,7 @@ static void cxSkeletonStateListener(spAnimationState* state, int trackIndex, spE
 static void cxSkeletonInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxSkeleton);
-    cxSpine spine = CX_TYPE_CAST(cxSpine, this->cxAction.view);
+    cxSpine spine = CX_TYPE_CAST(this->cxAction.view,cxSpine);
     cxSkeletionFree(this);
     this->state = spAnimationState_create(spine->stateData);
     if(this->state == NULL){
@@ -137,7 +137,7 @@ static void cxSkeletonStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxSkeleton);
     CX_ASSERT(this->state != NULL, "animation state null");
-    cxSpine spine = CX_TYPE_CAST(cxSpine, this->cxAction.view);
+    cxSpine spine = CX_TYPE_CAST(this->cxAction.view,cxSpine);
     CX_ASSERT(spine != NULL && spine->skeleton != NULL, "target spine view not init");
 	spAnimationState_update(this->state, dt);
 	spAnimationState_apply(this->state, spine->skeleton);

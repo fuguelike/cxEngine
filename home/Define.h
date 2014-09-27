@@ -102,17 +102,18 @@ typedef enum {
 //附近点搜索信息
 typedef struct {
     cxAny node;         //最近的view
-    cxVec2f idx;        //与此点的
     cxFloat dis;        //距离
+    cxAny src;          //搜索者
     NodeCombined type;
 } NodeNearestInfo;
 
 //两点搜索信息
 typedef struct {
     cxAny node;         //最近的view
-    cxVec2f a;          //第1点
-    cxVec2f b;          //第2点
+    cxFloat ab;         //ab点距离
     cxFloat dis;        //距离
+    cxAny src;          //搜索者
+    cxAny dst;          //目标
     NodeCombined type;  //搜索的类型
 } NodeSegmentInfo;
 

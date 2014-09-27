@@ -23,7 +23,6 @@ CX_OBJECT_FREE(cxLoader, cxObject)
 }
 CX_OBJECT_TERM(cxLoader, cxObject)
 
-
 cxAny cxLoaderGet(cxAny loader,cxConstChars id)
 {
     CX_ASSERT_THIS(loader, cxLoader);

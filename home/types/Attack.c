@@ -19,6 +19,10 @@ static cxAny AttackFindTarget(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Attack);
     Map map = NodeMap(this);
+    //已达到攻击范围
+    if(CX_METHOD_GET(false, this->Node.IsAttackTarget, this,target)){
+        return target;
+    }
     //搜索目标路径成功,移动到可攻击位置
     if(MapSearchPath(this, target)){
         NodeMovingToTarget(this, target, MapSearchPoints(map));
@@ -52,6 +56,7 @@ CX_OBJECT_INIT(Attack, Node)
     NodeSetRange(this, cxRange2fv(0, 0));
     NodeSetAttackRate(this, 0.1f);
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
+    cxViewSetColor(this, cxRED);
     
     CX_METHOD_SET(this->Node.FindTarget, AttackFindTarget);
     CX_METHOD_SET(this->Node.AttackTarget, AttackAttackTarget);

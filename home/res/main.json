@@ -23,61 +23,64 @@
       "resizing": "width|bottom",
       "subviews": [
         {
-          "cxId":"btnSelectTurret",
+          "cxId": "btnSelectTurret",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
           },
-          "tag":2,
-          "title":"炮塔"
+          "tag": 2,
+          "title": "炮塔"
         },
         {
-          "cxId":"btnSelectSoldier",
+          "cxId": "btnSelectSoldier",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
           },
-          "tag":1,
-          "title":"士兵"
+          "tag": 1,
+          "title": "士兵"
         },
         {
-          "cxId":"btnSelectArcher",
+          "cxId": "btnSelectArcher",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
           },
-          "tag":3,
-          "title":"城墙"
+          "tag": 3,
+          "title": "城墙"
         },
         {
-          "cxId":"btnLonger",
+          "cxId": "btnLonger",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
           },
-          "tag":4,
-          "title":"远程"
+          "tag": 4,
+          "title": "远程"
         },
         {
-          "cxId":"btnTest",
+          "cxId": "btnTest",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
           },
-          "tag":5,
-          "title":"Test"
+          "tag": 5,
+          "title": "Test"
         },
         {
+          "cxId": "btnClear",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
-          }
+          },
+          "tag": 6,
+          "title": "清空"
         },
         {
           "cxType": "Button",

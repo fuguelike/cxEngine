@@ -16,7 +16,7 @@
 static void BulletAttackArrive(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFollow);
-    Bullet bullet = CX_TYPE_CAST(Bullet, this->cxAction.view);
+    Bullet bullet = CX_TYPE_CAST(this->cxAction.view,Bullet);
     //如果有bind的目标就攻击他
     cxHash bindes = cxViewBindes(bullet);
     CX_HASH_FOREACH(bindes, ele, tmp){
@@ -68,14 +68,15 @@ CX_OBJECT_TYPE(Defence, Node)
 CX_OBJECT_INIT(Defence, Node)
 {
     NodeSetType(this, NodeTypeDefence);
-    NodeSetBody(this, 1.0f);
-    NodeSetSize(this, cxSize2iv(2, 2));
+    NodeSetBody(this, 2.0f);
+    NodeSetSize(this, cxSize2iv(3, 3));
     NodeSetAttackRate(this, 0.5f);
-    NodeSetRange(this, cxRange2fv(0, 15));
+    NodeSetRange(this, cxRange2fv(0, 11));
     
     NodeSetSearchOrder(this, NodeTypeAttack, NodeSubTypeNone,cxRange2fv(0, 15));
     
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
+    cxViewSetColor(this, cxRED);
     
     Range range = CX_CREATE(Range);
     RangeSetRange(range, NodeRange(this));

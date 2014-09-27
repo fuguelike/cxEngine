@@ -43,11 +43,10 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         if(this->tag == 1){
             Attack node = AttackCreate(this, idx);
             NodeSetLife(node, 200);
-            NodeSetPower(node, 200);
+            NodeSetPower(node, 50);
             MapAppendNode(node);
         }else if(this->tag == 2){
             Defence node = DefenceCreate(this, idx);
-            cxViewSetColor(node, cxRED);
             NodeSetPower(node, 40);
             NodeSetLife(node, 200);
             MapAppendNode(node);
@@ -56,7 +55,6 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
                 return false;
             }
             Wall node = WallCreate(this, idx);
-            cxViewSetColor(node, cxBLACK);
             NodeSetLife(node, 100);
             MapAppendNode(node);
         }else if(this->tag == 4){
@@ -80,6 +78,8 @@ static void mapSubType(cxAny dst,cxAny src)
                 MapAppendNode(node);
             }
         }
+    }else if(this->tag == 6){
+        MapRemoveNodes(this);
     }
 }
 

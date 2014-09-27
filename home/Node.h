@@ -57,13 +57,19 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(cxBool, MoveExit,cxAny,cxAny);
 CX_OBJECT_END(Node, cxSprite)
 
+//获取两个node之间的有效果距离，减去各自的body
+cxFloat NodeDistance(cxAny src,cxAny dst);
+
+//检测是否在attacker的作战范围内
+cxBool NodeIsAttackTarget(cxAny attacker,cxAny target);
+
 //启动攻击定时器
 void NodeStartupAttackTimer(cxAny pview);
 
 //使用点集合移动移动到目标,移动结束触发 MoveExit 回调
 void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points);
 
-//node被攻击
+//node被攻击的默认处理程序
 void NodeAttacked(cxAny pview,cxAny attacker,AttackType type);
 
 //攻击一个目标
@@ -74,14 +80,12 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle);
 
 //添加搜索顺序
 void NodeSetSearchOrder(cxAny pview,NodeType type,NodeSubType subType,cxRange2f range);
-//清空搜索
+//清空搜索顺序
 void NodeSearchOrderClear(cxAny pview);
 
 //朝向target
 void NodeFaceTarget(cxAny pview,cxAny target);
 
-//获取攻击范围
-cxRange2f NodeRange(cxAny pview);
 //根据网格坐标设置位置，与左下角格子中心为铆合点
 void NodeSetIndex(cxAny pview,cxVec2i idx);
 
@@ -91,28 +95,39 @@ cxSize2i NodeSize(cxAny pview);
 void NodeSetLife(cxAny pview,cxInt life);
 void NodeAddLife(cxAny pview,cxInt life);
 cxRange2i NodeLife(cxAny pview);
+
 void NodeSetLevel(cxAny pview,cxInt level);
 cxInt NodeLevel(cxAny pview);
+
 void NodeSetBody(cxAny pview,cxFloat body);
+cxFloat NodeBody(cxAny pview);
+
 void NodeSetPower(cxAny pview,cxFloat power);
+cxFloat NodePower(cxAny pview);
+
 void NodeSetSpeed(cxAny pview,cxFloat speed);
+cxFloat NodeSpeed(cxAny pview);
+//
 void NodeSetType(cxAny pview,NodeType type);
 void NodeSetSubType(cxAny pview,NodeSubType subType);
 //设置获取攻击频率
 cxFloat NodeAttackRate(cxAny pview);
 void NodeSetAttackRate(cxAny pview,cxFloat rate);
-//获取攻击力
-cxFloat NodePower(cxAny pview);
+
 //设置攻击范围
 void NodeSetRange(cxAny pview,cxRange2f range);
+cxRange2f NodeRange(cxAny pview);
 
+//返回关联的map对象
 cxAny NodeMap(cxAny pview);
 
+//如果node是静态
 cxBool NodeIsStatic(cxAny pview);
 
+//启动搜索程序
 void NodeSearchRun(cxAny pview);
 
-//节点死亡
+//检测node是否死亡
 cxBool NodeCheckDie(cxAny pview);
 
 //暂停搜索
@@ -121,8 +136,10 @@ void NodePauseSearch(cxAny pview);
 //重新启动搜索
 void NodeResumeSearch(cxAny pview);
 
+//返回精确的网格坐标
 cxVec2f NodeFloatIndex(cxAny pview);
 
+//初始化node
 void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic);
 
 CX_C_END
