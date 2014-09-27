@@ -31,7 +31,7 @@ static void BulletAttackArrive(cxAny pav)
 static void DefenceAttackTarget(cxAny pview,cxAny target,cxAny bd)
 {
     CX_ASSERT_THIS(pview, Defence);
-    Map map = NodeMap(this);
+    Map map = NodeGetMap(this);
     //开火
     Bullet bullet = CX_CREATE(Bullet);
     BulletInit(bullet, map, cxSize2fv(20, 20), cxViewPosition(this));

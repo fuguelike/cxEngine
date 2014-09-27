@@ -17,7 +17,7 @@
 static void NodeOnTransform(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    Map map = this->map;
+    Map map = NodeGetMap(this);
     cxVec2f pos = cxViewPosition(this);
     this->Index = MapPosToFloat(map, pos);
     cxSpatialReindexView(map->items, this);
@@ -54,7 +54,7 @@ void NodeAttacked(cxAny pview,cxAny attacker,AttackType type)
         NodeAddLife(this, -NodeGetPower(a));
     }else if(type == AttackTypeBullet){
         Bullet a = CX_TYPE_CAST(attacker,Bullet);
-        NodeAddLife(this, -a->power);
+        NodeAddLife(this, -BulletGetPower(a));
     }
 }
 
@@ -122,7 +122,6 @@ CX_OBJECT_INIT(Node, cxSprite)
     this->searchIndex = 0;
     this->isDie = false;
     this->Index = cxVec2fv(-1, -1);
-    this->activeIdx = cxVec2iv(-1, -1);
     NodeSetField(this, cxRange2fv(0, 6));
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
     CX_METHOD_SET(this->IsAttackTarget, NodeIsAttackTarget);
@@ -139,12 +138,13 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
     CX_ASSERT_THIS(pview, Node);
     cxInt dirIndex;
     this->DirAngle = AngleToIndex(angle, &dirIndex);
-    if(dirIndex != this->DirIndex){
-        this->DirIndex = dirIndex;
-        CX_METHOD_RUN(this->NodeDirection,this);
-        cxFloat angle = dirIndex * 45.0f;
-        cxViewSetDegrees(this->array, angle);
+    if(dirIndex == this->DirIndex){
+        return;
     }
+    this->DirIndex = dirIndex;
+    CX_METHOD_RUN(this->NodeDirection,this);
+    //Test
+    cxViewSetDegrees(this->array, dirIndex * 45.0f);
 }
 
 //到达指定位置
@@ -186,7 +186,7 @@ cxFloat NodeDistance(cxAny src,cxAny dst)
 void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Node);
-    Map map = NodeMap(this);
+    Map map = NodeGetMap(this);
     //Test show point position
     cxList subviews = cxViewSubViews(map->aLayer);
     CX_LIST_FOREACH(subviews, ele){
@@ -310,12 +310,6 @@ void NodeSearchRun(cxAny pview)
     CX_EVENT_APPEND(this->searchTimer->onArrive, NodeSearchArrive);
 }
 
-cxAny NodeMap(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->map;
-}
-
 cxBool NodeIsStatic(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -344,7 +338,7 @@ cxBool NodeCheckDie(cxAny pview)
 void NodeInitIndex(cxAny pview,cxVec2i idx)
 {
     CX_ASSERT_THIS(pview, Node);
-    Map map = this->map;
+    Map map = NodeGetMap(this);
     this->initIdx = idx;
     //为了对齐格子加上node大小
     cxVec2f fidx = cxVec2fv(idx.x + this->Size.w/2.0f, idx.y + this->Size.h/2.0f);
@@ -366,7 +360,7 @@ void NodeSetSize(cxAny pview,cxSize2i size)
 void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic)
 {
     CX_ASSERT_THIS(pview, Node);
-    this->map = map;
+    this->Map = map;
     this->isStatic = isStatic;
     NodeInitIndex(this, idx);
     MapFillNode(map, idx, this);

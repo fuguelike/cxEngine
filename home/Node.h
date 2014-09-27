@@ -17,11 +17,12 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(Node, cxSprite)
     cxSprite array;     //Test
-    cxAny map;
+
     cxBool isStatic;    //node 是否可移动，移动的node不加入nodes,不参与路径搜索
     cxVec2i initIdx;    //初始化放置的位置,对于静态物不会变化
     cxBool isDie;       //是否死去
 
+    CX_FIELD_DEF(cxAny Map);
     CX_FIELD_DEF(cxVec2f Index);
     CX_FIELD_DEF(NodeCombined Type);  //node组合类型,攻击范围
     CX_FIELD_DEF(cxRange2f Range);    //攻击范围
@@ -46,8 +47,6 @@ CX_OBJECT_DEF(Node, cxSprite)
     //死亡时
     CX_EVENT_ALLOC(onDie);
     NodeSearchOrder orders;
-    //记录了上一个网格活动位置，初始和initIdx相等
-    cxVec2i activeIdx;
     //是否能攻击目标
     CX_METHOD_DEF(cxBool, IsAttackTarget,cxAny attacker,cxAny target);
     //搜索到目标,返回bind哪个目标 seacher,target
@@ -63,6 +62,8 @@ CX_OBJECT_DEF(Node, cxSprite)
     //当Node MoveTo target结束时 attcker target,返回 false表示解除bind
     CX_METHOD_DEF(cxBool, MoveExit,cxAny,cxAny);
 CX_OBJECT_END(Node, cxSprite)
+
+CX_FIELD_GET(Node, cxAny, Map);
 
 CX_FIELD_IMP(Node, NodeCombined, Type);
 CX_FIELD_IMP(Node, cxRange2f, Range);
@@ -115,9 +116,6 @@ void NodeFaceTarget(cxAny pview,cxAny target);
 
 //根据网格坐标设置位置，与左下角格子中心为铆合点
 void NodeInitIndex(cxAny pview,cxVec2i idx);
-
-//返回关联的map对象
-cxAny NodeMap(cxAny pview);
 
 //如果node是静态
 cxBool NodeIsStatic(cxAny pview);

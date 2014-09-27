@@ -18,7 +18,7 @@ static void AttackAttackTarget(cxAny pview,cxAny target,cxAny bd)
 static cxAny AttackFindTarget(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Attack);
-    Map map = NodeMap(this);
+    Map map = NodeGetMap(this);
     //已达到攻击范围
     if(CX_METHOD_GET(false, this->Node.IsAttackTarget, this,target)){
         return target;

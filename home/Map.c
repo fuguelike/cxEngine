@@ -212,7 +212,7 @@ CX_OBJECT_TERM(Map, cxAtlas)
 void MapAppendBullet(cxAny bullet)
 {
     CX_ASSERT_THIS(bullet, Bullet);
-    Map map = BulletMap(this);
+    Map map = BulletGetMap(this);
     cxViewAppend(map->aLayer, bullet);
 }
 
@@ -225,7 +225,7 @@ void MapRemoveBullet(cxAny bullet)
 void MapAppendNode(cxAny node)
 {
     CX_ASSERT_THIS(node, Node);
-    Map map = NodeMap(this);
+    Map map = NodeGetMap(this);
     cxViewAppend(map->nLayer, node);
     cxSpatialInsert(map->items, node);
 }
@@ -242,7 +242,7 @@ void MapRemoveNodes(cxAny pmap)
 void MapRemoveNode(cxAny node)
 {
     CX_ASSERT_THIS(node, Node);
-    Map map = NodeMap(this);
+    Map map = NodeGetMap(this);
     cxSpatialRemove(map->items, node);
     //从nodes列表分离,注册动态目标不会从这个列表分离
     MapDetachNode(node);
@@ -287,7 +287,7 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
 cxAny MapNearestQuery(cxAny src,NodeCombined type,cxRange2f range,cxBool isReach)
 {
     CX_ASSERT_THIS(src, Node);
-    Map map = NodeMap(this);
+    Map map = NodeGetMap(this);
     NodeNearestInfo ret = {0};
     ret.src = src;
     ret.dis = INT32_MAX;
@@ -341,7 +341,7 @@ cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type)
 {
     Node sp = CX_TYPE_CAST(src,Node);
     Node dp = CX_TYPE_CAST(dst,Node);
-    Map map = NodeMap(sp);
+    Map map = NodeGetMap(sp);
     NodeSegmentInfo ret = {0};
     ret.src = src;
     ret.dst = dst;
@@ -403,7 +403,7 @@ cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b)
 
 cxBool MapSearchPath(cxAny snode,cxAny dnode)
 {
-    Map map = NodeMap(snode);
+    Map map = NodeGetMap(snode);
     Node sx = CX_TYPE_CAST(snode,Node);
     Node dx = CX_TYPE_CAST(dnode,Node);
     cxVec2f didx = NodeGetIndex(dnode);
@@ -497,7 +497,7 @@ cxAny MapItem(cxAny pmap,cxVec2i idx)
 void MapDetachNode(cxAny node)
 {
     CX_ASSERT_THIS(node, Node);
-    Map map = CX_TYPE_CAST(this->map,Map);
+    Map map = NodeGetMap(this);
     //静态目标才能放人nodes
     if(!NodeIsStatic(node)){
         return;

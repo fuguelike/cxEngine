@@ -14,15 +14,14 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Bullet, cxSprite)
-    cxAny map;
-    cxFloat power;  //子弹携带的攻击力
+    CX_FIELD_DEF(cxAny Map);
+    CX_FIELD_DEF(cxFloat Power);//子弹携带的攻击力
 CX_OBJECT_END(Bullet, cxSprite)
 
-cxAny BulletMap(cxAny pview);
+CX_FIELD_IMP(Bullet, cxFloat, Power);
+CX_FIELD_GET(Bullet, cxAny, Map);
 
-void BulletSetPower(cxAny pview,cxFloat power);
-
-void BulletInit(cxAny pview,cxAny map,cxSize2f size,cxVec2f pos);
+void BulletInit(cxAny pview,cxAny pmap,cxSize2f size,cxVec2f pos);
 
 CX_C_END
 
