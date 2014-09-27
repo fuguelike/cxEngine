@@ -24,11 +24,13 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxSize2i size;      //占用的格子数
     cxBool isDie;       //是否死去
     NodeCombined type;  //node组合类型,攻击范围
+    cxRange2f range;    //攻击范围
     cxFloat body;       //可攻击半径
     cxFloat attackRate; //攻击频率
     cxFloat speed;      //移动速度
-    cxFloat power;       //攻击力,每秒的攻击力，实际效果和攻击频率(attackRate)有关系
+    cxFloat power;      //攻击力,每秒的攻击力，实际效果和攻击频率(attackRate)有关系
     cxRange2i life;     //min当前生命，max最大生命
+    cxRange2f field;    //视野范围定义了，优先攻击范围内可以到达的目标,默认值为 0 - 5
     cxInt level;        //等级
     //自动搜索
     cxTimer searchTimer;      //搜索用定时器
@@ -81,12 +83,16 @@ void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type);
 void NodeSetDirAngle(cxAny pview,cxFloat angle);
 
 //添加搜索顺序
-void NodeSetSearchOrder(cxAny pview,NodeType type,NodeSubType subType,cxRange2f range);
+void NodeSetSearchOrder(cxAny pview,NodeType type,NodeSubType subType);
 //清空搜索顺序
 void NodeSearchOrderClear(cxAny pview);
 
 //朝向target
 void NodeFaceTarget(cxAny pview,cxAny target);
+
+//设置视野范围
+void NodeSetField(cxAny pview,cxRange2f field);
+cxRange2f NodeField(cxAny pview);
 
 //根据网格坐标设置位置，与左下角格子中心为铆合点
 void NodeSetIndex(cxAny pview,cxVec2i idx);

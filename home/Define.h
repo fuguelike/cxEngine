@@ -79,10 +79,9 @@ typedef enum {
 typedef struct {
     NodeType mainType;
     NodeSubType subType;
-    cxRange2f range;        //搜索这个组合使用的范围
 }NodeCombined;
 
-#define NodeCombinedMake(t,s) (NodeCombined){t,s,{0,0}}
+#define NodeCombinedMake(t,s) (NodeCombined){t,s}
 
 #define MAX_RANGE   cxRange2fv(0, MAP_ROW*2)
 
@@ -110,6 +109,8 @@ typedef struct {
     cxFloat dis;        //距离
     cxAny src;          //搜索者
     NodeCombined type;
+    cxRange2f range;    //
+    cxBool isReach;     //是否可到达
 } NodeNearestInfo;
 
 //两点搜索信息

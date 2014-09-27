@@ -72,8 +72,8 @@ CX_OBJECT_INIT(Defence, Node)
     NodeSetSize(this, cxSize2iv(3, 3));
     NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(0, 11));
-    
-    NodeSetSearchOrder(this, NodeTypeAttack, NodeSubTypeNone,cxRange2fv(0, 15));
+
+    NodeSetSearchOrder(this, NodeTypeAttack, NodeSubTypeNone);
     
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
     cxViewSetColor(this, cxRED);

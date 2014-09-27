@@ -264,6 +264,10 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
     if(info->type.subType != NodeSubTypeNone && !(info->type.subType & node->type.subType)){
         return id;
     }
+    //如果必须可到达，而没有路径则跳过
+    if(info->isReach && !MapSearchPath(info->src, node)){
+        return id;
+    }
     //计算距离，获取最近的node
     cxFloat d = NodeDistance(info->src, node);
     if(d > info->dis){
@@ -271,14 +275,14 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
     }
     info->dis = d;
     //node必须在范围内在范围内
-    if(info->dis >= info->type.range.min && info->dis <= info->type.range.max){
+    if(info->dis >= info->range.min && info->dis <= info->range.max){
         info->node = node;
     }
     return id;
 }
 
 //搜索离src最近的单位
-cxAny MapNearestQuery(cxAny src,NodeCombined type)
+cxAny MapNearestQuery(cxAny src,NodeCombined type,cxRange2f range,cxBool isReach)
 {
     CX_ASSERT_THIS(src, Node);
     Map map = NodeMap(this);
@@ -286,8 +290,10 @@ cxAny MapNearestQuery(cxAny src,NodeCombined type)
     ret.src = src;
     ret.dis = INT32_MAX;
     ret.type = type;
+    ret.range = range;
+    ret.isReach = isReach;
     cxVec2f idx = NodeFloatIndex(this);
-    cpBB bb = cpBBNewForCircle(idx, cpfmax(type.range.max, 0.0f));
+    cpBB bb = cpBBNewForCircle(idx, cpfmax(range.max, 0.0f));
     cpSpatialIndexQuery(map->items->index, map, bb, MapIndexQueryFunc, &ret);
     return ret.node;
 }

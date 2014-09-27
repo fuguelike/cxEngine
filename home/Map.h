@@ -33,7 +33,7 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxBool isSelectUnit;
     //path search algorithm
     cxAStar astar;
-    //路径索引
+    //路径缓存索引
     cxHash paths;
     //Test
     cxInt tag;
@@ -62,7 +62,7 @@ void MapRemoveNodes(cxAny pmap);
 void MapRemoveNode(cxAny node);
 
 //搜索离curr最近的单位
-cxAny MapNearestQuery(cxAny curr,NodeCombined type);
+cxAny MapNearestQuery(cxAny curr,NodeCombined type,cxRange2f range,cxBool isReach);
 
 //搜索src dst之间的单位
 cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type);

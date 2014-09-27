@@ -24,13 +24,12 @@ static void NodeOnTransform(cxAny pview)
 }
 
 //设置优先攻击顺序
-void NodeSetSearchOrder(cxAny pview,NodeType type,NodeSubType subType,cxRange2f range)
+void NodeSetSearchOrder(cxAny pview,NodeType type,NodeSubType subType)
 {
     CX_ASSERT_THIS(pview, Node);
     NodeCombined *ptype = &this->orders.types[this->orders.number++];
     ptype->mainType = type;
     ptype->subType = subType;
-    ptype->range = range;
 }
 //清空搜索
 void NodeSearchOrderClear(cxAny pview)
@@ -114,6 +113,7 @@ CX_OBJECT_INIT(Node, cxSprite)
     this->isDie = false;
     this->index = cxVec2fv(-1, -1);
     this->activeIdx = cxVec2iv(-1, -1);
+    this->field = cxRange2fv(0, 5);
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
     CX_METHOD_SET(this->IsAttackTarget, NodeIsAttackTarget);
 }
@@ -165,7 +165,7 @@ static void NodeMoveArrive(cxAny pav)
 cxRange2f NodeRange(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    return this->type.range;
+    return this->range;
 }
 
 cxFloat NodeDistance(cxAny src,cxAny dst)
@@ -229,9 +229,21 @@ static void NodeProcessSearch(Node this)
     if(this->searchIndex >= this->orders.number){
         this->searchIndex = 0;
     }
+    Node target = NULL;
     //获取当前搜索类型
     NodeCombined type = this->orders.types[this->searchIndex++];
-    Node target = MapNearestQuery(this, type);
+    //先搜索视野范围内可以到达的目标
+    if(target == NULL){
+        target = MapNearestQuery(this, type, this->field, true);
+    }
+    //搜索视野范围内最近的目标
+    if(target == NULL){
+        target = MapNearestQuery(this, type, this->field, false);
+    }
+    //搜索最大范围内的目标
+    if(target == NULL){
+        target = MapNearestQuery(this, type, MAX_RANGE, false);
+    }
     if(target == NULL){
         return;
     }
@@ -376,7 +388,7 @@ void NodeSetSpeed(cxAny pview,cxFloat speed)
 void NodeSetRange(cxAny pview,cxRange2f range)
 {
     CX_ASSERT_THIS(pview, Node);
-    this->type.range = range;
+    this->range = range;
 }
 
 cxAny NodeMap(cxAny pview)
@@ -431,6 +443,17 @@ cxSize2i NodeSize(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     return cxSize2iv(this->size.w, this->size.h);
+}
+
+void NodeSetField(cxAny pview,cxRange2f field)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->field = field;
+}
+cxRange2f NodeField(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    return this->field;
 }
 
 void NodeSetIndex(cxAny pview,cxVec2i idx)

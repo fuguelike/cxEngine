@@ -97,7 +97,6 @@ static void cxHashSetUnsafe(cxAny phash,cxHashKey key,cxAny any)
     CX_ASSERT_THIS(phash, cxHash);
     cxHashElement *new = allocator->malloc(sizeof(cxHashElement));
     memcpy(new->key, key.data, key.length);
-    new->key[key.length] = '\0';
     new->any = any;
     HASH_ADD(hh, this->hashPtr, key, key.length, new);
     CX_RETAIN(new->any);

@@ -48,10 +48,11 @@ CX_OBJECT_TYPE(Attack, Node)
 CX_OBJECT_INIT(Attack, Node)
 {
     NodeSetType(this, NodeTypeAttack);
-    NodeSetSearchOrder(this, NodeTypeDefence, NodeSubTypeNone, MAX_RANGE);
+    NodeSetSearchOrder(this, NodeTypeDefence, NodeSubTypeNone);
     NodeSetBody(this, 0.5f);
     NodeSetSize(this, cxSize2iv(1, 1));
     NodeSetSpeed(this, 100);
+    NodeSetField(this, cxRange2fv(0, 20));
     //近身攻击00
     NodeSetRange(this, cxRange2fv(0, 0));
     NodeSetAttackRate(this, 0.1f);
