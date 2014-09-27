@@ -156,7 +156,7 @@ bool cxShaderInit(cxAny pshader)
     }
     cxOpenGLUseProgram(this->program);
     this->uniformModelViewProject = glGetUniformLocation(this->program, CX_UNIFORM_MATRIX_MODELVIEW_PROJECT);
-    CX_METHOD_RUN(this->GetUniform, this);
+    CX_METHOD_RUN(this->Uniform, this);
     return true;
 }
 

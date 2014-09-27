@@ -42,7 +42,7 @@ cxString cxShaderMultipleGetFragmentSource(cxAny this)
     return cxStringConstChars(fragment);
 }
 
-static void cxShaderMultipleGetUniform(cxAny ps)
+static void cxShaderMultipleUniform(cxAny ps)
 {
     CX_ASSERT_THIS(ps, cxShaderMultiple);
     this->texture1 = glGetUniformLocation(this->cxShader.program, "uTexture1");
@@ -61,7 +61,7 @@ CX_OBJECT_INIT(cxShaderMultiple, cxShader)
 {
     CX_METHOD_SET(this->cxShader.GetVertexSource, cxShaderMultipleGetVertexSource);
     CX_METHOD_SET(this->cxShader.GetFragmentSource, cxShaderMultipleGetFragmentSource);
-    CX_METHOD_SET(this->cxShader.GetUniform, cxShaderMultipleGetUniform);
+    CX_METHOD_SET(this->cxShader.Uniform, cxShaderMultipleUniform);
 }
 CX_OBJECT_FREE(cxShaderMultiple, cxShader)
 {

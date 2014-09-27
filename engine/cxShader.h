@@ -42,7 +42,7 @@ CX_OBJECT_DEF(cxShader, cxObject)
     GLint uniformModelViewProject;
     CX_METHOD_DEF(void,Init,cxAny);
     CX_METHOD_DEF(void,Update,cxAny);
-    CX_METHOD_DEF(void,GetUniform,cxAny);
+    CX_METHOD_DEF(void,Uniform,cxAny);
     CX_METHOD_DEF(cxString, GetVertexSource, cxAny);
     CX_METHOD_DEF(cxString, GetFragmentSource, cxAny);
 CX_OBJECT_END(cxShader, cxObject)

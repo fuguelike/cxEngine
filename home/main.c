@@ -54,7 +54,6 @@ void cxEngineInit(cxEngine engine)
     fight->scale = 1.0f;
     cxActionMgrSet("fight", fight);
 }
-
 void cxEngineMain(cxEngine engine)
 {
     //全局数据初始化

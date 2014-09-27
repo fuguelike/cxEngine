@@ -64,8 +64,7 @@ static void NodeAttackTimerArrive(cxAny pav)
             continue;
         }
         //是否可以攻击
-        cxBool ret = CX_METHOD_GET(true, this->IsAttackTarget,this,target);
-        if(!ret){
+        if(!CX_METHOD_GET(true, this->IsAttackTarget,this,target)){
             continue;
         }
         CX_METHOD_RUN(this->AttackTarget,this,target);

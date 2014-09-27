@@ -110,14 +110,6 @@
 #define CX_SWAP16(i)  ((i & 0x00ff) << 8 | (i &0xff00) >> 8)
 #endif
 
-
-//blocks support
-#if defined(__has_extension)
-#if __has_extension(blocks)
-#define CX_HAS_BLOCKS   1
-#endif
-#endif
-
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>

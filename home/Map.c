@@ -316,7 +316,6 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
     //获取当前点与目标距离，获取距离目标最近的node
     cxFloat dis = NodeDistance(node, info->dst);
     if(dis < info->dis){
-        cxViewSetColor(node, cxRED);
         info->dis = dis;
         info->node = node;
     }

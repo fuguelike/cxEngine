@@ -6,7 +6,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := cxEngine
 
 LOCAL_CFLAGS := \
-    -std=gnu99 -O2 -DANDROID -fblocks \
+    -std=gnu99 -O2 -DANDROID \
     -I$(LOCAL_PATH) \
     -I$(LOCAL_PATH)/libs/android/include
 
