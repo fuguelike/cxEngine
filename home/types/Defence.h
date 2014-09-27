@@ -17,7 +17,7 @@ CX_OBJECT_DEF(Defence, Node)
     
 CX_OBJECT_END(Defence, Node)
 
-Defence DefenceCreate(cxAny map,cxVec2i pos);
+Defence DefenceCreate(cxAny pmap,cxVec2i pos);
 
 CX_C_END
 

@@ -19,7 +19,7 @@ static void NodeOnTransform(cxAny pview)
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     cxVec2f pos = cxViewPosition(this);
-    this->index = MapPosToFloat(map, pos);
+    this->Index = MapPosToFloat(map, pos);
     cxSpatialReindexView(map->items, this);
 }
 
@@ -38,13 +38,20 @@ void NodeSearchOrderClear(cxAny pview)
     this->orders.number = 0;
 }
 
+void NodeAddLife(cxAny pview,cxInt life)
+{
+    CX_ASSERT_THIS(pview, Node);
+    this->Life.min += life;
+    CX_EVENT_FIRE(this, onLife);
+}
+
 void NodeAttacked(cxAny pview,cxAny attacker,AttackType type)
 {
     CX_ASSERT_THIS(pview, Node);
     //如果是直接攻击
     if(type == AttackTypeDirect){
         Node a = CX_TYPE_CAST(attacker,Node);
-        NodeAddLife(this, -a->power);
+        NodeAddLife(this, -NodeGetPower(a));
     }else if(type == AttackTypeBullet){
         Bullet a = CX_TYPE_CAST(attacker,Bullet);
         NodeAddLife(this, -a->power);
@@ -66,7 +73,7 @@ static void NodeAttackTimerArrive(cxAny pav)
         if(!CX_METHOD_GET(true, this->IsAttackTarget,this,target)){
             continue;
         }
-        CX_METHOD_RUN(this->AttackTarget,this,target);
+        CX_METHOD_RUN(this->AttackTarget, this, target, ele->any);
         //攻击后目标死亡
         if(NodeCheckDie(target)){
             continue;
@@ -74,18 +81,22 @@ static void NodeAttackTimerArrive(cxAny pav)
     }
     //如果没有目标停止攻击定时器
     if(cxHashLength(bindes) == 0){
-        cxActionStop(pav);
+        cxActionPause(pav);
     }
 }
 
 void NodeStartupAttackTimer(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    cxTimer timer = cxEngineCreateObject("fights.json?attackTimer");
-    CX_ASSERT_TYPE(timer, cxTimer);
-    cxActionSetTime(timer, NodeAttackRate(this));
-    CX_EVENT_APPEND(timer->onArrive, NodeAttackTimerArrive);
-    cxViewAppendAction(this, timer);
+    if(this->attackTimer != NULL){
+        CX_LOGGER("attacker reset");
+        cxActionReset(this->attackTimer);
+    }else{
+        this->attackTimer = cxViewAppendTimer(this, NodeGetAttackRate(this), CX_TIMER_FOREVER);
+        cxActionSetGroup(this->attackTimer, "fight");
+        CX_EVENT_APPEND(this->attackTimer->onArrive, NodeAttackTimerArrive);
+    }
+    cxActionResume(this->attackTimer);
 }
 
 cxBool NodeIsAttackTarget(cxAny pattacker,cxAny ptarget)
@@ -93,7 +104,7 @@ cxBool NodeIsAttackTarget(cxAny pattacker,cxAny ptarget)
     Node attacker = CX_TYPE_CAST(pattacker,Node);
     Node target = CX_TYPE_CAST(ptarget,Node);
     //获取攻击者作战范围
-    cxRange2f range = NodeRange(attacker);
+    cxRange2f range = NodeGetRange(attacker);
     //计算作战距离
     cxFloat d = NodeDistance(attacker, target);
     //检测是否在作战范围内
@@ -107,13 +118,12 @@ CX_OBJECT_TYPE(Node, cxSprite)
 CX_OBJECT_INIT(Node, cxSprite)
 {
     CX_EVENT_APPEND(CX_TYPE(cxView, this)->onTransform, NodeOnTransform);
-    this->attackNum = 1;
+    NodeSetAttackNum(this, 1);
     this->searchIndex = 0;
-    this->dirIndex = 0;
     this->isDie = false;
-    this->index = cxVec2fv(-1, -1);
+    this->Index = cxVec2fv(-1, -1);
     this->activeIdx = cxVec2iv(-1, -1);
-    this->field = cxRange2fv(0, 5);
+    NodeSetField(this, cxRange2fv(0, 6));
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
     CX_METHOD_SET(this->IsAttackTarget, NodeIsAttackTarget);
 }
@@ -128,9 +138,9 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
 {
     CX_ASSERT_THIS(pview, Node);
     cxInt dirIndex;
-    this->dirAngle = AngleToIndex(angle, &dirIndex);
-    if(dirIndex != this->dirIndex){
-        this->dirIndex = dirIndex;
+    this->DirAngle = AngleToIndex(angle, &dirIndex);
+    if(dirIndex != this->DirIndex){
+        this->DirIndex = dirIndex;
         CX_METHOD_RUN(this->NodeDirection,this);
         cxFloat angle = dirIndex * 45.0f;
         cxViewSetDegrees(this->array, angle);
@@ -162,19 +172,13 @@ static void NodeMoveArrive(cxAny pav)
     }
 }
 
-cxRange2f NodeRange(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->range;
-}
-
 cxFloat NodeDistance(cxAny src,cxAny dst)
 {
     Node snode = CX_TYPE_CAST(src,Node);
     Node dnode = CX_TYPE_CAST(dst,Node);
-    cxVec2f sidx = NodeFloatIndex(snode);
-    cxVec2f didx = NodeFloatIndex(dnode);
-    cxFloat d = kmVec2DistanceBetween(&sidx, &didx) - (snode->body + dnode->body);
+    cxVec2f sidx = NodeGetIndex(snode);
+    cxVec2f didx = NodeGetIndex(dnode);
+    cxFloat d = kmVec2DistanceBetween(&sidx, &didx) - (NodeGetBody(snode) + NodeGetBody(dnode));
     d = CX_MAX(d, 0);
     return d;
 }
@@ -219,7 +223,7 @@ static void NodeProcessSearch(Node this)
 {
     cxHash bindes = cxViewBindes(this);
     //如果同时攻击数量到达
-    if(cxHashLength(bindes) >= this->attackNum){
+    if(cxHashLength(bindes) >= NodeGetAttackNum(this)){
         return;
     }
     //如果未定义搜索
@@ -229,16 +233,17 @@ static void NodeProcessSearch(Node this)
     if(this->searchIndex >= this->orders.number){
         this->searchIndex = 0;
     }
+    cxRange2f field = NodeGetField(this);
     Node target = NULL;
     //获取当前搜索类型
     NodeCombined type = this->orders.types[this->searchIndex++];
     //先搜索视野范围内可以到达的目标
     if(target == NULL){
-        target = MapNearestQuery(this, type, this->field, true);
+        target = MapNearestQuery(this, type, field, true);
     }
     //搜索视野范围内最近的目标
     if(target == NULL){
-        target = MapNearestQuery(this, type, this->field, false);
+        target = MapNearestQuery(this, type, field, false);
     }
     //搜索最大范围内的目标
     if(target == NULL){
@@ -300,95 +305,9 @@ void NodeResumeSearch(cxAny pview)
 void NodeSearchRun(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
-    this->searchTimer = cxEngineCreateObject("fights.json?searchTimer");
+    this->searchTimer = cxViewAppendTimer(this, NodeGetSearchRate(this), CX_TIMER_FOREVER);
+    cxActionSetGroup(this->searchTimer, "fight");
     CX_EVENT_APPEND(this->searchTimer->onArrive, NodeSearchArrive);
-    cxViewAppendAction(this, this->searchTimer);
-}
-
-void NodeSetLife(cxAny pview,cxInt life)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->life = cxRange2iv(life, life);
-    CX_EVENT_FIRE(this, onLife);
-}
-
-void NodeAddLife(cxAny pview,cxInt life)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->life.min += life;
-    CX_EVENT_FIRE(this, onLife);
-}
-
-void NodeSetLevel(cxAny pview,cxInt level)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->level = level;
-}
-
-cxFloat NodeBody(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->body;
-}
-
-void NodeSetBody(cxAny pview,cxFloat body)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->body  = body;
-}
-
-void NodeSetType(cxAny pview,NodeType type)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->type.mainType = type;
-}
-
-void NodeSetSubType(cxAny pview,NodeSubType subType)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->type.subType = subType;
-}
-
-cxFloat NodeAttackRate(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->attackRate;
-}
-
-void NodeSetAttackRate(cxAny pview,cxFloat rate)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->attackRate = rate;
-}
-
-cxFloat NodePower(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->power * this->attackRate;
-}
-
-void NodeSetPower(cxAny pview,cxFloat power)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->power = power;
-}
-
-cxFloat NodeSpeed(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->speed;
-}
-
-void NodeSetSpeed(cxAny pview,cxFloat speed)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->speed = speed;
-}
-
-void NodeSetRange(cxAny pview,cxRange2f range)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->range = range;
 }
 
 cxAny NodeMap(cxAny pview)
@@ -407,12 +326,13 @@ cxBool NodeCheckDie(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     //当前生命值太小表示死掉了
-    cxBool die = this->life.min <= 0;
-    if(this->life.min <= 0 && !this->isDie){
-        CX_LOGGER("Node (type=%s) die At(%f %f)",CX_TYPE(cxObject, this)->cxType,this->index.x,this->index.y);
+    cxRange2i life = this->Life;
+    cxBool die = life.min <= 0;
+    if(life.min <= 0 && !this->isDie){
+        CX_LOGGER("Node (type=%s) die At(%f %f)",CX_TYPE(cxObject, this)->cxType,this->Index.x,this->Index.y);
         //防止死的次数太多
         this->isDie = true;
-        this->life.min = 0;
+        this->Life.min = 0;
         CX_EVENT_FIRE(this, onLife);
         CX_EVENT_FIRE(this, onDie);
         cxViewUnBindAll(pview);
@@ -421,53 +341,18 @@ cxBool NodeCheckDie(cxAny pview)
     return die;
 }
 
-cxRange2i NodeLife(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->life;
-}
-
-cxInt NodeLevel(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->level;
-}
-
-cxVec2f NodeFloatIndex(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->index;
-}
-
-cxSize2i NodeSize(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return cxSize2iv(this->size.w, this->size.h);
-}
-
-void NodeSetField(cxAny pview,cxRange2f field)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->field = field;
-}
-cxRange2f NodeField(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->field;
-}
-
-void NodeSetIndex(cxAny pview,cxVec2i idx)
+void NodeInitIndex(cxAny pview,cxVec2i idx)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
     this->initIdx = idx;
     //为了对齐格子加上node大小
-    cxVec2f fidx = cxVec2fv(idx.x + this->size.w/2.0f, idx.y + this->size.h/2.0f);
+    cxVec2f fidx = cxVec2fv(idx.x + this->Size.w/2.0f, idx.y + this->Size.h/2.0f);
     
     cxVec2f npos = MapIndexToPos(map, fidx);
     cxViewSetPos(this, npos);
     //获取精确的格子坐标
-    this->index = MapPosToFloat(map, npos);
+    this->Index = MapPosToFloat(map, npos);
 }
 
 void NodeSetSize(cxAny pview,cxSize2i size)
@@ -475,7 +360,7 @@ void NodeSetSize(cxAny pview,cxSize2i size)
     CX_ASSERT_THIS(pview, Node);
     cxSize2f vsize = cxSize2fv(global.unitSize.w * size.w, global.unitSize.h * size.h);
     cxViewSetSize(this, vsize);
-    this->size = size;
+    this->Size = size;
 }
 
 void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic)
@@ -483,7 +368,7 @@ void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic)
     CX_ASSERT_THIS(pview, Node);
     this->map = map;
     this->isStatic = isStatic;
-    NodeSetIndex(this, idx);
+    NodeInitIndex(this, idx);
     MapFillNode(map, idx, this);
     //show test array
     cxSize2f ns = cxViewSize(this);

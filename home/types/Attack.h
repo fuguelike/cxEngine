@@ -17,7 +17,9 @@ CX_OBJECT_DEF(Attack, Node)
 
 CX_OBJECT_END(Attack, Node)
 
-Attack AttackCreate(cxAny map, cxVec2i pos);
+void AttackInit(cxAny pview, cxAny pmap,cxVec2i pos);
+
+Attack AttackCreate(cxAny pmap, cxVec2i pos);
 
 CX_C_END
 

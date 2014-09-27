@@ -28,26 +28,21 @@ static void BulletAttackArrive(cxAny pav)
 }
 
 //启动攻击
-static void DefenceAttackTarget(cxAny pview,cxAny target)
+static void DefenceAttackTarget(cxAny pview,cxAny target,cxAny bd)
 {
     CX_ASSERT_THIS(pview, Defence);
     Map map = NodeMap(this);
-    cxHash bindes = cxViewBindes(this);
-    CX_HASH_FOREACH(bindes, ele, tmp){
-        //获取目标
-        Node target = cxHashElementKeyToAny(ele);
-        //开火
-        Bullet bullet = CX_CREATE(Bullet);
-        BulletInit(bullet, map, cxSize2fv(20, 20), cxViewPosition(this));
-        BulletSetPower(bullet, NodePower(this));
-        MapAppendBullet(bullet);
-        //设定目标
-        cxFollow f = cxFollowCreate(800, target);
-        CX_EVENT_APPEND(f->cxAction.onExit, BulletAttackArrive);
-        cxViewAppendAction(bullet, f);
-        //子弹bind目标
-        cxViewBind(bullet, target, cxNumberInt(NodeBindReasonShoot));
-    }
+    //开火
+    Bullet bullet = CX_CREATE(Bullet);
+    BulletInit(bullet, map, cxSize2fv(20, 20), cxViewPosition(this));
+    BulletSetPower(bullet, NodeGetPower(this));
+    MapAppendBullet(bullet);
+    //设定目标
+    cxFollow f = cxFollowCreate(800, target);
+    CX_EVENT_APPEND(f->cxAction.onExit, BulletAttackArrive);
+    cxViewAppendAction(bullet, f);
+    //子弹bind目标
+    cxViewBind(bullet, target, cxNumberInt(NodeBindReasonShoot));
 }
 
 static cxAny DefenceFindTarget(cxAny pview,cxAny target)
@@ -67,9 +62,9 @@ CX_OBJECT_TYPE(Defence, Node)
 }
 CX_OBJECT_INIT(Defence, Node)
 {
-    NodeSetType(this, NodeTypeDefence);
+    NodeSetType(this, NodeCombinedMake(NodeTypeDefence, NodeSubTypeNone));
     NodeSetBody(this, 2.0f);
-    NodeSetSize(this, cxSize2iv(3, 3));
+    NodeSetSize(this, cxSize2iv(2, 2));
     NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(0, 11));
 
@@ -79,7 +74,7 @@ CX_OBJECT_INIT(Defence, Node)
     cxViewSetColor(this, cxRED);
     
     Range range = CX_CREATE(Range);
-    RangeSetRange(range, NodeRange(this));
+    RangeSetRange(range, NodeGetRange(this));
     cxViewAppend(this, range);
     
     CX_METHOD_SET(this->Node.FindTarget,   DefenceFindTarget);
@@ -91,10 +86,10 @@ CX_OBJECT_FREE(Defence, Node)
 }
 CX_OBJECT_TERM(Defence, Node)
 
-Defence DefenceCreate(cxAny map,cxVec2i pos)
+Defence DefenceCreate(cxAny pmap,cxVec2i pos)
 {
     Defence this = CX_CREATE(Defence);
-    NodeInit(this, map, pos, true);
+    NodeInit(this, pmap, pos, true);
     NodeSearchRun(this);
     return this;
 }

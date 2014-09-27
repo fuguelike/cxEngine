@@ -14,6 +14,7 @@
 #include <types/Attack.h>
 #include <types/Defence.h>
 #include <types/Wall.h>
+#include <types/LongAttacker.h>
 
 static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
 {
@@ -42,23 +43,26 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         //test
         if(this->tag == 1){
             Attack node = AttackCreate(this, idx);
-            NodeSetLife(node, 200);
-            NodeSetPower(node, 50);
+            NodeSetLife(node, cxRange2iv(200, 200));
+            NodeSetPower(node, 10);
             MapAppendNode(node);
         }else if(this->tag == 2){
             Defence node = DefenceCreate(this, idx);
-            NodeSetPower(node, 40);
-            NodeSetLife(node, 200);
+            NodeSetPower(node, 100);
+            NodeSetLife(node, cxRange2iv(200, 200));
             MapAppendNode(node);
         }else if(this->tag == 3){
             if(MapItem(this, idx) != NULL){
                 return false;
             }
             Wall node = WallCreate(this, idx);
-            NodeSetLife(node, 100);
+            NodeSetLife(node, cxRange2iv(100, 100));
             MapAppendNode(node);
         }else if(this->tag == 4){
-            
+            LongAttacker node = LongAttackerCreate(this, idx);
+            NodeSetLife(node, cxRange2iv(200, 200));
+            NodeSetPower(node, 20);
+            MapAppendNode(node);
         }
         return true;
     }
@@ -74,7 +78,7 @@ static void mapSubType(cxAny dst,cxAny src)
             for (cxInt y = 4; y < 30; y ++) {
                 Wall node = WallCreate(this, cxVec2iv(x, y));
                 cxViewSetColor(node, cxBLACK);
-                NodeSetLife(node, 100);
+                NodeSetLife(node, cxRange2iv(200, 200));
                 MapAppendNode(node);
             }
         }

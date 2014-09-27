@@ -90,9 +90,9 @@ static cpBB NodeIndexBB(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     //这个坐标其实是物体中间的坐标
-    cxVec2f idx = this->index;
-    cxFloat w = (cxFloat)this->size.w / 2.0f;
-    cxFloat h = (cxFloat)this->size.h / 2.0f;
+    cxVec2f idx = NodeGetIndex(this);
+    cxFloat w = (cxFloat)this->Size.w / 2.0f;
+    cxFloat h = (cxFloat)this->Size.h / 2.0f;
     return cpBBNew(idx.x - w, idx.y - h, idx.x + w, idx.y + h);
 }
 
@@ -119,8 +119,8 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
     if(!MapIsValidIdx(map, *idx)){
         return false;
     }
-    cxVec2f sidx = NodeFloatIndex(info->snode);
-    cxVec2f didx = NodeFloatIndex(info->dnode);
+    cxVec2f sidx = NodeGetIndex(info->snode);
+    cxVec2f didx = NodeGetIndex(info->dnode);
     //开始点与搜索点之间距离超过搜索范围
     cxFloat dis = kmVec2DistanceBetween(&sidx, &index);
     if(dis > info->dis){
@@ -142,7 +142,8 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
         return true;
     }
     //如果是阻挡类型
-    if(node->type.mainType == NodeTypeBlock && !NodeCheckDie(node)){
+    NodeCombined type = NodeGetType(node);
+    if(type.mainType == NodeTypeBlock && !NodeCheckDie(node)){
         return false;
     }
     return true;
@@ -256,12 +257,13 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
     if(NodeCheckDie(node)){
         return id;
     }
+    NodeCombined type = NodeGetType(node);
     //不匹配类型
-    if(info->type.mainType != NodeTypeNone && !(info->type.mainType & node->type.mainType)){
+    if(info->type.mainType != NodeTypeNone && !(info->type.mainType & type.mainType)){
         return id;
     }
     //不匹配子类型
-    if(info->type.subType != NodeSubTypeNone && !(info->type.subType & node->type.subType)){
+    if(info->type.subType != NodeSubTypeNone && !(info->type.subType & type.subType)){
         return id;
     }
     //如果必须可到达，而没有路径则跳过
@@ -292,7 +294,7 @@ cxAny MapNearestQuery(cxAny src,NodeCombined type,cxRange2f range,cxBool isReach
     ret.type = type;
     ret.range = range;
     ret.isReach = isReach;
-    cxVec2f idx = NodeFloatIndex(this);
+    cxVec2f idx = NodeGetIndex(this);
     cpBB bb = cpBBNewForCircle(idx, cpfmax(range.max, 0.0f));
     cpSpatialIndexQuery(map->items->index, map, bb, MapIndexQueryFunc, &ret);
     return ret.node;
@@ -306,12 +308,13 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
     if(NodeCheckDie(node)){
         return 1.0f;
     }
+    NodeCombined type = NodeGetType(node);
     //不匹配类型
-    if(info->type.mainType != NodeTypeNone && !(info->type.mainType & node->type.mainType)){
+    if(info->type.mainType != NodeTypeNone && !(info->type.mainType & type.mainType)){
         return 1.0f;
     }
     //不匹配子类型
-    if(info->type.subType != NodeSubTypeNone && !(info->type.subType & node->type.subType)){
+    if(info->type.subType != NodeSubTypeNone && !(info->type.subType & type.subType)){
         return 1.0f;
     }
     cxViewSetColor(node, cxRED);
@@ -345,8 +348,8 @@ cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type)
     ret.ab = NodeDistance(sp, dp);
     ret.dis = INT32_MAX;
     ret.type = type;
-    cxVec2f a = NodeFloatIndex(sp);
-    cxVec2f b = NodeFloatIndex(dp);
+    cxVec2f a = NodeGetIndex(sp);
+    cxVec2f b = NodeGetIndex(dp);
     cpSpatialIndexSegmentQuery(map->items->index, map, a, b, 1.0f, MapSegmentQueryFunc, &ret);
     return ret.node;
 }
@@ -403,8 +406,8 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
     Map map = NodeMap(snode);
     Node sx = CX_TYPE_CAST(snode,Node);
     Node dx = CX_TYPE_CAST(dnode,Node);
-    cxVec2f didx = NodeFloatIndex(dnode);
-    cxVec2f sidx = NodeFloatIndex(snode);
+    cxVec2f didx = NodeGetIndex(dnode);
+    cxVec2f sidx = NodeGetIndex(snode);
     cxVec2i a = cxVec2iv(sidx.x, sidx.y);
     if(!MapIsValidIdx(map, a)){
         CX_WARN("error index use at map path search");
@@ -422,8 +425,8 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
     //
     MapSearchInfo info = {NULL};
     //设置搜索参数
-    cxFloat sz = CX_MAX(sx->size.w, sx->size.h);
-    cxFloat dz = CX_MAX(dx->size.w, dx->size.h);
+    cxFloat sz = CX_MAX(sx->Size.w, sx->Size.h);
+    cxFloat dz = CX_MAX(dx->Size.w, dx->Size.h);
     info.dis = kmVec2DistanceBetween(&sidx, &didx) + sz + dz;
     info.map = map;
     info.snode = snode;
@@ -499,7 +502,7 @@ void MapDetachNode(cxAny node)
     if(!NodeIsStatic(node)){
         return;
     }
-    cxSize2i size = NodeSize(node);
+    cxSize2i size = NodeGetSize(node);
     cxVec2i idx = this->initIdx;
     for(cxInt x = idx.x; x < idx.x + size.w; x++)
     for(cxInt y = idx.y; y < idx.y + size.h; y++){
@@ -518,7 +521,7 @@ void MapFillNode(cxAny pmap,cxVec2i idx,cxAny node)
     if(!NodeIsStatic(node)){
         return;;
     }
-    cxSize2i size = NodeSize(node);
+    cxSize2i size = NodeGetSize(node);
     for(cxInt x = idx.x; x < idx.x + size.w; x++)
     for(cxInt y = idx.y; y < idx.y + size.h; y++) {
         MapSetNode(this, x, y, node);

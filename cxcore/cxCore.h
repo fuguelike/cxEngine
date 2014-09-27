@@ -22,8 +22,6 @@
 
 #define CX_TARGET_PLATFORM         CX_PLATFORM_UNKNOWN
 
-#define CX_INLINE inline
-
 // mac
 #if defined(CX_TARGET_MAC)
 #undef  CX_TARGET_PLATFORM
@@ -169,6 +167,8 @@ typedef char *          cxChars;
 //max type signature name length
 #define MAX_TYPE_SIGNATURE_SIZE     1024
 
+#define CX_INLINE                   static inline
+
 //#define NDEBUG 1
 
 #if !defined(NDEBUG)
@@ -288,6 +288,28 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 #define CX_METHOD_RUN(_m_,...)      if((_m_) != NULL)(_m_)(__VA_ARGS__)
 
 #define CX_METHOD_SET(_m_,_f_)      _m_ = _f_
+
+//field
+
+#define CX_FIELD_DEF(_var_)      _var_
+
+#define CX_FIELD_GET(_t_,_vt_, _n_)                     \
+CX_INLINE _vt_ _t_##Get##_n_(cxAny self)                \
+{                                                       \
+    CX_ASSERT_THIS(self,_t_);                           \
+    return this->_n_;                                   \
+}
+
+#define CX_FIELD_SET(_t_,_vt_, _n_)                     \
+CX_INLINE void _t_##Set##_n_(cxAny self,_vt_ value)     \
+{                                                       \
+    CX_ASSERT_THIS(self,_t_);                           \
+    this->_n_ = value;                                  \
+}
+
+#define CX_FIELD_IMP(_t_,_vt_, _n_)                     \
+CX_FIELD_GET(_t_,_vt_, _n_)                             \
+CX_FIELD_SET(_t_,_vt_, _n_)
 
 //signal and slot
 

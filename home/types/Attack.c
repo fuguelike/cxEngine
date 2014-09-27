@@ -9,7 +9,7 @@
 #include <Map.h>
 #include "Attack.h"
 
-static void AttackAttackTarget(cxAny pview,cxAny target)
+static void AttackAttackTarget(cxAny pview,cxAny target,cxAny bd)
 {
     CX_ASSERT_THIS(pview, Attack);
     NodeAttackTarget(this, target, AttackTypeDirect);
@@ -47,17 +47,20 @@ CX_OBJECT_TYPE(Attack, Node)
 }
 CX_OBJECT_INIT(Attack, Node)
 {
-    NodeSetType(this, NodeTypeAttack);
+    NodeSetType(this, NodeCombinedMake(NodeTypeAttack, NodeSubTypeNone));
+    
     NodeSetSearchOrder(this, NodeTypeDefence, NodeSubTypeNone);
+    
     NodeSetBody(this, 0.5f);
     NodeSetSize(this, cxSize2iv(1, 1));
     NodeSetSpeed(this, 100);
+    
     NodeSetField(this, cxRange2fv(0, 20));
     //近身攻击00
     NodeSetRange(this, cxRange2fv(0, 0));
-    NodeSetAttackRate(this, 0.1f);
+    NodeSetAttackRate(this, 0.2f);
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
-    cxViewSetColor(this, cxRED);
+    cxViewSetColor(this, cxBLUE);
     
     CX_METHOD_SET(this->Node.FindTarget, AttackFindTarget);
     CX_METHOD_SET(this->Node.AttackTarget, AttackAttackTarget);
@@ -68,10 +71,16 @@ CX_OBJECT_FREE(Attack, Node)
 }
 CX_OBJECT_TERM(Attack, Node)
 
-Attack AttackCreate(cxAny map,cxVec2i pos)
+void AttackInit(cxAny pview, cxAny pmap,cxVec2i pos)
+{
+    CX_ASSERT_THIS(pview, Attack);
+    NodeInit(this, pmap, pos, false);
+    NodeSearchRun(this);
+}
+
+Attack AttackCreate(cxAny pmap,cxVec2i pos)
 {
     Attack this = CX_CREATE(Attack);
-    NodeInit(this, map, pos, false);
-    NodeSearchRun(this);
+    AttackInit(this, pmap, pos);
     return this;
 }

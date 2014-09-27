@@ -18,20 +18,26 @@ CX_C_BEGIN
 CX_OBJECT_DEF(Node, cxSprite)
     cxSprite array;     //Test
     cxAny map;
-    cxVec2f index;      //更精确的浮点格子坐标,根据node当前位置计算
     cxBool isStatic;    //node 是否可移动，移动的node不加入nodes,不参与路径搜索
     cxVec2i initIdx;    //初始化放置的位置,对于静态物不会变化
-    cxSize2i size;      //占用的格子数
     cxBool isDie;       //是否死去
-    NodeCombined type;  //node组合类型,攻击范围
-    cxRange2f range;    //攻击范围
-    cxFloat body;       //可攻击半径
-    cxFloat attackRate; //攻击频率
-    cxFloat speed;      //移动速度
-    cxFloat power;      //攻击力,每秒的攻击力，实际效果和攻击频率(attackRate)有关系
-    cxRange2i life;     //min当前生命，max最大生命
-    cxRange2f field;    //视野范围定义了，优先攻击范围内可以到达的目标,默认值为 0 - 5
-    cxInt level;        //等级
+
+    CX_FIELD_DEF(cxVec2f Index);
+    CX_FIELD_DEF(NodeCombined Type);  //node组合类型,攻击范围
+    CX_FIELD_DEF(cxRange2f Range);    //攻击范围
+    CX_FIELD_DEF(cxSize2i Size);      //占用的格子数
+    CX_FIELD_DEF(cxFloat Body);       //可攻击半径
+    CX_FIELD_DEF(cxFloat Speed);      //移动速度
+    CX_FIELD_DEF(cxFloat Power);      //攻击力,每秒的攻击力，实际效果和攻击频率(attackRate)有关系
+    CX_FIELD_DEF(cxRange2i Life);     //min当前生命，max最大生命
+    CX_FIELD_DEF(cxRange2f Field);    //视野范围定义了，优先攻击范围内可以到达的目标,默认值为 0 - 5
+    CX_FIELD_DEF(cxInt Level);        //等级
+    CX_FIELD_DEF(cxFloat AttackRate); //攻击频率
+    CX_FIELD_DEF(cxFloat SearchRate); //搜索频率
+    CX_FIELD_DEF(cxInt AttackNum);    //同时攻击的数量
+    CX_FIELD_DEF(cxInt DirIndex);     //当前方向索引
+    CX_FIELD_DEF(cxFloat DirAngle);   //方向偏转角
+    cxTimer attackTimer;//攻击定时器
     //自动搜索
     cxTimer searchTimer;      //搜索用定时器
     cxInt searchIndex;
@@ -48,18 +54,38 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(cxAny, FindTarget, cxAny seacher, cxAny target);
     //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
     CX_METHOD_DEF(cxBool, NodeFinded,cxAny node,cxAny finder);
-    cxInt attackNum;    //同时攻击的数量
     //方向发生变化
-    cxInt   dirIndex;    //当前方向索引
-    cxFloat dirAngle;    //方向偏转角
     CX_METHOD_DEF(void, NodeDirection,cxAny);
-    //攻击一个目标 attcker攻击target
-    CX_METHOD_DEF(void, AttackTarget,cxAny attcker,cxAny target);
+    //攻击一个目标 attcker攻击target bd=bind数据
+    CX_METHOD_DEF(void, AttackTarget,cxAny attcker,cxAny target,cxAny bd);
     //被一个目标攻击 pview 被attacker攻击 attacktype可能是 弓箭或者node
     CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);
     //当Node MoveTo target结束时 attcker target,返回 false表示解除bind
     CX_METHOD_DEF(cxBool, MoveExit,cxAny,cxAny);
 CX_OBJECT_END(Node, cxSprite)
+
+CX_FIELD_IMP(Node, NodeCombined, Type);
+CX_FIELD_IMP(Node, cxRange2f, Range);
+
+CX_FIELD_GET(Node, cxSize2i, Size);
+void NodeSetSize(cxAny pview,cxSize2i size);
+
+CX_FIELD_IMP(Node, cxVec2f, Index);
+CX_FIELD_IMP(Node, cxFloat, Body);
+CX_FIELD_IMP(Node, cxFloat, Speed);
+CX_FIELD_IMP(Node, cxFloat, Power);
+CX_FIELD_IMP(Node, cxRange2i, Life);
+CX_FIELD_IMP(Node, cxRange2f, Field);
+CX_FIELD_IMP(Node, cxInt, Level);
+CX_FIELD_IMP(Node, cxFloat, AttackRate);
+CX_FIELD_IMP(Node, cxFloat, SearchRate);
+CX_FIELD_IMP(Node, cxInt, AttackNum);
+CX_FIELD_IMP(Node, cxInt, DirIndex);
+
+CX_FIELD_GET(Node, cxFloat, DirAngle);
+void NodeSetDirAngle(cxAny pview,cxFloat angle);
+
+void NodeAddLife(cxAny pview,cxInt life);
 
 //获取两个node之间的有效果距离，减去各自的body
 cxFloat NodeDistance(cxAny src,cxAny dst);
@@ -79,9 +105,6 @@ void NodeAttacked(cxAny pview,cxAny attacker,AttackType type);
 //攻击一个目标
 void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type);
 
-//设置node方向并触发事件
-void NodeSetDirAngle(cxAny pview,cxFloat angle);
-
 //添加搜索顺序
 void NodeSetSearchOrder(cxAny pview,NodeType type,NodeSubType subType);
 //清空搜索顺序
@@ -90,41 +113,8 @@ void NodeSearchOrderClear(cxAny pview);
 //朝向target
 void NodeFaceTarget(cxAny pview,cxAny target);
 
-//设置视野范围
-void NodeSetField(cxAny pview,cxRange2f field);
-cxRange2f NodeField(cxAny pview);
-
 //根据网格坐标设置位置，与左下角格子中心为铆合点
-void NodeSetIndex(cxAny pview,cxVec2i idx);
-
-void NodeSetSize(cxAny pview,cxSize2i size);
-cxSize2i NodeSize(cxAny pview);
-//设置生命 等级 攻击力
-void NodeSetLife(cxAny pview,cxInt life);
-void NodeAddLife(cxAny pview,cxInt life);
-cxRange2i NodeLife(cxAny pview);
-
-void NodeSetLevel(cxAny pview,cxInt level);
-cxInt NodeLevel(cxAny pview);
-
-void NodeSetBody(cxAny pview,cxFloat body);
-cxFloat NodeBody(cxAny pview);
-
-void NodeSetPower(cxAny pview,cxFloat power);
-cxFloat NodePower(cxAny pview);
-
-void NodeSetSpeed(cxAny pview,cxFloat speed);
-cxFloat NodeSpeed(cxAny pview);
-//
-void NodeSetType(cxAny pview,NodeType type);
-void NodeSetSubType(cxAny pview,NodeSubType subType);
-//设置获取攻击频率
-cxFloat NodeAttackRate(cxAny pview);
-void NodeSetAttackRate(cxAny pview,cxFloat rate);
-
-//设置攻击范围
-void NodeSetRange(cxAny pview,cxRange2f range);
-cxRange2f NodeRange(cxAny pview);
+void NodeInitIndex(cxAny pview,cxVec2i idx);
 
 //返回关联的map对象
 cxAny NodeMap(cxAny pview);
@@ -143,9 +133,6 @@ void NodePauseSearch(cxAny pview);
 
 //重新启动搜索
 void NodeResumeSearch(cxAny pview);
-
-//返回精确的网格坐标
-cxVec2f NodeFloatIndex(cxAny pview);
 
 //初始化node
 void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic);

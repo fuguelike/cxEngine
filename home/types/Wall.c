@@ -15,7 +15,7 @@ CX_OBJECT_TYPE(Wall, Node)
 }
 CX_OBJECT_INIT(Wall, Node)
 {
-    NodeSetType(this, NodeTypeBlock);
+    NodeSetType(this, NodeCombinedMake(NodeTypeBlock, NodeSubTypeWall));
     NodeSetBody(this, 1);
     NodeSetSize(this, cxSize2iv(1, 1));
     
@@ -28,9 +28,9 @@ CX_OBJECT_FREE(Wall, Node)
 }
 CX_OBJECT_TERM(Wall, Node)
 
-Wall WallCreate(cxAny map,cxVec2i pos)
+Wall WallCreate(cxAny pmap,cxVec2i pos)
 {
     Wall this = CX_CREATE(Wall);
-    NodeInit(this, map, pos, true);
+    NodeInit(this, pmap, pos, true);
     return this;
 }
