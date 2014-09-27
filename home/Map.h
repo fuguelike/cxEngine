@@ -17,14 +17,17 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(Map, cxAtlas)
-    cxView bLayer;  //效果层
+    cxView aLayer;  //效果层
     cxView nLayer;  //nodes节点层
+    //格子属性
+    MapUnitAttr *attrs;
     //mode
     MapMode mode;
     //
     cxBool isSort;
+    //静态单位存储
     cxHash nodes;
-    //所有单位空间索引
+    //动态单位空间索引
     cxSpatial items;
     //fight var
     cxBool isSelectUnit;
@@ -41,7 +44,6 @@ typedef struct {
     cxAny snode;
     cxAny dnode;
     cxFloat dis;//两点间距离
-    cxAny block;//第一个阻挡物
 }MapSearchInfo;
 
 //加入攻击
@@ -113,6 +115,12 @@ idx.x or idx.y 一般需要加上0.5f,两格子内容居中加上1.0f
 cxVec2f MapIndexToPos(cxAny pmap,cxVec2f idx);
 
 cxAny MapItem(cxAny pmap,cxVec2i idx);
+
+//设置 获取 添加 消去某个格子的属性
+void MapSubAttr(cxAny pmap,cxVec2i idx,MapUnitAttr attr);
+void MapAddAttr(cxAny pmap,cxVec2i idx,MapUnitAttr attr);
+void MapSetAttr(cxAny pmap,cxVec2i idx,MapUnitAttr attr);
+MapUnitAttr MapAttr(cxAny pmap,cxVec2i idx);
 
 //分离Node
 void MapDetachNode(cxAny node);

@@ -52,7 +52,7 @@ CX_OBJECT_INIT(Attack, Node)
     NodeSetBody(this, 0.5f);
     NodeSetSize(this, cxSize2iv(1, 1));
     NodeSetSpeed(this, 100);
-    //近身攻击01
+    //近身攻击00
     NodeSetRange(this, cxRange2fv(0, 0));
     NodeSetAttackRate(this, 0.1f);
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");

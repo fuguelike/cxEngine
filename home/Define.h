@@ -93,6 +93,11 @@ typedef struct {
     cxInt number;
 }NodeSearchOrder;
 
+//地图格子单元属性
+typedef enum {
+    MapUnitAttrNone = 0
+}MapUnitAttr;
+
 typedef enum {
     AttackTypeNone = 0,     //
     AttackTypeDirect,       //直接攻击

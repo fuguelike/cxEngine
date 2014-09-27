@@ -113,6 +113,7 @@ CX_OBJECT_INIT(Node, cxSprite)
     this->dirIndex = 0;
     this->isDie = false;
     this->index = cxVec2fv(-1, -1);
+    this->activeIdx = cxVec2iv(-1, -1);
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
     CX_METHOD_SET(this->IsAttackTarget, NodeIsAttackTarget);
 }
@@ -183,7 +184,7 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeMap(this);
     //Test show point position
-    cxList subviews = cxViewSubViews(map->bLayer);
+    cxList subviews = cxViewSubViews(map->aLayer);
     CX_LIST_FOREACH(subviews, ele){
         cxView tmp = ele->any;
         if(tmp->tag == 1001){
@@ -198,7 +199,7 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
         cxViewSetPos(sp, pos);
         cxViewSetSize(sp, cxSize2fv(8, 8));
         cxViewSetTag(sp, 1001);
-        cxViewAppend(map->bLayer, sp);
+        cxViewAppend(map->aLayer, sp);
     }
     //bind 目标 移动
     cxViewBind(pview, target, cxNumberInt(NodeBindReasonMove));
@@ -436,6 +437,7 @@ void NodeSetIndex(cxAny pview,cxVec2i idx)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = this->map;
+    this->initIdx = idx;
     //为了对齐格子加上node大小
     cxVec2f fidx = cxVec2fv(idx.x + this->size.w/2.0f, idx.y + this->size.h/2.0f);
     
@@ -457,7 +459,6 @@ void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic)
 {
     CX_ASSERT_THIS(pview, Node);
     this->map = map;
-    this->initIdx = idx;
     this->isStatic = isStatic;
     NodeSetIndex(this, idx);
     MapFillNode(map, idx, this);

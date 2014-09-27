@@ -87,7 +87,7 @@ CX_OBJECT_TERM(cxHttp, cxObject)
 
 static cxHttpConn cxHttpGetConnect(cxAny http)
 {
-    cxHttp this = http;
+    CX_ASSERT_THIS(http, cxHttp);
     cxConstChars host = evhttp_uri_get_host(this->uri);
     cxInt port = evhttp_uri_get_port(this->uri);
     return cxEventBaseHttpConnect(host,port < 0 ? 80 : port);
@@ -95,25 +95,25 @@ static cxHttpConn cxHttpGetConnect(cxAny http)
 
 cxString cxHttpBody(cxAny http)
 {
-    cxHttp this = http;
+    CX_ASSERT_THIS(http, cxHttp);
     return this->data;
 }
 
 void cxHttpCancel(cxAny http)
 {
-    cxHttp this = http;
+    CX_ASSERT_THIS(http, cxHttp);
     evhttp_cancel_request(this->request);
 }
 
 cxInt cxHttpLength(cxAny http)
 {
-    cxHttp this = http;
+    CX_ASSERT_THIS(http, cxHttp);
     return (cxInt)this->bodyBytes;
 }
 
 static cxString cxHttpGetUri(cxAny http)
 {
-    cxHttp this = http;
+    CX_ASSERT_THIS(http, cxHttp);
     cxConstChars path = evhttp_uri_get_path(this->uri);
     cxConstChars query = evhttp_uri_get_query(this->uri);
     if(query != NULL){
@@ -127,7 +127,7 @@ static cxString cxHttpGetUri(cxAny http)
 
 static cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked)
 {
-    cxHttp this = http;
+    CX_ASSERT_THIS(http, cxHttp);
     this->uri = evhttp_uri_parse(uri);
     this->request = evhttp_request_new(cxHttpRequestCompleted, this);
     if(chunked){
@@ -139,8 +139,8 @@ static cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked)
 
 void cxHttpAddHeader(cxAny http,cxString key,cxString value)
 {
+    CX_ASSERT_THIS(http, cxHttp);
     CX_ASSERT(cxStringOK(key) && cxStringOK(value), "error key or value");
-    cxHttp this = http;
     evhttp_add_header(this->request->output_headers, cxStringBody(key), cxStringBody(value));
 }
 

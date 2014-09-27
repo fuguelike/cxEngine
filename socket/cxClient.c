@@ -70,21 +70,21 @@ cxClient cxClientCreate(cxConstChars host,cxInt port)
 
 static void cxClientReadCB(struct bufferevent *bev, void *ctx)
 {
-    cxClient this = ctx;
+    CX_ASSERT_THIS(ctx, cxClient);
     struct evbuffer *input = bufferevent_get_input(bev);
     CX_METHOD_RUN(this->Read,this,input);
 }
 
 static void cxClientWriteCB(struct bufferevent *bev, void *ctx)
 {
-    cxClient this = ctx;
+    CX_ASSERT_THIS(ctx, cxClient);
     struct evbuffer *output = bufferevent_get_output(bev);
     CX_METHOD_RUN(this->Write,this,output);
 }
 
 static void cxClientEventCB(struct bufferevent *bev, short what, void *ctx)
 {
-    cxClient this = ctx;
+    CX_ASSERT_THIS(ctx, cxClient);
     CX_METHOD_RUN(this->Event,this,what);
 }
 
@@ -110,7 +110,7 @@ cxBool cxClientConnect(cxClient this)
         CX_ERROR("create socket error");
         return false;
     }
-    this->bufevent = bufferevent_socket_new(base->base, this->socket, BEV_OPT_CLOSE_ON_FREE);
+    this->bufevent = bufferevent_socket_new(base->base, this->socket, 0);
     if(this->bufevent == NULL){
         CX_ERROR("make buffer event failed");
         return false;

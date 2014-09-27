@@ -65,11 +65,11 @@ cxBool MapInit(cxAny pmap)
     pos = cxVec2fv(size.w / 4, -size.h / 4);
     cxAtlasAppendBoxPoint(this, pos, cxSize2fv(size.w/2.0f, size.h/2.0f), tex3, color);
     
-//    for (cxInt x = 0; x < 42; x ++) {
-//        for (cxInt y = 0; y < 42 ; y++) {
-//            cxSprite sp = cxSpriteCreateWithURL("0.png");
+//    for (cxInt x = 0; x < global.unitNum.x; x ++) {
+//        for (cxInt y = 0; y < global.unitNum.y ; y++) {
+//            cxSprite sp = cxSpriteCreateWithURL("bg1.png");
 //            cxViewSetSize(sp, global.unitSize);
-//            cxViewSetPos(sp, MapIdxToPos(this, cxVec2fv(x, y)));
+//            cxViewSetPos(sp, MapIndexToPos(this, cxVec2fv(x + 0.5f, y + 0.5f)));
 //            cxViewAppend(this, sp);
 //        }
 //    }
@@ -89,8 +89,11 @@ static void MapUpdate(cxAny pview)
 static cpBB NodeIndexBB(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
+    //这个坐标其实是物体中间的坐标
     cxVec2f idx = this->index;
-    return cpBBNew(idx.x, idx.y, idx.x + this->size.w, idx.y + this->size.h);
+    cxFloat w = (cxFloat)this->size.w / 2.0f;
+    cxFloat h = (cxFloat)this->size.h / 2.0f;
+    return cpBBNew(idx.x - w, idx.y - h, idx.x + w, idx.y + h);
 }
 
 static cxInt MapSearchEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *curr,cxVec2i *target)
@@ -140,8 +143,6 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
     }
     //如果是阻挡类型
     if(node->type.mainType == NodeTypeBlock && !NodeCheckDie(node)){
-        //记录第一个阻挡物
-        if(info->block == NULL)info->block = node;
         return false;
     }
     return true;
@@ -153,7 +154,7 @@ CX_OBJECT_TYPE(Map, cxAtlas)
 }
 CX_OBJECT_INIT(Map, cxAtlas)
 {
-    //只有自己能接收事件
+    //只有自己能接收touch事件
     cxViewSetTouchFlags(this, cxViewTouchFlagsSelf);
     //当选中按钮执行
     
@@ -168,35 +169,38 @@ CX_OBJECT_INIT(Map, cxAtlas)
     CX_METHOD_SET(this->astar->IsAppend, MapSearchIsAppend);
     CX_METHOD_SET(this->astar->EarlyExit, MapSearchEarlyExit);
     
-    //类型搜索索引
+    //格子大小
     cxInt cells = global.unitNum.x * global.unitNum.y;
-    this->items = cxSpatialAlloc(1.0f, cells, NodeIndexBB);
+    //类型搜索索引
+    this->items = cxSpatialAlloc(1.0f, cells * 2, NodeIndexBB);
     
     //node层
     this->nLayer = cxViewAppendType(this,cxView);
+    //效果层
+    this->aLayer = cxViewAppendType(this,cxView);
     
-    //弹药效果层
-    this->bLayer = cxViewAppendType(this,cxView);
-    cxViewAppend(this, this->bLayer);
-    
+    //创建格子属性数组
+    this->attrs = allocator->malloc(cells * sizeof(MapUnitAttr));
     //所有节点存储
     this->nodes = CX_ALLOC(cxHash);
-    
     //路径缓冲
     this->paths = CX_ALLOC(cxHash);
     
     cxEngine engine = cxEngineInstance();
-    
-    cxSize2f size = cxSize2fv(engine->winsize.w * global.mapRate, 0);
-    size.h = size.w * 0.75f;
+    //设定宽度
+    cxFloat w = engine->winsize.w * global.mapRate;
+    //4:3比例符合75度视角
+    cxSize2f size = cxSize2fv(w, w * 0.75f);
+    //单个node大小
     global.unitSize = cxSize2fv(size.w/global.unitNum.x, size.h/global.unitNum.y);
     
     cxViewSetSize(this, size);
-    cxViewSetSize(this->bLayer, size);
+    cxViewSetSize(this->aLayer, size);
     cxViewSetSize(this->nLayer, size);
 }
 CX_OBJECT_FREE(Map, cxAtlas)
 {
+    allocator->free(this->attrs);
     CX_RELEASE(this->paths);
     CX_RELEASE(this->items);
     CX_RELEASE(this->astar);
@@ -208,7 +212,7 @@ void MapAppendBullet(cxAny bullet)
 {
     CX_ASSERT_THIS(bullet, Bullet);
     Map map = BulletMap(this);
-    cxViewAppend(map->bLayer, bullet);
+    cxViewAppend(map->aLayer, bullet);
 }
 
 void MapRemoveBullet(cxAny bullet)
@@ -304,6 +308,7 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
     if(info->type.subType != NodeSubTypeNone && !(info->type.subType & node->type.subType)){
         return 1.0f;
     }
+    cxViewSetColor(node, cxRED);
     //获取当前点与原点之间的距离,如果比目标点更远直接返回
     cxFloat nb = NodeDistance(info->src, node);
     if(nb > info->ab){
@@ -395,9 +400,15 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
     cxVec2f didx = NodeFloatIndex(dnode);
     cxVec2f sidx = NodeFloatIndex(snode);
     cxVec2i a = cxVec2iv(sidx.x, sidx.y);
-    CX_ASSERT(MapIsValidIdx(map, a), "index error");
+    if(!MapIsValidIdx(map, a)){
+        CX_WARN("error index use at map path search");
+        return false;
+    }
     cxVec2i b = cxVec2iv(didx.x, didx.y);
-    CX_ASSERT(MapIsValidIdx(map, b), "index error");
+    if(!MapIsValidIdx(map, b)){
+        CX_WARN("error index use at map path search");
+        return false;
+    }
     //从缓存获取路径
     if(MapCachePath(map, a, b)){
         return true;
@@ -430,6 +441,38 @@ void MapSetNode(cxAny pmap,cxInt x,cxInt y,cxAny node)
     CX_ASSERT_THIS(pmap, Map);
     cxHashKey key = cxHashIntKey(y * global.unitNum.x + x);
     cxHashSet(this->nodes, key, node);
+}
+
+void MapAddAttr(cxAny pmap,cxVec2i idx,MapUnitAttr attr)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    CX_ASSERT(MapIsValidIdx(this,idx), "idx error");
+    cxInt key = idx.y * global.unitNum.x + idx.x;
+    this->attrs[key] |= attr;
+}
+
+void MapSubAttr(cxAny pmap,cxVec2i idx,MapUnitAttr attr)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    CX_ASSERT(MapIsValidIdx(this,idx), "idx error");
+    cxInt key = idx.y * global.unitNum.x + idx.x;
+    this->attrs[key] &= ~attr;
+}
+
+void MapSetAttr(cxAny pmap,cxVec2i idx,MapUnitAttr attr)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    CX_ASSERT(MapIsValidIdx(this,idx), "idx error");
+    cxInt key = idx.y * global.unitNum.x + idx.x;
+    this->attrs[key] = attr;
+}
+
+MapUnitAttr MapAttr(cxAny pmap,cxVec2i idx)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    CX_ASSERT(MapIsValidIdx(this,idx), "idx error");
+    cxInt key = idx.y * global.unitNum.x + idx.x;
+    return this->attrs[key];
 }
                             
 cxAny MapItem(cxAny pmap,cxVec2i idx)

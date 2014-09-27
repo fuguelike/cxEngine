@@ -38,6 +38,8 @@ CX_OBJECT_DEF(Node, cxSprite)
     //死亡时
     CX_EVENT_ALLOC(onDie);
     NodeSearchOrder orders;
+    //记录了上一个网格活动位置，初始和initIdx相等
+    cxVec2i activeIdx;
     //是否能攻击目标
     CX_METHOD_DEF(cxBool, IsAttackTarget,cxAny attacker,cxAny target);
     //搜索到目标,返回bind哪个目标 seacher,target
