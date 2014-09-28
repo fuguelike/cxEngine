@@ -43,7 +43,9 @@ typedef struct {
     cxAny map;
     cxAny snode;
     cxAny dnode;
+    cxFloat max;
     cxFloat dis;//两点间距离
+    cxVec2i idx;//最近点
 }MapSearchInfo;
 
 //加入攻击
@@ -82,7 +84,7 @@ cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b);
 
 //寻路失败时返回离目标最近的坐标
 //如果返回阻挡标识搜索失败
-cxBool MapSearchPath(cxAny snode,cxAny dnode);
+cxBool MapSearchPath(cxAny snode,cxAny dnode,cxFloat max);
 
 //init map
 cxBool MapInit(cxAny pmap);

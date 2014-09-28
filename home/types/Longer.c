@@ -42,6 +42,11 @@ static void LongerTarget(cxAny pview,cxAny target,cxAny bd)
     cxViewBind(bullet, target, cxNumberInt(NodeBindReasonShoot));
 }
 
+cxAny LongerFindRule(cxAny pview,const NodeCombined *type)
+{
+    return AttackFindRule(pview, type);
+}
+
 CX_OBJECT_TYPE(Longer, Attack)
 {
     
@@ -51,6 +56,7 @@ CX_OBJECT_INIT(Longer, Attack)
     NodeSetRange(this, cxRange2fv(0, 5));
     NodeSetAttackRate(this, 0.5f);
     CX_METHOD_SET(CX_TYPE(Node, this)->AttackTarget, LongerTarget);
+    CX_METHOD_SET(CX_TYPE(Node, this)->FindRule, LongerFindRule);
     
     cxViewSetColor(this, cxORANGE);
 }

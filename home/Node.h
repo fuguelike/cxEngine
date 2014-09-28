@@ -23,11 +23,11 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxBool isDie;       //是否死去
 
     CX_FIELD_DEF(cxAny Map);
+    CX_FIELD_DEF(cxFloat Body);
     CX_FIELD_DEF(cxVec2f Index);
     CX_FIELD_DEF(NodeCombined Type);  //node组合类型,攻击范围
     CX_FIELD_DEF(cxRange2f Range);    //攻击范围
     CX_FIELD_DEF(cxSize2i Size);      //占用的格子数
-    CX_FIELD_DEF(cxFloat Body);       //可攻击半径
     CX_FIELD_DEF(cxFloat Speed);      //移动速度
     CX_FIELD_DEF(cxFloat Power);      //攻击力,每秒的攻击力，实际效果和攻击频率(attackRate)有关系
     CX_FIELD_DEF(cxRange2i Life);     //min当前生命，max最大生命
@@ -47,12 +47,14 @@ CX_OBJECT_DEF(Node, cxSprite)
     //死亡时
     CX_EVENT_ALLOC(onDie);
     NodeSearchOrder orders;
+    //目标搜索规则
+    CX_METHOD_DEF(cxAny, FindRule,cxAny,const NodeCombined *);
+    //路径搜索规则
+    CX_METHOD_DEF(cxAny, PathRule, cxAny seacher, cxAny target);
     //是否能攻击目标
     CX_METHOD_DEF(cxBool, IsAttackTarget,cxAny attacker,cxAny target);
-    //搜索到目标,返回bind哪个目标 seacher,target
-    CX_METHOD_DEF(cxAny, FindTarget, cxAny seacher, cxAny target);
     //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
-    CX_METHOD_DEF(cxBool, NodeFinded,cxAny node,cxAny finder);
+    CX_METHOD_DEF(cxBool, Finded,cxAny node,cxAny finder);
     //方向发生变化
     CX_METHOD_DEF(void, NodeDirection,cxAny);
     //攻击一个目标 attcker攻击target bd=bind数据
@@ -66,22 +68,46 @@ CX_OBJECT_END(Node, cxSprite)
 CX_FIELD_GET(Node, cxAny, Map);
 
 CX_FIELD_IMP(Node, NodeCombined, Type);
-CX_FIELD_IMP(Node, cxRange2f, Range);
+CX_FIELD_SET(Node, cxRange2f, Range);
 
 CX_FIELD_GET(Node, cxSize2i, Size);
 void NodeSetSize(cxAny pview,cxSize2i size);
 
 CX_FIELD_IMP(Node, cxVec2f, Index);
-CX_FIELD_IMP(Node, cxFloat, Body);
 CX_FIELD_IMP(Node, cxFloat, Speed);
 CX_FIELD_IMP(Node, cxFloat, Power);
+CX_FIELD_IMP(Node, cxFloat, Body);
 CX_FIELD_IMP(Node, cxRange2i, Life);
-CX_FIELD_IMP(Node, cxRange2f, Field);
+CX_FIELD_SET(Node, cxRange2f, Field);
 CX_FIELD_IMP(Node, cxInt, Level);
 CX_FIELD_IMP(Node, cxFloat, AttackRate);
 CX_FIELD_IMP(Node, cxFloat, SearchRate);
 CX_FIELD_IMP(Node, cxInt, AttackNum);
 CX_FIELD_IMP(Node, cxInt, DirIndex);
+
+CX_INLINE cxVec2i NodeGetIntIndex(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    return cxVec2iv(this->Index.x, this->Index.y);
+}
+
+//获取视野，从body后开始计算
+CX_INLINE cxRange2f NodeGetField(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    cxRange2f range = this->Field;
+    range.max += NodeGetBody(this);
+    return range;
+}
+
+//获取攻击范围，和node' Body有关系
+CX_INLINE cxRange2f NodeGetRange(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    cxRange2f range = this->Range;
+    range.max += NodeGetBody(this);
+    return range;
+}
 
 CX_FIELD_GET(Node, cxFloat, DirAngle);
 void NodeSetDirAngle(cxAny pview,cxFloat angle);
@@ -89,10 +115,10 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle);
 void NodeAddLife(cxAny pview,cxInt life);
 
 //获取两个node之间的有效果距离，减去各自的body
-cxFloat NodeDistance(cxAny src,cxAny dst);
+cxFloat NodeFightDistance(cxAny src,cxAny dst);
 
 //检测是否在attacker的作战范围内
-cxBool NodeIsAttackTarget(cxAny attacker,cxAny target);
+cxBool NodeArriveFightRange(cxAny attacker,cxAny target);
 
 //启动攻击定时器
 void NodeStartupAttackTimer(cxAny pview);

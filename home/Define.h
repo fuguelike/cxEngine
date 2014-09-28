@@ -113,6 +113,15 @@ typedef struct {
     cxBool isReach;     //是否可到达
 } NodeNearestInfo;
 
+//附近点范围内所有的node
+typedef struct {
+    cxAny nodes;         //最近的view
+    cxVec2f index;
+    cxFloat body;
+    NodeCombined type;
+    cxRange2f range;    //
+} NodePointNearest;
+
 //两点搜索信息
 typedef struct {
     cxAny node;         //最近的view

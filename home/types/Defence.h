@@ -19,6 +19,10 @@ CX_OBJECT_END(Defence, Node)
 
 Defence DefenceCreate(cxAny pmap,cxVec2i pos);
 
+cxAny DefenceFindRule(cxAny pview,const NodeCombined *type);
+
+cxAny DefencePathRule(cxAny pview,cxAny target);
+
 CX_C_END
 
 #endif

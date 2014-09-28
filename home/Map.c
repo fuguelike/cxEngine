@@ -120,16 +120,17 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
         return false;
     }
     cxVec2f sidx = NodeGetIndex(info->snode);
-    cxVec2f didx = NodeGetIndex(info->dnode);
     //开始点与搜索点之间距离超过搜索范围
     cxFloat dis = kmVec2DistanceBetween(&sidx, &index);
-    if(dis > info->dis){
+    if(dis > info->max){
         return false;
     }
-    //目标点与搜索点之间距离超过范围
+    //获取最近点坐标
+    cxVec2f didx = NodeGetIndex(info->dnode);
     dis = kmVec2DistanceBetween(&didx, &index);
-    if(dis > info->dis){
-        return false;
+    if(dis < info->dis){
+        info->dis = dis;
+        info->idx = *idx;
     }
     //
     Node node = MapItem(map, *idx);
@@ -147,6 +148,44 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
         return false;
     }
     return true;
+}
+
+cxBool MapSearchPath(cxAny snode,cxAny dnode,cxFloat max)
+{
+    Map map = NodeGetMap(snode);
+    CX_ASSERT_VALUE(snode, Node, sx);
+    CX_ASSERT_VALUE(dnode, Node, dx);
+    cxVec2f didx = NodeGetIndex(dnode);
+    cxVec2f sidx = NodeGetIndex(snode);
+    cxVec2i a = cxVec2iv(sidx.x, sidx.y);
+    cxVec2i b = cxVec2iv(didx.x, didx.y);
+    if(!MapIsValidIdx(map, a) || !MapIsValidIdx(map, b)){
+        CX_WARN("error index use at map path search");
+        return false;
+    }
+    //从缓存获取路径
+    if(MapCachePath(map, a, b)){
+        return true;
+    }
+    //
+    MapSearchInfo info = {NULL};
+    //设置搜索参数
+    info.dis = INT32_MAX;
+    info.max = max;
+    info.map = map;
+    info.snode = snode;
+    info.dnode = dnode;
+    //开始搜索,如果成功保存路径到缓存
+    if(cxAStarRun(map->astar, a, b, &info)) {
+        return MapCacheSavePath(map, a, b);
+    }
+    //获取最近点坐标路径
+    info.dis = INT32_MAX;
+    b = info.idx;
+    if(cxAStarRun(map->astar, a, b, &info)) {
+        return MapCacheSavePath(map, a, b);
+    }
+    return false;
 }
 
 CX_OBJECT_TYPE(Map, cxAtlas)
@@ -267,11 +306,11 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
         return id;
     }
     //如果必须可到达，而没有路径则跳过
-    if(info->isReach && !MapSearchPath(info->src, node)){
+    if(info->isReach && !MapSearchPath(info->src, node, info->range.max)){
         return id;
     }
     //计算距离，获取最近的node
-    cxFloat d = NodeDistance(info->src, node);
+    cxFloat d = NodeFightDistance(info->src, node);
     if(d > info->dis){
         return id;
     }
@@ -319,16 +358,17 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
     }
     cxViewSetColor(node, cxRED);
     //获取当前点与原点之间的距离,如果比目标点更远直接返回
-    cxFloat nb = NodeDistance(info->src, node);
+    cxFloat nb = NodeFightDistance(info->src, node);
     if(nb > info->ab){
         return 1.0f;
     }
     //如果不能到达目标返回继续搜索
-    if(!MapSearchPath(info->src, node)){
+    cxRange2f field = NodeGetField(info->src);
+    if(!MapSearchPath(info->src, node, field.max)){
         return 1.0f;
     }
     //获取当前点与目标距离，获取距离目标最近的node
-    cxFloat dis = NodeDistance(node, info->dst);
+    cxFloat dis = NodeFightDistance(node, info->dst);
     if(dis < info->dis){
         info->dis = dis;
         info->node = node;
@@ -345,7 +385,7 @@ cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type)
     NodeSegmentInfo ret = {0};
     ret.src = src;
     ret.dst = dst;
-    ret.ab = NodeDistance(sp, dp);
+    ret.ab = NodeFightDistance(sp, dp);
     ret.dis = INT32_MAX;
     ret.type = type;
     cxVec2f a = NodeGetIndex(sp);
@@ -399,43 +439,6 @@ cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b)
     cxAStarCleanPath(this->astar);
     cxAnyArrayAppends(this->astar->points, path);
     return true;
-}
-
-cxBool MapSearchPath(cxAny snode,cxAny dnode)
-{
-    Map map = NodeGetMap(snode);
-    CX_ASSERT_VALUE(snode, Node, sx);
-    CX_ASSERT_VALUE(dnode, Node, dx);
-    cxVec2f didx = NodeGetIndex(dnode);
-    cxVec2f sidx = NodeGetIndex(snode);
-    cxVec2i a = cxVec2iv(sidx.x, sidx.y);
-    if(!MapIsValidIdx(map, a)){
-        CX_WARN("error index use at map path search");
-        return false;
-    }
-    cxVec2i b = cxVec2iv(didx.x, didx.y);
-    if(!MapIsValidIdx(map, b)){
-        CX_WARN("error index use at map path search");
-        return false;
-    }
-    //从缓存获取路径
-    if(MapCachePath(map, a, b)){
-        return true;
-    }
-    //
-    MapSearchInfo info = {NULL};
-    //设置搜索参数
-    cxFloat sz = CX_MAX(sx->Size.w, sx->Size.h);
-    cxFloat dz = CX_MAX(dx->Size.w, dx->Size.h);
-    info.dis = kmVec2DistanceBetween(&sidx, &didx) + sz + dz;
-    info.map = map;
-    info.snode = snode;
-    info.dnode = dnode;
-    //开始搜索,如果成功保存路径到缓存
-    if(cxAStarRun(map->astar, a, b, &info)) {
-        return MapCacheSavePath(map, a, b);
-    }
-    return false;
 }
 
 void MapDelNode(cxAny pmap,cxInt x,cxInt y)

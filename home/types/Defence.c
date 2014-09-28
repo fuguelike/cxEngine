@@ -45,15 +45,22 @@ static void DefenceAttackTarget(cxAny pview,cxAny target,cxAny bd)
     cxViewBind(bullet, target, cxNumberInt(NodeBindReasonShoot));
 }
 
-static cxAny DefenceFindTarget(cxAny pview,cxAny target)
+cxAny DefencePathRule(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Defence);
-    //未达到攻击范围
-    cxBool ret = CX_METHOD_GET(false, this->Node.IsAttackTarget, this,target);
-    if(!ret){
+    //目标未达到攻击范围
+    if(!NodeArriveFightRange(this, target)){
         return NULL;
     }
     return target;
+}
+
+cxAny DefenceFindRule(cxAny pview,const NodeCombined *type)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxRange2f range = NodeGetRange(this);
+    //搜索攻击范围内的
+    return MapNearestQuery(this, *type, range, false);
 }
 
 CX_OBJECT_TYPE(Defence, Node)
@@ -63,7 +70,6 @@ CX_OBJECT_TYPE(Defence, Node)
 CX_OBJECT_INIT(Defence, Node)
 {
     NodeSetType(this, NodeCombinedMake(NodeTypeDefence, NodeSubTypeNone));
-    NodeSetBody(this, 2.0f);
     NodeSetSize(this, cxSize2iv(2, 2));
     NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(0, 11));
@@ -77,8 +83,9 @@ CX_OBJECT_INIT(Defence, Node)
     RangeSetRange(range, NodeGetRange(this));
     cxViewAppend(this, range);
     
-    CX_METHOD_SET(this->Node.FindTarget,   DefenceFindTarget);
+    CX_METHOD_SET(this->Node.PathRule, DefencePathRule);
     CX_METHOD_SET(this->Node.AttackTarget, DefenceAttackTarget);
+    CX_METHOD_SET(this->Node.FindRule, DefenceFindRule);
 }
 CX_OBJECT_FREE(Defence, Node)
 {

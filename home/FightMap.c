@@ -48,7 +48,7 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
             MapAppendNode(node);
         }else if(this->tag == 2){
             Defence node = DefenceCreate(this, idx);
-            NodeSetPower(node, 100);
+            NodeSetPower(node, 10);
             NodeSetLife(node, cxRange2iv(200, 200));
             MapAppendNode(node);
         }else if(this->tag == 3){
@@ -82,6 +82,7 @@ static void mapSubType(cxAny dst,cxAny src)
                 MapAppendNode(node);
             }
         }
+
     }else if(this->tag == 6){
         MapRemoveNodes(this);
     }

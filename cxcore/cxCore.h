@@ -89,11 +89,11 @@
 #define CX_EXTERN   extern
 
 #ifndef CX_MIN
-#define CX_MIN(x,y) (((x) > (y)) ? (y) : (x))
+#define CX_MIN(v1,v2) (((v1) > (v2)) ? (v2) : (v1))
 #endif
 
 #ifndef CX_MAX
-#define CX_MAX(x,y) (((x) < (y)) ? (y) : (x))
+#define CX_MAX(v1,v2) (((v1) < (v2)) ? (v2) : (v1))
 #endif
 
 #ifndef CX_SWAP

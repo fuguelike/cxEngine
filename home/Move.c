@@ -54,9 +54,8 @@ static void MoveOnUpdate(cxAny pav)
         cxActionStop(pav);
         return;
     }
-    //如果到达攻击距离
-    cxBool ret = CX_METHOD_GET(false, attacker->IsAttackTarget, attacker, target);
-    if(ret){
+    //到达作战范围
+    if(NodeArriveFightRange(attacker, target)){
         cxActionStop(pav);
         return;
     }
@@ -68,6 +67,7 @@ CX_OBJECT_TYPE(Move, cxSpline)
 }
 CX_OBJECT_INIT(Move, cxSpline)
 {
+    MoveSetIsToPoints(this, false);
     cxActionSetGroup(this, "fight");
     CX_EVENT_APPEND(CX_TYPE(cxSpline, this)->onAngle, MoveOnAngle);
     CX_EVENT_APPEND(CX_TYPE(cxAction, this)->onInit, MoveOnInit);
@@ -82,11 +82,9 @@ CX_OBJECT_TERM(Move, cxSpline)
 Move MoveCreate(cxAny pmap,cxAnyArray points)
 {
     Move move = CX_CREATE(Move);
-    CX_ASSERT_THIS(pmap, Map);
-    //加入路径点
     CX_ASTAR_POINTS_FOREACH(points, idx){
         cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
-        cxVec2f pos = MapIndexToPos(this,p);
+        cxVec2f pos = MapIndexToPos(pmap,p);
         cxSplineAppend(move, pos);
     }
     return move;

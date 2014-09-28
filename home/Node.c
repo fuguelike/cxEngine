@@ -91,7 +91,6 @@ void NodeStartupAttackTimer(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     if(this->attackTimer != NULL){
-        CX_LOGGER("attacker reset");
         cxActionReset(this->attackTimer);
     }else{
         this->attackTimer = cxViewAppendTimer(this, NodeGetAttackRate(this), CX_TIMER_FOREVER);
@@ -101,14 +100,14 @@ void NodeStartupAttackTimer(cxAny pview)
     cxActionResume(this->attackTimer);
 }
 
-cxBool NodeIsAttackTarget(cxAny pattacker,cxAny ptarget)
+cxBool NodeArriveFightRange(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
     CX_ASSERT_VALUE(ptarget, Node, target);
     //获取攻击者作战范围
     cxRange2f range = NodeGetRange(attacker);
     //计算作战距离
-    cxFloat d = NodeDistance(attacker, target);
+    cxFloat d = NodeFightDistance(attacker, target);
     //检测是否在作战范围内
     return d >= range.min && d <= range.max;
 }
@@ -121,12 +120,11 @@ CX_OBJECT_INIT(Node, cxSprite)
 {
     CX_EVENT_APPEND(CX_TYPE(cxView, this)->onTransform, NodeOnTransform);
     NodeSetAttackNum(this, 1);
-    this->searchIndex = 0;
-    this->isDie = false;
-    this->Index = cxVec2fv(-1, -1);
+    NodeSetIndex(this, cxVec2fv(-1, -1));
     NodeSetField(this, cxRange2fv(0, 6));
+    NodeSetBody(this, 0.5f);
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
-    CX_METHOD_SET(this->IsAttackTarget, NodeIsAttackTarget);
+    CX_METHOD_SET(this->IsAttackTarget, NodeArriveFightRange);
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
@@ -150,7 +148,7 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
 }
 
 //到达指定位置
-static void NodeMoveArrive(cxAny pav)
+static void NodeMoveToTargetArrive(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
     CX_ASSERT_VALUE(cxActionView(this), Node, node);
@@ -168,19 +166,24 @@ static void NodeMoveArrive(cxAny pav)
         }
         //朝向target
         NodeFaceTarget(node, target);
+        //移动结束如果没有达到作战距离,解除bind继续搜索
+        if(!NodeArriveFightRange(node, target)){
+            cxViewUnBind(node, target);
+            continue;
+        }
         //发动攻击 目标已经bind到node
         cxViewBind(node, target, cxNumberInt(NodeBindReasonAttack));
         NodeStartupAttackTimer(node);
     }
 }
 
-cxFloat NodeDistance(cxAny src,cxAny dst)
+cxFloat NodeFightDistance(cxAny src,cxAny dst)
 {
     CX_ASSERT_VALUE(src, Node, snode);
     CX_ASSERT_VALUE(dst, Node, dnode);
     cxVec2f sidx = NodeGetIndex(snode);
     cxVec2f didx = NodeGetIndex(dnode);
-    cxFloat d = kmVec2DistanceBetween(&sidx, &didx) - (NodeGetBody(snode) + NodeGetBody(dnode));
+    cxFloat d = kmVec2DistanceBetween(&sidx, &didx) - (NodeGetBody(src) + NodeGetBody(dst));
     d = CX_MAX(d, 0);
     return d;
 }
@@ -189,26 +192,26 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
-//    //Test show point position
-//    cxList subviews = cxViewSubViews(map->aLayer);
-//    CX_LIST_FOREACH(subviews, ele){
-//        cxView tmp = ele->any;
-//        if(tmp->tag == 1001){
-//            cxViewRemove(tmp);
-//        }
-//    }
-//    CX_ASTAR_POINTS_FOREACH(points, idx){
-//        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
-//        cxVec2f pos = MapIndexToPos(map, p);
-//        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
-//        cxViewSetColor(sp, cxWHITE);
-//        cxViewSetPos(sp, pos);
-//        cxViewSetSize(sp, cxSize2fv(8, 8));
-//        cxViewSetTag(sp, 1001);
-//        cxViewAppend(map->aLayer, sp);
-//    }
+    //Test show point position
+    cxList subviews = cxViewSubViews(map->aLayer);
+    CX_LIST_FOREACH(subviews, ele){
+        cxView tmp = ele->any;
+        if(tmp->tag == 1001){
+            cxViewRemove(tmp);
+        }
+    }
+    CX_ASTAR_POINTS_FOREACH(points, idx){
+        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
+        cxVec2f pos = MapIndexToPos(map, p);
+        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
+        cxViewSetColor(sp, cxWHITE);
+        cxViewSetPos(sp, pos);
+        cxViewSetSize(sp, cxSize2fv(8, 8));
+        cxViewSetTag(sp, 1001);
+        cxViewAppend(map->aLayer, sp);
+    }
     Move move = MoveCreate(map, points);
-    CX_EVENT_APPEND(CX_TYPE(cxAction, move)->onExit, NodeMoveArrive);
+    CX_EVENT_APPEND(CX_TYPE(cxAction, move)->onExit, NodeMoveToTargetArrive);
     cxViewAppendAction(this, move);
     //bind 目标 移动
     cxViewBind(pview, target, cxNumberInt(NodeBindReasonMove));
@@ -223,6 +226,18 @@ void NodeFaceTarget(cxAny pview,cxAny target)
     }
 }
 
+static const NodeCombined *NodeGetSearchType(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    if(this->orders.number == 0){
+        return NULL;
+    }
+    if(this->searchIndex >= this->orders.number){
+        this->searchIndex = 0;
+    }
+    return &this->orders.types[this->searchIndex++];
+}
+
 static void NodeProcessSearch(Node this)
 {
     cxHash bindes = cxViewBindes(this);
@@ -230,42 +245,26 @@ static void NodeProcessSearch(Node this)
     if(cxHashLength(bindes) >= NodeGetAttackNum(this)){
         return;
     }
-    //如果未定义搜索
-    if(this->orders.number == 0){
+    const NodeCombined *type = NodeGetSearchType(this);
+    if(type == NULL){
         return;
     }
-    if(this->searchIndex >= this->orders.number){
-        this->searchIndex = 0;
-    }
-    cxRange2f field = NodeGetField(this);
-    Node target = NULL;
-    //获取当前搜索类型
-    NodeCombined type = this->orders.types[this->searchIndex++];
-    //先搜索视野范围内可以到达的目标
-    if(target == NULL){
-        target = MapNearestQuery(this, type, field, true);
-    }
-    //搜索视野范围内最近的目标
-    if(target == NULL){
-        target = MapNearestQuery(this, type, field, false);
-    }
-    //搜索最大范围内的目标
-    if(target == NULL){
-        target = MapNearestQuery(this, type, MAX_RANGE, false);
-    }
+    CX_ASSERT(this->FindRule, "nor implement search rule");
+    //启动搜索规则
+    Node target = CX_METHOD_GET(NULL, this->FindRule, this, type);
+    //在搜索规则下没有发现目标
     if(target == NULL){
         return;
     }
     //立即面向目标
     NodeFaceTarget(this,target);
-    cxBool isAttack = false;
     //target被this发现,返回false表示target不能被攻击
-    isAttack = CX_METHOD_GET(true, target->NodeFinded,target,this);
-    if(!isAttack){
+    if(!CX_METHOD_GET(true, target->Finded,target,this)){
         return;
     }
-    //返回bind的目标
-    target = CX_METHOD_GET(NULL,this->FindTarget,this,target);
+    //路径搜索规则
+    target = CX_METHOD_GET(NULL,this->PathRule,this,target);
+    //返回NULL表示未发现路径
     if(target == NULL){
         return;
     }
