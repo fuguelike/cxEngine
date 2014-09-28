@@ -16,7 +16,7 @@
 static void BulletAttackArrive(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFollow);
-    CX_ASSERT_VALUE(cxActionView(pav), Bullet, bullet);
+    CX_ASSERT_VALUE(cxActionView(this), Bullet, bullet);
     //如果有bind的目标就攻击他
     cxHash bindes = cxViewBindes(bullet);
     CX_HASH_FOREACH(bindes, ele, tmp){

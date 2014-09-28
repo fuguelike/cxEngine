@@ -155,8 +155,8 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode,cxFloat max)
     Map map = NodeGetMap(snode);
     CX_ASSERT_VALUE(snode, Node, sx);
     CX_ASSERT_VALUE(dnode, Node, dx);
-    cxVec2f didx = NodeGetIndex(dnode);
-    cxVec2f sidx = NodeGetIndex(snode);
+    cxVec2f didx = NodeGetIndex(dx);
+    cxVec2f sidx = NodeGetIndex(sx);
     cxVec2i a = cxVec2iv(sidx.x, sidx.y);
     cxVec2i b = cxVec2iv(didx.x, didx.y);
     if(!MapIsValidIdx(map, a) || !MapIsValidIdx(map, b)){
@@ -173,11 +173,17 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode,cxFloat max)
     info.dis = INT32_MAX;
     info.max = max;
     info.map = map;
+    info.idx = cxVec2iv(-1, -1);
     info.snode = snode;
     info.dnode = dnode;
     //开始搜索,如果成功保存路径到缓存
     if(cxAStarRun(map->astar, a, b, &info)) {
         return MapCacheSavePath(map, a, b);
+    }
+    //获取最近点失败
+    if(info.idx.x == -1 || info.idx.y == -1){
+        CX_ERROR("get nearest position error");
+        return false;
     }
     //获取最近点坐标路径
     info.dis = INT32_MAX;
