@@ -149,9 +149,9 @@ typedef const char *    cxConstType;
 typedef const char *    cxConstChars;
 typedef char *          cxChars;
 
-#define CX_ENGINE_VERSION   201
+#define CX_ENGINE_VERSION               201
 
-#define CX_ATTR_UNUSED     __attribute__ ((__unused__))
+#define CX_ATTR_UNUSED                  __attribute__ ((__unused__))
 
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
     #define CX_DEPRECATED_ATTRIBUTE __attribute__((deprecated))
@@ -162,22 +162,22 @@ typedef char *          cxChars;
 #endif
 
 //max logger length
-#define CX_MAX_LOGGER_LENGTH        1024
+#define CX_MAX_LOGGER_LENGTH            1024
 
 //max type signature name length
-#define MAX_TYPE_SIGNATURE_SIZE     1024
+#define MAX_TYPE_SIGNATURE_SIZE         1024
 
-#define CX_INLINE                   static inline
+#define CX_INLINE                       static inline
 
 //#define NDEBUG 1
 
 #if !defined(NDEBUG)
 
-#define CX_LOGGER(format,...)       cxUtilInfo(__FILE__,__LINE__,format, ##__VA_ARGS__)
+#define CX_LOGGER(format,...)           cxUtilInfo(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
-#define CX_ERROR(format,...)        cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
+#define CX_ERROR(format,...)            cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
-#define CX_WARN(format,...)         cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
+#define CX_WARN(format,...)             cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
 #define CX_ASSERT(cond,format,...)                              \
 do{                                                             \
@@ -186,13 +186,13 @@ do{                                                             \
     assert(cond);                                               \
 }while(0)
 
-#define CX_ASSERT_FALSE(format,...) CX_ASSERT(false,format,##__VA_ARGS__)
+#define CX_ASSERT_FALSE(format,...)     CX_ASSERT(false,format,##__VA_ARGS__)
 
-#define CX_ASSERT_TYPE(_o_,_t_)     CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type error,should is "#_t_,_o_)
+#define CX_ASSERT_TYPE(_o_,_t_)         CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type error,should is "#_t_,_o_)
 
-#define CX_ASSERT_THIS(_o_,_t_)     _t_ this = (_t_)(_o_);CX_ASSERT_TYPE(_o_,_t_)
+#define CX_ASSERT_VALUE(_o_,_t_,_n_)    _t_ _n_ = (_t_)(_o_);CX_ASSERT_TYPE(_n_,_t_)
 
-#define CX_TYPE_CAST(_o_,_t_)       (_t_)(_o_);CX_ASSERT_TYPE(_o_,_t_)
+#define CX_ASSERT_THIS(_o_,_t_)         CX_ASSERT_VALUE(_o_,_t_,this)
 
 #else
 
@@ -202,23 +202,23 @@ do{                                                             \
 
 #define CX_ASSERT_TYPE(_o_,_t_)
 
-#define CX_ASSERT_THIS(_o_,_t_)     _t_ this = (_t_)(_o_)
+#define CX_ASSERT_VALUE(_o_,_t_,_n_)    _t_ _n_ = (_t_)(_o_)
 
-#define CX_TYPE_CAST(_o_,_t_)       (_t_)(_o_)
+#define CX_ASSERT_THIS(_o_,_t_)         CX_ASSERT_VALUE(_o_,_t_,this)
 
 #define CX_ASSERT_FALSE(format,...)
 
-#define CX_ERROR(format,...)         cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
+#define CX_ERROR(format,...)            cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
-#define CX_WARN(format,...)          cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
+#define CX_WARN(format,...)             cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
 #endif
 
-#define CX_RETURN(cond,...)         if(cond)return __VA_ARGS__
+#define CX_RETURN(cond,...)             if(cond)return __VA_ARGS__
 
 //type define
 
-#define CX_TYPE_REG(_t_)            __##_t_##RegisterFunc()
+#define CX_TYPE_REG(_t_)                __##_t_##RegisterFunc()
 
 #define CX_OBJECT_BEG(_t_,_b_)                                  \
 CX_ATTR_UNUSED static cxConstType _t_##TypeName = #_t_;         \
@@ -275,7 +275,7 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 
 #define CX_RETAIN_SET(_f_,_v_)      do{_f_ = (_v_);CX_RETAIN(_f_);}while(0)
 
-#define CX_INSTANCE_OF(_o_,_t_)     cxInstanceOf(_o_,_t_##TypeName)
+#define CX_INSTANCE_OF(_o_,_t_)     cxObjectInstanceOf(_o_,_t_##TypeName)
 
 #define TYPE(_o_)                   ((cxObject)_o_)->cxType
 
@@ -291,25 +291,16 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 
 //field
 
-#define CX_FIELD_DEF(_var_)      _var_
+#define CX_FIELD_DEF(_var_)         _var_
 
-#define CX_FIELD_GET(_t_,_vt_, _n_)                     \
-CX_INLINE _vt_ _t_##Get##_n_(cxAny self)                \
-{                                                       \
-    CX_ASSERT_THIS(self,_t_);                           \
-    return this->_n_;                                   \
-}
+#define CX_FIELD_GET(_t_,_vt_, _n_) \
+CX_INLINE _vt_ _t_##Get##_n_(cxAny pthis){CX_ASSERT_THIS(pthis,_t_);return this->_n_;}
 
-#define CX_FIELD_SET(_t_,_vt_, _n_)                     \
-CX_INLINE void _t_##Set##_n_(cxAny self,_vt_ value)     \
-{                                                       \
-    CX_ASSERT_THIS(self,_t_);                           \
-    this->_n_ = value;                                  \
-}
+#define CX_FIELD_SET(_t_,_vt_, _n_) \
+CX_INLINE void _t_##Set##_n_(cxAny pthis,const _vt_ value){CX_ASSERT_THIS(pthis,_t_);this->_n_ = value;}
 
-#define CX_FIELD_IMP(_t_,_vt_, _n_)                     \
-CX_FIELD_GET(_t_,_vt_, _n_)                             \
-CX_FIELD_SET(_t_,_vt_, _n_)
+#define CX_FIELD_IMP(_t_,_vt_, _n_) \
+CX_FIELD_GET(_t_,_vt_, _n_)CX_FIELD_SET(_t_,_vt_, _n_)
 
 //signal and slot
 
@@ -485,6 +476,8 @@ CX_OBJECT_END(cxObject,cxObject)
 cxAny cxObjectType(cxAny object);
 
 cxAny cxObjectProperty(cxAny object,cxConstChars key);
+
+cxBool cxObjectInstanceOf(cxAny object,cxConstType type);
 
 typedef enum {
     cxCoreStackTypeLoader = 1,

@@ -63,7 +63,7 @@ void cxEngineMain(cxEngine engine)
     GlobalInit(engine);
     
     cxLoader loader = cxLoaderCreate("main.json");
-    Scene scene = CX_TYPE_CAST(loader->object,Scene);
+    CX_ASSERT_VALUE(cxLoaderGetRoot(loader), Scene, scene);
     scene->fightMap = cxLoaderGet(loader, "map");
     CX_ASSERT_TYPE(scene->fightMap, FightMap);
     

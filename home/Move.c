@@ -13,14 +13,14 @@
 static void MoveOnAngle(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    Node node = CX_TYPE_CAST(cxActionView(this),Node);
+    CX_ASSERT_VALUE(cxActionView(this), Node, node);
     NodeSetDirAngle(node, this->cxSpline.angle);
 }
 
 static void MoveOnInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    Node node = CX_TYPE_CAST(cxActionView(this),Node);
+    CX_ASSERT_VALUE(cxActionView(this), Node, node);
     cxFloat d = 0;
     cxAnyArray points = this->cxSpline.points;
     cxInt num = cxAnyArrayLength(points);
@@ -41,7 +41,7 @@ static void MoveOnInit(cxAny pav)
 static void MoveOnUpdate(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    Node attacker = CX_TYPE_CAST(cxActionView(this),Node);
+    CX_ASSERT_VALUE(cxActionView(this), Node, attacker);
     //第一个bind的一定是目标,如果为空目标可能已经死亡
     Node target = cxViewBindesFirst(attacker);
     if(target == NULL){

@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#ifndef cxCore_cxInitType_h
-#define cxCore_cxInitType_h
+#ifndef cxCore_cxType_h
+#define cxCore_cxType_h
 
 #include "cxHash.h"
 #include "cxJson.h"
@@ -35,8 +35,6 @@ cxProperty cxTypeProperty(cxType this,cxConstChars key);
 void cxTypeSignature(cxType type,cxType super);
 
 void cxTypeSetSuper(cxType type,cxType super);
-
-cxBool cxInstanceOf(cxAny object,cxConstType type);
 
 void cxTypesSet(cxConstType typeName,cxType type);
 

@@ -18,7 +18,7 @@ CX_OBJECT_INIT(cxLoader, cxObject)
 }
 CX_OBJECT_FREE(cxLoader, cxObject)
 {
-    CX_RELEASE(this->object);
+    CX_RELEASE(this->Root);
     CX_RELEASE(this->objects);
 }
 CX_OBJECT_TERM(cxLoader, cxObject)
@@ -35,7 +35,7 @@ cxLoader cxLoaderCreate(cxConstChars path)
     CX_ASSERT(json != NULL, "json file %s read error",path);
     cxLoader this = CX_CREATE(cxLoader);
     cxCorePush(cxCoreStackTypeLoader,this);
-    CX_RETAIN_SWAP(this->object, cxObjectCreateWithJson(json));
+    CX_RETAIN_SWAP(this->Root, cxObjectCreateWithJson(json));
     cxCorePop(cxCoreStackTypeLoader);
     return this;
 }

@@ -22,8 +22,8 @@ static cxInt MapSortCmpFunc(cxConstAny lv,cxConstAny rv)
 {
     cxListElement *lp = (cxListElement *)lv;
     cxListElement *rp = (cxListElement *)rv;
-    cxView v1 = CX_TYPE_CAST(lp->any,cxView);
-    cxView v2 = CX_TYPE_CAST(rp->any,cxView);
+    CX_ASSERT_VALUE(lp->any, cxView, v1);
+    CX_ASSERT_VALUE(rp->any, cxView, v2);
     return v2->position.y - v1->position.y;
 }
 
@@ -100,7 +100,7 @@ static cxInt MapSearchEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *curr,cxVec2i
 {
     CX_ASSERT_THIS(pstar, cxAStar);
     MapSearchInfo *info = this->data;
-    Map map = CX_TYPE_CAST(info->map,Map);
+    CX_ASSERT_VALUE(info->map, Map, map);
     cxAny item = MapItem(map, *curr);
     //如果格子上已经是目标提前完成
     if(item == info->dnode){
@@ -113,7 +113,7 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
 {
     CX_ASSERT_THIS(pstar, cxAStar);
     MapSearchInfo *info = this->data;
-    Map map = CX_TYPE_CAST(info->map,Map);
+    CX_ASSERT_VALUE(info->map, Map, map);
     cxVec2f index = cxVec2fv(idx->x, idx->y);
     //如果索引超出最大范围
     if(!MapIsValidIdx(map, *idx)){
@@ -252,7 +252,7 @@ void MapRemoveNode(cxAny node)
 static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id, void *data)
 {
     NodeNearestInfo *info = data;
-    Node node = CX_TYPE_CAST(pview,Node);
+    CX_ASSERT_VALUE(pview, Node, node);
     //死了的不参与搜索
     if(NodeCheckDie(node)){
         return id;
@@ -303,7 +303,7 @@ cxAny MapNearestQuery(cxAny src,NodeCombined type,cxRange2f range,cxBool isReach
 static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
 {
     NodeSegmentInfo *info = data;
-    Node node = CX_TYPE_CAST(pview,Node);
+    CX_ASSERT_VALUE(pview, Node, node);
     //死了的不参与搜索
     if(NodeCheckDie(node)){
         return 1.0f;
@@ -339,8 +339,8 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
 //搜索src dst之间的单位
 cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type)
 {
-    Node sp = CX_TYPE_CAST(src,Node);
-    Node dp = CX_TYPE_CAST(dst,Node);
+    CX_ASSERT_VALUE(src, Node, sp);
+    CX_ASSERT_VALUE(dst, Node, dp);
     Map map = NodeGetMap(sp);
     NodeSegmentInfo ret = {0};
     ret.src = src;
@@ -404,8 +404,8 @@ cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b)
 cxBool MapSearchPath(cxAny snode,cxAny dnode)
 {
     Map map = NodeGetMap(snode);
-    Node sx = CX_TYPE_CAST(snode,Node);
-    Node dx = CX_TYPE_CAST(dnode,Node);
+    CX_ASSERT_VALUE(snode, Node, sx);
+    CX_ASSERT_VALUE(dnode, Node, dx);
     cxVec2f didx = NodeGetIndex(dnode);
     cxVec2f sidx = NodeGetIndex(snode);
     cxVec2i a = cxVec2iv(sidx.x, sidx.y);

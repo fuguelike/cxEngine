@@ -93,7 +93,7 @@ void cxTypeSetSuper(cxType type,cxType super)
     CX_RETAIN_SWAP(type->superType, super);
 }
 
-cxBool cxInstanceOf(cxAny object,cxConstType type)
+cxBool cxObjectInstanceOf(cxAny object,cxConstType type)
 {
     cxObject this = object;
     CX_RETURN(object == NULL && type == NULL,true);

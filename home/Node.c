@@ -50,17 +50,17 @@ void NodeAttacked(cxAny pview,cxAny attacker,AttackType type)
     CX_ASSERT_THIS(pview, Node);
     //如果是直接攻击
     if(type == AttackTypeDirect){
-        Node a = CX_TYPE_CAST(attacker,Node);
+        CX_ASSERT_VALUE(attacker, Node, a);
         NodeAddLife(this, -NodeGetPower(a));
     }else if(type == AttackTypeBullet){
-        Bullet a = CX_TYPE_CAST(attacker,Bullet);
+        CX_ASSERT_VALUE(attacker, Bullet, a);
         NodeAddLife(this, -BulletGetPower(a));
     }
 }
 
 static void NodeAttackTimerArrive(cxAny pav)
 {
-    Node this = CX_TYPE_CAST(cxActionView(pav),Node);
+    CX_ASSERT_THIS(cxActionView(pav), Node);
     cxHash bindes = cxViewBindes(this);
     CX_HASH_FOREACH(bindes, ele, tmp){
         //获取目标
@@ -101,8 +101,8 @@ void NodeStartupAttackTimer(cxAny pview)
 
 cxBool NodeIsAttackTarget(cxAny pattacker,cxAny ptarget)
 {
-    Node attacker = CX_TYPE_CAST(pattacker,Node);
-    Node target = CX_TYPE_CAST(ptarget,Node);
+    CX_ASSERT_VALUE(pattacker, Node, attacker);
+    CX_ASSERT_VALUE(ptarget, Node, target);
     //获取攻击者作战范围
     cxRange2f range = NodeGetRange(attacker);
     //计算作战距离
@@ -151,7 +151,7 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
 static void NodeMoveArrive(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    Node node = CX_TYPE_CAST(cxActionView(this),Node);
+    CX_ASSERT_VALUE(cxActionView(this), Node, node);
     cxHash bindes = cxViewBindes(node);
     CX_HASH_FOREACH(bindes, ele, tmp){
         Node target = cxHashElementKeyToAny(ele);
@@ -174,8 +174,8 @@ static void NodeMoveArrive(cxAny pav)
 
 cxFloat NodeDistance(cxAny src,cxAny dst)
 {
-    Node snode = CX_TYPE_CAST(src,Node);
-    Node dnode = CX_TYPE_CAST(dst,Node);
+    CX_ASSERT_VALUE(src, Node, snode);
+    CX_ASSERT_VALUE(dst, Node, dnode);
     cxVec2f sidx = NodeGetIndex(snode);
     cxVec2f didx = NodeGetIndex(dnode);
     cxFloat d = kmVec2DistanceBetween(&sidx, &didx) - (NodeGetBody(snode) + NodeGetBody(dnode));
