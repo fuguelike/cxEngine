@@ -356,7 +356,6 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
     if(info->type.subType != NodeSubTypeNone && !(info->type.subType & type.subType)){
         return 1.0f;
     }
-    cxViewSetColor(node, cxRED);
     //获取当前点与原点之间的距离,如果比目标点更远直接返回
     cxFloat nb = NodeDistance(info->src, node);
     if(nb > info->ab){
@@ -391,6 +390,9 @@ cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type)
     cxVec2f a = NodeGetIndex(sp);
     cxVec2f b = NodeGetIndex(dp);
     cpSpatialIndexSegmentQuery(map->items->index, map, a, b, 1.0f, MapSegmentQueryFunc, &ret);
+    if(ret.node != NULL){
+        cxViewSetColor(ret.node, cxRED);
+    }
     return ret.node;
 }
 
