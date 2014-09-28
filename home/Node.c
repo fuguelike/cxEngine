@@ -100,14 +100,15 @@ void NodeStartupAttackTimer(cxAny pview)
     cxActionResume(this->attackTimer);
 }
 
-cxBool NodeArriveFightRange(cxAny pattacker,cxAny ptarget)
+cxBool NodeIsArriveRange(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
     CX_ASSERT_VALUE(ptarget, Node, target);
+    cxVec2f sidx = NodeGetIndex(attacker);
+    cxVec2f didx = NodeGetIndex(target);
+    cxFloat d = kmVec2DistanceBetween(&sidx, &didx);
     //获取攻击者作战范围
     cxRange2f range = NodeGetRange(attacker);
-    //计算作战距离
-    cxFloat d = NodeFightDistance(attacker, target);
     //检测是否在作战范围内
     return d >= range.min && d <= range.max;
 }
@@ -122,9 +123,8 @@ CX_OBJECT_INIT(Node, cxSprite)
     NodeSetAttackNum(this, 1);
     NodeSetIndex(this, cxVec2fv(-1, -1));
     NodeSetField(this, cxRange2fv(0, 6));
-    NodeSetBody(this, 0.5f);
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
-    CX_METHOD_SET(this->IsAttackTarget, NodeArriveFightRange);
+    CX_METHOD_SET(this->IsAttackTarget, NodeIsArriveRange);
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
@@ -147,6 +147,15 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
     cxViewSetDegrees(this->array, dirIndex * 45.0f);
 }
 
+cxFloat NodeDistance(cxAny src,cxAny dst)
+{
+    CX_ASSERT_VALUE(src, Node, snode);
+    CX_ASSERT_VALUE(dst, Node, dnode);
+    cxVec2f sidx = NodeGetIndex(snode);
+    cxVec2f didx = NodeGetIndex(dnode);
+    return kmVec2DistanceBetween(&sidx, &didx);
+}
+
 //到达指定位置
 static void NodeMoveToTargetArrive(cxAny pav)
 {
@@ -167,7 +176,7 @@ static void NodeMoveToTargetArrive(cxAny pav)
         //朝向target
         NodeFaceTarget(node, target);
         //移动结束如果没有达到作战距离,解除bind继续搜索
-        if(!NodeArriveFightRange(node, target)){
+        if(!NodeIsArriveRange(node, target)){
             cxViewUnBind(node, target);
             continue;
         }
@@ -175,17 +184,6 @@ static void NodeMoveToTargetArrive(cxAny pav)
         cxViewBind(node, target, cxNumberInt(NodeBindReasonAttack));
         NodeStartupAttackTimer(node);
     }
-}
-
-cxFloat NodeFightDistance(cxAny src,cxAny dst)
-{
-    CX_ASSERT_VALUE(src, Node, snode);
-    CX_ASSERT_VALUE(dst, Node, dnode);
-    cxVec2f sidx = NodeGetIndex(snode);
-    cxVec2f didx = NodeGetIndex(dnode);
-    cxFloat d = kmVec2DistanceBetween(&sidx, &didx) - (NodeGetBody(src) + NodeGetBody(dst));
-    d = CX_MAX(d, 0);
-    return d;
 }
 
 void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)

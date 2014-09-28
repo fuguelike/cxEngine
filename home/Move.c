@@ -55,7 +55,7 @@ static void MoveOnUpdate(cxAny pav)
         return;
     }
     //到达作战范围
-    if(NodeArriveFightRange(attacker, target)){
+    if(NodeIsArriveRange(attacker, target)){
         cxActionStop(pav);
         return;
     }

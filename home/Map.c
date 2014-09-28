@@ -310,7 +310,7 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
         return id;
     }
     //计算距离，获取最近的node
-    cxFloat d = NodeFightDistance(info->src, node);
+    cxFloat d = NodeDistance(info->src, node);
     if(d > info->dis){
         return id;
     }
@@ -358,7 +358,7 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
     }
     cxViewSetColor(node, cxRED);
     //获取当前点与原点之间的距离,如果比目标点更远直接返回
-    cxFloat nb = NodeFightDistance(info->src, node);
+    cxFloat nb = NodeDistance(info->src, node);
     if(nb > info->ab){
         return 1.0f;
     }
@@ -368,7 +368,7 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
         return 1.0f;
     }
     //获取当前点与目标距离，获取距离目标最近的node
-    cxFloat dis = NodeFightDistance(node, info->dst);
+    cxFloat dis = NodeDistance(node, info->dst);
     if(dis < info->dis){
         info->dis = dis;
         info->node = node;
@@ -385,7 +385,7 @@ cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type)
     NodeSegmentInfo ret = {0};
     ret.src = src;
     ret.dst = dst;
-    ret.ab = NodeFightDistance(sp, dp);
+    ret.ab = NodeDistance(sp, dp);
     ret.dis = INT32_MAX;
     ret.type = type;
     cxVec2f a = NodeGetIndex(sp);

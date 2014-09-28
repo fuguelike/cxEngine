@@ -7,6 +7,7 @@
 //
 #include <Move.h>
 #include <Map.h>
+#include <Range.h>
 #include "Attack.h"
 
 static void AttackAttackTarget(cxAny pview,cxAny target,cxAny bd)
@@ -29,11 +30,6 @@ cxAny AttackPathRule(cxAny pview,cxAny target)
         NodeMovingToTarget(this, target, MapSearchPoints(map));
         return target;
     }
-//    //移动到最后目标点
-//    if(MapSearchPathPoint(map, NodeGetIntIndex(this), map->NearstIdx, field.max)){
-//        NodeMovingToTarget(this, target, MapSearchPoints(map));
-//        return target;
-//    }
     //使用线段搜索法搜索距离目标最近的一个阻挡物
     Node block = MapSegmentQuery(this, target, NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
     if(block != NULL && MapSearchPath(this, block, field.max)){
@@ -81,13 +77,16 @@ CX_OBJECT_INIT(Attack, Node)
     NodeSetField(this, cxRange2fv(0, 10));
     NodeSetRange(this, cxRange2fv(0, 1));
     NodeSetAttackRate(this, 0.2f);
-    NodeSetBody(this, 0.3f);
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
     cxViewSetColor(this, cxBLUE);
     
     CX_METHOD_SET(this->Node.PathRule, AttackPathRule);
     CX_METHOD_SET(this->Node.AttackTarget, AttackAttackTarget);
     CX_METHOD_SET(this->Node.FindRule, AttackFindRule);
+    
+    Range range = CX_CREATE(Range);
+    RangeSetRange(range, NodeGetField(this));
+    cxViewAppend(this, range);
 }
 CX_OBJECT_FREE(Attack, Node)
 {

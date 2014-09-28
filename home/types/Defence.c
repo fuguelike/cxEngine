@@ -49,7 +49,7 @@ cxAny DefencePathRule(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Defence);
     //目标未达到攻击范围
-    if(!NodeArriveFightRange(this, target)){
+    if(!NodeIsArriveRange(this, target)){
         return NULL;
     }
     return target;
