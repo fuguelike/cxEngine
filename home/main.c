@@ -18,7 +18,7 @@
 #include <types/Attack.h>
 #include <types/Defence.h>
 #include <types/Wall.h>
-#include <types/LongAttacker.h>
+#include <types/Longer.h>
 
 void cxEngineType(cxEngine engine)
 {
@@ -36,7 +36,7 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Defence);
     CX_TYPE_REG(Wall);
     
-    CX_TYPE_REG(LongAttacker);
+    CX_TYPE_REG(Longer);
 }
 
 static void selectButton(cxAny pview)

@@ -14,7 +14,7 @@
 #include <types/Attack.h>
 #include <types/Defence.h>
 #include <types/Wall.h>
-#include <types/LongAttacker.h>
+#include <types/Longer.h>
 
 static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
 {
@@ -59,7 +59,7 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
             NodeSetLife(node, cxRange2iv(100, 100));
             MapAppendNode(node);
         }else if(this->tag == 4){
-            LongAttacker node = LongAttackerCreate(this, idx);
+            Longer node = LongerCreate(this, idx);
             NodeSetLife(node, cxRange2iv(200, 200));
             NodeSetPower(node, 20);
             MapAppendNode(node);

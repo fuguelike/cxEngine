@@ -1,5 +1,5 @@
 //
-//  LongAttacker.c
+//  Longer.c
 //  cxCore
 //
 //  Created by xuhua on 9/27/14.
@@ -9,7 +9,7 @@
 #include <Bullet.h>
 #include <actions/cxFollow.h>
 #include <Map.h>
-#include "LongAttacker.h"
+#include "Longer.h"
 
 static void BulletAttackArrive(cxAny pav)
 {
@@ -25,9 +25,9 @@ static void BulletAttackArrive(cxAny pav)
     MapRemoveBullet(bullet);
 }
 
-static void LongAttackerTarget(cxAny pview,cxAny target,cxAny bd)
+static void LongerTarget(cxAny pview,cxAny target,cxAny bd)
 {
-    CX_ASSERT_THIS(pview, LongAttacker);
+    CX_ASSERT_THIS(pview, Longer);
     Map map = NodeGetMap(this);
     //开火
     Bullet bullet = CX_CREATE(Bullet);
@@ -42,33 +42,33 @@ static void LongAttackerTarget(cxAny pview,cxAny target,cxAny bd)
     cxViewBind(bullet, target, cxNumberInt(NodeBindReasonShoot));
 }
 
-CX_OBJECT_TYPE(LongAttacker, Attack)
+CX_OBJECT_TYPE(Longer, Attack)
 {
     
 }
-CX_OBJECT_INIT(LongAttacker, Attack)
+CX_OBJECT_INIT(Longer, Attack)
 {
     NodeSetRange(this, cxRange2fv(0, 5));
     NodeSetAttackRate(this, 0.5f);
-    CX_METHOD_SET(CX_TYPE(Node, this)->AttackTarget, LongAttackerTarget);
+    CX_METHOD_SET(CX_TYPE(Node, this)->AttackTarget, LongerTarget);
     
     cxViewSetColor(this, cxORANGE);
 }
-CX_OBJECT_FREE(LongAttacker, Attack)
+CX_OBJECT_FREE(Longer, Attack)
 {
 
 }
-CX_OBJECT_TERM(LongAttacker, Attack)
+CX_OBJECT_TERM(Longer, Attack)
 
-void LongAttackerInit(cxAny pview, cxAny pmap,cxVec2i pos)
+void LongerInit(cxAny pview, cxAny pmap,cxVec2i pos)
 {
-    CX_ASSERT_THIS(pview, LongAttacker);
+    CX_ASSERT_THIS(pview, Longer);
     AttackInit(this, pmap, pos);
 }
 
-LongAttacker LongAttackerCreate(cxAny pmap,cxVec2i pos)
+Longer LongerCreate(cxAny pmap,cxVec2i pos)
 {
-    LongAttacker this = CX_CREATE(LongAttacker);
-    LongAttackerInit(this, pmap, pos);
+    Longer this = CX_CREATE(Longer);
+    LongerInit(this, pmap, pos);
     return this;
 }

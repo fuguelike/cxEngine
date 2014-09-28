@@ -32,6 +32,9 @@ cxBool cxVec2fIsInverse(cxVec2f v1,cxVec2f v2)
 
 cxFloat cxVec2fRadiansBetween(cxVec2f v1, cxVec2f v2)
 {
+    if(cxVec2fEqu(v1, v2)){
+        return FLT_EPSILON;
+    }
     cxVec2f delta;
     kmVec2Subtract(&delta, &v1, &v2);
     return cxVec2fAngle(delta);

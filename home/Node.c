@@ -73,6 +73,8 @@ static void NodeAttackTimerArrive(cxAny pav)
         if(!CX_METHOD_GET(true, this->IsAttackTarget,this,target)){
             continue;
         }
+        //朝向target攻击
+        NodeFaceTarget(this, target);
         CX_METHOD_RUN(this->AttackTarget, this, target, ele->any);
         //攻击后目标死亡
         if(NodeCheckDie(target)){
@@ -187,36 +189,38 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
-    //Test show point position
-    cxList subviews = cxViewSubViews(map->aLayer);
-    CX_LIST_FOREACH(subviews, ele){
-        cxView tmp = ele->any;
-        if(tmp->tag == 1001){
-            cxViewRemove(tmp);
-        }
-    }
-    CX_ASTAR_POINTS_FOREACH(points, idx){
-        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
-        cxVec2f pos = MapIndexToPos(map, p);
-        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
-        cxViewSetColor(sp, cxWHITE);
-        cxViewSetPos(sp, pos);
-        cxViewSetSize(sp, cxSize2fv(8, 8));
-        cxViewSetTag(sp, 1001);
-        cxViewAppend(map->aLayer, sp);
-    }
-    //bind 目标 移动
-    cxViewBind(pview, target, cxNumberInt(NodeBindReasonMove));
+//    //Test show point position
+//    cxList subviews = cxViewSubViews(map->aLayer);
+//    CX_LIST_FOREACH(subviews, ele){
+//        cxView tmp = ele->any;
+//        if(tmp->tag == 1001){
+//            cxViewRemove(tmp);
+//        }
+//    }
+//    CX_ASTAR_POINTS_FOREACH(points, idx){
+//        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
+//        cxVec2f pos = MapIndexToPos(map, p);
+//        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
+//        cxViewSetColor(sp, cxWHITE);
+//        cxViewSetPos(sp, pos);
+//        cxViewSetSize(sp, cxSize2fv(8, 8));
+//        cxViewSetTag(sp, 1001);
+//        cxViewAppend(map->aLayer, sp);
+//    }
     Move move = MoveCreate(map, points);
     CX_EVENT_APPEND(CX_TYPE(cxAction, move)->onExit, NodeMoveArrive);
     cxViewAppendAction(this, move);
+    //bind 目标 移动
+    cxViewBind(pview, target, cxNumberInt(NodeBindReasonMove));
 }
 
 void NodeFaceTarget(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Node);
     cxFloat angle = cxVec2fRadiansBetween(cxViewPosition(target),cxViewPosition(this));
-    NodeSetDirAngle(this, angle);
+    if(angle != FLT_EPSILON){
+        NodeSetDirAngle(this, angle);
+    }
 }
 
 static void NodeProcessSearch(Node this)
