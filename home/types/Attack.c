@@ -8,13 +8,8 @@
 #include <Move.h>
 #include <Map.h>
 #include <Range.h>
+#include <actions/cxScale.h>
 #include "Attack.h"
-
-static void AttackAttackTarget(cxAny pview,cxAny target,cxAny bd)
-{
-    CX_ASSERT_THIS(pview, Attack);
-    NodeAttackTarget(this, target, AttackTypeDirect);
-}
 
 PathRuleResult AttackPathRule(cxAny pview,FindRuleResult *fret)
 {
@@ -58,6 +53,14 @@ FindRuleResult AttackFindRule(cxAny pview,const NodeCombined *type)
     return ret;
 }
 
+AttackActionResult AttackAttackAction(cxAny pattacker,cxAny ptarget)
+{
+    CX_ASSERT_VALUE(pattacker, Node, attacker);
+    CX_ASSERT_VALUE(ptarget, Node, target);
+    cxScale scale = cxScaleCreate(NodeGetAttackRate(attacker), cxVec2fv(1.5f, 1.5f));
+    return AttackActionResultMake(NULL, scale);
+}
+
 CX_OBJECT_TYPE(Attack, Node)
 {
     
@@ -74,9 +77,9 @@ CX_OBJECT_INIT(Attack, Node)
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
     cxViewSetColor(this, cxBLUE);
     
-    CX_METHOD_SET(this->Node.PathRule, AttackPathRule);
-    CX_METHOD_SET(this->Node.AttackTarget, AttackAttackTarget);
-    CX_METHOD_SET(this->Node.FindRule, AttackFindRule);
+    SET(Node,this,PathRule, AttackPathRule);
+    SET(Node,this,FindRule, AttackFindRule);
+    SET(Node,this,AttackAction, AttackAttackAction);
     
 //    Range range = CX_CREATE(Range);
 //    RangeSetRange(range, NodeGetField(this));

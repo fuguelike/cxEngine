@@ -44,24 +44,40 @@ static void LifeChange(cxAny pview)
     cxLabelTTFSetText(this->lifeTTF, UTF8("%d/%d",this->Life.min,this->Life.max));
 }
 
-void NodeAddLife(cxAny pview,cxInt life)
-{
-    CX_ASSERT_THIS(pview, Node);
-    this->Life.min += life;
-    CX_EVENT_FIRE(this, onLife);
-}
-
 void NodeAttacked(cxAny pview,cxAny attacker,AttackType type)
 {
     CX_ASSERT_THIS(pview, Node);
     //如果是直接攻击
-    if(type == AttackTypeDirect){
+    if(type == AttackTypeNode){
         CX_ASSERT_VALUE(attacker, Node, a);
         NodeAddLife(this, -NodeGetPower(a));
     }else if(type == AttackTypeBullet){
         CX_ASSERT_VALUE(attacker, Bullet, a);
         NodeAddLife(this, -BulletGetPower(a));
     }
+}
+
+static void NodeAttackActionExit(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    CX_ASSERT_VALUE(cxActionView(this), Node, node);
+    Node target = cxViewBindesFirst(node);
+    if(target != NULL){
+        NodeAttackTarget(node, target, AttackTypeNode);
+    }
+    cxViewSetScale(node, cxVec2fv(1, 1));
+}
+
+static void NodeAttackBulletExit(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    CX_ASSERT_VALUE(cxActionView(this), Bullet, bullet);
+    //如果有bind的目标就攻击他
+    Node target = BulletGetTarget(bullet);
+    if(target != NULL){
+        NodeAttackTarget(bullet, target, AttackTypeBullet);
+    }
+    MapRemoveBullet(bullet);
 }
 
 static void NodeAttackTimerArrive(cxAny pav)
@@ -80,9 +96,27 @@ static void NodeAttackTimerArrive(cxAny pav)
             cxViewUnBind(this, target);
             continue;
         }
+        AttackActionResult ret = AttackActionResultEmpty();
+        ret = CX_METHOD_GET(ret, this->AttackAction, this, target);
+        if(ret.action == NULL){
+            cxViewUnBind(this, target);
+            CX_WARN("action create failed,unbind target");
+            continue;
+        }
+        CX_ASSERT_TYPE(ret.action, cxAction);
+        if(ret.bullet != NULL){
+            BulletBind(ret.bullet, this, target);
+            cxViewAppendAction(ret.bullet, ret.action);
+            MapAppendBullet(ret.bullet);
+            //带弹药结束 action.view = bullet
+            ON(cxAction, ret.action, onExit, NodeAttackBulletExit);
+        }else{
+            //带动画结束 action.view = node
+            cxViewAppendAction(this, ret.action);
+            ON(cxAction, ret.action, onExit, NodeAttackActionExit);
+        }
         //朝向target攻击
         NodeFaceTarget(this, target);
-        CX_METHOD_RUN(this->AttackTarget, this, target, ele->any);
         //攻击后目标死亡
         if(NodeCheckDie(target)){
             continue;
@@ -156,15 +190,6 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
     CX_METHOD_RUN(this->NodeDirection,this);
     //Test
     cxViewSetDegrees(this->array, dirIndex * 45.0f);
-}
-
-cxFloat NodeDistance(cxAny src,cxAny dst)
-{
-    CX_ASSERT_VALUE(src, Node, snode);
-    CX_ASSERT_VALUE(dst, Node, dnode);
-    cxVec2f sidx = NodeGetIndex(snode);
-    cxVec2f didx = NodeGetIndex(dnode);
-    return kmVec2DistanceBetween(&sidx, &didx);
 }
 
 //到达指定位置
@@ -253,7 +278,7 @@ void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type)
 {
     CX_ASSERT_THIS(target, Node);
     CX_METHOD_RUN(this->NodeAttacked,this,attacker,type);
-    //攻击后死亡了
+    //攻击后死亡了？
     NodeCheckDie(target);
 }
 

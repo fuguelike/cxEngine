@@ -67,6 +67,16 @@ void cxDrawClippingRect(const cxVec2f pos,cxSize2f size)
     cxDrawSolidRect(cxRect4fv(pos.x, pos.y, size.w, size.h), cxColor4fv(0, 0, 0, 0), cxShaderDefaultKey);
 }
 
+void cxDrawPoint(const cxVec2f pos,cxColor3f color,cxFloat w)
+{
+    GLint lw;
+    glGetIntegerv(GL_LINE_WIDTH, &lw);
+    glLineWidth(w);
+    cxRect4f rect = cxRect4fv(pos.x - w/2, pos.y - w/2, w, w);
+    cxDrawSolidRect(rect, cxColor4fv(color.r, color.g, color.b, 1.0f), cxShaderPositionColorKey);
+    glLineWidth(lw);
+}
+
 void cxDrawSolidRect(const cxRect4f rect,const cxColor4f color,cxConstChars skey)
 {
     cxBoxVec3f box;

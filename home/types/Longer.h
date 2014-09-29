@@ -22,6 +22,8 @@ Longer LongerCreate(cxAny pmap,cxVec2i pos);
 
 FindRuleResult LongerFindRule(cxAny pview,const NodeCombined *type);
 
+AttackActionResult LongerAttackAction(cxAny pattacker,cxAny ptarget);
+
 CX_C_END
 
 #endif

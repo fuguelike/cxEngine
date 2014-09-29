@@ -184,8 +184,40 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
 static void MapDraw(cxAny pmap)
 {
     CX_ASSERT_THIS(pmap, Map);
-    cxVec2f ps[2]={this->a,this->b};
-    cxDrawLineLoop(ps, 2, cxWHITE);
+    {
+//        this->a = cxVec2fv(0, -1024);
+//        this->b = cxVec2fv(0, 1024);
+        cxVec2f ps[2]={this->a,this->b};
+        cxDrawLineLoop(ps, 2, cxWHITE);
+    }
+//    {
+//        this->a = cxVec2fv(-1024,0);
+//        this->b = cxVec2fv(1024,0);
+//        cxVec2f ps[2]={this->a,this->b};
+//        cxDrawLineLoop(ps, 2, cxWHITE);
+//    }
+//    
+//    cxFloat k = 0;
+//    {
+//        this->a = cxVec2fv(100,-100);
+//        this->b = cxVec2fv(200,300);
+//        cxVec2f ps[2]={this->a,this->b};
+//        cxDrawLineLoop(ps, 2, cxRED);
+//        k = (this->b.y - this->a.y) / (this->b.x - this->a.x);
+//    }
+//    
+//    {
+//        k = -1.0f/ k;
+//        cxFloat b = 200 - k * 300;
+//        //y = kx + b;
+//        this->a = cxVec2fv(0,b);
+//        cxFloat y = k * 400 + b;
+//        this->b = cxVec2fv(400,y);
+//        cxVec2f ps[2]={this->a,this->b};
+//        cxDrawLineLoop(ps, 2, cxYELLOW);
+//    }
+//    
+//    cxDrawPoint(cxVec2fv(100, 100), cxRED, 5);
 }
 
 CX_OBJECT_TYPE(Map, cxAtlas)
@@ -386,10 +418,53 @@ cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type)
     map->a = MapIndexToPos(map, a);
     map->b = MapIndexToPos(map, b);
     cpSpatialIndexSegmentQuery(map->items->index, map, a, b, 1.0f, MapSegmentQueryFunc, &ret);
-    if(ret.node != NULL){
-        cxViewSetColor(ret.node, cxRED);
-    }
     return ret.node;
+}
+
+static cpCollisionID MapItemsQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id, void *data)
+{
+    NearestItemsInfo *info = data;
+    CX_ASSERT_VALUE(pview, Node, node);
+    //死了的不参与搜索
+    if(NodeCheckDie(node)){
+        return id;
+    }
+    NodeCombined type = NodeGetType(node);
+    //不匹配主类型
+    if(info->type.mainType != NodeTypeNone && !(info->type.mainType & type.mainType)){
+        return id;
+    }
+    //不匹配子类型
+    if(info->type.subType != NodeSubTypeNone && !(info->type.subType & type.subType)){
+        return id;
+    }
+    cxVec2f npos = NodeGetIndex(node);
+    cxFloat dis = kmVec2DistanceBetween(&npos, &info->point);
+    if(cxFloatEqu(dis, info->range.min)){
+        cxArrayAppend(info->nodes, node);
+        return id;
+    }
+    if(cxFloatEqu(dis, info->range.max)){
+        return id;
+    }
+    if(dis > info->range.min && dis < info->range.max){
+        cxArrayAppend(info->nodes, node);
+    }
+    return id;
+}
+
+//搜索某点附近的，范围内的所有node
+cxArray MapNearestItems(cxAny pmap,cxVec2f point,cxRange2f range,NodeCombined type)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    NearestItemsInfo ret = {0};
+    ret.nodes = CX_CREATE(cxArray);
+    ret.point = point;
+    ret.type = type;
+    ret.range = range;
+    cpBB bb = cpBBNewForCircle(point, cpfmax(range.max, 0.0f));
+    cpSpatialIndexQuery(this->items->index, this, bb, MapItemsQueryFunc, &ret);
+    return ret.nodes;
 }
 
 cxAnyArray MapVisiedPoints(cxAny pmap)

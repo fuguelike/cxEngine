@@ -16,10 +16,18 @@ CX_C_BEGIN
 CX_OBJECT_DEF(Bullet, cxSprite)
     CX_FIELD_DEF(cxAny Map);
     CX_FIELD_DEF(cxFloat Power);//子弹携带的攻击力
+    CX_FIELD_DEF(cxAny Action); //子弹驱动action
 CX_OBJECT_END(Bullet, cxSprite)
 
 CX_FIELD_IMP(Bullet, cxFloat, Power);
 CX_FIELD_GET(Bullet, cxAny, Map);
+CX_FIELD_IMP(Bullet, cxAny, Action);
+
+void BulletBind(cxAny pview,cxAny pattacker,cxAny target);
+
+cxAny BulletGetAttacker(cxAny pview);
+
+cxAny BulletGetTarget(cxAny pview);
 
 void BulletInit(cxAny pview,cxAny pmap,cxSize2f size,cxVec2f pos);
 

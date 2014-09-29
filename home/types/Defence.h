@@ -23,6 +23,8 @@ FindRuleResult DefenceFindRule(cxAny pview,const NodeCombined *type);
 
 PathRuleResult DefencePathRule(cxAny pview,FindRuleResult *fret);
 
+AttackActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget);
+
 CX_C_END
 
 #endif

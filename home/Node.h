@@ -32,6 +32,13 @@ typedef struct {
 #define FindRuleResultMake(_t_,_d_) (FindRuleResult){_t_,_d_}
 #define FindRuleResultEmpty()   FindRuleResultMake(NULL,NodeFindReasonNone)
 
+typedef struct {
+    cxAny bullet;
+    cxAny action;
+}AttackActionResult;
+#define AttackActionResultMake(_b_,_a_) (AttackActionResult){_b_,_a_}
+#define AttackActionResultEmpty()   AttackActionResultMake(NULL,NULL)
+
 CX_OBJECT_DEF(Node, cxSprite)
     cxLabelTTF lifeTTF;     //Test
     cxSprite array;     //Test
@@ -73,10 +80,10 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(cxBool, Finded,cxAny node,cxAny finder);
     //方向发生变化
     CX_METHOD_DEF(void, NodeDirection,cxAny);
-    //攻击一个目标 attcker攻击target bd=bind数据
-    CX_METHOD_DEF(void, AttackTarget,cxAny attcker,cxAny target,cxAny bd);
     //被一个目标攻击 pview 被attacker攻击 attacktype可能是 弓箭或者node
     CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);
+    //创建一个攻击动画,动画结时攻击目标
+    CX_METHOD_DEF(AttackActionResult, AttackAction,cxAny attacker,cxAny target);
 CX_OBJECT_END(Node, cxSprite)
 
 CX_FIELD_GET(Node, cxAny, Map);
@@ -108,6 +115,13 @@ CX_FIELD_IMP(Node, cxFloat, SearchRate);
 CX_FIELD_IMP(Node, cxInt, AttackNum);
 CX_FIELD_IMP(Node, cxInt, DirIndex);
 
+//获取node中心所在网格的的中心网格坐标
+CX_INLINE cxVec2f NodeCenterIdx(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    return cxVec2fv((cxInt)(this->Index.x) + 0.5f, (cxInt)(this->Index.y) + 0.5f);
+}
+
 CX_INLINE cxVec2i NodeGetIntIndex(cxAny pthis)
 {
     CX_ASSERT_THIS(pthis, Node);
@@ -115,9 +129,25 @@ CX_INLINE cxVec2i NodeGetIntIndex(cxAny pthis)
 }
 
 CX_FIELD_GET(Node, cxFloat, DirAngle);
+
 void NodeSetDirAngle(cxAny pview,cxFloat angle);
 
-void NodeAddLife(cxAny pview,cxInt life);
+//添加或者较少node生命值
+CX_INLINE void NodeAddLife(cxAny pthis,cxInt life)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    this->Life.min += life;
+    CX_EVENT_FIRE(this, onLife);
+}
+//获取node间的格子距离
+CX_INLINE cxFloat NodeDistance(cxAny src,cxAny dst)
+{
+    CX_ASSERT_VALUE(src, Node, snode);
+    CX_ASSERT_VALUE(dst, Node, dnode);
+    cxVec2f sidx = NodeGetIndex(snode);
+    cxVec2f didx = NodeGetIndex(dnode);
+    return kmVec2DistanceBetween(&sidx, &didx);
+}
 
 //检测是否移动到指定位置
 cxBool NodeIsArriveRange(cxAny attacker,cxAny target);

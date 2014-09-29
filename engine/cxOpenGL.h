@@ -108,6 +108,8 @@ void cxOpenGLClear();
 
 void cxDrawClippingRect(const cxVec2f pos,cxSize2f size);
 
+void cxDrawPoint(const cxVec2f pos,cxColor3f color,cxFloat w);
+
 void cxDrawSolidRect(const cxRect4f rect,const cxColor4f color,cxConstChars skey);
 
 void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars skey);

@@ -12,37 +12,19 @@
 #include <Range.h>
 #include "Bullet.h"
 
-//
-static void BulletAttackArrive(cxAny pav)
+AttackActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget)
 {
-    CX_ASSERT_THIS(pav, cxFollow);
-    CX_ASSERT_VALUE(cxActionView(this), Bullet, bullet);
-    //如果有bind的目标就攻击他
-    cxHash bindes = cxViewBindes(bullet);
-    CX_HASH_FOREACH(bindes, ele, tmp){
-        Node target = cxHashElementKeyToAny(ele);
-        //攻击目标
-        NodeAttackTarget(bullet, target, AttackTypeBullet);
-    }
-    MapRemoveBullet(bullet);
-}
-
-//启动攻击
-static void DefenceAttackTarget(cxAny pview,cxAny target,cxAny bd)
-{
-    CX_ASSERT_THIS(pview, Defence);
-    Map map = NodeGetMap(this);
-    //开火
+    CX_ASSERT_VALUE(pattacker, Node, attacker);
+    CX_ASSERT_VALUE(ptarget, Node, target);
+    Map map = NodeGetMap(attacker);
+    
     Bullet bullet = CX_CREATE(Bullet);
-    BulletInit(bullet, map, cxSize2fv(20, 20), cxViewPosition(this));
-    BulletSetPower(bullet, NodeGetPower(this));
-    MapAppendBullet(bullet);
-    //设定目标
-    cxFollow f = cxFollowCreate(800, target);
-    CX_EVENT_APPEND(f->cxAction.onExit, BulletAttackArrive);
-    cxViewAppendAction(bullet, f);
-    //子弹bind目标
-    cxViewBind(bullet, target, cxNumberInt(NodeBindReasonShoot));
+    BulletInit(bullet, map, cxSize2fv(10, 10), cxViewPosition(attacker));
+    BulletSetPower(bullet, NodeGetPower(attacker));
+    
+    cxFollow follow = cxFollowCreate(800, target);
+    
+    return AttackActionResultMake(bullet, follow);
 }
 
 PathRuleResult DefencePathRule(cxAny pview,FindRuleResult *fret)
@@ -89,9 +71,9 @@ CX_OBJECT_INIT(Defence, Node)
     RangeSetRange(range, NodeGetRange(this));
     cxViewAppend(this, range);
     
-    CX_METHOD_SET(this->Node.PathRule, DefencePathRule);
-    CX_METHOD_SET(this->Node.AttackTarget, DefenceAttackTarget);
-    CX_METHOD_SET(this->Node.FindRule, DefenceFindRule);
+    SET(Node,this,PathRule, DefencePathRule);
+    SET(Node,this,FindRule, DefenceFindRule);
+    SET(Node,this,AttackAction, DefenceAttackAction);
 }
 CX_OBJECT_FREE(Defence, Node)
 {

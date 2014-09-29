@@ -46,8 +46,13 @@ typedef enum {
     NodeBindReasonNone = 0,   //未知
     NodeBindReasonMove,       //bind朝目标移动移动状态
     NodeBindReasonAttack,     //bind攻击目标战斗状态
-    NodeBindReasonShoot       //bind射击状态
 }NodeBindReason;
+
+typedef enum {
+    BulletBindReasonNone = 0,
+    BulletBindReasonAttacker,//bind attacker
+    BulletBindReasonTarget, //bind target
+}BulletBindReason;
 
 //node Bind原因
 typedef enum {
@@ -108,7 +113,7 @@ typedef enum {
 
 typedef enum {
     AttackTypeNone = 0,     //
-    AttackTypeDirect,       //直接攻击
+    AttackTypeNode,       //直接被另一个攻击
     AttackTypeBullet,     //间接攻击 使用bullet基类
 }AttackType;
 
@@ -129,6 +134,14 @@ typedef struct {
     NodeCombined type;
     cxRange2f range;    //
 } NodePointNearest;
+
+//point范围内单位搜索
+typedef struct {
+    cxArray nodes;
+    cxVec2f point;
+    cxRange2f range;
+    NodeCombined type;
+}NearestItemsInfo;
 
 //两点搜索信息
 typedef struct {

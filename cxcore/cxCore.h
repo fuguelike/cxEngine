@@ -288,6 +288,8 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 #define CX_METHOD_RUN(_m_,...)      if((_m_) != NULL)(_m_)(__VA_ARGS__)
 
 #define CX_METHOD_SET(_m_,_f_)      _m_ = _f_
+//method overwrite short micro
+#define SET(_t_,_o_,_n_,_f_)        CX_METHOD_SET(CX_TYPE(_t_, _o_)->_n_, _f_)
 
 //field
 
@@ -409,6 +411,9 @@ do{                                                             \
         _ele_->func(_sender_);                                  \
     }                                                           \
 }while(0)
+
+//append event short micro
+#define ON(_t_,_o_,_n_,_f_)    CX_EVENT_APPEND(CX_TYPE(_t_, _o_)->_n_, _f_);
 
 //
 cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x);

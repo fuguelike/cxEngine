@@ -15,15 +15,17 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxFollow, cxAction)
     cxAny target;
-    cxFloat angle;  //current angle
+    cxVec2f opos;
+    cxFloat angle;
     cxFloat speed;  //current speed
     cxFloat init;   //init speed
-    cxFloat min;    //exit min distance
-    CX_METHOD_DEF(cxBool, Exit, cxAny);
     CX_METHOD_DEF(cxFloat, Speed,cxAny,cxFloat);
+    CX_METHOD_DEF(cxBool, IsExit,cxAny);
 CX_OBJECT_END(cxFollow, cxAction)
 
 void cxFollowInit(cxAny pav);
+
+cxAny cxFollowTarget(cxAny pav);
 
 void cxFollowSetInit(cxAny pav,cxFloat init);
 

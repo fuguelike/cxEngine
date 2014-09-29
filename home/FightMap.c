@@ -52,10 +52,6 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
             NodeSetPower(node, 10);
             NodeSetLife(node, cxRange2iv(2000, 2000));
             MapAppendNode(node);
-            
-            cxVec2f pos = cxViewPosition(node);
-            cxMove m = cxMoveCreate(120, cxVec2fv(pos.x, pos.y + 800));
-            cxViewAppendAction(node, m);
         }else if(this->tag == 3){
             if(MapItem(this, idx) != NULL){
                 return false;
@@ -86,6 +82,12 @@ static void mapSubType(cxAny dst,cxAny src)
                 NodeSetLife(node, cxRange2iv(200, 200));
                 MapAppendNode(node);
             }
+        }
+        
+        cxArray items = MapNearestItems(this, cxVec2fv(20.5f, 20.5f), cxRange2fv(0, 6), NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
+        CX_ARRAY_FOREACH(items, ele){
+            Node node = cxArrayObject(ele);
+            cxViewSetColor(node, cxRED);
         }
 
     }else if(this->tag == 6){
