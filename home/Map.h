@@ -43,9 +43,10 @@ CX_OBJECT_END(Map, cxAtlas)
 
 typedef struct {
     cxAny map;
-    cxAny snode;
-    cxAny dnode;
+    cxVec2f mid;    //中心点
     cxFloat ab;    //两点间距离
+    cxAny src;
+    cxAny dst;
 }MapSearchInfo;
 
 //加入攻击

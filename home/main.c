@@ -46,6 +46,7 @@ static void selectButton(cxAny pview)
 
 void cxEngineInit(cxEngine engine)
 {
+    cxEngineSetDesignSize(cxSize2fv(2048, 1536));
 #if !defined(NDEBUG)
     engine->isShowBorder = true;
 #else

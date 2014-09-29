@@ -103,7 +103,7 @@ static cxInt MapSearchEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *curr,cxVec2i
     CX_ASSERT_VALUE(info->map, Map, map);
     cxAny item = MapItem(map, *curr);
     //如果格子上已经是目标提前完成
-    return item == info->dnode;
+    return item == info->dst;
 }
 
 static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
@@ -117,24 +117,21 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
     }
     //+0.5f表示距离从中心点算
     cxVec2f index = cxVec2fv(idx->x+0.5f, idx->y+0.5f);
-    cxVec2f sidx = NodeGetIndex(info->snode);
-    //限制搜索范围在开始点为圆心 (两点距离+目标node大小)为半径的范围内
-    cxFloat dis = kmVec2DistanceBetween(&sidx, &index);
+    cxFloat dis = kmVec2DistanceBetween(&info->mid, &index);
     if(dis > info->ab){
         return false;
     }
-    //
+    //没有物体
     Node node = MapItem(map, *idx);
-    //空位置
     if(node == NULL){
         return true;
     }
-    //开始点和结束点
-    if(node == info->snode || node == info->dnode){
+    //开始或者结束物体
+    if(node == info->src || node == info->dst){
         return true;
     }
-    //如果是阻挡类型
     NodeCombined type = NodeGetType(node);
+    //如果是阻挡类型
     if(type.mainType == NodeTypeBlock && !NodeCheckDie(node)){
         return false;
     }
@@ -146,10 +143,23 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
     Map map = NodeGetMap(snode);
     CX_ASSERT_VALUE(snode, Node, sx);
     CX_ASSERT_VALUE(dnode, Node, dx);
+    MapSearchInfo info = {NULL};
+    info.map = map;
     cxVec2f didx = NodeGetIndex(dx);
-    map->a = MapIndexToPos(map, didx);
     cxVec2f sidx = NodeGetIndex(sx);
+    map->a = MapIndexToPos(map, didx);
     map->b = MapIndexToPos(map, sidx);
+    //设置开始node和结束node
+    info.src = snode;
+    info.dst = dnode;
+    //获取中心点
+    kmVec2MidPointBetween(&info.mid, &sidx, &didx);
+    //获取半径
+    info.ab = NodeDistance(snode, dnode);
+    info.ab += CX_MAX(dx->Size.w, dx->Size.h);
+    info.ab += CX_MAX(sx->Size.w, sx->Size.h);
+    info.ab = info.ab / 2.0f;
+    //
     cxVec2i a = cxVec2iv(sidx.x, sidx.y);
     cxVec2i b = cxVec2iv(didx.x, didx.y);
     if(!MapIsValidIdx(map, a) || !MapIsValidIdx(map, b)){
@@ -160,11 +170,6 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
     if(MapCachePath(map, a, b)){
         return true;
     }
-    MapSearchInfo info = {NULL};
-    info.ab = NodeDistance(snode, dnode) + CX_MAX(dx->Size.w, dx->Size.h);
-    info.map = map;
-    info.snode = snode;
-    info.dnode = dnode;
     //开始搜索,如果成功保存路径到缓存
     if(cxAStarRun(map->astar, a, b, &info)) {
         return MapCacheSavePath(map, a, b);
