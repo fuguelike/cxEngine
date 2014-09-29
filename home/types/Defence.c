@@ -22,7 +22,7 @@ AttackActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget)
     BulletInit(bullet, map, cxSize2fv(10, 10), cxViewPosition(attacker));
     BulletSetPower(bullet, NodeGetPower(attacker));
     
-    cxFollow follow = cxFollowCreate(800, target);
+    cxFollow follow = cxFollowCreate(500, target);
     
     return AttackActionResultMake(bullet, follow);
 }

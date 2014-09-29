@@ -69,6 +69,8 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxInt searchIndex;
     //生命值变化
     CX_EVENT_ALLOC(onLife);
+    //一次攻击结束
+    CX_METHOD_DEF(void, AttackOnce,cxAny attacker,cxAny target);
     //死亡时
     CX_EVENT_ALLOC(onDie);
     NodeSearchOrder orders;

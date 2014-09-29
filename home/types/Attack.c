@@ -61,6 +61,11 @@ AttackActionResult AttackAttackAction(cxAny pattacker,cxAny ptarget)
     return AttackActionResultMake(NULL, scale);
 }
 
+static void AttackAttackOnce(cxAny pattacker,cxAny ptarget)
+{
+    cxViewSetScale(pattacker, cxVec2fv(1, 1));
+}
+
 CX_OBJECT_TYPE(Attack, Node)
 {
     
@@ -80,6 +85,7 @@ CX_OBJECT_INIT(Attack, Node)
     SET(Node,this,PathRule, AttackPathRule);
     SET(Node,this,FindRule, AttackFindRule);
     SET(Node,this,AttackAction, AttackAttackAction);
+    SET(Node, this, AttackOnce, AttackAttackOnce);
     
 //    Range range = CX_CREATE(Range);
 //    RangeSetRange(range, NodeGetField(this));

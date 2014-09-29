@@ -64,8 +64,8 @@ static void NodeAttackActionExit(cxAny pav)
     Node target = cxViewBindesFirst(node);
     if(target != NULL){
         NodeAttackTarget(node, target, AttackTypeNode);
+        CX_METHOD_RUN(node->AttackOnce, node, target);
     }
-    cxViewSetScale(node, cxVec2fv(1, 1));
 }
 
 static void NodeAttackBulletExit(cxAny pav)
@@ -96,6 +96,7 @@ static void NodeAttackTimerArrive(cxAny pav)
             cxViewUnBind(this, target);
             continue;
         }
+        //创建攻击动画
         AttackActionResult ret = AttackActionResultEmpty();
         ret = CX_METHOD_GET(ret, this->AttackAction, this, target);
         if(ret.action == NULL){
@@ -104,19 +105,23 @@ static void NodeAttackTimerArrive(cxAny pav)
             continue;
         }
         CX_ASSERT_TYPE(ret.action, cxAction);
-        if(ret.bullet != NULL){
+        //朝向target攻击
+        NodeFaceTarget(this, target);
+        //为bullet创建动画
+        if(ret.bullet != NULL && ret.action != NULL){
+            CX_ASSERT_TYPE(ret.bullet, Bullet);
             BulletBind(ret.bullet, this, target);
             cxViewAppendAction(ret.bullet, ret.action);
             MapAppendBullet(ret.bullet);
             //带弹药结束 action.view = bullet
             ON(cxAction, ret.action, onExit, NodeAttackBulletExit);
-        }else{
+        }
+        //创建自身动画
+        if(ret.action != NULL && ret.bullet == NULL){
             //带动画结束 action.view = node
             cxViewAppendAction(this, ret.action);
             ON(cxAction, ret.action, onExit, NodeAttackActionExit);
         }
-        //朝向target攻击
-        NodeFaceTarget(this, target);
         //攻击后目标死亡
         if(NodeCheckDie(target)){
             continue;
@@ -160,16 +165,16 @@ CX_OBJECT_TYPE(Node, cxSprite)
 }
 CX_OBJECT_INIT(Node, cxSprite)
 {
-    CX_EVENT_APPEND(CX_TYPE(cxView, this)->onTransform, NodeOnTransform);
+    ON(cxView, this, onTransform, NodeOnTransform);
     NodeSetAttackNum(this, 1);
     NodeSetIndex(this, cxVec2fv(-1, -1));
     NodeSetField(this, cxRange2fv(0, 6));
     NodeSetSearchRate(this, 0.5f);
     NodeSetAttackRate(this, 0.5f);
     NodeSetBody(this, 0.5f);
-    CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
+    SET(Node, this, NodeAttacked, NodeAttacked);
     //Test
-    CX_EVENT_APPEND(this->onLife, LifeChange);
+    ON(Node, this, onLife, LifeChange);
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
@@ -222,23 +227,23 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
     //Test show point position
-    cxList subviews = cxViewSubViews(map->aLayer);
-    CX_LIST_FOREACH(subviews, ele){
-        cxView tmp = ele->any;
-        if(tmp->tag == 1001){
-            cxViewRemove(tmp);
-        }
-    }
-    CX_ASTAR_POINTS_FOREACH(points, idx){
-        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
-        cxVec2f pos = MapIndexToPos(map, p);
-        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
-        cxViewSetColor(sp, cxWHITE);
-        cxViewSetPos(sp, pos);
-        cxViewSetSize(sp, cxSize2fv(8, 8));
-        cxViewSetTag(sp, 1001);
-        cxViewAppend(map->aLayer, sp);
-    }
+//    cxList subviews = cxViewSubViews(map->aLayer);
+//    CX_LIST_FOREACH(subviews, ele){
+//        cxView tmp = ele->any;
+//        if(tmp->tag == 1001){
+//            cxViewRemove(tmp);
+//        }
+//    }
+//    CX_ASTAR_POINTS_FOREACH(points, idx){
+//        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
+//        cxVec2f pos = MapIndexToPos(map, p);
+//        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
+//        cxViewSetColor(sp, cxWHITE);
+//        cxViewSetPos(sp, pos);
+//        cxViewSetSize(sp, cxSize2fv(8, 8));
+//        cxViewSetTag(sp, 1001);
+//        cxViewAppend(map->aLayer, sp);
+//    }
     if(cxAnyArrayLength(points) < 2){
         //朝向target
         NodeFaceTarget(this, target);
