@@ -11,6 +11,7 @@
 
 #include <engine/cxSpatial.h>
 #include <views/cxSprite.h>
+#include <views/cxLabelTTF.h>
 #include "Define.h"
 
 CX_C_BEGIN
@@ -32,6 +33,7 @@ typedef struct {
 #define FindRuleResultEmpty()   FindRuleResultMake(NULL,NodeFindReasonNone)
 
 CX_OBJECT_DEF(Node, cxSprite)
+    cxLabelTTF lifeTTF;     //Test
     cxSprite array;     //Test
 
     cxBool isStatic;    //node 是否可移动，移动的node不加入nodes,不参与路径搜索
@@ -66,8 +68,6 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(FindRuleResult, FindRule,cxAny,const NodeCombined *);
     //路径搜索规则
     CX_METHOD_DEF(PathRuleResult, PathRule, cxAny seacher,FindRuleResult *fr);
-    //是否能攻击目标
-    CX_METHOD_DEF(cxBool, IsAttackTarget,cxAny attacker,cxAny target);
     //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
     CX_METHOD_DEF(cxBool, Finded,cxAny node,cxAny finder);
     //方向发生变化
@@ -89,7 +89,15 @@ void NodeSetSize(cxAny pview,cxSize2i size);
 CX_FIELD_IMP(Node, cxVec2f, Index);
 CX_FIELD_IMP(Node, cxFloat, Speed);
 CX_FIELD_IMP(Node, cxFloat, Power);
-CX_FIELD_IMP(Node, cxRange2i, Life);
+
+CX_FIELD_GET(Node, cxRange2i, Life);
+CX_INLINE void NodeSetLife(cxAny pthis,cxRange2i life)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    this->Life = life;
+    CX_EVENT_FIRE(this, onLife);
+}
+
 CX_FIELD_IMP(Node, cxRange2f, Field);
 CX_FIELD_IMP(Node, cxInt, Level);
 CX_FIELD_IMP(Node, cxFloat, AttackRate);

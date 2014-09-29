@@ -44,7 +44,7 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         if(this->tag == 1){
             Attack node = AttackCreate(this, idx);
             NodeSetLife(node, cxRange2iv(200, 200));
-            NodeSetPower(node, 100);
+            NodeSetPower(node, 10);
             MapAppendNode(node);
         }else if(this->tag == 2){
             Defence node = DefenceCreate(this, idx);
@@ -61,7 +61,7 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         }else if(this->tag == 4){
             Longer node = LongerCreate(this, idx);
             NodeSetLife(node, cxRange2iv(200, 200));
-            NodeSetPower(node, 20);
+            NodeSetPower(node, 10);
             MapAppendNode(node);
         }
         return true;

@@ -38,6 +38,12 @@ void NodeSearchOrderClear(cxAny pview)
     this->orders.number = 0;
 }
 
+static void LifeChange(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxLabelTTFSetText(this->lifeTTF, UTF8("%d/%d",this->Life.min,this->Life.max));
+}
+
 void NodeAddLife(cxAny pview,cxInt life)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -69,8 +75,9 @@ static void NodeAttackTimerArrive(cxAny pav)
         if(NodeCheckDie(target)){
             continue;
         }
-        //是否可以攻击
-        if(!CX_METHOD_GET(true, this->IsAttackTarget,this,target)){
+        //如果超出攻击范围重新搜索
+        if(!NodeIsArriveRange(this, target)){
+            cxViewUnBind(this, target);
             continue;
         }
         //朝向target攻击
@@ -126,7 +133,8 @@ CX_OBJECT_INIT(Node, cxSprite)
     NodeSetSearchRate(this, 0.5f);
     NodeSetAttackRate(this, 0.5f);
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
-    CX_METHOD_SET(this->IsAttackTarget, NodeIsArriveRange);
+    //Test
+    CX_EVENT_APPEND(this->onLife, LifeChange);
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
@@ -379,6 +387,11 @@ void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic)
     cxViewSetAnchor(this->array, cxVec2fv(-0.5f, 0.0f));
     cxViewSetSize(this->array, cxSize2fv(w/2, w/3));
     cxViewAppend(this, this->array);
+    
+    this->lifeTTF = cxLabelTTFCreate(UTF8("100"), NULL, 20);
+    cxViewSetColor(this->lifeTTF, cxWHITE);
+    cxViewSetAutoResizeMask(this->lifeTTF, cxViewAutoOutside| cxViewAutoResizeTop);
+    cxViewAppend(this, this->lifeTTF);
 }
 
 
