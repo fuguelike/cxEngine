@@ -79,15 +79,33 @@ CX_OBJECT_FREE(Move, cxSpline)
 }
 CX_OBJECT_TERM(Move, cxSpline)
 
-Move MoveCreate(cxAny pmap,cxAnyArray points)
+Move MoveCreate(cxAny node,cxAnyArray points)
 {
+    CX_ASSERT_THIS(node, Node);
+    Map map = NodeGetMap(this);
     Move move = CX_CREATE(Move);
+    cxVec2i vidx = NodeGetIntIndex(node);
+    cxVec2f pos;
     CX_ASTAR_POINTS_FOREACH(points, idx){
-        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
-        cxVec2f pos = MapIndexToPos(pmap,p);
+        //如果在同一个网格位置则使用当前位置
+        if(cxVec2iEqu(vidx, *idx)){
+            pos = cxViewPosition(node);
+        }else{
+            pos = MapIndexToPos(map,cxVec2fv(idx->x + 0.5f, idx->y + 0.5f));
+        }
         cxSplineAppend(move, pos);
     }
     return move;
 }
+
+
+
+
+
+
+
+
+
+
 
 

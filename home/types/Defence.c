@@ -59,8 +59,8 @@ cxAny DefenceFindRule(cxAny pview,const NodeCombined *type)
 {
     CX_ASSERT_THIS(pview, Node);
     cxRange2f range = NodeGetRange(this);
-    //搜索攻击范围内的
-    return MapNearestQuery(this, *type, range, false);
+    //搜索攻击范围内的目标
+    return MapNearestQuery(this, *type, range);
 }
 
 CX_OBJECT_TYPE(Defence, Node)

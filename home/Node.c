@@ -123,6 +123,8 @@ CX_OBJECT_INIT(Node, cxSprite)
     NodeSetAttackNum(this, 1);
     NodeSetIndex(this, cxVec2fv(-1, -1));
     NodeSetField(this, cxRange2fv(0, 6));
+    NodeSetSearchRate(this, 0.5f);
+    NodeSetAttackRate(this, 0.5f);
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
     CX_METHOD_SET(this->IsAttackTarget, NodeIsArriveRange);
 }
@@ -208,7 +210,7 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
         cxViewSetTag(sp, 1001);
         cxViewAppend(map->aLayer, sp);
     }
-    Move move = MoveCreate(map, points);
+    Move move = MoveCreate(this, points);
     CX_EVENT_APPEND(CX_TYPE(cxAction, move)->onExit, NodeMoveToTargetArrive);
     cxViewAppendAction(this, move);
     //bind 目标 移动
@@ -236,42 +238,6 @@ static const NodeCombined *NodeGetSearchType(cxAny pview)
     return &this->orders.types[this->searchIndex++];
 }
 
-static void NodeProcessSearch(Node this)
-{
-    cxHash bindes = cxViewBindes(this);
-    //如果同时攻击数量到达
-    if(cxHashLength(bindes) >= NodeGetAttackNum(this)){
-        return;
-    }
-    const NodeCombined *type = NodeGetSearchType(this);
-    if(type == NULL){
-        return;
-    }
-    CX_ASSERT(this->FindRule, "nor implement search rule");
-    //启动搜索规则
-    Node target = CX_METHOD_GET(NULL, this->FindRule, this, type);
-    //在搜索规则下没有发现目标
-    if(target == NULL){
-        return;
-    }
-    //立即面向目标
-    NodeFaceTarget(this,target);
-    //target被this发现,返回false表示target不能被攻击
-    if(!CX_METHOD_GET(true, target->Finded,target,this)){
-        return;
-    }
-    //路径搜索规则
-    target = CX_METHOD_GET(NULL,this->PathRule,this,target);
-    //返回NULL表示未发现路径
-    if(target == NULL){
-        return;
-    }
-    //bind目标
-    cxViewBind(this, target, cxNumberInt(NodeBindReasonAttack));
-    //目标已经bind到this,启动攻击定器
-    NodeStartupAttackTimer(this);
-}
-
 void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type)
 {
     CX_ASSERT_THIS(target, Node);
@@ -285,7 +251,43 @@ static void NodeSearchArrive(cxAny pav)
 {
     cxAny pview = cxActionView(pav);
     CX_ASSERT_THIS(pview, Node);
-    NodeProcessSearch(this);
+    cxHash bindes = cxViewBindes(this);
+    //如果同时攻击数量到达
+    if(cxHashLength(bindes) >= NodeGetAttackNum(this)){
+        return;
+    }
+    const NodeCombined *type = NodeGetSearchType(this);
+    if(type == NULL){
+        return;
+    }
+    CX_ASSERT(this->FindRule, "no implement search rule");
+    //启动搜索规则
+    Node target = CX_METHOD_GET(NULL, this->FindRule, this, type);
+    //在搜索规则下没有发现目标
+    if(target == NULL){
+        return;
+    }
+    //target被this发现,返回false表示target不能被攻击
+    if(!CX_METHOD_GET(true, target->Finded,target,this)){
+        return;
+    }
+    //已经到达攻击范围无需寻路
+    if(NodeIsArriveRange(this, target)){
+        goto attack;
+    }
+    //路径搜索bind的目标
+    target = CX_METHOD_GET(NULL,this->PathRule,this,target);
+    //返回NULL表示未发现路径
+    if(target == NULL){
+        return;
+    }
+attack:
+    //立即面向目标
+    NodeFaceTarget(this,target);
+    //bind目标
+    cxViewBind(this, target, cxNumberInt(NodeBindReasonAttack));
+    //目标已经bind到this,启动攻击定器
+    NodeStartupAttackTimer(this);
 }
 
 void NodePauseSearch(cxAny pview)
@@ -323,7 +325,7 @@ cxBool NodeCheckDie(cxAny pview)
     //当前生命值太小表示死掉了
     cxRange2i life = this->Life;
     cxBool die = life.min <= 0;
-    if(life.min <= 0 && !this->isDie){
+    if(die && !this->isDie){
         CX_LOGGER("Node (type=%s) die At(%f %f)",CX_TYPE(cxObject, this)->cxType,this->Index.x,this->Index.y);
         //防止死的次数太多
         this->isDie = true;

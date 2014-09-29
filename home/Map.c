@@ -103,10 +103,7 @@ static cxInt MapSearchEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *curr,cxVec2i
     CX_ASSERT_VALUE(info->map, Map, map);
     cxAny item = MapItem(map, *curr);
     //如果格子上已经是目标提前完成
-    if(item == info->dnode){
-        return 1;
-    }
-    return 0;
+    return item == info->dnode;
 }
 
 static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
@@ -114,23 +111,23 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
     CX_ASSERT_THIS(pstar, cxAStar);
     MapSearchInfo *info = this->data;
     CX_ASSERT_VALUE(info->map, Map, map);
-    cxVec2f index = cxVec2fv(idx->x, idx->y);
     //如果索引超出最大范围
     if(!MapIsValidIdx(map, *idx)){
         return false;
     }
+    //+0.5f表示距离从中心点算
+    cxVec2f index = cxVec2fv(idx->x+0.5f, idx->y+0.5f);
     cxVec2f sidx = NodeGetIndex(info->snode);
     //开始点与搜索点之间距离超过搜索范围
     cxFloat dis = kmVec2DistanceBetween(&sidx, &index);
-    if(dis > info->max){
+    if(dis > info->ab){
         return false;
     }
-    //获取最近点坐标
+    //目标点与当前点过大
     cxVec2f didx = NodeGetIndex(info->dnode);
     dis = kmVec2DistanceBetween(&didx, &index);
-    if(dis < info->dis){
-        info->dis = dis;
-        info->idx = *idx;
+    if(dis > info->ab){
+        return false;
     }
     //
     Node node = MapItem(map, *idx);
@@ -150,7 +147,7 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
     return true;
 }
 
-cxBool MapSearchPath(cxAny snode,cxAny dnode,cxFloat max)
+cxBool MapSearchPath(cxAny snode,cxAny dnode)
 {
     Map map = NodeGetMap(snode);
     CX_ASSERT_VALUE(snode, Node, sx);
@@ -167,31 +164,25 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode,cxFloat max)
     if(MapCachePath(map, a, b)){
         return true;
     }
-    //
     MapSearchInfo info = {NULL};
-    //设置搜索参数
-    info.dis = INT32_MAX;
-    info.max = max;
+    cxFloat a2 = CX_MAX(sx->Size.w, sx->Size.h) / 2.0f;
+    cxFloat b2 = CX_MAX(dx->Size.w, dx->Size.h) / 2.0f;
+    info.ab = NodeDistance(snode, dnode) + a2 + b2;
     info.map = map;
-    info.idx = cxVec2iv(-1, -1);
     info.snode = snode;
     info.dnode = dnode;
     //开始搜索,如果成功保存路径到缓存
     if(cxAStarRun(map->astar, a, b, &info)) {
         return MapCacheSavePath(map, a, b);
     }
-    //获取最近点失败
-    if(info.idx.x == -1 || info.idx.y == -1){
-        CX_ERROR("get nearest position error");
-        return false;
-    }
-    //获取最近点坐标路径
-    info.dis = INT32_MAX;
-    b = info.idx;
-    if(cxAStarRun(map->astar, a, b, &info)) {
-        return MapCacheSavePath(map, a, b);
-    }
     return false;
+}
+
+static void MapDraw(cxAny pmap)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    cxVec2f ps[2]={this->a,this->b};
+    cxDrawLineLoop(ps, 2, cxWHITE);
 }
 
 CX_OBJECT_TYPE(Map, cxAtlas)
@@ -200,6 +191,8 @@ CX_OBJECT_TYPE(Map, cxAtlas)
 }
 CX_OBJECT_INIT(Map, cxAtlas)
 {
+    CX_METHOD_SET(CX_TYPE(cxView, this)->After, MapDraw);
+    
     //只有自己能接收touch事件
     cxViewSetTouchFlags(this, cxViewTouchFlagsSelf);
     //当选中按钮执行
@@ -218,8 +211,7 @@ CX_OBJECT_INIT(Map, cxAtlas)
     //格子大小
     cxInt cells = global.unitNum.x * global.unitNum.y;
     //类型搜索索引
-    this->items = cxSpatialAlloc(1.0f, cells * 2, NodeIndexBB);
-    
+    this->items = cxSpatialAlloc(1.0f, cells, NodeIndexBB);
     //node层
     this->nLayer = cxViewAppendType(this,cxView);
     //效果层
@@ -303,16 +295,12 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
         return id;
     }
     NodeCombined type = NodeGetType(node);
-    //不匹配类型
+    //不匹配主类型
     if(info->type.mainType != NodeTypeNone && !(info->type.mainType & type.mainType)){
         return id;
     }
     //不匹配子类型
     if(info->type.subType != NodeSubTypeNone && !(info->type.subType & type.subType)){
-        return id;
-    }
-    //如果必须可到达，而没有路径则跳过
-    if(info->isReach && !MapSearchPath(info->src, node, info->range.max)){
         return id;
     }
     //计算距离，获取最近的node
@@ -321,7 +309,7 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
         return id;
     }
     info->dis = d;
-    //node必须在范围内在范围内
+    //node必须在范围内
     if(info->dis >= info->range.min && info->dis <= info->range.max){
         info->node = node;
     }
@@ -329,7 +317,7 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
 }
 
 //搜索离src最近的单位
-cxAny MapNearestQuery(cxAny src,NodeCombined type,cxRange2f range,cxBool isReach)
+cxAny MapNearestQuery(cxAny src,NodeCombined type,cxRange2f range)
 {
     CX_ASSERT_THIS(src, Node);
     Map map = NodeGetMap(this);
@@ -338,7 +326,6 @@ cxAny MapNearestQuery(cxAny src,NodeCombined type,cxRange2f range,cxBool isReach
     ret.dis = INT32_MAX;
     ret.type = type;
     ret.range = range;
-    ret.isReach = isReach;
     cxVec2f idx = NodeGetIndex(this);
     cpBB bb = cpBBNewForCircle(idx, cpfmax(range.max, 0.0f));
     cpSpatialIndexQuery(map->items->index, map, bb, MapIndexQueryFunc, &ret);
@@ -354,7 +341,7 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
         return 1.0f;
     }
     NodeCombined type = NodeGetType(node);
-    //不匹配类型
+    //不匹配主类型
     if(info->type.mainType != NodeTypeNone && !(info->type.mainType & type.mainType)){
         return 1.0f;
     }
@@ -363,17 +350,14 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
         return 1.0f;
     }
     //获取当前点与原点之间的距离,如果比目标点更远直接返回
-    cxFloat nb = NodeDistance(info->src, node);
-    if(nb > info->ab){
+    cxFloat dis = NodeDistance(info->src, node);
+    if(dis > info->ab){
         return 1.0f;
     }
-    //如果不能到达目标返回继续搜索
-    cxRange2f field = NodeGetField(info->src);
-    if(!MapSearchPath(info->src, node, field.max)){
+    if(!MapSearchPath(info->src, node)){
         return 1.0f;
     }
-    //获取当前点与目标距离，获取距离目标最近的node
-    cxFloat dis = NodeDistance(node, info->dst);
+    dis = NodeDistance(node, info->dst);
     if(dis < info->dis){
         info->dis = dis;
         info->node = node;
@@ -388,13 +372,15 @@ cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type)
     CX_ASSERT_VALUE(dst, Node, dp);
     Map map = NodeGetMap(sp);
     NodeSegmentInfo ret = {0};
-    ret.src = src;
-    ret.dst = dst;
-    ret.ab = NodeDistance(sp, dp);
-    ret.dis = INT32_MAX;
-    ret.type = type;
     cxVec2f a = NodeGetIndex(sp);
     cxVec2f b = NodeGetIndex(dp);
+    ret.src = src;
+    ret.dst = dst;
+    ret.ab = kmVec2DistanceBetween(&a, &b);
+    ret.dis = INT32_MAX;
+    ret.type = type;
+    map->a = MapIndexToPos(map, a);
+    map->b = MapIndexToPos(map, b);
     cpSpatialIndexSegmentQuery(map->items->index, map, a, b, 1.0f, MapSegmentQueryFunc, &ret);
     if(ret.node != NULL){
         cxViewSetColor(ret.node, cxRED);

@@ -59,11 +59,11 @@ typedef enum {
 //节点主类型
 typedef enum {
     NodeTypeNone        = 0,
-    NodeTypeResource    = 1 << 0,       //资源类型
-    NodeTypeDefence     = 1 << 1,       //主动防御类型
-    NodeTypeAttack      = 1 << 2,       //进攻单位类型
-    NodeTypeBlock       = 1 << 3,       //可阻挡进攻类,如城墙，城门
-    NodeTypeDecoration  = 1 << 4,       //非攻击装饰类型
+    NodeTypeResource    = 1 << 0,   //资源类型
+    NodeTypeDefence     = 1 << 1,   //主动防御类型
+    NodeTypeAttack      = 1 << 2,   //进攻单位类型
+    NodeTypeBlock       = 1 << 3,   //可阻挡进攻类,如城墙，城门
+    NodeTypeDecoration  = 1 << 4,   //非攻击装饰类型
 }NodeType;
 
 //节点子类型
@@ -110,7 +110,6 @@ typedef struct {
     cxAny src;          //搜索者
     NodeCombined type;
     cxRange2f range;    //
-    cxBool isReach;     //是否可到达
 } NodeNearestInfo;
 
 //附近点范围内所有的node

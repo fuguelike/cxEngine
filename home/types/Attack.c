@@ -20,19 +20,14 @@ cxAny AttackPathRule(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Attack);
     Map map = NodeGetMap(this);
-    //已达到攻击范围
-    if(CX_METHOD_GET(false, this->Node.IsAttackTarget, this,target)){
-        return target;
-    }
     //搜索目标路径成功,移动到可攻击位置,搜索视野范围内的路径
-    cxRange2f field = NodeGetField(this);
-    if(MapSearchPath(this, target, field.max)){
+    if(MapSearchPath(this, target)){
         NodeMovingToTarget(this, target, MapSearchPoints(map));
         return target;
     }
     //使用线段搜索法搜索距离目标最近的一个阻挡物
     Node block = MapSegmentQuery(this, target, NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
-    if(block != NULL && MapSearchPath(this, block, field.max)){
+    if(block != NULL && MapSearchPath(this, block)){
         NodeMovingToTarget(this, block, MapSearchPoints(map));
         return block;
     }
@@ -42,24 +37,20 @@ cxAny AttackPathRule(cxAny pview,cxAny target)
 cxAny AttackFindRule(cxAny pview,const NodeCombined *type)
 {
     CX_ASSERT_THIS(pview, Node);
-    cxRange2f range = NodeGetRange(this);
-    cxRange2f field = NodeGetField(this);
     Node target = NULL;
-    //搜索攻击范围内可以攻击的目标
+    //搜索攻击范围内的目标
+    cxRange2f range = NodeGetRange(this);
     if(target == NULL){
-        target = MapNearestQuery(this, *type, range, false);
+        target = MapNearestQuery(this, *type, range);
     }
-    //搜索视野范围内可以到达的目标
+    //搜索视野范围内的目标
+    cxRange2f field = NodeGetField(this);
     if(target == NULL){
-        target = MapNearestQuery(this, *type, field, true);
-    }
-    //搜索视野范围内最近的目标
-    if(target == NULL){
-        target = MapNearestQuery(this, *type, field, false);
+        target = MapNearestQuery(this, *type, field);
     }
     //全屏搜索
     if(target == NULL){
-        target = MapNearestQuery(this, *type, MAX_RANGE, false);
+        target = MapNearestQuery(this, *type, MAX_RANGE);
     }
     return target;
 }
@@ -84,9 +75,9 @@ CX_OBJECT_INIT(Attack, Node)
     CX_METHOD_SET(this->Node.AttackTarget, AttackAttackTarget);
     CX_METHOD_SET(this->Node.FindRule, AttackFindRule);
     
-    Range range = CX_CREATE(Range);
-    RangeSetRange(range, NodeGetField(this));
-    cxViewAppend(this, range);
+//    Range range = CX_CREATE(Range);
+//    RangeSetRange(range, NodeGetField(this));
+//    cxViewAppend(this, range);
 }
 CX_OBJECT_FREE(Attack, Node)
 {

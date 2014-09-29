@@ -21,7 +21,7 @@ CX_OBJECT_END(Move, cxSpline)
 
 CX_FIELD_IMP(Move, cxBool, IsToPoints);
 
-Move MoveCreate(cxAny pmap,cxAnyArray points);
+Move MoveCreate(cxAny node,cxAnyArray points);
 
 CX_C_END
 

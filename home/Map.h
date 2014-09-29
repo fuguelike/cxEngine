@@ -37,15 +37,15 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxHash paths;
     //Test
     cxInt tag;
+    cxVec2f a;
+    cxVec2f b;
 CX_OBJECT_END(Map, cxAtlas)
 
 typedef struct {
     cxAny map;
     cxAny snode;
     cxAny dnode;
-    cxFloat max;
-    cxFloat dis;//两点间距离
-    cxVec2i idx;//最近点
+    cxFloat ab;    //两点间距离
 }MapSearchInfo;
 
 //加入攻击
@@ -64,7 +64,7 @@ void MapRemoveNodes(cxAny pmap);
 void MapRemoveNode(cxAny node);
 
 //搜索离curr最近的单位
-cxAny MapNearestQuery(cxAny curr,NodeCombined type,cxRange2f range,cxBool isReach);
+cxAny MapNearestQuery(cxAny curr,NodeCombined type,cxRange2f range);
 
 //搜索src dst之间的单位
 cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type);
@@ -84,7 +84,7 @@ cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b);
 
 //寻路失败时返回离目标最近的坐标
 //如果返回阻挡标识搜索失败
-cxBool MapSearchPath(cxAny snode,cxAny dnode,cxFloat max);
+cxBool MapSearchPath(cxAny snode,cxAny dnode);
 
 //init map
 cxBool MapInit(cxAny pmap);
