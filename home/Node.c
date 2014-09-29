@@ -80,6 +80,36 @@ static void NodeAttackBulletExit(cxAny pav)
     MapRemoveBullet(bullet);
 }
 
+static void BulletOnUpdate(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    CX_ASSERT_VALUE(cxActionView(this), Bullet, bullet);
+    CX_METHOD_RUN(bullet->onUpdate,bullet, this);
+}
+
+static void NodeInitBullet(Node this,Node target,cxAny bullet)
+{
+    CX_ASSERT_VALUE(bullet, Bullet, b);
+    BulletBind(bullet, this, target);
+    
+    cxAny action = CX_METHOD_GET(NULL, b->CreateEngine,b);
+    CX_ASSERT_TYPE(action, cxAction);
+    
+    cxViewAppendAction(bullet, action);
+    MapAppendBullet(bullet);
+    
+    //带弹药结束 action.view = bullet
+    ON(cxAction, action, onExit, NodeAttackBulletExit);
+    ON(cxAction, action, onUpdate, BulletOnUpdate);
+}
+
+static void NodeInitAction(Node this,Node target,cxAny action)
+{
+    //带动画结束 action.view = node
+    cxViewAppendAction(this, action);
+    ON(cxAction, action, onExit, NodeAttackActionExit);
+}
+
 static void NodeAttackTimerArrive(cxAny pav)
 {
     CX_ASSERT_THIS(cxActionView(pav), Node);
@@ -96,31 +126,17 @@ static void NodeAttackTimerArrive(cxAny pav)
             cxViewUnBind(this, target);
             continue;
         }
-        //创建攻击动画
-        AttackActionResult ret = AttackActionResultEmpty();
-        ret = CX_METHOD_GET(ret, this->AttackAction, this, target);
-        if(ret.action == NULL){
-            cxViewUnBind(this, target);
-            CX_WARN("action create failed,unbind target");
-            continue;
-        }
-        CX_ASSERT_TYPE(ret.action, cxAction);
         //朝向target攻击
         NodeFaceTarget(this, target);
-        //为bullet创建动画
-        if(ret.bullet != NULL && ret.action != NULL){
-            CX_ASSERT_TYPE(ret.bullet, Bullet);
-            BulletBind(ret.bullet, this, target);
-            cxViewAppendAction(ret.bullet, ret.action);
-            MapAppendBullet(ret.bullet);
-            //带弹药结束 action.view = bullet
-            ON(cxAction, ret.action, onExit, NodeAttackBulletExit);
+        //创建攻击动画
+        AttackActionResult ret = CX_METHOD_GET(AAEmpty(), this->AttackAction, this, target);
+        //初始化bullet准备发射
+        if(ret.bullet != NULL){
+            NodeInitBullet(this, target, ret.bullet);
         }
         //创建自身动画
-        if(ret.action != NULL && ret.bullet == NULL){
-            //带动画结束 action.view = node
-            cxViewAppendAction(this, ret.action);
-            ON(cxAction, ret.action, onExit, NodeAttackActionExit);
+        if(ret.action != NULL){
+            NodeInitAction(this, target, ret.action);
         }
         //攻击后目标死亡
         if(NodeCheckDie(target)){
@@ -225,7 +241,7 @@ static void NodeMoveToTargetArrive(cxAny pav)
 void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Node);
-    Map map = NodeGetMap(this);
+//    Map map = NodeGetMap(this);
     //Test show point position
 //    cxList subviews = cxViewSubViews(map->aLayer);
 //    CX_LIST_FOREACH(subviews, ele){
@@ -294,9 +310,9 @@ static void NodeSearchArrive(cxAny pav)
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
     //路径规则结果
-    PathRuleResult pret = PathRuleResultEmpty();
+    PathRuleResult pret = PREmpty();
     //搜索规则结果
-    FindRuleResult fret = FindRuleResultEmpty();
+    FindRuleResult fret = FREmpty();
     const NodeCombined *type = NodeGetSearchType(this);
     if(type == NULL){
         goto attack;
@@ -315,7 +331,7 @@ static void NodeSearchArrive(cxAny pav)
     }
     //已经到达攻击范围无需寻路
     if(NodeIsArriveRange(this, fret.target)){
-        pret = PathRuleResultMake(fret.target, NodeBindReasonAttack);
+        pret = PRMake(fret.target, NodeBindReasonAttack);
         goto attack;
     }
     //路径搜索bind的目标传入搜索结果

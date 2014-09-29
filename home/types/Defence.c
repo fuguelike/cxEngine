@@ -22,9 +22,7 @@ AttackActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget)
     BulletInit(bullet, map, cxSize2fv(10, 10), cxViewPosition(attacker));
     BulletSetPower(bullet, NodeGetPower(attacker));
     
-    cxFollow follow = cxFollowCreate(500, target);
-    
-    return AttackActionResultMake(bullet, follow);
+    return AAMake(bullet, NULL);
 }
 
 PathRuleResult DefencePathRule(cxAny pview,FindRuleResult *fret)
@@ -32,9 +30,9 @@ PathRuleResult DefencePathRule(cxAny pview,FindRuleResult *fret)
     CX_ASSERT_THIS(pview, Defence);
     //目标未达到攻击范围
     if(!NodeIsArriveRange(this, fret->target)){
-        return PathRuleResultEmpty();
+        return PREmpty();
     }
-    return PathRuleResultMake(fret->target, NodeBindReasonAttack);
+    return PRMake(fret->target, NodeBindReasonAttack);
 }
 
 FindRuleResult DefenceFindRule(cxAny pview,const NodeCombined *type)
@@ -42,7 +40,7 @@ FindRuleResult DefenceFindRule(cxAny pview,const NodeCombined *type)
     CX_ASSERT_THIS(pview, Node);
     cxRange2f range = NodeGetRange(this);
     //搜索攻击范围内的目标
-    FindRuleResult ret = FindRuleResultEmpty();
+    FindRuleResult ret = FREmpty();
     ret.target = MapNearestQuery(this, *type, range);
     if(ret.target != NULL){
         ret.fd = NodeFindReasonRange;

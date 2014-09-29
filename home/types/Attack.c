@@ -16,20 +16,20 @@ PathRuleResult AttackPathRule(cxAny pview,FindRuleResult *fret)
     CX_ASSERT_THIS(pview, Attack);
     //搜索目标路径成功,移动到可攻击位置,搜索视野范围内的路径
     if(MapSearchPath(this, fret->target)){
-        return PathRuleResultMake(fret->target, NodeBindReasonMove);
+        return PRMake(fret->target, NodeBindReasonMove);
     }
     //使用线段搜索法搜索距离目标最近的一个阻挡物
     Node block = MapSegmentQuery(this, fret->target, NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
     if(block != NULL && MapSearchPath(this, block)){
-        return PathRuleResultMake(block, NodeBindReasonMove);
+        return PRMake(block, NodeBindReasonMove);
     }
-    return PathRuleResultEmpty();
+    return PREmpty();
 }
 
 FindRuleResult AttackFindRule(cxAny pview,const NodeCombined *type)
 {
     CX_ASSERT_THIS(pview, Node);
-    FindRuleResult ret = FindRuleResultEmpty();
+    FindRuleResult ret = FREmpty();
     //搜索攻击范围内的目标
     cxRange2f range = NodeGetRange(this);
     ret.target = MapNearestQuery(this, *type, range);
@@ -58,7 +58,7 @@ AttackActionResult AttackAttackAction(cxAny pattacker,cxAny ptarget)
     CX_ASSERT_VALUE(pattacker, Node, attacker);
     CX_ASSERT_VALUE(ptarget, Node, target);
     cxScale scale = cxScaleCreate(NodeGetAttackRate(attacker), cxVec2fv(1.5f, 1.5f));
-    return AttackActionResultMake(NULL, scale);
+    return AAMake(NULL, scale);
 }
 
 static void AttackAttackOnce(cxAny pattacker,cxAny ptarget)

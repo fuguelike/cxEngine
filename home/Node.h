@@ -20,24 +20,22 @@ typedef struct {
     cxAny target;
     NodeBindReason bd;
 }PathRuleResult;
-
-#define PathRuleResultMake(_t_,_d_) (PathRuleResult){_t_,_d_}
-#define PathRuleResultEmpty()   PathRuleResultMake(NULL,NodeBindReasonNone)
+#define PRMake(_t_,_d_)     (PathRuleResult){_t_,_d_}
+#define PREmpty()           PRMake(NULL,NodeBindReasonNone)
 
 typedef struct {
     cxAny target;
     NodeFindReason fd;
 }FindRuleResult;
-
-#define FindRuleResultMake(_t_,_d_) (FindRuleResult){_t_,_d_}
-#define FindRuleResultEmpty()   FindRuleResultMake(NULL,NodeFindReasonNone)
+#define FRMake(_t_,_d_)     (FindRuleResult){_t_,_d_}
+#define FREmpty()           FRMake(NULL,NodeFindReasonNone)
 
 typedef struct {
     cxAny bullet;
     cxAny action;
 }AttackActionResult;
-#define AttackActionResultMake(_b_,_a_) (AttackActionResult){_b_,_a_}
-#define AttackActionResultEmpty()   AttackActionResultMake(NULL,NULL)
+#define AAMake(_b_,_a_)     (AttackActionResult){_b_,_a_}
+#define AAEmpty()           AAMake(NULL,NULL)
 
 CX_OBJECT_DEF(Node, cxSprite)
     cxLabelTTF lifeTTF;     //Test
