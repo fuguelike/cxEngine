@@ -118,14 +118,8 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
     //+0.5f表示距离从中心点算
     cxVec2f index = cxVec2fv(idx->x+0.5f, idx->y+0.5f);
     cxVec2f sidx = NodeGetIndex(info->snode);
-    //开始点与搜索点之间距离超过搜索范围
+    //限制搜索范围在开始点为圆心 (两点距离+目标node大小)为半径的范围内
     cxFloat dis = kmVec2DistanceBetween(&sidx, &index);
-    if(dis > info->ab){
-        return false;
-    }
-    //目标点与当前点过大
-    cxVec2f didx = NodeGetIndex(info->dnode);
-    dis = kmVec2DistanceBetween(&didx, &index);
     if(dis > info->ab){
         return false;
     }
@@ -153,7 +147,9 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
     CX_ASSERT_VALUE(snode, Node, sx);
     CX_ASSERT_VALUE(dnode, Node, dx);
     cxVec2f didx = NodeGetIndex(dx);
+    map->a = MapIndexToPos(map, didx);
     cxVec2f sidx = NodeGetIndex(sx);
+    map->b = MapIndexToPos(map, sidx);
     cxVec2i a = cxVec2iv(sidx.x, sidx.y);
     cxVec2i b = cxVec2iv(didx.x, didx.y);
     if(!MapIsValidIdx(map, a) || !MapIsValidIdx(map, b)){
@@ -165,9 +161,7 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
         return true;
     }
     MapSearchInfo info = {NULL};
-    cxFloat a2 = CX_MAX(sx->Size.w, sx->Size.h) / 2.0f;
-    cxFloat b2 = CX_MAX(dx->Size.w, dx->Size.h) / 2.0f;
-    info.ab = NodeDistance(snode, dnode) + a2 + b2;
+    info.ab = NodeDistance(snode, dnode) + CX_MAX(dx->Size.w, dx->Size.h);
     info.map = map;
     info.snode = snode;
     info.dnode = dnode;
@@ -354,6 +348,7 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
     if(dis > info->ab){
         return 1.0f;
     }
+    //如果不能到达此点
     if(!MapSearchPath(info->src, node)){
         return 1.0f;
     }
