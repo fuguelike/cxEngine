@@ -16,22 +16,21 @@ static void AttackAttackTarget(cxAny pview,cxAny target,cxAny bd)
     NodeAttackTarget(this, target, AttackTypeDirect);
 }
 
-cxAny AttackPathRule(cxAny pview,cxAny target)
+PathRuleResult AttackPathRule(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Attack);
-    Map map = NodeGetMap(this);
     //搜索目标路径成功,移动到可攻击位置,搜索视野范围内的路径
     if(MapSearchPath(this, target)){
-        NodeMovingToTarget(this, target, MapSearchPoints(map));
-        return target;
+        //move to target
+        return PathRuleResultMake(target, NodeBindReasonMove);
     }
     //使用线段搜索法搜索距离目标最近的一个阻挡物
     Node block = MapSegmentQuery(this, target, NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
     if(block != NULL && MapSearchPath(this, block)){
-        NodeMovingToTarget(this, block, MapSearchPoints(map));
-        return block;
+        //move to block
+        return PathRuleResultMake(block, NodeBindReasonMove);
     }
-    return NULL;
+    return PathRuleResultEmpty();
 }
 
 cxAny AttackFindRule(cxAny pview,const NodeCombined *type)

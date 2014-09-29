@@ -115,7 +115,7 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
     if(!MapIsValidIdx(map, *idx)){
         return false;
     }
-    //+0.5f表示距离从中心点算
+    //+0.5f表示距离从中心点算 只搜索中心点附近的位置
     cxVec2f index = cxVec2fv(idx->x+0.5f, idx->y+0.5f);
     cxFloat dis = kmVec2DistanceBetween(&info->mid, &index);
     if(dis > info->ab){

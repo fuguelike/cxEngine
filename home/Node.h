@@ -15,6 +15,15 @@
 
 CX_C_BEGIN
 
+typedef struct {
+    cxAny target;
+    NodeBindReason bd;
+}PathRuleResult;
+
+#define PathRuleResultMake(_t_,_d_) (PathRuleResult){_t_,_d_}
+
+#define PathRuleResultEmpty()   PathRuleResultMake(NULL,NodeBindReasonNone)
+
 CX_OBJECT_DEF(Node, cxSprite)
     cxSprite array;     //Test
 
@@ -49,7 +58,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     //目标搜索规则
     CX_METHOD_DEF(cxAny, FindRule,cxAny,const NodeCombined *);
     //路径搜索规则
-    CX_METHOD_DEF(cxAny, PathRule, cxAny seacher, cxAny target);
+    CX_METHOD_DEF(PathRuleResult, PathRule, cxAny seacher, cxAny target);
     //是否能攻击目标
     CX_METHOD_DEF(cxBool, IsAttackTarget,cxAny attacker,cxAny target);
     //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)

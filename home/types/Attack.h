@@ -21,7 +21,7 @@ void AttackInit(cxAny pview, cxAny pmap,cxVec2i pos);
 
 Attack AttackCreate(cxAny pmap, cxVec2i pos);
 
-cxAny AttackPathRule(cxAny pview,cxAny target);
+PathRuleResult AttackPathRule(cxAny pview,cxAny target);
 
 cxAny AttackFindRule(cxAny pview,const NodeCombined *type);
 

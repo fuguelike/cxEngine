@@ -45,14 +45,14 @@ static void DefenceAttackTarget(cxAny pview,cxAny target,cxAny bd)
     cxViewBind(bullet, target, cxNumberInt(NodeBindReasonShoot));
 }
 
-cxAny DefencePathRule(cxAny pview,cxAny target)
+PathRuleResult DefencePathRule(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Defence);
     //目标未达到攻击范围
     if(!NodeIsArriveRange(this, target)){
-        return NULL;
+        return PathRuleResultMake(NULL, NodeBindReasonNone);
     }
-    return target;
+    return PathRuleResultMake(target, NodeBindReasonAttack);
 }
 
 cxAny DefenceFindRule(cxAny pview,const NodeCombined *type)

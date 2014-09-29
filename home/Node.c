@@ -175,14 +175,14 @@ static void NodeMoveToTargetArrive(cxAny pav)
             cxViewUnBind(node, target);
             continue;
         }
-        //朝向target
-        NodeFaceTarget(node, target);
         //移动结束如果没有达到作战距离,解除bind继续搜索
         if(!NodeIsArriveRange(node, target)){
             cxViewUnBind(node, target);
             continue;
         }
-        //发动攻击 目标已经bind到node
+        //朝向target
+        NodeFaceTarget(node, target);
+        //发动攻击 重新bind目标为攻击状态
         cxViewBind(node, target, cxNumberInt(NodeBindReasonAttack));
         NodeStartupAttackTimer(node);
     }
@@ -210,11 +210,10 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
         cxViewSetTag(sp, 1001);
         cxViewAppend(map->aLayer, sp);
     }
+    //使用点集合移动this
     Move move = MoveCreate(this, points);
     CX_EVENT_APPEND(CX_TYPE(cxAction, move)->onExit, NodeMoveToTargetArrive);
     cxViewAppendAction(this, move);
-    //bind 目标 移动
-    cxViewBind(pview, target, cxNumberInt(NodeBindReasonMove));
 }
 
 void NodeFaceTarget(cxAny pview,cxAny target)
@@ -251,6 +250,8 @@ static void NodeSearchArrive(cxAny pav)
 {
     cxAny pview = cxActionView(pav);
     CX_ASSERT_THIS(pview, Node);
+    Map map = NodeGetMap(this);
+    PathRuleResult ret = PathRuleResultEmpty();
     cxHash bindes = cxViewBindes(this);
     //如果同时攻击数量到达
     if(cxHashLength(bindes) >= NodeGetAttackNum(this)){
@@ -273,21 +274,29 @@ static void NodeSearchArrive(cxAny pav)
     }
     //已经到达攻击范围无需寻路
     if(NodeIsArriveRange(this, target)){
+        ret = PathRuleResultMake(target, NodeBindReasonAttack);
         goto attack;
     }
     //路径搜索bind的目标
-    target = CX_METHOD_GET(NULL,this->PathRule,this,target);
+    ret = CX_METHOD_GET(PathRuleResultEmpty(),this->PathRule,this,target);
     //返回NULL表示未发现路径
-    if(target == NULL){
+    if(ret.target == NULL){
         return;
     }
 attack:
     //立即面向目标
-    NodeFaceTarget(this,target);
+    NodeFaceTarget(this,ret.target);
     //bind目标
-    cxViewBind(this, target, cxNumberInt(NodeBindReasonAttack));
+    cxViewBind(this, ret.target, cxNumberInt(ret.bd));
     //目标已经bind到this,启动攻击定器
-    NodeStartupAttackTimer(this);
+    if(ret.bd == NodeBindReasonMove){
+        NodeMovingToTarget(this, target, MapSearchPoints(map));
+        return;
+    }
+    if(ret.bd == NodeBindReasonAttack){
+        NodeStartupAttackTimer(this);
+        return;
+    }
 }
 
 void NodePauseSearch(cxAny pview)
