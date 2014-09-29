@@ -101,9 +101,13 @@ static cxInt MapSearchEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *curr,cxVec2i
     CX_ASSERT_THIS(pstar, cxAStar);
     MapSearchInfo *info = this->data;
     CX_ASSERT_VALUE(info->map, Map, map);
-    cxAny item = MapItem(map, *curr);
+    CX_ASSERT_VALUE(info->dst, Node, node);
+    //如果目标是敌军继续寻路
+    if(node->Type.mainType == NodeTypeEnemy){
+        return 0;
+    }
     //如果格子上已经是目标提前完成
-    return item == info->dst;
+    return MapItem(map, *curr) == info->dst;
 }
 
 static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)

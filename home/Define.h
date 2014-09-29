@@ -70,8 +70,9 @@ typedef enum {
     NodeTypeResource    = 1 << 0,   //资源类型
     NodeTypeDefence     = 1 << 1,   //主动防御类型
     NodeTypeAttack      = 1 << 2,   //进攻单位类型
-    NodeTypeBlock       = 1 << 3,   //可阻挡进攻类,如城墙，城门
-    NodeTypeDecoration  = 1 << 4,   //非攻击装饰类型
+    NodeTypeEnemy       = 1 << 3,   //敌军单位
+    NodeTypeBlock       = 1 << 4,   //可阻挡进攻类,如城墙，城门
+    NodeTypeDecoration  = 1 << 5,   //非攻击装饰类型
 }NodeType;
 
 //节点子类型

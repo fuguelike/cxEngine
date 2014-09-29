@@ -40,6 +40,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxVec2i initIdx;    //初始化放置的位置,对于静态物不会变化
     cxBool isDie;       //是否死去
 
+    CX_FIELD_DEF(cxFloat Body);       //用于确定单位停留在目标的附近哪个位置,默认值为0.5格
     CX_FIELD_DEF(cxAny Map);
     CX_FIELD_DEF(cxVec2f Index);
     CX_FIELD_DEF(NodeCombined Type);  //node组合类型,攻击范围
@@ -79,6 +80,8 @@ CX_OBJECT_DEF(Node, cxSprite)
 CX_OBJECT_END(Node, cxSprite)
 
 CX_FIELD_GET(Node, cxAny, Map);
+
+CX_FIELD_IMP(Node, cxFloat, Body);
 
 CX_FIELD_IMP(Node, NodeCombined, Type);
 CX_FIELD_IMP(Node, cxRange2f, Range);

@@ -132,6 +132,7 @@ CX_OBJECT_INIT(Node, cxSprite)
     NodeSetField(this, cxRange2fv(0, 6));
     NodeSetSearchRate(this, 0.5f);
     NodeSetAttackRate(this, 0.5f);
+    NodeSetBody(this, 0.5f);
     CX_METHOD_SET(this->NodeAttacked, NodeAttacked);
     //Test
     CX_EVENT_APPEND(this->onLife, LifeChange);
@@ -212,6 +213,14 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
         cxViewSetSize(sp, cxSize2fv(8, 8));
         cxViewSetTag(sp, 1001);
         cxViewAppend(map->aLayer, sp);
+    }
+    if(cxAnyArrayLength(points) < 2){
+        //朝向target
+        NodeFaceTarget(this, target);
+        //发动攻击 重新bind目标为攻击状态
+        cxViewBind(this, target, cxNumberInt(NodeBindReasonAttack));
+        NodeStartupAttackTimer(this);
+        return;
     }
     //使用点集合移动this
     Move move = MoveCreate(this, points);

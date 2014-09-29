@@ -28,6 +28,7 @@ static void MoveOnInit(cxAny pav)
         cxActionStop(pav);
         return;
     }
+    //计算总长度和时间
     cxVec2f *p1 = cxAnyArrayAt(points, 0, cxVec2f);
     for(cxInt i=1; i < num;i++){
         cxVec2f *p2 = cxAnyArrayAt(points, i, cxVec2f);
@@ -79,11 +80,15 @@ CX_OBJECT_FREE(Move, cxSpline)
 }
 CX_OBJECT_TERM(Move, cxSpline)
 
-Move MoveCreate(cxAny node,cxAnyArray points)
+Move MoveCreate(cxAny node, cxAnyArray points)
 {
     CX_ASSERT_THIS(node, Node);
+    //移动创建前必须bind目标
+    CX_ASSERT_VALUE(cxViewBindesFirst(this), Node, target);
     Map map = NodeGetMap(this);
     Move move = CX_CREATE(Move);
+    cxInt num = cxAnyArrayLength(points);
+    CX_ASSERT(num > 1, "points num too few");
     cxVec2i vidx = NodeGetIntIndex(node);
     cxVec2f pos;
     CX_ASTAR_POINTS_FOREACH(points, idx){

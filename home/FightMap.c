@@ -15,6 +15,7 @@
 #include <types/Defence.h>
 #include <types/Wall.h>
 #include <types/Longer.h>
+#include <actions/cxMove.h>
 
 static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
 {
@@ -43,14 +44,18 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
         //test
         if(this->tag == 1){
             Attack node = AttackCreate(this, idx);
-            NodeSetLife(node, cxRange2iv(200, 200));
+            NodeSetLife(node, cxRange2iv(2000, 2000));
             NodeSetPower(node, 10);
             MapAppendNode(node);
         }else if(this->tag == 2){
             Defence node = DefenceCreate(this, idx);
             NodeSetPower(node, 10);
-            NodeSetLife(node, cxRange2iv(200, 200));
+            NodeSetLife(node, cxRange2iv(2000, 2000));
             MapAppendNode(node);
+            
+            cxVec2f pos = cxViewPosition(node);
+            cxMove m = cxMoveCreate(120, cxVec2fv(pos.x, pos.y + 800));
+            cxViewAppendAction(node, m);
         }else if(this->tag == 3){
             if(MapItem(this, idx) != NULL){
                 return false;
