@@ -16,42 +16,46 @@ static void AttackAttackTarget(cxAny pview,cxAny target,cxAny bd)
     NodeAttackTarget(this, target, AttackTypeDirect);
 }
 
-PathRuleResult AttackPathRule(cxAny pview,cxAny target)
+PathRuleResult AttackPathRule(cxAny pview,FindRuleResult *fret)
 {
     CX_ASSERT_THIS(pview, Attack);
     //搜索目标路径成功,移动到可攻击位置,搜索视野范围内的路径
-    if(MapSearchPath(this, target)){
-        //move to target
-        return PathRuleResultMake(target, NodeBindReasonMove);
+    if(MapSearchPath(this, fret->target)){
+        return PathRuleResultMake(fret->target, NodeBindReasonMove);
     }
     //使用线段搜索法搜索距离目标最近的一个阻挡物
-    Node block = MapSegmentQuery(this, target, NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
+    Node block = MapSegmentQuery(this, fret->target, NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
     if(block != NULL && MapSearchPath(this, block)){
-        //move to block
         return PathRuleResultMake(block, NodeBindReasonMove);
     }
     return PathRuleResultEmpty();
 }
 
-cxAny AttackFindRule(cxAny pview,const NodeCombined *type)
+FindRuleResult AttackFindRule(cxAny pview,const NodeCombined *type)
 {
     CX_ASSERT_THIS(pview, Node);
-    Node target = NULL;
+    FindRuleResult ret = FindRuleResultEmpty();
     //搜索攻击范围内的目标
     cxRange2f range = NodeGetRange(this);
-    if(target == NULL){
-        target = MapNearestQuery(this, *type, range);
+    ret.target = MapNearestQuery(this, *type, range);
+    if(ret.target != NULL){
+        ret.fd = NodeFindReasonRange;
+        return ret;
     }
     //搜索视野范围内的目标
     cxRange2f field = NodeGetField(this);
-    if(target == NULL){
-        target = MapNearestQuery(this, *type, field);
+    ret.target = MapNearestQuery(this, *type, field);
+    if(ret.target != NULL){
+        ret.fd = NodeFindReasonField;
+        return ret;
     }
     //全屏搜索
-    if(target == NULL){
-        target = MapNearestQuery(this, *type, MAX_RANGE);
+    ret.target = MapNearestQuery(this, *type, MAX_RANGE);
+    if(ret.target != NULL){
+        ret.fd = NodeFindReasonAll;
+        return ret;
     }
-    return target;
+    return ret;
 }
 
 CX_OBJECT_TYPE(Attack, Node)

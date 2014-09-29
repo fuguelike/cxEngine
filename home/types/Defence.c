@@ -45,22 +45,28 @@ static void DefenceAttackTarget(cxAny pview,cxAny target,cxAny bd)
     cxViewBind(bullet, target, cxNumberInt(NodeBindReasonShoot));
 }
 
-PathRuleResult DefencePathRule(cxAny pview,cxAny target)
+PathRuleResult DefencePathRule(cxAny pview,FindRuleResult *fret)
 {
     CX_ASSERT_THIS(pview, Defence);
     //目标未达到攻击范围
-    if(!NodeIsArriveRange(this, target)){
-        return PathRuleResultMake(NULL, NodeBindReasonNone);
+    if(!NodeIsArriveRange(this, fret->target)){
+        return PathRuleResultEmpty();
     }
-    return PathRuleResultMake(target, NodeBindReasonAttack);
+    return PathRuleResultMake(fret->target, NodeBindReasonAttack);
 }
 
-cxAny DefenceFindRule(cxAny pview,const NodeCombined *type)
+FindRuleResult DefenceFindRule(cxAny pview,const NodeCombined *type)
 {
     CX_ASSERT_THIS(pview, Node);
     cxRange2f range = NodeGetRange(this);
     //搜索攻击范围内的目标
-    return MapNearestQuery(this, *type, range);
+    FindRuleResult ret = FindRuleResultEmpty();
+    ret.target = MapNearestQuery(this, *type, range);
+    if(ret.target != NULL){
+        ret.fd = NodeFindReasonRange;
+        return ret;
+    }
+    return ret;
 }
 
 CX_OBJECT_TYPE(Defence, Node)

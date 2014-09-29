@@ -19,9 +19,9 @@ CX_OBJECT_END(Defence, Node)
 
 Defence DefenceCreate(cxAny pmap,cxVec2i pos);
 
-cxAny DefenceFindRule(cxAny pview,const NodeCombined *type);
+FindRuleResult DefenceFindRule(cxAny pview,const NodeCombined *type);
 
-PathRuleResult DefencePathRule(cxAny pview,cxAny target);
+PathRuleResult DefencePathRule(cxAny pview,FindRuleResult *fret);
 
 CX_C_END
 

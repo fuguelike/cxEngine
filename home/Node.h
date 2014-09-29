@@ -21,8 +21,15 @@ typedef struct {
 }PathRuleResult;
 
 #define PathRuleResultMake(_t_,_d_) (PathRuleResult){_t_,_d_}
-
 #define PathRuleResultEmpty()   PathRuleResultMake(NULL,NodeBindReasonNone)
+
+typedef struct {
+    cxAny target;
+    NodeFindReason fd;
+}FindRuleResult;
+
+#define FindRuleResultMake(_t_,_d_) (FindRuleResult){_t_,_d_}
+#define FindRuleResultEmpty()   FindRuleResultMake(NULL,NodeFindReasonNone)
 
 CX_OBJECT_DEF(Node, cxSprite)
     cxSprite array;     //Test
@@ -56,9 +63,9 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_EVENT_ALLOC(onDie);
     NodeSearchOrder orders;
     //目标搜索规则
-    CX_METHOD_DEF(cxAny, FindRule,cxAny,const NodeCombined *);
+    CX_METHOD_DEF(FindRuleResult, FindRule,cxAny,const NodeCombined *);
     //路径搜索规则
-    CX_METHOD_DEF(PathRuleResult, PathRule, cxAny seacher, cxAny target);
+    CX_METHOD_DEF(PathRuleResult, PathRule, cxAny seacher,FindRuleResult *fr);
     //是否能攻击目标
     CX_METHOD_DEF(cxBool, IsAttackTarget,cxAny attacker,cxAny target);
     //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
@@ -69,8 +76,6 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(void, AttackTarget,cxAny attcker,cxAny target,cxAny bd);
     //被一个目标攻击 pview 被attacker攻击 attacktype可能是 弓箭或者node
     CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);
-    //当Node MoveTo target结束时 attcker target,返回 false表示解除bind
-    CX_METHOD_DEF(cxBool, MoveExit,cxAny,cxAny);
 CX_OBJECT_END(Node, cxSprite)
 
 CX_FIELD_GET(Node, cxAny, Map);

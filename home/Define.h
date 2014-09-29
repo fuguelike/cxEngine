@@ -49,6 +49,14 @@ typedef enum {
     NodeBindReasonShoot       //bind射击状态
 }NodeBindReason;
 
+//node Bind原因
+typedef enum {
+    NodeFindReasonNone = 0,   //未知
+    NodeFindReasonRange,      //find来自攻击范围
+    NodeFindReasonField,     //find来自视野范围
+    NodeFindReasonAll       //find来自全屏
+}NodeFindReason;
+
 //地图模式
 typedef enum {
     MapModeNone = 0,

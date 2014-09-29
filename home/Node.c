@@ -170,11 +170,6 @@ static void NodeMoveToTargetArrive(cxAny pav)
         if(NodeCheckDie(target)){
             continue;
         }
-        //回调处理返回,返回false表示无需攻击目标
-        if(!CX_METHOD_GET(true, node->MoveExit, node, target)){
-            cxViewUnBind(node, target);
-            continue;
-        }
         //移动结束如果没有达到作战距离,解除bind继续搜索
         if(!NodeIsArriveRange(node, target)){
             cxViewUnBind(node, target);
@@ -251,49 +246,49 @@ static void NodeSearchArrive(cxAny pav)
     cxAny pview = cxActionView(pav);
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
-    PathRuleResult ret = PathRuleResultEmpty();
+    //路径规则结果
+    PathRuleResult pret = PathRuleResultEmpty();
+    //搜索规则结果
+    FindRuleResult fret = FindRuleResultEmpty();
+    const NodeCombined *type = NodeGetSearchType(this);
+    if(type == NULL){
+        goto attack;
+    }
     cxHash bindes = cxViewBindes(this);
     //如果同时攻击数量到达
     if(cxHashLength(bindes) >= NodeGetAttackNum(this)){
-        return;
-    }
-    const NodeCombined *type = NodeGetSearchType(this);
-    if(type == NULL){
-        return;
+        goto attack;
     }
     CX_ASSERT(this->FindRule, "no implement search rule");
     //启动搜索规则
-    Node target = CX_METHOD_GET(NULL, this->FindRule, this, type);
+     fret = CX_METHOD_GET(fret, this->FindRule, this, type);
     //在搜索规则下没有发现目标
-    if(target == NULL){
-        return;
-    }
-    //target被this发现,返回false表示target不能被攻击
-    if(!CX_METHOD_GET(true, target->Finded,target,this)){
-        return;
-    }
-    //已经到达攻击范围无需寻路
-    if(NodeIsArriveRange(this, target)){
-        ret = PathRuleResultMake(target, NodeBindReasonAttack);
+    if(fret.target == NULL){
         goto attack;
     }
-    //路径搜索bind的目标
-    ret = CX_METHOD_GET(PathRuleResultEmpty(),this->PathRule,this,target);
-    //返回NULL表示未发现路径
-    if(ret.target == NULL){
-        return;
+    //已经到达攻击范围无需寻路
+    if(NodeIsArriveRange(this, fret.target)){
+        pret = PathRuleResultMake(fret.target, NodeBindReasonAttack);
+        goto attack;
     }
+    //路径搜索bind的目标传入搜索结果
+    pret = CX_METHOD_GET(pret,this->PathRule,this,&fret);
 attack:
-    //立即面向目标
-    NodeFaceTarget(this,ret.target);
-    //bind目标
-    cxViewBind(this, ret.target, cxNumberInt(ret.bd));
-    //目标已经bind到this,启动攻击定器
-    if(ret.bd == NodeBindReasonMove){
-        NodeMovingToTarget(this, target, MapSearchPoints(map));
+    //返回NULL表示未发现路径
+    if(pret.target == NULL){
         return;
     }
-    if(ret.bd == NodeBindReasonAttack){
+    //立即面向目标
+    NodeFaceTarget(this,pret.target);
+    //为移动bind
+    if(pret.bd == NodeBindReasonMove){
+        cxViewBind(this, pret.target, cxNumberInt(pret.bd));
+        NodeMovingToTarget(this, pret.target, MapSearchPoints(map));
+        return;
+    }
+    //为攻击bind
+    if(pret.bd == NodeBindReasonAttack){
+        cxViewBind(this, pret.target, cxNumberInt(pret.bd));
         NodeStartupAttackTimer(this);
         return;
     }

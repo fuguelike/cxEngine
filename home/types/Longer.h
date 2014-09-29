@@ -20,7 +20,7 @@ void LongerInit(cxAny pview, cxAny pmap,cxVec2i pos);
 
 Longer LongerCreate(cxAny pmap,cxVec2i pos);
 
-cxAny LongerFindRule(cxAny pview,const NodeCombined *type);
+FindRuleResult LongerFindRule(cxAny pview,const NodeCombined *type);
 
 CX_C_END
 

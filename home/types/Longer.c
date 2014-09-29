@@ -42,7 +42,7 @@ static void LongerTarget(cxAny pview,cxAny target,cxAny bd)
     cxViewBind(bullet, target, cxNumberInt(NodeBindReasonShoot));
 }
 
-cxAny LongerFindRule(cxAny pview,const NodeCombined *type)
+FindRuleResult LongerFindRule(cxAny pview,const NodeCombined *type)
 {
     return AttackFindRule(pview, type);
 }
