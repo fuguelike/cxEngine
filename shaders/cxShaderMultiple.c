@@ -8,7 +8,7 @@
 
 #include "cxShaderMultiple.h"
 
-cxString cxShaderMultipleGetVertexSource(cxAny this)
+cxString cxShaderMultipleVertex(cxAny this)
 {
     static cxConstChars vertex =
     GLSL(
@@ -26,7 +26,7 @@ cxString cxShaderMultipleGetVertexSource(cxAny this)
     return cxStringConstChars(vertex);
 }
 
-cxString cxShaderMultipleGetFragmentSource(cxAny this)
+cxString cxShaderMultipleFragment(cxAny this)
 {
     static cxConstChars fragment =
     GLSL(
@@ -59,9 +59,9 @@ CX_OBJECT_TYPE(cxShaderMultiple, cxShader)
 }
 CX_OBJECT_INIT(cxShaderMultiple, cxShader)
 {
-    CX_METHOD_SET(this->cxShader.GetVertexSource, cxShaderMultipleGetVertexSource);
-    CX_METHOD_SET(this->cxShader.GetFragmentSource, cxShaderMultipleGetFragmentSource);
-    CX_METHOD_SET(this->cxShader.Uniform, cxShaderMultipleUniform);
+    CX_SET(cxShader, this, Vertex, cxShaderMultipleVertex);
+    CX_SET(cxShader, this, Fragment, cxShaderMultipleFragment);
+    CX_SET(cxShader, this, Uniform, cxShaderMultipleUniform);
 }
 CX_OBJECT_FREE(cxShaderMultiple, cxShader)
 {

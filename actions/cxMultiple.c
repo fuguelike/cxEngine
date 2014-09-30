@@ -27,7 +27,7 @@ static void cxMultipleRunNext(cxAny pav)
     CX_ASSERT_THIS(pav, cxMultiple);
     if(this->index >= 0 && this->index < cxArrayLength(this->items)){
         cxAction action = cxArrayAtIndex(this->items, this->index);
-        CX_EVENT_APPEND(action->onExit, cxActionItemStop);
+        CX_ADD(cxAction, action, onExit, cxActionItemStop);
         cxViewAppendAction(cxActionGetView(action), action);
     }
 }
@@ -37,7 +37,7 @@ static void cxMultipleRunAll(cxAny pav)
     CX_ASSERT_THIS(pav, cxMultiple);
     CX_ARRAY_FOREACH(this->items, ele){
         cxAction action = cxArrayObject(ele);
-        CX_EVENT_APPEND(action->onExit, cxActionItemStop);
+        CX_ADD(cxAction, action, onExit, cxActionItemStop);
         cxViewAppendAction(cxActionGetView(action), action);
     }
 }

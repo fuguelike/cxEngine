@@ -33,7 +33,7 @@ CX_OBJECT_TYPE(cxSpatial, cxObject)
 }
 CX_OBJECT_INIT(cxSpatial, cxObject)
 {
-    CX_METHOD_SET(this->IndexBB, cxSpatialIndexBB);
+    CX_SET(cxSpatial, this, IndexBB, cxSpatialIndexBB);
     this->index = cpBBTreeNew(this->IndexBB, NULL);
 }
 CX_OBJECT_FREE(cxSpatial, cxObject)

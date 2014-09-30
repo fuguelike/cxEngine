@@ -43,8 +43,8 @@ CX_OBJECT_DEF(cxShader, cxObject)
     CX_METHOD_DEF(void,Init,cxAny);
     CX_METHOD_DEF(void,Update,cxAny);
     CX_METHOD_DEF(void,Uniform,cxAny);
-    CX_METHOD_DEF(cxString, GetVertexSource, cxAny);
-    CX_METHOD_DEF(cxString, GetFragmentSource, cxAny);
+    CX_METHOD_DEF(cxString, Vertex, cxAny);
+    CX_METHOD_DEF(cxString, Fragment, cxAny);
 CX_OBJECT_END(cxShader, cxObject)
 
 void cxShaderInitPosColorTex(cxAny pshader);

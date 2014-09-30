@@ -86,8 +86,8 @@ CX_OBJECT_TYPE(cxTextureJSON, cxTexture)
 }
 CX_OBJECT_INIT(cxTextureJSON, cxTexture)
 {
-    CX_METHOD_SET(this->cxTexture.Bind, cxTextureJSONBind);
-    CX_METHOD_SET(this->cxTexture.Load, cxTextureJSONLoad);
+    CX_SET(cxTexture, this, Bind, cxTextureJSONBind);
+    CX_SET(cxTexture, this, Load, cxTextureJSONLoad);
 }
 CX_OBJECT_FREE(cxTextureJSON, cxTexture)
 {

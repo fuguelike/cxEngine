@@ -53,8 +53,8 @@ CX_OBJECT_TYPE(cxTextureTXT, cxTexture)
 }
 CX_OBJECT_INIT(cxTextureTXT, cxTexture)
 {
-    CX_METHOD_SET(this->cxTexture.Bind, cxTextureTXTBind);
-    CX_METHOD_SET(this->cxTexture.Load, cxTextureTXTLoad);
+    CX_SET(cxTexture, this, Bind, cxTextureTXTBind);
+    CX_SET(cxTexture, this, Load, cxTextureTXTLoad);
 }
 CX_OBJECT_FREE(cxTextureTXT, cxTexture)
 {

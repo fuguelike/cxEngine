@@ -110,7 +110,7 @@ CX_OBJECT_INIT(FightMap, Map)
 {
     MapSetMode(this, MapModeFight);
     cxMessageAppend(this, mapSubType, "selectSubType");
-    CX_METHOD_SET(CX_TYPE(cxView, this)->Touch, MapFightTouch);
+    CX_SET(cxView, this, Touch, MapFightTouch);
 }
 CX_OBJECT_FREE(FightMap, Map)
 {

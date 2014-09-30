@@ -63,7 +63,7 @@ void cxRunnerAppend(cxAny runner,cxAny pav, cxAny pview)
     CX_ASSERT_TYPE(pview, cxView);
     cxAction action = pav;
     this->count ++;
-    CX_EVENT_APPEND(action->onExit, cxRunnerItemStop);
+    CX_ADD(cxAction, action, onExit, cxRunnerItemStop);
     cxViewAppendAction(pview, pav);
     cxActionSetParent(pav, runner);
 }

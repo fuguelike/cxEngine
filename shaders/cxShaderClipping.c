@@ -9,7 +9,7 @@
 #include "cxShaderDefault.h"
 #include "cxShaderClipping.h"
 
-static cxString cxShaderClippingGetFragmentSource(cxAny this)
+static cxString cxShaderClippingFragment(cxAny this)
 {
     static cxConstChars fragment =
     GLSL(
@@ -31,8 +31,8 @@ CX_OBJECT_TYPE(cxShaderClipping, cxShader)
 }
 CX_OBJECT_INIT(cxShaderClipping, cxShader)
 {
-    CX_METHOD_SET(this->cxShader.GetVertexSource, cxShaderDefaultGetVertexSource);
-    CX_METHOD_SET(this->cxShader.GetFragmentSource, cxShaderClippingGetFragmentSource);
+    CX_SET(cxShader, this, Vertex, cxShaderDefaultVertex);
+    CX_SET(cxShader, this, Fragment, cxShaderClippingFragment);
 }
 CX_OBJECT_FREE(cxShaderClipping, cxShader)
 {

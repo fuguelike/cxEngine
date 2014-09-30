@@ -104,13 +104,13 @@ CX_OBJECT_TYPE(cxAssetsStream, cxStream)
 }
 CX_OBJECT_INIT(cxAssetsStream, cxStream)
 {
-    CX_METHOD_SET(this->cxStream.Open, cxAssetsStreamOpen);
-    CX_METHOD_SET(this->cxStream.Read, cxAssetsStreamRead);
-    CX_METHOD_SET(this->cxStream.Write, cxAssetsStreamWrite);
-    CX_METHOD_SET(this->cxStream.Seek, cxAssetsStreamSeek);
-    CX_METHOD_SET(this->cxStream.Close, cxAssetsStreamClose);
-    CX_METHOD_SET(this->cxStream.Position,cxAssetsStreamPosition);
-    CX_METHOD_SET(this->cxStream.AllBytes,cxAssetsStreamAllBytes);
+    CX_SET(cxStream, this, Read, cxAssetsStreamRead);
+    CX_SET(cxStream, this, Open, cxAssetsStreamOpen);
+    CX_SET(cxStream, this, Write, cxAssetsStreamWrite);
+    CX_SET(cxStream, this, Seek, cxAssetsStreamSeek);
+    CX_SET(cxStream, this, Close, cxAssetsStreamClose);
+    CX_SET(cxStream, this, Position, cxAssetsStreamPosition);
+    CX_SET(cxStream, this, AllBytes, cxAssetsStreamAllBytes);
 }
 CX_OBJECT_FREE(cxAssetsStream, cxStream)
 {

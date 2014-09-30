@@ -57,7 +57,7 @@ void cxEngineInit(cxEngine engine)
     //战斗用动画管理器
     cxActionMgr fight = CX_CREATE(cxActionMgr);
     fight->scale = 1.0f;
-    cxActionMgrSet("fight", fight);
+    cxActionMgrSet(FIGHT_ACTION_GROUP, fight);
 }
 void cxEngineMain(cxEngine engine)
 {

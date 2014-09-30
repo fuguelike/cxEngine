@@ -104,7 +104,7 @@ CX_OBJECT_TYPE(cxShader, cxObject)
 }
 CX_OBJECT_INIT(cxShader, cxObject)
 {
-    CX_METHOD_SET(this->Init, cxShaderInitPosColorTex);
+    CX_SET(cxShader, this, Init, cxShaderInitPosColorTex);
 }
 CX_OBJECT_FREE(cxShader, cxObject)
 {
@@ -129,9 +129,9 @@ bool cxShaderInit(cxAny pshader)
 {
     CX_ASSERT_THIS(pshader, cxShader);
     GLint status = 0;
-    cxString vbytes = CX_METHOD_GET(NULL, this->GetVertexSource, this);
+    cxString vbytes = CX_METHOD_GET(NULL, this->Vertex, this);
     CX_ASSERT(vbytes != NULL, "get vertex shader source failed");
-    cxString fbytes = CX_METHOD_GET(NULL, this->GetFragmentSource, this);
+    cxString fbytes = CX_METHOD_GET(NULL, this->Fragment, this);
     CX_ASSERT(vbytes != NULL, "get fragment shader source failed");
     if(!cxShaderCompile(this, &this->vertexShader, GL_VERTEX_SHADER, vbytes)){
         return false;

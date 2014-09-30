@@ -53,8 +53,8 @@ CX_OBJECT_TYPE(cxTexturePNG, cxTexture)
 }
 CX_OBJECT_INIT(cxTexturePNG, cxTexture)
 {
-    CX_METHOD_SET(this->cxTexture.Bind, cxTexturePNGBind);
-    CX_METHOD_SET(this->cxTexture.Load, cxTexturePNGLoad);
+    CX_SET(cxTexture, this, Bind, cxTexturePNGBind);
+    CX_SET(cxTexture, this, Load, cxTexturePNGLoad);
 }
 CX_OBJECT_FREE(cxTexturePNG, cxTexture)
 {

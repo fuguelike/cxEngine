@@ -18,9 +18,9 @@ CX_OBJECT_DEF(cxShaderMultiple, cxShader)
     GLint texture2;
 CX_OBJECT_END(cxShaderMultiple, cxShader)
 
-cxString cxShaderMultipleGetVertexSource(cxAny this);
+cxString cxShaderMultipleVertex(cxAny this);
 
-cxString cxShaderMultipleGetFragmentSource(cxAny this);
+cxString cxShaderMultipleFragment(cxAny this);
 
 CX_C_END
 

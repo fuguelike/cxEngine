@@ -153,9 +153,9 @@ CX_OBJECT_TYPE(cxAStar, cxObject)
 }
 CX_OBJECT_INIT(cxAStar, cxObject)
 {
-    CX_METHOD_SET(this->Neighbors, cxAStarNeighbors);
-    CX_METHOD_SET(this->Heuristic, cxAStarHeuristic);
-    CX_METHOD_SET(this->Comparator, cxAStarComparator);
+    CX_SET(cxAStar, this, Neighbors, cxAStarNeighbors);
+    CX_SET(cxAStar, this, Comparator, cxAStarComparator);
+    CX_SET(cxAStar, this, Heuristic, cxAStarHeuristic);
     this->points = cxAnyArrayAlloc(cxVec2i);
     this->visits = cxAnyArrayAlloc(cxVec2i);
     this->type = cxAStarTypeA4;

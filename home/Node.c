@@ -103,7 +103,7 @@ static void NodeInitBullet(Node this,Node target,cxAny bullet)
     
     cxAny baction = BulletCreateEngine(bullet);
     CX_ASSERT_TYPE(baction, cxAction);
-    cxActionSetGroup(baction, "fight");
+    cxActionSetGroup(baction, FIGHT_ACTION_GROUP);
     
     cxViewAppendAction(bullet, baction);
     MapAppendBullet(bullet);
@@ -117,7 +117,7 @@ static void NodeInitAction(Node this,Node target,cxAny action)
 {
     //带动画结束 action.view = node
     cxViewAppendAction(this, action);
-    cxActionSetGroup(action, "fight");
+    cxActionSetGroup(action, FIGHT_ACTION_GROUP);
     CX_ADD(cxAction, action, onExit, NodeAttackActionExit);
 }
 
@@ -167,8 +167,8 @@ void NodeStartupAttackTimer(cxAny pview)
         cxActionReset(this->attackTimer);
     }else{
         this->attackTimer = cxViewAppendTimer(this, NodeGetAttackRate(this), CX_TIMER_FOREVER);
-        cxActionSetGroup(this->attackTimer, "fight");
-        CX_EVENT_APPEND(this->attackTimer->onArrive, NodeAttackTimerArrive);
+        cxActionSetGroup(this->attackTimer, FIGHT_ACTION_GROUP);
+        CX_ADD(cxTimer, this->attackTimer, onArrive, NodeAttackTimerArrive);
     }
     cxActionResume(this->attackTimer);
 }
@@ -292,7 +292,7 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
     //使用点集合移动this
     Move move = MoveCreate(this, points);
     MoveSetType(move, MoveTypeFight);
-    CX_EVENT_APPEND(CX_TYPE(cxAction, move)->onExit, NodeMoveToTargetArrive);
+    CX_ADD(cxAction, move, onExit, NodeMoveToTargetArrive);
     cxViewAppendAction(this, move);
 }
 
@@ -390,8 +390,8 @@ void NodeSearchRun(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     this->searchTimer = cxViewAppendTimer(this, NodeGetSearchRate(this), CX_TIMER_FOREVER);
-    cxActionSetGroup(this->searchTimer, "fight");
-    CX_EVENT_APPEND(this->searchTimer->onArrive, NodeSearchArrive);
+    cxActionSetGroup(this->searchTimer, FIGHT_ACTION_GROUP);
+    CX_ADD(cxTimer, this->searchTimer, onArrive, NodeSearchArrive);
 }
 
 cxBool NodeIsStatic(cxAny pview)

@@ -48,7 +48,7 @@ static void cxLoadingArrive(cxAny sender)
     CX_EVENT_FIRE(this, onLoading);
     if(this->autoFinished){
         cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
-        CX_EVENT_APPEND(timer->onArrive, cxFinishedArrive);
+        CX_ADD(cxTimer, timer, onArrive, cxFinishedArrive);
     }
 }
 
@@ -84,7 +84,7 @@ void cxLoadingStart(cxAny pview)
     CX_EVENT_FIRE(this, onStart);
     this->isLoading = true;
     cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
-    CX_EVENT_APPEND(timer->onArrive, cxLoadingArrive);
+    CX_ADD(cxTimer, timer, onArrive, cxLoadingArrive);
     cxViewAppend(engine->window, this);
 }
 

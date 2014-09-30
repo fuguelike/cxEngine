@@ -9,7 +9,7 @@
 #include "cxShaderDefault.h"
 #include "cxShaderAlpha.h"
 
-static cxString cxShaderAlphaGetFragmentSource(cxAny this)
+static cxString cxShaderAlphaFragment(cxAny this)
 {
     static cxConstChars fragment =
     GLSL(
@@ -30,8 +30,8 @@ CX_OBJECT_TYPE(cxShaderAlpha, cxShader)
 }
 CX_OBJECT_INIT(cxShaderAlpha, cxShader)
 {
-    CX_METHOD_SET(this->cxShader.GetVertexSource, cxShaderDefaultGetVertexSource);
-    CX_METHOD_SET(this->cxShader.GetFragmentSource, cxShaderAlphaGetFragmentSource);
+    CX_SET(cxShader, this, Vertex, cxShaderDefaultVertex);
+    CX_SET(cxShader, this, Fragment, cxShaderAlphaFragment);
 }
 CX_OBJECT_FREE(cxShaderAlpha, cxShader)
 {

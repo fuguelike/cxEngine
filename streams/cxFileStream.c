@@ -108,13 +108,14 @@ CX_OBJECT_TYPE(cxFileStream, cxStream)
 }
 CX_OBJECT_INIT(cxFileStream, cxStream)
 {
-    CX_METHOD_SET(this->cxStream.Open, cxFileStreamOpen);
-    CX_METHOD_SET(this->cxStream.Read, cxFileStreamRead);
-    CX_METHOD_SET(this->cxStream.Write, cxFileStreamWrite);
-    CX_METHOD_SET(this->cxStream.Seek, cxFileStreamSeek);
-    CX_METHOD_SET(this->cxStream.Close, cxFileStreamClose);
-    CX_METHOD_SET(this->cxStream.Position,cxFileStreamPosition);
-    CX_METHOD_SET(this->cxStream.AllBytes,cxFileStreamAllBytes);
+    CX_SET(cxStream, this, Read, cxFileStreamRead);
+    CX_SET(cxStream, this, Open, cxFileStreamOpen);
+    CX_SET(cxStream, this, Write, cxFileStreamWrite);
+    CX_SET(cxStream, this, Seek, cxFileStreamSeek);
+    CX_SET(cxStream, this, Close, cxFileStreamClose);
+    CX_SET(cxStream, this, Position, cxFileStreamPosition);
+    CX_SET(cxStream, this, AllBytes, cxFileStreamAllBytes);
+    
 }
 CX_OBJECT_FREE(cxFileStream, cxStream)
 {

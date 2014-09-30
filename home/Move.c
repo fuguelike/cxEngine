@@ -79,7 +79,8 @@ CX_OBJECT_TYPE(Move, cxSpline)
 CX_OBJECT_INIT(Move, cxSpline)
 {
     MoveSetIsToPoints(this, false);
-    cxActionSetGroup(this, "fight");
+    cxActionSetGroup(this, FIGHT_ACTION_GROUP);
+    cxActionSetActionId(this, NodeActionMoveId);
     MoveSetType(this, MoveTypeNone);
     CX_ADD(cxSpline, this, onAngle, MoveOnAngle);
     CX_ADD(cxAction, this, onInit, MoveOnInit);

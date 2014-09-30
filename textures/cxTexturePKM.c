@@ -87,8 +87,8 @@ CX_OBJECT_TYPE(cxTexturePKM, cxTexture)
 }
 CX_OBJECT_INIT(cxTexturePKM, cxTexture)
 {
-    CX_METHOD_SET(this->cxTexture.Bind, cxTexturePKMBind);
-    CX_METHOD_SET(this->cxTexture.Load, cxTexturePKMLoad);
+    CX_SET(cxTexture, this, Bind, cxTexturePKMBind);
+    CX_SET(cxTexture, this, Load, cxTexturePKMLoad);
 }
 CX_OBJECT_FREE(cxTexturePKM, cxTexture)
 {

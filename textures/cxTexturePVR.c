@@ -148,8 +148,8 @@ CX_OBJECT_TYPE(cxTexturePVR, cxTexture)
 }
 CX_OBJECT_INIT(cxTexturePVR, cxTexture)
 {
-    CX_METHOD_SET(this->cxTexture.Bind, cxTexturePVRBind);
-    CX_METHOD_SET(this->cxTexture.Load, cxTexturePVRLoad);
+    CX_SET(cxTexture, this, Bind, cxTexturePVRBind);
+    CX_SET(cxTexture, this, Load, cxTexturePVRLoad);
 }
 CX_OBJECT_FREE(cxTexturePVR, cxTexture)
 {

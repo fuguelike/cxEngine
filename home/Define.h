@@ -89,6 +89,12 @@ typedef enum {
     NodeSubTypeWall     = 1 << 3,      //城墙
 }NodeSubType;
 
+typedef enum {
+    NodeActionMoveId    = 100000        //移动id
+}NodeActionId;
+
+#define FIGHT_ACTION_GROUP  "fight"
+
 //组合类型
 typedef struct {
     NodeType mainType;

@@ -90,8 +90,8 @@ CX_OBJECT_TYPE(cxTextureJPG, cxTexture)
 }
 CX_OBJECT_INIT(cxTextureJPG, cxTexture)
 {
-    CX_METHOD_SET(this->cxTexture.Bind, cxTextureJPGBind);
-    CX_METHOD_SET(this->cxTexture.Load, cxTextureJPGLoad);
+    CX_SET(cxTexture, this, Bind, cxTextureJPGBind);
+    CX_SET(cxTexture, this, Load, cxTextureJPGLoad);
 }
 CX_OBJECT_FREE(cxTextureJPG, cxTexture)
 {
