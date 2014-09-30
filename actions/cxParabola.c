@@ -57,9 +57,9 @@ CX_OBJECT_TYPE(cxParabola, cxAction)
 }
 CX_OBJECT_INIT(cxParabola, cxAction)
 {
-    CX_METHOD_SET(this->cxAction.Exit, cxParabolaExit);
-    CX_METHOD_SET(this->cxAction.Init, cxParabolaInit);
-    CX_METHOD_SET(this->cxAction.Step, cxParabolaStep);
+    SET(cxAction, this, Init, cxParabolaInit);
+    SET(cxAction, this, Step, cxParabolaStep);
+    SET(cxAction, this, Exit, cxParabolaExit);
     this->gravity = cxVec2fv(0, -1000);
     this->cxAction.time = -1;
 }

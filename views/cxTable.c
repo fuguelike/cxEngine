@@ -109,8 +109,8 @@ CX_OBJECT_TYPE(cxTable, cxView)
 CX_OBJECT_INIT(cxTable, cxView)
 {
     this->arrayHide = true;
-    CX_EVENT_APPEND(this->cxView.onResize, cxTableResize);
-    CX_EVENT_APPEND(this->cxView.onUpdate, cxTableUpdate);
+    ADD(cxView, this, onResize, cxTableResize);
+    ADD(cxView, this, onUpdate, cxTableUpdate);
 }
 CX_OBJECT_FREE(cxTable, cxView)
 {

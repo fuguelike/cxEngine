@@ -57,7 +57,6 @@
 #include <actions/cxSpline.h>
 #include <actions/cxTimeLine.h>
 #include <actions/cxBezier.h>
-#include <actions/cxSpeed.h>
 #include <actions/cxSkeleton.h>
 
 #include <algorithm/cxAStar.h>
@@ -132,6 +131,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxTextureJSON);
     
     //register views
+    CX_TYPE_REG(cxWindow);
     CX_TYPE_REG(cxSprite);
     CX_TYPE_REG(cxScroll);
     CX_TYPE_REG(cxTable);
@@ -164,7 +164,6 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxTint);
     CX_TYPE_REG(cxTimeLine);
     CX_TYPE_REG(cxBezier);
-    CX_TYPE_REG(cxSpeed);
     CX_TYPE_REG(cxSkeleton);
 }
 
@@ -186,6 +185,8 @@ void cxEngineBegin()
     _setMalloc(allocator->malloc);
     _setDebugMalloc(NULL);
     _setFree(allocator->free);
+    CX_ASSERT(engine->window == NULL, "mutiple init window");
+    engine->window = CX_ALLOC(cxWindow);
     //use init engine
     cxEngineInit(engine);
 }
@@ -212,15 +213,13 @@ void cxEngineDraw()
 {
     CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
+    if(!engine->isInit || engine->isPause){
+        return;
+    }
     cxDouble now = cxTimestamp();
     engine->frameDelta = now - engine->lastTime;
+    //30 - 60
     engine->frameDelta = kmClamp(engine->frameDelta, engine->interval, engine->interval * 2.0f);
-    if(!engine->isInit){
-        goto completed;
-    }
-    if(engine->isPause){
-        goto completed;
-    }
     cxMemPoolBegin();
     cxOpenGLClear();
     CX_SIGNAL_FIRE(engine->onUpdate, CX_FUNC_TYPE(cxAny,cxFloat),CX_SLOT_OBJECT,engine->frameDelta);
@@ -228,7 +227,6 @@ void cxEngineDraw()
     cxViewDraw(engine->window);
     kmGLPopMatrix();
     cxMemPoolClean();
-completed:
     engine->lastTime = now;
 }
 
@@ -316,7 +314,6 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->isTouch = true;
     this->isGesture = true;
     this->scale = cxVec2fv(1.0f, 1.0f);
-    this->window = CX_ALLOC(cxWindow);
     this->files = CX_ALLOC(cxHash);
     this->items = CX_ALLOC(cxHash);
     this->actionMgrs = CX_ALLOC(cxHash);

@@ -57,7 +57,7 @@ AttackActionResult AttackAttackAction(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
     CX_ASSERT_VALUE(ptarget, Node, target);
-    cxScale scale = cxScaleCreate(NodeGetAttackRate(attacker), cxVec2fv(1.5f, 1.5f));
+    cxScale scale = cxScaleCreate(NodeGetAttackRate(attacker), cxVec2fv(1.2f, 1.2f));
     return AAMake(NULL, scale);
 }
 
@@ -77,7 +77,7 @@ CX_OBJECT_INIT(Attack, Node)
     NodeSetSize(this, cxSize2iv(1, 1));
     NodeSetSpeed(this, 100);
     NodeSetField(this, cxRange2fv(0, 10));
-    NodeSetRange(this, cxRange2fv(0, 1));
+    NodeSetRange(this, cxRange2fv(0, 0));
     NodeSetAttackRate(this, 0.2f);
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
     cxViewSetColor(this, cxBLUE);

@@ -13,10 +13,9 @@
 
 static cxAny BulletCreateEngine(cxAny bullet)
 {
-    cxAny target = BulletGetTarget(bullet);
-    if(target == NULL){
-        return NULL;
-    }
+    cxAny target = NULL;
+    BulletGetNode(bullet, NULL, &target);
+    CX_RETURN(target == NULL,NULL);
     return cxFollowCreate(500, target);
 }
 
@@ -36,28 +35,19 @@ CX_OBJECT_FREE(Bullet, cxSprite)
 }
 CX_OBJECT_TERM(Bullet, cxSprite)
 
-cxAny BulletGetAttacker(cxAny pview)
+void BulletGetNode(cxAny pview,cxAny *pattacker,cxAny *ptarget)
 {
     CX_ASSERT_THIS(pview, Bullet);
     cxHash bindes = cxViewBindes(this);
     CX_HASH_FOREACH(bindes, ele, tmp){
-        if(cxNumberToInt(ele->any) == BulletBindReasonAttacker){
-            return cxHashKeyToAny(ele);
+        cxInt type = cxNumberToInt(ele->any);
+        if(type == BulletBindReasonAttacker && pattacker != NULL){
+            *pattacker = cxHashKeyToAny(ele);
+        }
+        if(type == BulletBindReasonTarget && ptarget != NULL){
+            *ptarget = cxHashKeyToAny(ele);
         }
     }
-    return NULL;
-}
-
-cxAny BulletGetTarget(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Bullet);
-    cxHash bindes = cxViewBindes(this);
-    CX_HASH_FOREACH(bindes, ele, tmp){
-        if(cxNumberToInt(ele->any) == BulletBindReasonTarget){
-            return cxHashKeyToAny(ele);
-        }
-    }
-    return NULL;
 }
 
 void BulletBind(cxAny pview,cxAny pattacker,cxAny ptarget)

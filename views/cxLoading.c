@@ -66,8 +66,8 @@ CX_OBJECT_INIT(cxLoading, cxView)
 {
     this->autoFinished = true;
     this->isLoading = true;
-    CX_EVENT_APPEND(this->cxView.onUpdate, cxLoadingOnUpdate);
-    CX_METHOD_SET(this->cxView.Touch, cxLoadingTouch);
+    ADD(cxView, this, onUpdate, cxLoadingOnUpdate);
+    SET(cxView, this, Touch, cxLoadingTouch);
 }
 CX_OBJECT_FREE(cxLoading, cxView)
 {

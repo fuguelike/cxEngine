@@ -60,9 +60,9 @@ CX_OBJECT_TYPE(cxFollow, cxAction)
 CX_OBJECT_INIT(cxFollow, cxAction)
 {
     this->cxAction.time = -1;
-    CX_METHOD_SET(this->cxAction.Init, cxFollowInit);
-    CX_METHOD_SET(this->cxAction.Step, cxFollowStep);
-    CX_METHOD_SET(this->IsExit, cxFollowIsExit);
+    SET(cxAction, this, Init, cxFollowInit);
+    SET(cxAction, this, Step, cxFollowStep);
+    SET(cxFollow, this, IsExit, cxFollowIsExit);
 }
 CX_OBJECT_FREE(cxFollow, cxAction)
 {

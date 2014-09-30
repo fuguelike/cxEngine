@@ -46,9 +46,8 @@ CX_OBJECT_INIT(cxTextureFactory, cxObject)
     
     cxHash group = CX_CREATE(cxHash);
     cxHashSet(this->caches, cxHashStrKey(CX_DEFAULT_GROUP), group);
-    
-    CX_SLOT_CONNECT(engine->onMemory, this, onMemory, cxTextureFactoryMemory);
-    CX_EVENT_APPEND(engine->onExit, cxTextureFactoryDestroy);
+    LIN(cxEngine, engine, onMemory, this, cxTextureFactoryMemory);
+    ADD(cxEngine, engine, onExit, cxTextureFactoryDestroy);
 }
 CX_OBJECT_FREE(cxTextureFactory, cxObject)
 {

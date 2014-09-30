@@ -76,7 +76,7 @@ CX_OBJECT_TYPE(cxLabelTTF, cxSprite)
 }
 CX_OBJECT_INIT(cxLabelTTF, cxSprite)
 {
-    CX_EVENT_APPEND(CX_TYPE(cxView, this)->onUpdate,cxLabelTTFUpdate);
+    ADD(cxView, this, onUpdate, cxLabelTTFUpdate);
     this->attr.size = 32;
     this->attr.align = cxTextAlignTopLeft;
     cxSpriteSetShader(this, cxShaderAlphaKey);

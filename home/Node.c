@@ -80,7 +80,8 @@ static void NodeAttackBulletExit(cxAny pav)
     CX_ASSERT_THIS(pav, cxAction);
     CX_ASSERT_VALUE(cxActionView(this), Bullet, bullet);
     //如果有bind的目标就攻击他
-    Node target = BulletGetTarget(bullet);
+    cxAny target = NULL;
+    BulletGetNode(bullet, NULL, &target);
     if(target != NULL){
         NodeAttackTarget(bullet, target, AttackTypeBullet);
     }
@@ -97,24 +98,27 @@ static void BulletOnUpdate(cxAny pav)
 static void NodeInitBullet(Node this,Node target,cxAny bullet)
 {
     CX_ASSERT_VALUE(bullet, Bullet, b);
+    
     BulletBind(bullet, this, target);
     
     cxAny baction = CX_METHOD_GET(NULL, b->CreateEngine,b);
     CX_ASSERT_TYPE(baction, cxAction);
+    cxActionSetGroup(baction, "fight");
     
     cxViewAppendAction(bullet, baction);
     MapAppendBullet(bullet);
     
     //带弹药结束 action.view = bullet
-    ON(cxAction, baction, onExit, NodeAttackBulletExit);
-    ON(cxAction, baction, onUpdate, BulletOnUpdate);
+    ADD(cxAction, baction, onExit, NodeAttackBulletExit);
+    ADD(cxAction, baction, onUpdate, BulletOnUpdate);
 }
 
 static void NodeInitAction(Node this,Node target,cxAny action)
 {
     //带动画结束 action.view = node
     cxViewAppendAction(this, action);
-    ON(cxAction, action, onExit, NodeAttackActionExit);
+    cxActionSetGroup(action, "fight");
+    ADD(cxAction, action, onExit, NodeAttackActionExit);
 }
 
 static void NodeAttackTimerArrive(cxAny pav)
@@ -176,6 +180,8 @@ cxBool NodeIsArriveRange(cxAny pattacker,cxAny ptarget)
     cxVec2f sidx = NodeGetIndex(attacker);
     cxVec2f didx = NodeGetIndex(target);
     cxFloat d = kmVec2DistanceBetween(&sidx, &didx);
+    d -= (NodeGetBody(attacker) + NodeGetBody(target));
+    d = CX_MAX(d, 0);
     //获取攻击者作战范围
     cxRange2f range = NodeGetRange(attacker);
     //检测是否在作战范围内
@@ -188,16 +194,16 @@ CX_OBJECT_TYPE(Node, cxSprite)
 }
 CX_OBJECT_INIT(Node, cxSprite)
 {
-    ON(cxView, this, onTransform, NodeOnTransform);
+    ADD(cxView, this, onTransform, NodeOnTransform);
     NodeSetAttackNum(this, 1);
     NodeSetIndex(this, cxVec2fv(-1, -1));
     NodeSetField(this, cxRange2fv(0, 6));
-    NodeSetSearchRate(this, 0.5f);
-    NodeSetAttackRate(this, 0.5f);
+    NodeSetSearchRate(this, 0.3f);
+    NodeSetAttackRate(this, 0.3f);
     NodeSetBody(this, 0.5f);
     SET(Node, this, NodeAttacked, NodeAttacked);
     //Test
-    ON(Node, this, onLife, LifeChange);
+    ADD(Node, this, onLife, LifeChange);
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
@@ -245,6 +251,14 @@ static void NodeMoveToTargetArrive(cxAny pav)
     }
 }
 
+void NodeMoveToPosition(cxAny pview,cxAnyArray points)
+{
+    CX_ASSERT_THIS(pview, Node);
+    Move move = MoveCreate(this, points);
+    MoveSetType(move, MoveTypePosition);
+    cxViewAppendAction(this, move);
+}
+
 void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -277,6 +291,7 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
     }
     //使用点集合移动this
     Move move = MoveCreate(this, points);
+    MoveSetType(move, MoveTypeFight);
     CX_EVENT_APPEND(CX_TYPE(cxAction, move)->onExit, NodeMoveToTargetArrive);
     cxViewAppendAction(this, move);
 }

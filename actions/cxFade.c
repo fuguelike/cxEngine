@@ -34,8 +34,8 @@ CX_OBJECT_TYPE(cxFade, cxAction)
 }
 CX_OBJECT_INIT(cxFade, cxAction)
 {
-    CX_METHOD_SET(this->cxAction.Init, cxFadeInit);
-    CX_METHOD_SET(this->cxAction.Step, cxFadeStep);
+    SET(cxAction, this, Init, cxFadeInit);
+    SET(cxAction, this, Step, cxFadeStep);
 }
 CX_OBJECT_FREE(cxFade, cxAction)
 {

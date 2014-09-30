@@ -149,7 +149,6 @@ LOCAL_SRC_FILES += \
     actions/cxFollow.c \
     actions/cxTimeLine.c \
     actions/cxBezier.c \
-    actions/cxSpeed.c \
     actions/cxSkeleton.c
 
 LOCAL_SRC_FILES += \

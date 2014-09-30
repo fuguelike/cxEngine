@@ -41,8 +41,8 @@ CX_OBJECT_TYPE(cxTimer, cxAction)
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
     this->isBegin = false;
-    CX_METHOD_SET(this->cxAction.Init, cxTimerInit);
-    CX_METHOD_SET(this->cxAction.Exit, cxTimerExit);
+    SET(cxAction, this, Init, cxTimerInit);
+    SET(cxAction, this, Exit, cxTimerExit);
 }
 CX_OBJECT_FREE(cxTimer, cxAction)
 {

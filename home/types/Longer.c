@@ -24,7 +24,7 @@ AttackActionResult LongerAttackAction(cxAny pattacker,cxAny ptarget)
     BulletSetPower(bullet, NodeGetPower(attacker));
     
     //自身攻击动画
-    cxScale scale = cxScaleCreate(NodeGetAttackRate(attacker), cxVec2fv(1.5f, 1.5f));
+    cxScale scale = cxScaleCreate(NodeGetAttackRate(attacker), cxVec2fv(1.2f, 1.2f));
     
     return AAMake(bullet, scale);
 }

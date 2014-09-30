@@ -19,10 +19,9 @@ static void cxParticleInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxParticle);
     CX_ASSERT_TYPE(this->cxAction.view, cxView);
-    cxView view = cxActionView(pav);
+    cxAny view = cxActionView(pav);
     view = CX_METHOD_GET(view, this->GetDrawView, this);
-    CX_ASSERT(view != NULL, "draw view must not null");
-    CX_SLOT_CONNECT(view->onDraw, this, onDraw, cxActionViewDraw);
+    LIN(cxView, view, onDraw, this, cxActionViewDraw);
 }
 
 static void cxParticleOver(cxAny pav)
@@ -435,11 +434,12 @@ CX_OBJECT_INIT(cxParticle, cxAction)
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
     cxParticleSetBlendMode(this, cxParticleBlendAdd);
-    CX_METHOD_SET(this->InitUnit, cxParticleInitUnit);
-    CX_METHOD_SET(this->cxAction.Reset, cxParticleReset);
-    CX_METHOD_SET(this->cxAction.Init, cxParticleInit);
-    CX_METHOD_SET(this->cxAction.Over, cxParticleOver);
-    CX_METHOD_SET(this->cxAction.Step, cxParticleStep);
+    
+    SET(cxParticle, this, InitUnit, cxParticleInitUnit);
+    SET(cxAction, this, Reset, cxParticleReset);
+    SET(cxAction, this, Init, cxParticleInit);
+    SET(cxAction, this, Over, cxParticleOver);
+    SET(cxAction, this, Step, cxParticleStep);
 }
 CX_OBJECT_FREE(cxParticle, cxAction)
 {

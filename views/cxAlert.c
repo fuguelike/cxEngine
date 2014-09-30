@@ -70,10 +70,10 @@ CX_OBJECT_TYPE(cxAlert, cxAtlas)
 CX_OBJECT_INIT(cxAlert, cxAtlas)
 {
     cxViewSetHideTop(this, false);
-    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Key, cxAlertKey);
-    CX_METHOD_SET(this->cxAtlas.cxSprite.cxView.Touch, cxAlertTouch);
-    CX_METHOD_SET(this->Hide, cxAlertOnHide);
-    CX_METHOD_SET(this->Show, cxAlertOnShow);
+    SET(cxView, this, Key, cxAlertKey);
+    SET(cxView, this, Touch, cxAlertTouch);
+    SET(cxAlert, this, Hide, cxAlertOnHide);
+    SET(cxAlert, this, Show, cxAlertOnShow);
 }
 CX_OBJECT_FREE(cxAlert, cxAtlas)
 {

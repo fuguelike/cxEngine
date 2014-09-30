@@ -66,8 +66,8 @@ CX_OBJECT_TYPE(cxBezier, cxAction)
 }
 CX_OBJECT_INIT(cxBezier, cxAction)
 {
-    CX_METHOD_SET(this->cxAction.Init, cxBezierInit);
-    CX_METHOD_SET(this->cxAction.Step, cxBezierStep);
+    SET(cxAction, this, Init, cxBezierInit);
+    SET(cxAction, this, Step, cxBezierStep);
 }
 CX_OBJECT_FREE(cxBezier, cxAction)
 {

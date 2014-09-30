@@ -80,7 +80,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(cxBool, Finded,cxAny node,cxAny finder);
     //方向发生变化
     CX_METHOD_DEF(void, NodeDirection,cxAny);
-    //被一个目标攻击 pview 被attacker攻击 attacktype可能是 弓箭或者node
+    //被一个目标攻击 pview 被attacker攻击
     CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);
     //创建一个攻击动画,动画结时攻击目标
     CX_METHOD_DEF(AttackActionResult, AttackAction,cxAny attacker,cxAny target);
@@ -149,11 +149,14 @@ CX_INLINE cxFloat NodeDistance(cxAny src,cxAny dst)
     return kmVec2DistanceBetween(&sidx, &didx);
 }
 
-//检测是否移动到指定位置
+//检测是到达攻击范围,是否加入attacker或者target body计算
 cxBool NodeIsArriveRange(cxAny attacker,cxAny target);
 
 //启动攻击定时器
 void NodeStartupAttackTimer(cxAny pview);
+
+//使用点集合移动
+void NodeMoveToPosition(cxAny pview,cxAnyArray points);
 
 //使用点集合移动移动到目标,移动结束触发 MoveExit 回调
 void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points);

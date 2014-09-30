@@ -7,6 +7,7 @@
 //
 
 #include <actions/cxFollow.h>
+#include <actions/cxScale.h>
 #include <Map.h>
 #include "Defence.h"
 #include <Range.h>
@@ -21,6 +22,8 @@ AttackActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget)
     Bullet bullet = CX_CREATE(Bullet);
     BulletInit(bullet, map, cxSize2fv(10, 10), cxViewPosition(attacker));
     BulletSetPower(bullet, NodeGetPower(attacker));
+    
+//    cxScale scale = cxScaleCreate(NodeGetAttackRate(attacker), cxVec2fv(1.2f, 1.2f));
     
     return AAMake(bullet, NULL);
 }
@@ -49,6 +52,11 @@ FindRuleResult DefenceFindRule(cxAny pview,const NodeCombined *type)
     return ret;
 }
 
+static void DefenceAttackOnce(cxAny pattacker,cxAny ptarget)
+{
+    cxViewSetScale(pattacker, cxVec2fv(1, 1));
+}
+
 CX_OBJECT_TYPE(Defence, Node)
 {
     
@@ -59,7 +67,7 @@ CX_OBJECT_INIT(Defence, Node)
     NodeSetSize(this, cxSize2iv(2, 2));
     NodeSetAttackRate(this, 0.5f);
     NodeSetRange(this, cxRange2fv(0, 11));
-
+    NodeSetBody(this, 1.5f);
     NodeSetSearchOrder(this, NodeTypeAttack, NodeSubTypeNone);
     
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
@@ -72,6 +80,7 @@ CX_OBJECT_INIT(Defence, Node)
     SET(Node,this,PathRule, DefencePathRule);
     SET(Node,this,FindRule, DefenceFindRule);
     SET(Node,this,AttackAction, DefenceAttackAction);
+    SET(Node, this, AttackOnce, DefenceAttackOnce);
 }
 CX_OBJECT_FREE(Defence, Node)
 {

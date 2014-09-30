@@ -258,10 +258,10 @@ CX_OBJECT_TYPE(cxAnimate, cxAction)
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {
     this->forever = true;
-    CX_METHOD_SET(this->cxAction.Exit, cxAnimateExit);
-    CX_METHOD_SET(this->cxAction.Init, cxAnimateInit);
-    CX_METHOD_SET(this->cxAction.Step, cxAnimateStep);
-    CX_METHOD_SET(this->cxAction.Reset, cxAnimateReset);
+    SET(cxAction, this, Init, cxAnimateInit);
+    SET(cxAction, this, Step, cxAnimateStep);
+    SET(cxAction, this, Exit, cxAnimateExit);
+    SET(cxAction, this, Reset, cxAnimateReset);
     this->groups = CX_ALLOC(cxHash);
     this->frames = CX_ALLOC(cxHash);
 }

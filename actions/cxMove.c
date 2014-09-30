@@ -46,8 +46,8 @@ CX_OBJECT_TYPE(cxMove, cxAction)
 }
 CX_OBJECT_INIT(cxMove, cxAction)
 {
-    CX_METHOD_SET(this->cxAction.Init, cxMoveInit);
-    CX_METHOD_SET(this->cxAction.Step, cxMoveStep);
+    SET(cxAction, this, Init, cxMoveInit);
+    SET(cxAction, this, Step, cxMoveStep);
 }
 CX_OBJECT_FREE(cxMove, cxAction)
 {

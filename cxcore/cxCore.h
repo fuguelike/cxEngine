@@ -288,21 +288,33 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 #define CX_METHOD_RUN(_m_,...)      if((_m_) != NULL)(_m_)(__VA_ARGS__)
 
 #define CX_METHOD_SET(_m_,_f_)      _m_ = _f_
+
 //method overwrite short micro
-#define SET(_t_,_o_,_n_,_f_)        CX_METHOD_SET(CX_TYPE(_t_, _o_)->_n_, _f_);CX_ASSERT_TYPE(_o_, _t_)
+#define SET(_t_,_o_,_n_,_f_)                                    \
+CX_ASSERT_TYPE(_o_, _t_);                                       \
+CX_METHOD_SET(CX_TYPE(_t_, _o_)->_n_, _f_)
 
 //field
 
 #define CX_FIELD_DEF(_var_)         _var_
 
-#define CX_FIELD_GET(_t_,_vt_, _n_) \
-CX_INLINE _vt_ _t_##Get##_n_(cxAny pthis){CX_ASSERT_THIS(pthis,_t_);return this->_n_;}
+#define CX_FIELD_GET(_t_,_vt_, _n_)                             \
+CX_INLINE _vt_ _t_##Get##_n_(cxAny pthis)                       \
+{                                                               \
+    CX_ASSERT_THIS(pthis,_t_);                                  \
+    return this->_n_;                                           \
+}
 
-#define CX_FIELD_SET(_t_,_vt_, _n_) \
-CX_INLINE void _t_##Set##_n_(cxAny pthis,const _vt_ value){CX_ASSERT_THIS(pthis,_t_);this->_n_ = value;}
+#define CX_FIELD_SET(_t_,_vt_, _n_)                             \
+CX_INLINE void _t_##Set##_n_(cxAny pthis,const _vt_ value)      \
+{                                                               \
+    CX_ASSERT_THIS(pthis,_t_);                                  \
+    this->_n_ = value;                                          \
+}
 
-#define CX_FIELD_IMP(_t_,_vt_, _n_) \
-CX_FIELD_GET(_t_,_vt_, _n_)CX_FIELD_SET(_t_,_vt_, _n_)
+#define CX_FIELD_IMP(_t_,_vt_, _n_)                             \
+CX_FIELD_GET(_t_,_vt_, _n_)                                     \
+CX_FIELD_SET(_t_,_vt_, _n_)
 
 //signal and slot
 
@@ -360,6 +372,10 @@ do{                                                             \
     DL_APPEND(_signal_,_new_);                                  \
 }while(0)
 
+#define LIN(_t_,_src_,_n_,_dst_,_f_)                            \
+CX_ASSERT_TYPE(_src_, _t_);                                     \
+CX_SLOT_CONNECT(CX_TYPE(_t_, _src_)->_n_, _dst_, _n_, _f_)
+
 //event
 
 typedef struct cxEvent cxEvent;
@@ -413,7 +429,9 @@ do{                                                             \
 }while(0)
 
 //append event short micro
-#define ON(_t_,_o_,_n_,_f_)    CX_EVENT_APPEND(CX_TYPE(_t_, _o_)->_n_, _f_);CX_ASSERT_TYPE(_o_, _t_)
+#define ADD(_t_,_o_,_n_,_f_)                                    \
+CX_ASSERT_TYPE(_o_, _t_);                                       \
+CX_EVENT_APPEND(CX_TYPE(_t_, _o_)->_n_, _f_)
 
 //
 cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x);

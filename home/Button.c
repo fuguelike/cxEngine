@@ -48,10 +48,9 @@ CX_OBJECT_TYPE(Button, cxButton)
 }
 CX_OBJECT_INIT(Button, cxButton)
 {
-    CX_EVENT_APPEND(this->cxButton.onEnter, ButtonEnter);
-    CX_EVENT_APPEND(this->cxButton.onLeave, ButtonLeave);
-    CX_EVENT_APPEND(this->cxButton.onRelease, ButtonRelease);
-    
+    ADD(cxButton, this, onEnter, ButtonEnter);
+    ADD(cxButton, this, onLeave, ButtonLeave);
+    ADD(cxButton, this, onRelease, ButtonRelease);
     this->ttf = cxLabelTTFCreate(UTF8("button"), NULL, 50);
     cxViewAppend(this, this->ttf);
 }

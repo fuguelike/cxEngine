@@ -96,6 +96,7 @@ void cxEngineRecvJson(cxString json);
 
 void cxEngineSetLocalized(cxString lang);
 
+//初始化数据
 void cxEngineBegin();
 
 void cxEngineTerminate();

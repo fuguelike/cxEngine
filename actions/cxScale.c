@@ -37,8 +37,8 @@ CX_OBJECT_TYPE(cxScale, cxAction)
 }
 CX_OBJECT_INIT(cxScale, cxAction)
 {
-    CX_METHOD_SET(this->cxAction.Init, cxScaleInit);
-    CX_METHOD_SET(this->cxAction.Step, cxScaleStep);
+    SET(cxAction, this, Init, cxScaleInit);
+    SET(cxAction, this, Step, cxScaleStep);
 }
 CX_OBJECT_FREE(cxScale, cxAction)
 {

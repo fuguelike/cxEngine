@@ -160,9 +160,9 @@ CX_OBJECT_TYPE(cxSkeleton, cxAction)
 CX_OBJECT_INIT(cxSkeleton, cxAction)
 {
     this->cxAction.time = -1;
-    CX_METHOD_SET(this->cxAction.Init, cxSkeletonInit);
-    CX_METHOD_SET(this->cxAction.Step, cxSkeletonStep);
-    CX_METHOD_SET(this->cxAction.Exit, cxSkeletonExit);
+    SET(cxAction, this, Init, cxSkeletonInit);
+    SET(cxAction, this, Step, cxSkeletonStep);
+    SET(cxAction, this, Exit, cxSkeletonExit);
 }
 CX_OBJECT_FREE(cxSkeleton, cxAction)
 {

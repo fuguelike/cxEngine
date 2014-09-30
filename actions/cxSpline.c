@@ -101,9 +101,9 @@ CX_OBJECT_INIT(cxSpline, cxAction)
 {
     this->index = -1;
     this->angle = INT32_MAX;
-    CX_METHOD_SET(this->cxAction.Init, cxSplineInit);
-    CX_METHOD_SET(this->cxAction.Step, cxSplineStep);
-    CX_METHOD_SET(this->cxAction.Reset, cxSplineReset);
+    SET(cxAction, this, Init, cxSplineInit);
+    SET(cxAction, this, Step, cxSplineStep);
+    SET(cxAction, this, Reset, cxSplineReset);
     this->points = cxAnyArrayAlloc(cxVec2f);
 }
 CX_OBJECT_FREE(cxSpline, cxAction)

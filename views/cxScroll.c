@@ -8,7 +8,6 @@
 
 #include <engine/cxEngine.h>
 #include <actions/cxMove.h>
-#include <actions/cxSpeed.h>
 #include <actions/cxScale.h>
 #include "cxScroll.h"
 
@@ -255,7 +254,7 @@ CX_OBJECT_INIT(cxScroll, cxView)
     this->moveTime = 1.0f;
     this->scaleTime = 0.5f;
     this->scalable = true;
-    CX_METHOD_SET(this->cxView.Touch, cxScrollTouch);
+    SET(cxView, this, Touch, cxScrollTouch);
     this->type = cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal;
 }
 CX_OBJECT_FREE(cxScroll, cxView)

@@ -101,9 +101,9 @@ CX_OBJECT_TYPE(cxMultiple, cxAction)
 }
 CX_OBJECT_INIT(cxMultiple, cxAction)
 {
-    CX_METHOD_SET(this->cxAction.Init, cxMultipleInit);
-    CX_METHOD_SET(this->cxAction.Step, cxMultipleStep);
-    CX_METHOD_SET(this->cxAction.Exit, cxMultipleExit);
+    SET(cxAction, this, Init, cxMultipleInit);
+    SET(cxAction, this, Step, cxMultipleStep);
+    SET(cxAction, this, Exit, cxMultipleExit);
     this->items = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxMultiple, cxAction)

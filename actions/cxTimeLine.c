@@ -62,8 +62,8 @@ CX_OBJECT_TYPE(cxTimeLine, cxAction)
 }
 CX_OBJECT_INIT(cxTimeLine, cxAction)
 {
-    CX_METHOD_SET(this->cxAction.Init, cxTimeLineInit);
-    CX_METHOD_SET(this->cxAction.Step, cxTimeLineStep);
+    SET(cxAction, this, Init, cxTimeLineInit);
+    SET(cxAction, this, Step, cxTimeLineStep);
     this->times = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxTimeLine, cxAction)

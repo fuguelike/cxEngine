@@ -161,7 +161,7 @@ CX_OBJECT_TYPE(cxPlayer, cxObject)
 CX_OBJECT_INIT(cxPlayer, cxObject)
 {
     cxEngine engine = cxEngineInstance();
-    CX_SLOT_CONNECT(engine->onMemory, this, onMemory, cxPlayerOnMemory);
+    LIN(cxEngine, engine, onMemory, this, cxPlayerOnMemory);
     
     this->device = alcOpenDevice(NULL);
     CX_ASSERT(this->device != NULL, "alc open device failed");

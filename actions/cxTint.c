@@ -42,8 +42,8 @@ CX_OBJECT_TYPE(cxTint, cxAction)
 }
 CX_OBJECT_INIT(cxTint, cxAction)
 {
-    CX_METHOD_SET(this->cxAction.Init, cxTintInit);
-    CX_METHOD_SET(this->cxAction.Step, cxTintStep);
+    SET(cxAction, this, Init, cxTintInit);
+    SET(cxAction, this, Step, cxTintStep);
 }
 CX_OBJECT_FREE(cxTint, cxAction)
 {

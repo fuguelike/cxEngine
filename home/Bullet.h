@@ -27,9 +27,7 @@ CX_FIELD_IMP(Bullet, cxAny, Action);
 
 void BulletBind(cxAny pview,cxAny pattacker,cxAny target);
 
-cxAny BulletGetAttacker(cxAny pview);
-
-cxAny BulletGetTarget(cxAny pview);
+void BulletGetNode(cxAny pview,cxAny *pattacker,cxAny *ptarget);
 
 void BulletInit(cxAny pview,cxAny pmap,cxSize2f size,cxVec2f pos);
 

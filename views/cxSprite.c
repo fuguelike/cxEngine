@@ -131,8 +131,8 @@ CX_OBJECT_INIT(cxSprite, cxView)
 {
     this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    CX_EVENT_APPEND(CX_TYPE(cxView, this)->onTransform, cxSpriteTransformEvent);
-    CX_METHOD_SET(this->cxView.Draw, cxSpriteDraw);
+    ADD(cxView, this, onTransform, cxSpriteTransformEvent);
+    SET(cxView, this, Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
 }
 CX_OBJECT_FREE(cxSprite, cxView)
