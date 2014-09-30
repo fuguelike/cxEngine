@@ -11,7 +11,7 @@
 #include "Define.h"
 #include "Node.h"
 
-static cxAny BulletCreateEngine(cxAny bullet)
+static cxAny BulletCreateEngineDefault(cxAny bullet)
 {
     cxAny target = NULL;
     BulletGetNode(bullet, NULL, &target);
@@ -27,7 +27,7 @@ CX_OBJECT_TYPE(Bullet, cxSprite)
 CX_OBJECT_INIT(Bullet, cxSprite)
 {
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
-    SET(Bullet, this, CreateEngine, BulletCreateEngine);
+    SET(Bullet, this, CreateEngine, BulletCreateEngineDefault);
 }
 CX_OBJECT_FREE(Bullet, cxSprite)
 {
@@ -35,10 +35,19 @@ CX_OBJECT_FREE(Bullet, cxSprite)
 }
 CX_OBJECT_TERM(Bullet, cxSprite)
 
+cxAny BulletCreateEngine(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Bullet);
+    cxAny action = CX_METHOD_GET(NULL, this->CreateEngine, this);
+    CX_RETURN(action == NULL, NULL);
+    BulletSetAction(this, action);
+    return action;
+}
+
 void BulletGetNode(cxAny pview,cxAny *pattacker,cxAny *ptarget)
 {
     CX_ASSERT_THIS(pview, Bullet);
-    cxHash bindes = cxViewBindes(this);
+    cxHash bindes = cxViewGetBindes(this);
     CX_HASH_FOREACH(bindes, ele, tmp){
         cxInt type = cxNumberToInt(ele->any);
         if(type == BulletBindReasonAttacker && pattacker != NULL){
@@ -65,5 +74,5 @@ void BulletInit(cxAny pview,cxAny pmap,cxSize2f size,cxVec2f pos)
     CX_ASSERT_THIS(pview, Bullet);
     this->Map = pmap;
     cxViewSetSize(this, size);
-    cxViewSetPos(this, pos);
+    cxViewSetPosition(this, pos);
 }

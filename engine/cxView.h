@@ -39,44 +39,54 @@ typedef enum {
     cxViewTouchFlagsSubviews = 1 << 1
 }cxViewTouchFlags;
 
-#define CX_HASH_KEY_TO_ANY(_e_) (*(cxAny *)(_e_)->key)
+typedef enum {
+    cxViewDirtyNone     = 0,
+    cxViewDirtySize     = 1 << 0,   //size changed
+    cxViewDirtyScale    = 1 << 1,   //scale changed
+    cxViewDirtyPosition = 1 << 2,   //position changed
+    cxViewDirtyColor    = 1 << 3,   //color changed
+    cxViewDirtyAnchor   = 1 << 4,   //anchor changed
+    cxViewDirtyFixScale = 1 << 5,   //fix scale changed
+    cxViewDirtyRaxis    = 1 << 6,   //rorate raxis changed
+    cxViewDirtyAngle    = 1 << 7,   //angle change
+}cxViewDirty;
 
 CX_OBJECT_DEF(cxView, cxObject)
-    cxHash bindes;//bind's views
-    cxHash binded;//binded's views
-    cxInt tag;
-    cxViewAutoResizeMask autoMask;
-    cxBox4f  autoBox;
+    CX_FIELD_DEF(cxHash Bindes);
+    CX_FIELD_DEF(cxHash Binded);
+    CX_FIELD_DEF(cxLong Tag);
+    CX_FIELD_DEF(cxViewAutoResizeMask AutoMask);
+    CX_FIELD_DEF(cxBox4f  AutoBox);
+    CX_FIELD_DEF(cxViewDirty Dirty);
+    CX_FIELD_DEF(cxList SubViews);
+    CX_FIELD_DEF(cxBool HideTop);
+    CX_FIELD_DEF(cxViewTouchFlags TouchFlags);
+    CX_FIELD_DEF(cxSize2f Size);
+    CX_FIELD_DEF(cxVec2f Position);
+    CX_FIELD_DEF(cxVec2f Scale);
+    CX_FIELD_DEF(cxVec2f FixScale);
+    CX_FIELD_DEF(cxVec2f Anchor);
+    CX_FIELD_DEF(cxVec3f Raxis);
+    CX_FIELD_DEF(cxFloat Angle);
+    CX_FIELD_DEF(cxColor4f Color);
+    CX_FIELD_DEF(cxColor3f BorderColor);
+    CX_FIELD_DEF(cxView ParentView);
+    CX_FIELD_DEF(cxBool IsVisible);
     cxHash actions;
     cxArray removes;
     cxArray appends;
     cxInt zorder;
     cxListElement *subElement;
-    cxList subViews;
-    cxView parentView;      //parent view
     cxBool isPrepend;
     cxBool isFront;    //
     cxBool isRunning;
-    cxBool isDirty;
-    cxBool isVisible;
     cxBool isShowBorder;    //if draw border
-    cxBool hideTop;         //=true hide prev view when use cxWindowPush
     cxBool isSort;
     cxBool isCropping;
-    cxViewTouchFlags touchFlags;     //enable touch
     cxBool isRemoved;   //if remove
-    cxSize2f size;
-    cxVec2f position;
-    cxVec2f scale;
-    cxVec2f fixscale;
-    cxVec2f anchor;
-    cxVec3f raxis;
-    cxFloat angle;
     cxRect4f scissor;
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
-    cxColor4f color;
-    cxColor3f borderColor;
 
     CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouchItems *);
     CX_METHOD_DEF(cxBool, Key, cxAny, cxKey *);
@@ -95,10 +105,45 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onUpdate);
     CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
-    CX_EVENT_ALLOC(onTransform);
+    CX_EVENT_ALLOC(onDirty);
+
 CX_OBJECT_END(cxView, cxObject)
 
-void cxViewSetTouchFlags(cxAny pview,cxViewTouchFlags flags);
+#define CX_VIEW_FOREACH_SUBVIEWS(_v_,_e_)           \
+cxList subViews = cxViewGetSubViews(_v_);           \
+CX_LIST_FOREACH(subViews, _e_)
+
+CX_FIELD_IMP(cxView, cxBool, IsVisible);
+CX_FIELD_GET(cxView,cxView,ParentView);
+CX_FIELD_GET(cxView,cxList,SubViews);
+CX_FIELD_IMP(cxView,cxBox4f,AutoBox);
+CX_FIELD_IMP(cxView,cxViewAutoResizeMask,AutoMask);
+CX_FIELD_IMP(cxView,cxLong,Tag);
+CX_FIELD_GET(cxView,cxHash,Bindes);
+CX_FIELD_GET(cxView,cxHash,Binded);
+CX_FIELD_IMP(cxView,cxBool,HideTop);
+CX_FIELD_IMP(cxView,cxViewTouchFlags,TouchFlags);
+CX_FIELD_GET(cxView,cxSize2f,Size);
+CX_FIELD_GET(cxView,cxVec2f,Position);
+CX_FIELD_GET(cxView,cxVec2f,FixScale);
+CX_FIELD_GET(cxView,cxVec2f,Anchor);
+CX_FIELD_GET(cxView,cxVec3f,Raxis);
+CX_FIELD_GET(cxView,cxFloat,Angle);
+CX_FIELD_GET(cxView,cxColor4f,Color);
+CX_FIELD_IMP(cxView,cxColor3f,BorderColor);
+
+CX_INLINE cxVec2f cxViewGetScale(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    return cxVec2fv(this->FixScale.x * this->Scale.x, this->FixScale.y * this->Scale.y);
+}
+
+CX_FIELD_SET(cxView, cxViewDirty, Dirty);
+CX_INLINE cxBool cxViewIsDirty(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    return this->Dirty != cxViewDirtyNone;
+}
 
 cxBool cxViewIsRunning(cxAny pview);
 
@@ -109,10 +154,6 @@ cxMatrix4f *cxViewAnchorMatrix(cxAny pview);
 void cxViewUnBindAll(cxAny pview);
 
 cxAny cxViewBindesFirst(cxAny pview);
-
-cxHash cxViewBindes(cxAny pview);
-
-cxHash cxViewBinded(cxAny pview);
 
 //bd pview and bview bind data
 void cxViewBind(cxAny pview,cxAny bview,cxAny bd);
@@ -125,27 +166,11 @@ void cxViewCheckFront(cxAny pview);
 
 void cxViewSetCropping(cxAny pview,cxBool cropping);
 
-cxAny cxViewParent(cxAny pview);
-
 cxVec2f cxViewTouchDelta(cxAny pview,cxTouchItem item);
-
-cxVec2f cxViewPosition(cxAny pview);
-
-cxList cxViewSubViews(cxAny pview);
-
-cxVec2f cxViewScale(cxAny pview);
 
 cxSize2f cxViewContentSize(cxAny pview);
 
-cxSize2f cxViewSize(cxAny pview);
-
-cxInt cxViewTag(cxAny pview);
-
-void cxViewSetTag(cxAny pview,cxInt tag);
-
 cxInt cxViewSubviewCount(cxAny pview);
-
-cxColor4f cxViewColor(cxAny pview);
 
 cxBox4f cxViewBox(cxAny pview);
 
@@ -153,17 +178,11 @@ cxBool cxViewContainsGLBox(cxAny pview);
 
 cxRect4f cxViewGLRect(cxAny pview);
 
-void cxViewSetHideTop(cxAny pview,cxBool hideTop);
-
-void cxViewSetDirty(cxAny pview,cxBool dirty);
-
 void cxViewSetShowBorder(cxAny pview,cxBool isShowBorder);
 
 void cxViewSetBorderColor(cxAny pview,cxColor3f color);
 
 cxBool cxViewZeroSize(cxAny pview);
-
-cxAny cxViewGetParentView(cxAny pview);
 
 void cxViewSetColor(cxAny pview,cxColor3f color);
 
@@ -216,17 +235,11 @@ cxVec2f cxViewPointToWindowPoint(cxAny pview,cxVec2f vPoint);
 
 cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint);
 
-void cxViewSetAutoResizeBox(cxAny pview,cxBox4f box);
-
-void cxViewSetAutoResizeMask(cxAny pview,cxViewAutoResizeMask mask);
-
 void cxViewSetSize(cxAny pview,cxSize2f size);
 
 void cxViewCheckSort(cxAny pview);
 
-void cxViewSetVisible(cxAny pview,cxBool visible);
-
-void cxViewSetPos(cxAny pview,cxVec2f pos);
+void cxViewSetPosition(cxAny pview,cxVec2f pos);
 
 // -0.5 <-> +0.5
 // -width/2 <-> width/2
@@ -238,10 +251,6 @@ void cxViewSetScale(cxAny pview,cxVec2f scale);
 void cxViewSetFixScale(cxAny pview,cxVec2f scale);
 
 void cxViewSetRaxis(cxAny pview,cxVec3f raxis);
-
-cxVec2f cxViewAnchor(cxAny pview);
-
-cxFloat cxViewAngle(cxAny pview);
 
 void cxViewSetAngle(cxAny pview,cxFloat angle);
 

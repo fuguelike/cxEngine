@@ -11,8 +11,8 @@
 static void cxScaleInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxScale);
-    CX_ASSERT_TYPE(this->cxAction.view, cxView);
-    this->oldScale = this->cxAction.view->scale;
+    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    this->oldScale = cxViewGetScale(view);
     this->delta.x = this->newScale.x - this->oldScale.x;
     this->delta.y = this->newScale.y - this->oldScale.y;
 }

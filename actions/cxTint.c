@@ -12,7 +12,8 @@ static void cxTintInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxTint);
     CX_ASSERT_TYPE(this->cxAction.view, cxView);
-    this->start = this->cxAction.view->color;
+    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    this->start = cxViewGetColor(view);
     this->delta.r = this->color.r - this->start.r;
     this->delta.g = this->color.g - this->start.g;
     this->delta.b = this->color.b - this->start.b;

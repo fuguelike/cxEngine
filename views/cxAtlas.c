@@ -76,7 +76,7 @@ void cxAtlasUpdateScale9(cxAny pview)
     CX_RETURN(!this->scale9.enable);
     CX_ASSERT(!cxViewZeroSize(pview) && this->cxSprite.texture != NULL, "must set texture and size");
     cxAtlasClean(pview);
-    cxSize2f size = cxViewSize(this);
+    cxSize2f size = cxViewGetSize(this);
     cxRect4f tr = cxBoxTex2fToRect4f(this->cxSprite.texCoord);
     cxSize2f tsize = cxSize2fv(this->cxSprite.texture->size.w * tr.w, this->cxSprite.texture->size.h * tr.h);
     cxFloat txs[]={0.0f, this->scale9.box.l/tsize.w, (tsize.w - this->scale9.box.r)/tsize.w, 1.0f};
@@ -90,7 +90,7 @@ void cxAtlasUpdateScale9(cxAny pview)
     cxFloat tx1=0,ty1=0,tx2=0,ty2=0;
     cxFloat bx1=0,by1=0,bx2=0,by2=0;
     cxFloat offx=0,offy=0;
-    cxColor4f color =cxViewColor(this);
+    cxColor4f color =cxViewGetColor(this);
     for(int i=0; i < 9;i++){
         tx1 = txs[i%3];
         tx2 = txs[i%3 + 1];

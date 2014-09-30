@@ -29,7 +29,7 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
     cxVec2f nextpos = cxVec2fv(0, 0);
     cxInt i = 0;
     cxUInt16 *sptr = NULL;
-    cxSize2f viewSize = cxViewSize(this);
+    cxSize2f viewSize = cxViewGetSize(this);
     viewSize.h = this->font->lineHeight;
     viewSize.w = 0;
     for(i=0,sptr = codeptr; i < txtLength; i++,prev = *sptr,sptr++){
@@ -58,7 +58,7 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
         cxFloat kerning = cxBMPKerningAmount(this->font, prev, *sptr);
         cxSize2f size = cxSize2fv(pchar->box.w, pchar->box.h);
         cxBoxTex2f tex = cxRect4fToBoxTex2f(pchar->box, this->font->scale);
-        cxColor4f color = cxViewColor(this);
+        cxColor4f color = cxViewGetColor(this);
         cxVec2f pos = cxVec2fv(0,0);
         pos.x = nextpos.x + pchar->xoffset + kerning + size.w/2.0f - viewSize.w/2.0f;
         if(this->isCenter){

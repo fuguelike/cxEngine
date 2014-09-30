@@ -17,7 +17,7 @@ static void cxParabolaInit(cxAny pav)
     kmVec2Normalize(&n, &this->speed);
     this->angle = cxVec2fAngle(n);
     this->time = 0;
-    this->pos = cxViewPosition(view);
+    this->pos = cxViewGetPosition(view);
 }
 
 static void cxParabolaStep(cxAny pav,cxFloat dt,cxFloat time)
@@ -31,7 +31,7 @@ static void cxParabolaStep(cxAny pav,cxFloat dt,cxFloat time)
     kmVec2Scale(&gv, &this->gravity, tv);
     kmVec2Add(&tmp, &tmp, &gv);
     kmVec2Add(&tmp, &tmp, &this->pos);
-    cxViewSetPos(view, tmp);
+    cxViewSetPosition(view, tmp);
     this->time += dt;
 }
 

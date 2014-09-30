@@ -11,8 +11,8 @@
 static void cxRotateInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxRotate);
-    CX_ASSERT_TYPE(this->cxAction.view, cxView);
-    this->oldAngle = this->cxAction.view->angle;
+    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    this->oldAngle = cxViewGetAngle(view);
     this->delta = this->newAngle - this->oldAngle;
     cxViewSetRaxis(this->cxAction.view, this->raxis);
 }

@@ -34,10 +34,10 @@ static void cxShowActionOnStop(cxAny sender)
 static void cxAlertOnShow(cxAny pview)
 {
     cxEngine engine = cxEngineInstance();
-    cxSize2f size = cxViewSize(pview);
-    cxVec2f pos = cxViewPosition(pview);
+    cxSize2f size = cxViewGetSize(pview);
+    cxVec2f pos = cxViewGetPosition(pview);
     pos.y = -engine->winsize.h/2.0f - size.h / 2.0f;
-    cxViewSetPos(pview, pos);
+    cxViewSetPosition(pview, pos);
     cxMove m = cxMoveCreate(0.3f, cxVec2fv(pos.x, 0));
     CX_EVENT_APPEND(m->cxAction.onExit, cxShowActionOnStop);
     cxActionSetCurve(m, cxCurveBackOut);
@@ -54,8 +54,8 @@ static void cxHideActionOnStop(cxAny sender)
 static void cxAlertOnHide(cxAny pview)
 {
     cxEngine engine = cxEngineInstance();
-    cxSize2f size = cxViewSize(pview);
-    cxVec2f pos = cxViewPosition(pview);
+    cxSize2f size = cxViewGetSize(pview);
+    cxVec2f pos = cxViewGetPosition(pview);
     pos.y = -engine->winsize.h/2.0f - size.h / 2.0f;
     cxMove m = cxMoveCreate(0.3f, pos);
     CX_EVENT_APPEND(m->cxAction.onExit, cxHideActionOnStop);

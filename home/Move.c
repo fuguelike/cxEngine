@@ -106,7 +106,7 @@ Move MoveCreate(cxAny node, cxAnyArray points)
     CX_ASTAR_POINTS_FOREACH(points, idx){
         //如果在同一个网格位置则使用当前位置
         if(cxVec2iEqu(vidx, *idx)){
-            pos = cxViewPosition(node);
+            pos = cxViewGetPosition(node);
         }else{
             pos = MapIndexToPos(map,cxVec2fv(idx->x + 0.5f, idx->y + 0.5f));
         }

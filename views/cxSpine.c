@@ -34,7 +34,7 @@ char * _spUtil_readFile (const char* path, int* length)
 
 void cxSpineUpdateBox(cxSpine this,spRegionAttachment *self,spSlot *slot)
 {
-    cxColor4f color = cxViewColor(this);
+    cxColor4f color = cxViewGetColor(this);
     this->skeleton->r = color.r;
 	this->skeleton->g = color.g;
 	this->skeleton->b = color.b;

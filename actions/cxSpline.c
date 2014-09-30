@@ -19,7 +19,7 @@ cxVec2f cxSplinePointAt(cxAny pav,cxInt idx)
 static void cxSplineInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxSpline);
-    CX_ASSERT_TYPE(this->cxAction.view, cxView);
+    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
     cxInt num = cxAnyArrayLength(this->points);
     if(num < 2){
         cxActionStop(pav);
@@ -27,7 +27,7 @@ static void cxSplineInit(cxAny pav)
     }
     this->delta = 1.0f/((cxFloat)num - 1.0f);
     this->diff = cxVec2fv(0, 0);
-    this->prev = this->cxAction.view->position;
+    this->prev =cxViewGetPosition(view);
     
     cxVec2f p0 = cxSplinePointAt(this, 0);
     cxVec2f p1 = cxSplinePointAt(this, num - 1);
@@ -42,6 +42,7 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxInt index = 0;
     CX_ASSERT_THIS(pav, cxSpline);
+    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
     cxFloat lt = 0;
     if (time >= 1.0f){
         index = cxAnyArrayLength(this->points) - 1;
@@ -60,7 +61,8 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f p3 = cxSplinePointAt(this, index + 2);
     cxVec2f newpos = cxCardinalSplineAt(p0, p1, p2, p3, this->tension, lt);
     cxVec2f diff;
-    kmVec2Subtract(&diff, &this->cxAction.view->position, &this->prev);
+    cxVec2f vpos = cxViewGetPosition(view);
+    kmVec2Subtract(&diff, &vpos, &this->prev);
     if(diff.x != 0 || diff.y != 0){
         kmVec2Add(&this->diff, &this->diff, &diff);
         kmVec2Add(&newpos, &newpos, &this->diff);
@@ -70,7 +72,7 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
         this->angle = angle;
         CX_EVENT_FIRE(this, onAngle);
     }
-    cxViewSetPos(this->cxAction.view, newpos);
+    cxViewSetPosition(view, newpos);
     this->prev = newpos;
 }
 

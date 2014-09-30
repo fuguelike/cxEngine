@@ -24,7 +24,7 @@ static cxInt MapSortCmpFunc(cxConstAny lv,cxConstAny rv)
     cxListElement *rp = (cxListElement *)rv;
     CX_ASSERT_VALUE(lp->any, cxView, v1);
     CX_ASSERT_VALUE(rp->any, cxView, v2);
-    return v2->position.y - v1->position.y;
+    return v2->Position.y - v1->Position.y;
 }
 
 void MapSortNode(cxAny pmap)
@@ -44,7 +44,7 @@ cxBool MapInit(cxAny pmap)
 {
     CX_ASSERT_THIS(pmap, Map);
     
-    cxSize2f size = cxViewSize(this);
+    cxSize2f size = cxViewGetSize(this);
     
     //test
     cxSpriteSetTextureURL(this, "bg3.png");
@@ -69,7 +69,7 @@ cxBool MapInit(cxAny pmap)
 //        for (cxInt y = 0; y < global.unitNum.y ; y++) {
 //            cxSprite sp = cxSpriteCreateWithURL("bg1.png");
 //            cxViewSetSize(sp, global.unitSize);
-//            cxViewSetPos(sp, MapIndexToPos(this, cxVec2fv(x + 0.5f, y + 0.5f)));
+//            cxViewSetPosition(sp, MapIndexToPos(this, cxVec2fv(x + 0.5f, y + 0.5f)));
 //            cxViewAppend(this, sp);
 //        }
 //    }
@@ -305,8 +305,7 @@ void MapAppendNode(cxAny node)
 void MapRemoveNodes(cxAny pmap)
 {
     CX_ASSERT_THIS(pmap, Map);
-    cxList views = cxViewSubViews(this->nLayer);
-    CX_LIST_FOREACH(views, ele){
+    CX_VIEW_FOREACH_SUBVIEWS(this->nLayer, ele){
         MapRemoveNode(ele->any);
     }
 }
@@ -612,7 +611,7 @@ cxBool MapIsValidIdx(cxAny pmap,cxVec2i idx)
 cxVec2f MapPosToFloat(cxAny pmap,cxVec2f pos)
 {
     CX_ASSERT_THIS(pmap, Map);
-    cxSize2f size = cxViewSize(this);
+    cxSize2f size = cxViewGetSize(this);
     pos.y += size.h/2.0f;
     return cxTilePosToIdx(pos, global.unitSize);
 }
@@ -620,7 +619,7 @@ cxVec2f MapPosToFloat(cxAny pmap,cxVec2f pos)
 cxVec2i MapPosToIndex(cxAny pmap,cxVec2f pos)
 {
     CX_ASSERT_THIS(pmap, Map);
-    cxSize2f size = cxViewSize(this);
+    cxSize2f size = cxViewGetSize(this);
     pos.y += size.h/2.0f;
     cxVec2f idx = cxTilePosToIdx(pos, global.unitSize);
     return cxVec2iv(idx.x, idx.y);
@@ -629,7 +628,7 @@ cxVec2i MapPosToIndex(cxAny pmap,cxVec2f pos)
 cxVec2f MapIndexToPos(cxAny pmap,cxVec2f idx)
 {
     CX_ASSERT_THIS(pmap, Map);
-    cxSize2f size = cxViewSize(this);
+    cxSize2f size = cxViewGetSize(this);
     cxVec2f pos = cxTileIdxToPos(idx, global.unitSize);
     pos.y -= size.h/2.0f;
     return pos;

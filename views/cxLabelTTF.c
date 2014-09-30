@@ -14,7 +14,7 @@ static void cxLabelTTFUpdate(cxAny sender)
 {
     CX_ASSERT_THIS(sender, cxLabelTTF);
     CX_RETURN(!this->isDirty);
-    this->attr.viewSize = cxViewSize(this);
+    this->attr.viewSize = cxViewGetSize(this);
     cxLabelTTFUpdateText(this);
     cxViewAutoResizing(this);
     this->isDirty = false;

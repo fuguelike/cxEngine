@@ -37,14 +37,15 @@ void cxSpriteDraw(cxAny pview)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-static void cxSpriteTransformEvent(cxAny sender)
+static void cxSpriteOnDirty(cxAny sender)
 {
     CX_ASSERT_THIS(sender, cxSprite);
     //set color
-    this->cbox.lb = this->cxView.color;
-    this->cbox.rb = this->cxView.color;
-    this->cbox.lt = this->cxView.color;
-    this->cbox.rt = this->cxView.color;
+    cxColor4f color = cxViewGetColor(this);
+    this->cbox.lb = color;
+    this->cbox.rb = color;
+    this->cbox.lt = color;
+    this->cbox.rt = color;
     //set pos
     cxBox4f box = cxViewBox(this);
     this->vbox.lb = cxVec3fv(box.l, box.b, 0.0f);
@@ -131,7 +132,7 @@ CX_OBJECT_INIT(cxSprite, cxView)
 {
     this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    ADD(cxView, this, onTransform, cxSpriteTransformEvent);
+    ADD(cxView, this, onDirty, cxSpriteOnDirty);
     SET(cxView, this, Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
 }

@@ -38,9 +38,9 @@ static void cxTableResize(cxAny sender)
 static cxInt cxTableCount(cxTable this)
 {
     cxInt count = 0;
-    CX_LIST_FOREACH(this->cxView.subViews, ele){
+    CX_VIEW_FOREACH_SUBVIEWS(this, ele){
         cxView view = ele->any;
-        if(!view->isVisible && !this->arrayHide){
+        if(!view->IsVisible && !this->arrayHide){
             continue;
         }
         count ++;
@@ -55,31 +55,32 @@ static void cxTableUpdate(cxAny sender)
     this->isArray = false;
     cxInt count = cxTableCount(this);
     CX_RETURN(count == 0);
-    cxFloat x = -this->cxView.size.w / 2.0f;
-    cxFloat y = -this->cxView.size.h / 2.0f;
+    cxSize2f size = cxViewGetSize(this);
+    cxFloat x = -size.w / 2.0f;
+    cxFloat y = -size.h / 2.0f;
     cxFloat dx = 0;
     cxFloat dy = 0;
     if(this->grid.x > 0){
         count = count > this->grid.x ? count : this->grid.x;
         cxFloat hnum = ceilf((cxFloat)count/(cxFloat)this->grid.x);
         cxFloat wnum = this->grid.x;
-        dx = this->cxView.size.w / wnum;
-        dy = this->cxView.size.h / hnum;
+        dx = size.w / wnum;
+        dy = size.h / hnum;
     }
     if(this->grid.y > 0){
         count = count > this->grid.y ? count : this->grid.y;
         cxFloat hnum = ceilf((cxFloat)count/(cxFloat)this->grid.y);
         cxFloat wnum = this->grid.y;
-        dy = this->cxView.size.h / wnum;
-        dx = this->cxView.size.w / hnum;
+        dy = size.h / wnum;
+        dx = size.w / hnum;
     }
     cxInt i = 0;
-    CX_LIST_FOREACH(this->cxView.subViews, ele){
+    CX_VIEW_FOREACH_SUBVIEWS(this, ele){
         cxView view = ele->any;
-        if(!view->isVisible && !this->arrayHide){
+        if(!view->IsVisible && !this->arrayHide){
             continue;
         }
-        cxVec2f pos = view->position;
+        cxVec2f pos = cxViewGetPosition(this);
         cxInt col = 0;
         cxInt row = 0;
         if(this->grid.x > 0){
@@ -91,7 +92,7 @@ static void cxTableUpdate(cxAny sender)
         }
         pos.x = x + dx/2.0f + col * dx;
         pos.y = y + dy/2.0f + row * dy;
-        cxViewSetPos(view, pos);
+        cxViewSetPosition(view, pos);
         i++;
     }
 }

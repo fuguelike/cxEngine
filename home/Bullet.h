@@ -25,6 +25,8 @@ CX_FIELD_IMP(Bullet, cxFloat, Power);
 CX_FIELD_GET(Bullet, cxAny, Map);
 CX_FIELD_IMP(Bullet, cxAny, Action);
 
+cxAny BulletCreateEngine(cxAny pview);
+
 void BulletBind(cxAny pview,cxAny pattacker,cxAny target);
 
 void BulletGetNode(cxAny pview,cxAny *pattacker,cxAny *ptarget);

@@ -20,7 +20,7 @@ AttackActionResult LongerAttackAction(cxAny pattacker,cxAny ptarget)
     
     //攻击武器动画
     Bullet bullet = CX_CREATE(Bullet);
-    BulletInit(bullet, map, cxSize2fv(10, 10), cxViewPosition(attacker));
+    BulletInit(bullet, map, cxSize2fv(10, 10), cxViewGetPosition(attacker));
     BulletSetPower(bullet, NodeGetPower(attacker));
     
     //自身攻击动画

@@ -11,8 +11,9 @@
 static void cxFadeInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFade);
-    CX_ASSERT_TYPE(this->cxAction.view, cxView);
-    this->start = this->cxAction.view->color.a;
+    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    cxColor4f color = cxViewGetColor(view);
+    this->start = color.a;
     this->delta = this->alpha - this->start;
 }
 

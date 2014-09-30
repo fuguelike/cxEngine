@@ -20,7 +20,7 @@ AttackActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget)
     Map map = NodeGetMap(attacker);
     
     Bullet bullet = CX_CREATE(Bullet);
-    BulletInit(bullet, map, cxSize2fv(10, 10), cxViewPosition(attacker));
+    BulletInit(bullet, map, cxSize2fv(10, 10), cxViewGetPosition(attacker));
     BulletSetPower(bullet, NodeGetPower(attacker));
     
 //    cxScale scale = cxScaleCreate(NodeGetAttackRate(attacker), cxVec2fv(1.2f, 1.2f));

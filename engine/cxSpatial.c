@@ -14,7 +14,7 @@ static cpBB cxSpatialIndexBB(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxBox4f box = cxViewBox(this);
-    cxVec2f pos = cxViewPosition(this);
+    cxVec2f pos = cxViewGetPosition(this);
     return cpBBNew(box.l + pos.x, box.b + pos.y, box.r + pos.x, box.t + pos.y);
 }
 
@@ -93,7 +93,8 @@ static cpCollisionID cxSpatialIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionI
     if(info->filter != NULL && !info->filter(view)){
         return id;
     }
-    cxFloat d = kmVec2DistanceBetween(&info->p, &view->position);
+    cxVec2f vpos = cxViewGetPosition(view);
+    cxFloat d = kmVec2DistanceBetween(&info->p, &vpos);
     if(d < info->d){
         info->view = view;
         info->d = d;

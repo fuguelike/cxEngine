@@ -11,23 +11,24 @@
 static void cxJumpInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxJump);
-    CX_ASSERT_TYPE(this->cxAction.view, cxView);
-    this->prevPos = this->startPos = this->cxAction.view->position;
+    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    this->prevPos = this->startPos = cxViewGetPosition(view);
 }
 
 static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxJump);
+    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
     cxFloat frac = fmodf( time * this->jumps, 1.0f );
     cxFloat y = this->height * 4 * frac * (1 - frac) + this->position.y * time;
     cxFloat x = this->position.x * time;
     cxVec2f diff;
-    cxVec2f currPos = this->cxAction.view->position;
+    cxVec2f currPos = cxViewGetPosition(view);
     kmVec2Subtract(&diff, &currPos, &this->prevPos);
     kmVec2Add(&this->startPos, &diff, &this->startPos);
     cxVec2f nPos;
     kmVec2Add(&nPos, &this->startPos, &cxVec2fv(x, y));
-    cxViewSetPos(this->cxAction.view, nPos);
+    cxViewSetPosition(view, nPos);
     this->prevPos = nPos;
 }
 

@@ -38,6 +38,7 @@ typedef struct {
 #define AAEmpty()           AAMake(NULL,NULL)
 
 CX_OBJECT_DEF(Node, cxSprite)
+
     cxLabelTTF lifeTTF;     //Test
     cxSprite array;     //Test
 
@@ -46,8 +47,8 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxBool isDie;       //是否死去
 
     CX_FIELD_DEF(cxFloat Body);       //用于确定单位停留在目标的附近哪个位置,默认值为0.5格
-    CX_FIELD_DEF(cxAny Map);
-    CX_FIELD_DEF(cxVec2f Index);
+    CX_FIELD_DEF(cxAny Map);          //关联的map对象
+    CX_FIELD_DEF(cxVec2f Index);      //精确的网格索引0 - 39.99999f
     CX_FIELD_DEF(NodeCombined Type);  //node组合类型,攻击范围
     CX_FIELD_DEF(cxRange2f Range);    //攻击范围
     CX_FIELD_DEF(cxSize2i Size);      //占用的格子数
@@ -61,13 +62,14 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_FIELD_DEF(cxInt AttackNum);    //同时攻击的数量
     CX_FIELD_DEF(cxInt DirIndex);     //当前方向索引
     CX_FIELD_DEF(cxFloat DirAngle);   //方向偏转角
+
     cxTimer attackTimer;//攻击定时器
     //自动搜索
     cxTimer searchTimer;      //搜索用定时器
     cxInt searchIndex;
     //生命值变化
     CX_EVENT_ALLOC(onLife);
-    //一次攻击结束
+    //node一次攻击动画结束时调用
     CX_METHOD_DEF(void, AttackOnce,cxAny attacker,cxAny target);
     //死亡时
     CX_EVENT_ALLOC(onDie);

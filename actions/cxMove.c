@@ -11,8 +11,8 @@
 static void cxMoveInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxMove);
-    CX_ASSERT_TYPE(this->cxAction.view, cxView);
-    this->prev = this->from = this->cxAction.view->position;
+    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    this->prev = this->from = cxViewGetPosition(view);
     kmVec2Subtract(&this->posDelta, &this->to, &this->from);
 }
 
@@ -25,14 +25,16 @@ void cxMoveSetPos(cxAny pav,cxVec2f pos)
 static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxMove);
+    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
     cxVec2f npos;
     cxVec2f diff;
-    kmVec2Subtract(&diff, &this->cxAction.view->position, &this->prev);
+    cxVec2f vpos = cxViewGetPosition(view);
+    kmVec2Subtract(&diff, &vpos, &this->prev);
     kmVec2Add(&this->from, &this->from, &diff);
     kmVec2Scale(&npos, &this->posDelta, time);
     kmVec2Add(&npos, &this->from, &npos);
     this->prev = npos;
-    cxViewSetPos(this->cxAction.view, npos);
+    cxViewSetPosition(this->cxAction.view, npos);
 }
 
 CX_SETTER_DEF(cxMove, to)

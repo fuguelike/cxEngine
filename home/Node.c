@@ -14,11 +14,11 @@
 #include "Move.h"
 #include "Map.h"
 
-static void NodeOnTransform(cxAny pview)
+static void NodeOnDirty(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
-    cxVec2f pos = cxViewPosition(this);
+    cxVec2f pos = cxViewGetPosition(this);
     this->Index = MapPosToFloat(map, pos);
     cxSpatialReindexView(map->items, this);
 }
@@ -101,7 +101,7 @@ static void NodeInitBullet(Node this,Node target,cxAny bullet)
     
     BulletBind(bullet, this, target);
     
-    cxAny baction = CX_METHOD_GET(NULL, b->CreateEngine,b);
+    cxAny baction = BulletCreateEngine(bullet);
     CX_ASSERT_TYPE(baction, cxAction);
     cxActionSetGroup(baction, "fight");
     
@@ -124,7 +124,7 @@ static void NodeInitAction(Node this,Node target,cxAny action)
 static void NodeAttackTimerArrive(cxAny pav)
 {
     CX_ASSERT_THIS(cxActionView(pav), Node);
-    cxHash bindes = cxViewBindes(this);
+    cxHash bindes = cxViewGetBindes(this);
     CX_HASH_FOREACH(bindes, ele, tmp){
         //获取目标
         Node target = cxHashKeyToAny(ele);
@@ -194,7 +194,7 @@ CX_OBJECT_TYPE(Node, cxSprite)
 }
 CX_OBJECT_INIT(Node, cxSprite)
 {
-    ADD(cxView, this, onTransform, NodeOnTransform);
+    ADD(cxView, this, onDirty, NodeOnDirty);
     NodeSetAttackNum(this, 1);
     NodeSetIndex(this, cxVec2fv(-1, -1));
     NodeSetField(this, cxRange2fv(0, 6));
@@ -231,7 +231,7 @@ static void NodeMoveToTargetArrive(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
     CX_ASSERT_VALUE(cxActionView(this), Node, node);
-    cxHash bindes = cxViewBindes(node);
+    cxHash bindes = cxViewGetBindes(node);
     CX_HASH_FOREACH(bindes, ele, tmp){
         Node target = cxHashKeyToAny(ele);
         //目标死了用不着移动了
@@ -276,7 +276,7 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 //        cxVec2f pos = MapIndexToPos(map, p);
 //        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
 //        cxViewSetColor(sp, cxWHITE);
-//        cxViewSetPos(sp, pos);
+//        cxViewSetPosition(sp, pos);
 //        cxViewSetSize(sp, cxSize2fv(8, 8));
 //        cxViewSetTag(sp, 1001);
 //        cxViewAppend(map->aLayer, sp);
@@ -299,7 +299,7 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 void NodeFaceTarget(cxAny pview,cxAny target)
 {
     CX_ASSERT_THIS(pview, Node);
-    cxFloat angle = cxVec2fRadiansBetween(cxViewPosition(target),cxViewPosition(this));
+    cxFloat angle = cxVec2fRadiansBetween(cxViewGetPosition(target),cxViewGetPosition(this));
     if(angle != FLT_EPSILON){
         NodeSetDirAngle(this, angle);
     }
@@ -331,7 +331,7 @@ static void NodeSearchArrive(cxAny pav)
     if(type == NULL){
         goto attack;
     }
-    cxHash bindes = cxViewBindes(this);
+    cxHash bindes = cxViewGetBindes(this);
     //如果同时攻击数量到达
     if(cxHashLength(bindes) >= NodeGetAttackNum(this)){
         goto attack;
@@ -428,7 +428,7 @@ void NodeInitIndex(cxAny pview,cxVec2i idx)
     cxVec2f fidx = cxVec2fv(idx.x + this->Size.w/2.0f, idx.y + this->Size.h/2.0f);
     
     cxVec2f npos = MapIndexToPos(map, fidx);
-    cxViewSetPos(this, npos);
+    cxViewSetPosition(this, npos);
     //获取精确的格子坐标
     this->Index = MapPosToFloat(map, npos);
 }
@@ -449,7 +449,7 @@ void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic)
     NodeInitIndex(this, idx);
     MapFillNode(map, idx, this);
     //show test array
-    cxSize2f ns = cxViewSize(this);
+    cxSize2f ns = cxViewGetSize(this);
     cxFloat w = CX_MIN(ns.w, ns.h);
     this->array = cxSpriteCreateWithURL("bullet.json?array.png");
     cxViewSetColor(this->array, cxWHITE);
@@ -459,7 +459,7 @@ void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic)
     
     this->lifeTTF = cxLabelTTFCreate(UTF8("100"), NULL, 20);
     cxViewSetColor(this->lifeTTF, cxWHITE);
-    cxViewSetAutoResizeMask(this->lifeTTF, cxViewAutoOutside| cxViewAutoResizeTop);
+    cxViewSetAutoMask(this->lifeTTF, cxViewAutoOutside| cxViewAutoResizeTop);
     cxViewAppend(this, this->lifeTTF);
 }
 

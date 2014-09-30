@@ -36,7 +36,8 @@ static cxFloat cxScrollMoveCurve(cxAny pav,cxFloat time)
 static void cxScrollResetScale(cxScroll this)
 {
     cxView body = cxScrollBody(this);
-    if(body->scale.x > this->range.max || body->scale.y > this->range.max){
+    cxVec2f scale = cxViewGetScale(body);
+    if(scale.x > this->range.max || scale.y > this->range.max){
         cxScale scale = cxScaleCreate(this->scaleTime, cxVec2fx(this->range.max));
         cxActionSetCurve(scale, cxScrollMoveCurve);
         cxViewAppendAction(body, scale);
@@ -70,7 +71,7 @@ static cxBool cxScrollScale(cxAny pview,cxTouchItems *points)
         cxFloat dis = kmVec2DistanceBetween(&item0->position, &item1->position);
         cxFloat delta = (dis - this->startDis);
         this->startDis = dis;
-        cxVec2f scale = body->scale;
+        cxVec2f scale = cxViewGetScale(body);
         if(delta > 0){
             scale.x += this->scaling;
             scale.y += this->scaling;
@@ -87,7 +88,7 @@ static cxBool cxScrollScale(cxAny pview,cxTouchItems *points)
         cxVec2f npos = cxViewSetAnchor(body, this->center);
         cxScrollUpdateBox(this);
         cxScrollCheckPos(this, &npos);
-        cxViewSetPos(body, npos);
+        cxViewSetPosition(body, npos);
         return true;
     }
     return false;
@@ -121,9 +122,9 @@ void cxScrollUpdateBox(cxAny pview)
     CX_ASSERT_THIS(pview, cxScroll);
     cxView body = cxScrollBody(this);
     cxSize2f msize = cxViewContentSize(body);
-    cxSize2f psize = cxViewSize(this);
+    cxSize2f psize = cxViewGetSize(this);
     cxFloat mw = (msize.w - psize.w) / 2.0f;
-    cxVec2f anchor = cxViewAnchor(body);
+    cxVec2f anchor = cxViewGetAnchor(body);
     this->box.l = -mw + anchor.x * msize.w;
     this->box.r =  mw + anchor.x * msize.w;
     cxFloat mh = (msize.h - psize.h) / 2.0f;
@@ -156,7 +157,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
         return false;
     }
     if(item->type == cxTouchTypeMove){
-        cxVec2f vpos = cxViewPosition(body);
+        cxVec2f vpos = cxViewGetPosition(body);
         cxVec2f delta = cxViewTouchDelta(body, item);
         this->movement += cxVec2fMagnitude(delta);
         cxBool setPos = false;
@@ -170,13 +171,13 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
         }
         if(setPos){
             cxScrollCheckPos(pview, &vpos);
-            cxViewSetPos(body, vpos);
+            cxViewSetPosition(body, vpos);
         }
         return true;
     }
     if(item->type == cxTouchTypeUp && this->movement > 0){
         this->isEnable = false;
-        cxVec2f npos = cxViewPosition(body);
+        cxVec2f npos = cxViewGetPosition(body);
         if(this->type & cxScrollMoveTypeVertical){
             npos.y += item->speed.y * this->speed;
         }

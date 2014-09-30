@@ -14,8 +14,8 @@ void cxFollowInit(cxAny pav)
     CX_ASSERT(this->cxAction.view != this->target, "target error,can't action'view");
     CX_ASSERT(this->cxAction.view != NULL, "view not set");
     CX_ASSERT(this->target != NULL, "target view null");
-    cxVec2f tpos = cxViewPosition(this->target);
-    cxVec2f cpos = cxViewPosition(this->cxAction.view);
+    cxVec2f tpos = cxViewGetPosition(this->target);
+    cxVec2f cpos = cxViewGetPosition(this->cxAction.view);
     this->angle = cxVec2fRadiansBetween(tpos, cpos);
     if(CX_METHOD_GET(false, this->IsExit,pav)){
         cxActionStop(pav);
@@ -25,8 +25,8 @@ void cxFollowInit(cxAny pav)
 static cxBool cxFollowIsExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFollow);
-    cxVec2f tpos = cxViewPosition(this->target);
-    cxVec2f cpos = cxViewPosition(this->cxAction.view);
+    cxVec2f tpos = cxViewGetPosition(this->target);
+    cxVec2f cpos = cxViewGetPosition(this->cxAction.view);
     cxFloat dis = kmVec2DistanceBetween(&tpos, &cpos);
     return dis < 10;
 }
@@ -34,8 +34,8 @@ static cxBool cxFollowIsExit(cxAny pav)
 static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxFollow);
-    cxVec2f tpos = cxViewPosition(this->target);
-    cxVec2f cpos = cxViewPosition(this->cxAction.view);
+    cxVec2f tpos = cxViewGetPosition(this->target);
+    cxVec2f cpos = cxViewGetPosition(this->cxAction.view);
     this->angle = cxVec2fRadiansBetween(tpos, cpos);
     this->speed = CX_METHOD_GET(this->init, this->Speed,pav,this->cxAction.timeElapsed);
     cxFloat s = dt * this->speed;
@@ -44,7 +44,7 @@ static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
     if(CX_METHOD_GET(false, this->IsExit,pav)){
         cxActionStop(pav);
     }
-    cxViewSetPos(this->cxAction.view, cpos);
+    cxViewSetPosition(this->cxAction.view, cpos);
 }
 
 cxAny cxFollowTarget(cxAny pav)
