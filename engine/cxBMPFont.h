@@ -33,7 +33,7 @@ CX_OBJECT_DEF(cxBMPKerning, cxObject)
     cxInt amount;
 CX_OBJECT_END(cxBMPKerning, cxObject)
 
-#define cxBMPKerningKey(f,s)    (((f) << 16) | ((s) & 0xffff))
+#define cxBMPKerningKey(f,s)    cxHashIntKey(((f) << 16) | ((s) & 0xffff))
 
 CX_OBJECT_DEF(cxBMPFont, cxObject)
     cxString face;

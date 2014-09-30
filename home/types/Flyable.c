@@ -63,6 +63,7 @@ CX_OBJECT_INIT(Flyable, Attack)
     NodeSetRange(this, cxRange2fv(0, 4));
     NodeSetAttackRate(this, 0.5f);
     NodeSetSpeed(this, 200);
+    cxViewSetColor(this, cxYELLOW);
     CX_SET(Node, this, PathRule, FlyablePathRule);
     CX_SET(Node, this, FindRule, FlyableFindRule);
     CX_SET(Node, this, AttackAction, FlyableAttackAction);

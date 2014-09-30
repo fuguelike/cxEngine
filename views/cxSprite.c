@@ -31,10 +31,10 @@ void cxSpriteDraw(cxAny pview)
     CX_RETURN(this->texture == NULL);
     cxSpriteBindTexture(pview);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
-    glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), &this->vbox);
-    glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTex2f), &this->tbox);
-    glVertexAttribPointer(cxVertexAttribColor,    4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), &this->cbox);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxVec3f), &this->vbox);
+    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2, sizeof(cxTex2f), &this->tbox);
+    cxOpenGLVertexAttribPointer(cxVertexAttribColor,    4, sizeof(cxColor4f), &this->cbox);
+    cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 static void cxSpriteOnDirty(cxAny sender)

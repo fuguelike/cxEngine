@@ -16,12 +16,6 @@
 
 static cxOpenGL instance = NULL;
 
-CX_STRING_KEY_IMP(cxShaderPositionColorKey);
-CX_STRING_KEY_IMP(cxShaderDefaultKey);
-CX_STRING_KEY_IMP(cxShaderAlphaKey);
-CX_STRING_KEY_IMP(cxShaderClippingKey);
-CX_STRING_KEY_IMP(cxShaderMultipleKey);
-
 #define CX_OPENGL_LOAD_SHADER(t)                                    \
 do{                                                                 \
     cxShader shader = CX_ALLOC(t);                                  \
@@ -95,9 +89,9 @@ void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars ske
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     cxOpenGLUsingShader(skey);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosition | cxVertexAttribFlagColor);
-    glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), box);
-    glVertexAttribPointer(cxVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), colors);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxVec3f), box);
+    cxOpenGLVertexAttribPointer(cxVertexAttribColor, 4, sizeof(cxColor4f), colors);
+    cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 void cxOpenGLUsingShader(cxConstChars key)
@@ -197,7 +191,7 @@ void cxOpenGLVertexAttribPointer(GLuint indx, GLint size, GLsizei stride, const 
     glVertexAttribPointer(indx, size, GL_FLOAT, GL_FALSE, stride, ptr);
 }
 
-static void cxOpenGLEnableVertexAttribArray (GLuint index,GLboolean enable)
+void cxOpenGLEnableVertexAttribArray (GLuint index,GLboolean enable)
 {
     if(enable){
         glEnableVertexAttribArray(index);
@@ -345,10 +339,13 @@ void cxOpenGLCheckFeature()
     
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &this->max_texture_size);
     CX_LOGGER("GL_MAX_TEXTURE_SIZE: %d",this->max_texture_size);
+    
     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &this->max_combined_texture_units);
     CX_LOGGER("GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS: %d",this->max_combined_texture_units);
+    
     glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &this->max_vertex_texture_units);
     CX_LOGGER("GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS: %d",this->max_vertex_texture_units);
+    
     cxOpenGLLoadDefaultShaders();
 }
 

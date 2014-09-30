@@ -122,6 +122,8 @@ void cxOpenGLDrawArrays(GLenum mode, GLint first, GLsizei count);
 
 void cxOpenGLVertexAttribPointer(GLuint indx, GLint size, GLsizei stride, const GLvoid *ptr);
 
+void cxOpenGLEnableVertexAttribArray (GLuint index,GLboolean enable);
+
 void cxOpenGLSetTexParameter(GLuint type,GLuint value);
 
 void cxOpenGLSetTexParameters(const cxTextureParams params);

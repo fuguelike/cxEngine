@@ -15,10 +15,10 @@ static void cxPolygonDraw(cxAny pview)
     CX_RETURN(this->number < 3);
     cxSpriteBindTexture(pview);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
-    glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), this->points);
-    glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTex2f), this->texs);
-    glVertexAttribPointer(cxVertexAttribColor,    4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), this->colors);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, this->number);
+    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxVec3f), this->points);
+    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2, sizeof(cxTex2f), this->texs);
+    cxOpenGLVertexAttribPointer(cxVertexAttribColor,    4, sizeof(cxColor4f), this->colors);
+    cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, this->number);
 }
 
 static void cxPolygonMalloc(cxPolygon this)

@@ -13,16 +13,6 @@
 #include "cxStream.h"
 #include "cxUtil.h"
 
-void __cxStreamInitType(cxAny type)
-{
-    
-}
-
-void __cxStreamInitObject(cxAny object,cxAny json,cxAny hash)
-{
-    
-}
-
 CX_OBJECT_TYPE(cxStream, cxObject)
 {
     

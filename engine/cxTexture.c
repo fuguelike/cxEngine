@@ -119,10 +119,10 @@ void cxTextureDraw(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     cxOpenGLUsingShader(skey);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
-    glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), &vbox);
-    glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTex2f), &tbox);
-    glVertexAttribPointer(cxVertexAttribColor,    4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), &cxBoxColor4fDefault);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxVec3f), &vbox);
+    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2, sizeof(cxTex2f), &tbox);
+    cxOpenGLVertexAttribPointer(cxVertexAttribColor,    4, sizeof(cxColor4f), &cxBoxColor4fDefault);
+    cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 void cxTextureBind(cxAny ptex)

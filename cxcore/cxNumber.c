@@ -15,16 +15,6 @@ cxBool cxNumberIsType(cxAny this,cxNumberType type)
     return number != NULL && number->type == type;
 }
 
-void __cxNumberInitType(cxAny type)
-{
-    
-}
-
-void __cxNumberInitObject(cxAny object,cxAny json,cxAny hash)
-{
-    
-}
-
 CX_OBJECT_TYPE(cxNumber, cxObject)
 {}
 CX_OBJECT_INIT(cxNumber, cxObject)
