@@ -47,7 +47,7 @@ cxBool MapInit(cxAny pmap)
     cxSize2f size = cxViewGetSize(this);
     
     //test
-    cxSpriteSetTextureURL(this, "bg3.png");
+    cxSpriteSetTextureURL(this, "bg2.png");
     cxBoxTex2f tex = cxBoxTex2fDefault();
     cxVec2f pos = cxVec2fv(size.w / 4, size.h / 4);
     cxColor4f color = cxColor4fv(1, 1, 1, 1);
