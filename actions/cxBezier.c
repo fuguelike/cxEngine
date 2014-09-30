@@ -11,14 +11,14 @@
 static void cxBezierInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxBezier);
-    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->from = this->prev = cxViewGetPosition(view);
 }
 
 static void cxBezierStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxBezier);
-    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat xa = 0;
     cxFloat xb = this->cpos1.x;
     cxFloat xc = this->cpos2.x;
@@ -39,7 +39,7 @@ static void cxBezierStep(cxAny pav,cxFloat dt,cxFloat time)
     kmVec2Add(&this->from, &this->from, &diff);
     cxVec2f npos;
     kmVec2Add(&npos, &this->from, &xy);
-    cxViewSetPosition(this->cxAction.view, npos);
+    cxViewSetPosition(view, npos);
     this->prev = npos;
 }
 
@@ -66,8 +66,8 @@ CX_OBJECT_TYPE(cxBezier, cxAction)
 }
 CX_OBJECT_INIT(cxBezier, cxAction)
 {
-    SET(cxAction, this, Init, cxBezierInit);
-    SET(cxAction, this, Step, cxBezierStep);
+    CX_SET(cxAction, this, Init, cxBezierInit);
+    CX_SET(cxAction, this, Step, cxBezierStep);
 }
 CX_OBJECT_FREE(cxBezier, cxAction)
 {

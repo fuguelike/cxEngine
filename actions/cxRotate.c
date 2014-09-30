@@ -11,17 +11,18 @@
 static void cxRotateInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxRotate);
-    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->oldAngle = cxViewGetAngle(view);
     this->delta = this->newAngle - this->oldAngle;
-    cxViewSetRaxis(this->cxAction.view, this->raxis);
+    cxViewSetRaxis(view, this->raxis);
 }
 
 static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxRotate);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat angle = this->oldAngle + this->delta * time;
-    cxViewSetAngle(this->cxAction.view, angle);
+    cxViewSetAngle(view, angle);
 }
 
 CX_SETTER_DEF(cxRotate, raxis)
@@ -47,8 +48,8 @@ CX_OBJECT_TYPE(cxRotate, cxAction)
 CX_OBJECT_INIT(cxRotate, cxAction)
 {
     this->raxis = cxVec3fZ;
-    SET(cxAction, this, Init, cxRotateInit);
-    SET(cxAction, this, Step, cxRotateStep);
+    CX_SET(cxAction, this, Init, cxRotateInit);
+    CX_SET(cxAction, this, Step, cxRotateStep);
 }
 CX_OBJECT_FREE(cxRotate, cxAction)
 {
@@ -59,7 +60,7 @@ CX_OBJECT_TERM(cxRotate, cxAction)
 cxRotate cxRotateCreate(cxFloat time,cxVec3f raxis,cxFloat newAngle)
 {
     cxRotate this = CX_CREATE(cxRotate);
-    this->cxAction.time = time;
+    this->cxAction.Time = time;
     this->raxis = raxis;
     this->newAngle = newAngle;
     return this;

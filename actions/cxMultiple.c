@@ -14,7 +14,7 @@ static void cxMultipleRunNext(cxAny pav);
 static void cxActionItemStop(cxAny sender)
 {
     CX_ASSERT_TYPE(sender, cxAction);
-    cxAny parent = cxActionParent(sender);
+    cxAny parent = cxActionGetParent(sender);
     CX_ASSERT_THIS(parent, cxMultiple);
     this->index ++;
     if(this->type == cxMultipleTypeSequence){
@@ -28,7 +28,7 @@ static void cxMultipleRunNext(cxAny pav)
     if(this->index >= 0 && this->index < cxArrayLength(this->items)){
         cxAction action = cxArrayAtIndex(this->items, this->index);
         CX_EVENT_APPEND(action->onExit, cxActionItemStop);
-        cxViewAppendAction(this->cxAction.view, action);
+        cxViewAppendAction(cxActionGetView(action), action);
     }
 }
 
@@ -38,14 +38,14 @@ static void cxMultipleRunAll(cxAny pav)
     CX_ARRAY_FOREACH(this->items, ele){
         cxAction action = cxArrayObject(ele);
         CX_EVENT_APPEND(action->onExit, cxActionItemStop);
-        cxViewAppendAction(this->cxAction.view, action);
+        cxViewAppendAction(cxActionGetView(action), action);
     }
 }
 
 static void cxMultipleInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxMultiple);
-    CX_ASSERT(this->cxAction.view != NULL, "view not set");
+    CX_ASSERT_TYPE(cxActionGetView(this), cxView);
     if(this->type == cxMultipleTypeSequence){
         this->index = 0;
         cxMultipleRunNext(this);
@@ -101,9 +101,9 @@ CX_OBJECT_TYPE(cxMultiple, cxAction)
 }
 CX_OBJECT_INIT(cxMultiple, cxAction)
 {
-    SET(cxAction, this, Init, cxMultipleInit);
-    SET(cxAction, this, Step, cxMultipleStep);
-    SET(cxAction, this, Exit, cxMultipleExit);
+    CX_SET(cxAction, this, Init, cxMultipleInit);
+    CX_SET(cxAction, this, Step, cxMultipleStep);
+    CX_SET(cxAction, this, Exit, cxMultipleExit);
     this->items = CX_ALLOC(cxArray);
 }
 CX_OBJECT_FREE(cxMultiple, cxAction)

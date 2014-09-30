@@ -226,13 +226,13 @@ CX_OBJECT_TYPE(Map, cxAtlas)
 }
 CX_OBJECT_INIT(Map, cxAtlas)
 {
-    SET(cxView, this, After, MapDraw);
+    CX_SET(cxView, this, After, MapDraw);
     
     //只有自己能接收touch事件
     cxViewSetTouchFlags(this, cxViewTouchFlagsSelf);
     //当选中按钮执行
     
-    ADD(cxView, this, onUpdate, MapUpdate);
+    CX_ADD(cxView, this, onUpdate, MapUpdate);
 
     this->mode = MapModeNormal;
     this->isSort = true;
@@ -240,8 +240,8 @@ CX_OBJECT_INIT(Map, cxAtlas)
     //路劲搜索算法
     this->astar = CX_ALLOC(cxAStar);
     cxAStarSetType(this->astar, cxAStarTypeA8);
-    SET(cxAStar, this->astar, IsAppend, MapSearchIsAppend);
-    SET(cxAStar, this->astar, EarlyExit, MapSearchEarlyExit);
+    CX_SET(cxAStar, this->astar, IsAppend, MapSearchIsAppend);
+    CX_SET(cxAStar, this->astar, EarlyExit, MapSearchEarlyExit);
     
     //格子大小
     cxInt cells = global.unitNum.x * global.unitNum.y;

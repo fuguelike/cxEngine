@@ -41,9 +41,9 @@ CX_OBJECT_TERM(typeName, baseType)
 创建对象,对象使用引用计数内存管理
 ------
 ```
-ADD (append event)添加一个事件
-SET (method set)重写一个方法
-LIN (link signal)连接到信号
+CX_ADD (append event)添加一个事件
+CX_SET (method set)重写一个方法
+CX_LIN (link signal)连接到信号
 
 cxAny object1 = CX_CREATE(typeName); //对象将放入自动释放池
 

@@ -41,8 +41,8 @@ CX_OBJECT_TYPE(cxTimer, cxAction)
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
     this->isBegin = false;
-    SET(cxAction, this, Init, cxTimerInit);
-    SET(cxAction, this, Exit, cxTimerExit);
+    CX_SET(cxAction, this, Init, cxTimerInit);
+    CX_SET(cxAction, this, Exit, cxTimerExit);
 }
 CX_OBJECT_FREE(cxTimer, cxAction)
 {
@@ -59,7 +59,7 @@ void cxTimerSetBegin(cxAny pav,cxBool isBegin)
 cxTimer cxTimerCreate(cxFloat freq,cxInt repeat)
 {
     cxTimer this = CX_CREATE(cxTimer);
-    this->cxAction.time  = freq;
+    this->cxAction.Time  = freq;
     this->repeat = repeat;
     return this;
 }

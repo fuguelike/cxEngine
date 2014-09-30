@@ -31,8 +31,8 @@ CX_OBJECT_TYPE(cxRunner, cxAction)
 }
 CX_OBJECT_INIT(cxRunner, cxAction)
 {
-    SET(cxAction, this, Init, cxRunnerInit);
-    SET(cxAction, this, Exit, cxRunnerExit);
+    CX_SET(cxAction, this, Init, cxRunnerInit);
+    CX_SET(cxAction, this, Exit, cxRunnerExit);
 }
 CX_OBJECT_FREE(cxRunner, cxAction)
 {
@@ -43,7 +43,7 @@ CX_OBJECT_TERM(cxRunner, cxAction)
 static void cxRunnerItemStop(cxAny sender)
 {
     CX_ASSERT_TYPE(sender, cxAction);
-    cxAny parent = cxActionParent(sender);
+    cxAny parent = cxActionGetParent(sender);
     CX_ASSERT_THIS(parent, cxRunner);
     CX_ASSERT(this != NULL, "parent null");
     this->count --;

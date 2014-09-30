@@ -23,7 +23,7 @@ CX_OBJECT_TYPE(cxWindow, cxView)
 }
 CX_OBJECT_INIT(cxWindow, cxView)
 {
-    SET(cxView, this, Key, cxWindowKey);
+    CX_SET(cxView, this, Key, cxWindowKey);
     this->views = CX_ALLOC(cxStack);
 }
 CX_OBJECT_FREE(cxWindow, cxView)

@@ -9,7 +9,7 @@
 #include <engine/cxEngine.h>
 #include "cxParticle.h"
 
-static void cxActionViewDraw(cxAny pav)
+static void cxActionGetViewDraw(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxParticle);
     cxAtlasDraw(this->atlas);
@@ -18,10 +18,9 @@ static void cxActionViewDraw(cxAny pav)
 static void cxParticleInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxParticle);
-    CX_ASSERT_TYPE(this->cxAction.view, cxView);
-    cxAny view = cxActionView(pav);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     view = CX_METHOD_GET(view, this->GetDrawView, this);
-    LIN(cxView, view, onDraw, this, cxActionViewDraw);
+    CX_LIN(cxView, view, onDraw, this, cxActionGetViewDraw);
 }
 
 static void cxParticleOver(cxAny pav)
@@ -170,7 +169,7 @@ static void cxParticleStep(cxAny pav,cxFloat dt,cxFloat time)
             cxParticleAdd(this);
             this->emitcounter -= rate;
         }
-		if (this->time != -1 && this->time < this->cxAction.timeElapsed){
+		if (this->time != -1 && this->time < cxActionGetTimeElapsed(this)){
 			cxParticleStop(pav);
         }
     }
@@ -428,18 +427,18 @@ CX_OBJECT_TYPE(cxParticle, cxAction)
 }
 CX_OBJECT_INIT(cxParticle, cxAction)
 {
-    this->cxAction.time = -1;
+    this->cxAction.Time = -1;
     this->atlas = CX_ALLOC(cxAtlas);
     this->rate = -1;
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
     cxParticleSetBlendMode(this, cxParticleBlendAdd);
     
-    SET(cxParticle, this, InitUnit, cxParticleInitUnit);
-    SET(cxAction, this, Reset, cxParticleReset);
-    SET(cxAction, this, Init, cxParticleInit);
-    SET(cxAction, this, Over, cxParticleOver);
-    SET(cxAction, this, Step, cxParticleStep);
+    CX_SET(cxParticle, this, InitUnit, cxParticleInitUnit);
+    CX_SET(cxAction, this, Reset, cxParticleReset);
+    CX_SET(cxAction, this, Init, cxParticleInit);
+    CX_SET(cxAction, this, Over, cxParticleOver);
+    CX_SET(cxAction, this, Step, cxParticleStep);
 }
 CX_OBJECT_FREE(cxParticle, cxAction)
 {

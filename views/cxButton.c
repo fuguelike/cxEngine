@@ -67,7 +67,7 @@ CX_OBJECT_INIT(cxButton, cxSprite)
 {
     this->movement = 30;
     this->isEnable = true;
-    SET(cxView, this, Touch, cxButtonTouch);
+    CX_SET(cxView, this, Touch, cxButtonTouch);
 }
 CX_OBJECT_FREE(cxButton, cxSprite)
 {

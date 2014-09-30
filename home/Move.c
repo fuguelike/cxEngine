@@ -13,14 +13,14 @@
 static void MoveOnAngle(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    CX_ASSERT_VALUE(cxActionView(this), Node, node);
+    CX_ASSERT_VALUE(cxActionGetView(this), Node, node);
     NodeSetDirAngle(node, this->cxSpline.angle);
 }
 
 static void MoveOnInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    CX_ASSERT_VALUE(cxActionView(this), Node, node);
+    CX_ASSERT_VALUE(cxActionGetView(this), Node, node);
     CX_ASSERT(MoveGetType(this) != MoveTypeNone, "not set move type");
     cxFloat d = 0;
     cxAnyArray points = this->cxSpline.points;
@@ -43,7 +43,7 @@ static void MoveOnInit(cxAny pav)
 static void MoveOnUpdate(cxAny pav)
 {
     CX_ASSERT_THIS(pav, Move);
-    CX_ASSERT_VALUE(cxActionView(this), Node, attacker);
+    CX_ASSERT_VALUE(cxActionGetView(this), Node, attacker);
     //战斗移动才检测target
     if(MoveGetType(this) != MoveTypeFight){
         return;
@@ -81,10 +81,10 @@ CX_OBJECT_INIT(Move, cxSpline)
     MoveSetIsToPoints(this, false);
     cxActionSetGroup(this, "fight");
     MoveSetType(this, MoveTypeNone);
-    ADD(cxSpline, this, onAngle, MoveOnAngle);
-    ADD(cxAction, this, onInit, MoveOnInit);
-    ADD(cxAction, this, onUpdate, MoveOnUpdate);
-    ADD(cxAction, this, onExit, MoveOnExit);
+    CX_ADD(cxSpline, this, onAngle, MoveOnAngle);
+    CX_ADD(cxAction, this, onInit, MoveOnInit);
+    CX_ADD(cxAction, this, onUpdate, MoveOnUpdate);
+    CX_ADD(cxAction, this, onExit, MoveOnExit);
 }
 CX_OBJECT_FREE(Move, cxSpline)
 {

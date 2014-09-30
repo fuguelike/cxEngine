@@ -148,8 +148,8 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);
-    SET(cxView, this, Draw, cxAtlasDraw);
-    ADD(cxView, this, onResize, cxAtlasResize);
+    CX_SET(cxView, this, Draw, cxAtlasDraw);
+    CX_ADD(cxView, this, onResize, cxAtlasResize);
     this->items = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxAtlas, cxSprite)

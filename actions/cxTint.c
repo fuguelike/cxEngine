@@ -11,8 +11,7 @@
 static void cxTintInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxTint);
-    CX_ASSERT_TYPE(this->cxAction.view, cxView);
-    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->start = cxViewGetColor(view);
     this->delta.r = this->color.r - this->start.r;
     this->delta.g = this->color.g - this->start.g;
@@ -23,13 +22,14 @@ static void cxTintInit(cxAny pav)
 static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxTint);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxColor3f color;
     color.r = this->start.r + this->delta.r * time;
     color.g = this->start.g + this->delta.g * time;
     color.b = this->start.b + this->delta.b * time;
     cxFloat alpha = this->start.a + this->delta.a * time;
-    cxViewSetColor(this->cxAction.view, color);
-    cxViewSetAlpha(this->cxAction.view, alpha);
+    cxViewSetColor(view, color);
+    cxViewSetAlpha(view, alpha);
 }
 
 CX_SETTER_DEF(cxTint, color)
@@ -43,8 +43,8 @@ CX_OBJECT_TYPE(cxTint, cxAction)
 }
 CX_OBJECT_INIT(cxTint, cxAction)
 {
-    SET(cxAction, this, Init, cxTintInit);
-    SET(cxAction, this, Step, cxTintStep);
+    CX_SET(cxAction, this, Init, cxTintInit);
+    CX_SET(cxAction, this, Step, cxTintStep);
 }
 CX_OBJECT_FREE(cxTint, cxAction)
 {
@@ -56,6 +56,6 @@ cxTint cxTintCreate(cxFloat time,cxColor4f color)
 {
     cxTint this = CX_CREATE(cxTint);
     this->color = color;
-    this->cxAction.time = time;
+    this->cxAction.Time = time;
     return this;
 }

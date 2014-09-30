@@ -48,9 +48,9 @@ CX_OBJECT_INIT(Longer, Attack)
 {
     NodeSetRange(this, cxRange2fv(0, 5));
     NodeSetAttackRate(this, 0.5f);
-    SET(Node, this, FindRule, LongerFindRule);
-    SET(Node, this, AttackAction, LongerAttackAction);
-    SET(Node, this, AttackOnce, LongerAttackOnce);
+    CX_SET(Node, this, FindRule, LongerFindRule);
+    CX_SET(Node, this, AttackAction, LongerAttackAction);
+    CX_SET(Node, this, AttackOnce, LongerAttackOnce);
     cxViewSetColor(this, cxORANGE);
 }
 CX_OBJECT_FREE(Longer, Attack)

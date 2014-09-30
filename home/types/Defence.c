@@ -77,10 +77,10 @@ CX_OBJECT_INIT(Defence, Node)
     RangeSetRange(range, NodeGetRange(this));
     cxViewAppend(this, range);
     
-    SET(Node,this,PathRule, DefencePathRule);
-    SET(Node,this,FindRule, DefenceFindRule);
-    SET(Node,this,AttackAction, DefenceAttackAction);
-    SET(Node, this, AttackOnce, DefenceAttackOnce);
+    CX_SET(Node,this,PathRule, DefencePathRule);
+    CX_SET(Node,this,FindRule, DefenceFindRule);
+    CX_SET(Node,this,AttackAction, DefenceAttackAction);
+    CX_SET(Node, this, AttackOnce, DefenceAttackOnce);
 }
 CX_OBJECT_FREE(Defence, Node)
 {

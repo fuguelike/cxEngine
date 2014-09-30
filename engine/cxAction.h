@@ -16,26 +16,23 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxAction, cxObject)
-    cxLong tag;
-    cxAny parent;
-    cxAssist4f assist;
-    cxUInt actionId;
-    cxFloat scale;
-    cxFloat delay;
-    cxFloat delayElapsed;
-    cxFloat timeInit;
-    cxFloat time;
-    cxFloat timeElapsed;
-    cxFloat pauseTime;
+    CX_FIELD_DEF(cxAny Parent);
+    CX_FIELD_DEF(cxAssist4f Assist);
     cxBool isExit;
     cxBool isPause;
     cxBool isFirst;
     cxBool isActive;
-    cxView view;
-    cxInt indexNum;
-    cxInt index;
-    cxFloat indexDelta;
-    cxActionMgr actionMgr;
+    CX_FIELD_DEF(cxFloat Scale);
+    CX_FIELD_DEF(cxFloat InitTime);
+    CX_FIELD_DEF(cxFloat Delay);
+    CX_FIELD_DEF(cxFloat DelayElapsed);
+    CX_FIELD_DEF(cxFloat Time);
+    CX_FIELD_DEF(cxFloat TimeElapsed);
+    CX_FIELD_DEF(cxUInt ActionId);
+    CX_FIELD_DEF(cxLong Tag);
+    CX_FIELD_DEF(cxFloat PauseTime);
+    CX_FIELD_DEF(cxAny View);
+    CX_FIELD_DEF(cxActionMgr Group);
     CX_METHOD_DEF(cxFloat, Curve, cxAny, cxFloat);
     CX_METHOD_DEF(void, Init, cxAny);
     CX_METHOD_DEF(void, Active, cxAny);
@@ -45,45 +42,34 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_METHOD_DEF(cxBool, Exit, cxAny);
     CX_EVENT_ALLOC(onInit);
     CX_EVENT_ALLOC(onExit);
-    CX_EVENT_ALLOC(onIndex);
     CX_EVENT_ALLOC(onUpdate);
 CX_OBJECT_END(cxAction, cxObject)
 
-cxLong cxActionTag(cxAny pav);
+CX_FIELD_SET(cxAction, cxFloat, PauseTime);
+CX_FIELD_SET(cxAction, cxFloat, InitTime);
+CX_FIELD_IMP(cxAction, cxFloat, Time);
+CX_FIELD_IMP(cxAction, cxAny, Parent);
+CX_FIELD_IMP(cxAction, cxAssist4f, Assist);
+CX_FIELD_IMP(cxAction, cxFloat, Scale);
+CX_FIELD_GET(cxAction, cxFloat, TimeElapsed);
+CX_FIELD_GET(cxAction, cxActionMgr, Group);
+CX_FIELD_IMP(cxAction, cxFloat, Delay);
+CX_FIELD_GET(cxAction, cxFloat, DelayElapsed);
+CX_FIELD_IMP(cxAction, cxAny, View);
+CX_FIELD_IMP(cxAction, cxFloat, Tag);
 
-void cxActionSetTag(cxAny pav,cxLong tag);
+CX_FIELD_SET(cxAction, cxUInt, ActionId);
+CX_INLINE cxUInt cxActionGetActionId(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxAction);
+    return this->ActionId == 0 ? (cxUInt)this:this->ActionId;
+}
 
 void cxActionSetGroup(cxAny pav,cxConstChars name);
 
-void cxActionSetMgr(cxAny pav,cxActionMgr mgr);
-
-cxAny cxActionParent(cxAny pav);
-
-void cxActionSetParent(cxAny pav,cxAny parent);
-
-void cxActionSetPauseTime(cxAny pav,cxFloat time);
-
-cxAny cxActionView(cxAny pav);
-
-void cxActionSetView(cxAny pav,cxAny pview);
-
-void cxActionSetIndex(cxAny pav,cxInt indexNum);
-
-void cxActionSetScale(cxAny pav,cxFloat scale);
-
 cxBool cxActionForever(cxAny pav);
 
-void cxActionSetTime(cxAny pav,cxFloat time);
-
-void cxActionSetTimeInit(cxAny pav,cxFloat time);
-
 void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve);
-
-cxUInt cxActionGetId(cxAny pav);
-
-void cxActionSetId(cxAny pav,cxUInt actionId);
-
-void cxActionSetDelay(cxAny pav,cxFloat delay);
 
 cxBool cxActionUpdate(cxAny pav,cxFloat dt);
 

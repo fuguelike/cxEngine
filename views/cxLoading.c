@@ -38,13 +38,13 @@ cxAny cxLoadingObject(cxAny pview)
 
 static void cxFinishedArrive(cxAny sender)
 {
-    cxLoading this = cxActionView(sender);
+    cxLoading this = cxActionGetView(sender);
     cxLoaingFinished(this);
 }
 
 static void cxLoadingArrive(cxAny sender)
 {
-    cxLoading this = cxActionView(sender);
+    cxLoading this = cxActionGetView(sender);
     CX_EVENT_FIRE(this, onLoading);
     if(this->autoFinished){
         cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
@@ -66,8 +66,8 @@ CX_OBJECT_INIT(cxLoading, cxView)
 {
     this->autoFinished = true;
     this->isLoading = true;
-    ADD(cxView, this, onUpdate, cxLoadingOnUpdate);
-    SET(cxView, this, Touch, cxLoadingTouch);
+    CX_ADD(cxView, this, onUpdate, cxLoadingOnUpdate);
+    CX_SET(cxView, this, Touch, cxLoadingTouch);
 }
 CX_OBJECT_FREE(cxLoading, cxView)
 {

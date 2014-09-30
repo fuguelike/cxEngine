@@ -186,7 +186,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
         }
         cxScrollCheckPos(this, &npos);
         cxMove m = cxMoveCreate(this->moveTime, npos);
-        cxActionSetId(m, CX_SCROLL_MOVE_ACTION_ID);
+        cxActionSetActionId(m, CX_SCROLL_MOVE_ACTION_ID);
         cxActionSetCurve(m, cxScrollMoveCurve);
         cxViewAppendAction(body, m);
     }
@@ -255,7 +255,7 @@ CX_OBJECT_INIT(cxScroll, cxView)
     this->moveTime = 1.0f;
     this->scaleTime = 0.5f;
     this->scalable = true;
-    SET(cxView, this, Touch, cxScrollTouch);
+    CX_SET(cxView, this, Touch, cxScrollTouch);
     this->type = cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal;
 }
 CX_OBJECT_FREE(cxScroll, cxView)

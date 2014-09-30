@@ -113,7 +113,7 @@ CX_OBJECT_TYPE(cxLabelBMP, cxAtlas)
 }
 CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
 {
-    ADD(cxView, this, onUpdate, cxLabelBMPUpdate);
+    CX_ADD(cxView, this, onUpdate, cxLabelBMPUpdate);
     this->isDirty = true;
 }
 CX_OBJECT_FREE(cxLabelBMP, cxAtlas)

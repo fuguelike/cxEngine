@@ -11,14 +11,14 @@
 static void cxJumpInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxJump);
-    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->prevPos = this->startPos = cxViewGetPosition(view);
 }
 
 static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxJump);
-    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat frac = fmodf( time * this->jumps, 1.0f );
     cxFloat y = this->height * 4 * frac * (1 - frac) + this->position.y * time;
     cxFloat x = this->position.x * time;
@@ -53,8 +53,8 @@ CX_OBJECT_TYPE(cxJump, cxAction)
 }
 CX_OBJECT_INIT(cxJump, cxAction)
 {
-    SET(cxAction, this, Init, cxJumpInit);
-    SET(cxAction, this, Step, cxJumpStep);
+    CX_SET(cxAction, this, Init, cxJumpInit);
+    CX_SET(cxAction, this, Step, cxJumpStep);
 }
 CX_OBJECT_FREE(cxJump, cxAction)
 {
@@ -65,7 +65,7 @@ CX_OBJECT_TERM(cxJump, cxAction)
 cxJump cxJumpCreate(cxFloat time,cxVec2f position,cxFloat height,cxInt jumps)
 {
     cxJump this = CX_CREATE(cxJump);
-    this->cxAction.time = time;
+    this->cxAction.Time = time;
     this->position = position;
     this->height = height;
     this->jumps = jumps;

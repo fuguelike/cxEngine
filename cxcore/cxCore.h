@@ -290,7 +290,7 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 #define CX_METHOD_SET(_m_,_f_)      _m_ = _f_
 
 //method overwrite short micro
-#define SET(_t_,_o_,_n_,_f_)                                    \
+#define CX_SET(_t_,_o_,_n_,_f_)                                 \
 CX_ASSERT_TYPE(_o_, _t_);                                       \
 CX_METHOD_SET(CX_TYPE(_t_, _o_)->_n_, _f_)
 
@@ -372,7 +372,7 @@ do{                                                             \
     DL_APPEND(_signal_,_new_);                                  \
 }while(0)
 
-#define LIN(_t_,_src_,_n_,_dst_,_f_)                            \
+#define CX_LIN(_t_,_src_,_n_,_dst_,_f_)                            \
 CX_ASSERT_TYPE(_src_, _t_);                                     \
 CX_SLOT_CONNECT(CX_TYPE(_t_, _src_)->_n_, _dst_, _n_, _f_)
 
@@ -429,7 +429,7 @@ do{                                                             \
 }while(0)
 
 //append event short micro
-#define ADD(_t_,_o_,_n_,_f_)                                    \
+#define CX_ADD(_t_,_o_,_n_,_f_)                                 \
 CX_ASSERT_TYPE(_o_, _t_);                                       \
 CX_EVENT_APPEND(CX_TYPE(_t_, _o_)->_n_, _f_)
 

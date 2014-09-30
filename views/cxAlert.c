@@ -25,9 +25,9 @@ static cxBool cxAlertTouch(cxAny pview,cxTouchItems *points)
     return true;
 }
 
-static void cxShowActionOnStop(cxAny sender)
+static void cxShowActionOnStop(cxAny pav)
 {
-    cxAlert this = cxActionView(sender);
+    CX_ASSERT_VALUE(cxActionGetView(pav), cxAlert, this);
     CX_EVENT_FIRE(this, OnShow);
 }
 
@@ -44,9 +44,9 @@ static void cxAlertOnShow(cxAny pview)
     cxViewAppendAction(pview, m);
 }
 
-static void cxHideActionOnStop(cxAny sender)
+static void cxHideActionOnStop(cxAny pav)
 {
-    cxAlert this = cxActionView(sender);
+    CX_ASSERT_VALUE(cxActionGetView(pav), cxAlert, this);
     CX_EVENT_FIRE(this, OnHide);
     cxWindowPopView();
 }
@@ -70,10 +70,10 @@ CX_OBJECT_TYPE(cxAlert, cxAtlas)
 CX_OBJECT_INIT(cxAlert, cxAtlas)
 {
     cxViewSetHideTop(this, false);
-    SET(cxView, this, Key, cxAlertKey);
-    SET(cxView, this, Touch, cxAlertTouch);
-    SET(cxAlert, this, Hide, cxAlertOnHide);
-    SET(cxAlert, this, Show, cxAlertOnShow);
+    CX_SET(cxView, this, Key, cxAlertKey);
+    CX_SET(cxView, this, Touch, cxAlertTouch);
+    CX_SET(cxAlert, this, Hide, cxAlertOnHide);
+    CX_SET(cxAlert, this, Show, cxAlertOnShow);
 }
 CX_OBJECT_FREE(cxAlert, cxAtlas)
 {

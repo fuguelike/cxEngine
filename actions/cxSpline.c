@@ -19,7 +19,7 @@ cxVec2f cxSplinePointAt(cxAny pav,cxInt idx)
 static void cxSplineInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxSpline);
-    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxInt num = cxAnyArrayLength(this->points);
     if(num < 2){
         cxActionStop(pav);
@@ -42,7 +42,7 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     cxInt index = 0;
     CX_ASSERT_THIS(pav, cxSpline);
-    CX_ASSERT_VALUE(cxActionView(this), cxView, view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat lt = 0;
     if (time >= 1.0f){
         index = cxAnyArrayLength(this->points) - 1;
@@ -103,9 +103,9 @@ CX_OBJECT_INIT(cxSpline, cxAction)
 {
     this->index = -1;
     this->angle = INT32_MAX;
-    SET(cxAction, this, Init, cxSplineInit);
-    SET(cxAction, this, Step, cxSplineStep);
-    SET(cxAction, this, Reset, cxSplineReset);
+    CX_SET(cxAction, this, Init, cxSplineInit);
+    CX_SET(cxAction, this, Step, cxSplineStep);
+    CX_SET(cxAction, this, Reset, cxSplineReset);
     this->points = cxAnyArrayAlloc(cxVec2f);
 }
 CX_OBJECT_FREE(cxSpline, cxAction)

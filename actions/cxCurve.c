@@ -94,9 +94,9 @@ cxFloat cxCurveElasticIn(cxAny pav,cxFloat time)
     if (time == 0 || time == 1){
         newtime = time;
     }else{
-        cxFloat s = this->assist.v1 / 4;
+        cxFloat s = this->Assist.v1 / 4;
         time = time - 1;
-        newtime = -powf(2, 10 * time) * sinf((time - s) * M_PI_X2 / this->assist.v1);
+        newtime = -powf(2, 10 * time) * sinf((time - s) * M_PI_X2 / this->Assist.v1);
     }
     return newtime;
 }
@@ -108,8 +108,8 @@ cxFloat cxCurveElasticOut(cxAny pav,cxFloat time)
     if (time == 0 || time == 1){
         newtime = time;
     }else{
-        cxFloat s = this->assist.v1 / 4;
-        newtime = powf(2, -10 * time) * sinf((time - s) * M_PI_X2 / this->assist.v1) + 1;
+        cxFloat s = this->Assist.v1 / 4;
+        newtime = powf(2, -10 * time) * sinf((time - s) * M_PI_X2 / this->Assist.v1) + 1;
     }
     return newtime;
 }
@@ -122,15 +122,15 @@ cxFloat cxCurveElasticInOut(cxAny pav,cxFloat time)
         newtime = time;
     }else{
         time = time * 2;
-        if(this->assist.v1){
-            this->assist.v1 = 0.3f * 1.5f;
+        if(this->Assist.v1){
+            this->Assist.v1 = 0.3f * 1.5f;
         }
-        cxFloat s = this->assist.v1 / 4;
+        cxFloat s = this->Assist.v1 / 4;
         time = time - 1;
         if (time < 0){
-            newtime = -0.5f * powf(2, 10 * time) * sinf((time -s) * M_PI_X2 / this->assist.v1);
+            newtime = -0.5f * powf(2, 10 * time) * sinf((time -s) * M_PI_X2 / this->Assist.v1);
         }else{
-            newtime = powf(2, -10 * time) * sinf((time - s) * M_PI_X2 / this->assist.v1) * 0.5f + 1;
+            newtime = powf(2, -10 * time) * sinf((time - s) * M_PI_X2 / this->Assist.v1) * 0.5f + 1;
         }
     }
     return newtime;

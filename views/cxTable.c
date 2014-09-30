@@ -110,8 +110,8 @@ CX_OBJECT_TYPE(cxTable, cxView)
 CX_OBJECT_INIT(cxTable, cxView)
 {
     this->arrayHide = true;
-    ADD(cxView, this, onResize, cxTableResize);
-    ADD(cxView, this, onUpdate, cxTableUpdate);
+    CX_ADD(cxView, this, onResize, cxTableResize);
+    CX_ADD(cxView, this, onUpdate, cxTableUpdate);
 }
 CX_OBJECT_FREE(cxTable, cxView)
 {

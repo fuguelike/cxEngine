@@ -11,11 +11,11 @@
 void cxFollowInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFollow);
-    CX_ASSERT(this->cxAction.view != this->target, "target error,can't action'view");
-    CX_ASSERT(this->cxAction.view != NULL, "view not set");
-    CX_ASSERT(this->target != NULL, "target view null");
-    cxVec2f tpos = cxViewGetPosition(this->target);
-    cxVec2f cpos = cxViewGetPosition(this->cxAction.view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
+    CX_ASSERT_VALUE(this->target, cxView, target);
+    CX_ASSERT(view != this->target, "target error,can't action'view");
+    cxVec2f tpos = cxViewGetPosition(target);
+    cxVec2f cpos = cxViewGetPosition(view);
     this->angle = cxVec2fRadiansBetween(tpos, cpos);
     if(CX_METHOD_GET(false, this->IsExit,pav)){
         cxActionStop(pav);
@@ -25,8 +25,10 @@ void cxFollowInit(cxAny pav)
 static cxBool cxFollowIsExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFollow);
-    cxVec2f tpos = cxViewGetPosition(this->target);
-    cxVec2f cpos = cxViewGetPosition(this->cxAction.view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
+    CX_ASSERT_VALUE(this->target, cxView, target);
+    cxVec2f tpos = cxViewGetPosition(target);
+    cxVec2f cpos = cxViewGetPosition(view);
     cxFloat dis = kmVec2DistanceBetween(&tpos, &cpos);
     return dis < 10;
 }
@@ -34,17 +36,19 @@ static cxBool cxFollowIsExit(cxAny pav)
 static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxFollow);
-    cxVec2f tpos = cxViewGetPosition(this->target);
-    cxVec2f cpos = cxViewGetPosition(this->cxAction.view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
+    CX_ASSERT_VALUE(this->target, cxView, target);
+    cxVec2f tpos = cxViewGetPosition(target);
+    cxVec2f cpos = cxViewGetPosition(view);
     this->angle = cxVec2fRadiansBetween(tpos, cpos);
-    this->speed = CX_METHOD_GET(this->init, this->Speed,pav,this->cxAction.timeElapsed);
+    this->speed = CX_METHOD_GET(this->init, this->Speed,pav,cxActionGetTimeElapsed(this));
     cxFloat s = dt * this->speed;
     cxVec2f delta = cxVec2fv(s*cosf(this->angle), s*sinf(this->angle));
     kmVec2Add(&cpos, &cpos, &delta);
     if(CX_METHOD_GET(false, this->IsExit,pav)){
         cxActionStop(pav);
     }
-    cxViewSetPosition(this->cxAction.view, cpos);
+    cxViewSetPosition(view, cpos);
 }
 
 cxAny cxFollowTarget(cxAny pav)
@@ -59,10 +63,10 @@ CX_OBJECT_TYPE(cxFollow, cxAction)
 }
 CX_OBJECT_INIT(cxFollow, cxAction)
 {
-    this->cxAction.time = -1;
-    SET(cxAction, this, Init, cxFollowInit);
-    SET(cxAction, this, Step, cxFollowStep);
-    SET(cxFollow, this, IsExit, cxFollowIsExit);
+    this->cxAction.Time = -1;
+    CX_SET(cxAction, this, Init, cxFollowInit);
+    CX_SET(cxAction, this, Step, cxFollowStep);
+    CX_SET(cxFollow, this, IsExit, cxFollowIsExit);
 }
 CX_OBJECT_FREE(cxFollow, cxAction)
 {

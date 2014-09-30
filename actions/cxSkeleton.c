@@ -52,7 +52,7 @@
 
 static cxBool cxSkeletionParseAnimation(cxSkeleton this,cxJson tracks)
 {
-    cxSpine spine = CX_TYPE(cxSpine, this->cxAction.view);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxSpine, spine);
     CX_JSON_ARRAY_EACH_BEG(tracks, track)
     {
         //set
@@ -111,7 +111,7 @@ static void cxSkeletonStateListener(spAnimationState* state, int trackIndex, spE
 static void cxSkeletonInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxSkeleton);
-    CX_ASSERT_VALUE(cxActionView(pav), cxSpine, spine);
+    CX_ASSERT_VALUE(cxActionGetView(pav), cxSpine, spine);
     cxSkeletionFree(this);
     this->state = spAnimationState_create(spine->stateData);
     if(this->state == NULL){
@@ -137,7 +137,7 @@ static void cxSkeletonStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxSkeleton);
     CX_ASSERT(this->state != NULL, "animation state null");
-    CX_ASSERT_VALUE(cxActionView(pav), cxSpine, spine);
+    CX_ASSERT_VALUE(cxActionGetView(pav), cxSpine, spine);
     CX_ASSERT(spine != NULL && spine->skeleton != NULL, "target spine view not init");
 	spAnimationState_update(this->state, dt);
 	spAnimationState_apply(this->state, spine->skeleton);
@@ -159,10 +159,10 @@ CX_OBJECT_TYPE(cxSkeleton, cxAction)
 }
 CX_OBJECT_INIT(cxSkeleton, cxAction)
 {
-    this->cxAction.time = -1;
-    SET(cxAction, this, Init, cxSkeletonInit);
-    SET(cxAction, this, Step, cxSkeletonStep);
-    SET(cxAction, this, Exit, cxSkeletonExit);
+    this->cxAction.Time = -1;
+    CX_SET(cxAction, this, Init, cxSkeletonInit);
+    CX_SET(cxAction, this, Step, cxSkeletonStep);
+    CX_SET(cxAction, this, Exit, cxSkeletonExit);
 }
 CX_OBJECT_FREE(cxSkeleton, cxAction)
 {

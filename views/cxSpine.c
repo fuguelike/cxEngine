@@ -143,8 +143,8 @@ CX_OBJECT_TYPE(cxSpine, cxAtlas)
 }
 CX_OBJECT_INIT(cxSpine, cxAtlas)
 {
-    SET(cxView, this, Draw, cxSpineDraw);
-    ADD(cxView, this, onUpdate, cxSpineUpdate);
+    CX_SET(cxView, this, Draw, cxSpineDraw);
+    CX_ADD(cxView, this, onUpdate, cxSpineUpdate);
     cxAtlasSetCapacity(this, 256);
 }
 CX_OBJECT_FREE(cxSpine, cxAtlas)

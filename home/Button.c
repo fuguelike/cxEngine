@@ -15,7 +15,7 @@ static void ButtonEnter(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Button);
     cxScale scale = cxScaleCreate(0.1f, cxVec2fv(0.9f, 0.9f));
-    cxActionSetId(scale, BUTTON_SCALE_ACTIION_ID);
+    cxActionSetActionId(scale, BUTTON_SCALE_ACTIION_ID);
     cxViewAppendAction(this, scale);
 }
 
@@ -23,7 +23,7 @@ static void ButtonLeave(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Button);
     cxScale scale = cxScaleCreate(0.1f, cxVec2fv(1.0f, 1.0f));
-    cxActionSetId(scale, BUTTON_SCALE_ACTIION_ID);
+    cxActionSetActionId(scale, BUTTON_SCALE_ACTIION_ID);
     cxViewAppendAction(this, scale);
 }
 
@@ -31,7 +31,7 @@ static void ButtonRelease(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Button);
     cxScale scale = cxScaleCreate(0.1f, cxVec2fv(1.0f, 1.0f));
-    cxActionSetId(scale, BUTTON_SCALE_ACTIION_ID);
+    cxActionSetActionId(scale, BUTTON_SCALE_ACTIION_ID);
     cxViewAppendAction(this, scale);
     CX_EVENT_FIRE(this, onTap);
 }
@@ -48,9 +48,9 @@ CX_OBJECT_TYPE(Button, cxButton)
 }
 CX_OBJECT_INIT(Button, cxButton)
 {
-    ADD(cxButton, this, onEnter, ButtonEnter);
-    ADD(cxButton, this, onLeave, ButtonLeave);
-    ADD(cxButton, this, onRelease, ButtonRelease);
+    CX_ADD(cxButton, this, onEnter, ButtonEnter);
+    CX_ADD(cxButton, this, onLeave, ButtonLeave);
+    CX_ADD(cxButton, this, onRelease, ButtonRelease);
     this->ttf = cxLabelTTFCreate(UTF8("button"), NULL, 50);
     cxViewAppend(this, this->ttf);
 }

@@ -902,7 +902,7 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
     CX_ASSERT_THIS(pview, cxView);
     CX_ASSERT_VALUE(pav, cxAction, action);
     cxActionSetView(action, pview);
-    cxUInt actionId = cxActionGetId(action);
+    cxUInt actionId = cxActionGetActionId(action);
     cxHashKey key = cxHashLongKey(actionId);
     cxAny ptr = cxHashGet(this->actions, key);
     if(ptr != NULL){

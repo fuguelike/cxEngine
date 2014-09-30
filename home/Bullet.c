@@ -27,7 +27,7 @@ CX_OBJECT_TYPE(Bullet, cxSprite)
 CX_OBJECT_INIT(Bullet, cxSprite)
 {
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
-    SET(Bullet, this, CreateEngine, BulletCreateEngineDefault);
+    CX_SET(Bullet, this, CreateEngine, BulletCreateEngineDefault);
 }
 CX_OBJECT_FREE(Bullet, cxSprite)
 {
