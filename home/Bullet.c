@@ -42,7 +42,7 @@ cxAny BulletGetAttacker(cxAny pview)
     cxHash bindes = cxViewBindes(this);
     CX_HASH_FOREACH(bindes, ele, tmp){
         if(cxNumberToInt(ele->any) == BulletBindReasonAttacker){
-            return cxHashElementKeyToAny(ele);
+            return cxHashKeyToAny(ele);
         }
     }
     return NULL;
@@ -54,7 +54,7 @@ cxAny BulletGetTarget(cxAny pview)
     cxHash bindes = cxViewBindes(this);
     CX_HASH_FOREACH(bindes, ele, tmp){
         if(cxNumberToInt(ele->any) == BulletBindReasonTarget){
-            return cxHashElementKeyToAny(ele);
+            return cxHashKeyToAny(ele);
         }
     }
     return NULL;

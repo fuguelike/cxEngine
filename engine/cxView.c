@@ -239,13 +239,13 @@ void cxViewUnBindAll(cxAny pview)
     CX_ASSERT_THIS(pview, cxView);
     //clean bind's view
     CX_HASH_FOREACH(this->bindes, ele1, tmp1){
-        cxView view = cxHashElementKeyToAny(ele1);
+        cxView view = cxHashKeyToAny(ele1);
         cxHashDel(view->binded, cxHashAnyKey(this));
     }
     cxHashClean(this->bindes);
     //clean binded view
     CX_HASH_FOREACH(this->binded, ele2, tmp2){
-        cxView view = cxHashElementKeyToAny(ele2);
+        cxView view = cxHashKeyToAny(ele2);
         cxHashDel(view->bindes, cxHashAnyKey(this));
     }
     cxHashClean(this->binded);
@@ -263,7 +263,7 @@ cxAny cxViewBindesFirst(cxAny pview)
     if(this->bindes->hashPtr == NULL){
         return NULL;
     }
-    return cxHashElementKeyToAny(this->bindes->hashPtr);
+    return cxHashKeyToAny(this->bindes->hashPtr);
 }
 
 cxHash cxViewBinded(cxAny pview)

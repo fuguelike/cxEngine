@@ -26,13 +26,13 @@ typedef struct {
     UT_hash_handle hh;
 }cxHashElement;
 
-#define cxHashElementKeyToLong(_e_)     *(cxLong *)((_e_)->key)
+#define cxHashKeyToLong(_e_)     *(cxLong *)((_e_)->key)
 
-#define cxHashElementKeyToAny(_e_)      (cxAny)cxHashElementKeyToLong(_e_)
+#define cxHashKeyToAny(_e_)      (cxAny)cxHashKeyToLong(_e_)
 
-#define cxHashElementKeyToInt(_e_)      *(cxInt *)((_e_)->key)
+#define cxHashKeyToInt(_e_)      *(cxInt *)((_e_)->key)
 
-#define cxHashElementKeyToStr(_e_)      (_e_)->key
+#define cxHashKeyToStr(_e_)      (_e_)->key
 
 typedef struct {
     cxInt length;

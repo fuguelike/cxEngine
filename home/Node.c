@@ -47,7 +47,6 @@ static void LifeChange(cxAny pview)
 void NodeAttacked(cxAny pview,cxAny attacker,AttackType type)
 {
     CX_ASSERT_THIS(pview, Node);
-    //如果是直接攻击
     if(type == AttackTypeNode){
         CX_ASSERT_VALUE(attacker, Node, a);
         NodeAddLife(this, -NodeGetPower(a));
@@ -55,6 +54,14 @@ void NodeAttacked(cxAny pview,cxAny attacker,AttackType type)
         CX_ASSERT_VALUE(attacker, Bullet, a);
         NodeAddLife(this, -BulletGetPower(a));
     }
+}
+
+void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type)
+{
+    CX_ASSERT_THIS(target, Node);
+    CX_METHOD_RUN(this->NodeAttacked,this,attacker,type);
+    //攻击后死亡了？
+    NodeCheckDie(target);
 }
 
 static void NodeAttackActionExit(cxAny pav)
@@ -92,15 +99,15 @@ static void NodeInitBullet(Node this,Node target,cxAny bullet)
     CX_ASSERT_VALUE(bullet, Bullet, b);
     BulletBind(bullet, this, target);
     
-    cxAny action = CX_METHOD_GET(NULL, b->CreateEngine,b);
-    CX_ASSERT_TYPE(action, cxAction);
+    cxAny baction = CX_METHOD_GET(NULL, b->CreateEngine,b);
+    CX_ASSERT_TYPE(baction, cxAction);
     
-    cxViewAppendAction(bullet, action);
+    cxViewAppendAction(bullet, baction);
     MapAppendBullet(bullet);
     
     //带弹药结束 action.view = bullet
-    ON(cxAction, action, onExit, NodeAttackBulletExit);
-    ON(cxAction, action, onUpdate, BulletOnUpdate);
+    ON(cxAction, baction, onExit, NodeAttackBulletExit);
+    ON(cxAction, baction, onUpdate, BulletOnUpdate);
 }
 
 static void NodeInitAction(Node this,Node target,cxAny action)
@@ -116,7 +123,7 @@ static void NodeAttackTimerArrive(cxAny pav)
     cxHash bindes = cxViewBindes(this);
     CX_HASH_FOREACH(bindes, ele, tmp){
         //获取目标
-        Node target = cxHashElementKeyToAny(ele);
+        Node target = cxHashKeyToAny(ele);
         //攻击前目标已死
         if(NodeCheckDie(target)){
             continue;
@@ -130,12 +137,12 @@ static void NodeAttackTimerArrive(cxAny pav)
         NodeFaceTarget(this, target);
         //创建攻击动画
         AttackActionResult ret = CX_METHOD_GET(AAEmpty(), this->AttackAction, this, target);
-        //初始化bullet准备发射
         if(ret.bullet != NULL){
+            //初始化bullet准备发射
             NodeInitBullet(this, target, ret.bullet);
         }
-        //创建自身动画
         if(ret.action != NULL){
+            //创建自身动画
             NodeInitAction(this, target, ret.action);
         }
         //攻击后目标死亡
@@ -220,7 +227,7 @@ static void NodeMoveToTargetArrive(cxAny pav)
     CX_ASSERT_VALUE(cxActionView(this), Node, node);
     cxHash bindes = cxViewBindes(node);
     CX_HASH_FOREACH(bindes, ele, tmp){
-        Node target = cxHashElementKeyToAny(ele);
+        Node target = cxHashKeyToAny(ele);
         //目标死了用不着移动了
         if(NodeCheckDie(target)){
             continue;
@@ -293,14 +300,6 @@ static const NodeCombined *NodeGetSearchType(cxAny pview)
         this->searchIndex = 0;
     }
     return &this->orders.types[this->searchIndex++];
-}
-
-void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type)
-{
-    CX_ASSERT_THIS(target, Node);
-    CX_METHOD_RUN(this->NodeAttacked,this,attacker,type);
-    //攻击后死亡了？
-    NodeCheckDie(target);
 }
 
 //搜索附近的

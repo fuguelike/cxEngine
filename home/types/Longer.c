@@ -8,6 +8,7 @@
 
 #include <Bullet.h>
 #include <actions/cxFollow.h>
+#include <actions/cxScale.h>
 #include <Map.h>
 #include "Longer.h"
 
@@ -17,16 +18,26 @@ AttackActionResult LongerAttackAction(cxAny pattacker,cxAny ptarget)
     CX_ASSERT_VALUE(ptarget, Node, target);
     Map map = NodeGetMap(attacker);
     
+    //攻击武器动画
     Bullet bullet = CX_CREATE(Bullet);
     BulletInit(bullet, map, cxSize2fv(10, 10), cxViewPosition(attacker));
     BulletSetPower(bullet, NodeGetPower(attacker));
     
-    return AAMake(bullet, NULL);
+    //自身攻击动画
+    cxScale scale = cxScaleCreate(NodeGetAttackRate(attacker), cxVec2fv(1.5f, 1.5f));
+    
+    return AAMake(bullet, scale);
 }
 
 FindRuleResult LongerFindRule(cxAny pview,const NodeCombined *type)
 {
     return AttackFindRule(pview, type);
+}
+
+//一次攻击完成
+static void LongerAttackOnce(cxAny pattacker,cxAny ptarget)
+{
+    cxViewSetScale(pattacker, cxVec2fv(1, 1));
 }
 
 CX_OBJECT_TYPE(Longer, Attack)
@@ -39,6 +50,7 @@ CX_OBJECT_INIT(Longer, Attack)
     NodeSetAttackRate(this, 0.5f);
     SET(Node, this, FindRule, LongerFindRule);
     SET(Node, this, AttackAction, LongerAttackAction);
+    SET(Node, this, AttackOnce, LongerAttackOnce);
     cxViewSetColor(this, cxORANGE);
 }
 CX_OBJECT_FREE(Longer, Attack)
