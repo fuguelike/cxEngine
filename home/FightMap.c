@@ -15,6 +15,7 @@
 #include <types/Defence.h>
 #include <types/Wall.h>
 #include <types/Longer.h>
+#include <types/Flyable.h>
 #include <actions/cxMove.h>
 
 static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
@@ -64,6 +65,11 @@ static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
             NodeSetLife(node, cxRange2iv(200, 200));
             NodeSetPower(node, 10);
             MapAppendNode(node);
+        }else if(this->tag == 7){
+            Flyable node = FlyableCreate(this, idx);
+            NodeSetLife(node, cxRange2iv(200, 200));
+            NodeSetPower(node, 10);
+            MapAppendNode(node);
         }
         return true;
     }
@@ -84,7 +90,8 @@ static void mapSubType(cxAny dst,cxAny src)
             }
         }
         
-        cxArray items = MapNearestItems(this, cxVec2fv(20.5f, 20.5f), cxRange2fv(0, 6), NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
+        cxArray items = MapNearestItems(this, cxVec2fv(20.5f, 20.5f), cxRange2fv(0, 5), NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
+        
         CX_ARRAY_FOREACH(items, ele){
             Node node = cxArrayObject(ele);
             cxViewSetColor(node, cxRED);

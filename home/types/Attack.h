@@ -17,9 +17,9 @@ CX_OBJECT_DEF(Attack, Node)
 
 CX_OBJECT_END(Attack, Node)
 
-void AttackInit(cxAny pview, cxAny pmap,cxVec2i pos);
+void AttackInit(cxAny pview, cxAny pmap,cxVec2i idx);
 
-Attack AttackCreate(cxAny pmap, cxVec2i pos);
+Attack AttackCreate(cxAny pmap, cxVec2i idx);
 
 PathRuleResult AttackPathRule(cxAny pview,FindRuleResult *fret);
 

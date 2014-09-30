@@ -16,9 +16,9 @@ CX_C_BEGIN
 CX_OBJECT_DEF(Longer, Attack)
 CX_OBJECT_END(Longer, Attack)
 
-void LongerInit(cxAny pview, cxAny pmap,cxVec2i pos);
+void LongerInit(cxAny pview, cxAny pmap,cxVec2i idx);
 
-Longer LongerCreate(cxAny pmap,cxVec2i pos);
+Longer LongerCreate(cxAny pmap,cxVec2i idx);
 
 FindRuleResult LongerFindRule(cxAny pview,const NodeCombined *type);
 

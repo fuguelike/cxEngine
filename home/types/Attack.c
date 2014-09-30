@@ -97,16 +97,16 @@ CX_OBJECT_FREE(Attack, Node)
 }
 CX_OBJECT_TERM(Attack, Node)
 
-void AttackInit(cxAny pview, cxAny pmap,cxVec2i pos)
+void AttackInit(cxAny pview, cxAny pmap,cxVec2i idx)
 {
     CX_ASSERT_THIS(pview, Attack);
-    NodeInit(this, pmap, pos, false);
+    NodeInit(this, pmap, idx, false);
     NodeSearchRun(this);
 }
 
-Attack AttackCreate(cxAny pmap,cxVec2i pos)
+Attack AttackCreate(cxAny pmap,cxVec2i idx)
 {
     Attack this = CX_CREATE(Attack);
-    AttackInit(this, pmap, pos);
+    AttackInit(this, pmap, idx);
     return this;
 }

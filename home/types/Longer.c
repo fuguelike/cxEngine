@@ -59,15 +59,15 @@ CX_OBJECT_FREE(Longer, Attack)
 }
 CX_OBJECT_TERM(Longer, Attack)
 
-void LongerInit(cxAny pview, cxAny pmap,cxVec2i pos)
+void LongerInit(cxAny pview, cxAny pmap,cxVec2i idx)
 {
     CX_ASSERT_THIS(pview, Longer);
-    AttackInit(this, pmap, pos);
+    AttackInit(this, pmap, idx);
 }
 
-Longer LongerCreate(cxAny pmap,cxVec2i pos)
+Longer LongerCreate(cxAny pmap,cxVec2i idx)
 {
     Longer this = CX_CREATE(Longer);
-    LongerInit(this, pmap, pos);
+    LongerInit(this, pmap, idx);
     return this;
 }

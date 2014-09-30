@@ -452,24 +452,41 @@ static cpCollisionID MapItemsQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
     return id;
 }
 
-//搜索某点附近的，范围内的所有node
+//搜索某点附近的，范围内的所有node,
 cxArray MapNearestItems(cxAny pmap,cxVec2f point,cxRange2f range,NodeCombined type)
 {
     CX_ASSERT_THIS(pmap, Map);
     NearestItemsInfo ret = {0};
-    ret.nodes = CX_CREATE(cxArray);
+    ret.nodes = CX_ALLOC(cxArray);
     ret.point = point;
     ret.type = type;
     ret.range = range;
     cpBB bb = cpBBNewForCircle(point, cpfmax(range.max, 0.0f));
     cpSpatialIndexQuery(this->items->index, this, bb, MapItemsQueryFunc, &ret);
-    return ret.nodes;
+    if(cxArrayLength(ret.nodes) == 0){
+        CX_RELEASE(ret.nodes);
+        return NULL;
+    }
+    return CX_AUTO(ret.nodes);
 }
 
 cxAnyArray MapVisiedPoints(cxAny pmap)
 {
     CX_ASSERT_THIS(pmap, Map);
     return this->astar->visits;
+}
+
+void MapAppendPoint(cxAny pmap,cxVec2f pos)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    cxVec2i idx = cxVec2iv(pos.x, pos.y);
+    cxAnyArrayAppend(this->astar->points, &idx);
+}
+
+void MapCleanPoints(cxAny pmap)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    cxAStarCleanPath(this->astar);
 }
 
 cxAnyArray MapSearchPoints(cxAny pmap)

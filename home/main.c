@@ -19,6 +19,7 @@
 #include <types/Defence.h>
 #include <types/Wall.h>
 #include <types/Longer.h>
+#include <types/Flyable.h>
 
 void cxEngineType(cxEngine engine)
 {
@@ -35,7 +36,7 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Attack);
     CX_TYPE_REG(Defence);
     CX_TYPE_REG(Wall);
-    
+    CX_TYPE_REG(Flyable);
     CX_TYPE_REG(Longer);
 }
 
@@ -70,22 +71,25 @@ void cxEngineMain(cxEngine engine)
     
     //test code
     CX_LOADER_DEF(loader, Button, btnSelectTurret);
-    CX_EVENT_APPEND(btnSelectTurret->onTap, selectButton);
+    CX_ADD(Button, btnSelectTurret, onTap, selectButton);
     
     CX_LOADER_DEF(loader, Button, btnSelectSoldier);
-    CX_EVENT_APPEND(btnSelectSoldier->onTap, selectButton);
+    CX_ADD(Button, btnSelectSoldier, onTap, selectButton);
     
     CX_LOADER_DEF(loader, Button, btnSelectArcher);
-    CX_EVENT_APPEND(btnSelectArcher->onTap, selectButton);
+    CX_ADD(Button, btnSelectArcher, onTap, selectButton);
     
     CX_LOADER_DEF(loader, Button, btnTest);
-    CX_EVENT_APPEND(btnTest->onTap, selectButton);
+    CX_ADD(Button, btnTest, onTap, selectButton);
     
     CX_LOADER_DEF(loader, Button, btnLonger);
-    CX_EVENT_APPEND(btnLonger->onTap, selectButton);
+    CX_ADD(Button, btnLonger, onTap, selectButton);
     
     CX_LOADER_DEF(loader, Button, btnClear);
-    CX_EVENT_APPEND(btnClear->onTap, selectButton);
+    CX_ADD(Button, btnClear, onTap, selectButton);
+    
+    CX_LOADER_DEF(loader, Button, btnFlyable);
+    CX_ADD(Button, btnFlyable, onTap, selectButton);
     
     FightMapInit(scene->fightMap);
     cxWindowPushView(scene);

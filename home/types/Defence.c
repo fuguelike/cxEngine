@@ -88,10 +88,10 @@ CX_OBJECT_FREE(Defence, Node)
 }
 CX_OBJECT_TERM(Defence, Node)
 
-Defence DefenceCreate(cxAny pmap,cxVec2i pos)
+Defence DefenceCreate(cxAny pmap,cxVec2i idx)
 {
     Defence this = CX_CREATE(Defence);
-    NodeInit(this, pmap, pos, true);
+    NodeInit(this, pmap, idx, true);
     NodeSearchRun(this);
     return this;
 }

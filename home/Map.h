@@ -64,7 +64,7 @@ void MapRemoveNodes(cxAny pmap);
 //移除单位
 void MapRemoveNode(cxAny node);
 
-//搜索某点附近的，范围内的所有node,包括min,不包括max
+//搜索某点附近的，范围内的所有node,包括min,不包括max，没有返回NULL
 cxArray MapNearestItems(cxAny pmap,cxVec2f point,cxRange2f range,NodeCombined type);
 
 //搜索离curr最近的单位
@@ -74,6 +74,12 @@ cxAny MapNearestQuery(cxAny curr,NodeCombined type,cxRange2f range);
 cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type);
 
 cxAnyArray MapVisiedPoints(cxAny pmap);
+
+//清空路径点
+void MapCleanPoints(cxAny pmap);
+
+//手动添加路径点
+void MapAppendPoint(cxAny pmap,cxVec2f pos);
 
 cxAnyArray MapSearchPoints(cxAny pmap);
 

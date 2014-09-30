@@ -85,11 +85,14 @@
           "title": "清空"
         },
         {
+          "cxId": "btnFlyable",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
-          }
+          },
+          "tag": 7,
+          "title": "飞行物"
         },
         {
           "cxType": "Button",
