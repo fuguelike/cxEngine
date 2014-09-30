@@ -15,7 +15,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxTimeLine, cxAction)
     cxInt index;
-    cxArray times;
+    cxAnyArray times;
     CX_EVENT_ALLOC(onTime);
 CX_OBJECT_END(cxTimeLine, cxAction)
 

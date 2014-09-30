@@ -14,28 +14,27 @@
 static void cxTimeLineInit(cxAny pav)
 {
     cxTimeLine this = pav;
-    cxNumber last = cxArrayLast(this->times);
-    if(last == NULL){
+    cxFloat *time = cxAnyArrayLast(this->times, cxFloat);
+    if(time == NULL){
         cxActionStop(this);
         return;
     }
-    cxActionSetTime(this, cxNumberToFloat(last) + 1.0f);
+    cxActionSetTime(this, *time + 0.5f);
     this->index = -1;
 }
 
 static void cxTimeLineStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxTimeLine);
-    cxInt count = cxArrayLength(this->times);
+    cxInt count = cxAnyArrayLength(this->times);
+    cxFloat elapsed = cxActionGetTimeElapsed(this);
     for(cxInt i = this->index + 1; i < count; i++){
-        cxNumber num = cxArrayAtIndex(this->times, i);
-        cxFloat time = cxNumberToFloat(num);
-        if(cxActionGetTimeElapsed(this) >= time){
-            this->index = i;
-            CX_EVENT_FIRE(this, onTime);
-            continue;
+        cxFloat *time = cxAnyArrayAt(this->times, i, cxFloat);
+        if(*time < elapsed){
+            break;
         }
-        break;
+        this->index = i;
+        CX_EVENT_FIRE(this, onTime);
     }
     if(this->index == (count - 1)){
         cxActionStop(this);
@@ -64,7 +63,7 @@ CX_OBJECT_INIT(cxTimeLine, cxAction)
 {
     CX_SET(cxAction, this, Init, cxTimeLineInit);
     CX_SET(cxAction, this, Step, cxTimeLineStep);
-    this->times = CX_ALLOC(cxArray);
+    this->times = cxAnyArrayAlloc(cxFloat);
 }
 CX_OBJECT_FREE(cxTimeLine, cxAction)
 {
@@ -76,16 +75,16 @@ CX_OBJECT_TERM(cxTimeLine, cxAction)
 void cxTimeLineSet(cxAny pav,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxTimeLine);
-    cxArrayAppend(this->times, cxNumberFloat(time));
+    cxAnyArrayAppend(this->times, &time);
 }
 
 void cxTimeLineAdd(cxAny pav,cxFloat add)
 {
     CX_ASSERT_THIS(pav, cxTimeLine);
     cxFloat time = add;
-    cxNumber last = cxArrayLast(this->times);
+    cxFloat *last = cxAnyArrayLast(this->times,cxFloat);
     if(last != NULL){
-        time += cxNumberToFloat(last);
+        time += *last;
     }
     cxTimeLineSet(pav, time);
 }
