@@ -20,6 +20,8 @@ CX_OBJECT_DEF(cxIconvItem, cxObject)
     cxString to;
 CX_OBJECT_END(cxIconvItem, cxObject)
 
+cxIconvItem cxIconvItemCreate(cxConstChars from,cxConstChars to);
+
 CX_OBJECT_DEF(cxIconv, cxObject)
     cxHash caches;
 CX_OBJECT_END(cxIconv, cxObject)

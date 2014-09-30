@@ -6,12 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <libgen.h>
-#include <streams/cxAssetsStream.h>
-#include <streams/cxMemStream.h>
-#include <streams/cxFileStream.h>
 #include "cxStream.h"
-#include "cxUtil.h"
 
 CX_OBJECT_TYPE(cxStream, cxObject)
 {

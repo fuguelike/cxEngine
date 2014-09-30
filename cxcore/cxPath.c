@@ -1,23 +1,24 @@
 //
-//  cxUrlPath.c
+//  cxPath.c
 //  cxEngine
 //
 //  Created by xuhua on 12/10/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxUrlPath.h"
+#include "cxString.h"
+#include "cxPath.h"
 
-CX_OBJECT_TYPE(cxUrlPath, cxObject)
+CX_OBJECT_TYPE(cxPath, cxObject)
 {}
-CX_OBJECT_INIT(cxUrlPath, cxObject)
+CX_OBJECT_INIT(cxPath, cxObject)
 {}
-CX_OBJECT_FREE(cxUrlPath, cxObject)
+CX_OBJECT_FREE(cxPath, cxObject)
 {}
-CX_OBJECT_TERM(cxUrlPath, cxObject)
+CX_OBJECT_TERM(cxPath, cxObject)
 
 //parse url?key=value
-static cxUrlPath cxUrlPathParseKeyValueImp(cxUrlPath this)
+cxPath cxPathParseKeyValue(cxPath this)
 {
     CX_RETURN(this->count == 1, this);
     cxConstChars url = this->key;
@@ -36,9 +37,9 @@ static cxUrlPath cxUrlPathParseKeyValueImp(cxUrlPath this)
 }
 
 //parse url?key
-cxUrlPath cxUrlPathParse(cxConstChars url)
+cxPath cxPathParse(cxConstChars url)
 {
-    cxUrlPath this = CX_CREATE(cxUrlPath);
+    cxPath this = CX_CREATE(cxPath);
     if(!cxConstCharsOK(url)){
         return this;
     }
@@ -59,6 +60,6 @@ cxUrlPath cxUrlPathParse(cxConstChars url)
         this->path[len]='\0';
         this->count = 1;
     }
-    return cxUrlPathParseKeyValueImp(this);
+    return cxPathParseKeyValue(this);
 }
 

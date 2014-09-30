@@ -25,5 +25,7 @@
 #include "cxMath.h"
 #include "cxJson.h"
 #include "cxLoader.h"
+#include "cxPath.h"
+#include "cxStream.h"
 
 #endif

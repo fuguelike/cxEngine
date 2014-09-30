@@ -10,7 +10,6 @@
 #define cxEngine_cxAssetsStream_h
 
 #include <cxCore/cxBase.h>
-#include <engine/cxStream.h>
 
 CX_C_BEGIN
 

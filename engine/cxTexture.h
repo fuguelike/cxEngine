@@ -9,8 +9,8 @@
 #ifndef cxEngine_cxTexture_h
 #define cxEngine_cxTexture_h
 
+#include <cxcore/cxStream.h>
 #include "cxOpenGL.h"
-#include "cxStream.h"
 #include "cxShader.h"
 
 CX_C_BEGIN

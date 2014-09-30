@@ -10,7 +10,6 @@
 #include <textures/cxTextureFactory.h>
 #include <engine/cxTexture.h>
 #include <engine/cxUtil.h>
-#include <engine/cxUrlPath.h>
 #include "cxAnimate.h"
 CX_SETTER_DEF(cxAnimateItem, id)
 {

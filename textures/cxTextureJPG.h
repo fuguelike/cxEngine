@@ -10,7 +10,7 @@
 #define cxEngine_cxTextureJPG_h
 
 #include <engine/cxTexture.h>
-#include <engine/cxStream.h>
+#include <cxcore/cxStream.h>
 
 CX_C_BEGIN
 

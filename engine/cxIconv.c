@@ -28,7 +28,7 @@ CX_OBJECT_FREE(cxIconvItem, cxObject)
 }
 CX_OBJECT_TERM(cxIconvItem, cxObject)
 
-static cxIconvItem cxIconvItemCreate(cxConstChars from,cxConstChars to)
+cxIconvItem cxIconvItemCreate(cxConstChars from,cxConstChars to)
 {
     cxIconvItem this = CX_CREATE(cxIconvItem);
     this->from = cxStringAllocChars(from);
@@ -102,9 +102,9 @@ cxString cxIconvConvert(const cxString string,cxConstChars from,cxConstChars to)
     cxIconvItem item = cxHashGet(this->caches, cxHashStrKey(key));
     if(item == NULL){
         item = cxIconvItemCreate(from,to);
+        CX_ASSERT(item != NULL, "create iconv %s error",key);
         cxHashSet(this->caches, cxHashStrKey(key), item);
     }
-    CX_RETURN(item == NULL, NULL);
     return cxIconvItemConvert(item,string);
 }
 

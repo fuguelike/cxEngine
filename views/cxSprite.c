@@ -94,7 +94,7 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url)
 {
     CX_RETURN(url == NULL);
     CX_ASSERT_THIS(pview, cxSprite);
-    cxUrlPath path = cxUrlPathParse(url);
+    cxPath path = cxPathParse(url);
     CX_RETURN(path == NULL);
     cxTexture texture = cxTextureFactoryLoadFile(path->path);
     if(texture == NULL){

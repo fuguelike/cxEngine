@@ -26,6 +26,8 @@ void cxTypesInit()
     CX_TYPE_REG(cxString);
     CX_TYPE_REG(cxMessage);
     CX_TYPE_REG(cxLoader);
+    CX_TYPE_REG(cxPath);
+    CX_TYPE_REG(cxStream);
 }
 
 void cxTypesFree()

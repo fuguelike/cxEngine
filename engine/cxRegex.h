@@ -24,13 +24,13 @@ typedef struct{
 #define CX_REGEX_POS_OK(p) ((p).start >= 0 && (p).end >= 0)
 
 CX_OBJECT_DEF(cxRegex, cxObject)
-    int error_offset;
-    const char *error_message;
+    cxInt error_offset;
+    cxConstChars error_message;
     pcre *regex;
-    int offsets[CX_REGEX_MAX_COUNT];
+    cxInt offsets[CX_REGEX_MAX_COUNT];
     cxString input;
-    int start;
-    int count;
+    cxInt start;
+    cxInt count;
 CX_OBJECT_END(cxRegex, cxObject)
 
 typedef cxString (*cxRegexReplaceFunc)(cxRegex regex,cxAny arg);

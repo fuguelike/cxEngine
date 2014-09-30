@@ -97,7 +97,6 @@ void cxEnginePause()
 static void cxEngineTypes()
 {
     //register core
-    CX_TYPE_REG(cxStream);
     CX_TYPE_REG(cxTexture);
     CX_TYPE_REG(cxView);
     CX_TYPE_REG(cxAction);
@@ -345,7 +344,7 @@ CX_OBJECT_TERM(cxEngine, cxObject)
 //a.json?key
 cxJson cxEngineJsonReader(cxConstChars src)
 {
-    cxUrlPath path = cxUrlPathParse(src);
+    cxPath path = cxPathParse(src);
     cxJson json = cxEngineLoadJson(path->path);
     CX_RETURN(json == NULL, NULL);
     //get file.json?key

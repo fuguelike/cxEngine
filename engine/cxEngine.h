@@ -14,7 +14,6 @@
 #include "cxInput.h"
 #include "cxUtil.h"
 #include "cxBMPFont.h"
-#include "cxUrlPath.h"
 #include "cxActionMgr.h"
 
 CX_C_BEGIN
