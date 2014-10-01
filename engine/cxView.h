@@ -12,7 +12,7 @@
 #include <libgen.h>
 #include <cxcore/cxBase.h>
 #include "cxInput.h"
-#include "cxActionMgr.h"
+#include "cxGlobal.h"
 
 CX_C_BEGIN
 

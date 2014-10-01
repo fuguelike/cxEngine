@@ -7,7 +7,7 @@
 //
 #include <engine/cxEngine.h>
 #include "cxAction.h"
-#include "cxActionMgr.h"
+#include "cxGroup.h"
 
 CX_SETTER_DEF(cxAction, time)
 {
@@ -93,7 +93,7 @@ void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
 void cxActionSetGroup(cxAny pav,cxConstChars name)
 {
     CX_ASSERT_THIS(pav, cxAction);
-    cxActionMgr mgr = cxActionMgrGet(name);
+    cxGroup mgr = cxGroupGet(name);
     CX_ASSERT(mgr != NULL, "action mgr name %s not exists",name);
     CX_RETAIN_SWAP(this->Group, mgr);
 }
@@ -121,7 +121,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     cxBool isExit = false;
     //time scale
     if(this->Group != NULL){
-        dt *= this->Scale * this->Group->scale;
+        dt *= this->Scale * cxGroupGetScale(this->Group);
     }else{
         dt *= this->Scale;
     }

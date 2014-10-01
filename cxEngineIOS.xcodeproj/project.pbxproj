@@ -104,7 +104,7 @@
 		8341C68118227FA10045A66F /* cxEAGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67C18227FA10045A66F /* cxEAGLView.m */; };
 		8341C68218227FA10045A66F /* cxUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67D18227FA10045A66F /* cxUtil.m */; };
 		8341C68318227FA10045A66F /* cxGLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8341C67F18227FA10045A66F /* cxGLViewController.m */; };
-		83445E5F19A9A212002275FB /* cxActionMgr.c in Sources */ = {isa = PBXBuildFile; fileRef = 83445E5D19A9A212002275FB /* cxActionMgr.c */; };
+		83445E5F19A9A212002275FB /* cxGroup.c in Sources */ = {isa = PBXBuildFile; fileRef = 83445E5D19A9A212002275FB /* cxGroup.c */; };
 		8344F0A618D3F3C50003E410 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8344F0A518D3F3C50003E410 /* main.m */; };
 		8358342C185EB94D0057E40B /* cxPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8358342B185EB94D0057E40B /* cxPlayer.m */; };
 		835DB17B19C44C550037DA5B /* Animation.c in Sources */ = {isa = PBXBuildFile; fileRef = 835DB14619C44C550037DA5B /* Animation.c */; };
@@ -411,8 +411,8 @@
 		8341C67D18227FA10045A66F /* cxUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cxUtil.m; sourceTree = "<group>"; };
 		8341C67E18227FA10045A66F /* cxGLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxGLViewController.h; sourceTree = "<group>"; };
 		8341C67F18227FA10045A66F /* cxGLViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cxGLViewController.m; sourceTree = "<group>"; };
-		83445E5D19A9A212002275FB /* cxActionMgr.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxActionMgr.c; sourceTree = "<group>"; };
-		83445E5E19A9A212002275FB /* cxActionMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxActionMgr.h; sourceTree = "<group>"; };
+		83445E5D19A9A212002275FB /* cxGroup.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxGroup.c; sourceTree = "<group>"; };
+		83445E5E19A9A212002275FB /* cxGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxGroup.h; sourceTree = "<group>"; };
 		8344F0A518D3F3C50003E410 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8358342B185EB94D0057E40B /* cxPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = cxPlayer.m; sourceTree = "<group>"; };
 		835DB14619C44C550037DA5B /* Animation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Animation.c; sourceTree = "<group>"; };
@@ -1065,8 +1065,8 @@
 				83B995C61925C5A100FD6BC1 /* cxUtil.h */,
 				83B995C71925C5A100FD6BC1 /* cxView.c */,
 				83B995C81925C5A100FD6BC1 /* cxView.h */,
-				83445E5D19A9A212002275FB /* cxActionMgr.c */,
-				83445E5E19A9A212002275FB /* cxActionMgr.h */,
+				83445E5D19A9A212002275FB /* cxGroup.c */,
+				83445E5E19A9A212002275FB /* cxGroup.h */,
 				831A993D19C6CE6B006980AA /* cxSpatial.c */,
 				831A993E19C6CE6B006980AA /* cxSpatial.h */,
 			);
@@ -1305,7 +1305,7 @@
 				830EEB9C19C5681C00C81EA5 /* cpSpaceHash.c in Sources */,
 				83B995D71925C5A100FD6BC1 /* cxShader.c in Sources */,
 				830EEBA119C5681C00C81EA5 /* cpVect.c in Sources */,
-				83445E5F19A9A212002275FB /* cxActionMgr.c in Sources */,
+				83445E5F19A9A212002275FB /* cxGroup.c in Sources */,
 				833CA53D1925DB5E0013630A /* cxEventBase.c in Sources */,
 				83CC1EC0193B1FA900426152 /* cxAlert.c in Sources */,
 				833CA4FE1925D95C0013630A /* cxTimer.c in Sources */,

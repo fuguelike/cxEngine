@@ -12,6 +12,7 @@
 #include <actions/cxCurve.h>
 #include <cxcore/cxBase.h>
 #include "cxView.h"
+#include "cxGroup.h"
 
 CX_C_BEGIN
 
@@ -32,7 +33,7 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_FIELD_DEF(cxLong Tag);
     CX_FIELD_DEF(cxFloat PauseTime);
     CX_FIELD_DEF(cxAny View);
-    CX_FIELD_DEF(cxActionMgr Group);
+    CX_FIELD_DEF(cxGroup Group);
     CX_METHOD_DEF(cxFloat, Curve, cxAny, cxFloat);
     CX_METHOD_DEF(void, Init, cxAny);
     CX_METHOD_DEF(void, Active, cxAny);
@@ -52,7 +53,7 @@ CX_FIELD_IMP(cxAction, cxAny, Parent);
 CX_FIELD_IMP(cxAction, cxAssist4f, Assist);
 CX_FIELD_IMP(cxAction, cxFloat, Scale);
 CX_FIELD_GET(cxAction, cxFloat, TimeElapsed);
-CX_FIELD_GET(cxAction, cxActionMgr, Group);
+CX_FIELD_GET(cxAction, cxGroup, Group);
 CX_FIELD_IMP(cxAction, cxFloat, Delay);
 CX_FIELD_GET(cxAction, cxFloat, DelayElapsed);
 CX_FIELD_IMP(cxAction, cxAny, View);

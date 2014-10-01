@@ -187,7 +187,7 @@ LOCAL_SRC_FILES += \
 	engine/cxUtil.c \
 	engine/cxView.c \
 	engine/cxInput.c \
-	engine/cxActionMgr.c \
+	engine/cxGroup.c \
     engine/cxSpatial.c
     
 LOCAL_SRC_FILES += \

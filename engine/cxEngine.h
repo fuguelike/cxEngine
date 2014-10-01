@@ -14,7 +14,7 @@
 #include "cxInput.h"
 #include "cxUtil.h"
 #include "cxBMPFont.h"
-#include "cxActionMgr.h"
+#include "cxGroup.h"
 
 CX_C_BEGIN
 
@@ -46,7 +46,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxTouchItems points;    //all touch points
     cxKey key;
     cxString lang;
-    cxHash actionMgrs;
+    cxHash groups;
 CX_OBJECT_END(cxEngine, cxObject)
 
 //type init

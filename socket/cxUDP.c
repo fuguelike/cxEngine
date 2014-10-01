@@ -83,11 +83,11 @@ cxInt cxUDPWrite(cxAny pudp,cxConstChars data,cxInt len)
 static void UDPRead(evutil_socket_t sockt, short which, void *arg)
 {
     CX_ASSERT_THIS(arg, cxUDP);
-    cxChar buf[1024];
+    cxChar buf[2048];
     struct sockaddr_in udpFrom;
     memset(&udpFrom, 0, sizeof(udpFrom));
     socklen_t fromAddrLen = sizeof(struct sockaddr_in);
-    cxInt bytes = recvfrom(this->socket, buf, 1024, 0, (struct sockaddr *)&udpFrom, &fromAddrLen);
+    cxInt bytes = recvfrom(this->socket, buf, 2048, 0, (struct sockaddr *)&udpFrom, &fromAddrLen);
     if(bytes <= 0) {
         return;
     }
@@ -105,10 +105,9 @@ cxUDP cxUDPCreate(cxConstChars host,cxInt port)
         CX_ERROR("create udp error %d:%s",port,host);
         return NULL;
     }
-    struct in_addr addr;
-    inet_pton(AF_INET, host, (void *)&addr);
-    this->udpTo.sin_addr.s_addr = addr.s_addr;
+    this->udpTo.sin_family = AF_INET;
     this->udpTo.sin_port = htons(port);
+    this->udpTo.sin_addr.s_addr = inet_addr(host);
     this->udpEvent = event_new(base->base, this->socket, EV_READ | EV_PERSIST, UDPRead, this);
     if(event_add(this->udpEvent, NULL) != 0){
         CX_ERROR("add event error");

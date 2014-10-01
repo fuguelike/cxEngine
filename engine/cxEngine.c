@@ -110,7 +110,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxPlayer);
     CX_TYPE_REG(cxTouchItem);
     CX_TYPE_REG(cxAStar);
-    CX_TYPE_REG(cxActionMgr);
+    CX_TYPE_REG(cxGroup);
     CX_TYPE_REG(cxShader);
     
     //register shader
@@ -325,12 +325,12 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->files = CX_ALLOC(cxHash);
     this->items = CX_ALLOC(cxHash);
-    this->actionMgrs = CX_ALLOC(cxHash);
+    this->groups = CX_ALLOC(cxHash);
     this->assets = CX_ALLOC(cxHash);
 }
 CX_OBJECT_FREE(cxEngine, cxObject)
 {
-    CX_RELEASE(this->actionMgrs);
+    CX_RELEASE(this->groups);
     CX_RELEASE(this->items);
     CX_RELEASE(this->files);
     CX_RELEASE(this->assets);
