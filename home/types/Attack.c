@@ -85,7 +85,7 @@ CX_OBJECT_INIT(Attack, Node)
     CX_SET(Node,this,PathRule, AttackPathRule);
     CX_SET(Node,this,FindRule, AttackFindRule);
     CX_SET(Node,this,AttackAction, AttackAttackAction);
-    CX_SET(Node, this, AttackOnce, AttackAttackOnce);
+    CX_SET(Node,this,AttackOnce, AttackAttackOnce);
     
 //    Range range = CX_CREATE(Range);
 //    RangeSetRange(range, NodeGetField(this));

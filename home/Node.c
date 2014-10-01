@@ -21,6 +21,13 @@ static void NodeOnDirty(cxAny pview)
     cxVec2f pos = cxViewGetPosition(this);
     this->Index = MapPosToFloat(map, pos);
     cxSpatialReindexView(map->items, this);
+    cxVec2i idx = cxVec2iv(this->Index.x, this->Index.y);
+    if(cxVec2iEqu(this->prevIdx, idx)){
+        return;
+    }
+    CX_LOGGER("node arrive %d %d",idx.x,idx.y);
+    this->prevIdx = idx;
+    CX_EVENT_FIRE(this, onIndex);
 }
 
 //设置优先攻击顺序
@@ -207,6 +214,7 @@ CX_OBJECT_INIT(Node, cxSprite)
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
+    CX_EVENT_RELEASE(this->onIndex);
     CX_EVENT_RELEASE(this->onDie);
     CX_EVENT_RELEASE(this->onLife);
 }
@@ -424,6 +432,7 @@ void NodeInitIndex(cxAny pview,cxVec2i idx)
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
     this->initIdx = idx;
+    this->prevIdx = idx;
     //为了对齐格子加上node大小
     cxVec2f fidx = cxVec2fv(idx.x + this->Size.w/2.0f, idx.y + this->Size.h/2.0f);
     

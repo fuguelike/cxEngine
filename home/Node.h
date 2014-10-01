@@ -62,7 +62,9 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_FIELD_DEF(cxInt AttackNum);    //同时攻击的数量
     CX_FIELD_DEF(cxInt DirIndex);     //当前方向索引
     CX_FIELD_DEF(cxFloat DirAngle);   //方向偏转角
-
+    //到达某个格子
+    cxVec2i prevIdx;
+    CX_EVENT_ALLOC(onIndex);
     cxTimer attackTimer;//攻击定时器
     //自动搜索
     cxTimer searchTimer;      //搜索用定时器
