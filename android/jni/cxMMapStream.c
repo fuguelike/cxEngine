@@ -138,13 +138,13 @@ CX_OBJECT_INIT(cxMMapStream, cxStream)
 {
     this->fd = -1;
     this->flags = CX_MMAP_READ;
-    CX_METHOD_SET(this->cxStream.Open, cxMMapStreamOpen);
-    CX_METHOD_SET(this->cxStream.Read, cxMMapStreamRead);
-    CX_METHOD_SET(this->cxStream.Write, cxMMapStreamWrite);
-    CX_METHOD_SET(this->cxStream.Seek, cxMMapStreamSeek);
-    CX_METHOD_SET(this->cxStream.Close, cxMMapStreamClose);
-    CX_METHOD_SET(this->cxStream.Position,cxMMapStreamPosition);
-    CX_METHOD_SET(this->cxStream.AllBytes,cxMMapStreamAllBytes);
+    CX_SET(cxStream, this, Read, cxMMapStreamRead);
+    CX_SET(cxStream, this, Open, cxMMapStreamOpen);
+    CX_SET(cxStream, this, Write, cxMMapStreamWrite);
+    CX_SET(cxStream, this, Seek, cxMMapStreamSeek);
+    CX_SET(cxStream, this, Close, cxMMapStreamClose);
+    CX_SET(cxStream, this, Position, cxMMapStreamPosition);
+    CX_SET(cxStream, this, AllBytes, cxMMapStreamAllBytes);
 }
 CX_OBJECT_FREE(cxMMapStream, cxStream)
 {

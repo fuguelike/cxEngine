@@ -172,8 +172,7 @@ LOCAL_SRC_FILES += \
     socket/cxEventBase.c \
     socket/cxHttp.c \
     socket/cxHttpConn.c \
-    socket/cxListen.c \
-    socket/cxClient.c
+    socket/cxUDP.c
 
 LOCAL_SRC_FILES += \
     engine/cxAction.c \

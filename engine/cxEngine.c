@@ -59,6 +59,11 @@
 #include <actions/cxBezier.h>
 #include <actions/cxSkeleton.h>
 
+#include <socket/cxUDP.h>
+#include <socket/cxHttp.h>
+#include <socket/cxHttpConn.h>
+#include <socket/cxEventBase.h>
+
 #include <algorithm/cxAStar.h>
 
 static cxEngine instance = NULL;
@@ -164,6 +169,11 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxTimeLine);
     CX_TYPE_REG(cxBezier);
     CX_TYPE_REG(cxSkeleton);
+    //scoket
+    CX_TYPE_REG(cxUDP);
+    CX_TYPE_REG(cxEventBase);
+    CX_TYPE_REG(cxHttpConn);
+    CX_TYPE_REG(cxHttp);
 }
 
 void cxEngineBegin()

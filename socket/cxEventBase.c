@@ -42,7 +42,7 @@ static void cxEventUpdate(cxAny base)
 
 CX_OBJECT_TYPE(cxEventBase, cxObject)
 {
-    
+
 }
 CX_OBJECT_INIT(cxEventBase, cxObject)
 {
