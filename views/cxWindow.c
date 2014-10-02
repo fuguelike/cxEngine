@@ -74,15 +74,8 @@ void cxWindowPopView()
 void cxWindowReplaceView(cxAny pview)
 {
     CX_ASSERT_TYPE(pview, cxView);
-    cxEngine engine = cxEngineInstance();
-    cxView top = cxStackTop(engine->window->views);
-    if(top != NULL){
-        cxViewRemove(top);
-        cxStackPop(engine->window->views);
-    }
-    cxStackPush(engine->window->views, pview);
-    cxViewAppend(engine->window, pview);
-    cxEngineTimeReset();
+    cxWindowPopView();
+    cxWindowPushView(pview);
 }
 
 

@@ -49,6 +49,7 @@ typedef enum {
     cxViewDirtyFixScale = 1 << 5,   //fix scale changed
     cxViewDirtyRaxis    = 1 << 6,   //rorate raxis changed
     cxViewDirtyAngle    = 1 << 7,   //angle change
+    cxViewDirtyTexture  = 1 << 8,   //texture or texture coord change
 }cxViewDirty;
 
 CX_OBJECT_DEF(cxView, cxObject)
@@ -75,6 +76,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxBool IsCropping);
     CX_FIELD_DEF(cxHash Actions);
     CX_FIELD_DEF(cxInt Order);
+
     cxArray removes;
     cxArray appends;
     cxListElement *subElement;
@@ -139,7 +141,12 @@ CX_INLINE cxVec2f cxViewGetScale(cxAny pview)
     return cxVec2fv(this->FixScale.x * this->Scale.x, this->FixScale.y * this->Scale.y);
 }
 
-CX_FIELD_SET(cxView, cxViewDirty, Dirty);
+CX_FIELD_GET(cxView, cxViewDirty, Dirty);
+CX_INLINE void cxViewSetDirty(cxAny pthis,cxViewDirty dirty)
+{
+    CX_ASSERT_THIS(pthis, cxView);
+    this->Dirty |= dirty;
+}
 CX_INLINE cxBool cxViewIsDirty(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);

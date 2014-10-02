@@ -45,42 +45,42 @@ void cxTextureLoad(cxAny ptex,cxStream stream)
     }
 }
 
-cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat pixel)
+cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat pixel,cxBool flipx,cxBool flipy)
 {
     CX_ASSERT_THIS(ptex, cxTexture);
     CX_ASSERT(this != NULL, "texture null");
     cxBoxTex2f rv = cxBoxTex2fDefault();
     CX_RETURN(key == NULL, rv);
-    cxTexCoord texCoord = cxHashGet(this->keys, cxHashStrKey(key));
-    if(texCoord == NULL){
+    cxTexCoord coord = cxHashGet(this->keys, cxHashStrKey(key));
+    if(coord == NULL){
         return rv;
     }
-    cxFloat x = (texCoord->x + pixel) / this->size.w;
-    cxFloat y = (texCoord->y + pixel) / this->size.h;
-    cxFloat w = (texCoord->w - pixel*2.0f) / this->size.w;
-    cxFloat h = (texCoord->h - pixel*2.0f) / this->size.h;
+    cxFloat x = (coord->x + pixel) / this->size.w;
+    cxFloat y = (coord->y + pixel) / this->size.h;
+    cxFloat w = (coord->w - pixel*2.0f) / this->size.w;
+    cxFloat h = (coord->h - pixel*2.0f) / this->size.h;
     rv.lb = cxTex2fv(x, y + h);
     rv.rb = cxTex2fv(x + w, y + h);
     rv.lt = cxTex2fv(x, y);
     rv.rt = cxTex2fv(x + w, y);
-    return rv;
+    return cxBoxTex2fFlip(rv, flipx, flipy);
 }
 
 cxBoxTex2f cxTextureBox(cxAny ptex,cxConstChars key)
 {
     CX_ASSERT_THIS(ptex, cxTexture);
-    return cxTextureBoxPixel(this, key, 0);
+    return cxTextureBoxPixel(this, key, 0, false, false);
 }
 
 cxSize2f cxTextureSize(cxAny ptex,cxConstChars key)
 {
     CX_ASSERT_THIS(ptex, cxTexture);
     CX_ASSERT(cxConstCharsOK(key), "key error");
-    cxTexCoord texCoord = cxHashGet(this->keys, cxHashStrKey(key));
-    if(texCoord == NULL){
+    cxTexCoord coord = cxHashGet(this->keys, cxHashStrKey(key));
+    if(coord == NULL){
         return this->size;
     }
-    return cxSize2fv(texCoord->w, texCoord->h);
+    return cxSize2fv(coord->w, coord->h);
 }
 
 void cxDrawClippingTexture(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars tkey)

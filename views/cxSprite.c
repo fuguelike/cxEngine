@@ -40,32 +40,26 @@ void cxSpriteDraw(cxAny pview)
 static void cxSpriteOnDirty(cxAny sender)
 {
     CX_ASSERT_THIS(sender, cxSprite);
+    cxViewDirty dirty = cxViewGetDirty(this);
     //set color
-    cxColor4f color = cxViewGetColor(this);
-    this->cbox.lb = color;
-    this->cbox.rb = color;
-    this->cbox.lt = color;
-    this->cbox.rt = color;
-    //set pos
-    cxBox4f box = cxViewBox(this);
-    this->vbox.lb = cxVec3fv(box.l, box.b, 0.0f);
-    this->vbox.rb = cxVec3fv(box.r, box.b, 0.0f);
-    this->vbox.lt = cxVec3fv(box.l, box.t, 0.0f);
-    this->vbox.rt = cxVec3fv(box.r, box.t, 0.0f);
-    this->tbox = this->texCoord;
-    //set flipX type
-    if(this->isFlipX){
-        this->tbox.lb.u = this->texCoord.rb.u;
-        this->tbox.rb.u = this->texCoord.lb.u;
-        this->tbox.lt.u = this->texCoord.rt.u;
-        this->tbox.rt.u = this->texCoord.lt.u;
+    if(dirty & cxViewDirtyColor){
+        cxColor4f color = cxViewGetColor(this);
+        this->cbox.lb = color;
+        this->cbox.rb = color;
+        this->cbox.lt = color;
+        this->cbox.rt = color;
     }
-    //set flipY type
-    if(this->isFlipY){
-        this->tbox.lb.v = this->texCoord.lt.v;
-        this->tbox.rb.v = this->texCoord.rt.v;
-        this->tbox.lt.v = this->texCoord.lb.v;
-        this->tbox.rt.v = this->texCoord.rb.v;
+    //set pos
+    if(dirty & cxViewDirtySize){
+        cxBox4f box = cxViewBox(this);
+        this->vbox.lb = cxVec3fv(box.l, box.b, 0.0f);
+        this->vbox.rb = cxVec3fv(box.r, box.b, 0.0f);
+        this->vbox.lt = cxVec3fv(box.l, box.t, 0.0f);
+        this->vbox.rt = cxVec3fv(box.r, box.t, 0.0f);
+    }
+    //set texture coord
+    if(dirty & cxViewDirtyTexture){
+        this->tbox = cxBoxTex2fFlip(this->texCoord, this->isFlipX, this->isFlipY);
     }
 }
 
@@ -74,7 +68,7 @@ void cxSpriteSetFlipX(cxAny pview,cxBool flipx)
     CX_ASSERT_THIS(pview, cxSprite);
     CX_RETURN(this->isFlipX == flipx);
     this->isFlipX = flipx;
-    cxViewSetDirty(pview, true);
+    cxViewSetDirty(pview, cxViewDirtyTexture);
 }
 
 void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
@@ -82,7 +76,7 @@ void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
     CX_ASSERT_THIS(pview, cxSprite);
     CX_RETURN(this->isFlipY == flipy);
     this->isFlipY = flipy;
-    cxViewSetDirty(pview, true);
+    cxViewSetDirty(pview, cxViewDirtyTexture);
 }
 
 void cxSpriteSetImage(cxAny pview,cxConstChars url)
@@ -103,7 +97,7 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url)
     }
     cxSpriteSetTexture(this, texture);
     if(path->count >= 2){
-        this->texCoord = cxTextureBox(this->Texture, path->key);
+        this->tbox = this->texCoord = cxTextureBox(this->Texture, path->key);
     }
     if(texture->shader != NULL){
         CX_RETAIN_SWAP(this->Shader, texture->shader);
@@ -130,7 +124,7 @@ CX_OBJECT_TYPE(cxSprite, cxView)
 }
 CX_OBJECT_INIT(cxSprite, cxView)
 {
-    this->texCoord = cxBoxTex2fDefault();
+    this->tbox = this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     CX_ADD(cxView, this, onDirty, cxSpriteOnDirty);
     CX_SET(cxView, this, Draw, cxSpriteDraw);
@@ -153,8 +147,8 @@ cxSprite cxSpriteCreateWithURL(cxConstChars url)
 void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box)
 {
     CX_ASSERT_THIS(pview, cxSprite);
-    this->texCoord = box;
-    cxViewSetDirty(this, true);
+    this->tbox = this->texCoord = box;
+    cxViewSetDirty(pview, cxViewDirtyTexture);
 }
 
 cxBoxColor4f cxSpriteBoxColor(cxAny pview)
@@ -176,10 +170,10 @@ void cxSpriteSetTextureKey(cxAny pview,cxConstChars key)
         cxTexture texture = cxTextureFactoryLoadFile(key);
         cxSpriteSetTexture(pview, texture);
     }else{
-        this->texCoord = cxTextureBox(this->Texture, key);
+        this->tbox = this->texCoord = cxTextureBox(this->Texture, key);
     }
     CX_ASSERT(this->Texture != NULL, "sprite texture not load");
-    cxViewSetDirty(this, true);
+    cxViewSetDirty(pview, cxViewDirtyTexture);
 }
 
 void cxSpriteSetShader(cxAny pview,cxConstChars key)
@@ -196,7 +190,7 @@ void cxSpriteSetTexture(cxAny pview,cxTexture texture)
     CX_ASSERT_THIS(pview, cxSprite);
     CX_RETURN(this->Texture == texture);
     CX_RETAIN_SWAP(this->Texture, texture);
-    cxViewSetDirty(this, true);
+    cxViewSetDirty(pview, cxViewDirtyTexture);
 }
 
 

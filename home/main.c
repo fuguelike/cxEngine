@@ -22,6 +22,7 @@
 #include <types/Flyable.h>
 #include "WarMap.h"
 #include "WarScene.h"
+#include "NormalMap.h"
 
 void cxEngineType(cxEngine engine)
 {
@@ -36,6 +37,7 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(WarScene);
     
     CX_TYPE_REG(FightMap);
+    CX_TYPE_REG(NormalMap);
     
     CX_TYPE_REG(Bullet);
     CX_TYPE_REG(Attack);

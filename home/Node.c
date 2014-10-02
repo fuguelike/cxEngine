@@ -397,6 +397,11 @@ void NodeResumeSearch(cxAny pview)
 void NodeSearchRun(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
+    Map map = NodeGetMap(this);
+    //战斗地图下才启动搜索
+    if(map->mode != MapModeFight){
+        return;
+    }
     this->searchTimer = cxViewAppendTimer(this, NodeGetSearchRate(this), CX_TIMER_FOREVER);
     cxActionSetGroup(this->searchTimer, FIGHT_ACTION_GROUP);
     CX_ADD(cxTimer, this->searchTimer, onArrive, NodeSearchArrive);

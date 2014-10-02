@@ -18,7 +18,7 @@
 #include <types/Flyable.h>
 #include <actions/cxMove.h>
 
-static cxBool MapFightTouch(cxAny pview,cxTouchItems *points)
+static cxBool FightMapTouch(cxAny pview,cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, Map);
     if(points->number != 1){
@@ -111,7 +111,7 @@ CX_OBJECT_INIT(FightMap, Map)
 {
     MapSetMode(this, MapModeFight);
     cxMessageAppend(this, mapSubType, "selectSubType");
-    CX_SET(cxView, this, Touch, MapFightTouch);
+    CX_SET(cxView, this, Touch, FightMapTouch);
 }
 CX_OBJECT_FREE(FightMap, Map)
 {

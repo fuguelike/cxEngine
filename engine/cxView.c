@@ -188,7 +188,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->HideTop       = true;
     this->isShowBorder  = false;
     this->IsVisible     = true;
-    this->Dirty         = cxViewDirtyNone;
+    this->Dirty         = cxViewDirtyColor;
     this->TouchFlags    = cxViewTouchFlagsSubviews | cxViewTouchFlagsSelf;
     this->Color         = cxColor4fv(1.0f, 1.0f, 1.0f, 1.0f);
     this->Size          = cxSize2fv(0.0f, 0.0f);

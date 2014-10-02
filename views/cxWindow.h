@@ -26,8 +26,6 @@ void cxWindowPopView();
 
 void cxWindowReplaceView(cxAny pview);
 
-void cxWindowSetRootLoader(cxAny loader);
-
 CX_C_END
 
 #endif
