@@ -90,7 +90,8 @@ CX_SETTER_DEF(cxView, hidetop)
 }
 CX_SETTER_DEF(cxView, cropping)
 {
-    this->isCropping = cxJsonToBool(value, this->isCropping);
+    cxBool isCropping = cxJsonToBool(value, this->IsCropping);
+    cxViewSetIsCropping(this, isCropping);
 }
 CX_SETTER_DEF(cxView, autobox)
 {
@@ -343,12 +344,6 @@ void cxViewCheckFront(cxAny pview)
     cxView parent = this->ParentView;
     CX_RETURN(parent == NULL);
     cxListMoveToTail(parent->SubViews, this->subElement);
-}
-
-void cxViewSetCropping(cxAny pview,cxBool cropping)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    this->isCropping = cropping;
 }
 
 cxBool cxViewZeroSize(cxAny pview)
@@ -671,7 +666,7 @@ void cxViewTransform(cxAny pview)
     
     CX_EVENT_FIRE(this, onDirty);
     //
-    if(this->isCropping){
+    if(cxViewGetIsCropping(pview)){
         this->scissor = cxViewGLRect(pview);
     }
     cxViewSetDirty(this, cxViewDirtyNone);
@@ -972,10 +967,13 @@ void cxViewDraw(cxAny pview)
     CX_ASSERT_THIS(pview, cxView);
     //process append view
     cxViewCleanAppends(this);
-    if(!this->IsVisible || this->isRemoved){
+    if(this->isRemoved){
         goto finished;
     }
     CX_EVENT_FIRE(this, onUpdate);
+    if(!this->IsVisible){
+        goto finished;
+    }
     cxViewUpdateActions(this);
     cxViewTransform(this);
     cxViewCheckSort(this);
@@ -983,11 +981,11 @@ void cxViewDraw(cxAny pview)
     if(!this->IsVisible || this->isRemoved){
         goto finished;
     }
+    cxBool isCropping = cxViewGetIsCropping(this);
     kmGLPushMatrix();
     kmGLMultMatrix(&this->normalMatrix);
     kmGLMultMatrix(&this->anchorMatrix);
-    //check cropping
-    if(this->isCropping){
+    if(isCropping){
         cxOpenGLEnableScissor(this->scissor);
     }
     CX_METHOD_RUN(this->Before, this);
@@ -998,8 +996,7 @@ void cxViewDraw(cxAny pview)
     }
     CX_SIGNAL_FIRE(this->onDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
     CX_METHOD_RUN(this->After,this);
-    //
-    if(this->isCropping){
+    if(isCropping){
         cxOpenGLDisableScissor();
     }
     if(cxEngineInstance()->isShowBorder || this->isShowBorder){

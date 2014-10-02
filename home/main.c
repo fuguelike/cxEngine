@@ -20,6 +20,8 @@
 #include <types/Wall.h>
 #include <types/Longer.h>
 #include <types/Flyable.h>
+#include "WarMap.h"
+#include "WarScene.h"
 
 void cxEngineType(cxEngine engine)
 {
@@ -30,6 +32,9 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Range);
     CX_TYPE_REG(Move);
     
+    CX_TYPE_REG(WarMap);
+    CX_TYPE_REG(WarScene);
+    
     CX_TYPE_REG(FightMap);
     
     CX_TYPE_REG(Bullet);
@@ -39,11 +44,6 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Flyable);
     CX_TYPE_REG(Longer);
 }
-
-#include <socket/cxEventBase.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <socket/cxUDP.h>
 
 static void selectButton(cxAny pview)
 {

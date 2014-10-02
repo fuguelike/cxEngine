@@ -14,9 +14,9 @@
 CX_C_BEGIN
 
 typedef enum {
-    cxScrollMoveTypeNone = 0,
-    cxScrollMoveTypeHorizontal = 1 << 0,
-    cxScrollMoveTypeVertical = 1 << 1,
+    cxScrollMoveTypeNone        = 0,
+    cxScrollMoveTypeHorizontal  = 1 << 0,
+    cxScrollMoveTypeVertical    = 1 << 1,
 }cxScrollMoveType;
 
 CX_OBJECT_DEF(cxScroll, cxView)

@@ -15,7 +15,6 @@ CX_C_BEGIN
 
 #define MAP_ROW         40
 #define MAP_COL         40
-#define ARRIVE_MIN_DIS  (15)    //到达点最小距离
 
 //固定数量数组
 typedef struct {

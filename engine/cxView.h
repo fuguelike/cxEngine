@@ -72,6 +72,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxColor3f BorderColor);
     CX_FIELD_DEF(cxView ParentView);
     CX_FIELD_DEF(cxBool IsVisible);
+    CX_FIELD_DEF(cxBool IsCropping);
     cxHash actions;
     cxArray removes;
     cxArray appends;
@@ -82,7 +83,6 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxBool isRunning;
     cxBool isShowBorder;    //if draw border
     cxBool isSort;
-    cxBool isCropping;
     cxBool isRemoved;   //if remove
     cxRect4f scissor;
     cxMatrix4f normalMatrix;
@@ -131,6 +131,7 @@ CX_FIELD_GET(cxView,cxVec3f,Raxis);
 CX_FIELD_GET(cxView,cxFloat,Angle);
 CX_FIELD_GET(cxView,cxColor4f,Color);
 CX_FIELD_IMP(cxView,cxColor3f,BorderColor);
+CX_FIELD_IMP(cxView, cxBool, IsCropping);
 
 CX_INLINE cxVec2f cxViewGetScale(cxAny pview)
 {
@@ -163,8 +164,6 @@ void cxViewUnBind(cxAny pview,cxAny bview);
 void cxViewBringFront(cxAny pview);
 
 void cxViewCheckFront(cxAny pview);
-
-void cxViewSetCropping(cxAny pview,cxBool cropping);
 
 cxVec2f cxViewTouchDelta(cxAny pview,cxTouchItem item);
 
