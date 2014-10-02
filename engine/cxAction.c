@@ -125,15 +125,12 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     }else{
         dt *= this->Scale;
     }
+    if(this->isPause || this->isExit){
+        goto finished;
+    }
     //if pause
     if(this->PauseTime > 0){
         this->PauseTime -= dt;
-        goto finished;
-    }
-    if(this->isPause){
-        goto finished;
-    }
-    if(this->isExit){
         goto finished;
     }
     //init event

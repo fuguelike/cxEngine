@@ -18,12 +18,13 @@ static cxBool cxMMapStreamOpen(cxAny ps)
     CX_ASSERT_THIS(ps, cxMMapStream);
     CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
     cxConstChars file = cxStringBody(this->cxStream.path);
-    this->fd = cxAssertsFD(file, &this->off, &this->cxStream.length);
+    cxInt length  = 0;
+    this->fd = cxAssertsFD(file, &this->off, &length);
     if(this->fd < 0){
-        CX_ERROR("get assert %s fd=%d failed %d/%d",file,this->fd,this->off,this->cxStream.length);
+        CX_ERROR("get assert %s fd=%d failed %d/%d",file,this->fd,this->off,length);
         return false;
     }
-
+    cxStreamSetLength(this, length);
     this->cxStream.canSeek = true;
     cxInt f = 0;
     if(this->flags & CX_MMAP_READ){
@@ -32,7 +33,7 @@ static cxBool cxMMapStreamOpen(cxAny ps)
     if(this->flags & CX_MMAP_WRITE){
         f |= PROT_WRITE;
     }
-    this->map = mmap(NULL, this->cxStream.length, f, MAP_SHARED, this->fd, this->off);
+    this->map = mmap(NULL, this->cxStream.Length, f, MAP_SHARED, this->fd, this->off);
     if(this->map == MAP_FAILED){
         return false;
     }
@@ -52,7 +53,7 @@ static cxInt cxMMapStreamRead(cxAny ps,cxAny buffer,cxInt size)
     if(!this->cxStream.canRead){
         return 0;
     }
-    cxInt bytes = (cxInt)(this->cxStream.length - this->position);
+    cxInt bytes = (cxInt)(this->cxStream.Length - this->position);
     if(bytes <= 0){
         return 0;
     }
@@ -70,13 +71,13 @@ static cxInt cxMMapStreamWrite(cxAny ps,cxAny buffer,cxInt size)
     if(!this->cxStream.canWrite){
         return 0;
     }
-    cxInt bytes = (cxInt)(this->cxStream.length - this->position);
+    cxInt bytes = (cxInt)(this->cxStream.Length - this->position);
     if(size > bytes){
         size = bytes;
     }
     memcpy(this->map + this->position, buffer, size);
     this->position += size;
-    this->cxStream.length += size;
+    this->cxStream.Length += size;
     return size;
 }
 
@@ -92,17 +93,17 @@ static cxInt cxMMapStreamSeek(cxAny ps,cxOff off,cxInt flags)
     if(!this->cxStream.canSeek){
         return 0;
     }
-    if(flags == SEEK_SET && off < this->cxStream.length){
+    if(flags == SEEK_SET && off < this->cxStream.Length){
         this->position = off;
         return this->position;
     }
-    cxInt seek = (cxInt)(this->cxStream.length - this->position);
+    cxInt seek = (cxInt)(this->cxStream.Length - this->position);
     if(flags == SEEK_CUR && off < seek){
         this->position += off;
         return this->position;
     }
-    seek = (cxInt)(this->cxStream.length + off);
-    if(flags == SEEK_END && seek < this->cxStream.length){
+    seek = (cxInt)(this->cxStream.Length + off);
+    if(flags == SEEK_END && seek < this->cxStream.Length){
         this->position = seek;
         return this->position;
     }
@@ -121,7 +122,7 @@ static cxString cxMMapStreamAllBytes(cxAny ps)
     }
     cxStreamSeek(this,0,SEEK_SET);
     //return memory ref
-    return cxStringAttachMap(this->map, this->cxStream.length);
+    return cxStringAttachMap(this->map, this->cxStream.Length);
 }
 
 static void cxMMapStreamClose(cxAny ps)
@@ -132,7 +133,7 @@ static void cxMMapStreamClose(cxAny ps)
         this->fd = -1;
     }
     if(this->map != MAP_FAILED){
-        munmap(this->map, this->cxStream.length);
+        munmap(this->map, this->cxStream.Length);
         this->map = NULL;
     }
     cxStreamBaseClose(this);

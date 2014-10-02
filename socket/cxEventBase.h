@@ -22,6 +22,10 @@ CX_OBJECT_DEF(cxEventBase, cxObject)
     cxInt freq;
 CX_OBJECT_END(cxEventBase, cxObject)
 
+
+//type=SOCK_DGRAM udp,or SOCK_STREAM tcp
+evutil_socket_t cxCreateSocket(cxBool reuse,int type);
+
 void cxEventBaseSetFreq(cxInt freq);
 
 cxEventBase cxEventBaseInstance();

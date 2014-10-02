@@ -56,7 +56,7 @@ static cxBool cxTexturePKMLoad(cxAny ptex,cxStream stream)
     cxOpenGLGenTextures(1, &this->cxTexture.textureId);
     cxOpenGLBindTexture(this->cxTexture.textureId, 0);
     cxOpenGLSetTexParameters(this->cxTexture.texParam);
-    cxInt bufsiz = stream->length - sizeof(cxPKMHeader);
+    cxInt bufsiz = stream->Length - sizeof(cxPKMHeader);
     cxAny buffer = allocator->malloc(bufsiz);
     cxInt readbytes = cxStreamRead(stream, buffer, bufsiz);
     CX_ASSERT(readbytes == bufsiz, "read pkm data error");

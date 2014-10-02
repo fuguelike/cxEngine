@@ -27,7 +27,7 @@ static cxBool cxFileStreamOpen(cxAny ps)
     }
     struct stat stat={0};
     lstat(path, &stat);
-    this->cxStream.length = (cxInt)stat.st_size;
+    this->cxStream.Length = (cxInt)stat.st_size;
     this->cxStream.canRead = true;
     this->cxStream.canSeek = true;
     this->cxStream.canWrite = true;
@@ -82,12 +82,12 @@ static cxString cxFileStreamAllBytes(cxAny ps)
         return NULL;
     }
     cxStreamSeek(this,0,SEEK_END);
-    this->length = cxStreamPosition(this);
+    this->Length = cxStreamPosition(this);
     cxStreamSeek(this,0,SEEK_SET);
-    cxChars bytes = allocator->malloc(this->length + 1);
-    cxStreamRead(this,bytes,this->length);
-    bytes[this->length] = '\0';
-    cxString data = cxStringAttachMem(bytes, this->length);
+    cxChars bytes = allocator->malloc(this->Length + 1);
+    cxStreamRead(this,bytes,this->Length);
+    bytes[this->Length] = '\0';
+    cxString data = cxStringAttachMem(bytes, this->Length);
     cxStreamClose(this);
     return data;
 }

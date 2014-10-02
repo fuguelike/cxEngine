@@ -15,7 +15,7 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxStream, cxObject)
     cxString path;
-    cxInt length;
+    CX_FIELD_DEF(cxInt Length);
     cxBool canRead;
     cxBool canWrite;
     cxBool canSeek;
@@ -29,6 +29,8 @@ CX_OBJECT_DEF(cxStream, cxObject)
     CX_METHOD_DEF(cxString, AllBytes, cxAny);
 CX_OBJECT_END(cxStream, cxObject)
 
+CX_FIELD_IMP(cxStream, cxInt, Length);
+
 void cxStreamBaseClose(cxAny pstream);
 
 cxBool cxStreamOpen(cxAny pstream);
@@ -40,8 +42,6 @@ cxInt cxStreamWrite(cxAny pstream,cxAny buffer,cxInt size);
 cxInt cxStreamSeek(cxAny pstream,cxOff off,cxInt flags);
 
 cxOff cxStreamPosition(cxAny pstream);
-
-cxInt cxStreamLength(cxAny pstream);
 
 void cxStreamClose(cxAny pstream);
 

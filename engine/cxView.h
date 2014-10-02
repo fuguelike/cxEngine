@@ -73,10 +73,10 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxView ParentView);
     CX_FIELD_DEF(cxBool IsVisible);
     CX_FIELD_DEF(cxBool IsCropping);
-    cxHash actions;
+    CX_FIELD_DEF(cxHash Actions);
+    CX_FIELD_DEF(cxInt Order);
     cxArray removes;
     cxArray appends;
-    cxInt zorder;
     cxListElement *subElement;
     cxBool isPrepend;
     cxBool isFront;    //
@@ -145,12 +145,6 @@ CX_INLINE cxBool cxViewIsDirty(cxAny pview)
     CX_ASSERT_THIS(pview, cxView);
     return this->Dirty != cxViewDirtyNone;
 }
-
-cxBool cxViewIsRunning(cxAny pview);
-
-cxMatrix4f *cxViewNormalMatrix(cxAny pview);
-
-cxMatrix4f *cxViewAnchorMatrix(cxAny pview);
 
 void cxViewUnBindAll(cxAny pview);
 

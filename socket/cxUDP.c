@@ -33,35 +33,6 @@ CX_OBJECT_FREE(cxUDP, cxObject)
 }
 CX_OBJECT_TERM(cxUDP, cxObject)
 
-evutil_socket_t cxUDPSocket(cxBool reuse)
-{
-    evutil_socket_t fd = -1;
-    int on = 1;
-    int serrno;
-    fd = socket(AF_INET, SOCK_DGRAM, 0);
-    if (fd == -1) {
-        return (-1);
-    }
-    if (evutil_make_socket_nonblocking(fd) < 0){
-        goto out;
-    }
-    if (evutil_make_socket_closeonexec(fd) < 0){
-        goto out;
-    }
-    if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (void *)&on, sizeof(on))<0){
-        goto out;
-    }
-    if (reuse && evutil_make_listen_socket_reuseable(fd) < 0) {
-        goto out;
-    }
-    return (fd);
-out:
-    serrno = EVUTIL_SOCKET_ERROR();
-    evutil_closesocket(fd);
-    EVUTIL_SET_SOCKET_ERROR(serrno);
-    return (-1);
-}
-
 cxInt cxUDPWriteString(cxAny pudp,cxString data)
 {
     CX_ASSERT_TYPE(pudp, cxUDP);
@@ -84,10 +55,7 @@ static void UDPRead(evutil_socket_t sockt, short which, void *arg)
 {
     CX_ASSERT_THIS(arg, cxUDP);
     cxChar buf[2048];
-    struct sockaddr_in udpFrom;
-    memset(&udpFrom, 0, sizeof(udpFrom));
-    socklen_t fromAddrLen = sizeof(struct sockaddr_in);
-    cxInt bytes = recvfrom(this->socket, buf, 2048, 0, (struct sockaddr *)&udpFrom, &fromAddrLen);
+    cxInt bytes = recvfrom(this->socket, buf, 2048, 0, (struct sockaddr *)&this->udpFrom, &this->fromAddrLen);
     if(bytes <= 0) {
         return;
     }
@@ -100,12 +68,11 @@ cxUDP cxUDPCreate(cxConstChars host,cxInt port)
     cxUDP this = CX_CREATE(cxUDP);
     this->host = cxStringAllocChars(host);
     this->port = port;
-    this->socket = cxUDPSocket(true);
+    this->socket = cxCreateSocket(true,SOCK_DGRAM);
     if(this->socket == -1){
         CX_ERROR("create udp error %d:%s",port,host);
         return NULL;
     }
-    this->udpTo.sin_family = AF_INET;
     this->udpTo.sin_port = htons(port);
     this->udpTo.sin_addr.s_addr = inet_addr(host);
     this->udpEvent = event_new(base->base, this->socket, EV_READ | EV_PERSIST, UDPRead, this);

@@ -27,7 +27,7 @@ static cxInt cxMemStreamRead(cxAny ps,cxAny buffer,cxInt size)
     if(!this->cxStream.canRead){
         return 0;
     }
-    cxInt bytes = (cxInt)(this->cxStream.length - this->position);
+    cxInt bytes = (cxInt)(this->cxStream.Length - this->position);
     if(bytes <= 0){
         return 0;
     }
@@ -53,7 +53,7 @@ static cxInt cxMemStreamWrite(cxAny ps,cxAny buffer,cxInt size)
     }
     memcpy(this->data + this->position, buffer, size);
     this->position += size;
-    this->cxStream.length += size;
+    this->cxStream.Length += size;
     return size;
 }
 
@@ -69,17 +69,17 @@ static cxInt cxMemStreamSeek(cxAny ps,cxOff off,cxInt flags)
     if(!this->cxStream.canSeek){
         return 0;
     }
-    if(flags == SEEK_SET && off < this->cxStream.length){
+    if(flags == SEEK_SET && off < this->cxStream.Length){
         this->position = off;
         return this->position;
     }
-    cxInt seek = (cxInt)(this->cxStream.length - this->position);
+    cxInt seek = (cxInt)(this->cxStream.Length - this->position);
     if(flags == SEEK_CUR && off < seek){
         this->position += off;
         return this->position;
     }
-    seek = (cxInt)(this->cxStream.length + off);
-    if(flags == SEEK_END && seek < this->cxStream.length){
+    seek = (cxInt)(this->cxStream.Length + off);
+    if(flags == SEEK_END && seek < this->cxStream.Length){
         this->position = seek;
         return this->position;
     }
@@ -90,7 +90,7 @@ static cxString cxMemStreamAllBytes(cxAny ps)
 {
     CX_ASSERT_THIS(ps, cxMemStream);
     cxString rv = CX_CREATE(cxString);
-    cxStringAppend(rv, this->data, this->cxStream.length);
+    cxStringAppend(rv, this->data, this->cxStream.Length);
     return rv;
 }
 

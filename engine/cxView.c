@@ -198,7 +198,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->FixScale      = cxVec2fv(1.0f, 1.0f);
     this->BorderColor   = cxRED;
     this->SubViews      = CX_ALLOC(cxList);
-    this->actions       = CX_ALLOC(cxHash);
+    this->Actions       = CX_ALLOC(cxHash);
     this->removes       = CX_ALLOC(cxArray);
     this->appends       = CX_ALLOC(cxArray);
     this->Binded        = CX_ALLOC(cxHash);
@@ -211,7 +211,7 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_RELEASE(this->appends);
     CX_RELEASE(this->removes);
     CX_RELEASE(this->SubViews);
-    CX_RELEASE(this->actions);
+    CX_RELEASE(this->Actions);
     CX_RELEASE(this->Bindes);
     CX_RELEASE(this->Binded);
     //
@@ -225,24 +225,6 @@ CX_OBJECT_FREE(cxView, cxObject)
     CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_OBJECT_TERM(cxView, cxObject)
-
-cxBool cxViewIsRunning(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    return this->isRunning;
-}
-
-cxMatrix4f *cxViewNormalMatrix(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    return &this->normalMatrix;
-}
-
-cxMatrix4f *cxViewAnchorMatrix(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    return &this->anchorMatrix;
-}
 
 void cxViewUnBindAll(cxAny pview)
 {
@@ -503,7 +485,7 @@ static cxInt cxViewSortByZOrder(cxListElement *lp,cxListElement *rp)
 {
     cxView v1 = (cxView)lp->any;
     cxView v2 = (cxView)rp->any;
-    return v1->zorder - v2->zorder;
+    return v1->Order - v2->Order;
 }
 
 void cxViewSortWithFunc(cxAny pview,cxCmpFunc func)
@@ -553,8 +535,8 @@ void cxViewSetAlpha(cxAny pview,cxFloat alpha)
 void cxViewSetOrder(cxAny pview,cxInt order)
 {
     CX_ASSERT_THIS(pview, cxView);
-    CX_RETURN(this->zorder == order);
-    this->zorder = order;
+    CX_RETURN(this->Order == order);
+    this->Order = order;
     CX_RETURN(this->ParentView == NULL);
     this->ParentView->isSort = true;
 }
@@ -672,7 +654,7 @@ void cxViewTransform(cxAny pview)
     cxViewSetDirty(this, cxViewDirtyNone);
 }
 
-static void cxViewDrawBorder(cxAny pview)
+CX_INLINE void cxViewDrawBorder(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxBox4f b = cxViewBox(this);
@@ -857,28 +839,28 @@ completed:
 void cxViewCleanActions(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxHashClean(this->actions);
+    cxHashClean(this->Actions);
 }
 
 cxBool cxViewHasAction(cxAny pview,cxUInt actionId)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxHashKey key = cxHashLongKey(actionId);
-    return cxHashHas(this->actions, key);
+    return cxHashHas(this->Actions, key);
 }
 
 cxAny cxViewGetAction(cxAny pview,cxUInt actionId)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxHashKey key = cxHashLongKey(actionId);
-    return cxHashGet(this->actions, key);
+    return cxHashGet(this->Actions, key);
 }
 
 void cxViewStopAction(cxAny pview,cxUInt actionId)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxHashKey key = cxHashLongKey(actionId);
-    cxAny ptr = cxHashGet(this->actions, key);
+    cxAny ptr = cxHashGet(this->Actions, key);
     if(ptr != NULL){
         cxActionStop(ptr);
     }
@@ -899,28 +881,28 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
     cxActionSetView(action, pview);
     cxUInt actionId = cxActionGetActionId(action);
     cxHashKey key = cxHashLongKey(actionId);
-    cxAny ptr = cxHashGet(this->actions, key);
+    cxAny ptr = cxHashGet(this->Actions, key);
     if(ptr != NULL){
         cxActionStop(ptr);
     }
-    cxHashSet(this->actions, key, action);
+    cxHashSet(this->Actions, key, action);
     return actionId;
 }
 
-static void cxViewUpdateActions(cxView pview)
+CX_INLINE void cxViewUpdateActions(cxView pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxEngine engine = cxEngineInstance();
-    CX_HASH_FOREACH(this->actions, ele, tmp){
+    CX_HASH_FOREACH(this->Actions, ele, tmp){
         cxAction action = ele->any;
         if(!cxActionUpdate(action, engine->frameDelta)){
             continue;
         }
-        cxHashDelElement(this->actions, ele);
+        cxHashDelElement(this->Actions, ele);
     }
 }
 
-static void cxViewCleanRemoves(cxView this)
+CX_INLINE void cxViewCleanRemoves(cxView this)
 {
     CX_ARRAY_FOREACH(this->removes, ele){
         cxView view = cxArrayObject(ele);
@@ -937,7 +919,7 @@ static void cxViewCleanRemoves(cxView this)
     cxArrayClean(this->removes);
 }
 
-static void cxViewCleanAppends(cxAny pview)
+CX_INLINE void cxViewCleanAppends(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     CX_ARRAY_FOREACH(this->appends, ele){
@@ -970,6 +952,7 @@ void cxViewDraw(cxAny pview)
     if(this->isRemoved){
         goto finished;
     }
+    //update in not visible
     CX_EVENT_FIRE(this, onUpdate);
     if(!this->IsVisible){
         goto finished;

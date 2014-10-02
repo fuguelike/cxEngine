@@ -55,12 +55,6 @@ cxOff cxStreamPosition(cxAny pstream)
     return CX_METHOD_GET(0, this->Position, this);
 }
 
-cxInt cxStreamLength(cxAny pstream)
-{
-    CX_ASSERT_THIS(pstream, cxStream);
-    return this->length;
-}
-
 void cxStreamClose(cxAny pstream)
 {
     CX_ASSERT_THIS(pstream, cxStream);
@@ -76,7 +70,7 @@ cxString cxStreamAllBytes(cxAny pstream)
 void cxStreamBaseClose(cxAny pstream)
 {
     CX_ASSERT_THIS(pstream, cxStream);
-    this->length = 0;
+    this->Length = 0;
     this->canRead = false;
     this->canWrite = false;
     this->canSeek = false;

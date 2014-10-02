@@ -32,7 +32,7 @@ static cxBool cxMMapStreamOpen(cxAny ps)
         return false;
     }
     this->off = 0;
-    this->cxStream.length = (cxInt)AAsset_getLength(this->asset);
+    this->cxStream.Length = (cxInt)AAsset_getLength(this->asset);
     this->cxStream.canRead = true;
     this->cxStream.canSeek = true;
     this->cxStream.canWrite = false;
@@ -46,7 +46,7 @@ static cxInt cxMMapStreamRead(cxAny ps,cxAny buffer,cxInt size)
     if(!this->cxStream.canRead){
         return 0;
     }
-    cxInt bytes = (cxInt)(this->cxStream.length - this->position);
+    cxInt bytes = (cxInt)(this->cxStream.Length - this->position);
     if(bytes <= 0){
         return 0;
     }
@@ -64,13 +64,13 @@ static cxInt cxMMapStreamWrite(cxAny ps,cxAny buffer,cxInt size)
     if(!this->cxStream.canWrite){
         return 0;
     }
-    cxInt bytes = (cxInt)(this->cxStream.length - this->position);
+    cxInt bytes = (cxInt)(this->cxStream.Length - this->position);
     if(size > bytes){
         size = bytes;
     }
     memcpy(this->map + this->position, buffer, size);
     this->position += size;
-    this->cxStream.length += size;
+    this->cxStream.Length += size;
     return size;
 }
 
@@ -86,17 +86,17 @@ static cxInt cxMMapStreamSeek(cxAny ps,cxOff off,cxInt flags)
     if(!this->cxStream.canSeek){
         return 0;
     }
-    if(flags == SEEK_SET && off < this->cxStream.length){
+    if(flags == SEEK_SET && off < this->cxStream.Length){
         this->position = off;
         return this->position;
     }
-    cxInt seek = (cxInt)(this->cxStream.length - this->position);
+    cxInt seek = (cxInt)(this->cxStream.Length - this->position);
     if(flags == SEEK_CUR && off < seek){
         this->position += off;
         return this->position;
     }
-    seek = (cxInt)(this->cxStream.length + off);
-    if(flags == SEEK_END && seek < this->cxStream.length){
+    seek = (cxInt)(this->cxStream.Length + off);
+    if(flags == SEEK_END && seek < this->cxStream.Length){
         this->position = seek;
         return this->position;
     }
@@ -114,7 +114,7 @@ static cxString cxMMapStreamAllBytes(cxAny ps)
         return NULL;
     }
     cxStreamSeek(this,0,SEEK_SET);
-    return cxStringAttachMap(this->map, this->cxStream.length);
+    return cxStringAttachMap(this->map, this->cxStream.Length);
 }
 
 static void cxMMapStreamClose(cxAny ps)

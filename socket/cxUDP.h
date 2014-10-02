@@ -21,12 +21,14 @@ CX_OBJECT_DEF(cxUDP, cxObject)
     cxInt port;
     cxString host;
     struct event *udpEvent;
+    //to addr
     struct sockaddr_in udpTo;
     socklen_t toAddrLen;
+    //from addr
+    struct sockaddr_in udpFrom;
+    socklen_t fromAddrLen;
     CX_METHOD_DEF(void, OnData,cxAny pudp,cxChars buf,cxInt size);
 CX_OBJECT_END(cxUDP, cxObject)
-
-evutil_socket_t cxUDPSocket(cxBool reuse);
 
 cxUDP cxUDPCreate(cxConstChars host,cxInt port);
 

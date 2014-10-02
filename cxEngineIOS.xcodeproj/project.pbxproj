@@ -370,11 +370,6 @@
 		833CA55C1925DFEC0013630A /* cxMessage.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMessage.c; sourceTree = "<group>"; };
 		833CA55D1925DFEC0013630A /* cxMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMessage.h; sourceTree = "<group>"; };
 		8341C34B18227C310045A66F /* libcxEngineIOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcxEngineIOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		8341C37E18227D2D0045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		8341C38218227D380045A66F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
-		8341C4F818227DDF0045A66F /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = libs/ios/lib/libevent.a; sourceTree = "<group>"; };
-		8341C4FA18227DDF0045A66F /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = libs/ios/lib/libjpeg.a; sourceTree = "<group>"; };
-		8341C4FB18227DDF0045A66F /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = libs/ios/lib/libpng.a; sourceTree = "<group>"; };
 		8341C5A518227DF20045A66F /* aabb.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = aabb.c; sourceTree = "<group>"; };
 		8341C5A618227DF20045A66F /* aabb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aabb.h; sourceTree = "<group>"; };
 		8341C5A718227DF20045A66F /* kazmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kazmath.h; sourceTree = "<group>"; };
@@ -864,11 +859,6 @@
 				8341C67018227E8A0045A66F /* CoreGraphics.framework */,
 				8341C66E18227E800045A66F /* UIKit.framework */,
 				8341C66C18227E680045A66F /* Foundation.framework */,
-				8341C4F818227DDF0045A66F /* libevent.a */,
-				8341C4FA18227DDF0045A66F /* libjpeg.a */,
-				8341C4FB18227DDF0045A66F /* libpng.a */,
-				8341C38218227D380045A66F /* libiconv.dylib */,
-				8341C37E18227D2D0045A66F /* libz.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

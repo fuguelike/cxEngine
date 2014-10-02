@@ -23,7 +23,7 @@ static cxBool cxAssetsStreamOpen(cxAny ps)
         CX_ERROR("open asset file %s failed",path);
         return false;
     }
-    this->cxStream.length = (cxInt)AAsset_getLength(this->asset);
+    this->cxStream.Length = (cxInt)AAsset_getLength(this->asset);
     this->cxStream.canRead = true;
     this->cxStream.canSeek = true;
     this->cxStream.canWrite = false;
@@ -80,10 +80,10 @@ static cxString cxAssetsStreamAllBytes(cxAny ps)
         return NULL;
     }
     cxStreamSeek(this,0,SEEK_SET);
-    cxChar *bytes = allocator->malloc(this->length + 1);
-    cxStreamRead(this,bytes,this->length);
-    bytes[this->length] = '\0';
-    cxString data = cxStringAttachMem(bytes, this->length);
+    cxChar *bytes = allocator->malloc(this->Length + 1);
+    cxStreamRead(this,bytes,this->Length);
+    bytes[this->Length] = '\0';
+    cxString data = cxStringAttachMem(bytes, this->Length);
     cxStreamClose(this);
     return data;
 }

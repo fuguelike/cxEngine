@@ -149,7 +149,7 @@ cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
     cxChar buffer[4096];
     cxProgress p = {0};
     p.current = 0;
-    p.total = src->length;
+    p.total = src->Length;
     while (true) {
         cxInt rbytes = cxStreamRead(src, buffer, 4096);
         if(rbytes <= 0){

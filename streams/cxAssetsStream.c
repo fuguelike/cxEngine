@@ -25,7 +25,7 @@ static cxBool cxAssetsStreamOpen(cxAny ps)
         CX_ERROR("lstat assets %s stream failed",path);
         return false;
     }
-    this->cxStream.length = (cxInt)stat.st_size;
+    this->cxStream.Length = (cxInt)stat.st_size;
     this->cxStream.canRead = true;
     this->cxStream.canSeek = true;
     this->cxStream.canWrite = false;
@@ -80,10 +80,10 @@ static cxString cxAssetsStreamAllBytes(cxAny ps)
         return NULL;
     }
     cxStreamSeek(this,0,SEEK_SET);
-    cxChars bytes = allocator->malloc(this->length + 1);
-    cxStreamRead(this,bytes,this->length);
-    bytes[this->length] = '\0';
-    cxString data = cxStringAttachMem(bytes, this->length);
+    cxChars bytes = allocator->malloc(this->Length + 1);
+    cxStreamRead(this,bytes,this->Length);
+    bytes[this->Length] = '\0';
+    cxString data = cxStringAttachMem(bytes, this->Length);
     cxStreamClose(this);
     return data;
 }
