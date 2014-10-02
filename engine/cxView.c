@@ -372,15 +372,15 @@ cxVec2f cxViewTouchDelta(cxAny pview,cxTouchItem item)
 cxSize2f cxViewContentSize(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxVec2f scale = cxViewGetScale(pview);
-    cxSize2f size = cxViewGetSize(pview);
+    cxVec2f scale = cxViewGetScale(this);
+    cxSize2f size = cxViewGetSize(this);
     return cxSize2fv(size.w * scale.x, size.h * scale.y);
 }
 
 cxBox4f cxViewBox(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxSize2f size = cxViewGetSize(pview);
+    cxSize2f size = cxViewGetSize(this);
     cxFloat wh = size.w/2.0f;
     cxFloat hh = size.h/2.0f;
     return cxBox4fv(-wh, wh, hh, -hh);
@@ -398,13 +398,13 @@ cxBool cxViewContainsGLBox(cxAny pview)
 cxRect4f cxViewGLRect(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxSize2f size = cxViewGetSize(pview);
+    cxSize2f size = cxViewGetSize(this);
     cxFloat wh = size.w/2.0f;
     cxFloat hh = size.h/2.0f;
     cxVec2f p1 = cxVec2fv(-wh, -hh);
     cxVec2f p2 = cxVec2fv(wh, hh);
-    p1 = cxViewPointToGLPoint(pview, p1);
-    p2 = cxViewPointToGLPoint(pview, p2);
+    p1 = cxViewPointToGLPoint(this, p1);
+    p2 = cxViewPointToGLPoint(this, p2);
     return cxRect4fv(p1.x, p1.y, p2.x - p1.x, p2.y - p1.y);
 }
 

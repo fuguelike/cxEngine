@@ -104,7 +104,7 @@ static void BulletOnUpdate(cxAny pav)
 
 static void NodeInitBullet(Node this,Node target,cxAny bullet)
 {
-    CX_ASSERT_VALUE(bullet, Bullet, b);
+    CX_ASSERT_TYPE(bullet, Bullet);
     
     BulletBind(bullet, this, target);
     

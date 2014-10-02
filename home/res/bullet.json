@@ -2,15 +2,23 @@
 
 {
 	"filename": "array.png",
-	"frame": {"x":2,"y":2,"w":172,"h":59},
+	"frame": {"x":325,"y":2,"w":172,"h":59},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":172,"h":59},
 	"sourceSize": {"w":172,"h":59}
 },
 {
+	"filename": "range.png",
+	"frame": {"x":2,"y":2,"w":321,"h":240},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":321,"h":240},
+	"sourceSize": {"w":321,"h":240}
+},
+{
 	"filename": "shell.png",
-	"frame": {"x":2,"y":63,"w":100,"h":100},
+	"frame": {"x":325,"y":63,"w":100,"h":100},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
@@ -21,8 +29,8 @@
 	"version": "1.0",
 	"image": "bullet.png",
 	"format": "RGBA8888",
-	"size": {"w":256,"h":256},
+	"size": {"w":512,"h":256},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:3dd46ef9afdd4b377d5070b73ba065b2$"
+	"smartupdate": "$TexturePacker:SmartUpdate:c64ba4fc67ea9d09c9db2cbbcc208629$"
 }
 }

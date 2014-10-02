@@ -296,7 +296,7 @@ CX_SETTER_DEF(cxParticle, texture)
         cxBoxTex2f *boxs = this->boxtexs->data;
         cxBoxTex2f *box = &boxs[itemIndex];
         cxConstChars key = cxJsonToConstChars(item);
-        *box = cxTextureBox(this->atlas->cxSprite.texture, key);
+        *box = cxTextureBox(cxSpriteGetTexture(this), key);
     }
     CX_JSON_ARRAY_EACH_END(keys, item)
 }

@@ -81,6 +81,7 @@ static void mapSubType(cxAny dst,cxAny src)
     CX_ASSERT_THIS(dst, Map);
     this->tag = cxViewGetTag(src);
     if(this->tag == 5){
+        
         for(cxInt x = 0; x < MAP_COL; x++){
             for (cxInt y = 4; y < 30; y ++) {
                 Wall node = WallCreate(this, cxVec2iv(x, y));

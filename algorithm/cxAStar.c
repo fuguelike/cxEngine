@@ -66,7 +66,6 @@ static int AStarEarlyExit(size_t visitedCount, void *visitingNode, void *goalNod
 {
     CX_ASSERT_THIS(context, cxAStar);
     cxAnyArrayAppend(this->visits, visitingNode);
-    CX_METHOD_RUN(this->Visited,this,visitingNode);
     return CX_METHOD_GET(0, this->EarlyExit, this, visitedCount, visitingNode, goalNode);
 }
 
@@ -89,39 +88,40 @@ static const ASPathNodeSource cxAStarSource =
 void cxAStarNeighbors(cxAny pobj, cxAny list, cxVec2i *node)
 {
     CX_ASSERT_THIS(pobj, cxAStar);
+    CX_ASSERT(this->IsAppend != NULL, "append not set");
     cxVec2i right = cxVec2iv(node->x + 1, node->y);
-    if(CX_METHOD_GET(false, this->IsAppend, this, &right)){
+    if(this->IsAppend(this,&right)){
         cxAStarAppendNeighbors(list, right, 1);
     }
     cxVec2i left = cxVec2iv(node->x - 1, node->y);
-    if(CX_METHOD_GET(false, this->IsAppend, this, &left)){
+    if(this->IsAppend(this,&left)){
         cxAStarAppendNeighbors(list, left, 1);
     }
     cxVec2i up = cxVec2iv(node->x, node->y + 1);
-    if(CX_METHOD_GET(false, this->IsAppend, this, &up)){
+    if(this->IsAppend(this,&up)){
         cxAStarAppendNeighbors(list, up, 1);
     }
     cxVec2i down = cxVec2iv(node->x, node->y - 1);
-    if(CX_METHOD_GET(false, this->IsAppend, this, &down)){
+    if(this->IsAppend(this,&down)){
         cxAStarAppendNeighbors(list, down, 1);
     }
     if(this->type == cxAStarTypeA4){
         return;
     }
     cxVec2i leftUp = cxVec2iv(node->x - 1, node->y + 1);
-    if(CX_METHOD_GET(false, this->IsAppend, this, &leftUp)){
+    if(this->IsAppend(this,&leftUp)){
         cxAStarAppendNeighbors(list, leftUp, 1);
     }
     cxVec2i leftDown = cxVec2iv(node->x - 1, node->y - 1);
-    if(CX_METHOD_GET(false, this->IsAppend, this, &leftDown)){
+    if(this->IsAppend(this,&leftDown)){
         cxAStarAppendNeighbors(list, leftDown, 1);
     }
     cxVec2i rightUp = cxVec2iv(node->x + 1, node->y + 1);
-    if(CX_METHOD_GET(false, this->IsAppend, this, &rightUp)){
+    if(this->IsAppend(this,&rightUp)){
         cxAStarAppendNeighbors(list, rightUp, 1);
     }
     cxVec2i rightDown = cxVec2iv(node->x + 1, node->y - 1);
-    if(CX_METHOD_GET(false, this->IsAppend, this, &rightDown)){
+    if(this->IsAppend(this,&rightDown)){
         cxAStarAppendNeighbors(list, rightDown, 1);
     }
 }

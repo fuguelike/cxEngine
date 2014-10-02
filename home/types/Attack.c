@@ -56,7 +56,7 @@ FindRuleResult AttackFindRule(cxAny pview,const NodeCombined *type)
 AttackActionResult AttackAttackAction(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
-    CX_ASSERT_VALUE(ptarget, Node, target);
+    CX_ASSERT_TYPE(ptarget, Node);
     cxScale scale = cxScaleCreate(NodeGetAttackRate(attacker), cxVec2fv(1.2f, 1.2f));
     return AAMake(NULL, scale);
 }

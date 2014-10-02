@@ -53,7 +53,7 @@ static cxBool cxTextureJSONLoad(cxAny ptex,cxStream stream)
         cxTexCoord e = CX_ALLOC(cxTexCoord);
         cxConstChars sn = cxJsonConstChars(item, "filename");
         CX_ASSERT(sn != NULL, "filename node miss");
-        e->isRotation = cxJsonBool(item, "rotated", false);
+        CX_ASSERT(cxJsonBool(item, "rotated", false) == false, "not support rotate texture");
         cxJson frame = cxJsonObject(item, "frame");
         CX_ASSERT(frame != NULL, "frame node miss");
         e->x = cxJsonDouble(frame, "x", 0) / this->cxTexture.scale.x;

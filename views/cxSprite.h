@@ -16,8 +16,8 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxSprite, cxView)
-    cxShader        shader;
-    cxTexture       texture;
+    CX_FIELD_DEF(cxTexture Texture);
+    CX_FIELD_DEF(cxShader Shader);
     GLenum          sfactor;
     GLenum          dfactor;
     cxBoxVec3f      vbox;
@@ -27,6 +27,9 @@ CX_OBJECT_DEF(cxSprite, cxView)
     cxBool          isFlipY;
     cxBoxTex2f      texCoord;
 CX_OBJECT_END(cxSprite, cxView)
+
+CX_FIELD_GET(cxSprite, cxTexture, Texture);
+CX_FIELD_GET(cxSprite, cxShader, Shader);
 
 void cxSpriteSetBoxTex(cxAny pview,cxBoxTex2f box);
 

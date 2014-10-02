@@ -15,7 +15,7 @@
 AttackActionResult FlyableAttackAction(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
-    CX_ASSERT_VALUE(ptarget, Node, target);
+    CX_ASSERT_TYPE(ptarget, Node);
     Map map = NodeGetMap(attacker);
     
     //攻击武器动画

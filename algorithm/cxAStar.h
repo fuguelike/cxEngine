@@ -49,7 +49,6 @@ CX_OBJECT_DEF(cxAStar, cxObject)
     CX_METHOD_DEF(cxInt, EarlyExit, cxAny, cxInt vcount, cxVec2i *curr,cxVec2i *target);
     CX_METHOD_DEF(cxInt, Comparator, cxAny, cxVec2i *lv,cxVec2i *rv);
     CX_METHOD_DEF(cxBool, IsAppend, cxAny, cxVec2i *node);
-    CX_METHOD_DEF(void, Visited,cxAny,cxVec2i *node);
     cxAny data;
     cxAnyArray points;
     cxAnyArray visits;

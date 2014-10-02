@@ -97,11 +97,9 @@ Move MoveCreate(cxAny node, cxAnyArray points)
 {
     CX_ASSERT_THIS(node, Node);
     //移动创建前必须bind目标
-    CX_ASSERT_VALUE(cxViewBindesFirst(this), Node, target);
+    CX_ASSERT_TYPE(cxViewBindesFirst(this), Node);
     Map map = NodeGetMap(this);
     Move move = CX_CREATE(Move);
-    cxInt num = cxAnyArrayLength(points);
-    CX_ASSERT(num > 1, "points num too few");
     cxVec2i vidx = NodeGetIntIndex(node);
     cxVec2f pos;
     CX_ASTAR_POINTS_FOREACH(points, idx){

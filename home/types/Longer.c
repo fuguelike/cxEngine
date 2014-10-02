@@ -15,7 +15,7 @@
 AttackActionResult LongerAttackAction(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
-    CX_ASSERT_VALUE(ptarget, Node, target);
+
     Map map = NodeGetMap(attacker);
     
     //攻击武器动画

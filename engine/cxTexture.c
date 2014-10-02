@@ -59,17 +59,10 @@ cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat subPixel)
     cxFloat y = (texCoord->y + subPixel) / this->size.h;
     cxFloat w = (texCoord->w - subPixel*2.0f) / this->size.w;
     cxFloat h = (texCoord->h - subPixel*2.0f) / this->size.h;
-    if(texCoord->isRotation){
-        rv.lb = cxTex2fv(x, y);
-        rv.rb = cxTex2fv(x, y + h);
-        rv.lt = cxTex2fv(x + w, y);
-        rv.rt = cxTex2fv(x + w, y + h);
-    }else{
-        rv.lb = cxTex2fv(x, y + h);
-        rv.rb = cxTex2fv(x + w, y + h);
-        rv.lt = cxTex2fv(x, y);
-        rv.rt = cxTex2fv(x + w, y);
-    }
+    rv.lb = cxTex2fv(x, y + h);
+    rv.rb = cxTex2fv(x + w, y + h);
+    rv.lt = cxTex2fv(x, y);
+    rv.rt = cxTex2fv(x + w, y);
     return rv;
 }
 

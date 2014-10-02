@@ -16,7 +16,6 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(cxTexCoord, cxObject)
-    cxBool isRotation;
     cxFloat x;
     cxFloat y;
     cxFloat w;

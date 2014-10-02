@@ -64,7 +64,7 @@ out:
 
 cxInt cxUDPWriteString(cxAny pudp,cxString data)
 {
-    CX_ASSERT_THIS(pudp, cxUDP);
+    CX_ASSERT_TYPE(pudp, cxUDP);
     if(!cxStringOK(data)){
         return 0;
     }

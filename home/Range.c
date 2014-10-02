@@ -15,7 +15,7 @@ CX_OBJECT_TYPE(Range, cxAtlas)
 }
 CX_OBJECT_INIT(Range, cxAtlas)
 {
-    cxSpriteSetTextureURL(this, "range.png");
+    cxSpriteSetTextureURL(this, "bullet.json");
 }
 CX_OBJECT_FREE(Range, cxAtlas)
 {
@@ -35,7 +35,7 @@ void RangeUpdateValue(cxAny pview)
         
         cxViewSetSize(this, cxSize2fv(w, h));
         
-        cxBoxTex2f tex = (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, 1.0f),cxTex2fv(1.0f, 0.0f),cxTex2fv(1.0f, 1.0f)};
+        cxBoxTex2f tex = cxTextureBoxPixel(cxSpriteGetTexture(this), "range.png",1.0f);
         cxColor4f color = cxColor4fv(1, 1, 1, 1);
         cxSize2f size = cxSize2fv(w/2.0f,h/2.0f);
         
@@ -64,7 +64,7 @@ void RangeUpdateValue(cxAny pview)
         cxFloat h = cosf(global.angle) * d;
         cxFloat w = sinf(global.angle) * d;
         
-        cxBoxTex2f tex = (cxBoxTex2f){cxTex2fv(0.0f, 0.0f),cxTex2fv(0.0f, 1.0f),cxTex2fv(1.0f, 0.0f),cxTex2fv(1.0f, 1.0f)};
+        cxBoxTex2f tex = cxTextureBoxPixel(cxSpriteGetTexture(this), "range.png",1.0f);
         cxColor4f color = cxColor4fv(1, 0, 0, 1);
         cxSize2f size = cxSize2fv(w/2.0f,h/2.0f);
         

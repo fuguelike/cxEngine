@@ -21,14 +21,14 @@ void cxSpriteBindTexture(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxSprite);
     cxOpenGLSetBlendFactor(this->sfactor, this->dfactor);
-    cxShaderUsing(this->shader);
-    cxTextureBind(this->texture);
+    cxShaderUsing(this->Shader);
+    cxTextureBind(this->Texture);
 }
 
 void cxSpriteDraw(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxSprite);
-    CX_RETURN(this->texture == NULL);
+    CX_RETURN(this->Texture == NULL);
     cxSpriteBindTexture(pview);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
     cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxVec3f), &this->vbox);
@@ -103,10 +103,10 @@ void cxSpriteSetTextureURL(cxAny pview,cxConstChars url)
     }
     cxSpriteSetTexture(this, texture);
     if(path->count >= 2){
-        this->texCoord = cxTextureBox(this->texture, path->key);
+        this->texCoord = cxTextureBox(this->Texture, path->key);
     }
     if(texture->shader != NULL){
-        CX_RETAIN_SWAP(this->shader, texture->shader);
+        CX_RETAIN_SWAP(this->Shader, texture->shader);
     }
 }
 
@@ -120,7 +120,7 @@ CX_SETTER_DEF(cxSprite, shader)
 {
     cxConstChars name = cxJsonToConstChars(value);
     cxShader shader = cxOpenGLShaderByName(name);
-    CX_RETAIN_SWAP(this->shader, shader);
+    CX_RETAIN_SWAP(this->Shader, shader);
 }
 
 CX_OBJECT_TYPE(cxSprite, cxView)
@@ -138,8 +138,8 @@ CX_OBJECT_INIT(cxSprite, cxView)
 }
 CX_OBJECT_FREE(cxSprite, cxView)
 {
-    CX_RELEASE(this->shader);
-    CX_RELEASE(this->texture);
+    CX_RELEASE(this->Shader);
+    CX_RELEASE(this->Texture);
 }
 CX_OBJECT_TERM(cxSprite, cxView)
 
@@ -172,13 +172,13 @@ cxBoxTex2f cxSpriteBoxTex(cxAny pview)
 void cxSpriteSetTextureKey(cxAny pview,cxConstChars key)
 {
     CX_ASSERT_THIS(pview, cxSprite);
-    if(this->texture == NULL){
+    if(this->Texture == NULL){
         cxTexture texture = cxTextureFactoryLoadFile(key);
         cxSpriteSetTexture(pview, texture);
     }else{
-        this->texCoord = cxTextureBox(this->texture, key);
+        this->texCoord = cxTextureBox(this->Texture, key);
     }
-    CX_ASSERT(this->texture != NULL, "sprite texture not load");
+    CX_ASSERT(this->Texture != NULL, "sprite texture not load");
     cxViewSetDirty(this, true);
 }
 
@@ -188,14 +188,14 @@ void cxSpriteSetShader(cxAny pview,cxConstChars key)
     CX_RETURN(key == NULL);
     cxShader shader = cxOpenGLShader(key);
     CX_RETURN(shader == NULL);
-    CX_RETAIN_SWAP(this->shader, shader);
+    CX_RETAIN_SWAP(this->Shader, shader);
 }
 
 void cxSpriteSetTexture(cxAny pview,cxTexture texture)
 {
     CX_ASSERT_THIS(pview, cxSprite);
-    CX_RETURN(this->texture == texture);
-    CX_RETAIN_SWAP(this->texture, texture);
+    CX_RETURN(this->Texture == texture);
+    CX_RETAIN_SWAP(this->Texture, texture);
     cxViewSetDirty(this, true);
 }
 

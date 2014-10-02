@@ -78,7 +78,7 @@ cxAnyArray MapVisiedPoints(cxAny pmap);
 //清空路径点
 void MapCleanPoints(cxAny pmap);
 
-//手动添加路径点
+//手动添加路径点,pos
 void MapAppendPoint(cxAny pmap,cxVec2f pos);
 
 cxAnyArray MapSearchPoints(cxAny pmap);

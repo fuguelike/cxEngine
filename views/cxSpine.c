@@ -96,7 +96,7 @@ static void cxSpineDraw(cxAny pview)
             GLenum dfactor = additive ? GL_ONE : this->cxAtlas.cxSprite.dfactor;
             GLenum sfactor = this->cxAtlas.cxSprite.sfactor;
             cxSpriteSetBlendFactor(this, sfactor, dfactor);
-        }else if(this->cxAtlas.cxSprite.texture != texture){
+        }else if(cxSpriteGetTexture(this) != texture){
             cxSpriteSetTexture(this, texture);
             cxAtlasDraw(this);
             cxAtlasClean(this);

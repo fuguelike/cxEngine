@@ -45,10 +45,10 @@ static void cxAtlasVBODraw(cxAny pview)
 void cxAtlasDraw(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
-    CX_RETURN(this->number == 0 || this->cxSprite.texture == NULL);
+    CX_RETURN(this->number == 0 || this->cxSprite.Texture == NULL);
     cxOpenGLSetBlendFactor(this->cxSprite.sfactor, this->cxSprite.dfactor);
-    cxShaderUsing(this->cxSprite.shader);
-    cxTextureBind(this->cxSprite.texture);
+    cxShaderUsing(this->cxSprite.Shader);
+    cxTextureBind(this->cxSprite.Texture);
     if(!this->isInit){
         this->isInit = true;
         cxAtlasDrawInit(pview);
@@ -72,11 +72,11 @@ void cxAtlasUpdateScale9(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
     CX_RETURN(!this->scale9.enable);
-    CX_ASSERT(!cxViewZeroSize(pview) && this->cxSprite.texture != NULL, "must set texture and size");
+    CX_ASSERT(!cxViewZeroSize(pview) && this->cxSprite.Texture != NULL, "must set texture and size");
     cxAtlasClean(pview);
     cxSize2f size = cxViewGetSize(this);
     cxRect4f tr = cxBoxTex2fToRect4f(this->cxSprite.texCoord);
-    cxSize2f tsize = cxSize2fv(this->cxSprite.texture->size.w * tr.w, this->cxSprite.texture->size.h * tr.h);
+    cxSize2f tsize = cxSize2fv(this->cxSprite.Texture->size.w * tr.w, this->cxSprite.Texture->size.h * tr.h);
     cxFloat txs[]={0.0f, this->scale9.box.l/tsize.w, (tsize.w - this->scale9.box.r)/tsize.w, 1.0f};
     cxFloat tys[]={0.0f, this->scale9.box.t/tsize.h, (tsize.h - this->scale9.box.b)/tsize.h, 1.0f};
     for(int i=0; i < 4; i++){
