@@ -209,7 +209,7 @@ CX_SETTER_DEF(cxScroll, scaleinc)
 }
 CX_SETTER_DEF(cxScroll, body)
 {
-    cxAny object = cxObjectCreateWithJson(value);
+    cxAny object = cxObjectCreateUseJson(value);
     CX_ASSERT_TYPE(object, cxView);
     cxScrollSetBody(this, object);
 }

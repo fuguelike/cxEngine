@@ -6,11 +6,13 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
+#include "Button.h"
 #include "FightMap.h"
 #include "Map.h"
 #include "Node.h"
 #include "Move.h"
 #include "Bullet.h"
+#include "WarMap.h"
 #include <types/Attack.h>
 #include <types/Defence.h>
 #include <types/Wall.h>
@@ -126,4 +128,68 @@ cxBool FightMapInit(cxAny pmap)
         return false;
     }
     return true;
+}
+
+static void selectButton(cxAny pview)
+{
+    cxMessagePost("selectSubType", pview);
+}
+
+static void btnToWarClick(cxAny sender)
+{
+    WarScene scene = WarSceneCreate();
+    cxWindowPushView(scene);
+}
+
+CX_OBJECT_TYPE(FightScene, cxScroll)
+{
+    
+}
+CX_OBJECT_INIT(FightScene, cxScroll)
+{
+    
+}
+CX_OBJECT_FREE(FightScene, cxScroll)
+{
+    
+}
+CX_OBJECT_TERM(FightScene, cxScroll)
+
+FightScene FightSceneCreate()
+{
+    cxLoader loader = cxLoaderCreate("fight.json");
+    CX_ASSERT_VALUE(cxLoaderGetRoot(loader), FightScene, scene);
+    scene->fightMap = cxLoaderGet(loader, "map");
+    CX_ASSERT_TYPE(scene->fightMap, FightMap);
+    
+    //test code
+    CX_LOADER_DEF(loader, Button, btnSelectTurret);
+    CX_ADD(Button, btnSelectTurret, onTap, selectButton);
+    
+    CX_LOADER_DEF(loader, Button, btnSelectSoldier);
+    CX_ADD(Button, btnSelectSoldier, onTap, selectButton);
+    
+    CX_LOADER_DEF(loader, Button, btnSelectArcher);
+    CX_ADD(Button, btnSelectArcher, onTap, selectButton);
+    
+    CX_LOADER_DEF(loader, Button, btnTest);
+    CX_ADD(Button, btnTest, onTap, selectButton);
+    
+    CX_LOADER_DEF(loader, Button, btnLonger);
+    CX_ADD(Button, btnLonger, onTap, selectButton);
+    
+    CX_LOADER_DEF(loader, Button, btnClear);
+    CX_ADD(Button, btnClear, onTap, selectButton);
+    
+    CX_LOADER_DEF(loader, Button, btnFlyable);
+    CX_ADD(Button, btnFlyable, onTap, selectButton);
+    
+    CX_LOADER_DEF(loader, Button, btnToWar);
+    CX_ADD(Button, btnToWar, onTap, btnToWarClick);
+    
+    if(!FightMapInit(scene->fightMap)){
+        CX_ERROR("init normal map error");
+        return NULL;
+    }
+    return scene;
 }

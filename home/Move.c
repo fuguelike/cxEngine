@@ -107,6 +107,7 @@ Move MoveCreate(cxAny node, cxAnyArray points)
         if(cxVec2iEqu(vidx, *idx)){
             pos = cxViewGetPosition(node);
         }else{
+            //+0.5表示是格子的中心点
             pos = MapIndexToPos(map,cxVec2fv(idx->x + 0.5f, idx->y + 0.5f));
         }
         cxSplineAppend(move, pos);

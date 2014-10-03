@@ -283,11 +283,30 @@ cxBool cxPointsContainPoint(cxAnyArray polygon,cxVec2f tp);
 
 cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t);
 
-cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t);
+CX_INLINE cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t)
+{
+    return (powf(1.0f-t,2.0f)*a+2.0f*t*(1.0f-t)*b+powf(t,2.0f)*c);
+}
 
-cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t);
+CX_INLINE cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t)
+{
+    return (powf(1.0f-t,3.0f)*a+3.0f*t*(powf(1.0f-t,2.0f))*b+3.0f*powf(t,2.0f)*(1.0f-t)*c+powf(t,3.0f)*d);
+}
 
-cxBool cxBox2fContainPoint(cxBox4f box,cxVec2f pos);
+CX_INLINE cxBool cxBox4fIntersects(const cxBox4f a, const cxBox4f b)
+{
+    return (a.l <= b.r && b.l <= a.r && a.b <= b.t && b.b <= a.t);
+}
+
+CX_INLINE cxBool cxBox4fContainsBox4f(const cxBox4f bb, const cxBox4f other)
+{
+    return (bb.l <= other.l && bb.r >= other.r && bb.b <= other.b && bb.t >= other.t);
+}
+
+CX_INLINE cxBool cxBox4fContainPoint(cxBox4f box,cxVec2f pos)
+{
+    return (pos.x >= box.l && pos.x <= box.r && pos.y >= box.b && pos.y <= box.t);
+}
 
 //if r1 contains r2 return true
 cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2);

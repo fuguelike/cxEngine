@@ -406,9 +406,20 @@ void NodeSearchRun(cxAny pview)
     CX_ADD(cxTimer, this->searchTimer, onArrive, NodeSearchArrive);
 }
 
+cxBool NodeHited(cxAny pview,cxVec2f index)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxBox4f box = NodeGetBox(this);
+    return cxBox4fContainPoint(box, index);
+}
+
 cxBool NodeCheckDie(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
+    Map map = NodeGetMap(this);
+    if(map->mode != MapModeFight){
+        return false;
+    }
     //当前生命值太小表示死掉了
     cxRange2i life = this->Life;
     cxBool die = life.min <= 0;

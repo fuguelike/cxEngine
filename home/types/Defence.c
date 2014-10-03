@@ -70,7 +70,7 @@ CX_OBJECT_INIT(Defence, Node)
     NodeSetBody(this, 1.5f);
     NodeSetSearchOrder(this, NodeTypeAttack, NodeSubTypeNone);
     
-    cxSpriteSetTextureURL(this, "bullet.json?shell.png");
+    cxSpriteSetTextureURL(this, "bg1.png");//"bullet.json?shell.png");
     cxViewSetColor(this, cxRED);
     
     Range range = CX_CREATE(Range);

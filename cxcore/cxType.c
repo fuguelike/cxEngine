@@ -123,7 +123,7 @@ static void cxObjectSave(cxAny object,cxJson json)
     }
 }
 
-cxAny cxObjectCreateWithType(cxConstType type)
+cxAny cxObjectCreateUseType(cxConstType type)
 {
     CX_ASSERT(type != NULL, "type null");
     cxType ptype = cxTypesGet(type);
@@ -131,7 +131,7 @@ cxAny cxObjectCreateWithType(cxConstType type)
     return ptype->Create();
 }
 
-cxAny cxObjectCreateWithJson(cxJson json)
+cxAny cxObjectCreateUseJson(cxJson json)
 {
     CX_ASSERT_TYPE(json, cxJson);
     cxAny object = NULL;
@@ -153,7 +153,7 @@ cxAny cxObjectCreateWithJson(cxJson json)
         type = cxJsonConstChars(ojson, "cxType");
     }
     CX_ASSERT(type != NULL, "json cxType property null");
-    object = cxObjectCreateWithType(type);
+    object = cxObjectCreateUseType(type);
     CX_ASSERT(object != NULL,"create object %s failed", type);
     //read new json property
     if(njson != NULL){

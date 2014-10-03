@@ -9,10 +9,21 @@
 #include "cxType.h"
 #include "cxHash.h"
 
+/*
+ items:{
+    "key1":value1,
+    "key2":value2,
+ }
+ */
+
 CX_OBJECT_TYPE(cxHash, cxObject)
-{}
+{
+   
+}
 CX_OBJECT_INIT(cxHash, cxObject)
-{}
+{
+    
+}
 CX_OBJECT_FREE(cxHash, cxObject)
 {
     cxHashClear(this);

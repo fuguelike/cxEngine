@@ -134,7 +134,7 @@ CX_SETTER_DEF(cxView, subviews)
     cxJson subviews = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(subviews, item)
     {
-        cxAny object = cxObjectCreateWithJson(item);
+        cxAny object = cxObjectCreateUseJson(item);
         CX_ASSERT_TYPE(object, cxView);
         cxViewAppend(this, object);
     }
@@ -145,7 +145,7 @@ CX_SETTER_DEF(cxView, actions)
     cxJson actions = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(actions, item)
     {
-        cxAny object = cxObjectCreateWithJson(item);
+        cxAny object = cxObjectCreateUseJson(item);
         CX_ASSERT_TYPE(object, cxAction);
         cxViewAppendAction(this, object);
     }
@@ -284,7 +284,7 @@ void cxViewPrepend(cxAny pview,cxAny newview)
 
 cxAny cxViewAppendTypeImp(cxAny pview,cxConstType type)
 {
-    cxAny nview = cxObjectCreateWithType(type);
+    cxAny nview = cxObjectCreateUseType(type);
     CX_ASSERT_TYPE(nview, cxView);
     cxViewAppend(pview, nview);
     return nview;
@@ -768,7 +768,7 @@ cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
     if(vPoint != NULL){
         *vPoint = pos;
     }
-    return cxBox2fContainPoint(box, pos);
+    return cxBox4fContainPoint(box, pos);
 }
 
 cxBool cxViewTouch(cxAny pview,cxTouchItems *points)

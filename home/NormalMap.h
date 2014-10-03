@@ -9,12 +9,22 @@
 #ifndef Home_NormalMap_h
 #define Home_NormalMap_h
 
+#include <views/cxScroll.h>
 #include "Map.h"
 
 CX_C_BEGIN
 
 CX_OBJECT_DEF(NormalMap, Map)
+    cxAny currNode;         //当前选中的node
 CX_OBJECT_END(NormalMap, Map)
+
+cxBool NormalMapInit(cxAny pmap);
+
+CX_OBJECT_DEF(NormalScene, cxScroll)
+    cxAny normalMap;      //战斗地图
+CX_OBJECT_END(NormalScene, cxScroll)
+
+NormalScene NormalSceneCreate();
 
 CX_C_END
 

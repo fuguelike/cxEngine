@@ -10,7 +10,6 @@
 #include <views/cxLoading.h>
 #include "Map.h"
 #include "Node.h"
-#include "FightScene.h"
 #include "Button.h"
 #include "Range.h"
 #include "Move.h"
@@ -22,25 +21,27 @@
 #include <types/Longer.h>
 #include <types/Flyable.h>
 #include "WarMap.h"
-#include "WarScene.h"
 #include "NormalMap.h"
 
 void cxEngineType(cxEngine engine)
 {
+    //基本类型
     CX_TYPE_REG(Map);
     CX_TYPE_REG(Node);
-    CX_TYPE_REG(FightScene);
     CX_TYPE_REG(Button);
     CX_TYPE_REG(Range);
     CX_TYPE_REG(Move);
-    
+    //战役地图
     CX_TYPE_REG(WarMapUnit);
     CX_TYPE_REG(WarMap);
     CX_TYPE_REG(WarScene);
-    
+    //战斗地图
     CX_TYPE_REG(FightMap);
+    CX_TYPE_REG(FightScene);
+    //普通地图
     CX_TYPE_REG(NormalMap);
-    
+    CX_TYPE_REG(NormalScene);
+    //单位类型
     CX_TYPE_REG(Bullet);
     CX_TYPE_REG(Attack);
     CX_TYPE_REG(Defence);
@@ -67,7 +68,7 @@ static void loadingFightSceneExit(cxAny sender)
 {
     CX_ASSERT_THIS(sender, cxLoading);
     
-    FightScene scene = FightSceneCreate();
+    cxAny scene = NormalSceneCreate();// FightSceneCreate();
     cxWindowPushView(scene);
 }
 

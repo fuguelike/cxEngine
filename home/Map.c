@@ -181,6 +181,13 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
     return false;
 }
 
+cxAny MapHitNode(cxAny pmap,cxVec2f index,NodeCombined type)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    cxArray items = MapSelectedItems(this, index, type);
+    return cxArrayFirst(items);
+}
+
 static void MapDraw(cxAny pmap)
 {
     CX_ASSERT_THIS(pmap, Map);
@@ -315,7 +322,7 @@ void MapRemoveNode(cxAny node)
     CX_ASSERT_THIS(node, Node);
     Map map = NodeGetMap(this);
     cxSpatialRemove(map->items, node);
-    //从nodes列表分离,注册动态目标不会从这个列表分离
+    //从nodes列表分离,动态目标不会从这个列表分离
     MapDetachNode(node);
     cxViewRemove(node);
 }
@@ -463,6 +470,37 @@ cxArray MapNearestItems(cxAny pmap,cxVec2f point,cxRange2f range,NodeCombined ty
     ret.range = range;
     cpBB bb = cpBBNewForCircle(point, cpfmax(range.max, 0.0f));
     cpSpatialIndexQuery(this->items->index, this, bb, MapItemsQueryFunc, &ret);
+    return ret.nodes;
+}
+
+static cpCollisionID MapSelectedItemsFunc(cxAny pmap, cxAny pview, cpCollisionID id, void *data)
+{
+    SelectedItemsInfo *info = data;
+    CX_ASSERT_VALUE(pview, Node, node);
+    NodeCombined type = NodeGetType(node);
+    //不匹配主类型
+    if(info->type.mainType != NodeTypeNone && !(info->type.mainType & type.mainType)){
+        return id;
+    }
+    //不匹配子类型
+    if(info->type.subType != NodeSubTypeNone && !(info->type.subType & type.subType)){
+        return id;
+    }
+    if(NodeHited(node, info->point)){
+        cxArrayAppend(info->nodes, node);
+    }
+    return id;
+}
+
+cxArray MapSelectedItems(cxAny pmap,cxVec2f point,NodeCombined type)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    SelectedItemsInfo ret = {0};
+    ret.nodes = CX_CREATE(cxArray);
+    ret.point = point;
+    ret.type = type;
+    cpBB bb = cpBBNewForCircle(point, cpfmax(1.0f, 0.0f));
+    cpSpatialIndexQuery(this->items->index, this, bb, MapSelectedItemsFunc, &ret);
     return ret.nodes;
 }
 

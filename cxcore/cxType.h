@@ -41,9 +41,9 @@ void cxTypesSet(cxConstType typeName,cxType type);
 
 void cxTypeRunObjectSetter(cxObject object,cxJson json);
 //
-cxAny cxObjectCreateWithType(cxConstType type);
+cxAny cxObjectCreateUseType(cxConstType type);
 //use end set object property
-cxAny cxObjectCreateWithJson(cxJson json);
+cxAny cxObjectCreateUseJson(cxJson json);
 
 void cxTypesInit();
 

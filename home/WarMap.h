@@ -12,6 +12,7 @@
 #include <engine/cxView.h>
 #include <engine/cxSpatial.h>
 #include <views/cxSprite.h>
+#include <views/cxScroll.h>
 
 CX_C_BEGIN
 
@@ -29,6 +30,12 @@ void WarMapAppendUnit(cxAny pmap,cxVec2i idx,cxAny punit);
 
 //获取一块的显示位置
 cxVec2f WarMapUnitPosition(cxAny pmap,cxVec2i idx);
+
+CX_OBJECT_DEF(WarScene, cxScroll)
+
+CX_OBJECT_END(WarScene, cxScroll)
+
+WarScene WarSceneCreate();
 
 CX_C_END
 

@@ -93,3 +93,25 @@ cxVec2f WarMapUnitPosition(cxAny pmap,cxVec2i idx)
     pos.y -= (size.h - global.warUnitSize.h)/2.0f;
     return pos;
 }
+
+CX_OBJECT_TYPE(WarScene, cxScroll)
+{
+    
+}
+CX_OBJECT_INIT(WarScene, cxScroll)
+{
+    
+}
+CX_OBJECT_FREE(WarScene, cxScroll)
+{
+    
+}
+CX_OBJECT_TERM(WarScene, cxScroll)
+
+WarScene WarSceneCreate()
+{
+    cxLoader loader = cxLoaderCreate("war.json");
+    CX_ASSERT_VALUE(cxLoaderGetRoot(loader), WarScene, scene);
+    return scene;
+}
+

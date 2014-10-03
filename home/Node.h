@@ -113,7 +113,19 @@ CX_FIELD_IMP(Node, cxFloat, AttackRate);
 CX_FIELD_IMP(Node, cxFloat, SearchRate);
 CX_FIELD_IMP(Node, cxInt, AttackNum);
 CX_FIELD_IMP(Node, cxInt, DirIndex);
-
+//获取精确索引下node范围
+CX_INLINE cxBox4f NodeGetBox(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    cxBox4f box;
+    cxFloat w2 = this->Size.w / 2.0f;
+    cxFloat h2 = this->Size.h / 2.0f;
+    box.l = this->Index.x - w2;
+    box.r = this->Index.x + w2;
+    box.t = this->Index.y + h2;
+    box.b = this->Index.y - h2;
+    return box;
+}
 //获取node中心所在网格的的中心网格坐标
 CX_INLINE cxVec2f NodeCenterIdx(cxAny pthis)
 {
@@ -140,6 +152,9 @@ CX_INLINE cxFloat NodeDistance(cxAny src,cxAny dst)
     cxVec2f didx = NodeGetIndex(dnode);
     return kmVec2DistanceBetween(&sidx, &didx);
 }
+
+//检测网格坐标是否选在node范围内
+cxBool NodeHited(cxAny pview,cxVec2f index);
 
 //检测是到达攻击范围,是否加入attacker或者target body计算
 cxBool NodeIsArriveRange(cxAny attacker,cxAny target);

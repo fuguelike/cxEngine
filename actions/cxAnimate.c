@@ -184,7 +184,7 @@ CX_SETTER_DEF(cxAnimate, frames)
     cxJson frames = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(frames, item)
     {
-        cxAnimateItem frame = cxObjectCreateWithJson(item);
+        cxAnimateItem frame = cxObjectCreateUseJson(item);
         CX_ASSERT_TYPE(frame, cxAnimateItem);
         cxHashKey key = cxAnimateItemKey(frame);
         cxHashSet(this->frames, key, frame);
@@ -207,7 +207,7 @@ CX_SETTER_DEF(cxAnimate, groups)
         CX_JSON_ARRAY_EACH_BEG(frames, ats)
         {
             if(cxJsonIsObject(ats)){
-                cxAnimateItem frame = cxObjectCreateWithJson(ats);
+                cxAnimateItem frame = cxObjectCreateUseJson(ats);
                 CX_ASSERT_TYPE(frame, cxAnimateItem);
                 cxArrayAppend(items, frame);
                 continue;

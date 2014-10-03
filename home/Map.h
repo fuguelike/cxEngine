@@ -49,6 +49,9 @@ typedef struct {
     cxAny dst;
 }MapSearchInfo;
 
+//获取网格索引下的特定类型node第一个，如果不重贴理论上就只有一个
+cxAny MapHitNode(cxAny pmap,cxVec2f index,NodeCombined type);
+
 //加入攻击
 void MapAppendBullet(cxAny bullet);
 
@@ -63,6 +66,9 @@ void MapRemoveNodes(cxAny pmap);
 
 //移除单位
 void MapRemoveNode(cxAny node);
+
+//返回包含这个点所有node
+cxArray MapSelectedItems(cxAny pmap,cxVec2f point,NodeCombined type);
 
 //搜索某点附近的，范围内的所有node,包括min,不包括max，没有返回NULL
 cxArray MapNearestItems(cxAny pmap,cxVec2f point,cxRange2f range,NodeCombined type);

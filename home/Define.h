@@ -106,6 +106,8 @@ typedef struct {
 
 #define NodeCombinedMake(t,s) (NodeCombined){t,s}
 
+#define NodeTypeAll NodeCombinedMake(NodeTypeNone,NodeSubTypeNone)
+
 #define MAX_RANGE   cxRange2fv(0, MAP_ROW*2)
 
 //搜索顺序最大32
@@ -151,6 +153,13 @@ typedef struct {
     cxRange2f range;
     NodeCombined type;
 }NearestItemsInfo;
+
+//point范围内单位搜索
+typedef struct {
+    cxArray nodes;
+    cxVec2f point;
+    NodeCombined type;
+}SelectedItemsInfo;
 
 //两点搜索信息
 typedef struct {

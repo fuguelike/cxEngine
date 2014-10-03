@@ -1,0 +1,14 @@
+{
+    "cxType": "NormalScene",
+    "layout": "horizontal|vertical",
+    "resizing": "fill",
+    "body": {
+        "cxId": "map",
+        "cxType": "NormalMap"
+    },
+    "scale": 1.2,
+    "range": {
+        "min": 1.0,
+        "max": 4.0
+    }
+}

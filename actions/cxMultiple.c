@@ -87,7 +87,7 @@ CX_SETTER_DEF(cxMultiple, actions)
     cxJson actions = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(actions, item)
     {
-        cxAny object = cxObjectCreateWithJson(item);
+        cxAny object = cxObjectCreateUseJson(item);
         CX_ASSERT_TYPE(object, cxAction);
         cxMultipleAppend(this, object);
     }

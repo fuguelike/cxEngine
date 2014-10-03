@@ -368,7 +368,7 @@ cxAny cxEngineCreateObject(cxConstChars src)
 {
     cxJson json = cxEngineJsonReader(src);
     CX_ASSERT(json != NULL, "read json error");
-    return cxObjectCreateWithJson(json);
+    return cxObjectCreateUseJson(json);
 }
 
 cxString cxEngineAssetsData(cxConstChars file)
