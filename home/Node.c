@@ -25,7 +25,6 @@ static void NodeOnDirty(cxAny pview)
     if(cxVec2iEqu(this->prevIdx, idx)){
         return;
     }
-    CX_LOGGER("node arrive %d %d",idx.x,idx.y);
     this->prevIdx = idx;
     CX_EVENT_FIRE(this, onIndex);
 }

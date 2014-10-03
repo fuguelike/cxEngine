@@ -34,6 +34,7 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Range);
     CX_TYPE_REG(Move);
     
+    CX_TYPE_REG(WarMapUnit);
     CX_TYPE_REG(WarMap);
     CX_TYPE_REG(WarScene);
     
