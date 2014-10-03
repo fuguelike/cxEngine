@@ -8,6 +8,7 @@
 
 #include "NormalMap.h"
 #include <types/Wall.h>
+#include <algorithm/cxTile.h>
 #include <types/Defence.h>
 
 static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
@@ -23,10 +24,54 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
     }
     if(item->type == cxTouchTypeUp){
         cxVec2f index = MapPosToFloat(this, cpos);
+        if(this->currNode != NULL){
+            cxVec2i xx = NodeGetInitIndexUseIndex(this->currNode);
+            CX_LOGGER("fix:%d %d",xx.x,xx.y);
+        }
         this->currNode = MapHitNode(this, index, NodeTypeAll);
         if(this->currNode == NULL){
             return false;
         }
+        //放入前段
+        cxViewBringFront(this->currNode);
+    }
+    if(this->currNode == NULL){
+        return false;
+    }
+    if(item->type == cxTouchTypeDown){
+        this->prevIdx = MapPosToFloat(this, cpos);
+        return false;
+    }
+    if(item->type == cxTouchTypeMove){
+        cxVec2f currIdx = MapPosToFloat(this, cpos);
+        cxVec2f delta;
+        kmVec2Subtract(&delta, &currIdx, &this->prevIdx);
+        delta = cxRoundVec2f(delta);
+        
+        cxVec2i idx = cxVec2iv(delta.x, delta.y);
+        cxBool setPos = false;
+        cxVec2f nidx = NodeGetIndex(this->currNode);
+        if(idx.x != 0){
+            nidx.x += (cxFloat)idx.x;
+            setPos = true;
+            this->prevIdx.x = currIdx.x;
+        }
+        if(idx.y != 0){
+            nidx.y += (cxFloat)idx.y;
+            setPos = true;
+            this->prevIdx.y = currIdx.y;
+        }
+        if(setPos){
+            cxVec2f npos = MapIndexToPos(this, nidx);
+            cxViewSetPosition(this->currNode, npos);
+            cxVec2i newIdx = NodeIndexToInitIndex(this->currNode,nidx);
+            if(MapIsFillNode(this, newIdx, this->currNode)){
+                cxViewSetColor(this->currNode, cxGREEN);
+            }else{
+                cxViewSetColor(this->currNode, cxRED);
+            }
+        }
+        return true;
     }
     return false;
 }

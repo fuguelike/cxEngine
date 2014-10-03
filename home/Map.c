@@ -636,6 +636,35 @@ void MapDetachNode(cxAny node)
     }
 }
 
+cxBool MapIsFillNode(cxAny pmap,cxVec2i idx,cxAny node)
+{
+    CX_ASSERT_THIS(pmap, Map);
+    CX_ASSERT_TYPE(node, Node);
+    if(!MapIsValidIdx(this,idx)){
+        return false;
+    }
+    //静态目标才能放人nodes
+    if(!NodeGetIsStatic(node)){
+        return false;
+    }
+    cxSize2i size = NodeGetSize(node);
+    if(idx.x < 0 || idx.y < 0){
+        return false;
+    }
+    if((idx.x + size.w > global.unitNum.x) || (idx.y + size.h) > global.unitNum.y){
+        return false;
+    }
+    for(cxInt x = idx.x; x < idx.x + size.w; x++)
+    for(cxInt y = idx.y; y < idx.y + size.h; y++) {
+        cxAny cnode = MapItem(this, cxVec2iv(x, y));
+        //有其他node返回
+        if(cnode != NULL && cnode != node){
+            return false;
+        }
+    }
+    return true;
+}
+
 void MapFillNode(cxAny pmap,cxVec2i idx,cxAny node)
 {
     CX_ASSERT_THIS(pmap, Map);
@@ -670,9 +699,7 @@ cxVec2f MapPosToFloat(cxAny pmap,cxVec2f pos)
 cxVec2i MapPosToIndex(cxAny pmap,cxVec2f pos)
 {
     CX_ASSERT_THIS(pmap, Map);
-    cxSize2f size = cxViewGetSize(this);
-    pos.y += size.h/2.0f;
-    cxVec2f idx = cxTilePosToIdx(pos, global.unitSize);
+    cxVec2f idx = MapPosToFloat(this, pos);
     return cxVec2iv(idx.x, idx.y);
 }
 

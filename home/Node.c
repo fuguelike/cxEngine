@@ -436,7 +436,24 @@ cxBool NodeCheckDie(cxAny pview)
     return die;
 }
 
-void NodeInitIndex(cxAny pview,cxVec2i idx)
+cxVec2i NodeIndexToInitIndex(cxAny pview,cxVec2f idx)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxSize2i size = NodeGetSize(this);
+    cxVec2f oidx = cxRoundVec2f(idx);
+    oidx.x -= ((cxFloat)size.w / 2.0f);
+    oidx.y -= ((cxFloat)size.h / 2.0f);
+    return cxVec2iv(oidx.x, oidx.y);
+}
+
+cxVec2i NodeGetInitIndexUseIndex(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    cxVec2f idx = NodeGetIndex(this);
+    return NodeIndexToInitIndex(this, idx);
+}
+
+void NodeUpdateIndex(cxAny pview,cxVec2i idx)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
@@ -449,6 +466,10 @@ void NodeInitIndex(cxAny pview,cxVec2i idx)
     cxViewSetPosition(this, npos);
     //获取精确的格子坐标
     this->Index = MapPosToFloat(map, npos);
+    //之前必须检测idx是否可以放置在地图内
+    CX_ASSERT(MapIsFillNode(map, idx, this), "idx error or has node in here");
+    MapDetachNode(this);
+    MapFillNode(map, idx, this);
 }
 
 void NodeSetSize(cxAny pview,cxSize2i size)
@@ -464,8 +485,7 @@ void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic)
     CX_ASSERT_THIS(pview, Node);
     this->Map = map;
     NodeSetIsStatic(this, isStatic);
-    NodeInitIndex(this, idx);
-    MapFillNode(map, idx, this);
+    NodeUpdateIndex(this, idx);
     //show test array
     cxSize2f ns = cxViewGetSize(this);
     cxFloat w = CX_MIN(ns.w, ns.h);

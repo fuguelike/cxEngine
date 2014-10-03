@@ -143,6 +143,8 @@ MapUnitAttr MapAttr(cxAny pmap,cxVec2i idx);
 //分离Node
 void MapDetachNode(cxAny node);
 
+//是否可以填充到map,如果有其他的node将返回false
+cxBool MapIsFillNode(cxAny pmap,cxVec2i idx,cxAny node);
 //将node放到idx位置
 void MapFillNode(cxAny pmap,cxVec2i idx,cxAny node);
 

@@ -283,6 +283,21 @@ cxBool cxPointsContainPoint(cxAnyArray polygon,cxVec2f tp);
 
 cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t);
 
+CX_INLINE cxFloat cxRound(cxFloat v)
+{
+    if(v > 0){
+        return v + kmEpsilon;
+    }else if(v < 0){
+        return v - kmEpsilon;
+    }else{
+        return v;
+    }
+}
+CX_INLINE cxVec2f cxRoundVec2f(cxVec2f v)
+{
+    return cxVec2fv(cxRound(v.x), cxRound(v.y));
+}
+
 CX_INLINE cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t)
 {
     return (powf(1.0f-t,2.0f)*a+2.0f*t*(1.0f-t)*b+powf(t,2.0f)*c);

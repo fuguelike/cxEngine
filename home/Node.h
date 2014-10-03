@@ -186,7 +186,12 @@ cxFloat NodeDistance(cxAny src,cxAny dst);
 void NodeFaceTarget(cxAny pview,cxAny target);
 
 //根据网格坐标设置位置，与左下角格子中心为铆合点
-void NodeInitIndex(cxAny pview,cxVec2i idx);
+void NodeUpdateIndex(cxAny pview,cxVec2i idx);
+
+//从精确的网格坐标转换成基于node左下角格子坐标,此坐标一般用来判断位置是否存在其他的node
+cxVec2i NodeIndexToInitIndex(cxAny pview,cxVec2f idx);
+//从当前精确网格坐标获取基于node左下角的整形坐标
+cxVec2i NodeGetInitIndexUseIndex(cxAny pview);
 
 //启动搜索程序
 void NodeSearchRun(cxAny pview);

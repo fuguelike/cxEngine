@@ -15,6 +15,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(NormalMap, Map)
+    cxVec2f prevIdx;
     cxAny currNode;         //当前选中的node
 CX_OBJECT_END(NormalMap, Map)
 
