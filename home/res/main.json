@@ -1,5 +1,5 @@
 {
-  "cxType": "Scene",
+  "cxType": "FightScene",
   "layout": "horizontal|vertical",
   "resizing": "fill",
   "body": {

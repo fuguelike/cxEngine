@@ -7,9 +7,10 @@
 //
 #include <engine/cxEngine.h>
 #include <engine/cxGroup.h>
+#include <views/cxLoading.h>
 #include "Map.h"
 #include "Node.h"
-#include "Scene.h"
+#include "FightScene.h"
 #include "Button.h"
 #include "Range.h"
 #include "Move.h"
@@ -28,7 +29,7 @@ void cxEngineType(cxEngine engine)
 {
     CX_TYPE_REG(Map);
     CX_TYPE_REG(Node);
-    CX_TYPE_REG(Scene);
+    CX_TYPE_REG(FightScene);
     CX_TYPE_REG(Button);
     CX_TYPE_REG(Range);
     CX_TYPE_REG(Move);
@@ -47,14 +48,25 @@ void cxEngineType(cxEngine engine)
     CX_TYPE_REG(Longer);
 }
 
-static void selectButton(cxAny pview)
+
+static cxLabelTTF progress = NULL;
+
+static void loadingFightSceneStart(cxAny sender)
 {
-    cxMessagePost("selectSubType", pview);
+    CX_ASSERT_THIS(sender, cxLoading);
 }
 
-static void btnToWarClick(cxAny sender)
+static void loadingFightSceneStep(cxAny sender)
 {
-    WarScene scene = WarSceneCreate();
+    CX_ASSERT_THIS(sender, cxLoading);
+    cxLabelTTFSetText(progress, UTF8("%d/%d",this->Index + 1,this->Step));
+}
+
+static void loadingFightSceneExit(cxAny sender)
+{
+    CX_ASSERT_THIS(sender, cxLoading);
+    
+    FightScene scene = FightSceneCreate();
     cxWindowPushView(scene);
 }
 
@@ -72,38 +84,15 @@ void cxEngineMain(cxEngine engine)
     //全局数据初始化
     GlobalInit(engine);
     
-    cxLoader loader = cxLoaderCreate("main.json");
-    CX_ASSERT_VALUE(cxLoaderGetRoot(loader), Scene, scene);
-    scene->fightMap = cxLoaderGet(loader, "map");
-    CX_ASSERT_TYPE(scene->fightMap, FightMap);
-    
-    //test code
-    CX_LOADER_DEF(loader, Button, btnSelectTurret);
-    CX_ADD(Button, btnSelectTurret, onTap, selectButton);
-    
-    CX_LOADER_DEF(loader, Button, btnSelectSoldier);
-    CX_ADD(Button, btnSelectSoldier, onTap, selectButton);
-    
-    CX_LOADER_DEF(loader, Button, btnSelectArcher);
-    CX_ADD(Button, btnSelectArcher, onTap, selectButton);
-    
-    CX_LOADER_DEF(loader, Button, btnTest);
-    CX_ADD(Button, btnTest, onTap, selectButton);
-    
-    CX_LOADER_DEF(loader, Button, btnLonger);
-    CX_ADD(Button, btnLonger, onTap, selectButton);
-    
-    CX_LOADER_DEF(loader, Button, btnClear);
-    CX_ADD(Button, btnClear, onTap, selectButton);
-    
-    CX_LOADER_DEF(loader, Button, btnFlyable);
-    CX_ADD(Button, btnFlyable, onTap, selectButton);
-    
-    CX_LOADER_DEF(loader, Button, btnToWar);
-    CX_ADD(Button, btnToWar, onTap, btnToWarClick);
-    
-    FightMapInit(scene->fightMap);
-    cxWindowPushView(scene);
+    progress = cxLabelTTFCreate(UTF8("100/100"), NULL, 52);
+
+    cxLoading loader = CX_CREATE(cxLoading);
+    cxViewAppend(loader, progress);
+    cxLoadingSetStep(loader, 20);
+    CX_SET(cxLoading, loader, onStart, loadingFightSceneStart);
+    CX_SET(cxLoading, loader, onStep, loadingFightSceneStep);
+    CX_SET(cxLoading, loader, onExit, loadingFightSceneExit);
+    cxLoadingStart(loader);
 }
 
 void cxEngineFree(cxEngine engine)

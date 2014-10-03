@@ -10,52 +10,37 @@
 #include <actions/cxTimer.h>
 #include "cxLoading.h"
 
-void cxLoadingOnUpdate(cxAny sender)
-{
-    CX_ASSERT_THIS(sender, cxLoading);
-    if(!this->isLoading){
-        CX_EVENT_FIRE(this, onFinished);
-        cxViewRemove(this);
-    }
-}
-
-cxBool cxLoadingTouch(cxAny pview,cxTouchItems *points)
+static cxBool cxLoadingTouch(cxAny pview,cxTouchItems *points)
 {
     return true;
 }
 
-void cxLoadingSetObject(cxAny pview,cxAny object)
+static cxBool cxLoadingKey(cxAny pview,cxKey *key)
 {
-    CX_ASSERT_THIS(pview, cxLoading);
-    CX_RETAIN_SWAP(this->object, object);
+    return true;
 }
 
-cxAny cxLoadingObject(cxAny pview)
+static void cxLoadingTimerArrive(cxAny sender)
 {
-    CX_ASSERT_THIS(pview, cxLoading);
-    return this->object;
-}
-
-static void cxFinishedArrive(cxAny sender)
-{
-    cxLoading this = cxActionGetView(sender);
-    cxLoaingFinished(this);
-}
-
-static void cxLoadingArrive(cxAny sender)
-{
-    cxLoading this = cxActionGetView(sender);
-    CX_EVENT_FIRE(this, onLoading);
-    if(this->autoFinished){
-        cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
-        CX_ADD(cxTimer, timer, onArrive, cxFinishedArrive);
+    CX_ASSERT_VALUE(cxActionGetView(sender), cxLoading, this);
+    CX_METHOD_RUN(this->onStep, this);
+    this->Index ++;
+    if(this->Index == this->Step){
+        cxActionStop(this->stepTimer);
     }
+}
+
+static void cxLoadingTimerExit(cxAny sender)
+{
+    CX_ASSERT_VALUE(cxActionGetView(sender), cxLoading, this);
+    CX_METHOD_RUN(this->onExit, this);
+    cxViewRemove(this);
 }
 
 void cxLoaingFinished(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxLoading);
-    this->isLoading = false;
+    cxActionStop(this->stepTimer);
 }
 
 CX_OBJECT_TYPE(cxLoading, cxView)
@@ -64,16 +49,13 @@ CX_OBJECT_TYPE(cxLoading, cxView)
 }
 CX_OBJECT_INIT(cxLoading, cxView)
 {
-    this->autoFinished = true;
-    this->isLoading = true;
-    CX_ADD(cxView, this, onUpdate, cxLoadingOnUpdate);
+    this->Step = 1;
     CX_SET(cxView, this, Touch, cxLoadingTouch);
+    CX_SET(cxView, this, Key, cxLoadingKey);
 }
 CX_OBJECT_FREE(cxLoading, cxView)
 {
-    CX_EVENT_RELEASE(this->onStart);
-    CX_EVENT_RELEASE(this->onFinished);
-    CX_EVENT_RELEASE(this->onLoading);
+
 }
 CX_OBJECT_TERM(cxLoading, cxView)
 
@@ -81,10 +63,10 @@ void cxLoadingStart(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxLoading);
     cxEngine engine = cxEngineInstance();
-    CX_EVENT_FIRE(this, onStart);
-    this->isLoading = true;
-    cxTimer timer = cxViewAppendTimer(this, 1.0f, 1);
-    CX_ADD(cxTimer, timer, onArrive, cxLoadingArrive);
+    CX_METHOD_RUN(this->onStart, this);
+    this->stepTimer = cxViewAppendTimer(this, 1.0f/30.0f, CX_TIMER_FOREVER);
+    CX_ADD(cxTimer, this->stepTimer, onArrive, cxLoadingTimerArrive);
+    CX_ADD(cxAction, this->stepTimer, onExit, cxLoadingTimerExit);
     cxViewAppend(engine->window, this);
 }
 
