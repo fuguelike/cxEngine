@@ -139,7 +139,7 @@ static cxInt cxAStarComparator(cxAny pbj, cxVec2i *lv,cxVec2i *rv)
 void cxAStarSetType(cxAny pobj,cxAStarType type)
 {
     cxAStar this = pobj;
-    cxAnyArrayClean(this->points);
+    cxAnyArrayClear(this->points);
     this->type = type;
 }
 
@@ -177,18 +177,18 @@ void cxAStarPrintPoints(cxAny pobj)
     }
 }
 
-void cxAStarCleanPath(cxAny pobj)
+void cxAStarClearPath(cxAny pobj)
 {
     CX_ASSERT_THIS(pobj, cxAStar);
-    cxAnyArrayClean(this->points);
-    cxAnyArrayClean(this->visits);
+    cxAnyArrayClear(this->points);
+    cxAnyArrayClear(this->visits);
 }
 
 cxBool cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
 {
     CX_ASSERT_THIS(pobj, cxAStar);
     this->data = data;
-    cxAStarCleanPath(this);
+    cxAStarClearPath(this);
     return ASPathCreate(&cxAStarSource, pobj, &from, &to, this->points);
 }
 

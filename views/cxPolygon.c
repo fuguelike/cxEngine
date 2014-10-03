@@ -63,7 +63,7 @@ CX_OBJECT_FREE(cxPolygon, cxSprite)
 }
 CX_OBJECT_TERM(cxPolygon, cxSprite)
 
-void cxPolygonClean(cxAny pview)
+void cxPolygonClear(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxPolygon);
     this->number = 0;

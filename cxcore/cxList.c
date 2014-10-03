@@ -15,7 +15,7 @@ CX_OBJECT_INIT(cxList, cxObject)
 {}
 CX_OBJECT_FREE(cxList, cxObject)
 {
-    cxListClean(this);
+    cxListClear(this);
 }
 CX_OBJECT_TERM(cxList, cxObject)
 
@@ -104,7 +104,7 @@ void cxListRemove(cxAny plist,cxListElement *element)
     allocator->free(element);
 }
 
-void cxListClean(cxAny plist)
+void cxListClear(cxAny plist)
 {
     CX_ASSERT_THIS(plist, cxList);
     cxListElement *ele = NULL,*tmp=NULL;

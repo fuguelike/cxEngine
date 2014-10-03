@@ -31,11 +31,11 @@ cxTexture cxTextureFactoryLoadText(cxString txt,cxString font,cxTextAttr attr);
 
 void cxTextureFactoryUnloadFile(cxConstChars file);
 
-void cxTextureFactoryClean();
+void cxTextureFactoryClear();
 
 cxTexture cxTextureCreate(cxConstChars file);
 
-void cxTextureFactoryCleanGroup(cxConstChars group);
+void cxTextureFactoryClearGroup(cxConstChars group);
 
 CX_C_END
 

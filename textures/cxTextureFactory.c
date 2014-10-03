@@ -32,7 +32,7 @@ static void cxTextureFactoryDestroy(cxAny sender)
 
 static void cxTextureFactoryMemory(cxTextureFactory this)
 {
-    cxHashClean(this->caches);
+    cxHashClear(this->caches);
 }
 
 CX_OBJECT_TYPE(cxTextureFactory, cxObject)
@@ -82,20 +82,20 @@ static cxHash cxTextureFactoryGroup(cxConstChars file,cxChars files)
     return groups;
 }
 
-void cxTextureFactoryClean()
+void cxTextureFactoryClear()
 {
     cxTextureFactory this = cxTextureFactoryInstance();
     CX_HASH_FOREACH(this->caches, ele, tmp){
-        cxHashClean(ele->any);
+        cxHashClear(ele->any);
     }
 }
 
-void cxTextureFactoryCleanGroup(cxConstChars group)
+void cxTextureFactoryClearGroup(cxConstChars group)
 {
     cxTextureFactory this = cxTextureFactoryInstance();
     cxHash groups = cxHashGet(this->caches, cxHashStrKey(group));
     if(groups != NULL){
-        cxHashClean(groups);
+        cxHashClear(groups);
     }
 }
 

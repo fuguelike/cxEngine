@@ -59,7 +59,7 @@ cxAnyArray cxAnyArrayCreateImp(cxInt size);
 //insert index before
 #define cxAnyArrayInsert(_o_,_p_,_i_) utarray_insert((_o_)->array,_p_,_i_)
 
-#define cxAnyArrayClean(_o_)          utarray_clear((_o_)->array)
+#define cxAnyArrayClear(_o_)          utarray_clear((_o_)->array)
 
 #define cxAnyArrayPush(_o_,_p_)       cxAnyArrayAppend(_o_,_p_)
 

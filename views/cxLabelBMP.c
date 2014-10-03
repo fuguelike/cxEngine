@@ -23,7 +23,7 @@ static void cxLabelBMPUpdateText(cxLabelBMP this)
     cxUInt16 *codeptr = (cxUInt16 *)unicode->strptr.d;
     //init atlas
     cxAtlasSetCapacity(this, txtLength);
-    cxAtlasClean(this);
+    cxAtlasClear(this);
     //compute txt size
     cxUInt16 prev = 0;
     cxVec2f nextpos = cxVec2fv(0, 0);

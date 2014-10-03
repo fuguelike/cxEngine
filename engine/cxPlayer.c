@@ -151,7 +151,7 @@ cxAny cxPlayEffect(cxConstChars file,cxBool loop)
 static void cxPlayerOnMemory(cxAny player)
 {
     cxPlayer this = player;
-    cxHashClean(this->caches);
+    cxHashClear(this->caches);
 }
 
 CX_OBJECT_TYPE(cxPlayer, cxObject)

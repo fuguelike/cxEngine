@@ -73,7 +73,7 @@ void cxAtlasUpdateScale9(cxAny pview)
     CX_ASSERT_THIS(pview, cxAtlas);
     CX_RETURN(!this->scale9.enable);
     CX_ASSERT(!cxViewZeroSize(pview) && this->cxSprite.Texture != NULL, "must set texture and size");
-    cxAtlasClean(pview);
+    cxAtlasClear(pview);
     cxSize2f size = cxViewGetSize(this);
     cxRect4f tr = cxBoxTex2fToRect4f(this->cxSprite.texCoord);
     cxSize2f tsize = cxSize2fv(this->cxSprite.Texture->size.w * tr.w, this->cxSprite.Texture->size.h * tr.h);
@@ -190,7 +190,7 @@ cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColo
     return rv;
 }
 
-void cxAtlasClean(cxAny pview)
+void cxAtlasClear(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
     this->number = 0;

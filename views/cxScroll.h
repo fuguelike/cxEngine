@@ -28,7 +28,7 @@ CX_OBJECT_DEF(cxScroll, cxView)
     cxBox4f box;
     cxScrollMoveType type;
     //can move view
-    cxAny body;
+    CX_FIELD_DEF(cxAny Body);
     //scale data
     cxFloat scaleTime;
     cxFloat scaleinc;       //increase scale
@@ -39,13 +39,12 @@ CX_OBJECT_DEF(cxScroll, cxView)
     cxFloat startDis;
 CX_OBJECT_END(cxScroll, cxView)
 
+CX_FIELD_GET(cxScroll, cxAny, Body);
+void cxScrollSetBody(cxAny pview,cxAny body);
+
 void cxScrollUpdateBox(cxAny pview);
 
 cxBool cxScrollTouch(cxAny pview,cxTouchItems *points);
-
-void cxScrollSetBody(cxAny pview,cxAny cview);
-
-cxView cxScrollBody(cxAny pview);
 
 void cxScrollSetEnable(cxAny pview,cxBool enable);
 

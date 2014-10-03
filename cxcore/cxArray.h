@@ -36,7 +36,7 @@ if((_a_)!=NULL)while((_e_=(cxAny)utarray_prev((_a_)->utArray, _e_))!=NULL)
 
 #define cxArrayObject(_e_)   (*_e_)
 
-void    cxArrayClean(cxAny array);
+void    cxArrayClear(cxAny array);
 
 void    cxArrayUpdate(cxAny array,cxAny any,cxInt index);
 

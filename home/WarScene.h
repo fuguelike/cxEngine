@@ -14,7 +14,10 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(WarScene, cxScroll)
+    
 CX_OBJECT_END(WarScene, cxScroll)
+
+WarScene WarSceneCreate();
 
 CX_C_END
 

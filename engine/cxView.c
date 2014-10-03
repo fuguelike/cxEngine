@@ -186,7 +186,6 @@ CX_OBJECT_TYPE(cxView, cxObject)
 CX_OBJECT_INIT(cxView, cxObject)
 {
     this->HideTop       = true;
-    this->isShowBorder  = false;
     this->IsVisible     = true;
     this->Dirty         = cxViewDirtyColor;
     this->TouchFlags    = cxViewTouchFlagsSubviews | cxViewTouchFlagsSelf;
@@ -234,13 +233,13 @@ void cxViewUnBindAll(cxAny pview)
         cxView view = cxHashKeyToAny(ele1);
         cxHashDel(view->Binded, cxHashAnyKey(this));
     }
-    cxHashClean(this->Bindes);
+    cxHashClear(this->Bindes);
     //clean binded view
     CX_HASH_FOREACH(this->Binded, ele2, tmp2){
         cxView view = cxHashKeyToAny(ele2);
         cxHashDel(view->Bindes, cxHashAnyKey(this));
     }
-    cxHashClean(this->Binded);
+    cxHashClear(this->Binded);
 }
 
 cxAny cxViewBindesFirst(cxAny pview)
@@ -836,10 +835,10 @@ completed:
     return CX_METHOD_GET(false, this->Key,this , key);
 }
 
-void cxViewCleanActions(cxAny pview)
+void cxViewClearActions(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxHashClean(this->Actions);
+    cxHashClear(this->Actions);
 }
 
 cxBool cxViewHasAction(cxAny pview,cxUInt actionId)
@@ -902,7 +901,7 @@ CX_INLINE void cxViewUpdateActions(cxView pview)
     }
 }
 
-CX_INLINE void cxViewCleanRemoves(cxView this)
+CX_INLINE void cxViewClearRemoves(cxView this)
 {
     CX_ARRAY_FOREACH(this->removes, ele){
         cxView view = cxArrayObject(ele);
@@ -916,10 +915,10 @@ CX_INLINE void cxViewCleanRemoves(cxView this)
         view->subElement = NULL;
         view->ParentView = NULL;
     }
-    cxArrayClean(this->removes);
+    cxArrayClear(this->removes);
 }
 
-CX_INLINE void cxViewCleanAppends(cxAny pview)
+CX_INLINE void cxViewClearAppends(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     CX_ARRAY_FOREACH(this->appends, ele){
@@ -941,15 +940,15 @@ CX_INLINE void cxViewCleanAppends(cxAny pview)
         }
         CX_METHOD_RUN(this->onAppend, this , nview);
     }
-    cxArrayClean(this->appends);
+    cxArrayClear(this->appends);
 }
 
 void cxViewDraw(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     //process append view
-    cxViewCleanAppends(this);
-    if(this->isRemoved){
+    cxViewClearAppends(this);
+    if(this->isRemoved || this->IsSleep){
         goto finished;
     }
     //update in not visible
@@ -961,7 +960,7 @@ void cxViewDraw(cxAny pview)
     cxViewTransform(this);
     cxViewCheckSort(this);
     cxViewCheckFront(this);
-    if(!this->IsVisible || this->isRemoved){
+    if(!this->IsVisible || this->isRemoved || this->IsSleep){
         goto finished;
     }
     cxBool isCropping = cxViewGetIsCropping(this);
@@ -988,7 +987,7 @@ void cxViewDraw(cxAny pview)
     kmGLPopMatrix();
 finished:
     //process remove view
-    cxViewCleanRemoves(this);
+    cxViewClearRemoves(this);
 }
 
 

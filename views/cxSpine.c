@@ -91,7 +91,7 @@ static void cxSpineDraw(cxAny pview)
         }
         if(slot->data->additiveBlending != additive){
             cxAtlasDraw(this);
-            cxAtlasClean(this);
+            cxAtlasClear(this);
             additive = !additive;
             GLenum dfactor = additive ? GL_ONE : this->cxAtlas.cxSprite.dfactor;
             GLenum sfactor = this->cxAtlas.cxSprite.sfactor;
@@ -99,12 +99,12 @@ static void cxSpineDraw(cxAny pview)
         }else if(cxSpriteGetTexture(this) != texture){
             cxSpriteSetTexture(this, texture);
             cxAtlasDraw(this);
-            cxAtlasClean(this);
+            cxAtlasClear(this);
         }
         cxSpineUpdateBox(this, attachment, slot);
 	}
     cxAtlasDraw(this);
-    cxAtlasClean(this);
+    cxAtlasClear(this);
 }
 /*
 "data":

@@ -17,12 +17,12 @@ CX_OBJECT_INIT(cxArray, cxObject)
 }
 CX_OBJECT_FREE(cxArray, cxObject)
 {
-    cxArrayClean(this);
+    cxArrayClear(this);
     utarray_free(this->utArray);
 }
 CX_OBJECT_TERM(cxArray, cxObject)
 
-void cxArrayClean(cxAny array)
+void cxArrayClear(cxAny array)
 {
     CX_ASSERT_THIS(array, cxArray);
     CX_ARRAY_FOREACH(this, e) {

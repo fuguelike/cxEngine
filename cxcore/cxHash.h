@@ -55,7 +55,7 @@ CX_OBJECT_END(cxHash, cxObject)
 
 #define cxHashSort(_hash_,_cmp_)    HASH_SORT(_hash_,_cmp_)
 
-void    cxHashClean(cxAny phash);
+void    cxHashClear(cxAny phash);
 
 cxInt   cxHashLength(cxAny phash);
 

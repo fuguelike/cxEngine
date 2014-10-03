@@ -26,7 +26,7 @@ cxAny cxMemPoolAppend(cxAny any);
 
 void cxMemPoolBegin();
 
-void cxMemPoolClean();
+void cxMemPoolClear();
 
 void cxMemPoolPush();
 

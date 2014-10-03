@@ -38,7 +38,7 @@ cxSpatial cxSpatialCreate(cxFloat dim,cxInt cells,cpBB (*func)(cxAny));
 
 void cxSpatialEach(cxAny ps,cxSpatialEachFunc func,cxAny data);
 
-void cxSpatialClean(cxAny ps);
+void cxSpatialClear(cxAny ps);
 
 void cxSpatialInsert(cxAny ps,cxAny view);
 

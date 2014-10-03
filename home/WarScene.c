@@ -21,3 +21,10 @@ CX_OBJECT_FREE(WarScene, cxScroll)
     
 }
 CX_OBJECT_TERM(WarScene, cxScroll)
+
+WarScene WarSceneCreate()
+{
+    cxLoader loader = cxLoaderCreate("war.json");
+    CX_ASSERT_VALUE(cxLoaderGetRoot(loader), WarScene, scene);
+    return scene;
+}

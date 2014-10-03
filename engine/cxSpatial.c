@@ -39,7 +39,7 @@ CX_OBJECT_INIT(cxSpatial, cxObject)
 CX_OBJECT_FREE(cxSpatial, cxObject)
 {
     if(this->index != NULL){
-        cxSpatialClean(this);
+        cxSpatialClear(this);
         cpSpatialIndexDestroy(this->index);
     }
 }
@@ -49,7 +49,7 @@ cxSpatial cxSpatialAlloc(cxFloat dim,cxInt cells, cpBB (*func)(cxAny))
 {
     cxSpatial this = CX_ALLOC(cxSpatial);
     if(this->index != NULL){
-        cxSpatialClean(this);
+        cxSpatialClear(this);
         cpSpatialIndexDestroy(this->index);
     }
     this->index = cpSpaceHashNew(dim, cells, func, NULL);
@@ -116,7 +116,7 @@ cxSpatialNearestInfo cxSpatialNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNe
     return ret;
 }
 
-void cxSpatialClean(cxAny ps)
+void cxSpatialClear(cxAny ps)
 {
     CX_ASSERT_THIS(ps, cxSpatial);
     cpSpatialIndexEach(this->index, cxSpatialIndexIterator, this);

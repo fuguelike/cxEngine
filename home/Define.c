@@ -31,13 +31,19 @@ void GlobalInit(cxEngine engine)
     cxSize2f size = cxSize2fv(engine->winsize.w * 1.2f, 0);
     size.h = size.w * 0.75f;
     
-    global.unitSize = cxSize2fv(size.w/global.unitNum.x, size.h/global.unitNum.y);
+    global.unitSize.w = size.w/global.unitNum.x;
+    global.unitSize.h = size.h/global.unitNum.y;
     
     cxFloat w2 = global.unitSize.w / 2.0f;
     cxFloat h2 = global.unitSize.h / 2.0f;
     global.sideLen = sqrtf(w2*w2 + h2*h2);
     
     global.angle = asinf(w2 / global.sideLen);
+    
+    global.warUnitNum = cxVec2iv(16, 12);
+    global.warUnitSize = cxSize2fv(256, 256);
+    global.warMapSize.w = global.warUnitSize.w * global.warUnitNum.x;
+    global.warMapSize.h = global.warUnitSize.h * global.warUnitNum.y;
 }
 
 cxFloat SideDistance(cxInt sideNum)

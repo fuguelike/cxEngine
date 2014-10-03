@@ -26,7 +26,7 @@ CX_OBJECT_TERM(Range, cxAtlas)
 void RangeUpdateValue(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Range);
-    cxAtlasClean(this);
+    cxAtlasClear(this);
     cxTexture texture = cxSpriteGetTexture(this);
     if(this->range.max > 0){
 

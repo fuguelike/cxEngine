@@ -52,6 +52,12 @@ static void selectButton(cxAny pview)
     cxMessagePost("selectSubType", pview);
 }
 
+static void btnToWarClick(cxAny sender)
+{
+    WarScene scene = WarSceneCreate();
+    cxWindowPushView(scene);
+}
+
 void cxEngineInit(cxEngine engine)
 {
     cxEngineSetDesignSize(cxSize2fv(2048, 1536));
@@ -92,6 +98,9 @@ void cxEngineMain(cxEngine engine)
     
     CX_LOADER_DEF(loader, Button, btnFlyable);
     CX_ADD(Button, btnFlyable, onTap, selectButton);
+    
+    CX_LOADER_DEF(loader, Button, btnToWar);
+    CX_ADD(Button, btnToWar, onTap, btnToWarClick);
     
     FightMapInit(scene->fightMap);
     cxWindowPushView(scene);

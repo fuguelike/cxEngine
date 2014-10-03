@@ -57,7 +57,7 @@ static void cxHttpRequestCompleted(struct evhttp_request *req,void *xhttp)
 static void cxHttpRequestChunked(struct evhttp_request *req,void *xhttp)
 {
     cxHttp this = xhttp;
-    cxStringClean(this->data);
+    cxStringClear(this->data);
     cxHttpReadData(this);
     CX_EVENT_FIRE(this, onChunked);
 }

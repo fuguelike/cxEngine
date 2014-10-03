@@ -50,7 +50,7 @@ cxDouble cxStringToDouble(cxString str,cxDouble dv);
 
 cxLong cxStringToLong(cxString str,cxLong dv);
 
-void cxStringClean(cxString string);
+void cxStringClear(cxString string);
 
 cxString cxMD5(cxString v);
 

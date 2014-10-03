@@ -63,7 +63,7 @@ cxString cxMD5(cxString v)
     return cxStringConstChars(md5);
 }
 
-void cxStringClean(cxString string)
+void cxStringClear(cxString string)
 {
     if(cxStringLength(string) > 0){
         utstring_clear(&string->strptr);

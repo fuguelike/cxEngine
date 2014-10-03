@@ -63,7 +63,7 @@ void cxAStarAppendNeighbors(cxAny list,cxVec2i point,cxFloat edgeCost);
 
 void cxAStarPrintPoints(cxAny pobj);
 
-void cxAStarCleanPath(cxAny pobj);
+void cxAStarClearPath(cxAny pobj);
 
 cxBool cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data);
 

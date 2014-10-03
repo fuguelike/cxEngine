@@ -13,18 +13,12 @@
 
 #define CX_SCROLL_MOVE_ACTION_ID    100000
 
-void cxScrollSetBody(cxAny pview,cxAny cview)
+void cxScrollSetBody(cxAny pview,cxAny body)
 {
     CX_ASSERT_THIS(pview, cxScroll);
-    CX_ASSERT(this->body == NULL, "container already set");
-    cxViewPrepend(this, cview);
-    this->body = cview;
-}
-
-cxView cxScrollBody(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxScroll);
-    return this->body;
+    CX_ASSERT(this->Body == NULL, "container already set");
+    cxViewPrepend(this, body);
+    this->Body = body;
 }
 
 static cxFloat cxScrollMoveCurve(cxAny pav,cxFloat time)
@@ -35,7 +29,7 @@ static cxFloat cxScrollMoveCurve(cxAny pav,cxFloat time)
 
 static void cxScrollResetScale(cxScroll this)
 {
-    cxView body = cxScrollBody(this);
+    cxView body = cxScrollGetBody(this);
     cxVec2f scale = cxViewGetScale(body);
     if(scale.x > this->range.max || scale.y > this->range.max){
         cxScale scale = cxScaleCreate(this->scaleTime, cxVec2fx(this->range.max));
@@ -51,7 +45,7 @@ static cxBool cxScrollScale(cxAny pview,cxTouchItems *points)
     cxVec2f cp1;
     cxTouchItem item0 = points->items[0];
     cxTouchItem item1 = points->items[1];
-    cxView body = cxScrollBody(this);
+    cxView body = cxScrollGetBody(this);
     bool hited = cxViewHitTest(body, item0->position, &cp0) && cxViewHitTest(body, item1->position, &cp1);
     if(hited && (item0->type == cxTouchTypeDown || item1->type == cxTouchTypeDown)){
         //disable move
@@ -120,7 +114,7 @@ cxBool cxScrollCheckPos(cxAny pview,cxVec2f *pos)
 void cxScrollUpdateBox(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxScroll);
-    cxView body = cxScrollBody(this);
+    cxView body = cxScrollGetBody(this);
     cxSize2f msize = cxViewContentSize(body);
     cxSize2f psize = cxViewGetSize(this);
     cxFloat mw = (msize.w - psize.w) / 2.0f;
@@ -135,14 +129,14 @@ void cxScrollUpdateBox(cxAny pview)
 cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, cxScroll);
-    CX_RETURN(this->body == NULL,false);
+    CX_RETURN(this->Body == NULL,false);
     if(this->scalable && points->number == 2){
         return cxScrollScale(pview, points);
     }
     if(points->number != 1){
         return false;
     }
-    cxView body = cxScrollBody(this);
+    cxView body = cxScrollGetBody(this);
     cxTouchItem item = points->items[0];
     cxVec2f cpos;
     cxBool hited = cxViewHitTest(this, item->position, &cpos);

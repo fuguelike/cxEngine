@@ -41,7 +41,7 @@ void cxMemPoolInit()
 
 void cxMemPoolFree()
 {
-    cxMemPoolClean();
+    cxMemPoolClear();
     pthread_key_delete(autoPoolKey);
 }
 
@@ -76,10 +76,10 @@ void cxMemPoolBegin()
     cxMemPoolInstance();
 }
 
-void cxMemPoolClean()
+void cxMemPoolClear()
 {
     cxMemPool pool = cxMemPoolInstance();
-    cxArrayClean(pool->objects);
+    cxArrayClear(pool->objects);
 }
 
 void cxMemPoolPush()

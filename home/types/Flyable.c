@@ -34,7 +34,7 @@ PathRuleResult FlyablePathRule(cxAny pview,FindRuleResult *fret)
     CX_ASSERT_THIS(pview, Attack);
     Map map = NodeGetMap(this);
     //飞行单位直接到达，无需寻路
-    MapCleanPoints(map);
+    MapClearPoints(map);
     cxVec2f sidx = NodeGetIndex(this);
     cxVec2f didx = NodeGetIndex(fret->target);
     //先加目标点，在加入移动动画时反向取

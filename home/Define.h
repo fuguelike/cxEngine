@@ -23,13 +23,17 @@ typedef struct {
 }FixArray;
 
 #define FixArrayAppend(_a_,_i_) (_a_).items[(_a_).number++] = _i_
+#define FixArrayClear(_a_,_i_) (_a_).items[(_a_).number++] = _i_
 
 typedef struct {
-    cxVec2i unitNum;    //单元数量
-    cxSize2f unitSize;  //单元大小
-    cxFloat sideLen;    //菱形单元边长
-    cxFloat angle;      //大角度
-    cxFloat mapRate;    //地图宽度比例
+    cxVec2i unitNum;        //单元数量
+    cxSize2f unitSize;      //单元大小
+    cxFloat sideLen;        //菱形单元边长
+    cxFloat angle;          //大角度
+    cxFloat mapRate;        //地图宽度比例
+    cxVec2i warUnitNum;     //战争地图快数量
+    cxSize2f warUnitSize;   //战争地图一块大小
+    cxSize2f warMapSize;    //战争地图大小
 }Global;
 
 extern Global global;

@@ -235,7 +235,7 @@ void cxEngineDraw()
     kmGLPushMatrix();
     cxViewDraw(engine->window);
     kmGLPopMatrix();
-    cxMemPoolClean();
+    cxMemPoolClear();
     engine->lastTime = now;
 }
 

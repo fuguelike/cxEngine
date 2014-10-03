@@ -56,7 +56,7 @@ cxListElement *cxListLast(cxAny plist);
 
 void cxListRemove(cxAny plist,cxListElement *element);
 
-void cxListClean(cxAny plist);
+void cxListClear(cxAny plist);
 
 CX_C_END
 

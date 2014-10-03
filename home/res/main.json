@@ -95,11 +95,13 @@
           "title": "飞行物"
         },
         {
+          "cxId": "btnToWar",
           "cxType": "Button",
           "size": {
             "w": 200,
             "h": 200
-          }
+          },
+          "title": "WarMap"
         },
         {
           "cxType": "Button",

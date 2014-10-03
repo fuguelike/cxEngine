@@ -45,7 +45,7 @@ void cxWindowPushView(cxAny pview)
     cxView new = pview;
     cxView top = cxStackTop(engine->window->views);
     if(top != NULL && cxViewGetHideTop(new)){
-        cxViewSetIsVisible(top, false);
+        cxViewSetIsSleep(top, true);
         cxViewExit(top);
     }
     cxStackPush(engine->window->views, new);
@@ -66,7 +66,7 @@ void cxWindowPopView()
     }
     if(top != NULL && hideTop){
         cxViewEnter(top);
-        cxViewSetIsVisible(top, true);
+        cxViewSetIsSleep(top, false);
     }
     cxEngineTimeReset();
 }

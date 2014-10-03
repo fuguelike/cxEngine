@@ -28,7 +28,7 @@ static void cxParticleOver(cxAny pav)
     CX_ASSERT_THIS(pav, cxParticle);
     this->isActive = false;
     this->emitcounter = 0;
-    cxAtlasClean(this->atlas);
+    cxAtlasClear(this->atlas);
     CX_SLOT_RELEASE(this->onDraw);
 }
 
@@ -255,7 +255,7 @@ static void cxParticleReset(cxAny pav)
         cxParticleUnit *p = &this->units[this->index];
         p->life = 0;
     }
-    cxAtlasClean(this->atlas);
+    cxAtlasClear(this->atlas);
 }
 
 CX_SETTER_DEF(cxParticle, number)

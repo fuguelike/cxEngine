@@ -15,13 +15,13 @@ CX_OBJECT_INIT(cxHash, cxObject)
 {}
 CX_OBJECT_FREE(cxHash, cxObject)
 {
-    cxHashClean(this);
+    cxHashClear(this);
 }
 CX_OBJECT_TERM(cxHash, cxObject)
 
 #define CX_HASH_KEY_OK(_k_) ((_k_).data != NULL && (_k_).length > 0 && (_k_).length < CX_HASH_MAX_KEY)
 
-void cxHashClean(cxAny phash)
+void cxHashClear(cxAny phash)
 {
     CX_ASSERT_THIS(phash, cxHash);
     cxHashElement *ele = NULL, *tmp = NULL;

@@ -76,6 +76,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxBool IsCropping);
     CX_FIELD_DEF(cxHash Actions);
     CX_FIELD_DEF(cxInt Order);
+    CX_FIELD_DEF(cxBool IsSleep);
 
     cxArray removes;
     cxArray appends;
@@ -115,6 +116,7 @@ CX_OBJECT_END(cxView, cxObject)
 cxList subViews = cxViewGetSubViews(_v_);           \
 CX_LIST_FOREACH(subViews, _e_)
 
+CX_FIELD_IMP(cxView, cxBool, IsSleep);
 CX_FIELD_IMP(cxView, cxBool, IsVisible);
 CX_FIELD_GET(cxView,cxView,ParentView);
 CX_FIELD_GET(cxView,cxList,SubViews);
@@ -197,7 +199,7 @@ void cxViewStopAction(cxAny pview,cxUInt actionId);
 
 cxBool cxViewHasAction(cxAny pview,cxUInt actionId);
 
-void cxViewCleanActions(cxAny pview);
+void cxViewClearActions(cxAny pview);
 
 cxAny cxViewGetAction(cxAny pview,cxUInt actionId);
 

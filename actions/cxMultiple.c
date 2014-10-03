@@ -59,7 +59,7 @@ static cxBool cxMultipleExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxMultiple);
     if(this->index >= cxArrayLength(this->items)){
-        cxArrayClean(this->items);
+        cxArrayClear(this->items);
         return true;
     }
     return false;

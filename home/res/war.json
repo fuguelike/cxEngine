@@ -1,0 +1,14 @@
+{
+  "cxType": "WarScene",
+  "layout": "horizontal|vertical",
+  "resizing": "fill",
+  "body": {
+    "cxId": "map",
+    "cxType": "WarMap"
+  },
+  "scale": 1.2,
+  "range": {
+    "min": 1.0,
+    "max": 1.5
+  }
+}

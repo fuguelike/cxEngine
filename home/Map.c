@@ -479,10 +479,10 @@ void MapAppendPoint(cxAny pmap,cxVec2f pos)
     cxAnyArrayAppend(this->astar->points, &idx);
 }
 
-void MapCleanPoints(cxAny pmap)
+void MapClearPoints(cxAny pmap)
 {
     CX_ASSERT_THIS(pmap, Map);
-    cxAStarCleanPath(this->astar);
+    cxAStarClearPath(this->astar);
 }
 
 cxAnyArray MapSearchPoints(cxAny pmap)
@@ -521,7 +521,7 @@ cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b)
     if(path == NULL){
         return false;
     }
-    cxAStarCleanPath(this->astar);
+    cxAStarClearPath(this->astar);
     cxAnyArrayAppends(this->astar->points, path);
     return true;
 }

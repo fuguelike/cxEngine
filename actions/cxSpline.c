@@ -81,7 +81,7 @@ static void cxSplineReset(cxAny pav)
     CX_ASSERT_THIS(pav, cxSpline);
     this->index = -1;
     this->angle = INT32_MAX;
-    cxAnyArrayClean(this->points);
+    cxAnyArrayClear(this->points);
 }
 
 CX_SETTER_DEF(cxSpline, points)
