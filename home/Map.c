@@ -457,17 +457,13 @@ cxArray MapNearestItems(cxAny pmap,cxVec2f point,cxRange2f range,NodeCombined ty
 {
     CX_ASSERT_THIS(pmap, Map);
     NearestItemsInfo ret = {0};
-    ret.nodes = CX_ALLOC(cxArray);
+    ret.nodes = CX_CREATE(cxArray);
     ret.point = point;
     ret.type = type;
     ret.range = range;
     cpBB bb = cpBBNewForCircle(point, cpfmax(range.max, 0.0f));
     cpSpatialIndexQuery(this->items->index, this, bb, MapItemsQueryFunc, &ret);
-    if(cxArrayLength(ret.nodes) == 0){
-        CX_RELEASE(ret.nodes);
-        return NULL;
-    }
-    return CX_AUTO(ret.nodes);
+    return ret.nodes;
 }
 
 cxAnyArray MapVisiedPoints(cxAny pmap)
@@ -591,11 +587,11 @@ void MapDetachNode(cxAny node)
     CX_ASSERT_THIS(node, Node);
     Map map = NodeGetMap(this);
     //静态目标才能放人nodes
-    if(!NodeIsStatic(node)){
+    if(!NodeGetIsStatic(node)){
         return;
     }
     cxSize2i size = NodeGetSize(node);
-    cxVec2i idx = this->initIdx;
+    cxVec2i idx = NodeGetInitIndex(this);
     for(cxInt x = idx.x; x < idx.x + size.w; x++)
     for(cxInt y = idx.y; y < idx.y + size.h; y++){
         MapDelNode(map, x, y);
@@ -610,7 +606,7 @@ void MapFillNode(cxAny pmap,cxVec2i idx,cxAny node)
         return;
     }
     //静态目标才能放人nodes
-    if(!NodeIsStatic(node)){
+    if(!NodeGetIsStatic(node)){
         return;;
     }
     cxSize2i size = NodeGetSize(node);

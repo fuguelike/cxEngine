@@ -56,6 +56,8 @@ cxString cxMD5(cxString v);
 
 cxBool cxStringEqu(cxString s1,cxString s2);
 
+cxBool cxStringHasConstChars(cxString str,cxConstChars cs);
+
 cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c);
 
 cxInt cxStringLength(cxString string);

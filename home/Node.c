@@ -205,7 +205,7 @@ CX_OBJECT_INIT(Node, cxSprite)
     NodeSetAttackNum(this, 1);
     NodeSetIndex(this, cxVec2fv(-1, -1));
     NodeSetField(this, cxRange2fv(0, 6));
-    NodeSetSearchRate(this, 0.3f);
+    NodeSetSearchRate(this, 0.5f);
     NodeSetAttackRate(this, 0.3f);
     NodeSetBody(this, 0.5f);
     CX_SET(Node, this, NodeAttacked, NodeAttacked);
@@ -407,12 +407,6 @@ void NodeSearchRun(cxAny pview)
     CX_ADD(cxTimer, this->searchTimer, onArrive, NodeSearchArrive);
 }
 
-cxBool NodeIsStatic(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, Node);
-    return this->isStatic;
-}
-
 cxBool NodeCheckDie(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Node);
@@ -436,7 +430,7 @@ void NodeInitIndex(cxAny pview,cxVec2i idx)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
-    this->initIdx = idx;
+    NodeSetInitIndex(this, idx);
     this->prevIdx = idx;
     //为了对齐格子加上node大小
     cxVec2f fidx = cxVec2fv(idx.x + this->Size.w/2.0f, idx.y + this->Size.h/2.0f);
@@ -459,7 +453,7 @@ void NodeInit(cxAny pview,cxAny map,cxVec2i idx,cxBool isStatic)
 {
     CX_ASSERT_THIS(pview, Node);
     this->Map = map;
-    this->isStatic = isStatic;
+    NodeSetIsStatic(this, isStatic);
     NodeInitIndex(this, idx);
     MapFillNode(map, idx, this);
     //show test array

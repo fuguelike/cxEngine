@@ -79,14 +79,11 @@ void cxTypesSet(cxConstType typeName,cxType type)
 void cxTypeSignature(cxType type,cxType super)
 {
     CX_ASSERT(type != NULL, "args error");
-    CX_ASSERT(type->signature == NULL, "error repeat reg type");
-    cxChar maxs[MAX_TYPE_SIGNATURE_SIZE]={0};
     if(super == NULL){
-        snprintf(maxs, MAX_TYPE_SIGNATURE_SIZE, "%s",cxObjectTypeName);
+        cxStringFormat(type->signature, "%s",cxObjectTypeName);
     }else{
-        snprintf(maxs, MAX_TYPE_SIGNATURE_SIZE, "%s.%s",type->typeName,super->signature);
+        cxStringFormat(type->signature, "%s.%s",type->typeName,cxStringBody(super->signature));
     }
-    type->signature = allocator->strdup(maxs);
 }
 
 void cxTypeSetSuper(cxType type,cxType super)
@@ -103,8 +100,8 @@ cxBool cxObjectInstanceOf(cxAny object,cxConstType type)
     CX_RETURN(this->cxType == type, true);
     CX_RETURN(type == cxObjectTypeName,true);
     cxType ptype = cxTypesGet(this->cxType);
-    CX_ASSERT(ptype != NULL && ptype->signature != NULL, "type %s not register",this->cxType);
-    return strstr(ptype->signature, type) != NULL;
+    CX_ASSERT(ptype != NULL, "type %s not register",this->cxType);
+    return cxStringHasConstChars(ptype->signature, type);
 }
 
 void cxTypeRunObjectSetter(cxObject object,cxJson json)
@@ -178,10 +175,11 @@ CX_OBJECT_TYPE(cxType, cxObject)
 CX_OBJECT_INIT(cxType, cxObject)
 {
     this->properties = CX_ALLOC(cxHash);
+    this->signature = CX_ALLOC(cxString);
 }
 CX_OBJECT_FREE(cxType, cxObject)
 {
-    allocator->free(this->signature);
+    CX_RELEASE(this->signature);
     CX_RELEASE(this->properties);
     CX_RELEASE(this->superType);
 }

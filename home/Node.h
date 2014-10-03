@@ -42,10 +42,9 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxLabelTTF lifeTTF;     //Test
     cxSprite array;     //Test
 
-    cxBool isStatic;    //node 是否可移动，移动的node不加入nodes,不参与路径搜索
-    cxVec2i initIdx;    //初始化放置的位置,对于静态物不会变化
     cxBool isDie;       //是否死去
-
+    CX_FIELD_DEF(cxBool IsStatic);
+    CX_FIELD_DEF(cxVec2i InitIndex);  //初始化放置的位置,对于静态物不会变化
     CX_FIELD_DEF(cxFloat Body);       //用于确定单位停留在目标的附近哪个位置,默认值为0.5格
     CX_FIELD_DEF(cxAny Map);          //关联的map对象
     CX_FIELD_DEF(cxVec2f Index);      //精确的网格索引0 - 39.99999f
@@ -90,10 +89,10 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(AttackActionResult, AttackAction,cxAny attacker,cxAny target);
 CX_OBJECT_END(Node, cxSprite)
 
+CX_FIELD_IMP(Node, cxBool, IsStatic);
+CX_FIELD_IMP(Node, cxVec2i, InitIndex);
 CX_FIELD_GET(Node, cxAny, Map);
-
 CX_FIELD_IMP(Node, cxFloat, Body);
-
 CX_FIELD_IMP(Node, NodeCombined, Type);
 CX_FIELD_IMP(Node, cxRange2f, Range);
 
@@ -184,9 +183,6 @@ void NodeFaceTarget(cxAny pview,cxAny target);
 
 //根据网格坐标设置位置，与左下角格子中心为铆合点
 void NodeInitIndex(cxAny pview,cxVec2i idx);
-
-//如果node是静态
-cxBool NodeIsStatic(cxAny pview);
 
 //启动搜索程序
 void NodeSearchRun(cxAny pview);

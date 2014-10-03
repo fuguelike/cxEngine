@@ -147,6 +147,11 @@ CX_INLINE void cxViewSetDirty(cxAny pthis,cxViewDirty dirty)
     CX_ASSERT_THIS(pthis, cxView);
     this->Dirty |= dirty;
 }
+CX_INLINE void cxViewClearDirty(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxView);
+    this->Dirty = cxViewDirtyNone;
+}
 CX_INLINE cxBool cxViewIsDirty(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);

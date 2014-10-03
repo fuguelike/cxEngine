@@ -651,7 +651,7 @@ void cxViewTransform(cxAny pview)
     if(cxViewGetIsCropping(pview)){
         this->scissor = cxViewGLRect(pview);
     }
-    cxViewSetDirty(this, cxViewDirtyNone);
+    cxViewClearDirty(this);
 }
 
 CX_INLINE void cxViewDrawBorder(cxAny pview)

@@ -12,6 +12,7 @@
 #include "cxHash.h"
 #include "cxJson.h"
 #include "cxProperty.h"
+#include "cxString.h"
 
 CX_C_BEGIN
 
@@ -19,7 +20,7 @@ CX_OBJECT_DEF(cxType, cxObject)
     cxAny (*Create)();
     cxAny (*Alloc)();
     cxConstType typeName;
-    cxChars signature;    //a.b.c
+    cxString signature;    //a.b.c
     cxType superType;
     cxHash properties;
 CX_OBJECT_END(cxType, cxObject)
