@@ -61,32 +61,21 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_FIELD_DEF(cxInt AttackNum);    //同时攻击的数量
     CX_FIELD_DEF(cxInt DirIndex);     //当前方向索引
     CX_FIELD_DEF(cxFloat DirAngle);   //方向偏转角
-    //到达某个格子
     cxVec2i prevIdx;
-    CX_EVENT_ALLOC(onIndex);
-    cxTimer attackTimer;//攻击定时器
-    //自动搜索
-    cxTimer searchTimer;      //搜索用定时器
+    CX_EVENT_ALLOC(onIndex);//到达某个格子
+    cxTimer attackTimer;                //攻击定时器
+    cxTimer searchTimer;                //搜索用定时器
     cxInt searchIndex;
-    //生命值变化
-    CX_EVENT_ALLOC(onLife);
-    //node一次攻击动画结束时调用
-    CX_METHOD_DEF(void, AttackOnce,cxAny attacker,cxAny target);
-    //死亡时
-    CX_EVENT_ALLOC(onDie);
-    NodeSearchOrder orders;
-    //目标搜索规则
-    CX_METHOD_DEF(FindRuleResult, FindRule,cxAny,const NodeCombined *);
-    //路径搜索规则
-    CX_METHOD_DEF(PathRuleResult, PathRule, cxAny seacher,FindRuleResult *fr);
-    //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
-    CX_METHOD_DEF(cxBool, Finded,cxAny node,cxAny finder);
-    //方向发生变化
-    CX_METHOD_DEF(void, NodeDirection,cxAny);
-    //被一个目标攻击 pview 被attacker攻击
-    CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);
-    //创建一个攻击动画,动画结时攻击目标
-    CX_METHOD_DEF(AttackActionResult, AttackAction,cxAny attacker,cxAny target);
+    CX_EVENT_ALLOC(onLife);             //生命值变化
+    CX_METHOD_DEF(void, AttackOnce,cxAny attacker,cxAny target);    //node一次攻击动画结束时调用
+    CX_EVENT_ALLOC(onDie);//死亡时
+    NodeSearchOrder orders; //搜索顺序
+    CX_METHOD_DEF(FindRuleResult, FindRule,cxAny,const NodeCombined *);//目标搜索规则
+    CX_METHOD_DEF(PathRuleResult, PathRule, cxAny seacher,FindRuleResult *fr);//路径搜索规则
+    CX_METHOD_DEF(cxBool, Finded,cxAny node,cxAny finder);//node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
+    CX_METHOD_DEF(void, NodeDirection,cxAny);//方向发生变化
+    CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);//被一个目标攻击 pview 被attacker攻击
+    CX_METHOD_DEF(AttackActionResult, AttackAction,cxAny attacker,cxAny target);//创建一个攻击动画,动画结时攻击目标
 CX_OBJECT_END(Node, cxSprite)
 
 CX_FIELD_IMP(Node, cxBool, IsStatic);
@@ -108,6 +97,13 @@ CX_INLINE void NodeSetLife(cxAny pthis,cxRange2i life)
 {
     CX_ASSERT_THIS(pthis, Node);
     this->Life = life;
+    CX_EVENT_FIRE(this, onLife);
+}
+//添加或者较少node生命值
+CX_INLINE void NodeAddLife(cxAny pthis,cxInt life)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    this->Life.min += life;
     CX_EVENT_FIRE(this, onLife);
 }
 
@@ -135,13 +131,6 @@ CX_FIELD_GET(Node, cxFloat, DirAngle);
 
 void NodeSetDirAngle(cxAny pview,cxFloat angle);
 
-//添加或者较少node生命值
-CX_INLINE void NodeAddLife(cxAny pthis,cxInt life)
-{
-    CX_ASSERT_THIS(pthis, Node);
-    this->Life.min += life;
-    CX_EVENT_FIRE(this, onLife);
-}
 //获取node间的格子距离
 CX_INLINE cxFloat NodeDistance(cxAny src,cxAny dst)
 {
