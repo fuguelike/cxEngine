@@ -46,7 +46,6 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
         cxVec2f currIdx = MapPosToFloat(this, cpos);
         cxVec2f delta;
         kmVec2Subtract(&delta, &currIdx, &this->prevIdx);
-        delta = cxRoundVec2f(delta);
         
         cxVec2i idx = cxVec2iv(delta.x, delta.y);
         cxBool setPos = false;
@@ -54,12 +53,12 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
         if(idx.x != 0){
             nidx.x += (cxFloat)idx.x;
             setPos = true;
-            this->prevIdx.x = currIdx.x;
+            this->prevIdx.x = currIdx.x - fmodf(delta.x, 1.0f);
         }
         if(idx.y != 0){
             nidx.y += (cxFloat)idx.y;
             setPos = true;
-            this->prevIdx.y = currIdx.y;
+            this->prevIdx.y = currIdx.y - fmodf(delta.y, 1.0f);;
         }
         if(setPos){
             cxVec2f npos = MapIndexToPos(this, nidx);
