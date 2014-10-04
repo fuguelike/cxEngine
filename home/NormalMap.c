@@ -45,9 +45,6 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
                 cxViewBringFront(this->currNode);
                 //node 被选中
                 CX_LOGGER("select node");
-            }else{
-                //没有选中node
-                CX_LOGGER("not select node");
             }
             return false;
         }
@@ -66,13 +63,13 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
         cxBool setPos = false;
         cxVec2f nidx = NodeGetIndex(this->currNode);
         if(idx.x != 0){
-            nidx.x += (cxFloat)idx.x;
             setPos = true;
+            nidx.x += idx.x;
             this->prevIdx.x = currIdx.x - fmodf(delta.x, 1.0f);
         }
         if(idx.y != 0){
-            nidx.y += (cxFloat)idx.y;
             setPos = true;
+            nidx.y += idx.y;
             this->prevIdx.y = currIdx.y - fmodf(delta.y, 1.0f);;
         }
         if(setPos){

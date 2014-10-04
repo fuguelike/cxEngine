@@ -99,7 +99,6 @@ void cxTextureDraw(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars
     vbox.lt = cxVec3fv(pos.x - wh, pos.y + hh, 0);
     vbox.rb = cxVec3fv(pos.x + wh, pos.y - hh, 0);
     vbox.rt = cxVec3fv(pos.x + wh, pos.y + hh, 0);
-
     cxBoxTex2f tbox = cxBoxTex2fDefault();
     if(tkey != NULL){
         tbox = cxTextureBox(this, tkey);

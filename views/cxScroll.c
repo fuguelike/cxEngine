@@ -153,7 +153,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
     if(item->type == cxTouchTypeMove){
         cxVec2f vpos = cxViewGetPosition(body);
         cxVec2f delta = cxViewTouchDelta(body, item);
-        this->movement += cxVec2fMagnitude(delta);
+        this->movement += cxVec2fLength(delta);
         cxBool setPos = false;
         if(this->type & cxScrollMoveTypeHorizontal){
             vpos.x += delta.x;

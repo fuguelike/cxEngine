@@ -40,10 +40,13 @@ void GlobalInit(cxEngine engine)
     
     global.angle = asinf(w2 / global.sideLen);
     
-    global.warUnitNum = cxVec2iv(16, 12);
+    global.warUnitNum = cxVec2iv(32, 24);
     global.warUnitSize = cxSize2fv(256, 256);
     global.warMapSize.w = global.warUnitSize.w * global.warUnitNum.x;
     global.warMapSize.h = global.warUnitSize.h * global.warUnitNum.y;
+    
+    global.warShowNum.x = (engine->winsize.w / global.warUnitSize.w  + 4)/2 ;
+    global.warShowNum.y = (engine->winsize.h / global.warUnitSize.h  + 4)/2;
 }
 
 cxFloat SideDistance(cxInt sideNum)

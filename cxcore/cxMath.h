@@ -67,10 +67,9 @@ typedef kmVec2 cxVec2f;
 #define cxVec2fv(x,y)           (cxVec2f){x,y}
 #define cxVec2fEqu(p1,p2)       (cxFloatEqu((p1).x,(p2).x) && cxFloatEqu((p1).y,(p2).y))
 #define cxVec2fAngle(a)         atan2f((a).y, (a).x)
-#define cxVec2fMagnitude(a)     sqrtf((a).x*(a).x + (a).y*(a).y)
-#define cxVec2f2PAngle(p1,p2)   atan2f((p1).y - (p2).y, (p1).x - (p2).x)
-#define cxVec2fZero(v)          (kmAlmostEqual((v).x, 0.0f) && kmAlmostEqual((v).y, 0.0f))
-#define cxVec2fOne(v)           (kmAlmostEqual((v).x, 1.0f) && kmAlmostEqual((v).y, 1.0f))
+#define cxVec2fLength(a)        sqrtf((a).x*(a).x + (a).y*(a).y)
+#define cxVec2fZero(v)          (cxFloatEqu((v).x, 0.0f) && cxFloatEqu((v).y, 0.0f))
+#define cxVec2fOne(v)           (cxFloatEqu((v).x, 1.0f) && cxFloatEqu((v).y, 1.0f))
 
 typedef kmVec3 cxVec3f;
 #define cxVec3fv(x,y,z)         (cxVec3f){x,y,z}
@@ -139,7 +138,7 @@ typedef struct {
 }cxSize2f;
 #define cxSize2fv(w,h)          (cxSize2f){w,h}
 #define cxSize2fEqu(s1,s2)      (cxFloatEqu((s1).w,(s2).w) &&  cxFloatEqu((s1).h,(s2).h))
-#define cxSize2fZero(v)          (kmAlmostEqual((v).w, 0) && kmAlmostEqual((v).h, 0))
+#define cxSize2fZero(v)         (cxFloatEqu((v).w, 0) && cxFloatEqu((v).h, 0))
 
 typedef struct {
     cxFloat u;
@@ -273,10 +272,6 @@ typedef struct {
 cxVec2f cxVec2fValue(cxVec2fRange rv);
 #define cxVec2fRangeValue(vx,vy,rx,ry)    (cxVec2fRange){{vx,vy},{rx,ry}}
 
-cxBool cxVec2fIsInverse(cxVec2f v1,cxVec2f v2);
-
-cxBool cxFloatIsInverse(cxFloat v1,cxFloat v2);
-
 cxFloat cxVec2fRadiansBetween(cxVec2f v1, cxVec2f v2);
 
 cxBool cxPointsContainPoint(cxAnyArray polygon,cxVec2f tp);
@@ -324,7 +319,20 @@ CX_INLINE cxBool cxBox4fContainPoint(cxBox4f box,cxVec2f pos)
 }
 
 //if r1 contains r2 return true
-cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2);
+CX_INLINE cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2)
+{
+    cxFloat x1 = r1.x;
+    cxFloat y1 = r1.y;
+    cxFloat x2 = r1.x + r1.w;
+    cxFloat y2 = r1.y + r1.h;
+    cxFloat x3 = r2.x;
+    cxFloat y3 = r2.y;
+    cxFloat x4 = r2.x + r2.w;
+    cxFloat y4 = r2.y + r2.h;
+    bool c1 = (x1 >=x3 && x1 < x4) || (x3 >= x1 && x3 <= x2);
+    bool c2 = (y1 >=y3 && y1 < y4) || (y3 >= y1 && y3 <= y2);
+    return (c1 && c2) ? true : false;
+}
 
 CX_C_END
 

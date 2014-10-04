@@ -34,6 +34,7 @@ typedef struct {
     cxVec2i warUnitNum;     //战争地图快数量
     cxSize2f warUnitSize;   //战争地图一块大小
     cxSize2f warMapSize;    //战争地图大小
+    cxVec2i warShowNum;     //横向和纵向加载的单元数量的一半
 }Global;
 
 extern Global global;

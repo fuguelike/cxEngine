@@ -488,8 +488,8 @@ static void cxEngineComputeTouchItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
     item->speed.x = (cpos.x - item->startPos.x) / dt;
     item->speed.y = (cpos.y - item->startPos.y) / dt;
     //get movement
-    item->movement += cxVec2fMagnitude(item->delta);
-    item->isTap = dt < 0.2f && item->movement < 25;
+    item->movement += cxVec2fLength(item->delta);
+    item->isTap = dt < 0.2f && item->movement < 20;
 }
 
 static void cxEngineInitTouchItem(cxDouble now,cxTouchItem item,cxVec2f cpos)

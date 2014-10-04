@@ -488,10 +488,10 @@ void NodeUpdateIndex(cxAny pview,cxVec2i idx)
     CX_METHOD_RUN(map->NodeMove,map,this,this->InitIndex,idx);
     NodeSetInitIndex(this, idx);
     this->prevIdx = idx;
-    //之前必须检测idx是否可以放置在地图内
-    CX_ASSERT(MapIsFillNode(map, idx, this), "idx error or has node in here");
-    MapDetachNode(this);
-    MapFillNode(map, idx, this);
+    if(MapIsFillNode(map, idx, this)){
+        MapDetachNode(this);
+        MapFillNode(map, idx, this);
+    }
 }
 
 void NodeSetSize(cxAny pview,cxSize2i size)
