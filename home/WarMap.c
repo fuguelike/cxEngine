@@ -124,19 +124,17 @@ CX_OBJECT_TYPE(WarMap, cxView)
 CX_OBJECT_INIT(WarMap, cxView)
 {
     CX_ADD(cxView, this, onUpdate, WarMapUpdate);
-    
+    CX_ADD(cxView, this, onDirty, WarMapOnDirty);
     cxInt cells = global.warUnitNum.x * global.warUnitNum.y * 2;
-    this->units = cxSpatialAlloc(global.warUnitSize.w, cells, UnitIndexBB);
+    this->tribes = cxSpatialAlloc(global.warUnitSize.w, cells, UnitIndexBB);
     this->items = CX_ALLOC(cxHash);
     this->centerIdx = cxVec2iv(-1, -1);
-    
     cxViewSetSize(this, global.warMapSize);
-    CX_ADD(cxView, this, onDirty, WarMapOnDirty);
 }
 CX_OBJECT_FREE(WarMap, cxView)
 {
     CX_RELEASE(this->items);
-    CX_RELEASE(this->units);
+    CX_RELEASE(this->tribes);
 }
 CX_OBJECT_TERM(WarMap, cxView)
 
@@ -154,7 +152,6 @@ void WarMapRemoveUnit(cxAny punit)
     WarMap map = WarMapUnitGetMap(this);
     cxInt index = WarMapItemKey(this->Index);
     cxHashKey key = cxHashIntKey(index);
-    cxSpatialRemove(map->units, this);
     cxHashDel(map->items, key);
     cxViewRemove(this);
 }
@@ -168,9 +165,7 @@ void WarMapAppendUnit(cxAny pmap,cxVec2i idx,cxAny punit)
     cxVec2f pos = WarMapUnitPosition(this, idx);
     cxViewSetPosition(unit, pos);
     cxViewSetSize(unit, global.warUnitSize);
-    //insert and append
     cxViewAppend(this, unit);
-    cxSpatialInsert(this->units, unit);
     cxInt index = WarMapItemKey(idx);
     cxHashKey key = cxHashIntKey(index);
     cxHashSet(this->items, key, unit);

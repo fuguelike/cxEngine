@@ -43,7 +43,7 @@ CX_FIELD_IMP(WarMapUnit, cxVec2i, Index);
 CX_OBJECT_DEF(WarMap, cxView)
     cxVec2i centerIdx;          //屏幕中心对应的map格子坐标
     cxInt currIndex;        //检测单元计数,每次Update检测一个单元
-    cxSpatial units;
+    cxSpatial tribes;       //部落，资源等
     cxHash items;
 CX_OBJECT_END(WarMap, cxView)
 
