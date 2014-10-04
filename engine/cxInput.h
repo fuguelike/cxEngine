@@ -37,6 +37,7 @@ CX_OBJECT_DEF(cxTouchItem, cxObject)
     cxDouble startTime; //start down time
     cxVec2f startPos;   //start position
     cxVec2f position;   //current position
+    cxBool  isTap;      //is tap
     cxTouchType type;
 CX_OBJECT_END(cxTouchItem, cxObject)
 

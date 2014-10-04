@@ -17,6 +17,8 @@ CX_C_BEGIN
 CX_OBJECT_DEF(NormalMap, Map)
     cxVec2f prevIdx;
     cxAny currNode;         //当前选中的node
+    cxAny dnode;            //按下时选中的node
+    cxAny unode;            //up时选中的node 
 CX_OBJECT_END(NormalMap, Map)
 
 cxBool NormalMapInit(cxAny pmap);

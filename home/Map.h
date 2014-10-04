@@ -39,6 +39,7 @@ CX_OBJECT_DEF(Map, cxAtlas)
     cxInt tag;
     cxVec2f a;
     cxVec2f b;
+    CX_METHOD_DEF(void, NodeMove,cxAny,cxAny,cxVec2i from,cxVec2i to);
 CX_OBJECT_END(Map, cxAtlas)
 
 typedef struct {

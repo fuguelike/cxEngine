@@ -185,6 +185,12 @@ cxFloat NodeDistance(cxAny src,cxAny dst);
 //朝向target
 void NodeFaceTarget(cxAny pview,cxAny target);
 
+//重置node位置为初始位置
+void NodeResetIndex(cxAny pview);
+
+//使用自身pos位置更新index,不能更新返回false
+cxBool NodeUpdateInitIndex(cxAny pview);
+
 //根据网格坐标设置位置，与左下角格子中心为铆合点
 void NodeUpdateIndex(cxAny pview,cxVec2i idx);
 

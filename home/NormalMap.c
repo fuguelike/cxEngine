@@ -11,6 +11,11 @@
 #include <algorithm/cxTile.h>
 #include <types/Defence.h>
 
+static void NormalNodeMove(cxAny pmap,cxAny node,cxVec2i from,cxVec2i to)
+{
+    CX_LOGGER("node %p from(%d,%d) to (%d,%d)",node,from.x,from.y,to.x,to.y);;
+}
+
 static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, NormalMap);
@@ -22,27 +27,37 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
     if(!cxViewHitTest(this, item->position, &cpos)){
         return false;
     }
+    cxVec2f index = MapPosToFloat(this, cpos);
     if(item->type == cxTouchTypeUp){
-        cxVec2f index = MapPosToFloat(this, cpos);
+        this->unode = MapHitNode(this, index, NodeTypeAll);
         if(this->currNode != NULL){
-            cxVec2i xx = NodeGetInitIndexUseIndex(this->currNode);
-            CX_LOGGER("fix:%d %d",xx.x,xx.y);
+            NodeUpdateInitIndex(this->currNode);
         }
-        this->currNode = MapHitNode(this, index, NodeTypeAll);
-        if(this->currNode == NULL){
+        if(item->isTap && this->dnode == this->unode){
+            if(this->currNode != NULL && !NodeUpdateInitIndex(this->currNode)){
+                NodeResetIndex(this->currNode);
+            }
+            if(this->currNode != NULL){
+                //process prev selected node
+            }
+            this->currNode = this->dnode;
+            if(this->currNode != NULL){
+                cxViewBringFront(this->currNode);
+                //node 被选中
+                CX_LOGGER("select node");
+            }else{
+                //没有选中node
+                CX_LOGGER("not select node");
+            }
             return false;
         }
-        //放入前段
-        cxViewBringFront(this->currNode);
-    }
-    if(this->currNode == NULL){
-        return false;
     }
     if(item->type == cxTouchTypeDown){
         this->prevIdx = MapPosToFloat(this, cpos);
+        this->dnode = MapHitNode(this, index, NodeTypeAll);
         return false;
     }
-    if(item->type == cxTouchTypeMove){
+    if(item->type == cxTouchTypeMove && this->dnode != NULL && this->dnode == this->currNode){
         cxVec2f currIdx = MapPosToFloat(this, cpos);
         cxVec2f delta;
         kmVec2Subtract(&delta, &currIdx, &this->prevIdx);
@@ -64,9 +79,12 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
             cxVec2f npos = MapIndexToPos(this, nidx);
             cxViewSetPosition(this->currNode, npos);
             cxVec2i newIdx = NodeIndexToInitIndex(this->currNode,nidx);
+            //检测位置是否合法
             if(MapIsFillNode(this, newIdx, this->currNode)){
+                //合法的位置
                 cxViewSetColor(this->currNode, cxGREEN);
             }else{
+                //错误的位置
                 cxViewSetColor(this->currNode, cxRED);
             }
         }
@@ -83,6 +101,7 @@ CX_OBJECT_INIT(NormalMap, Map)
 {
     MapSetMode(this, MapModeNormal);
     CX_SET(cxView, this, Touch, NormalMapTouch);
+    CX_SET(Map, this, NodeMove, NormalNodeMove);
 }
 CX_OBJECT_FREE(NormalMap, Map)
 {

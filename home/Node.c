@@ -453,19 +453,41 @@ cxVec2i NodeGetInitIndexUseIndex(cxAny pview)
     return NodeIndexToInitIndex(this, idx);
 }
 
+void NodeResetIndex(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    NodeUpdateIndex(this, this->InitIndex);
+}
+
+cxBool NodeUpdateInitIndex(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    Map map = NodeGetMap(this);
+    cxVec2i newInitIdx = NodeGetInitIndexUseIndex(this);
+    if(!MapIsFillNode(map, newInitIdx, this)){
+        return false;
+    }
+    NodeUpdateIndex(this, newInitIdx);
+    return true;
+}
+
 void NodeUpdateIndex(cxAny pview,cxVec2i idx)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
-    NodeSetInitIndex(this, idx);
-    this->prevIdx = idx;
     //为了对齐格子加上node大小
     cxVec2f fidx = cxVec2fv(idx.x + this->Size.w/2.0f, idx.y + this->Size.h/2.0f);
-    
     cxVec2f npos = MapIndexToPos(map, fidx);
     cxViewSetPosition(this, npos);
     //获取精确的格子坐标
     this->Index = MapPosToFloat(map, npos);
+    //如果位没改变不更新
+    if(cxVec2iEqu(this->InitIndex, idx)){
+        return;
+    }
+    CX_METHOD_RUN(map->NodeMove,map,this,this->InitIndex,idx);
+    NodeSetInitIndex(this, idx);
+    this->prevIdx = idx;
     //之前必须检测idx是否可以放置在地图内
     CX_ASSERT(MapIsFillNode(map, idx, this), "idx error or has node in here");
     MapDetachNode(this);
