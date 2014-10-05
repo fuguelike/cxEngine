@@ -74,13 +74,8 @@ static void WarMapOnDirty(cxAny sender)
         WarMapLoadUnit(this,idx);
     }
     //移除太远的item
-    for(cxInt x=0;x < global.warUnitNum.x;x++)
-    for(cxInt y=0;y < global.warUnitNum.y;y++){
-        cxVec2i idx = cxVec2iv(x, y);
-        WarMapUnit item = WarMapItem(this, idx);
-        if(item == NULL){
-            continue;
-        }
+    CX_HASH_FOREACH(this->items, ele, tmp){
+        WarMapUnit item = ele->any;
         if(abs(item->Index.x - this->centerIdx.x) > global.warShowNum.x){
             WarMapUnLoadUnit(this,item);
             continue;

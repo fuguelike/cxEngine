@@ -31,8 +31,8 @@ CX_OBJECT_DEF(cxScroll, cxView)
     CX_FIELD_DEF(cxAny Body);
     //scale data
     cxFloat scaleTime;
-    cxFloat scaleinc;       //increase scale
-    cxBool scalable;         //suppot body scale
+    cxFloat scaleinc;           //increase scale
+    cxBool scalable;            //suppot body scale
     cxFloat scaling;
     cxRange2f range;
     cxVec2f center;

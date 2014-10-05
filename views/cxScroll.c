@@ -11,8 +11,6 @@
 #include <actions/cxScale.h>
 #include "cxScroll.h"
 
-#define CX_SCROLL_MOVE_ACTION_ID    100000
-
 void cxScrollSetBody(cxAny pview,cxAny body)
 {
     CX_ASSERT_THIS(pview, cxScroll);
@@ -143,7 +141,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
     if(item->type == cxTouchTypeDown){
         this->isEnable = hited;
         this->movement = 0;
-        cxViewStopAction(body, CX_SCROLL_MOVE_ACTION_ID);
+        cxViewStopAction(body, (cxUInt)body);
         cxScrollUpdateBox(this);
         return hited;
     }
@@ -180,7 +178,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
         }
         cxScrollCheckPos(this, &npos);
         cxMove m = cxMoveCreate(this->moveTime, npos);
-        cxActionSetActionId(m, CX_SCROLL_MOVE_ACTION_ID);
+        cxActionSetActionId(m, (cxUInt)body);
         cxActionSetCurve(m, cxScrollMoveCurve);
         cxViewAppendAction(body, m);
     }
