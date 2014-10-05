@@ -188,7 +188,8 @@ LOCAL_SRC_FILES += \
 	engine/cxView.c \
 	engine/cxInput.c \
 	engine/cxGroup.c \
-    engine/cxSpatial.c
+    engine/cxSpatial.c \
+    engine/cxValue.c
     
 LOCAL_SRC_FILES += \
     algorithm/cxTile.c \

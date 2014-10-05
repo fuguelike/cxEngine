@@ -11,26 +11,26 @@
 static void cxTimerInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxTimer);
-    CX_RETURN(!this->isBegin);
+    CX_RETURN(!this->IsBegin);
     CX_EVENT_FIRE(this, onArrive);
 }
 
 static cxBool cxTimerExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxTimer);
-    this->repeat --;
-    CX_RETURN(this->repeat == 0 && this->isBegin, true);
+    this->Repeat --;
+    CX_RETURN(this->Repeat == 0 && this->IsBegin, true);
     CX_EVENT_FIRE(this, onArrive);
-    return this->repeat == 0;
+    return this->Repeat == 0;
 }
 
 CX_SETTER_DEF(cxTimer, repeat)
 {
-    this->repeat = cxJsonToInt(value, this->repeat);
+    this->IsBegin = cxJsonToInt(value, this->Repeat);
 }
 CX_SETTER_DEF(cxTimer, begin)
 {
-    this->isBegin = cxJsonToBool(value, this->isBegin);
+    this->IsBegin = cxJsonToBool(value, this->IsBegin);
 }
 
 CX_OBJECT_TYPE(cxTimer, cxAction)
@@ -40,7 +40,7 @@ CX_OBJECT_TYPE(cxTimer, cxAction)
 }
 CX_OBJECT_INIT(cxTimer, cxAction)
 {
-    this->isBegin = false;
+    this->IsBegin = false;
     CX_SET(cxAction, this, Init, cxTimerInit);
     CX_SET(cxAction, this, Exit, cxTimerExit);
 }
@@ -50,17 +50,11 @@ CX_OBJECT_FREE(cxTimer, cxAction)
 }
 CX_OBJECT_TERM(cxTimer, cxAction)
 
-void cxTimerSetBegin(cxAny pav,cxBool isBegin)
-{
-    CX_ASSERT_THIS(pav, cxTimer);
-    this->isBegin = isBegin;
-}
-
 cxTimer cxTimerCreate(cxFloat freq,cxInt repeat)
 {
     cxTimer this = CX_CREATE(cxTimer);
     this->cxAction.Time  = freq;
-    this->repeat = repeat;
+    cxTimerSetRepeat(this, repeat);
     return this;
 }
 

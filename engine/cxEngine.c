@@ -9,6 +9,7 @@
 #include <spine/extension.h>
 #include "cxEngine.h"
 #include "cxIconv.h"
+#include "cxValue.h"
 
 #include <textures/cxTextureFactory.h>
 #include <textures/cxTextureJPG.h>
@@ -112,6 +113,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxAStar);
     CX_TYPE_REG(cxGroup);
     CX_TYPE_REG(cxShader);
+    CX_TYPE_REG(cxValue);
     
     //register shader
     CX_TYPE_REG(cxShaderAlpha);

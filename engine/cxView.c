@@ -440,18 +440,16 @@ cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
     cxView pv = this;
     cxVec3f out;
     kmVec3Fill(&out, wPoint.x, wPoint.y, 0);
-    //
-    cxView vs[64];
+    cxView views[64];
     cxInt num = 0;
     while (pv != NULL && pv->ParentView != NULL) {
-        vs[num++] = pv;
+        views[num++] = pv;
         pv = pv->ParentView;
         CX_ASSERT(num < 64, "vs too small");
     }
-    //
     cxMatrix4f matrix;
-    for(cxInt i= num; i > 0; i--){
-        pv = vs[i - 1];
+    for(cxInt i= num - 1; i >= 0; i--){
+        pv = views[i];
         kmMat4Inverse(&matrix, &pv->normalMatrix);
         kmVec3MultiplyMat4(&out, &out, &matrix);
         kmMat4Inverse(&matrix, &pv->anchorMatrix);
