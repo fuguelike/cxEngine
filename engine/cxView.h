@@ -77,6 +77,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxHash Actions);
     CX_FIELD_DEF(cxInt Order);
     CX_FIELD_DEF(cxBool IsSleep);
+    CX_FIELD_DEF(cxBool IsDraw);
+    CX_FIELD_DEF(cxInt Assist);
 
     cxArray removes;
     cxArray appends;
@@ -112,29 +114,43 @@ CX_OBJECT_DEF(cxView, cxObject)
 
 CX_OBJECT_END(cxView, cxObject)
 
+CX_INLINE cxMatrix4f *cxViewGetNormalMatrix(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxView);
+    return &this->normalMatrix;
+}
+
+CX_INLINE cxMatrix4f *cxViewGetAnchorMatrix(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxView);
+    return &this->anchorMatrix;
+}
+
 #define CX_VIEW_FOREACH_SUBVIEWS(_v_,_e_)           \
 cxList subViews = cxViewGetSubViews(_v_);           \
 CX_LIST_FOREACH(subViews, _e_)
 
+CX_FIELD_IMP(cxView, cxInt, Assist);
+CX_FIELD_IMP(cxView, cxBool, IsDraw);
 CX_FIELD_IMP(cxView, cxBool, IsSleep);
 CX_FIELD_IMP(cxView, cxBool, IsVisible);
-CX_FIELD_GET(cxView,cxView,ParentView);
-CX_FIELD_GET(cxView,cxList,SubViews);
-CX_FIELD_IMP(cxView,cxBox4f,AutoBox);
-CX_FIELD_IMP(cxView,cxViewAutoResizeMask,AutoMask);
-CX_FIELD_IMP(cxView,cxLong,Tag);
-CX_FIELD_GET(cxView,cxHash,Bindes);
-CX_FIELD_GET(cxView,cxHash,Binded);
-CX_FIELD_IMP(cxView,cxBool,HideTop);
-CX_FIELD_IMP(cxView,cxViewTouchFlags,TouchFlags);
-CX_FIELD_GET(cxView,cxSize2f,Size);
-CX_FIELD_GET(cxView,cxVec2f,Position);
-CX_FIELD_GET(cxView,cxVec2f,FixScale);
-CX_FIELD_GET(cxView,cxVec2f,Anchor);
-CX_FIELD_GET(cxView,cxVec3f,Raxis);
-CX_FIELD_GET(cxView,cxFloat,Angle);
-CX_FIELD_GET(cxView,cxColor4f,Color);
-CX_FIELD_IMP(cxView,cxColor3f,BorderColor);
+CX_FIELD_GET(cxView, cxView, ParentView);
+CX_FIELD_GET(cxView, cxList, SubViews);
+CX_FIELD_IMP(cxView, cxBox4f, AutoBox);
+CX_FIELD_IMP(cxView, cxViewAutoResizeMask, AutoMask);
+CX_FIELD_IMP(cxView, cxLong, Tag);
+CX_FIELD_GET(cxView, cxHash, Bindes);
+CX_FIELD_GET(cxView, cxHash, Binded);
+CX_FIELD_IMP(cxView, cxBool, HideTop);
+CX_FIELD_IMP(cxView, cxViewTouchFlags, TouchFlags);
+CX_FIELD_GET(cxView, cxSize2f, Size);
+CX_FIELD_GET(cxView, cxVec2f, Position);
+CX_FIELD_GET(cxView, cxVec2f, FixScale);
+CX_FIELD_GET(cxView, cxVec2f, Anchor);
+CX_FIELD_GET(cxView, cxVec3f, Raxis);
+CX_FIELD_GET(cxView, cxFloat, Angle);
+CX_FIELD_GET(cxView, cxColor4f, Color);
+CX_FIELD_IMP(cxView, cxColor3f, BorderColor);
 CX_FIELD_IMP(cxView, cxBool, IsCropping);
 
 CX_INLINE cxVec2f cxViewGetScale(cxAny pview)

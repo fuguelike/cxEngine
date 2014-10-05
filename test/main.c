@@ -17,9 +17,16 @@ void cxEngineInit(cxEngine engine)
     cxEngineSetDesignSize(cxSize2fv(640, 960));
 }
 
+static void exitact(cxAny sender)
+{
+    cxViewRemove(cxActionGetView(sender));
+}
+
 void cxEngineMain(cxEngine engine)
 {
-    cxLoader loader = cxLoaderCreate("cxSprite.json");
+    cxLoader loader = cxLoaderCreate("cxSprites.json");
+    cxAction a = cxLoaderGet(loader, "animate");
+    CX_ADD(cxAction, a, onExit, exitact);
     cxWindowPushView(loader->Root);
 }
 

@@ -35,6 +35,13 @@ CX_OBJECT_DEF(cxAtlas, cxSprite)
     cxHash items;
 CX_OBJECT_END(cxAtlas, cxSprite)
 
+CX_INLINE cxBoxPoint *cxAtlasBoxPoint(cxAny pthis,cxInt idx)
+{
+    CX_ASSERT_THIS(pthis, cxAtlas);
+    CX_ASSERT(idx >= 0 && idx < this->number, "idx error");
+    return &this->boxes[idx];
+}
+
 void cxAtlasSetNumber(cxAny pview,cxInt number);
 
 void cxAtlasDraw(cxAny pview);
@@ -45,6 +52,8 @@ void cxAtlasDrawInit(cxAny pview);
 
 void cxAtlasResize(cxAny sender);
 
+void cxAtlasAppendEmpty(cxAny pview);
+
 void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color);
 
 cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color);
@@ -54,6 +63,8 @@ void cxAtlasSetCapacity(cxAny pview,cxInt capacity);
 void cxAtlasSetScale9(cxAny pview,cxBox4f box);
 
 void cxAtlasUpdateScale9(cxAny pview);
+
+void cxAtlasFastRemove(cxAny pview,cxInt index);
 
 void cxAtlasClear(cxAny pview);
 

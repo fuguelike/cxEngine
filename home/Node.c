@@ -488,7 +488,7 @@ void NodeUpdateIndex(cxAny pview,cxVec2i idx)
     cxViewSetPosition(this, npos);
     //获取精确的格子坐标
     this->Index = MapPosToFloat(map, npos);
-    //如果位没改变不更新
+    //如果位置没改变不更新
     if(cxVec2iEqu(this->InitIndex, idx)){
         return;
     }

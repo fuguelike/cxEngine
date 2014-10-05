@@ -140,6 +140,7 @@
 		837FEA4C1925CBBB005434C4 /* cxShaderClipping.c in Sources */ = {isa = PBXBuildFile; fileRef = 837FEA451925CBBB005434C4 /* cxShaderClipping.c */; };
 		837FEA4D1925CBBB005434C4 /* cxShaderDefault.c in Sources */ = {isa = PBXBuildFile; fileRef = 837FEA471925CBBB005434C4 /* cxShaderDefault.c */; };
 		837FEA4E1925CBBB005434C4 /* cxShaderPositionColor.c in Sources */ = {isa = PBXBuildFile; fileRef = 837FEA491925CBBB005434C4 /* cxShaderPositionColor.c */; };
+		839E42CF19E1838E00A3498A /* cxSprites.c in Sources */ = {isa = PBXBuildFile; fileRef = 839E42CD19E1838E00A3498A /* cxSprites.c */; };
 		83A0D37E19DC0B9C00728CFB /* cxUDP.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A0D37C19DC0B9C00728CFB /* cxUDP.c */; };
 		83A1189419B353AE00F8F0D5 /* mat4stack.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A1189019B353AE00F8F0D5 /* mat4stack.c */; };
 		83A1189519B353AE00F8F0D5 /* matrix.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A1189219B353AE00F8F0D5 /* matrix.c */; };
@@ -478,6 +479,8 @@
 		837FEA481925CBBB005434C4 /* cxShaderDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderDefault.h; sourceTree = "<group>"; };
 		837FEA491925CBBB005434C4 /* cxShaderPositionColor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderPositionColor.c; sourceTree = "<group>"; };
 		837FEA4A1925CBBB005434C4 /* cxShaderPositionColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderPositionColor.h; sourceTree = "<group>"; };
+		839E42CD19E1838E00A3498A /* cxSprites.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxSprites.c; sourceTree = "<group>"; };
+		839E42CE19E1838E00A3498A /* cxSprites.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxSprites.h; sourceTree = "<group>"; };
 		83A0D37C19DC0B9C00728CFB /* cxUDP.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxUDP.c; sourceTree = "<group>"; };
 		83A0D37D19DC0B9C00728CFB /* cxUDP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxUDP.h; sourceTree = "<group>"; };
 		83A1189019B353AE00F8F0D5 /* mat4stack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mat4stack.c; sourceTree = "<group>"; };
@@ -818,6 +821,8 @@
 				833CA53B1925DB5E0013630A /* cxWindow.h */,
 				835DB1A019C450640037DA5B /* cxSpine.c */,
 				835DB1A119C450640037DA5B /* cxSpine.h */,
+				839E42CD19E1838E00A3498A /* cxSprites.c */,
+				839E42CE19E1838E00A3498A /* cxSprites.h */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -1208,6 +1213,7 @@
 				83DA310C19E125B00095D834 /* cxValue.c in Sources */,
 				835DB18919C44C550037DA5B /* IkConstraintData.c in Sources */,
 				835DB18B19C44C550037DA5B /* MeshAttachment.c in Sources */,
+				839E42CF19E1838E00A3498A /* cxSprites.c in Sources */,
 				833CA5491925DB5E0013630A /* cxTexturePVR.c in Sources */,
 				83B995FB1925C6C300FD6BC1 /* cxType.c in Sources */,
 				830EEB9119C5681C00C81EA5 /* cpArbiter.c in Sources */,

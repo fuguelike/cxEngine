@@ -166,7 +166,8 @@ LOCAL_SRC_FILES += \
     views/cxLabelBMP.c \
     views/cxPolygon.c \
     views/cxAlert.c \
-    views/cxSpine.c
+    views/cxSpine.c \
+    views/cxSprites.c
 
 LOCAL_SRC_FILES += \
     socket/cxEventBase.c \

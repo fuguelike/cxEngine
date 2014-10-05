@@ -48,6 +48,7 @@
 		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		839722AE19161746006D0F89 /* font.json in Resources */ = {isa = PBXBuildFile; fileRef = 839722AC19161746006D0F89 /* font.json */; };
 		839722AF19161746006D0F89 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 839722AD19161746006D0F89 /* font.png */; };
+		839E42D119E18F5000A3498A /* cxSprites.json in Resources */ = {isa = PBXBuildFile; fileRef = 839E42D019E18F5000A3498A /* cxSprites.json */; };
 		83D9FFA019CB32B400F0EAB2 /* odus_cutout.pkm in Resources */ = {isa = PBXBuildFile; fileRef = 83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */; };
 		83D9FFA119CB32B400F0EAB2 /* odus_cutout.pkm.alpha in Resources */ = {isa = PBXBuildFile; fileRef = 83D9FF9F19CB32B400F0EAB2 /* odus_cutout.pkm.alpha */; };
 		83DAD700191A14A6000A7D1F /* ui.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD6FF191A14A6000A7D1F /* ui.json */; };
@@ -110,6 +111,7 @@
 		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		839722AC19161746006D0F89 /* font.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = font.json; path = res/font.json; sourceTree = SOURCE_ROOT; };
 		839722AD19161746006D0F89 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = res/font.png; sourceTree = SOURCE_ROOT; };
+		839E42D019E18F5000A3498A /* cxSprites.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxSprites.json; path = res/cxSprites.json; sourceTree = SOURCE_ROOT; };
 		83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */ = {isa = PBXFileReference; lastKnownFileType = file; name = odus_cutout.pkm; path = res/odus_cutout.pkm; sourceTree = SOURCE_ROOT; };
 		83D9FF9F19CB32B400F0EAB2 /* odus_cutout.pkm.alpha */ = {isa = PBXFileReference; lastKnownFileType = file; name = odus_cutout.pkm.alpha; path = res/odus_cutout.pkm.alpha; sourceTree = SOURCE_ROOT; };
 		83DAD6FF191A14A6000A7D1F /* ui.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = ui.json; path = res/ui.json; sourceTree = SOURCE_ROOT; };
@@ -199,6 +201,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				839E42D019E18F5000A3498A /* cxSprites.json */,
 				8321071019CC746900B1AA1E /* candy.json */,
 				8321071119CC746900B1AA1E /* candy.png */,
 				83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */,
@@ -336,6 +339,7 @@
 				834327BD19B8034400B4927F /* yellow.png in Resources */,
 				83DAD70A191A386C000A7D1F /* cxLabelTTF.json in Resources */,
 				83D9FFA119CB32B400F0EAB2 /* odus_cutout.pkm.alpha in Resources */,
+				839E42D119E18F5000A3498A /* cxSprites.json in Resources */,
 				835DB1C419C4A0F80037DA5B /* goblins.atlas in Resources */,
 				830EEBB819C5CB4500C81EA5 /* cxLabelBMP.json in Resources */,
 				835DB1C519C4A0F80037DA5B /* goblins.json in Resources */,

@@ -147,7 +147,6 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
         cxSpriteSetFlipX(view, item->flipx);
         cxSpriteSetFlipY(view, item->flipy);
         CX_EVENT_FIRE(this, onFrame);
-        CX_LOGGER("%d",this->index);
         //set to next frame
         this->index = i + 1;
     }
@@ -163,11 +162,12 @@ static void cxAnimateReset(cxAny pav)
 static cxBool cxAnimateExit(cxAny pav)
 {
     cxAnimate this = pav;
-    if(this->forever){
-        cxActionReset(pav);
-        return false;
+    this->Repeat --;
+    if(this->Repeat == 0){
+        return true;
     }
-    return true;
+    cxActionReset(pav);
+    return false;
 }
 
 CX_SETTER_DEF(cxAnimate, time)
@@ -179,46 +179,40 @@ CX_SETTER_DEF(cxAnimate, frames)
 {
     cxJson frames = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(frames, item)
-    {
-        cxAnimateItem frame = cxObjectCreateUseJson(item);
-        CX_ASSERT_TYPE(frame, cxAnimateItem);
-        cxHashKey key = cxAnimateItemKey(frame);
-        cxHashSet(this->frames, key, frame);
-    }
+    cxAnimateItem frame = cxObjectCreateUseJson(item);
+    CX_ASSERT_TYPE(frame, cxAnimateItem);
+    cxHashKey key = cxAnimateItemKey(frame);
+    cxHashSet(this->frames, key, frame);
     CX_JSON_ARRAY_EACH_END(frames, item)
 }
-CX_SETTER_DEF(cxAnimate, forever)
+CX_SETTER_DEF(cxAnimate, repeat)
 {
-    this->forever = cxJsonToBool(value, this->forever);
+    this->Repeat = cxJsonToInt(value, this->Repeat);
 }
 CX_SETTER_DEF(cxAnimate, groups)
 {
     cxJson groups = value;
     CX_JSON_OBJECT_EACH_BEG(groups, item)
-    {
-        CX_ASSERT(cxJsonIsArray(item), "must is array");
-        cxString key = cxStringAllocChars(itemKey);
-        cxArray items = cxAnimateGetGroup(this,key);
-        cxJson frames = cxJsonToArray(item);
-        CX_JSON_ARRAY_EACH_BEG(frames, ats)
-        {
-            if(cxJsonIsObject(ats)){
-                cxAnimateItem frame = cxObjectCreateUseJson(ats);
-                CX_ASSERT_TYPE(frame, cxAnimateItem);
-                cxArrayAppend(items, frame);
-                continue;
-            }
-            if(cxJsonIsString(ats)){
-                cxConstChars ik = cxJsonToConstChars(ats);
-                cxString frameKey = cxStringAllocChars(ik);
-                cxArrayAppend(items, frameKey);
-                CX_RELEASE(frameKey);
-                continue;
-            }
-        }
-        CX_JSON_ARRAY_EACH_END(frames, ats)
-        CX_RELEASE(key);
+    CX_ASSERT(cxJsonIsArray(item), "must is array");
+    cxString key = cxStringAllocChars(itemKey);
+    cxArray items = cxAnimateGetGroup(this,key);
+    cxJson frames = cxJsonToArray(item);
+    CX_JSON_ARRAY_EACH_BEG(frames, ats)
+    if(cxJsonIsObject(ats)){
+        cxAnimateItem frame = cxObjectCreateUseJson(ats);
+        CX_ASSERT_TYPE(frame, cxAnimateItem);
+        cxArrayAppend(items, frame);
+        continue;
     }
+    if(cxJsonIsString(ats)){
+        cxConstChars ik = cxJsonToConstChars(ats);
+        cxString frameKey = cxStringAllocChars(ik);
+        cxArrayAppend(items, frameKey);
+        CX_RELEASE(frameKey);
+        continue;
+    }
+    CX_JSON_ARRAY_EACH_END(frames, ats)
+    CX_RELEASE(key);
     CX_JSON_OBJECT_EACH_END(groups, item)
 }
 CX_SETTER_DEF(cxAnimate, name)
@@ -246,7 +240,7 @@ cxArray cxAnimateGetGroup(cxAny pav,cxString name)
 
 CX_OBJECT_TYPE(cxAnimate, cxAction)
 {
-    CX_PROPERTY_SETTER(cxAnimate, forever);
+    CX_PROPERTY_SETTER(cxAnimate, repeat);
     CX_PROPERTY_SETTER(cxAnimate, time);
     CX_PROPERTY_SETTER(cxAnimate, name);
     CX_PROPERTY_SETTER(cxAnimate, frames);
@@ -254,7 +248,7 @@ CX_OBJECT_TYPE(cxAnimate, cxAction)
 }
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {
-    this->forever = true;
+    this->Repeat = CX_ANIMATE_FOREVER;
     CX_SET(cxAction, this, Init, cxAnimateInit);
     CX_SET(cxAction, this, Step, cxAnimateStep);
     CX_SET(cxAction, this, Exit, cxAnimateExit);

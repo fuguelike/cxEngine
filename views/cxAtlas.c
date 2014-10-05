@@ -166,6 +166,12 @@ void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,
     cxAtlasAppend(pview, &bp);
 }
 
+void cxAtlasAppendEmpty(cxAny pview)
+{
+    cxBoxPoint bp = cxAtlasCreateBoxPoint(cxVec2fv(0, 0), cxSize2fv(0, 0), cxBoxTex2fDefault(), cxColor4fv(0, 0, 0, 0));
+    cxAtlasAppend(pview, &bp);
+}
+
 cxBoxPoint cxAtlasCreateBoxPoint(cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color)
 {
     cxBoxPoint rv;
@@ -209,10 +215,21 @@ void cxAtlasAppend(cxAny pview,cxBoxPoint *point)
     this->isDirty = true;
 }
 
+void cxAtlasFastRemove(cxAny pview,cxInt index)
+{
+    CX_ASSERT_THIS(pview, cxAtlas);
+    CX_ASSERT(index >= 0 && index < this->number, "index > boxNumber");
+    cxInt lastIdx = this->number - 1;
+    if(index != lastIdx){
+        this->boxes[index] = this->boxes[lastIdx];
+    }
+    this->number--;
+}
+
 void cxAtlasUpdateAt(cxAny pview,cxInt index, cxBoxPoint *point)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
-    CX_ASSERT(index >= 0 && index < this->capacity, "index > boxNumber");
+    CX_ASSERT(index >= 0 && index < this->number, "index > boxNumber");
     this->boxes[index] = *point;
     this->isDirty = true;
 }

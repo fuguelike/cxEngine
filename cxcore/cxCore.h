@@ -249,7 +249,7 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 
 #define CX_TYPE(_t_,_o_)            ((_t_)(_o_))
 
-//type imp
+//type imp cxAny = cxType
 
 #define CX_OBJECT_TYPE(_t_,_b_)     void __##_t_##AutoType(cxAny this){
 

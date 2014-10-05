@@ -34,19 +34,6 @@ void cxArrayClear(cxAny array)
     utarray_clear(this->utArray);
 }
 
-void cxArrayFastRemoveAtIndex(cxAny array,cxInt index)
-{
-    CX_ASSERT_THIS(array, cxArray);
-    CX_ASSERT(index >= 0 && index < cxArrayLength(this), "index invalid");
-    cxAny srcObject = cxArrayAtIndex(array, index);
-    CX_RELEASE(srcObject);
-    cxInt last = cxArrayLength(this) - 1;
-    void *dst = this->utArray->d + this->utArray->icd.sz * index;
-    void *src = this->utArray->d + this->utArray->icd.sz * last;
-    memcpy(dst, src, this->utArray->icd.sz);
-    this->utArray->i--;
-}
-
 void cxArrayUpdate(cxAny array,cxAny nAny,cxInt index)
 {
     CX_ASSERT_THIS(array, cxArray);
@@ -109,13 +96,17 @@ void cxArrayRemove(cxAny array,cxAny any)
     }
 }
 
-void cxArrayFastRemove(cxAny array,cxAny any)
+void cxArrayFastRemove(cxAny array,cxInt index)
 {
     CX_ASSERT_THIS(array, cxArray);
-    cxInt index = cxArrayObjectIndex(this, any);
-    if(index != -1) {
-        cxArrayFastRemoveAtIndex(this, index);
-    }
+    CX_ASSERT(index >= 0 && index < cxArrayLength(this), "index invalid");
+    cxAny srcObject = cxArrayAtIndex(array, index);
+    CX_RELEASE(srcObject);
+    cxInt last = cxArrayLength(this) - 1;
+    void *dst = this->utArray->d + this->utArray->icd.sz * index;
+    void *src = this->utArray->d + this->utArray->icd.sz * last;
+    memcpy(dst, src, this->utArray->icd.sz);
+    this->utArray->i--;
 }
 
 void cxArrayRemoveAtIndex(cxAny array,cxInt index)

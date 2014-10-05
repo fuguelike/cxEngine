@@ -13,6 +13,8 @@
 
 CX_C_BEGIN
 
+#define CX_ANIMATE_FOREVER   -1
+
 CX_OBJECT_DEF(cxAnimateItem, cxObject)
     cxTexture texture;
     cxString key;
@@ -28,10 +30,12 @@ CX_OBJECT_DEF(cxAnimate, cxAction)
     cxHash frames;
     cxInt index;
     cxFloat time;
-    cxBool forever;
+    CX_FIELD_DEF(cxInt Repeat);
     cxString name;              //group name
     CX_EVENT_ALLOC(onFrame);    //play frame competed index=0 - (n-1)
 CX_OBJECT_END(cxAnimate, cxAction)
+
+CX_FIELD_IMP(cxAnimate, cxInt, Repeat);
 
 cxArray cxAnimateGetGroup(cxAny pav,cxString name);
 

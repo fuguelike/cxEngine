@@ -51,9 +51,7 @@ cxInt cxArrayIndex(cxAny array,cxAny any);
 
 void    cxArrayRemove(cxAny array,cxAny any);
 
-void    cxArrayFastRemove(cxAny array,cxAny any);
-
-void    cxArrayFastRemoveAtIndex(cxAny array,cxInt index);
+void    cxArrayFastRemove(cxAny array,cxInt index);
 
 void    cxArrayRemoveAtIndex(cxAny array,cxInt index);
 

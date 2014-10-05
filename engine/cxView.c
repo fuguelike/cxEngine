@@ -185,6 +185,7 @@ CX_OBJECT_TYPE(cxView, cxObject)
 }
 CX_OBJECT_INIT(cxView, cxObject)
 {
+    this->IsDraw        = true;
     this->HideTop       = true;
     this->IsVisible     = true;
     this->Dirty         = cxViewDirtyColor;
@@ -958,7 +959,7 @@ void cxViewDraw(cxAny pview)
     cxViewTransform(this);
     cxViewCheckSort(this);
     cxViewCheckFront(this);
-    if(!this->IsVisible || this->isRemoved || this->IsSleep){
+    if(!this->IsDraw || !this->IsVisible || this->IsSleep || this->isRemoved){
         goto finished;
     }
     cxBool isCropping = cxViewGetIsCropping(this);
