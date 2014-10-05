@@ -11,7 +11,7 @@
 @interface cxEAGLView : UIView
 {
     GLuint  frameBuffer;
-    GLuint  colorBuffer;
+    GLuint  renderBuffer;
     GLuint  depthBuffer;
     GLint   width;
     GLint   height;

@@ -11,6 +11,7 @@
 #include <engine/cxTexture.h>
 #include <engine/cxUtil.h>
 #include "cxAnimate.h"
+
 CX_SETTER_DEF(cxAnimateItem, id)
 {
     cxString id = cxJsonToString(value);
@@ -66,7 +67,7 @@ CX_OBJECT_FREE(cxAnimateItem, cxObject)
 }
 CX_OBJECT_TERM(cxAnimateItem, cxObject)
 
-static cxAnimateItem cxAnimateItemCopy(cxAnimateItem this)
+CX_INLINE cxAnimateItem cxAnimateItemClone(cxAnimateItem this)
 {
     cxAnimateItem cp = CX_CREATE(cxAnimateItem);
     CX_RETAIN_SET(cp->id, this->id);
@@ -76,7 +77,7 @@ static cxAnimateItem cxAnimateItemCopy(cxAnimateItem this)
     return cp;
 }
 
-static cxHashKey cxAnimateItemKey(cxAnimateItem this)
+CX_INLINE cxHashKey cxAnimateItemKey(cxAnimateItem this)
 {
     CX_ASSERT(this->key != NULL, "must set cxAnimateItem key");
     cxConstChars key = this->id != NULL ? cxStringBody(this->id) : cxStringBody(this->key);
@@ -98,29 +99,29 @@ static cxAnimateItem cxAnimateItemGet(cxAnimate this,cxArray items, cxAny any, c
         return NULL;
     }
     //update frame at array index
-    frame = cxAnimateItemCopy(frame);
+    frame = cxAnimateItemClone(frame);
     cxArrayUpdate(items, frame, index);
     return frame;
 }
 
+/* 1 dt 2 dt 3 dt 4 dt 5 dt 6 dt 7 dt 8*/
 static void cxAnimateInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxAnimate);
-    CX_ASSERT_TYPE(cxActionGetView(this), cxSprite);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxSprite, sprite);
     this->index = 0;
     cxFloat time = cxActionGetTime(this);
     cxArray items = cxAnimateGetGroup(this,this->name);
     CX_ASSERT(items != NULL, "group name not found");
-    cxFloat dt = this->time / (cxFloat)cxArrayLength(items);
+    cxInt num = cxArrayLength(items);
+    cxFloat dt = this->time / (cxFloat)num;
     cxFloat value = 0;
-    cxInt i = 0;
-    CX_ARRAY_FOREACH(items, e){
-        cxAnimateItem item = cxAnimateItemGet(this,items,cxArrayObject(e),i);
-        CX_ASSERT_TYPE(item, cxAnimateItem);
-        time += item->time;
-        value += dt  + item->time;
+    for (cxInt i = 0; i < num; i++) {
+        cxAny any = cxArrayAtIndex(items, i);
+        CX_ASSERT_VALUE(cxAnimateItemGet(this,items,any,i), cxAnimateItem, item);
         item->value = value;
-        i++;
+        time += item->time;
+        value += dt + item->time;
     }
     cxActionSetTime(this, time);
 }
@@ -131,16 +132,10 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_ASSERT_VALUE(cxActionGetView(this), cxSprite, view);
     cxArray items = cxAnimateGetGroup(this,this->name);
     CX_ASSERT(items != NULL, "group name not found ");
-    cxInt i = 0;
-    CX_RETURN(this->index >= cxArrayLength(items));
-    CX_ARRAY_FOREACH(items, e){
-        i++;
-        cxAnimateItem item = cxArrayObject(e);
-        CX_ASSERT_TYPE(item, cxAnimateItem);
-        if(cxActionGetTimeElapsed(this) > item->value){
-            continue;
-        }
-        if(this->index == i){
+    cxFloat elapsed = cxActionGetTimeElapsed(this);
+    for (cxInt i = this->index,num = cxArrayLength(items); i < num; i++) {
+        CX_ASSERT_VALUE(cxArrayAtIndex(items, i), cxAnimateItem, item);
+        if(elapsed < item->value){
             break;
         }
         if(item->texture != NULL){
@@ -151,9 +146,10 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
         }
         cxSpriteSetFlipX(view, item->flipx);
         cxSpriteSetFlipY(view, item->flipy);
-        this->index = i;
         CX_EVENT_FIRE(this, onFrame);
-        break;
+        CX_LOGGER("%d",this->index);
+        //set to next frame
+        this->index = i + 1;
     }
 }
 

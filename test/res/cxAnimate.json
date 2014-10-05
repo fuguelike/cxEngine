@@ -7,74 +7,74 @@
       "cxType": "cxAnimateItem",
       "id": "testid",
       "key": "artichoke.png",
-      "texture": "texture.json",
+      "texture": "pvr.json",
       "time": 1
     },
     {
       "cxType": "cxAnimateItem",
       "key": "carrot.png",
-      "texture": "texture.json",
+      "texture": "pvr.json",
       "time": 1
     },
     {
       "cxType": "cxAnimateItem",
       "key": "chilli.png",
-      "texture": "texture.json",
+      "texture": "pvr.json",
       "time": 1
     },
     {
       "cxType": "cxAnimateItem",
       "key": "cholesterol.png",
-      "texture": "texture.json",
+      "texture": "pvr.json",
       "time": 0.1
     },
     {
       "cxType": "cxAnimateItem",
       "key": "cucumber.png",
-      "texture": "texture.json",
+      "texture": "pvr.json",
       "time": 0.1
     },
     {
       "cxType": "cxAnimateItem",
       "key": "leek.png",
-      "texture": "texture.json",
+      "texture": "pvr.json",
       "time": 0.1
     },
     {
       "cxType": "cxAnimateItem",
       "key": "1.png",
-      "texture": "texture.json",
+      "texture": "pvr.json",
       "time": 1
     },
     {
       "cxType": "cxAnimateItem",
       "key": "2.png",
-      "texture": "texture.json",
-      "time": 1
+      "texture": "pvr.json",
+      "time": 0.5
     },
     {
       "cxType": "cxAnimateItem",
       "key": "3.png",
-      "texture": "texture.json",
-      "time": 1
+      "texture": "pvr.json",
+      "time": 0.5
     },
     {
       "cxType": "cxAnimateItem",
       "key": "4.png",
-      "texture": "texture.json",
-      "time": 1
+      "texture": "pvr.json",
+      "time": 0.5
     },
     {
       "cxType": "cxAnimateItem",
       "key": "5.png",
-      "texture": "texture.json",
-      "time": 1
+      "texture": "pvr.json",
+      "time": 0.5
     },
     {
       "cxType": "cxAnimateItem",
       "key": "6.png",
-      "texture": "texture.json",
-      "time": 1
+      "texture": "pvr.json",
+      "time": 0.5
     }
   ],
   "groups": {
@@ -82,34 +82,32 @@
       {
         "cxType": "cxAnimateItem",
         "key": "artichoke.png",
-        "texture": "texture.json",
+        "texture": "pvr.json",
         "time": 1,
         "flipx":true
       },
       {
         "cxType": "cxAnimateItem",
         "key": "carrot.png",
-        "texture": "texture.json",
+        "texture": "pvr.json",
         "time": 1,
         "flipx":true
       },
       {
         "cxType": "cxAnimateItem",
         "key": "chilli.png",
-        "texture": "texture.json",
+        "texture": "pvr.json",
         "time": 1,
         "flipx":true
       }
     ],
     "cry": [
-      "testid",
       "2.png",
       "3.png",
       "4.png",
       "5.png",
-      "6.png",
-      "testid"
+      "6.png"
     ]
   },
-  "name":"run"
+  "name":"cry"
 }

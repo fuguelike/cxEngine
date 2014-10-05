@@ -13,7 +13,7 @@
 #include <Range.h>
 #include "Bullet.h"
 
-AttackActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget)
+ActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
     CX_ASSERT_TYPE(ptarget, Node);
@@ -28,7 +28,7 @@ AttackActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget)
     return AAMake(bullet, NULL);
 }
 
-PathRuleResult DefencePathRule(cxAny pview,FindRuleResult *fret)
+PathRuleResult DefencePathRule(cxAny pview,const FindRuleResult *fret)
 {
     CX_ASSERT_THIS(pview, Defence);
     //目标未达到攻击范围

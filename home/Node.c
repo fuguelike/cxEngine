@@ -143,10 +143,12 @@ static void NodeAttackTimerArrive(cxAny pav)
             cxViewUnBind(this, target);
             continue;
         }
+        //设置为攻击状态
+        NodeSetState(this, NodeStateAttack);
         //朝向target攻击
         NodeFaceTarget(this, target);
         //创建攻击动画
-        AttackActionResult ret = CX_METHOD_GET(AAEmpty(), this->AttackAction, this, target);
+        ActionResult ret = CX_METHOD_GET(AAEmpty(), this->AttackAction, this, target);
         if(ret.bullet != NULL){
             //初始化bullet准备发射
             NodeInitBullet(this, target, ret.bullet);
@@ -162,6 +164,7 @@ static void NodeAttackTimerArrive(cxAny pav)
     }
     //如果没有目标停止攻击定时器
     if(cxHashLength(bindes) == 0){
+        NodeSetState(this, NodeStateStatic);
         cxActionPause(pav);
     }
 }
@@ -207,12 +210,14 @@ CX_OBJECT_INIT(Node, cxSprite)
     NodeSetSearchRate(this, 0.5f);
     NodeSetAttackRate(this, 0.3f);
     NodeSetBody(this, 0.5f);
+    NodeSetState(this, NodeStateStatic);
     CX_SET(Node, this, NodeAttacked, NodeAttacked);
     //Test
     CX_ADD(Node, this, onLife, LifeChange);
 }
 CX_OBJECT_FREE(Node, cxSprite)
 {
+    CX_EVENT_RELEASE(this->onState);
     CX_EVENT_RELEASE(this->onIndex);
     CX_EVENT_RELEASE(this->onDie);
     CX_EVENT_RELEASE(this->onLife);
@@ -228,7 +233,7 @@ void NodeSetDirAngle(cxAny pview,cxFloat angle)
         return;
     }
     this->DirIndex = dirIndex;
-    CX_METHOD_RUN(this->NodeDirection,this);
+    CX_EVENT_FIRE(this, onState);
     //Test
     cxViewSetDegrees(this->array, dirIndex * 45.0f);
 }
@@ -428,6 +433,8 @@ cxBool NodeCheckDie(cxAny pview)
         //防止死的次数太多
         this->isDie = true;
         this->Life.min = 0;
+        //死亡状态
+        NodeSetState(this, NodeStateDie);
         CX_EVENT_FIRE(this, onLife);
         CX_EVENT_FIRE(this, onDie);
         cxViewUnBindAll(pview);

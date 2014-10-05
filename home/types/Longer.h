@@ -22,7 +22,7 @@ Longer LongerCreate(cxAny pmap,cxVec2i idx);
 
 FindRuleResult LongerFindRule(cxAny pview,const NodeCombined *type);
 
-AttackActionResult LongerAttackAction(cxAny pattacker,cxAny ptarget);
+ActionResult LongerAttackAction(cxAny pattacker,cxAny ptarget);
 
 CX_C_END
 

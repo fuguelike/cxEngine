@@ -353,7 +353,7 @@ cxSize2f cxViewContentSize(cxAny pview)
     return cxSize2fv(size.w * scale.x, size.h * scale.y);
 }
 
-cxBox4f cxViewBox(cxAny pview)
+cxBox4f cxViewGetBox(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxSize2f size = cxViewGetSize(this);
@@ -654,7 +654,7 @@ void cxViewTransform(cxAny pview)
 CX_INLINE void cxViewDrawBorder(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxBox4f b = cxViewBox(this);
+    cxBox4f b = cxViewGetBox(this);
     cxBoxVec2f box = cxBoxVec2fFromBox4f(b);
     cxDrawLineBox(&box, this->BorderColor);
 }
@@ -762,7 +762,7 @@ cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxVec2f pos = cxWindowPointToViewPoint(this, wPoint);
-    cxBox4f box = cxViewBox(this);
+    cxBox4f box = cxViewGetBox(this);
     if(vPoint != NULL){
         *vPoint = pos;
     }

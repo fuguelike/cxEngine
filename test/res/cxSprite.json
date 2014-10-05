@@ -4,5 +4,10 @@
     "w": 600,
     "h": 600
   },
-  "texture": "candy.json?drop_point.png"
+  "texture": "candy.json?drop_point.png",
+  "actions":[
+  	{
+  		"cxSrc":"cxAnimate.json"
+  	}
+  ]
 }

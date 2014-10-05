@@ -21,9 +21,9 @@ Defence DefenceCreate(cxAny pmap,cxVec2i idx);
 
 FindRuleResult DefenceFindRule(cxAny pview,const NodeCombined *type);
 
-PathRuleResult DefencePathRule(cxAny pview,FindRuleResult *fret);
+PathRuleResult DefencePathRule(cxAny pview,const FindRuleResult *fret);
 
-AttackActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget);
+ActionResult DefenceAttackAction(cxAny pattacker,cxAny ptarget);
 
 CX_C_END
 

@@ -11,7 +11,7 @@
 #include <actions/cxScale.h>
 #include "Attack.h"
 
-PathRuleResult AttackPathRule(cxAny pview,FindRuleResult *fret)
+PathRuleResult AttackPathRule(cxAny pview,const FindRuleResult *fret)
 {
     CX_ASSERT_THIS(pview, Attack);
     //搜索目标路径成功,移动到可攻击位置,搜索视野范围内的路径
@@ -53,7 +53,7 @@ FindRuleResult AttackFindRule(cxAny pview,const NodeCombined *type)
     return ret;
 }
 
-AttackActionResult AttackAttackAction(cxAny pattacker,cxAny ptarget)
+ActionResult AttackAttackAction(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
     CX_ASSERT_TYPE(ptarget, Node);

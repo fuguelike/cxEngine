@@ -15,6 +15,7 @@ static void MoveOnAngle(cxAny pav)
     CX_ASSERT_THIS(pav, Move);
     CX_ASSERT_VALUE(cxActionGetView(this), Node, node);
     NodeSetDirAngle(node, this->cxSpline.angle);
+    NodeSetState(node, NodeStateMove);
 }
 
 static void MoveOnInit(cxAny pav)

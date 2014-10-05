@@ -73,6 +73,14 @@ typedef enum {
     MapModeFight,           //战斗模式
 }MapMode;
 
+//node状态
+typedef enum {
+    NodeStateStatic,        //静止状态
+    NodeStateMove,          //移动状态
+    NodeStateAttack,        //攻击状态
+    NodeStateDie,           //死亡状态
+}NodeState;
+
 //节点主类型
 typedef enum {
     NodeTypeNone        = 0,

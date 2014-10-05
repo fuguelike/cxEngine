@@ -23,6 +23,14 @@ CX_OBJECT_DEF(cxValue, cxObject)
     CX_FIELD_DEF(cxAny Data);
 CX_OBJECT_END(cxValue, cxObject)
 
+cxBool cxValueBinaryEqu(cxAny pobj);
+
+cxBool cxValueFloatEqu(cxAny pobj);
+
+cxBool cxValueVec2fEqu(cxAny pobj);
+
+cxBool cxValueSize2fEqu(cxAny pobj);
+
 CX_FIELD_IMP(cxValue, cxAny, Data);
 
 cxValue cxValueAllocImp(cxInt size);

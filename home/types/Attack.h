@@ -21,11 +21,11 @@ void AttackInit(cxAny pview, cxAny pmap,cxVec2i idx);
 
 Attack AttackCreate(cxAny pmap, cxVec2i idx);
 
-PathRuleResult AttackPathRule(cxAny pview,FindRuleResult *fret);
+PathRuleResult AttackPathRule(cxAny pview,const FindRuleResult *fret);
 
 FindRuleResult AttackFindRule(cxAny pview,const NodeCombined *type);
 
-AttackActionResult AttackAttackAction(cxAny pattacker,cxAny ptarget);
+ActionResult AttackAttackAction(cxAny pattacker,cxAny ptarget);
 
 CX_C_END
 

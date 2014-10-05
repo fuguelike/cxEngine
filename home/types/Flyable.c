@@ -12,7 +12,7 @@
 #include <Bullet.h>
 #include "Flyable.h"
 
-AttackActionResult FlyableAttackAction(cxAny pattacker,cxAny ptarget)
+ActionResult FlyableAttackAction(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
     CX_ASSERT_TYPE(ptarget, Node);
@@ -29,7 +29,7 @@ AttackActionResult FlyableAttackAction(cxAny pattacker,cxAny ptarget)
     return AAMake(bullet, scale);
 }
 
-PathRuleResult FlyablePathRule(cxAny pview,FindRuleResult *fret)
+PathRuleResult FlyablePathRule(cxAny pview,const FindRuleResult *fret)
 {
     CX_ASSERT_THIS(pview, Attack);
     Map map = NodeGetMap(this);

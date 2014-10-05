@@ -13,7 +13,7 @@
 static cpBB cxSpatialIndexBB(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxBox4f box = cxViewBox(this);
+    cxBox4f box = cxViewGetBox(this);
     cxVec2f pos = cxViewGetPosition(this);
     return cpBBNew(box.l + pos.x, box.b + pos.y, box.r + pos.x, box.t + pos.y);
 }

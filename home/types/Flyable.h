@@ -16,9 +16,9 @@ CX_C_BEGIN
 CX_OBJECT_DEF(Flyable, Attack)
 CX_OBJECT_END(Flyable, Attack)
 
-AttackActionResult FlyableAttackAction(cxAny pattacker,cxAny ptarget);
+ActionResult FlyableAttackAction(cxAny pattacker,cxAny ptarget);
 
-PathRuleResult FlyablePathRule(cxAny pview,FindRuleResult *fret);
+PathRuleResult FlyablePathRule(cxAny pview,const FindRuleResult *fret);
 
 FindRuleResult FlyableFindRule(cxAny pview,const NodeCombined *type);
 

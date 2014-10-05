@@ -51,7 +51,7 @@ static void cxSpriteOnDirty(cxAny sender)
     }
     //set pos
     if(dirty & cxViewDirtySize){
-        cxBox4f box = cxViewBox(this);
+        cxBox4f box = cxViewGetBox(this);
         this->vbox.lb = cxVec3fv(box.l, box.b, 0.0f);
         this->vbox.rb = cxVec3fv(box.r, box.b, 0.0f);
         this->vbox.lt = cxVec3fv(box.l, box.t, 0.0f);

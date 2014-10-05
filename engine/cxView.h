@@ -179,7 +179,7 @@ cxSize2f cxViewContentSize(cxAny pview);
 
 cxInt cxViewSubviewCount(cxAny pview);
 
-cxBox4f cxViewBox(cxAny pview);
+cxBox4f cxViewGetBox(cxAny pview);
 
 cxBool cxViewContainsGLBox(cxAny pview);
 

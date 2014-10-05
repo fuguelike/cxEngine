@@ -33,8 +33,8 @@ typedef struct {
 typedef struct {
     cxAny bullet;
     cxAny action;
-}AttackActionResult;
-#define AAMake(_b_,_a_)     (AttackActionResult){_b_,_a_}
+}ActionResult;
+#define AAMake(_b_,_a_)     (ActionResult){_b_,_a_}
 #define AAEmpty()           AAMake(NULL,NULL)
 
 CX_OBJECT_DEF(Node, cxSprite)
@@ -42,41 +42,56 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxLabelTTF lifeTTF;     //Test
     cxSprite array;     //Test
 
-    cxBool isDie;       //是否死去
-    CX_FIELD_DEF(cxBool IsStatic);
-    CX_FIELD_DEF(cxVec2i InitIndex);  //初始化放置的位置,对于静态物不会变化
-    CX_FIELD_DEF(cxFloat Body);       //用于确定单位停留在目标的附近哪个位置,默认值为0.5格
-    CX_FIELD_DEF(cxAny Map);          //关联的map对象
-    CX_FIELD_DEF(cxVec2f Index);      //精确的网格索引0 - 39.99999f
-    CX_FIELD_DEF(NodeCombined Type);  //node组合类型,攻击范围
-    CX_FIELD_DEF(cxRange2f Range);    //攻击范围
-    CX_FIELD_DEF(cxSize2i Size);      //占用的格子数
-    CX_FIELD_DEF(cxFloat Speed);      //移动速度
-    CX_FIELD_DEF(cxFloat Power);      //攻击力,每秒的攻击力，实际效果和攻击频率(attackRate)有关系
-    CX_FIELD_DEF(cxRange2i Life);     //min当前生命，max最大生命
-    CX_FIELD_DEF(cxRange2f Field);    //视野范围定义了，优先攻击范围内可以到达的目标,默认值为 0 - 5
-    CX_FIELD_DEF(cxInt Level);        //等级
-    CX_FIELD_DEF(cxFloat AttackRate); //攻击频率
-    CX_FIELD_DEF(cxFloat SearchRate); //搜索频率
-    CX_FIELD_DEF(cxInt AttackNum);    //同时攻击的数量
-    CX_FIELD_DEF(cxInt DirIndex);     //当前方向索引
-    CX_FIELD_DEF(cxFloat DirAngle);   //方向偏转角
-    cxVec2i prevIdx;
-    CX_EVENT_ALLOC(onIndex);//到达某个格子
+    cxBool isDie;                       //是否死去
+    CX_FIELD_DEF(cxBool IsStatic);      //是否是静态物体，静态物体将被加入a*搜索列表中
+    CX_FIELD_DEF(cxVec2i InitIndex);    //初始化放置的位置,对于静态物不会变化
+    CX_FIELD_DEF(cxFloat Body);         //用于确定单位停留在目标的附近哪个位置,默认值为0.5格
+    CX_FIELD_DEF(cxAny Map);            //关联的map对象
+    CX_FIELD_DEF(cxVec2f Index);        //精确的网格索引0 - 39.99999f
+    CX_FIELD_DEF(NodeCombined Type);    //node组合类型,攻击范围
+    CX_FIELD_DEF(cxRange2f Range);      //攻击范围
+    CX_FIELD_DEF(cxSize2i Size);        //占用的格子数
+    CX_FIELD_DEF(cxFloat Speed);        //移动速度
+    CX_FIELD_DEF(cxFloat Power);        //攻击力,每秒的攻击力，实际效果和攻击频率(attackRate)有关系
+    CX_FIELD_DEF(cxRange2i Life);       //min当前生命，max最大生命
+    CX_FIELD_DEF(cxRange2f Field);      //视野范围定义了，优先攻击范围内可以到达的目标,默认值为 0 - 5
+    CX_FIELD_DEF(cxInt Level);          //等级
+    CX_FIELD_DEF(cxFloat AttackRate);   //攻击频率
+    CX_FIELD_DEF(cxFloat SearchRate);   //搜索频率
+    CX_FIELD_DEF(cxInt AttackNum);      //同时攻击的数量
+
+    CX_FIELD_DEF(cxInt DirIndex);       //当前方向索引 0-7 一共8个方向 从0度到360度
+    CX_FIELD_DEF(cxFloat DirAngle);     //方向偏转角 实际与8方向的偏移角
+    CX_FIELD_DEF(NodeState State);      //当前状态
+    CX_EVENT_ALLOC(onState);            //方向或者状态发生改变,例如静止下方向改变，或者移动，攻击,此事件用来控制纹理动画
+
+    cxVec2i prevIdx;                    //上一个格子坐标
+    CX_EVENT_ALLOC(onIndex);            //到达某个格子
+
     cxTimer attackTimer;                //攻击定时器
     cxTimer searchTimer;                //搜索用定时器
     cxInt searchIndex;
+
     CX_EVENT_ALLOC(onLife);             //生命值变化
-    CX_METHOD_DEF(void, AttackOnce,cxAny attacker,cxAny target);    //node一次攻击动画结束时调用
-    CX_EVENT_ALLOC(onDie);//死亡时
-    NodeSearchOrder orders; //搜索顺序
-    CX_METHOD_DEF(FindRuleResult, FindRule,cxAny,const NodeCombined *);//目标搜索规则
-    CX_METHOD_DEF(PathRuleResult, PathRule, cxAny seacher,FindRuleResult *fr);//路径搜索规则
-    CX_METHOD_DEF(cxBool, Finded,cxAny node,cxAny finder);//node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
-    CX_METHOD_DEF(void, NodeDirection,cxAny);//方向发生变化
-    CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);//被一个目标攻击 pview 被attacker攻击
-    CX_METHOD_DEF(AttackActionResult, AttackAction,cxAny attacker,cxAny target);//创建一个攻击动画,动画结时攻击目标
+    CX_EVENT_ALLOC(onDie);              //死亡时
+
+    NodeSearchOrder orders;             //搜索顺序
+    CX_METHOD_DEF(void, AttackOnce,cxAny attacker,cxAny target);                    //node一次攻击动画结束时调用
+    CX_METHOD_DEF(FindRuleResult, FindRule,cxAny,const NodeCombined *);             //目标搜索规则
+    CX_METHOD_DEF(PathRuleResult, PathRule, cxAny seacher,const FindRuleResult *fr);//路径搜索规则
+    CX_METHOD_DEF(cxBool, Finded,cxAny node,cxAny finder);                          //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
+    CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);   //被一个目标攻击 pview 被attacker攻击
+    CX_METHOD_DEF(ActionResult, AttackAction,cxAny attacker,cxAny target);          //创建一个攻击动画,动画结时攻击目标
 CX_OBJECT_END(Node, cxSprite)
+
+CX_FIELD_GET(Node, NodeState, State);
+CX_INLINE void NodeSetState(cxAny pthis,const NodeState state)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    CX_RETURN(this->State == state);
+    this->State = state;
+    CX_EVENT_FIRE(this, onState);
+}
 
 CX_FIELD_IMP(Node, cxBool, IsStatic);
 CX_FIELD_IMP(Node, cxVec2i, InitIndex);
@@ -90,7 +105,14 @@ void NodeSetSize(cxAny pview,cxSize2i size);
 
 CX_FIELD_IMP(Node, cxVec2f, Index);
 CX_FIELD_IMP(Node, cxFloat, Speed);
-CX_FIELD_IMP(Node, cxFloat, Power);
+
+//设置或者获取攻击力
+CX_FIELD_SET(Node, cxFloat, Power);
+CX_INLINE cxFloat NodeGetPower(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    return this->Power;
+}
 
 CX_FIELD_GET(Node, cxRange2i, Life);
 CX_INLINE void NodeSetLife(cxAny pthis,cxRange2i life)

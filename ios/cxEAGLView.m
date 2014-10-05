@@ -89,13 +89,13 @@ cxEAGLView *instance = nil;
     }
     glGenFramebuffers(1, &frameBuffer);
     CX_ASSERT(frameBuffer > 0,"gl frame buffer create failed");
-    glGenRenderbuffers(1, &colorBuffer);
-    CX_ASSERT(colorBuffer > 0,"gl color buffer create failed");
+    glGenRenderbuffers(1, &renderBuffer);
+    CX_ASSERT(renderBuffer > 0,"gl render buffer create failed");
     glGenRenderbuffers(1, &depthBuffer);
     CX_ASSERT(depthBuffer > 0,"gl depth buffer create failed");
     glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, colorBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, colorBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
     [self initMainLoop];
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
     [displayLink retain];
@@ -110,7 +110,7 @@ cxEAGLView *instance = nil;
 
 -(void)resizeFromLayer:(CAEAGLLayer *)layer
 {
-    glBindRenderbuffer(GL_RENDERBUFFER, colorBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
     [eaglCTX renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
@@ -118,18 +118,18 @@ cxEAGLView *instance = nil;
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, colorBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 }
 
 - (void) dealloc
 {
     [self freeMainLoop];
     glDeleteFramebuffers(1, &frameBuffer);
-    glDeleteRenderbuffers(1, &colorBuffer);
+    glDeleteRenderbuffers(1, &renderBuffer);
     glDeleteRenderbuffers(1, &depthBuffer);
     [EAGLContext setCurrentContext:nil];
     frameBuffer = 0;
-    colorBuffer = 0;
+    renderBuffer = 0;
     depthBuffer = 0;
     [eaglCTX release];
     [displayLink release];

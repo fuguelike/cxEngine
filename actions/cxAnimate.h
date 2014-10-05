@@ -30,7 +30,7 @@ CX_OBJECT_DEF(cxAnimate, cxAction)
     cxFloat time;
     cxBool forever;
     cxString name;              //group name
-    CX_EVENT_ALLOC(onFrame);    //play frame competed 1 - n
+    CX_EVENT_ALLOC(onFrame);    //play frame competed index=0 - (n-1)
 CX_OBJECT_END(cxAnimate, cxAction)
 
 cxArray cxAnimateGetGroup(cxAny pav,cxString name);
