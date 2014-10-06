@@ -344,6 +344,10 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
     if(info->type.subType != NodeSubTypeNone && !(info->type.subType & type.subType)){
         return id;
     }
+    //如果node不能被src发现返回false
+    if(!CX_METHOD_GET(true, node->Finded,node,info->src)){
+        return id;
+    }
     //计算距离，获取最近的node
     cxFloat d = NodeDistance(info->src, node);
     if(d > info->dis){

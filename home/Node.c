@@ -350,7 +350,7 @@ static void NodeSearchArrive(cxAny pav)
     }
     CX_ASSERT(this->FindRule, "no implement search rule");
     //启动搜索规则
-     fret = CX_METHOD_GET(fret, this->FindRule, this, type);
+    fret = CX_METHOD_GET(fret, this->FindRule, this, type);
     //在搜索规则下没有发现目标
     if(fret.target == NULL){
         goto attack;

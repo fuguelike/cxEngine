@@ -15,7 +15,7 @@
 CX_C_BEGIN
 
 CX_OBJECT_DEF(NormalMap, Map)
-    cxVec2f prevIdx;
+    cxVec2f startPos;       //上个位置
     cxAny currNode;         //当前选中的node
     cxAny dnode;            //按下时选中的node
     cxAny unode;            //up时选中的node 

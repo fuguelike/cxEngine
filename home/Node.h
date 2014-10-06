@@ -79,7 +79,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(void, AttackOnce,cxAny attacker,cxAny target);                    //node一次攻击动画结束时调用
     CX_METHOD_DEF(FindRuleResult, FindRule,cxAny,const NodeCombined *);             //目标搜索规则
     CX_METHOD_DEF(PathRuleResult, PathRule, cxAny seacher,const FindRuleResult *fr);//路径搜索规则
-    CX_METHOD_DEF(cxBool, Finded,cxAny node,cxAny finder);                          //node被finder发现,返回false表示不能被攻击(谁发现了node,回答是finder)
+    CX_METHOD_DEF(cxBool, Finded,cxAny node,cxAny finder);                          //node是否能被finder发现
     CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);   //被一个目标攻击 pview 被attacker攻击
     CX_METHOD_DEF(ActionResult, AttackAction,cxAny attacker,cxAny target);          //创建一个攻击动画,动画结时攻击目标
 CX_OBJECT_END(Node, cxSprite)

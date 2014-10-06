@@ -50,14 +50,14 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
         }
     }
     if(item->type == cxTouchTypeDown){
-        this->prevIdx = MapPosToFloat(this, cpos);
+        this->startPos = MapPosToFloat(this, cpos);
         this->dnode = MapHitNode(this, index, NodeTypeAll);
         return false;
     }
     if(item->type == cxTouchTypeMove && this->dnode != NULL && this->dnode == this->currNode){
         cxVec2f currIdx = MapPosToFloat(this, cpos);
         cxVec2f delta;
-        kmVec2Subtract(&delta, &currIdx, &this->prevIdx);
+        kmVec2Subtract(&delta, &currIdx, &this->startPos);
         
         cxVec2i idx = cxVec2iv(delta.x, delta.y);
         cxBool setPos = false;
@@ -65,12 +65,12 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
         if(idx.x != 0){
             setPos = true;
             nidx.x += idx.x;
-            this->prevIdx.x = currIdx.x - fmodf(delta.x, 1.0f);
+            this->startPos.x = currIdx.x - fmodf(delta.x, 1.0f);
         }
         if(idx.y != 0){
             setPos = true;
             nidx.y += idx.y;
-            this->prevIdx.y = currIdx.y - fmodf(delta.y, 1.0f);;
+            this->startPos.y = currIdx.y - fmodf(delta.y, 1.0f);;
         }
         if(setPos){
             cxVec2f npos = MapIndexToPos(this, nidx);

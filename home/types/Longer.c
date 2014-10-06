@@ -12,7 +12,7 @@
 #include <Map.h>
 #include "Longer.h"
 
-AttackActionResult LongerAttackAction(cxAny pattacker,cxAny ptarget)
+ActionResult LongerAttackAction(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
 
