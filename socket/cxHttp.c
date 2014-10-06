@@ -41,10 +41,14 @@ static void cxHttpReadData(cxHttp this)
     if(len <= 0){
         return;
     }
-    char *pdata = allocator->malloc(len);
-    evbuffer_copyout(this->request->input_buffer, pdata, len);
-    cxStringAppend(this->Data, pdata, len);
-    allocator->free(pdata);
+    if(len > this->psize){
+        this->pdata = allocator->realloc(this->pdata,len);
+        this->psize = len;
+    }
+    cxInt bytes = evbuffer_copyout(this->request->input_buffer, this->pdata, len);
+    if(bytes > 0){
+        cxStringAppend(this->Data, this->pdata, bytes);
+    }
 }
 
 static void cxHttpRequestCompleted(struct evhttp_request *req,void *xhttp)
@@ -79,6 +83,9 @@ CX_OBJECT_FREE(cxHttp, cxObject)
     CX_EVENT_RELEASE(this->onChunked);
     if(this->uri != NULL){
         evhttp_uri_free(this->uri);
+    }
+    if(this->pdata != NULL){
+        allocator->free(this->pdata);
     }
     CX_RELEASE(this->URL);
     CX_RELEASE(this->Data);

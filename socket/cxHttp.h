@@ -24,6 +24,8 @@ CX_OBJECT_DEF(cxHttp, cxObject)
     CX_FIELD_DEF(cxString Data);
     CX_FIELD_DEF(cxString URL);
     cxString suri;
+    cxChar *pdata;
+    cxInt psize;
     struct evhttp_request *request;
     struct evhttp_uri *uri;
     CX_EVENT_ALLOC(onChunked);

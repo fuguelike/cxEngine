@@ -17,8 +17,8 @@ CX_C_BEGIN
 
 typedef enum {
     MoveTypeNone = 0,
-    MoveTypeFight,
-    MoveTypePosition
+    MoveTypeFight,      //为作战移动
+    MoveTypePosition    //为目标位置移动
 }MoveType;
 
 CX_OBJECT_DEF(Move, cxSpline)

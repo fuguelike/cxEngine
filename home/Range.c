@@ -37,7 +37,7 @@ void RangeUpdateValue(cxAny pview)
         cxViewSetSize(this, cxSize2fv(w, h));
         
         cxBoxTex2f tex = cxTextureBoxPixel(texture, "range.png",1.0f, false,false);
-        cxColor4f color = cxColor4fv(1, 1, 1, 1);
+        cxColor4f color = cxColor3fToColor4f(cxWHITE);
         cxSize2f size = cxSize2fv(w/2.0f,h/2.0f);
         
         cxVec2f pos = cxVec2fv(w/4, h/4);
@@ -66,7 +66,7 @@ void RangeUpdateValue(cxAny pview)
         cxFloat w = sinf(global.angle) * d;
         
         cxBoxTex2f tex = cxTextureBoxPixel(texture, "range.png",1.0f,false,false);
-        cxColor4f color = cxColor4fv(1, 0, 0, 1);
+        cxColor4f color = cxColor3fToColor4f(cxRED);
         cxSize2f size = cxSize2fv(w/2.0f,h/2.0f);
         
         cxVec2f pos = cxVec2fv(w/4, h/4);

@@ -143,10 +143,10 @@ static void NodeAttackTimerArrive(cxAny pav)
             cxViewUnBind(this, target);
             continue;
         }
-        //设置为攻击状态
-        NodeSetState(this, NodeStateAttack);
         //朝向target攻击
         NodeFaceTarget(this, target);
+        //设置为攻击状态
+        NodeSetState(this, NodeStateAttack);
         //创建攻击动画
         ActionResult ret = CX_METHOD_GET(AAEmpty(), this->AttackAction, this, target);
         if(ret.bullet != NULL){
@@ -292,20 +292,18 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
         cxViewSetTag(sp, 1001);
         cxViewAppend(map->aLayer, sp);
     }
-    
+    //
     if(cxAnyArrayLength(points) < 2){
-        //朝向target
-        NodeFaceTarget(this, target);
         //发动攻击 重新bind目标为攻击状态
         cxViewBind(this, target, cxNumberInt(NodeBindReasonAttack));
         NodeStartupAttackTimer(this);
-        return;
+    }else{
+        //使用点集合移动this
+        Move move = MoveCreate(this, points);
+        MoveSetType(move, MoveTypeFight);
+        CX_ADD(cxAction, move, onExit, NodeMoveToTargetArrive);
+        cxViewAppendAction(this, move);
     }
-    //使用点集合移动this
-    Move move = MoveCreate(this, points);
-    MoveSetType(move, MoveTypeFight);
-    CX_ADD(cxAction, move, onExit, NodeMoveToTargetArrive);
-    cxViewAppendAction(this, move);
 }
 
 void NodeFaceTarget(cxAny pview,cxAny target)

@@ -151,8 +151,6 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
     info.map = map;
     cxVec2f didx = NodeGetIndex(dx);
     cxVec2f sidx = NodeGetIndex(sx);
-    map->a = MapIndexToPos(map, didx);
-    map->b = MapIndexToPos(map, sidx);
     //设置开始node和结束node
     info.src = snode;
     info.dst = dnode;
@@ -191,12 +189,12 @@ cxAny MapHitNode(cxAny pmap,cxVec2f index,NodeCombined type)
 static void MapDraw(cxAny pmap)
 {
     CX_ASSERT_THIS(pmap, Map);
-    {
+//    {
 //        this->a = cxVec2fv(0, -1024);
 //        this->b = cxVec2fv(0, 1024);
-        cxVec2f ps[2]={this->a,this->b};
-        cxDrawLineLoop(ps, 2, cxWHITE);
-    }
+//        cxVec2f ps[2]={this->a,this->b};
+//        cxDrawLineLoop(ps, 2, cxWHITE);
+//    }
 //    {
 //        this->a = cxVec2fv(-1024,0);
 //        this->b = cxVec2fv(1024,0);
@@ -344,10 +342,6 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
     if(info->type.subType != NodeSubTypeNone && !(info->type.subType & type.subType)){
         return id;
     }
-    //如果node不能被src发现返回false
-    if(!CX_METHOD_GET(true, node->Finded,node,info->src)){
-        return id;
-    }
     //计算距离，获取最近的node
     cxFloat d = NodeDistance(info->src, node);
     if(d > info->dis){
@@ -357,6 +351,11 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
     //node必须在范围内
     if(info->dis >= info->range.min && info->dis <= info->range.max){
         info->node = node;
+    }
+    //如果node不能被src发现返回false
+    cxBool ret = CX_METHOD_GET(true, node->IsFinded,node,info->src);
+    if(info->node != NULL && !ret){
+        info->node = NULL;
     }
     return id;
 }
@@ -371,8 +370,7 @@ cxAny MapNearestQuery(cxAny src,NodeCombined type,cxRange2f range)
     ret.dis = INT32_MAX;
     ret.type = type;
     ret.range = range;
-    cxVec2f idx = NodeGetIndex(this);
-    cpBB bb = cpBBNewForCircle(idx, cpfmax(range.max, 0.0f));
+    cpBB bb = cpBBNewForCircle(NodeGetIndex(this), cpfmax(range.max, 0.0f));
     cpSpatialIndexQuery(map->items->index, map, bb, MapIndexQueryFunc, &ret);
     return ret.node;
 }
@@ -425,8 +423,6 @@ cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type)
     ret.ab = kmVec2DistanceBetween(&a, &b);
     ret.dis = INT32_MAX;
     ret.type = type;
-    map->a = MapIndexToPos(map, a);
-    map->b = MapIndexToPos(map, b);
     cpSpatialIndexSegmentQuery(map->items->index, map, a, b, 1.0f, MapSegmentQueryFunc, &ret);
     return ret.node;
 }
