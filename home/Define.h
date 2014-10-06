@@ -31,7 +31,7 @@ typedef struct {
     cxFloat sideLen;        //菱形单元边长
     cxFloat angle;          //大角度
     cxFloat mapRate;        //地图宽度比例
-    cxVec2i warUnitNum;     //战争地图快数量
+    cxVec2i warUnitNum;     //战争地图x,y快数量
     cxSize2f warUnitSize;   //战争地图一块大小
     cxSize2f warMapSize;    //战争地图大小
     cxVec2i warShowNum;     //横向和纵向加载的单元数量的一半

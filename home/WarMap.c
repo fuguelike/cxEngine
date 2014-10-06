@@ -61,11 +61,16 @@ static void WarMapOnDirty(cxAny sender)
     //获取中心格子坐标
     this->centerIdx = cidx;
     //加载中心点附近的格子
-    for(cxInt x=this->centerIdx.x - global.warShowNum.x;x < this->centerIdx.x + global.warShowNum.x;x++)
-    for(cxInt y=this->centerIdx.y - global.warShowNum.y;y < this->centerIdx.y + global.warShowNum.y;y++){
-        if(x < 0 || y < 0){
-            continue;
-        }
+    cxInt sx = this->centerIdx.x - global.warShowNum.x;
+    sx = CX_MAX(sx, 0);
+    cxInt sy = this->centerIdx.y - global.warShowNum.y;
+    sy = CX_MAX(sy, 0);
+    cxInt cx = this->centerIdx.x + global.warShowNum.x;
+    cx = CX_MIN(cx, global.warUnitNum.x);
+    cxInt cy = this->centerIdx.y + global.warShowNum.y;
+    cy = CX_MIN(cy, global.warUnitNum.y);
+    for(cxInt x=sx;x < cx;x++)
+    for(cxInt y=sy;y < cy;y++){
         cxVec2i idx = cxVec2iv(x, y);
         cxAny item = WarMapItem(this, idx);
         if(item != NULL){
@@ -76,13 +81,10 @@ static void WarMapOnDirty(cxAny sender)
     //移除太远的item
     CX_HASH_FOREACH(this->items, ele, tmp){
         WarMapUnit item = ele->any;
-        if(abs(item->Index.x - this->centerIdx.x) > global.warShowNum.x){
+        cxInt ax = abs(item->Index.x - this->centerIdx.x);
+        cxInt ay = abs(item->Index.y - this->centerIdx.y);
+        if(ax > global.warShowNum.x || ay > global.warShowNum.y){
             WarMapUnLoadUnit(this,item);
-            continue;
-        }
-        if(abs(item->Index.y - this->centerIdx.y) > global.warShowNum.y){
-            WarMapUnLoadUnit(this,item);
-            continue;
         }
     }
 }
@@ -99,17 +101,7 @@ static cpBB UnitIndexBB(cxAny pview)
 
 static void WarMapUpdate(cxAny sender)
 {
-//    CX_ASSERT_THIS(sender, WarMap);
-//    cxVec2i idx = WarMapItemIndex(this->currIndex);
-//    WarMapUnit item = WarMapItem(this, idx);
-//    //移除太远的item
-//    if(item != NULL){
-//        WarMapUnitCheck(this, item);
-//    }
-//    this->currIndex ++;
-//    if(this->currIndex >= (global.warUnitNum.x * global.warUnitNum.y)){
-//        this->currIndex = 0;
-//    }
+    
 }
 
 CX_OBJECT_TYPE(WarMap, cxView)
