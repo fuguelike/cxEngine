@@ -40,22 +40,22 @@ void cxParticleInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index)
     particle->position = cxVec2fValue(this->position);
     particle->life = cxFloatValue(this->life);
     
-    cxColor4f startcolor = cxColor4fValue(this->startcolor);
-    cxColor4f endcolor = cxColor4fValue(this->endcolor);
-    cxFloat startsize = cxFloatValue(this->startsize);
-    cxFloat endsize = cxFloatValue(this->endsize);
-    cxFloat startspin = cxFloatValue(this->startspin);
-    cxFloat endspin = cxFloatValue(this->endspin);
+    cxColor4f scolor = cxColor4fValue(this->startcolor);
+    cxColor4f ecolor = cxColor4fValue(this->endcolor);
+    cxFloat ssize = cxFloatValue(this->startsize);
+    cxFloat esize = cxFloatValue(this->endsize);
+    cxFloat sspin = cxFloatValue(this->startspin);
+    cxFloat espin = cxFloatValue(this->endspin);
     
-    particle->color = startcolor;
-    particle->deltacolor.r = (endcolor.r - startcolor.r) / particle->life;
-    particle->deltacolor.g = (endcolor.g - startcolor.g) / particle->life;
-    particle->deltacolor.b = (endcolor.b - startcolor.b) / particle->life;
-    particle->deltacolor.a = (endcolor.a - startcolor.a) / particle->life;
-    particle->size = startsize;
-    particle->deltasize = (endsize - startsize) / particle->life;
-    particle->rotation = startspin;
-    particle->deltarotation = (endspin - startspin) / particle->life;
+    particle->color = scolor;
+    particle->deltacolor.r = (ecolor.r - scolor.r) / particle->life;
+    particle->deltacolor.g = (ecolor.g - scolor.g) / particle->life;
+    particle->deltacolor.b = (ecolor.b - scolor.b) / particle->life;
+    particle->deltacolor.a = (ecolor.a - scolor.a) / particle->life;
+    particle->size = ssize;
+    particle->deltasize = (esize - ssize) / particle->life;
+    particle->rotation = sspin;
+    particle->deltarotation = (espin - sspin) / particle->life;
     
     if(this->type == cxParticleEmitterGravity){
         cxVec2f v = cxVec2fv(cosf(angle), sinf(angle));
@@ -292,12 +292,10 @@ CX_SETTER_DEF(cxParticle, texture)
     CX_SET(cxParticle, this, GetBoxTex, cxParticleGetBoxTex);
     //
     CX_JSON_ARRAY_EACH_BEG(keys, item)
-    {
-        cxBoxTex2f *boxs = this->boxtexs->data;
-        cxBoxTex2f *box = &boxs[itemIndex];
-        cxConstChars key = cxJsonToConstChars(item);
-        *box = cxTextureBox(cxSpriteGetTexture(this), key);
-    }
+    cxBoxTex2f *boxs = this->boxtexs->data;
+    cxBoxTex2f *box = &boxs[itemIndex];
+    cxConstChars key = cxJsonToConstChars(item);
+    *box = cxTextureBox(cxSpriteGetTexture(this), key);
     CX_JSON_ARRAY_EACH_END(keys, item)
 }
 CX_SETTER_DEF(cxParticle, emitter)
@@ -342,27 +340,27 @@ CX_SETTER_DEF(cxParticle, angle)
 {
     this->angle = cxJsonToFloatRangle(value,this->angle);
 }
-CX_SETTER_DEF(cxParticle, startsize)
+CX_SETTER_DEF(cxParticle, ssize)
 {
     this->startsize = cxJsonToFloatRangle(value,this->startsize);
 }
-CX_SETTER_DEF(cxParticle, endsize)
+CX_SETTER_DEF(cxParticle, esize)
 {
     this->endsize = cxJsonToFloatRangle(value, this->endsize);
 }
-CX_SETTER_DEF(cxParticle, startcolor)
+CX_SETTER_DEF(cxParticle, scolor)
 {
     this->startcolor = cxJsonToColor4fRangle(value,this->startcolor);
 }
-CX_SETTER_DEF(cxParticle, endcolor)
+CX_SETTER_DEF(cxParticle, ecolor)
 {
     this->endcolor = cxJsonToColor4fRangle(value,this->endcolor);
 }
-CX_SETTER_DEF(cxParticle, startspin)
+CX_SETTER_DEF(cxParticle, sspin)
 {
     this->startspin = cxJsonToFloatRangle(value,this->startspin);
 }
-CX_SETTER_DEF(cxParticle, endspin)
+CX_SETTER_DEF(cxParticle, espin)
 {
     this->endspin = cxJsonToFloatRangle(value,this->endspin);
 }
@@ -386,11 +384,11 @@ CX_SETTER_DEF(cxParticle, speed)
 {
     this->speed = cxJsonToFloatRangle(value,this->speed);
 }
-CX_SETTER_DEF(cxParticle, startradius)
+CX_SETTER_DEF(cxParticle, sradius)
 {
     this->startradius = cxJsonToFloatRangle(value,this->startradius);
 }
-CX_SETTER_DEF(cxParticle, endradius)
+CX_SETTER_DEF(cxParticle, eradius)
 {
     this->endradius = cxJsonToFloatRangle(value,this->endradius);
 }
@@ -410,19 +408,19 @@ CX_OBJECT_TYPE(cxParticle, cxAction)
     CX_PROPERTY_SETTER(cxParticle, position);
     CX_PROPERTY_SETTER(cxParticle, rate);
     CX_PROPERTY_SETTER(cxParticle, angle);
-    CX_PROPERTY_SETTER(cxParticle, startsize);
-    CX_PROPERTY_SETTER(cxParticle, endsize);
-    CX_PROPERTY_SETTER(cxParticle, startcolor);
-    CX_PROPERTY_SETTER(cxParticle, endcolor);
-    CX_PROPERTY_SETTER(cxParticle, startspin);
-    CX_PROPERTY_SETTER(cxParticle, endspin);
+    CX_PROPERTY_SETTER(cxParticle, ssize);      //start size
+    CX_PROPERTY_SETTER(cxParticle, esize);      //end size
+    CX_PROPERTY_SETTER(cxParticle, scolor);     //start color
+    CX_PROPERTY_SETTER(cxParticle, ecolor);     //end color
+    CX_PROPERTY_SETTER(cxParticle, sspin);      //start spin
+    CX_PROPERTY_SETTER(cxParticle, espin);      //end spin
     CX_PROPERTY_SETTER(cxParticle, gravity);
     CX_PROPERTY_SETTER(cxParticle, todir);
     CX_PROPERTY_SETTER(cxParticle, tanaccel);
     CX_PROPERTY_SETTER(cxParticle, radaccel);
     CX_PROPERTY_SETTER(cxParticle, speed);
-    CX_PROPERTY_SETTER(cxParticle, startradius);
-    CX_PROPERTY_SETTER(cxParticle, endradius);
+    CX_PROPERTY_SETTER(cxParticle, sradius);    //start radius
+    CX_PROPERTY_SETTER(cxParticle, eradius);    //end radius
     CX_PROPERTY_SETTER(cxParticle, rotatepers);
 }
 CX_OBJECT_INIT(cxParticle, cxAction)

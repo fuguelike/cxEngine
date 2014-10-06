@@ -13,10 +13,13 @@
 
 CX_C_BEGIN
 
+#define CX_VALUE_MAX_SIZE 16
+
 CX_OBJECT_DEF(cxValue, cxObject)
+    cxBool isChanged;
     cxInt size;
-    cxAny oldVar;
-    cxAny newVar;
+    cxByte oldVar[CX_VALUE_MAX_SIZE];
+    cxByte newVar[CX_VALUE_MAX_SIZE];
     CX_METHOD_DEF(cxBool, ValueEqu, cxAny);
     CX_EVENT_ALLOC(onChanged);
     CX_SLOT_ALLOC(onUpdate);
@@ -37,14 +40,13 @@ cxValue cxValueAllocImp(cxInt size);
 
 cxValue cxValueCreateImp(cxInt size);
 
+void cxValueSet(cxAny pthis,cxAny v);
+
 #define cxValueAlloc(_t_)           cxValueAllocImp(sizeof(_t_))
 
 #define cxValueCreate(_t_)          cxValueCreateImp(sizeof(_t_))
-
-#define cxValueSet(_o_,_pv_)        memcpy((_o_)->newVar,_pv_,(_o_)->size)
-
 //_t_ *
-#define cxValueGet(_o_,_t_)         (_t_ *)(_o_)->newVar
+#define cxValueGet(_o_,_t_)         (_t_ *)(_o_)->oldVar
 
 CX_C_END
 

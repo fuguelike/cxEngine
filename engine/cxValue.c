@@ -42,11 +42,17 @@ cxBool cxValueBinaryEqu(cxAny pobj)
 static void cxValueUpdate(cxAny pobj,cxFloat dt)
 {
     CX_ASSERT_THIS(pobj, cxValue);
-    if(CX_METHOD_GET(false, this->ValueEqu, this)){
-        return;
-    }
-    CX_EVENT_FIRE(this, onChanged);
+    CX_RETURN(!this->isChanged);
     memcpy(this->oldVar, this->newVar, this->size);
+    CX_EVENT_FIRE(this, onChanged);
+    this->isChanged = false;
+}
+
+void cxValueSet(cxAny pthis,cxAny v)
+{
+    CX_ASSERT_THIS(pthis, cxValue);
+    memcpy(this->newVar,v,this->size);
+    this->isChanged = CX_METHOD_GET(false, this->ValueEqu, this);
 }
 
 CX_OBJECT_TYPE(cxValue, cxObject)
@@ -62,19 +68,15 @@ CX_OBJECT_INIT(cxValue, cxObject)
 CX_OBJECT_FREE(cxValue, cxObject)
 {
     CX_SLOT_RELEASE(this->onUpdate);
-    allocator->free(this->oldVar);
-    allocator->free(this->newVar);
     CX_EVENT_RELEASE(this->onChanged);
 }
 CX_OBJECT_TERM(cxValue, cxObject)
 
 cxValue cxValueAllocImp(cxInt size)
 {
-    CX_ASSERT(size > 0, "size error");
+    CX_ASSERT(size > 0 && size < CX_VALUE_MAX_SIZE, "size error,please inc CX_VALUE_MAX_SIZE");
     cxValue this = CX_ALLOC(cxValue);
     this->size = size;
-    this->newVar = allocator->malloc(size);
-    this->oldVar = allocator->malloc(size);
     return this;
 }
 

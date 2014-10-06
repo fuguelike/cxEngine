@@ -18,7 +18,7 @@
     "x": 0,
     "y": -1000
   },
-  "startspin":{
+  "sspin":{
       "v":1000
     },
   "life": {
@@ -37,19 +37,19 @@
   "angle": {
     "r": 360
   },
-  "startsize": {
+  "ssize": {
     "v": 50
   },
-  "endsize": {
+  "esize": {
     "v": 50
   },
-  "startcolor": {
+  "scolor": {
     "vr": 1,
     "vg": 1,
     "vb": 1,
     "va": 1
   },
-  "endcolor": {
+  "ecolor": {
     "vr": 0.3,
     "vg": 0.3,
     "vb": 0.3,

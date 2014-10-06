@@ -75,9 +75,10 @@ cxBool cxStringHasConstChars(cxString str,cxConstChars cs)
 {
     CX_ASSERT_THIS(str, cxString);
     if(!cxStringOK(this) || !cxConstCharsOK(cs)){
-        false;
+        return false;
     }
-    return strstr(cxStringBody(this), cs) != NULL;
+    cxConstChars body = cxStringBody(this);
+    return cxConstCharsHas(body, cs);
 }
 
 cxBool cxStringEqu(cxString s1,cxString s2)

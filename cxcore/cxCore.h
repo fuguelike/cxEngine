@@ -133,6 +133,7 @@ typedef const void *    cxConstAny;
 typedef void *          cxAny;
 typedef size_t          cxSize;
 
+typedef unsigned char   cxByte;
 typedef unsigned char   cxUChar;
 typedef unsigned int    cxUInt;
 typedef unsigned long   cxULong;
