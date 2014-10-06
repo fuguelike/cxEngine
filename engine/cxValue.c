@@ -56,7 +56,7 @@ CX_OBJECT_TYPE(cxValue, cxObject)
 CX_OBJECT_INIT(cxValue, cxObject)
 {
     cxEngine engine = cxEngineInstance();
-    CX_LIN(cxEngine, engine, onUpdate, this, cxValueUpdate);
+    CX_CON(cxEngine, engine, onUpdate, this, cxValueUpdate);
     CX_SET(cxValue, this, ValueEqu, cxValueBinaryEqu);
 }
 CX_OBJECT_FREE(cxValue, cxObject)

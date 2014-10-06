@@ -34,7 +34,7 @@ cxUDP cxUDPCreate(cxConstChars host,cxInt port);
 
 cxInt cxUDPWrite(cxAny pudp,cxConstChars data,cxInt len);
 
-cxInt cxUDPWriteString(cxAny pudp,cxString data);
+cxInt cxUDPWriteString(cxAny pudp,const cxString data);
 
 CX_C_END
 

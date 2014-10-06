@@ -20,7 +20,7 @@ static void cxParticleInit(cxAny pav)
     CX_ASSERT_THIS(pav, cxParticle);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     view = CX_METHOD_GET(view, this->GetDrawView, this);
-    CX_LIN(cxView, view, onDraw, this, cxActionGetViewDraw);
+    CX_CON(cxView, view, onDraw, this, cxActionGetViewDraw);
 }
 
 static void cxParticleOver(cxAny pav)

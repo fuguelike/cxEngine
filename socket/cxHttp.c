@@ -28,13 +28,13 @@ cxString cxHttpUriDecode(cxString uri)
 
 static void cxHttpReadData(cxHttp this)
 {
-    this->readBytes = this->request->body_size;
-    if(this->bodyBytes == 0){
+    this->ReadBytes = this->request->body_size;
+    if(this->BodyBytes == 0){
         cxConstChars cl = evhttp_find_header(this->request->input_headers, "Content-Length");
-        this->bodyBytes = cl != NULL ? atoll(cl) : 0;
+        this->BodyBytes = cl != NULL ? atoll(cl) : 0;
     }
-    this->isSuccess = this->request->response_code == HTTP_OK;
-    if(!this->isSuccess){
+    this->IsSuccess = this->request->response_code == HTTP_OK;
+    if(!this->IsSuccess){
         return;
     }
     size_t len = evbuffer_get_length(this->request->input_buffer);
@@ -43,7 +43,7 @@ static void cxHttpReadData(cxHttp this)
     }
     char *pdata = allocator->malloc(len);
     evbuffer_copyout(this->request->input_buffer, pdata, len);
-    cxStringAppend(this->data, pdata, len);
+    cxStringAppend(this->Data, pdata, len);
     allocator->free(pdata);
 }
 
@@ -57,7 +57,7 @@ static void cxHttpRequestCompleted(struct evhttp_request *req,void *xhttp)
 static void cxHttpRequestChunked(struct evhttp_request *req,void *xhttp)
 {
     cxHttp this = xhttp;
-    cxStringClear(this->data);
+    cxStringClear(this->Data);
     cxHttpReadData(this);
     CX_EVENT_FIRE(this, onChunked);
 }
@@ -68,7 +68,7 @@ CX_OBJECT_TYPE(cxHttp, cxObject)
 }
 CX_OBJECT_INIT(cxHttp, cxObject)
 {
-    this->data = CX_ALLOC(cxString);
+    this->Data = CX_ALLOC(cxString);
 }
 CX_OBJECT_FREE(cxHttp, cxObject)
 {
@@ -80,7 +80,8 @@ CX_OBJECT_FREE(cxHttp, cxObject)
     if(this->uri != NULL){
         evhttp_uri_free(this->uri);
     }
-    CX_RELEASE(this->data);
+    CX_RELEASE(this->URL);
+    CX_RELEASE(this->Data);
     CX_RELEASE(this->suri);
 }
 CX_OBJECT_TERM(cxHttp, cxObject)
@@ -93,22 +94,10 @@ static cxHttpConn cxHttpGetConnect(cxAny http)
     return cxEventBaseHttpConnect(host,port < 0 ? 80 : port);
 }
 
-cxString cxHttpBody(cxAny http)
-{
-    CX_ASSERT_THIS(http, cxHttp);
-    return this->data;
-}
-
 void cxHttpCancel(cxAny http)
 {
     CX_ASSERT_THIS(http, cxHttp);
     evhttp_cancel_request(this->request);
-}
-
-cxInt cxHttpLength(cxAny http)
-{
-    CX_ASSERT_THIS(http, cxHttp);
-    return (cxInt)this->bodyBytes;
 }
 
 static cxString cxHttpGetUri(cxAny http)
@@ -125,10 +114,14 @@ static cxString cxHttpGetUri(cxAny http)
     }
 }
 
-static cxBool cxHttpInit(cxAny http,cxConstChars uri,cxBool chunked)
+static cxBool cxHttpInit(cxAny http,cxString url,cxBool chunked)
 {
     CX_ASSERT_THIS(http, cxHttp);
-    this->uri = evhttp_uri_parse(uri);
+    if(!cxStringOK(url)){
+        return false;
+    }
+    CX_RETAIN_SWAP(this->URL, url);
+    this->uri = evhttp_uri_parse(cxStringBody(url));
     this->request = evhttp_request_new(cxHttpRequestCompleted, this);
     if(chunked){
         evhttp_request_set_chunked_cb(this->request, cxHttpRequestChunked);
@@ -144,7 +137,7 @@ void cxHttpAddHeader(cxAny http,cxString key,cxString value)
     evhttp_add_header(this->request->output_headers, cxStringBody(key), cxStringBody(value));
 }
 
-cxHttp cxHttpPost(cxConstChars url,cxString data,cxBool chunked)
+cxHttp cxHttpPost(cxString url,cxString data,cxBool chunked)
 {
     cxHttp this = CX_CREATE(cxHttp);
     if(!cxHttpInit(this,url,chunked)){
@@ -173,7 +166,7 @@ cxHttp cxHttpPost(cxConstChars url,cxString data,cxBool chunked)
     return this;
 }
 
-cxHttp cxHttpGet(cxConstChars url,cxBool chunked)
+cxHttp cxHttpGet(cxString url,cxBool chunked)
 {
     cxHttp this = CX_CREATE(cxHttp);
     if(!cxHttpInit(this,url,chunked)){

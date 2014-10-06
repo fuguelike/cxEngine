@@ -17,13 +17,14 @@ CX_OBJECT_TYPE(cxUDP, cxObject)
 }
 CX_OBJECT_INIT(cxUDP, cxObject)
 {
-    this->toAddrLen = sizeof(struct sockaddr_in);
-    memset(&this->udpTo, 0, sizeof(struct sockaddr_in));
+    this->toAddrLen = sizeof(this->udpTo);
+    memset(&this->udpTo, 0, this->toAddrLen);
     this->udpTo.sin_family = AF_INET;
 }
 CX_OBJECT_FREE(cxUDP, cxObject)
 {
     if(this->udpEvent != NULL){
+        event_del(this->udpEvent);
         event_free(this->udpEvent);
     }
     if(this->socket > 0){
@@ -33,16 +34,13 @@ CX_OBJECT_FREE(cxUDP, cxObject)
 }
 CX_OBJECT_TERM(cxUDP, cxObject)
 
-cxInt cxUDPWriteString(cxAny pudp,cxString data)
+cxInt cxUDPWriteString(cxAny pudp,const cxString data)
 {
-    CX_ASSERT_TYPE(pudp, cxUDP);
-    if(!cxStringOK(data)){
-        return 0;
-    }
+    CX_ASSERT_THIS(pudp, cxUDP);
+    CX_ASSERT(cxStringOK(data), "data args error");
     cxInt l = cxStringLength(data);
     cxConstChars d = cxStringBody(data);
-    return cxUDPWrite(pudp, d, l);
-    
+    return cxUDPWrite(this, d, l);
 }
 
 cxInt cxUDPWrite(cxAny pudp,cxConstChars data,cxInt len)

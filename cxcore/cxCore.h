@@ -188,7 +188,7 @@ do{                                                             \
 
 #define CX_ASSERT_FALSE(format,...)     CX_ASSERT(false,format,##__VA_ARGS__)
 
-#define CX_ASSERT_TYPE(_o_,_t_)         CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type error,should is "#_t_,_o_)
+#define CX_ASSERT_TYPE(_o_,_t_)         CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type (%s) error,should is "#_t_,TYPE(_o_))
 
 #define CX_ASSERT_VALUE(_o_,_t_,_n_)    _t_ _n_ = (_t_)(_o_);CX_ASSERT_TYPE(_n_,_t_)
 
@@ -372,7 +372,7 @@ do{                                                             \
     DL_APPEND(_signal_,_new_);                                  \
 }while(0)
 
-#define CX_LIN(_t_,_src_,_n_,_dst_,_f_)                         \
+#define CX_CON(_t_,_src_,_n_,_dst_,_f_)                         \
 CX_ASSERT_TYPE(_src_, _t_);                                     \
 CX_SLOT_CONNECT(CX_TYPE(_t_, _src_)->_n_, _dst_, _n_, _f_)
 

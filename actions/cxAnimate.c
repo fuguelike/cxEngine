@@ -248,7 +248,7 @@ CX_OBJECT_TYPE(cxAnimate, cxAction)
 }
 CX_OBJECT_INIT(cxAnimate, cxAction)
 {
-    this->Repeat = CX_ANIMATE_FOREVER;
+    this->Repeat = CX_FOREVER;
     CX_SET(cxAction, this, Init, cxAnimateInit);
     CX_SET(cxAction, this, Step, cxAnimateStep);
     CX_SET(cxAction, this, Exit, cxAnimateExit);

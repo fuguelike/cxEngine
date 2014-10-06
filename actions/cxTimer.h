@@ -13,8 +13,6 @@
 
 CX_C_BEGIN
 
-#define CX_TIMER_FOREVER   -1
-
 CX_OBJECT_DEF(cxTimer, cxAction)
     CX_FIELD_DEF(cxInt Repeat);
     CX_FIELD_DEF(cxBool IsBegin);

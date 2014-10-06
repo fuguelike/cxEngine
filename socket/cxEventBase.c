@@ -80,7 +80,7 @@ CX_OBJECT_TYPE(cxEventBase, cxObject)
 CX_OBJECT_INIT(cxEventBase, cxObject)
 {
     cxEngine engine = cxEngineInstance();
-    CX_LIN(cxEngine, engine, onUpdate, this, cxEventUpdate);
+    CX_CON(cxEngine, engine, onUpdate, this, cxEventUpdate);
     this->base = event_base_new();
     this->conns = CX_ALLOC(cxHash);
     this->counter = 0;

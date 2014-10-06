@@ -13,8 +13,6 @@
 
 CX_C_BEGIN
 
-#define CX_ANIMATE_FOREVER   -1
-
 CX_OBJECT_DEF(cxAnimateItem, cxObject)
     cxTexture texture;
     cxString key;

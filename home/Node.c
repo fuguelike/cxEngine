@@ -175,7 +175,7 @@ void NodeStartupAttackTimer(cxAny pview)
     if(this->attackTimer != NULL){
         cxActionReset(this->attackTimer);
     }else{
-        this->attackTimer = cxViewAppendTimer(this, NodeGetAttackRate(this), CX_TIMER_FOREVER);
+        this->attackTimer = cxViewAppendTimer(this, NodeGetAttackRate(this), CX_FOREVER);
         cxActionSetGroup(this->attackTimer, FIGHT_ACTION_GROUP);
         CX_ADD(cxTimer, this->attackTimer, onArrive, NodeAttackTimerArrive);
     }
@@ -406,7 +406,7 @@ void NodeSearchRun(cxAny pview)
     if(map->mode != MapModeFight){
         return;
     }
-    this->searchTimer = cxViewAppendTimer(this, NodeGetSearchRate(this), CX_TIMER_FOREVER);
+    this->searchTimer = cxViewAppendTimer(this, NodeGetSearchRate(this), CX_FOREVER);
     cxActionSetGroup(this->searchTimer, FIGHT_ACTION_GROUP);
     CX_ADD(cxTimer, this->searchTimer, onArrive, NodeSearchArrive);
 }

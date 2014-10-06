@@ -16,6 +16,8 @@
 
 CX_C_BEGIN
 
+#define CX_FOREVER   -1
+
 CX_OBJECT_DEF(cxAction, cxObject)
     CX_FIELD_DEF(cxAny Parent);
     CX_FIELD_DEF(cxAssist4f Assist);

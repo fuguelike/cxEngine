@@ -17,10 +17,11 @@ CX_C_BEGIN
 typedef void (*cxHttpFunc)(cxAny http);
 
 CX_OBJECT_DEF(cxHttp, cxObject)
-    cxBool isSuccess;
-    cxInt64 bodyBytes;
-    cxInt64 readBytes;
-    cxString data;
+    CX_FIELD_DEF(cxBool IsSuccess);
+    CX_FIELD_DEF(cxInt64 BodyBytes);
+    CX_FIELD_DEF(cxInt64 ReadBytes);
+    CX_FIELD_DEF(cxString Data);
+    CX_FIELD_DEF(cxString URL);
     cxString suri;
     struct evhttp_request *request;
     struct evhttp_uri *uri;
@@ -28,21 +29,23 @@ CX_OBJECT_DEF(cxHttp, cxObject)
     CX_EVENT_ALLOC(onCompleted);
 CX_OBJECT_END(cxHttp, cxObject)
 
+CX_FIELD_GET(cxHttp, cxString, URL);
+CX_FIELD_GET(cxHttp, cxString, Data);
+CX_FIELD_GET(cxHttp, cxInt64, ReadBytes);
+CX_FIELD_GET(cxHttp, cxInt64, BodyBytes);
+CX_FIELD_GET(cxHttp, cxBool, IsSuccess);
+
 cxString cxHttpUriEncode(cxString uri);
 
 cxString cxHttpUriDecode(cxString uri);
-
-cxInt cxHttpLength(cxAny http);
 
 void cxHttpCancel(cxAny http);
 
 void cxHttpAddHeader(cxAny http,cxString key,cxString value);
 
-cxString cxHttpBody(cxAny http);
+cxHttp cxHttpGet(cxString url,cxBool chunked);
 
-cxHttp cxHttpGet(cxConstChars url,cxBool chunked);
-
-cxHttp cxHttpPost(cxConstChars url,cxString data,cxBool chunked);
+cxHttp cxHttpPost(cxString url,cxString data,cxBool chunked);
 
 CX_C_END
 

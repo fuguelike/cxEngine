@@ -46,7 +46,7 @@ CX_OBJECT_INIT(cxTextureFactory, cxObject)
     
     cxHash group = CX_CREATE(cxHash);
     cxHashSet(this->caches, cxHashStrKey(CX_DEFAULT_GROUP), group);
-    CX_LIN(cxEngine, engine, onMemory, this, cxTextureFactoryMemory);
+    CX_CON(cxEngine, engine, onMemory, this, cxTextureFactoryMemory);
     CX_ADD(cxEngine, engine, onExit, cxTextureFactoryDestroy);
 }
 CX_OBJECT_FREE(cxTextureFactory, cxObject)
