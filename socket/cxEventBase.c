@@ -19,19 +19,19 @@ evutil_socket_t cxCreateSocket(cxBool reuse,int type)
         CX_ERROR("socket create error");
         return (-1);
     }
-    if (evutil_make_socket_nonblocking(fd) < 0){
+    if (evutil_make_socket_nonblocking(fd) != 0){
         CX_ERROR("socket set nonblock error");
         goto out;
     }
-    if (evutil_make_socket_closeonexec(fd) < 0){
+    if (evutil_make_socket_closeonexec(fd) != 0){
         CX_ERROR("socket set exec close error");
         goto out;
     }
-    if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (void *)&on, sizeof(on))<0){
+    if (setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (void *)&on, sizeof(on)) != 0){
         CX_ERROR("socket set keepalive error");
         goto out;
     }
-    if (reuse && evutil_make_listen_socket_reuseable(fd) < 0) {
+    if (reuse && evutil_make_listen_socket_reuseable(fd) != 0) {
         CX_ERROR("socket set reuseable error");
         goto out;
     }

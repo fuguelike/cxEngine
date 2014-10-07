@@ -182,6 +182,18 @@ void NodeStartupAttackTimer(cxAny pview)
     cxActionResume(this->attackTimer);
 }
 
+cxBool NodeIsArriveDistance(cxAny pattacker,cxAny ptarget,cxFloat dis)
+{
+    CX_ASSERT_VALUE(pattacker, Node, attacker);
+    CX_ASSERT_VALUE(ptarget, Node, target);
+    dis -= (NodeGetBody(attacker) + NodeGetBody(target));
+    dis = CX_MAX(dis, 0);
+    //获取攻击者作战范围
+    cxRange2f range = NodeGetRange(attacker);
+    //检测是否在作战范围内
+    return dis >= range.min && dis <= range.max;
+}
+
 cxBool NodeIsArriveRange(cxAny pattacker,cxAny ptarget)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
@@ -189,12 +201,7 @@ cxBool NodeIsArriveRange(cxAny pattacker,cxAny ptarget)
     cxVec2f sidx = NodeGetIndex(attacker);
     cxVec2f didx = NodeGetIndex(target);
     cxFloat d = kmVec2DistanceBetween(&sidx, &didx);
-    d -= (NodeGetBody(attacker) + NodeGetBody(target));
-    d = CX_MAX(d, 0);
-    //获取攻击者作战范围
-    cxRange2f range = NodeGetRange(attacker);
-    //检测是否在作战范围内
-    return d >= range.min && d <= range.max;
+    return NodeIsArriveDistance(attacker,target,d);
 }
 
 CX_OBJECT_TYPE(Node, cxSprite)

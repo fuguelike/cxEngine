@@ -101,13 +101,27 @@ static cxInt MapSearchEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *curr,cxVec2i
     CX_ASSERT_THIS(pstar, cxAStar);
     MapSearchInfo *info = this->data;
     CX_ASSERT_VALUE(info->map, Map, map);
-    CX_ASSERT_VALUE(info->dst, Node, node);
+    CX_ASSERT_VALUE(info->dst, Node, dnode);
+    CX_ASSERT_VALUE(info->src, Node, snode);
     //如果目标是敌军继续寻路
-    if(node->Type.mainType == NodeTypeEnemy){
+    if(dnode->Type.mainType == NodeTypeEnemy){
         return 0;
     }
+    Node cnode = MapItem(map, *curr);
     //如果格子上已经是目标提前完成
-    return MapItem(map, *curr) == info->dst;
+    if(cnode == info->dst){
+        return 1;
+    }
+    //如果此点可以攻击到目标返回成功,使用中心点计算
+    cxVec2f cidx = cxVec2fv(curr->x + 0.5f, curr->y + 0.5f);
+    cxVec2f didx = NodeGetIndex(dnode);
+    //当前点与目标点之间的距离
+    cxFloat dis = kmVec2DistanceBetween(&cidx, &didx);
+    //如果可以攻击到就成功返回
+    if(NodeIsArriveDistance(snode, dnode, dis)){
+        return 1;
+    }
+    return 0;
 }
 
 static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)

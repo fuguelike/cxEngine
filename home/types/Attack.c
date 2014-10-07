@@ -14,7 +14,7 @@
 PathRuleResult AttackPathRule(cxAny pview,const FindRuleResult *fret)
 {
     CX_ASSERT_THIS(pview, Attack);
-    //搜索目标路径成功,移动到可攻击位置,搜索视野范围内的路径
+    //搜索目标路径成功,移动到可攻击位置
     if(MapSearchPath(this, fret->target)){
         return PRMake(fret->target, NodeBindReasonMove);
     }

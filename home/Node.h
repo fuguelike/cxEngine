@@ -178,6 +178,8 @@ CX_INLINE cxFloat NodeDistance(cxAny src,cxAny dst)
 //检测网格坐标是否选在node范围内
 cxBool NodeHited(cxAny pview,cxVec2f index);
 
+//是否到达，使用计算好的距离检测
+cxBool NodeIsArriveDistance(cxAny pattacker,cxAny ptarget,cxFloat dis);
 //检测是到达攻击范围,是否加入attacker或者target body计算
 cxBool NodeIsArriveRange(cxAny attacker,cxAny target);
 
