@@ -23,13 +23,14 @@ CX_OBJECT_INIT(cxUDP, cxObject)
 }
 CX_OBJECT_FREE(cxUDP, cxObject)
 {
+    if(this->socket > 0){
+        evutil_closesocket(this->socket);
+    }
     if(this->udpEvent != NULL){
         event_del(this->udpEvent);
         event_free(this->udpEvent);
     }
-    if(this->socket > 0){
-        evutil_closesocket(this->socket);
-    }
+    CX_EVENT_RELEASE(this->onData);
     CX_RELEASE(this->host);
 }
 CX_OBJECT_TERM(cxUDP, cxObject)
@@ -52,12 +53,14 @@ cxInt cxUDPWrite(cxAny pudp,cxConstChars data,cxInt len)
 static void UDPRead(evutil_socket_t sockt, short which, void *arg)
 {
     CX_ASSERT_THIS(arg, cxUDP);
-    cxChar buf[2048];
-    cxInt bytes = recvfrom(this->socket, buf, 2048, 0, (struct sockaddr *)&this->udpFrom, &this->fromAddrLen);
-    if(bytes <= 0) {
+    if(!(which & EV_READ)){
         return;
     }
-    CX_METHOD_RUN(this->OnData,this,buf,bytes);
+    this->bytes = recvfrom(this->socket, this->buffer, CX_UDP_BUFFER_SIZE, 0, (struct sockaddr *)&this->udpFrom, &this->fromAddrLen);
+    if(this->bytes <= 0) {
+        return;
+    }
+    CX_EVENT_FIRE(this, onData);
 }
 
 cxUDP cxUDPCreate(cxConstChars host,cxInt port)
@@ -68,7 +71,7 @@ cxUDP cxUDPCreate(cxConstChars host,cxInt port)
     this->port = port;
     this->socket = cxCreateSocket(true,SOCK_DGRAM);
     if(this->socket == -1){
-        CX_ERROR("create udp error %d:%s",port,host);
+        CX_ERROR("create udp socket error %d:%s",port,host);
         return NULL;
     }
     this->udpTo.sin_port = htons(port);

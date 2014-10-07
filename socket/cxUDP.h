@@ -16,6 +16,8 @@
 
 CX_C_BEGIN
 
+#define CX_UDP_BUFFER_SIZE 1024
+
 CX_OBJECT_DEF(cxUDP, cxObject)
     evutil_socket_t socket;
     cxInt port;
@@ -27,8 +29,23 @@ CX_OBJECT_DEF(cxUDP, cxObject)
     //from addr
     struct sockaddr_in udpFrom;
     socklen_t fromAddrLen;
-    CX_METHOD_DEF(void, OnData,cxAny pudp,cxChars buf,cxInt size);
+    //on data readed
+    cxChar buffer[CX_UDP_BUFFER_SIZE];
+    cxInt bytes;
+    CX_EVENT_ALLOC(onData);
 CX_OBJECT_END(cxUDP, cxObject)
+
+CX_INLINE cxAny cxUDPGetBuffer(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxUDP);
+    return this->buffer;
+}
+
+CX_INLINE cxInt cxUDPGetBytes(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxUDP);
+    return this->bytes;
+}
 
 cxUDP cxUDPCreate(cxConstChars host,cxInt port);
 
