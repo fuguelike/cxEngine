@@ -91,9 +91,9 @@ static cpBB NodeIndexBB(cxAny pview)
     CX_ASSERT_THIS(pview, Node);
     //这个坐标其实是物体中间的坐标
     cxVec2f idx = NodeGetIndex(this);
-    cxFloat w = (cxFloat)this->Size.w / 2.0f;
-    cxFloat h = (cxFloat)this->Size.h / 2.0f;
-    return cpBBNew(idx.x - w, idx.y - h, idx.x + w, idx.y + h);
+    cxFloat w2 = (cxFloat)this->Size.w / 2.0f;
+    cxFloat h2 = (cxFloat)this->Size.h / 2.0f;
+    return cpBBNew(idx.x - w2, idx.y - h2, idx.x + w2, idx.y + h2);
 }
 
 static cxInt MapSearchEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *curr,cxVec2i *target)
@@ -278,9 +278,9 @@ CX_OBJECT_INIT(Map, cxAtlas)
     //路径缓冲
     this->paths = CX_ALLOC(cxHash);
     
-    cxEngine engine = cxEngineInstance();
+    cxSize2f wsize = cxEngineWinSize();
     //设定宽度
-    cxFloat w = engine->winsize.w * global.mapRate;
+    cxFloat w = wsize.w * global.mapRate;
     //4:3比例符合75度视角
     cxSize2f size = cxSize2fv(w, w * 0.75f);
     //单个node大小

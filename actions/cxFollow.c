@@ -44,7 +44,7 @@ static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
     this->speed = CX_METHOD_GET(this->init, this->Speed,pav,cxActionGetTimeElapsed(this));
     cxFloat s = dt * this->speed;
     cxVec2f delta = cxVec2fv(s*cosf(this->angle), s*sinf(this->angle));
-    kmVec2Add(&cpos, &cpos, &delta);
+    cpos = cxVec2fAdd(cpos, delta);
     if(CX_METHOD_GET(false, this->IsExit,pav)){
         cxActionStop(pav);
     }

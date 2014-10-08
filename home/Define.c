@@ -28,7 +28,7 @@ void GlobalInit(cxEngine engine)
     global.mapRate = 1.2f;
     global.unitNum = cxVec2iv(MAP_ROW, MAP_COL);
     
-    cxSize2f size = cxSize2fv(engine->winsize.w * 1.2f, 0);
+    cxSize2f size = cxSize2fv(engine->WinSize.w * 1.2f, 0);
     size.h = size.w * 0.75f;
     
     global.unitSize.w = size.w/global.unitNum.x;
@@ -45,8 +45,8 @@ void GlobalInit(cxEngine engine)
     global.warMapSize.w = global.warUnitSize.w * global.warUnitNum.x;
     global.warMapSize.h = global.warUnitSize.h * global.warUnitNum.y;
     
-    global.warShowNum.x = (engine->winsize.w / global.warUnitSize.w  + 4)/2 ;
-    global.warShowNum.y = (engine->winsize.h / global.warUnitSize.h  + 4)/2;
+    global.warShowNum.x = (engine->WinSize.w / global.warUnitSize.w  + 4)/2 ;
+    global.warShowNum.y = (engine->WinSize.h / global.warUnitSize.h  + 4)/2;
 }
 
 cxFloat SideDistance(cxInt sideNum)

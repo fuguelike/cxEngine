@@ -60,12 +60,11 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f p2 = cxSplinePointAt(this, index + 1);
     cxVec2f p3 = cxSplinePointAt(this, index + 2);
     cxVec2f newpos = cxCardinalSplineAt(p0, p1, p2, p3, this->tension, lt);
-    cxVec2f diff;
     cxVec2f vpos = cxViewGetPosition(view);
-    kmVec2Subtract(&diff, &vpos, &this->prev);
+    cxVec2f diff = cxVec2fSub(vpos, this->prev);
     if(diff.x != 0 || diff.y != 0){
-        kmVec2Add(&this->diff, &this->diff, &diff);
-        kmVec2Add(&newpos, &newpos, &this->diff);
+        this->diff = cxVec2fAdd(this->diff, diff);
+        newpos = cxVec2fAdd(newpos, this->diff);
     }
     cxFloat angle = cxVec2fRadiansBetween(newpos, this->prev);
     if(!cxFloatEqu(angle, this->angle)){

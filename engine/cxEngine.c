@@ -188,7 +188,7 @@ void cxEngineBegin()
     //registe other type
     cxEngineType(engine);
     //set localized lang
-    cxEngineSetLocalized(cxLocalizedLang());
+    cxEngineSetLang(cxLocalizedLang());
     //open player
     cxPlayerOpen();
     //init engine
@@ -230,12 +230,12 @@ void cxEngineDraw()
         return;
     }
     cxDouble now = cxTimestamp();
-    engine->frameDelta = now - engine->lastTime;
+    engine->FrameDelta = now - engine->lastTime;
     //30 - 60
-    engine->frameDelta = kmClamp(engine->frameDelta, engine->interval, engine->interval * 2.0f);
+    engine->FrameDelta = kmClamp(engine->FrameDelta, engine->interval, engine->interval * 2.0f);
     cxMemPoolBegin();
     cxOpenGLClear();
-    CX_SIGNAL_FIRE(engine->onUpdate, CX_FUNC_TYPE(cxAny,cxFloat),CX_SLOT_OBJECT,engine->frameDelta);
+    CX_SIGNAL_FIRE(engine->onUpdate, CX_FUNC_TYPE(cxAny,cxFloat),CX_SLOT_OBJECT,engine->FrameDelta);
     kmGLPushMatrix();
     cxViewDraw(engine->window);
     kmGLPopMatrix();
@@ -255,29 +255,23 @@ static void cxEngineLookAt(cxMatrix4f *matrix,cxFloat zeye,const cxVec2f point)
     kmMat4LookAt(matrix, &eye, &center, &up);
 }
 
-void cxEngineSetDesignSize(cxSize2f dessize)
-{
-    cxEngine engine = cxEngineInstance();
-    engine->dessize = dessize;
-}
-
 void cxEngineLayout(cxInt width,cxInt height)
 {
     CX_LOGGER("openGL layout width=%d height=%d",width,height);
     cxEngine engine = cxEngineInstance();
-    engine->winsize = cxSize2fv(width, height);
+    engine->WinSize = cxSize2fv(width, height);
     //$WinSize.w $WinSize.h
-    cxJsonRegisterSize2f("WinSize", engine->winsize);
-    cxViewSetSize(engine->window, engine->winsize);
+    cxJsonRegisterSize2f("WinSize", engine->WinSize);
+    cxViewSetSize(engine->window, engine->WinSize);
     //
-    if(!cxSize2fZero(engine->dessize)){
-        engine->scale.x = engine->winsize.w/engine->dessize.w;
-        engine->scale.y = engine->winsize.h/engine->dessize.h;
-        cxJsonRegisterVec2f("Scale", engine->scale);
+    if(!cxSize2fZero(engine->DesSize)){
+        engine->Scale.x = engine->WinSize.w/engine->DesSize.w;
+        engine->Scale.y = engine->WinSize.h/engine->DesSize.h;
+        cxJsonRegisterVec2f("Scale", engine->Scale);
     }else{
-        engine->scale.x = 1.0f;
-        engine->scale.y = 1.0f;
-        cxJsonRegisterVec2f("Scale", engine->scale);
+        engine->Scale.x = 1.0f;
+        engine->Scale.y = 1.0f;
+        cxJsonRegisterVec2f("Scale", engine->Scale);
     }
     //
     if(!engine->isInit){
@@ -286,18 +280,18 @@ void cxEngineLayout(cxInt width,cxInt height)
         cxDumpGlobalJson();
     }
     //
-    cxFloat zeye = engine->winsize.h / 1.1566f;
+    cxFloat zeye = engine->WinSize.h / 1.1566f;
     kmMat4 perspective={0};
     kmGLMatrixMode(KM_GL_PROJECTION);
     kmGLLoadIdentity();
     //
-    kmMat4PerspectiveProjection(&perspective, 60.0f, engine->winsize.w / engine->winsize.h, 0.0f, zeye * 2);
+    kmMat4PerspectiveProjection(&perspective, 60.0f, engine->WinSize.w / engine->WinSize.h, 0.0f, zeye * 2);
     kmGLMultMatrix(&perspective);
     kmGLMatrixMode(KM_GL_MODELVIEW);
     kmGLLoadIdentity();
     //
     cxOpenGLSetDepthTest(false);
-    cxOpenGLViewport(cxBox4fv(0, engine->winsize.w, 0, engine->winsize.h));
+    cxOpenGLViewport(cxBox4fv(0, engine->WinSize.w, 0, engine->WinSize.h));
     //
     cxMatrix4f matrix;
     cxEngineLookAt(&matrix,zeye,cxVec2fv(0, 0));
@@ -323,10 +317,10 @@ CX_OBJECT_TYPE(cxEngine, cxObject)
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
     this->interval = 1.0f/60.0f;
-    this->isShowBorder = true;
+    this->IsShowBorder = true;
     this->isTouch = true;
     this->isGesture = true;
-    this->scale = cxVec2fv(1.0f, 1.0f);
+    this->Scale = cxVec2fv(1.0f, 1.0f);
     this->files = CX_ALLOC(cxHash);
     this->items = CX_ALLOC(cxHash);
     this->groups = CX_ALLOC(cxHash);
@@ -338,7 +332,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->items);
     CX_RELEASE(this->files);
     CX_RELEASE(this->assets);
-    CX_RELEASE(this->lang);
+    CX_RELEASE(this->Lang);
     CX_RELEASE(this->window);
     CX_EVENT_RELEASE(this->onExit);
     CX_SIGNAL_RELEASE(this->onRecvJson);
@@ -415,12 +409,6 @@ cxBMPFont cxEngineLoadBMPFont(cxConstChars file)
     return font;
 }
 
-void cxEngineSetLocalized(cxString lang)
-{
-    cxEngine this = cxEngineInstance();
-    CX_RETAIN_SWAP(this->lang, lang);
-}
-
 cxEngine cxEngineInstance()
 {
     if(instance == NULL) {
@@ -447,15 +435,15 @@ void cxEngineTimeReset()
 {
     cxEngine this = cxEngineInstance();
     this->lastTime = cxTimestamp();
-    this->frameDelta = 0;
+    this->FrameDelta = 0;
 }
 
 cxVec2f cxEngineTouchToWindow(cxVec2f pos)
 {
     cxEngine this = cxEngineInstance();
     cxVec2f rv;
-    rv.x = pos.x - this->winsize.w / 2.0f;
-    rv.y = this->winsize.h / 2.0f - pos.y;
+    rv.x = pos.x - this->WinSize.w / 2.0f;
+    rv.y = this->WinSize.h / 2.0f - pos.y;
     return rv;
 }
 
@@ -463,8 +451,8 @@ cxVec2f cxEngineWindowToTouch(cxVec2f pos)
 {
     cxEngine this = cxEngineInstance();
     cxVec2f rv;
-    rv.x = this->winsize.w / 2.0f - pos.x;
-    rv.y = pos.y - this->winsize.h / 2.0f;
+    rv.x = this->WinSize.w / 2.0f - pos.x;
+    rv.y = pos.y - this->WinSize.h / 2.0f;
     return rv;
 }
 
@@ -484,7 +472,7 @@ cxBool cxEngineFireKey(cxKeyType type,cxInt code)
 
 static void cxEngineComputeTouchItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
 {
-    kmVec2Subtract(&item->delta, &cpos, &item->previous);
+    item->delta = cxVec2fSub(cpos, item->previous);
     item->previous = cpos;
     //get move speed
     cxDouble dt = now - item->startTime;

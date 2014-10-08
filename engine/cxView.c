@@ -57,15 +57,15 @@ CX_SETTER_DEF(cxView, scale)
 }
 CX_SETTER_DEF(cxView, fixscale)
 {
-    cxEngine engine = cxEngineInstance();
     cxConstChars autofix = cxJsonToConstChars(value);
     cxVec2f fixScale = this->FixScale;
+    cxVec2f scale = cxEngineGetScale();
     if(cxConstCharsEqu(autofix, "width")){
-        fixScale.x = engine->scale.x;
-        fixScale.y = engine->scale.x;
+        fixScale.x = scale.x;
+        fixScale.y = scale.x;
     }else if(cxConstCharsEqu(autofix, "height")){
-        fixScale.x = engine->scale.y;
-        fixScale.y = engine->scale.y;
+        fixScale.x = scale.y;
+        fixScale.y = scale.y;
     }else{
         fixScale = cxJsonToVec2f(value,fixScale);
     }
@@ -366,9 +366,9 @@ cxBox4f cxViewGetBox(cxAny pview)
 cxBool cxViewContainsGLBox(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxEngine engine = cxEngineInstance();
+    cxSize2f wsize = cxEngineWinSize();
     cxRect4f vr = cxViewGLRect(this);
-    cxRect4f gr = cxRect4fv(0, 0, engine->winsize.w, engine->winsize.h);
+    cxRect4f gr = cxRect4fv(0, 0, wsize.w, wsize.h);
     return cxRect4fContainsRect4f(gr,vr);
 }
 
@@ -393,17 +393,17 @@ void cxViewSetShowBorder(cxAny pview,cxBool isShowBorder)
 
 cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint)
 {
-    cxEngine engine = cxEngineInstance();
-    cxFloat x = wPoint.x + engine->winsize.w/2.0f;
-    cxFloat y = wPoint.y + engine->winsize.h/2.0f;
+    cxSize2f wsize = cxEngineWinSize();
+    cxFloat x = wPoint.x + wsize.w/2.0f;
+    cxFloat y = wPoint.y + wsize.h/2.0f;
     return cxVec2fv(x, y);
 }
 
 cxVec2f cxGLPointToWindowPoint(cxVec2f glPoint)
 {
-    cxEngine engine = cxEngineInstance();
-    cxFloat x = glPoint.x - engine->winsize.w/2.0f;
-    cxFloat y = glPoint.y - engine->winsize.h/2.0f;
+    cxSize2f wsize = cxEngineWinSize();
+    cxFloat x = glPoint.x - wsize.w/2.0f;
+    cxFloat y = glPoint.y - wsize.h/2.0f;
     return cxVec2fv(x, y);
 }
 
@@ -462,12 +462,12 @@ cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
 void cxViewSetSize(cxAny pview,cxSize2f size)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxEngine engine = cxEngineInstance();
+    cxSize2f wsize = cxEngineWinSize();
     if(size.w > 0 && size.w < 1.0f){
-        size.w = engine->winsize.w * size.w;
+        size.w = wsize.w * size.w;
     }
     if(size.h > 0 && size.h < 1.0f){
-        size.h = engine->winsize.h * size.h;
+        size.h = wsize.h * size.h;
     }
     if(size.w < 1.0f || size.h < 1.0f){
         return;
@@ -562,8 +562,7 @@ cxVec2f cxViewSetAnchor(cxAny pview,cxVec2f anchor)
     CX_RETURN(cxVec2fEqu(this->Anchor, anchor),opos);
     if(!cxViewZeroSize(this)){
         cxSize2f size = cxViewContentSize(this);
-        cxVec2f delta;
-        kmVec2Subtract(&delta, &anchor, &this->Anchor);
+        cxVec2f delta = cxVec2fSub(anchor, this->Anchor);
         opos.x += size.w * delta.x;
         opos.y += size.h * delta.y;
     }
@@ -890,10 +889,10 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
 CX_INLINE void cxViewUpdateActions(cxView pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxEngine engine = cxEngineInstance();
+    cxFloat dt = cxEngineGetFrameDelta();
     CX_HASH_FOREACH(this->Actions, ele, tmp){
         cxAction action = ele->any;
-        if(!cxActionUpdate(action, engine->frameDelta)){
+        if(!cxActionUpdate(action, dt)){
             continue;
         }
         cxHashDelElement(this->Actions, ele);
@@ -980,7 +979,7 @@ void cxViewDraw(cxAny pview)
     if(isCropping){
         cxOpenGLDisableScissor();
     }
-    if(cxEngineInstance()->isShowBorder || this->isShowBorder){
+    if(cxEngineGetIsShowBorder() || this->isShowBorder){
         cxViewDrawBorder(this);
     }
     kmGLPopMatrix();

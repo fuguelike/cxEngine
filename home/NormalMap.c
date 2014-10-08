@@ -56,10 +56,8 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
     }
     if(item->type == cxTouchTypeMove && this->dnode != NULL && this->dnode == this->currNode){
         cxVec2f currIdx = MapPosToFloat(this, cpos);
-        cxVec2f delta;
-        kmVec2Subtract(&delta, &currIdx, &this->startPos);
-        
-        cxVec2i idx = cxVec2iv(delta.x, delta.y);
+        cxVec2f delta = cxVec2fSub(currIdx, this->startPos);
+        cxVec2i idx = cxVec2fTo2i(delta);
         cxBool setPos = false;
         cxVec2f nidx = NodeGetIndex(this->currNode);
         if(idx.x != 0){
@@ -76,8 +74,9 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
             cxVec2f npos = MapIndexToPos(this, nidx);
             cxViewSetPosition(this->currNode, npos);
             cxVec2i newIdx = NodeIndexToInitIndex(this->currNode,nidx);
+            cxBool isValid = MapIsFillNode(this, newIdx, this->currNode);
             //检测位置是否合法
-            if(MapIsFillNode(this, newIdx, this->currNode)){
+            if(isValid){
                 //合法的位置
                 cxViewSetColor(this->currNode, cxGREEN);
             }else{
@@ -112,6 +111,7 @@ cxBool NormalMapInit(cxAny pmap)
     if(!MapInit(pmap)){
         return false;
     }
+    //Test
     cxAny node1 = WallCreate(this, cxVec2iv(8, 8));
     MapAppendNode(node1);
     
@@ -146,3 +146,4 @@ NormalScene NormalSceneCreate()
     }
     return scene;
 }
+

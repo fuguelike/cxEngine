@@ -59,7 +59,7 @@ void cxParticleInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index)
     
     if(this->type == cxParticleEmitterGravity){
         cxVec2f v = cxVec2fv(cosf(angle), sinf(angle));
-        kmVec2Scale(&particle->dir, &v, speed);
+        particle->dir = cxVec2fScale(v, speed);
         particle->radaccel = cxFloatValue(this->radaccel);
         particle->tanaccel = cxFloatValue(this->tanaccel);
         if(this->todir){
@@ -186,19 +186,19 @@ static void cxParticleStep(cxAny pav,cxFloat dt,cxFloat time)
                     kmVec2Normalize(&radial, &p->position);
                 }
                 cxVec2f tangential = radial;
-                kmVec2Scale(&radial, &radial, p->radaccel);
+                radial = cxVec2fScale(radial, p->radaccel);
                 //compute tangential
                 cxFloat newy = tangential.x;
                 tangential.x = -tangential.y;
                 tangential.y = newy;
-                kmVec2Scale(&tangential,&tangential,p->tanaccel);
+                tangential = cxVec2fScale(tangential, p->tanaccel);
                 //compute position
-                kmVec2Add(&tmp, &radial, &tangential);
-                kmVec2Add(&tmp, &tmp, &this->gravity);
-                kmVec2Scale(&tmp, &tmp, dt);
-                kmVec2Add(&p->dir, &p->dir, &tmp);
-                kmVec2Scale(&tmp, &p->dir, dt);
-                kmVec2Add(&p->position, &p->position, &tmp);
+                tmp = cxVec2fAdd(radial, tangential);
+                tmp = cxVec2fAdd(tmp, this->gravity);
+                tmp = cxVec2fScale(tmp, dt);
+                p->dir = cxVec2fAdd(p->dir, tmp);
+                tmp = cxVec2fScale(p->dir, dt);
+                p->position = cxVec2fAdd(p->position, tmp);
             }else{
                 p->angle += p->degreespers * dt;
                 p->radius += p->deltaradius * dt;

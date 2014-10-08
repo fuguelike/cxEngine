@@ -74,8 +74,8 @@ static void loadingFightSceneExit(cxAny sender)
 
 void cxEngineInit(cxEngine engine)
 {
-    cxEngineSetDesignSize(cxSize2fv(2048, 1536));
-    engine->isShowBorder = true;
+    cxEngineSetDesSize(cxSize2fv(2048, 1536));
+    cxEngineSetIsShowBorder(true);
     //战斗用动画管理器
     cxGroup fight = CX_CREATE(cxGroup);
     cxGroupSetScale(fight, 1.0f);

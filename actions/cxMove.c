@@ -13,7 +13,7 @@ static void cxMoveInit(cxAny pav)
     CX_ASSERT_THIS(pav, cxMove);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->prev = this->from = cxViewGetPosition(view);
-    kmVec2Subtract(&this->posDelta, &this->to, &this->from);
+    this->posDelta = cxVec2fSub(this->to, this->from);
 }
 
 void cxMoveSetPos(cxAny pav,cxVec2f pos)
@@ -27,12 +27,11 @@ static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_ASSERT_THIS(pav, cxMove);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxVec2f npos;
-    cxVec2f diff;
     cxVec2f vpos = cxViewGetPosition(view);
-    kmVec2Subtract(&diff, &vpos, &this->prev);
-    kmVec2Add(&this->from, &this->from, &diff);
-    kmVec2Scale(&npos, &this->posDelta, time);
-    kmVec2Add(&npos, &this->from, &npos);
+    cxVec2f diff = cxVec2fSub(vpos, this->prev);
+    this->from = cxVec2fAdd(this->from, diff);
+    npos = cxVec2fScale(this->posDelta, time);
+    npos = cxVec2fAdd(npos,this->from);
     this->prev = npos;
     cxViewSetPosition(view, npos);
 }

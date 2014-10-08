@@ -22,12 +22,10 @@ static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
     cxFloat frac = fmodf( time * this->jumps, 1.0f );
     cxFloat y = this->height * 4 * frac * (1 - frac) + this->position.y * time;
     cxFloat x = this->position.x * time;
-    cxVec2f diff;
     cxVec2f currPos = cxViewGetPosition(view);
-    kmVec2Subtract(&diff, &currPos, &this->prevPos);
-    kmVec2Add(&this->startPos, &diff, &this->startPos);
-    cxVec2f nPos;
-    kmVec2Add(&nPos, &this->startPos, &cxVec2fv(x, y));
+    cxVec2f diff = cxVec2fSub(currPos, this->prevPos);
+    this->startPos = cxVec2fAdd(this->startPos, diff);
+    cxVec2f nPos = cxVec2fAdd(this->startPos, cxVec2fv(x, y));
     cxViewSetPosition(view, nPos);
     this->prevPos = nPos;
 }

@@ -26,10 +26,10 @@ static void cxParabolaStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f tmp;
     cxVec2f gv;
     cxFloat tv = this->time * this->time / 2.0f;
-    kmVec2Scale(&tmp, &this->speed, this->time);
-    kmVec2Scale(&gv, &this->gravity, tv);
-    kmVec2Add(&tmp, &tmp, &gv);
-    kmVec2Add(&tmp, &tmp, &this->pos);
+    tmp = cxVec2fScale(this->speed, this->time);
+    gv = cxVec2fScale(this->gravity, tv);
+    tmp = cxVec2fAdd(tmp, gv);
+    tmp = cxVec2fAdd(tmp, this->pos);
     cxViewSetPosition(view, tmp);
     this->time += dt;
 }

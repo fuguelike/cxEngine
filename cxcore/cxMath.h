@@ -70,6 +70,7 @@ typedef kmVec2 cxVec2f;
 #define cxVec2fLength(a)        sqrtf((a).x*(a).x + (a).y*(a).y)
 #define cxVec2fZero(v)          (cxFloatEqu((v).x, 0.0f) && cxFloatEqu((v).y, 0.0f))
 #define cxVec2fOne(v)           (cxFloatEqu((v).x, 1.0f) && cxFloatEqu((v).y, 1.0f))
+#define cxVec2fTo2i(v)          cxVec2iv((v).x,(v).y)
 
 typedef kmVec3 cxVec3f;
 #define cxVec3fv(x,y,z)         (cxVec3f){x,y,z}
@@ -278,6 +279,21 @@ cxBool cxPointsContainPoint(cxAnyArray polygon,cxVec2f tp);
 
 cxVec2f cxCardinalSplineAt(cxVec2f p0, cxVec2f p1, cxVec2f p2, cxVec2f p3, cxFloat tension, cxFloat t);
 
+CX_INLINE  cxVec2f cxVec2fSub(cxVec2f pV1, cxVec2f pV2)
+{
+    return cxVec2fv(pV1.x - pV2.x, pV1.y - pV2.y);
+}
+
+CX_INLINE  cxVec2f cxVec2fAdd(cxVec2f pV1, cxVec2f pV2)
+{
+    return cxVec2fv(pV1.x + pV2.x, pV1.y + pV2.y);
+}
+
+CX_INLINE cxVec2f cxVec2fScale(cxVec2f pIn, cxFloat s)
+{
+    return cxVec2fv(pIn.x * s, pIn.y * s);
+}
+
 CX_INLINE cxFloat cxRound(cxFloat v)
 {
     if(v > 0){
@@ -288,6 +304,7 @@ CX_INLINE cxFloat cxRound(cxFloat v)
         return v;
     }
 }
+
 CX_INLINE cxVec2f cxRoundVec2f(cxVec2f v)
 {
     return cxVec2fv(cxRound(v.x), cxRound(v.y));

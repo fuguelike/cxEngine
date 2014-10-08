@@ -186,7 +186,7 @@ cxBool NodeIsArriveDistance(cxAny pattacker,cxAny ptarget,cxFloat dis)
 {
     CX_ASSERT_VALUE(pattacker, Node, attacker);
     CX_ASSERT_VALUE(ptarget, Node, target);
-    dis -= (NodeGetBody(attacker) + NodeGetBody(target));
+    dis -= NodeGetBody(attacker) + NodeGetBody(target);
     dis = CX_MAX(dis, 0);
     //获取攻击者作战范围
     cxRange2f range = NodeGetRange(attacker);

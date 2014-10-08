@@ -33,10 +33,10 @@ static void cxShowActionOnStop(cxAny pav)
 
 static void cxAlertOnShow(cxAny pview)
 {
-    cxEngine engine = cxEngineInstance();
+    cxSize2f wsize = cxEngineWinSize();
     cxSize2f size = cxViewGetSize(pview);
     cxVec2f pos = cxViewGetPosition(pview);
-    pos.y = -engine->winsize.h/2.0f - size.h / 2.0f;
+    pos.y = -wsize.h/2.0f - size.h / 2.0f;
     cxViewSetPosition(pview, pos);
     cxMove m = cxMoveCreate(0.3f, cxVec2fv(pos.x, 0));
     CX_ADD(cxAction, m, onExit, cxShowActionOnStop);
@@ -53,10 +53,10 @@ static void cxHideActionOnStop(cxAny pav)
 
 static void cxAlertOnHide(cxAny pview)
 {
-    cxEngine engine = cxEngineInstance();
+    cxSize2f wsize = cxEngineWinSize();
     cxSize2f size = cxViewGetSize(pview);
     cxVec2f pos = cxViewGetPosition(pview);
-    pos.y = -engine->winsize.h/2.0f - size.h / 2.0f;
+    pos.y = -wsize.h/2.0f - size.h / 2.0f;
     cxMove m = cxMoveCreate(0.3f, pos);
     CX_ADD(cxAction, m, onExit, cxHideActionOnStop);
     cxActionSetCurve(m, cxCurveBackIn);

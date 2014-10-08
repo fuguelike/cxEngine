@@ -21,21 +21,21 @@ CX_C_BEGIN
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
 CX_OBJECT_DEF(cxEngine, cxObject)
-    cxHash files;
-    cxHash assets;
-    cxFloat interval;
-    cxSize2f winsize;   //screen size
-    cxSize2f dessize;   //design size
-    cxFloat  desRate;   //design h/w
-    cxVec2f scale;
+    CX_FIELD_DEF(cxSize2f WinSize);     //screen size
+    CX_FIELD_DEF(cxSize2f DesSize);     //design size
+    CX_FIELD_DEF(cxVec2f Scale);        //dessize / winsize
+    CX_FIELD_DEF(cxBool IsShowBorder);  //show debug border
+    CX_FIELD_DEF(cxFloat FrameDelta);   // time per frame
+    CX_FIELD_DEF(cxString Lang);
     cxBool isInit;
-    cxBool isShowBorder;
     cxBool isTouch;
     cxBool isGesture;
     cxBool isPause;
     cxWindow window;
     cxDouble lastTime;
-    cxFloat frameDelta;
+    cxHash files;
+    cxHash assets;
+    cxFloat interval;
     CX_SIGNAL_ALLOC(onPause);
     CX_SIGNAL_ALLOC(onResume);
     CX_SIGNAL_ALLOC(onMemory);
@@ -45,9 +45,65 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxHash items;           //touch items
     cxTouchItems points;    //all touch points
     cxKey key;
-    cxString lang;
-    cxHash groups;
+    cxHash groups;          //action groups
 CX_OBJECT_END(cxEngine, cxObject)
+
+cxEngine cxEngineInstance();
+
+CX_INLINE cxString cxEngineGetLang()
+{
+    cxEngine engine = cxEngineInstance();
+    return engine->Lang;
+}
+
+CX_INLINE void cxEngineSetLang(cxString lng)
+{
+    cxEngine engine = cxEngineInstance();
+    CX_RETAIN_SWAP(engine->Lang, lng);
+}
+
+CX_INLINE cxFloat cxEngineGetFrameDelta()
+{
+    cxEngine engine = cxEngineInstance();
+    return engine->FrameDelta;
+}
+
+CX_INLINE void cxEngineSetScale(cxVec2f v)
+{
+    cxEngine engine = cxEngineInstance();
+    engine->Scale = v;
+}
+
+CX_INLINE cxVec2f cxEngineGetScale()
+{
+    cxEngine engine = cxEngineInstance();
+    return engine->Scale;
+}
+
+CX_INLINE cxBool cxEngineGetIsShowBorder()
+{
+    cxEngine engine = cxEngineInstance();
+    return engine->IsShowBorder;
+}
+
+CX_INLINE void cxEngineSetIsShowBorder(cxBool v)
+{
+    cxEngine engine = cxEngineInstance();
+    engine->IsShowBorder = v;
+}
+
+//use init method
+CX_INLINE void cxEngineSetDesSize(cxSize2f size)
+{
+    cxEngine engine = cxEngineInstance();
+    engine->DesSize = size;
+}
+
+CX_INLINE cxSize2f cxEngineWinSize()
+{
+    cxEngine engine = cxEngineInstance();
+    return engine->WinSize;
+}
 
 //type init
 CX_EXTERN void cxEngineType(cxEngine engine);
@@ -61,8 +117,6 @@ CX_EXTERN void cxEngineMain(cxEngine engine);
 //engine free
 CX_EXTERN void cxEngineFree(cxEngine engine);
 
-cxEngine cxEngineInstance();
-
 cxJson cxEngineJsonReader(cxConstChars src);
 
 cxAny cxEngineCreateObject(cxConstChars src);
@@ -70,8 +124,6 @@ cxAny cxEngineCreateObject(cxConstChars src);
 cxString cxEngineAssetsData(cxConstChars file);
 
 cxJson cxEngineLoadJson(cxConstChars file);
-
-void cxEngineSetDesignSize(cxSize2f dessize);
 
 void cxEngineTimeReset();
 
@@ -92,8 +144,6 @@ cxBool cxEngineFireKey(cxKeyType type,cxInt code);
 void cxEngineSendJson(cxString json);
 
 void cxEngineRecvJson(cxString json);
-
-void cxEngineSetLocalized(cxString lang);
 
 //初始化数据
 void cxEngineBegin();

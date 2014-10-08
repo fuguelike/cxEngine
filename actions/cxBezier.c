@@ -34,11 +34,9 @@ static void cxBezierStep(cxAny pav,cxFloat dt,cxFloat time)
     xy.y = cxBezier3(ya, yb, yc, yd, time);
     
     cxVec2f curr = cxViewGetPosition(view);
-    cxVec2f diff;
-    kmVec2Subtract(&diff, &curr, &this->prev);
-    kmVec2Add(&this->from, &this->from, &diff);
-    cxVec2f npos;
-    kmVec2Add(&npos, &this->from, &xy);
+    cxVec2f diff = cxVec2fSub(curr, this->prev);
+    this->from = cxVec2fAdd(this->from, diff);
+    cxVec2f npos = cxVec2fAdd(this->from, xy);
     cxViewSetPosition(view, npos);
     this->prev = npos;
 }
