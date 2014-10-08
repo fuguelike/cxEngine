@@ -30,19 +30,19 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
     cxVec2f index = MapPosToFloat(this, cpos);
     if(item->type == cxTouchTypeUp){
         this->unode = MapHitNode(this, index, NodeTypeAll);
-        if(this->currNode != NULL){
-            NodeUpdateInitIndex(this->currNode);
+        if(this->cnode != NULL){
+            NodeUpdateInitIndex(this->cnode);
         }
         if(item->isTap && this->dnode == this->unode){
-            if(this->currNode != NULL && !NodeUpdateInitIndex(this->currNode)){
-                NodeResetIndex(this->currNode);
+            if(this->cnode != NULL && !NodeUpdateInitIndex(this->cnode)){
+                NodeResetIndex(this->cnode);
             }
-            if(this->currNode != NULL){
+            if(this->cnode != NULL){
                 //process prev selected node
             }
-            this->currNode = this->dnode;
-            if(this->currNode != NULL){
-                cxViewBringFront(this->currNode);
+            this->cnode = this->dnode;
+            if(this->cnode != NULL){
+                cxViewBringFront(this->cnode);
                 //node 被选中
                 CX_LOGGER("select node");
             }
@@ -54,12 +54,12 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
         this->dnode = MapHitNode(this, index, NodeTypeAll);
         return false;
     }
-    if(item->type == cxTouchTypeMove && this->dnode != NULL && this->dnode == this->currNode){
+    if(item->type == cxTouchTypeMove && this->dnode != NULL && this->dnode == this->cnode){
         cxVec2f currIdx = MapPosToFloat(this, cpos);
         cxVec2f delta = cxVec2fSub(currIdx, this->startPos);
         cxVec2i idx = cxVec2fTo2i(delta);
         cxBool setPos = false;
-        cxVec2f nidx = NodeGetIndex(this->currNode);
+        cxVec2f nidx = NodeGetIndex(this->cnode);
         if(idx.x != 0){
             setPos = true;
             nidx.x += idx.x;
@@ -72,17 +72,10 @@ static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
         }
         if(setPos){
             cxVec2f npos = MapIndexToPos(this, nidx);
-            cxViewSetPosition(this->currNode, npos);
-            cxVec2i newIdx = NodeIndexToInitIndex(this->currNode,nidx);
-            cxBool isValid = MapIsFillNode(this, newIdx, this->currNode);
-            //检测位置是否合法
-            if(isValid){
-                //合法的位置
-                cxViewSetColor(this->currNode, cxGREEN);
-            }else{
-                //错误的位置
-                cxViewSetColor(this->currNode, cxRED);
-            }
+            cxViewSetPosition(this->cnode, npos);
+            cxVec2i newIdx = NodeIndexToInitIndex(this->cnode,nidx);
+            cxBool isValid = MapIsFillNode(this, newIdx, this->cnode);
+            cxViewSetColor(this->cnode, isValid?cxGREEN:cxRED);
         }
         return true;
     }
