@@ -261,6 +261,13 @@ void cxViewUnBind(cxAny pview,cxAny bview)
     cxHashDel(view->Binded, cxHashAnyKey(pview));
 }
 
+cxBool cxViewHasBind(cxAny pview,cxAny bview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    CX_ASSERT_VALUE(bview, cxView, bind);
+    return cxHashHas(this->Bindes, cxHashAnyKey(bview));
+}
+
 void cxViewBind(cxAny pview,cxAny bview,cxAny bd)
 {
     CX_ASSERT(pview != bview, "self can't bind self");

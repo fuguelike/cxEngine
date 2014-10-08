@@ -180,6 +180,8 @@ void cxViewUnBindAll(cxAny pview);
 
 cxAny cxViewBindesFirst(cxAny pview);
 
+cxBool cxViewHasBind(cxAny pview,cxAny bview);
+
 //bd pview and bview bind data
 void cxViewBind(cxAny pview,cxAny bview,cxAny bd);
 

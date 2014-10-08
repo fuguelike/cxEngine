@@ -133,7 +133,7 @@ static void NodeAttackTimerArrive(cxAny pav)
     cxHash bindes = cxViewGetBindes(this);
     CX_HASH_FOREACH(bindes, ele, tmp){
         //获取目标
-        Node target = cxHashKeyToAny(ele);
+        CX_ASSERT_VALUE(cxHashKeyToAny(ele), Node, target);
         //攻击前目标已死
         if(NodeCheckDie(target)){
             continue;

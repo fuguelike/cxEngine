@@ -356,6 +356,10 @@ static cpCollisionID MapIndexQueryFunc(cxAny pmap, cxAny pview, cpCollisionID id
     if(info->type.subType != NodeSubTypeNone && !(info->type.subType & type.subType)){
         return id;
     }
+    //不包括已经bind的对象
+    if(cxViewHasBind(info->src, node)){
+        return id;
+    }
     //计算距离，获取最近的node
     cxFloat d = NodeDistance(info->src, node);
     if(d > info->dis){

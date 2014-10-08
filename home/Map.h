@@ -72,8 +72,8 @@ cxArray MapSelectedItems(cxAny pmap,cxVec2f point,NodeCombined type);
 //搜索某点附近的，范围内的所有node,包括min,不包括max，没有返回NULL
 cxArray MapNearestItems(cxAny pmap,cxVec2f point,cxRange2f range,NodeCombined type);
 
-//搜索离curr最近的单位
-cxAny MapNearestQuery(cxAny curr,NodeCombined type,cxRange2f range);
+//搜索离curr最近的单位,src已经bind的对象不会搜索到
+cxAny MapNearestQuery(cxAny src,NodeCombined type,cxRange2f range);
 
 //搜索src dst之间的单位
 cxAny MapSegmentQuery(cxAny src,cxAny dst,NodeCombined type);

@@ -11,7 +11,7 @@
 #include "Define.h"
 #include "Node.h"
 
-static cxAny BulletCreateEngineDefault(cxAny bullet)
+static cxAny BulletCreateActionDefault(cxAny bullet)
 {
     cxAny target = NULL;
     BulletGetNode(bullet, NULL, &target);
@@ -27,7 +27,7 @@ CX_OBJECT_TYPE(Bullet, cxSprite)
 CX_OBJECT_INIT(Bullet, cxSprite)
 {
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
-    CX_SET(Bullet, this, CreateEngine, BulletCreateEngineDefault);
+    CX_SET(Bullet, this, CreateAction, BulletCreateActionDefault);
 }
 CX_OBJECT_FREE(Bullet, cxSprite)
 {
@@ -38,7 +38,7 @@ CX_OBJECT_TERM(Bullet, cxSprite)
 cxAny BulletCreateEngine(cxAny pview)
 {
     CX_ASSERT_THIS(pview, Bullet);
-    cxAny action = CX_METHOD_GET(NULL, this->CreateEngine, this);
+    cxAny action = CX_METHOD_GET(NULL, this->CreateAction, this);
     CX_RETURN(action == NULL, NULL);
     BulletSetAction(this, action);
     return action;
