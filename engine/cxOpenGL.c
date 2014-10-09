@@ -37,6 +37,14 @@ static void cxOpenGLLoadDefaultShaders()
     CX_OPENGL_LOAD_SHADER(cxShaderMultiple);
 }
 
+void cxOpenGLUsingShader(cxConstChars key)
+{
+    cxOpenGL this = cxOpenGLInstance();
+    cxShader shader = cxHashGet(this->shaders, cxHashStrKey(key));
+    CX_ASSERT(shader != NULL, "shader %s not exists",key);
+    cxShaderUsing(shader);
+}
+
 void cxDrawLineBox(const cxBoxVec2f *box,const cxColor3f color)
 {
     cxDrawLineLoop(&box->lt, 4, color);
@@ -94,160 +102,6 @@ void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars ske
     cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void cxOpenGLUsingShader(cxConstChars key)
-{
-    cxOpenGL this = cxOpenGLInstance();
-    cxShader shader = cxHashGet(this->shaders, cxHashStrKey(key));
-    CX_ASSERT(shader != NULL, "shader %s not exists",key);
-    cxShaderUsing(shader);
-}
-
-void cxOpenGLSetBlendFactor(GLenum sfactor, GLenum dfactor)
-{
-    cxOpenGL this = cxOpenGLInstance();
-    if(sfactor == this->blendSrc && dfactor == this->blendDst){
-        return;
-    }
-	if(sfactor == GL_ONE && dfactor == GL_ZERO){
-		glDisable(GL_BLEND);
-	}else{
-        glEnable(GL_BLEND);
-        glBlendFunc(sfactor, dfactor);
-        this->blendSrc = sfactor;
-        this->blendDst = dfactor;
-    }
-}
-
-void cxOpenGLSetDepthTest(cxBool on)
-{
-    if (on){
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
-    }else{
-        glDisable(GL_DEPTH_TEST);
-    }
-}
-
-void cxOpenGLViewport(const cxBox4f box)
-{
-    glViewport(box.l, box.t, box.r - box.l, box.b - box.t);
-}
-
-void cxOpenGLEnableScissor(const cxRect4f rect)
-{
-    glEnable(GL_SCISSOR_TEST);
-    glScissor(rect.x, rect.y, rect.w, rect.h);
-}
-
-void cxOpenGLSetTexParameter(GLuint type,GLuint value)
-{
-    glTexParameteri(GL_TEXTURE_2D, type, value);
-}
-
-void cxOpenGLSetTexParameters(const cxTextureParams params)
-{
-    cxOpenGLSetTexParameter(GL_TEXTURE_MIN_FILTER, params.minFilter);
-    cxOpenGLSetTexParameter(GL_TEXTURE_MAG_FILTER, params.magFilter);
-    cxOpenGLSetTexParameter(GL_TEXTURE_WRAP_S, params.wrapS);
-    cxOpenGLSetTexParameter(GL_TEXTURE_WRAP_T, params.wrapT);
-}
-
-void cxOpenGLGenTextures(GLsizei n,GLuint *textures)
-{
-    glGenTextures(n, textures);
-}
-
-void cxOpenGLBindTexture(GLuint texture,cxInt idx)
-{
-    cxOpenGL this = cxOpenGLInstance();
-    if (this->activeTextures[idx] != texture){
-        this->activeTextures[idx] = texture;
-        glActiveTexture(GL_TEXTURE0 + idx);
-        glBindTexture(GL_TEXTURE_2D, texture);
-    }
-}
-
-void cxOpenGLDeleteTexture(GLuint texture,cxInt idx)
-{
-    cxOpenGL this = cxOpenGLInstance();
-    if(this->activeTextures[idx] == texture){
-        this->activeTextures[idx] = -1;
-    }
-	glDeleteTextures(1, &texture);
-}
-
-void cxOpenGLDisableScissor()
-{
-    glDisable(GL_SCISSOR_TEST);
-}
-
-void cxOpenGLDrawArrays(GLenum mode, GLint first, GLsizei count)
-{
-    glDrawArrays(mode, first, count);
-}
-
-void cxOpenGLVertexAttribPointer(GLuint indx, GLint size, GLsizei stride, const GLvoid* ptr)
-{
-    glVertexAttribPointer(indx, size, GL_FLOAT, GL_FALSE, stride, ptr);
-}
-
-void cxOpenGLEnableVertexAttribArray (GLuint index,GLboolean enable)
-{
-    if(enable){
-        glEnableVertexAttribArray(index);
-    }else{
-        glDisableVertexAttribArray(index);
-    }
-}
-
-void cxOpenGLActiveAttribs(cxUInt flags)
-{
-    cxOpenGL this = cxOpenGLInstance();
-    cxBool eposition = (flags & cxVertexAttribFlagPosition) != 0;
-    if(eposition != this->enableAttribPosition){
-        cxOpenGLEnableVertexAttribArray(cxVertexAttribPosition,eposition);
-        this->enableAttribPosition = eposition;
-    }
-    cxBool ecolor = (flags & cxVertexAttribFlagColor) != 0;
-    if(ecolor != this->enableAttribColor){
-        cxOpenGLEnableVertexAttribArray(cxVertexAttribColor,ecolor);
-        this->enableAttribColor = ecolor;
-    }
-    cxBool etexcoords = (flags & cxVertexAttribFlagTexcoord);
-    if(etexcoords != this->enableAttribTexcoords){
-        cxOpenGLEnableVertexAttribArray(cxVertexAttribTexcoord,etexcoords);
-        this->enableAttribTexcoords = etexcoords;
-    }
-}
-
-void cxOpenGLUseProgram(GLuint program)
-{
-    cxOpenGL this = cxOpenGLInstance();
-    if(this->currentProgram != program){
-        glUseProgram(program);
-        this->currentProgram = program;
-    }
-}
-
-void cxOpenGLDeleteProgram(GLuint program)
-{
-    cxOpenGL this = cxOpenGLInstance();
-    glDeleteProgram(program);
-    this->currentProgram = -1;
-}
-
-void cxOpenGLSetClearColor(cxColor4f color)
-{
-    cxOpenGL this = cxOpenGLInstance();
-    this->clearColor = color;
-}
-
-void cxOpenGLClear()
-{
-    cxOpenGL this = cxOpenGLInstance();
-    glClearColor(this->clearColor.r, this->clearColor.g, this->clearColor.b, this->clearColor.a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
 
 CX_OBJECT_TYPE(cxOpenGL, cxObject)
 {

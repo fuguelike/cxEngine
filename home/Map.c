@@ -153,6 +153,7 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
     if(type.mainType == NodeTypeBlock && !NodeCheckDie(node)){
         return false;
     }
+    //其他node只可以在最外一格活动
     return true;
 }
 

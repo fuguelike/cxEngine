@@ -47,7 +47,6 @@ FindRuleResult DefenceFindRule(cxAny pview,const NodeCombined *type)
     ret.target = MapNearestQuery(this, *type, range);
     if(ret.target != NULL){
         ret.fd = NodeFindReasonRange;
-        return ret;
     }
     return ret;
 }

@@ -47,14 +47,14 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_FIELD_DEF(cxVec2i InitIndex);    //初始化放置的位置,对于静态物不会变化
     CX_FIELD_DEF(cxFloat Body);         //用于确定单位停留在目标的附近哪个位置,默认值为0.5格
     CX_FIELD_DEF(cxAny Map);            //关联的map对象
-    CX_FIELD_DEF(cxVec2f Index);        //精确的网格索引0 - 39.99999f
+    CX_FIELD_DEF(cxVec2f Index);        //精确的网格索引0 - 39
     CX_FIELD_DEF(NodeCombined Type);    //node组合类型,攻击范围
     CX_FIELD_DEF(cxRange2f Range);      //攻击范围
-    CX_FIELD_DEF(cxSize2i Size);        //占用的格子数
+    CX_FIELD_DEF(cxSize2i Size);        //占用的格子数，node大小
     CX_FIELD_DEF(cxFloat Speed);        //移动速度
     CX_FIELD_DEF(cxFloat Power);        //攻击力,每秒的攻击力，实际效果和攻击频率(attackRate)有关系
     CX_FIELD_DEF(cxRange2i Life);       //min当前生命，max最大生命
-    CX_FIELD_DEF(cxRange2f Field);      //视野范围定义了，优先攻击范围内可以到达的目标,默认值为 0 - 5
+    CX_FIELD_DEF(cxRange2f Field);      //视野范围定义，优先攻击范围内可以到达的目标,默认值为 0 - 5
     CX_FIELD_DEF(cxInt Level);          //等级
     CX_FIELD_DEF(cxFloat AttackRate);   //攻击频率
     CX_FIELD_DEF(cxFloat SearchRate);   //搜索频率

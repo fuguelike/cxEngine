@@ -9,14 +9,6 @@
 #include <kazmath/GL/matrix.h>
 #include "cxShader.h"
 
-void cxShaderInitPosColorTex(cxAny pshader)
-{
-    CX_ASSERT_THIS(pshader, cxShader);
-    glBindAttribLocation(this->program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
-    glBindAttribLocation(this->program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
-    glBindAttribLocation(this->program, cxVertexAttribTexcoord, CX_ATTRIBUTE_NAME_TEXCOORD);
-}
-
 typedef void (*cxOpenGLInfoFunc)(GLuint program, GLenum pname, GLint *params);
 
 typedef void (*cxOpenGLLogFunc)(GLuint program, GLsizei bufsize, GLsizei *length, GLchar *infolog);
@@ -114,16 +106,6 @@ CX_OBJECT_FREE(cxShader, cxObject)
 }
 CX_OBJECT_TERM(cxShader, cxObject)
 
-void cxShaderUsing(cxAny pshader)
-{
-    CX_ASSERT_THIS(pshader, cxShader);
-    cxOpenGLUseProgram(this->program);
-	kmGLGetMatrix(KM_GL_PROJECTION, &this->kxMatrixProject);
-	kmGLGetMatrix(KM_GL_MODELVIEW,  &this->kxMatrixModelView);
-    kmMat4Multiply(&this->kxMatrix, &this->kxMatrixProject, &this->kxMatrixModelView);
-    glUniformMatrix4fv(this->uniformModelViewProject, 1, GL_FALSE, this->kxMatrix.mat);
-    CX_METHOD_RUN(this->Update, this);
-}
 
 bool cxShaderInit(cxAny pshader)
 {
