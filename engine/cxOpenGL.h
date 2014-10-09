@@ -37,15 +37,15 @@ CX_STRING_KEY_DEF(cxShaderClippingKey);
 CX_STRING_KEY_DEF(cxShaderMultipleKey);
 
 typedef struct{
-    GLuint    minFilter;
-    GLuint    magFilter;
-    GLuint    wrapS;
-    GLuint    wrapT;
+    GLuint minFilter;
+    GLuint magFilter;
+    GLuint wrapS;
+    GLuint wrapT;
 }cxTextureParams;
 
 #define cxtpv(n,g,s,t) (cxTextureParams){n,g,s,t}
 
-#define MAX_ACTIVE_TEXTURE 16
+#define MAX_ACTIVE_TEXTURE (GL_TEXTURE31 - GL_TEXTURE0 + 1)
 
 CX_OBJECT_DEF(cxOpenGL, cxObject)
     cxInt max_texture_size;

@@ -88,10 +88,10 @@ typedef struct {
 }cxAssist4f;
 
 typedef struct {
-    cxUChar r;
-    cxUChar g;
-    cxUChar b;
-    cxUChar a;
+    cxUInt8 r;
+    cxUInt8 g;
+    cxUInt8 b;
+    cxUInt8 a;
 }cxColor4b;
 #define cxColor4bv(r,g,b,a)     (cxColor4b){r,g,b,a}
 

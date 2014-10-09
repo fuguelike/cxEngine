@@ -17,7 +17,6 @@ CX_OBJECT_DEF(cxParabola, cxAction)
     cxVec2f pos;
     cxVec2f gravity;
     cxVec2f speed;
-    cxFloat angle;
     cxFloat time;
 CX_OBJECT_END(cxParabola, cxAction)
 

@@ -154,7 +154,7 @@ static void NodeAttackTimerArrive(cxAny pav)
             NodeInitBullet(this, target, ret.bullet);
         }
         if(ret.action != NULL){
-            //创建自身动画
+            //创建自身动作
             NodeInitAction(this, target, ret.action);
         }
         //攻击后目标死亡
@@ -353,7 +353,8 @@ static void NodeSearchArrive(cxAny pav)
     if(cxHashLength(bindes) >= NodeGetAttackNum(this)){
         goto attack;
     }
-    CX_ASSERT(this->FindRule, "no implement search rule");
+    //必须实现搜索接口
+    CX_ASSERT(this->FindRule != NULL, "no implement search rule");
     //启动搜索规则
     fret = CX_METHOD_GET(fret, this->FindRule, this, type);
     //在搜索规则下没有发现目标

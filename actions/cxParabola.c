@@ -12,9 +12,6 @@ static void cxParabolaInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxParabola);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
-    cxVec2f n;
-    kmVec2Normalize(&n, &this->speed);
-    this->angle = cxVec2fAngle(n);
     this->time = 0;
     this->pos = cxViewGetPosition(view);
 }
