@@ -14,6 +14,29 @@
 
 CX_C_BEGIN
 
+#define GLSL(x) #x
+
+enum {
+    cxVertexAttribPosition,
+    cxVertexAttribColor,
+    cxVertexAttribTexcoord,
+    cxVertexAttribMax,
+};
+
+//Attribute names
+#define CX_ATTRIBUTE_NAME_COLOR                     "aColor"
+#define CX_ATTRIBUTE_NAME_POSITION                  "aPosition"
+#define CX_ATTRIBUTE_NAME_TEXCOORD                  "aTexcoord"
+//Uniform names
+#define CX_UNIFORM_MATRIX_MODELVIEW_PROJECT         "cxMatrixModelViewProject"
+
+enum {
+    cxVertexAttribFlagPosition    = 1 << 0,
+    cxVertexAttribFlagColor       = 1 << 1,
+    cxVertexAttribFlagTexcoord    = 1 << 2,
+    cxVertexAttribFlagPosColorTex = cxVertexAttribFlagPosition|cxVertexAttribFlagColor|cxVertexAttribFlagTexcoord,
+};
+
 CX_OBJECT_DEF(cxShader, cxObject)
     cxMatrix4f kxMatrixProject;
     cxMatrix4f kxMatrixModelView;
@@ -29,26 +52,11 @@ CX_OBJECT_DEF(cxShader, cxObject)
     CX_METHOD_DEF(cxString, Fragment, cxAny);
 CX_OBJECT_END(cxShader, cxObject)
 
-CX_INLINE void cxShaderInitPosColorTex(cxAny pshader)
-{
-    CX_ASSERT_THIS(pshader, cxShader);
-    glBindAttribLocation(this->program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
-    glBindAttribLocation(this->program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
-    glBindAttribLocation(this->program, cxVertexAttribTexcoord, CX_ATTRIBUTE_NAME_TEXCOORD);
-}
+void cxShaderInitPosColorTex(cxAny pshader);
 
 bool cxShaderInit(cxAny pshader);
 
-CX_INLINE void cxShaderUsing(cxAny pshader)
-{
-    CX_ASSERT_THIS(pshader, cxShader);
-    cxOpenGLUseProgram(this->program);
-    kmGLGetMatrix(KM_GL_PROJECTION, &this->kxMatrixProject);
-    kmGLGetMatrix(KM_GL_MODELVIEW,  &this->kxMatrixModelView);
-    kmMat4Multiply(&this->kxMatrix, &this->kxMatrixProject, &this->kxMatrixModelView);
-    glUniformMatrix4fv(this->uniformModelViewProject, 1, GL_FALSE, this->kxMatrix.mat);
-    CX_METHOD_RUN(this->Update, this);
-}
+void cxShaderUsing(cxAny pshader);
 
 CX_C_END
 
