@@ -469,28 +469,31 @@ cxBool cxEngineFireKey(cxKeyType type,cxInt code)
     return cxViewKey(this->window, &this->key);
 }
 
-static void cxEngineComputeTouchItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
+static void cxEngineComputeItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
 {
     item->delta = cxVec2fSub(cpos, item->previous);
     item->previous = cpos;
     //get move speed
     cxDouble dt = now - item->startTime;
-    dt = CX_MAX(dt, FLT_EPSILON);
-    item->speed.x = (cpos.x - item->startPos.x) / dt;
-    item->speed.y = (cpos.y - item->startPos.y) / dt;
+    if(cxFloatEqu(dt, 0)){
+        item->speed = cxVec2fv(0, 0);
+    }else{
+        item->speed.x = (cpos.x - item->startpos.x) / dt;
+        item->speed.y = (cpos.y - item->startpos.y) / dt;
+    }
     //get movement
     item->movement += cxVec2fLength(item->delta);
-    item->isTap = dt < 0.2f && item->movement < 20;
+    item->isTap = dt < TAP_TIME && item->movement < TAP_MOVEMENT;
 }
 
-static void cxEngineInitTouchItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
+static void cxEngineInitItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
 {
     item->delta = cxVec2fv(0, 0);
     item->previous = cpos;
     item->startTime = now;
     item->speed = cxVec2fv(0, 0);
     item->movement = 0;
-    item->startPos = cpos;
+    item->startpos = cpos;
 }
 
 cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
@@ -499,28 +502,43 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
     //current fires point
     this->points.number = 0;
     cxDouble now = cxTimestamp();
-    cxTouchItems delItems = {.number = 0};
+    cxTouchItems delItems = {0};
     cxTouchItem item = NULL;
     //save point
     for(cxInt i=0; i < num; i++){
         cxTouchPoint p = points[i];
         cxVec2f cpos = cxEngineTouchToWindow(p.xy);
         cxHashKey key = cxHashLongKey(p.id);
+        item = NULL;
         if(type == cxTouchTypeDown){
             item  = CX_ALLOC(cxTouchItem);
             cxHashSet(this->items, key, item);
             CX_RELEASE(item);
-            cxEngineInitTouchItem(now, item, cpos);
-        }else if(type == cxTouchTypeMove){
+            cxEngineInitItem(now, item, cpos);
+            goto setTouchAttr;
+        }
+        if(type == cxTouchTypeMove){
             item = cxHashGet(this->items, key);
             CX_ASSERT(item != NULL, "item error");
-            cxEngineComputeTouchItem(now, item, cpos);
-        }else if(type == cxTouchTypeUp || type == cxTouchTypeCancel){
+            cxEngineComputeItem(now, item, cpos);
+            goto setTouchAttr;
+        }
+        if(type == cxTouchTypeUp){
             item = cxHashGet(this->items, key);
             CX_ASSERT(item != NULL, "item error");
-            cxEngineComputeTouchItem(now, item, cpos);
-            delItems.items[delItems.number++] = item;
-        }else{
+            cxEngineComputeItem(now, item, cpos);
+            cxTouchItemsAppend(delItems, item);
+            goto setTouchAttr;
+        }
+        if(type == cxTouchTypeCancel){
+            item = cxHashGet(this->items, key);
+            CX_ASSERT(item != NULL, "item error");
+            cxEngineComputeItem(now, item, cpos);
+            cxTouchItemsAppend(delItems, item);
+            goto setTouchAttr;
+        }
+        setTouchAttr:
+        if(item == NULL){
             continue;
         }
         item->position = cpos;
@@ -529,15 +547,13 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
     }
     //get all points
     CX_HASH_FOREACH(this->items, ele, tmp){
-        item = ele->any;
-        this->points.items[this->points.number++] = item;
+        cxTouchItemsAppend(this->points, ele->any);
     }
     cxBool ret = cxViewTouch(this->window, &this->points);
     //remove up cancel point
     for(cxInt i=0; i < delItems.number; i++){
         item = delItems.items[i];
-        cxHashKey key = cxHashLongKey(item->key);
-        cxHashDel(this->items, key);
+        cxHashDel(this->items, cxHashLongKey(item->key));
     }
     return ret;
 }

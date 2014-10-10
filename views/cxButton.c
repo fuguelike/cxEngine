@@ -18,7 +18,6 @@ cxBool cxButtonTouch(cxAny pview,cxTouchItems *points)
         return false;
     }
     cxBool hit = cxViewHitTest(pview, item->position, &this->touchPos);
-    //leave
     if(item->type != cxTouchTypeDown && this->isSelected && !hit){
         CX_EVENT_FIRE(this, onLeave);
         this->isSelected = false;
@@ -57,7 +56,6 @@ CX_SETTER_DEF(cxButton, enable)
 {
     this->isEnable = cxJsonToBool(value, this->isEnable);
 }
-
 CX_OBJECT_TYPE(cxButton, cxSprite)
 {
     CX_PROPERTY_SETTER(cxButton, movement);
@@ -65,7 +63,7 @@ CX_OBJECT_TYPE(cxButton, cxSprite)
 }
 CX_OBJECT_INIT(cxButton, cxSprite)
 {
-    this->movement = 50;
+    this->movement = 30;
     this->isEnable = true;
     CX_SET(cxView, this, Touch, cxButtonTouch);
 }

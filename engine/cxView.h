@@ -191,8 +191,6 @@ void cxViewBringFront(cxAny pview);
 
 void cxViewCheckFront(cxAny pview);
 
-cxVec2f cxViewTouchDelta(cxAny pview,cxTouchItem item);
-
 cxSize2f cxViewContentSize(cxAny pview);
 
 cxInt cxViewSubviewCount(cxAny pview);

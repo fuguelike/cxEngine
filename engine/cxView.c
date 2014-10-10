@@ -341,18 +341,6 @@ cxBool cxViewZeroSize(cxAny pview)
     return cxSize2fZero(this->Size);
 }
 
-cxVec2f cxViewTouchDelta(cxAny pview,cxTouchItem item)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    cxVec2f delta = item->delta;
-    cxView parent = cxViewGetParentView(this);
-    CX_RETURN(parent == NULL,delta);
-    cxVec2f scale = cxViewGetScale(parent);
-    delta.x /= scale.x;
-    delta.y /= scale.y;
-    return delta;
-}
-
 cxSize2f cxViewContentSize(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);

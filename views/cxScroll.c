@@ -140,7 +140,6 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
     cxBool hited = cxViewHitTest(this, item->position, &cpos);
     if(item->type == cxTouchTypeDown){
         this->isEnable = hited;
-        this->movement = 0;
         cxViewStopAction(body, (cxUInt)body);
         cxScrollUpdateBox(this);
         return hited;
@@ -150,15 +149,13 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
     }
     if(item->type == cxTouchTypeMove){
         cxVec2f vpos = cxViewGetPosition(body);
-        cxVec2f delta = cxViewTouchDelta(body, item);
-        this->movement += cxVec2fLength(delta);
         cxBool setPos = false;
         if(this->type & cxScrollMoveTypeHorizontal){
-            vpos.x += delta.x;
+            vpos.x += item->delta.x;
             setPos = true;
         }
         if(this->type & cxScrollMoveTypeVertical){
-            vpos.y += delta.y;
+            vpos.y += item->delta.y;
             setPos = true;
         }
         if(setPos){
@@ -167,7 +164,7 @@ cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
         }
         return true;
     }
-    if(item->type == cxTouchTypeUp && this->movement > 0){
+    if(item->type == cxTouchTypeUp && item->movement > 0){
         this->isEnable = false;
         cxVec2f npos = cxViewGetPosition(body);
         if(this->type & cxScrollMoveTypeVertical){

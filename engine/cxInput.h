@@ -28,6 +28,9 @@ typedef struct {
     cxVec2f xy;
 }cxTouchPoint;
 
+#define TAP_TIME        0.15f
+#define TAP_MOVEMENT    25.0f
+
 CX_OBJECT_DEF(cxTouchItem, cxObject)
     cxLong  key;        //item key
     cxVec2f previous;   //prev position
@@ -35,7 +38,7 @@ CX_OBJECT_DEF(cxTouchItem, cxObject)
     cxFloat movement;   //movement
     cxVec2f speed;      //move speed unit:pixel/s
     cxDouble startTime; //start down time
-    cxVec2f startPos;   //start position
+    cxVec2f startpos;   //start position
     cxVec2f position;   //current position
     cxBool  isTap;      //is tap
     cxTouchType type;
@@ -45,6 +48,8 @@ typedef struct {
     cxTouchItem items[CX_MAX_TOUCH_POINT];
     cxInt number;
 }cxTouchItems;
+
+#define cxTouchItemsAppend(_s_,_p_) (_s_).items[(_s_).number++] = _p_
 
 typedef enum {
     cxKeyTypeDown       = 0,

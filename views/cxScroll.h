@@ -23,7 +23,6 @@ CX_OBJECT_DEF(cxScroll, cxView)
     //move data
     cxFloat speed;
     cxFloat moveTime;
-    cxFloat movement;
     cxBool isEnable;
     cxBox4f box;
     cxScrollMoveType type;
