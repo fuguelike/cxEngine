@@ -152,7 +152,8 @@ CX_INLINE cxBox4f NodeGetBox(cxAny pthis)
 CX_INLINE cxVec2f NodeCenterIdx(cxAny pthis)
 {
     CX_ASSERT_THIS(pthis, Node);
-    return cxVec2fv((cxInt)(this->Index.x) + 0.5f, (cxInt)(this->Index.y) + 0.5f);
+    cxVec2i idx = cxVec2fTo2i(this->Index);
+    return cxVec2fv(idx.x + 0.5f, idx.y + 0.5f);
 }
 
 CX_INLINE cxVec2i NodeGetIntIndex(cxAny pthis)

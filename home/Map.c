@@ -505,6 +505,7 @@ static cpCollisionID MapSelectedItemsFunc(cxAny pmap, cxAny pview, cpCollisionID
     if(info->type.subType != NodeSubTypeNone && !(info->type.subType & type.subType)){
         return id;
     }
+    //如果点击在node内部
     if(NodeHited(node, info->point)){
         cxArrayAppend(info->nodes, node);
     }

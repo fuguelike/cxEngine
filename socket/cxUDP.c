@@ -60,6 +60,7 @@ static void UDPRead(evutil_socket_t sockt, short which, void *arg)
     if(this->bytes <= 0) {
         return;
     }
+    this->buffer[this->bytes] = '\0';
     CX_EVENT_FIRE(this, onData);
 }
 

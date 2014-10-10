@@ -231,8 +231,7 @@ void cxEngineDraw()
     }
     cxDouble now = cxTimestamp();
     engine->FrameDelta = now - engine->lastTime;
-    //30 - 60
-    engine->FrameDelta = kmClamp(engine->FrameDelta, engine->interval, engine->interval * 2.0f);
+    engine->FrameDelta = kmClamp(engine->FrameDelta, 1.0f/60.0f, 1.0f/30.0f);
     cxMemPoolBegin();
     cxOpenGLClear();
     CX_SIGNAL_FIRE(engine->onUpdate, CX_FUNC_TYPE(cxAny,cxFloat),CX_SLOT_OBJECT,engine->FrameDelta);
@@ -316,7 +315,7 @@ CX_OBJECT_TYPE(cxEngine, cxObject)
 }
 CX_OBJECT_INIT(cxEngine, cxObject)
 {
-    this->interval = 1.0f/60.0f;
+    this->Interval = 1.0f/60.0f;
     this->IsShowBorder = true;
     this->isTouch = true;
     this->isGesture = true;

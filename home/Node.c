@@ -21,10 +21,8 @@ static void NodeOnDirty(cxAny pview)
     cxVec2f pos = cxViewGetPosition(this);
     this->Index = MapPosToFloat(map, pos);
     cxSpatialReindexView(map->items, this);
-    cxVec2i idx = cxVec2iv(this->Index.x, this->Index.y);
-    if(cxVec2iEqu(this->prevIdx, idx)){
-        return;
-    }
+    cxVec2i idx = cxVec2fTo2i(this->Index);
+    CX_RETURN(cxVec2iEqu(this->prevIdx, idx));
     this->prevIdx = idx;
     CX_EVENT_FIRE(this, onIndex);
 }
@@ -70,15 +68,24 @@ void NodeAttackTarget(cxAny attacker,cxAny target,AttackType type)
     NodeCheckDie(target);
 }
 
-static void NodeAttackActionExit(cxAny pav)
+//执行攻击结束
+static void NodeHasAttackActionExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxAction);
     CX_ASSERT_VALUE(cxActionGetView(this), Node, node);
     Node target = cxViewBindesFirst(node);
-    if(target != NULL){
-        NodeAttackTarget(node, target, AttackTypeNode);
-        CX_METHOD_RUN(node->AttackOnce, node, target);
-    }
+    CX_RETURN(target == NULL);
+    NodeAttackTarget(node, target, AttackTypeNode);
+    CX_METHOD_RUN(node->AttackOnce, node, target);
+}
+//不执行攻击结束
+static void NodeNotAttackActionExit(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    CX_ASSERT_VALUE(cxActionGetView(this), Node, node);
+    Node target = cxViewBindesFirst(node);
+    CX_RETURN(target == NULL);
+    CX_METHOD_RUN(node->AttackOnce, node, target);
 }
 
 static void NodeAttackBulletExit(cxAny pav)
@@ -88,9 +95,11 @@ static void NodeAttackBulletExit(cxAny pav)
     //如果有bind的目标就攻击他
     cxAny target = NULL;
     BulletGetNode(bullet, NULL, &target);
+    //如果目标还存在进行攻击
     if(target != NULL){
         NodeAttackTarget(bullet, target, AttackTypeBullet);
     }
+    //移除bullet
     MapRemoveBullet(bullet);
 }
 
@@ -104,7 +113,6 @@ static void BulletOnUpdate(cxAny pav)
 static void NodeInitBullet(Node this,Node target,cxAny bullet)
 {
     CX_ASSERT_TYPE(bullet, Bullet);
-    
     BulletBind(bullet, this, target);
     
     cxAny baction = BulletCreateEngine(bullet);
@@ -116,15 +124,21 @@ static void NodeInitBullet(Node this,Node target,cxAny bullet)
     
     //带弹药结束 action.view = bullet
     CX_ADD(cxAction, baction, onExit, NodeAttackBulletExit);
+    //bullet飞行过程ing
     CX_ADD(cxAction, baction, onUpdate, BulletOnUpdate);
 }
 
-static void NodeInitAction(Node this,Node target,cxAny action)
+static void NodeInitAction(Node this,Node target,cxAny action,cxBool hasBullet)
 {
     //带动画结束 action.view = node
     cxViewAppendAction(this, action);
     cxActionSetGroup(action, FIGHT_ACTION_GROUP);
-    CX_ADD(cxAction, action, onExit, NodeAttackActionExit);
+    //如果使用bullet攻击则不执行攻击动作
+    if(hasBullet){
+        CX_ADD(cxAction, action, onExit, NodeNotAttackActionExit);
+    }else{
+        CX_ADD(cxAction, action, onExit, NodeHasAttackActionExit);
+    }
 }
 
 static void NodeAttackTimerArrive(cxAny pav)
@@ -149,13 +163,13 @@ static void NodeAttackTimerArrive(cxAny pav)
         NodeSetState(this, NodeStateAttack);
         //创建攻击动画
         ActionResult ret = CX_METHOD_GET(AAEmpty(), this->AttackAction, this, target);
+        //初始化bullet准备发射
         if(ret.bullet != NULL){
-            //初始化bullet准备发射
             NodeInitBullet(this, target, ret.bullet);
         }
+        //创建自身动作
         if(ret.action != NULL){
-            //创建自身动作
-            NodeInitAction(this, target, ret.action);
+            NodeInitAction(this, target, ret.action, ret.bullet != NULL);
         }
         //攻击后目标死亡
         if(NodeCheckDie(target)){

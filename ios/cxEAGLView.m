@@ -62,7 +62,7 @@ cxEAGLView *instance = nil;
 -(void)startMainLoop
 {
     cxEngine engine = cxEngineInstance();
-    [displayLink setFrameInterval:engine->interval * 60.0f];
+    [displayLink setFrameInterval:engine->Interval * 60.0f];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
 -(id)initWithFrame:(CGRect)frame

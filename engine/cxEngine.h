@@ -27,6 +27,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxBool IsShowBorder);  //show debug border
     CX_FIELD_DEF(cxFloat FrameDelta);   // time per frame
     CX_FIELD_DEF(cxString Lang);
+    CX_FIELD_DEF(cxFloat Interval);
     cxBool isInit;
     cxBool isTouch;
     cxBool isGesture;
@@ -35,7 +36,6 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxDouble lastTime;
     cxHash files;
     cxHash assets;
-    cxFloat interval;
     CX_SIGNAL_ALLOC(onPause);
     CX_SIGNAL_ALLOC(onResume);
     CX_SIGNAL_ALLOC(onMemory);
@@ -49,6 +49,12 @@ CX_OBJECT_DEF(cxEngine, cxObject)
 CX_OBJECT_END(cxEngine, cxObject)
 
 cxEngine cxEngineInstance();
+
+CX_INLINE void cxEngineSetInterval(cxFloat interval)
+{
+    cxEngine engine = cxEngineInstance();
+    engine->Interval = interval;
+}
 
 CX_INLINE cxString cxEngineGetLang()
 {

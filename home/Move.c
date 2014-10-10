@@ -56,11 +56,6 @@ static void MoveOnUpdate(cxAny pav)
         return;
     }
     CX_ASSERT_TYPE(target, Node);
-    //如果目标死亡停止移动
-    if(NodeCheckDie(target)){
-        cxActionStop(pav);
-        return;
-    }
     //到达作战范围
     if(NodeIsArriveRange(attacker, target)){
         cxActionStop(pav);

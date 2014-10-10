@@ -386,21 +386,21 @@ struct cxEvent{cxEvent *prev,*next;cxEventFunc func;};
 #define CX_EVENT_ALLOC(_n_) cxEvent *_n_
 
 #define CX_EVENT_APPEND(_event_,_func_)                         \
-do{                                                             \
+if(_func_ != NULL){                                             \
     cxEvent *_newptr_ = allocator->malloc(sizeof(cxEvent));     \
     _newptr_->func = _func_;                                    \
     DL_APPEND(_event_, _newptr_);                               \
-}while(0)
+}
 
 #define CX_EVENT_PREPEND(_event_,_func_)                        \
-do{                                                             \
+if(_func_ != NULL){                                             \
     cxEvent *_newptr_ = allocator->malloc(sizeof(cxEvent));     \
     _newptr_->func = _func_;                                    \
     DL_PREPEND(_event_, _newptr_);                              \
-}while(0)
+}
 
 #define CX_EVENT_DEL(_event_,_func_)                            \
-do{                                                             \
+if(_event_ != NULL){                                            \
     cxEvent *_tmp_ = NULL;                                      \
     cxEvent *_ele_ = NULL;                                      \
     DL_FOREACH_SAFE(_event_, _ele_, _tmp_){                     \
@@ -408,26 +408,26 @@ do{                                                             \
         DL_DELETE(_event_, _ele_);                              \
         allocator->free(_ele_);                                 \
     }                                                           \
-}while(0)
+}
 
 #define CX_EVENT_RELEASE(_event_)                               \
-do{                                                             \
+if(_event_ != NULL){                                            \
     cxEvent *_tmp_ = NULL;                                      \
     cxEvent *_ele_ = NULL;                                      \
     DL_FOREACH_SAFE(_event_, _ele_, _tmp_){                     \
         DL_DELETE(_event_, _ele_);                              \
         allocator->free(_ele_);                                 \
     }                                                           \
-}while(0)
+}
 
 #define CX_EVENT_FIRE(_sender_,_event_)                         \
-do{                                                             \
+if(_sender_ != NULL){                                           \
     cxEvent *_ele_ = NULL;                                      \
     cxEvent *_tmp_=NULL;                                        \
     DL_FOREACH_SAFE(_sender_->_event_, _ele_,_tmp_){            \
         _ele_->func(_sender_);                                  \
     }                                                           \
-}while(0)
+}
 
 //append event short micro
 #define CX_ADD(_t_,_o_,_n_,_f_)                                 \
