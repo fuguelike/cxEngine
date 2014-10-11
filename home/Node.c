@@ -348,7 +348,7 @@ static const NodeCombined *NodeGetSearchType(cxAny pview)
     return &this->orders.types[this->searchIndex++];
 }
 
-//搜索附近的
+//搜索处理启动
 static void NodeSearchArrive(cxAny pav)
 {
     cxAny pview = cxActionGetView(pav);
@@ -429,6 +429,27 @@ void NodeSearchRun(cxAny pview)
     this->searchTimer = cxViewAppendTimer(this, NodeGetSearchRate(this), CX_FOREVER);
     cxActionSetGroup(this->searchTimer, FIGHT_ACTION_GROUP);
     CX_ADD(cxTimer, this->searchTimer, onArrive, NodeSearchArrive);
+}
+
+//搜索附近的
+static void NodeTimerArrive(cxAny pav)
+{
+    cxAny pview = cxActionGetView(pav);
+    CX_ASSERT_THIS(pview, Node);
+    CX_METHOD_RUN(this->TimerArrive, this);
+}
+
+void NodeTimerRun(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, Node);
+    Map map = NodeGetMap(this);
+    //普通地图下才启动资源生产
+    if(map->mode != MapModeNormal){
+        return;
+    }
+    this->searchTimer = cxViewAppendTimer(this, 1.0f, CX_FOREVER);
+    cxActionSetGroup(this->searchTimer, FIGHT_ACTION_GROUP);
+    CX_ADD(cxTimer, this->searchTimer, onArrive, NodeTimerArrive);
 }
 
 cxBool NodeHited(cxAny pview,cxVec2f index)

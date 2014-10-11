@@ -43,6 +43,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     cxSprite array;     //Test
 
     cxBool isDie;                       //是否死去
+    CX_FIELD_DEF(cxString Id);          //node id,用于数据库保存
     CX_FIELD_DEF(cxBool IsStatic);      //是否是静态物体，静态物体将被加入a*搜索列表中
     CX_FIELD_DEF(cxVec2i InitIndex);    //初始化放置的位置,对于静态物不会变化
     CX_FIELD_DEF(cxFloat Body);         //用于确定单位停留在目标的附近哪个位置,默认值为0.5格
@@ -82,6 +83,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(cxBool, IsFinded,cxAny node,cxAny finder);                          //node是否能被finder发现
     CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);   //被一个目标攻击 pview 被attacker攻击
     CX_METHOD_DEF(ActionResult, AttackAction,cxAny attacker,cxAny target);          //创建一个攻击动画,动画结时攻击目标
+    CX_METHOD_DEF(void, TimerArrive,cxAny);                                         //资源生产等处理
 CX_OBJECT_END(Node, cxSprite)
 
 CX_FIELD_GET(Node, NodeState, State);
@@ -91,6 +93,13 @@ CX_INLINE void NodeSetState(cxAny pthis,const NodeState state)
     CX_RETURN(this->State == state);
     this->State = state;
     CX_EVENT_FIRE(this, onState);
+}
+
+CX_FIELD_GET(Node, cxString, Id);
+CX_INLINE void NodeSetId(cxAny pthis,const cxString v)
+{
+    CX_ASSERT_THIS(pthis, Node);
+    CX_RETAIN_SWAP(this->Id, v);
 }
 
 CX_FIELD_IMP(Node, cxBool, IsStatic);
@@ -224,8 +233,11 @@ cxVec2i NodeIndexToInitIndex(cxAny pview,cxVec2f idx);
 //从当前精确网格坐标获取基于node左下角的整形坐标
 cxVec2i NodeGetInitIndexUseIndex(cxAny pview);
 
-//启动搜索程序
+//启动搜索程序,用于防御或者战斗单位
 void NodeSearchRun(cxAny pview);
+
+//启动资源生产程序，用于资源
+void NodeTimerRun(cxAny pview);
 
 //检测node是否死亡
 cxBool NodeCheckDie(cxAny pview);
