@@ -93,8 +93,8 @@ CX_OBJECT_DEF(cxView, cxObject)
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
 
-    CX_METHOD_DEF(cxBool, Touch, cxAny, cxTouchItems *);
-    CX_METHOD_DEF(cxBool, Key, cxAny, cxKey *);
+    CX_METHOD_DEF(cxBool, Touch, cxAny, const cxTouchItems *);
+    CX_METHOD_DEF(cxBool, Key, cxAny, const cxKey *);
     CX_METHOD_DEF(void, Draw, cxAny);
     CX_METHOD_DEF(void, After, cxAny);
     CX_METHOD_DEF(void, Before, cxAny);

@@ -9,7 +9,7 @@
 #include <engine/cxEngine.h>
 #include "cxWindow.h"
 
-static cxBool cxWindowKey(cxAny pview,cxKey *key)
+static cxBool cxWindowKey(cxAny pview,const cxKey *key)
 {
     if(key->code == CX_KEYCODE_BACK && key->type == cxKeyTypeUp){
         cxEngineExit();

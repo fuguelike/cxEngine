@@ -11,7 +11,7 @@
 #include "cxWindow.h"
 #include "cxAlert.h"
 
-static cxBool cxAlertKey(cxAny pview,cxKey *key)
+static cxBool cxAlertKey(cxAny pview,const cxKey *key)
 {
     if(key->type == cxKeyTypeUp && key->code == CX_KEYCODE_BACK){
         cxAlertHide(pview);
@@ -20,7 +20,7 @@ static cxBool cxAlertKey(cxAny pview,cxKey *key)
     return false;
 }
 
-static cxBool cxAlertTouch(cxAny pview,cxTouchItems *points)
+static cxBool cxAlertTouch(cxAny pview,const cxTouchItems *points)
 {
     return true;
 }

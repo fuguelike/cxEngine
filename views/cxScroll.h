@@ -43,7 +43,7 @@ void cxScrollSetBody(cxAny pview,cxAny body);
 
 void cxScrollUpdateBox(cxAny pview);
 
-cxBool cxScrollTouch(cxAny pview,cxTouchItems *points);
+cxBool cxScrollTouch(cxAny pview,const cxTouchItems *points);
 
 void cxScrollSetEnable(cxAny pview,cxBool enable);
 

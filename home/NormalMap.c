@@ -16,7 +16,7 @@ static void NormalNodeMove(cxAny pmap,cxAny node,cxVec2i from,cxVec2i to)
     CX_LOGGER("node %p from(%d,%d) to (%d,%d)",node,from.x,from.y,to.x,to.y);;
 }
 
-static cxBool NormalMapTouch(cxAny pview,cxTouchItems *points)
+static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, NormalMap);
     if(points->number != 1){

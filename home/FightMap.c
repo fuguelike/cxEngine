@@ -20,7 +20,7 @@
 #include <types/Flyable.h>
 #include <actions/cxMove.h>
 
-static cxBool FightMapTouch(cxAny pview,cxTouchItems *points)
+static cxBool FightMapTouch(cxAny pview,const cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, Map);
     if(points->number != 1){

@@ -36,7 +36,7 @@ static void cxScrollResetScale(cxScroll this)
     }
 }
 
-static cxBool cxScrollScale(cxAny pview,cxTouchItems *points)
+static cxBool cxScrollScale(cxAny pview,const cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, cxScroll);
     cxVec2f cp0;
@@ -124,7 +124,7 @@ void cxScrollUpdateBox(cxAny pview)
     this->box.t =  mh + anchor.y * msize.h;
 }
 
-cxBool cxScrollTouch(cxAny pview,cxTouchItems *points)
+cxBool cxScrollTouch(cxAny pview,const cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, cxScroll);
     CX_RETURN(this->Body == NULL,false);

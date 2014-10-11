@@ -9,7 +9,7 @@
 #include <engine/cxEngine.h>
 #include "cxButton.h"
 
-cxBool cxButtonTouch(cxAny pview,cxTouchItems *points)
+cxBool cxButtonTouch(cxAny pview,const cxTouchItems *points)
 {
     CX_RETURN(points->number != 1,false);
     cxTouchItem item = points->items[0];

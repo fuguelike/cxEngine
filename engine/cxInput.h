@@ -40,8 +40,8 @@ CX_OBJECT_DEF(cxTouchItem, cxObject)
     cxDouble startTime; //start down time
     cxVec2f startpos;   //start position
     cxVec2f position;   //current position
-    cxBool  isTap;      //is tap
     cxTouchType type;
+    cxBool isTap;
 CX_OBJECT_END(cxTouchItem, cxObject)
 
 typedef struct {
@@ -49,7 +49,9 @@ typedef struct {
     cxInt number;
 }cxTouchItems;
 
-#define cxTouchItemsAppend(_s_,_p_) (_s_).items[(_s_).number++] = _p_
+#define cxTouchItemNumber(_s_)          ((_s_)->number)
+#define cxTouchItemsAt(_s_,_i_)         ((_s_)->items[_i_])
+#define cxTouchItemsAppend(_s_,_p_)     (_s_).items[(_s_).number++] = _p_
 
 typedef enum {
     cxKeyTypeDown       = 0,

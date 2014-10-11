@@ -10,12 +10,12 @@
 #include <actions/cxTimer.h>
 #include "cxLoading.h"
 
-static cxBool cxLoadingTouch(cxAny pview,cxTouchItems *points)
+static cxBool cxLoadingTouch(cxAny pview,const cxTouchItems *points)
 {
     return true;
 }
 
-static cxBool cxLoadingKey(cxAny pview,cxKey *key)
+static cxBool cxLoadingKey(cxAny pview,const cxKey *key)
 {
     return true;
 }
