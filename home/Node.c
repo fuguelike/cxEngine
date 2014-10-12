@@ -439,7 +439,7 @@ static void NodeTimerArrive(cxAny pav)
     CX_METHOD_RUN(this->TimerArrive, this);
 }
 
-void NodeTimerRun(cxAny pview)
+void NodeTimerRun(cxAny pview,cxFloat time)
 {
     CX_ASSERT_THIS(pview, Node);
     Map map = NodeGetMap(this);
@@ -447,8 +447,7 @@ void NodeTimerRun(cxAny pview)
     if(map->mode != MapModeNormal){
         return;
     }
-    this->searchTimer = cxViewAppendTimer(this, 1.0f, CX_FOREVER);
-    cxActionSetGroup(this->searchTimer, FIGHT_ACTION_GROUP);
+    this->searchTimer = cxViewAppendTimer(this, time, CX_FOREVER);
     CX_ADD(cxTimer, this->searchTimer, onArrive, NodeTimerArrive);
 }
 

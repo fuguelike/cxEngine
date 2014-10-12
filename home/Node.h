@@ -237,7 +237,7 @@ cxVec2i NodeGetInitIndexUseIndex(cxAny pview);
 void NodeSearchRun(cxAny pview);
 
 //启动资源生产程序，用于资源
-void NodeTimerRun(cxAny pview);
+void NodeTimerRun(cxAny pview,cxFloat time);
 
 //检测node是否死亡
 cxBool NodeCheckDie(cxAny pview);

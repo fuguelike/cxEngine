@@ -41,6 +41,8 @@ cxSprite cxSpriteCreateWithURL(cxConstChars url);
 
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor);
 
+void cxSpriteSetFlip(cxAny pview,cxBool flipx,cxBool flipy);
+
 void cxSpriteSetFlipX(cxAny pview,cxBool flipx);
 
 void cxSpriteSetFlipY(cxAny pview,cxBool flipy);

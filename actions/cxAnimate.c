@@ -133,7 +133,7 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     cxArray items = cxAnimateGetGroup(this,this->name);
     CX_ASSERT(items != NULL, "group name not found ");
     cxFloat elapsed = cxActionGetTimeElapsed(this);
-    for (cxInt i = this->index,num = cxArrayLength(items); i < num; i++) {
+    for (cxInt i = this->index; i < cxArrayLength(items); i++) {
         CX_ASSERT_VALUE(cxArrayAtIndex(items, i), cxAnimateItem, item);
         if(elapsed < item->value){
             break;
@@ -141,11 +141,10 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
         if(item->texture != NULL){
             cxSpriteSetTexture(view, item->texture);
         }
-        if(item->texture != NULL && item->key != NULL){
+        if(item->key != NULL){
             cxSpriteSetTextureKey(view, cxStringBody(item->key));
         }
-        cxSpriteSetFlipX(view, item->flipx);
-        cxSpriteSetFlipY(view, item->flipy);
+        cxSpriteSetFlip(view, item->flipx, item->flipy);
         CX_EVENT_FIRE(this, onFrame);
         //set to next frame
         this->index = i + 1;

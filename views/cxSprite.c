@@ -63,6 +63,12 @@ static void cxSpriteOnDirty(cxAny sender)
     }
 }
 
+void cxSpriteSetFlip(cxAny pview,cxBool flipx,cxBool flipy)
+{
+    cxSpriteSetFlipX(pview, flipx);
+    cxSpriteSetFlipY(pview, flipy);
+}
+
 void cxSpriteSetFlipX(cxAny pview,cxBool flipx)
 {
     CX_ASSERT_THIS(pview, cxSprite);
