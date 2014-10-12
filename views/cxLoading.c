@@ -59,6 +59,13 @@ CX_OBJECT_FREE(cxLoading, cxView)
 }
 CX_OBJECT_TERM(cxLoading, cxView)
 
+void cxLoadingStop(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxLoading);
+    CX_RETURN(this->stepTimer == NULL);
+    cxActionStop(this->stepTimer);
+}
+
 void cxLoadingStart(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxLoading);

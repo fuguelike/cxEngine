@@ -35,6 +35,8 @@ CX_INLINE cxFloat cxLoadingGetProgress(cxAny pthis)
     return i / a;
 }
 
+void cxLoadingStop(cxAny pview);
+
 void cxLoadingStart(cxAny pview);
 
 void cxLoaingFinished(cxAny pview);
