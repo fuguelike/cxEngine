@@ -34,6 +34,19 @@ cxGroup cxGroupGet(cxConstChars name)
     return cxHashGet(this->groups, cxHashStrKey(name));
 }
 
+void cxGroupSetTimeScale(cxConstChars name,cxFloat scale)
+{
+    cxGroup group = cxGroupGet(name);
+    cxGroupSetScale(group, scale);
+}
+
+void cxGroupAppend(cxConstChars name, cxFloat scale)
+{
+    cxGroup group = CX_CREATE(cxGroup);
+    cxGroupSetScale(group, scale);
+    cxGroupSet(name, group);
+}
+
 void cxGroupSet(cxConstChars name,cxGroup mgr)
 {
     cxEngine this = cxEngineInstance();

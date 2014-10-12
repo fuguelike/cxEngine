@@ -86,11 +86,10 @@ CX_INLINE cxHashKey cxAnimateItemKey(cxAnimateItem this)
 
 static cxAnimateItem cxAnimateItemGet(cxAnimate this,cxArray items, cxAny any, cxInt index)
 {
-    cxObject item = any;
-    if(item->cxType == cxAnimateItemTypeName){
+    if(TYPE(any) == cxAnimateItemTypeName){
         return any;
     }
-    if(item->cxType != cxStringTypeName){
+    if(TYPE(any) != cxStringTypeName){
         return NULL;
     }
     cxConstChars key = cxStringBody(any);
@@ -118,7 +117,8 @@ static void cxAnimateInit(cxAny pav)
     cxFloat value = 0;
     for (cxInt i = 0; i < num; i++) {
         cxAny any = cxArrayAtIndex(items, i);
-        CX_ASSERT_VALUE(cxAnimateItemGet(this,items,any,i), cxAnimateItem, item);
+        cxAnimateItem item = cxAnimateItemGet(this, items, any, i);
+        CX_ASSERT_TYPE(item, cxAnimateItem);
         item->value = value;
         time += item->time;
         value += dt + item->time;
@@ -134,7 +134,8 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     CX_ASSERT(items != NULL, "group name not found ");
     cxFloat elapsed = cxActionGetTimeElapsed(this);
     for (cxInt i = this->index; i < cxArrayLength(items); i++) {
-        CX_ASSERT_VALUE(cxArrayAtIndex(items, i), cxAnimateItem, item);
+        cxAnimateItem item = cxArrayAtIndex(items,i);
+        CX_ASSERT_TYPE(item, cxAnimateItem);
         if(elapsed < item->value){
             break;
         }

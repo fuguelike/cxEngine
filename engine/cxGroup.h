@@ -23,6 +23,10 @@ cxGroup cxGroupGet(cxConstChars name);
 
 void cxGroupSet(cxConstChars name,cxGroup mgr);
 
+void cxGroupAppend(cxConstChars name, cxFloat scale);
+
+void cxGroupSetTimeScale(cxConstChars name,cxFloat scale);
+
 CX_C_END
 
 #endif
