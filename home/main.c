@@ -68,7 +68,7 @@ static void loadingFightSceneExit(cxAny sender)
 {
     CX_ASSERT_THIS(sender, cxLoading);
     
-    cxAny scene = NormalSceneCreate();//FightSceneCreate();
+    cxAny scene = FightSceneCreate();//NormalSceneCreate();
     cxWindowPushView(scene);
 }
 

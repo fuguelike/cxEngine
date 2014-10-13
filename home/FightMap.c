@@ -85,7 +85,10 @@ static void mapSubType(cxAny dst,cxAny src)
     if(this->tag == 5){
         
         for(cxInt x = 0; x < MAP_COL; x++){
-            for (cxInt y = 15; y < 25; y ++) {
+            for (cxInt y = 0; y < MAP_ROW; y ++) {
+                if(!((x % 3) == 0)){
+                    continue;
+                }
                 Wall node = WallCreate(this, cxVec2iv(x, y));
                 cxViewSetColor(node, cxBLACK);
                 NodeSetLife(node, cxRange2iv(200, 200));

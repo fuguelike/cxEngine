@@ -112,6 +112,13 @@ static cxInt MapSearchEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *curr,cxVec2i
     if(cnode == info->dst){
         return 1;
     }
+    if(!info->attacked){
+        return 0;
+    }
+    //如果上一点已经到达
+    if(info->arrive){
+        return 1;
+    }
     //如果此点可以攻击到目标返回成功,使用中心点计算
     cxVec2f cidx = cxVec2fv(curr->x + 0.5f, curr->y + 0.5f);
     cxVec2f didx = NodeGetIndex(dnode);
@@ -119,7 +126,7 @@ static cxInt MapSearchEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *curr,cxVec2i
     cxFloat dis = kmVec2DistanceBetween(&cidx, &didx);
     //如果可以攻击到就成功返回
     if(NodeIsArriveDistance(snode, dnode, dis)){
-        return 1;
+        info->arrive = true;
     }
     return 0;
 }
@@ -157,12 +164,14 @@ static cxBool MapSearchIsAppend(cxAny pstar,cxVec2i *idx)
     return true;
 }
 
-cxBool MapSearchPath(cxAny snode,cxAny dnode)
+cxBool MapSearchPath(cxAny snode,cxAny dnode,cxBool isAttacked)
 {
     Map map = NodeGetMap(snode);
     CX_ASSERT_VALUE(snode, Node, sx);
     CX_ASSERT_VALUE(dnode, Node, dx);
     MapSearchInfo info = {NULL};
+    info.attacked = isAttacked;
+    info.arrive = false;
     info.map = map;
     cxVec2f didx = NodeGetIndex(dx);
     cxVec2f sidx = NodeGetIndex(sx);
@@ -188,10 +197,10 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode)
         return true;
     }
     //开始搜索,如果成功保存路径到缓存
-    if(cxAStarRun(map->astar, a, b, &info)) {
-        return MapCacheSavePath(map, a, b);
+    if(!cxAStarRun(map->astar, a, b, &info)) {
+        return false;
     }
-    return false;
+    return MapCacheSavePath(map, a, b);
 }
 
 cxAny MapHitNode(cxAny pmap,cxVec2f index,NodeCombined type)
@@ -417,7 +426,7 @@ static cpFloat MapSegmentQueryFunc(cxAny pmap, cxAny pview, void *data)
         return 1.0f;
     }
     //如果不能到达此点
-    if(!MapSearchPath(info->src, node)){
+    if(!MapSearchPath(info->src, node, false)){
         return 1.0f;
     }
     dis = NodeDistance(node, info->dst);

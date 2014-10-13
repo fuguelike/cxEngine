@@ -46,6 +46,8 @@ typedef struct {
     cxFloat ab;    //两点间距离
     cxAny src;
     cxAny dst;
+    cxBool arrive;//为了多加一点的标识
+    cxBool attacked;
 }MapSearchInfo;
 
 //获取网格索引下的特定类型node第一个，如果不重贴理论上就只有一个
@@ -98,8 +100,8 @@ cxBool MapCacheSavePath(cxAny pmap,cxVec2i a,cxVec2i b);
 cxBool MapCachePath(cxAny pmap,cxVec2i a,cxVec2i b);
 
 //寻路失败时返回离目标最近的坐标
-//如果返回阻挡标识搜索失败
-cxBool MapSearchPath(cxAny snode,cxAny dnode);
+//如果返回阻挡标识搜索失败 isAttacked=true标识如果到达可攻击距离返回寻路成功
+cxBool MapSearchPath(cxAny snode,cxAny dnode,cxBool isAttacked);
 
 //init map
 cxBool MapInit(cxAny pmap);

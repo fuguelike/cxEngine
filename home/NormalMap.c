@@ -44,7 +44,7 @@ static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
             if(this->cnode != NULL){
                 cxViewBringFront(this->cnode);
                 //node 被选中
-                CX_LOGGER("select node");
+                CX_LOGGER("select node %p",this->cnode);
             }
             return false;
         }
@@ -71,7 +71,6 @@ static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
             this->startPos.y = currIdx.y - fmodf(delta.y, 1.0f);;
         }
         if(setPos){
-            
             cxVec2f npos = MapIndexToPos(this, nidx);
             cxViewSetPosition(this->cnode, npos);
             cxVec2i newIdx = NodeIndexToInitIndex(this->cnode,nidx);

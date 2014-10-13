@@ -15,12 +15,12 @@ PathRuleResult AttackPathRule(cxAny pview,const FindRuleResult *fret)
 {
     CX_ASSERT_THIS(pview, Attack);
     //搜索目标路径成功,移动到可攻击位置
-    if(MapSearchPath(this, fret->target)){
+    if(MapSearchPath(this, fret->target, true)){
         return PRMake(fret->target, NodeBindReasonMove);
     }
     //使用线段搜索法搜索距离目标最近的一个阻挡物
     Node block = MapSegmentQuery(this, fret->target, NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
-    if(block != NULL && MapSearchPath(this, block)){
+    if(block != NULL && MapSearchPath(this, block, true)){
         return PRMake(block, NodeBindReasonMove);
     }
     return PREmpty();
