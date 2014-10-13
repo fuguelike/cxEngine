@@ -71,6 +71,7 @@ static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
             this->startPos.y = currIdx.y - fmodf(delta.y, 1.0f);;
         }
         if(setPos){
+            
             cxVec2f npos = MapIndexToPos(this, nidx);
             cxViewSetPosition(this->cnode, npos);
             cxVec2i newIdx = NodeIndexToInitIndex(this->cnode,nidx);

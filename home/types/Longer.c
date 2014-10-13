@@ -55,7 +55,7 @@ CX_OBJECT_INIT(Longer, Attack)
 }
 CX_OBJECT_FREE(Longer, Attack)
 {
-
+    
 }
 CX_OBJECT_TERM(Longer, Attack)
 

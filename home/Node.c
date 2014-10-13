@@ -487,10 +487,10 @@ cxVec2i NodeIndexToInitIndex(cxAny pview,cxVec2f idx)
 {
     CX_ASSERT_THIS(pview, Node);
     cxSize2i size = NodeGetSize(this);
-    cxVec2f oidx = cxRoundVec2f(idx);
-    oidx.x -= ((cxFloat)size.w / 2.0f);
-    oidx.y -= ((cxFloat)size.h / 2.0f);
-    return cxVec2iv(oidx.x, oidx.y);
+    idx.x -= ((cxFloat)size.w / 2.0f);
+    idx.y -= ((cxFloat)size.h / 2.0f);
+    idx = cxRoundVec2f(idx);
+    return cxVec2fTo2i(idx);
 }
 
 cxVec2i NodeGetInitIndexUseIndex(cxAny pview)
