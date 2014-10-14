@@ -49,6 +49,8 @@ void cxScrollSetEnable(cxAny pview,cxBool enable);
 
 cxBool cxScrollCheckPos(cxAny pview,cxVec2f *pos);
 
+void cxScrollLocationTo(cxAny pview,cxVec2f pos,cxBool animate);
+
 CX_C_END
 
 #endif

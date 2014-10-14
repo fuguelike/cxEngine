@@ -182,6 +182,24 @@ cxBool cxScrollTouch(cxAny pview,const cxTouchItems *points)
     return false;
 }
 
+void cxScrollLocationTo(cxAny pview,cxVec2f pos,cxBool animate)
+{
+    CX_ASSERT_THIS(pview, cxScroll);
+    CX_RETURN(this->Body == NULL);
+    cxScrollUpdateBox(this);
+    pos = cxVec2fv(-pos.x, -pos.y);
+    cxView body = cxScrollGetBody(this);
+    cxScrollCheckPos(this, &pos);
+    if(animate){
+        cxMove m = cxMoveCreate(this->moveTime, pos);
+        cxActionSetActionId(m, (cxUInt)body);
+        cxActionSetCurve(m, cxScrollMoveCurve);
+        cxViewAppendAction(body, m);
+    }else{
+        cxViewSetPosition(body, pos);
+    }
+}
+
 CX_SETTER_DEF(cxScroll, range)
 {
     this->range = cxJsonToRange2f(value, this->range);

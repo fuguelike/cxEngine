@@ -61,7 +61,7 @@ cxVec2f WarMapUnitPosition(cxAny pmap,cxVec2i idx);
 cxVec2i WarMapUnitIndex(cxAny pmap,cxVec2f pos);
 
 CX_OBJECT_DEF(WarScene, cxScroll)
-
+    WarMap warMap;
 CX_OBJECT_END(WarScene, cxScroll)
 
 WarScene WarSceneCreate();

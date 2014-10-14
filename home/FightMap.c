@@ -62,6 +62,8 @@ static cxBool FightMapTouch(cxAny pview,const cxTouchItems *points)
             Wall node = WallCreate(this, idx);
             NodeSetLife(node, cxRange2iv(100, 100));
             MapAppendNode(node);
+            cxViewSetColor(node, cxColor3fv(1.3f, 1.3f, 1.3f));
+            cxViewSetAlpha(node, 1.3f);
         }else if(this->tag == 4){
             Longer node = LongerCreate(this, idx);
             NodeSetLife(node, cxRange2iv(200, 200));

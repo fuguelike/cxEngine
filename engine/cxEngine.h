@@ -33,7 +33,6 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxBool isGesture;
     cxBool isPause;
     cxWindow window;
-    cxDouble lastTime;
     cxHash files;
     cxHash assets;
     CX_SIGNAL_ALLOC(onPause);
@@ -131,8 +130,6 @@ cxString cxEngineAssetsData(cxConstChars file);
 
 cxJson cxEngineLoadJson(cxConstChars file);
 
-void cxEngineTimeReset();
-
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 
 cxTimer cxEngineTimer(cxFloat freq,cxInt repeat);
@@ -164,7 +161,7 @@ void cxEngineResume();
 
 void cxEngineMemory();
 
-void cxEngineDraw();
+void cxEngineDraw(cxFloat dt);
 
 void cxEngineLayout(cxInt width,cxInt height);
 

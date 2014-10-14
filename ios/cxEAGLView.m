@@ -49,7 +49,7 @@ cxEAGLView *instance = nil;
 
 -(void)drawFrame
 {
-    cxEngineDraw();
+    cxEngineDraw(displayLink.duration);
     [eaglCTX presentRenderbuffer:GL_RENDERBUFFER];
 }
 

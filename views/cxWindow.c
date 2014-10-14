@@ -50,7 +50,6 @@ void cxWindowPushView(cxAny pview)
     }
     cxStackPush(engine->window->views, new);
     cxViewAppend(engine->window, new);
-    cxEngineTimeReset();
 }
 
 void cxWindowPopView()
@@ -68,7 +67,6 @@ void cxWindowPopView()
         cxViewEnter(top);
         cxViewSetIsSleep(top, false);
     }
-    cxEngineTimeReset();
 }
 
 void cxWindowReplaceView(cxAny pview)

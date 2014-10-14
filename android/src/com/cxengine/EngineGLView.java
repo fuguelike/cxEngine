@@ -56,7 +56,7 @@ public class EngineGLView extends GLSurfaceView {
 	}
     public static native void cxEngineLayout(int width, int height);
     public static native void cxEngineBegin();
-    public static native void cxEngineDraw();
+    public static native void cxEngineDraw(float dt);
     public static native void cxEnginePause();
     public static native void cxEngineResume();
     public static native void cxEngineMemory();
@@ -389,7 +389,7 @@ public class EngineGLView extends GLSurfaceView {
     }
     private static class Renderer implements GLSurfaceView.Renderer {
         public void onDrawFrame(GL10 gl) {
-        	cxEngineDraw();
+        	cxEngineDraw(1.0f/60.0f);
         }
         public void onSurfaceChanged(GL10 gl, int width, int height) {
         	cxEngineLayout(width,height);

@@ -222,15 +222,14 @@ void cxEngineMemory()
     CX_SIGNAL_FIRE(engine->onMemory, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
 }
 
-void cxEngineDraw()
+void cxEngineDraw(cxFloat dt)
 {
     CX_RETURN(isExit);
     cxEngine engine = cxEngineInstance();
     if(!engine->isInit || engine->isPause){
         return;
     }
-    cxDouble now = cxTimestamp();
-    engine->FrameDelta = now - engine->lastTime;
+    engine->FrameDelta = dt;
     engine->FrameDelta = kmClamp(engine->FrameDelta, 1.0f/60.0f, 1.0f/30.0f);
     cxMemPoolBegin();
     cxOpenGLClear();
@@ -239,7 +238,6 @@ void cxEngineDraw()
     cxViewDraw(engine->window);
     kmGLPopMatrix();
     cxMemPoolClear();
-    engine->lastTime = now;
 }
 
 static void cxEngineLookAt(cxMatrix4f *matrix,cxFloat zeye,const cxVec2f point)
@@ -301,7 +299,6 @@ void cxEngineLayout(cxInt width,cxInt height)
     }
     cxViewLayout(engine->window);
     engine->isInit = true;
-    engine->lastTime = cxTimestamp();
 }
 
 cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)
@@ -428,13 +425,6 @@ void cxEngineDestroy()
         CX_RELEASE(instance);
         instance = NULL;
     }
-}
-
-void cxEngineTimeReset()
-{
-    cxEngine this = cxEngineInstance();
-    this->lastTime = cxTimestamp();
-    this->FrameDelta = 0;
 }
 
 cxVec2f cxEngineTouchToWindow(cxVec2f pos)

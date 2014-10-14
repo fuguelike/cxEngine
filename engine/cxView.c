@@ -614,7 +614,7 @@ cxInt cxViewSubviewCount(cxAny pview)
     return cxListLength(this->SubViews);
 }
 
-void cxViewTransform(cxAny pview)
+CX_INLINE void cxViewTransform(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     if(!cxViewIsDirty(this)){
@@ -951,6 +951,7 @@ void cxViewDraw(cxAny pview)
     }
     cxViewUpdateActions(this);
     cxViewTransform(this);
+    //
     cxViewCheckSort(this);
     cxViewCheckFront(this);
     if(!this->IsDraw || !this->IsVisible || this->IsSleep || this->isRemoved){

@@ -183,7 +183,7 @@ CX_OBJECT_TYPE(WarScene, cxScroll)
 }
 CX_OBJECT_INIT(WarScene, cxScroll)
 {
-    
+
 }
 CX_OBJECT_FREE(WarScene, cxScroll)
 {
@@ -195,6 +195,8 @@ WarScene WarSceneCreate()
 {
     cxLoader loader = cxLoaderCreate("war.json");
     CX_ASSERT_VALUE(cxLoaderGetRoot(loader), WarScene, scene);
+    scene->warMap = cxLoaderGet(loader, "map");
+    CX_ASSERT_TYPE(scene->warMap, WarMap);
     return scene;
 }
 

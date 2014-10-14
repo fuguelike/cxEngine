@@ -287,8 +287,6 @@ void cxViewExit(cxAny pview);
 
 void cxViewRemove(cxAny pview);
 
-void cxViewTransform(cxAny pview);
-
 CX_C_END
 
 #endif
