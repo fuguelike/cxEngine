@@ -246,10 +246,10 @@ void cxViewUnBindAll(cxAny pview)
 cxAny cxViewBindesFirst(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    if(this->Bindes->hashPtr == NULL){
+    if(this->Bindes->hptr == NULL){
         return NULL;
     }
-    return cxHashKeyToAny(this->Bindes->hashPtr);
+    return cxHashKeyToAny(this->Bindes->hptr);
 }
 
 //解除bind关系
@@ -886,7 +886,7 @@ CX_INLINE void cxViewUpdateActions(cxView pview)
     CX_ASSERT_THIS(pview, cxView);
     cxFloat dt = cxEngineGetFrameDelta();
     CX_HASH_FOREACH(this->Actions, ele, tmp){
-        cxAction action = ele->any;
+        CX_ASSERT_VALUE(ele->any, cxAction, action);
         if(!cxActionUpdate(action, dt)){
             continue;
         }

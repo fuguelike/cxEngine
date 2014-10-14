@@ -180,15 +180,15 @@ cxBool MapSearchPath(cxAny snode,cxAny dnode,cxBool isAttacked)
     info.src = snode;
     info.dst = dnode;
     //获取中心点
-    kmVec2MidPointBetween(&info.mid, &sidx, &didx);
+    info.mid = cxVec2fMidPoint(sidx, didx);
     //获取半径
     info.ab = NodeDistance(snode, dnode);
     info.ab += CX_MAX(dx->Size.w, dx->Size.h);
     info.ab += CX_MAX(sx->Size.w, sx->Size.h);
     info.ab = info.ab / 2.0f;
-    //
-    cxVec2i a = cxVec2iv(sidx.x, sidx.y);
-    cxVec2i b = cxVec2iv(didx.x, didx.y);
+    //获取起点和终点
+    cxVec2i a = cxVec2fTo2i(sidx);
+    cxVec2i b = cxVec2fTo2i(didx);
     if(!MapIsValidIdx(map, a) || !MapIsValidIdx(map, b)){
         CX_WARN("error index use at map path search");
         return false;

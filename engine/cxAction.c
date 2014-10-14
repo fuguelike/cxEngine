@@ -121,7 +121,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     cxBool isExit = false;
     //time scale
     if(this->Group != NULL){
-        dt *= this->Scale * cxGroupGetScale(this->Group);
+        dt *= this->Scale * cxGroupGetScale(this->Group,pav);
     }else{
         dt *= this->Scale;
     }

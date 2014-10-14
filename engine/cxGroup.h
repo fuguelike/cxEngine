@@ -15,15 +15,17 @@ CX_C_BEGIN
 
 CX_OBJECT_DEF(cxGroup, cxObject)
     CX_FIELD_DEF(cxFloat Scale);
+    CX_METHOD_DEF(void, onUpdate,cxAny group,cxAny pav);
 CX_OBJECT_END(cxGroup, cxObject)
 
-CX_FIELD_IMP(cxGroup, cxFloat, Scale);
+CX_FIELD_SET(cxGroup, cxFloat, Scale);
+cxFloat cxGroupGetScale(cxAny group,cxAny pav);
 
 cxGroup cxGroupGet(cxConstChars name);
 
 void cxGroupSet(cxConstChars name,cxGroup mgr);
 
-void cxGroupAppend(cxConstChars name, cxFloat scale);
+cxGroup cxGroupAppend(cxConstChars name, cxFloat scale);
 
 void cxGroupSetTimeScale(cxConstChars name,cxFloat scale);
 

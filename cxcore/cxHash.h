@@ -18,7 +18,7 @@ CX_C_BEGIN
 
 #define CX_HASH_FOREACH(_hash_,_ele_,_tmp_)         \
 cxHashElement *_ele_ = NULL,*_tmp_=NULL;            \
-HASH_ITER(hh, _hash_->hashPtr, _ele_, _tmp_)
+HASH_ITER(hh, _hash_->hptr, _ele_, _tmp_)
 
 typedef struct {
     cxAny any;
@@ -50,7 +50,7 @@ typedef cxInt (*cxHashCmpFunc)(cxHashElement *lp,cxHashElement *rp);
 #define cxHashStrKey(_s_)       (cxHashKey){.length=(cxInt)strlen(_s_),.data=(cxChars)(_s_)}
 
 CX_OBJECT_DEF(cxHash, cxObject)
-    cxHashElement *hashPtr;
+    cxHashElement *hptr;
 CX_OBJECT_END(cxHash, cxObject)
 
 #define cxHashSort(_hash_,_cmp_)    HASH_SORT(_hash_,_cmp_)

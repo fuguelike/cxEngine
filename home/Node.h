@@ -117,10 +117,11 @@ CX_FIELD_IMP(Node, cxFloat, Speed);
 
 //设置或者获取攻击力
 CX_FIELD_SET(Node, cxFloat, Power);
+//和攻击频率有关 Power是每秒的攻击力
 CX_INLINE cxFloat NodeGetPower(cxAny pthis)
 {
     CX_ASSERT_THIS(pthis, Node);
-    return this->Power;
+    return this->Power * this->AttackRate;
 }
 
 CX_FIELD_GET(Node, cxRange2i, Life);
@@ -149,8 +150,8 @@ CX_INLINE cxBox4f NodeGetBox(cxAny pthis)
 {
     CX_ASSERT_THIS(pthis, Node);
     cxBox4f box;
-    cxFloat w2 = this->Size.w / 2.0f;
-    cxFloat h2 = this->Size.h / 2.0f;
+    cxFloat w2 = (cxFloat)this->Size.w / 2.0f;
+    cxFloat h2 = (cxFloat)this->Size.h / 2.0f;
     box.l = this->Index.x - w2;
     box.r = this->Index.x + w2;
     box.t = this->Index.y + h2;

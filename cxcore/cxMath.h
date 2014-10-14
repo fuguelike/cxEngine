@@ -294,6 +294,12 @@ CX_INLINE cxVec2f cxVec2fScale(cxVec2f pIn, cxFloat s)
     return cxVec2fv(pIn.x * s, pIn.y * s);
 }
 
+CX_INLINE cxVec2f cxVec2fMidPoint(cxVec2f v1, cxVec2f v2)
+{
+    cxVec2f sum = cxVec2fAdd(v1, v2);
+    return cxVec2fv(sum.x / 2.0f, sum.y / 2.0f);
+}
+
 CX_INLINE cxFloat cxRound(cxFloat v)
 {
     if(v > 0){

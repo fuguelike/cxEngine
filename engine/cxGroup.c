@@ -28,6 +28,13 @@ CX_OBJECT_FREE(cxGroup, cxObject)
 }
 CX_OBJECT_TERM(cxGroup, cxObject)
 
+cxFloat cxGroupGetScale(cxAny group,cxAny pav)
+{
+    CX_ASSERT_THIS(group, cxGroup);
+    CX_METHOD_RUN(this->onUpdate, this, pav);
+    return this->Scale;
+}
+
 cxGroup cxGroupGet(cxConstChars name)
 {
     cxEngine this = cxEngineInstance();
@@ -40,11 +47,12 @@ void cxGroupSetTimeScale(cxConstChars name,cxFloat scale)
     cxGroupSetScale(group, scale);
 }
 
-void cxGroupAppend(cxConstChars name, cxFloat scale)
+cxGroup cxGroupAppend(cxConstChars name, cxFloat scale)
 {
     cxGroup group = CX_CREATE(cxGroup);
     cxGroupSetScale(group, scale);
     cxGroupSet(name, group);
+    return group;
 }
 
 void cxGroupSet(cxConstChars name,cxGroup mgr)

@@ -49,16 +49,16 @@ void cxHashClear(cxAny phash)
 {
     CX_ASSERT_THIS(phash, cxHash);
     cxHashElement *ele = NULL, *tmp = NULL;
-    HASH_ITER(hh, this->hashPtr, ele, tmp){
+    HASH_ITER(hh, this->hptr, ele, tmp){
         CX_RELEASE(ele->any);
     }
-    HASH_CLEAR(hh, this->hashPtr);
+    HASH_CLEAR(hh, this->hptr);
 }
 
 void cxHashDelElement(cxAny phash,cxHashElement *element)
 {
     CX_ASSERT_THIS(phash, cxHash);
-    HASH_DEL(this->hashPtr, element);
+    HASH_DEL(this->hptr, element);
     CX_RELEASE(element->any);
     allocator->free(element);
 }
@@ -68,7 +68,7 @@ cxBool cxHashHas(cxAny phash,cxHashKey key)
     CX_ASSERT_THIS(phash, cxHash);
     CX_ASSERT(CX_HASH_KEY_OK(key), "hash key error");
     cxHashElement *element = NULL;
-    HASH_FIND(hh, this->hashPtr, key.data, key.length, element);
+    HASH_FIND(hh, this->hptr, key.data, key.length, element);
     return element != NULL;
 }
 
@@ -76,7 +76,7 @@ cxBool cxHashDel(cxAny phash,cxHashKey key)
 {
     CX_ASSERT_THIS(phash, cxHash);
     cxHashElement *element = NULL;
-    HASH_FIND(hh, this->hashPtr, key.data, key.length, element);
+    HASH_FIND(hh, this->hptr, key.data, key.length, element);
     if(element != NULL){
         cxHashDelElement(this, element);
         return true;
@@ -87,17 +87,13 @@ cxBool cxHashDel(cxAny phash,cxHashKey key)
 cxInt cxHashLength(cxAny phash)
 {
     CX_ASSERT_THIS(phash, cxHash);
-    return HASH_COUNT(this->hashPtr);
+    return HASH_COUNT(this->hptr);
 }
 
 cxAny cxHashFirst(cxAny phash)
 {
     CX_ASSERT_THIS(phash, cxHash);
-    cxHashElement *ele = NULL, *tmp = NULL;
-    HASH_ITER(hh, this->hashPtr, ele, tmp){
-        return ele->any;
-    }
-    return NULL;
+    return (this->hptr == NULL) ? NULL : this->hptr->any;
 }
 
 cxAny cxHashGet(cxAny phash,cxHashKey key)
@@ -112,7 +108,7 @@ cxHashElement *cxHashGetElement(cxAny phash,cxHashKey key)
     CX_ASSERT_THIS(phash, cxHash);
     CX_ASSERT(CX_HASH_KEY_OK(key), "hash key error");
     cxHashElement *element = NULL;
-    HASH_FIND(hh, this->hashPtr, key.data, key.length, element);
+    HASH_FIND(hh, this->hptr, key.data, key.length, element);
     return element;
 }
 
@@ -122,7 +118,7 @@ static void cxHashSetUnsafe(cxAny phash,cxHashKey key,cxAny any)
     cxHashElement *new = allocator->malloc(sizeof(cxHashElement));
     memcpy(new->key, key.data, key.length);
     new->any = any;
-    HASH_ADD(hh, this->hashPtr, key, key.length, new);
+    HASH_ADD(hh, this->hptr, key, key.length, new);
     CX_RETAIN(new->any);
 }
 

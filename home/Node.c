@@ -298,9 +298,8 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
     Map map = NodeGetMap(this);
 //    Test show point position
     CX_VIEW_FOREACH_SUBVIEWS(map->aLayer, ele){
-        cxView tmp = ele->any;
-        if(cxViewGetTag(tmp) == 1001){
-            cxViewRemove(tmp);
+        if(cxViewGetTag(ele->any) == 1001){
+            cxViewRemove(ele->any);
         }
     }
     CX_ASTAR_POINTS_FOREACH(points, idx){
@@ -313,7 +312,7 @@ void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
         cxViewSetTag(sp, 1001);
         cxViewAppend(map->aLayer, sp);
     }
-    //使用点集合移动this
+    //使用点集合移动this,至少有两个点
     CX_ASSERT(cxAnyArrayLength(points) > 1, "points shound > 1");
     Move move = MoveCreate(this, points);
     MoveSetType(move, MoveTypeFight);
@@ -378,22 +377,18 @@ static void NodeSearchArrive(cxAny pav)
     pret = CX_METHOD_GET(pret,this->PathRule,this,&fret);
 attack:
     //返回NULL表示未发现路径
-    if(pret.target == NULL){
-        return;
-    }
+    CX_RETURN(pret.target == NULL);
     //立即面向目标
     NodeFaceTarget(this,pret.target);
     //为移动bind
     if(pret.bd == NodeBindReasonMove){
         cxViewBind(this, pret.target, cxNumberInt(pret.bd));
         NodeMovingToTarget(this, pret.target, MapSearchPoints(map));
-        return;
-    }
-    //为攻击bind
-    if(pret.bd == NodeBindReasonAttack){
+    }else if(pret.bd == NodeBindReasonAttack){
         cxViewBind(this, pret.target, cxNumberInt(pret.bd));
         NodeStartupAttackTimer(this);
-        return;
+    }else{
+        CX_ASSERT_FALSE("error bd");
     }
 }
 
