@@ -112,6 +112,7 @@ static cxInt MapSearchEarlyExit(cxAny pstar, cxInt vcount, cxVec2i *curr,cxVec2i
     if(cnode == info->dst){
         return 1;
     }
+    //如果不检测到达攻击距离
     if(!info->attacked){
         return 0;
     }

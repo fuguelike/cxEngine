@@ -9,8 +9,26 @@
 #include "cxType.h"
 #include "cxStack.h"
 
+/*
+ items:[value1,value2]
+*/
+
+CX_SETTER_DEF(cxStack, items)
+{
+    CX_ASSERT(cxJsonIsArray(value), "items must is array");
+    cxJson items = cxJsonToArray(value);
+    CX_JSON_ARRAY_EACH_BEG(items, v)
+    cxAny any = cxJsonTocxObject(v);
+    if(any != NULL){
+        cxStackPush(this, any);
+    }
+    CX_JSON_ARRAY_EACH_END(items, v)
+}
+
 CX_OBJECT_TYPE(cxStack, cxObject)
-{}
+{
+    CX_PROPERTY_SETTER(cxStack, items);
+}
 CX_OBJECT_INIT(cxStack, cxObject)
 {
     this->array = CX_ALLOC(cxArray);

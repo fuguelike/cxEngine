@@ -9,9 +9,25 @@
 #include "cxType.h"
 #include "cxList.h"
 
+/*
+ items:[value1,value2]
+*/
+
+CX_SETTER_DEF(cxList, items)
+{
+    CX_ASSERT(cxJsonIsArray(value), "items must is array");
+    cxJson items = cxJsonToArray(value);
+    CX_JSON_ARRAY_EACH_BEG(items, v)
+    cxAny any = cxJsonTocxObject(v);
+    if(any != NULL){
+        cxListAppend(this, any);
+    }
+    CX_JSON_ARRAY_EACH_END(items, v)
+}
+
 CX_OBJECT_TYPE(cxList, cxObject)
 {
-    
+    CX_PROPERTY_SETTER(cxList, items);
 }
 CX_OBJECT_INIT(cxList, cxObject)
 {

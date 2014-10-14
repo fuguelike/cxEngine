@@ -123,6 +123,25 @@ static void cxObjectSave(cxAny object,cxJson json)
     }
 }
 
+cxAny cxJsonTocxObject(cxJson v)
+{
+    cxAny any = NULL;
+    if(cxJsonIsInt(v)){
+        any = cxNumberInt(cxJsonToInt(v, 0));
+    }else if(cxJsonIsBool(v)){
+        any = cxNumberBool(cxJsonToBool(v, false));
+    }else if(cxJsonIsDouble(v)){
+        any = cxNumberDouble(cxJsonToDouble(v, 0));
+    }else if(cxJsonIsString(v)){
+        any = cxStringCreate("%s",cxJsonToConstChars(v));
+    }else if(cxJsonIsObject(v)){
+        any = cxObjectCreateUseJson(v);
+    }else {
+        any = v;
+    }
+    return any;
+}
+
 cxAny cxObjectCreateUseType(cxConstType type)
 {
     CX_ASSERT(type != NULL, "type null");

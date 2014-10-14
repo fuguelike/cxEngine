@@ -16,9 +16,22 @@
  }
  */
 
+CX_SETTER_DEF(cxHash, items)
+{
+    CX_ASSERT(cxJsonIsObject(value), "items must is object");
+    cxJson items = cxJsonToObject(value);
+    CX_JSON_OBJECT_EACH_BEG(items, v)
+    cxHashKey key = cxHashStrKey(vKey);
+    cxAny any = cxJsonTocxObject(v);
+    if(any != NULL){
+        cxHashSet(this, key, any);
+    }
+    CX_JSON_OBJECT_EACH_END(items, v)
+}
+
 CX_OBJECT_TYPE(cxHash, cxObject)
 {
-   
+    CX_PROPERTY_SETTER(cxHash, items);
 }
 CX_OBJECT_INIT(cxHash, cxObject)
 {

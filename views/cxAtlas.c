@@ -168,7 +168,7 @@ void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,
 
 void cxAtlasAppendEmpty(cxAny pview)
 {
-    cxBoxPoint bp = cxAtlasCreateBoxPoint(cxVec2fv(0, 0), cxSize2fv(0, 0), cxBoxTex2fDefault(), cxColor4fv(0, 0, 0, 0));
+    cxBoxPoint bp = {0};
     cxAtlasAppend(pview, &bp);
 }
 

@@ -9,9 +9,32 @@
 #include <ctype.h>
 #include "cxMD5.h"
 #include "cxString.h"
+#include "cxType.h"
+
+CX_SETTER_DEF(cxString, string)
+{
+    cxConstChars str = cxJsonToConstChars(value);
+    if(str == NULL){
+        return;
+    }
+    cxStringFormat(this, "%s",str);
+}
+CX_SETTER_DEF(cxString, number)
+{
+    if(cxJsonIsInt(value)){
+        cxStringFormat(this, "%d",cxJsonToInt(value, 0));
+    }else if(cxJsonIsDouble(value)){
+        cxStringFormat(this, "%f",cxJsonToDouble(value, 0));
+    }else if(cxJsonIsBool(value)){
+        cxStringFormat(this, "%s", cxJsonToBool(value, false) ? "true" : "false");
+    }
+}
 
 CX_OBJECT_TYPE(cxString, cxObject)
-{}
+{
+    CX_PROPERTY_SETTER(cxString, string);
+    CX_PROPERTY_SETTER(cxString, number);
+}
 CX_OBJECT_INIT(cxString, cxObject)
 {}
 CX_OBJECT_FREE(cxString, cxObject)

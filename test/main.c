@@ -14,7 +14,7 @@ void cxEngineType(cxEngine engine)
 
 void cxEngineInit(cxEngine engine)
 {
-    cxEngineSetDesignSize(cxSize2fv(640, 960));
+    cxEngineSetDesSize(cxSize2fv(2048, 1536));
 }
 
 static void exitact(cxAny sender)

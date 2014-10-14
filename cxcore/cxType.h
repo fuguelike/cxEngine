@@ -29,6 +29,8 @@ typedef cxJson (*cxObjectCreateReaderFunc)(cxConstChars src);
 
 cxType cxTypesGet(cxConstType type);
 
+cxAny cxJsonTocxObject(cxJson v);
+
 cxProperty cxTypeSetProperty(cxType this,cxConstChars key);
 
 cxProperty cxTypeProperty(cxType this,cxConstChars key);
