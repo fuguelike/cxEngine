@@ -272,11 +272,6 @@ JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEnginePause(JNIEnv * env
     cxEnginePause();
 }
 
-JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineInit(JNIEnv * env, jclass class)
-{
-    cxGlobalInit();
-}
-
 JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineDraw(JNIEnv * env, jclass class,jfloat dt)
 {
     cxEngineDraw(dt);

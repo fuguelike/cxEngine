@@ -11,10 +11,13 @@
 #include <actions/cxCurve.h>
 #include <actions/cxTimer.h>
 #include <cxcore/cxBase.h>
+#include <textures/cxTextureFactory.h>
 #include "cxInput.h"
 #include "cxUtil.h"
 #include "cxBMPFont.h"
 #include "cxGroup.h"
+#include "cxIconv.h"
+#include "cxPlayer.h"
 
 CX_C_BEGIN
 
@@ -28,11 +31,11 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxFloat FrameDelta);   // time per frame
     CX_FIELD_DEF(cxString Lang);
     CX_FIELD_DEF(cxFloat Interval);
+    CX_FIELD_DEF(cxWindow Window);      //main window
     cxBool isInit;
     cxBool isTouch;
     cxBool isGesture;
     cxBool isPause;
-    cxWindow window;
     cxHash files;
     cxHash assets;
     CX_SIGNAL_ALLOC(onPause);
@@ -40,74 +43,104 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_SIGNAL_ALLOC(onMemory);
     CX_SIGNAL_ALLOC(onUpdate);
     CX_SIGNAL_ALLOC(onRecvJson);
-    CX_EVENT_ALLOC(onExit);
     cxHash items;           //touch items
     cxTouchItems points;    //all touch points
     cxKey key;
     cxHash groups;          //action groups
+
+    cxCurve curve;              //cxCurve instance
+    cxOpenGL opengl;            //cxOpenGL instance
+    cxIconv iconv;              //cxIconv instance
+    cxPlayer player;            //cxPlayer instance
+    cxTextureFactory textures;  //cxTextureFactory instance
 CX_OBJECT_END(cxEngine, cxObject)
 
-cxEngine cxEngineInstance();
+extern cxEngine engineInstance;
+
+CX_INLINE cxEngine cxEngineInstance()
+{
+    return engineInstance;
+}
+
+CX_INLINE cxTextureFactory cxTextureFactoryInstance()
+{
+    return engineInstance->textures;
+}
+
+CX_INLINE cxPlayer cxPlayerInstance()
+{
+    return engineInstance->player;
+}
+
+CX_INLINE cxIconv cxIconvInstance()
+{
+    return engineInstance->iconv;
+}
+
+CX_INLINE cxWindow cxEngineGetWindow()
+{
+    return engineInstance->Window;
+}
+
+CX_INLINE cxOpenGL cxOpenGLInstance()
+{
+    return engineInstance->opengl;
+}
+
+CX_INLINE cxCurve cxCurveInstance()
+{
+    return engineInstance->curve;
+}
 
 CX_INLINE void cxEngineSetInterval(cxFloat interval)
 {
-    cxEngine engine = cxEngineInstance();
-    engine->Interval = interval;
+    engineInstance->Interval = interval;
 }
 
 CX_INLINE cxString cxEngineGetLang()
 {
-    cxEngine engine = cxEngineInstance();
-    return engine->Lang;
+    return engineInstance->Lang;
 }
 
 CX_INLINE void cxEngineSetLang(cxString lng)
 {
-    cxEngine engine = cxEngineInstance();
-    CX_RETAIN_SWAP(engine->Lang, lng);
+    CX_RETAIN_SWAP(engineInstance->Lang, lng);
 }
 
 CX_INLINE cxFloat cxEngineGetFrameDelta()
 {
-    cxEngine engine = cxEngineInstance();
-    return engine->FrameDelta;
+    return engineInstance->FrameDelta;
 }
 
 CX_INLINE void cxEngineSetScale(cxVec2f v)
 {
-    cxEngine engine = cxEngineInstance();
-    engine->Scale = v;
+    engineInstance->Scale = v;
 }
 
 CX_INLINE cxVec2f cxEngineGetScale()
 {
-    cxEngine engine = cxEngineInstance();
-    return engine->Scale;
+    return engineInstance->Scale;
 }
 
 CX_INLINE cxBool cxEngineGetIsShowBorder()
 {
-    cxEngine engine = cxEngineInstance();
-    return engine->IsShowBorder;
+    return engineInstance->IsShowBorder;
 }
 
 CX_INLINE void cxEngineSetIsShowBorder(cxBool v)
 {
-    cxEngine engine = cxEngineInstance();
-    engine->IsShowBorder = v;
+    engineInstance->IsShowBorder = v;
 }
 
 //use init method
 CX_INLINE void cxEngineSetDesSize(cxSize2f size)
 {
-    cxEngine engine = cxEngineInstance();
-    engine->DesSize = size;
+    engineInstance->DesSize = size;
 }
 
 CX_INLINE cxSize2f cxEngineWinSize()
 {
-    cxEngine engine = cxEngineInstance();
-    return engine->WinSize;
+    return engineInstance->WinSize;
 }
 
 //type init

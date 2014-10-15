@@ -23,8 +23,6 @@ CX_OBJECT_DEF(cxCurve, cxObject)
     cxHash curves;
 CX_OBJECT_END(cxCurve, cxObject)
 
-void cxCurveDestroy();
-
 cxCurveItem cxCurveGet(cxConstChars key);
 
 cxFloat cxCurveBackIn(cxAny pav,cxFloat time);

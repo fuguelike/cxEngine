@@ -83,10 +83,10 @@ CX_SETTER_DEF(cxView, degrees)
         cxViewSetDegrees(this, degrees);
     }
 }
-CX_SETTER_DEF(cxView, hidetop)
+CX_SETTER_DEF(cxView, sleeptop)
 {
-    cxBool hideTop = cxJsonToBool(value, this->HideTop);
-    cxViewSetHideTop(this, hideTop);
+    cxBool sleepTop = cxJsonToBool(value, this->SleepTop);
+    cxViewSetSleepTop(this, sleepTop);
 }
 CX_SETTER_DEF(cxView, cropping)
 {
@@ -174,7 +174,7 @@ CX_OBJECT_TYPE(cxView, cxObject)
     CX_PROPERTY_SETTER(cxView, fixscale);
     CX_PROPERTY_SETTER(cxView, visible);
     CX_PROPERTY_SETTER(cxView, degrees);
-    CX_PROPERTY_SETTER(cxView, hidetop);
+    CX_PROPERTY_SETTER(cxView, sleeptop);
     CX_PROPERTY_SETTER(cxView, cropping);
     CX_PROPERTY_SETTER(cxView, autobox);
     CX_PROPERTY_SETTER(cxView, resizing);
@@ -186,7 +186,7 @@ CX_OBJECT_TYPE(cxView, cxObject)
 CX_OBJECT_INIT(cxView, cxObject)
 {
     this->IsDraw        = true;
-    this->HideTop       = true;
+    this->SleepTop      = true;
     this->IsVisible     = true;
     this->Dirty         = cxViewDirtyColor;
     this->TouchFlags    = cxViewTouchFlagsSubviews | cxViewTouchFlagsSelf;

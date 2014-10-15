@@ -35,7 +35,7 @@ CX_OBJECT_TERM(cxWindow, cxView)
 cxAny cxWindowTopView()
 {
     cxEngine engine = cxEngineInstance();
-    return cxStackTop(engine->window->views);
+    return cxStackTop(engine->Window->views);
 }
 
 void cxWindowPushView(cxAny pview)
@@ -43,24 +43,24 @@ void cxWindowPushView(cxAny pview)
     CX_ASSERT_TYPE(pview, cxView);
     cxEngine engine = cxEngineInstance();
     cxView new = pview;
-    cxView top = cxStackTop(engine->window->views);
-    if(top != NULL && cxViewGetHideTop(new)){
+    cxView top = cxWindowTopView();
+    if(top != NULL && cxViewGetSleepTop(new)){
         cxViewSetIsSleep(top, true);
         cxViewExit(top);
     }
-    cxStackPush(engine->window->views, new);
-    cxViewAppend(engine->window, new);
+    cxStackPush(engine->Window->views, new);
+    cxViewAppend(engine->Window, new);
 }
 
 void cxWindowPopView()
 {
     cxEngine engine = cxEngineInstance();
     cxBool hideTop = false;
-    cxView prev = cxStackTop(engine->window->views);
-    cxStackPop(engine->window->views);
-    cxView top = cxStackTop(engine->window->views);
+    cxView prev = cxWindowTopView();
+    cxStackPop(engine->Window->views);
+    cxView top = cxWindowTopView();
     if(prev != NULL){
-        hideTop = cxViewGetHideTop(prev);
+        hideTop = cxViewGetSleepTop(prev);
         cxViewRemove(prev);
     }
     if(top != NULL && hideTop){

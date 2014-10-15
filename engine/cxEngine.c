@@ -8,7 +8,6 @@
 
 #include <spine/extension.h>
 #include "cxEngine.h"
-#include "cxIconv.h"
 #include "cxValue.h"
 
 #include <textures/cxTextureFactory.h>
@@ -68,12 +67,11 @@
 
 #include <algorithm/cxAStar.h>
 
-static cxEngine instance = NULL;
-static cxBool isExit = false;
+cxEngine engineInstance = NULL;
 
 void cxEngineRecvJson(cxString json)
 {
-    CX_RETURN(isExit);
+    CX_RETURN(engineInstance == NULL);
     cxEngine engine = cxEngineInstance();
     CX_SIGNAL_FIRE(engine->onRecvJson, CX_FUNC_TYPE(cxAny,cxString), CX_SLOT_OBJECT, json);
     CX_LOGGER("cxengine recv:%s",cxStringBody(json));
@@ -81,18 +79,15 @@ void cxEngineRecvJson(cxString json)
 
 void cxEngineExit()
 {
-    CX_RETURN(isExit);
-    cxEngine engine = cxEngineInstance();
-    CX_EVENT_FIRE(engine, onExit);
+    CX_RETURN(engineInstance == NULL);
     cxEnginePause();
     cxEngineDestroy();
     cxEngineTerminate();
-    isExit = true;
 }
 
 void cxEnginePause()
 {
-    CX_RETURN(isExit);
+    CX_RETURN(engineInstance == NULL);
     cxEngine engine = cxEngineInstance();
     engine->isPause = true;
     CX_SIGNAL_FIRE(engine->onPause, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
@@ -182,15 +177,23 @@ static void cxEngineTypes()
 
 void cxEngineBegin()
 {
-    cxEngine engine = cxEngineInstance();
+#if !defined(NDEBUG)
+    CX_LOGGER("cxEngine Version: %d,Run Mode:DEBUG",CX_ENGINE_VERSION);
+#else
+    CX_LOGGER("cxEngine Version: %d,Run Mode:RELEASE",CX_ENGINE_VERSION);
+#endif
+    //free prev instance
+    if(engineInstance != NULL){
+        cxEngineExit();
+    }
+    //make new engine
+    engineInstance = CX_ALLOC(cxEngine);
     //registe all type
     cxEngineTypes();
     //registe other type
-    cxEngineType(engine);
+    cxEngineType(engineInstance);
     //set localized lang
     cxEngineSetLang(cxLocalizedLang());
-    //open player
-    cxPlayerOpen();
     //init engine
     //set cxjsonReader
     cxJsonSetReader(cxEngineJsonReader);
@@ -198,15 +201,20 @@ void cxEngineBegin()
     _setMalloc(allocator->malloc);
     _setDebugMalloc(NULL);
     _setFree(allocator->free);
-    CX_ASSERT(engine->window == NULL, "mutiple init window");
-    engine->window = CX_ALLOC(cxWindow);
+    //init model
+    engineInstance->Window      = CX_ALLOC(cxWindow);
+    engineInstance->curve       = CX_ALLOC(cxCurve);
+    engineInstance->opengl      = CX_ALLOC(cxOpenGL);
+    engineInstance->iconv       = CX_ALLOC(cxIconv);
+    engineInstance->player      = CX_ALLOC(cxPlayer);
+    engineInstance->textures    = CX_ALLOC(cxTextureFactory);
     //use init engine
-    cxEngineInit(engine);
+    cxEngineInit(engineInstance);
 }
 
 void cxEngineResume()
 {
-    CX_RETURN(isExit);
+    CX_RETURN(engineInstance == NULL);
     cxEngine engine = cxEngineInstance();
     engine->isPause = false;
     CX_SIGNAL_FIRE(engine->onResume, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
@@ -217,14 +225,14 @@ void cxEngineResume()
 
 void cxEngineMemory()
 {
-    CX_RETURN(isExit);
+    CX_RETURN(engineInstance == NULL);
     cxEngine engine = cxEngineInstance();
     CX_SIGNAL_FIRE(engine->onMemory, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
 }
 
 void cxEngineDraw(cxFloat dt)
 {
-    CX_RETURN(isExit);
+    CX_RETURN(engineInstance == NULL);
     cxEngine engine = cxEngineInstance();
     if(!engine->isInit || engine->isPause){
         return;
@@ -233,7 +241,7 @@ void cxEngineDraw(cxFloat dt)
     cxOpenGLClear();
     CX_SIGNAL_FIRE(engine->onUpdate, CX_FUNC_TYPE(cxAny,cxFloat),CX_SLOT_OBJECT,engine->FrameDelta);
     kmGLPushMatrix();
-    cxViewDraw(engine->window);
+    cxViewDraw(engine->Window);
     kmGLPopMatrix();
     cxMemPoolClear();
 }
@@ -257,7 +265,7 @@ void cxEngineLayout(cxInt width,cxInt height)
     engine->WinSize = cxSize2fv(width, height);
     //$WinSize.w $WinSize.h
     cxJsonRegisterSize2f("WinSize", engine->WinSize);
-    cxViewSetSize(engine->window, engine->WinSize);
+    cxViewSetSize(engine->Window, engine->WinSize);
     //
     if(!cxSize2fZero(engine->DesSize)){
         engine->Scale.x = engine->WinSize.w/engine->DesSize.w;
@@ -293,15 +301,16 @@ void cxEngineLayout(cxInt width,cxInt height)
     kmGLMultMatrix(&matrix);
     //
     if(!engine->isInit){
-        cxViewEnter(engine->window);
+        cxViewEnter(engine->Window);
     }
-    cxViewLayout(engine->window);
+    cxViewLayout(engine->Window);
     engine->isInit = true;
 }
 
 cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)
 {
-    return cxViewAppendTimer(instance->window, freq, repeat);
+    cxEngine engine = cxEngineInstance();
+    return cxViewAppendTimer(engine->Window, freq, repeat);
 }
 
 CX_OBJECT_TYPE(cxEngine, cxObject)
@@ -328,18 +337,17 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->files);
     CX_RELEASE(this->assets);
     CX_RELEASE(this->Lang);
-    CX_RELEASE(this->window);
-    CX_EVENT_RELEASE(this->onExit);
+    CX_RELEASE(this->Window);
     CX_SIGNAL_RELEASE(this->onRecvJson);
     CX_SIGNAL_RELEASE(this->onUpdate);
     CX_SIGNAL_RELEASE(this->onPause);
     CX_SIGNAL_RELEASE(this->onResume);
     CX_SIGNAL_RELEASE(this->onMemory);
-    cxCurveDestroy();
-    cxOpenGLDestroy();
-    cxIconvDestroy();
-    cxPlayerDestroy();
-    cxMessageDestroy();
+    CX_RELEASE(this->curve);
+    CX_RELEASE(this->opengl);
+    CX_RELEASE(this->iconv);
+    CX_RELEASE(this->player);
+    CX_RELEASE(this->textures);
     kmGLFreeAll();
 }
 CX_OBJECT_TERM(cxEngine, cxObject)
@@ -404,26 +412,11 @@ cxBMPFont cxEngineLoadBMPFont(cxConstChars file)
     return font;
 }
 
-cxEngine cxEngineInstance()
-{
-    if(instance == NULL) {
-#if !defined(NDEBUG)
-        CX_LOGGER("cxEngine Version: %d,Run Mode:DEBUG",CX_ENGINE_VERSION);
-#else
-        CX_LOGGER("cxEngine Version: %d,Run Mode:RELEASE",CX_ENGINE_VERSION);
-#endif
-        instance = CX_ALLOC(cxEngine);
-    }
-    return instance;
-}
-
 void cxEngineDestroy()
 {
-    if(instance != NULL) {
-        cxEngineFree(instance);
-        CX_RELEASE(instance);
-        instance = NULL;
-    }
+    cxEngineFree(engineInstance);
+    CX_RELEASE(engineInstance);
+    engineInstance = NULL;
 }
 
 cxVec2f cxEngineTouchToWindow(cxVec2f pos)
@@ -455,7 +448,7 @@ cxBool cxEngineFireKey(cxKeyType type,cxInt code)
     cxEngine this = cxEngineInstance();
     this->key.type = type;
     this->key.code = code;
-    return cxViewKey(this->window, &this->key);
+    return cxViewKey(this->Window, &this->key);
 }
 
 static void cxEngineComputeItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
@@ -538,7 +531,7 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
     CX_HASH_FOREACH(this->items, ele, tmp){
         cxTouchItemsAppend(this->points, ele->any);
     }
-    cxBool ret = cxViewTouch(this->window, &this->points);
+    cxBool ret = cxViewTouch(this->Window, &this->points);
     //remove up cancel point
     for(cxInt i=0; i < delItems.number; i++){
         item = delItems.items[i];

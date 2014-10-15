@@ -23,8 +23,6 @@ CX_OBJECT_DEF(cxTextureFactory, cxObject)
     CX_SLOT_ALLOC(onMemory);
 CX_OBJECT_END(cxTextureFactory, cxObject)
 
-cxTextureFactory cxTextureFactoryInstance();
-
 cxTexture cxTextureFactoryLoadFile(cxConstChars file);
 
 cxTexture cxTextureFactoryLoadText(cxString txt,cxString font,cxTextAttr attr);

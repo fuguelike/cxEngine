@@ -74,7 +74,7 @@ void cxLoadingStart(cxAny pview)
     this->stepTimer = cxViewAppendTimer(this, 1.0f/30.0f, CX_FOREVER);
     CX_ADD(cxTimer, this->stepTimer, onArrive, cxLoadingTimerArrive);
     CX_ADD(cxAction, this->stepTimer, onExit, cxLoadingTimerExit);
-    cxViewAppend(engine->window, this);
+    cxViewAppend(engine->Window, this);
 }
 
 

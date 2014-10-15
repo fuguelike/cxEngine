@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include "cxEngine.h"
 #include <shaders/cxShaderPositionColor.h>
 #include <shaders/cxShaderDefault.h>
 #include <shaders/cxShaderAlpha.h>
@@ -13,8 +14,6 @@
 #include <shaders/cxShaderMultiple.h>
 #include "cxUtil.h"
 #include "cxOpenGL.h"
-
-static cxOpenGL instance = NULL;
 
 #define CX_OPENGL_LOAD_SHADER(t)                                    \
 do{                                                                 \
@@ -149,20 +148,6 @@ cxAny cxOpenGLShaderByName(cxConstChars name)
         return cxOpenGLShader(cxShaderMultipleKey);
     }
     return cxOpenGLShader(cxShaderDefaultKey);
-}
-
-cxOpenGL cxOpenGLInstance()
-{
-    if(instance == NULL){
-        instance = CX_ALLOC(cxOpenGL);
-    }
-    return instance;
-}
-
-void cxOpenGLDestroy()
-{
-    CX_RELEASE(instance);
-    instance = NULL;
 }
 
 #define CX_GL_SUPPORT(t)                                \

@@ -21,6 +21,8 @@ CX_OBJECT_DEF(cxMessage, cxObject)
     cxHash keys;
 CX_OBJECT_END(cxMessage, cxObject)
 
+cxMessage cxMessageInstance();
+
 void cxMessageDestroy();
 
 void cxMessageRemove(cxAny dst);

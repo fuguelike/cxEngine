@@ -7,8 +7,7 @@
 //
 
 #include "cxIconv.h"
-
-static cxIconv instance = NULL;
+#include "cxEngine.h"
 
 CX_OBJECT_TYPE(cxIconvItem, cxObject)
 {
@@ -60,20 +59,6 @@ static cxString cxIconvItemConvert(cxIconvItem this,const cxString string)
     CX_ERROR("convert failed");
     allocator->free(buffer);
     return NULL;
-}
-
-void cxIconvDestroy()
-{
-    CX_RELEASE(instance);
-    instance = NULL;
-}
-
-cxIconv cxIconvInstance()
-{
-    if(instance == NULL){
-        instance = CX_ALLOC(cxIconv);
-    }
-    return instance;
 }
 
 CX_OBJECT_TYPE(cxIconv, cxObject)

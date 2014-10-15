@@ -60,7 +60,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxBox4f  AutoBox);
     CX_FIELD_DEF(cxViewDirty Dirty);
     CX_FIELD_DEF(cxList SubViews);
-    CX_FIELD_DEF(cxBool HideTop);
+    CX_FIELD_DEF(cxBool SleepTop);
     CX_FIELD_DEF(cxViewTouchFlags TouchFlags);
     CX_FIELD_DEF(cxSize2f Size);
     CX_FIELD_DEF(cxVec2f Position);
@@ -141,7 +141,7 @@ CX_FIELD_IMP(cxView, cxViewAutoResizeMask, AutoMask);
 CX_FIELD_IMP(cxView, cxLong, Tag);
 CX_FIELD_GET(cxView, cxHash, Bindes);
 CX_FIELD_GET(cxView, cxHash, Binded);
-CX_FIELD_IMP(cxView, cxBool, HideTop);
+CX_FIELD_IMP(cxView, cxBool, SleepTop);
 CX_FIELD_IMP(cxView, cxViewTouchFlags, TouchFlags);
 CX_FIELD_GET(cxView, cxSize2f, Size);
 CX_FIELD_GET(cxView, cxVec2f, Position);

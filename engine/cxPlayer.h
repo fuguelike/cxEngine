@@ -54,12 +54,6 @@ void cxPauseMusic();
 
 void cxResumeMusic();
 
-void cxPlayerOpen();
-
-void cxPlayerDestroy();
-
-cxAny cxPlayerInstance();
-
 CX_C_END
 
 #endif

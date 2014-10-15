@@ -10,6 +10,7 @@
 #include <engine/cxUtil.h>
 #include <streams/cxAssetsStream.h>
 #include "cxPlayer.h"
+#include "cxEngine.h"
 
 cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
 
@@ -80,8 +81,6 @@ void cxStopEffect(cxAny track)
     cxTrack this = track;
     alSourceStop(this->source);
 }
-
-static cxPlayer instance = NULL;
 
 static cxTrack cxPlayerQueryTrack()
 {
@@ -188,22 +187,3 @@ CX_OBJECT_FREE(cxPlayer, cxObject)
     CX_SLOT_RELEASE(this->onMemory);
 }
 CX_OBJECT_TERM(cxPlayer, cxObject)
-
-void cxPlayerOpen()
-{
-    cxPlayerInstance();
-}
-
-cxAny cxPlayerInstance()
-{
-    if(instance == NULL){
-        instance = CX_ALLOC(cxPlayer);
-    }
-    return instance;
-}
-
-void cxPlayerDestroy()
-{
-    CX_RELEASE(instance);
-    instance = NULL;
-}

@@ -26,13 +26,9 @@ CX_OBJECT_DEF(cxIconv, cxObject)
     cxHash caches;
 CX_OBJECT_END(cxIconv, cxObject)
 
-cxIconv cxIconvInstance();
-
 cxString cxIconvConvertUTF8ToUTF16LE(const cxString string);
 
 cxString cxIconvConvert(const cxString string,cxConstChars from,cxConstChars to);
-
-void cxIconvDestroy();
 
 CX_C_END
 

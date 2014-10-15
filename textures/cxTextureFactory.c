@@ -12,23 +12,7 @@
 #include <streams/cxMemStream.h>
 #include "cxTextureFactory.h"
 
-#define CX_DEFAULT_GROUP "__default__group__"
-
-static cxTextureFactory instance = NULL;
-
-cxTextureFactory cxTextureFactoryInstance()
-{
-    if(instance == NULL){
-        instance = CX_ALLOC(cxTextureFactory);
-    }
-    return instance;
-}
-
-static void cxTextureFactoryDestroy(cxAny sender)
-{
-    CX_RELEASE(instance);
-    instance = NULL;
-}
+#define CX_DEFAULT_GROUP "__cxTexturesGroupName__"
 
 static void cxTextureFactoryMemory(cxTextureFactory this)
 {
@@ -47,7 +31,6 @@ CX_OBJECT_INIT(cxTextureFactory, cxObject)
     cxHash group = CX_CREATE(cxHash);
     cxHashSet(this->caches, cxHashStrKey(CX_DEFAULT_GROUP), group);
     CX_CON(cxEngine, engine, onMemory, this, cxTextureFactoryMemory);
-    CX_ADD(cxEngine, engine, onExit, cxTextureFactoryDestroy);
 }
 CX_OBJECT_FREE(cxTextureFactory, cxObject)
 {

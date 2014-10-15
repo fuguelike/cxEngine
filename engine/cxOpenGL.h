@@ -67,13 +67,9 @@ CX_OBJECT_DEF(cxOpenGL, cxObject)
     cxColor4f clearColor;
 CX_OBJECT_END(cxOpenGL, cxObject)
 
-cxOpenGL cxOpenGLInstance();
-
 cxAny cxOpenGLShader(cxConstChars key);
 
 cxAny cxOpenGLShaderByName(cxConstChars name);
-
-void cxOpenGLDestroy();
 
 void cxOpenGLCheckFeature();
 

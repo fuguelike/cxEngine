@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <engine/cxEngine.h>
 #include "cxTexturePVR.h"
 
 #pragma pack(1)

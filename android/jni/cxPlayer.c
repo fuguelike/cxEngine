@@ -7,6 +7,7 @@
 //
 
 #include <engine/cxPlayer.h>
+#include <engine/cxEngine.h>
 #include <cxcore/cxBase.h>
 #include "cxAndroid.h"
 
@@ -131,25 +132,6 @@ void cxResumeMusic()
 {
     CX_GET_METHOD(resumeMusic,"cxEngineResumeMusic","()V");
     (*javaENV)->CallStaticVoidMethod(M(resumeMusic));
-}
-
-void cxPlayerOpen()
-{
-    cxPlayerInstance();
-}
-
-void cxPlayerDestroy()
-{
-    CX_RELEASE(instance);
-    instance = NULL;
-}
-
-cxAny cxPlayerInstance()
-{
-    if(instance == NULL){
-        instance = CX_ALLOC(cxPlayer);
-    }
-    return instance;
 }
 
 

@@ -256,10 +256,12 @@ void cxCoreInit()
     cxAllocatorInit();
     cxTypesInit();
     groups = CX_ALLOC(cxHash);
+    cxMessageInstance();
 }
 
 void cxCoreFree()
 {
+    cxMessageDestroy();
     CX_RELEASE(groups);
     cxTypesFree();
     cxAllocatorFree();

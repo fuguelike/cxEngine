@@ -69,7 +69,7 @@ CX_OBJECT_TYPE(cxAlert, cxAtlas)
 }
 CX_OBJECT_INIT(cxAlert, cxAtlas)
 {
-    cxViewSetHideTop(this, false);
+    cxViewSetSleepTop(this, false);
     CX_SET(cxView, this, Key, cxAlertKey);
     CX_SET(cxView, this, Touch, cxAlertTouch);
     CX_SET(cxAlert, this, Hide, cxAlertOnHide);

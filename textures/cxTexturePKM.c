@@ -7,6 +7,7 @@
 //
 
 #include <engine/cxUtil.h>
+#include <engine/cxEngine.h>
 #include "cxTexturePKM.h"
 #include "cxTextureFactory.h"
 

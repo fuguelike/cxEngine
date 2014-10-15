@@ -7,6 +7,7 @@
 //
 
 #include <engine/cxAction.h>
+#include <engine/cxEngine.h>
 #include "cxCurve.h"
 
 #define M_PI_X2 (M_PI * 2)
@@ -224,22 +225,6 @@ static void cxCurveRegister(cxCurve this,cxConstChars name,cxActionCurveFunc fun
     item->func = func;
     cxHashSet(this->curves, cxHashStrKey(name), item);
     CX_RELEASE(item);
-}
-
-static cxCurve instance = NULL;
-
-static cxCurve cxCurveInstance()
-{
-    if(instance == NULL){
-        instance = CX_ALLOC(cxCurve);
-    }
-    return instance;
-}
-
-void cxCurveDestroy()
-{
-    CX_RELEASE(instance);
-    instance = NULL;
 }
 
 cxCurveItem cxCurveGet(cxConstChars key)

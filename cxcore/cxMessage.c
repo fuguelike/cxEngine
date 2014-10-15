@@ -29,7 +29,7 @@ void cxMessageDestroy()
     instance = NULL;
 }
 
-static cxMessage cxMessageInstance()
+cxMessage cxMessageInstance()
 {
     if(instance == NULL){
         instance = CX_ALLOC(cxMessage);
