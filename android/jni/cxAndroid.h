@@ -27,10 +27,10 @@ typedef struct {
 extern JNIEnv *javaENV;
 extern jclass javaClass;
 
-#define CX_GET_METHOD(_v_,_n_,_d_)    \
-if(!(_v_).isGet){ \
-    cxGetStaticMethodInfo(&(_v_), CLASS_NAME, _n_,_d_);\
-    CX_ASSERT((_v_).isGet,"get method "_n_" failed");\
+#define CX_GET_METHOD(_v_,_n_,_d_)                          \
+if(!(_v_).isGet){                                           \
+    cxGetStaticMethodInfo(&(_v_), CLASS_NAME, _n_,_d_);     \
+    CX_ASSERT((_v_).isGet,"get method "_n_" failed");       \
 }
 #define M(_m_) javaENV, javaClass, (_m_).methodID
 
