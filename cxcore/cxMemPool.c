@@ -47,16 +47,13 @@ void cxMemPoolFree()
 
 static cxMemPool cxMemPoolInstance()
 {
-    cxMemPool pool = NULL;
     cxStack stack = cxMemPoolStack();
     if(cxStackLength(stack) == 0){
-        pool = CX_ALLOC(cxMemPool);
+        cxMemPool pool = CX_ALLOC(cxMemPool);
         cxStackPush(stack, pool);
         CX_RELEASE(pool);
-    }else{
-        pool = cxStackTop(stack);
     }
-    return pool;
+    return cxStackTop(stack);
 }
 
 cxAny cxMemPoolAppend(cxAny any)

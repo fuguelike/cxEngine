@@ -482,7 +482,6 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
 {
     cxEngine this = cxEngineInstance();
     //current fires point
-    this->points.number = 0;
     cxDouble now = cxTimestamp();
     cxTouchItems delItems = {0};
     cxTouchItem item = NULL;
@@ -528,6 +527,7 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
         item->key = p.id;
     }
     //get all points
+    this->points.number = 0;
     CX_HASH_FOREACH(this->items, ele, tmp){
         cxTouchItemsAppend(this->points, ele->any);
     }

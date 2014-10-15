@@ -33,11 +33,9 @@ static cxBool FightMapTouch(cxAny pview,const cxTouchItems *points)
     }
     if(item->type == cxTouchTypeDown){
         this->isSelectUnit = true;
-        //        cxVec2f idx = MapPosToPos(this, cpos);
-        //        CX_LOGGER("%f %f",idx.x,idx.y);
         return false;
     }
-    if(item->type == cxTouchTypeUp && item->movement < 30){
+    if(item->type == cxTouchTypeUp && item->isTap){
         cxVec2i idx = MapPosToIndex(this, cpos);
         cxAny item = MapItem(this, idx);
         if(item != NULL){
