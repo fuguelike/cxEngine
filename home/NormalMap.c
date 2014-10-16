@@ -23,11 +23,11 @@ static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
         return false;
     }
     cxTouchItem item = points->items[0];
-    cxVec2f cpos;
-    if(!cxViewHitTest(this, item->position, &cpos)){
+    cxHitInfo hit = cxViewHitTest(this, item->position);
+    if(!hit.hited){
         return false;
     }
-    cxVec2f index = MapPosToFloat(this, cpos);
+    cxVec2f index = MapPosToFloat(this, hit.position);
     if(item->type == cxTouchTypeUp){
         this->unode = MapHitNode(this, index, NodeTypeAll);
         if(this->cnode != NULL){
@@ -50,12 +50,12 @@ static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
         }
     }
     if(item->type == cxTouchTypeDown){
-        this->startPos = MapPosToFloat(this, cpos);
+        this->startPos = MapPosToFloat(this, hit.position);
         this->dnode = MapHitNode(this, index, NodeTypeAll);
         return false;
     }
     if(item->type == cxTouchTypeMove && this->dnode != NULL && this->dnode == this->cnode){
-        cxVec2f currIdx = MapPosToFloat(this, cpos);
+        cxVec2f currIdx = MapPosToFloat(this, hit.position);
         cxVec2f delta = cxVec2fSub(currIdx, this->startPos);
         cxVec2i idx = cxVec2fTo2i(delta);
         cxBool setPos = false;

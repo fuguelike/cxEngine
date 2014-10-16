@@ -17,13 +17,13 @@ cxBool cxButtonTouch(cxAny pview,const cxTouchItems *points)
     if(!this->isEnable){
         return false;
     }
-    cxBool hit = cxViewHitTest(pview, item->position, &this->touchPos);
-    if(item->type != cxTouchTypeDown && this->isSelected && !hit){
+    cxHitInfo hit = cxViewHitTest(pview, item->position);
+    if(item->type != cxTouchTypeDown && this->isSelected && !hit.hited){
         CX_EVENT_FIRE(this, onLeave);
         this->isSelected = false;
         return false;
     }
-    if(!hit){
+    if(!hit.hited){
         return false;
     }
     if(item->type == cxTouchTypeDown){

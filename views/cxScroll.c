@@ -39,17 +39,16 @@ static void cxScrollResetScale(cxScroll this)
 static cxBool cxScrollScale(cxAny pview,const cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, cxScroll);
-    cxVec2f cp0;
-    cxVec2f cp1;
     cxTouchItem item0 = points->items[0];
     cxTouchItem item1 = points->items[1];
     cxView body = cxScrollGetBody(this);
-    bool hited = cxViewHitTest(body, item0->position, &cp0) && cxViewHitTest(body, item1->position, &cp1);
-    if(hited && (item0->type == cxTouchTypeDown || item1->type == cxTouchTypeDown)){
+    cxHitInfo h0 = cxViewHitTest(body, item0->position);
+    cxHitInfo h1 = cxViewHitTest(body, item1->position);
+    if(h0.hited && h1.hited && (item0->type == cxTouchTypeDown || item1->type == cxTouchTypeDown)){
         //disable move
         this->isEnable = false;
         this->startDis = kmVec2DistanceBetween(&item0->position, &item1->position);
-        kmVec2MidPointBetween(&this->center, &cp0, &cp1);
+        kmVec2MidPointBetween(&this->center, &h0.position, &h1.position);
         return true;
     }
     if(item0->type == cxTouchTypeUp || item1->type == cxTouchTypeUp){
@@ -136,13 +135,12 @@ cxBool cxScrollTouch(cxAny pview,const cxTouchItems *points)
     }
     cxView body = cxScrollGetBody(this);
     cxTouchItem item = points->items[0];
-    cxVec2f cpos;
-    cxBool hited = cxViewHitTest(this, item->position, &cpos);
+    cxHitInfo hit = cxViewHitTest(this, item->position);
     if(item->type == cxTouchTypeDown){
-        this->isEnable = hited;
+        this->isEnable = hit.hited;
         cxViewStopAction(body, (cxUInt)body);
         cxScrollUpdateBox(this);
-        return hited;
+        return hit.hited;
     }
     if(!this->isEnable){
         return false;

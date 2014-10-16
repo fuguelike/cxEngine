@@ -32,6 +32,10 @@ typedef enum {
     cxViewAutoOutside           = 1 << 16
 }cxViewAutoResizeMask;
 
+typedef struct {
+    cxVec2f position;
+    cxBool hited;
+}cxHitInfo;
 
 typedef enum {
     cxViewTouchFlagsNone = 0,
@@ -242,7 +246,7 @@ void cxViewLayout(cxAny pview);
 
 void cxViewAutoResizing(cxAny pview);
 
-cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint);
+cxHitInfo cxViewHitTest(cxAny pview,cxVec2f wPoint);
 
 cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint);
 

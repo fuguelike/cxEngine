@@ -27,8 +27,8 @@ static cxBool FightMapTouch(cxAny pview,const cxTouchItems *points)
         return false;
     }
     cxTouchItem item = points->items[0];
-    cxVec2f cpos;
-    if(!cxViewHitTest(pview, item->position, &cpos)){
+    cxHitInfo hit = cxViewHitTest(pview, item->position);
+    if(!hit.hited){
         return false;
     }
     if(item->type == cxTouchTypeDown){
@@ -36,7 +36,7 @@ static cxBool FightMapTouch(cxAny pview,const cxTouchItems *points)
         return false;
     }
     if(item->type == cxTouchTypeUp && item->isTap){
-        cxVec2i idx = MapPosToIndex(this, cpos);
+        cxVec2i idx = MapPosToIndex(this, hit.position);
         cxAny item = MapItem(this, idx);
         if(item != NULL){
             return false;

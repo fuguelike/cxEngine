@@ -753,15 +753,14 @@ void cxViewLayout(cxAny pview)
     CX_EVENT_FIRE(this, onLayout);
 }
 
-cxBool cxViewHitTest(cxAny pview,cxVec2f wPoint,cxVec2f *vPoint)
+cxHitInfo cxViewHitTest(cxAny pview,cxVec2f wPoint)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxVec2f pos = cxWindowPointToViewPoint(this, wPoint);
     cxBox4f box = cxViewGetBox(this);
-    if(vPoint != NULL){
-        *vPoint = pos;
-    }
-    return cxBox4fContainPoint(box, pos);
+    cxHitInfo ret={0};
+    ret.position = cxWindowPointToViewPoint(this, wPoint);
+    ret.hited = cxBox4fContainPoint(box, ret.position);
+    return ret;
 }
 
 cxBool cxViewTouch(cxAny pview,cxTouchItems *points)

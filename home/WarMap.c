@@ -49,12 +49,12 @@ static void WarMapOnDirty(cxAny sender)
 {
     CX_ASSERT_THIS(sender, WarMap);
     //获取屏幕中心点对应的map坐标
-    cxVec2f cpos;
-    if(!cxViewHitTest(this, cxVec2fv(0, 0), &cpos)){
+    cxHitInfo hit = cxViewHitTest(this, cxVec2fv(0, 0));
+    if(!hit.hited){
         return;
     }
     //减小检测压力
-    cxVec2i cidx = WarMapUnitIndex(this, cpos);
+    cxVec2i cidx = WarMapUnitIndex(this, hit.position);
     if(cxVec2iEqu(cidx, this->centerIdx)){
         return;
     }
