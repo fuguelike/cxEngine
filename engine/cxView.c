@@ -784,12 +784,8 @@ cxBool cxViewTouch(cxAny pview,cxTouchItems *points)
         goto completed;
     }
     for(cxListElement *ele = tail;ele != NULL;ele = ele->prev){
-        if(cxViewTouch(ele->any,points)){
-            return true;
-        }
-        if(ele == head){
-            break;
-        }
+        if(cxViewTouch(ele->any,points))return true;
+        if(ele == head)break;
     }
 completed:
     return CX_METHOD_GET(false, this->Touch, this, points);
@@ -816,12 +812,8 @@ cxBool cxViewKey(cxAny pview,cxKey *key)
         goto completed;
     }
     for(cxListElement *ele = tail;ele != NULL;ele = ele->prev){
-        if(cxViewKey(ele->any, key)){
-            return true;
-        }
-        if(ele == head){
-            break;
-        }
+        if(cxViewKey(ele->any, key))return true;
+        if(ele == head)break;
     }
 completed:
     return CX_METHOD_GET(false, this->Key,this , key);

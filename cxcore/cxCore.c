@@ -261,10 +261,12 @@ void cxCoreInit()
 
 void cxCoreFree()
 {
+    CX_RETURN(groups == NULL);
     cxMessageDestroy();
     CX_RELEASE(groups);
     cxTypesFree();
     cxAllocatorFree();
+    groups = NULL;
 }
 
 

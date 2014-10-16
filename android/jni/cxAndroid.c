@@ -282,12 +282,11 @@ JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineLayout(JNIEnv * en
     cxEngineLayout(width, height);
 }
 
-JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineBegin(JNIEnv * env, jclass class)
+JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineStartup(JNIEnv * env, jclass class)
 {
     javaENV = env;
     javaClass = (*env)->NewGlobalRef(env,class);
-    cxGlobalInit();
-    cxEngineBegin();
+    cxEngineStartup();
 }
 
 

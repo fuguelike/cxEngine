@@ -182,7 +182,7 @@ void cxEngineSendJson(cxString json);
 void cxEngineRecvJson(cxString json);
 
 //初始化数据
-void cxEngineBegin();
+void cxEngineStartup();
 
 void cxEngineTerminate();
 

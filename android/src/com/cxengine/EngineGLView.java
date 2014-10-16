@@ -55,7 +55,7 @@ public class EngineGLView extends GLSurfaceView {
 		});
 	}
     public static native void cxEngineLayout(int width, int height);
-    public static native void cxEngineBegin();
+    public static native void cxEngineStartup();
     public static native void cxEngineDraw(float dt);
     public static native void cxEnginePause();
     public static native void cxEngineResume();
@@ -395,7 +395,7 @@ public class EngineGLView extends GLSurfaceView {
         	cxEngineLayout(width,height);
         }
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        	cxEngineBegin();
+        	cxEngineStartup();
         }
     }
 }

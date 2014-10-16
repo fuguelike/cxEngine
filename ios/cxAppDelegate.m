@@ -13,12 +13,13 @@
 
 @implementation cxAppDelegate
 
-static cxBool cxDisableDocumentBackup()
+static BOOL cxDisableDocumentBackup()
 {
-    cxString docPath = cxDocumentPath(NULL);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *docPath = [paths objectAtIndex:0];
     u_int8_t attrValue = 0;
-    cxConstChars path = cxStringBody(docPath);
-    cxConstChars name = "com.apple.MobileBackup";
+    const char *path = [docPath UTF8String];
+    const char *name = "com.apple.MobileBackup";
     if(getxattr(path, name, &attrValue, sizeof(attrValue), 0, 0) && attrValue == 1){
         return true;
     }

@@ -175,7 +175,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxHttp);
 }
 
-void cxEngineBegin()
+void cxEngineStartup()
 {
 #if !defined(NDEBUG)
     CX_LOGGER("cxEngine Version: %d,Run Mode:DEBUG",CX_ENGINE_VERSION);
@@ -184,14 +184,12 @@ void cxEngineBegin()
 #endif
     //free prev instance
     if(engineInstance != NULL){
-        cxEngineExit();
+        cxEngineDestroy();
     }
-    //make new engine
+    cxGlobalInit();
     engineInstance = CX_ALLOC(cxEngine);
     //registe all type
     cxEngineTypes();
-    //registe other type
-    cxEngineType(engineInstance);
     //set localized lang
     cxEngineSetLang(cxLocalizedLang());
     //init engine
@@ -208,6 +206,8 @@ void cxEngineBegin()
     engineInstance->iconv       = CX_ALLOC(cxIconv);
     engineInstance->player      = CX_ALLOC(cxPlayer);
     engineInstance->textures    = CX_ALLOC(cxTextureFactory);
+    //registe other type
+    cxEngineType(engineInstance);
     //use init engine
     cxEngineInit(engineInstance);
 }
@@ -417,6 +417,7 @@ void cxEngineDestroy()
     cxEngineFree(engineInstance);
     CX_RELEASE(engineInstance);
     engineInstance = NULL;
+    cxGlobalFree();
 }
 
 cxVec2f cxEngineTouchToWindow(cxVec2f pos)
@@ -454,9 +455,8 @@ cxBool cxEngineFireKey(cxKeyType type,cxInt code)
 static void cxEngineComputeItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
 {
     item->delta = cxVec2fSub(cpos, item->previous);
-    item->previous = cpos;
     //get move speed
-    cxDouble dt = now - item->startTime;
+    cxFloat dt = now - item->startTime;
     if(cxFloatEqu(dt, 0)){
         item->speed = cxVec2fv(0, 0);
     }else{
@@ -466,6 +466,7 @@ static void cxEngineComputeItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
     //get movement
     item->movement += cxVec2fLength(item->delta);
     item->isTap = dt < TAP_TIME && item->movement < TAP_MOVEMENT;
+    item->previous = cpos;
 }
 
 static void cxEngineInitItem(cxDouble now,cxTouchItem item,cxVec2f cpos)

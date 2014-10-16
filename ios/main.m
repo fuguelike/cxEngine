@@ -5,11 +5,5 @@
 
 int main(int argc, char * argv[])
 {
-    cxGlobalInit();
-    int r = 0;
-    @autoreleasepool {
-        r = UIApplicationMain(argc, argv, nil, NSStringFromClass([cxAppDelegate class]));
-    }
-    cxGlobalFree();
-    return r;
+    return UIApplicationMain(argc, argv, nil, NSStringFromClass([cxAppDelegate class]));;
 }

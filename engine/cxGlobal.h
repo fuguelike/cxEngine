@@ -9,6 +9,7 @@
 #ifndef cxEngine_cxGlobal_h
 #define cxEngine_cxGlobal_h
 
+#include <pthread.h>
 #include <cxcore/cxBase.h>
 
 CX_C_BEGIN

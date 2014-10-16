@@ -132,7 +132,9 @@ void cxJsonInit()
 
 void cxJsonFree()
 {
+    CX_RETURN(global == NULL);
     json_decref(global);
+    global = NULL;
 }
 
 static cxJson jsonToArray(json_t *v)
