@@ -50,7 +50,7 @@ static cxString cxIconvItemConvert(cxIconvItem this,const cxString string)
     cxChars inptr = (cxChars)cxStringBody(string);
     cxChars outptr = allocator->malloc(outsiz);
     cxChars buffer = outptr;
-    int ret = iconv(this->iconvptr, &inptr, (size_t *)&insiz, &outptr, (size_t *)&outsiz);
+    cxInt ret = (cxInt)iconv(this->iconvptr, &inptr, (size_t *)&insiz, &outptr, (size_t *)&outsiz);
     if(ret == 0){
         outlen = allocsize - outsiz;
         outptr[outlen] = '\0';

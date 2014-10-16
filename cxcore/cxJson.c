@@ -849,13 +849,13 @@ cxJson cxJsonArrayAt(cxJson json,cxInt idx)
 cxInt cxJsonObjectLength(cxJson json)
 {
     CX_ASSERT_THIS(json, cxJson);
-    return json_object_size(CX_JSON_PTR(this));
+    return (cxInt)json_object_size(CX_JSON_PTR(this));
 }
 
 cxInt cxJsonArrayLength(cxJson json)
 {
     CX_ASSERT_THIS(json, cxJson);
-    return json_array_size(CX_JSON_PTR(this));
+    return (cxInt)json_array_size(CX_JSON_PTR(this));
 }
 
 cxJson cxJsonAnyAt(cxJson json,cxInt idx)

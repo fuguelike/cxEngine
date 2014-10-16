@@ -41,7 +41,7 @@ static cxInt cxFileStreamRead(cxAny ps,cxAny buffer,cxInt size)
     if(!this->cxStream.canRead){
         return 0;
     }
-    return fread(buffer, 1, size, this->fd);
+    return (cxInt)fread(buffer, 1, size, this->fd);
 }
 
 static cxInt cxFileStreamWrite(cxAny ps,cxAny buffer,cxInt size)
@@ -50,7 +50,7 @@ static cxInt cxFileStreamWrite(cxAny ps,cxAny buffer,cxInt size)
     if(!this->cxStream.canWrite){
         return 0;
     }
-    return fwrite(buffer, 1, size, this->fd);
+    return (cxInt)fwrite(buffer, 1, size, this->fd);
 }
 
 static cxOff cxFileStreamPosition(cxAny ps)

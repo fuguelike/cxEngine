@@ -112,8 +112,7 @@ CX_OBJECT_INIT(WarMap, cxView)
 {
     CX_ADD(cxView, this, onUpdate, WarMapUpdate);
     CX_ADD(cxView, this, onDirty, WarMapOnDirty);
-    cxInt cells = global.warUnitNum.x * global.warUnitNum.y * 2;
-    this->tribes = cxSpatialAlloc(global.warUnitSize.w, cells, UnitIndexBB);
+    this->tribes = cxSpatialAlloc(UnitIndexBB);
     this->items = CX_ALLOC(cxHash);
     this->centerIdx = cxVec2iv(-1, -1);
     cxViewSetSize(this, global.warMapSize);

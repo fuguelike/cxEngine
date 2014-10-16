@@ -68,14 +68,14 @@ static void loadingFightSceneExit(cxAny sender)
 {
     CX_ASSERT_THIS(sender, cxLoading);
     
-    cxAny scene = NormalSceneCreate();//FightSceneCreate();
+    cxAny scene = FightSceneCreate();//NormalSceneCreate();
     cxWindowPushView(scene);
 }
 
 void cxEngineInit(cxEngine engine)
 {
     cxEngineSetDesSize(cxSize2fv(2048, 1536));
-    cxEngineSetIsShowBorder(true);
+    cxEngineSetIsShowBorder(false);
     //战斗用动画管理器
     cxGroupAppend(FIGHT_ACTION_GROUP, 1.0f);
 }

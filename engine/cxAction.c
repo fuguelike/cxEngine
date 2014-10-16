@@ -37,7 +37,7 @@ CX_SETTER_DEF(cxAction, curve)
 }
 CX_SETTER_DEF(cxAction, actionid)
 {
-    cxUInt actionId = cxJsonToLong(value, this->ActionId);
+    cxUInt actionId = (cxUInt)cxJsonToLong(value, this->ActionId);
     cxActionSetActionId(this, actionId);
 }
 CX_SETTER_DEF(cxAction, group)

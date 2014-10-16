@@ -50,7 +50,7 @@ void cxAnyArrayAppends(cxAnyArray arr,cxAnyArray dst)
 cxAnyArray cxAnyArrayClone(cxAnyArray arr)
 {
     CX_ASSERT_THIS(arr, cxAnyArray);
-    cxAnyArray ret = cxAnyArrayCreateImp(this->icd.sz);
+    cxAnyArray ret = cxAnyArrayCreateImp((cxInt)this->icd.sz);
     cxInt num = cxAnyArrayLength(this);
     if(num > 0){
         utarray_resize(ret->array, num);

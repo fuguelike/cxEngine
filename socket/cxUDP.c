@@ -47,7 +47,7 @@ cxInt cxUDPWriteString(cxAny pudp,const cxString data)
 cxInt cxUDPWrite(cxAny pudp,cxConstChars data,cxInt len)
 {
     CX_ASSERT_THIS(pudp, cxUDP);
-    return sendto(this->socket, data, len, 0, (struct sockaddr *)&this->udpTo, this->toAddrLen);
+    return (cxInt)sendto(this->socket, data, len, 0, (struct sockaddr *)&this->udpTo, this->toAddrLen);
 }
 
 static void UDPRead(evutil_socket_t sockt, short which, void *arg)
@@ -56,7 +56,7 @@ static void UDPRead(evutil_socket_t sockt, short which, void *arg)
     if(!(which & EV_READ)){
         return;
     }
-    this->bytes = recvfrom(this->socket, this->buffer, CX_UDP_BUFFER_SIZE, 0, (struct sockaddr *)&this->udpFrom, &this->fromAddrLen);
+    this->bytes = (cxInt)recvfrom(this->socket, this->buffer, CX_UDP_BUFFER_SIZE, 0, (struct sockaddr *)&this->udpFrom, &this->fromAddrLen);
     if(this->bytes <= 0) {
         return;
     }

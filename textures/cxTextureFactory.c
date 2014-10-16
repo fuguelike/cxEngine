@@ -45,11 +45,11 @@ static cxHash cxTextureFactoryGroup(cxConstChars file,cxChars files)
     CX_ASSERT(file != NULL && files != NULL, "args error");
     cxChar group[PATH_MAX] = {0};
     cxTextureFactory this = cxTextureFactoryInstance();
-    cxInt len = strlen(file);
+    cxInt len = (cxInt)strlen(file);
     if(file[0] == '@'){
         cxConstChars gs = strrchr(file, ':');
         CX_ASSERT(gs != NULL, "@ prefix must has : char");
-        int glen = strlen(gs);
+        int glen = (cxInt)strlen(gs);
         memcpy(group, file + 1, len - glen - 1);
         memcpy(files, gs + 1, glen - 1);
     }else{

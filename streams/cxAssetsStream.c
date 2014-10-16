@@ -39,7 +39,7 @@ static cxInt cxAssetsStreamRead(cxAny ps,cxAny buffer,cxInt size)
     if(!this->cxStream.canRead){
         return 0;
     }
-    return fread(buffer, 1, size, this->asset);
+    return (cxInt)fread(buffer, 1, size, this->asset);
 }
 
 static cxInt cxAssetsStreamWrite(cxAny ps,cxAny buffer,cxInt size)

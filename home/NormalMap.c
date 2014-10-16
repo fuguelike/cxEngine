@@ -46,12 +46,13 @@ static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
                 //node 被选中
                 CX_LOGGER("select node %p",this->cnode);
             }
-            return false;
         }
+        return this->hasMove;
     }
     if(item->type == cxTouchTypeDown){
         this->startPos = MapPosToFloat(this, hit.position);
         this->dnode = MapHitNode(this, index, NodeTypeAll);
+        this->hasMove = false;
         return false;
     }
     if(item->type == cxTouchTypeMove && this->dnode != NULL && this->dnode == this->cnode){
@@ -76,6 +77,7 @@ static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
             cxVec2i newIdx = NodeIndexToInitIndex(this->cnode,nidx);
             cxBool isValid = MapIsFillNode(this, newIdx, this->cnode);
             cxViewSetColor(this->cnode, isValid?cxGREEN:cxRED);
+            this->hasMove = true;
         }
         return true;
     }

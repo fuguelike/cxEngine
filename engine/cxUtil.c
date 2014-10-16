@@ -169,7 +169,7 @@ cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
 cxUInt cxBinaryToUInt(cxConstChars bs)
 {
     CX_ASSERT(bs != NULL, "args error");
-    cxInt len = strlen(bs);
+    cxInt len = (cxInt)strlen(bs);
     cxUInt ret = 0;
     for(cxInt i=0; i < len; i++){
         CX_ASSERT(bs[i] == '0' || bs[i] == '1', "str error");
@@ -184,7 +184,7 @@ cxUInt cxBinaryToUInt(cxConstChars bs)
 cxUInt cxHexToUInt(cxConstChars bs)
 {
     CX_ASSERT(bs != NULL, "args error");
-    cxInt len = strlen(bs);
+    cxInt len = (cxInt)strlen(bs);
     cxUInt ret = 0;
     for(cxInt i=0; i < len; i++){
         cxChar v = tolower(bs[i]);
@@ -221,7 +221,7 @@ cxString cxCompressed(cxString data)
     uLongf size = compressBound(datasiz);
     char *cv = allocator->malloc(size);
     if(compress((Bytef *)cv, &size, (Bytef *)cxStringBody(data), datasiz) == Z_OK){
-        return cxStringAttachMem(cv, size);
+        return cxStringAttachMem(cv, (cxInt)size);
     }
     allocator->free(cv);
     return NULL;
@@ -240,7 +240,7 @@ cxString cxDecompress(cxString data)
         ret = uncompress((Bytef *)cv, &size, (Bytef *)cxStringBody(data), (uLongf)datasiz);
     }
     if(ret == Z_OK){
-        return cxStringAttachMem(cv, size);
+        return cxStringAttachMem(cv, (cxInt)size);
     }
     allocator->free(cv);
     return NULL;

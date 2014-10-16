@@ -32,9 +32,9 @@ CX_OBJECT_DEF(cxSpatial, cxObject)
     CX_METHOD_DEF(cpBB, IndexBB,cxAny);
 CX_OBJECT_END(cxSpatial, cxObject)
 
-cxSpatial cxSpatialAlloc(cxFloat dim,cxInt cells, cpBB (*func)(cxAny));
+cxSpatial cxSpatialAlloc(cpBB (*func)(cxAny));
 
-cxSpatial cxSpatialCreate(cxFloat dim,cxInt cells,cpBB (*func)(cxAny));
+cxSpatial cxSpatialCreate(cpBB (*func)(cxAny));
 
 void cxSpatialEach(cxAny ps,cxSpatialEachFunc func,cxAny data);
 

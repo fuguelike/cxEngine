@@ -22,14 +22,14 @@ cxPath cxPathParseKeyValue(cxPath this)
 {
     CX_RETURN(this->count == 1, this);
     cxConstChars url = this->key;
-    cxInt len = strlen(url);
+    cxInt len = (cxInt)strlen(url);
     cxChars sq = strrchr(url, '=');
     if(sq == NULL){
         return this;
     }
     cxInt kl = len - (cxInt)strlen(sq);
     this->key[kl]='\0';
-    cxInt vl = strlen(sq + 1);
+    cxInt vl = (cxInt)strlen(sq + 1);
     memcpy(this->value, sq + 1, vl);
     this->value[vl]='\0';
     this->count = 3;
@@ -45,13 +45,13 @@ cxPath cxPathParse(cxConstChars url)
     }
     CX_ASSERT(strlen(url) < CX_HASH_MAX_KEY, "url too long");
     this->count = 0;
-    cxInt len = strlen(url);
+    cxInt len = (cxInt)strlen(url);
     cxChars sq = strrchr(url, '?');
     if(sq != NULL){
         cxInt cl = len - (cxInt)strlen(sq);
         memcpy(this->path, url, cl);
         this->path[cl]='\0';
-        cxInt kl = strlen(sq);
+        cxInt kl = (cxInt)strlen(sq);
         memcpy(this->key, sq + 1, kl);
         this->key[kl]='\0';
         this->count = 2;

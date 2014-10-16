@@ -165,7 +165,7 @@ cxBool cxWriteFile(cxString file,cxString data)
 {
     FILE *fd = fopen(cxStringBody(file), "wb");
     CX_RETURN(fd == NULL, -1);
-    cxInt bytes = fwrite(cxStringBody(data), cxStringLength(data), 1, fd);
+    cxInt bytes = (cxInt)fwrite(cxStringBody(data), cxStringLength(data), 1, fd);
     fclose(fd);
     return bytes > 0;
 }

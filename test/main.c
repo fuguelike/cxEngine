@@ -17,16 +17,16 @@ void cxEngineInit(cxEngine engine)
     cxEngineSetDesSize(cxSize2fv(2048, 1536));
 }
 
-static void exitact(cxAny sender)
-{
-    cxViewRemove(cxActionGetView(sender));
-}
+//static void exitact(cxAny sender)
+//{
+//    cxViewRemove(cxActionGetView(sender));
+//}
 
 void cxEngineMain(cxEngine engine)
 {
-    cxLoader loader = cxLoaderCreate("cxSprites.json");
-    cxAction a = cxLoaderGet(loader, "animate");
-    CX_ADD(cxAction, a, onExit, exitact);
+    cxLoader loader = cxLoaderCreate("cxLabelTTF.json");
+//    cxAction a = cxLoaderGet(loader, "animate");
+//    CX_ADD(cxAction, a, onExit, exitact);
     cxWindowPushView(loader->Root);
 }
 

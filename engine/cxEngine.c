@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <spine/extension.h>
 #include "cxEngine.h"
 #include "cxValue.h"
 
@@ -39,7 +38,6 @@
 #include <views/cxLabelBMP.h>
 #include <views/cxPolygon.h>
 #include <views/cxAlert.h>
-#include <views/cxSpine.h>
 #include <views/cxSprites.h>
 
 #include <actions/cxParticle.h>
@@ -58,7 +56,6 @@
 #include <actions/cxSpline.h>
 #include <actions/cxTimeLine.h>
 #include <actions/cxBezier.h>
-#include <actions/cxSkeleton.h>
 
 #include <socket/cxUDP.h>
 #include <socket/cxHttp.h>
@@ -146,7 +143,6 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxLabelTTF);
     CX_TYPE_REG(cxLabelBMP);
     CX_TYPE_REG(cxAlert);
-    CX_TYPE_REG(cxSpine);
     CX_TYPE_REG(cxSprites);
     
     //register actions
@@ -167,7 +163,6 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxTint);
     CX_TYPE_REG(cxTimeLine);
     CX_TYPE_REG(cxBezier);
-    CX_TYPE_REG(cxSkeleton);
     //scoket
     CX_TYPE_REG(cxUDP);
     CX_TYPE_REG(cxEventBase);
@@ -195,10 +190,6 @@ void cxEngineStartup()
     //init engine
     //set cxjsonReader
     cxJsonSetReader(cxEngineJsonReader);
-    //set spine malloc
-    _setMalloc(allocator->malloc);
-    _setDebugMalloc(NULL);
-    _setFree(allocator->free);
     //init model
     engineInstance->Window      = CX_ALLOC(cxWindow);
     engineInstance->curve       = CX_ALLOC(cxCurve);

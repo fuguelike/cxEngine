@@ -273,17 +273,15 @@ CX_OBJECT_INIT(Map, cxAtlas)
     CX_SET(cxAStar, this->astar, IsAppend, MapSearchIsAppend);
     CX_SET(cxAStar, this->astar, EarlyExit, MapSearchEarlyExit);
     
-    //格子大小
-    cxInt cells = global.unitNum.x * global.unitNum.y;
     //类型搜索索引
-    this->items = cxSpatialAlloc(1.0f, cells, NodeIndexBB);
+    this->items = cxSpatialAlloc(NodeIndexBB);
     //node层
     this->nLayer = cxViewAppendType(this,cxView);
     //效果层
     this->aLayer = cxViewAppendType(this,cxView);
     
     //创建格子属性数组
-    this->attrs = allocator->malloc(cells * sizeof(MapUnitAttr));
+    this->attrs = allocator->malloc(global.unitNum.x * global.unitNum.y * sizeof(MapUnitAttr));
     //所有节点存储
     this->nodes = CX_ALLOC(cxHash);
     //路径缓冲

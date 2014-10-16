@@ -15,7 +15,7 @@ LOCAL_SRC_FILES := ../../test/main.c
 
 LOCAL_WHOLE_STATIC_LIBRARIES += cxEngine
 
-LOCAL_STATIC_LIBRARIES := pcre event jpeg png charset iconv jansson
+LOCAL_STATIC_LIBRARIES := pcre event jpeg png charset iconv
 
 LOCAL_LDLIBS := -llog -lGLESv2 -lz -landroid
 

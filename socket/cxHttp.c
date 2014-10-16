@@ -15,7 +15,7 @@ cxString cxHttpUriEncode(cxString uri)
     CX_RETURN(uri == NULL, NULL);
     cxChars data = evhttp_uriencode(cxStringBody(uri), cxStringLength(uri), 0);
     CX_RETURN(data == NULL, NULL);
-    return cxStringAttachMem(data, strlen(data));
+    return cxStringAttachMem(data, (cxInt)strlen(data));
 }
 
 cxString cxHttpUriDecode(cxString uri)
@@ -43,9 +43,9 @@ static void cxHttpReadData(cxHttp this)
     }
     if(len > this->psize){
         this->pdata = allocator->realloc(this->pdata,len);
-        this->psize = len;
+        this->psize = (cxInt)len;
     }
-    cxInt bytes = evbuffer_copyout(this->request->input_buffer, this->pdata, len);
+    cxInt bytes = (cxInt)evbuffer_copyout(this->request->input_buffer, this->pdata, len);
     if(bytes > 0){
         cxStringAppend(this->Data, this->pdata, bytes);
     }

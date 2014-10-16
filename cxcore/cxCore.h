@@ -170,7 +170,7 @@ typedef char *          cxChars;
 
 #define CX_INLINE                       static inline
 
-//#define NDEBUG 1
+#define NDEBUG 1
 
 #if !defined(NDEBUG)
 

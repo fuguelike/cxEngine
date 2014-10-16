@@ -15,7 +15,6 @@
 		8321071219CC746900B1AA1E /* candy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8321071019CC746900B1AA1E /* candy.json */; };
 		8321071319CC746900B1AA1E /* candy.png in Resources */ = {isa = PBXBuildFile; fileRef = 8321071119CC746900B1AA1E /* candy.png */; };
 		83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6018D9C5D00093FF54 /* libevent.a */; };
-		83314F6C18D9C5D00093FF54 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6318D9C5D00093FF54 /* libjansson.a */; };
 		83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6418D9C5D00093FF54 /* libjpeg.a */; };
 		83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6618D9C5D00093FF54 /* libpcre.a */; };
 		83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6718D9C5D00093FF54 /* libpng.a */; };
@@ -33,6 +32,7 @@
 		8344F0B018D3F4960003E410 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0AF18D3F4960003E410 /* CoreGraphics.framework */; };
 		8344F0B218D3F4A50003E410 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B118D3F4A50003E410 /* OpenAL.framework */; };
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
+		834ABCBE19EFABD900F7EE91 /* libcxEngineStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 834ABCBB19EFABB300F7EE91 /* libcxEngineStatic.a */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
 		835D3B2D19AF21680004155D /* texture.png in Resources */ = {isa = PBXBuildFile; fileRef = 835D3B2C19AF21680004155D /* texture.png */; };
 		835DB19919C44C650037DA5B /* spineboy.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 835DB19519C44C650037DA5B /* spineboy.atlas */; };
@@ -45,7 +45,6 @@
 		836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 836165D518F67BC400FFF173 /* Default-568h@2x.png */; };
 		836D8DA7191B8C02000F0230 /* cxScroll.json in Resources */ = {isa = PBXBuildFile; fileRef = 836D8DA6191B8C02000F0230 /* cxScroll.json */; };
 		83732B4219B9BF740049D09A /* cxAnimate.json in Resources */ = {isa = PBXBuildFile; fileRef = 83732B4119B9BF740049D09A /* cxAnimate.json */; };
-		83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */; };
 		839722AE19161746006D0F89 /* font.json in Resources */ = {isa = PBXBuildFile; fileRef = 839722AC19161746006D0F89 /* font.json */; };
 		839722AF19161746006D0F89 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 839722AD19161746006D0F89 /* font.png */; };
 		839E42D119E18F5000A3498A /* cxSprites.json in Resources */ = {isa = PBXBuildFile; fileRef = 839E42D019E18F5000A3498A /* cxSprites.json */; };
@@ -59,12 +58,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		83771AC018D9C6F900CFC7F6 /* PBXContainerItemProxy */ = {
+		834ABCBA19EFABB300F7EE91 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */;
+			containerPortal = 834ABCB519EFABB300F7EE91 /* cxEngineStatic.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 8341C34B18227C310045A66F;
-			remoteInfo = cxEngineIOS;
+			remoteGlobalIDString = 831E632119EFA97A00FCFD85;
+			remoteInfo = cxEngineStatic;
+		};
+		834ABCBC19EFABB300F7EE91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 834ABCB519EFABB300F7EE91 /* cxEngineStatic.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 831E632C19EFA97A00FCFD85;
+			remoteInfo = cxEngineStaticTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -96,6 +102,7 @@
 		8344F0AF18D3F4960003E410 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		8344F0B118D3F4A50003E410 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8344F0B318D3F4A90003E410 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		834ABCB519EFABB300F7EE91 /* cxEngineStatic.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineStatic.xcodeproj; path = ../cxEngineStatic.xcodeproj; sourceTree = "<group>"; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		835D3B2C19AF21680004155D /* texture.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = texture.png; path = res/texture.png; sourceTree = SOURCE_ROOT; };
 		835DB19519C44C650037DA5B /* spineboy.atlas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = spineboy.atlas; path = res/spineboy.atlas; sourceTree = SOURCE_ROOT; };
@@ -108,7 +115,6 @@
 		836165D518F67BC400FFF173 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		836D8DA6191B8C02000F0230 /* cxScroll.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxScroll.json; path = res/cxScroll.json; sourceTree = SOURCE_ROOT; };
 		83732B4119B9BF740049D09A /* cxAnimate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxAnimate.json; path = res/cxAnimate.json; sourceTree = SOURCE_ROOT; };
-		83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineIOS.xcodeproj; path = ../cxEngineIOS.xcodeproj; sourceTree = "<group>"; };
 		839722AC19161746006D0F89 /* font.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = font.json; path = res/font.json; sourceTree = SOURCE_ROOT; };
 		839722AD19161746006D0F89 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = res/font.png; sourceTree = SOURCE_ROOT; };
 		839E42D019E18F5000A3498A /* cxSprites.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxSprites.json; path = res/cxSprites.json; sourceTree = SOURCE_ROOT; };
@@ -126,9 +132,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83771AC218D9C70200CFC7F6 /* libcxEngineIOS.a in Frameworks */,
+				834ABCBE19EFABD900F7EE91 /* libcxEngineStatic.a in Frameworks */,
 				83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */,
-				83314F6C18D9C5D00093FF54 /* libjansson.a in Frameworks */,
 				83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */,
 				83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */,
 				83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */,
@@ -148,10 +153,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		83771ABD18D9C6F900CFC7F6 /* Products */ = {
+		834ABCB619EFABB300F7EE91 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */,
+				834ABCBB19EFABB300F7EE91 /* libcxEngineStatic.a */,
+				834ABCBD19EFABB300F7EE91 /* cxEngineStaticTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -159,7 +165,7 @@
 		839E7A3D17F1BC7600B0F5EC = {
 			isa = PBXGroup;
 			children = (
-				83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */,
+				834ABCB519EFABB300F7EE91 /* cxEngineStatic.xcodeproj */,
 				839E7A5317F1BC7600B0F5EC /* test */,
 				839E7A4817F1BC7600B0F5EC /* Frameworks */,
 				839E7A5417F1BC7600B0F5EC /* Supporting Files */,
@@ -286,8 +292,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 83771ABD18D9C6F900CFC7F6 /* Products */;
-					ProjectRef = 83771ABC18D9C6F900CFC7F6 /* cxEngineIOS.xcodeproj */;
+					ProductGroup = 834ABCB619EFABB300F7EE91 /* Products */;
+					ProjectRef = 834ABCB519EFABB300F7EE91 /* cxEngineStatic.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -298,11 +304,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		83771AC118D9C6F900CFC7F6 /* libcxEngineIOS.a */ = {
+		834ABCBB19EFABB300F7EE91 /* libcxEngineStatic.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = libcxEngineIOS.a;
-			remoteRef = 83771AC018D9C6F900CFC7F6 /* PBXContainerItemProxy */;
+			path = libcxEngineStatic.a;
+			remoteRef = 834ABCBA19EFABB300F7EE91 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		834ABCBD19EFABB300F7EE91 /* cxEngineStaticTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = cxEngineStaticTests.xctest;
+			remoteRef = 834ABCBC19EFABB300F7EE91 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -455,11 +468,11 @@
 				INFOPLIST_FILE = "test-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../libs/ios/lib";
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = test;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -487,10 +500,11 @@
 				INFOPLIST_FILE = "test-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../libs/ios/lib";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = test;
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

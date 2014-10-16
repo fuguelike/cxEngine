@@ -66,7 +66,7 @@ static int AStarEarlyExit(size_t visitedCount, void *visitingNode, void *goalNod
 {
     CX_ASSERT_THIS(context, cxAStar);
     cxAnyArrayAppend(this->visits, visitingNode);
-    return CX_METHOD_GET(0, this->EarlyExit, this, visitedCount, visitingNode, goalNode);
+    return CX_METHOD_GET(0, this->EarlyExit, this, (cxInt)visitedCount, visitingNode, goalNode);
 }
 
 static int AStarNodeComparator(void *node1, void *node2, void *context)
