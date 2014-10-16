@@ -314,7 +314,6 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->FrameDelta = 1.0f/60.0f;
     this->IsShowBorder = true;
     this->isTouch = true;
-    this->isGesture = true;
     this->Scale = cxVec2fv(1.0f, 1.0f);
     this->files = CX_ALLOC(cxHash);
     this->items = CX_ALLOC(cxHash);

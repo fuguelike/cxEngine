@@ -34,7 +34,6 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxWindow Window);      //main window
     cxBool isInit;
     cxBool isTouch;
-    cxBool isGesture;
     cxBool isPause;
     cxHash files;
     cxHash assets;
@@ -47,7 +46,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxTouchItems points;    //all touch points
     cxKey key;
     cxHash groups;          //action groups
-
+    //
     cxCurve curve;              //cxCurve instance
     cxOpenGL opengl;            //cxOpenGL instance
     cxIconv iconv;              //cxIconv instance
