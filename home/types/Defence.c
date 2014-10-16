@@ -72,9 +72,9 @@ CX_OBJECT_INIT(Defence, Node)
     cxSpriteSetTextureURL(this, "bg1.png");//"bullet.json?shell.png");
     cxViewSetColor(this, cxRED);
     
-//    Range range = CX_CREATE(Range);
-//    RangeSetRange(range, NodeGetRange(this));
-//    cxViewAppend(this, range);
+    Range range = CX_CREATE(Range);
+    RangeSetRange(range, NodeGetRange(this));
+    cxViewAppend(this, range);
     
     CX_SET(Node, this, PathRule, DefencePathRule);
     CX_SET(Node, this, FindRule, DefenceFindRule);
