@@ -285,6 +285,9 @@ JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineLayout(JNIEnv * en
 JNIEXPORT void JNICALL Java_com_cxengine_EngineGLView_cxEngineStartup(JNIEnv * env, jclass class)
 {
     javaENV = env;
+    if(javaClass != NULL){
+        (*env)->DeleteGlobalRef(env,javaClass);
+    }
     javaClass = (*env)->NewGlobalRef(env,class);
     cxEngineStartup();
 }

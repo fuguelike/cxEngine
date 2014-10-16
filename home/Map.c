@@ -678,10 +678,10 @@ cxBool MapIsFillNode(cxAny pmap,cxVec2i idx,cxAny node)
         return false;
     }
     cxSize2i size = NodeGetSize(node);
-    if(idx.x < 0 || idx.y < 0){
+    if(idx.x < 1 || idx.y < 1){
         return false;
     }
-    if((idx.x + size.w > global.unitNum.x) || (idx.y + size.h) > global.unitNum.y){
+    if((idx.x + size.w > global.unitNum.x - 1) || (idx.y + size.h) > global.unitNum.y - 1){
         return false;
     }
     for(cxInt x = idx.x; x < idx.x + size.w; x++)
