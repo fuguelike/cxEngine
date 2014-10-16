@@ -41,7 +41,7 @@ void GlobalInit(cxEngine engine)
     global.angle = asinf(w2 / global.sideLen);
     
     global.warUnitNum = cxVec2iv(32, 24);
-    global.warUnitSize = cxSize2fv(256, 256);
+    global.warUnitSize = cxSize2fv(512, 512);
     global.warMapSize.w = global.warUnitSize.w * global.warUnitNum.x;
     global.warMapSize.h = global.warUnitSize.h * global.warUnitNum.y;
     

@@ -213,7 +213,7 @@ cxAny MapHitNode(cxAny pmap,cxVec2f index,NodeCombined type)
 
 static void MapDraw(cxAny pmap)
 {
-    CX_ASSERT_THIS(pmap, Map);
+//    CX_ASSERT_THIS(pmap, Map);
 //    {
 //        this->a = cxVec2fv(0, -1024);
 //        this->b = cxVec2fv(0, 1024);

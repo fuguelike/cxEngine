@@ -55,7 +55,7 @@ static cxLabelTTF progress = NULL;
 
 static void loadingFightSceneStart(cxAny sender)
 {
-    CX_ASSERT_THIS(sender, cxLoading);
+//    CX_ASSERT_THIS(sender, cxLoading);
 }
 
 static void loadingFightSceneStep(cxAny sender)
@@ -66,7 +66,7 @@ static void loadingFightSceneStep(cxAny sender)
 
 static void loadingFightSceneExit(cxAny sender)
 {
-    CX_ASSERT_THIS(sender, cxLoading);
+//    CX_ASSERT_THIS(sender, cxLoading);
     
     cxAny scene = FightSceneCreate();//NormalSceneCreate();
     cxWindowPushView(scene);

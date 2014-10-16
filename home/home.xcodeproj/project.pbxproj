@@ -282,11 +282,6 @@
 				CLASSPREFIX = cx;
 				LastUpgradeCheck = 0600;
 				ORGANIZATIONNAME = xuhua;
-				TargetAttributes = {
-					839E7A4517F1BC7600B0F5EC = {
-						DevelopmentTeam = TJHL6UAL86;
-					};
-				};
 			};
 			buildConfigurationList = 839E7A4117F1BC7600B0F5EC /* Build configuration list for PBXProject "home" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -460,6 +455,7 @@
 					"DEBUG=1",
 					"CX_TARGET_IOS=1",
 				);
+				GCC_WARN_UNUSED_LABEL = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(SRCROOT)/../",
@@ -483,7 +479,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Chengdu Think-Smart Network Technology Inc. (TJHL6UAL86)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Hua Luo (4AZ9G639XA)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Chengdu Think-Smart Network Technology Inc. (TJHL6UAL86)";
 				COMPRESS_PNG_FILES = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -492,6 +488,7 @@
 					"NDEBUG=1",
 					"CX_TARGET_IOS=1",
 				);
+				GCC_WARN_UNUSED_LABEL = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(SRCROOT)/../",

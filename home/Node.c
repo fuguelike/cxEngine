@@ -31,6 +31,7 @@ static void NodeOnDirty(cxAny pview)
 void NodeSetSearchOrder(cxAny pview,NodeType type,NodeSubType subType)
 {
     CX_ASSERT_THIS(pview, Node);
+    CX_ASSERT(this->orders.number < MAX_ORDERS, "order too many");
     NodeCombined *ptype = &this->orders.types[this->orders.number++];
     ptype->mainType = type;
     ptype->subType = subType;
@@ -295,23 +296,23 @@ void NodeMoveToPosition(cxAny pview,cxAnyArray points)
 void NodeMovingToTarget(cxAny pview,cxAny target, cxAnyArray points)
 {
     CX_ASSERT_THIS(pview, Node);
-    Map map = NodeGetMap(this);
+//    Map map = NodeGetMap(this);
 //    Test show point position
-    CX_VIEW_FOREACH_SUBVIEWS(map->aLayer, ele){
-        if(cxViewGetTag(ele->any) == 1001){
-            cxViewRemove(ele->any);
-        }
-    }
-    CX_ASTAR_POINTS_FOREACH(points, idx){
-        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
-        cxVec2f pos = MapIndexToPos(map, p);
-        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
-        cxViewSetColor(sp, cxWHITE);
-        cxViewSetPosition(sp, pos);
-        cxViewSetSize(sp, cxSize2fv(8, 8));
-        cxViewSetTag(sp, 1001);
-        cxViewAppend(map->aLayer, sp);
-    }
+//    CX_VIEW_FOREACH_SUBVIEWS(map->aLayer, ele){
+//        if(cxViewGetTag(ele->any) == 1001){
+//            cxViewRemove(ele->any);
+//        }
+//    }
+//    CX_ASTAR_POINTS_FOREACH(points, idx){
+//        cxVec2f p = cxVec2fv(idx->x + 0.5f, idx->y + 0.5f);
+//        cxVec2f pos = MapIndexToPos(map, p);
+//        cxSprite sp = cxSpriteCreateWithURL("bullet.json?shell.png");
+//        cxViewSetColor(sp, cxWHITE);
+//        cxViewSetPosition(sp, pos);
+//        cxViewSetSize(sp, cxSize2fv(8, 8));
+//        cxViewSetTag(sp, 1001);
+//        cxViewAppend(map->aLayer, sp);
+//    }
     //使用点集合移动this,至少有两个点
     CX_ASSERT(cxAnyArrayLength(points) > 1, "points shound > 1");
     Move move = MoveCreate(this, points);

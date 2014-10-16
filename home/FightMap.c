@@ -85,7 +85,7 @@ static void mapSubType(cxAny dst,cxAny src)
     if(this->tag == 5){
         
         for(cxInt x = 0; x < MAP_COL; x++){
-            for (cxInt y = 0; y < MAP_ROW; y ++) {
+            for (cxInt y = 0; y < MAP_ROW/2; y ++) {
                 if(!((x % 3) == 0)){
                     continue;
                 }

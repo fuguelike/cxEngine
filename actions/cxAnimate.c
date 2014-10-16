@@ -107,7 +107,6 @@ static cxAnimateItem cxAnimateItemGet(cxAnimate this,cxArray items, cxAny any, c
 static void cxAnimateInit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxAnimate);
-    CX_ASSERT_VALUE(cxActionGetView(this), cxSprite, sprite);
     this->index = 0;
     cxFloat time = cxActionGetTime(this);
     cxArray items = cxAnimateGetGroup(this,this->name);

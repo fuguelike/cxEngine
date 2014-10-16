@@ -94,12 +94,12 @@ CX_INLINE void NodeSetState(cxAny pthis,const NodeState state)
     this->State = state;
     CX_EVENT_FIRE(this, onState);
 }
-
+//设置获取nodeId
 CX_FIELD_GET(Node, cxString, Id);
-CX_INLINE void NodeSetId(cxAny pthis,const cxString v)
+CX_INLINE void NodeSetId(cxAny pthis,const cxString id)
 {
     CX_ASSERT_THIS(pthis, Node);
-    CX_RETAIN_SWAP(this->Id, v);
+    CX_RETAIN_SWAP(this->Id, id);
 }
 
 CX_FIELD_IMP(Node, cxBool, IsStatic);
