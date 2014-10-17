@@ -54,7 +54,7 @@ CX_SETTER_DEF(cxLabelTTF, align)
 CX_SETTER_DEF(cxLabelTTF, font)
 {
     cxString font = cxJsonString(value, "name");
-    cxFloat size = cxJsonDouble(value, "size", this->attr.size);
+    cxFloat size = cxJsonFloat(value, "size", this->attr.size);
     cxColor4f color = cxJsonColor4f(value, "color", this->attr.color);
     cxLabelTTFSetFont(this, font, color, size);
 }
@@ -69,13 +69,13 @@ CX_SETTER_DEF(cxLabelTTF, shadow)
 {
     cxColor4f color = cxJsonColor4f(value, "color", this->attr.shadowColor);
     cxSize2f offset = cxJsonSize2f(value, "offset", this->attr.shadowOffset);
-    cxFloat radius = cxJsonDouble(value, "radius", this->attr.shadowRadius);
+    cxFloat radius = cxJsonFloat(value, "radius", this->attr.shadowRadius);
     cxLabelTTFSetShadow(this, color, radius, offset);
 }
 CX_SETTER_DEF(cxLabelTTF, stroke)
 {
     cxColor4f color = cxJsonColor4f(value, "color", this->attr.strokeColor);
-    cxFloat width = cxJsonDouble(value, "width", this->attr.strokeWidth);
+    cxFloat width = cxJsonFloat(value, "width", this->attr.strokeWidth);
     cxLabelTTFSetStroke(this, color, width);
 }
 

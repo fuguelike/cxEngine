@@ -144,6 +144,8 @@ cxString cxJsonString(cxJson json,cxConstChars key);
 
 cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble ev);
 
+cxFloat cxJsonFloat(cxJson json,cxConstChars key,cxFloat dv);
+
 cxLong cxJsonLong(cxJson json,cxConstChars key,cxLong dv);
 
 cxBool cxJsonBool(cxJson json,cxConstChars key,cxBool dv);

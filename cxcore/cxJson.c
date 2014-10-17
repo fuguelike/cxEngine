@@ -907,6 +907,11 @@ cxString cxJsonString(cxJson json,cxConstChars key)
     return jsonToString(v);
 }
 
+cxFloat cxJsonFloat(cxJson json,cxConstChars key,cxFloat dv)
+{
+    return cxJsonDouble(json, key, dv);
+}
+
 cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble dv)
 {
     CX_ASSERT_THIS(json, cxJson);
