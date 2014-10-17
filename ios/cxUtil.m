@@ -58,37 +58,32 @@ static CGSize cxCalculateStringSize(NSString *str, id font, CGSize *constrainSiz
 #define ALIGN_CENTER 3
 #define ALIGN_BOTTOM 2
 
-cxString cxCreateTXTTextureData(cxConstChars txt,
-                                cxConstChars fontName,cxFloat size,
-                                cxTextAlign align,
-                                cxInt cw,cxInt ch,
-                                cxColor4f color,
-                                cxColor4f shadowColor,cxFloat shadowRadius,cxSize2f shadowOffset,
-                                cxColor4f strokeColor,cxFloat strokeWidth)
+cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxTextAttr *attr)
 {
     CX_RETURN(txt == NULL, NULL);
     NSString *str = [NSString stringWithUTF8String:txt];
     NSString *fntName = nil;
     CGSize dim, constrainSize;
-    constrainSize.width = cw;
-    constrainSize.height = ch;
+    constrainSize.width = attr->viewSize.w;
+    constrainSize.height = attr->viewSize.h;
     if(fontName != NULL){
         fntName = [NSString stringWithUTF8String:fontName];
         fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
     }
     UIFont *font = nil;
     if(fntName != nil){
-        font = [UIFont systemFontOfSize:size];
+        font = [UIFont systemFontOfSize:attr->size];
     }else{
-        font = [UIFont fontWithName:fntName size:size];
+        font = [UIFont fontWithName:fntName size:attr->size];
     }
     if(font == nil){
-        font = [UIFont fontWithName:fntName size:size];
+        font = [UIFont fontWithName:fntName size:attr->size];
     }
     NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
     //font and color
     [attrs setObject:font forKey:NSFontAttributeName];
-    [attrs setObject:[UIColor colorWithRed:color.r green:color.g blue:color.b alpha:color.a] forKey:NSForegroundColorAttributeName];
+    UIColor *color = [UIColor colorWithRed:attr->color.r green:attr->color.g blue:attr->color.b alpha:attr->color.a];
+    [attrs setObject:color forKey:NSForegroundColorAttributeName];
     
     dim = cxCalculateStringSize(str, font, &constrainSize, attrs);
     // compute start point
@@ -96,7 +91,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,
     int startW = 0;
     if (constrainSize.height > dim.height){
         // vertical alignment
-        unsigned int vAlignment = ((int)align >> 4) & 0x0F;
+        unsigned int vAlignment = ((int)attr->align >> 4) & 0x0F;
         if (vAlignment == ALIGN_TOP){
             startH = 0;
         }else if (vAlignment == ALIGN_CENTER){
@@ -123,7 +118,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,
     CGContextTranslateCTM(context, 0.0f, dim.height);
     CGContextScaleCTM(context, 1.0f, -1.0f);
     UIGraphicsPushContext(context);
-    cxUInt uHoriFlag = (int)align & 0x0f;
+    cxUInt uHoriFlag = (int)attr->align & 0x0f;
     NSTextAlignment nsAlign = (2 == uHoriFlag) ? NSTextAlignmentRight : (3 == uHoriFlag) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
     CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
     CGContextSetShouldSubpixelQuantizeFonts(context, false);
@@ -134,19 +129,19 @@ cxString cxCreateTXTTextureData(cxConstChars txt,
     [attrs setObject:parastyle forKey:NSParagraphStyleAttributeName];
     [parastyle release];
     //shadow
-    if(shadowRadius > 0){
+    if(attr->shadowRadius > 0){
         NSShadow *shadow =[[NSShadow alloc] init];
-        shadow.shadowOffset = CGSizeMake(shadowOffset.w, shadowOffset.h);
-        shadow.shadowBlurRadius = shadowRadius;
-        shadow.shadowColor = [UIColor colorWithRed:shadowColor.r green:shadowColor.g blue:shadowColor.b alpha:shadowColor.a];
+        shadow.shadowOffset = CGSizeMake(attr->shadowOffset.w, attr->shadowOffset.h);
+        shadow.shadowBlurRadius = attr->shadowRadius;
+        shadow.shadowColor = [UIColor colorWithRed:attr->shadowColor.r green:attr->shadowColor.g blue:attr->shadowColor.b alpha:attr->shadowColor.a];
         [attrs setObject:shadow forKey:NSShadowAttributeName];
         [shadow release];
     }
     //stroke
-    if(strokeWidth > 0){
-        UIColor *scolor = [UIColor colorWithRed:strokeColor.r green:strokeColor.g blue:strokeColor.b alpha:strokeColor.a];
+    if(attr->strokeWidth > 0){
+        UIColor *scolor = [UIColor colorWithRed:attr->strokeColor.r green:attr->strokeColor.g blue:attr->strokeColor.b alpha:attr->strokeColor.a];
         [attrs setObject:scolor forKey:NSStrokeColorAttributeName];
-        [attrs setObject:[NSNumber numberWithFloat:strokeWidth] forKey:NSStrokeWidthAttributeName];
+        [attrs setObject:[NSNumber numberWithFloat:attr->strokeWidth] forKey:NSStrokeWidthAttributeName];
         [str drawInRect:rect withAttributes:attrs];
         [attrs removeObjectForKey:NSStrokeColorAttributeName];
         [attrs removeObjectForKey:NSStrokeWidthAttributeName];

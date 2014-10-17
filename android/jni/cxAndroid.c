@@ -21,12 +21,7 @@ JniMethodInfo engineLocalized   = {.isGet=false};
 JniMethodInfo assertManager     = {.isGet=false};
 JniMethodInfo engineRecvJson    = {.isGet=false};
 
-cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxFloat size,
-                                cxTextAlign align,
-                                cxInt cw,cxInt ch,
-                                cxColor4f color,
-                                cxColor4f shadowColor,cxFloat shadowRadius,cxSize2f shadowOffset,
-                                cxColor4f strokeColor,cxFloat strokeWidth)
+cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,const cxTextAttr *attr)
 {
     CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
     CX_GET_METHOD(createTextBitmap,"createTextBitmap","(Ljava/lang/String;Ljava/lang/String;IIIIIIIIFFFIIIIIIIIF)[B");
@@ -36,25 +31,30 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,cxFloat size,
     if(font != NULL){
         fontName = (*javaENV)->NewStringUTF(javaENV,font);
     }
-    jint A = color.a * 255;
-    jint R = color.r * 255;
-    jint G = color.g * 255;
-    jint B = color.b * 255;
-    jfloat sr = shadowRadius;
-    jfloat sx = shadowOffset.w;
-    jfloat sy = shadowOffset.h;
-    jint sA = shadowColor.a * 255;
-    jint sR = shadowColor.r * 255;
-    jint sG = shadowColor.g * 255;
-    jint sB = shadowColor.b * 255;
-    jint oA = strokeColor.a * 255;
-    jint oR = strokeColor.r * 255;
-    jint oG = strokeColor.g * 255;
-    jint oB = strokeColor.b * 255;
-    jfloat ow = strokeWidth;
+    jint size = attr->size;
+    jint align = attr->align;
+    jint cw = attr->viewSize.w;
+    jint ch = attr->viewSize.h;
+    jint A = attr->color.a * 255;
+    jint R = attr->color.r * 255;
+    jint G = attr->color.g * 255;
+    jint B = attr->color.b * 255;
+    jfloat sr = attr->shadowRadius;
+    jfloat sx = attr->shadowOffset.w;
+    jfloat sy = attr->shadowOffset.h;
+    jint sA = attr->shadowColor.a * 255;
+    jint sR = attr->shadowColor.r * 255;
+    jint sG = attr->shadowColor.g * 255;
+    jint sB = attr->shadowColor.b * 255;
+    jint oA = attr->strokeColor.a * 255;
+    jint oR = attr->strokeColor.r * 255;
+    jint oG = attr->strokeColor.g * 255;
+    jint oB = attr->strokeColor.b * 255;
+    jfloat ow = attr->strokeWidth;
     
-    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(M(createTextBitmap),strText,fontName,
-                                                                      (jint)size,(jint)align,(jint)cw,(jint)ch,
+    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(M(createTextBitmap),
+                                                                      strText,fontName,
+                                                                      size,align,cw,ch,
                                                                       A,R,G,B,
                                                                       sr,sx,sy,sA,sR,sG,sB,
                                                                       oA,oR,oG,oB,ow);

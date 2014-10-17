@@ -14,12 +14,7 @@ static cxBool cxTextureTXTLoad(cxAny texture,cxStream stream)
     cxTextureTXT this = texture;
     cxConstChars font = this->font == NULL ? NULL : cxStringBody(this->font);
     cxConstChars text = cxStringBody(this->string);
-    cxString data = cxCreateTXTTextureData(text, font,this->attr.size,
-                                           this->attr.align,
-                                           this->attr.viewSize.w,this->attr.viewSize.h,
-                                           this->attr.color,
-                                           this->attr.shadowColor,this->attr.shadowRadius,this->attr.shadowOffset,
-                                           this->attr.strokeColor,this->attr.strokeWidth);
+    cxString data = cxCreateTXTTextureData(text, font,&this->attr);
     CX_RETURN(data == NULL, false);
     cxInt bufsiz = cxStringLength(data);
     cxAny buffer = (cxAny)cxStringBody(data);

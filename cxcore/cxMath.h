@@ -254,6 +254,7 @@ typedef enum {
 }cxTextAlign;
 
 typedef struct {
+    //font size
     cxFloat size;
     cxTextAlign align;
     cxSize2f viewSize;
