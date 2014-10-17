@@ -56,11 +56,11 @@ static void DefenceAttackOnce(cxAny pattacker,cxAny ptarget)
     cxViewSetScale(pattacker, cxVec2fv(1, 1));
 }
 
-CX_OBJECT_TYPE(Defence, Node)
+CX_TYPE(Defence, Node)
 {
     
 }
-CX_OBJECT_INIT(Defence, Node)
+CX_INIT(Defence, Node)
 {
     NodeSetType(this, NodeCombinedMake(NodeTypeDefence, NodeSubTypeNone));
     NodeSetSize(this, cxSize2iv(2, 2));
@@ -81,11 +81,11 @@ CX_OBJECT_INIT(Defence, Node)
     CX_SET(Node, this, AttackAction, DefenceAttackAction);
     CX_SET(Node, this, AttackOnce, DefenceAttackOnce);
 }
-CX_OBJECT_FREE(Defence, Node)
+CX_FREE(Defence, Node)
 {
     
 }
-CX_OBJECT_TERM(Defence, Node)
+CX_TERM(Defence, Node)
 
 Defence DefenceCreate(cxAny pmap,cxVec2i idx)
 {

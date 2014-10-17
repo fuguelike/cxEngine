@@ -14,19 +14,19 @@ CX_SETTER_DEF(cxGroup, scale)
 {
     this->Scale = cxJsonToDouble(value, this->Scale);
 }
-CX_OBJECT_TYPE(cxGroup, cxObject)
+CX_TYPE(cxGroup, cxObject)
 {
     CX_PROPERTY_SETTER(cxGroup, scale);
 }
-CX_OBJECT_INIT(cxGroup, cxObject)
+CX_INIT(cxGroup, cxObject)
 {
     this->Scale = 1.0f;
 }
-CX_OBJECT_FREE(cxGroup, cxObject)
+CX_FREE(cxGroup, cxObject)
 {
     //
 }
-CX_OBJECT_TERM(cxGroup, cxObject)
+CX_TERM(cxGroup, cxObject)
 
 cxFloat cxGroupGetScale(cxAny group,cxAny pav)
 {

@@ -19,7 +19,7 @@ typedef enum {
     cxScrollMoveTypeVertical    = 1 << 1,
 }cxScrollMoveType;
 
-CX_OBJECT_DEF(cxScroll, cxView)
+CX_DEF(cxScroll, cxView)
     //move data
     cxFloat speed;
     cxFloat moveTime;
@@ -36,7 +36,7 @@ CX_OBJECT_DEF(cxScroll, cxView)
     cxRange2f range;
     cxVec2f center;
     cxFloat startDis;
-CX_OBJECT_END(cxScroll, cxView)
+CX_END(cxScroll, cxView)
 
 CX_FIELD_GET(cxScroll, cxAny, Body);
 void cxScrollSetBody(cxAny pview,cxAny body);

@@ -15,11 +15,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxHttpConn, cxObject)
+CX_DEF(cxHttpConn, cxObject)
     cxString host;
     cxInt port;
     struct evhttp_connection *conn;
-CX_OBJECT_END(cxHttpConn, cxObject)
+CX_END(cxHttpConn, cxObject)
 
 cxHttpConn cxHttpConnectOpen(cxConstChars host,cxInt port);
 

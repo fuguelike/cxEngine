@@ -68,11 +68,11 @@ static void MoveOnExit(cxAny pav)
     //node move exit
 }
 
-CX_OBJECT_TYPE(Move, cxSpline)
+CX_TYPE(Move, cxSpline)
 {
     
 }
-CX_OBJECT_INIT(Move, cxSpline)
+CX_INIT(Move, cxSpline)
 {
     MoveSetIsToPoints(this, false);
     cxActionSetGroup(this, FIGHT_ACTION_GROUP);
@@ -83,11 +83,11 @@ CX_OBJECT_INIT(Move, cxSpline)
     CX_ADD(cxAction, this, onUpdate, MoveOnUpdate);
     CX_ADD(cxAction, this, onExit, MoveOnExit);
 }
-CX_OBJECT_FREE(Move, cxSpline)
+CX_FREE(Move, cxSpline)
 {
     
 }
-CX_OBJECT_TERM(Move, cxSpline)
+CX_TERM(Move, cxSpline)
 
 Move MoveCreate(cxAny node, cxAnyArray points)
 {

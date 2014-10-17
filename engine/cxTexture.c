@@ -10,30 +10,30 @@
 #include "cxShader.h"
 #include "cxTexture.h"
 
-CX_OBJECT_TYPE(cxTexCoord, cxObject)
+CX_TYPE(cxTexCoord, cxObject)
 {}
-CX_OBJECT_INIT(cxTexCoord, cxObject)
+CX_INIT(cxTexCoord, cxObject)
 {}
-CX_OBJECT_FREE(cxTexCoord, cxObject)
+CX_FREE(cxTexCoord, cxObject)
 {}
-CX_OBJECT_TERM(cxTexCoord, cxObject)
+CX_TERM(cxTexCoord, cxObject)
 
-CX_OBJECT_TYPE(cxTexture, cxObject)
+CX_TYPE(cxTexture, cxObject)
 {}
-CX_OBJECT_INIT(cxTexture, cxObject)
+CX_INIT(cxTexture, cxObject)
 {
     this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE);
     this->keys = CX_ALLOC(cxHash);
     this->scale = cxVec2fv(1.0f, 1.0f);
     this->isSetParam = true;
 }
-CX_OBJECT_FREE(cxTexture, cxObject)
+CX_FREE(cxTexture, cxObject)
 {
     cxOpenGLDeleteTexture(this->textureId, 0);
     CX_RELEASE(this->keys);
     CX_RELEASE(this->shader);
 }
-CX_OBJECT_TERM(cxTexture, cxObject)
+CX_TERM(cxTexture, cxObject)
 
 void cxTextureLoad(cxAny ptex,cxStream stream)
 {

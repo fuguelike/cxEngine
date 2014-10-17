@@ -88,18 +88,18 @@ static void cxSpritesOnRemove(cxAny pview,cxAny nview)
     cxAtlasFastRemove(this, idx);
 }
 
-CX_OBJECT_TYPE(cxSprites, cxAtlas)
+CX_TYPE(cxSprites, cxAtlas)
 {
     
 }
-CX_OBJECT_INIT(cxSprites, cxAtlas)
+CX_INIT(cxSprites, cxAtlas)
 {
     CX_SET(cxView, this, onAppend, cxSpritesOnAppend);
     CX_SET(cxView, this, onRemove, cxSpritesOnRemove);
     this->sprites = CX_ALLOC(cxArray);
 }
-CX_OBJECT_FREE(cxSprites, cxAtlas)
+CX_FREE(cxSprites, cxAtlas)
 {
     CX_RELEASE(this->sprites);
 }
-CX_OBJECT_TERM(cxSprites, cxAtlas)
+CX_TERM(cxSprites, cxAtlas)

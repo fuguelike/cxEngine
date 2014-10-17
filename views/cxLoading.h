@@ -15,14 +15,15 @@ CX_C_BEGIN
 
 typedef void (*cxLoadingFunc)(cxAny object);
 
-CX_OBJECT_DEF(cxLoading, cxView)
+CX_DEF(cxLoading, cxView)
     cxTimer stepTimer;
     CX_FIELD_DEF(cxInt Index);
     CX_FIELD_DEF(cxInt Step);
     CX_METHOD_DEF(void, onExit, cxAny);
     CX_METHOD_DEF(void, onStep, cxAny);
     CX_METHOD_DEF(void, onStart, cxAny);
-CX_OBJECT_END(cxLoading, cxView)
+    cxArray items;
+CX_END(cxLoading, cxView)
 
 CX_FIELD_GET(cxLoading, cxInt, Index);
 CX_FIELD_SET(cxLoading, cxInt, Step);
@@ -34,6 +35,8 @@ CX_INLINE cxFloat cxLoadingGetProgress(cxAny pthis)
     cxFloat a = this->Step;
     return i / a;
 }
+
+void cxLoadingAppend(cxAny pview,cxLoadingFunc func);
 
 void cxLoadingStop(cxAny pview);
 

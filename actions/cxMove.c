@@ -41,20 +41,20 @@ CX_SETTER_DEF(cxMove, to)
     this->to = cxJsonToVec2f(value, this->to);
 }
 
-CX_OBJECT_TYPE(cxMove, cxAction)
+CX_TYPE(cxMove, cxAction)
 {
     CX_PROPERTY_SETTER(cxMove, to);
 }
-CX_OBJECT_INIT(cxMove, cxAction)
+CX_INIT(cxMove, cxAction)
 {
     CX_SET(cxAction, this, Init, cxMoveInit);
     CX_SET(cxAction, this, Step, cxMoveStep);
 }
-CX_OBJECT_FREE(cxMove, cxAction)
+CX_FREE(cxMove, cxAction)
 {
     
 }
-CX_OBJECT_TERM(cxMove, cxAction)
+CX_TERM(cxMove, cxAction)
 
 cxMove cxMoveCreate(cxFloat time, cxVec2f pos)
 {

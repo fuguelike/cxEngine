@@ -13,9 +13,9 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(Range, cxAtlas)
+CX_DEF(Range, cxAtlas)
     cxRange2f range;
-CX_OBJECT_END(Range, cxAtlas)
+CX_END(Range, cxAtlas)
 
 void RangeUpdateValue(cxAny pview);
 

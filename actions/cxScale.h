@@ -13,11 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxScale, cxAction)
+CX_DEF(cxScale, cxAction)
     cxVec2f oldScale;
     cxVec2f delta;
     cxVec2f newScale;
-CX_OBJECT_END(cxScale, cxAction)
+CX_END(cxScale, cxAction)
 
 cxScale cxScaleCreate(cxFloat time,cxVec2f scale);
 

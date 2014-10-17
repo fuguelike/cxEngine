@@ -53,18 +53,18 @@ static void cxShaderMultipleUniform(cxAny ps)
     glUniform1i(this->texture2, 2);
 }
 
-CX_OBJECT_TYPE(cxShaderMultiple, cxShader)
+CX_TYPE(cxShaderMultiple, cxShader)
 {
     
 }
-CX_OBJECT_INIT(cxShaderMultiple, cxShader)
+CX_INIT(cxShaderMultiple, cxShader)
 {
     CX_SET(cxShader, this, Vertex, cxShaderMultipleVertex);
     CX_SET(cxShader, this, Fragment, cxShaderMultipleFragment);
     CX_SET(cxShader, this, Uniform, cxShaderMultipleUniform);
 }
-CX_OBJECT_FREE(cxShaderMultiple, cxShader)
+CX_FREE(cxShaderMultiple, cxShader)
 {
 
 }
-CX_OBJECT_TERM(cxShaderMultiple, cxShader)
+CX_TERM(cxShaderMultiple, cxShader)

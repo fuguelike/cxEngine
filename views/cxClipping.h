@@ -13,11 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxClipping, cxView)
+CX_DEF(cxClipping, cxView)
     cxUInt useRef;
     cxBool inverse;
     CX_EVENT_ALLOC(onClipping);
-CX_OBJECT_END(cxClipping, cxView)
+CX_END(cxClipping, cxView)
 
 void cxClippingSetInverse(cxAny pview,cxBool inverse);
 

@@ -250,11 +250,11 @@ static void MapDraw(cxAny pmap)
 //    cxDrawPoint(cxVec2fv(100, 100), cxRED, 5);
 }
 
-CX_OBJECT_TYPE(Map, cxAtlas)
+CX_TYPE(Map, cxAtlas)
 {
     
 }
-CX_OBJECT_INIT(Map, cxAtlas)
+CX_INIT(Map, cxAtlas)
 {
     CX_SET(cxView, this, After, MapDraw);
     
@@ -299,7 +299,7 @@ CX_OBJECT_INIT(Map, cxAtlas)
     cxViewSetSize(this->aLayer, size);
     cxViewSetSize(this->nLayer, size);
 }
-CX_OBJECT_FREE(Map, cxAtlas)
+CX_FREE(Map, cxAtlas)
 {
     allocator->free(this->attrs);
     CX_RELEASE(this->paths);
@@ -307,7 +307,7 @@ CX_OBJECT_FREE(Map, cxAtlas)
     CX_RELEASE(this->astar);
     CX_RELEASE(this->nodes);
 }
-CX_OBJECT_TERM(Map, cxAtlas)
+CX_TERM(Map, cxAtlas)
 
 void MapAppendBullet(cxAny bullet)
 {

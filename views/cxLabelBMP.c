@@ -105,23 +105,23 @@ CX_SETTER_DEF(cxLabelBMP, center)
     this->isCenter = cxJsonToBool(value, false);
 }
 
-CX_OBJECT_TYPE(cxLabelBMP, cxAtlas)
+CX_TYPE(cxLabelBMP, cxAtlas)
 {
     CX_PROPERTY_SETTER(cxLabelBMP, font);
     CX_PROPERTY_SETTER(cxLabelBMP, text);
     CX_PROPERTY_SETTER(cxLabelBMP, center);
 }
-CX_OBJECT_INIT(cxLabelBMP, cxAtlas)
+CX_INIT(cxLabelBMP, cxAtlas)
 {
     CX_ADD(cxView, this, onUpdate, cxLabelBMPUpdate);
     this->isDirty = true;
 }
-CX_OBJECT_FREE(cxLabelBMP, cxAtlas)
+CX_FREE(cxLabelBMP, cxAtlas)
 {
     CX_RELEASE(this->font);
     CX_RELEASE(this->txt);
 }
-CX_OBJECT_TERM(cxLabelBMP, cxAtlas)
+CX_TERM(cxLabelBMP, cxAtlas)
 
 cxLabelBMP cxLabelBMPCreate(cxString font,cxString txt)
 {

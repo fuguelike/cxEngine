@@ -25,19 +25,19 @@ CX_SETTER_DEF(cxList, items)
     CX_JSON_ARRAY_EACH_END(items, v)
 }
 
-CX_OBJECT_TYPE(cxList, cxObject)
+CX_TYPE(cxList, cxObject)
 {
     CX_PROPERTY_SETTER(cxList, items);
 }
-CX_OBJECT_INIT(cxList, cxObject)
+CX_INIT(cxList, cxObject)
 {
     
 }
-CX_OBJECT_FREE(cxList, cxObject)
+CX_FREE(cxList, cxObject)
 {
     cxListClear(this);
 }
-CX_OBJECT_TERM(cxList, cxObject)
+CX_TERM(cxList, cxObject)
 
 cxListElement *cxListAppend(cxAny plist,cxAny any)
 {

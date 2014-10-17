@@ -8,16 +8,16 @@
 
 #include "cxInput.h"
 
-CX_OBJECT_TYPE(cxTouchItem, cxObject)
+CX_TYPE(cxTouchItem, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxTouchItem, cxObject)
+CX_INIT(cxTouchItem, cxObject)
 {
     
 }
-CX_OBJECT_FREE(cxTouchItem, cxObject)
+CX_FREE(cxTouchItem, cxObject)
 {
     
 }
-CX_OBJECT_TERM(cxTouchItem, cxObject)
+CX_TERM(cxTouchItem, cxObject)

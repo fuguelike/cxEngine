@@ -55,22 +55,22 @@ void cxValueSet(cxAny pthis,cxAny v)
     this->isChanged = CX_METHOD_GET(false, this->ValueEqu, this);
 }
 
-CX_OBJECT_TYPE(cxValue, cxObject)
+CX_TYPE(cxValue, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxValue, cxObject)
+CX_INIT(cxValue, cxObject)
 {
     cxEngine engine = cxEngineInstance();
     CX_CON(cxEngine, engine, onUpdate, this, cxValueUpdate);
     CX_SET(cxValue, this, ValueEqu, cxValueBinaryEqu);
 }
-CX_OBJECT_FREE(cxValue, cxObject)
+CX_FREE(cxValue, cxObject)
 {
     CX_SLOT_RELEASE(this->onUpdate);
     CX_EVENT_RELEASE(this->onChanged);
 }
-CX_OBJECT_TERM(cxValue, cxObject)
+CX_TERM(cxValue, cxObject)
 
 cxValue cxValueAllocImp(cxInt size)
 {

@@ -53,7 +53,7 @@ CX_SETTER_DEF(cxAction, tag)
     cxActionSetTag(this, tag);
 }
 
-CX_OBJECT_TYPE(cxAction, cxObject)
+CX_TYPE(cxAction, cxObject)
 {
     CX_PROPERTY_SETTER(cxAction, time);
     CX_PROPERTY_SETTER(cxAction, delay);
@@ -63,19 +63,19 @@ CX_OBJECT_TYPE(cxAction, cxObject)
     CX_PROPERTY_SETTER(cxAction, group);
     CX_PROPERTY_SETTER(cxAction, tag);
 }
-CX_OBJECT_INIT(cxAction, cxObject)
+CX_INIT(cxAction, cxObject)
 {
     this->Scale = 1.0f;
     this->isExit = false;
 }
-CX_OBJECT_FREE(cxAction, cxObject)
+CX_FREE(cxAction, cxObject)
 {
     CX_RELEASE(this->Group);
     CX_EVENT_RELEASE(this->onInit);
     CX_EVENT_RELEASE(this->onExit);
     CX_EVENT_RELEASE(this->onUpdate);
 }
-CX_OBJECT_TERM(cxAction, cxObject)
+CX_TERM(cxAction, cxObject)
 
 cxBool cxActionForever(cxAny pav)
 {

@@ -13,9 +13,9 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(Attack, Node)
+CX_DEF(Attack, Node)
 
-CX_OBJECT_END(Attack, Node)
+CX_END(Attack, Node)
 
 void AttackInit(cxAny pview, cxAny pmap,cxVec2i idx);
 

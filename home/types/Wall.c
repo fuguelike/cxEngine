@@ -9,11 +9,11 @@
 #include <Map.h>
 #include "Wall.h"
 
-CX_OBJECT_TYPE(Wall, Node)
+CX_TYPE(Wall, Node)
 {
     
 }
-CX_OBJECT_INIT(Wall, Node)
+CX_INIT(Wall, Node)
 {
     NodeSetType(this, NodeCombinedMake(NodeTypeBlock, NodeSubTypeWall));
     NodeSetSize(this, cxSize2iv(1, 1));
@@ -21,11 +21,11 @@ CX_OBJECT_INIT(Wall, Node)
     cxSpriteSetTextureURL(this, "bg1.png");
     cxViewSetColor(this, cxBLACK);
 }
-CX_OBJECT_FREE(Wall, Node)
+CX_FREE(Wall, Node)
 {
     
 }
-CX_OBJECT_TERM(Wall, Node)
+CX_TERM(Wall, Node)
 
 Wall WallCreate(cxAny pmap,cxVec2i pos)
 {

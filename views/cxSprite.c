@@ -123,12 +123,12 @@ CX_SETTER_DEF(cxSprite, shader)
     CX_RETAIN_SWAP(this->Shader, shader);
 }
 
-CX_OBJECT_TYPE(cxSprite, cxView)
+CX_TYPE(cxSprite, cxView)
 {
     CX_PROPERTY_SETTER(cxSprite, texture);
     CX_PROPERTY_SETTER(cxSprite, shader);
 }
-CX_OBJECT_INIT(cxSprite, cxView)
+CX_INIT(cxSprite, cxView)
 {
     this->tbox = this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -136,12 +136,12 @@ CX_OBJECT_INIT(cxSprite, cxView)
     CX_SET(cxView, this, Draw, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
 }
-CX_OBJECT_FREE(cxSprite, cxView)
+CX_FREE(cxSprite, cxView)
 {
     CX_RELEASE(this->Shader);
     CX_RELEASE(this->Texture);
 }
-CX_OBJECT_TERM(cxSprite, cxView)
+CX_TERM(cxSprite, cxView)
 
 cxSprite cxSpriteCreateWithURL(cxConstChars url)
 {

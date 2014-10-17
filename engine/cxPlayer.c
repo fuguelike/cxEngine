@@ -14,25 +14,25 @@
 
 cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
 
-CX_OBJECT_DEF(cxBuffer, cxObject)
+CX_DEF(cxBuffer, cxObject)
     ALuint buffer;
     ALenum format;
     ALsizei freq;
-CX_OBJECT_END(cxBuffer, cxObject)
+CX_END(cxBuffer, cxObject)
 
-CX_OBJECT_TYPE(cxBuffer, cxObject)
+CX_TYPE(cxBuffer, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxBuffer, cxObject)
+CX_INIT(cxBuffer, cxObject)
 {
     alGenBuffers(1, &this->buffer);
 }
-CX_OBJECT_FREE(cxBuffer, cxObject)
+CX_FREE(cxBuffer, cxObject)
 {
     alDeleteBuffers(1, &this->buffer);
 }
-CX_OBJECT_TERM(cxBuffer, cxObject)
+CX_TERM(cxBuffer, cxObject)
 
 static cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
 {
@@ -43,26 +43,26 @@ static cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
     return this;
 }
 
-CX_OBJECT_DEF(cxTrack, cxObject)
+CX_DEF(cxTrack, cxObject)
     ALsizei freq;
     ALuint format;
     ALuint source;
-CX_OBJECT_END(cxTrack, cxObject)
+CX_END(cxTrack, cxObject)
 
-CX_OBJECT_TYPE(cxTrack, cxObject)
+CX_TYPE(cxTrack, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxTrack, cxObject)
+CX_INIT(cxTrack, cxObject)
 {
     alGenSources(1, &this->source);
 }
-CX_OBJECT_FREE(cxTrack, cxObject)
+CX_FREE(cxTrack, cxObject)
 {
     alSourceStop(this->source);
     alDeleteSources(1, &this->source);
 }
-CX_OBJECT_TERM(cxTrack, cxObject)
+CX_TERM(cxTrack, cxObject)
 
 void cxPauseEffect(cxAny track)
 {
@@ -153,11 +153,11 @@ static void cxPlayerOnMemory(cxAny player)
     cxHashClear(this->caches);
 }
 
-CX_OBJECT_TYPE(cxPlayer, cxObject)
+CX_TYPE(cxPlayer, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxPlayer, cxObject)
+CX_INIT(cxPlayer, cxObject)
 {
     cxEngine engine = cxEngineInstance();
     CX_CON(cxEngine, engine, onMemory, this, cxPlayerOnMemory);
@@ -177,7 +177,7 @@ CX_OBJECT_INIT(cxPlayer, cxObject)
         CX_RELEASE(track);
     }
 }
-CX_OBJECT_FREE(cxPlayer, cxObject)
+CX_FREE(cxPlayer, cxObject)
 {
     CX_RELEASE(this->caches);
     CX_RELEASE(this->tracks);
@@ -186,4 +186,4 @@ CX_OBJECT_FREE(cxPlayer, cxObject)
     alcCloseDevice(this->device);
     CX_SLOT_RELEASE(this->onMemory);
 }
-CX_OBJECT_TERM(cxPlayer, cxObject)
+CX_TERM(cxPlayer, cxObject)

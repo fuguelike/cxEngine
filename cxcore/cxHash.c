@@ -29,19 +29,19 @@ CX_SETTER_DEF(cxHash, items)
     CX_JSON_OBJECT_EACH_END(items, v)
 }
 
-CX_OBJECT_TYPE(cxHash, cxObject)
+CX_TYPE(cxHash, cxObject)
 {
     CX_PROPERTY_SETTER(cxHash, items);
 }
-CX_OBJECT_INIT(cxHash, cxObject)
+CX_INIT(cxHash, cxObject)
 {
     
 }
-CX_OBJECT_FREE(cxHash, cxObject)
+CX_FREE(cxHash, cxObject)
 {
     cxHashClear(this);
 }
-CX_OBJECT_TERM(cxHash, cxObject)
+CX_TERM(cxHash, cxObject)
 
 #define CX_HASH_KEY_OK(_k_) ((_k_).data != NULL && (_k_).length > 0 && (_k_).length < CX_HASH_MAX_KEY)
 

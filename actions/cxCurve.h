@@ -15,13 +15,13 @@ CX_C_BEGIN
 
 typedef cxFloat (*cxActionCurveFunc)(cxAny pav,cxFloat time);
 
-CX_OBJECT_DEF(cxCurveItem, cxObject)
+CX_DEF(cxCurveItem, cxObject)
     cxActionCurveFunc func;
-CX_OBJECT_END(cxCurveItem, cxObject)
+CX_END(cxCurveItem, cxObject)
 
-CX_OBJECT_DEF(cxCurve, cxObject)
+CX_DEF(cxCurve, cxObject)
     cxHash curves;
-CX_OBJECT_END(cxCurve, cxObject)
+CX_END(cxCurve, cxObject)
 
 cxCurveItem cxCurveGet(cxConstChars key);
 

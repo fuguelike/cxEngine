@@ -13,9 +13,9 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(Wall, Node)
+CX_DEF(Wall, Node)
 
-CX_OBJECT_END(Wall, Node)
+CX_END(Wall, Node)
 
 Wall WallCreate(cxAny pmap,cxVec2i pos);
 

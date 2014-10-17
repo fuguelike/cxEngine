@@ -30,20 +30,20 @@ CX_SETTER_DEF(cxFade, alpha)
     this->alpha = cxJsonToDouble(value, this->alpha);
 }
 
-CX_OBJECT_TYPE(cxFade, cxAction)
+CX_TYPE(cxFade, cxAction)
 {
     CX_PROPERTY_SETTER(cxFade, alpha);
 }
-CX_OBJECT_INIT(cxFade, cxAction)
+CX_INIT(cxFade, cxAction)
 {
     CX_SET(cxAction, this, Init, cxFadeInit);
     CX_SET(cxAction, this, Step, cxFadeStep);
 }
-CX_OBJECT_FREE(cxFade, cxAction)
+CX_FREE(cxFade, cxAction)
 {
 
 }
-CX_OBJECT_TERM(cxFade, cxAction)
+CX_TERM(cxFade, cxAction)
 
 cxFade cxFadeCreate(cxFloat time,cxFloat alpha)
 {

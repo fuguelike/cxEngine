@@ -13,11 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxTimer, cxAction)
+CX_DEF(cxTimer, cxAction)
     CX_FIELD_DEF(cxInt Repeat);
     CX_FIELD_DEF(cxBool IsBegin);
     CX_EVENT_ALLOC(onArrive);
-CX_OBJECT_END(cxTimer, cxAction)
+CX_END(cxTimer, cxAction)
 
 CX_FIELD_IMP(cxTimer, cxInt, Repeat);
 CX_FIELD_IMP(cxTimer, cxBool, IsBegin);

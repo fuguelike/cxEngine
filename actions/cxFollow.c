@@ -57,22 +57,22 @@ cxAny cxFollowTarget(cxAny pav)
     return this->target;
 }
 
-CX_OBJECT_TYPE(cxFollow, cxAction)
+CX_TYPE(cxFollow, cxAction)
 {
     
 }
-CX_OBJECT_INIT(cxFollow, cxAction)
+CX_INIT(cxFollow, cxAction)
 {
     this->cxAction.Time = -1;
     CX_SET(cxAction, this, Init, cxFollowInit);
     CX_SET(cxAction, this, Step, cxFollowStep);
     CX_SET(cxFollow, this, IsExit, cxFollowIsExit);
 }
-CX_OBJECT_FREE(cxFollow, cxAction)
+CX_FREE(cxFollow, cxAction)
 {
     CX_RELEASE(this->target);
 }
-CX_OBJECT_TERM(cxFollow, cxAction)
+CX_TERM(cxFollow, cxAction)
 
 void cxFollowSetInit(cxAny pav,cxFloat init)
 {

@@ -229,7 +229,7 @@ void __##_t_##AutoFree(_t_ this);                               \
 void __##_t_##AutoType(cxAny this);                             \
 struct _t_ {
 
-#define CX_OBJECT_END(_t_,_b_) };                               \
+#define CX_END(_t_,_b_) };                               \
 CX_ATTR_UNUSED static cxAny __##_t_##CreateFunc()               \
 {                                                               \
     return CX_CREATE(_t_);                                      \
@@ -246,19 +246,19 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
     __##_t_##AutoType);                                         \
 }
 
-#define CX_OBJECT_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_,_b_) struct _b_ _b_;
+#define CX_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_,_b_) struct _b_ _b_;
 
-#define CX_TYPE(_t_,_o_)            ((_t_)(_o_))
+#define CX_TYPE_OF(_t_,_o_)  ((_t_)(_o_))
 
 //type imp cxAny = cxType
 
-#define CX_OBJECT_TYPE(_t_,_b_)     void __##_t_##AutoType(cxAny this){
+#define CX_TYPE(_t_,_b_)     void __##_t_##AutoType(cxAny this){
 
-#define CX_OBJECT_INIT(_t_,_b_)     };void __##_t_##AutoInit(_t_ this){__##_b_##AutoInit((_b_)this);
+#define CX_INIT(_t_,_b_)     };void __##_t_##AutoInit(_t_ this){__##_b_##AutoInit((_b_)this);
 
-#define CX_OBJECT_FREE(_t_,_b_)     };void __##_t_##AutoFree(_t_ this){
+#define CX_FREE(_t_,_b_)     };void __##_t_##AutoFree(_t_ this){
 
-#define CX_OBJECT_TERM(_t_,_b_)     __##_b_##AutoFree((_b_)this);}
+#define CX_TERM(_t_,_b_)     __##_b_##AutoFree((_b_)this);}
 
 //object mem manage
 
@@ -293,7 +293,7 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 //method overwrite short micro
 #define CX_SET(_t_,_o_,_n_,_f_)                                 \
 CX_ASSERT_TYPE(_o_, _t_);                                       \
-CX_METHOD_SET(CX_TYPE(_t_, _o_)->_n_, _f_)
+CX_METHOD_SET(CX_TYPE_OF(_t_, _o_)->_n_, _f_)
 
 //field
 
@@ -375,7 +375,7 @@ do{                                                             \
 
 #define CX_CON(_t_,_src_,_n_,_dst_,_f_)                         \
 CX_ASSERT_TYPE(_src_, _t_);                                     \
-CX_SLOT_CONNECT(CX_TYPE(_t_, _src_)->_n_, _dst_, _n_, _f_)
+CX_SLOT_CONNECT(CX_TYPE_OF(_t_, _src_)->_n_, _dst_, _n_, _f_)
 
 //event
 
@@ -432,7 +432,7 @@ if(_sender_ != NULL){                                           \
 //append event short micro
 #define CX_ADD(_t_,_o_,_n_,_f_)                                 \
 CX_ASSERT_TYPE(_o_, _t_);                                       \
-CX_EVENT_APPEND(CX_TYPE(_t_, _o_)->_n_, _f_)
+CX_EVENT_APPEND(CX_TYPE_OF(_t_, _o_)->_n_, _f_)
 
 //
 cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x);
@@ -495,7 +495,7 @@ CX_OBJECT_BEG(cxObject,cxObject)
     cxConstType cxType;
     cxInt cxRefcount;
     cxObjectFunc cxFree;
-CX_OBJECT_END(cxObject,cxObject)
+CX_END(cxObject,cxObject)
 
 cxAny cxObjectType(cxAny object);
 

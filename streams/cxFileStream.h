@@ -15,10 +15,10 @@ CX_C_BEGIN
 
 //document file stream
 
-CX_OBJECT_DEF(cxFileStream, cxStream)
+CX_DEF(cxFileStream, cxStream)
     FILE *fd;
     cxBool rdonly;
-CX_OBJECT_END(cxFileStream, cxStream)
+CX_END(cxFileStream, cxStream)
 
 cxString cxDocumentData(cxConstChars file);
 

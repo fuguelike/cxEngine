@@ -18,10 +18,10 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxTextureFactory, cxObject)
+CX_DEF(cxTextureFactory, cxObject)
     cxHash caches;
     CX_SLOT_ALLOC(onMemory);
-CX_OBJECT_END(cxTextureFactory, cxObject)
+CX_END(cxTextureFactory, cxObject)
 
 cxTexture cxTextureFactoryLoadFile(cxConstChars file);
 

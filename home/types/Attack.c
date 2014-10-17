@@ -66,11 +66,11 @@ static void AttackAttackOnce(cxAny pattacker,cxAny ptarget)
     cxViewSetScale(pattacker, cxVec2fv(1, 1));
 }
 
-CX_OBJECT_TYPE(Attack, Node)
+CX_TYPE(Attack, Node)
 {
     
 }
-CX_OBJECT_INIT(Attack, Node)
+CX_INIT(Attack, Node)
 {
     NodeSetType(this, NodeCombinedMake(NodeTypeAttack, NodeSubTypeNone));
     NodeSetSearchOrder(this, NodeTypeDefence, NodeSubTypeNone);
@@ -91,11 +91,11 @@ CX_OBJECT_INIT(Attack, Node)
 //    RangeSetRange(range, NodeGetField(this));
 //    cxViewAppend(this, range);
 }
-CX_OBJECT_FREE(Attack, Node)
+CX_FREE(Attack, Node)
 {
     
 }
-CX_OBJECT_TERM(Attack, Node)
+CX_TERM(Attack, Node)
 
 void AttackInit(cxAny pview, cxAny pmap,cxVec2i idx)
 {

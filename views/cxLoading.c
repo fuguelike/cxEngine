@@ -10,6 +10,17 @@
 #include <actions/cxTimer.h>
 #include "cxLoading.h"
 
+CX_DEF(cxLoadingItem, cxObject)
+    cxLoadingFunc func;
+CX_END(cxLoadingItem, cxObject)
+CX_TYPE(cxLoadingItem, cxObject)
+{}
+CX_INIT(cxLoadingItem, cxObject)
+{}
+CX_FREE(cxLoadingItem, cxObject)
+{}
+CX_TERM(cxLoadingItem, cxObject)
+
 static cxBool cxLoadingTouch(cxAny pview,const cxTouchItems *points)
 {
     return true;
@@ -24,6 +35,15 @@ static void cxLoadingTimerArrive(cxAny sender)
 {
     CX_ASSERT_VALUE(cxActionGetView(sender), cxLoading, this);
     CX_METHOD_RUN(this->onStep, this);
+    //run step method
+    cxLoadingItem item = NULL;
+    if(this->Index >= 0 && this->Index < cxArrayLength(this->items)){
+        item = cxArrayAtIndex(this->items, this->Index);
+    }
+    if(item != NULL && item->func != NULL){
+        item->func(this);
+    }
+    //
     this->Index ++;
     if(this->Index == this->Step){
         cxActionStop(this->stepTimer);
@@ -37,27 +57,37 @@ static void cxLoadingTimerExit(cxAny sender)
     cxViewRemove(this);
 }
 
+void cxLoadingAppend(cxAny pview,cxLoadingFunc func)
+{
+    CX_ASSERT_THIS(pview, cxLoading);
+    cxLoadingItem item = CX_ALLOC(cxLoadingItem);
+    item->func = func;
+    cxArrayAppend(this->items, item);
+    CX_RELEASE(item);
+}
+
 void cxLoaingFinished(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxLoading);
     cxActionStop(this->stepTimer);
 }
 
-CX_OBJECT_TYPE(cxLoading, cxView)
+CX_TYPE(cxLoading, cxView)
 {
     
 }
-CX_OBJECT_INIT(cxLoading, cxView)
+CX_INIT(cxLoading, cxView)
 {
     this->Step = 1;
     CX_SET(cxView, this, Touch, cxLoadingTouch);
     CX_SET(cxView, this, Key, cxLoadingKey);
+    this->items = CX_ALLOC(cxArray);
 }
-CX_OBJECT_FREE(cxLoading, cxView)
+CX_FREE(cxLoading, cxView)
 {
-
+    CX_RELEASE(this->items);
 }
-CX_OBJECT_TERM(cxLoading, cxView)
+CX_TERM(cxLoading, cxView)
 
 void cxLoadingStop(cxAny pview)
 {

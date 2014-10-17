@@ -240,7 +240,7 @@ CX_SETTER_DEF(cxScroll, layout)
     }
 }
 
-CX_OBJECT_TYPE(cxScroll, cxView)
+CX_TYPE(cxScroll, cxView)
 {
     CX_PROPERTY_SETTER(cxScroll, scaling);
     CX_PROPERTY_SETTER(cxScroll, range);
@@ -251,7 +251,7 @@ CX_OBJECT_TYPE(cxScroll, cxView)
     CX_PROPERTY_SETTER(cxScroll, body);
     CX_PROPERTY_SETTER(cxScroll, layout);
 }
-CX_OBJECT_INIT(cxScroll, cxView)
+CX_INIT(cxScroll, cxView)
 {
     this->scaleinc = 0.5f;
     this->speed = 0.1f;
@@ -263,11 +263,11 @@ CX_OBJECT_INIT(cxScroll, cxView)
     CX_SET(cxView, this, Touch, cxScrollTouch);
     this->type = cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal;
 }
-CX_OBJECT_FREE(cxScroll, cxView)
+CX_FREE(cxScroll, cxView)
 {
     
 }
-CX_OBJECT_TERM(cxScroll, cxView)
+CX_TERM(cxScroll, cxView)
 
 void cxScrollSetEnable(cxAny pview,cxBool enable)
 {

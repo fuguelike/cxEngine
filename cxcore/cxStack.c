@@ -25,19 +25,19 @@ CX_SETTER_DEF(cxStack, items)
     CX_JSON_ARRAY_EACH_END(items, v)
 }
 
-CX_OBJECT_TYPE(cxStack, cxObject)
+CX_TYPE(cxStack, cxObject)
 {
     CX_PROPERTY_SETTER(cxStack, items);
 }
-CX_OBJECT_INIT(cxStack, cxObject)
+CX_INIT(cxStack, cxObject)
 {
     this->array = CX_ALLOC(cxArray);
 }
-CX_OBJECT_FREE(cxStack, cxObject)
+CX_FREE(cxStack, cxObject)
 {
     CX_RELEASE(this->array);
 }
-CX_OBJECT_TERM(cxStack, cxObject)
+CX_TERM(cxStack, cxObject)
 
 void cxStackPush(cxAny pstack,cxAny any)
 {

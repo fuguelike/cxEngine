@@ -13,12 +13,12 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxRotate, cxAction)
+CX_DEF(cxRotate, cxAction)
     cxVec3f raxis;
     cxFloat newAngle;
     cxFloat delta;
     cxFloat oldAngle;
-CX_OBJECT_END(cxRotate, cxAction)
+CX_END(cxRotate, cxAction)
 
 cxRotate cxRotateCreate(cxFloat time,cxVec3f raxis,cxFloat newAngle);
 

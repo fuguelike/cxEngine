@@ -13,13 +13,13 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxRunner, cxAction)
+CX_DEF(cxRunner, cxAction)
     cxAny data;
     cxInt count;
     cxInt step;
     CX_METHOD_DEF(void, Init, cxAny);
     CX_METHOD_DEF(void, Exit, cxAny);
-CX_OBJECT_END(cxRunner, cxAction)
+CX_END(cxRunner, cxAction)
 
 void cxRunnerAppend(cxAny runner,cxAny pav, cxAny pview);
 

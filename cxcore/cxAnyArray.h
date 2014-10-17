@@ -23,10 +23,10 @@ if((_o_)!=NULL)while((_e_=(_t_ *)utarray_next((_o_)->array, _e_))!=NULL)
 _t_ *_e_ = NULL;                                                            \
 if((_o_)!=NULL)while((_e_=(_t_ *)utarray_prev((_o_)->array, _e_))!=NULL)
 
-CX_OBJECT_DEF(cxAnyArray, cxObject)
+CX_DEF(cxAnyArray, cxObject)
     UT_array *array;
     UT_icd icd;
-CX_OBJECT_END(cxAnyArray, cxObject)
+CX_END(cxAnyArray, cxObject)
 
 cxAnyArray cxAnyArrayClone(cxAnyArray arr);
 

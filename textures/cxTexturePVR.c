@@ -143,20 +143,20 @@ static void cxTexturePVRBind(cxAny this)
     cxOpenGLBindTexture(pvr->cxTexture.textureId,0);
 }
 
-CX_OBJECT_TYPE(cxTexturePVR, cxTexture)
+CX_TYPE(cxTexturePVR, cxTexture)
 {
     
 }
-CX_OBJECT_INIT(cxTexturePVR, cxTexture)
+CX_INIT(cxTexturePVR, cxTexture)
 {
     CX_SET(cxTexture, this, Bind, cxTexturePVRBind);
     CX_SET(cxTexture, this, Load, cxTexturePVRLoad);
 }
-CX_OBJECT_FREE(cxTexturePVR, cxTexture)
+CX_FREE(cxTexturePVR, cxTexture)
 {
     
 }
-CX_OBJECT_TERM(cxTexturePVR, cxTexture)
+CX_TERM(cxTexturePVR, cxTexture)
 
 cxTexture cxTexturePVRLoadStream(cxStream stream)
 {

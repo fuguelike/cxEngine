@@ -30,20 +30,20 @@ CX_SETTER_DEF(cxString, number)
     }
 }
 
-CX_OBJECT_TYPE(cxString, cxObject)
+CX_TYPE(cxString, cxObject)
 {
     CX_PROPERTY_SETTER(cxString, string);
     CX_PROPERTY_SETTER(cxString, number);
 }
-CX_OBJECT_INIT(cxString, cxObject)
+CX_INIT(cxString, cxObject)
 {}
-CX_OBJECT_FREE(cxString, cxObject)
+CX_FREE(cxString, cxObject)
 {
     if(!this->nocopy){
         utstring_done(&this->strptr);
     }
 }
-CX_OBJECT_TERM(cxString, cxObject)
+CX_TERM(cxString, cxObject)
 
 cxBool cxStringToBool(cxString str,cxBool dv)
 {

@@ -94,23 +94,23 @@ CX_SETTER_DEF(cxMultiple, actions)
     CX_JSON_ARRAY_EACH_END(actions, item)
 }
 
-CX_OBJECT_TYPE(cxMultiple, cxAction)
+CX_TYPE(cxMultiple, cxAction)
 {
     CX_PROPERTY_SETTER(cxMultiple, settype);
     CX_PROPERTY_SETTER(cxMultiple, actions);
 }
-CX_OBJECT_INIT(cxMultiple, cxAction)
+CX_INIT(cxMultiple, cxAction)
 {
     CX_SET(cxAction, this, Init, cxMultipleInit);
     CX_SET(cxAction, this, Step, cxMultipleStep);
     CX_SET(cxAction, this, Exit, cxMultipleExit);
     this->items = CX_ALLOC(cxArray);
 }
-CX_OBJECT_FREE(cxMultiple, cxAction)
+CX_FREE(cxMultiple, cxAction)
 {
     CX_RELEASE(this->items);
 }
-CX_OBJECT_TERM(cxMultiple, cxAction)
+CX_TERM(cxMultiple, cxAction)
 
 void cxMultipleSetType(cxAny pav,cxMultipleType type)
 {

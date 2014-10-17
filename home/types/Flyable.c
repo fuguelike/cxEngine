@@ -54,11 +54,11 @@ static void FlyableAttackOnce(cxAny pattacker,cxAny ptarget)
     cxViewSetScale(pattacker, cxVec2fv(1, 1));
 }
 
-CX_OBJECT_TYPE(Flyable, Attack)
+CX_TYPE(Flyable, Attack)
 {
     
 }
-CX_OBJECT_INIT(Flyable, Attack)
+CX_INIT(Flyable, Attack)
 {
     NodeSetRange(this, cxRange2fv(0, 4));
     NodeSetAttackRate(this, 0.5f);
@@ -69,11 +69,11 @@ CX_OBJECT_INIT(Flyable, Attack)
     CX_SET(Node, this, AttackAction, FlyableAttackAction);
     CX_SET(Node, this, AttackOnce, FlyableAttackOnce);
 }
-CX_OBJECT_FREE(Flyable, Attack)
+CX_FREE(Flyable, Attack)
 {
 
 }
-CX_OBJECT_TERM(Flyable, Attack)
+CX_TERM(Flyable, Attack)
 
 void FlyableInit(cxAny pview, cxAny pmap,cxVec2i idx)
 {

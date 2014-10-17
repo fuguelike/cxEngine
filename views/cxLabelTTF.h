@@ -13,12 +13,12 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxLabelTTF, cxSprite)
+CX_DEF(cxLabelTTF, cxSprite)
     cxString text;
     cxString font;
     cxBool isDirty;
     cxTextAttr attr;
-CX_OBJECT_END(cxLabelTTF, cxSprite)
+CX_END(cxLabelTTF, cxSprite)
 
 void cxLabelTTFSetFontSize(cxAny pview,cxFloat size);
 

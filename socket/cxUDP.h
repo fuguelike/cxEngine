@@ -18,7 +18,7 @@ CX_C_BEGIN
 
 #define CX_UDP_BUFFER_SIZE 1024
 
-CX_OBJECT_DEF(cxUDP, cxObject)
+CX_DEF(cxUDP, cxObject)
     evutil_socket_t socket;
     cxInt port;
     cxString host;
@@ -33,7 +33,7 @@ CX_OBJECT_DEF(cxUDP, cxObject)
     cxChar buffer[CX_UDP_BUFFER_SIZE];
     cxInt bytes;
     CX_EVENT_ALLOC(onData);
-CX_OBJECT_END(cxUDP, cxObject)
+CX_END(cxUDP, cxObject)
 
 CX_INLINE cxAny cxUDPGetBuffer(cxAny pthis)
 {

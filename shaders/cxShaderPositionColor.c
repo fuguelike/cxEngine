@@ -42,21 +42,21 @@ static cxString cxShaderPositionColorFragment(cxAny this)
     return cxStringConstChars(fragment);
 }
 
-CX_OBJECT_TYPE(cxShaderPositionColor, cxShader)
+CX_TYPE(cxShaderPositionColor, cxShader)
 {
     
 }
-CX_OBJECT_INIT(cxShaderPositionColor, cxShader)
+CX_INIT(cxShaderPositionColor, cxShader)
 {
     CX_SET(cxShader, this, Init, cxShaderPositionColorInit);
     CX_SET(cxShader, this, Vertex, cxShaderPositionColorVertex);
     CX_SET(cxShader, this, Fragment, cxShaderPositionColorFragment);
 }
-CX_OBJECT_FREE(cxShaderPositionColor, cxShader)
+CX_FREE(cxShaderPositionColor, cxShader)
 {
     
 }
-CX_OBJECT_TERM(cxShaderPositionColor, cxShader)
+CX_TERM(cxShaderPositionColor, cxShader)
 
 
 

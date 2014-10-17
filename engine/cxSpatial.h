@@ -26,11 +26,11 @@ typedef struct {
     cxSpatialNearestFilter filter;
 } cxSpatialNearestInfo;
 
-CX_OBJECT_DEF(cxSpatial, cxObject)
+CX_DEF(cxSpatial, cxObject)
     cxAny index;
     CX_METHOD_DEF(cxUInt, HashValue, cxAny);
     CX_METHOD_DEF(cpBB, IndexBB,cxAny);
-CX_OBJECT_END(cxSpatial, cxObject)
+CX_END(cxSpatial, cxObject)
 
 cxSpatial cxSpatialAlloc(cpBB (*func)(cxAny));
 

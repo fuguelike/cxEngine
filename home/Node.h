@@ -37,7 +37,7 @@ typedef struct {
 #define AAMake(_b_,_a_)     (ActionResult){_b_,_a_}
 #define AAEmpty()           AAMake(NULL,NULL)
 
-CX_OBJECT_DEF(Node, cxSprite)
+CX_DEF(Node, cxSprite)
 
     cxLabelTTF lifeTTF;     //Test
     cxSprite array;     //Test
@@ -84,7 +84,7 @@ CX_OBJECT_DEF(Node, cxSprite)
     CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);   //被一个目标攻击 pview 被attacker攻击
     CX_METHOD_DEF(ActionResult, AttackAction,cxAny attacker,cxAny target);          //创建一个攻击动画,动画结时攻击目标
     CX_METHOD_DEF(void, TimerArrive,cxAny);                                         //资源生产等处理
-CX_OBJECT_END(Node, cxSprite)
+CX_END(Node, cxSprite)
 
 CX_FIELD_GET(Node, NodeState, State);
 CX_INLINE void NodeSetState(cxAny pthis,const NodeState state)

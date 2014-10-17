@@ -162,7 +162,7 @@ CX_SETTER_DEF(cxView, bordercolor)
     cxViewSetBorderColor(this, borderColor);
 }
 
-CX_OBJECT_TYPE(cxView, cxObject)
+CX_TYPE(cxView, cxObject)
 {
     CX_PROPERTY_SETTER(cxView, size);
     CX_PROPERTY_SETTER(cxView, position);
@@ -183,7 +183,7 @@ CX_OBJECT_TYPE(cxView, cxObject)
     CX_PROPERTY_SETTER(cxView, tag);
     CX_PROPERTY_SETTER(cxView, bordercolor);
 }
-CX_OBJECT_INIT(cxView, cxObject)
+CX_INIT(cxView, cxObject)
 {
     this->IsDraw        = true;
     this->SleepTop      = true;
@@ -204,7 +204,7 @@ CX_OBJECT_INIT(cxView, cxObject)
     this->Binded        = CX_ALLOC(cxHash);
     this->Bindes        = CX_ALLOC(cxHash);
 }
-CX_OBJECT_FREE(cxView, cxObject)
+CX_FREE(cxView, cxObject)
 {
     //unbind binds
     cxViewUnBindAll(this);
@@ -224,7 +224,7 @@ CX_OBJECT_FREE(cxView, cxObject)
 
     CX_SIGNAL_RELEASE(this->onDraw);
 }
-CX_OBJECT_TERM(cxView, cxObject)
+CX_TERM(cxView, cxObject)
 
 void cxViewUnBindAll(cxAny pview)
 {

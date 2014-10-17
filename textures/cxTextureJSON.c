@@ -80,21 +80,21 @@ static void cxTextureJSONBind(cxAny this)
     }
 }
 
-CX_OBJECT_TYPE(cxTextureJSON, cxTexture)
+CX_TYPE(cxTextureJSON, cxTexture)
 {
     
 }
-CX_OBJECT_INIT(cxTextureJSON, cxTexture)
+CX_INIT(cxTextureJSON, cxTexture)
 {
     CX_SET(cxTexture, this, Bind, cxTextureJSONBind);
     CX_SET(cxTexture, this, Load, cxTextureJSONLoad);
 }
-CX_OBJECT_FREE(cxTextureJSON, cxTexture)
+CX_FREE(cxTextureJSON, cxTexture)
 {
     CX_RELEASE(this->alphaTexture);
     CX_RELEASE(this->innerTexture);
 }
-CX_OBJECT_TERM(cxTextureJSON, cxTexture)
+CX_TERM(cxTextureJSON, cxTexture)
 
 cxTexture cxTextureJSONLoadStream(cxStream stream)
 {

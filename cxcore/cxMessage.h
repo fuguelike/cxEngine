@@ -17,9 +17,9 @@ CX_C_BEGIN
 
 typedef void (*cxMessageFunc)(cxAny dst,cxAny src);
 
-CX_OBJECT_DEF(cxMessage, cxObject)
+CX_DEF(cxMessage, cxObject)
     cxHash keys;
-CX_OBJECT_END(cxMessage, cxObject)
+CX_END(cxMessage, cxObject)
 
 cxMessage cxMessageInstance();
 

@@ -39,23 +39,23 @@ CX_SETTER_DEF(cxRotate, degrees)
     this->newAngle = kmDegreesToRadians(cxJsonToDouble(value, oldDegrees));
 }
 
-CX_OBJECT_TYPE(cxRotate, cxAction)
+CX_TYPE(cxRotate, cxAction)
 {
     CX_PROPERTY_SETTER(cxRotate, raxis);
     CX_PROPERTY_SETTER(cxRotate, angle);
     CX_PROPERTY_SETTER(cxRotate, degrees);
 }
-CX_OBJECT_INIT(cxRotate, cxAction)
+CX_INIT(cxRotate, cxAction)
 {
     this->raxis = cxVec3fZ;
     CX_SET(cxAction, this, Init, cxRotateInit);
     CX_SET(cxAction, this, Step, cxRotateStep);
 }
-CX_OBJECT_FREE(cxRotate, cxAction)
+CX_FREE(cxRotate, cxAction)
 {
 
 }
-CX_OBJECT_TERM(cxRotate, cxAction)
+CX_TERM(cxRotate, cxAction)
 
 cxRotate cxRotateCreate(cxFloat time,cxVec3f raxis,cxFloat newAngle)
 {

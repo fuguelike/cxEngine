@@ -9,13 +9,13 @@
 #include "cxString.h"
 #include "cxPath.h"
 
-CX_OBJECT_TYPE(cxPath, cxObject)
+CX_TYPE(cxPath, cxObject)
 {}
-CX_OBJECT_INIT(cxPath, cxObject)
+CX_INIT(cxPath, cxObject)
 {}
-CX_OBJECT_FREE(cxPath, cxObject)
+CX_FREE(cxPath, cxObject)
 {}
-CX_OBJECT_TERM(cxPath, cxObject)
+CX_TERM(cxPath, cxObject)
 
 //parse url?key=value
 cxPath cxPathParseKeyValue(cxPath this)

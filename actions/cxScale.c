@@ -32,20 +32,20 @@ CX_SETTER_DEF(cxScale, scale)
     this->newScale = cxJsonToVec2f(value, this->newScale);
 }
 
-CX_OBJECT_TYPE(cxScale, cxAction)
+CX_TYPE(cxScale, cxAction)
 {
     CX_PROPERTY_SETTER(cxScale, scale);
 }
-CX_OBJECT_INIT(cxScale, cxAction)
+CX_INIT(cxScale, cxAction)
 {
     CX_SET(cxAction, this, Init, cxScaleInit);
     CX_SET(cxAction, this, Step, cxScaleStep);
 }
-CX_OBJECT_FREE(cxScale, cxAction)
+CX_FREE(cxScale, cxAction)
 {
 
 }
-CX_OBJECT_TERM(cxScale, cxAction)
+CX_TERM(cxScale, cxAction)
 
 void cxScaleSetScale(cxAny pav,cxVec2f scale)
 {

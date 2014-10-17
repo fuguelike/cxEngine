@@ -40,20 +40,20 @@ cxString cxShaderDefaultFragment(cxAny this)
     return cxStringConstChars(fragment);
 }
 
-CX_OBJECT_TYPE(cxShaderDefault, cxShader)
+CX_TYPE(cxShaderDefault, cxShader)
 {
     
 }
-CX_OBJECT_INIT(cxShaderDefault, cxShader)
+CX_INIT(cxShaderDefault, cxShader)
 {
     CX_SET(cxShader, this, Vertex, cxShaderDefaultVertex);
     CX_SET(cxShader, this, Fragment, cxShaderDefaultFragment);
 }
-CX_OBJECT_FREE(cxShaderDefault, cxShader)
+CX_FREE(cxShaderDefault, cxShader)
 {
 
 }
-CX_OBJECT_TERM(cxShaderDefault, cxShader)
+CX_TERM(cxShaderDefault, cxShader)
 
 
 

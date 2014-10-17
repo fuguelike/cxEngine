@@ -13,8 +13,8 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(Flyable, Attack)
-CX_OBJECT_END(Flyable, Attack)
+CX_DEF(Flyable, Attack)
+CX_END(Flyable, Attack)
 
 ActionResult FlyableAttackAction(cxAny pattacker,cxAny ptarget);
 

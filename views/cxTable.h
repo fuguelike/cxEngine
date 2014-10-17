@@ -13,12 +13,12 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxTable, cxView)
+CX_DEF(cxTable, cxView)
     cxVec2f space;
     cxBool isArray;
     cxBool arrayHide;
     cxVec2i grid;
-CX_OBJECT_END(cxTable, cxView)
+CX_END(cxTable, cxView)
 
 void cxTableArrayHide(cxAny pview,cxBool arrayHide);
 

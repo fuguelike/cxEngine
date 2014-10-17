@@ -17,25 +17,25 @@
 CX_C_BEGIN
 
 //id="124" x="2" y="3" width="14" height="70" xoffset="4" yoffset="-1" xadvance="17" page="0" chnl="0" letter="|"
-CX_OBJECT_DEF(cxBMPElement, cxObject)
+CX_DEF(cxBMPElement, cxObject)
     cxRect4f box;
     cxInt xoffset;
     cxInt yoffset;
     cxInt xadvance;
     cxInt page;
     cxInt key;
-CX_OBJECT_END(cxBMPElement, cxObject)
+CX_END(cxBMPElement, cxObject)
 
 //key = (first<<16) | (second & 0xffff);
-CX_OBJECT_DEF(cxBMPKerning, cxObject)
+CX_DEF(cxBMPKerning, cxObject)
     cxInt first;
     cxInt second;
     cxInt amount;
-CX_OBJECT_END(cxBMPKerning, cxObject)
+CX_END(cxBMPKerning, cxObject)
 
 #define cxBMPKerningKey(f,s)    cxHashIntKey(((f) << 16) | ((s) & 0xffff))
 
-CX_OBJECT_DEF(cxBMPFont, cxObject)
+CX_DEF(cxBMPFont, cxObject)
     cxString face;
     cxInt bold;
     cxInt stretchH;
@@ -56,7 +56,7 @@ CX_OBJECT_DEF(cxBMPFont, cxObject)
     cxHash chars;
     cxHash kernings;
     cxBool isError;
-CX_OBJECT_END(cxBMPFont, cxObject)
+CX_END(cxBMPFont, cxObject)
 
 cxFloat cxBMPKerningAmount(cxBMPFont this, cxUInt16 prev,cxUInt16 curr);
 

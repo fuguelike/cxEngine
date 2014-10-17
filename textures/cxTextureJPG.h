@@ -14,9 +14,9 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxTextureJPG, cxTexture)
+CX_DEF(cxTextureJPG, cxTexture)
     //
-CX_OBJECT_END(cxTextureJPG, cxTexture)
+CX_END(cxTextureJPG, cxTexture)
 
 cxTexture cxTextureJPGLoadStream(cxStream stream);
 

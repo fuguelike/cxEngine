@@ -47,20 +47,20 @@ static void cxTextureTXTBind(cxAny this)
     cxOpenGLBindTexture(txt->cxTexture.textureId, 0);
 }
 
-CX_OBJECT_TYPE(cxTextureTXT, cxTexture)
+CX_TYPE(cxTextureTXT, cxTexture)
 {
     
 }
-CX_OBJECT_INIT(cxTextureTXT, cxTexture)
+CX_INIT(cxTextureTXT, cxTexture)
 {
     CX_SET(cxTexture, this, Bind, cxTextureTXTBind);
     CX_SET(cxTexture, this, Load, cxTextureTXTLoad);
 }
-CX_OBJECT_FREE(cxTextureTXT, cxTexture)
+CX_FREE(cxTextureTXT, cxTexture)
 {
     CX_RELEASE(this->string);
     CX_RELEASE(this->font);
 }
-CX_OBJECT_TERM(cxTextureTXT, cxTexture)
+CX_TERM(cxTextureTXT, cxTexture)
 
 

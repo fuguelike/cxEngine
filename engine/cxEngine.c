@@ -304,11 +304,11 @@ cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)
     return cxViewAppendTimer(engine->Window, freq, repeat);
 }
 
-CX_OBJECT_TYPE(cxEngine, cxObject)
+CX_TYPE(cxEngine, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxEngine, cxObject)
+CX_INIT(cxEngine, cxObject)
 {
     this->Interval = 1.0f/60.0f;
     this->FrameDelta = 1.0f/60.0f;
@@ -320,7 +320,7 @@ CX_OBJECT_INIT(cxEngine, cxObject)
     this->groups = CX_ALLOC(cxHash);
     this->assets = CX_ALLOC(cxHash);
 }
-CX_OBJECT_FREE(cxEngine, cxObject)
+CX_FREE(cxEngine, cxObject)
 {
     CX_RELEASE(this->groups);
     CX_RELEASE(this->items);
@@ -340,7 +340,7 @@ CX_OBJECT_FREE(cxEngine, cxObject)
     CX_RELEASE(this->textures);
     kmGLFreeAll();
 }
-CX_OBJECT_TERM(cxEngine, cxObject)
+CX_TERM(cxEngine, cxObject)
 
 //a.json?key
 cxJson cxEngineJsonReader(cxConstChars src)

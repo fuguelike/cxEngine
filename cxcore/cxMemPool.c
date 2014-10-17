@@ -12,17 +12,17 @@
 
 static pthread_key_t autoPoolKey;
 
-CX_OBJECT_TYPE(cxMemPool, cxObject)
+CX_TYPE(cxMemPool, cxObject)
 {}
-CX_OBJECT_INIT(cxMemPool, cxObject)
+CX_INIT(cxMemPool, cxObject)
 {
     this->objects = CX_ALLOC(cxArray);
 }
-CX_OBJECT_FREE(cxMemPool, cxObject)
+CX_FREE(cxMemPool, cxObject)
 {
     CX_RELEASE(this->objects);
 }
-CX_OBJECT_TERM(cxMemPool, cxObject)
+CX_TERM(cxMemPool, cxObject)
 
 static cxStack cxMemPoolStack()
 {

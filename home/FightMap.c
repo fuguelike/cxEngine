@@ -108,21 +108,21 @@ static void mapSubType(cxAny dst,cxAny src)
     }
 }
 
-CX_OBJECT_TYPE(FightMap, Map)
+CX_TYPE(FightMap, Map)
 {
     
 }
-CX_OBJECT_INIT(FightMap, Map)
+CX_INIT(FightMap, Map)
 {
     MapSetMode(this, MapModeFight);
     cxMessageAppend(this, mapSubType, "selectSubType");
     CX_SET(cxView, this, Touch, FightMapTouch);
 }
-CX_OBJECT_FREE(FightMap, Map)
+CX_FREE(FightMap, Map)
 {
     cxMessageRemove(this);
 }
-CX_OBJECT_TERM(FightMap, Map)
+CX_TERM(FightMap, Map)
 
 cxBool FightMapInit(cxAny pmap)
 {
@@ -144,19 +144,19 @@ static void btnToWarClick(cxAny sender)
     cxWindowPushView(scene);
 }
 
-CX_OBJECT_TYPE(FightScene, cxScroll)
+CX_TYPE(FightScene, cxScroll)
 {
     
 }
-CX_OBJECT_INIT(FightScene, cxScroll)
+CX_INIT(FightScene, cxScroll)
 {
     
 }
-CX_OBJECT_FREE(FightScene, cxScroll)
+CX_FREE(FightScene, cxScroll)
 {
     
 }
-CX_OBJECT_TERM(FightScene, cxScroll)
+CX_TERM(FightScene, cxScroll)
 
 FightScene FightSceneCreate()
 {

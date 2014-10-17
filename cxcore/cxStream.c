@@ -8,22 +8,22 @@
 
 #include "cxStream.h"
 
-CX_OBJECT_TYPE(cxStream, cxObject)
+CX_TYPE(cxStream, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxStream, cxObject)
+CX_INIT(cxStream, cxObject)
 {
     //
 }
-CX_OBJECT_FREE(cxStream, cxObject)
+CX_FREE(cxStream, cxObject)
 {
     if(this->isOpen){
         cxStreamClose(this);
     }
     CX_RELEASE(this->path);
 }
-CX_OBJECT_TERM(cxStream, cxObject)
+CX_TERM(cxStream, cxObject)
 
 cxBool cxStreamOpen(cxAny pstream)
 {

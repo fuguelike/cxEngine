@@ -13,8 +13,8 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(Longer, Attack)
-CX_OBJECT_END(Longer, Attack)
+CX_DEF(Longer, Attack)
+CX_END(Longer, Attack)
 
 void LongerInit(cxAny pview, cxAny pmap,cxVec2i idx);
 

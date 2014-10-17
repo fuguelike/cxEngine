@@ -14,10 +14,10 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(Button, cxButton)
+CX_DEF(Button, cxButton)
     CX_EVENT_ALLOC(onTap);
     cxLabelTTF ttf;
-CX_OBJECT_END(Button, cxButton)
+CX_END(Button, cxButton)
 
 CX_C_END
 

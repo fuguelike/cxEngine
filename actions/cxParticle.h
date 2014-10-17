@@ -44,7 +44,7 @@ typedef enum {
     cxParticleBlendMultiply,
 }cxParticleBlendMode;
 
-CX_OBJECT_DEF(cxParticle, cxAction)
+CX_DEF(cxParticle, cxAction)
     cxFloat time;
     cxAtlas atlas;
     cxParticleEmitterType type;
@@ -83,7 +83,7 @@ CX_OBJECT_DEF(cxParticle, cxAction)
     CX_METHOD_DEF(cxAny, GetDrawView,cxAny);
     CX_METHOD_DEF(void, InitUnit,cxAny,cxParticleUnit *,cxInt);
     CX_SLOT_ALLOC(onDraw);
-CX_OBJECT_END(cxParticle, cxAction)
+CX_END(cxParticle, cxAction)
 
 cxBoxTex2f *cxParticleGetBoxTex(cxAny pav,cxInt index);
 

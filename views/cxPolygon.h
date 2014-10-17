@@ -13,13 +13,13 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxPolygon, cxSprite)
+CX_DEF(cxPolygon, cxSprite)
     cxVec3f *points;
     cxColor4f *colors;
     cxTex2f *texs;
     cxInt capacity;
     cxInt number;
-CX_OBJECT_END(cxPolygon, cxSprite)
+CX_END(cxPolygon, cxSprite)
 
 void cxPolygonClear(cxAny pview);
 

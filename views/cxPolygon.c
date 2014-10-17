@@ -45,23 +45,23 @@ CX_SETTER_DEF(cxPolygon, points)
     CX_JSON_ARRAY_EACH_END(points, point);
 }
 
-CX_OBJECT_TYPE(cxPolygon, cxSprite)
+CX_TYPE(cxPolygon, cxSprite)
 {
     CX_PROPERTY_SETTER(cxPolygon, points);
 }
-CX_OBJECT_INIT(cxPolygon, cxSprite)
+CX_INIT(cxPolygon, cxSprite)
 {
     CX_SET(cxView, this, Draw, cxPolygonDraw);
     this->capacity = 8;
     cxPolygonMalloc(this);
 }
-CX_OBJECT_FREE(cxPolygon, cxSprite)
+CX_FREE(cxPolygon, cxSprite)
 {
     allocator->free(this->points);
     allocator->free(this->colors);
     allocator->free(this->texs);
 }
-CX_OBJECT_TERM(cxPolygon, cxSprite)
+CX_TERM(cxPolygon, cxSprite)
 
 void cxPolygonClear(cxAny pview)
 {

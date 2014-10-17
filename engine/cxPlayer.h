@@ -26,7 +26,7 @@ typedef enum {
     cxAudioFileTypeWAV,
 }cxAudioFileType;
 
-CX_OBJECT_DEF(cxPlayer, cxObject)
+CX_DEF(cxPlayer, cxObject)
 #if (CX_TARGET_PLATFORM == CX_PLATFORM_IOS)
     cxArray tracks;
     cxHash caches;
@@ -36,7 +36,7 @@ CX_OBJECT_DEF(cxPlayer, cxObject)
 #elif CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID
     cxHash tracks;
 #endif
-CX_OBJECT_END(cxPlayer, cxObject)
+CX_END(cxPlayer, cxObject)
 
 void cxPauseEffect(cxAny this);
 

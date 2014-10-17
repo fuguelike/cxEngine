@@ -13,8 +13,8 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxShaderAlpha, cxShader)
-CX_OBJECT_END(cxShaderAlpha, cxShader)
+CX_DEF(cxShaderAlpha, cxShader)
+CX_END(cxShaderAlpha, cxShader)
 
 CX_C_END
 

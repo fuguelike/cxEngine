@@ -42,7 +42,7 @@ typedef enum {
 
 #define CX_ASTAR_POINTS_FOREACH(_p_, _i_)    CX_ANY_ARRAY_REVERSE(_p_, _i_, cxVec2i)
 
-CX_OBJECT_DEF(cxAStar, cxObject)
+CX_DEF(cxAStar, cxObject)
     cxAStarType type;
     CX_METHOD_DEF(void, Neighbors, cxAny, cxAny list, cxVec2i *node);
     CX_METHOD_DEF(cxFloat, Heuristic, cxAny, cxVec2i *from,cxVec2i *to);
@@ -52,7 +52,7 @@ CX_OBJECT_DEF(cxAStar, cxObject)
     cxAny data;
     cxAnyArray points;
     cxAnyArray visits;
-CX_OBJECT_END(cxAStar, cxObject)
+CX_END(cxAStar, cxObject)
 
 void cxAStarSetType(cxAny pobj,cxAStarType type);
 

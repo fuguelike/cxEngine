@@ -55,22 +55,22 @@ CX_SETTER_DEF(cxTimeLine, times)
     CX_JSON_ARRAY_EACH_END(times, item)
 }
 
-CX_OBJECT_TYPE(cxTimeLine, cxAction)
+CX_TYPE(cxTimeLine, cxAction)
 {
     CX_PROPERTY_SETTER(cxTimeLine, times);
 }
-CX_OBJECT_INIT(cxTimeLine, cxAction)
+CX_INIT(cxTimeLine, cxAction)
 {
     CX_SET(cxAction, this, Init, cxTimeLineInit);
     CX_SET(cxAction, this, Step, cxTimeLineStep);
     this->times = cxAnyArrayAlloc(cxFloat);
 }
-CX_OBJECT_FREE(cxTimeLine, cxAction)
+CX_FREE(cxTimeLine, cxAction)
 {
     CX_EVENT_RELEASE(this->onTime);
     CX_RELEASE(this->times);
 }
-CX_OBJECT_TERM(cxTimeLine, cxAction)
+CX_TERM(cxTimeLine, cxAction)
 
 void cxTimeLineSet(cxAny pav,cxFloat time)
 {

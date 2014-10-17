@@ -15,15 +15,15 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxTexCoord, cxObject)
+CX_DEF(cxTexCoord, cxObject)
     cxBool rotated;
     cxFloat x;
     cxFloat y;
     cxFloat w;
     cxFloat h;
-CX_OBJECT_END(cxTexCoord, cxObject)
+CX_END(cxTexCoord, cxObject)
 
-CX_OBJECT_DEF(cxTexture, cxObject)
+CX_DEF(cxTexture, cxObject)
     cxHash keys;    //cxTexCoord
     GLuint textureId;
     cxTextureParams texParam;
@@ -36,7 +36,7 @@ CX_OBJECT_DEF(cxTexture, cxObject)
     CX_METHOD_DEF(cxBool, Load, cxAny, cxStream);
     CX_METHOD_DEF(void, Bind, cxAny);
     cxShader shader;
-CX_OBJECT_END(cxTexture, cxObject)
+CX_END(cxTexture, cxObject)
 
 void cxDrawClippingTexture(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars tkey);
 

@@ -13,7 +13,7 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxButton, cxSprite)
+CX_DEF(cxButton, cxSprite)
     cxVec2f touchPos;
     cxFloat movement;
     cxBool isPass;
@@ -23,7 +23,7 @@ CX_OBJECT_DEF(cxButton, cxSprite)
     CX_EVENT_ALLOC(onRelease);
     CX_EVENT_ALLOC(onEnter);
     CX_EVENT_ALLOC(onLeave);
-CX_OBJECT_END(cxButton, cxSprite)
+CX_END(cxButton, cxSprite)
 
 cxBool cxButtonTouch(cxAny pview,const cxTouchItems *points);
 

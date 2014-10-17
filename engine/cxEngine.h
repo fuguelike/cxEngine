@@ -23,7 +23,7 @@ CX_C_BEGIN
 
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
-CX_OBJECT_DEF(cxEngine, cxObject)
+CX_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxSize2f WinSize);     //screen size
     CX_FIELD_DEF(cxSize2f DesSize);     //design size
     CX_FIELD_DEF(cxVec2f Scale);        //dessize / winsize
@@ -52,7 +52,7 @@ CX_OBJECT_DEF(cxEngine, cxObject)
     cxIconv iconv;              //cxIconv instance
     cxPlayer player;            //cxPlayer instance
     cxTextureFactory textures;  //cxTextureFactory instance
-CX_OBJECT_END(cxEngine, cxObject)
+CX_END(cxEngine, cxObject)
 
 extern cxEngine engineInstance;
 

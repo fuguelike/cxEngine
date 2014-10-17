@@ -13,11 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxMemory, cxObject)
+CX_DEF(cxMemory, cxObject)
     cxAny data;
     cxInt size;
     cxInt number;
-CX_OBJECT_END(cxMemory, cxObject)
+CX_END(cxMemory, cxObject)
 
 cxMemory cxMemoryCreate(cxInt size);
 

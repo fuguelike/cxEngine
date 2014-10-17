@@ -13,9 +13,9 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxSprites, cxAtlas)
+CX_DEF(cxSprites, cxAtlas)
     cxArray sprites;
-CX_OBJECT_END(cxSprites, cxAtlas)
+CX_END(cxSprites, cxAtlas)
 
 CX_C_END
 

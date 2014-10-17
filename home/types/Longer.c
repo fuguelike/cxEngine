@@ -40,11 +40,11 @@ static void LongerAttackOnce(cxAny pattacker,cxAny ptarget)
     cxViewSetScale(pattacker, cxVec2fv(1, 1));
 }
 
-CX_OBJECT_TYPE(Longer, Attack)
+CX_TYPE(Longer, Attack)
 {
     
 }
-CX_OBJECT_INIT(Longer, Attack)
+CX_INIT(Longer, Attack)
 {
     NodeSetRange(this, cxRange2fv(0, 5));
     NodeSetAttackRate(this, 0.5f);
@@ -53,11 +53,11 @@ CX_OBJECT_INIT(Longer, Attack)
     CX_SET(Node, this, AttackOnce, LongerAttackOnce);
     cxViewSetColor(this, cxORANGE);
 }
-CX_OBJECT_FREE(Longer, Attack)
+CX_FREE(Longer, Attack)
 {
     
 }
-CX_OBJECT_TERM(Longer, Attack)
+CX_TERM(Longer, Attack)
 
 void LongerInit(cxAny pview, cxAny pmap,cxVec2i idx)
 {

@@ -90,21 +90,21 @@ static bool cxShaderCompile(cxAny pshader,GLuint *shader, GLenum type, cxString 
     }
     return (status == GL_TRUE);
 }
-CX_OBJECT_TYPE(cxShader, cxObject)
+CX_TYPE(cxShader, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxShader, cxObject)
+CX_INIT(cxShader, cxObject)
 {
     CX_SET(cxShader, this, Init, cxShaderInitPosColorTex);
 }
-CX_OBJECT_FREE(cxShader, cxObject)
+CX_FREE(cxShader, cxObject)
 {
     glDeleteShader(this->vertexShader);
     glDeleteShader(this->fragmentShader);
     cxOpenGLDeleteProgram(this->program);
 }
-CX_OBJECT_TERM(cxShader, cxObject)
+CX_TERM(cxShader, cxObject)
 
 void cxShaderInitPosColorTex(cxAny pshader)
 {

@@ -47,12 +47,12 @@ CX_SETTER_DEF(cxParabola, gravity)
     this->gravity = cxJsonToVec2f(value, this->gravity);
 }
 
-CX_OBJECT_TYPE(cxParabola, cxAction)
+CX_TYPE(cxParabola, cxAction)
 {
     CX_PROPERTY_SETTER(cxParabola, speed);
     CX_PROPERTY_SETTER(cxParabola, gravity);
 }
-CX_OBJECT_INIT(cxParabola, cxAction)
+CX_INIT(cxParabola, cxAction)
 {
     CX_SET(cxAction, this, Init, cxParabolaInit);
     CX_SET(cxAction, this, Step, cxParabolaStep);
@@ -60,11 +60,11 @@ CX_OBJECT_INIT(cxParabola, cxAction)
     this->gravity = cxVec2fv(0, -1000);
     this->cxAction.Time = -1;
 }
-CX_OBJECT_FREE(cxParabola, cxAction)
+CX_FREE(cxParabola, cxAction)
 {
     
 }
-CX_OBJECT_TERM(cxParabola, cxAction)
+CX_TERM(cxParabola, cxAction)
 
 cxParabola cxParabolaCreate(cxVec2f speed)
 {

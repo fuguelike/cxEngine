@@ -21,10 +21,10 @@ typedef enum {
     MoveTypePosition    //为目标位置移动
 }MoveType;
 
-CX_OBJECT_DEF(Move, cxSpline)
+CX_DEF(Move, cxSpline)
     CX_FIELD_DEF(MoveType Type);
     CX_FIELD_DEF(cxBool IsToPoints);
-CX_OBJECT_END(Move, cxSpline)
+CX_END(Move, cxSpline)
 
 CX_FIELD_IMP(Move, cxBool, IsToPoints);
 CX_FIELD_IMP(Move, MoveType, Type);

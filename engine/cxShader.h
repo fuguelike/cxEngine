@@ -37,7 +37,7 @@ enum {
     cxVertexAttribFlagPosColorTex = cxVertexAttribFlagPosition|cxVertexAttribFlagColor|cxVertexAttribFlagTexcoord,
 };
 
-CX_OBJECT_DEF(cxShader, cxObject)
+CX_DEF(cxShader, cxObject)
     cxMatrix4f kxMatrixProject;
     cxMatrix4f kxMatrixModelView;
     cxMatrix4f kxMatrix;
@@ -50,7 +50,7 @@ CX_OBJECT_DEF(cxShader, cxObject)
     CX_METHOD_DEF(void,Uniform,cxAny);
     CX_METHOD_DEF(cxString, Vertex, cxAny);
     CX_METHOD_DEF(cxString, Fragment, cxAny);
-CX_OBJECT_END(cxShader, cxObject)
+CX_END(cxShader, cxObject)
 
 void cxShaderInitPosColorTex(cxAny pshader);
 

@@ -27,23 +27,23 @@ static void cxSpatialIndexIterator(void *obj, void *data)
     CX_RELEASE(view);
 }
 
-CX_OBJECT_TYPE(cxSpatial, cxObject)
+CX_TYPE(cxSpatial, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxSpatial, cxObject)
+CX_INIT(cxSpatial, cxObject)
 {
     CX_SET(cxSpatial, this, IndexBB, cxSpatialIndexBB);
     this->index = cpBBTreeNew(this->IndexBB, NULL);
 }
-CX_OBJECT_FREE(cxSpatial, cxObject)
+CX_FREE(cxSpatial, cxObject)
 {
     if(this->index != NULL){
         cxSpatialClear(this);
         cpSpatialIndexDestroy(this->index);
     }
 }
-CX_OBJECT_TERM(cxSpatial, cxObject)
+CX_TERM(cxSpatial, cxObject)
 
 cxSpatial cxSpatialAlloc(cpBB (*func)(cxAny))
 {

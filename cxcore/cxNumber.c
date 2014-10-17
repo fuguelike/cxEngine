@@ -15,13 +15,13 @@ cxBool cxNumberIsType(cxAny this,cxNumberType type)
     return number != NULL && number->type == type;
 }
 
-CX_OBJECT_TYPE(cxNumber, cxObject)
+CX_TYPE(cxNumber, cxObject)
 {}
-CX_OBJECT_INIT(cxNumber, cxObject)
+CX_INIT(cxNumber, cxObject)
 {}
-CX_OBJECT_FREE(cxNumber, cxObject)
+CX_FREE(cxNumber, cxObject)
 {}
-CX_OBJECT_TERM(cxNumber, cxObject)
+CX_TERM(cxNumber, cxObject)
 //
 void cxNumberSetBool(cxAny pnum,cxBool v)
 {

@@ -16,14 +16,14 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxType, cxObject)
+CX_DEF(cxType, cxObject)
     cxAny (*Create)();
     cxAny (*Alloc)();
     cxConstType typeName;
     cxString signature;    //a.b.c
     cxType superType;
     cxHash properties;
-CX_OBJECT_END(cxType, cxObject)
+CX_END(cxType, cxObject)
 
 typedef cxJson (*cxObjectCreateReaderFunc)(cxConstChars src);
 

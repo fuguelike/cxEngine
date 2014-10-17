@@ -13,11 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxTimeLine, cxAction)
+CX_DEF(cxTimeLine, cxAction)
     cxInt index;
     cxAnyArray times;
     CX_EVENT_ALLOC(onTime);
-CX_OBJECT_END(cxTimeLine, cxAction)
+CX_END(cxTimeLine, cxAction)
 
 //set time event point
 void cxTimeLineSet(cxAny pav,cxFloat time);

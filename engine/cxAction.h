@@ -18,7 +18,7 @@ CX_C_BEGIN
 
 #define CX_FOREVER   -1
 
-CX_OBJECT_DEF(cxAction, cxObject)
+CX_DEF(cxAction, cxObject)
     CX_FIELD_DEF(cxAny Parent);
     CX_FIELD_DEF(cxAssist4f Assist);
     cxBool isExit;
@@ -46,7 +46,7 @@ CX_OBJECT_DEF(cxAction, cxObject)
     CX_EVENT_ALLOC(onInit);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
-CX_OBJECT_END(cxAction, cxObject)
+CX_END(cxAction, cxObject)
 
 CX_FIELD_SET(cxAction, cxFloat, PauseTime);
 CX_FIELD_SET(cxAction, cxFloat, InitTime);

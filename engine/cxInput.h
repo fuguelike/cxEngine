@@ -31,7 +31,7 @@ typedef struct {
 #define TAP_TIME        0.15f
 #define TAP_MOVEMENT    25.0f
 
-CX_OBJECT_DEF(cxTouchItem, cxObject)
+CX_DEF(cxTouchItem, cxObject)
     cxLong  key;        //item key
     cxVec2f previous;   //prev position
     cxVec2f delta;      //window delta,when cxTouchTypeMove
@@ -42,7 +42,7 @@ CX_OBJECT_DEF(cxTouchItem, cxObject)
     cxVec2f position;   //current position
     cxTouchType type;
     cxBool isTap;
-CX_OBJECT_END(cxTouchItem, cxObject)
+CX_END(cxTouchItem, cxObject)
 
 typedef struct {
     cxTouchItem items[CX_MAX_TOUCH_POINT];

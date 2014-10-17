@@ -13,10 +13,10 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxGroup, cxObject)
+CX_DEF(cxGroup, cxObject)
     CX_FIELD_DEF(cxFloat Scale);
     CX_METHOD_DEF(void, onUpdate,cxAny group,cxAny pav);
-CX_OBJECT_END(cxGroup, cxObject)
+CX_END(cxGroup, cxObject)
 
 CX_FIELD_SET(cxGroup, cxFloat, Scale);
 cxFloat cxGroupGetScale(cxAny group,cxAny pav);

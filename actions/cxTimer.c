@@ -33,22 +33,22 @@ CX_SETTER_DEF(cxTimer, begin)
     this->IsBegin = cxJsonToBool(value, this->IsBegin);
 }
 
-CX_OBJECT_TYPE(cxTimer, cxAction)
+CX_TYPE(cxTimer, cxAction)
 {
     CX_PROPERTY_SETTER(cxTimer, repeat);
     CX_PROPERTY_SETTER(cxTimer, begin);
 }
-CX_OBJECT_INIT(cxTimer, cxAction)
+CX_INIT(cxTimer, cxAction)
 {
     this->IsBegin = false;
     CX_SET(cxAction, this, Init, cxTimerInit);
     CX_SET(cxAction, this, Exit, cxTimerExit);
 }
-CX_OBJECT_FREE(cxTimer, cxAction)
+CX_FREE(cxTimer, cxAction)
 {
     CX_EVENT_RELEASE(this->onArrive);
 }
-CX_OBJECT_TERM(cxTimer, cxAction)
+CX_TERM(cxTimer, cxAction)
 
 cxTimer cxTimerCreate(cxFloat freq,cxInt repeat)
 {

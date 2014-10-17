@@ -14,10 +14,10 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxTexturePVR, cxTexture)
+CX_DEF(cxTexturePVR, cxTexture)
     GLenum format;
     GLenum glFormat;
-CX_OBJECT_END(cxTexturePVR, cxTexture)
+CX_END(cxTexturePVR, cxTexture)
 
 cxTexture cxTexturePVRLoadStream(cxStream stream);
 

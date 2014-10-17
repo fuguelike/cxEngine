@@ -8,20 +8,20 @@
 
 #include "cxLoader.h"
 
-CX_OBJECT_TYPE(cxLoader, cxObject)
+CX_TYPE(cxLoader, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxLoader, cxObject)
+CX_INIT(cxLoader, cxObject)
 {
     this->objects = CX_ALLOC(cxHash);
 }
-CX_OBJECT_FREE(cxLoader, cxObject)
+CX_FREE(cxLoader, cxObject)
 {
     CX_RELEASE(this->Root);
     CX_RELEASE(this->objects);
 }
-CX_OBJECT_TERM(cxLoader, cxObject)
+CX_TERM(cxLoader, cxObject)
 
 cxAny cxLoaderGet(cxAny loader,cxConstChars id)
 {

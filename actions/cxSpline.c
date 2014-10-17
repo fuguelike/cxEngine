@@ -94,11 +94,11 @@ CX_SETTER_DEF(cxSpline, points)
     CX_JSON_ARRAY_EACH_END(points, item)
 }
 
-CX_OBJECT_TYPE(cxSpline, cxAction)
+CX_TYPE(cxSpline, cxAction)
 {
     CX_PROPERTY_SETTER(cxSpline, points);
 }
-CX_OBJECT_INIT(cxSpline, cxAction)
+CX_INIT(cxSpline, cxAction)
 {
     this->index = -1;
     this->angle = INT32_MAX;
@@ -107,13 +107,13 @@ CX_OBJECT_INIT(cxSpline, cxAction)
     CX_SET(cxAction, this, Reset, cxSplineReset);
     this->points = cxAnyArrayAlloc(cxVec2f);
 }
-CX_OBJECT_FREE(cxSpline, cxAction)
+CX_FREE(cxSpline, cxAction)
 {
     CX_EVENT_RELEASE(this->onAngle);
     CX_EVENT_RELEASE(this->onIndex);
     CX_RELEASE(this->points);
 }
-CX_OBJECT_TERM(cxSpline, cxAction)
+CX_TERM(cxSpline, cxAction)
 
 cxSpline cxSplineCreate(cxFloat time,cxAnyArray points)
 {

@@ -56,22 +56,22 @@ CX_SETTER_DEF(cxBezier, cpos2)
     this->cpos2 = cxJsonToVec2f(value, this->cpos2);
 }
 
-CX_OBJECT_TYPE(cxBezier, cxAction)
+CX_TYPE(cxBezier, cxAction)
 {
     CX_PROPERTY_SETTER(cxBezier, epos);
     CX_PROPERTY_SETTER(cxBezier, cpos1);
     CX_PROPERTY_SETTER(cxBezier, cpos2);
 }
-CX_OBJECT_INIT(cxBezier, cxAction)
+CX_INIT(cxBezier, cxAction)
 {
     CX_SET(cxAction, this, Init, cxBezierInit);
     CX_SET(cxAction, this, Step, cxBezierStep);
 }
-CX_OBJECT_FREE(cxBezier, cxAction)
+CX_FREE(cxBezier, cxAction)
 {
     
 }
-CX_OBJECT_TERM(cxBezier, cxAction)
+CX_TERM(cxBezier, cxAction)
 
 cxBezier cxBezierCreate(cxFloat time,cxVec2f epos,cxVec2f cpos1,cxVec2f cpos2)
 {

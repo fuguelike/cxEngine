@@ -11,17 +11,17 @@
 #include "cxEventBase.h"
 #include "cxUDP.h"
 
-CX_OBJECT_TYPE(cxUDP, cxObject)
+CX_TYPE(cxUDP, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxUDP, cxObject)
+CX_INIT(cxUDP, cxObject)
 {
     this->toAddrLen = sizeof(this->udpTo);
     memset(&this->udpTo, 0, this->toAddrLen);
     this->udpTo.sin_family = AF_INET;
 }
-CX_OBJECT_FREE(cxUDP, cxObject)
+CX_FREE(cxUDP, cxObject)
 {
     if(this->socket > 0){
         evutil_closesocket(this->socket);
@@ -33,7 +33,7 @@ CX_OBJECT_FREE(cxUDP, cxObject)
     CX_EVENT_RELEASE(this->onData);
     CX_RELEASE(this->host);
 }
-CX_OBJECT_TERM(cxUDP, cxObject)
+CX_TERM(cxUDP, cxObject)
 
 cxInt cxUDPWriteString(cxAny pudp,const cxString data)
 {

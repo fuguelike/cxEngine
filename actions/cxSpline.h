@@ -13,7 +13,7 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxSpline, cxAction)
+CX_DEF(cxSpline, cxAction)
     cxVec2f diff;
     cxVec2f prev;
     cxAnyArray points;
@@ -23,7 +23,7 @@ CX_OBJECT_DEF(cxSpline, cxAction)
     cxFloat angle;
     CX_EVENT_ALLOC(onIndex);
     CX_EVENT_ALLOC(onAngle);
-CX_OBJECT_END(cxSpline, cxAction)
+CX_END(cxSpline, cxAction)
 
 cxVec2f cxSplinePointAt(cxAny pav,cxInt idx);
 

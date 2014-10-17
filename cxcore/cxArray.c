@@ -25,20 +25,20 @@ CX_SETTER_DEF(cxArray, items)
     CX_JSON_ARRAY_EACH_END(items, v)
 }
 
-CX_OBJECT_TYPE(cxArray, cxObject)
+CX_TYPE(cxArray, cxObject)
 {
     CX_PROPERTY_SETTER(cxArray, items);
 }
-CX_OBJECT_INIT(cxArray, cxObject)
+CX_INIT(cxArray, cxObject)
 {
     utarray_new(this->utArray, &ut_ptr_icd);
 }
-CX_OBJECT_FREE(cxArray, cxObject)
+CX_FREE(cxArray, cxObject)
 {
     cxArrayClear(this);
     utarray_free(this->utArray);
 }
-CX_OBJECT_TERM(cxArray, cxObject)
+CX_TERM(cxArray, cxObject)
 
 void cxArrayClear(cxAny array)
 {

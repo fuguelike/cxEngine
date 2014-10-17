@@ -13,13 +13,13 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(Bullet, cxSprite)
+CX_DEF(Bullet, cxSprite)
     CX_FIELD_DEF(cxAny Map);
     CX_FIELD_DEF(cxFloat Power);//子弹携带的攻击力
     CX_FIELD_DEF(cxAny Action); //子弹驱动action
     CX_METHOD_DEF(void, onUpdate,cxAny bullet,cxAny action);//驱动器update
     CX_METHOD_DEF(cxAny, CreateAction,cxAny bullet);//创建一个驱动bullet的action发动机
-CX_OBJECT_END(Bullet, cxSprite)
+CX_END(Bullet, cxSprite)
 
 CX_FIELD_IMP(Bullet, cxFloat, Power);
 CX_FIELD_GET(Bullet, cxAny, Map);

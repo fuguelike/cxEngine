@@ -13,11 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxMemStream, cxStream)
+CX_DEF(cxMemStream, cxStream)
     cxOff position;
     char *data;
     cxUInt allocSize;
-CX_OBJECT_END(cxMemStream, cxStream)
+CX_END(cxMemStream, cxStream)
 
 cxStream cxMemStreamCreateWithText(cxString txt);
 

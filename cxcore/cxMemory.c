@@ -8,15 +8,15 @@
 
 #include "cxMemory.h"
 
-CX_OBJECT_TYPE(cxMemory, cxObject)
+CX_TYPE(cxMemory, cxObject)
 {}
-CX_OBJECT_INIT(cxMemory, cxObject)
+CX_INIT(cxMemory, cxObject)
 {}
-CX_OBJECT_FREE(cxMemory, cxObject)
+CX_FREE(cxMemory, cxObject)
 {
     allocator->free(this->data);
 }
-CX_OBJECT_TERM(cxMemory, cxObject)
+CX_TERM(cxMemory, cxObject)
 
 cxMemory cxMemoryCreate(cxInt size)
 {

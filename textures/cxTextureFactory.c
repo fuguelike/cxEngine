@@ -19,11 +19,11 @@ static void cxTextureFactoryMemory(cxTextureFactory this)
     cxHashClear(this->caches);
 }
 
-CX_OBJECT_TYPE(cxTextureFactory, cxObject)
+CX_TYPE(cxTextureFactory, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxTextureFactory, cxObject)
+CX_INIT(cxTextureFactory, cxObject)
 {
     cxEngine engine = cxEngineInstance();
     this->caches = CX_ALLOC(cxHash);
@@ -32,12 +32,12 @@ CX_OBJECT_INIT(cxTextureFactory, cxObject)
     cxHashSet(this->caches, cxHashStrKey(CX_DEFAULT_GROUP), group);
     CX_CON(cxEngine, engine, onMemory, this, cxTextureFactoryMemory);
 }
-CX_OBJECT_FREE(cxTextureFactory, cxObject)
+CX_FREE(cxTextureFactory, cxObject)
 {
     CX_SLOT_RELEASE(this->onMemory);
     CX_RELEASE(this->caches);
 }
-CX_OBJECT_TERM(cxTextureFactory, cxObject)
+CX_TERM(cxTextureFactory, cxObject)
 
 //@GroupName:candy.xml?green.png
 static cxHash cxTextureFactoryGroup(cxConstChars file,cxChars files)

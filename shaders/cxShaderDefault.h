@@ -13,9 +13,9 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxShaderDefault, cxShader)
+CX_DEF(cxShaderDefault, cxShader)
     
-CX_OBJECT_END(cxShaderDefault, cxShader)
+CX_END(cxShaderDefault, cxShader)
 
 cxString cxShaderDefaultVertex(cxAny this);
 

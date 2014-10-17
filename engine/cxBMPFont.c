@@ -10,33 +10,33 @@
 #include <textures/cxTextureFactory.h>
 #include "cxBMPFont.h"
 
-CX_OBJECT_TYPE(cxBMPElement, cxObject)
+CX_TYPE(cxBMPElement, cxObject)
 {}
-CX_OBJECT_INIT(cxBMPElement, cxObject)
+CX_INIT(cxBMPElement, cxObject)
 {}
-CX_OBJECT_FREE(cxBMPElement, cxObject)
+CX_FREE(cxBMPElement, cxObject)
 {}
-CX_OBJECT_TERM(cxBMPElement, cxObject)
+CX_TERM(cxBMPElement, cxObject)
 
 
-CX_OBJECT_TYPE(cxBMPKerning, cxObject)
+CX_TYPE(cxBMPKerning, cxObject)
 {}
-CX_OBJECT_INIT(cxBMPKerning, cxObject)
+CX_INIT(cxBMPKerning, cxObject)
 {}
-CX_OBJECT_FREE(cxBMPKerning, cxObject)
+CX_FREE(cxBMPKerning, cxObject)
 {}
-CX_OBJECT_TERM(cxBMPKerning, cxObject)
+CX_TERM(cxBMPKerning, cxObject)
 
 
-CX_OBJECT_TYPE(cxBMPFont, cxObject)
+CX_TYPE(cxBMPFont, cxObject)
 {}
-CX_OBJECT_INIT(cxBMPFont, cxObject)
+CX_INIT(cxBMPFont, cxObject)
 {
     this->textures = CX_ALLOC(cxHash);
     this->chars = CX_ALLOC(cxHash);
     this->kernings = CX_ALLOC(cxHash);
 }
-CX_OBJECT_FREE(cxBMPFont, cxObject)
+CX_FREE(cxBMPFont, cxObject)
 {
     CX_RELEASE(this->face);
     CX_RELEASE(this->chasrset);
@@ -44,7 +44,7 @@ CX_OBJECT_FREE(cxBMPFont, cxObject)
     CX_RELEASE(this->chars);
     CX_RELEASE(this->kernings);
 }
-CX_OBJECT_TERM(cxBMPFont, cxObject)
+CX_TERM(cxBMPFont, cxObject)
 
 cxTexture cxBMPFontTexture(cxBMPFont this,cxUChar page)
 {

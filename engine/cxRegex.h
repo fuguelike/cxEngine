@@ -23,7 +23,7 @@ typedef struct{
 
 #define CX_REGEX_POS_OK(p) ((p).start >= 0 && (p).end >= 0)
 
-CX_OBJECT_DEF(cxRegex, cxObject)
+CX_DEF(cxRegex, cxObject)
     cxInt error_offset;
     cxConstChars error_message;
     pcre *regex;
@@ -31,7 +31,7 @@ CX_OBJECT_DEF(cxRegex, cxObject)
     cxString input;
     cxInt start;
     cxInt count;
-CX_OBJECT_END(cxRegex, cxObject)
+CX_END(cxRegex, cxObject)
 
 typedef cxString (*cxRegexReplaceFunc)(cxRegex regex,cxAny arg);
 

@@ -137,11 +137,11 @@ CX_SETTER_DEF(cxAtlas, scale9)
     }
 }
 
-CX_OBJECT_TYPE(cxAtlas, cxSprite)
+CX_TYPE(cxAtlas, cxSprite)
 {
     CX_PROPERTY_SETTER(cxAtlas, scale9);
 }
-CX_OBJECT_INIT(cxAtlas, cxSprite)
+CX_INIT(cxAtlas, cxSprite)
 {
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
@@ -150,7 +150,7 @@ CX_OBJECT_INIT(cxAtlas, cxSprite)
     CX_ADD(cxView, this, onResize, cxAtlasResize);
     this->items = CX_ALLOC(cxHash);
 }
-CX_OBJECT_FREE(cxAtlas, cxSprite)
+CX_FREE(cxAtlas, cxSprite)
 {
     CX_RELEASE(this->items);
     allocator->free(this->boxes);
@@ -158,7 +158,7 @@ CX_OBJECT_FREE(cxAtlas, cxSprite)
     glDeleteBuffers(2, this->vboid);
     glDeleteVertexArrays(1, &this->vaoid);
 }
-CX_OBJECT_TERM(cxAtlas, cxSprite)
+CX_TERM(cxAtlas, cxSprite)
 
 void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color)
 {

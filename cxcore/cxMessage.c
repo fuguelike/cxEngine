@@ -10,18 +10,18 @@
 
 static cxMessage instance = NULL;
 
-CX_OBJECT_DEF(cxMessageItem, cxObject)
+CX_DEF(cxMessageItem, cxObject)
     cxMessageFunc func;
     cxAny dst;
-CX_OBJECT_END(cxMessageItem, cxObject)
+CX_END(cxMessageItem, cxObject)
 
-CX_OBJECT_TYPE(cxMessageItem, cxObject)
+CX_TYPE(cxMessageItem, cxObject)
 {}
-CX_OBJECT_INIT(cxMessageItem, cxObject)
+CX_INIT(cxMessageItem, cxObject)
 {}
-CX_OBJECT_FREE(cxMessageItem, cxObject)
+CX_FREE(cxMessageItem, cxObject)
 {}
-CX_OBJECT_TERM(cxMessageItem, cxObject)
+CX_TERM(cxMessageItem, cxObject)
 
 void cxMessageDestroy()
 {
@@ -37,17 +37,17 @@ cxMessage cxMessageInstance()
     return instance;
 }
 
-CX_OBJECT_TYPE(cxMessage, cxObject)
+CX_TYPE(cxMessage, cxObject)
 {}
-CX_OBJECT_INIT(cxMessage, cxObject)
+CX_INIT(cxMessage, cxObject)
 {
     this->keys = CX_ALLOC(cxHash);
 }
-CX_OBJECT_FREE(cxMessage, cxObject)
+CX_FREE(cxMessage, cxObject)
 {
     CX_RELEASE(this->keys);
 }
-CX_OBJECT_TERM(cxMessage, cxObject)
+CX_TERM(cxMessage, cxObject)
 
 void cxMessageRemove(cxAny dst)
 {

@@ -15,10 +15,10 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxLoader, cxObject)
+CX_DEF(cxLoader, cxObject)
     CX_FIELD_DEF(cxAny Root);
     cxHash objects;
-CX_OBJECT_END(cxLoader, cxObject)
+CX_END(cxLoader, cxObject)
 
 cxAny cxLoaderGet(cxAny loader,cxConstChars id);
 

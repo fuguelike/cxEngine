@@ -14,15 +14,15 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(FightMap, Map)
+CX_DEF(FightMap, Map)
     
-CX_OBJECT_END(FightMap, Map)
+CX_END(FightMap, Map)
 
 cxBool FightMapInit(cxAny pmap);
 
-CX_OBJECT_DEF(FightScene, cxScroll)
+CX_DEF(FightScene, cxScroll)
     cxAny fightMap;      //战斗地图
-CX_OBJECT_END(FightScene, cxScroll)
+CX_END(FightScene, cxScroll)
 
 FightScene FightSceneCreate();
 

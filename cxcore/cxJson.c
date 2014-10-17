@@ -368,21 +368,21 @@ cxSize2f cxJsonEnvSize2f(cxConstChars key,cxSize2f dv)
     return cxJsonToSize2f(cxJsonAttachCreate(v), dv);
 }
 
-CX_OBJECT_TYPE(cxJson, cxObject)
+CX_TYPE(cxJson, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxJson, cxObject)
+CX_INIT(cxJson, cxObject)
 {
     
 }
-CX_OBJECT_FREE(cxJson, cxObject)
+CX_FREE(cxJson, cxObject)
 {
     if(this->json != NULL){
         json_decref(this->json);
     }
 }
-CX_OBJECT_TERM(cxJson, cxObject)
+CX_TERM(cxJson, cxObject)
 //
 
 //{"vx":0,"vy":0,"rx":0,"ry":0}

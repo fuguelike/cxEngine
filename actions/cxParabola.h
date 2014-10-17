@@ -13,12 +13,12 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxParabola, cxAction)
+CX_DEF(cxParabola, cxAction)
     cxVec2f pos;
     cxVec2f gravity;
     cxVec2f speed;
     cxFloat time;
-CX_OBJECT_END(cxParabola, cxAction)
+CX_END(cxParabola, cxAction)
 
 cxParabola cxParabolaCreate(cxVec2f speed);
 

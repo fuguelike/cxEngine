@@ -9,15 +9,15 @@
 #include "cxIconv.h"
 #include "cxEngine.h"
 
-CX_OBJECT_TYPE(cxIconvItem, cxObject)
+CX_TYPE(cxIconvItem, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxIconvItem, cxObject)
+CX_INIT(cxIconvItem, cxObject)
 {
     
 }
-CX_OBJECT_FREE(cxIconvItem, cxObject)
+CX_FREE(cxIconvItem, cxObject)
 {
     if(this->iconvptr != NULL){
         iconv_close(this->iconvptr);
@@ -25,7 +25,7 @@ CX_OBJECT_FREE(cxIconvItem, cxObject)
     CX_RELEASE(this->from);
     CX_RELEASE(this->to);
 }
-CX_OBJECT_TERM(cxIconvItem, cxObject)
+CX_TERM(cxIconvItem, cxObject)
 
 cxIconvItem cxIconvItemCreate(cxConstChars from,cxConstChars to)
 {
@@ -61,19 +61,19 @@ static cxString cxIconvItemConvert(cxIconvItem this,const cxString string)
     return NULL;
 }
 
-CX_OBJECT_TYPE(cxIconv, cxObject)
+CX_TYPE(cxIconv, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxIconv, cxObject)
+CX_INIT(cxIconv, cxObject)
 {
     this->caches = CX_ALLOC(cxHash);
 }
-CX_OBJECT_FREE(cxIconv, cxObject)
+CX_FREE(cxIconv, cxObject)
 {
     CX_RELEASE(this->caches);
 }
-CX_OBJECT_TERM(cxIconv, cxObject)
+CX_TERM(cxIconv, cxObject)
 
 cxString cxIconvConvertUTF8ToUTF16LE(const cxString string)
 {

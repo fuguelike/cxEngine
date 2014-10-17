@@ -25,20 +25,20 @@ static cxBool cxRunnerExit(cxAny pav)
 }
 
 
-CX_OBJECT_TYPE(cxRunner, cxAction)
+CX_TYPE(cxRunner, cxAction)
 {
     
 }
-CX_OBJECT_INIT(cxRunner, cxAction)
+CX_INIT(cxRunner, cxAction)
 {
     CX_SET(cxAction, this, Init, cxRunnerInit);
     CX_SET(cxAction, this, Exit, cxRunnerExit);
 }
-CX_OBJECT_FREE(cxRunner, cxAction)
+CX_FREE(cxRunner, cxAction)
 {
     //
 }
-CX_OBJECT_TERM(cxRunner, cxAction)
+CX_TERM(cxRunner, cxAction)
 
 static void cxRunnerItemStop(cxAny sender)
 {

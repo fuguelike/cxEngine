@@ -48,10 +48,10 @@ typedef union {
     cxDouble vd;
 }cxNumberValue;
 
-CX_OBJECT_DEF(cxNumber, cxObject)
+CX_DEF(cxNumber, cxObject)
     cxNumberValue value;
     cxNumberType type;
-CX_OBJECT_END(cxNumber, cxObject)
+CX_END(cxNumber, cxObject)
 
 cxBool cxNumberIsType(cxAny pnum,cxNumberType type);
 

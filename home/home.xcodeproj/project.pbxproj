@@ -75,6 +75,7 @@
 		83314F6618D9C5D00093FF54 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = ../libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		83314F6718D9C5D00093FF54 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../libs/ios/lib/libpng.a; sourceTree = "<group>"; };
 		83314F7218D9C6530093FF54 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = SOURCE_ROOT; };
+		833C1CAE19F0B99F004F41A4 /* home copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "home copy-Info.plist"; path = "/Users/xuhua/cxEngine/home/home copy-Info.plist"; sourceTree = "<absolute>"; };
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8341C69E182280E20045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		8341C6A2182280ED0045A66F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
@@ -174,6 +175,7 @@
 				839E7A4817F1BC7600B0F5EC /* Frameworks */,
 				839E7A5417F1BC7600B0F5EC /* Supporting Files */,
 				8300651F18232BE000AF680D /* home.app */,
+				833C1CAE19F0B99F004F41A4 /* home copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};

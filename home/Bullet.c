@@ -20,20 +20,20 @@ static cxAny BulletCreateActionDefault(cxAny bullet)
 }
 
 
-CX_OBJECT_TYPE(Bullet, cxSprite)
+CX_TYPE(Bullet, cxSprite)
 {
     
 }
-CX_OBJECT_INIT(Bullet, cxSprite)
+CX_INIT(Bullet, cxSprite)
 {
     cxSpriteSetTextureURL(this, "bullet.json?shell.png");
     CX_SET(Bullet, this, CreateAction, BulletCreateActionDefault);
 }
-CX_OBJECT_FREE(Bullet, cxSprite)
+CX_FREE(Bullet, cxSprite)
 {
     
 }
-CX_OBJECT_TERM(Bullet, cxSprite)
+CX_TERM(Bullet, cxSprite)
 
 cxAny BulletCreateEngine(cxAny pview)
 {

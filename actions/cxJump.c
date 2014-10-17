@@ -43,22 +43,22 @@ CX_SETTER_DEF(cxJump, jumps)
     this->jumps = cxJsonToInt(value, this->jumps);
 }
 
-CX_OBJECT_TYPE(cxJump, cxAction)
+CX_TYPE(cxJump, cxAction)
 {
     CX_PROPERTY_SETTER(cxJump, position);
     CX_PROPERTY_SETTER(cxJump, height);
     CX_PROPERTY_SETTER(cxJump, jumps);
 }
-CX_OBJECT_INIT(cxJump, cxAction)
+CX_INIT(cxJump, cxAction)
 {
     CX_SET(cxAction, this, Init, cxJumpInit);
     CX_SET(cxAction, this, Step, cxJumpStep);
 }
-CX_OBJECT_FREE(cxJump, cxAction)
+CX_FREE(cxJump, cxAction)
 {
     //
 }
-CX_OBJECT_TERM(cxJump, cxAction)
+CX_TERM(cxJump, cxAction)
 
 cxJump cxJumpCreate(cxFloat time,cxVec2f position,cxFloat height,cxInt jumps)
 {

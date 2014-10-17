@@ -103,21 +103,21 @@ CX_SETTER_DEF(cxTable, grid)
     cxTableArraySubviews(this);
 }
 
-CX_OBJECT_TYPE(cxTable, cxView)
+CX_TYPE(cxTable, cxView)
 {
     CX_PROPERTY_SETTER(cxTable, grid);
 }
-CX_OBJECT_INIT(cxTable, cxView)
+CX_INIT(cxTable, cxView)
 {
     this->arrayHide = true;
     CX_ADD(cxView, this, onResize, cxTableResize);
     CX_ADD(cxView, this, onUpdate, cxTableUpdate);
 }
-CX_OBJECT_FREE(cxTable, cxView)
+CX_FREE(cxTable, cxView)
 {
     
 }
-CX_OBJECT_TERM(cxTable, cxView)
+CX_TERM(cxTable, cxView)
 
 
 cxTable cxTableCreate(cxVec2i grid)

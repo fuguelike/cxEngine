@@ -187,22 +187,22 @@ cxAny cxObjectCreateUseJson(cxJson json)
     return object;
 }
 
-CX_OBJECT_TYPE(cxType, cxObject)
+CX_TYPE(cxType, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxType, cxObject)
+CX_INIT(cxType, cxObject)
 {
     this->properties = CX_ALLOC(cxHash);
     this->signature = CX_ALLOC(cxString);
 }
-CX_OBJECT_FREE(cxType, cxObject)
+CX_FREE(cxType, cxObject)
 {
     CX_RELEASE(this->signature);
     CX_RELEASE(this->properties);
     CX_RELEASE(this->superType);
 }
-CX_OBJECT_TERM(cxType, cxObject)
+CX_TERM(cxType, cxObject)
 
 
 

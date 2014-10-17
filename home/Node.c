@@ -219,11 +219,11 @@ cxBool NodeIsArriveRange(cxAny pattacker,cxAny ptarget)
     return NodeIsArriveDistance(attacker,target,d);
 }
 
-CX_OBJECT_TYPE(Node, cxSprite)
+CX_TYPE(Node, cxSprite)
 {
     
 }
-CX_OBJECT_INIT(Node, cxSprite)
+CX_INIT(Node, cxSprite)
 {
     CX_ADD(cxView, this, onDirty, NodeOnDirty);
     NodeSetAttackNum(this, 1);
@@ -237,14 +237,14 @@ CX_OBJECT_INIT(Node, cxSprite)
     //Test
     CX_ADD(Node, this, onLife, LifeChange);
 }
-CX_OBJECT_FREE(Node, cxSprite)
+CX_FREE(Node, cxSprite)
 {
     CX_EVENT_RELEASE(this->onState);
     CX_EVENT_RELEASE(this->onIndex);
     CX_EVENT_RELEASE(this->onDie);
     CX_EVENT_RELEASE(this->onLife);
 }
-CX_OBJECT_TERM(Node, cxSprite)
+CX_TERM(Node, cxSprite)
 
 void NodeSetDirAngle(cxAny pview,cxFloat angle)
 {
@@ -459,7 +459,7 @@ cxBool NodeCheckDie(cxAny pview)
     cxRange2i life = this->Life;
     cxBool die = life.min <= 0;
     if(die && !this->isDie){
-        CX_LOGGER("Node (type=%s) die At(%f %f)",CX_TYPE(cxObject, this)->cxType,this->Index.x,this->Index.y);
+        CX_LOGGER("Node (type=%s) die At(%f %f)",CX_TYPE_OF(cxObject, this)->cxType,this->Index.x,this->Index.y);
         //防止死的次数太多
         this->isDie = true;
         this->Life.min = 0;

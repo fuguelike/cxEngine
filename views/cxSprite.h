@@ -15,7 +15,7 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxSprite, cxView)
+CX_DEF(cxSprite, cxView)
     CX_FIELD_DEF(cxTexture Texture);
     CX_FIELD_DEF(cxShader Shader);
     GLenum          sfactor;
@@ -26,7 +26,7 @@ CX_OBJECT_DEF(cxSprite, cxView)
     cxBool          isFlipX;
     cxBool          isFlipY;
     cxBoxTex2f      texCoord;
-CX_OBJECT_END(cxSprite, cxView)
+CX_END(cxSprite, cxView)
 
 CX_FIELD_GET(cxSprite, cxTexture, Texture);
 CX_FIELD_GET(cxSprite, cxShader, Shader);

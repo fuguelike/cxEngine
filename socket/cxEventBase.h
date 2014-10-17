@@ -14,13 +14,13 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxEventBase, cxObject)
+CX_DEF(cxEventBase, cxObject)
     cxHash conns;   //host:port key
     struct event_base *base;
     CX_SLOT_ALLOC(onUpdate);
     cxInt64 counter;
     cxInt freq;
-CX_OBJECT_END(cxEventBase, cxObject)
+CX_END(cxEventBase, cxObject)
 
 
 //type=SOCK_DGRAM udp,or SOCK_STREAM tcp

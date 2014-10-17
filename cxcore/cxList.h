@@ -28,10 +28,10 @@ struct cxListElement {
     cxAny any;
 };
 
-CX_OBJECT_DEF(cxList, cxObject)
+CX_DEF(cxList, cxObject)
     cxListElement *listptr;
     cxInt length;
-CX_OBJECT_END(cxList, cxObject)
+CX_END(cxList, cxObject)
 
 #define cxListSort(_list_,_cmp_)    DL_SORT((_list_)->listptr, _cmp_)
 

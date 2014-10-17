@@ -43,7 +43,7 @@ CX_SETTER_DEF(cxAnimateItem, flipy)
     this->flipy = cxJsonToBool(value, this->flipy);
 }
 
-CX_OBJECT_TYPE(cxAnimateItem, cxAction)
+CX_TYPE(cxAnimateItem, cxAction)
 {
     CX_PROPERTY_SETTER(cxAnimateItem, id);
     CX_PROPERTY_SETTER(cxAnimateItem, key);
@@ -52,20 +52,20 @@ CX_OBJECT_TYPE(cxAnimateItem, cxAction)
     CX_PROPERTY_SETTER(cxAnimateItem, flipx);
     CX_PROPERTY_SETTER(cxAnimateItem, flipy);
 }
-CX_OBJECT_INIT(cxAnimateItem, cxObject)
+CX_INIT(cxAnimateItem, cxObject)
 {
     this->time = 0;
     this->value = 0;
     this->flipx = false;
     this->flipy = false;
 }
-CX_OBJECT_FREE(cxAnimateItem, cxObject)
+CX_FREE(cxAnimateItem, cxObject)
 {
     CX_RELEASE(this->id);
     CX_RELEASE(this->key);
     CX_RELEASE(this->texture);
 }
-CX_OBJECT_TERM(cxAnimateItem, cxObject)
+CX_TERM(cxAnimateItem, cxObject)
 
 CX_INLINE cxAnimateItem cxAnimateItemClone(cxAnimateItem this)
 {
@@ -237,7 +237,7 @@ cxArray cxAnimateGetGroup(cxAny pav,cxString name)
     return items;
 }
 
-CX_OBJECT_TYPE(cxAnimate, cxAction)
+CX_TYPE(cxAnimate, cxAction)
 {
     CX_PROPERTY_SETTER(cxAnimate, repeat);
     CX_PROPERTY_SETTER(cxAnimate, time);
@@ -245,7 +245,7 @@ CX_OBJECT_TYPE(cxAnimate, cxAction)
     CX_PROPERTY_SETTER(cxAnimate, frames);
     CX_PROPERTY_SETTER(cxAnimate, groups);
 }
-CX_OBJECT_INIT(cxAnimate, cxAction)
+CX_INIT(cxAnimate, cxAction)
 {
     this->Repeat = CX_FOREVER;
     CX_SET(cxAction, this, Init, cxAnimateInit);
@@ -255,14 +255,14 @@ CX_OBJECT_INIT(cxAnimate, cxAction)
     this->groups = CX_ALLOC(cxHash);
     this->frames = CX_ALLOC(cxHash);
 }
-CX_OBJECT_FREE(cxAnimate, cxAction)
+CX_FREE(cxAnimate, cxAction)
 {
     CX_RELEASE(this->frames);
     CX_RELEASE(this->groups);
     CX_RELEASE(this->name);
     CX_EVENT_RELEASE(this->onFrame);
 }
-CX_OBJECT_TERM(cxAnimate, cxAction)
+CX_TERM(cxAnimate, cxAction)
 
 void cxAnimateRunGroup(cxAny pav,cxConstChars name)
 {

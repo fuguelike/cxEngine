@@ -102,11 +102,11 @@ static void cxFileStreamClose(cxAny this)
     cxStreamBaseClose(this);
 }
 
-CX_OBJECT_TYPE(cxFileStream, cxStream)
+CX_TYPE(cxFileStream, cxStream)
 {
     
 }
-CX_OBJECT_INIT(cxFileStream, cxStream)
+CX_INIT(cxFileStream, cxStream)
 {
     CX_SET(cxStream, this, Read, cxFileStreamRead);
     CX_SET(cxStream, this, Open, cxFileStreamOpen);
@@ -117,11 +117,11 @@ CX_OBJECT_INIT(cxFileStream, cxStream)
     CX_SET(cxStream, this, AllBytes, cxFileStreamAllBytes);
     
 }
-CX_OBJECT_FREE(cxFileStream, cxStream)
+CX_FREE(cxFileStream, cxStream)
 {
     
 }
-CX_OBJECT_TERM(cxFileStream, cxStream)
+CX_TERM(cxFileStream, cxStream)
 
 cxString cxDocumentData(cxConstChars file)
 {

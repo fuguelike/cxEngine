@@ -49,9 +49,9 @@ typedef cxInt (*cxHashCmpFunc)(cxHashElement *lp,cxHashElement *rp);
 
 #define cxHashStrKey(_s_)       (cxHashKey){.length=(cxInt)strlen(_s_),.data=(cxChars)(_s_)}
 
-CX_OBJECT_DEF(cxHash, cxObject)
+CX_DEF(cxHash, cxObject)
     cxHashElement *hptr;
-CX_OBJECT_END(cxHash, cxObject)
+CX_END(cxHash, cxObject)
 
 #define cxHashSort(_hash_,_cmp_)    HASH_SORT(_hash_,_cmp_)
 

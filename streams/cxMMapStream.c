@@ -139,11 +139,11 @@ static void cxMMapStreamClose(cxAny ps)
     cxStreamBaseClose(this);
 }
 
-CX_OBJECT_TYPE(cxMMapStream, cxStream)
+CX_TYPE(cxMMapStream, cxStream)
 {
     
 }
-CX_OBJECT_INIT(cxMMapStream, cxStream)
+CX_INIT(cxMMapStream, cxStream)
 {
     this->fd = -1;
     this->flags = CX_MMAP_READ;
@@ -155,11 +155,11 @@ CX_OBJECT_INIT(cxMMapStream, cxStream)
     CX_SET(cxStream, this, Position, cxMMapStreamPosition);
     CX_SET(cxStream, this, AllBytes, cxMMapStreamAllBytes);
 }
-CX_OBJECT_FREE(cxMMapStream, cxStream)
+CX_FREE(cxMMapStream, cxStream)
 {
 
 }
-CX_OBJECT_TERM(cxMMapStream, cxStream)
+CX_TERM(cxMMapStream, cxStream)
 
 cxStream cxMMapStreamCreate(cxConstChars file)
 {

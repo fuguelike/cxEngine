@@ -397,7 +397,7 @@ CX_SETTER_DEF(cxParticle, rotatepers)
     this->rotatepers = cxJsonToFloatRangle(value,this->rotatepers);
 }
 
-CX_OBJECT_TYPE(cxParticle, cxAction)
+CX_TYPE(cxParticle, cxAction)
 {
     CX_PROPERTY_SETTER(cxParticle, number);
     CX_PROPERTY_SETTER(cxParticle, texture);
@@ -423,7 +423,7 @@ CX_OBJECT_TYPE(cxParticle, cxAction)
     CX_PROPERTY_SETTER(cxParticle, eradius);    //end radius
     CX_PROPERTY_SETTER(cxParticle, rotatepers);
 }
-CX_OBJECT_INIT(cxParticle, cxAction)
+CX_INIT(cxParticle, cxAction)
 {
     this->cxAction.Time = -1;
     this->atlas = CX_ALLOC(cxAtlas);
@@ -438,14 +438,14 @@ CX_OBJECT_INIT(cxParticle, cxAction)
     CX_SET(cxAction, this, Over, cxParticleOver);
     CX_SET(cxAction, this, Step, cxParticleStep);
 }
-CX_OBJECT_FREE(cxParticle, cxAction)
+CX_FREE(cxParticle, cxAction)
 {
     CX_RELEASE(this->boxtexs);
     allocator->free(this->units);
     CX_RELEASE(this->atlas);
     CX_SLOT_RELEASE(this->onDraw);
 }
-CX_OBJECT_TERM(cxParticle, cxAction)
+CX_TERM(cxParticle, cxAction)
 
 void cxParticleInitNumber(cxAny pav,cxInt number)
 {

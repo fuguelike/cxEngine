@@ -75,7 +75,9 @@ static void loadingFightSceneExit(cxAny sender)
 void cxEngineInit(cxEngine engine)
 {
     cxEngineSetDesSize(cxSize2fv(2048, 1536));
+#ifndef NDEBUG
     cxEngineSetIsShowBorder(true);
+#endif
     //战斗用动画管理器
     cxGroupAppend(FIGHT_ACTION_GROUP, 1.0f);
 }

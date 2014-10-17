@@ -9,22 +9,22 @@
 #include "cxEventBase.h"
 #include "cxHttpConn.h"
 
-CX_OBJECT_TYPE(cxHttpConn, cxObject)
+CX_TYPE(cxHttpConn, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxHttpConn, cxObject)
+CX_INIT(cxHttpConn, cxObject)
 {
     
 }
-CX_OBJECT_FREE(cxHttpConn, cxObject)
+CX_FREE(cxHttpConn, cxObject)
 {
     if(this->conn != NULL){
         evhttp_connection_free(this->conn);
     }
     CX_RELEASE(this->host);
 }
-CX_OBJECT_TERM(cxHttpConn, cxObject)
+CX_TERM(cxHttpConn, cxObject)
 
 cxHttpConn cxHttpConnectOpen(cxConstChars host,cxInt port)
 {

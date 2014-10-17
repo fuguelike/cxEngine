@@ -13,11 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxTint, cxAction)
+CX_DEF(cxTint, cxAction)
     cxColor4f delta;
     cxColor4f start;
     cxColor4f color;
-CX_OBJECT_END(cxTint, cxAction)
+CX_END(cxTint, cxAction)
 
 cxTint cxTintCreate(cxFloat time,cxColor4f color);
 

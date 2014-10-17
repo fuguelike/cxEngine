@@ -13,19 +13,19 @@
 #include "Define.h"
 #include "WarMap.h"
 
-CX_OBJECT_TYPE(WarMapUnit, cxSprite)
+CX_TYPE(WarMapUnit, cxSprite)
 {
     
 }
-CX_OBJECT_INIT(WarMapUnit, cxSprite)
+CX_INIT(WarMapUnit, cxSprite)
 {
     
 }
-CX_OBJECT_FREE(WarMapUnit, cxSprite)
+CX_FREE(WarMapUnit, cxSprite)
 {
     
 }
-CX_OBJECT_TERM(WarMapUnit, cxSprite)
+CX_TERM(WarMapUnit, cxSprite)
 
 //加载位置上的单元格
 static void WarMapLoadUnit(WarMap this,cxVec2i idx)
@@ -104,11 +104,11 @@ static void WarMapUpdate(cxAny sender)
     
 }
 
-CX_OBJECT_TYPE(WarMap, cxView)
+CX_TYPE(WarMap, cxView)
 {
     
 }
-CX_OBJECT_INIT(WarMap, cxView)
+CX_INIT(WarMap, cxView)
 {
     CX_ADD(cxView, this, onUpdate, WarMapUpdate);
     CX_ADD(cxView, this, onDirty, WarMapOnDirty);
@@ -117,12 +117,12 @@ CX_OBJECT_INIT(WarMap, cxView)
     this->centerIdx = cxVec2iv(-1, -1);
     cxViewSetSize(this, global.warMapSize);
 }
-CX_OBJECT_FREE(WarMap, cxView)
+CX_FREE(WarMap, cxView)
 {
     CX_RELEASE(this->items);
     CX_RELEASE(this->tribes);
 }
-CX_OBJECT_TERM(WarMap, cxView)
+CX_TERM(WarMap, cxView)
 
 cxAny WarMapItem(cxAny pmap,cxVec2i idx)
 {
@@ -176,19 +176,19 @@ cxVec2i WarMapUnitIndex(cxAny pmap,cxVec2f pos)
     return cxVec2iv(pos.x / global.warUnitSize.w, pos.y / global.warUnitSize.h);
 }
 
-CX_OBJECT_TYPE(WarScene, cxScroll)
+CX_TYPE(WarScene, cxScroll)
 {
     
 }
-CX_OBJECT_INIT(WarScene, cxScroll)
+CX_INIT(WarScene, cxScroll)
 {
 
 }
-CX_OBJECT_FREE(WarScene, cxScroll)
+CX_FREE(WarScene, cxScroll)
 {
     
 }
-CX_OBJECT_TERM(WarScene, cxScroll)
+CX_TERM(WarScene, cxScroll)
 
 WarScene WarSceneCreate()
 {

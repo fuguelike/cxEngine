@@ -14,13 +14,13 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxLabelBMP, cxAtlas)
+CX_DEF(cxLabelBMP, cxAtlas)
     cxBMPFont font;
     cxString txt;
     cxBool isDirty;
     cxBool isCenter;
     cxFloat size;
-CX_OBJECT_END(cxLabelBMP, cxAtlas)
+CX_END(cxLabelBMP, cxAtlas)
 
 cxLabelBMP cxLabelBMPCreate(cxString font,cxString txt);
 

@@ -13,11 +13,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxFade, cxAction)
+CX_DEF(cxFade, cxAction)
     cxFloat alpha;
     cxFloat delta;
     cxFloat start;
-CX_OBJECT_END(cxFade, cxAction)
+CX_END(cxFade, cxAction)
 
 cxFade cxFadeCreate(cxFloat time,cxFloat alpha);
 

@@ -8,18 +8,18 @@
 
 #include "cxRegex.h"
 
-CX_OBJECT_TYPE(cxRegex, cxObject)
+CX_TYPE(cxRegex, cxObject)
 {}
-CX_OBJECT_INIT(cxRegex, cxObject)
+CX_INIT(cxRegex, cxObject)
 {}
-CX_OBJECT_FREE(cxRegex, cxObject)
+CX_FREE(cxRegex, cxObject)
 {
     if(this->regex != NULL){
         pcre_free(this->regex);
     }
     CX_RELEASE(this->input);
 }
-CX_OBJECT_TERM(cxRegex, cxObject)
+CX_TERM(cxRegex, cxObject)
 
 cxString cxRegexReplace(cxAny preg,cxRegexReplaceFunc replaceFunc,cxAny arg)
 {

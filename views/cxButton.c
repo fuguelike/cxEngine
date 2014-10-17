@@ -56,25 +56,25 @@ CX_SETTER_DEF(cxButton, enable)
 {
     this->isEnable = cxJsonToBool(value, this->isEnable);
 }
-CX_OBJECT_TYPE(cxButton, cxSprite)
+CX_TYPE(cxButton, cxSprite)
 {
     CX_PROPERTY_SETTER(cxButton, movement);
     CX_PROPERTY_SETTER(cxButton, enable);
 }
-CX_OBJECT_INIT(cxButton, cxSprite)
+CX_INIT(cxButton, cxSprite)
 {
     this->movement = 30;
     this->isEnable = true;
     CX_SET(cxView, this, Touch, cxButtonTouch);
 }
-CX_OBJECT_FREE(cxButton, cxSprite)
+CX_FREE(cxButton, cxSprite)
 {
     CX_EVENT_RELEASE(this->onEnter);
     CX_EVENT_RELEASE(this->onLeave);
     CX_EVENT_RELEASE(this->onPress);
     CX_EVENT_RELEASE(this->onRelease);
 }
-CX_OBJECT_TERM(cxButton, cxSprite)
+CX_TERM(cxButton, cxSprite)
 
 cxButton cxButtonCreate(cxConstChars url)
 {

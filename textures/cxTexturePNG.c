@@ -47,20 +47,20 @@ static void cxTexturePNGBind(cxAny this)
     cxOpenGLBindTexture(png->cxTexture.textureId, 0);
 }
 
-CX_OBJECT_TYPE(cxTexturePNG, cxTexture)
+CX_TYPE(cxTexturePNG, cxTexture)
 {
     
 }
-CX_OBJECT_INIT(cxTexturePNG, cxTexture)
+CX_INIT(cxTexturePNG, cxTexture)
 {
     CX_SET(cxTexture, this, Bind, cxTexturePNGBind);
     CX_SET(cxTexture, this, Load, cxTexturePNGLoad);
 }
-CX_OBJECT_FREE(cxTexturePNG, cxTexture)
+CX_FREE(cxTexturePNG, cxTexture)
 {
 
 }
-CX_OBJECT_TERM(cxTexturePNG, cxTexture)
+CX_TERM(cxTexturePNG, cxTexture)
 
 cxTexture cxTexturePNGLoadStream(cxStream stream)
 {

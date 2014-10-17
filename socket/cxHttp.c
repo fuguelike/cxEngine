@@ -66,15 +66,15 @@ static void cxHttpRequestChunked(struct evhttp_request *req,void *xhttp)
     CX_EVENT_FIRE(this, onChunked);
 }
 
-CX_OBJECT_TYPE(cxHttp, cxObject)
+CX_TYPE(cxHttp, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxHttp, cxObject)
+CX_INIT(cxHttp, cxObject)
 {
     this->Data = CX_ALLOC(cxString);
 }
-CX_OBJECT_FREE(cxHttp, cxObject)
+CX_FREE(cxHttp, cxObject)
 {
     if(this->request != NULL){
         evhttp_cancel_request(this->request);
@@ -91,7 +91,7 @@ CX_OBJECT_FREE(cxHttp, cxObject)
     CX_RELEASE(this->Data);
     CX_RELEASE(this->suri);
 }
-CX_OBJECT_TERM(cxHttp, cxObject)
+CX_TERM(cxHttp, cxObject)
 
 static cxHttpConn cxHttpGetConnect(cxAny http)
 {

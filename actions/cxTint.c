@@ -37,20 +37,20 @@ CX_SETTER_DEF(cxTint, color)
     this->color = cxJsonToColor4f(value, this->color);
 }
 
-CX_OBJECT_TYPE(cxTint, cxAction)
+CX_TYPE(cxTint, cxAction)
 {
     CX_PROPERTY_SETTER(cxTint, color);
 }
-CX_OBJECT_INIT(cxTint, cxAction)
+CX_INIT(cxTint, cxAction)
 {
     CX_SET(cxAction, this, Init, cxTintInit);
     CX_SET(cxAction, this, Step, cxTintStep);
 }
-CX_OBJECT_FREE(cxTint, cxAction)
+CX_FREE(cxTint, cxAction)
 {
 
 }
-CX_OBJECT_TERM(cxTint, cxAction)
+CX_TERM(cxTint, cxAction)
 
 cxTint cxTintCreate(cxFloat time,cxColor4f color)
 {

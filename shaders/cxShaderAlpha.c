@@ -24,17 +24,17 @@ static cxString cxShaderAlphaFragment(cxAny this)
     return cxStringConstChars(fragment);
 }
 
-CX_OBJECT_TYPE(cxShaderAlpha, cxShader)
+CX_TYPE(cxShaderAlpha, cxShader)
 {
     
 }
-CX_OBJECT_INIT(cxShaderAlpha, cxShader)
+CX_INIT(cxShaderAlpha, cxShader)
 {
     CX_SET(cxShader, this, Vertex, cxShaderDefaultVertex);
     CX_SET(cxShader, this, Fragment, cxShaderAlphaFragment);
 }
-CX_OBJECT_FREE(cxShaderAlpha, cxShader)
+CX_FREE(cxShaderAlpha, cxShader)
 {
 
 }
-CX_OBJECT_TERM(cxShaderAlpha, cxShader)
+CX_TERM(cxShaderAlpha, cxShader)

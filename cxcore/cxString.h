@@ -15,10 +15,10 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxString, cxObject)
+CX_DEF(cxString, cxObject)
     cxBool nocopy;
     UT_string strptr;
-CX_OBJECT_END(cxString, cxObject)
+CX_END(cxString, cxObject)
 
 #define cxStringNumber(v,t)         cxStringData(&(t){v},sizeof(t))
 

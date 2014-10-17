@@ -17,20 +17,20 @@ static cxBool cxWindowKey(cxAny pview,const cxKey *key)
     return true;
 }
 
-CX_OBJECT_TYPE(cxWindow, cxView)
+CX_TYPE(cxWindow, cxView)
 {
     
 }
-CX_OBJECT_INIT(cxWindow, cxView)
+CX_INIT(cxWindow, cxView)
 {
     CX_SET(cxView, this, Key, cxWindowKey);
     this->views = CX_ALLOC(cxStack);
 }
-CX_OBJECT_FREE(cxWindow, cxView)
+CX_FREE(cxWindow, cxView)
 {
     CX_RELEASE(this->views);
 }
-CX_OBJECT_TERM(cxWindow, cxView)
+CX_TERM(cxWindow, cxView)
 
 cxAny cxWindowTopView()
 {

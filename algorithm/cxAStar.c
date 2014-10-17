@@ -148,10 +148,10 @@ void cxAStarAppendNeighbors(cxAny list,cxVec2i point,cxFloat edgeCost)
     ASNeighborListAdd(list, &point, edgeCost);
 }
 
-CX_OBJECT_TYPE(cxAStar, cxObject)
+CX_TYPE(cxAStar, cxObject)
 {
 }
-CX_OBJECT_INIT(cxAStar, cxObject)
+CX_INIT(cxAStar, cxObject)
 {
     CX_SET(cxAStar, this, Neighbors, cxAStarNeighbors);
     CX_SET(cxAStar, this, Comparator, cxAStarComparator);
@@ -160,12 +160,12 @@ CX_OBJECT_INIT(cxAStar, cxObject)
     this->visits = cxAnyArrayAlloc(cxVec2i);
     this->type = cxAStarTypeA4;
 }
-CX_OBJECT_FREE(cxAStar, cxObject)
+CX_FREE(cxAStar, cxObject)
 {
     CX_RELEASE(this->visits);
     CX_RELEASE(this->points);
 }
-CX_OBJECT_TERM(cxAStar, cxObject)
+CX_TERM(cxAStar, cxObject)
 
 void cxAStarPrintPoints(cxAny pobj)
 {

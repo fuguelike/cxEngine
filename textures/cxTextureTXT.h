@@ -14,11 +14,11 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxTextureTXT, cxTexture)
+CX_DEF(cxTextureTXT, cxTexture)
     cxString font;
     cxString string;
     cxTextAttr attr;
-CX_OBJECT_END(cxTextureTXT, cxTexture)
+CX_END(cxTextureTXT, cxTexture)
 
 void cxTextureTXTMakeTexture(cxTextureTXT texture,cxAny buffer,cxInt width,cxInt height);
 

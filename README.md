@@ -16,27 +16,27 @@ QQ:4575407
 定义一个类型
 ------
 ```
-CX_OBJECT_DEF(typeName, baseType)
+CX_DEF(typeName, baseType)
     //定义字段
     int filed;
-CX_OBJECT_END(typeName, baseType)
+CX_END(typeName, baseType)
 ```
 实现一个类型
 ------
 ```
-CX_OBJECT_TYPE(typeName, baseType)
+CX_TYPE(typeName, baseType)
 {
     //当类型被注册时调用
 }
-CX_OBJECT_INIT(typeName, baseType)
+CX_INIT(typeName, baseType)
 {
     //当对象被初始化
 }
-CX_OBJECT_FREE(typeName, baseType)
+CX_FREE(typeName, baseType)
 {
     //当对象被销毁时
 }
-CX_OBJECT_TERM(typeName, baseType)
+CX_TERM(typeName, baseType)
 ```
 创建对象,对象使用引用计数内存管理
 ------
@@ -57,7 +57,7 @@ CX_AUTO(object2);//加入自动释放池
 
 TYPE(obj);//获取对象的字符串类型
 
-CX_TYPE(type,obj);强制转换对象类型，这里不检测类型
+CX_TYPE_OF(type,obj);强制转换对象类型，这里不检测类型
 
 CX_TYPE_REG(type);//注册一个类型到系统中，如果没有注册系统将不承认这个类型
 

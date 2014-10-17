@@ -25,17 +25,17 @@ static cxString cxShaderClippingFragment(cxAny this)
     return cxStringConstChars(fragment);
 }
 
-CX_OBJECT_TYPE(cxShaderClipping, cxShader)
+CX_TYPE(cxShaderClipping, cxShader)
 {
     
 }
-CX_OBJECT_INIT(cxShaderClipping, cxShader)
+CX_INIT(cxShaderClipping, cxShader)
 {
     CX_SET(cxShader, this, Vertex, cxShaderDefaultVertex);
     CX_SET(cxShader, this, Fragment, cxShaderClippingFragment);
 }
-CX_OBJECT_FREE(cxShaderClipping, cxShader)
+CX_FREE(cxShaderClipping, cxShader)
 {
 
 }
-CX_OBJECT_TERM(cxShaderClipping, cxShader)
+CX_TERM(cxShaderClipping, cxShader)

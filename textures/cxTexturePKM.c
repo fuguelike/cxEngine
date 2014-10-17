@@ -82,20 +82,20 @@ static void cxTexturePKMBind(cxAny this)
     cxOpenGLBindTexture(pkm->cxTexture.textureId, 0);
 }
 
-CX_OBJECT_TYPE(cxTexturePKM, cxTexture)
+CX_TYPE(cxTexturePKM, cxTexture)
 {
     
 }
-CX_OBJECT_INIT(cxTexturePKM, cxTexture)
+CX_INIT(cxTexturePKM, cxTexture)
 {
     CX_SET(cxTexture, this, Bind, cxTexturePKMBind);
     CX_SET(cxTexture, this, Load, cxTexturePKMLoad);
 }
-CX_OBJECT_FREE(cxTexturePKM, cxTexture)
+CX_FREE(cxTexturePKM, cxTexture)
 {
 
 }
-CX_OBJECT_TERM(cxTexturePKM, cxTexture)
+CX_TERM(cxTexturePKM, cxTexture)
 
 cxTexture cxTexturePKMLoadStream(cxStream stream)
 {

@@ -13,9 +13,9 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxStack, cxObject)
+CX_DEF(cxStack, cxObject)
     cxArray array;
-CX_OBJECT_END(cxStack, cxObject)
+CX_END(cxStack, cxObject)
 
 void    cxStackPush(cxAny pstack,cxAny any);
 

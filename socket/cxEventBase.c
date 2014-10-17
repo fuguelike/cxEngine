@@ -73,11 +73,11 @@ static void cxEventUpdate(cxAny base)
     event_base_loop(this->base, EVLOOP_NONBLOCK);
 }
 
-CX_OBJECT_TYPE(cxEventBase, cxObject)
+CX_TYPE(cxEventBase, cxObject)
 {
 
 }
-CX_OBJECT_INIT(cxEventBase, cxObject)
+CX_INIT(cxEventBase, cxObject)
 {
     cxEngine engine = cxEngineInstance();
     CX_CON(cxEngine, engine, onUpdate, this, cxEventUpdate);
@@ -86,14 +86,14 @@ CX_OBJECT_INIT(cxEventBase, cxObject)
     this->counter = 0;
     this->freq = 1;
 }
-CX_OBJECT_FREE(cxEventBase, cxObject)
+CX_FREE(cxEventBase, cxObject)
 {
     CX_RELEASE(this->conns);
     event_base_loopbreak(this->base);
     event_base_free(this->base);
     CX_SLOT_RELEASE(this->onUpdate);
 }
-CX_OBJECT_TERM(cxEventBase, cxObject)
+CX_TERM(cxEventBase, cxObject)
 
 cxAny cxEventBaseHttpConnect(cxConstChars host,cxInt port)
 {

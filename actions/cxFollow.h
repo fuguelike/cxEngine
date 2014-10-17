@@ -13,7 +13,7 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(cxFollow, cxAction)
+CX_DEF(cxFollow, cxAction)
     cxAny target;
     cxVec2f opos;
     cxFloat angle;
@@ -21,7 +21,7 @@ CX_OBJECT_DEF(cxFollow, cxAction)
     cxFloat init;   //init speed
     CX_METHOD_DEF(cxFloat, Speed,cxAny,cxFloat);
     CX_METHOD_DEF(cxBool, IsExit,cxAny);
-CX_OBJECT_END(cxFollow, cxAction)
+CX_END(cxFollow, cxAction)
 
 void cxFollowInit(cxAny pav);
 

@@ -56,7 +56,7 @@ typedef enum {
     cxViewDirtyTexture  = 1 << 8,   //texture or texture coord change
 }cxViewDirty;
 
-CX_OBJECT_DEF(cxView, cxObject)
+CX_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxHash Bindes);
     CX_FIELD_DEF(cxHash Binded);
     CX_FIELD_DEF(cxLong Tag);
@@ -116,7 +116,7 @@ CX_OBJECT_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
 
-CX_OBJECT_END(cxView, cxObject)
+CX_END(cxView, cxObject)
 
 CX_INLINE cxMatrix4f *cxViewGetNormalMatrix(cxAny pthis)
 {

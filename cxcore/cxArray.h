@@ -18,9 +18,9 @@ CX_C_BEGIN
 
 typedef cxInt (*cxCmpFunc)(cxConstAny lv,cxConstAny rv);
 
-CX_OBJECT_DEF(cxArray, cxObject)
+CX_DEF(cxArray, cxObject)
     UT_array *utArray;
-CX_OBJECT_END(cxArray, cxObject)
+CX_END(cxArray, cxObject)
 
 #define CX_ARRAY_FOREACH(_a_,_e_)                                               \
 cxAny *_e_ = NULL;                                                              \

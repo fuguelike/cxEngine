@@ -84,21 +84,21 @@ static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
     return false;
 }
 
-CX_OBJECT_TYPE(NormalMap, Map)
+CX_TYPE(NormalMap, Map)
 {
     
 }
-CX_OBJECT_INIT(NormalMap, Map)
+CX_INIT(NormalMap, Map)
 {
     MapSetMode(this, MapModeNormal);
     CX_SET(cxView, this, Touch, NormalMapTouch);
     CX_SET(Map, this, NodeMove, NormalNodeMove);
 }
-CX_OBJECT_FREE(NormalMap, Map)
+CX_FREE(NormalMap, Map)
 {
     
 }
-CX_OBJECT_TERM(NormalMap, Map)
+CX_TERM(NormalMap, Map)
 
 cxBool NormalMapInit(cxAny pmap)
 {
@@ -115,19 +115,19 @@ cxBool NormalMapInit(cxAny pmap)
     return true;
 }
 
-CX_OBJECT_TYPE(NormalScene, cxScroll)
+CX_TYPE(NormalScene, cxScroll)
 {
     
 }
-CX_OBJECT_INIT(NormalScene, cxScroll)
+CX_INIT(NormalScene, cxScroll)
 {
     
 }
-CX_OBJECT_FREE(NormalScene, cxScroll)
+CX_FREE(NormalScene, cxScroll)
 {
     
 }
-CX_OBJECT_TERM(NormalScene, cxScroll)
+CX_TERM(NormalScene, cxScroll)
 
 NormalScene NormalSceneCreate()
 {

@@ -42,11 +42,11 @@ CX_SETTER_DEF(Button, title)
     cxLabelTTFSetText(this->ttf, title);
 }
 
-CX_OBJECT_TYPE(Button, cxButton)
+CX_TYPE(Button, cxButton)
 {
     CX_PROPERTY_SETTER(Button, title);
 }
-CX_OBJECT_INIT(Button, cxButton)
+CX_INIT(Button, cxButton)
 {
     CX_ADD(cxButton, this, onEnter, ButtonEnter);
     CX_ADD(cxButton, this, onLeave, ButtonLeave);
@@ -54,8 +54,8 @@ CX_OBJECT_INIT(Button, cxButton)
     this->ttf = cxLabelTTFCreate(UTF8("button"), NULL, 50);
     cxViewAppend(this, this->ttf);
 }
-CX_OBJECT_FREE(Button, cxButton)
+CX_FREE(Button, cxButton)
 {
     CX_EVENT_RELEASE(this->onTap);
 }
-CX_OBJECT_TERM(Button, cxButton)
+CX_TERM(Button, cxButton)

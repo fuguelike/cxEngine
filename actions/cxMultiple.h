@@ -19,11 +19,11 @@ typedef enum {
     cxMultipleTypeSequence,  //sequence
 }cxMultipleType;
 
-CX_OBJECT_DEF(cxMultiple, cxAction)
+CX_DEF(cxMultiple, cxAction)
     cxMultipleType type;
     cxArray items;
     cxInt index;
-CX_OBJECT_END(cxMultiple, cxAction)
+CX_END(cxMultiple, cxAction)
 
 void cxMultipleSetType(cxAny pav,cxMultipleType type);
 

@@ -102,11 +102,11 @@ void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars ske
 }
 
 
-CX_OBJECT_TYPE(cxOpenGL, cxObject)
+CX_TYPE(cxOpenGL, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxOpenGL, cxObject)
+CX_INIT(cxOpenGL, cxObject)
 {
     this->clearColor = cxColor4fv(0, 0, 0, 1);
     this->blendSrc = -1;
@@ -117,11 +117,11 @@ CX_OBJECT_INIT(cxOpenGL, cxObject)
         this->activeTextures[i] = -1;
     }
 }
-CX_OBJECT_FREE(cxOpenGL, cxObject)
+CX_FREE(cxOpenGL, cxObject)
 {
     CX_RELEASE(this->shaders);
 }
-CX_OBJECT_TERM(cxOpenGL, cxObject)
+CX_TERM(cxOpenGL, cxObject)
 
 cxAny cxOpenGLShader(cxConstChars key)
 {

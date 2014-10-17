@@ -47,7 +47,7 @@ typedef struct{
 
 #define MAX_ACTIVE_TEXTURE (GL_TEXTURE31 - GL_TEXTURE0 + 1)
 
-CX_OBJECT_DEF(cxOpenGL, cxObject)
+CX_DEF(cxOpenGL, cxObject)
     cxInt max_texture_size;
     cxInt max_combined_texture_units;
     cxInt max_vertex_texture_units;
@@ -65,7 +65,7 @@ CX_OBJECT_DEF(cxOpenGL, cxObject)
     cxBool enableAttribTexcoords;
     GLuint activeTextures[MAX_ACTIVE_TEXTURE];
     cxColor4f clearColor;
-CX_OBJECT_END(cxOpenGL, cxObject)
+CX_END(cxOpenGL, cxObject)
 
 cxAny cxOpenGLShader(cxConstChars key);
 

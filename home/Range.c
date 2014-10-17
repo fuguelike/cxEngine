@@ -9,19 +9,19 @@
 #include "Define.h"
 #include "Range.h"
 
-CX_OBJECT_TYPE(Range, cxAtlas)
+CX_TYPE(Range, cxAtlas)
 {
     
 }
-CX_OBJECT_INIT(Range, cxAtlas)
+CX_INIT(Range, cxAtlas)
 {
     cxSpriteSetTextureURL(this, "bullet.json");
 }
-CX_OBJECT_FREE(Range, cxAtlas)
+CX_FREE(Range, cxAtlas)
 {
 
 }
-CX_OBJECT_TERM(Range, cxAtlas)
+CX_TERM(Range, cxAtlas)
 
 void RangeUpdateValue(cxAny pview)
 {

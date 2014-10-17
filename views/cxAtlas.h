@@ -22,7 +22,7 @@ typedef struct {
     GLushort indices[6];
 }cxIndices;
 
-CX_OBJECT_DEF(cxAtlas, cxSprite)
+CX_DEF(cxAtlas, cxSprite)
     GLuint vaoid;
     GLuint vboid[2];
     cxInt capacity;
@@ -33,7 +33,7 @@ CX_OBJECT_DEF(cxAtlas, cxSprite)
     cxBool isInit;
     cxAtlasScale9 scale9;
     cxHash items;
-CX_OBJECT_END(cxAtlas, cxSprite)
+CX_END(cxAtlas, cxSprite)
 
 CX_INLINE cxBoxPoint *cxAtlasBoxPoint(cxAny pthis,cxInt idx)
 {

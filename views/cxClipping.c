@@ -55,22 +55,22 @@ static void cxClippingDrawAfter(cxAny pview)
     glDisable(GL_STENCIL_TEST);
 }
 
-CX_OBJECT_TYPE(cxClipping, cxView)
+CX_TYPE(cxClipping, cxView)
 {
     
 }
-CX_OBJECT_INIT(cxClipping, cxView)
+CX_INIT(cxClipping, cxView)
 {
     this->useRef = cxStencilRefAlloc();
     CX_SET(cxView, this, Before, cxClippingDrawBefore);
     CX_SET(cxView, this, After, cxClippingDrawAfter);
 }
-CX_OBJECT_FREE(cxClipping, cxView)
+CX_FREE(cxClipping, cxView)
 {
     cxStencilRefFree(this->useRef);
     CX_EVENT_RELEASE(this->onClipping);
 }
-CX_OBJECT_TERM(cxClipping, cxView)
+CX_TERM(cxClipping, cxView)
 
 
 

@@ -15,7 +15,7 @@ CX_C_BEGIN
 
 #define CX_VALUE_MAX_SIZE 16
 
-CX_OBJECT_DEF(cxValue, cxObject)
+CX_DEF(cxValue, cxObject)
     cxBool isChanged;
     cxInt size;
     cxByte oldVar[CX_VALUE_MAX_SIZE];
@@ -24,7 +24,7 @@ CX_OBJECT_DEF(cxValue, cxObject)
     CX_EVENT_ALLOC(onChanged);
     CX_SLOT_ALLOC(onUpdate);
     CX_FIELD_DEF(cxAny Data);
-CX_OBJECT_END(cxValue, cxObject)
+CX_END(cxValue, cxObject)
 
 cxBool cxValueBinaryEqu(cxAny pobj);
 

@@ -12,19 +12,19 @@
 
 #define M_PI_X2 (M_PI * 2)
 
-CX_OBJECT_TYPE(cxCurveItem, cxAction)
+CX_TYPE(cxCurveItem, cxAction)
 {
     
 }
-CX_OBJECT_INIT(cxCurveItem, cxObject)
+CX_INIT(cxCurveItem, cxObject)
 {
     
 }
-CX_OBJECT_FREE(cxCurveItem, cxObject)
+CX_FREE(cxCurveItem, cxObject)
 {
     
 }
-CX_OBJECT_TERM(cxCurveItem, cxObject)
+CX_TERM(cxCurveItem, cxObject)
 
 cxFloat cxCurveBackIn(cxAny pav,cxFloat time)
 {
@@ -234,11 +234,11 @@ cxCurveItem cxCurveGet(cxConstChars key)
     return cxHashGet(this->curves, cxHashStrKey(key));
 }
 
-CX_OBJECT_TYPE(cxCurve, cxAction)
+CX_TYPE(cxCurve, cxAction)
 {
     
 }
-CX_OBJECT_INIT(cxCurve, cxObject)
+CX_INIT(cxCurve, cxObject)
 {
     this->curves = CX_ALLOC(cxHash);
 
@@ -274,9 +274,9 @@ CX_OBJECT_INIT(cxCurve, cxObject)
     cxCurveRegister(this,"BackInOut",cxCurveBackInOut);
     
 }
-CX_OBJECT_FREE(cxCurve, cxObject)
+CX_FREE(cxCurve, cxObject)
 {
     CX_RELEASE(this->curves);
 }
-CX_OBJECT_TERM(cxCurve, cxObject)
+CX_TERM(cxCurve, cxObject)
 

@@ -68,25 +68,25 @@ CX_SETTER_DEF(cxLabelTTF, text)
     }
 }
 
-CX_OBJECT_TYPE(cxLabelTTF, cxSprite)
+CX_TYPE(cxLabelTTF, cxSprite)
 {
     CX_PROPERTY_SETTER(cxLabelTTF, align);
     CX_PROPERTY_SETTER(cxLabelTTF, font);
     CX_PROPERTY_SETTER(cxLabelTTF, text);
 }
-CX_OBJECT_INIT(cxLabelTTF, cxSprite)
+CX_INIT(cxLabelTTF, cxSprite)
 {
     CX_ADD(cxView, this, onUpdate, cxLabelTTFUpdate);
     this->attr.size = 32;
     this->attr.align = cxTextAlignTopLeft;
     cxSpriteSetShader(this, cxShaderAlphaKey);
 }
-CX_OBJECT_FREE(cxLabelTTF, cxSprite)
+CX_FREE(cxLabelTTF, cxSprite)
 {
     CX_RELEASE(this->font);
     CX_RELEASE(this->text);
 }
-CX_OBJECT_TERM(cxLabelTTF, cxSprite)
+CX_TERM(cxLabelTTF, cxSprite)
 
 cxLabelTTF cxLabelTTFCreate(cxString txt,cxString font,cxFloat fontsize)
 {

@@ -9,19 +9,19 @@
 #include "cxBase.h"
 #include "cxAnyArray.h"
 
-CX_OBJECT_TYPE(cxAnyArray, cxObject)
+CX_TYPE(cxAnyArray, cxObject)
 {
     
 }
-CX_OBJECT_INIT(cxAnyArray, cxObject)
+CX_INIT(cxAnyArray, cxObject)
 {
     
 }
-CX_OBJECT_FREE(cxAnyArray, cxObject)
+CX_FREE(cxAnyArray, cxObject)
 {
     utarray_free(this->array);
 }
-CX_OBJECT_TERM(cxAnyArray, cxObject)
+CX_TERM(cxAnyArray, cxObject)
 
 cxAnyArray cxAnyArrayAllocImp(cxInt size)
 {

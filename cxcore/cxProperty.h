@@ -37,10 +37,10 @@ do{                                                     \
     p->getter = (cxPropertyGetter)CX_GETTER(_t_,_p_);   \
 }while(0)
 
-CX_OBJECT_DEF(cxProperty, cxObject)
+CX_DEF(cxProperty, cxObject)
     cxPropertySetter setter;
     cxPropertyGetter getter;
-CX_OBJECT_END(cxProperty, cxObject)
+CX_END(cxProperty, cxObject)
 
 void cxObjectSetter(cxAny object,cxConstChars key,cxAny value);
 

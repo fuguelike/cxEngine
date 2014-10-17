@@ -104,11 +104,11 @@ static void cxMemStreamClose(cxAny ps)
     cxStreamBaseClose(this);
 }
 
-CX_OBJECT_TYPE(cxMemStream, cxStream)
+CX_TYPE(cxMemStream, cxStream)
 {
     
 }
-CX_OBJECT_INIT(cxMemStream, cxStream)
+CX_INIT(cxMemStream, cxStream)
 {
     CX_SET(cxStream, this, Read, cxMemStreamRead);
     CX_SET(cxStream, this, Open, cxMemStreamOpen);
@@ -118,11 +118,11 @@ CX_OBJECT_INIT(cxMemStream, cxStream)
     CX_SET(cxStream, this, Position, cxMemStreamPosition);
     CX_SET(cxStream, this, AllBytes, cxMemStreamAllBytes);
 }
-CX_OBJECT_FREE(cxMemStream, cxStream)
+CX_FREE(cxMemStream, cxStream)
 {
     
 }
-CX_OBJECT_TERM(cxMemStream, cxStream)
+CX_TERM(cxMemStream, cxStream)
 
 cxStream cxMemStreamCreateWithText(cxString txt)
 {

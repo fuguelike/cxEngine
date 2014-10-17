@@ -63,11 +63,11 @@ static void cxAlertOnHide(cxAny pview)
     cxViewAppendAction(pview, m);
 }
 
-CX_OBJECT_TYPE(cxAlert, cxAtlas)
+CX_TYPE(cxAlert, cxAtlas)
 {
     
 }
-CX_OBJECT_INIT(cxAlert, cxAtlas)
+CX_INIT(cxAlert, cxAtlas)
 {
     cxViewSetSleepTop(this, false);
     CX_SET(cxView, this, Key, cxAlertKey);
@@ -75,12 +75,12 @@ CX_OBJECT_INIT(cxAlert, cxAtlas)
     CX_SET(cxAlert, this, Hide, cxAlertOnHide);
     CX_SET(cxAlert, this, Show, cxAlertOnShow);
 }
-CX_OBJECT_FREE(cxAlert, cxAtlas)
+CX_FREE(cxAlert, cxAtlas)
 {
     CX_EVENT_RELEASE(this->OnHide);
     CX_EVENT_RELEASE(this->OnShow);
 }
-CX_OBJECT_TERM(cxAlert, cxAtlas)
+CX_TERM(cxAlert, cxAtlas)
 
 void cxAlertShow(cxAny pview)
 {

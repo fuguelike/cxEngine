@@ -16,7 +16,7 @@ CX_C_BEGIN
 
 typedef void (*cxHttpFunc)(cxAny http);
 
-CX_OBJECT_DEF(cxHttp, cxObject)
+CX_DEF(cxHttp, cxObject)
     CX_FIELD_DEF(cxLong Tag);
     CX_FIELD_DEF(cxBool IsSuccess);
     CX_FIELD_DEF(cxInt64 BodyBytes);
@@ -30,7 +30,7 @@ CX_OBJECT_DEF(cxHttp, cxObject)
     struct evhttp_uri *uri;
     CX_EVENT_ALLOC(onChunked);
     CX_EVENT_ALLOC(onCompleted);
-CX_OBJECT_END(cxHttp, cxObject)
+CX_END(cxHttp, cxObject)
 
 CX_FIELD_IMP(cxHttp, cxLong, Tag);
 CX_FIELD_GET(cxHttp, cxString, URL);

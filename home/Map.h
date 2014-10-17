@@ -16,7 +16,7 @@
 
 CX_C_BEGIN
 
-CX_OBJECT_DEF(Map, cxAtlas)
+CX_DEF(Map, cxAtlas)
     cxView aLayer;  //效果层
     cxView nLayer;  //nodes节点层
     //格子属性
@@ -38,7 +38,7 @@ CX_OBJECT_DEF(Map, cxAtlas)
     //Test
     cxLong tag;
     CX_METHOD_DEF(void, NodeMove,cxAny,cxAny,cxVec2i from,cxVec2i to);
-CX_OBJECT_END(Map, cxAtlas)
+CX_END(Map, cxAtlas)
 
 typedef struct {
     cxAny map;
