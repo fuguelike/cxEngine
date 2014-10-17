@@ -9,13 +9,17 @@
 #include <engine/cxUtil.h>
 #include "cxTextureTXT.h"
 
-
 static cxBool cxTextureTXTLoad(cxAny texture,cxStream stream)
 {
     cxTextureTXT this = texture;
     cxConstChars font = this->font == NULL ? NULL : cxStringBody(this->font);
     cxConstChars text = cxStringBody(this->string);
-    cxString data = cxCreateTXTTextureData(text, font,this->attr.size, this->attr.align, this->attr.viewSize.w,this->attr.viewSize.h);
+    cxString data = cxCreateTXTTextureData(text, font,this->attr.size,
+                                           this->attr.align,
+                                           this->attr.viewSize.w,this->attr.viewSize.h,
+                                           this->attr.color,
+                                           this->attr.shadowColor,this->attr.shadowBlur,this->attr.shadowOffset,
+                                           this->attr.strokeColor,this->attr.strokeWidth);
     CX_RETURN(data == NULL, false);
     cxInt bufsiz = cxStringLength(data);
     cxAny buffer = (cxAny)cxStringBody(data);

@@ -58,7 +58,13 @@ static CGSize cxCalculateStringSize(NSString *str, id font, CGSize *constrainSiz
 #define ALIGN_CENTER 3
 #define ALIGN_BOTTOM 2
 
-cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat size,cxTextAlign align,cxInt cw,cxInt ch)
+cxString cxCreateTXTTextureData(cxConstChars txt,
+                                cxConstChars fontName,cxFloat size,
+                                cxTextAlign align,
+                                cxInt cw,cxInt ch,
+                                cxColor4f color,
+                                cxColor4f shadowColor,cxFloat shadowBlur,cxSize2f shadowOffset,
+                                cxColor4f strokeColor,cxFloat strokeWidth)
 {
     CX_RETURN(txt == NULL, NULL);
     NSString *str = [NSString stringWithUTF8String:txt];
@@ -80,13 +86,14 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat s
         font = [UIFont fontWithName:fntName size:size];
     }
     NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
+    //font and color
     [attrs setObject:font forKey:NSFontAttributeName];
+    [attrs setObject:[UIColor colorWithRed:color.r green:color.g blue:color.b alpha:color.a] forKey:NSForegroundColorAttributeName];
     
     dim = cxCalculateStringSize(str, font, &constrainSize, attrs);
     // compute start point
     int startH = 0;
-    int startW = 2;
-    dim.width += 2;
+    int startW = 0;
     if (constrainSize.height > dim.height){
         // vertical alignment
         unsigned int vAlignment = ((int)align >> 4) & 0x0F;
@@ -119,19 +126,38 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,cxFloat s
     UIGraphicsPushContext(context);
     cxUInt uHoriFlag = (int)align & 0x0f;
     NSTextAlignment nsAlign = (2 == uHoriFlag) ? NSTextAlignmentRight : (3 == uHoriFlag) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
-    
     CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
     CGContextSetShouldSubpixelQuantizeFonts(context, false);
     CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
     
     NSMutableParagraphStyle *parastyle = [[NSMutableParagraphStyle alloc] init];
     parastyle.alignment = nsAlign;
-    parastyle.lineBreakMode = NSLineBreakByCharWrapping;
+    parastyle.lineBreakMode = NSLineBreakByTruncatingTail;
     [attrs setObject:parastyle forKey:NSParagraphStyleAttributeName];
-    
-    [str drawInRect:rect withAttributes:attrs];
-    
     [parastyle release];
+    //shadow
+    if(shadowBlur > 0){
+        NSShadow *shadow =[[NSShadow alloc] init];
+        shadow.shadowOffset = CGSizeMake(shadowOffset.w, shadowOffset.h);
+        shadow.shadowBlurRadius = shadowBlur;
+        shadow.shadowColor = [UIColor colorWithRed:shadowColor.r green:shadowColor.g blue:shadowColor.b alpha:shadowColor.a];
+        [attrs setObject:shadow forKey:NSShadowAttributeName];
+        [shadow release];
+    }
+    //stroke
+    if(strokeWidth > 0){
+        UIColor *scolor = [UIColor colorWithRed:strokeColor.r green:strokeColor.g blue:strokeColor.b alpha:strokeColor.a];
+        [attrs setObject:scolor forKey:NSStrokeColorAttributeName];
+        [attrs setObject:[NSNumber numberWithFloat:strokeWidth] forKey:NSStrokeWidthAttributeName];
+    }
+    if(shadowBlur > 0 || strokeWidth > 0){
+        [str drawInRect:rect withAttributes:attrs];
+    }
+    //draw normal
+    [attrs removeObjectForKey:NSStrokeColorAttributeName];
+    [attrs removeObjectForKey:NSStrokeWidthAttributeName];
+    [attrs removeObjectForKey:NSShadowAttributeName];
+    [str drawInRect:rect withAttributes:attrs];
     
     CGContextEndTransparencyLayer(context);
     UIGraphicsPopContext();

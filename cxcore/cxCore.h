@@ -248,8 +248,6 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 
 #define CX_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_,_b_) struct _b_ _b_;
 
-#define CX_TYPE_OF(_t_,_o_)  ((_t_)(_o_))
-
 //type imp cxAny = cxType
 
 #define CX_TYPE(_t_,_b_)     void __##_t_##AutoType(cxAny this){
@@ -279,6 +277,8 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 #define CX_INSTANCE_OF(_o_,_t_)     cxObjectInstanceOf(_o_,_t_##TypeName)
 
 #define TYPE(_o_)                   ((cxObject)_o_)->cxType
+
+#define CX_TYPE_OF(_t_,_o_)         ((_t_)(_o_))
 
 //method
 

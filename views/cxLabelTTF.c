@@ -54,11 +54,9 @@ CX_SETTER_DEF(cxLabelTTF, align)
 CX_SETTER_DEF(cxLabelTTF, font)
 {
     cxString font = cxJsonString(value, "name");
-    if(cxStringOK(font)){
-        cxLabelTTFSetFontName(this, font);
-    }
     cxFloat size = cxJsonDouble(value, "size", this->attr.size);
-    cxLabelTTFSetFontSize(this, size);
+    cxColor4f color = cxJsonColor4f(value, "color", this->attr.color);
+    cxLabelTTFSetFont(this, font, color, size);
 }
 CX_SETTER_DEF(cxLabelTTF, text)
 {
@@ -67,19 +65,33 @@ CX_SETTER_DEF(cxLabelTTF, text)
         cxLabelTTFSetText(this, text);
     }
 }
+CX_SETTER_DEF(cxLabelTTF, shadow)
+{
+    cxColor4f color = cxJsonColor4f(value, "color", this->attr.shadowColor);
+    cxSize2f offset = cxJsonSize2f(value, "offset", this->attr.shadowOffset);
+    cxFloat blur = cxJsonDouble(value, "blur", this->attr.shadowBlur);
+    cxLabelTTFSetShadow(this, color, blur, offset);
+}
+CX_SETTER_DEF(cxLabelTTF, stroke)
+{
+    cxColor4f color = cxJsonColor4f(value, "color", this->attr.strokeColor);
+    cxFloat width = cxJsonDouble(value, "width", this->attr.strokeWidth);
+    cxLabelTTFSetStroke(this, color, width);
+}
 
 CX_TYPE(cxLabelTTF, cxSprite)
 {
     CX_PROPERTY_SETTER(cxLabelTTF, align);
     CX_PROPERTY_SETTER(cxLabelTTF, font);
     CX_PROPERTY_SETTER(cxLabelTTF, text);
+    CX_PROPERTY_SETTER(cxLabelTTF, shadow);
+    CX_PROPERTY_SETTER(cxLabelTTF, stroke);
 }
 CX_INIT(cxLabelTTF, cxSprite)
 {
     CX_ADD(cxView, this, onUpdate, cxLabelTTFUpdate);
     this->attr.size = 32;
     this->attr.align = cxTextAlignTopLeft;
-    cxSpriteSetShader(this, cxShaderAlphaKey);
 }
 CX_FREE(cxLabelTTF, cxSprite)
 {
@@ -91,9 +103,8 @@ CX_TERM(cxLabelTTF, cxSprite)
 cxLabelTTF cxLabelTTFCreate(cxString txt,cxString font,cxFloat fontsize)
 {
     cxLabelTTF this = CX_CREATE(cxLabelTTF);
-    cxLabelTTFSetFontName(this, font);
+    cxLabelTTFSetFont(this, font, cxColor4fv(1, 1, 1, 1), fontsize);
     cxLabelTTFSetText(this, txt);
-    cxLabelTTFSetFontSize(this, fontsize);
     return this;
 }
 
@@ -106,12 +117,21 @@ void cxLabelTTFUpdateText(cxAny pview)
     cxViewSetSize(this, texture->size);
 }
 
-void cxLabelTTFSetFontSize(cxAny pview,cxFloat size)
+void cxLabelTTFSetFont(cxAny pview,cxString font,cxColor4f color,cxFloat size)
 {
     CX_ASSERT_THIS(pview, cxLabelTTF);
-    CX_RETURN(kmAlmostEqual(this->attr.size, size));
-    this->attr.size = size;
-    this->isDirty = true;
+    if(!cxFloatEqu(this->attr.size, size)){
+        this->attr.size = size;
+        this->isDirty = true;
+    }
+    if(!cxColor4fEqu(this->attr.color, color)){
+        this->attr.color = color;
+        this->isDirty = true;
+    }
+    if(!cxStringEqu(this->font, font)){
+        CX_RETAIN_SWAP(this->font, font);
+        this->isDirty = true;
+    }
 }
 
 void cxLabelTTFSetAlign(cxAny pview,cxTextAlign align)
@@ -122,12 +142,34 @@ void cxLabelTTFSetAlign(cxAny pview,cxTextAlign align)
     this->isDirty = true;
 }
 
-void cxLabelTTFSetFontName(cxAny pview,cxString font)
+void cxLabelTTFSetShadow(cxAny pview,cxColor4f color,cxFloat blur,cxSize2f offset)
 {
     CX_ASSERT_THIS(pview, cxLabelTTF);
-    CX_RETURN(cxStringEqu(this->font, font));
-    CX_RETAIN_SWAP(this->font, font);
-    this->isDirty = true;
+    if(!cxFloatEqu(this->attr.shadowBlur, blur)){
+        this->attr.shadowBlur = blur;
+        this->isDirty = true;
+    }
+    if(!cxColor4fEqu(this->attr.shadowColor, color)){
+        this->attr.shadowColor = color;
+        this->isDirty = true;
+    }
+    if(!cxSize2fEqu(this->attr.shadowOffset, offset)){
+        this->attr.shadowOffset = offset;
+        this->isDirty = true;
+    }
+}
+
+void cxLabelTTFSetStroke(cxAny pview,cxColor4f color,cxFloat width)
+{
+    CX_ASSERT_THIS(pview, cxLabelTTF);
+    if(!cxFloatEqu(this->attr.strokeWidth, width)){
+        this->attr.strokeWidth = width;
+        this->isDirty = true;
+    }
+    if(!cxColor4fEqu(this->attr.strokeColor, color)){
+        this->attr.strokeColor = color;
+        this->isDirty = true;
+    }
 }
 
 void cxLabelTTFSetText(cxAny pview,cxString txt)

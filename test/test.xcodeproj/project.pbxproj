@@ -48,6 +48,7 @@
 		839722AE19161746006D0F89 /* font.json in Resources */ = {isa = PBXBuildFile; fileRef = 839722AC19161746006D0F89 /* font.json */; };
 		839722AF19161746006D0F89 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 839722AD19161746006D0F89 /* font.png */; };
 		839E42D119E18F5000A3498A /* cxSprites.json in Resources */ = {isa = PBXBuildFile; fileRef = 839E42D019E18F5000A3498A /* cxSprites.json */; };
+		83CF7C5319F0CD04002EDE02 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83CF7C5219F0CD04002EDE02 /* CoreText.framework */; };
 		83D9FFA019CB32B400F0EAB2 /* odus_cutout.pkm in Resources */ = {isa = PBXBuildFile; fileRef = 83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */; };
 		83D9FFA119CB32B400F0EAB2 /* odus_cutout.pkm.alpha in Resources */ = {isa = PBXBuildFile; fileRef = 83D9FF9F19CB32B400F0EAB2 /* odus_cutout.pkm.alpha */; };
 		83DAD700191A14A6000A7D1F /* ui.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD6FF191A14A6000A7D1F /* ui.json */; };
@@ -84,7 +85,6 @@
 		8321071019CC746900B1AA1E /* candy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = candy.json; path = res/candy.json; sourceTree = SOURCE_ROOT; };
 		8321071119CC746900B1AA1E /* candy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = candy.png; path = res/candy.png; sourceTree = SOURCE_ROOT; };
 		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
-		83314F6318D9C5D00093FF54 /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = ../libs/ios/lib/libjansson.a; sourceTree = "<group>"; };
 		83314F6418D9C5D00093FF54 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../libs/ios/lib/libjpeg.a; sourceTree = "<group>"; };
 		83314F6618D9C5D00093FF54 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = ../libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		83314F6718D9C5D00093FF54 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../libs/ios/lib/libpng.a; sourceTree = "<group>"; };
@@ -118,6 +118,7 @@
 		839722AC19161746006D0F89 /* font.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = font.json; path = res/font.json; sourceTree = SOURCE_ROOT; };
 		839722AD19161746006D0F89 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = res/font.png; sourceTree = SOURCE_ROOT; };
 		839E42D019E18F5000A3498A /* cxSprites.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxSprites.json; path = res/cxSprites.json; sourceTree = SOURCE_ROOT; };
+		83CF7C5219F0CD04002EDE02 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */ = {isa = PBXFileReference; lastKnownFileType = file; name = odus_cutout.pkm; path = res/odus_cutout.pkm; sourceTree = SOURCE_ROOT; };
 		83D9FF9F19CB32B400F0EAB2 /* odus_cutout.pkm.alpha */ = {isa = PBXFileReference; lastKnownFileType = file; name = odus_cutout.pkm.alpha; path = res/odus_cutout.pkm.alpha; sourceTree = SOURCE_ROOT; };
 		83DAD6FF191A14A6000A7D1F /* ui.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = ui.json; path = res/ui.json; sourceTree = SOURCE_ROOT; };
@@ -132,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83CF7C5319F0CD04002EDE02 /* CoreText.framework in Frameworks */,
 				834ABCBE19EFABD900F7EE91 /* libcxEngineStatic.a in Frameworks */,
 				83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */,
 				83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */,
@@ -176,8 +178,8 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83CF7C5219F0CD04002EDE02 /* CoreText.framework */,
 				83314F6018D9C5D00093FF54 /* libevent.a */,
-				83314F6318D9C5D00093FF54 /* libjansson.a */,
 				83314F6418D9C5D00093FF54 /* libjpeg.a */,
 				83314F6618D9C5D00093FF54 /* libpcre.a */,
 				83314F6718D9C5D00093FF54 /* libpng.a */,
