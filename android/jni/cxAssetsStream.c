@@ -98,10 +98,10 @@ static void cxAssetsStreamClose(cxAny ps)
     cxStreamBaseClose(this);
 }
 
-CX_OBJECT_TYPE(cxAssetsStream, cxStream)
+CX_TYPE(cxAssetsStream, cxStream)
 {
 }
-CX_OBJECT_INIT(cxAssetsStream, cxStream)
+CX_INIT(cxAssetsStream, cxStream)
 {
     CX_SET(cxStream, this, Read, cxAssetsStreamRead);
     CX_SET(cxStream, this, Open, cxAssetsStreamOpen);
@@ -111,11 +111,11 @@ CX_OBJECT_INIT(cxAssetsStream, cxStream)
     CX_SET(cxStream, this, Position, cxAssetsStreamPosition);
     CX_SET(cxStream, this, AllBytes, cxAssetsStreamAllBytes);
 }
-CX_OBJECT_FREE(cxAssetsStream, cxStream)
+CX_FREE(cxAssetsStream, cxStream)
 {
     cxAssetsStreamClose(this);
 }
-CX_OBJECT_TERM(cxAssetsStream, cxStream)
+CX_TERM(cxAssetsStream, cxStream)
 
 cxString cxAssetsData(cxConstChars file)
 {

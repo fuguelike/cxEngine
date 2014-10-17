@@ -18,7 +18,7 @@ static cxBool cxTextureTXTLoad(cxAny texture,cxStream stream)
                                            this->attr.align,
                                            this->attr.viewSize.w,this->attr.viewSize.h,
                                            this->attr.color,
-                                           this->attr.shadowColor,this->attr.shadowBlur,this->attr.shadowOffset,
+                                           this->attr.shadowColor,this->attr.shadowRadius,this->attr.shadowOffset,
                                            this->attr.strokeColor,this->attr.strokeWidth);
     CX_RETURN(data == NULL, false);
     cxInt bufsiz = cxStringLength(data);

@@ -69,8 +69,8 @@ CX_SETTER_DEF(cxLabelTTF, shadow)
 {
     cxColor4f color = cxJsonColor4f(value, "color", this->attr.shadowColor);
     cxSize2f offset = cxJsonSize2f(value, "offset", this->attr.shadowOffset);
-    cxFloat blur = cxJsonDouble(value, "blur", this->attr.shadowBlur);
-    cxLabelTTFSetShadow(this, color, blur, offset);
+    cxFloat radius = cxJsonDouble(value, "radius", this->attr.shadowRadius);
+    cxLabelTTFSetShadow(this, color, radius, offset);
 }
 CX_SETTER_DEF(cxLabelTTF, stroke)
 {
@@ -142,11 +142,11 @@ void cxLabelTTFSetAlign(cxAny pview,cxTextAlign align)
     this->isDirty = true;
 }
 
-void cxLabelTTFSetShadow(cxAny pview,cxColor4f color,cxFloat blur,cxSize2f offset)
+void cxLabelTTFSetShadow(cxAny pview,cxColor4f color,cxFloat radius,cxSize2f offset)
 {
     CX_ASSERT_THIS(pview, cxLabelTTF);
-    if(!cxFloatEqu(this->attr.shadowBlur, blur)){
-        this->attr.shadowBlur = blur;
+    if(!cxFloatEqu(this->attr.shadowRadius, radius)){
+        this->attr.shadowRadius = radius;
         this->isDirty = true;
     }
     if(!cxColor4fEqu(this->attr.shadowColor, color)){

@@ -50,7 +50,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,
                                 cxTextAlign align,
                                 cxInt cw,cxInt ch,
                                 cxColor4f color,
-                                cxColor4f shadowColor,cxFloat shadowBlur,cxSize2f shadowOffset,
+                                cxColor4f shadowColor,cxFloat shadowRadius,cxSize2f shadowOffset,
                                 cxColor4f strokeColor,cxFloat strokeWidth
                                 );
 

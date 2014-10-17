@@ -262,7 +262,7 @@ typedef struct {
     //shadow
     cxColor4f shadowColor;
     cxSize2f shadowOffset;
-    cxFloat shadowBlur;
+    cxFloat shadowRadius;
     //stroke
     cxColor4f strokeColor;
     cxFloat strokeWidth;

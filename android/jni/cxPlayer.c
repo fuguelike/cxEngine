@@ -11,36 +11,36 @@
 #include <cxcore/cxBase.h>
 #include "cxAndroid.h"
 
-CX_OBJECT_DEF(cxTrack, cxObject)
+CX_DEF(cxTrack, cxObject)
     cxInt soundId;
     cxString file;
-CX_OBJECT_END(cxTrack, cxObject)
+CX_END(cxTrack, cxObject)
 
-CX_OBJECT_TYPE(cxTrack, cxObject)
+CX_TYPE(cxTrack, cxObject)
 {
 }
-CX_OBJECT_INIT(cxTrack, cxObject)
+CX_INIT(cxTrack, cxObject)
 {
     
 }
-CX_OBJECT_FREE(cxTrack, cxObject)
+CX_FREE(cxTrack, cxObject)
 {
     CX_RELEASE(this->file);
 }
-CX_OBJECT_TERM(cxTrack, cxObject)
+CX_TERM(cxTrack, cxObject)
 
-CX_OBJECT_TYPE(cxPlayer, cxObject)
+CX_TYPE(cxPlayer, cxObject)
 {
 }
-CX_OBJECT_INIT(cxPlayer, cxObject)
+CX_INIT(cxPlayer, cxObject)
 {
     this->tracks = CX_ALLOC(cxHash);
 }
-CX_OBJECT_FREE(cxPlayer, cxObject)
+CX_FREE(cxPlayer, cxObject)
 {
     CX_RELEASE(this->tracks);
 }
-CX_OBJECT_TERM(cxPlayer, cxObject)
+CX_TERM(cxPlayer, cxObject)
 
 static cxPlayer instance = NULL;
 

@@ -338,12 +338,30 @@ public class EngineGLView extends GLSurfaceView {
 		return y;
 	}
 	//create ttf image
-	public byte[] createTextBitmapImp(String pString, String pFontName, int fontSize,int align,int w,int h) {
+	//(Ljava/lang/String;Ljava/lang/String;IIIIIIIIFFFIIIIIIIIF
+	public byte[] createTextBitmapImp(String pString, String pFontName, int fontSize,int align,int w,int h,
+			int A,int R,int G,int B,
+			float shadowRadius,float shadowOffx,float shadowOffy,int shadowA,int shadowR,int shadowG,int shadowB,
+			int strokeA,int strokeR,int strokeG,int strokeB,float strokeWidth) {
 		int hAlign = align & 0x0F;
 		int vAlign   = (align >> 4) & 0x0F;
 		pString = refactorString(pString);
 		Paint paint = newPaint(pFontName, fontSize, hAlign);
-		paint.setARGB(255, 255, 255, 255);
+		paint.setARGB(A, R, G, B);
+		//FFFIIII
+		//float shadowRadius,float shadowOffx,float shadowOffy,int shadowA,int shadowR,int shadowG,int shadowB
+		if(shadowRadius > 0){
+			paint.setShadowLayer(shadowRadius, shadowOffx, shadowOffy, Color.argb(shadowA, shadowR, shadowG, shadowB));
+		}
+		Paint stroke = null;
+		//IIIIF
+		//int strokeA,int strokeR,int strokeG,int strokeB,float strokeWidth
+		if(strokeWidth > 0){
+			stroke = newPaint(pFontName, fontSize, hAlign);
+			stroke.setARGB(strokeA, strokeR, strokeG, strokeB);
+			stroke.setStyle(Paint.Style.STROKE);
+			stroke.setStrokeWidth(strokeWidth);
+		}
 		final TextProperty textProperty = computeTextProperty(pString, w, h, paint);
 		int totalHeight = (h == 0 ? textProperty.mTotalHeight: h);
 		if(h > totalHeight){
@@ -364,14 +382,25 @@ public class EngineGLView extends GLSurfaceView {
 		String[] lines = textProperty.mLines;
 		for (String line : lines) {
 			x = computeX(line, textProperty.mMaxWidth, hAlign);
-			canvas.drawText(line, x + renderTextDeltaX, y + renderTextDeltaY, paint);
+			if(stroke != null){
+				canvas.drawText(line, x + renderTextDeltaX, y + renderTextDeltaY, stroke);
+			}
+			if(paint != null){
+				canvas.drawText(line, x + renderTextDeltaX, y + renderTextDeltaY, paint);
+			}
 			y += textProperty.mHeightPerLine;
 		}
 		return getPixels(bitmap);
 	}
-	
-	public static byte[] createTextBitmap(String pString, String pFontName, int fontSize,int align,int w,int h) {
-		return glView.createTextBitmapImp(pString, pFontName, fontSize, align, w, h);
+
+	public static byte[] createTextBitmap(String pString, String pFontName, int fontSize,int align,int w,int h,
+			int A,int R,int G,int B,
+			float shadowRadius,float shadowOffx,float shadowOffy,int shadowA,int shadowR,int shadowG,int shadowB,
+			int strokeA,int strokeR,int strokeG,int strokeB,float strokeWidth) {
+		return glView.createTextBitmapImp(pString, pFontName, fontSize, align, w, h,
+				A,R,G,B,
+				shadowRadius,shadowOffx,shadowOffy,shadowA,shadowR,shadowG,shadowB,
+				strokeA,strokeR,strokeG,strokeB,strokeWidth);
 	}
     public EngineGLView(Context context) {
         super(context);

@@ -63,7 +63,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,
                                 cxTextAlign align,
                                 cxInt cw,cxInt ch,
                                 cxColor4f color,
-                                cxColor4f shadowColor,cxFloat shadowBlur,cxSize2f shadowOffset,
+                                cxColor4f shadowColor,cxFloat shadowRadius,cxSize2f shadowOffset,
                                 cxColor4f strokeColor,cxFloat strokeWidth)
 {
     CX_RETURN(txt == NULL, NULL);
@@ -122,24 +122,22 @@ cxString cxCreateTXTTextureData(cxConstChars txt,
     CGContextSetRGBFillColor(context, 1.0f, 1.0f, 1.0f, 1.0f);
     CGContextTranslateCTM(context, 0.0f, dim.height);
     CGContextScaleCTM(context, 1.0f, -1.0f);
-    
     UIGraphicsPushContext(context);
     cxUInt uHoriFlag = (int)align & 0x0f;
     NSTextAlignment nsAlign = (2 == uHoriFlag) ? NSTextAlignmentRight : (3 == uHoriFlag) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
     CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
     CGContextSetShouldSubpixelQuantizeFonts(context, false);
     CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
-    
     NSMutableParagraphStyle *parastyle = [[NSMutableParagraphStyle alloc] init];
     parastyle.alignment = nsAlign;
     parastyle.lineBreakMode = NSLineBreakByTruncatingTail;
     [attrs setObject:parastyle forKey:NSParagraphStyleAttributeName];
     [parastyle release];
     //shadow
-    if(shadowBlur > 0){
+    if(shadowRadius > 0){
         NSShadow *shadow =[[NSShadow alloc] init];
         shadow.shadowOffset = CGSizeMake(shadowOffset.w, shadowOffset.h);
-        shadow.shadowBlurRadius = shadowBlur;
+        shadow.shadowBlurRadius = shadowRadius;
         shadow.shadowColor = [UIColor colorWithRed:shadowColor.r green:shadowColor.g blue:shadowColor.b alpha:shadowColor.a];
         [attrs setObject:shadow forKey:NSShadowAttributeName];
         [shadow release];
@@ -149,16 +147,12 @@ cxString cxCreateTXTTextureData(cxConstChars txt,
         UIColor *scolor = [UIColor colorWithRed:strokeColor.r green:strokeColor.g blue:strokeColor.b alpha:strokeColor.a];
         [attrs setObject:scolor forKey:NSStrokeColorAttributeName];
         [attrs setObject:[NSNumber numberWithFloat:strokeWidth] forKey:NSStrokeWidthAttributeName];
-    }
-    if(shadowBlur > 0 || strokeWidth > 0){
         [str drawInRect:rect withAttributes:attrs];
+        [attrs removeObjectForKey:NSStrokeColorAttributeName];
+        [attrs removeObjectForKey:NSStrokeWidthAttributeName];
     }
     //draw normal
-    [attrs removeObjectForKey:NSStrokeColorAttributeName];
-    [attrs removeObjectForKey:NSStrokeWidthAttributeName];
-    [attrs removeObjectForKey:NSShadowAttributeName];
     [str drawInRect:rect withAttributes:attrs];
-    
     CGContextEndTransparencyLayer(context);
     UIGraphicsPopContext();
     CGColorSpaceRelease(colorSpace);

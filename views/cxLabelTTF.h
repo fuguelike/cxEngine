@@ -26,7 +26,7 @@ void cxLabelTTFSetAlign(cxAny pview,cxTextAlign align);
 
 void cxLabelTTFSetText(cxAny pview,cxString txt);
 
-void cxLabelTTFSetShadow(cxAny pview,cxColor4f color,cxFloat blur,cxSize2f offset);
+void cxLabelTTFSetShadow(cxAny pview,cxColor4f color,cxFloat radius,cxSize2f offset);
 
 void cxLabelTTFSetStroke(cxAny pview,cxColor4f color,cxFloat width);
 
