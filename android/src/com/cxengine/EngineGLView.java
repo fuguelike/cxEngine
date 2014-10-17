@@ -300,6 +300,7 @@ public class EngineGLView extends GLSurfaceView {
 		rv.mTotalHeight = rv.mHeightPerLine * lines.length;
 		rv.mTotalHeight = height > rv.mTotalHeight ? height : rv.mTotalHeight;
 		rv.mLines = lines;
+		rv.mMaxWidth += 2;
 		return rv;
 	}
 	private int computeX(final String text, final int maxWidth, final int horizontalAlignment) {
@@ -315,7 +316,7 @@ public class EngineGLView extends GLSurfaceView {
 		default:
 			break;
 		}
-		return ret;
+		return ret + 2;
 	}
 
 	private int computeY(final FontMetricsInt fontMetricsInt,final int constrainHeight, final int totalHeight,final int verticalAlignment) {
@@ -367,14 +368,10 @@ public class EngineGLView extends GLSurfaceView {
 		if(h > totalHeight){
 			totalHeight = h;
 		}
-		float bitmapPaddingX   = 0.0f;
-		float bitmapPaddingY   = 0.0f;
-		float renderTextDeltaX = 0.0f;
-		float renderTextDeltaY = 0.0f;
 		if (0 == textProperty.mMaxWidth || 0 == totalHeight){
 			return null;
 		}
-		Bitmap bitmap = Bitmap.createBitmap(textProperty.mMaxWidth + (int)bitmapPaddingX,totalHeight + (int)bitmapPaddingY, Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(textProperty.mMaxWidth,totalHeight, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 		FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
 		int x = 0;
@@ -383,10 +380,10 @@ public class EngineGLView extends GLSurfaceView {
 		for (String line : lines) {
 			x = computeX(line, textProperty.mMaxWidth, hAlign);
 			if(stroke != null){
-				canvas.drawText(line, x + renderTextDeltaX, y + renderTextDeltaY, stroke);
+				canvas.drawText(line, x, y, stroke);
 			}
 			if(paint != null){
-				canvas.drawText(line, x + renderTextDeltaX, y + renderTextDeltaY, paint);
+				canvas.drawText(line, x, y, paint);
 			}
 			y += textProperty.mHeightPerLine;
 		}

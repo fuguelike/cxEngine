@@ -49,7 +49,7 @@ static CGSize cxCalculateStringSize(NSString *str, id font, CGSize *constrainSiz
         }
         dim.height += tmp.height;
     }
-    dim.width = ceilf(dim.width);
+    dim.width = ceilf(dim.width) + 2;
     dim.height = ceilf(dim.height);
     return dim;
 }
@@ -88,7 +88,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     dim = cxCalculateStringSize(str, font, &constrainSize, attrs);
     // compute start point
     int startH = 0;
-    int startW = 0;
+    int startW = 2;
     if (constrainSize.height > dim.height){
         // vertical alignment
         unsigned int vAlignment = ((int)attr->align >> 4) & 0x0F;
