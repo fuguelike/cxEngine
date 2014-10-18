@@ -39,6 +39,7 @@
 #include <views/cxPolygon.h>
 #include <views/cxAlert.h>
 #include <views/cxSprites.h>
+#include <views/cxSpine.h>
 
 #include <actions/cxParticle.h>
 #include <actions/cxMultiple.h>
@@ -56,6 +57,7 @@
 #include <actions/cxSpline.h>
 #include <actions/cxTimeLine.h>
 #include <actions/cxBezier.h>
+#include <actions/cxSkeleton.h>
 
 #include <socket/cxUDP.h>
 #include <socket/cxHttp.h>
@@ -144,6 +146,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxLabelBMP);
     CX_TYPE_REG(cxAlert);
     CX_TYPE_REG(cxSprites);
+    CX_TYPE_REG(cxSpline);
     
     //register actions
     CX_TYPE_REG(cxMultiple);
@@ -163,6 +166,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxTint);
     CX_TYPE_REG(cxTimeLine);
     CX_TYPE_REG(cxBezier);
+    CX_TYPE_REG(cxSkeleton);
     //scoket
     CX_TYPE_REG(cxUDP);
     CX_TYPE_REG(cxEventBase);

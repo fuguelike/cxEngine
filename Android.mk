@@ -48,6 +48,34 @@ LOCAL_SRC_FILES += \
     chipmunk/constraints/cpSlideJoint.c
 
 LOCAL_SRC_FILES += \
+    spine/Animation.c \
+    spine/AnimationState.c \
+    spine/AnimationStateData.c \
+    spine/Atlas.c \
+    spine/AtlasAttachmentLoader.c \
+    spine/Attachment.c \
+    spine/AttachmentLoader.c \
+    spine/Bone.c \
+    spine/BoneData.c \
+    spine/BoundingBoxAttachment.c \
+    spine/EventData.c \
+    spine/IkConstraint.c \
+    spine/IkConstraintData.c \
+    spine/Json.c \
+    spine/MeshAttachment.c \
+    spine/RegionAttachment.c \
+    spine/Skeleton.c \
+    spine/SkeletonBounds.c \
+    spine/SkeletonData.c \
+    spine/SkeletonJson.c \
+    spine/Skin.c \
+    spine/SkinnedMeshAttachment.c \
+    spine/Slot.c \
+    spine/SlotData.c \
+    spine/extension.c \
+    spine/spEvent.c
+
+LOCAL_SRC_FILES += \
     cxcore/cxNumber.c \
 	cxcore/cxMessage.c \
 	cxcore/cxMD5.c \
@@ -121,7 +149,8 @@ LOCAL_SRC_FILES += \
     actions/cxParabola.c \
     actions/cxFollow.c \
     actions/cxTimeLine.c \
-    actions/cxBezier.c
+    actions/cxBezier.c \
+    actions/cxSkeleton.c
 
 LOCAL_SRC_FILES += \
     views/cxAtlas.c \
@@ -136,7 +165,8 @@ LOCAL_SRC_FILES += \
     views/cxLabelBMP.c \
     views/cxPolygon.c \
     views/cxAlert.c \
-    views/cxSprites.c
+    views/cxSprites.c \
+    views/cxSpine.c
 
 LOCAL_SRC_FILES += \
     socket/cxEventBase.c \

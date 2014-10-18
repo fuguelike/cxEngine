@@ -7,6 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		831046E019F21B3E0086D91A /* Animation.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046AB19F21B3D0086D91A /* Animation.c */; };
+		831046E119F21B3E0086D91A /* AnimationState.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046AD19F21B3D0086D91A /* AnimationState.c */; };
+		831046E219F21B3E0086D91A /* AnimationStateData.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046AF19F21B3D0086D91A /* AnimationStateData.c */; };
+		831046E319F21B3E0086D91A /* Atlas.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046B119F21B3D0086D91A /* Atlas.c */; };
+		831046E419F21B3E0086D91A /* AtlasAttachmentLoader.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046B319F21B3D0086D91A /* AtlasAttachmentLoader.c */; };
+		831046E519F21B3E0086D91A /* Attachment.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046B519F21B3D0086D91A /* Attachment.c */; };
+		831046E619F21B3E0086D91A /* AttachmentLoader.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046B719F21B3D0086D91A /* AttachmentLoader.c */; };
+		831046E719F21B3E0086D91A /* Bone.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046B919F21B3D0086D91A /* Bone.c */; };
+		831046E819F21B3E0086D91A /* BoneData.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046BB19F21B3D0086D91A /* BoneData.c */; };
+		831046E919F21B3E0086D91A /* BoundingBoxAttachment.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046BD19F21B3D0086D91A /* BoundingBoxAttachment.c */; };
+		831046EA19F21B3E0086D91A /* EventData.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046BF19F21B3D0086D91A /* EventData.c */; };
+		831046EB19F21B3E0086D91A /* extension.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046C119F21B3D0086D91A /* extension.c */; };
+		831046EC19F21B3E0086D91A /* IkConstraint.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046C319F21B3D0086D91A /* IkConstraint.c */; };
+		831046ED19F21B3E0086D91A /* IkConstraintData.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046C519F21B3D0086D91A /* IkConstraintData.c */; };
+		831046EE19F21B3E0086D91A /* Json.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046C719F21B3D0086D91A /* Json.c */; };
+		831046EF19F21B3E0086D91A /* MeshAttachment.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046C919F21B3D0086D91A /* MeshAttachment.c */; };
+		831046F019F21B3E0086D91A /* RegionAttachment.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046CB19F21B3D0086D91A /* RegionAttachment.c */; };
+		831046F119F21B3E0086D91A /* Skeleton.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046CD19F21B3D0086D91A /* Skeleton.c */; };
+		831046F219F21B3E0086D91A /* SkeletonBounds.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046CF19F21B3D0086D91A /* SkeletonBounds.c */; };
+		831046F319F21B3E0086D91A /* SkeletonData.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046D119F21B3D0086D91A /* SkeletonData.c */; };
+		831046F419F21B3E0086D91A /* SkeletonJson.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046D319F21B3D0086D91A /* SkeletonJson.c */; };
+		831046F519F21B3E0086D91A /* Skin.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046D519F21B3D0086D91A /* Skin.c */; };
+		831046F619F21B3E0086D91A /* SkinnedMeshAttachment.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046D719F21B3D0086D91A /* SkinnedMeshAttachment.c */; };
+		831046F719F21B3E0086D91A /* Slot.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046D919F21B3D0086D91A /* Slot.c */; };
+		831046F819F21B3E0086D91A /* SlotData.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046DB19F21B3D0086D91A /* SlotData.c */; };
+		831046F919F21B3E0086D91A /* spEvent.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046DD19F21B3D0086D91A /* spEvent.c */; };
+		831046FC19F21B970086D91A /* cxSkeleton.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046FA19F21B970086D91A /* cxSkeleton.c */; };
+		831046FF19F21BA40086D91A /* cxSpine.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046FD19F21BA40086D91A /* cxSpine.c */; };
 		831E654819EFA9B000FCFD85 /* cxAnimate.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E633919EFA9AF00FCFD85 /* cxAnimate.c */; };
 		831E654919EFA9B000FCFD85 /* cxBezier.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E633B19EFA9AF00FCFD85 /* cxBezier.c */; };
 		831E654A19EFA9B000FCFD85 /* cxCurve.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E633D19EFA9AF00FCFD85 /* cxCurve.c */; };
@@ -180,6 +208,63 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		831046AB19F21B3D0086D91A /* Animation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Animation.c; sourceTree = "<group>"; };
+		831046AC19F21B3D0086D91A /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animation.h; sourceTree = "<group>"; };
+		831046AD19F21B3D0086D91A /* AnimationState.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AnimationState.c; sourceTree = "<group>"; };
+		831046AE19F21B3D0086D91A /* AnimationState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationState.h; sourceTree = "<group>"; };
+		831046AF19F21B3D0086D91A /* AnimationStateData.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AnimationStateData.c; sourceTree = "<group>"; };
+		831046B019F21B3D0086D91A /* AnimationStateData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimationStateData.h; sourceTree = "<group>"; };
+		831046B119F21B3D0086D91A /* Atlas.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Atlas.c; sourceTree = "<group>"; };
+		831046B219F21B3D0086D91A /* Atlas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Atlas.h; sourceTree = "<group>"; };
+		831046B319F21B3D0086D91A /* AtlasAttachmentLoader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AtlasAttachmentLoader.c; sourceTree = "<group>"; };
+		831046B419F21B3D0086D91A /* AtlasAttachmentLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtlasAttachmentLoader.h; sourceTree = "<group>"; };
+		831046B519F21B3D0086D91A /* Attachment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Attachment.c; sourceTree = "<group>"; };
+		831046B619F21B3D0086D91A /* Attachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attachment.h; sourceTree = "<group>"; };
+		831046B719F21B3D0086D91A /* AttachmentLoader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AttachmentLoader.c; sourceTree = "<group>"; };
+		831046B819F21B3D0086D91A /* AttachmentLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttachmentLoader.h; sourceTree = "<group>"; };
+		831046B919F21B3D0086D91A /* Bone.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Bone.c; sourceTree = "<group>"; };
+		831046BA19F21B3D0086D91A /* Bone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bone.h; sourceTree = "<group>"; };
+		831046BB19F21B3D0086D91A /* BoneData.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BoneData.c; sourceTree = "<group>"; };
+		831046BC19F21B3D0086D91A /* BoneData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoneData.h; sourceTree = "<group>"; };
+		831046BD19F21B3D0086D91A /* BoundingBoxAttachment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = BoundingBoxAttachment.c; sourceTree = "<group>"; };
+		831046BE19F21B3D0086D91A /* BoundingBoxAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoundingBoxAttachment.h; sourceTree = "<group>"; };
+		831046BF19F21B3D0086D91A /* EventData.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = EventData.c; sourceTree = "<group>"; };
+		831046C019F21B3D0086D91A /* EventData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventData.h; sourceTree = "<group>"; };
+		831046C119F21B3D0086D91A /* extension.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = extension.c; sourceTree = "<group>"; };
+		831046C219F21B3D0086D91A /* extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = extension.h; sourceTree = "<group>"; };
+		831046C319F21B3D0086D91A /* IkConstraint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IkConstraint.c; sourceTree = "<group>"; };
+		831046C419F21B3D0086D91A /* IkConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IkConstraint.h; sourceTree = "<group>"; };
+		831046C519F21B3D0086D91A /* IkConstraintData.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IkConstraintData.c; sourceTree = "<group>"; };
+		831046C619F21B3D0086D91A /* IkConstraintData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IkConstraintData.h; sourceTree = "<group>"; };
+		831046C719F21B3D0086D91A /* Json.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Json.c; sourceTree = "<group>"; };
+		831046C819F21B3D0086D91A /* Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Json.h; sourceTree = "<group>"; };
+		831046C919F21B3D0086D91A /* MeshAttachment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = MeshAttachment.c; sourceTree = "<group>"; };
+		831046CA19F21B3D0086D91A /* MeshAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshAttachment.h; sourceTree = "<group>"; };
+		831046CB19F21B3D0086D91A /* RegionAttachment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = RegionAttachment.c; sourceTree = "<group>"; };
+		831046CC19F21B3D0086D91A /* RegionAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegionAttachment.h; sourceTree = "<group>"; };
+		831046CD19F21B3D0086D91A /* Skeleton.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Skeleton.c; sourceTree = "<group>"; };
+		831046CE19F21B3D0086D91A /* Skeleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeleton.h; sourceTree = "<group>"; };
+		831046CF19F21B3D0086D91A /* SkeletonBounds.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SkeletonBounds.c; sourceTree = "<group>"; };
+		831046D019F21B3D0086D91A /* SkeletonBounds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonBounds.h; sourceTree = "<group>"; };
+		831046D119F21B3D0086D91A /* SkeletonData.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SkeletonData.c; sourceTree = "<group>"; };
+		831046D219F21B3D0086D91A /* SkeletonData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonData.h; sourceTree = "<group>"; };
+		831046D319F21B3D0086D91A /* SkeletonJson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SkeletonJson.c; sourceTree = "<group>"; };
+		831046D419F21B3D0086D91A /* SkeletonJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkeletonJson.h; sourceTree = "<group>"; };
+		831046D519F21B3D0086D91A /* Skin.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Skin.c; sourceTree = "<group>"; };
+		831046D619F21B3D0086D91A /* Skin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skin.h; sourceTree = "<group>"; };
+		831046D719F21B3D0086D91A /* SkinnedMeshAttachment.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SkinnedMeshAttachment.c; sourceTree = "<group>"; };
+		831046D819F21B3D0086D91A /* SkinnedMeshAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SkinnedMeshAttachment.h; sourceTree = "<group>"; };
+		831046D919F21B3D0086D91A /* Slot.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Slot.c; sourceTree = "<group>"; };
+		831046DA19F21B3D0086D91A /* Slot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slot.h; sourceTree = "<group>"; };
+		831046DB19F21B3D0086D91A /* SlotData.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SlotData.c; sourceTree = "<group>"; };
+		831046DC19F21B3D0086D91A /* SlotData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlotData.h; sourceTree = "<group>"; };
+		831046DD19F21B3D0086D91A /* spEvent.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = spEvent.c; sourceTree = "<group>"; };
+		831046DE19F21B3D0086D91A /* spEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spEvent.h; sourceTree = "<group>"; };
+		831046DF19F21B3D0086D91A /* spine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spine.h; sourceTree = "<group>"; };
+		831046FA19F21B970086D91A /* cxSkeleton.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxSkeleton.c; sourceTree = "<group>"; };
+		831046FB19F21B970086D91A /* cxSkeleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxSkeleton.h; sourceTree = "<group>"; };
+		831046FD19F21BA40086D91A /* cxSpine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxSpine.c; sourceTree = "<group>"; };
+		831046FE19F21BA40086D91A /* cxSpine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxSpine.h; sourceTree = "<group>"; };
 		831E632119EFA97A00FCFD85 /* libcxEngineStatic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcxEngineStatic.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		831E632C19EFA97A00FCFD85 /* cxEngineStaticTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = cxEngineStaticTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		831E632F19EFA97A00FCFD85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -509,6 +594,66 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		831046AA19F21B3D0086D91A /* spine */ = {
+			isa = PBXGroup;
+			children = (
+				831046AB19F21B3D0086D91A /* Animation.c */,
+				831046AC19F21B3D0086D91A /* Animation.h */,
+				831046AD19F21B3D0086D91A /* AnimationState.c */,
+				831046AE19F21B3D0086D91A /* AnimationState.h */,
+				831046AF19F21B3D0086D91A /* AnimationStateData.c */,
+				831046B019F21B3D0086D91A /* AnimationStateData.h */,
+				831046B119F21B3D0086D91A /* Atlas.c */,
+				831046B219F21B3D0086D91A /* Atlas.h */,
+				831046B319F21B3D0086D91A /* AtlasAttachmentLoader.c */,
+				831046B419F21B3D0086D91A /* AtlasAttachmentLoader.h */,
+				831046B519F21B3D0086D91A /* Attachment.c */,
+				831046B619F21B3D0086D91A /* Attachment.h */,
+				831046B719F21B3D0086D91A /* AttachmentLoader.c */,
+				831046B819F21B3D0086D91A /* AttachmentLoader.h */,
+				831046B919F21B3D0086D91A /* Bone.c */,
+				831046BA19F21B3D0086D91A /* Bone.h */,
+				831046BB19F21B3D0086D91A /* BoneData.c */,
+				831046BC19F21B3D0086D91A /* BoneData.h */,
+				831046BD19F21B3D0086D91A /* BoundingBoxAttachment.c */,
+				831046BE19F21B3D0086D91A /* BoundingBoxAttachment.h */,
+				831046BF19F21B3D0086D91A /* EventData.c */,
+				831046C019F21B3D0086D91A /* EventData.h */,
+				831046C119F21B3D0086D91A /* extension.c */,
+				831046C219F21B3D0086D91A /* extension.h */,
+				831046C319F21B3D0086D91A /* IkConstraint.c */,
+				831046C419F21B3D0086D91A /* IkConstraint.h */,
+				831046C519F21B3D0086D91A /* IkConstraintData.c */,
+				831046C619F21B3D0086D91A /* IkConstraintData.h */,
+				831046C719F21B3D0086D91A /* Json.c */,
+				831046C819F21B3D0086D91A /* Json.h */,
+				831046C919F21B3D0086D91A /* MeshAttachment.c */,
+				831046CA19F21B3D0086D91A /* MeshAttachment.h */,
+				831046CB19F21B3D0086D91A /* RegionAttachment.c */,
+				831046CC19F21B3D0086D91A /* RegionAttachment.h */,
+				831046CD19F21B3D0086D91A /* Skeleton.c */,
+				831046CE19F21B3D0086D91A /* Skeleton.h */,
+				831046CF19F21B3D0086D91A /* SkeletonBounds.c */,
+				831046D019F21B3D0086D91A /* SkeletonBounds.h */,
+				831046D119F21B3D0086D91A /* SkeletonData.c */,
+				831046D219F21B3D0086D91A /* SkeletonData.h */,
+				831046D319F21B3D0086D91A /* SkeletonJson.c */,
+				831046D419F21B3D0086D91A /* SkeletonJson.h */,
+				831046D519F21B3D0086D91A /* Skin.c */,
+				831046D619F21B3D0086D91A /* Skin.h */,
+				831046D719F21B3D0086D91A /* SkinnedMeshAttachment.c */,
+				831046D819F21B3D0086D91A /* SkinnedMeshAttachment.h */,
+				831046D919F21B3D0086D91A /* Slot.c */,
+				831046DA19F21B3D0086D91A /* Slot.h */,
+				831046DB19F21B3D0086D91A /* SlotData.c */,
+				831046DC19F21B3D0086D91A /* SlotData.h */,
+				831046DD19F21B3D0086D91A /* spEvent.c */,
+				831046DE19F21B3D0086D91A /* spEvent.h */,
+				831046DF19F21B3D0086D91A /* spine.h */,
+			);
+			path = spine;
+			sourceTree = SOURCE_ROOT;
+		};
 		831E631819EFA97A00FCFD85 = {
 			isa = PBXGroup;
 			children = (
@@ -530,6 +675,7 @@
 		831E632319EFA97A00FCFD85 /* cxEngineStatic */ = {
 			isa = PBXGroup;
 			children = (
+				831046AA19F21B3D0086D91A /* spine */,
 				831E633819EFA9AF00FCFD85 /* actions */,
 				831E635B19EFA9AF00FCFD85 /* algorithm */,
 				831E636919EFA9AF00FCFD85 /* chipmunk */,
@@ -567,6 +713,8 @@
 		831E633819EFA9AF00FCFD85 /* actions */ = {
 			isa = PBXGroup;
 			children = (
+				831046FA19F21B970086D91A /* cxSkeleton.c */,
+				831046FB19F21B970086D91A /* cxSkeleton.h */,
 				831E633919EFA9AF00FCFD85 /* cxAnimate.c */,
 				831E633A19EFA9AF00FCFD85 /* cxAnimate.h */,
 				831E633B19EFA9AF00FCFD85 /* cxBezier.c */,
@@ -954,6 +1102,8 @@
 		831E660319EFA9D200FCFD85 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				831046FD19F21BA40086D91A /* cxSpine.c */,
+				831046FE19F21BA40086D91A /* cxSpine.h */,
 				831E660419EFA9D200FCFD85 /* cxAlert.c */,
 				831E660519EFA9D200FCFD85 /* cxAlert.h */,
 				831E660619EFA9D200FCFD85 /* cxAtlas.c */,
@@ -1071,7 +1221,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				831046F119F21B3E0086D91A /* Skeleton.c in Sources */,
 				831E65BF19EFA9B000FCFD85 /* vec3.c in Sources */,
+				831046FC19F21B970086D91A /* cxSkeleton.c in Sources */,
 				831E663919EFA9D200FCFD85 /* cxClipping.c in Sources */,
 				831E65C019EFA9B000FCFD85 /* vec4.c in Sources */,
 				831E663819EFA9D200FCFD85 /* cxButton.c in Sources */,
@@ -1083,45 +1235,56 @@
 				831E656119EFA9B000FCFD85 /* cxTile.c in Sources */,
 				831E659319EFA9B000FCFD85 /* cxBMPFont.c in Sources */,
 				831E657319EFA9B000FCFD85 /* cpCollision.c in Sources */,
+				831046F219F21B3E0086D91A /* SkeletonBounds.c in Sources */,
 				831E655119EFA9B000FCFD85 /* cxParticle.c in Sources */,
 				831E654C19EFA9B000FCFD85 /* cxFollow.c in Sources */,
 				831E664219EFA9D200FCFD85 /* cxWindow.c in Sources */,
 				831E662819EFA9D200FCFD85 /* cxHttp.c in Sources */,
+				831046EE19F21B3E0086D91A /* Json.c in Sources */,
 				831E655C19EFA9B000FCFD85 /* aes_ctr.c in Sources */,
 				831E655919EFA9B000FCFD85 /* aes_cbc.c in Sources */,
 				831E659A19EFA9B000FCFD85 /* cxPlayer.c in Sources */,
 				831E659F19EFA9B000FCFD85 /* cxUtil.c in Sources */,
 				831E663B19EFA9D200FCFD85 /* cxLabelTTF.c in Sources */,
 				831E65BC19EFA9B000FCFD85 /* ray3.c in Sources */,
+				831046E219F21B3E0086D91A /* AnimationStateData.c in Sources */,
 				831E658319EFA9B000FCFD85 /* cxJson.c in Sources */,
 				831E654B19EFA9B000FCFD85 /* cxFade.c in Sources */,
+				831046F819F21B3E0086D91A /* SlotData.c in Sources */,
 				831E659B19EFA9B000FCFD85 /* cxRegex.c in Sources */,
 				831E656919EFA9B000FCFD85 /* cpPivotJoint.c in Sources */,
 				831E662D19EFA9D200FCFD85 /* cxMemStream.c in Sources */,
 				831E658419EFA9B000FCFD85 /* cxList.c in Sources */,
 				831E654D19EFA9B000FCFD85 /* cxJump.c in Sources */,
 				831E657719EFA9B000FCFD85 /* cpSpace.c in Sources */,
+				831046EB19F21B3E0086D91A /* extension.c in Sources */,
 				831E655319EFA9B000FCFD85 /* cxRunner.c in Sources */,
 				831E662419EFA9D200FCFD85 /* cxShaderDefault.c in Sources */,
 				831E65BD19EFA9B000FCFD85 /* utility.c in Sources */,
 				831E655019EFA9B000FCFD85 /* cxParabola.c in Sources */,
 				831E656719EFA9B000FCFD85 /* cpGrooveJoint.c in Sources */,
 				831E657B19EFA9B000FCFD85 /* cpSpaceStep.c in Sources */,
+				831046E719F21B3E0086D91A /* Bone.c in Sources */,
 				831E655719EFA9B000FCFD85 /* cxTimer.c in Sources */,
 				831E655B19EFA9B000FCFD85 /* aes_core.c in Sources */,
 				831E659719EFA9B000FCFD85 /* cxIconv.c in Sources */,
 				831E658F19EFA9B000FCFD85 /* cxStream.c in Sources */,
 				831E663019EFA9D200FCFD85 /* cxTextureJPG.c in Sources */,
+				831046E519F21B3E0086D91A /* Attachment.c in Sources */,
 				831E662019EFA9D200FCFD85 /* LzmaEnc.c in Sources */,
+				831046E419F21B3E0086D91A /* AtlasAttachmentLoader.c in Sources */,
 				831E659D19EFA9B000FCFD85 /* cxSpatial.c in Sources */,
 				831E65BB19EFA9B000FCFD85 /* ray2.c in Sources */,
 				831E656219EFA9B000FCFD85 /* chipmunk.c in Sources */,
 				831E663F19EFA9D200FCFD85 /* cxSprite.c in Sources */,
+				831046F919F21B3E0086D91A /* spEvent.c in Sources */,
 				831E656019EFA9B000FCFD85 /* cxAStar.c in Sources */,
 				831E654A19EFA9B000FCFD85 /* cxCurve.c in Sources */,
+				831046E619F21B3E0086D91A /* AttachmentLoader.c in Sources */,
 				831E65B219EFA9B000FCFD85 /* value.c in Sources */,
 				831E65A319EFA9B000FCFD85 /* cxEAGLView.m in Sources */,
 				831E664019EFA9D200FCFD85 /* cxSprites.c in Sources */,
+				831046EA19F21B3E0086D91A /* EventData.c in Sources */,
 				831E662719EFA9D200FCFD85 /* cxEventBase.c in Sources */,
 				831E65A419EFA9B000FCFD85 /* cxGLViewController.m in Sources */,
 				831E659E19EFA9B000FCFD85 /* cxTexture.c in Sources */,
@@ -1130,15 +1293,19 @@
 				831E658B19EFA9B000FCFD85 /* cxNumber.c in Sources */,
 				831E663419EFA9D200FCFD85 /* cxTexturePVR.c in Sources */,
 				831E661E19EFA9D200FCFD85 /* LzFind.c in Sources */,
+				831046E919F21B3E0086D91A /* BoundingBoxAttachment.c in Sources */,
 				831E663A19EFA9D200FCFD85 /* cxLabelBMP.c in Sources */,
 				831E656419EFA9B000FCFD85 /* cpDampedRotarySpring.c in Sources */,
 				831E658819EFA9B000FCFD85 /* cxMemory.c in Sources */,
+				831046F619F21B3E0086D91A /* SkinnedMeshAttachment.c in Sources */,
 				831E654F19EFA9B000FCFD85 /* cxMultiple.c in Sources */,
 				831E663D19EFA9D200FCFD85 /* cxPolygon.c in Sources */,
 				831E662F19EFA9D200FCFD85 /* cxTextureFactory.c in Sources */,
 				831E663C19EFA9D200FCFD85 /* cxLoading.c in Sources */,
 				831E65A619EFA9B000FCFD85 /* cxUtil.m in Sources */,
 				831E662C19EFA9D200FCFD85 /* cxFileStream.c in Sources */,
+				831046EF19F21B3E0086D91A /* MeshAttachment.c in Sources */,
+				831046F519F21B3E0086D91A /* Skin.c in Sources */,
 				831E657819EFA9B000FCFD85 /* cpSpaceComponent.c in Sources */,
 				831E65AA19EFA9B000FCFD85 /* hashtable.c in Sources */,
 				831E655E19EFA9B000FCFD85 /* aes_ige.c in Sources */,
@@ -1148,7 +1315,9 @@
 				831E659219EFA9B000FCFD85 /* cxAction.c in Sources */,
 				831E657119EFA9B000FCFD85 /* cpBBTree.c in Sources */,
 				831E656819EFA9B000FCFD85 /* cpPinJoint.c in Sources */,
+				831046F719F21B3E0086D91A /* Slot.c in Sources */,
 				831E65B819EFA9B000FCFD85 /* neon_matrix_impl.c in Sources */,
+				831046FF19F21BA40086D91A /* cxSpine.c in Sources */,
 				831E65AD19EFA9B000FCFD85 /* memory.c in Sources */,
 				831E658919EFA9B000FCFD85 /* cxMemPool.c in Sources */,
 				831E65AC19EFA9B000FCFD85 /* load.c in Sources */,
@@ -1169,7 +1338,9 @@
 				831E65AE19EFA9B000FCFD85 /* pack_unpack.c in Sources */,
 				831E659C19EFA9B000FCFD85 /* cxShader.c in Sources */,
 				831E662919EFA9D200FCFD85 /* cxHttpConn.c in Sources */,
+				831046E119F21B3E0086D91A /* AnimationState.c in Sources */,
 				831E662E19EFA9D200FCFD85 /* cxMMapStream.c in Sources */,
+				831046F419F21B3E0086D91A /* SkeletonJson.c in Sources */,
 				831E65A119EFA9B000FCFD85 /* cxView.c in Sources */,
 				831E662A19EFA9D200FCFD85 /* cxUDP.c in Sources */,
 				831E65B619EFA9B000FCFD85 /* mat3.c in Sources */,
@@ -1180,18 +1351,21 @@
 				831E65A819EFA9B000FCFD85 /* dump.c in Sources */,
 				831E661F19EFA9D200FCFD85 /* LzmaDec.c in Sources */,
 				831E65BA19EFA9B000FCFD85 /* quaternion.c in Sources */,
+				831046F319F21B3E0086D91A /* SkeletonData.c in Sources */,
 				831E658C19EFA9B000FCFD85 /* cxPath.c in Sources */,
 				831E659119EFA9B000FCFD85 /* cxType.c in Sources */,
 				831E656D19EFA9B000FCFD85 /* cpSlideJoint.c in Sources */,
 				831E656F19EFA9B000FCFD85 /* cpArray.c in Sources */,
 				831E657E19EFA9B000FCFD85 /* cpVect.c in Sources */,
 				831E65A919EFA9B000FCFD85 /* error.c in Sources */,
+				831046EC19F21B3E0086D91A /* IkConstraint.c in Sources */,
 				831E662519EFA9D200FCFD85 /* cxShaderMultiple.c in Sources */,
 				831E663119EFA9D200FCFD85 /* cxTextureJSON.c in Sources */,
 				831E65AF19EFA9B000FCFD85 /* strbuffer.c in Sources */,
 				831E663219EFA9D200FCFD85 /* cxTexturePKM.c in Sources */,
 				831E65B119EFA9B000FCFD85 /* utf.c in Sources */,
 				831E655A19EFA9B000FCFD85 /* aes_cfb.c in Sources */,
+				831046E319F21B3E0086D91A /* Atlas.c in Sources */,
 				831E664119EFA9D200FCFD85 /* cxTable.c in Sources */,
 				831E657F19EFA9B000FCFD85 /* cxAnyArray.c in Sources */,
 				831E655219EFA9B000FCFD85 /* cxRotate.c in Sources */,
@@ -1203,6 +1377,8 @@
 				831E658E19EFA9B000FCFD85 /* cxStack.c in Sources */,
 				831E65AB19EFA9B000FCFD85 /* hashtable_seed.c in Sources */,
 				831E658D19EFA9B000FCFD85 /* cxProperty.c in Sources */,
+				831046F019F21B3E0086D91A /* RegionAttachment.c in Sources */,
+				831046E819F21B3E0086D91A /* BoneData.c in Sources */,
 				831E656A19EFA9B000FCFD85 /* cpRatchetJoint.c in Sources */,
 				831E658619EFA9B000FCFD85 /* cxMath.c in Sources */,
 				831E663519EFA9D200FCFD85 /* cxTextureTXT.c in Sources */,
@@ -1226,8 +1402,10 @@
 				831E657D19EFA9B000FCFD85 /* cpSweep1D.c in Sources */,
 				831E654919EFA9B000FCFD85 /* cxBezier.c in Sources */,
 				831E663319EFA9D200FCFD85 /* cxTexturePNG.c in Sources */,
+				831046E019F21B3E0086D91A /* Animation.c in Sources */,
 				831E658119EFA9B000FCFD85 /* cxCore.c in Sources */,
 				831E658219EFA9B000FCFD85 /* cxHash.c in Sources */,
+				831046ED19F21B3E0086D91A /* IkConstraintData.c in Sources */,
 				831E659519EFA9B000FCFD85 /* cxGlobal.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
