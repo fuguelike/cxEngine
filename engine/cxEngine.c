@@ -146,7 +146,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxLabelBMP);
     CX_TYPE_REG(cxAlert);
     CX_TYPE_REG(cxSprites);
-    CX_TYPE_REG(cxSpline);
+    CX_TYPE_REG(cxSpine);
     
     //register actions
     CX_TYPE_REG(cxMultiple);

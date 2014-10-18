@@ -27,7 +27,7 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxLoader loader = cxLoaderCreate("cxLabelTTF.json");
+    cxLoader loader = cxLoaderCreate("cxSpine.json");
 //    cxAction a = cxLoaderGet(loader, "animate");
 //    CX_ADD(cxAction, a, onExit, exitact);
 //    cxLabelTTFSetText(loader->Root, UTF8("abcdd\nxxdfdf"));
