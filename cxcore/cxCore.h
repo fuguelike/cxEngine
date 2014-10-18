@@ -189,7 +189,7 @@ do{                                                             \
 
 #define CX_ASSERT_FALSE(format,...)     CX_ASSERT(false,format,##__VA_ARGS__)
 
-#define CX_ASSERT_TYPE(_o_,_t_)         CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type (%s) error,should is "#_t_,TYPE(_o_))
+#define CX_ASSERT_TYPE(_o_,_t_)         CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type (%s) error,should is "#_t_,CX_TYPE_NAME(_o_))
 
 #define CX_ASSERT_VALUE(_o_,_t_,_n_)    _t_ _n_ = (_t_)(_o_);CX_ASSERT_TYPE(_n_,_t_)
 
@@ -276,7 +276,7 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 
 #define CX_INSTANCE_OF(_o_,_t_)     cxObjectInstanceOf(_o_,_t_##TypeName)
 
-#define TYPE(_o_)                   ((cxObject)_o_)->cxType
+#define CX_TYPE_NAME(_o_)           ((cxObject)_o_)->cxType
 
 #define CX_TYPE_OF(_t_,_o_)         ((_t_)(_o_))
 

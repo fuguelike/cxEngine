@@ -86,10 +86,10 @@ CX_INLINE cxHashKey cxAnimateItemKey(cxAnimateItem this)
 
 static cxAnimateItem cxAnimateItemGet(cxAnimate this,cxArray items, cxAny any, cxInt index)
 {
-    if(TYPE(any) == cxAnimateItemTypeName){
+    if(CX_TYPE_NAME(any) == cxAnimateItemTypeName){
         return any;
     }
-    if(TYPE(any) != cxStringTypeName){
+    if(CX_TYPE_NAME(any) != cxStringTypeName){
         return NULL;
     }
     cxConstChars key = cxStringBody(any);

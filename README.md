@@ -55,7 +55,7 @@ CX_RELEASE(object2); //引用计数-1,当引用计数＝0时对象降被释放
 
 CX_AUTO(object2);//加入自动释放池
 
-TYPE(obj);//获取对象的字符串类型
+CX_TYPE_NAME(obj);//获取对象的字符串类型
 
 CX_TYPE_OF(type,obj);强制转换对象类型，这里不检测类型
 
