@@ -22,8 +22,8 @@
 		8344F0B218D3F4A50003E410 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B118D3F4A50003E410 /* OpenAL.framework */; };
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
-		836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 836165D518F67BC400FFF173 /* Default-568h@2x.png */; };
 		839B897019EFAB92009C6B5C /* libcxEngineStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B896D19EFAAD6009C6B5C /* libcxEngineStatic.a */; };
+		83CA51EF19F3CBC6002119B0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83CA51EE19F3CBC6002119B0 /* LaunchScreen.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,8 +60,8 @@
 		8344F0B118D3F4A50003E410 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8344F0B318D3F4A90003E410 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		836165D518F67BC400FFF173 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		839B896719EFAAD5009C6B5C /* cxEngineStatic.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineStatic.xcodeproj; path = ../cxEngineStatic.xcodeproj; sourceTree = "<group>"; };
+		83CA51EE19F3CBC6002119B0 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,7 +143,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				836165D518F67BC400FFF173 /* Default-568h@2x.png */,
+				83CA51EE19F3CBC6002119B0 /* LaunchScreen.xib */,
 			);
 			name = "Supporting Files";
 			path = cxEngine;
@@ -230,7 +230,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
+				83CA51EF19F3CBC6002119B0 /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

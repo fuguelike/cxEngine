@@ -27,7 +27,6 @@
 		834A455919D14E480016DE02 /* Defence.c in Sources */ = {isa = PBXBuildFile; fileRef = 834A455719D14E480016DE02 /* Defence.c */; };
 		8356B77619B081C000C9ED0F /* fight.json in Resources */ = {isa = PBXBuildFile; fileRef = 8356B77519B081C000C9ED0F /* fight.json */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
-		836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 836165D518F67BC400FFF173 /* Default-568h@2x.png */; };
 		837D091619C2E44F003FD8E5 /* Button.c in Sources */ = {isa = PBXBuildFile; fileRef = 837D091419C2E44F003FD8E5 /* Button.c */; };
 		8391237519D67CFA00C5B2DB /* FightMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 8391237319D67CFA00C5B2DB /* FightMap.c */; };
 		8391237B19D70EA500C5B2DB /* Longer.c in Sources */ = {isa = PBXBuildFile; fileRef = 8391237919D70EA500C5B2DB /* Longer.c */; };
@@ -35,7 +34,6 @@
 		83A0D38819DD625A00728CFB /* NormalMap.c in Sources */ = {isa = PBXBuildFile; fileRef = 83A0D38619DD625A00728CFB /* NormalMap.c */; };
 		83C190D219CFB068000DDCB0 /* Move.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C190D019CFB068000DDCB0 /* Move.c */; };
 		83C8805419D50C750048610F /* Bullet.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C8805219D50C750048610F /* Bullet.c */; };
-		83CA51B119F3C013002119B0 /* Default-736h@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83CA51B019F3C013002119B0 /* Default-736h@3x.png */; };
 		83CA51EA19F3C447002119B0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83CA51E919F3C447002119B0 /* LaunchScreen.xib */; };
 		83CE2CF819D271190041A7E9 /* Wall.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CE2CF619D271190041A7E9 /* Wall.c */; };
 		83CE2CFF19D299AB0041A7E9 /* bullet.json in Resources */ = {isa = PBXBuildFile; fileRef = 83CE2CFD19D299AB0041A7E9 /* bullet.json */; };
@@ -92,7 +90,6 @@
 		834A455819D14E480016DE02 /* Defence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Defence.h; sourceTree = "<group>"; };
 		8356B77519B081C000C9ED0F /* fight.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = fight.json; path = res/fight.json; sourceTree = SOURCE_ROOT; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		836165D518F67BC400FFF173 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		837D091419C2E44F003FD8E5 /* Button.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Button.c; sourceTree = SOURCE_ROOT; };
 		837D091519C2E44F003FD8E5 /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.h; sourceTree = SOURCE_ROOT; };
 		8391237319D67CFA00C5B2DB /* FightMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = FightMap.c; sourceTree = SOURCE_ROOT; };
@@ -107,7 +104,6 @@
 		83C190D119CFB068000DDCB0 /* Move.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Move.h; sourceTree = SOURCE_ROOT; };
 		83C8805219D50C750048610F /* Bullet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Bullet.c; sourceTree = SOURCE_ROOT; };
 		83C8805319D50C750048610F /* Bullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bullet.h; sourceTree = SOURCE_ROOT; };
-		83CA51B019F3C013002119B0 /* Default-736h@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-736h@3x.png"; sourceTree = SOURCE_ROOT; };
 		83CA51E919F3C447002119B0 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = SOURCE_ROOT; };
 		83CE2CF619D271190041A7E9 /* Wall.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Wall.c; sourceTree = "<group>"; };
 		83CE2CF719D271190041A7E9 /* Wall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wall.h; sourceTree = "<group>"; };
@@ -236,7 +232,6 @@
 			isa = PBXGroup;
 			children = (
 				83CA51E919F3C447002119B0 /* LaunchScreen.xib */,
-				83CA51B019F3C013002119B0 /* Default-736h@3x.png */,
 				83E60CBB19DE4E1400FB9816 /* war.json */,
 				83CE2CFD19D299AB0041A7E9 /* bullet.json */,
 				83CE2CFE19D299AB0041A7E9 /* bullet.png */,
@@ -244,7 +239,6 @@
 				8356B77519B081C000C9ED0F /* fight.json */,
 				83E60CBE19DED6B300FB9816 /* normal.json */,
 				8301C6B319A7441400DFD640 /* bg1.png */,
-				836165D518F67BC400FFF173 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
 			path = cxEngine;
@@ -342,8 +336,6 @@
 				8301C6B419A7441400DFD640 /* bg1.png in Resources */,
 				83E60CBF19DED6B300FB9816 /* normal.json in Resources */,
 				83D780CC19D0260500E44A87 /* bg2.png in Resources */,
-				836165D618F67BC400FFF173 /* Default-568h@2x.png in Resources */,
-				83CA51B119F3C013002119B0 /* Default-736h@3x.png in Resources */,
 				83E60CBC19DE4E1400FB9816 /* war.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
