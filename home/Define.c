@@ -47,6 +47,8 @@ void GlobalInit(cxEngine engine)
     
     global.warShowNum.x = (engine->WinSize.w / global.warUnitSize.w  + 4)/2 ;
     global.warShowNum.y = (engine->WinSize.h / global.warUnitSize.h  + 4)/2;
+    
+    CX_LOGGER("%d %d",global.warShowNum.x,global.warShowNum.y);
 }
 
 cxFloat SideDistance(cxInt sideNum)

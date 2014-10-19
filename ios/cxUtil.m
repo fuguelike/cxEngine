@@ -120,6 +120,8 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     cxUInt uHoriFlag = (int)attr->align & 0x0f;
     NSTextAlignment nsAlign = (2 == uHoriFlag) ? NSTextAlignmentRight : (3 == uHoriFlag) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
     CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
+    CGContextSetShouldSubpixelQuantizeFonts(context, false);
+    CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
     NSMutableParagraphStyle *parastyle = [[NSMutableParagraphStyle alloc] init];
     parastyle.alignment = nsAlign;
     parastyle.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -145,8 +147,8 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     }
     //draw normal
     [str drawInRect:rect withAttributes:attrs];
+    CGContextEndTransparencyLayer(context);
     UIGraphicsPopContext();
-    //
     CGColorSpaceRelease(colorSpace);
     CGContextRelease(context);
     [attrs release];
