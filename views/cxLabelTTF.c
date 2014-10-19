@@ -92,6 +92,7 @@ CX_INIT(cxLabelTTF, cxSprite)
     CX_ADD(cxView, this, onUpdate, cxLabelTTFUpdate);
     this->attr.size = 32;
     this->attr.align = cxTextAlignTopLeft;
+    cxSpriteSetShader(this, cxShaderTTFKey);
 }
 CX_FREE(cxLabelTTF, cxSprite)
 {

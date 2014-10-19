@@ -22,6 +22,7 @@
 #include <shaders/cxShaderPositionColor.h>
 #include <shaders/cxShaderClipping.h>
 #include <shaders/cxShaderMultiple.h>
+#include <shaders/cxShaderTTF.h>
 
 #include <streams/cxAssetsStream.h>
 #include <streams/cxFileStream.h>
@@ -116,6 +117,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxShaderDefault);
     CX_TYPE_REG(cxShaderPositionColor);
     CX_TYPE_REG(cxShaderMultiple);
+    CX_TYPE_REG(cxShaderTTF);
     
     //register streams
     CX_TYPE_REG(cxAssetsStream);

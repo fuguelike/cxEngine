@@ -35,6 +35,7 @@ CX_STRING_KEY_DEF(cxShaderDefaultKey);
 CX_STRING_KEY_DEF(cxShaderAlphaKey);
 CX_STRING_KEY_DEF(cxShaderClippingKey);
 CX_STRING_KEY_DEF(cxShaderMultipleKey);
+CX_STRING_KEY_DEF(cxShaderTTFKey);
 
 typedef struct{
     GLuint minFilter;

@@ -12,6 +12,7 @@
 #include <shaders/cxShaderAlpha.h>
 #include <shaders/cxShaderClipping.h>
 #include <shaders/cxShaderMultiple.h>
+#include <shaders/cxShaderTTF.h>
 #include "cxUtil.h"
 #include "cxOpenGL.h"
 
@@ -34,6 +35,7 @@ static void cxOpenGLLoadDefaultShaders()
     CX_OPENGL_LOAD_SHADER(cxShaderAlpha);
     CX_OPENGL_LOAD_SHADER(cxShaderClipping);
     CX_OPENGL_LOAD_SHADER(cxShaderMultiple);
+    CX_OPENGL_LOAD_SHADER(cxShaderTTF);
 }
 
 void cxOpenGLUsingShader(cxConstChars key)

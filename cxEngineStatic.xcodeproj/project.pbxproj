@@ -193,6 +193,7 @@
 		831E664019EFA9D200FCFD85 /* cxSprites.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661819EFA9D200FCFD85 /* cxSprites.c */; };
 		831E664119EFA9D200FCFD85 /* cxTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661A19EFA9D200FCFD85 /* cxTable.c */; };
 		831E664219EFA9D200FCFD85 /* cxWindow.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661C19EFA9D200FCFD85 /* cxWindow.c */; };
+		83CA51A919F3A6DD002119B0 /* cxShaderTTF.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -574,6 +575,8 @@
 		831E661B19EFA9D200FCFD85 /* cxTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTable.h; sourceTree = "<group>"; };
 		831E661C19EFA9D200FCFD85 /* cxWindow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxWindow.c; sourceTree = "<group>"; };
 		831E661D19EFA9D200FCFD85 /* cxWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxWindow.h; sourceTree = "<group>"; };
+		83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderTTF.c; sourceTree = "<group>"; };
+		83CA51A819F3A6DD002119B0 /* cxShaderTTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderTTF.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1034,6 +1037,8 @@
 		831E65D719EFA9D200FCFD85 /* shaders */ = {
 			isa = PBXGroup;
 			children = (
+				83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */,
+				83CA51A819F3A6DD002119B0 /* cxShaderTTF.h */,
 				831E65D819EFA9D200FCFD85 /* cxShaderAlpha.c */,
 				831E65D919EFA9D200FCFD85 /* cxShaderAlpha.h */,
 				831E65DA19EFA9D200FCFD85 /* cxShaderClipping.c */,
@@ -1397,6 +1402,7 @@
 				831E65A019EFA9B000FCFD85 /* cxValue.c in Sources */,
 				831E655D19EFA9B000FCFD85 /* aes_ecb.c in Sources */,
 				831E662619EFA9D200FCFD85 /* cxShaderPositionColor.c in Sources */,
+				83CA51A919F3A6DD002119B0 /* cxShaderTTF.c in Sources */,
 				831E657519EFA9B000FCFD85 /* cpPolyShape.c in Sources */,
 				831E659419EFA9B000FCFD85 /* cxEngine.c in Sources */,
 				831E657D19EFA9B000FCFD85 /* cpSweep1D.c in Sources */,

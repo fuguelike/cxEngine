@@ -111,18 +111,15 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     cxChar *buffer = allocator->malloc(bufsiz);
     memset(buffer, 0, bufsiz);
     // draw text
-    CGBitmapInfo bitMapInfo = kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big;
+    CGBitmapInfo bitMapInfo = kCGImageAlphaPremultipliedLast|kCGBitmapByteOrderDefault;
     CGColorSpaceRef colorSpace  = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(buffer,dim.width,dim.height,8,(int)(dim.width) * 4,colorSpace,bitMapInfo);
-    CGContextSetRGBFillColor(context, 1.0f, 1.0f, 1.0f, 1.0f);
     CGContextTranslateCTM(context, 0.0f, dim.height);
     CGContextScaleCTM(context, 1.0f, -1.0f);
     UIGraphicsPushContext(context);
     cxUInt uHoriFlag = (int)attr->align & 0x0f;
     NSTextAlignment nsAlign = (2 == uHoriFlag) ? NSTextAlignmentRight : (3 == uHoriFlag) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
     CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
-    CGContextSetShouldSubpixelQuantizeFonts(context, false);
-    CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
     NSMutableParagraphStyle *parastyle = [[NSMutableParagraphStyle alloc] init];
     parastyle.alignment = nsAlign;
     parastyle.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -148,8 +145,8 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     }
     //draw normal
     [str drawInRect:rect withAttributes:attrs];
-    CGContextEndTransparencyLayer(context);
     UIGraphicsPopContext();
+    //
     CGColorSpaceRelease(colorSpace);
     CGContextRelease(context);
     [attrs release];

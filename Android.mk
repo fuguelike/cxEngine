@@ -117,7 +117,8 @@ LOCAL_SRC_FILES += \
     shaders/cxShaderClipping.c \
     shaders/cxShaderDefault.c \
     shaders/cxShaderPositionColor.c \
-    shaders/cxShaderMultiple.c
+    shaders/cxShaderMultiple.c \
+    shaders/cxShaderTTF.c
 
 LOCAL_SRC_FILES += \
     streams/cxMemStream.c \
