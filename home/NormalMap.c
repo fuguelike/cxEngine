@@ -71,13 +71,13 @@ static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
             nidx.y += idx.y;
             this->startPos.y = currIdx.y - fmodf(delta.y, 1.0f);;
         }
-        if(setPos){
+        this->hasMove = setPos;
+        if(this->hasMove){
             cxVec2f npos = MapIndexToPos(this, nidx);
             cxViewSetPosition(this->cnode, npos);
             cxVec2i newIdx = NodeIndexToInitIndex(this->cnode,nidx);
             cxBool isValid = MapIsFillNode(this, newIdx, this->cnode);
             cxViewSetColor(this->cnode, isValid?cxGREEN:cxRED);
-            this->hasMove = true;
         }
         return true;
     }

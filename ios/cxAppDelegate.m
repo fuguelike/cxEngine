@@ -32,9 +32,7 @@ static BOOL cxDisableDocumentBackup()
     cxDisableDocumentBackup();
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.contentScaleFactor = [UIScreen mainScreen].scale;
-    
     self.rootViewController = [[[cxGLViewController alloc] init] autorelease];
-    
     [self.window setRootViewController:self.rootViewController];
     [self.window makeKeyAndVisible];
     //startup draw
