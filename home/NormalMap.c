@@ -59,19 +59,18 @@ static cxBool NormalMapTouch(cxAny pview,const cxTouchItems *points)
         cxVec2f currIdx = MapPosToFloat(this, hit.position);
         cxVec2f delta = cxVec2fSub(currIdx, this->startPos);
         cxVec2i idx = cxVec2fTo2i(delta);
-        cxBool setPos = false;
+        this->hasMove = false;
         cxVec2f nidx = NodeGetIndex(this->cnode);
         if(idx.x != 0){
-            setPos = true;
+            this->hasMove = true;
             nidx.x += idx.x;
             this->startPos.x = currIdx.x - fmodf(delta.x, 1.0f);
         }
         if(idx.y != 0){
-            setPos = true;
+            this->hasMove = true;
             nidx.y += idx.y;
             this->startPos.y = currIdx.y - fmodf(delta.y, 1.0f);;
         }
-        this->hasMove = setPos;
         if(this->hasMove){
             cxVec2f npos = MapIndexToPos(this, nidx);
             cxViewSetPosition(this->cnode, npos);
