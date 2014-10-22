@@ -766,7 +766,7 @@ cxHitInfo cxViewHitTest(cxAny pview,cxVec2f wPoint)
 cxBool cxViewTouch(cxAny pview,cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, cxView);
-    if(!this->IsVisible){
+    if(!this->IsVisible || this->IsSleep){
         return false;
     }
     if(this->TouchFlags == cxViewTouchFlagsNone){
@@ -794,7 +794,7 @@ completed:
 cxBool cxViewKey(cxAny pview,cxKey *key)
 {
     CX_ASSERT_THIS(pview, cxView);
-    if(!this->IsVisible){
+    if(!this->IsVisible || this->IsSleep){
         return false;
     }
     if(this->TouchFlags == cxViewTouchFlagsNone){

@@ -67,10 +67,8 @@ static void cxSpritesOnAppend(cxAny pview,cxAny nview)
     CX_ADD(cxView, item, onDirty, cxSpriteOnDirty);
     cxInt idx = cxArrayLength(this->sprites);
     cxViewSetAssist(item, idx);
-    
     cxAtlasAppendEmpty(this);
     cxArrayAppend(this->sprites, item);
-    
     cxSpriteUpdateBox(this, item);
 }
 
