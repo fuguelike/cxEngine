@@ -32,11 +32,13 @@ static BOOL cxDisableDocumentBackup()
     cxDisableDocumentBackup();
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.contentScaleFactor = [UIScreen mainScreen].scale;
-    self.glViewController = [[[cxGLViewController alloc] init] autorelease];
-    [self.window setRootViewController:self.glViewController];
+    
+    self.rootViewController = [[[cxGLViewController alloc] init] autorelease];
+    
+    [self.window setRootViewController:self.rootViewController];
     [self.window makeKeyAndVisible];
     //startup draw
-    [[self.glViewController getGLView] startMainLoop];
+    [[self.rootViewController getGLView] startMainLoop];
     return YES;
 }
 
@@ -88,19 +90,19 @@ static BOOL cxDisableDocumentBackup()
 							
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    cxEAGLView *glView = [self.glViewController getGLView];
+    cxEAGLView *glView = [self.rootViewController getGLView];
     [glView pauseMainLoop];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    cxEAGLView *glView = [self.glViewController getGLView];
+    cxEAGLView *glView = [self.rootViewController getGLView];
     [glView resumeMainLoop];
 }
 
 -(void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
-    cxEAGLView *glView = [self.glViewController getGLView];
+    cxEAGLView *glView = [self.rootViewController getGLView];
     [glView memoryWarning];
 }
 

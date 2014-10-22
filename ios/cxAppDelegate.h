@@ -17,7 +17,7 @@
     cxString currFile;
 }
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) cxGLViewController *glViewController;
+@property (strong, nonatomic) cxGLViewController *rootViewController;
 -(void)cxPlayMusic:(cxConstChars)file loop:(cxBool)loop;
 -(void)cxStopMusic;
 -(void)cxPauseMusic;
