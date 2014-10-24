@@ -34,13 +34,13 @@ cxArray cxFontNames()
     return list;
 }
 
-static CGSize cxCalculateStringSize(NSString *str, id font, CGSize *constrainSize, NSMutableDictionary *attrs)
+static CGSize cxCalculateStringSize(NSString *str, id font, CGSize constrainSize, NSMutableDictionary *attrs)
 {
     NSArray *listItems = [str componentsSeparatedByString: @"\n"];
     CGSize dim = CGSizeZero;
     CGSize textRect = CGSizeZero;
-    textRect.width = constrainSize->width > 0 ? constrainSize->width : -1;
-    textRect.height = constrainSize->height > 0 ? constrainSize->height : -1;
+    textRect.width = constrainSize.width > 0 ? constrainSize.width : -1;
+    textRect.height = constrainSize.height > 0 ? constrainSize.height : -1;
     for (NSString *s in listItems){
         CGRect rect =  [s boundingRectWithSize:textRect options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attrs context:nil];
         CGSize tmp = rect.size;
@@ -85,7 +85,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     UIColor *color = [UIColor colorWithRed:attr->color.r green:attr->color.g blue:attr->color.b alpha:attr->color.a];
     [attrs setObject:color forKey:NSForegroundColorAttributeName];
     
-    dim = cxCalculateStringSize(str, font, &constrainSize, attrs);
+    dim = cxCalculateStringSize(str, font, constrainSize, attrs);
     // compute start point
     int startH = 0;
     int startW = 2;
@@ -122,6 +122,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
     CGContextSetShouldSubpixelQuantizeFonts(context, false);
     CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
+    
     NSMutableParagraphStyle *parastyle = [[NSMutableParagraphStyle alloc] init];
     parastyle.alignment = nsAlign;
     parastyle.lineBreakMode = NSLineBreakByTruncatingTail;

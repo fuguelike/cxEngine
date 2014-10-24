@@ -10,6 +10,7 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
@@ -278,29 +279,24 @@ public class EngineGLView extends GLSurfaceView {
 		public int mHeightPerLine;
 		public String[] mLines;
 	}
-	private TextProperty computeTextProperty(final String string,final int width, final int height, final Paint paint) {
+	private TextProperty computeTextProperty(final String string, final Paint paint) {
 		TextProperty rv = new TextProperty();
 		FontMetricsInt fm = paint.getFontMetricsInt();
 		int h = (int) Math.ceil(fm.bottom - fm.top);
 		int maxContentWidth = 0;
 		String[] lines = string.split("\\n");
-		if (width != 0) {
-			maxContentWidth = width;
-		} else {
-			int temp = 0;
-			for (String line : lines) {
-				temp = (int) Math.ceil(paint.measureText(line, 0, line.length()));
-				if (temp > maxContentWidth) {
-					maxContentWidth = temp;
-				}
+		int temp = 0;
+		for (String line : lines) {
+			temp = (int) Math.ceil(paint.measureText(line, 0, line.length()));
+			if (temp > maxContentWidth) {
+				maxContentWidth = temp;
 			}
 		}
-		rv.mMaxWidth = width > maxContentWidth?width : maxContentWidth;
+		rv.mMaxWidth =  maxContentWidth + 2;
 		rv.mHeightPerLine = h;
 		rv.mTotalHeight = rv.mHeightPerLine * lines.length;
-		rv.mTotalHeight = height > rv.mTotalHeight ? height : rv.mTotalHeight;
+		rv.mTotalHeight = rv.mTotalHeight;
 		rv.mLines = lines;
-		rv.mMaxWidth += 2;
 		return rv;
 	}
 	private int computeX(final String text, final int maxWidth, final int horizontalAlignment) {
@@ -344,11 +340,15 @@ public class EngineGLView extends GLSurfaceView {
 			int A,int R,int G,int B,
 			float shadowRadius,float shadowOffx,float shadowOffy,int shadowA,int shadowR,int shadowG,int shadowB,
 			int strokeA,int strokeR,int strokeG,int strokeB,float strokeWidth) {
+		if(pString.length() == 0){
+			return null;
+		}
 		int hAlign = align & 0x0F;
 		int vAlign   = (align >> 4) & 0x0F;
 		pString = refactorString(pString);
 		Paint paint = newPaint(pFontName, fontSize, hAlign);
 		paint.setARGB(A, R, G, B);
+		paint.setColorFilter(new LightingColorFilter(Color.BLUE, Color.RED));
 		//FFFIIII
 		//float shadowRadius,float shadowOffx,float shadowOffy,int shadowA,int shadowR,int shadowG,int shadowB
 		if(shadowRadius > 0){
@@ -363,22 +363,23 @@ public class EngineGLView extends GLSurfaceView {
 			stroke.setStyle(Paint.Style.STROKE);
 			stroke.setStrokeWidth(strokeWidth);
 		}
-		final TextProperty textProperty = computeTextProperty(pString, w, h, paint);
-		int totalHeight = (h == 0 ? textProperty.mTotalHeight: h);
-		if(h > totalHeight){
+		TextProperty textProperty = computeTextProperty(pString,paint);
+		int totalHeight = textProperty.mTotalHeight;
+		if(h > 0 && h > totalHeight){
 			totalHeight = h;
 		}
-		if (0 == textProperty.mMaxWidth || 0 == totalHeight){
-			return null;
+		int maxWidth = textProperty.mMaxWidth;
+		if(w > 0 && w > maxWidth){
+			maxWidth = w;
 		}
-		Bitmap bitmap = Bitmap.createBitmap(textProperty.mMaxWidth,totalHeight, Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(maxWidth,totalHeight, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 		FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
-		int x = 0;
-		int y = computeY(fontMetricsInt, h, textProperty.mTotalHeight, vAlign);
+		int x = 2;
+		int y = computeY(fontMetricsInt, h, totalHeight, vAlign);
 		String[] lines = textProperty.mLines;
 		for (String line : lines) {
-			x = computeX(line, textProperty.mMaxWidth, hAlign);
+			x = computeX(line, maxWidth, hAlign);
 			if(stroke != null){
 				canvas.drawText(line, x, y, stroke);
 			}
