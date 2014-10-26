@@ -246,17 +246,16 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
     __##_t_##AutoType);                                         \
 }
 
-#define CX_DEF(_t_,_b_)      CX_OBJECT_BEG(_t_,_b_) struct _b_ _b_;
+#define CX_DEF(_t_,_b_)             CX_OBJECT_BEG(_t_,_b_) struct _b_ _b_;
 
 //type imp cxAny = cxType
+#define CX_TYPE(_t_,_b_)            void __##_t_##AutoType(cxAny this){
 
-#define CX_TYPE(_t_,_b_)     void __##_t_##AutoType(cxAny this){
+#define CX_INIT(_t_,_b_)            };void __##_t_##AutoInit(_t_ this){__##_b_##AutoInit((_b_)this);
 
-#define CX_INIT(_t_,_b_)     };void __##_t_##AutoInit(_t_ this){__##_b_##AutoInit((_b_)this);
+#define CX_FREE(_t_,_b_)            };void __##_t_##AutoFree(_t_ this){
 
-#define CX_FREE(_t_,_b_)     };void __##_t_##AutoFree(_t_ this){
-
-#define CX_TERM(_t_,_b_)     __##_b_##AutoFree((_b_)this);}
+#define CX_TERM(_t_,_b_)            __##_b_##AutoFree((_b_)this);}
 
 //object mem manage
 
