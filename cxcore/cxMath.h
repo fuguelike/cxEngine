@@ -75,6 +75,7 @@ typedef kmVec2 cxVec2f;
 typedef kmVec3 cxVec3f;
 #define cxVec3fv(x,y,z)         (cxVec3f){x,y,z}
 #define cxVec3fEqu(p1,p2)       (cxFloatEqu((p1).x,(p2).x) && cxFloatEqu((p1).y,(p2).y) && cxFloatEqu((p1).z,(p2).z))
+#define cxVec3fZero(v)           (cxFloatEqu((v).x, 0.0f) && cxFloatEqu((v).y, 0.0f) && cxFloatEqu((v).z, 0.0f))
 
 static const cxVec3f cxVec3fX  = cxVec3fv(1.0f,0.0f,0.0f);
 static const cxVec3f cxVec3fY  = cxVec3fv(0.0f,1.0f,0.0f);
@@ -105,6 +106,13 @@ typedef struct {
 #define cxColor4fEqu(c1,c2)      (cxFloatEqu((c1).r,(c2).r)&&cxFloatEqu((c1).g,(c2).g)&&cxFloatEqu((c1).b,(c2).b)&&cxFloatEqu((c1).a,(c2).a))
 
 typedef struct {
+    cxUInt8 r;
+    cxUInt8 g;
+    cxUInt8 b;
+}cxColor3b;
+#define cxColor3bv(r,g,b,a)     (cxColor3b){r,g,b}
+
+typedef struct {
     cxFloat r;
     cxFloat g;
     cxFloat b;
@@ -112,7 +120,6 @@ typedef struct {
 #define cxColor3fToColor4f(c)   cxColor4fv((c).r,(c).g,(c).b,1.0f)
 #define cxColor3fv(r,g,b)       (cxColor3f){r,g,b}
 #define cxColor3fEqu(c1,c2)     (cxFloatEqu((c1).r,(c2).r) && cxFloatEqu((c1).g,(c2).g) && cxFloatEqu((c1).b,(c2).b))
-#define cxColor3bv(r,g,b)       (cxColor3f){(cxFloat)(r)/255.0f,(cxFloat)(g)/255.0f,(cxFloat)(b)/255.0f}
 
 //colors define
 
@@ -319,12 +326,12 @@ CX_INLINE cxVec2f cxRoundVec2f(cxVec2f v)
 
 CX_INLINE cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t)
 {
-    return (powf(1.0f-t,2.0f)*a+2.0f*t*(1.0f-t)*b+powf(t,2.0f)*c);
+    return powf(1.0f-t,2.0f)*a+2.0f*t*(1.0f-t)*b+powf(t,2.0f)*c;
 }
 
 CX_INLINE cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t)
 {
-    return (powf(1.0f-t,3.0f)*a+3.0f*t*(powf(1.0f-t,2.0f))*b+3.0f*powf(t,2.0f)*(1.0f-t)*c+powf(t,3.0f)*d);
+    return powf(1.0f-t,3.0f)*a+3.0f*t*(powf(1.0f-t,2.0f))*b+3.0f*powf(t,2.0f)*(1.0f-t)*c+powf(t,3.0f)*d;
 }
 
 CX_INLINE cxBool cxBox4fIntersects(const cxBox4f a, const cxBox4f b)

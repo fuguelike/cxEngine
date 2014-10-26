@@ -70,7 +70,7 @@ CX_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxVec2f Position);
     CX_FIELD_DEF(cxVec2f Scale);
     CX_FIELD_DEF(cxVec2f FixScale);
-    CX_FIELD_DEF(cxVec2f Anchor);
+    CX_FIELD_DEF(cxVec2f Anchor);       //-0.5f <--> 0.5f
     CX_FIELD_DEF(cxVec3f Raxis);
     CX_FIELD_DEF(cxFloat Angle);
     CX_FIELD_DEF(cxColor4f Color);
@@ -106,6 +106,7 @@ CX_DEF(cxView, cxObject)
     CX_METHOD_DEF(void, onAppend,cxAny,cxAny);
     CX_METHOD_DEF(void, onRemove,cxAny,cxAny);
     CX_METHOD_DEF(void, onSort,cxAny);
+    CX_METHOD_DEF(void, onPosition,cxAny,cxVec2f opos,cxVec2f npos);//when set position
 
     CX_SIGNAL_ALLOC(onDraw);        //(cxAny pview)
 

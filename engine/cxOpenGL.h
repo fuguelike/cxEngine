@@ -12,12 +12,14 @@
 #include <cxcore/cxBase.h>
 
 #if (CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID)
+    #include <GLES/gl.h>
     #include <GLES2/gl2.h>
     #include <GLES2/gl2ext.h>
     #define glDeleteVertexArrays(n,p)       (void)n;(void)p
     #define glGenVertexArrays(n,p)          (void)n;(void)p
     #define glBindVertexArray(a)            (void)a
 #elif (CX_TARGET_PLATFORM == CX_PLATFORM_IOS)
+    #include <OpenGLES/ES1/gl.h>
     #include <OpenGLES/ES2/gl.h>
     #include <OpenGLES/ES2/glext.h>
     #define glDeleteVertexArrays		glDeleteVertexArraysOES

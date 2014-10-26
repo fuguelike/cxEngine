@@ -539,6 +539,7 @@ void cxViewSetPosition(cxAny pview,cxVec2f pos)
     CX_ASSERT_THIS(pview, cxView);
     cxVec2f vpos = cxViewGetPosition(this);
     CX_RETURN(cxVec2fEqu(vpos, pos));
+    CX_METHOD_RUN(this->onPosition,this,this->Position,pos);
     this->Position = pos;
     this->Dirty |= cxViewDirtyPosition;
 }
@@ -632,7 +633,7 @@ CX_INLINE void cxViewTransform(cxAny pview)
     
     cxFloat x = -this->Size.w * this->Anchor.x;
     cxFloat y = -this->Size.h * this->Anchor.y;
-    kmMat4Translation(&this->anchorMatrix, x, y, 0);
+    kmMat4Translation(&this->anchorMatrix, x, y, 0.0f);
     
     //translate,rotate,scale
     kmMat4Multiply(&this->normalMatrix, &transMatrix, &rotateMatrix);

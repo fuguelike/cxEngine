@@ -55,23 +55,23 @@ CX_END(cxHash, cxObject)
 
 #define cxHashSort(_hash_,_cmp_)    HASH_SORT(_hash_,_cmp_)
 
-void    cxHashClear(cxAny phash);
+void cxHashClear(cxAny phash);
 
-cxInt   cxHashLength(cxAny phash);
+cxInt cxHashLength(cxAny phash);
 
-void    cxHashDelElement(cxAny phash,cxHashElement *element);
+void cxHashDelElement(cxAny phash,cxHashElement *element);
 
 cxHashElement *cxHashGetElement(cxAny phash,cxHashKey key);
 
-cxBool  cxHashHas(cxAny phash,cxHashKey key);
+cxBool cxHashHas(cxAny phash,cxHashKey key);
 
-cxBool  cxHashDel(cxAny phash,cxHashKey key);
+cxBool cxHashDel(cxAny phash,cxHashKey key);
 
-cxBool  cxHashSet(cxAny phash,cxHashKey key,cxAny any);
+cxBool cxHashSet(cxAny phash,cxHashKey key,cxAny any);
 
-cxAny   cxHashGet(cxAny phash,cxHashKey key);
+cxAny cxHashGet(cxAny phash,cxHashKey key);
 
-cxAny   cxHashFirst(cxAny phash);
+cxAny cxHashFirst(cxAny phash);
 
 CX_C_END
 

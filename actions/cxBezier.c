@@ -19,20 +19,9 @@ static void cxBezierStep(cxAny pav,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_THIS(pav, cxBezier);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
-    cxFloat xa = 0;
-    cxFloat xb = this->cpos1.x;
-    cxFloat xc = this->cpos2.x;
-    cxFloat xd = this->epos.x;
-    
-    cxFloat ya = 0;
-    cxFloat yb = this->cpos1.y;
-    cxFloat yc = this->cpos2.y;
-    cxFloat yd = this->epos.y;
-    
     cxVec2f xy;
-    xy.x = cxBezier3(xa, xb, xc, xd, time);
-    xy.y = cxBezier3(ya, yb, yc, yd, time);
-    
+    xy.x = cxBezier3(0, this->pos1.x, this->pos2.x, this->epos.x, time);
+    xy.y = cxBezier3(0, this->pos1.y, this->pos2.y, this->epos.y, time);
     cxVec2f curr = cxViewGetPosition(view);
     cxVec2f diff = cxVec2fSub(curr, this->prev);
     this->from = cxVec2fAdd(this->from, diff);
@@ -46,21 +35,21 @@ CX_SETTER_DEF(cxBezier, epos)
     this->epos = cxJsonToVec2f(value, this->epos);
 }
 
-CX_SETTER_DEF(cxBezier, cpos1)
+CX_SETTER_DEF(cxBezier, pos1)
 {
-    this->cpos1 = cxJsonToVec2f(value, this->cpos1);
+    this->pos1 = cxJsonToVec2f(value, this->pos1);
 }
 
-CX_SETTER_DEF(cxBezier, cpos2)
+CX_SETTER_DEF(cxBezier, pos2)
 {
-    this->cpos2 = cxJsonToVec2f(value, this->cpos2);
+    this->pos2 = cxJsonToVec2f(value, this->pos2);
 }
 
 CX_TYPE(cxBezier, cxAction)
 {
     CX_PROPERTY_SETTER(cxBezier, epos);
-    CX_PROPERTY_SETTER(cxBezier, cpos1);
-    CX_PROPERTY_SETTER(cxBezier, cpos2);
+    CX_PROPERTY_SETTER(cxBezier, pos1);
+    CX_PROPERTY_SETTER(cxBezier, pos2);
 }
 CX_INIT(cxBezier, cxAction)
 {
@@ -73,13 +62,13 @@ CX_FREE(cxBezier, cxAction)
 }
 CX_TERM(cxBezier, cxAction)
 
-cxBezier cxBezierCreate(cxFloat time,cxVec2f epos,cxVec2f cpos1,cxVec2f cpos2)
+cxBezier cxBezierCreate(cxFloat time,cxVec2f epos,cxVec2f pos1,cxVec2f pos2)
 {
     cxBezier this = CX_CREATE(cxBezier);
     cxActionSetTime(this, time);
     this->epos = epos;
-    this->cpos1 = cpos1;
-    this->cpos2 = cpos2;
+    this->pos1 = pos1;
+    this->pos2 = pos2;
     return this;
 }
 
