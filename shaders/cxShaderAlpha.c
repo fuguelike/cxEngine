@@ -9,7 +9,7 @@
 #include "cxShaderDefault.h"
 #include "cxShaderAlpha.h"
 
-static cxString cxShaderAlphaFragment(cxAny this)
+cxString cxShaderAlphaFragment(cxAny ps)
 {
     static cxConstChars fragment =
     GLSL(

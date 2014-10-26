@@ -9,7 +9,7 @@
 #include "cxShaderDefault.h"
 #include "cxShaderClipping.h"
 
-static cxString cxShaderClippingFragment(cxAny this)
+static cxString cxShaderClippingFragment(cxAny ps)
 {
     static cxConstChars fragment =
     GLSL(

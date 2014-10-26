@@ -16,6 +16,8 @@ CX_C_BEGIN
 CX_DEF(cxShaderAlpha, cxShader)
 CX_END(cxShaderAlpha, cxShader)
 
+cxString cxShaderAlphaFragment(cxAny ps);
+
 CX_C_END
 
 #endif

@@ -8,7 +8,7 @@
 
 #include "cxShaderDefault.h"
 
-cxString cxShaderDefaultVertex(cxAny this)
+cxString cxShaderDefaultVertex(cxAny ps)
 {
     static cxConstChars vertex =
     GLSL(
@@ -26,7 +26,7 @@ cxString cxShaderDefaultVertex(cxAny this)
     return cxStringConstChars(vertex);
 }
 
-cxString cxShaderDefaultFragment(cxAny this)
+cxString cxShaderDefaultFragment(cxAny ps)
 {
     static cxConstChars fragment =
     GLSL(

@@ -7,26 +7,9 @@
 //
 
 #include "cxShaderMultiple.h"
+#include "cxShaderDefault.h"
 
-cxString cxShaderMultipleVertex(cxAny this)
-{
-    static cxConstChars vertex =
-    GLSL(
-         attribute highp vec4 aPosition;
-         attribute highp vec2 aTexcoord;
-         attribute mediump vec4 aColor;
-         varying mediump vec4 vFragmentColor;
-         varying highp vec2 vTexCoord;
-         void main() {
-             gl_Position = cxMatrixModelViewProject * aPosition;
-             vFragmentColor = aColor;
-             vTexCoord = aTexcoord;
-         }
-    );
-    return cxStringConstChars(vertex);
-}
-
-cxString cxShaderMultipleFragment(cxAny this)
+cxString cxShaderMultipleFragment(cxAny ps)
 {
     static cxConstChars fragment =
     GLSL(
@@ -59,7 +42,7 @@ CX_TYPE(cxShaderMultiple, cxShader)
 }
 CX_INIT(cxShaderMultiple, cxShader)
 {
-    CX_SET(cxShader, this, Vertex, cxShaderMultipleVertex);
+    CX_SET(cxShader, this, Vertex, cxShaderDefaultVertex);
     CX_SET(cxShader, this, Fragment, cxShaderMultipleFragment);
     CX_SET(cxShader, this, Uniform, cxShaderMultipleUniform);
 }
