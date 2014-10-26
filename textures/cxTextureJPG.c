@@ -11,13 +11,13 @@
 
 typedef struct {
     struct jpeg_error_mgr pub;
-    int error;
+    cxBool error;
 }cxJPEGError;
 
 static void cxJPGErrorExit(j_common_ptr cinfo)
 {
     cxJPEGError *error = (cxJPEGError *)cinfo->err;
-    error->error = 1;
+    error->error = true;
 }
 
 static cxBool cxTextureJPGLoad(cxAny ptex,cxStream stream)
@@ -27,7 +27,7 @@ static cxBool cxTextureJPGLoad(cxAny ptex,cxStream stream)
     struct jpeg_decompress_struct cinfo;
     cxJPEGError error;
     cinfo.err = jpeg_std_error(&error.pub);
-    error.error = 0;
+    error.error = false;
     error.pub.error_exit = cxJPGErrorExit;
     jpeg_create_decompress(&cinfo);
     if(error.error){
