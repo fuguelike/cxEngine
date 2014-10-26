@@ -195,7 +195,7 @@ public class EngineGLView extends GLSurfaceView {
 	private byte[] getPixels(Bitmap pBitmap) {
 		int width = pBitmap.getWidth();
 		int height = pBitmap.getHeight();
-		int isize = width * height * 4;
+		int isize = width * height;
 		byte[] wb = packInt(width);
 		byte[] hb = packInt(height);
 		byte[] pixels = new byte[isize + 8];
@@ -311,7 +311,7 @@ public class EngineGLView extends GLSurfaceView {
 		default:
 			break;
 		}
-		return ret + 2;
+		return ret;
 	}
 
 	private int computeY(final FontMetricsInt fontMetricsInt,final int constrainHeight, final int totalHeight,final int verticalAlignment) {
@@ -334,33 +334,16 @@ public class EngineGLView extends GLSurfaceView {
 		return y;
 	}
 	//create ttf image
-	//(Ljava/lang/String;Ljava/lang/String;IIIIIIIIFFFIIIIIIIIF
-	public byte[] createTextBitmapImp(String pString, String pFontName, int fontSize,int align,int w,int h,
-			int A,int R,int G,int B,
-			float shadowRadius,float shadowOffx,float shadowOffy,int shadowA,int shadowR,int shadowG,int shadowB,
-			int strokeA,int strokeR,int strokeG,int strokeB,float strokeWidth) {
+	//(Ljava/lang/String;Ljava/lang/String;IIII
+	public byte[] createTextBitmapImp(String pString, String pFontName, int fontSize,int align,int w,int h) {
 		if(pString.length() == 0){
 			return null;
 		}
 		int hAlign = align & 0x0F;
-		int vAlign   = (align >> 4) & 0x0F;
+		int vAlign = (align >> 4) & 0x0F;
 		pString = refactorString(pString);
 		Paint paint = newPaint(pFontName, fontSize, hAlign);
-		paint.setARGB(A, R, G, B);
-		//FFFIIII
-		//float shadowRadius,float shadowOffx,float shadowOffy,int shadowA,int shadowR,int shadowG,int shadowB
-		if(shadowRadius > 0){
-			paint.setShadowLayer(shadowRadius, shadowOffx, shadowOffy, Color.argb(shadowA, shadowR, shadowG, shadowB));
-		}
-		Paint stroke = null;
-		//IIIIF
-		//int strokeA,int strokeR,int strokeG,int strokeB,float strokeWidth
-		if(strokeWidth > 0){
-			stroke = newPaint(pFontName, fontSize, hAlign);
-			stroke.setARGB(strokeA, strokeR, strokeG, strokeB);
-			stroke.setStyle(Paint.Style.STROKE);
-			stroke.setStrokeWidth(strokeWidth);
-		}
+		paint.setARGB(255, 255, 255, 255);
 		TextProperty textProperty = computeTextProperty(pString,paint);
 		int totalHeight = textProperty.mTotalHeight;
 		if(h > 0 && h > totalHeight){
@@ -370,7 +353,7 @@ public class EngineGLView extends GLSurfaceView {
 		if(w > 0 && w > maxWidth){
 			maxWidth = w;
 		}
-		Bitmap bitmap = Bitmap.createBitmap(maxWidth,totalHeight, Bitmap.Config.ARGB_8888);
+		Bitmap bitmap = Bitmap.createBitmap(maxWidth,totalHeight, Bitmap.Config.ALPHA_8);
 		Canvas canvas = new Canvas(bitmap);
 		FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
 		int x = 0;
@@ -378,25 +361,14 @@ public class EngineGLView extends GLSurfaceView {
 		String[] lines = textProperty.mLines;
 		for (String line : lines) {
 			x = computeX(line, maxWidth, hAlign);
-			if(stroke != null){
-				canvas.drawText(line, x, y, stroke);
-			}
-			if(paint != null){
-				canvas.drawText(line, x, y, paint);
-			}
+			canvas.drawText(line, x, y, paint);
 			y += textProperty.mHeightPerLine;
 		}
 		return getPixels(bitmap);
 	}
 
-	public static byte[] createTextBitmap(String pString, String pFontName, int fontSize,int align,int w,int h,
-			int A,int R,int G,int B,
-			float shadowRadius,float shadowOffx,float shadowOffy,int shadowA,int shadowR,int shadowG,int shadowB,
-			int strokeA,int strokeR,int strokeG,int strokeB,float strokeWidth) {
-		return glView.createTextBitmapImp(pString, pFontName, fontSize, align, w, h,
-				A,R,G,B,
-				shadowRadius,shadowOffx,shadowOffy,shadowA,shadowR,shadowG,shadowB,
-				strokeA,strokeR,strokeG,strokeB,strokeWidth);
+	public static byte[] createTextBitmap(String pString, String pFontName, int fontSize,int align,int w,int h) {
+		return glView.createTextBitmapImp(pString, pFontName, fontSize, align, w, h);
 	}
     public EngineGLView(Context context) {
         super(context);

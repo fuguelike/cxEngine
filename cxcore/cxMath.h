@@ -258,15 +258,6 @@ typedef struct {
     cxFloat size;
     cxTextAlign align;
     cxSize2f viewSize;
-    //font color
-    cxColor4f color;
-    //shadow
-    cxColor4f shadowColor;
-    cxSize2f shadowOffset;
-    cxFloat shadowRadius;
-    //stroke
-    cxColor4f strokeColor;
-    cxFloat strokeWidth;
 }cxTextAttr;
 
 typedef struct {

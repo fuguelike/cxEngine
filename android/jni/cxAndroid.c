@@ -24,7 +24,7 @@ JniMethodInfo engineRecvJson    = {.isGet=false};
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,const cxTextAttr *attr)
 {
     CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
-    CX_GET_METHOD(createTextBitmap,"createTextBitmap","(Ljava/lang/String;Ljava/lang/String;IIIIIIIIFFFIIIIIIIIF)[B");
+    CX_GET_METHOD(createTextBitmap,"createTextBitmap","(Ljava/lang/String;Ljava/lang/String;IIII)[B");
     cxString rv = NULL;
     jstring strText = (*javaENV)->NewStringUTF(javaENV,txt);
     jstring fontName = NULL;
@@ -35,29 +35,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,const cxTextA
     jint align = attr->align;
     jint cw = attr->viewSize.w;
     jint ch = attr->viewSize.h;
-    jint A = attr->color.a * 255;
-    jint R = attr->color.r * 255;
-    jint G = attr->color.g * 255;
-    jint B = attr->color.b * 255;
-    jfloat sr = attr->shadowRadius;
-    jfloat sx = attr->shadowOffset.w;
-    jfloat sy = attr->shadowOffset.h;
-    jint sA = attr->shadowColor.a * 255;
-    jint sR = attr->shadowColor.r * 255;
-    jint sG = attr->shadowColor.g * 255;
-    jint sB = attr->shadowColor.b * 255;
-    jint oA = attr->strokeColor.a * 255;
-    jint oR = attr->strokeColor.r * 255;
-    jint oG = attr->strokeColor.g * 255;
-    jint oB = attr->strokeColor.b * 255;
-    jfloat ow = attr->strokeWidth;
-    
-    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(M(createTextBitmap),
-                                                                      strText,fontName,
-                                                                      size,align,cw,ch,
-                                                                      A,R,G,B,
-                                                                      sr,sx,sy,sA,sR,sG,sB,
-                                                                      oA,oR,oG,oB,ow);
+    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(M(createTextBitmap),strText,fontName,size,align,cw,ch);
     if(bytes != NULL){
         jboolean ok = JNI_FALSE;
         jsize length = (*javaENV)->GetArrayLength(javaENV,bytes);

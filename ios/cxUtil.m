@@ -81,9 +81,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
     //font and color
     [attrs setObject:font forKey:NSFontAttributeName];
-    UIColor *color = [UIColor colorWithRed:attr->color.r green:attr->color.g blue:attr->color.b alpha:attr->color.a];
-    [attrs setObject:color forKey:NSForegroundColorAttributeName];
-    
+    [attrs setObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
     dim = cxCalculateStringSize(str, font, csize, attrs);
     // compute start point
     int startH = 0;
@@ -106,13 +104,13 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     if (csize.height > 0 && csize.height > dim.height){
         dim.height = csize.height;
     }
-    cxInt bufsiz = sizeof(cxChar) * (int)(dim.width * dim.height * 4) + sizeof(cxSize2i);
+    cxInt bufsiz = sizeof(cxChar) * (int)(dim.width * dim.height) + sizeof(cxSize2i);
     cxChar *buffer = allocator->malloc(bufsiz);
     memset(buffer, 0, bufsiz);
     // draw text
-    CGBitmapInfo bitMapInfo = kCGImageAlphaPremultipliedLast|kCGBitmapByteOrderDefault;
-    CGColorSpaceRef colorSpace  = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(buffer,dim.width,dim.height,8,(int)(dim.width * 4),colorSpace,bitMapInfo);
+    CGBitmapInfo bitMapInfo = kCGImageAlphaOnly|kCGBitmapByteOrderDefault;
+    CGColorSpaceRef colorSpace  = CGColorSpaceCreateDeviceGray();
+    CGContextRef context = CGBitmapContextCreate(buffer,dim.width,dim.height,8,(int)(dim.width),colorSpace,bitMapInfo);
     CGContextTranslateCTM(context, 0.0f, dim.height);
     CGContextScaleCTM(context, 1.0f, -1.0f);
     UIGraphicsPushContext(context);
@@ -127,24 +125,6 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     parastyle.lineBreakMode = NSLineBreakByClipping;
     [attrs setObject:parastyle forKey:NSParagraphStyleAttributeName];
     [parastyle release];
-    //shadow
-    if(attr->shadowRadius > 0){
-        NSShadow *shadow =[[NSShadow alloc] init];
-        shadow.shadowOffset = CGSizeMake(attr->shadowOffset.w, attr->shadowOffset.h);
-        shadow.shadowBlurRadius = attr->shadowRadius;
-        shadow.shadowColor = [UIColor colorWithRed:attr->shadowColor.r green:attr->shadowColor.g blue:attr->shadowColor.b alpha:attr->shadowColor.a];
-        [attrs setObject:shadow forKey:NSShadowAttributeName];
-        [shadow release];
-    }
-    //stroke
-    if(attr->strokeWidth > 0){
-        UIColor *scolor = [UIColor colorWithRed:attr->strokeColor.r green:attr->strokeColor.g blue:attr->strokeColor.b alpha:attr->strokeColor.a];
-        [attrs setObject:scolor forKey:NSStrokeColorAttributeName];
-        [attrs setObject:[NSNumber numberWithFloat:attr->strokeWidth] forKey:NSStrokeWidthAttributeName];
-        [str drawInRect:rect withAttributes:attrs];
-        [attrs removeObjectForKey:NSStrokeColorAttributeName];
-        [attrs removeObjectForKey:NSStrokeWidthAttributeName];
-    }
     [str drawInRect:rect withAttributes:attrs];
     CGContextEndTransparencyLayer(context);
     UIGraphicsPopContext();
