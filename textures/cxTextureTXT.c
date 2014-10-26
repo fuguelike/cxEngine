@@ -19,8 +19,7 @@ static cxBool cxTextureTXTLoad(cxAny texture,cxStream stream)
     cxInt bufsiz = cxStringLength(data);
     cxAny buffer = (cxAny)cxStringBody(data);
     cxSize2i *psize = (cxSize2i *)(buffer + bufsiz - sizeof(cxSize2i));
-    cxAny tdata = buffer + sizeof(cxSize2i);
-    cxTextureTXTMakeTexture(this, tdata, psize->w, psize->h);
+    cxTextureTXTMakeTexture(this, buffer, psize->w, psize->h);
     return true;
 }
 

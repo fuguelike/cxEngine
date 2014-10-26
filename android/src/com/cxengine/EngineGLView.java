@@ -10,7 +10,6 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
 import android.graphics.Typeface;
@@ -292,7 +291,7 @@ public class EngineGLView extends GLSurfaceView {
 				maxContentWidth = temp;
 			}
 		}
-		rv.mMaxWidth =  maxContentWidth + 2;
+		rv.mMaxWidth =  maxContentWidth;
 		rv.mHeightPerLine = h;
 		rv.mTotalHeight = rv.mHeightPerLine * lines.length;
 		rv.mTotalHeight = rv.mTotalHeight;
@@ -348,7 +347,6 @@ public class EngineGLView extends GLSurfaceView {
 		pString = refactorString(pString);
 		Paint paint = newPaint(pFontName, fontSize, hAlign);
 		paint.setARGB(A, R, G, B);
-		paint.setColorFilter(new LightingColorFilter(Color.BLUE, Color.RED));
 		//FFFIIII
 		//float shadowRadius,float shadowOffx,float shadowOffy,int shadowA,int shadowR,int shadowG,int shadowB
 		if(shadowRadius > 0){
@@ -375,7 +373,7 @@ public class EngineGLView extends GLSurfaceView {
 		Bitmap bitmap = Bitmap.createBitmap(maxWidth,totalHeight, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 		FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
-		int x = 2;
+		int x = 0;
 		int y = computeY(fontMetricsInt, h, totalHeight, vAlign);
 		String[] lines = textProperty.mLines;
 		for (String line : lines) {

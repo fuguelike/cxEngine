@@ -18,7 +18,7 @@ static cxString cxShaderAlphaFragment(cxAny this)
         uniform sampler2D uTexture0;
         void main() {
             vec4 texColor = texture2D(uTexture0, vTexCoord);
-            gl_FragColor = vFragmentColor * texColor;
+            gl_FragColor = vFragmentColor*texColor;
         }
     );
     return cxStringConstChars(fragment);

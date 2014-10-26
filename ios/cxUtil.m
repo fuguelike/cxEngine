@@ -49,23 +49,22 @@ static CGSize cxCalculateStringSize(NSString *str, id font, CGSize constrainSize
         }
         dim.height += tmp.height;
     }
-    dim.width = ceilf(dim.width) + 2;
+    dim.width = ceilf(dim.width);
     dim.height = ceilf(dim.height);
     return dim;
 }
 
 #define ALIGN_TOP    1
-#define ALIGN_CENTER 3
 #define ALIGN_BOTTOM 2
+#define ALIGN_CENTER 3
 
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxTextAttr *attr)
 {
     CX_RETURN(txt == NULL, NULL);
     NSString *str = [NSString stringWithUTF8String:txt];
     NSString *fntName = nil;
-    CGSize dim, constrainSize;
-    constrainSize.width = attr->viewSize.w;
-    constrainSize.height = attr->viewSize.h;
+    CGSize dim = CGSizeMake(0, 0);
+    CGSize csize = CGSizeMake(attr->viewSize.w, attr->viewSize.h);
     if(fontName != NULL){
         fntName = [NSString stringWithUTF8String:fontName];
         fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
@@ -85,27 +84,27 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     UIColor *color = [UIColor colorWithRed:attr->color.r green:attr->color.g blue:attr->color.b alpha:attr->color.a];
     [attrs setObject:color forKey:NSForegroundColorAttributeName];
     
-    dim = cxCalculateStringSize(str, font, constrainSize, attrs);
+    dim = cxCalculateStringSize(str, font, csize, attrs);
     // compute start point
     int startH = 0;
-    int startW = 2;
-    if (constrainSize.height > dim.height){
+    int startW = 0;
+    if (csize.height > dim.height){
         // vertical alignment
         unsigned int vAlignment = ((int)attr->align >> 4) & 0x0F;
         if (vAlignment == ALIGN_TOP){
             startH = 0;
         }else if (vAlignment == ALIGN_CENTER){
-            startH = (constrainSize.height - dim.height) / 2;
+            startH = (csize.height - dim.height) / 2;
         }else{
-            startH = constrainSize.height - dim.height;
+            startH = csize.height - dim.height;
         }
     }
     // adjust text rect
-    if (constrainSize.width > 0 && constrainSize.width > dim.width){
-        dim.width = constrainSize.width;
+    if (csize.width > 0 && csize.width > dim.width){
+        dim.width = csize.width;
     }
-    if (constrainSize.height > 0 && constrainSize.height > dim.height){
-        dim.height = constrainSize.height;
+    if (csize.height > 0 && csize.height > dim.height){
+        dim.height = csize.height;
     }
     cxInt bufsiz = sizeof(cxChar) * (int)(dim.width * dim.height * 4) + sizeof(cxSize2i);
     cxChar *buffer = allocator->malloc(bufsiz);
@@ -113,7 +112,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     // draw text
     CGBitmapInfo bitMapInfo = kCGImageAlphaPremultipliedLast|kCGBitmapByteOrderDefault;
     CGColorSpaceRef colorSpace  = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(buffer,dim.width,dim.height,8,(int)(dim.width) * 4,colorSpace,bitMapInfo);
+    CGContextRef context = CGBitmapContextCreate(buffer,dim.width,dim.height,8,(int)(dim.width * 4),colorSpace,bitMapInfo);
     CGContextTranslateCTM(context, 0.0f, dim.height);
     CGContextScaleCTM(context, 1.0f, -1.0f);
     UIGraphicsPushContext(context);
@@ -122,10 +121,10 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
     CGContextSetShouldSubpixelQuantizeFonts(context, false);
     CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
-    
+    //parastyle
     NSMutableParagraphStyle *parastyle = [[NSMutableParagraphStyle alloc] init];
     parastyle.alignment = nsAlign;
-    parastyle.lineBreakMode = NSLineBreakByTruncatingTail;
+    parastyle.lineBreakMode = NSLineBreakByClipping;
     [attrs setObject:parastyle forKey:NSParagraphStyleAttributeName];
     [parastyle release];
     //shadow
@@ -146,7 +145,6 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
         [attrs removeObjectForKey:NSStrokeColorAttributeName];
         [attrs removeObjectForKey:NSStrokeWidthAttributeName];
     }
-    //draw normal
     [str drawInRect:rect withAttributes:attrs];
     CGContextEndTransparencyLayer(context);
     UIGraphicsPopContext();
@@ -154,9 +152,9 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     CGContextRelease(context);
     [attrs release];
     //last 8bytes save widht and height
-    cxAny psize = buffer + bufsiz - sizeof(cxSize2i);
-    ((cxSize2i *)psize)->w = dim.width;
-    ((cxSize2i *)psize)->h = dim.height;
+    cxSize2i *psize = (cxSize2i *)(buffer + bufsiz - sizeof(cxSize2i));
+    psize->w = dim.width;
+    psize->h = dim.height;
     return cxStringAttachMem(buffer, bufsiz);
 }
 
