@@ -45,7 +45,7 @@ void cxMemPoolFree()
     pthread_key_delete(autoPoolKey);
 }
 
-static cxMemPool cxMemPoolInstance()
+CX_INLINE cxMemPool cxMemPoolInstance()
 {
     cxStack stack = cxMemPoolStack();
     if(cxStackLength(stack) == 0){
