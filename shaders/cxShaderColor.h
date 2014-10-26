@@ -13,8 +13,8 @@
 
 CX_C_BEGIN
 
-CX_DEF(cxShaderPositionColor, cxShader)
-CX_END(cxShaderPositionColor, cxShader)
+CX_DEF(cxShaderColor, cxShader)
+CX_END(cxShaderColor, cxShader)
 
 CX_C_END
 

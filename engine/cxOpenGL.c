@@ -7,7 +7,7 @@
 //
 
 #include "cxEngine.h"
-#include <shaders/cxShaderPositionColor.h>
+#include <shaders/cxShaderColor.h>
 #include <shaders/cxShaderDefault.h>
 #include <shaders/cxShaderAlpha.h>
 #include <shaders/cxShaderClipping.h>
@@ -31,7 +31,7 @@ static void cxOpenGLLoadDefaultShaders()
 {
     cxOpenGL this = cxOpenGLInstance();
     CX_OPENGL_LOAD_SHADER(cxShaderDefault);
-    CX_OPENGL_LOAD_SHADER(cxShaderPositionColor);
+    CX_OPENGL_LOAD_SHADER(cxShaderColor);
     CX_OPENGL_LOAD_SHADER(cxShaderAlpha);
     CX_OPENGL_LOAD_SHADER(cxShaderClipping);
     CX_OPENGL_LOAD_SHADER(cxShaderMultiple);
@@ -58,7 +58,7 @@ void cxDrawLineLoop(const cxVec2f *vertices,int num,const cxColor3f color)
         colors[i] = color;
     }
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    cxOpenGLUsingShader(cxShaderPositionColorKey);
+    cxOpenGLUsingShader(cxShaderColorKey);
     cxOpenGLActiveAttribs(cxVertexAttribFlagPosition|cxVertexAttribFlagColor);
     cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 2, 0, vertices);
     cxOpenGLVertexAttribPointer(cxVertexAttribColor, 3, 0, colors);
@@ -76,7 +76,7 @@ void cxDrawPoint(const cxVec2f pos,cxColor3f color,cxFloat w)
     glGetIntegerv(GL_LINE_WIDTH, &lw);
     glLineWidth(w);
     cxRect4f rect = cxRect4fv(pos.x - w/2, pos.y - w/2, w, w);
-    cxDrawSolidRect(rect, cxColor4fv(color.r, color.g, color.b, 1.0f), cxShaderPositionColorKey);
+    cxDrawSolidRect(rect, cxColor4fv(color.r, color.g, color.b, 1.0f), cxShaderColorKey);
     glLineWidth(lw);
 }
 
@@ -137,8 +137,8 @@ cxAny cxOpenGLShaderByName(cxConstChars name)
     if(cxConstCharsEqu(name, "default")){
         return cxOpenGLShader(cxShaderDefaultKey);
     }
-    if(cxConstCharsEqu(name, "positioncolor")){
-        return cxOpenGLShader(cxShaderPositionColorKey);
+    if(cxConstCharsEqu(name, "color")){
+        return cxOpenGLShader(cxShaderColorKey);
     }
     if(cxConstCharsEqu(name, "clipping")){
         return cxOpenGLShader(cxShaderClippingKey);

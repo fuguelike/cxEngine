@@ -115,13 +115,12 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     CGContextScaleCTM(context, 1.0f, -1.0f);
     UIGraphicsPushContext(context);
     cxUInt uHoriFlag = (int)attr->align & 0x0f;
-    NSTextAlignment nsAlign = (2 == uHoriFlag) ? NSTextAlignmentRight : (3 == uHoriFlag) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
     CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
     CGContextSetShouldSubpixelQuantizeFonts(context, false);
     CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
     //parastyle
     NSMutableParagraphStyle *parastyle = [[NSMutableParagraphStyle alloc] init];
-    parastyle.alignment = nsAlign;
+    parastyle.alignment = (2 == uHoriFlag) ? NSTextAlignmentRight : (3 == uHoriFlag) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
     parastyle.lineBreakMode = NSLineBreakByClipping;
     [attrs setObject:parastyle forKey:NSParagraphStyleAttributeName];
     [parastyle release];

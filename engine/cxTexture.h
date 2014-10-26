@@ -32,7 +32,6 @@ CX_DEF(cxTexture, cxObject)
     cxBool hasAlpha;
     cxBool hasMipmap;
     cxSize2f size;
-    cxVec2f scale;
     CX_METHOD_DEF(cxBool, Load, cxAny, cxStream);
     CX_METHOD_DEF(void, Bind, cxAny);
     cxShader shader;

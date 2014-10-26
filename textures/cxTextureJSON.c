@@ -35,16 +35,12 @@ static cxBool cxTextureJSONLoad(cxAny ptex,cxStream stream)
         CX_RETAIN_SET(this->alphaTexture, cxTextureFactoryLoadFile(alphaPath));
     }
     cxConstChars simagePath = cxJsonConstChars(meta, "image");
-    if(simagePath != NULL){
-        CX_RETAIN_SET(this->innerTexture, cxTextureFactoryLoadFile(simagePath));
-        ret = (this->innerTexture != NULL);
-    }
-    CX_ASSERT(ret, "get innerTexture error");
+    CX_ASSERT(cxConstCharsOK(simagePath), "image miss");
+    CX_RETAIN_SET(this->innerTexture, cxTextureFactoryLoadFile(simagePath));
+    CX_ASSERT(this->innerTexture != NULL, "get innerTexture error");
+    ret = true;
     //for jpg pkm atlas texture
-    cxSize2f metasiz = cxJsonSize2f(meta, "size", this->innerTexture->size);
     this->cxTexture.size = this->innerTexture->size;
-    this->cxTexture.scale.x = this->cxTexture.size.w / metasiz.w;
-    this->cxTexture.scale.y = this->cxTexture.size.h / metasiz.h;
     //parse frames
     cxJson frames = cxJsonArray(json, "frames");
     CX_JSON_ARRAY_EACH_BEG(frames, item)
@@ -54,10 +50,10 @@ static cxBool cxTextureJSONLoad(cxAny ptex,cxStream stream)
     e->rotated = cxJsonBool(item, "rotated", false);
     cxJson frame = cxJsonObject(item, "frame");
     CX_ASSERT(frame != NULL, "frame node miss");
-    e->x = cxJsonDouble(frame, "x", 0) / this->cxTexture.scale.x;
-    e->y = cxJsonDouble(frame, "y", 0) / this->cxTexture.scale.y;
-    e->w = cxJsonDouble(frame, "w", 0) / this->cxTexture.scale.x;
-    e->h = cxJsonDouble(frame, "h", 0) / this->cxTexture.scale.y;
+    e->x = cxJsonDouble(frame, "x", 0);
+    e->y = cxJsonDouble(frame, "y", 0);
+    e->w = cxJsonDouble(frame, "w", 0);
+    e->h = cxJsonDouble(frame, "h", 0);
     cxHashSet(this->cxTexture.keys, cxHashStrKey(sn), e);
     CX_RELEASE(e);
     CX_JSON_ARRAY_EACH_END(frames, item);

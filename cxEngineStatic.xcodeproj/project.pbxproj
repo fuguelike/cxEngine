@@ -164,7 +164,7 @@
 		831E662319EFA9D200FCFD85 /* cxShaderClipping.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65DA19EFA9D200FCFD85 /* cxShaderClipping.c */; };
 		831E662419EFA9D200FCFD85 /* cxShaderDefault.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65DC19EFA9D200FCFD85 /* cxShaderDefault.c */; };
 		831E662519EFA9D200FCFD85 /* cxShaderMultiple.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65DE19EFA9D200FCFD85 /* cxShaderMultiple.c */; };
-		831E662619EFA9D200FCFD85 /* cxShaderPositionColor.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E019EFA9D200FCFD85 /* cxShaderPositionColor.c */; };
+		831E662619EFA9D200FCFD85 /* cxShaderColor.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E019EFA9D200FCFD85 /* cxShaderColor.c */; };
 		831E662719EFA9D200FCFD85 /* cxEventBase.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E319EFA9D200FCFD85 /* cxEventBase.c */; };
 		831E662819EFA9D200FCFD85 /* cxHttp.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E519EFA9D200FCFD85 /* cxHttp.c */; };
 		831E662919EFA9D200FCFD85 /* cxHttpConn.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E719EFA9D200FCFD85 /* cxHttpConn.c */; };
@@ -517,8 +517,8 @@
 		831E65DD19EFA9D200FCFD85 /* cxShaderDefault.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderDefault.h; sourceTree = "<group>"; };
 		831E65DE19EFA9D200FCFD85 /* cxShaderMultiple.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderMultiple.c; sourceTree = "<group>"; };
 		831E65DF19EFA9D200FCFD85 /* cxShaderMultiple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderMultiple.h; sourceTree = "<group>"; };
-		831E65E019EFA9D200FCFD85 /* cxShaderPositionColor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderPositionColor.c; sourceTree = "<group>"; };
-		831E65E119EFA9D200FCFD85 /* cxShaderPositionColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderPositionColor.h; sourceTree = "<group>"; };
+		831E65E019EFA9D200FCFD85 /* cxShaderColor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderColor.c; sourceTree = "<group>"; };
+		831E65E119EFA9D200FCFD85 /* cxShaderColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderColor.h; sourceTree = "<group>"; };
 		831E65E319EFA9D200FCFD85 /* cxEventBase.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxEventBase.c; sourceTree = "<group>"; };
 		831E65E419EFA9D200FCFD85 /* cxEventBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEventBase.h; sourceTree = "<group>"; };
 		831E65E519EFA9D200FCFD85 /* cxHttp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxHttp.c; sourceTree = "<group>"; };
@@ -1047,8 +1047,8 @@
 				831E65DD19EFA9D200FCFD85 /* cxShaderDefault.h */,
 				831E65DE19EFA9D200FCFD85 /* cxShaderMultiple.c */,
 				831E65DF19EFA9D200FCFD85 /* cxShaderMultiple.h */,
-				831E65E019EFA9D200FCFD85 /* cxShaderPositionColor.c */,
-				831E65E119EFA9D200FCFD85 /* cxShaderPositionColor.h */,
+				831E65E019EFA9D200FCFD85 /* cxShaderColor.c */,
+				831E65E119EFA9D200FCFD85 /* cxShaderColor.h */,
 			);
 			path = shaders;
 			sourceTree = SOURCE_ROOT;
@@ -1401,7 +1401,7 @@
 				831E658719EFA9B000FCFD85 /* cxMD5.c in Sources */,
 				831E65A019EFA9B000FCFD85 /* cxValue.c in Sources */,
 				831E655D19EFA9B000FCFD85 /* aes_ecb.c in Sources */,
-				831E662619EFA9D200FCFD85 /* cxShaderPositionColor.c in Sources */,
+				831E662619EFA9D200FCFD85 /* cxShaderColor.c in Sources */,
 				83CA51A919F3A6DD002119B0 /* cxShaderTTF.c in Sources */,
 				831E657519EFA9B000FCFD85 /* cpPolyShape.c in Sources */,
 				831E659419EFA9B000FCFD85 /* cxEngine.c in Sources */,

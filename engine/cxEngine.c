@@ -19,7 +19,7 @@
 
 #include <shaders/cxShaderAlpha.h>
 #include <shaders/cxShaderDefault.h>
-#include <shaders/cxShaderPositionColor.h>
+#include <shaders/cxShaderColor.h>
 #include <shaders/cxShaderClipping.h>
 #include <shaders/cxShaderMultiple.h>
 #include <shaders/cxShaderTTF.h>
@@ -115,7 +115,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxShaderAlpha);
     CX_TYPE_REG(cxShaderClipping);
     CX_TYPE_REG(cxShaderDefault);
-    CX_TYPE_REG(cxShaderPositionColor);
+    CX_TYPE_REG(cxShaderColor);
     CX_TYPE_REG(cxShaderMultiple);
     CX_TYPE_REG(cxShaderTTF);
     

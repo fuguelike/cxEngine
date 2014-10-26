@@ -1,21 +1,21 @@
 //
-//  cxShaderPositionColor.c
+//  cxShaderColor.c
 //  cxEngine
 //
 //  Created by xuhua on 9/28/13.
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxShaderPositionColor.h"
+#include "cxShaderColor.h"
 
-static void cxShaderPositionColorInit(cxAny this)
+static void cxShaderColorInit(cxAny this)
 {
-    cxShaderPositionColor shader = this;
+    cxShaderColor shader = this;
     glBindAttribLocation(shader->cxShader.program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
     glBindAttribLocation(shader->cxShader.program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
 }
 
-static cxString cxShaderPositionColorVertex(cxAny this)
+static cxString cxShaderColorVertex(cxAny this)
 {
     static cxConstChars vertex =
     GLSL(
@@ -30,7 +30,7 @@ static cxString cxShaderPositionColorVertex(cxAny this)
     return cxStringConstChars(vertex);
 }
 
-static cxString cxShaderPositionColorFragment(cxAny this)
+static cxString cxShaderColorFragment(cxAny this)
 {
     static cxConstChars fragment =
     GLSL(
@@ -42,21 +42,21 @@ static cxString cxShaderPositionColorFragment(cxAny this)
     return cxStringConstChars(fragment);
 }
 
-CX_TYPE(cxShaderPositionColor, cxShader)
+CX_TYPE(cxShaderColor, cxShader)
 {
     
 }
-CX_INIT(cxShaderPositionColor, cxShader)
+CX_INIT(cxShaderColor, cxShader)
 {
-    CX_SET(cxShader, this, Init, cxShaderPositionColorInit);
-    CX_SET(cxShader, this, Vertex, cxShaderPositionColorVertex);
-    CX_SET(cxShader, this, Fragment, cxShaderPositionColorFragment);
+    CX_SET(cxShader, this, Init, cxShaderColorInit);
+    CX_SET(cxShader, this, Vertex, cxShaderColorVertex);
+    CX_SET(cxShader, this, Fragment, cxShaderColorFragment);
 }
-CX_FREE(cxShaderPositionColor, cxShader)
+CX_FREE(cxShaderColor, cxShader)
 {
     
 }
-CX_TERM(cxShaderPositionColor, cxShader)
+CX_TERM(cxShaderColor, cxShader)
 
 
 

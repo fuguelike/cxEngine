@@ -30,7 +30,7 @@
 CX_C_BEGIN
 
 //shader key define
-CX_STRING_KEY_DEF(cxShaderPositionColorKey);
+CX_STRING_KEY_DEF(cxShaderColorKey);
 CX_STRING_KEY_DEF(cxShaderDefaultKey);
 CX_STRING_KEY_DEF(cxShaderAlphaKey);
 CX_STRING_KEY_DEF(cxShaderClippingKey);
