@@ -25,14 +25,14 @@ cxFloat AngleToIndex(cxFloat angle,cxInt *index)
 
 void GlobalInit(cxEngine engine)
 {
-    global.mapRate = 1.2f;
+    global.mapRate = 1.5f;
     global.unitNum = cxVec2iv(MAP_ROW, MAP_COL);
     
-    cxSize2f size = cxSize2fv(engine->WinSize.w * 1.2f, 0);
-    size.h = size.w * 0.75f;
+    global.mapSize = cxSize2fv(engine->WinSize.w * global.mapRate, 0);
+    global.mapSize.h = global.mapSize.w * 0.75f;
     
-    global.unitSize.w = size.w/global.unitNum.x;
-    global.unitSize.h = size.h/global.unitNum.y;
+    global.unitSize.w = global.mapSize.w/global.unitNum.x;
+    global.unitSize.h = global.mapSize.h/global.unitNum.y;
     
     cxFloat w2 = global.unitSize.w / 2.0f;
     cxFloat h2 = global.unitSize.h / 2.0f;
@@ -40,7 +40,7 @@ void GlobalInit(cxEngine engine)
     
     global.angle = asinf(w2 / global.sideLen);
     
-    global.warUnitNum = cxVec2iv(32, 24);
+    global.warUnitNum = cxVec2iv(32, 18);
     global.warUnitSize = cxSize2fv(512, 512);
     global.warMapSize.w = global.warUnitSize.w * global.warUnitNum.x;
     global.warMapSize.h = global.warUnitSize.h * global.warUnitNum.y;

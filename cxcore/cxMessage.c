@@ -38,7 +38,9 @@ cxMessage cxMessageInstance()
 }
 
 CX_TYPE(cxMessage, cxObject)
-{}
+{
+    
+}
 CX_INIT(cxMessage, cxObject)
 {
     this->keys = CX_ALLOC(cxHash);
@@ -71,7 +73,7 @@ void cxMessageRemoveKey(cxAny dst,cxConstChars key)
 {
     cxMessage this = cxMessageInstance();
     cxHash list = cxHashGet(this->keys, cxHashAnyKey(key));
-    CX_RETURN(list == NULL || cxHashLength(list) == 0);
+    CX_RETURN(list == NULL);
     cxHashDel(list, cxHashAnyKey(dst));
 }
 
@@ -79,7 +81,7 @@ void cxMessagePost(cxConstChars key,cxAny src)
 {
     cxMessage this = cxMessageInstance();
     cxHash list = cxHashGet(this->keys, cxHashAnyKey(key));
-    CX_RETURN(list == NULL || cxHashLength(list) == 0);
+    CX_RETURN(list == NULL);
     CX_HASH_FOREACH(list, ele, tmp){
         cxMessageItem item = ele->any;
         item->func(item->dst,src);

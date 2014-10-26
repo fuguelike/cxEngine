@@ -6,9 +6,9 @@
         "cxId": "map",
         "cxType": "NormalMap"
     },
-    "scale": 1.2,
+    "scale": 1.0,
     "range": {
-        "min": 1.0,
-        "max": 4.0
+        "min": 0.7,
+        "max": 3.0
     }
 }

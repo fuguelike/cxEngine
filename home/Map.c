@@ -211,53 +211,12 @@ cxAny MapHitNode(cxAny pmap,cxVec2f index,NodeCombined type)
     return cxArrayFirst(items);
 }
 
-static void MapDraw(cxAny pmap)
-{
-//    CX_ASSERT_THIS(pmap, Map);
-//    {
-//        this->a = cxVec2fv(0, -1024);
-//        this->b = cxVec2fv(0, 1024);
-//        cxVec2f ps[2]={this->a,this->b};
-//        cxDrawLineLoop(ps, 2, cxWHITE);
-//    }
-//    {
-//        this->a = cxVec2fv(-1024,0);
-//        this->b = cxVec2fv(1024,0);
-//        cxVec2f ps[2]={this->a,this->b};
-//        cxDrawLineLoop(ps, 2, cxWHITE);
-//    }
-//    
-//    cxFloat k = 0;
-//    {
-//        this->a = cxVec2fv(100,-100);
-//        this->b = cxVec2fv(200,300);
-//        cxVec2f ps[2]={this->a,this->b};
-//        cxDrawLineLoop(ps, 2, cxRED);
-//        k = (this->b.y - this->a.y) / (this->b.x - this->a.x);
-//    }
-//    
-//    {
-//        k = -1.0f/ k;
-//        cxFloat b = 200 - k * 300;
-//        //y = kx + b;
-//        this->a = cxVec2fv(0,b);
-//        cxFloat y = k * 400 + b;
-//        this->b = cxVec2fv(400,y);
-//        cxVec2f ps[2]={this->a,this->b};
-//        cxDrawLineLoop(ps, 2, cxYELLOW);
-//    }
-//    
-//    cxDrawPoint(cxVec2fv(100, 100), cxRED, 5);
-}
-
 CX_TYPE(Map, cxAtlas)
 {
     
 }
 CX_INIT(Map, cxAtlas)
 {
-    CX_SET(cxView, this, After, MapDraw);
-    
     //只有自己能接收touch事件
     cxViewSetTouchFlags(this, cxViewTouchFlagsSelf);
     //当选中按钮执行
@@ -286,18 +245,9 @@ CX_INIT(Map, cxAtlas)
     this->nodes = CX_ALLOC(cxHash);
     //路径缓冲
     this->paths = CX_ALLOC(cxHash);
-    
-    cxSize2f wsize = cxEngineWinSize();
-    //设定宽度
-    cxFloat w = wsize.w * global.mapRate;
-    //4:3比例符合75度视角
-    cxSize2f size = cxSize2fv(w, w * 0.75f);
-    //单个node大小
-    global.unitSize = cxSize2fv(size.w/global.unitNum.x, size.h/global.unitNum.y);
-    
-    cxViewSetSize(this, size);
-    cxViewSetSize(this->aLayer, size);
-    cxViewSetSize(this->nLayer, size);
+    cxViewSetSize(this, global.mapSize);
+    cxViewSetSize(this->aLayer, global.mapSize);
+    cxViewSetSize(this->nLayer, global.mapSize);
 }
 CX_FREE(Map, cxAtlas)
 {

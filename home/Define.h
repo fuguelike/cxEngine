@@ -33,6 +33,7 @@ CX_ASSERT((_a_).number < FIX_ARRAY_SIZE,"fix array index error")    \
 //全局数据
 typedef struct {
     cxVec2i unitNum;        //单元数量
+    cxSize2f mapSize;       //地图大小
     cxSize2f unitSize;      //单元大小
     cxFloat sideLen;        //菱形单元边长
     cxFloat angle;          //菱形大角度

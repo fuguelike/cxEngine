@@ -83,10 +83,12 @@ static void mapSubType(cxAny dst,cxAny src)
     CX_ASSERT_THIS(dst, Map);
     this->tag = cxViewGetTag(src);
     if(this->tag == 5){
-        
         for(cxInt x = 0; x < MAP_COL; x++){
-            for (cxInt y = 0; y < MAP_ROW/2; y ++) {
-                if(!((x % 3) == 0)){
+            for (cxInt y = 0; y < MAP_ROW; y ++) {
+                if(x > cxRand(10, 50) > 30){
+                    continue;
+                }
+                if(y > cxRand(10, 50) > 30){
                     continue;
                 }
                 Wall node = WallCreate(this, cxVec2iv(x, y));
@@ -95,14 +97,11 @@ static void mapSubType(cxAny dst,cxAny src)
                 MapAppendNode(node);
             }
         }
-        
         cxArray items = MapNearestItems(this, cxVec2fv(20.5f, 20.5f), cxRange2fv(0, 5), NodeCombinedMake(NodeTypeBlock, NodeSubTypeNone));
-        
         CX_ARRAY_FOREACH(items, ele){
             Node node = cxArrayObject(ele);
             cxViewSetColor(node, cxRED);
         }
-
     }else if(this->tag == 6){
         MapRemoveNodes(this);
     }
