@@ -48,7 +48,7 @@ CX_DEF(Node, cxSprite)
     CX_FIELD_DEF(cxVec2i InitIndex);    //初始化放置的位置,对于静态物不会变化
     CX_FIELD_DEF(cxFloat Body);         //用于确定单位停留在目标的附近哪个位置,默认值为0.5格
     CX_FIELD_DEF(cxAny Map);            //关联的map对象
-    CX_FIELD_DEF(cxVec2f Index);        //精确的网格索引0 - 39
+    CX_FIELD_DEF(cxVec2f Index);        //精确的网格索引0 - (max_row - 1)
     CX_FIELD_DEF(NodeCombined Type);    //node组合类型,攻击范围
     CX_FIELD_DEF(cxRange2f Range);      //攻击范围
     CX_FIELD_DEF(cxSize2i Size);        //占用的格子数，node大小
@@ -80,8 +80,8 @@ CX_DEF(Node, cxSprite)
     CX_METHOD_DEF(void, AttackOnce,cxAny attacker,cxAny target);                    //node一次攻击动画结束时调用
     CX_METHOD_DEF(FindRuleResult, FindRule,cxAny,const NodeCombined *);             //目标搜索规则
     CX_METHOD_DEF(PathRuleResult, PathRule, cxAny seacher,const FindRuleResult *fr);//路径搜索规则
-    CX_METHOD_DEF(cxBool, IsFinded,cxAny node,cxAny finder);                          //node是否能被finder发现
-    CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);   //被一个目标攻击 pview 被attacker攻击
+    CX_METHOD_DEF(cxBool, IsFinded,cxAny node,cxAny finder);                        //node是否能被finder发现
+    CX_METHOD_DEF(void, NodeAttacked,cxAny pview,cxAny attacker,AttackType type);   //pview被attacker攻击
     CX_METHOD_DEF(ActionResult, AttackAction,cxAny attacker,cxAny target);          //创建一个攻击动画,动画结时攻击目标
     CX_METHOD_DEF(void, TimerArrive,cxAny);                                         //资源生产等处理
 CX_END(Node, cxSprite)

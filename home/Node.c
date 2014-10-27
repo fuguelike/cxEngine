@@ -421,7 +421,7 @@ void NodeSearchRun(cxAny pview)
     CX_ADD(cxTimer, this->searchTimer, onArrive, NodeSearchArrive);
 }
 
-//搜索附近的
+//资源
 static void NodeTimerArrive(cxAny pav)
 {
     cxAny pview = cxActionGetView(pav);

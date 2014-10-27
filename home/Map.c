@@ -293,7 +293,6 @@ void MapRemoveNode(cxAny node)
     CX_ASSERT_THIS(node, Node);
     Map map = NodeGetMap(this);
     cxSpatialRemove(map->items, node);
-    //从nodes列表分离,动态目标不会从这个列表分离
     MapDetachNode(node);
     cxViewRemove(node);
 }

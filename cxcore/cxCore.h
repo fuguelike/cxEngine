@@ -191,10 +191,6 @@ do{                                                             \
 
 #define CX_ASSERT_TYPE(_o_,_t_)         CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type (%s) error,should is "#_t_,CX_TYPE_NAME(_o_))
 
-#define CX_ASSERT_VALUE(_o_,_t_,_n_)    _t_ _n_ = (_t_)(_o_);CX_ASSERT_TYPE(_n_,_t_)
-
-#define CX_ASSERT_THIS(_o_,_t_)         CX_ASSERT_VALUE(_o_,_t_,this)
-
 #else
 
 #define CX_LOGGER(format,...)
@@ -203,10 +199,6 @@ do{                                                             \
 
 #define CX_ASSERT_TYPE(_o_,_t_)
 
-#define CX_ASSERT_VALUE(_o_,_t_,_n_)    _t_ _n_ = (_t_)(_o_)
-
-#define CX_ASSERT_THIS(_o_,_t_)         CX_ASSERT_VALUE(_o_,_t_,this)
-
 #define CX_ASSERT_FALSE(format,...)
 
 #define CX_ERROR(format,...)            cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
@@ -214,6 +206,10 @@ do{                                                             \
 #define CX_WARN(format,...)             cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
 #endif
+
+#define CX_ASSERT_VALUE(_o_,_t_,_n_)    _t_ _n_ = (_t_)(_o_);CX_ASSERT_TYPE(_n_,_t_)
+
+#define CX_ASSERT_THIS(_o_,_t_)         CX_ASSERT_VALUE(_o_,_t_,this)
 
 #define CX_RETURN(cond,...)             if(cond)return __VA_ARGS__
 
