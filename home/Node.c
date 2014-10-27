@@ -459,7 +459,7 @@ cxBool NodeCheckDie(cxAny pview)
     cxRange2i life = this->Life;
     cxBool die = life.min <= 0;
     if(die && !this->isDie){
-        CX_LOGGER("Node (type=%s) die At(%f %f)",CX_TYPE_OF(cxObject, this)->cxType,this->Index.x,this->Index.y);
+        CX_LOGGER("Node (type=%s) die At(%f %f)",CX_TYPE_NAME(this),this->Index.x,this->Index.y);
         //防止死的次数太多
         this->isDie = true;
         this->Life.min = 0;
