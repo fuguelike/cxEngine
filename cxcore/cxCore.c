@@ -10,19 +10,7 @@
 #include "cxType.h"
 #include "cxMemPool.h"
 
-//MAC atomic support
-#if CX_TARGET_PLATFORM==CX_PLATFORM_MAC
-#include <libkern/OSAtomic.h>
-cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x)
-{
-    return OSAtomicAdd32((int32_t)x, (int32_t *)p);
-}
-cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x)
-{
-    return OSAtomicAdd32(-((int32_t)x), (int32_t *)p);
-}
-//IOS atomic support
-#elif CX_TARGET_PLATFORM == CX_PLATFORM_IOS
+#if CX_TARGET_PLATFORM == CX_PLATFORM_IOS
 #include <libkern/OSAtomic.h>
 cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x)
 {
