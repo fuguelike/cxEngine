@@ -11,17 +11,17 @@
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>21575CC54AF364C0A3701F0A668C8952ADCF5A1C</key>
-		<string>https://github.com/cxuhua/cxEngine.git</string>
+		<string>http://github.com/cxuhua/cxEngine</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>tpl/tpl.xcodeproj/project.xcworkspace</string>
+	<string>tpl/tpl.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>21575CC54AF364C0A3701F0A668C8952ADCF5A1C</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/cxuhua/cxEngine.git</string>
+	<string>http://github.com/cxuhua/cxEngine</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
