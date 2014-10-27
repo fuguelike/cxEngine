@@ -33,8 +33,8 @@ static void WarMapLoadUnit(WarMap this,cxVec2i idx)
     //load x,y item
     WarMapUnit item = CX_CREATE(WarMapUnit);
     cxSpriteSetTextureURL(item, "bg1.png");
-    cxLabelTTF ttf = cxLabelTTFCreate(UTF8("%d,%d",idx.x,idx.y), NULL, 40);
-    cxViewAppend(item, ttf);
+//    cxLabelTTF ttf = cxLabelTTFCreate(UTF8("%d,%d",idx.x,idx.y), NULL, 40);
+//    cxViewAppend(item, ttf);
     WarMapAppendUnit(this, idx, item);
     CX_METHOD_RUN(item->onAppend,item);
 }
@@ -53,13 +53,8 @@ static void WarMapOnDirty(cxAny sender)
     if(!hit.hited){
         return;
     }
-    //减小检测压力
-    cxVec2i cidx = WarMapUnitIndex(this, hit.position);
-    if(cxVec2iEqu(cidx, this->centerIdx)){
-        return;
-    }
     //获取中心格子坐标
-    this->centerIdx = cidx;
+    this->centerIdx = WarMapUnitIndex(this, hit.position);
     //加载中心点附近的格子
     cxInt sx = this->centerIdx.x - global.warShowNum.x;
     sx = CX_MAX(sx, 0);

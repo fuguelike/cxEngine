@@ -103,6 +103,66 @@ void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars ske
     cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
+void cxOpenGLVAODraw(GLuint vaoId,GLuint vboId[2],cxInt number,cxAny vbuffer,cxBool *dirty)
+{
+    if (*dirty){
+        glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(cxBoxPoint) * number, vbuffer);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        *dirty = false;
+    }
+    glBindVertexArray(vaoId);
+    glDrawElements(GL_TRIANGLES, number*6, GL_UNSIGNED_SHORT, NULL);
+    glBindVertexArray(0);
+}
+
+void cxOpenGLVBODraw(GLuint vboId[2],cxInt number,cxAny vbuffer,cxBool *dirty)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
+    if (*dirty){
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(cxBoxPoint) * number, vbuffer);
+        *dirty = false;
+    }
+    cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
+    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, vertices));
+    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2, sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, texcoords));
+    cxOpenGLVertexAttribPointer(cxVertexAttribColor, 4, sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, colors));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId[1]);
+    glDrawElements(GL_TRIANGLES, (GLsizei)number*6, GL_UNSIGNED_SHORT, (GLvoid*)NULL);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void cxOpenGLInitVAO(GLuint vaoId,GLuint vboId[2],cxInt number,cxAny vbuffer,cxAny ibuffer)
+{
+    glBindVertexArray(vaoId);
+    glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cxBoxPoint) * number, vbuffer, GL_DYNAMIC_DRAW);
+    //vertices
+    cxOpenGLEnableVertexAttribArray(cxVertexAttribPosition,true);
+    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, vertices));
+    //colors
+    cxOpenGLEnableVertexAttribArray(cxVertexAttribColor,true);
+    cxOpenGLVertexAttribPointer(cxVertexAttribColor, 4,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, colors));
+    //tex coords
+    cxOpenGLEnableVertexAttribArray(cxVertexAttribTexcoord,true);
+    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, texcoords));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices)*number, ibuffer, GL_STATIC_DRAW);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void cxOpenGLInitVBO(GLuint vboId[2],cxInt number,cxAny vbuffer,cxAny ibuffer)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cxBoxPoint) * number, vbuffer, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId[1]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices) * number, ibuffer, GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
 CX_TYPE(cxOpenGL, cxObject)
 {

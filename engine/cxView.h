@@ -119,13 +119,13 @@ CX_DEF(cxView, cxObject)
 
 CX_END(cxView, cxObject)
 
-CX_INLINE cxMatrix4f *cxViewGetNormalMatrix(cxAny pthis)
+CX_INLINE const cxMatrix4f *cxViewGetNormalMatrix(cxAny pthis)
 {
     CX_ASSERT_THIS(pthis, cxView);
     return &this->normalMatrix;
 }
 
-CX_INLINE cxMatrix4f *cxViewGetAnchorMatrix(cxAny pthis)
+CX_INLINE const cxMatrix4f *cxViewGetAnchorMatrix(cxAny pthis)
 {
     CX_ASSERT_THIS(pthis, cxView);
     return &this->anchorMatrix;

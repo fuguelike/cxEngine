@@ -10,38 +10,6 @@
 #include <engine/cxEngine.h>
 #include "cxAtlas.h"
 
-static void cxAtlasVAODraw(void *pview)
-{
-    CX_ASSERT_THIS(pview, cxAtlas);
-    if (this->isDirty){
-        glBindBuffer(GL_ARRAY_BUFFER, this->vboid[0]);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(cxBoxPoint) * this->number, this->boxes);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        this->isDirty = false;
-    }
-    glBindVertexArray(this->vaoid);
-    glDrawElements(GL_TRIANGLES, this->number*6, GL_UNSIGNED_SHORT, NULL);
-    glBindVertexArray(0);
-}
-
-static void cxAtlasVBODraw(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxAtlas);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vboid[0]);
-    if (this->isDirty){
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(cxBoxPoint) * this->number, this->boxes);
-        this->isDirty = false;
-    }
-    cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
-    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, vertices));
-    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2, sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, texcoords));
-    cxOpenGLVertexAttribPointer(cxVertexAttribColor, 4, sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, colors));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vboid[1]);
-    glDrawElements(GL_TRIANGLES, (GLsizei)this->number*6, GL_UNSIGNED_SHORT, (GLvoid*)NULL);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
 void cxAtlasDraw(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
@@ -54,9 +22,9 @@ void cxAtlasDraw(cxAny pview)
         cxAtlasDrawInit(pview);
     }
     if(cxOpenGLInstance()->support_GL_OES_vertex_array_object){
-        cxAtlasVAODraw(pview);
+        cxOpenGLVAODraw(this->vaoid, this->vboid, this->number, this->boxes, &this->isDirty);
     }else{
-        cxAtlasVBODraw(pview);
+        cxOpenGLVBODraw(this->vboid, this->number, this->boxes, &this->isDirty);
     }
 }
 
@@ -234,46 +202,6 @@ void cxAtlasUpdateAt(cxAny pview,cxInt index, cxBoxPoint *point)
     this->isDirty = true;
 }
 
-static void cxAtlasInitVAO(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxAtlas);
-    
-    glBindVertexArray(this->vaoid);
-    glBindBuffer(GL_ARRAY_BUFFER, this->vboid[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cxBoxPoint) * this->capacity, this->boxes, GL_DYNAMIC_DRAW);
-
-    //vertices
-    cxOpenGLEnableVertexAttribArray(cxVertexAttribPosition,true);
-    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, vertices));
-    //colors
-    cxOpenGLEnableVertexAttribArray(cxVertexAttribColor,true);
-    cxOpenGLVertexAttribPointer(cxVertexAttribColor, 4,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, colors));
-    //tex coords
-    cxOpenGLEnableVertexAttribArray(cxVertexAttribTexcoord,true);
-    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, texcoords));
-    
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vboid[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices)*this->capacity, this->indices, GL_STATIC_DRAW);
-    
-    glBindVertexArray(0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-static void cxAtlasInitVBO(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxAtlas);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, this->vboid[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cxBoxPoint) * this->capacity, this->boxes, GL_DYNAMIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->vboid[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices) * this->capacity, this->indices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
 void cxAtlasSetNumber(cxAny pview,cxInt number)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
@@ -292,9 +220,9 @@ void cxAtlasDrawInit(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
     if(cxOpenGLInstance()->support_GL_OES_vertex_array_object){
-        cxAtlasInitVAO(this);
+        cxOpenGLInitVAO(this->vaoid, this->vboid, this->capacity, this->boxes, this->indices);
     }else{
-        cxAtlasInitVBO(this);
+        cxOpenGLInitVBO(this->vboid, this->capacity, this->boxes, this->indices);
     }
 }
 

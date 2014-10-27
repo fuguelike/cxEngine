@@ -25,8 +25,8 @@ static void cxSpriteUpdateBox(cxSprites this,cxSprite sp)
     box->rt.texcoords = tex.rt;
     
     cxBox4f sbox = cxViewGetBox(sp);
-    cxMatrix4f *normal = cxViewGetNormalMatrix(sp);
-    cxMatrix4f *anchor = cxViewGetAnchorMatrix(sp);
+    const cxMatrix4f *normal = cxViewGetNormalMatrix(sp);
+    const cxMatrix4f *anchor = cxViewGetAnchorMatrix(sp);
     
     pos = cxVec3fv(sbox.l, sbox.b, 0);
     kmVec3MultiplyMat4(&pos, &pos, normal);
