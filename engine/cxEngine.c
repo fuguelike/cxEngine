@@ -262,6 +262,7 @@ void cxEngineLayout(cxInt width,cxInt height)
     engine->WinSize = cxSize2fv(width, height);
     //$WinSize.w $WinSize.h
     cxJsonRegisterSize2f("WinSize", engine->WinSize);
+    cxJsonRegisterSize2f("DesSize", engine->DesSize);
     cxViewSetSize(engine->Window, engine->WinSize);
     //
     if(!cxSize2fZero(engine->DesSize)){

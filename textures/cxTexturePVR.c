@@ -70,11 +70,12 @@ static cxBool cxTexturePVRLoad(cxAny ptex,cxStream stream)
         goto completed;
     }
     this->cxTexture.size = cxSize2fv(header.width, header.height);
-    this->cxTexture.hasAlpha = header.bitmaskAlpha;
+    cxBool hasAlpha = header.bitmaskAlpha;
+    this->cxTexture.hasAlpha = hasAlpha;
     if(this->format == cxFormatPVR2BPP){
-        this->glFormat = this->cxTexture.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
+        this->glFormat = hasAlpha?GL_COMPRESSED_RGBA_PVRTC_2BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_2BPPV1_IMG;
     }else{
-        this->glFormat = this->cxTexture.hasAlpha?GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
+        this->glFormat = hasAlpha?GL_COMPRESSED_RGBA_PVRTC_4BPPV1_IMG:GL_COMPRESSED_RGB_PVRTC_4BPPV1_IMG;
     }
     cxOpenGLGenTextures(1, &this->cxTexture.textureId);
     cxOpenGLBindTexture(this->cxTexture.textureId, 0);
@@ -127,7 +128,7 @@ static cxBool cxTexturePVRLoad(cxAny ptex,cxStream stream)
     }
     allocator->free(buffer);
     if(i > 1){
-        cxTextureSetParam((cxTexture)this, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+        cxTextureSetParam(this, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
     }
     this->cxTexture.hasMipmap = i > 1;
     cxOpenGLBindTexture(0,0);
