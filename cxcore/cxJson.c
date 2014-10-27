@@ -390,10 +390,10 @@ cxVec2fRange cxJsonToVec2fRangle(cxJson json,cxVec2fRange dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.v.x = cxJsonDouble(json, "vx", dv.v.x);
-    dv.v.y = cxJsonDouble(json, "vy", dv.v.y);
-    dv.r.x = cxJsonDouble(json, "rx", dv.r.x);
-    dv.r.y = cxJsonDouble(json, "ry", dv.r.y);
+    dv.v.x = cxJsonDouble(this, "vx", dv.v.x);
+    dv.v.y = cxJsonDouble(this, "vy", dv.v.y);
+    dv.r.x = cxJsonDouble(this, "rx", dv.r.x);
+    dv.r.y = cxJsonDouble(this, "ry", dv.r.y);
     return dv;
 }
 
@@ -402,8 +402,8 @@ cxFloatRange cxJsonToFloatRangle(cxJson json,cxFloatRange dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.v = cxJsonDouble(json, "v", dv.v);
-    dv.r = cxJsonDouble(json, "r", dv.r);
+    dv.v = cxJsonDouble(this, "v", dv.v);
+    dv.r = cxJsonDouble(this, "r", dv.r);
     return dv;
 }
 
@@ -412,8 +412,8 @@ cxSize2f cxJsonToSize2f(cxJson json,cxSize2f dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.w = cxJsonDouble(json, "w", dv.w);
-    dv.h = cxJsonDouble(json, "h", dv.h);
+    dv.w = cxJsonDouble(this, "w", dv.w);
+    dv.h = cxJsonDouble(this, "h", dv.h);
     return dv;
 }
 
@@ -422,8 +422,8 @@ cxSize2i cxJsonToSize2i(cxJson json,cxSize2i dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.w = cxJsonInt(json, "w", dv.w);
-    dv.h = cxJsonInt(json, "h", dv.h);
+    dv.w = cxJsonInt(this, "w", dv.w);
+    dv.h = cxJsonInt(this, "h", dv.h);
     return dv;
 }
 
@@ -432,9 +432,9 @@ cxVec3f cxJsonToVec3f(cxJson json,cxVec3f dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.x = cxJsonDouble(json, "x", dv.x);
-    dv.y = cxJsonDouble(json, "y", dv.y);
-    dv.z = cxJsonDouble(json, "z", dv.z);
+    dv.x = cxJsonDouble(this, "x", dv.x);
+    dv.y = cxJsonDouble(this, "y", dv.y);
+    dv.z = cxJsonDouble(this, "z", dv.z);
     return dv;
 }
 
@@ -443,8 +443,8 @@ cxVec2i cxJsonToVec2i(cxJson json,cxVec2i dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.x = cxJsonInt(json, "x", dv.x);
-    dv.y = cxJsonInt(json, "y", dv.y);
+    dv.x = cxJsonInt(this, "x", dv.x);
+    dv.y = cxJsonInt(this, "y", dv.y);
     return dv;
 }
 
@@ -453,8 +453,8 @@ cxRange2f cxJsonToRange2f(cxJson json,cxRange2f dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.min = cxJsonDouble(json, "min", dv.min);
-    dv.max = cxJsonDouble(json, "max", dv.max);
+    dv.min = cxJsonDouble(this, "min", dv.min);
+    dv.max = cxJsonDouble(this, "max", dv.max);
     return dv;
 }
 
@@ -463,8 +463,8 @@ cxVec2f cxJsonToVec2f(cxJson json,cxVec2f dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.x = cxJsonDouble(json, "x", dv.x);
-    dv.y = cxJsonDouble(json, "y", dv.y);
+    dv.x = cxJsonDouble(this, "x", dv.x);
+    dv.y = cxJsonDouble(this, "y", dv.y);
     return dv;
 }
 
@@ -473,14 +473,14 @@ cxColor4fRange cxJsonToColor4fRangle(cxJson json,cxColor4fRange dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.v.r = cxJsonDouble(json, "vr", dv.v.r);
-    dv.v.g = cxJsonDouble(json, "vg", dv.v.g);
-    dv.v.b = cxJsonDouble(json, "vb", dv.v.b);
-    dv.v.a = cxJsonDouble(json, "va", dv.v.a);
-    dv.r.r = cxJsonDouble(json, "rr", dv.r.r);
-    dv.r.g = cxJsonDouble(json, "rg", dv.r.g);
-    dv.r.b = cxJsonDouble(json, "rb", dv.r.b);
-    dv.r.a = cxJsonDouble(json, "ra", dv.r.a);
+    dv.v.r = cxJsonDouble(this, "vr", dv.v.r);
+    dv.v.g = cxJsonDouble(this, "vg", dv.v.g);
+    dv.v.b = cxJsonDouble(this, "vb", dv.v.b);
+    dv.v.a = cxJsonDouble(this, "va", dv.v.a);
+    dv.r.r = cxJsonDouble(this, "rr", dv.r.r);
+    dv.r.g = cxJsonDouble(this, "rg", dv.r.g);
+    dv.r.b = cxJsonDouble(this, "rb", dv.r.b);
+    dv.r.a = cxJsonDouble(this, "ra", dv.r.a);
     return dv;
 }
 
@@ -489,10 +489,10 @@ cxColor4f cxJsonToColor4f(cxJson json,cxColor4f dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.r = cxJsonDouble(json, "r", dv.r);
-    dv.g = cxJsonDouble(json, "g", dv.g);
-    dv.b = cxJsonDouble(json, "b", dv.b);
-    dv.a = cxJsonDouble(json, "a", dv.a);
+    dv.r = cxJsonDouble(this, "r", dv.r);
+    dv.g = cxJsonDouble(this, "g", dv.g);
+    dv.b = cxJsonDouble(this, "b", dv.b);
+    dv.a = cxJsonDouble(this, "a", dv.a);
     return dv;
 }
 
@@ -501,9 +501,9 @@ cxColor3f cxJsonToColor3f(cxJson json,cxColor3f dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.r = cxJsonDouble(json, "r", dv.r);
-    dv.g = cxJsonDouble(json, "g", dv.g);
-    dv.b = cxJsonDouble(json, "b", dv.b);
+    dv.r = cxJsonDouble(this, "r", dv.r);
+    dv.g = cxJsonDouble(this, "g", dv.g);
+    dv.b = cxJsonDouble(this, "b", dv.b);
     return dv;
 }
 
@@ -512,10 +512,10 @@ cxBox4f cxJsonToBox4f(cxJson json,cxBox4f dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.l = cxJsonDouble(json, "l", dv.l);
-    dv.r = cxJsonDouble(json, "r", dv.r);
-    dv.t = cxJsonDouble(json, "t", dv.t);
-    dv.b = cxJsonDouble(json, "b", dv.b);
+    dv.l = cxJsonDouble(this, "l", dv.l);
+    dv.r = cxJsonDouble(this, "r", dv.r);
+    dv.t = cxJsonDouble(this, "t", dv.t);
+    dv.b = cxJsonDouble(this, "b", dv.b);
     return dv;
 }
 
@@ -524,8 +524,8 @@ cxTex2f cxJsonToTex2f(cxJson json,cxTex2f dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.u = cxJsonDouble(json, "u", dv.u);
-    dv.v = cxJsonDouble(json, "v", dv.v);
+    dv.u = cxJsonDouble(this, "u", dv.u);
+    dv.v = cxJsonDouble(this, "v", dv.v);
     return dv;
 }
 
@@ -534,10 +534,10 @@ cxBoxTex2f cxJsonToBoxTex2f(cxJson json,cxBoxTex2f dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     this = cxJsonParseRegisterValue(this);
-    dv.lb = cxJsonTex2f(json, "lb", dv.lb);
-    dv.rb = cxJsonTex2f(json, "rb", dv.rb);
-    dv.lt = cxJsonTex2f(json, "lt", dv.lt);
-    dv.rt = cxJsonTex2f(json, "rt", dv.rt);
+    dv.lb = cxJsonTex2f(this, "lb", dv.lb);
+    dv.rb = cxJsonTex2f(this, "rb", dv.rb);
+    dv.lt = cxJsonTex2f(this, "lt", dv.lt);
+    dv.rt = cxJsonTex2f(this, "rt", dv.rt);
     return dv;
 }
 

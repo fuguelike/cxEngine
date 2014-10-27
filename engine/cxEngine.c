@@ -318,7 +318,7 @@ CX_INIT(cxEngine, cxObject)
 {
     this->Interval = 1.0f/60.0f;
     this->FrameDelta = 1.0f/60.0f;
-    this->IsShowBorder = true;
+    this->IsShowBorder = false;
     this->isTouch = true;
     this->Scale = cxVec2fv(1.0f, 1.0f);
     this->files = CX_ALLOC(cxHash);

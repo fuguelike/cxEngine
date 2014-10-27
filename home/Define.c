@@ -28,7 +28,7 @@ void GlobalInit(cxEngine engine)
     global.mapRate = 1.5f;
     global.unitNum = cxVec2iv(MAP_ROW, MAP_COL);
     
-    global.mapSize = cxSize2fv(engine->WinSize.w * global.mapRate, 0);
+    global.mapSize = cxSize2fv(engine->DesSize.w * global.mapRate, 0);
     global.mapSize.h = global.mapSize.w * 0.75f;
     
     global.unitSize.w = global.mapSize.w/global.unitNum.x;
@@ -45,8 +45,8 @@ void GlobalInit(cxEngine engine)
     global.warMapSize.w = global.warUnitSize.w * global.warUnitNum.x;
     global.warMapSize.h = global.warUnitSize.h * global.warUnitNum.y;
     
-    global.warShowNum.x = (engine->WinSize.w / global.warUnitSize.w  + 4)/2 ;
-    global.warShowNum.y = (engine->WinSize.h / global.warUnitSize.h  + 4)/2;
+    global.warShowNum.x = (engine->DesSize.w / global.warUnitSize.w  + 4)/2 ;
+    global.warShowNum.y = (engine->DesSize.h / global.warUnitSize.h  + 4)/2;
     
     CX_LOGGER("%d %d",global.warShowNum.x,global.warShowNum.y);
 }

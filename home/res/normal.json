@@ -4,8 +4,10 @@
     "resizing": "fill",
     "body": {
         "cxId": "map",
-        "cxType": "NormalMap"
+        "cxType": "NormalMap",
+        "fixscale":"width"
     },
+    "fixscale":"width",
     "scale": 1.0,
     "range": {
         "min": 0.7,

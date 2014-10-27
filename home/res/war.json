@@ -4,7 +4,8 @@
   "resizing": "fill",
   "body": {
     "cxId": "map",
-    "cxType": "WarMap"
+    "cxType": "WarMap",
+    "fixscale":"width"
   },
   "scale": 1.3,
   "range": {
