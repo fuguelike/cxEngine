@@ -7,6 +7,7 @@
 //
 
 #include <engine/cxEngine.h>
+#include <actions/cxTimer.h>
 #include "cxEventBase.h"
 #include "cxHttpConn.h"
 
@@ -59,39 +60,29 @@ void cxEventBaseDestroy()
     instance = NULL;
 }
 
-void cxEventBaseSetFreq(cxInt freq)
+static void cxEventUpdateArrive(cxAny base)
 {
-    CX_ASSERT(instance != NULL, "event base not init");
-    instance->freq = freq;
-}
-
-static void cxEventUpdate(cxAny base)
-{
-    cxEventBase this = base;
-    this->counter ++;
-    CX_RETURN((this->counter % this->freq) != 0);
+    cxEventBase this = instance;
+    CX_RETURN(this == NULL);
     event_base_loop(this->base, EVLOOP_NONBLOCK);
 }
 
 CX_TYPE(cxEventBase, cxObject)
 {
-
+    
 }
 CX_INIT(cxEventBase, cxObject)
 {
-    cxEngine engine = cxEngineInstance();
-    CX_CON(cxEngine, engine, onUpdate, this, cxEventUpdate);
     this->base = event_base_new();
     this->conns = CX_ALLOC(cxHash);
-    this->counter = 0;
-    this->freq = 1;
+    cxTimer timer = cxEngineTimer(CX_EVLOOP_FREQ, CX_FOREVER);
+    CX_ADD(cxTimer, timer, onArrive, cxEventUpdateArrive);
 }
 CX_FREE(cxEventBase, cxObject)
 {
     CX_RELEASE(this->conns);
     event_base_loopbreak(this->base);
     event_base_free(this->base);
-    CX_SLOT_RELEASE(this->onUpdate);
 }
 CX_TERM(cxEventBase, cxObject)
 

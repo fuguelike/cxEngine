@@ -996,9 +996,9 @@ void cxJsonSetAESKey(cxString v)
     CX_RETAIN_SWAP(key, v);
 }
 
-cxString JsonEncode(cxJson json)
+cxString cxJsonAESEncode(cxJson json)
 {
-    CX_ASSERT(key == NULL, "cxJson not set key");
+    CX_ASSERT(key != NULL, "cxJson not set key");
     cxString data = cxJsonDump(json);
     if(data == NULL){
         CX_ERROR("json dump error");
@@ -1007,9 +1007,9 @@ cxString JsonEncode(cxJson json)
     return cxAESEncode(data, key);
 }
 
-cxJson JsonDecode(cxString data)
+cxJson cxJsonAESDecode(cxString data)
 {
-    CX_ASSERT(key == NULL, "cxJson not set key");
+    CX_ASSERT(key != NULL, "cxJson not set key");
     cxString json = cxAESDecode(data, key);
     if(json == NULL){
         CX_ERROR("aes decode error");

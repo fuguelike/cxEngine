@@ -98,6 +98,8 @@ void cxStringAppend(cxString string,cxConstChars d,cxInt l);
 
 cxString cxStringBinary(cxAny d,cxInt l);
 
+void cxStringAppendByte(cxString str,cxByte b);
+
 CX_C_END
 
 #endif

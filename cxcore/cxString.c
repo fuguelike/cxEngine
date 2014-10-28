@@ -383,6 +383,11 @@ void cxStringFormat(cxString string,cxConstChars format,...)
     va_end(ap);
 }
 
+void cxStringAppendByte(cxString str,cxByte b)
+{
+    utstring_bincpy(&str->strptr, &b, 1);
+}
+
 void cxStringAppend(cxString string,cxConstChars d,cxInt l)
 {
     CX_ASSERT(l > 0 && d != NULL, "args error");

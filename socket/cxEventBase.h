@@ -14,19 +14,17 @@
 
 CX_C_BEGIN
 
+#ifndef CX_EVLOOP_FREQ
+#define CX_EVLOOP_FREQ    0.01f
+#endif
+
 CX_DEF(cxEventBase, cxObject)
     cxHash conns;   //host:port key
     struct event_base *base;
-    CX_SLOT_ALLOC(onUpdate);
-    cxInt64 counter;
-    cxInt freq;
 CX_END(cxEventBase, cxObject)
-
 
 //type=SOCK_DGRAM udp,or SOCK_STREAM tcp
 evutil_socket_t cxCreateSocket(cxBool reuse,int type);
-
-void cxEventBaseSetFreq(cxInt freq);
 
 cxEventBase cxEventBaseInstance();
 

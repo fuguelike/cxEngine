@@ -242,9 +242,9 @@ cxAny cxJsonDecode(cxJson json);
 
 void cxJsonSetAESKey(cxString v);
 
-cxString JsonEncode(cxJson json);
+cxString cxJsonAESEncode(cxJson json);
 
-cxJson JsonDecode(cxString data);
+cxJson cxJsonAESDecode(cxString data);
 
 CX_C_END
 
