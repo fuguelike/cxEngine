@@ -121,7 +121,7 @@ cxString cxJsonDump(cxJson json)
 {
     CX_ASSERT_THIS(json, cxJson);
     cxChars jsonText = json_dumps(CX_JSON_PTR(this), JSON_ENCODE_ANY);
-    return cxStringAttachChars(jsonText);
+    return cxStringAttachMem(jsonText, (cxInt)strlen(jsonText));
 }
 
 void cxJsonInit()
@@ -709,7 +709,10 @@ cxJson cxJsonCreate(cxString json)
         return NULL;
     }
     this->json = json_loadb(cxStringBody(json), cxStringLength(json), JSON_DECODE_ANY, &error);
-    CX_ASSERT(this->json != NULL, "cxJson load error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
+    if(this->json == NULL){
+        CX_ERROR("cxJson load error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
+        return NULL;
+    }
     return this;
 }
 

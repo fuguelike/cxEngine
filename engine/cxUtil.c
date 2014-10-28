@@ -67,10 +67,11 @@ cxString cxAESEncode(cxString data,cxString key)
     for(cxInt i=0; i < AES_KEY_LENGTH; i++){
         iv[i] = cxRand(0, 255);
     }
-    if(cxStringLength(key) > AES_KEY_LENGTH){
+    cxInt keylen = cxStringLength(key);
+    if(keylen > AES_KEY_LENGTH){
         memcpy(ik, cxStringBody(key), AES_KEY_LENGTH);
     }else {
-        memcpy(ik, cxStringBody(key), cxStringLength(key));
+        memcpy(ik, cxStringBody(key), keylen);
     }
     AES_KEY eKey;
     if(AES_set_encrypt_key((const cxUInt8 *)ik, AES_KEY_LENGTH * 8, &eKey) != 0){
