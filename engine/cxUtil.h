@@ -23,27 +23,15 @@ typedef void (*cxCopyFileFunc)(cxConstChars file,cxProgress *progress,cxAny udat
 
 cxArray cxFontNames();
 
-cxInt cxRand(cxInt min,cxInt max);
-
 cxUInt cxHexToUInt(cxConstChars bs);
 
 cxUInt cxBinaryToUInt(cxConstChars bs);
-
-void cxSetRandSeed();
 
 cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata);
 
 cxAudioFileType cxAudioGetType(cxConstChars file);
 
 cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c);
-
-cxString cxAESDecode(cxString data,cxString key);
-
-cxString cxAESEncode(cxString data,cxString key);
-
-cxString cxCompressed(cxString data);
-
-cxString cxDecompress(cxString data);
 
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxTextAttr *attr);
 

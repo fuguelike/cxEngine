@@ -20,6 +20,8 @@ CX_DEF(cxString, cxObject)
     UT_string strptr;
 CX_END(cxString, cxObject)
 
+#define AES_KEY_LENGTH  16
+
 #define cxStringNumber(v,t)         cxStringData(&(t){v},sizeof(t))
 
 #define cxConstCharsEqu(s1,s2)      ((s1) != NULL && (s2) != NULL && strcmp(s1,s2) == 0)
@@ -35,6 +37,18 @@ CX_END(cxString, cxObject)
 #define CX_CONST_STRING(f,...)      cxStringBody(cxStringCreate(f,##__VA_ARGS__))
 
 #define UTF8(f,...)  cxStringCreate(f,##__VA_ARGS__)
+
+cxInt cxRand(cxInt min,cxInt max);
+
+void cxSetRandSeed();
+
+cxString cxCompressed(cxString data);
+
+cxString cxDecompress(cxString data);
+
+cxString cxAESDecode(cxString data,cxString key);
+
+cxString cxAESEncode(cxString data,cxString key);
 
 cxBool cxConstCharsIsNumber(cxConstChars s);
 

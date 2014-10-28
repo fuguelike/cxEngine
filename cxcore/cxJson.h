@@ -238,6 +238,14 @@ cxTex2f cxJsonTex2f(cxJson json,cxConstChars key,cxTex2f dv);
 
 cxAny cxJsonDecode(cxJson json);
 
+//
+
+void cxJsonSetAESKey(cxString v);
+
+cxString JsonEncode(cxJson json);
+
+cxJson JsonDecode(cxString data);
+
 CX_C_END
 
 #endif
