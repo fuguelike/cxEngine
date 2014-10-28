@@ -27,5 +27,6 @@
 #include "cxLoader.h"
 #include "cxPath.h"
 #include "cxStream.h"
+#include "cxThread.h"
 
 #endif

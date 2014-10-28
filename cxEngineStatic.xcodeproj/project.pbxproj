@@ -35,6 +35,7 @@
 		831046F919F21B3E0086D91A /* spEvent.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046DD19F21B3D0086D91A /* spEvent.c */; };
 		831046FC19F21B970086D91A /* cxSkeleton.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046FA19F21B970086D91A /* cxSkeleton.c */; };
 		831046FF19F21BA40086D91A /* cxSpine.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046FD19F21BA40086D91A /* cxSpine.c */; };
+		8315B69319FF3119007FCDFE /* cxThread.c in Sources */ = {isa = PBXBuildFile; fileRef = 8315B69119FF3119007FCDFE /* cxThread.c */; };
 		831E654819EFA9B000FCFD85 /* cxAnimate.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E633919EFA9AF00FCFD85 /* cxAnimate.c */; };
 		831E654919EFA9B000FCFD85 /* cxBezier.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E633B19EFA9AF00FCFD85 /* cxBezier.c */; };
 		831E654A19EFA9B000FCFD85 /* cxCurve.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E633D19EFA9AF00FCFD85 /* cxCurve.c */; };
@@ -266,6 +267,8 @@
 		831046FB19F21B970086D91A /* cxSkeleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxSkeleton.h; sourceTree = "<group>"; };
 		831046FD19F21BA40086D91A /* cxSpine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxSpine.c; sourceTree = "<group>"; };
 		831046FE19F21BA40086D91A /* cxSpine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxSpine.h; sourceTree = "<group>"; };
+		8315B69119FF3119007FCDFE /* cxThread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxThread.c; sourceTree = "<group>"; };
+		8315B69219FF3119007FCDFE /* cxThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxThread.h; sourceTree = "<group>"; };
 		831E632119EFA97A00FCFD85 /* libcxEngineStatic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcxEngineStatic.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		831E632C19EFA97A00FCFD85 /* cxEngineStaticTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = cxEngineStaticTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		831E632F19EFA97A00FCFD85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -888,6 +891,8 @@
 				831E63C719EFA9AF00FCFD85 /* cxString.h */,
 				831E63C819EFA9AF00FCFD85 /* cxType.c */,
 				831E63C919EFA9AF00FCFD85 /* cxType.h */,
+				8315B69119FF3119007FCDFE /* cxThread.c */,
+				8315B69219FF3119007FCDFE /* cxThread.h */,
 			);
 			path = cxcore;
 			sourceTree = SOURCE_ROOT;
@@ -1404,6 +1409,7 @@
 				831E662619EFA9D200FCFD85 /* cxShaderColor.c in Sources */,
 				83CA51A919F3A6DD002119B0 /* cxShaderTTF.c in Sources */,
 				831E657519EFA9B000FCFD85 /* cpPolyShape.c in Sources */,
+				8315B69319FF3119007FCDFE /* cxThread.c in Sources */,
 				831E659419EFA9B000FCFD85 /* cxEngine.c in Sources */,
 				831E657D19EFA9B000FCFD85 /* cpSweep1D.c in Sources */,
 				831E654919EFA9B000FCFD85 /* cxBezier.c in Sources */,
