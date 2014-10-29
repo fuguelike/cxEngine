@@ -41,6 +41,7 @@ CX_FIELD_GET(cxHttp, cxInt64, ReadBytes);
 CX_FIELD_GET(cxHttp, cxInt64, BodyBytes);
 CX_FIELD_GET(cxHttp, cxBool, IsSuccess);
 
+//set auto release http object
 CX_INLINE void cxHttpSetAuto(cxAny http)
 {
     CX_ASSERT_THIS(http, cxHttp);
