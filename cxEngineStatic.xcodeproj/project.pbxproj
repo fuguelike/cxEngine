@@ -271,7 +271,6 @@
 		8315B69219FF3119007FCDFE /* cxThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxThread.h; sourceTree = "<group>"; };
 		831E632119EFA97A00FCFD85 /* libcxEngineStatic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcxEngineStatic.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		831E632C19EFA97A00FCFD85 /* cxEngineStaticTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = cxEngineStaticTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		831E632F19EFA97A00FCFD85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		831E633919EFA9AF00FCFD85 /* cxAnimate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAnimate.c; sourceTree = "<group>"; };
 		831E633A19EFA9AF00FCFD85 /* cxAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAnimate.h; sourceTree = "<group>"; };
 		831E633B19EFA9AF00FCFD85 /* cxBezier.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxBezier.c; sourceTree = "<group>"; };
@@ -664,7 +663,6 @@
 			isa = PBXGroup;
 			children = (
 				831E632319EFA97A00FCFD85 /* cxEngineStatic */,
-				831E632D19EFA97A00FCFD85 /* cxEngineStaticTests */,
 				831E632219EFA97A00FCFD85 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -698,22 +696,6 @@
 				831E660319EFA9D200FCFD85 /* views */,
 			);
 			path = cxEngineStatic;
-			sourceTree = "<group>";
-		};
-		831E632D19EFA97A00FCFD85 /* cxEngineStaticTests */ = {
-			isa = PBXGroup;
-			children = (
-				831E632E19EFA97A00FCFD85 /* Supporting Files */,
-			);
-			path = cxEngineStaticTests;
-			sourceTree = "<group>";
-		};
-		831E632E19EFA97A00FCFD85 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				831E632F19EFA97A00FCFD85 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		831E633819EFA9AF00FCFD85 /* actions */ = {
@@ -1539,6 +1521,7 @@
 					"$(SRCROOT)/libs/ios/include",
 				);
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/libs/ios/lib";
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

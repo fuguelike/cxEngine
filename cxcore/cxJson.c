@@ -1020,6 +1020,11 @@ cxString cxJsonAESEncodeWithKey(cxJson json,cxString key)
 cxJson cxJsonAESDecodeWithKey(cxString data,cxString key)
 {
     CX_ASSERT(key != NULL, "cxJson not set key");
+    cxInt bytes = cxStringLength(data);
+    if(bytes < 32 || bytes % AES_KEY_LENGTH != 0){
+        CX_ERROR("aes decode data error");
+        return NULL;
+    }
     cxString json = cxAESDecode(data, key);
     if(json == NULL){
         CX_ERROR("aes decode error");
@@ -1039,6 +1044,12 @@ void cxJsonSetConstChars(cxJson json,cxConstChars key,cxConstChars v)
 {
     CX_ASSERT(json != NULL && cxJsonIsObject(json), "json error");
     json_object_set_new(CX_JSON_PTR(json), key, json_string(v));
+}
+
+void cxJsonSetJson(cxJson json,cxConstChars key,cxJson v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsObject(json), "json error");
+    json_object_set(CX_JSON_PTR(json), key, CX_JSON_PTR(v));
 }
 
 void cxJsonSetString(cxJson json,cxConstChars key,cxString v)
@@ -1072,34 +1083,40 @@ cxJson cxJsonCreateArray()
     return this;
 }
 
-void cxJsonAddConstChars(cxJson json,cxConstChars v)
+void cxJsonAppendConstChars(cxJson json,cxConstChars v)
 {
     CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
-    json_array_append(CX_JSON_PTR(json), json_string(v));
+    json_array_append_new(CX_JSON_PTR(json), json_string(v));
 }
 
-void cxJsonAddString(cxJson json,cxString v)
+void cxJsonAppendString(cxJson json,cxString v)
 {
     CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
-    cxJsonAddConstChars(json, cxStringBody(v));
+    cxJsonAppendConstChars(json, cxStringBody(v));
 }
 
-void cxJsonAddInt(cxJson json,cxInt v)
+void cxJsonAppendInt(cxJson json,cxInt v)
 {
     CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
-    json_array_append(CX_JSON_PTR(json), json_integer(v));
+    json_array_append_new(CX_JSON_PTR(json), json_integer(v));
 }
 
-void cxJsonAddDouble(cxJson json,cxDouble v)
+void cxJsonAppendDouble(cxJson json,cxDouble v)
 {
     CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
-    json_array_append(CX_JSON_PTR(json), json_real(v));
+    json_array_append_new(CX_JSON_PTR(json), json_real(v));
 }
 
-void cxJsonAddBool(cxJson json,cxBool v)
+void cxJsonAppendBool(cxJson json,cxBool v)
 {
     CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
-    json_array_append(CX_JSON_PTR(json), json_boolean(v));
+    json_array_append_new(CX_JSON_PTR(json), json_boolean(v));
+}
+
+void cxJsonAppendJson(cxJson json,cxJson v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
+    json_array_append(CX_JSON_PTR(json), CX_JSON_PTR(v));
 }
 
 

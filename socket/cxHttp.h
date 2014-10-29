@@ -23,6 +23,7 @@ CX_DEF(cxHttp, cxObject)
     CX_FIELD_DEF(cxInt64 ReadBytes);
     CX_FIELD_DEF(cxString Data);
     CX_FIELD_DEF(cxString URL);
+    cxBool isCancel;
     cxString suri;
     cxChar *pdata;
     cxInt psize;
@@ -30,6 +31,7 @@ CX_DEF(cxHttp, cxObject)
     struct evhttp_uri *uri;
     CX_EVENT_ALLOC(onChunked);
     CX_EVENT_ALLOC(onCompleted);
+    cxBool autoRelease;
 CX_END(cxHttp, cxObject)
 
 CX_FIELD_IMP(cxHttp, cxLong, Tag);
@@ -38,6 +40,14 @@ CX_FIELD_GET(cxHttp, cxString, Data);
 CX_FIELD_GET(cxHttp, cxInt64, ReadBytes);
 CX_FIELD_GET(cxHttp, cxInt64, BodyBytes);
 CX_FIELD_GET(cxHttp, cxBool, IsSuccess);
+
+CX_INLINE void cxHttpSetAuto(cxAny http)
+{
+    CX_ASSERT_THIS(http, cxHttp);
+    CX_RETURN(this->autoRelease);
+    CX_RETAIN(this);
+    this->autoRelease = true;
+}
 
 cxString cxHttpUriEncode(cxString uri);
 

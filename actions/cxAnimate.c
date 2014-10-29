@@ -267,10 +267,11 @@ CX_TERM(cxAnimate, cxAction)
 void cxAnimateRunGroup(cxAny pav,cxConstChars name)
 {
     CX_ASSERT_THIS(pav, cxAnimate);
+    CX_RETURN(!cxConstCharsOK(name));
+    //group name not exists return
+    CX_RETURN(!cxHashHas(this->groups, cxHashStrKey(name)));
     cxActionReset(this);
-    CX_RETURN(name == NULL);
-    cxString str = cxStringConstChars(name);
-    CX_RETAIN_SWAP(this->name, str);
+    CX_RETAIN_SWAP(this->name, cxStringConstChars(name));
 }
 
 

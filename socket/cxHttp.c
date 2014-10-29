@@ -29,12 +29,14 @@ cxString cxHttpUriDecode(cxString uri)
 static void cxHttpReadData(cxHttp this)
 {
     this->ReadBytes = this->request->body_size;
-    if(this->BodyBytes == 0){
+    //parse data length
+    if(this->BodyBytes == 0 && this->request->headers_size > 0){
         cxConstChars cl = evhttp_find_header(this->request->input_headers, "Content-Length");
         this->BodyBytes = cl != NULL ? atoll(cl) : 0;
     }
     this->IsSuccess = this->request->response_code == HTTP_OK;
     if(!this->IsSuccess){
+        CX_ERROR("request error:%d",this->request->response_code);
         return;
     }
     size_t len = evbuffer_get_length(this->request->input_buffer);
@@ -56,6 +58,9 @@ static void cxHttpRequestCompleted(struct evhttp_request *req,void *xhttp)
     cxHttp this = xhttp;
     cxHttpReadData(this);
     CX_EVENT_FIRE(this, onCompleted);
+    if(this->autoRelease){
+        CX_AUTO(this);
+    }
 }
 
 static void cxHttpRequestChunked(struct evhttp_request *req,void *xhttp)
@@ -64,6 +69,9 @@ static void cxHttpRequestChunked(struct evhttp_request *req,void *xhttp)
     cxStringClear(this->Data);
     cxHttpReadData(this);
     CX_EVENT_FIRE(this, onChunked);
+    if(this->isCancel){
+        evhttp_cancel_request(req);
+    }
 }
 
 CX_TYPE(cxHttp, cxObject)
@@ -76,9 +84,6 @@ CX_INIT(cxHttp, cxObject)
 }
 CX_FREE(cxHttp, cxObject)
 {
-    if(this->request != NULL){
-        evhttp_cancel_request(this->request);
-    }
     CX_EVENT_RELEASE(this->onCompleted);
     CX_EVENT_RELEASE(this->onChunked);
     if(this->uri != NULL){
@@ -104,7 +109,7 @@ static cxHttpConn cxHttpGetConnect(cxAny http)
 void cxHttpCancel(cxAny http)
 {
     CX_ASSERT_THIS(http, cxHttp);
-    evhttp_cancel_request(this->request);
+    this->isCancel = true;
 }
 
 static cxString cxHttpGetUri(cxAny http)
@@ -130,6 +135,7 @@ static cxBool cxHttpInit(cxAny http,cxString url,cxBool chunked)
     CX_RETAIN_SWAP(this->URL, url);
     this->uri = evhttp_uri_parse(cxStringBody(url));
     this->request = evhttp_request_new(cxHttpRequestCompleted, this);
+    CX_ASSERT(this->request != NULL, "create http request failed");
     if(chunked){
         evhttp_request_set_chunked_cb(this->request, cxHttpRequestChunked);
     }
