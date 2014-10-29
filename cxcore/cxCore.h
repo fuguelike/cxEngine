@@ -148,7 +148,8 @@ typedef double          cxDouble;
 
 typedef const char *    cxConstType;
 typedef const char *    cxConstChars;
-typedef char *          cxChars;
+typedef cxChar *        cxChars;
+typedef cxUChar *       cxUChars;
 
 #define CX_ENGINE_VERSION               201
 
@@ -484,6 +485,8 @@ void cxUtilError(cxConstChars file, cxInt line, cxConstChars format, ...);
 void cxUtilWarn(cxConstChars file, cxInt line, cxConstChars format, ...);
 
 void cxUtilAssert(cxConstChars file, cxInt line, cxConstChars format, ...);
+
+cxDouble cxTimestamp();
 
 //base type define
 CX_OBJECT_BEG(cxObject,cxObject)

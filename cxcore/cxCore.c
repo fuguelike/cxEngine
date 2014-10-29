@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
+#include <sys/time.h>
 #include "cxCore.h"
 #include "cxType.h"
 #include "cxMemPool.h"
@@ -206,6 +207,13 @@ void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny 
     type->Create = create;
     autoType(type);
     CX_RELEASE(type);
+}
+
+cxDouble cxTimestamp()
+{
+    struct timeval val = {0};
+    gettimeofday(&val, NULL);
+    return val.tv_sec + (cxDouble)val.tv_usec/(cxDouble)1000000.0;
 }
 
 static cxHash groups = NULL;

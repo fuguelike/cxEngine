@@ -20,6 +20,23 @@ JniMethodInfo documentPath      = {.isGet=false};
 JniMethodInfo engineLocalized   = {.isGet=false};
 JniMethodInfo assertManager     = {.isGet=false};
 JniMethodInfo engineRecvJson    = {.isGet=false};
+JniMethodInfo engineUUID        = {.isGet=false};
+
+//cxEngineUUID
+cxString cxUUID()
+{
+    CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
+    CX_GET_METHOD(engineUUID,"cxEngineUUID","()Ljava/lang/String;");
+    jstring uuid = (*javaENV)->CallStaticObjectMethod(M(engineUUID));
+    if(uuid == NULL){
+        return NULL;
+    }
+    cxString str = jstringTocxString(uuid);
+    if(uuid != NULL){
+        (*javaENV)->DeleteLocalRef(javaENV,uuid);
+    }
+    return cxMD5(str);
+}
 
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,const cxTextAttr *attr)
 {

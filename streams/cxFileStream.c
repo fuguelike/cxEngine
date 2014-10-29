@@ -22,7 +22,6 @@ static cxBool cxFileStreamOpen(cxAny ps)
         this->fd = fopen(path, "wb");
     }
     if(this->fd == NULL){
-        CX_ERROR("open file %s stream failed",path);
         return false;
     }
     struct stat stat={0};
@@ -78,7 +77,6 @@ static cxString cxFileStreamAllBytes(cxAny ps)
         cxStreamOpen(this);
     }
     if(!this->canRead){
-        CX_ERROR("file stream can't read");
         return NULL;
     }
     cxStreamSeek(this,0,SEEK_END);

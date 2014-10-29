@@ -60,10 +60,9 @@ void cxEventBaseDestroy()
     instance = NULL;
 }
 
-static void cxEventUpdateArrive(cxAny base)
+static void cxEventUpdate(cxAny base)
 {
-    cxEventBase this = instance;
-    CX_RETURN(this == NULL);
+    CX_ASSERT_THIS(base, cxEventBase);
     event_base_loop(this->base, EVLOOP_NONBLOCK);
 }
 
@@ -75,11 +74,12 @@ CX_INIT(cxEventBase, cxObject)
 {
     this->base = event_base_new();
     this->conns = CX_ALLOC(cxHash);
-    cxTimer timer = cxEngineTimer(CX_EVLOOP_FREQ, CX_FOREVER);
-    CX_ADD(cxTimer, timer, onArrive, cxEventUpdateArrive);
+    cxEngine engine = cxEngineInstance();
+    CX_CON(cxEngine, engine, onUpdate, this, cxEventUpdate);
 }
 CX_FREE(cxEventBase, cxObject)
 {
+    CX_SLOT_RELEASE(this->onUpdate);
     CX_RELEASE(this->conns);
     event_base_loopbreak(this->base);
     event_base_free(this->base);

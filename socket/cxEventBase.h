@@ -21,6 +21,7 @@ CX_C_BEGIN
 CX_DEF(cxEventBase, cxObject)
     cxHash conns;   //host:port key
     struct event_base *base;
+    CX_SLOT_ALLOC(onUpdate);
 CX_END(cxEventBase, cxObject)
 
 //type=SOCK_DGRAM udp,or SOCK_STREAM tcp

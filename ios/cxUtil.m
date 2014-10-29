@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <uuid/uuid.h>
 #import <UIKit/UIKit.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
@@ -32,6 +33,13 @@ cxArray cxFontNames()
         }
     }
     return list;
+}
+
+cxString cxUUID()
+{
+    uuid_t uuid;
+    uuid_generate(uuid);
+    return cxMD5(cxStringBinary(uuid, sizeof(uuid_t)));
 }
 
 static CGSize cxCalculateStringSize(NSString *str, id font, CGSize constrainSize, NSMutableDictionary *attrs)
@@ -151,15 +159,6 @@ cxInt cxAssertsFD(cxConstChars file,cxInt *off,cxInt *length)
     cxString path = cxAssetsPath(file);
     CX_ASSERT(path != NULL, "get file %s path failed",file);
     return cxFileFD(cxStringBody(path), off, length);
-}
-
-cxBool cxWriteFile(cxString file,cxString data)
-{
-    FILE *fd = fopen(cxStringBody(file), "wb");
-    CX_RETURN(fd == NULL, -1);
-    cxInt bytes = (cxInt)fwrite(cxStringBody(data), cxStringLength(data), 1, fd);
-    fclose(fd);
-    return bytes > 0;
 }
 
 void cxEngineSendJson(cxString json)

@@ -236,15 +236,43 @@ cxBoxTex2f cxJsonBoxTex2f(cxJson json,cxConstChars key,cxBoxTex2f dv);
 cxTex2f cxJsonTex2f(cxJson json,cxConstChars key,cxTex2f dv);
 //
 
-cxAny cxJsonDecode(cxJson json);
+cxJson cxJsonCreateObject();
+
+void cxJsonSetConstChars(cxJson json,cxConstChars key,cxConstChars v);
+
+void cxJsonSetString(cxJson json,cxConstChars key,cxString v);
+
+void cxJsonSetInt(cxJson json,cxConstChars key,cxInt v);
+
+void cxJsonSetDouble(cxJson json,cxConstChars key,cxDouble v);
+
+void cxJsonSetBool(cxJson json,cxConstChars key,cxBool v);
+
+cxJson cxJsonCreateArray();
+
+void cxJsonAddConstChars(cxJson json,cxConstChars v);
+
+void cxJsonAddString(cxJson json,cxString v);
+
+void cxJsonAddInt(cxJson json,cxInt v);
+
+void cxJsonAddDouble(cxJson json,cxDouble v);
+
+void cxJsonAddBool(cxJson json,cxBool v);
 
 //
+
+cxAny cxJsonDecode(cxJson json);
 
 void cxJsonSetAESKey(cxString v);
 
 cxString cxJsonAESEncode(cxJson json);
 
 cxJson cxJsonAESDecode(cxString data);
+
+cxString cxJsonAESEncodeWithKey(cxJson json,cxString key);
+
+cxJson cxJsonAESDecodeWithKey(cxString data,cxString key);
 
 CX_C_END
 

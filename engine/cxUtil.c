@@ -7,7 +7,6 @@
 //
 
 #include <evhttp.h>
-#include <sys/time.h>
 #include <ctype.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -17,6 +16,15 @@
 #include <engine/cxEngine.h>
 #include <sys/stat.h>
 #include "cxUtil.h"
+
+cxBool cxWriteFile(cxString file,cxString data)
+{
+    FILE *fd = fopen(cxStringBody(file), "wb");
+    CX_RETURN(fd == NULL, false);
+    cxInt bytes = (cxInt)fwrite(cxStringBody(data), 1, cxStringLength(data), fd);
+    fclose(fd);
+    return bytes == cxStringLength(data);
+}
 
 cxInt cxFileFD(cxConstChars file,cxInt *off,cxInt *length)
 {
@@ -131,9 +139,3 @@ cxAudioFileType cxAudioGetType(cxConstChars file)
     return cxAudioFileTypeNone;
 }
 
-cxDouble cxTimestamp()
-{
-    struct timeval val = {0};
-    gettimeofday(&val, NULL);
-    return val.tv_sec + (cxDouble)val.tv_usec/(cxDouble)1000000.0;
-}

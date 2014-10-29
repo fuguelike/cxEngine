@@ -5,6 +5,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.UUID;
+
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -60,6 +62,11 @@ public class EngineGLView extends GLSurfaceView {
     public static native void cxEnginePause();
     public static native void cxEngineResume();
     public static native void cxEngineMemory();
+    
+    public static String cxEngineUUID(){
+    	UUID uuid = UUID.randomUUID();
+    	return uuid.toString();
+    }
     
     //completed exit android app
     public static void cxEngineTerminate() {

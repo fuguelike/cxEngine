@@ -21,6 +21,8 @@ typedef struct {
 
 typedef void (*cxCopyFileFunc)(cxConstChars file,cxProgress *progress,cxAny udata);
 
+cxString cxUUID();
+
 cxArray cxFontNames();
 
 cxUInt cxHexToUInt(cxConstChars bs);
@@ -50,8 +52,6 @@ cxBool cxAssetsExists(cxConstChars file);
 cxBool cxDocumentExists(cxConstChars file);
 
 cxBool cxFileExists(cxConstChars file);
-
-cxDouble cxTimestamp();
 
 cxString cxLocalizedLang();
 

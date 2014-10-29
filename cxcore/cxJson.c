@@ -11,7 +11,7 @@
 #include "cxHash.h"
 #include "cxType.h"
 
-static cxString key = NULL;
+static cxString jsonKey = NULL;
 static json_t *global = NULL;
 static cxJsonReaderFunc cxJsonReader = NULL;
 
@@ -993,10 +993,20 @@ cxAny cxJsonDecode(cxJson json)
 
 void cxJsonSetAESKey(cxString v)
 {
-    CX_RETAIN_SWAP(key, v);
+    CX_RETAIN_SWAP(jsonKey, v);
 }
 
 cxString cxJsonAESEncode(cxJson json)
+{
+    return cxJsonAESEncodeWithKey(json, jsonKey);
+}
+
+cxJson cxJsonAESDecode(cxString data)
+{
+    return cxJsonAESDecodeWithKey(data, jsonKey);
+}
+
+cxString cxJsonAESEncodeWithKey(cxJson json,cxString key)
 {
     CX_ASSERT(key != NULL, "cxJson not set key");
     cxString data = cxJsonDump(json);
@@ -1007,7 +1017,7 @@ cxString cxJsonAESEncode(cxJson json)
     return cxAESEncode(data, key);
 }
 
-cxJson cxJsonAESDecode(cxString data)
+cxJson cxJsonAESDecodeWithKey(cxString data,cxString key)
 {
     CX_ASSERT(key != NULL, "cxJson not set key");
     cxString json = cxAESDecode(data, key);
@@ -1016,6 +1026,80 @@ cxJson cxJsonAESDecode(cxString data)
         return NULL;
     }
     return cxJsonCreate(json);
+}
+
+cxJson cxJsonCreateObject()
+{
+    cxJson this = CX_CREATE(cxJson);
+    this->json = json_object();
+    return this;
+}
+
+void cxJsonSetConstChars(cxJson json,cxConstChars key,cxConstChars v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsObject(json), "json error");
+    json_object_set_new(CX_JSON_PTR(json), key, json_string(v));
+}
+
+void cxJsonSetString(cxJson json,cxConstChars key,cxString v)
+{
+    CX_ASSERT(cxStringOK(v), "string error");
+    cxJsonSetConstChars(json, key, cxStringBody(v));
+}
+
+void cxJsonSetInt(cxJson json,cxConstChars key,cxInt v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsObject(json), "json error");
+    json_object_set(CX_JSON_PTR(json), key, json_integer(v));
+}
+
+void cxJsonSetDouble(cxJson json,cxConstChars key,cxDouble v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsObject(json), "json error");
+    json_object_set(CX_JSON_PTR(json), key, json_real(v));
+}
+
+void cxJsonSetBool(cxJson json,cxConstChars key,cxBool v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsObject(json), "json error");
+    json_object_set(CX_JSON_PTR(json), key, json_boolean(v));
+}
+
+cxJson cxJsonCreateArray()
+{
+    cxJson this = CX_CREATE(cxJson);
+    this->json = json_array();
+    return this;
+}
+
+void cxJsonAddConstChars(cxJson json,cxConstChars v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
+    json_array_append(CX_JSON_PTR(json), json_string(v));
+}
+
+void cxJsonAddString(cxJson json,cxString v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
+    cxJsonAddConstChars(json, cxStringBody(v));
+}
+
+void cxJsonAddInt(cxJson json,cxInt v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
+    json_array_append(CX_JSON_PTR(json), json_integer(v));
+}
+
+void cxJsonAddDouble(cxJson json,cxDouble v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
+    json_array_append(CX_JSON_PTR(json), json_real(v));
+}
+
+void cxJsonAddBool(cxJson json,cxBool v)
+{
+    CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
+    json_array_append(CX_JSON_PTR(json), json_boolean(v));
 }
 
 
