@@ -194,6 +194,8 @@
 		831E664019EFA9D200FCFD85 /* cxSprites.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661819EFA9D200FCFD85 /* cxSprites.c */; };
 		831E664119EFA9D200FCFD85 /* cxTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661A19EFA9D200FCFD85 /* cxTable.c */; };
 		831E664219EFA9D200FCFD85 /* cxWindow.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661C19EFA9D200FCFD85 /* cxWindow.c */; };
+		83B1EAD51A01DE520089B374 /* lzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B1EAD31A01DE520089B374 /* lzma.c */; };
+		83B1EAD81A01FE3F0089B374 /* cxLzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B1EAD61A01FE3F0089B374 /* cxLzma.c */; };
 		83CA51A919F3A6DD002119B0 /* cxShaderTTF.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */; };
 /* End PBXBuildFile section */
 
@@ -577,6 +579,10 @@
 		831E661B19EFA9D200FCFD85 /* cxTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTable.h; sourceTree = "<group>"; };
 		831E661C19EFA9D200FCFD85 /* cxWindow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxWindow.c; sourceTree = "<group>"; };
 		831E661D19EFA9D200FCFD85 /* cxWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxWindow.h; sourceTree = "<group>"; };
+		83B1EAD31A01DE520089B374 /* lzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lzma.c; sourceTree = "<group>"; };
+		83B1EAD41A01DE520089B374 /* lzma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzma.h; sourceTree = "<group>"; };
+		83B1EAD61A01FE3F0089B374 /* cxLzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLzma.c; sourceTree = "<group>"; };
+		83B1EAD71A01FE3F0089B374 /* cxLzma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLzma.h; sourceTree = "<group>"; };
 		83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderTTF.c; sourceTree = "<group>"; };
 		83CA51A819F3A6DD002119B0 /* cxShaderTTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderTTF.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1017,6 +1023,10 @@
 				831E65D419EFA9D200FCFD85 /* LzmaLib.c */,
 				831E65D519EFA9D200FCFD85 /* LzmaLib.h */,
 				831E65D619EFA9D200FCFD85 /* Types.h */,
+				83B1EAD31A01DE520089B374 /* lzma.c */,
+				83B1EAD41A01DE520089B374 /* lzma.h */,
+				83B1EAD61A01FE3F0089B374 /* cxLzma.c */,
+				83B1EAD71A01FE3F0089B374 /* cxLzma.h */,
 			);
 			path = lzma;
 			sourceTree = SOURCE_ROOT;
@@ -1253,6 +1263,7 @@
 				831E655319EFA9B000FCFD85 /* cxRunner.c in Sources */,
 				831E662419EFA9D200FCFD85 /* cxShaderDefault.c in Sources */,
 				831E65BD19EFA9B000FCFD85 /* utility.c in Sources */,
+				83B1EAD81A01FE3F0089B374 /* cxLzma.c in Sources */,
 				831E655019EFA9B000FCFD85 /* cxParabola.c in Sources */,
 				831E656719EFA9B000FCFD85 /* cpGrooveJoint.c in Sources */,
 				831E657B19EFA9B000FCFD85 /* cpSpaceStep.c in Sources */,
@@ -1341,6 +1352,7 @@
 				831E65A519EFA9B000FCFD85 /* cxPlayer.m in Sources */,
 				831E655F19EFA9B000FCFD85 /* aes_ofb.c in Sources */,
 				831E65A819EFA9B000FCFD85 /* dump.c in Sources */,
+				83B1EAD51A01DE520089B374 /* lzma.c in Sources */,
 				831E661F19EFA9D200FCFD85 /* LzmaDec.c in Sources */,
 				831E65BA19EFA9B000FCFD85 /* quaternion.c in Sources */,
 				831046F319F21B3E0086D91A /* SkeletonData.c in Sources */,

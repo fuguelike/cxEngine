@@ -14,7 +14,9 @@ LOCAL_SRC_FILES += \
     lzma/LzFind.c \
     lzma/LzmaDec.c \
     lzma/LzmaEnc.c \
-    lzma/LzmaLib.c
+    lzma/LzmaLib.c \
+    lzma/lzma.c \
+    lzma/cxLzma.c
 
 LOCAL_SRC_FILES += \
     chipmunk/chipmunk.c \

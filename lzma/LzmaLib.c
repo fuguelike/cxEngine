@@ -2,21 +2,18 @@
 2008-08-05
 Igor Pavlov
 Public domain */
-
-#include <cxcore/cxCore.h>
+#include <stdlib.h>
 #include "LzmaEnc.h"
 #include "LzmaDec.h"
 #include "LzmaLib.h"
 
 static void *SzAlloc(void *p, size_t size)
 {
-    p = p;
-    return allocator->malloc(size);
+    return malloc(size);
 }
 static void SzFree(void *p, void *address)
 {
-    p = p;
-    allocator->free(address);
+    free(address);
 }
 static ISzAlloc g_Alloc = { SzAlloc, SzFree };
 

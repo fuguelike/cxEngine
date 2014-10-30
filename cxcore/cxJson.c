@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <lzma/cxLzma.h>
 #include "cxNumber.h"
 #include "cxJson.h"
 #include "cxHash.h"
@@ -1014,6 +1015,11 @@ cxString cxJsonAESEncodeWithKey(cxJson json,cxString key)
         CX_ERROR("json dump error");
         return NULL;
     }
+    data = cxLzmaCompress(data);
+    if(data == NULL){
+        CX_ERROR("compress json failed");
+        return NULL;
+    }
     return cxAESEncode(data, key);
 }
 
@@ -1028,6 +1034,11 @@ cxJson cxJsonAESDecodeWithKey(cxString data,cxString key)
     cxString json = cxAESDecode(data, key);
     if(json == NULL){
         CX_ERROR("aes decode error");
+        return NULL;
+    }
+    json = cxLzmaUncompress(json);
+    if(json == NULL){
+        CX_ERROR("json uncompress failed");
         return NULL;
     }
     return cxJsonCreate(json);
