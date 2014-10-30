@@ -35,16 +35,10 @@ CX_DEF(cxUDP, cxObject)
     CX_EVENT_ALLOC(onData);
 CX_END(cxUDP, cxObject)
 
-CX_INLINE cxAny cxUDPGetBuffer(cxAny pthis)
+CX_INLINE cxString cxUDPGetData(cxAny pthis)
 {
     CX_ASSERT_THIS(pthis, cxUDP);
-    return this->buffer;
-}
-
-CX_INLINE cxInt cxUDPGetBytes(cxAny pthis)
-{
-    CX_ASSERT_THIS(pthis, cxUDP);
-    return this->bytes;
+    return cxStringBinary(this->buffer, this->bytes);
 }
 
 cxUDP cxUDPCreate(cxConstChars host,cxInt port);

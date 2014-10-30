@@ -13,9 +13,10 @@
 
 CX_C_BEGIN
 
-typedef void (*cxLoadingFunc)(cxAny object);
+typedef cxBool (*cxLoadingFunc)(cxAny object);
 
 CX_DEF(cxLoading, cxView)
+    CX_FIELD_DEF(cxBool Success);
     cxTimer stepTimer;
     CX_FIELD_DEF(cxInt Index);
     CX_FIELD_DEF(cxInt Step);
@@ -25,6 +26,7 @@ CX_DEF(cxLoading, cxView)
     cxArray items;
 CX_END(cxLoading, cxView)
 
+CX_FIELD_GET(cxLoading, cxBool, Success);
 CX_FIELD_GET(cxLoading, cxInt, Index);
 CX_FIELD_SET(cxLoading, cxInt, Step);
 

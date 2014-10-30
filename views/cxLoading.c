@@ -40,8 +40,15 @@ static void cxLoadingTimerArrive(cxAny sender)
     if(this->Index >= 0 && this->Index < cxArrayLength(this->items)){
         item = cxArrayAtIndex(this->items, this->Index);
     }
+    cxBool ret = true;
     if(item != NULL && item->func != NULL){
-        item->func(this);
+        ret = item->func(this);
+    }
+    //break init
+    if(!ret){
+        this->Success = false;
+        cxActionStop(this->stepTimer);
+        return;
     }
     //
     this->Index ++;
@@ -78,6 +85,7 @@ CX_TYPE(cxLoading, cxView)
 }
 CX_INIT(cxLoading, cxView)
 {
+    this->Success = true;
     this->Step = 1;
     CX_SET(cxView, this, Touch, cxLoadingTouch);
     CX_SET(cxView, this, Key, cxLoadingKey);
