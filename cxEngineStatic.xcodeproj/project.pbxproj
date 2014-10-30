@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		830ADF941A0250EC00040306 /* cxTCP.c in Sources */ = {isa = PBXBuildFile; fileRef = 830ADF921A0250EC00040306 /* cxTCP.c */; };
 		831046E019F21B3E0086D91A /* Animation.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046AB19F21B3D0086D91A /* Animation.c */; };
 		831046E119F21B3E0086D91A /* AnimationState.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046AD19F21B3D0086D91A /* AnimationState.c */; };
 		831046E219F21B3E0086D91A /* AnimationStateData.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046AF19F21B3D0086D91A /* AnimationStateData.c */; };
@@ -212,6 +213,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		830ADF921A0250EC00040306 /* cxTCP.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTCP.c; sourceTree = "<group>"; };
+		830ADF931A0250EC00040306 /* cxTCP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTCP.h; sourceTree = "<group>"; };
 		831046AB19F21B3D0086D91A /* Animation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = Animation.c; sourceTree = "<group>"; };
 		831046AC19F21B3D0086D91A /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animation.h; sourceTree = "<group>"; };
 		831046AD19F21B3D0086D91A /* AnimationState.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = AnimationState.c; sourceTree = "<group>"; };
@@ -1061,6 +1064,8 @@
 				831E65E819EFA9D200FCFD85 /* cxHttpConn.h */,
 				831E65E919EFA9D200FCFD85 /* cxUDP.c */,
 				831E65EA19EFA9D200FCFD85 /* cxUDP.h */,
+				830ADF921A0250EC00040306 /* cxTCP.c */,
+				830ADF931A0250EC00040306 /* cxTCP.h */,
 			);
 			path = socket;
 			sourceTree = SOURCE_ROOT;
@@ -1282,6 +1287,7 @@
 				831E663F19EFA9D200FCFD85 /* cxSprite.c in Sources */,
 				831046F919F21B3E0086D91A /* spEvent.c in Sources */,
 				831E656019EFA9B000FCFD85 /* cxAStar.c in Sources */,
+				830ADF941A0250EC00040306 /* cxTCP.c in Sources */,
 				831E654A19EFA9B000FCFD85 /* cxCurve.c in Sources */,
 				831046E619F21B3E0086D91A /* AttachmentLoader.c in Sources */,
 				831E65B219EFA9B000FCFD85 /* value.c in Sources */,

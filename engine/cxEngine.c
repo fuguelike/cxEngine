@@ -61,6 +61,7 @@
 #include <actions/cxSkeleton.h>
 
 #include <socket/cxUDP.h>
+#include <socket/cxTCP.h>
 #include <socket/cxHttp.h>
 #include <socket/cxHttpConn.h>
 #include <socket/cxEventBase.h>
@@ -171,6 +172,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxSkeleton);
     //scoket
     CX_TYPE_REG(cxUDP);
+    CX_TYPE_REG(cxTCP);
     CX_TYPE_REG(cxEventBase);
     CX_TYPE_REG(cxHttpConn);
     CX_TYPE_REG(cxHttp);
