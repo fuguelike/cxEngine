@@ -34,6 +34,7 @@
     [glView setMultipleTouchEnabled:YES];
     self.view = glView;
     [glView release];
+    [glView startMainLoop];
 }
 
 - (NSUInteger)supportedInterfaceOrientations
@@ -58,6 +59,8 @@
 
 -(void)dealloc
 {
+    [self.view release];
+    self.view = nil;
     [super dealloc];
 }
 

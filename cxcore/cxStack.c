@@ -39,6 +39,12 @@ CX_FREE(cxStack, cxObject)
 }
 CX_TERM(cxStack, cxObject)
 
+void cxStackClear(cxAny pstack)
+{
+    CX_ASSERT_THIS(pstack, cxStack);
+    cxArrayClear(this->array);
+}
+
 void cxStackPush(cxAny pstack,cxAny any)
 {
     CX_ASSERT_THIS(pstack, cxStack);

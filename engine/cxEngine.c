@@ -142,6 +142,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxWindow);
     CX_TYPE_REG(cxClipping);
     CX_TYPE_REG(cxLoading);
+    CX_TYPE_REG(cxLoadingItem);
     CX_TYPE_REG(cxPolygon);
     CX_TYPE_REG(cxAtlas);
     CX_TYPE_REG(cxButton);
@@ -185,10 +186,7 @@ void cxEngineStartup()
 #else
     CX_LOGGER("cxEngine Version: %d,Run Mode:RELEASE",CX_ENGINE_VERSION);
 #endif
-    //free prev instance
-    if(engineInstance != NULL){
-        cxEngineDestroy();
-    }
+    CX_ASSERT(engineInstance == NULL, "repeat init engine");
     cxGlobalInit();
     engineInstance = CX_ALLOC(cxEngine);
     //registe all type

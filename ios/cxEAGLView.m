@@ -11,8 +11,6 @@
 #import "cxEAGLView.h"
 #import <regex.h>
 
-cxEAGLView *instance = nil;
-
 @implementation cxEAGLView
 
 +(Class)layerClass
@@ -72,7 +70,6 @@ cxEAGLView *instance = nil;
         CX_ERROR("init gl frame error");
         return nil;
     }
-    instance = self;
     CX_ASSERT(self != nil, "init view frame failed");
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
     eaglLayer.opaque = YES;
@@ -100,12 +97,6 @@ cxEAGLView *instance = nil;
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
     [displayLink retain];
     return self;
-}
-
-+(cxEAGLView *)glView
-{
-    cxAppDelegate *app = (cxAppDelegate *)[[UIApplication sharedApplication] delegate];
-    return [app.rootViewController getGLView];
 }
 
 -(void)resizeFromLayer:(CAEAGLLayer *)layer

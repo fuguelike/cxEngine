@@ -32,6 +32,13 @@ CX_FREE(cxWindow, cxView)
 }
 CX_TERM(cxWindow, cxView)
 
+void cxWindowClear()
+{
+    cxEngine engine = cxEngineInstance();
+    cxListClear(engine->Window->cxView.SubViews);
+    cxStackClear(engine->Window->views);
+}
+
 cxAny cxWindowTopView()
 {
     cxEngine engine = cxEngineInstance();

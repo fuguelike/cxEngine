@@ -10,14 +10,27 @@
 #define cxEngineIOS_cxLoading_h
 
 #include <engine/cxView.h>
+#include <actions/cxTimer.h>
 
 CX_C_BEGIN
 
-typedef cxBool (*cxLoadingFunc)(cxAny object);
+typedef enum {
+    cxLoadingResultFailed = 0,
+    cxLoadingResultSuccess,
+    cxLoadingResultWait
+}cxLoadingResult;
+
+typedef cxLoadingResult (*cxLoadingFunc)(cxAny object,cxAny item);
+
+CX_DEF(cxLoadingItem, cxObject)
+    cxLoadingFunc Running;
+CX_END(cxLoadingItem, cxObject)
 
 CX_DEF(cxLoading, cxView)
     CX_FIELD_DEF(cxBool Success);
     cxTimer stepTimer;
+    CX_FIELD_DEF(cxInt Count);
+    CX_FIELD_DEF(cxFloat Time);
     CX_FIELD_DEF(cxInt Index);
     CX_FIELD_DEF(cxInt Step);
     CX_METHOD_DEF(void, onExit, cxAny);
@@ -26,9 +39,11 @@ CX_DEF(cxLoading, cxView)
     cxArray items;
 CX_END(cxLoading, cxView)
 
+CX_FIELD_GET(cxLoading, cxInt, Count);
+CX_FIELD_GET(cxLoading, cxFloat, Time);
 CX_FIELD_GET(cxLoading, cxBool, Success);
 CX_FIELD_GET(cxLoading, cxInt, Index);
-CX_FIELD_SET(cxLoading, cxInt, Step);
+CX_FIELD_GET(cxLoading, cxInt, Step);
 
 CX_INLINE cxFloat cxLoadingGetProgress(cxAny pthis)
 {
@@ -38,7 +53,13 @@ CX_INLINE cxFloat cxLoadingGetProgress(cxAny pthis)
     return i / a;
 }
 
-void cxLoadingAppend(cxAny pview,cxLoadingFunc func);
+cxLoadingItem cxLoadingCurrentItem(cxAny pview);
+
+void cxLoadingAppend(cxAny pview,cxLoadingFunc running);
+
+void cxLoadingAppendItem(cxAny pview,cxAny pitem);
+
+#define cxLoadingAppendType(_o_,_t_)  cxLoadingAppendItem(_o_,CX_CREATE(_t_))
 
 void cxLoadingStop(cxAny pview);
 

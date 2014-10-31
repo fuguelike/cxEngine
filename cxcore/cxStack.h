@@ -17,6 +17,8 @@ CX_DEF(cxStack, cxObject)
     cxArray array;
 CX_END(cxStack, cxObject)
 
+void cxStackClear(cxAny pstack);
+
 void cxStackPush(cxAny pstack,cxAny any);
 
 cxAny cxStackTop(cxAny pstack);

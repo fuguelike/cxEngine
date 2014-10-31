@@ -1069,7 +1069,7 @@ void cxJsonSetString(cxJson json,cxConstChars key,cxString v)
     cxJsonSetConstChars(json, key, cxStringBody(v));
 }
 
-void cxJsonSetInt(cxJson json,cxConstChars key,cxInt v)
+void cxJsonSetInt(cxJson json,cxConstChars key,cxLong v)
 {
     CX_ASSERT(json != NULL && cxJsonIsObject(json), "json error");
     json_object_set(CX_JSON_PTR(json), key, json_integer(v));
@@ -1106,7 +1106,7 @@ void cxJsonAppendString(cxJson json,cxString v)
     cxJsonAppendConstChars(json, cxStringBody(v));
 }
 
-void cxJsonAppendInt(cxJson json,cxInt v)
+void cxJsonAppendInt(cxJson json,cxLong v)
 {
     CX_ASSERT(json != NULL && cxJsonIsArray(json), "json error");
     json_array_append_new(CX_JSON_PTR(json), json_integer(v));

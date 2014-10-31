@@ -13,18 +13,16 @@
 
 @implementation cxAppDelegate
 
-static BOOL cxDisableDocumentBackup()
+static void cxDisableDocumentBackup()
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *docPath = [paths objectAtIndex:0];
-    u_int8_t attrValue = 0;
-    const char *path = [docPath UTF8String];
-    const char *name = "com.apple.MobileBackup";
-    if(getxattr(path, name, &attrValue, sizeof(attrValue), 0, 0) && attrValue == 1){
-        return true;
+    NSURL *url = [NSURL fileURLWithPath:docPath];
+    NSError *error = NULL;
+    [url setResourceValue:[NSNumber numberWithBool:YES] forKey:NSURLIsExcludedFromBackupKey error:&error];
+    if(error != NULL){
+        NSLog(@"%@",error);
     }
-    attrValue = 1;
-    return setxattr(path, name, &attrValue, sizeof(attrValue), 0, 0);
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -35,8 +33,6 @@ static BOOL cxDisableDocumentBackup()
     self.rootViewController = [[[cxGLViewController alloc] init] autorelease];
     [self.window setRootViewController:self.rootViewController];
     [self.window makeKeyAndVisible];
-    //startup draw
-    [[self.rootViewController getGLView] startMainLoop];
     return YES;
 }
 

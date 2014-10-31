@@ -244,7 +244,7 @@ void cxJsonSetString(cxJson json,cxConstChars key,cxString v);
 
 void cxJsonSetJson(cxJson json,cxConstChars key,cxJson v);
 
-void cxJsonSetInt(cxJson json,cxConstChars key,cxInt v);
+void cxJsonSetInt(cxJson json,cxConstChars key,cxLong v);
 
 void cxJsonSetDouble(cxJson json,cxConstChars key,cxDouble v);
 
@@ -256,7 +256,7 @@ void cxJsonAppendConstChars(cxJson json,cxConstChars v);
 
 void cxJsonAppendString(cxJson json,cxString v);
 
-void cxJsonAppendInt(cxJson json,cxInt v);
+void cxJsonAppendInt(cxJson json,cxLong v);
 
 void cxJsonAppendDouble(cxJson json,cxDouble v);
 

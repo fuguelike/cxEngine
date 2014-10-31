@@ -20,6 +20,8 @@ CX_END(cxWindow, cxView)
 
 cxAny cxWindowTopView();
 
+void cxWindowClear();
+
 void cxWindowPushView(cxAny pview);
 
 void cxWindowPopView();

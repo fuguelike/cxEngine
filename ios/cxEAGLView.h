@@ -31,9 +31,5 @@
 
 -(void)freeMainLoop;
 
-+(cxEAGLView *)glView;
-
 -(id)initWithFrame:(CGRect)frame;
 @end
-
-extern cxEAGLView *instance;

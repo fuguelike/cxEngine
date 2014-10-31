@@ -14,6 +14,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AudioToolbox/ExtendedAudioFile.h>
 #include <engine/cxEngine.h>
+#import <ios/cxAppDelegate.h>
 
 void cxEngineTerminate()
 {
