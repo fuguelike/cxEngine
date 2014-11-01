@@ -176,7 +176,8 @@ LOCAL_SRC_FILES += \
     socket/cxEventBase.c \
     socket/cxHttp.c \
     socket/cxHttpConn.c \
-    socket/cxUDP.c
+    socket/cxUDP.c \
+    socket/cxTCP.c
 
 LOCAL_SRC_FILES += \
     engine/cxAction.c \
@@ -193,7 +194,8 @@ LOCAL_SRC_FILES += \
 	engine/cxInput.c \
 	engine/cxGroup.c \
     engine/cxSpatial.c \
-    engine/cxValue.c
+    engine/cxValue.c \
+    engine/cxAsync.c
     
 LOCAL_SRC_FILES += \
     algorithm/cxTile.c \

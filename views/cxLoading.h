@@ -10,37 +10,10 @@
 #define cxEngineIOS_cxLoading_h
 
 #include <engine/cxView.h>
+#include <engine/cxAsync.h>
 #include <actions/cxTimer.h>
 
 CX_C_BEGIN
-
-typedef enum {
-    cxLoadingResultFailed = 0,
-    cxLoadingResultSuccess,
-    cxLoadingResultWait
-}cxLoadingResult;
-
-typedef cxLoadingResult (*cxLoadingFunc)(cxAny object,cxAny item);
-
-CX_DEF(cxLoadingItem, cxObject)
-    cxLoadingFunc Running;
-    CX_FIELD_DEF(cxInt Count);
-    CX_FIELD_DEF(cxFloat Time);
-    CX_FIELD_DEF(cxAny View);
-CX_END(cxLoadingItem, cxObject)
-
-CX_FIELD_GET(cxLoadingItem, cxInt, Count);
-CX_FIELD_GET(cxLoadingItem, cxFloat, Time);
-CX_FIELD_IMP(cxLoadingItem, cxAny, View);
-
-cxLoadingResult cxLoadingItemDrive(cxAny pview, cxAny pitem);
-
-CX_INLINE void cxLoadingItemReset(cxAny pthis)
-{
-    CX_ASSERT_THIS(pthis, cxLoadingItem);
-    this->Count = 0;
-    this->Time = 0;
-}
 
 CX_DEF(cxLoading, cxView)
     CX_FIELD_DEF(cxBool Success);
@@ -50,7 +23,7 @@ CX_DEF(cxLoading, cxView)
     CX_METHOD_DEF(void, onExit, cxAny);
     CX_METHOD_DEF(void, onStep, cxAny);
     CX_METHOD_DEF(void, onStart, cxAny);
-    cxArray items;
+    cxArray asyncs;
 CX_END(cxLoading, cxView)
 
 CX_FIELD_GET(cxLoading, cxBool, Success);
@@ -65,9 +38,9 @@ CX_INLINE cxFloat cxLoadingGetProgress(cxAny pthis)
     return i / a;
 }
 
-cxLoadingItem cxLoadingCurrentItem(cxAny pview);
+cxAsync cxLoadingCurrentItem(cxAny pview);
 
-void cxLoadingAppend(cxAny pview,cxLoadingFunc running);
+void cxLoadingAppend(cxAny pview,cxAsyncFunc running);
 
 void cxLoadingAppendItem(cxAny pview,cxAny pitem);
 

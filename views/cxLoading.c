@@ -10,33 +10,6 @@
 #include <actions/cxTimer.h>
 #include "cxLoading.h"
 
-CX_TYPE(cxLoadingItem, cxObject)
-{
-    //
-}
-CX_INIT(cxLoadingItem, cxObject)
-{
-    //
-}
-CX_FREE(cxLoadingItem, cxObject)
-{
-    
-}
-CX_TERM(cxLoadingItem, cxObject)
-
-cxLoadingResult cxLoadingItemDrive(cxAny pview, cxAny pitem)
-{
-    CX_ASSERT_THIS(pitem, cxLoadingItem);
-    cxLoadingItemSetView(this, pview);
-    cxLoadingResult ret = this->Running(pview,this);
-    //wait
-    if(ret == cxLoadingResultWait){
-        this->Count ++;
-        this->Time += cxEngineGetFrameDelta();
-    }
-    return ret;
-}
-
 static cxBool cxLoadingTouch(cxAny pview,const cxTouchItems *points)
 {
     return true;
@@ -47,12 +20,12 @@ static cxBool cxLoadingKey(cxAny pview,const cxKey *key)
     return true;
 }
 
-cxLoadingItem cxLoadingCurrentItem(cxAny pview)
+cxAsync cxLoadingCurrentItem(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxLoading);
-    cxLoadingItem item = NULL;
-    if(this->Index >= 0 && this->Index < cxArrayLength(this->items)){
-        item = cxArrayAtIndex(this->items, this->Index);
+    cxAsync item = NULL;
+    if(this->Index >= 0 && this->Index < cxArrayLength(this->asyncs)){
+        item = cxArrayAtIndex(this->asyncs, this->Index);
     }
     return item;
 }
@@ -61,20 +34,20 @@ static void cxLoadingTimerArrive(cxAny sender)
 {
     CX_ASSERT_VALUE(cxActionGetView(sender), cxLoading, this);
     //run step method
-    cxLoadingItem item =  cxLoadingCurrentItem(this);
+    cxAsync item =  cxLoadingCurrentItem(this);
     CX_ASSERT(item != NULL && item->Running != NULL, "item error");
-    cxLoadingResult ret = cxLoadingItemDrive(this, item);
+    cxAsyncState ret = cxAsyncDrive(this, item);
     //wait
-    if(ret == cxLoadingResultWait){
+    if(ret == cxAsyncStateWait){
         return;
     }
     //success
-    if(ret == cxLoadingResultSuccess){
+    if(ret == cxAsyncStateSuccess){
         this->Index ++;
         CX_METHOD_RUN(this->onStep, this);
     }
     //break init
-    if(ret == cxLoadingResultFailed){
+    if(ret == cxAsyncStateFailed){
         this->Success = false;
         cxActionStop(this->stepTimer);
     }
@@ -93,18 +66,18 @@ static void cxLoadingTimerExit(cxAny sender)
 void cxLoadingAppendItem(cxAny pview,cxAny pitem)
 {
     CX_ASSERT_THIS(pview, cxLoading);
-    CX_ASSERT_VALUE(pitem, cxLoadingItem, item);
+    CX_ASSERT_VALUE(pitem, cxAsync, item);
     CX_ASSERT(item->Running != NULL, "item not set running method");
-    cxArrayAppend(this->items, item);
+    cxArrayAppend(this->asyncs, item);
     this->Step ++;
 }
 
-void cxLoadingAppend(cxAny pview,cxLoadingFunc running)
+void cxLoadingAppend(cxAny pview,cxAsyncFunc running)
 {
     CX_ASSERT_THIS(pview, cxLoading);
-    cxLoadingItem item = CX_ALLOC(cxLoadingItem);
+    cxAsync item = CX_ALLOC(cxAsync);
     item->Running = running;
-    cxArrayAppend(this->items, item);
+    cxArrayAppend(this->asyncs, item);
     this->Step ++;
     CX_RELEASE(item);
 }
@@ -125,11 +98,11 @@ CX_INIT(cxLoading, cxView)
     this->Step = 0;
     CX_SET(cxView, this, Touch, cxLoadingTouch);
     CX_SET(cxView, this, Key, cxLoadingKey);
-    this->items = CX_ALLOC(cxArray);
+    this->asyncs = CX_ALLOC(cxArray);
 }
 CX_FREE(cxLoading, cxView)
 {
-    CX_RELEASE(this->items);
+    CX_RELEASE(this->asyncs);
 }
 CX_TERM(cxLoading, cxView)
 

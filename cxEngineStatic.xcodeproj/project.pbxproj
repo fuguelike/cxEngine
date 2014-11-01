@@ -198,6 +198,7 @@
 		83B1EAD51A01DE520089B374 /* lzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B1EAD31A01DE520089B374 /* lzma.c */; };
 		83B1EAD81A01FE3F0089B374 /* cxLzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B1EAD61A01FE3F0089B374 /* cxLzma.c */; };
 		83CA51A919F3A6DD002119B0 /* cxShaderTTF.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */; };
+		83E21E971A04C9AF000DCD15 /* cxAsync.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E21E951A04C9AF000DCD15 /* cxAsync.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -588,6 +589,8 @@
 		83B1EAD71A01FE3F0089B374 /* cxLzma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLzma.h; sourceTree = "<group>"; };
 		83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderTTF.c; sourceTree = "<group>"; };
 		83CA51A819F3A6DD002119B0 /* cxShaderTTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderTTF.h; sourceTree = "<group>"; };
+		83E21E951A04C9AF000DCD15 /* cxAsync.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAsync.c; sourceTree = "<group>"; };
+		83E21E961A04C9AF000DCD15 /* cxAsync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAsync.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -710,8 +713,6 @@
 		831E633819EFA9AF00FCFD85 /* actions */ = {
 			isa = PBXGroup;
 			children = (
-				831046FA19F21B970086D91A /* cxSkeleton.c */,
-				831046FB19F21B970086D91A /* cxSkeleton.h */,
 				831E633919EFA9AF00FCFD85 /* cxAnimate.c */,
 				831E633A19EFA9AF00FCFD85 /* cxAnimate.h */,
 				831E633B19EFA9AF00FCFD85 /* cxBezier.c */,
@@ -738,6 +739,8 @@
 				831E635019EFA9AF00FCFD85 /* cxRunner.h */,
 				831E635119EFA9AF00FCFD85 /* cxScale.c */,
 				831E635219EFA9AF00FCFD85 /* cxScale.h */,
+				831046FA19F21B970086D91A /* cxSkeleton.c */,
+				831046FB19F21B970086D91A /* cxSkeleton.h */,
 				831E635319EFA9AF00FCFD85 /* cxSpline.c */,
 				831E635419EFA9AF00FCFD85 /* cxSpline.h */,
 				831E635519EFA9AF00FCFD85 /* cxTimeLine.c */,
@@ -923,6 +926,8 @@
 				831E63E819EFA9AF00FCFD85 /* cxValue.h */,
 				831E63E919EFA9AF00FCFD85 /* cxView.c */,
 				831E63EA19EFA9AF00FCFD85 /* cxView.h */,
+				83E21E951A04C9AF000DCD15 /* cxAsync.c */,
+				83E21E961A04C9AF000DCD15 /* cxAsync.h */,
 			);
 			path = engine;
 			sourceTree = SOURCE_ROOT;
@@ -1279,6 +1284,7 @@
 				831E658F19EFA9B000FCFD85 /* cxStream.c in Sources */,
 				831E663019EFA9D200FCFD85 /* cxTextureJPG.c in Sources */,
 				831046E519F21B3E0086D91A /* Attachment.c in Sources */,
+				83E21E971A04C9AF000DCD15 /* cxAsync.c in Sources */,
 				831E662019EFA9D200FCFD85 /* LzmaEnc.c in Sources */,
 				831046E419F21B3E0086D91A /* AtlasAttachmentLoader.c in Sources */,
 				831E659D19EFA9B000FCFD85 /* cxSpatial.c in Sources */,

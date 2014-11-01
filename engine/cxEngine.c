@@ -142,7 +142,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxWindow);
     CX_TYPE_REG(cxClipping);
     CX_TYPE_REG(cxLoading);
-    CX_TYPE_REG(cxLoadingItem);
+    CX_TYPE_REG(cxAsync);
     CX_TYPE_REG(cxPolygon);
     CX_TYPE_REG(cxAtlas);
     CX_TYPE_REG(cxButton);
