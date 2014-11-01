@@ -19,7 +19,12 @@ CX_DEF(cxHttpConn, cxObject)
     cxString host;
     cxInt port;
     struct evhttp_connection *conn;
+    CX_EVENT_ALLOC(onClose);
 CX_END(cxHttpConn, cxObject)
+
+void cxHttpConnSetTimeout(cxAny pthis,cxInt s);
+
+void cxHttpConnSetRetries(cxAny pthis,cxInt s);
 
 cxHttpConn cxHttpConnectOpen(cxConstChars host,cxInt port);
 

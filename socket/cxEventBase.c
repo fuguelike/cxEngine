@@ -86,6 +86,7 @@ CX_FREE(cxEventBase, cxObject)
 }
 CX_TERM(cxEventBase, cxObject)
 
+//use one connection
 cxAny cxEventBaseHttpConnect(cxConstChars host,cxInt port)
 {
     cxEventBase this = cxEventBaseInstance();

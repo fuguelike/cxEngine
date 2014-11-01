@@ -24,13 +24,27 @@ typedef cxLoadingResult (*cxLoadingFunc)(cxAny object,cxAny item);
 
 CX_DEF(cxLoadingItem, cxObject)
     cxLoadingFunc Running;
+    CX_FIELD_DEF(cxInt Count);
+    CX_FIELD_DEF(cxFloat Time);
+    CX_FIELD_DEF(cxAny View);
 CX_END(cxLoadingItem, cxObject)
+
+CX_FIELD_GET(cxLoadingItem, cxInt, Count);
+CX_FIELD_GET(cxLoadingItem, cxFloat, Time);
+CX_FIELD_IMP(cxLoadingItem, cxAny, View);
+
+cxLoadingResult cxLoadingItemDrive(cxAny pview, cxAny pitem);
+
+CX_INLINE void cxLoadingItemReset(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxLoadingItem);
+    this->Count = 0;
+    this->Time = 0;
+}
 
 CX_DEF(cxLoading, cxView)
     CX_FIELD_DEF(cxBool Success);
     cxTimer stepTimer;
-    CX_FIELD_DEF(cxInt Count);
-    CX_FIELD_DEF(cxFloat Time);
     CX_FIELD_DEF(cxInt Index);
     CX_FIELD_DEF(cxInt Step);
     CX_METHOD_DEF(void, onExit, cxAny);
@@ -39,8 +53,6 @@ CX_DEF(cxLoading, cxView)
     cxArray items;
 CX_END(cxLoading, cxView)
 
-CX_FIELD_GET(cxLoading, cxInt, Count);
-CX_FIELD_GET(cxLoading, cxFloat, Time);
 CX_FIELD_GET(cxLoading, cxBool, Success);
 CX_FIELD_GET(cxLoading, cxInt, Index);
 CX_FIELD_GET(cxLoading, cxInt, Step);

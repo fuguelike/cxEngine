@@ -24,6 +24,19 @@ CX_FREE(cxLoadingItem, cxObject)
 }
 CX_TERM(cxLoadingItem, cxObject)
 
+cxLoadingResult cxLoadingItemDrive(cxAny pview, cxAny pitem)
+{
+    CX_ASSERT_THIS(pitem, cxLoadingItem);
+    cxLoadingItemSetView(this, pview);
+    cxLoadingResult ret = this->Running(pview,this);
+    //wait
+    if(ret == cxLoadingResultWait){
+        this->Count ++;
+        this->Time += cxEngineGetFrameDelta();
+    }
+    return ret;
+}
+
 static cxBool cxLoadingTouch(cxAny pview,const cxTouchItems *points)
 {
     return true;
@@ -50,11 +63,9 @@ static void cxLoadingTimerArrive(cxAny sender)
     //run step method
     cxLoadingItem item =  cxLoadingCurrentItem(this);
     CX_ASSERT(item != NULL && item->Running != NULL, "item error");
-    cxLoadingResult ret = item->Running(this,item);
+    cxLoadingResult ret = cxLoadingItemDrive(this, item);
     //wait
     if(ret == cxLoadingResultWait){
-        this->Count ++;
-        this->Time += cxEngineGetFrameDelta();
         return;
     }
     //success
@@ -70,8 +81,6 @@ static void cxLoadingTimerArrive(cxAny sender)
     if(this->Index == this->Step){
         cxActionStop(this->stepTimer);
     }
-    this->Count = 0;
-    this->Time = 0;
 }
 
 static void cxLoadingTimerExit(cxAny sender)
