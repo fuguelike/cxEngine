@@ -8,7 +8,7 @@
 
 #include <engine/cxEngine.h>
 #include <evutil.h>
-#include "cxEventBase.h"
+#include "cxLooper.h"
 #include "cxUDP.h"
 
 CX_TYPE(cxUDP, cxObject)
@@ -66,7 +66,7 @@ static void UDPRead(evutil_socket_t sockt, short which, void *arg)
 
 cxUDP cxUDPCreate(cxConstChars host,cxInt port)
 {
-    cxEventBase base = cxEventBaseInstance();
+    cxLooper looper = cxLooperInstance();
     cxUDP this = CX_CREATE(cxUDP);
     this->host = cxStringAllocChars(host);
     this->port = port;
@@ -77,7 +77,7 @@ cxUDP cxUDPCreate(cxConstChars host,cxInt port)
     }
     this->udpTo.sin_port = htons(port);
     this->udpTo.sin_addr.s_addr = inet_addr(host);
-    this->udpEvent = event_new(base->base, this->socket, EV_READ | EV_PERSIST, UDPRead, this);
+    this->udpEvent = event_new(looper->looper, this->socket, EV_READ | EV_PERSIST, UDPRead, this);
     if(event_add(this->udpEvent, NULL) != 0){
         CX_ERROR("add event error");
         return NULL;

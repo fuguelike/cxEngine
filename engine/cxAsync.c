@@ -27,8 +27,13 @@ cxAsyncState cxAsyncDrive(cxAny pview, cxAny pitem)
 {
     CX_ASSERT_THIS(pitem, cxAsync);
     cxAsyncSetView(this, pview);
-    this->Count ++;
-    this->Time += cxEngineGetFrameDelta();
-    CX_METHOD_RUN(this->Running,this);
+    if(this->State == cxAsyncStateInit){
+        this->State = cxAsyncStateWait;
+        CX_METHOD_RUN(this->Init,this);
+    }else{
+        this->Count ++;
+        this->Time += cxEngineGetFrameDelta();
+        CX_METHOD_RUN(this->Running,this);
+    }
     return this->State;
 }

@@ -26,6 +26,7 @@ CX_DEF(cxAsync, cxObject)
     CX_FIELD_DEF(cxInt Count);
     CX_FIELD_DEF(cxFloat Time);
     CX_FIELD_DEF(cxAny View);
+    CX_METHOD_DEF(void, Init, cxAny);
 CX_END(cxAsync, cxObject)
 
 CX_FIELD_GET(cxAsync, cxInt, Count);

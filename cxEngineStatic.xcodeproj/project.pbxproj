@@ -167,7 +167,7 @@
 		831E662419EFA9D200FCFD85 /* cxShaderDefault.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65DC19EFA9D200FCFD85 /* cxShaderDefault.c */; };
 		831E662519EFA9D200FCFD85 /* cxShaderMultiple.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65DE19EFA9D200FCFD85 /* cxShaderMultiple.c */; };
 		831E662619EFA9D200FCFD85 /* cxShaderColor.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E019EFA9D200FCFD85 /* cxShaderColor.c */; };
-		831E662719EFA9D200FCFD85 /* cxEventBase.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E319EFA9D200FCFD85 /* cxEventBase.c */; };
+		831E662719EFA9D200FCFD85 /* cxLooper.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E319EFA9D200FCFD85 /* cxLooper.c */; };
 		831E662819EFA9D200FCFD85 /* cxHttp.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E519EFA9D200FCFD85 /* cxHttp.c */; };
 		831E662919EFA9D200FCFD85 /* cxHttpConn.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E719EFA9D200FCFD85 /* cxHttpConn.c */; };
 		831E662A19EFA9D200FCFD85 /* cxUDP.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65E919EFA9D200FCFD85 /* cxUDP.c */; };
@@ -527,8 +527,8 @@
 		831E65DF19EFA9D200FCFD85 /* cxShaderMultiple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderMultiple.h; sourceTree = "<group>"; };
 		831E65E019EFA9D200FCFD85 /* cxShaderColor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderColor.c; sourceTree = "<group>"; };
 		831E65E119EFA9D200FCFD85 /* cxShaderColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderColor.h; sourceTree = "<group>"; };
-		831E65E319EFA9D200FCFD85 /* cxEventBase.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxEventBase.c; sourceTree = "<group>"; };
-		831E65E419EFA9D200FCFD85 /* cxEventBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxEventBase.h; sourceTree = "<group>"; };
+		831E65E319EFA9D200FCFD85 /* cxLooper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLooper.c; sourceTree = "<group>"; };
+		831E65E419EFA9D200FCFD85 /* cxLooper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLooper.h; sourceTree = "<group>"; };
 		831E65E519EFA9D200FCFD85 /* cxHttp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxHttp.c; sourceTree = "<group>"; };
 		831E65E619EFA9D200FCFD85 /* cxHttp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxHttp.h; sourceTree = "<group>"; };
 		831E65E719EFA9D200FCFD85 /* cxHttpConn.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxHttpConn.c; sourceTree = "<group>"; };
@@ -1061,8 +1061,8 @@
 		831E65E219EFA9D200FCFD85 /* socket */ = {
 			isa = PBXGroup;
 			children = (
-				831E65E319EFA9D200FCFD85 /* cxEventBase.c */,
-				831E65E419EFA9D200FCFD85 /* cxEventBase.h */,
+				831E65E319EFA9D200FCFD85 /* cxLooper.c */,
+				831E65E419EFA9D200FCFD85 /* cxLooper.h */,
 				831E65E519EFA9D200FCFD85 /* cxHttp.c */,
 				831E65E619EFA9D200FCFD85 /* cxHttp.h */,
 				831E65E719EFA9D200FCFD85 /* cxHttpConn.c */,
@@ -1300,7 +1300,7 @@
 				831E65A319EFA9B000FCFD85 /* cxEAGLView.m in Sources */,
 				831E664019EFA9D200FCFD85 /* cxSprites.c in Sources */,
 				831046EA19F21B3E0086D91A /* EventData.c in Sources */,
-				831E662719EFA9D200FCFD85 /* cxEventBase.c in Sources */,
+				831E662719EFA9D200FCFD85 /* cxLooper.c in Sources */,
 				831E65A419EFA9B000FCFD85 /* cxGLViewController.m in Sources */,
 				831E659E19EFA9B000FCFD85 /* cxTexture.c in Sources */,
 				831E656619EFA9B000FCFD85 /* cpGearJoint.c in Sources */,

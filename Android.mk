@@ -173,7 +173,7 @@ LOCAL_SRC_FILES += \
     views/cxSpine.c
 
 LOCAL_SRC_FILES += \
-    socket/cxEventBase.c \
+    socket/cxLooper.c \
     socket/cxHttp.c \
     socket/cxHttpConn.c \
     socket/cxUDP.c \

@@ -64,7 +64,7 @@
 #include <socket/cxTCP.h>
 #include <socket/cxHttp.h>
 #include <socket/cxHttpConn.h>
-#include <socket/cxEventBase.h>
+#include <socket/cxLooper.h>
 
 #include <algorithm/cxAStar.h>
 
@@ -174,7 +174,7 @@ static void cxEngineTypes()
     //scoket
     CX_TYPE_REG(cxUDP);
     CX_TYPE_REG(cxTCP);
-    CX_TYPE_REG(cxEventBase);
+    CX_TYPE_REG(cxLooper);
     CX_TYPE_REG(cxHttpConn);
     CX_TYPE_REG(cxHttp);
 }
@@ -203,10 +203,20 @@ void cxEngineStartup()
     engineInstance->iconv       = CX_ALLOC(cxIconv);
     engineInstance->player      = CX_ALLOC(cxPlayer);
     engineInstance->textures    = CX_ALLOC(cxTextureFactory);
+    engineInstance->looper      = CX_ALLOC(cxLooper);
     //registe other type
     cxEngineType(engineInstance);
     //use init engine
     cxEngineInit(engineInstance);
+}
+
+void cxEngineClear()
+{
+    CX_RETURN(engineInstance == NULL);
+    cxEngine engine = cxEngineInstance();
+    cxTextureFactoryClear();
+    cxHashClear(engine->files);
+    cxHashClear(engine->assets);
 }
 
 void cxEngineResume()
@@ -236,6 +246,7 @@ void cxEngineDraw(cxFloat dt)
     }
     cxMemPoolBegin();
     cxOpenGLClear();
+    cxLooperUpdate(engine->looper);
     CX_SIGNAL_FIRE(engine->onUpdate, CX_SIGNAL_TYPE(cxFloat),engine->FrameDelta);
     kmGLPushMatrix();
     cxViewDraw(engine->Window);
@@ -345,6 +356,7 @@ CX_FREE(cxEngine, cxObject)
     CX_RELEASE(this->iconv);
     CX_RELEASE(this->player);
     CX_RELEASE(this->textures);
+    CX_RELEASE(this->looper);
     kmGLFreeAll();
 }
 CX_TERM(cxEngine, cxObject)

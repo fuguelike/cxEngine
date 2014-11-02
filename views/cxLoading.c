@@ -65,7 +65,6 @@ void cxLoadingAppend(cxAny pview,cxAny pitem)
 {
     CX_ASSERT_THIS(pview, cxLoading);
     CX_ASSERT_VALUE(pitem, cxAsync, item);
-    CX_ASSERT(item->Running != NULL, "item not set running method");
     cxArrayAppend(this->asyncs, item);
     this->Step ++;
 }

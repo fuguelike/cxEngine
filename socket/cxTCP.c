@@ -8,7 +8,7 @@
 
 #include <engine/cxEngine.h>
 #include <evutil.h>
-#include "cxEventBase.h"
+#include "cxLooper.h"
 #include "cxTCP.h"
 
 CX_TYPE(cxTCP, cxObject)
@@ -108,14 +108,14 @@ cxInt cxTcpConnect(cxAny ptcp)
 {
     CX_ASSERT_THIS(ptcp, cxTCP);
     CX_ASSERT(cxStringOK(this->host) || this->port == 0, "tcp host or port not set");
-    cxEventBase base = cxEventBaseInstance();
+    cxLooper looper = cxLooperInstance();
     cxConstChars host = cxStringBody(this->host);
     this->socket = cxCreateSocket(true,SOCK_STREAM);
     if(this->socket == -1){
         CX_ERROR("create tcp socket error %s:%d",host,this->port);
         return -1;
     }
-    this->bufferEvent = bufferevent_socket_new(base->base, this->socket, BEV_OPT_CLOSE_ON_FREE);
+    this->bufferEvent = bufferevent_socket_new(looper->looper, this->socket, BEV_OPT_CLOSE_ON_FREE);
     if(this->bufferEvent == NULL){
         CX_ERROR("create buffer event socket failed");
         return -1;

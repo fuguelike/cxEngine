@@ -83,7 +83,7 @@ cxString cxIconvConvertUTF8ToUTF16LE(const cxString string)
 cxString cxIconvConvert(const cxString string,cxConstChars from,cxConstChars to)
 {
     cxIconv this = cxIconvInstance();
-    cxConstChars key = CX_CONST_STRING("%s->%s",from,to);
+    cxConstChars key = cxConstString("%s->%s",from,to);
     cxIconvItem item = cxHashGet(this->caches, cxHashStrKey(key));
     if(item == NULL){
         item = cxIconvItemCreate(from,to);

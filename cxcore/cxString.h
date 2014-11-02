@@ -34,7 +34,7 @@ CX_END(cxString, cxObject)
 
 #define cxStringOK(s)               ((s) != NULL && cxStringLength(s) > 0)
 
-#define CX_CONST_STRING(f,...)      cxStringBody(cxStringCreate(f,##__VA_ARGS__))
+#define cxConstString(f,...)        cxStringBody(cxStringCreate(f,##__VA_ARGS__))
 
 #define UTF8(f,...)  cxStringCreate(f,##__VA_ARGS__)
 

@@ -6,7 +6,8 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxEventBase.h"
+#include <engine/cxEngine.h>
+#include "cxLooper.h"
 #include "cxHttpConn.h"
 
 CX_TYPE(cxHttpConn, cxObject)
@@ -49,11 +50,11 @@ void cxHttpConnSetRetries(cxAny pthis,cxInt s)
 cxHttpConn cxHttpConnectOpen(cxConstChars host,cxInt port)
 {
     CX_ASSERT(host != NULL && port > 0, "args error");
-    cxEventBase base= cxEventBaseInstance();
+    cxLooper looper = cxLooperInstance();
     cxHttpConn this = CX_CREATE(cxHttpConn);
     this->host = cxStringAllocChars(host);
     this->port = port;
-    this->conn = evhttp_connection_base_new(base->base, NULL, host, port);
+    this->conn = evhttp_connection_base_new(looper->looper, NULL, host, port);
     if(this->conn == NULL){
         CX_ERROR("evhttp new connection error");
         return NULL;

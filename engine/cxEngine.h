@@ -12,6 +12,7 @@
 #include <actions/cxTimer.h>
 #include <cxcore/cxBase.h>
 #include <textures/cxTextureFactory.h>
+#include <socket/cxLooper.h>
 #include "cxInput.h"
 #include "cxUtil.h"
 #include "cxBMPFont.h"
@@ -47,11 +48,13 @@ CX_DEF(cxEngine, cxObject)
     cxKey key;
     cxHash groups;          //action groups
     //
+
     cxCurve curve;              //cxCurve instance
     cxOpenGL opengl;            //cxOpenGL instance
     cxIconv iconv;              //cxIconv instance
     cxPlayer player;            //cxPlayer instance
     cxTextureFactory textures;  //cxTextureFactory instance
+    cxLooper looper;            //socket looper
 CX_END(cxEngine, cxObject)
 
 extern cxEngine engineInstance;
@@ -64,6 +67,11 @@ CX_INLINE cxEngine cxEngineInstance()
 CX_INLINE cxTextureFactory cxTextureFactoryInstance()
 {
     return engineInstance->textures;
+}
+
+CX_INLINE cxLooper cxLooperInstance()
+{
+    return engineInstance->looper;
 }
 
 CX_INLINE cxPlayer cxPlayerInstance()
@@ -141,6 +149,8 @@ CX_INLINE cxSize2f cxEngineWinSize()
 {
     return engineInstance->WinSize;
 }
+
+void cxEngineClear();
 
 //type init
 CX_EXTERN void cxEngineType(cxEngine engine);

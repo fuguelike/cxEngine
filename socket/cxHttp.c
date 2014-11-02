@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxEventBase.h"
+#include "cxLooper.h"
 #include "cxHttpConn.h"
 #include "cxHttp.h"
 
@@ -167,7 +167,7 @@ static cxHttpConn cxHttpGetConnect(cxAny http)
     CX_ASSERT_THIS(http, cxHttp);
     cxConstChars host = evhttp_uri_get_host(this->uri);
     cxInt port = evhttp_uri_get_port(this->uri);
-    return cxEventBaseHttpConnect(host,port < 0 ? 80 : port);
+    return cxLooperHttpConnect(host,port < 0 ? 80 : port);
 }
 
 void cxHttpCancel(cxAny http)

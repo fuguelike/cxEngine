@@ -1,5 +1,5 @@
 //
-//  cxEventBase.c
+//  cxLooper.c
 //  cxEngine
 //
 //  Created by xuhua on 10/31/13.
@@ -8,7 +8,7 @@
 
 #include <engine/cxEngine.h>
 #include <actions/cxTimer.h>
-#include "cxEventBase.h"
+#include "cxLooper.h"
 #include "cxHttpConn.h"
 
 evutil_socket_t cxCreateSocket(cxBool reuse,int type)
@@ -44,53 +44,35 @@ out:
     return (-1);
 }
 
-static cxEventBase instance = NULL;
-
-cxEventBase cxEventBaseInstance()
+void cxLooperUpdate(cxAny looper)
 {
-    if(instance == NULL){
-        instance = CX_ALLOC(cxEventBase);
-    }
-    return instance;
+    CX_ASSERT_THIS(looper, cxLooper);
+    event_base_loop(this->looper, EVLOOP_NONBLOCK);
 }
 
-void cxEventBaseDestroy()
-{
-    CX_RELEASE(instance);
-    instance = NULL;
-}
-
-static void cxEventUpdate(cxAny base)
-{
-    CX_ASSERT_THIS(base, cxEventBase);
-    event_base_loop(this->base, EVLOOP_NONBLOCK);
-}
-
-CX_TYPE(cxEventBase, cxObject)
+CX_TYPE(cxLooper, cxObject)
 {
     
 }
-CX_INIT(cxEventBase, cxObject)
+CX_INIT(cxLooper, cxObject)
 {
-    this->base = event_base_new();
+    this->looper = event_base_new();
     this->conns = CX_ALLOC(cxHash);
-    cxEngine engine = cxEngineInstance();
-    CX_CON(cxEngine, engine, onUpdate, this, cxEventUpdate);
 }
-CX_FREE(cxEventBase, cxObject)
+CX_FREE(cxLooper, cxObject)
 {
     CX_SLOT_RELEASE(this->onUpdate);
     CX_RELEASE(this->conns);
-    event_base_loopbreak(this->base);
-    event_base_free(this->base);
+    event_base_loopbreak(this->looper);
+    event_base_free(this->looper);
 }
-CX_TERM(cxEventBase, cxObject)
+CX_TERM(cxLooper, cxObject)
 
 //use one connection
-cxAny cxEventBaseHttpConnect(cxConstChars host,cxInt port)
+cxAny cxLooperHttpConnect(cxConstChars host,cxInt port)
 {
-    cxEventBase this = cxEventBaseInstance();
-    cxConstChars key = CX_CONST_STRING("%s:%d",host,port);
+    cxLooper this = cxLooperInstance();
+    cxConstChars key = cxConstString("%s:%d",host,port);
     cxHttpConn conn = cxHashGet(this->conns, cxHashStrKey(key));
     if(conn != NULL){
         return conn;

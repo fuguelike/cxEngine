@@ -162,6 +162,13 @@ cxInt cxAssertsFD(cxConstChars file,cxInt *off,cxInt *length)
     return cxFileFD(cxStringBody(path), off, length);
 }
 
+void cxEngineAlert(cxString message)
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"title" message:@"message" delegate:nil cancelButtonTitle:@"cancel" otherButtonTitles: nil];
+    [alert show];
+    [alert release];
+}
+
 void cxEngineSendJson(cxString json)
 {
     cxEngineRecvJson(json);
