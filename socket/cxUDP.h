@@ -33,7 +33,10 @@ CX_DEF(cxUDP, cxObject)
     cxChar buffer[CX_UDP_BUFFER_SIZE];
     cxInt bytes;
     CX_EVENT_ALLOC(onData);
+    CX_FIELD_DEF(cxAny UserData);
 CX_END(cxUDP, cxObject)
+
+CX_FIELD_IMP(cxUDP, cxAny, UserData);
 
 CX_INLINE cxString cxUDPGetData(cxAny pthis)
 {

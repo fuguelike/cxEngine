@@ -33,21 +33,19 @@ cxAsync cxLoadingCurrentItem(cxAny pview)
 static void cxLoadingTimerArrive(cxAny sender)
 {
     CX_ASSERT_VALUE(cxActionGetView(sender), cxLoading, this);
+    CX_RETURN(cxArrayLength(this->asyncs) == 0);
     //run step method
     cxAsync item =  cxLoadingCurrentItem(this);
-    CX_ASSERT(item != NULL && item->Running != NULL, "item error");
-    cxAsyncState ret = cxAsyncDrive(this, item);
+    cxAsyncState state = cxAsyncDrive(this, item);
     //wait
-    if(ret == cxAsyncStateWait){
-        return;
-    }
+    CX_RETURN(state == cxAsyncStateWait);
     //success
-    if(ret == cxAsyncStateSuccess){
+    if(state == cxAsyncStateSuccess){
         this->Index ++;
         CX_METHOD_RUN(this->onStep, this);
     }
     //break init
-    if(ret == cxAsyncStateFailed){
+    if(state == cxAsyncStateFailed){
         this->Success = false;
         cxActionStop(this->stepTimer);
     }
@@ -63,23 +61,13 @@ static void cxLoadingTimerExit(cxAny sender)
     cxViewRemove(this);
 }
 
-void cxLoadingAppendItem(cxAny pview,cxAny pitem)
+void cxLoadingAppend(cxAny pview,cxAny pitem)
 {
     CX_ASSERT_THIS(pview, cxLoading);
     CX_ASSERT_VALUE(pitem, cxAsync, item);
     CX_ASSERT(item->Running != NULL, "item not set running method");
     cxArrayAppend(this->asyncs, item);
     this->Step ++;
-}
-
-void cxLoadingAppend(cxAny pview,cxAsyncFunc running)
-{
-    CX_ASSERT_THIS(pview, cxLoading);
-    cxAsync item = CX_ALLOC(cxAsync);
-    item->Running = running;
-    cxArrayAppend(this->asyncs, item);
-    this->Step ++;
-    CX_RELEASE(item);
 }
 
 void cxLoaingFinished(cxAny pview)

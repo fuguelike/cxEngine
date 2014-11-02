@@ -74,7 +74,7 @@ void cxEngineRecvJson(cxString json)
 {
     CX_RETURN(engineInstance == NULL);
     cxEngine engine = cxEngineInstance();
-    CX_SIGNAL_FIRE(engine->onRecvJson, CX_FUNC_TYPE(cxAny,cxString), CX_SLOT_OBJECT, json);
+    CX_SIGNAL_FIRE(engine->onRecvJson, CX_SIGNAL_TYPE(cxString),json);
     CX_LOGGER("cxengine recv:%s",cxStringBody(json));
 }
 
@@ -91,7 +91,7 @@ void cxEnginePause()
     CX_RETURN(engineInstance == NULL);
     cxEngine engine = cxEngineInstance();
     engine->isPause = true;
-    CX_SIGNAL_FIRE(engine->onPause, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    CX_SIGNAL_FIRE(engine->onPause, CX_SIGNAL_TYPE());
     if(engine->isInit){
         cxPauseMusic();
     }
@@ -214,7 +214,7 @@ void cxEngineResume()
     CX_RETURN(engineInstance == NULL);
     cxEngine engine = cxEngineInstance();
     engine->isPause = false;
-    CX_SIGNAL_FIRE(engine->onResume, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    CX_SIGNAL_FIRE(engine->onResume, CX_SIGNAL_TYPE());
     if(engine->isInit){
         cxResumeMusic();
     }
@@ -224,7 +224,7 @@ void cxEngineMemory()
 {
     CX_RETURN(engineInstance == NULL);
     cxEngine engine = cxEngineInstance();
-    CX_SIGNAL_FIRE(engine->onMemory, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    CX_SIGNAL_FIRE(engine->onMemory, CX_SIGNAL_TYPE());
 }
 
 void cxEngineDraw(cxFloat dt)
@@ -236,7 +236,7 @@ void cxEngineDraw(cxFloat dt)
     }
     cxMemPoolBegin();
     cxOpenGLClear();
-    CX_SIGNAL_FIRE(engine->onUpdate, CX_FUNC_TYPE(cxAny,cxFloat),CX_SLOT_OBJECT,engine->FrameDelta);
+    CX_SIGNAL_FIRE(engine->onUpdate, CX_SIGNAL_TYPE(cxFloat),engine->FrameDelta);
     kmGLPushMatrix();
     cxViewDraw(engine->Window);
     kmGLPopMatrix();

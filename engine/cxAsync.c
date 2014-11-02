@@ -29,5 +29,6 @@ cxAsyncState cxAsyncDrive(cxAny pview, cxAny pitem)
     cxAsyncSetView(this, pview);
     this->Count ++;
     this->Time += cxEngineGetFrameDelta();
-    return this->Running(pview,this);
+    CX_METHOD_RUN(this->Running,this);
+    return this->State;
 }

@@ -40,11 +40,9 @@ CX_INLINE cxFloat cxLoadingGetProgress(cxAny pthis)
 
 cxAsync cxLoadingCurrentItem(cxAny pview);
 
-void cxLoadingAppend(cxAny pview,cxAsyncFunc running);
+void cxLoadingAppend(cxAny pview,cxAny pitem);
 
-void cxLoadingAppendItem(cxAny pview,cxAny pitem);
-
-#define cxLoadingAppendType(_o_,_t_)  cxLoadingAppendItem(_o_,CX_CREATE(_t_))
+#define cxLoadingAppendType(_o_,_t_)  cxLoadingAppend(_o_,CX_CREATE(_t_))
 
 void cxLoadingStop(cxAny pview);
 

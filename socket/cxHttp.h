@@ -40,7 +40,7 @@ CX_DEF(cxHttp, cxObject)
     CX_EVENT_ALLOC(onCompleted);
     CX_EVENT_ALLOC(onError);
     cxInt error;
-    cxBool autoRelease;
+    cxBool release;
 CX_END(cxHttp, cxObject)
 
 CX_FIELD_IMP(cxHttp, cxAny, UserData);
@@ -52,12 +52,12 @@ CX_FIELD_GET(cxHttp, cxInt64, BodyBytes);
 CX_FIELD_GET(cxHttp, cxBool, IsSuccess);
 
 //set auto release http object
-CX_INLINE void cxHttpSetAuto(cxAny http)
+CX_INLINE void cxHttpSetRelease(cxAny http)
 {
     CX_ASSERT_THIS(http, cxHttp);
-    CX_RETURN(this->autoRelease);
+    CX_RETURN(this->release);
     CX_RETAIN(this);
-    this->autoRelease = true;
+    this->release = true;
 }
 
 cxString cxHttpUriEncode(cxString uri);

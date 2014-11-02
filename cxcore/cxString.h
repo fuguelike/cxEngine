@@ -54,7 +54,7 @@ cxBool cxConstCharsIsNumber(cxConstChars s);
 
 cxString cxStringAttachMem(cxChars d,cxInt l);
 
-cxString cxStringAttachMap(cxAny d,cxInt l);
+cxString cxStringNoCopy(cxAny d,cxInt l);
 
 cxBool cxStringToBool(cxString str,cxBool dv);
 
@@ -65,6 +65,8 @@ cxDouble cxStringToDouble(cxString str,cxDouble dv);
 cxLong cxStringToLong(cxString str,cxLong dv);
 
 void cxStringClear(cxString string);
+
+void cxStringErase(cxString str,cxInt c);
 
 cxString cxMD5(cxString v);
 
@@ -78,7 +80,7 @@ cxInt cxStringLength(cxString string);
 
 cxArray cxStringSplit(cxString string,cxConstChars sp);
 
-cxConstChars cxStringBody(cxString string);
+cxAny cxStringBody(cxString string);
 
 cxString cxStringAllocChars(cxConstChars str);
 

@@ -334,16 +334,14 @@ do{                                                             \
     }                                                           \
 }while(0)
 
-#define CX_FUNC_TYPE(...) (void (*)(__VA_ARGS__))
-
 //only use at CX_SIGNAL_FIRE micro
-#define CX_SLOT_OBJECT _ele_->object
+#define CX_SIGNAL_TYPE(...) (void (*)(cxAny,##__VA_ARGS__))
 
 #define CX_SIGNAL_FIRE(_signal_,_ft_,...)                       \
 do{                                                             \
     cxSignal *_ele_ = NULL;                                     \
     DL_FOREACH(_signal_, _ele_){                                \
-        (_ft_(_ele_->func))(__VA_ARGS__);                       \
+        (_ft_(_ele_->func))(_ele_->object,##__VA_ARGS__);       \
     }                                                           \
 }while(0)
 

@@ -213,6 +213,23 @@ cxString cxMD5(cxString v)
     return cxStringConstChars(md5);
 }
 
+void cxStringErase(cxString str,cxInt c)
+{
+    cxInt l = cxStringLength(str);
+    CX_RETURN(c == 0 || l < abs(c));
+    cxInt r = l - abs(c);
+    if(r == 0){
+        cxStringClear(str);
+        return;
+    }
+    if(c > 0){
+        memmove(str->strptr.d, str->strptr.d + c, r);
+    }
+    str->strptr.i = r;
+    str->strptr.d[r] = '\0';
+}
+
+
 void cxStringClear(cxString string)
 {
     if(cxStringLength(string) > 0){
@@ -311,7 +328,7 @@ cxArray cxStringSplit(cxString string,cxConstChars sp)
     return ret;
 }
 
-cxConstChars cxStringBody(cxString string)
+cxAny cxStringBody(cxString string)
 {
     CX_RETURN(string == NULL,NULL);
     return utstring_body(&string->strptr);
@@ -346,7 +363,7 @@ cxBool cxConstCharsIsNumber(cxConstChars s)
     return true;
 }
 
-cxString cxStringAttachMap(cxAny d,cxInt l)
+cxString cxStringNoCopy(cxAny d,cxInt l)
 {
     cxString rv = CX_CREATE(cxString);
     rv->strptr.d = d;

@@ -48,7 +48,7 @@ static void cxHttpRequestCompleted(struct evhttp_request *req,void *xhttp)
     CX_ASSERT_THIS(xhttp, cxHttp);
     cxHttpReadData(this);
     CX_EVENT_FIRE(this, onCompleted);
-    if(this->autoRelease){
+    if(this->release){
         CX_AUTO(this);
     }
 }
@@ -120,10 +120,10 @@ CX_SETTER_DEF(cxHttp, chunked)
     cxHttpSetChunked(this, chunked);
 }
 //autorelease at completed
-CX_SETTER_DEF(cxHttp, autorelease)
+CX_SETTER_DEF(cxHttp, release)
 {
-    if(cxJsonBool(value, "autorelease", false)){
-        cxHttpSetAuto(this);
+    if(cxJsonBool(value, "release", false)){
+        cxHttpSetRelease(this);
     }
 }
 CX_TYPE(cxHttp, cxObject)
@@ -132,15 +132,15 @@ CX_TYPE(cxHttp, cxObject)
     CX_PROPERTY_SETTER(cxHttp, method);
     CX_PROPERTY_SETTER(cxHttp, data);
     CX_PROPERTY_SETTER(cxHttp, chunked);
-    CX_PROPERTY_SETTER(cxHttp, autorelease);
+    CX_PROPERTY_SETTER(cxHttp, release);
 }
 CX_INIT(cxHttp, cxObject)
 {
     this->Data = CX_ALLOC(cxString);
     this->request = evhttp_request_new(cxHttpRequestCompleted, this);
-    evhttp_request_own(this->request);
     evhttp_request_set_error_cb(this->request, cxHttpRequestError);
     evhttp_request_set_header_cb(this->request, cxHttpRequestHeader);
+    this->request->flags |= EVHTTP_REQ_DEFER_FREE;
 }
 CX_FREE(cxHttp, cxObject)
 {

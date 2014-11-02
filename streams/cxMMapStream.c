@@ -122,7 +122,7 @@ static cxString cxMMapStreamAllBytes(cxAny ps)
     }
     cxStreamSeek(this,0,SEEK_SET);
     //return memory ref
-    return cxStringAttachMap(this->map, this->cxStream.Length);
+    return cxStringNoCopy(this->map, this->cxStream.Length);
 }
 
 static void cxMMapStreamClose(cxAny ps)

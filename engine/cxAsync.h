@@ -20,11 +20,9 @@ typedef enum {
     cxAsyncStateWait
 }cxAsyncState;
 
-typedef cxAsyncState (*cxAsyncFunc)(cxAny object,cxAny item);
-
 CX_DEF(cxAsync, cxObject)
     CX_FIELD_DEF(cxAsyncState State);
-    cxAsyncFunc Running;
+    CX_METHOD_DEF(void, Running,cxAny item);
     CX_FIELD_DEF(cxInt Count);
     CX_FIELD_DEF(cxFloat Time);
     CX_FIELD_DEF(cxAny View);

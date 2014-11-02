@@ -962,7 +962,7 @@ void cxViewDraw(cxAny pview)
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    CX_SIGNAL_FIRE(this->onDraw, CX_FUNC_TYPE(cxAny),CX_SLOT_OBJECT);
+    CX_SIGNAL_FIRE(this->onDraw, CX_SIGNAL_TYPE());
     CX_METHOD_RUN(this->After,this);
     if(isCropping){
         cxOpenGLDisableScissor();
