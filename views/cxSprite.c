@@ -122,9 +122,20 @@ CX_SETTER_DEF(cxSprite, shader)
     cxShader shader = cxOpenGLShaderByName(name);
     CX_RETAIN_SWAP(this->Shader, shader);
 }
-
+CX_SETTER_DEF(cxSprite, blend)
+{
+    cxConstChars blend = cxJsonToConstChars(value);
+    if(cxConstCharsEqu(blend, "add")){
+        cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE);
+    }else if(cxConstCharsEqu(blend, "multiply")){
+        cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }else{
+        CX_ASSERT_FALSE("not support mode %s",blend);
+    }
+}
 CX_TYPE(cxSprite, cxView)
 {
+    CX_PROPERTY_SETTER(cxSprite, blend);
     CX_PROPERTY_SETTER(cxSprite, texture);
     CX_PROPERTY_SETTER(cxSprite, shader);
 }
@@ -133,7 +144,7 @@ CX_INIT(cxSprite, cxView)
     this->tbox = this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     CX_ADD(cxView, this, onDirty, cxSpriteOnDirty);
-    CX_SET(cxView, this, Draw, cxSpriteDraw);
+    CX_SET(cxView, this, DrawView, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
 }
 CX_FREE(cxSprite, cxView)

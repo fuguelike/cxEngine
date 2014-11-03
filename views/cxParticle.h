@@ -38,11 +38,6 @@ typedef struct {
     cxFloat deltaradius;
 }cxParticleUnit;
 
-typedef enum {
-    cxParticleBlendAdd,
-    cxParticleBlendMultiply,
-}cxParticleBlendMode;
-
 CX_DEF(cxParticle, cxAtlas)
     cxFloat time;
     cxFloat TimeElapsed;
@@ -52,8 +47,6 @@ CX_DEF(cxParticle, cxAtlas)
     cxParticleUnit *units;
     cxBool isActive;
     cxFloat emitcounter;
-    //base property
-    cxParticleBlendMode blend;
     cxInt number;
     cxFloat rate;
     cxVec2fRange position;
@@ -86,8 +79,6 @@ void cxParticlePlay(cxAny pview);
 void cxParticleSetType(cxAny pav,cxParticleEmitterType type);
 
 void cxParticleInitNumber(cxAny pav,cxInt number);
-
-void cxParticleSetBlendMode(cxAny pav,cxParticleBlendMode mode);
 
 cxParticle cxParticleCreate(cxFloat time,cxConstChars url,cxInt number);
 

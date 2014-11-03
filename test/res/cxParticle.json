@@ -2,8 +2,8 @@
   "cxId": "particle",
   "cxType": "cxParticle",
   "time": -1,
-  "number": 200,
-  "rate": 20,
+  "number": 60,
+  "rate": 60,
   "texture": "pvr.json?1.png",
   "gravity": {
     "x": 0,

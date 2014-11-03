@@ -49,7 +49,7 @@ CX_TYPE(cxPolygon, cxSprite)
 }
 CX_INIT(cxPolygon, cxSprite)
 {
-    CX_SET(cxView, this, Draw, cxPolygonDraw);
+    CX_SET(cxView, this, DrawView, cxPolygonDraw);
     this->capacity = 8;
     cxPolygonMalloc(this);
 }

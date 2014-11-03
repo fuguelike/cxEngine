@@ -284,33 +284,31 @@ void cxEngineLayout(cxInt width,cxInt height)
         cxJsonRegisterVec2f("Scale", engine->Scale);
     }
     //
-    if(!engine->isInit){
-        cxOpenGLCheckFeature();
-        cxEngineMain(engine);
-        cxDumpGlobalJson();
-    }
-    //
     cxFloat zeye = engine->WinSize.h / 1.1566f;
-    kmMat4 perspective={0};
+    kmMat4 perspective;
     kmGLMatrixMode(KM_GL_PROJECTION);
     kmGLLoadIdentity();
-    //
     kmMat4PerspectiveProjection(&perspective, 60.0f, engine->WinSize.w / engine->WinSize.h, 0.0f, zeye * 2);
     kmGLMultMatrix(&perspective);
+    //
     kmGLMatrixMode(KM_GL_MODELVIEW);
     kmGLLoadIdentity();
-    //
-    cxOpenGLSetDepthTest(false);
-    cxOpenGLViewport(cxBox4fv(0, engine->WinSize.w, 0, engine->WinSize.h));
-    //
     cxMatrix4f matrix;
     cxEngineLookAt(&matrix,zeye,cxVec2fv(0, 0));
     kmGLMultMatrix(&matrix);
     //
+    cxOpenGLSetDepthTest(false);
+    cxOpenGLViewport(cxBox4fv(0, engine->WinSize.w, 0, engine->WinSize.h));
+    //
     if(!engine->isInit){
+        cxOpenGLCheckFeature();
+        cxEngineMain(engine);
         cxViewEnter(engine->Window);
     }
     cxViewLayout(engine->Window);
+    if(!engine->isInit){
+        cxDumpGlobalJson();
+    }
     engine->isInit = true;
 }
 

@@ -142,7 +142,7 @@ CX_TYPE(cxSpine, cxAtlas)
 }
 CX_INIT(cxSpine, cxAtlas)
 {
-    CX_SET(cxView, this, Draw, cxSpineDraw);
+    CX_SET(cxView, this, DrawView, cxSpineDraw);
     CX_ADD(cxView, this, onUpdate, cxSpineUpdate);
     cxAtlasSetCapacity(this, 256);
 }

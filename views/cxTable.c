@@ -30,10 +30,13 @@ void cxTableArraySubviews(cxAny pview)
     this->isArray = true;
 }
 
-static void cxTableResize(cxAny sender)
+static void cxTableDirty(cxAny pview)
 {
-    cxTableArraySubviews(sender);
+    if(cxViewGetDirty(pview) & cxViewDirtySize){
+        cxTableArraySubviews(pview);
+    }
 }
+
 
 static cxInt cxTableCount(cxTable this)
 {
@@ -110,7 +113,7 @@ CX_TYPE(cxTable, cxView)
 CX_INIT(cxTable, cxView)
 {
     this->arrayHide = true;
-    CX_ADD(cxView, this, onResize, cxTableResize);
+    CX_ADD(cxView, this, onDirty, cxTableDirty);
     CX_ADD(cxView, this, onUpdate, cxTableUpdate);
 }
 CX_FREE(cxTable, cxView)

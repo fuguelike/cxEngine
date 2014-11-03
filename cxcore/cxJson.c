@@ -28,13 +28,12 @@ cxJson cxJsonRead(cxConstChars src)
 }
 
 //if field is array
-static cxBool keyIsArray(cxString key,cxChars skey,cxInt *index)
+static cxBool keyIsArray(cxConstChars ckey,cxChars skey,cxInt *index)
 {
-    CX_ASSERT(skey != NULL && key != NULL, "args error");
+    CX_ASSERT(skey != NULL && ckey != NULL, "args error");
     cxInt s = -1;
     cxInt e = -1;
-    cxConstChars ckey = cxStringBody(key);
-    cxInt len = cxStringLength(key);
+    cxInt len = (cxInt)strlen(ckey);
     for(cxInt i=0; i < len;i++){
         if(ckey[i] == '['){
             s = i;
@@ -54,34 +53,48 @@ static cxBool keyIsArray(cxString key,cxChars skey,cxInt *index)
     *index = atoi(num);
     return true;
 }
-//support key.key key[0].filed
+//support key.key key[0].filed, max 8 level
 static json_t *jsonGetJson(json_t *json,cxConstChars key)
 {
-    cxString str = cxStringConstChars(key);
-    cxArray list = cxStringSplit(str, ".");
+    CX_ASSERT(cxConstCharsOK(key), "key error");
+    cxChars ckey = allocator->strdup(key);
+    cxInt num = 0;
+    cxChars ckeys[8];
+    cxChars src = ckey;
+    ckeys[num++] = src;
+    while (*src++ != '\0') {
+        if(*src != '.')continue;
+        CX_ASSERT(num < 8, ". opt too more");
+        ckeys[num++] = src + 1;
+        *src++ = '\0';
+    }
+    if(num == 1){
+        allocator->free(ckey);
+        return json_object_get(json, key);
+    }
     json_t *pv = json;
     cxInt index = 0;
     cxChar skey[CX_HASH_MAX_KEY]={0};
     json_t *rv = NULL;
-    CX_ARRAY_FOREACH(list, e){
-        if(keyIsArray(cxArrayObject(e), skey, &index)){
-            pv = strlen(skey) > 0 ? json_object_get(pv, skey) : pv;
-            CX_ASSERT(json_is_array(pv), "json must is array");
+    for(cxInt i=0; i < num;i ++){
+        cxConstChars ckey = ckeys[i];
+        if(keyIsArray(ckey, skey, &index)){
+            pv = json_object_get(pv, skey);
             rv = json_array_get(pv, index);
         }else{
             rv = json_object_get(pv, skey);
         }
-        if(rv == NULL){
-            break;
-        }
+        if(rv == NULL)break;
         pv = rv;
     }
+    allocator->free(ckey);
     return rv;
 }
 //
 static json_t *cxJsonGetJson(cxJson json,cxConstChars key)
 {
     CX_ASSERT_THIS(json, cxJson);
+    CX_ASSERT(cxConstCharsOK(key), "key error");
     return jsonGetJson(CX_JSON_PTR(this), key);
 }
 

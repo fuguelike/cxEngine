@@ -219,7 +219,6 @@ CX_FREE(cxView, cxObject)
     CX_EVENT_RELEASE(this->onEnter);
     CX_EVENT_RELEASE(this->onExit);
     CX_EVENT_RELEASE(this->onUpdate);
-    CX_EVENT_RELEASE(this->onResize);
     CX_EVENT_RELEASE(this->onLayout);
 }
 CX_TERM(cxView, cxObject)
@@ -468,7 +467,6 @@ void cxViewSetSize(cxAny pview,cxSize2f size)
     CX_RETURN(cxSize2fEqu(vsize, size));
     this->Size = size;
     this->Dirty |= cxViewDirtySize;
-    CX_EVENT_FIRE(this, onResize);
 }
 
 static cxInt cxViewSortByZOrder(cxListElement *lp,cxListElement *rp)
@@ -490,7 +488,6 @@ void cxViewCheckSort(cxAny pview)
     CX_RETURN(!this->isSort);
     this->isSort = false;
     cxListSort(this->SubViews, cxViewSortByZOrder);
-    CX_METHOD_RUN(this->onSort,this);
 }
 
 void cxViewSetColor(cxAny pview,cxColor3f color)
@@ -536,7 +533,6 @@ void cxViewSetPosition(cxAny pview,cxVec2f pos)
     CX_ASSERT_THIS(pview, cxView);
     cxVec2f vpos = cxViewGetPosition(this);
     CX_RETURN(cxVec2fEqu(vpos, pos));
-    CX_METHOD_RUN(this->onPosition,this,this->Position,pos);
     this->Position = pos;
     this->Dirty |= cxViewDirtyPosition;
 }
@@ -860,7 +856,7 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
     CX_ASSERT_THIS(pview, cxView);
     CX_ASSERT_VALUE(pav, cxAction, action);
     cxActionSetView(action, pview);
-    cxUInt actionId = cxActionGetActionId(action);
+    cxUInt actionId = cxActionGetId(action);
     cxHashKey key = cxHashLongKey(actionId);
     cxAny ptr = cxHashGet(this->Actions, key);
     if(ptr != NULL){
@@ -891,8 +887,6 @@ CX_INLINE void cxViewClearRemoves(cxView this)
         if(view->isRunning){
             cxViewExit(view);
         }
-        cxView parent = view->ParentView;
-        CX_METHOD_RUN(parent->onRemove, parent, view);
         cxListRemove(this->SubViews, view->subElement);
         view->subElement = NULL;
         view->ParentView = NULL;
@@ -920,7 +914,6 @@ CX_INLINE void cxViewClearAppends(cxAny pview)
             cxViewEnter(nview);
             cxViewLayout(nview);
         }
-        CX_METHOD_RUN(this->onAppend, this , nview);
     }
     cxArrayClear(this->appends);
 }
@@ -953,13 +946,13 @@ void cxViewDraw(cxAny pview)
     if(isCropping){
         cxOpenGLEnableScissor(this->scissor);
     }
-    CX_METHOD_RUN(this->Before, this);
-    CX_METHOD_RUN(this->Draw, this);
+    CX_METHOD_RUN(this->DrawBefore, this);
+    CX_METHOD_RUN(this->DrawView, this);
     CX_VIEW_FOREACH_SUBVIEWS(this, ele){
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    CX_METHOD_RUN(this->After,this);
+    CX_METHOD_RUN(this->DrawAfter,this);
     if(isCropping){
         cxOpenGLDisableScissor();
     }

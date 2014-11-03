@@ -57,6 +57,18 @@ typedef enum {
 }cxViewDirty;
 
 CX_DEF(cxView, cxObject)
+    cxArray removes;
+    cxArray appends;
+    cxListElement *subElement;
+    cxBool isPrepend;
+    cxBool isFront;    //
+    cxBool isRunning;
+    cxBool isShowBorder;    //if draw border
+    cxBool isSort;
+    cxBool isRemoved;   //if remove
+    cxRect4f scissor;
+    cxMatrix4f normalMatrix;
+    cxMatrix4f anchorMatrix;
     CX_FIELD_DEF(cxHash Bindes);
     CX_FIELD_DEF(cxHash Binded);
     CX_FIELD_DEF(cxLong Tag);
@@ -83,38 +95,16 @@ CX_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxBool IsSleep);
     CX_FIELD_DEF(cxBool IsDraw);
     CX_FIELD_DEF(cxInt Assist);
-
-    cxArray removes;
-    cxArray appends;
-    cxListElement *subElement;
-    cxBool isPrepend;
-    cxBool isFront;    //
-    cxBool isRunning;
-    cxBool isShowBorder;    //if draw border
-    cxBool isSort;
-    cxBool isRemoved;   //if remove
-    cxRect4f scissor;
-    cxMatrix4f normalMatrix;
-    cxMatrix4f anchorMatrix;
-
     CX_METHOD_DEF(cxBool, Touch, cxAny, const cxTouchItems *);
     CX_METHOD_DEF(cxBool, Key, cxAny, const cxKey *);
-    CX_METHOD_DEF(void, Draw, cxAny);
-    CX_METHOD_DEF(void, After, cxAny);
-    CX_METHOD_DEF(void, Before, cxAny);
-    //method event
-    CX_METHOD_DEF(void, onAppend,cxAny,cxAny);
-    CX_METHOD_DEF(void, onRemove,cxAny,cxAny);
-    CX_METHOD_DEF(void, onSort,cxAny);
-    CX_METHOD_DEF(void, onPosition,cxAny,cxVec2f opos,cxVec2f npos);//when set position
-
+    CX_METHOD_DEF(void, DrawView, cxAny);
+    CX_METHOD_DEF(void, DrawAfter, cxAny);
+    CX_METHOD_DEF(void, DrawBefore, cxAny);
     CX_EVENT_ALLOC(onEnter);    //when view appended
     CX_EVENT_ALLOC(onExit);     //when view removed
     CX_EVENT_ALLOC(onUpdate);
-    CX_EVENT_ALLOC(onResize);
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
-
 CX_END(cxView, cxObject)
 
 CX_INLINE const cxMatrix4f *cxViewGetNormalMatrix(cxAny pthis)

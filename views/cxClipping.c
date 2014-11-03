@@ -62,8 +62,8 @@ CX_TYPE(cxClipping, cxView)
 CX_INIT(cxClipping, cxView)
 {
     this->useRef = cxStencilRefAlloc();
-    CX_SET(cxView, this, Before, cxClippingDrawBefore);
-    CX_SET(cxView, this, After, cxClippingDrawAfter);
+    CX_SET(cxView, this, DrawBefore, cxClippingDrawBefore);
+    CX_SET(cxView, this, DrawAfter, cxClippingDrawAfter);
 }
 CX_FREE(cxClipping, cxView)
 {

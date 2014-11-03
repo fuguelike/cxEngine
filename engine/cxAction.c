@@ -35,10 +35,10 @@ CX_SETTER_DEF(cxAction, curve)
         cxActionSetCurve(this, item->func);
     }
 }
-CX_SETTER_DEF(cxAction, actionid)
+CX_SETTER_DEF(cxAction, id)
 {
-    cxUInt actionId = (cxUInt)cxJsonToLong(value, this->ActionId);
-    cxActionSetActionId(this, actionId);
+    cxUInt id = (cxUInt)cxJsonToLong(value, this->Id);
+    cxActionSetId(this, id);
 }
 CX_SETTER_DEF(cxAction, group)
 {
@@ -59,7 +59,7 @@ CX_TYPE(cxAction, cxObject)
     CX_PROPERTY_SETTER(cxAction, delay);
     CX_PROPERTY_SETTER(cxAction, scale);
     CX_PROPERTY_SETTER(cxAction, curve);
-    CX_PROPERTY_SETTER(cxAction, actionid);
+    CX_PROPERTY_SETTER(cxAction, id);
     CX_PROPERTY_SETTER(cxAction, group);
     CX_PROPERTY_SETTER(cxAction, tag);
 }
@@ -112,7 +112,12 @@ static void cxActionExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxAction);
     CX_EVENT_FIRE(this, onExit);
-    CX_METHOD_RUN(this->Over,this);
+}
+
+CX_INLINE void cxActionResetElapsed(cxAction this)
+{
+    this->TimeElapsed = 0;
+    this->DelayElapsed = 0;
 }
 
 cxBool cxActionUpdate(cxAny pav,cxFloat dt)
@@ -128,9 +133,9 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     if(this->isPause || this->isExit){
         goto finished;
     }
-    //if pause
-    if(this->PauseTime > 0){
-        this->PauseTime -= dt;
+    //action delay init before
+    this->DelayElapsed += dt;
+    if(this->Delay > 0 && this->DelayElapsed < this->Delay){
         goto finished;
     }
     //init event
@@ -141,35 +146,19 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     if(this->isExit){
         goto finished;
     }
-    //action delay
-    this->DelayElapsed += dt;
-    if(this->Delay > 0 && this->DelayElapsed < this->Delay){
-        goto finished;
-    }
-    //for active
-    if(!this->isActive){
-        this->isActive = true;
-        CX_METHOD_RUN(this->Active, this);
-    }
     this->TimeElapsed += dt;
-    cxFloat value = this->TimeElapsed/CX_MAX(this->Time, FLT_EPSILON);
-    cxFloat time = kmClamp(value, 0.0f, 1.0f);
-    //wait exit
+    cxFloat time = kmClamp(this->TimeElapsed/this->Time, 0.0f, 1.0f);
+    time = CX_METHOD_GET(time, this->Curve, this, time);
     if(this->Time < 0){
         CX_METHOD_RUN(this->Step,this,dt,time);
-    }else if(this->Time == 0){
+    }else if(cxFloatEqu(this->Time, 0.0f)){
         isExit = CX_METHOD_GET(true, this->Exit, this);
     }else if(this->TimeElapsed < this->Time){
-        time = CX_METHOD_GET(time, this->Curve, this, time);
         CX_METHOD_RUN(this->Step,this,dt,time);
     }else{
-        time = CX_METHOD_GET(1.0f, this->Curve,this,1.0f);
         CX_METHOD_RUN(this->Step,this,dt,1.0f);
-        //check exit
         isExit = CX_METHOD_GET(true, this->Exit,this);
-        this->TimeElapsed = 0.0f;
-        this->DelayElapsed = 0.0f;
-        this->isActive = false;
+        cxActionResetElapsed(this);
     }
 finished:
     //update
@@ -192,15 +181,13 @@ void cxActionReset(cxAny pav)
     CX_ASSERT_THIS(pav, cxAction);
     this->isFirst = false;
     this->isExit = false;
-    this->TimeElapsed = 0;
-    this->DelayElapsed = 0;
+    cxActionResetElapsed(this);
     CX_METHOD_RUN(this->Reset, this);
 }
 
 void cxActionResume(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxAction);
-    this->PauseTime = 0.0f;
     this->isPause = false;
 }
 

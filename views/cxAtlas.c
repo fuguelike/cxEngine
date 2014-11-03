@@ -90,11 +90,29 @@ void cxAtlasUpdateScale9(cxAny pview)
     }
 }
 
-void cxAtlasResize(cxAny sender)
+void cxAtlasResize(cxAny pview)
 {
-    cxAtlasUpdateScale9(sender);
+    cxAtlasUpdateScale9(pview);
 }
 
+static void cxAtlasDirty(cxAny pview)
+{
+    if(cxViewGetDirty(pview) & cxViewDirtySize){
+        cxAtlasResize(pview);
+    }
+}
+
+CX_SETTER_DEF(cxAtlas, blend)
+{
+    cxConstChars blend = cxJsonToConstChars(value);
+    if(cxConstCharsEqu(blend, "add")){
+        cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE);
+    }else if(cxConstCharsEqu(blend, "multiply")){
+        cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }else{
+        CX_ASSERT_FALSE("not support mode %s",blend);
+    }
+}
 CX_SETTER_DEF(cxAtlas, scale9)
 {
     if(cxJsonBool(value, "enable", false)){
@@ -107,6 +125,7 @@ CX_SETTER_DEF(cxAtlas, scale9)
 
 CX_TYPE(cxAtlas, cxSprite)
 {
+    CX_PROPERTY_SETTER(cxAtlas, blend);
     CX_PROPERTY_SETTER(cxAtlas, scale9);
 }
 CX_INIT(cxAtlas, cxSprite)
@@ -114,8 +133,8 @@ CX_INIT(cxAtlas, cxSprite)
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);
-    CX_SET(cxView, this, Draw, cxAtlasDraw);
-    CX_ADD(cxView, this, onResize, cxAtlasResize);
+    CX_SET(cxView, this, DrawView, cxAtlasDraw);
+    CX_ADD(cxView, this, onDirty, cxAtlasDirty);
     this->items = CX_ALLOC(cxHash);
 }
 CX_FREE(cxAtlas, cxSprite)

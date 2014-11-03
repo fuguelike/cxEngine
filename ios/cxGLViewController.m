@@ -34,7 +34,6 @@
     [glView setMultipleTouchEnabled:YES];
     self.view = glView;
     [glView release];
-    [glView startMainLoop];
 }
 
 - (NSUInteger)supportedInterfaceOrientations

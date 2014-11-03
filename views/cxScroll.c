@@ -51,40 +51,36 @@ static void cxScrollResetScale(cxScroll this)
 static cxBool cxScrollScale(cxAny pview,const cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, cxScroll);
-    cxTouchItem item0 = points->items[0];
-    cxTouchItem item1 = points->items[1];
+    cxTouchItem item1 = points->items[0];
+    cxTouchItem item2 = points->items[1];
     cxView body = cxScrollGetBody(this);
-    cxHitInfo h0 = cxViewHitTest(body, item0->position);
     cxHitInfo h1 = cxViewHitTest(body, item1->position);
-    if(h0.hited && h1.hited && (item0->type == cxTouchTypeDown || item1->type == cxTouchTypeDown)){
+    cxHitInfo h2 = cxViewHitTest(body, item2->position);
+    if(h1.hited && h2.hited && (item1->type == cxTouchTypeDown || item2->type == cxTouchTypeDown)){
         //disable move
         this->isEnable = false;
-        this->startDis = kmVec2DistanceBetween(&item0->position, &item1->position);
+        this->startDis = kmVec2DistanceBetween(&item1->position, &item2->position);
         return true;
     }
-    if(item0->type == cxTouchTypeUp || item1->type == cxTouchTypeUp){
+    if(item1->type == cxTouchTypeUp || item2->type == cxTouchTypeUp){
         cxScrollResetScale(this);
         this->startDis = 0;
+        return false;
     }
     if(this->startDis == 0){
         return false;
     }
-    if(item0->type == cxTouchTypeMove || item1->type == cxTouchTypeMove){
-        if(this->startDis <= 0){
-            return false;
-        }
-        cxFloat dis = kmVec2DistanceBetween(&item0->position, &item1->position);
+    if(item1->type == cxTouchTypeMove || item2->type == cxTouchTypeMove){
+        cxFloat dis = kmVec2DistanceBetween(&item1->position, &item2->position);
         cxFloat delta = dis - this->startDis;
         this->startDis = dis;
         cxVec2f scale = cxViewGetScale(body);
         if(delta > 0){
             scale.x += this->scaling;
             scale.y += this->scaling;
-            CX_LOGGER("add %f %f",scale.x,scale.y);
         }else if(delta < 0){
             scale.x -= this->scaling;
             scale.y -= this->scaling;
-            CX_LOGGER("dec %f %f",scale.x,scale.y);
         }else{
             return false;
         }
@@ -92,7 +88,7 @@ static cxBool cxScrollScale(cxAny pview,const cxTouchItems *points)
         scale.y = kmClamp(scale.y, this->range.min, this->range.max + this->scaleinc);
         cxViewSetScale(body, scale);
         //fix position
-        cxVec2f npos = cxViewSetAnchor(body, cxVec2fMidPoint(h0.position, h1.position));
+        cxVec2f npos = cxViewSetAnchor(body, cxVec2fMidPoint(h1.position, h2.position));
         cxScrollUpdateBox(this);
         cxScrollCheckPos(this, &npos);
         cxViewSetPosition(body, npos);
@@ -189,7 +185,7 @@ cxBool cxScrollTouch(cxAny pview,const cxTouchItems *points)
         }
         cxScrollCheckPos(this, &npos);
         cxMove m = cxMoveCreate(this->moveTime, npos);
-        cxActionSetActionId(m, (cxUInt)body);
+        cxActionSetId(m, (cxUInt)body);
         cxActionSetCurve(m, cxScrollMoveCurve);
         cxViewAppendAction(body, m);
     }
@@ -206,7 +202,7 @@ void cxScrollLocationTo(cxAny pview,cxVec2f pos,cxBool animate)
     cxScrollCheckPos(this, &pos);
     if(animate){
         cxMove m = cxMoveCreate(this->moveTime, pos);
-        cxActionSetActionId(m, (cxUInt)body);
+        cxActionSetId(m, (cxUInt)body);
         cxActionSetCurve(m, cxScrollMoveCurve);
         cxViewAppendAction(body, m);
     }else{
@@ -285,11 +281,6 @@ CX_FREE(cxScroll, cxView)
 }
 CX_TERM(cxScroll, cxView)
 
-void cxScrollSetEnable(cxAny pview,cxBool enable)
-{
-    CX_ASSERT_THIS(pview, cxScroll);
-    this->isEnable = enable;
-}
 
 
 

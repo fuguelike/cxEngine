@@ -129,6 +129,7 @@ void cxParticlePlay(cxAny pview)
         cxParticleUnit *p = &this->units[this->index];
         p->life = 0;
     }
+    this->count = 0;
     cxAtlasClear(this);
 }
 
@@ -142,6 +143,9 @@ void cxParticleStop(cxAny pview)
 static void cxParticleUpdate(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxParticle);
+    if(this->number == 0){
+        return;
+    }
     cxFloat dt = cxEngineGetFrameDelta();
     this->TimeElapsed += dt;
     if(this->isActive){
@@ -219,17 +223,6 @@ void cxParticleSetType(cxAny pav,cxParticleEmitterType type)
     this->type = type;
 }
 
-void cxParticleSetBlendMode(cxAny pav,cxParticleBlendMode mode)
-{
-    CX_ASSERT_THIS(pav, cxParticle);
-    if(mode == cxParticleBlendAdd){
-        cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE);
-    }else{
-        cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-    this->blend = mode;
-}
-
 CX_SETTER_DEF(cxParticle, number)
 {
     cxInt number = cxJsonToInt(value, this->number);
@@ -245,17 +238,6 @@ CX_SETTER_DEF(cxParticle, emitter)
         cxParticleSetType(this, cxParticleEmitterRadial);
     }else{
         cxParticleSetType(this, cxParticleEmitterGravity);
-    }
-}
-CX_SETTER_DEF(cxParticle, blend)
-{
-    cxConstChars blend = cxJsonToConstChars(value);
-    if(cxConstCharsEqu(blend, "add")){
-        cxParticleSetBlendMode(this, cxParticleBlendAdd);
-    }else if(cxConstCharsEqu(blend, "multiply")){
-        cxParticleSetBlendMode(this, cxParticleBlendMultiply);
-    }else{
-        cxParticleSetBlendMode(this, cxParticleBlendAdd);
     }
 }
 CX_SETTER_DEF(cxParticle, time)
@@ -339,7 +321,6 @@ CX_TYPE(cxParticle, cxAtlas)
 {
     CX_PROPERTY_SETTER(cxParticle, number);
     CX_PROPERTY_SETTER(cxParticle, emitter);
-    CX_PROPERTY_SETTER(cxParticle, blend);
     CX_PROPERTY_SETTER(cxParticle, time);
     CX_PROPERTY_SETTER(cxParticle, life);
     CX_PROPERTY_SETTER(cxParticle, position);
@@ -362,10 +343,11 @@ CX_TYPE(cxParticle, cxAtlas)
 }
 CX_INIT(cxParticle, cxAtlas)
 {
+    cxSetRandSeed();
     this->rate = -1;
+    this->time = -1;
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
-    cxParticleSetBlendMode(this, cxParticleBlendAdd);
     CX_ADD(cxView, this, onUpdate, cxParticleUpdate);
 }
 CX_FREE(cxParticle, cxAtlas)

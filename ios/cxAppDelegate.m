@@ -30,9 +30,12 @@ static void cxDisableDocumentBackup()
     cxDisableDocumentBackup();
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.window.contentScaleFactor = [UIScreen mainScreen].scale;
-    self.rootViewController = [[[cxGLViewController alloc] init] autorelease];
-    [self.window setRootViewController:self.rootViewController];
+    cxGLViewController *glController = [[cxGLViewController alloc] init];
+    self.rootViewController = glController;
+    [self.window setRootViewController:glController];
     [self.window makeKeyAndVisible];
+    [[glController getGLView] startMainLoop];
+    [glController release];
     return YES;
 }
 
