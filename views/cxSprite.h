@@ -28,6 +28,11 @@ CX_DEF(cxSprite, cxView)
     cxBoxTex2f      texCoord;
 CX_END(cxSprite, cxView)
 
+CX_INLINE cxBoxTex2f *cxSpriteGetTexCoord(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxSprite);
+    return &this->texCoord;
+}
 CX_FIELD_GET(cxSprite, cxTexture, Texture);
 CX_FIELD_GET(cxSprite, cxShader, Shader);
 

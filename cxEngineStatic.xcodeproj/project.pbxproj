@@ -46,7 +46,6 @@
 		831E654E19EFA9B000FCFD85 /* cxMove.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E634519EFA9AF00FCFD85 /* cxMove.c */; };
 		831E654F19EFA9B000FCFD85 /* cxMultiple.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E634719EFA9AF00FCFD85 /* cxMultiple.c */; };
 		831E655019EFA9B000FCFD85 /* cxParabola.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E634919EFA9AF00FCFD85 /* cxParabola.c */; };
-		831E655119EFA9B000FCFD85 /* cxParticle.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E634B19EFA9AF00FCFD85 /* cxParticle.c */; };
 		831E655219EFA9B000FCFD85 /* cxRotate.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E634D19EFA9AF00FCFD85 /* cxRotate.c */; };
 		831E655319EFA9B000FCFD85 /* cxRunner.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E634F19EFA9AF00FCFD85 /* cxRunner.c */; };
 		831E655419EFA9B000FCFD85 /* cxScale.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E635119EFA9AF00FCFD85 /* cxScale.c */; };
@@ -194,6 +193,7 @@
 		831E663F19EFA9D200FCFD85 /* cxSprite.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661619EFA9D200FCFD85 /* cxSprite.c */; };
 		831E664119EFA9D200FCFD85 /* cxTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661A19EFA9D200FCFD85 /* cxTable.c */; };
 		831E664219EFA9D200FCFD85 /* cxWindow.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661C19EFA9D200FCFD85 /* cxWindow.c */; };
+		8353037F1A07613A00235B79 /* cxParticle.c in Sources */ = {isa = PBXBuildFile; fileRef = 8353037D1A07613A00235B79 /* cxParticle.c */; };
 		83B1EAD51A01DE520089B374 /* lzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B1EAD31A01DE520089B374 /* lzma.c */; };
 		83B1EAD81A01FE3F0089B374 /* cxLzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B1EAD61A01FE3F0089B374 /* cxLzma.c */; };
 		83CA51A919F3A6DD002119B0 /* cxShaderTTF.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */; };
@@ -294,8 +294,6 @@
 		831E634819EFA9AF00FCFD85 /* cxMultiple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMultiple.h; sourceTree = "<group>"; };
 		831E634919EFA9AF00FCFD85 /* cxParabola.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxParabola.c; sourceTree = "<group>"; };
 		831E634A19EFA9AF00FCFD85 /* cxParabola.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxParabola.h; sourceTree = "<group>"; };
-		831E634B19EFA9AF00FCFD85 /* cxParticle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxParticle.c; sourceTree = "<group>"; };
-		831E634C19EFA9AF00FCFD85 /* cxParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxParticle.h; sourceTree = "<group>"; };
 		831E634D19EFA9AF00FCFD85 /* cxRotate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxRotate.c; sourceTree = "<group>"; };
 		831E634E19EFA9AF00FCFD85 /* cxRotate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxRotate.h; sourceTree = "<group>"; };
 		831E634F19EFA9AF00FCFD85 /* cxRunner.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxRunner.c; sourceTree = "<group>"; };
@@ -580,6 +578,8 @@
 		831E661B19EFA9D200FCFD85 /* cxTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTable.h; sourceTree = "<group>"; };
 		831E661C19EFA9D200FCFD85 /* cxWindow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxWindow.c; sourceTree = "<group>"; };
 		831E661D19EFA9D200FCFD85 /* cxWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxWindow.h; sourceTree = "<group>"; };
+		8353037D1A07613A00235B79 /* cxParticle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxParticle.c; sourceTree = "<group>"; };
+		8353037E1A07613A00235B79 /* cxParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxParticle.h; sourceTree = "<group>"; };
 		83B1EAD31A01DE520089B374 /* lzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lzma.c; sourceTree = "<group>"; };
 		83B1EAD41A01DE520089B374 /* lzma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzma.h; sourceTree = "<group>"; };
 		83B1EAD61A01FE3F0089B374 /* cxLzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLzma.c; sourceTree = "<group>"; };
@@ -728,8 +728,6 @@
 				831E634819EFA9AF00FCFD85 /* cxMultiple.h */,
 				831E634919EFA9AF00FCFD85 /* cxParabola.c */,
 				831E634A19EFA9AF00FCFD85 /* cxParabola.h */,
-				831E634B19EFA9AF00FCFD85 /* cxParticle.c */,
-				831E634C19EFA9AF00FCFD85 /* cxParticle.h */,
 				831E634D19EFA9AF00FCFD85 /* cxRotate.c */,
 				831E634E19EFA9AF00FCFD85 /* cxRotate.h */,
 				831E634F19EFA9AF00FCFD85 /* cxRunner.c */,
@@ -1111,6 +1109,8 @@
 		831E660319EFA9D200FCFD85 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				8353037D1A07613A00235B79 /* cxParticle.c */,
+				8353037E1A07613A00235B79 /* cxParticle.h */,
 				831E660419EFA9D200FCFD85 /* cxAlert.c */,
 				831E660519EFA9D200FCFD85 /* cxAlert.h */,
 				831E660619EFA9D200FCFD85 /* cxAtlas.c */,
@@ -1243,7 +1243,6 @@
 				831E659319EFA9B000FCFD85 /* cxBMPFont.c in Sources */,
 				831E657319EFA9B000FCFD85 /* cpCollision.c in Sources */,
 				831046F219F21B3E0086D91A /* SkeletonBounds.c in Sources */,
-				831E655119EFA9B000FCFD85 /* cxParticle.c in Sources */,
 				831E654C19EFA9B000FCFD85 /* cxFollow.c in Sources */,
 				831E664219EFA9D200FCFD85 /* cxWindow.c in Sources */,
 				831E662819EFA9D200FCFD85 /* cxHttp.c in Sources */,
@@ -1395,6 +1394,7 @@
 				831E657019EFA9B000FCFD85 /* cpBB.c in Sources */,
 				831E656B19EFA9B000FCFD85 /* cpRotaryLimitJoint.c in Sources */,
 				831E654E19EFA9B000FCFD85 /* cxMove.c in Sources */,
+				8353037F1A07613A00235B79 /* cxParticle.c in Sources */,
 				831E658019EFA9B000FCFD85 /* cxArray.c in Sources */,
 				831E662119EFA9D200FCFD85 /* LzmaLib.c in Sources */,
 				831E656E19EFA9B000FCFD85 /* cpArbiter.c in Sources */,

@@ -3,20 +3,11 @@
   "cxType": "cxParticle",
   "time": -1,
   "number": 200,
-  "rate": -1,
-  "texture": {
-    "url": "texture.json",
-    "keys": [
-      "chilli.png",
-      "carrot.png",
-      "cholesterol.png",
-      "cucumber.png",
-      "leek.png"
-    ]
-  },
+  "rate": 20,
+  "texture": "pvr.json?1.png",
   "gravity": {
     "x": 0,
-    "y": -1000
+    "y": 0
   },
   "sspin":{
       "v":1000
@@ -25,7 +16,7 @@
     "v": 3,
     "r": 0
   },
-  "blend": "add",
+  "blend": "multiply",
   "position": {
     "rx": 0,
     "ry": 0

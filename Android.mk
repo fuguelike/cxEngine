@@ -149,7 +149,6 @@ LOCAL_SRC_FILES += \
     actions/cxRunner.c \
     actions/cxAnimate.c \
     actions/cxSpline.c \
-    actions/cxParticle.c \
     actions/cxParabola.c \
     actions/cxFollow.c \
     actions/cxTimeLine.c \
@@ -169,7 +168,8 @@ LOCAL_SRC_FILES += \
     views/cxLabelBMP.c \
     views/cxPolygon.c \
     views/cxAlert.c \
-    views/cxSpine.c
+    views/cxSpine.c \
+    views/cxParticle.c
 
 LOCAL_SRC_FILES += \
     socket/cxLooper.c \

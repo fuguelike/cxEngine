@@ -40,8 +40,8 @@
 #include <views/cxPolygon.h>
 #include <views/cxAlert.h>
 #include <views/cxSpine.h>
+#include <views/cxParticle.h>
 
-#include <actions/cxParticle.h>
 #include <actions/cxMultiple.h>
 #include <actions/cxMove.h>
 #include <actions/cxFade.h>

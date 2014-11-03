@@ -108,8 +108,6 @@ CX_DEF(cxView, cxObject)
     CX_METHOD_DEF(void, onSort,cxAny);
     CX_METHOD_DEF(void, onPosition,cxAny,cxVec2f opos,cxVec2f npos);//when set position
 
-    CX_SIGNAL_ALLOC(onDraw);        //(cxAny pview)
-
     CX_EVENT_ALLOC(onEnter);    //when view appended
     CX_EVENT_ALLOC(onExit);     //when view removed
     CX_EVENT_ALLOC(onUpdate);

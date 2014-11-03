@@ -221,8 +221,6 @@ CX_FREE(cxView, cxObject)
     CX_EVENT_RELEASE(this->onUpdate);
     CX_EVENT_RELEASE(this->onResize);
     CX_EVENT_RELEASE(this->onLayout);
-
-    CX_SIGNAL_RELEASE(this->onDraw);
 }
 CX_TERM(cxView, cxObject)
 
@@ -961,7 +959,6 @@ void cxViewDraw(cxAny pview)
         cxView view = ele->any;
         cxViewDraw(view);
     }
-    CX_SIGNAL_FIRE(this->onDraw, CX_SIGNAL_TYPE());
     CX_METHOD_RUN(this->After,this);
     if(isCropping){
         cxOpenGLDisableScissor();

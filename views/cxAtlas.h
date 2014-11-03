@@ -34,7 +34,7 @@ CX_END(cxAtlas, cxSprite)
 CX_INLINE cxBoxPoint *cxAtlasBoxPoint(cxAny pthis,cxInt idx)
 {
     CX_ASSERT_THIS(pthis, cxAtlas);
-    CX_ASSERT(idx >= 0 && idx < this->number, "idx error");
+    CX_ASSERT(idx >= 0 && idx < this->capacity, "idx error");
     return &this->boxes[idx];
 }
 

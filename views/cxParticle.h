@@ -9,7 +9,6 @@
 #ifndef cxEngine_cxRunParticle_h
 #define cxEngine_cxRunParticle_h
 
-#include <engine/cxAction.h>
 #include <views/cxAtlas.h>
 
 CX_C_BEGIN
@@ -44,9 +43,9 @@ typedef enum {
     cxParticleBlendMultiply,
 }cxParticleBlendMode;
 
-CX_DEF(cxParticle, cxAction)
+CX_DEF(cxParticle, cxAtlas)
     cxFloat time;
-    cxAtlas atlas;
+    cxFloat TimeElapsed;
     cxParticleEmitterType type;
     cxInt index;
     cxInt count;
@@ -76,20 +75,13 @@ CX_DEF(cxParticle, cxAction)
     cxFloatRange startradius;
     cxFloatRange endradius;
     cxFloatRange rotatepers;
-    //use multiple texture
-    cxMemory boxtexs;
-    //
-    CX_METHOD_DEF(cxBoxTex2f *, GetBoxTex, cxAny, cxInt);
-    CX_METHOD_DEF(cxAny, GetDrawView,cxAny);
-    CX_METHOD_DEF(void, InitUnit,cxAny,cxParticleUnit *,cxInt);
-    CX_SLOT_ALLOC(onDraw);
-CX_END(cxParticle, cxAction)
-
-cxBoxTex2f *cxParticleGetBoxTex(cxAny pav,cxInt index);
+CX_END(cxParticle, cxAtlas)
 
 void cxParticleInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index);
 
 void cxParticleStop(cxAny pav);
+
+void cxParticlePlay(cxAny pview);
 
 void cxParticleSetType(cxAny pav,cxParticleEmitterType type);
 
