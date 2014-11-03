@@ -14,6 +14,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Align;
+import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.graphics.Paint.FontMetricsInt;
 import android.opengl.GLSurfaceView;
@@ -202,7 +203,7 @@ public class EngineGLView extends GLSurfaceView {
 	private byte[] getPixels(Bitmap pBitmap) {
 		int width = pBitmap.getWidth();
 		int height = pBitmap.getHeight();
-		int isize = width * height;
+		int isize = width * height * 4;
 		byte[] wb = packInt(width);
 		byte[] hb = packInt(height);
 		byte[] pixels = new byte[isize + 8];
@@ -248,7 +249,6 @@ public class EngineGLView extends GLSurfaceView {
 	}
 	private Paint newPaint(String fontName,int fontSize,int horizontalAlignment) {
 		Paint paint = new Paint();
-		paint.setColor(Color.WHITE);
 		paint.setTextSize(fontSize); 
 		paint.setAntiAlias(true);
 		if (fontName != null && fontName.endsWith(".ttf")) {
@@ -341,15 +341,33 @@ public class EngineGLView extends GLSurfaceView {
 	}
 	//create ttf image
 	//(Ljava/lang/String;Ljava/lang/String;IIII
-	public byte[] createTextBitmapImp(String pString, String pFontName, int fontSize,int align,int w,int h) {
+	public byte[] createTextBitmapImp(String pString, 
+			String pFontName, int fontSize,
+			int align,
+			int w,int h,
+			float r,float g,float b,float a,
+			float sw,float sr,float sg,float sb,float sa) {
 		if(pString.length() == 0){
 			return null;
 		}
 		int hAlign = align & 0x0F;
 		int vAlign = (align >> 4) & 0x0F;
 		pString = refactorString(pString);
+		//normal
 		Paint paint = newPaint(pFontName, fontSize, hAlign);
-		paint.setARGB(255, 255, 255, 255);
+		paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+		paint.setStyle(Style.FILL);
+		paint.setARGB((int)(a*255),(int)(r*255), (int)(g*255), (int)(b*255));
+		//stroke
+		Paint stroke = null;
+		if(sw > 0){
+			stroke = newPaint(pFontName, fontSize, hAlign);
+			stroke.setFlags(Paint.ANTI_ALIAS_FLAG);
+			stroke.setStrokeWidth(sw);
+			stroke.setStyle(Style.STROKE);
+			stroke.setARGB((int)(sa*255),(int)(sr*255), (int)(sg*255), (int)(sb*255));
+		}
+		//draw begin
 		TextProperty textProperty = computeTextProperty(pString,paint);
 		int totalHeight = textProperty.mTotalHeight;
 		if(h > 0 && h > totalHeight){
@@ -359,7 +377,7 @@ public class EngineGLView extends GLSurfaceView {
 		if(w > 0 && w > maxWidth){
 			maxWidth = w;
 		}
-		Bitmap bitmap = Bitmap.createBitmap(maxWidth,totalHeight, Bitmap.Config.ALPHA_8);
+		Bitmap bitmap = Bitmap.createBitmap(maxWidth,totalHeight, Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 		FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
 		int x = 0;
@@ -367,14 +385,23 @@ public class EngineGLView extends GLSurfaceView {
 		String[] lines = textProperty.mLines;
 		for (String line : lines) {
 			x = computeX(line, maxWidth, hAlign);
-			canvas.drawText(line, x, y, paint);
+			if(stroke != null){
+				canvas.drawText(line, x, y, stroke);
+			}
+			if(paint != null){
+				canvas.drawText(line, x, y, paint);
+			}
 			y += textProperty.mHeightPerLine;
 		}
 		return getPixels(bitmap);
 	}
 
-	public static byte[] createTextBitmap(String pString, String pFontName, int fontSize,int align,int w,int h) {
-		return glView.createTextBitmapImp(pString, pFontName, fontSize, align, w, h);
+	public static byte[] createTextBitmap(String pString, String pFontName, 
+			int fontSize,int align,
+			int w,int h,
+			float r,float g,float b,float a,
+			float sw,float sr,float sg,float sb,float sa) {
+		return glView.createTextBitmapImp(pString, pFontName, fontSize, align, w, h,r,g,b,a,sw,sr,sg,sb,sa);
 	}
     public EngineGLView(Context context) {
         super(context);
