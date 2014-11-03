@@ -39,7 +39,7 @@ cxString cxUUID()
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,const cxTextAttr *attr)
 {
     CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
-    CX_GET_METHOD(createTextBitmap,"createTextBitmap","(Ljava/lang/String;Ljava/lang/String;IIII)[B");
+    CX_GET_METHOD(createTextBitmap,"createTextBitmap","(Ljava/lang/String;Ljava/lang/String;IIIIFFFFFFFFF)[B");
     cxString rv = NULL;
     jstring strText = (*javaENV)->NewStringUTF(javaENV,txt);
     jstring fontName = NULL;
@@ -50,7 +50,24 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,const cxTextA
     jint align = attr->align;
     jint cw = attr->viewSize.w;
     jint ch = attr->viewSize.h;
-    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(M(createTextBitmap),strText,fontName,size,align,cw,ch);
+    //font color
+    jfloat r = attr->color.r;
+    jfloat g = attr->color.g;
+    jfloat b = attr->color.b;
+    jfloat a = attr->color.a;
+    //stroke width
+    jfloat sw = attr->strokeWidth;
+    //stroke color
+    jfloat sr = attr->strokeColor.r;
+    jfloat sg = attr->strokeColor.g;
+    jfloat sb = attr->strokeColor.b;
+    jfloat sa = attr->strokeColor.a;
+    jbyteArray bytes = (jbyteArray)(*javaENV)->CallStaticObjectMethod(M(createTextBitmap),strText,
+                                                                      fontName,size,
+                                                                      align,
+                                                                      cw,ch,
+                                                                      r,g,b,a,
+                                                                      sw,sr,sg,sb,sa);
     if(bytes != NULL){
         jboolean ok = JNI_FALSE;
         jsize length = (*javaENV)->GetArrayLength(javaENV,bytes);

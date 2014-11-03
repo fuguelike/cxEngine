@@ -87,7 +87,7 @@ CX_INIT(cxLabelTTF, cxSprite)
     this->attr.color = cxColor4fv(1, 1, 1, 1);
     cxSpriteSetShader(this, cxShaderTTFKey);
     
-    cxLabelTTfSetStroke(this, cxColor4fv(1, 0, 0, 1), 8);
+    cxLabelTTfSetStroke(this, cxColor4fv(0, 0, 0, 1), 5);
 }
 CX_FREE(cxLabelTTF, cxSprite)
 {
