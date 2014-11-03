@@ -36,16 +36,18 @@ CX_END(cxString, cxObject)
 
 #define cxConstString(f,...)        cxStringBody(cxStringCreate(f,##__VA_ARGS__))
 
-#define UTF8(f,...)  cxStringCreate(f,##__VA_ARGS__)
+#define UTF8(f,...)                 cxStringCreate(f,##__VA_ARGS__)
 
 cxInt cxRand(cxInt min,cxInt max);
 
 void cxSetRandSeed();
 
+//user zlib
 cxString cxCompressed(cxString data);
 
 cxString cxDecompress(cxString data);
 
+//use aes cbc
 cxString cxAESDecode(cxString data,cxString key);
 
 cxString cxAESEncode(cxString data,cxString key);
@@ -81,8 +83,6 @@ cxInt cxStringLength(cxString string);
 cxArray cxStringSplit(cxString string,cxConstChars sp);
 
 cxAny cxStringBody(cxString string);
-
-cxString cxStringAllocChars(cxConstChars str);
 
 void cxStringReplace(cxString string,cxChar s1,cxChar s2);
 

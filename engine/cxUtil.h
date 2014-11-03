@@ -19,8 +19,6 @@ typedef struct {
     cxInt current;
 }cxProgress;
 
-void cxEngineAlert(cxString message);
-
 typedef void (*cxCopyFileFunc)(cxConstChars file,cxProgress *progress,cxAny udata);
 
 cxString cxUUID();

@@ -150,6 +150,7 @@ CX_FIELD_IMP(cxView, cxBool, SleepTop);
 CX_FIELD_IMP(cxView, cxViewTouchFlags, TouchFlags);
 CX_FIELD_GET(cxView, cxSize2f, Size);
 CX_FIELD_GET(cxView, cxVec2f, Position);
+CX_FIELD_GET(cxView, cxVec2f, Scale);
 CX_FIELD_GET(cxView, cxVec2f, FixScale);
 CX_FIELD_GET(cxView, cxVec2f, Anchor);
 CX_FIELD_GET(cxView, cxVec3f, Raxis);
@@ -157,12 +158,6 @@ CX_FIELD_GET(cxView, cxFloat, Angle);
 CX_FIELD_GET(cxView, cxColor4f, Color);
 CX_FIELD_IMP(cxView, cxColor3f, BorderColor);
 CX_FIELD_IMP(cxView, cxBool, IsCropping);
-
-CX_INLINE cxVec2f cxViewGetScale(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    return cxVec2fv(this->FixScale.x * this->Scale.x, this->FixScale.y * this->Scale.y);
-}
 
 CX_FIELD_GET(cxView, cxViewDirty, Dirty);
 CX_INLINE void cxViewSetDirty(cxAny pthis,cxViewDirty dirty)
@@ -276,7 +271,7 @@ cxVec2f cxViewSetAnchor(cxAny pview,cxVec2f anchor);
 
 void cxViewSetScale(cxAny pview,cxVec2f scale);
 
-void cxViewSetFixScale(cxAny pview,cxVec2f scale);
+void cxViewSetFixScale(cxAny pview,cxVec2f fixscale);
 
 void cxViewSetRaxis(cxAny pview,cxVec3f raxis);
 

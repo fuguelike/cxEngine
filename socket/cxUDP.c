@@ -68,7 +68,7 @@ cxUDP cxUDPCreate(cxConstChars host,cxInt port)
 {
     cxLooper looper = cxLooperInstance();
     cxUDP this = CX_CREATE(cxUDP);
-    this->host = cxStringAllocChars(host);
+    CX_RETAIN_SET(this->host, cxStringConstChars(host));
     this->port = port;
     this->socket = cxCreateSocket(true,SOCK_DGRAM);
     if(this->socket == -1){

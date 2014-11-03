@@ -33,7 +33,6 @@ cxAsync cxLoadingCurrentItem(cxAny pview)
 static void cxLoadingTimerArrive(cxAny sender)
 {
     CX_ASSERT_VALUE(cxActionGetView(sender), cxLoading, this);
-    CX_RETURN(cxArrayLength(this->asyncs) == 0);
     //run step method
     cxAsync item =  cxLoadingCurrentItem(this);
     cxAsyncState state = cxAsyncDrive(this, item);
@@ -104,6 +103,10 @@ void cxLoadingStart(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxLoading);
     cxEngine engine = cxEngineInstance();
+    if(cxArrayLength(this->asyncs) == 0){
+        CX_METHOD_RUN(this->onExit, this);
+        return;
+    }
     //run start and step 1
     CX_METHOD_RUN(this->onStart, this);
     CX_METHOD_RUN(this->onStep, this);

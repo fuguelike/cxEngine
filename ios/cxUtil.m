@@ -28,9 +28,8 @@ cxArray cxFontNames()
     for (NSString *family  in familys) {
         NSArray* fonts = [UIFont fontNamesForFamilyName:family];
         for (NSString *font in fonts) {
-            cxString item = cxStringAllocChars([font UTF8String]);
+            cxString item = cxStringConstChars([font UTF8String]);
             cxArrayAppend(list, item);
-            CX_RELEASE(item);
         }
     }
     return list;
@@ -67,6 +66,8 @@ static CGSize cxCalculateStringSize(NSString *str, id font, CGSize constrainSize
 #define ALIGN_BOTTOM 2
 #define ALIGN_CENTER 3
 
+#define cxColor4fToUIColor(c) [UIColor colorWithRed:(c).r green:(c).g blue:(c).b alpha:(c).a]
+
 cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxTextAttr *attr)
 {
     CX_RETURN(txt == NULL, NULL);
@@ -90,13 +91,12 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
     //font and color
     [attrs setObject:font forKey:NSFontAttributeName];
-    [attrs setObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
+    [attrs setObject:cxColor4fToUIColor(attr->color) forKey:NSForegroundColorAttributeName];
     dim = cxCalculateStringSize(str, font, csize, attrs);
     // compute start point
     int startH = 0;
     int startW = 0;
     if (csize.height > dim.height){
-        // vertical alignment
         unsigned int vAlignment = ((int)attr->align >> 4) & 0x0F;
         if (vAlignment == ALIGN_TOP){
             startH = 0;
@@ -113,18 +113,20 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     if (csize.height > 0 && csize.height > dim.height){
         dim.height = csize.height;
     }
-    cxInt bufsiz = sizeof(cxChar) * (int)(dim.width * dim.height) + sizeof(cxSize2i);
+    cxInt bufsiz = sizeof(cxChar) * (int)(dim.width * dim.height * 4) + sizeof(cxSize2i);
     cxChar *buffer = allocator->malloc(bufsiz);
     memset(buffer, 0, bufsiz);
     // draw text
-    CGBitmapInfo bitMapInfo = kCGImageAlphaOnly|kCGBitmapByteOrderDefault;
-    CGColorSpaceRef colorSpace  = CGColorSpaceCreateDeviceGray();
-    CGContextRef context = CGBitmapContextCreate(buffer,dim.width,dim.height,8,(int)(dim.width),colorSpace,bitMapInfo);
+    CGBitmapInfo bitMapInfo = kCGImageAlphaPremultipliedLast|kCGBitmapByteOrderDefault;
+    CGColorSpaceRef colorSpace  = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(buffer,dim.width,dim.height,8,(int)(dim.width * 4),colorSpace,bitMapInfo);
     CGContextTranslateCTM(context, 0.0f, dim.height);
     CGContextScaleCTM(context, 1.0f, -1.0f);
     UIGraphicsPushContext(context);
     cxUInt uHoriFlag = (int)attr->align & 0x0f;
     CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
+    CGContextSetShouldSmoothFonts(context, true);
+    CGContextSetShouldAntialias(context, true);
     CGContextSetShouldSubpixelQuantizeFonts(context, false);
     CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
     //parastyle
@@ -133,6 +135,13 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxT
     parastyle.lineBreakMode = NSLineBreakByClipping;
     [attrs setObject:parastyle forKey:NSParagraphStyleAttributeName];
     [parastyle release];
+    if(attr->strokeWidth > 0){
+        [attrs setObject:cxColor4fToUIColor(attr->strokeColor) forKey:NSStrokeColorAttributeName];
+        [attrs setObject:[NSNumber numberWithFloat:attr->strokeWidth] forKey:NSStrokeWidthAttributeName];
+        [str drawInRect:rect withAttributes:attrs];
+        [attrs removeObjectForKey:NSStrokeColorAttributeName];
+        [attrs removeObjectForKey:NSStrokeWidthAttributeName];
+    }
     [str drawInRect:rect withAttributes:attrs];
     CGContextEndTransparencyLayer(context);
     UIGraphicsPopContext();
@@ -160,13 +169,6 @@ cxInt cxAssertsFD(cxConstChars file,cxInt *off,cxInt *length)
     cxString path = cxAssetsPath(file);
     CX_ASSERT(path != NULL, "get file %s path failed",file);
     return cxFileFD(cxStringBody(path), off, length);
-}
-
-void cxEngineAlert(cxString message)
-{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"title" message:@"message" delegate:nil cancelButtonTitle:@"cancel" otherButtonTitles: nil];
-    [alert show];
-    [alert release];
 }
 
 void cxEngineSendJson(cxString json)

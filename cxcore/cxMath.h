@@ -265,6 +265,9 @@ typedef struct {
     cxFloat size;
     cxTextAlign align;
     cxSize2f viewSize;
+    cxColor4f color;
+    cxFloat strokeWidth;
+    cxColor4f strokeColor;
 }cxTextAttr;
 
 typedef struct {

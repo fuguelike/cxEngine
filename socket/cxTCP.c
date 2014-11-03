@@ -17,7 +17,8 @@ CX_TYPE(cxTCP, cxObject)
 }
 CX_INIT(cxTCP, cxObject)
 {
-    
+    this->ReadTimeout = 10;
+    this->WriteTimeout = 10;
 }
 CX_FREE(cxTCP, cxObject)
 {
@@ -120,6 +121,15 @@ cxInt cxTcpConnect(cxAny ptcp)
         CX_ERROR("create buffer event socket failed");
         return -1;
     }
+    //set read write timeoout
+    struct timeval r;
+    r.tv_sec = (cxInt)this->ReadTimeout;
+    r.tv_usec = fmodf(this->ReadTimeout, 1.0f) * 1000000.0f;
+    struct timeval w;
+    w.tv_sec = (cxInt)this->WriteTimeout;
+    w.tv_usec = fmodf(this->WriteTimeout, 1.0f) * 1000000.0f;
+    bufferevent_set_timeouts(this->bufferEvent, &r, &w);
+    //
     bufferevent_setcb(this->bufferEvent, cxTcpBufferRead, NULL, cxTcpBufferEvent, this);
     bufferevent_enable(this->bufferEvent, EV_READ|EV_WRITE);
     return bufferevent_socket_connect_hostname(this->bufferEvent, NULL, AF_INET, host , this->port);

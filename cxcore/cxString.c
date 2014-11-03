@@ -261,14 +261,6 @@ cxBool cxStringEqu(cxString s1,cxString s2)
     return memcmp(s1->strptr.d, s2->strptr.d,s1->strptr.i) == 0;
 }
 
-cxString cxStringAllocChars(cxConstChars str)
-{
-    CX_ASSERT(str != NULL, "str null");
-    cxString rv = CX_ALLOC(cxString);
-    cxStringAppend(rv, (void *)str, (cxInt)strlen(str));
-    return rv;
-}
-
 cxString cxStringAttachChars(cxChars str)
 {
     CX_ASSERT(str != NULL, "str null");

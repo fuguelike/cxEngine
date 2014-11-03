@@ -25,6 +25,17 @@ static cxFloat cxScrollMoveCurve(cxAny pav,cxFloat time)
     return (powf(time, 3.0f) + 1.0f);
 }
 
+static void cxBodyResetScaleUpdate(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxAction);
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, body);
+    CX_ASSERT_VALUE(cxViewGetParentView(body), cxScroll, scroll);
+    cxScrollUpdateBox(scroll);
+    cxVec2f npos = cxViewGetPosition(body);
+    cxScrollCheckPos(scroll, &npos);
+    cxViewSetPosition(body, npos);
+}
+
 static void cxScrollResetScale(cxScroll this)
 {
     cxView body = cxScrollGetBody(this);
@@ -32,6 +43,7 @@ static void cxScrollResetScale(cxScroll this)
     if(scale.x > this->range.max || scale.y > this->range.max){
         cxScale scale = cxScaleCreate(this->scaleTime, cxVec2fx(this->range.max));
         cxActionSetCurve(scale, cxScrollMoveCurve);
+        CX_ADD(cxAction, scale, onUpdate, cxBodyResetScaleUpdate);
         cxViewAppendAction(body, scale);
     }
 }
@@ -48,7 +60,6 @@ static cxBool cxScrollScale(cxAny pview,const cxTouchItems *points)
         //disable move
         this->isEnable = false;
         this->startDis = kmVec2DistanceBetween(&item0->position, &item1->position);
-        kmVec2MidPointBetween(&this->center, &h0.position, &h1.position);
         return true;
     }
     if(item0->type == cxTouchTypeUp || item1->type == cxTouchTypeUp){
@@ -59,16 +70,21 @@ static cxBool cxScrollScale(cxAny pview,const cxTouchItems *points)
         return false;
     }
     if(item0->type == cxTouchTypeMove || item1->type == cxTouchTypeMove){
+        if(this->startDis <= 0){
+            return false;
+        }
         cxFloat dis = kmVec2DistanceBetween(&item0->position, &item1->position);
-        cxFloat delta = (dis - this->startDis);
+        cxFloat delta = dis - this->startDis;
         this->startDis = dis;
         cxVec2f scale = cxViewGetScale(body);
         if(delta > 0){
             scale.x += this->scaling;
             scale.y += this->scaling;
+            CX_LOGGER("add %f %f",scale.x,scale.y);
         }else if(delta < 0){
             scale.x -= this->scaling;
             scale.y -= this->scaling;
+            CX_LOGGER("dec %f %f",scale.x,scale.y);
         }else{
             return false;
         }
@@ -76,7 +92,7 @@ static cxBool cxScrollScale(cxAny pview,const cxTouchItems *points)
         scale.y = kmClamp(scale.y, this->range.min, this->range.max + this->scaleinc);
         cxViewSetScale(body, scale);
         //fix position
-        cxVec2f npos = cxViewSetAnchor(body, this->center);
+        cxVec2f npos = cxViewSetAnchor(body, cxVec2fMidPoint(h0.position, h1.position));
         cxScrollUpdateBox(this);
         cxScrollCheckPos(this, &npos);
         cxViewSetPosition(body, npos);

@@ -52,7 +52,7 @@ cxHttpConn cxHttpConnectOpen(cxConstChars host,cxInt port)
     CX_ASSERT(host != NULL && port > 0, "args error");
     cxLooper looper = cxLooperInstance();
     cxHttpConn this = CX_CREATE(cxHttpConn);
-    this->host = cxStringAllocChars(host);
+    CX_RETAIN_SET(this->host, cxStringConstChars(host));
     this->port = port;
     this->conn = evhttp_connection_base_new(looper->looper, NULL, host, port);
     if(this->conn == NULL){

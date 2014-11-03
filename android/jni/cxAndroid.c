@@ -32,9 +32,7 @@ cxString cxUUID()
         return NULL;
     }
     cxString str = jstringTocxString(uuid);
-    if(uuid != NULL){
-        (*javaENV)->DeleteLocalRef(javaENV,uuid);
-    }
+    (*javaENV)->DeleteLocalRef(javaENV,uuid);
     return cxMD5(str);
 }
 
@@ -59,6 +57,7 @@ cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars font,const cxTextA
         jbyte *buffer = (*javaENV)->GetByteArrayElements(javaENV,bytes,&ok);
         rv = cxStringBinary(buffer, length);
         (*javaENV)->ReleaseByteArrayElements(javaENV,bytes,buffer,0);
+        (*javaENV)->DeleteLocalRef(javaENV,bytes);
     }
     if(fontName != NULL){
         (*javaENV)->DeleteLocalRef(javaENV,fontName);

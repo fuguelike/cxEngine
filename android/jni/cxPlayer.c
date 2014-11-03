@@ -101,7 +101,7 @@ cxAny cxPlayEffect(cxConstChars file,cxBool loop)
     //add or replace
     if(track == NULL || track->soundId != soundId){
         track = CX_ALLOC(cxTrack);
-        track->file = cxStringAllocChars(file);
+        CX_RETAIN_SET(track->file, cxStringConstChars(file));
         track->soundId = soundId;
         cxHashSet(this->tracks, cxHashStrKey(file), track);
         CX_RELEASE(track);

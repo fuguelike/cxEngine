@@ -20,6 +20,8 @@ CX_C_BEGIN
 
 CX_DEF(cxTCP, cxObject)
     evutil_socket_t socket;
+    CX_FIELD_DEF(cxFloat ReadTimeout);
+    CX_FIELD_DEF(cxFloat WriteTimeout);
     cxInt port;
     cxString host;
     cxChar buf[CX_TCP_BUFFER_SIZE];
@@ -33,6 +35,8 @@ CX_DEF(cxTCP, cxObject)
     CX_FIELD_DEF(cxAny UserData);
 CX_END(cxTCP, cxObject)
 
+CX_FIELD_SET(cxTCP, cxFloat, ReadTimeout);
+CX_FIELD_SET(cxTCP, cxFloat, WriteTimeout);
 CX_FIELD_GET(cxTCP, cxBool, IsConnected);
 CX_FIELD_IMP(cxTCP, cxAny, UserData);
 
@@ -60,7 +64,7 @@ void cxTcpBufferClose(cxAny ptcp);
 CX_INLINE void cxTcpSetHost(cxAny ptcp,cxConstChars host)
 {
     CX_ASSERT_THIS(ptcp, cxTCP);
-    this->host = cxStringAllocChars(host);
+    CX_RETAIN_SET(this->host, cxStringConstChars(host));
 }
 CX_INLINE void cxTcpSetPort(cxAny ptcp,cxInt port)
 {

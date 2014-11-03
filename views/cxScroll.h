@@ -34,7 +34,6 @@ CX_DEF(cxScroll, cxView)
     cxBool scalable;            //suppot body scale
     cxFloat scaling;
     cxRange2f range;
-    cxVec2f center;
     cxFloat startDis;
 CX_END(cxScroll, cxView)
 

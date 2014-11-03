@@ -55,7 +55,8 @@ CX_SETTER_DEF(cxLabelTTF, font)
 {
     cxString font = cxJsonString(value, "name");
     cxFloat size = cxJsonFloat(value, "size", this->attr.size);
-    cxLabelTTFSetFont(this, font, size);
+    cxColor4f color = cxJsonColor4f(value, "color", this->attr.color);
+    cxLabelTTFSetFont(this, font, color, size);
 }
 CX_SETTER_DEF(cxLabelTTF, text)
 {
@@ -64,9 +65,16 @@ CX_SETTER_DEF(cxLabelTTF, text)
         cxLabelTTFSetText(this, text);
     }
 }
+CX_SETTER_DEF(cxLabelTTF, stroke)
+{
+    cxFloat width = cxJsonFloat(value, "width", this->attr.strokeWidth);
+    cxColor4f color = cxJsonColor4f(value, "color", this->attr.color);
+    cxLabelTTfSetStroke(this, color, width);
+}
 
 CX_TYPE(cxLabelTTF, cxSprite)
 {
+    CX_PROPERTY_SETTER(cxLabelTTF, stroke);
     CX_PROPERTY_SETTER(cxLabelTTF, align);
     CX_PROPERTY_SETTER(cxLabelTTF, font);
     CX_PROPERTY_SETTER(cxLabelTTF, text);
@@ -76,7 +84,10 @@ CX_INIT(cxLabelTTF, cxSprite)
     CX_ADD(cxView, this, onUpdate, cxLabelTTFUpdate);
     this->attr.size = 32;
     this->attr.align = cxTextAlignTopLeft;
+    this->attr.color = cxColor4fv(1, 1, 1, 1);
     cxSpriteSetShader(this, cxShaderTTFKey);
+    
+    cxLabelTTfSetStroke(this, cxColor4fv(1, 0, 0, 1), 8);
 }
 CX_FREE(cxLabelTTF, cxSprite)
 {
@@ -88,7 +99,7 @@ CX_TERM(cxLabelTTF, cxSprite)
 cxLabelTTF cxLabelTTFCreate(cxString txt,cxString font,cxFloat fontsize)
 {
     cxLabelTTF this = CX_CREATE(cxLabelTTF);
-    cxLabelTTFSetFont(this, font, fontsize);
+    cxLabelTTFSetFont(this, font, this->attr.color, fontsize);
     cxLabelTTFSetText(this, txt);
     return this;
 }
@@ -102,7 +113,20 @@ void cxLabelTTFUpdateText(cxAny pview)
     cxViewSetSize(this, texture->size);
 }
 
-void cxLabelTTFSetFont(cxAny pview,cxString font,cxFloat size)
+void cxLabelTTfSetStroke(cxAny pview,cxColor4f color,cxFloat witdh)
+{
+    CX_ASSERT_THIS(pview, cxLabelTTF);
+    if(!cxFloatEqu(this->attr.strokeWidth, witdh)){
+        this->attr.strokeWidth = witdh;
+        this->isDirty = true;
+    }
+    if(!cxColor4fEqu(this->attr.strokeColor, color)){
+        this->attr.strokeColor = color;
+        this->isDirty = true;
+    }
+}
+
+void cxLabelTTFSetFont(cxAny pview,cxString font, cxColor4f color, cxFloat size)
 {
     CX_ASSERT_THIS(pview, cxLabelTTF);
     if(!cxFloatEqu(this->attr.size, size)){
@@ -111,6 +135,10 @@ void cxLabelTTFSetFont(cxAny pview,cxString font,cxFloat size)
     }
     if(!cxStringEqu(this->font, font)){
         CX_RETAIN_SWAP(this->font, font);
+        this->isDirty = true;
+    }
+    if(!cxColor4fEqu(this->attr.color, color)){
+        this->attr.color = color;
         this->isDirty = true;
     }
 }

@@ -193,7 +193,7 @@ CX_SETTER_DEF(cxAnimate, groups)
     cxJson groups = value;
     CX_JSON_OBJECT_EACH_BEG(groups, item)
     CX_ASSERT(cxJsonIsArray(item), "must is array");
-    cxString key = cxStringAllocChars(itemKey);
+    cxString key = cxStringConstChars(itemKey);
     cxArray items = cxAnimateGetGroup(this,key);
     cxJson frames = cxJsonToArray(item);
     CX_JSON_ARRAY_EACH_BEG(frames, ats)
@@ -205,13 +205,11 @@ CX_SETTER_DEF(cxAnimate, groups)
     }
     if(cxJsonIsString(ats)){
         cxConstChars ik = cxJsonToConstChars(ats);
-        cxString frameKey = cxStringAllocChars(ik);
+        cxString frameKey = cxStringConstChars(ik);
         cxArrayAppend(items, frameKey);
-        CX_RELEASE(frameKey);
         continue;
     }
     CX_JSON_ARRAY_EACH_END(frames, ats)
-    CX_RELEASE(key);
     CX_JSON_OBJECT_EACH_END(groups, item)
 }
 CX_SETTER_DEF(cxAnimate, name)

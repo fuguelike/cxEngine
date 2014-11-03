@@ -39,9 +39,6 @@ void cxTextureLoad(cxAny ptex,cxStream stream)
     CX_ASSERT_THIS(ptex, cxTexture);
     CX_RETURN(this->isLoad);
     this->isLoad = CX_METHOD_GET(false, this->Load,this,stream);
-    if(!this->isLoad){
-        CX_ERROR("texture %s can not load",cxStringBody(stream->path));
-    }
 }
 
 cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat pixel,cxBool flipx,cxBool flipy)

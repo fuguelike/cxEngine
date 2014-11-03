@@ -344,9 +344,8 @@ cxBool cxViewZeroSize(cxAny pview)
 cxSize2f cxViewContentSize(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxVec2f scale = cxViewGetScale(this);
     cxSize2f size = cxViewGetSize(this);
-    return cxSize2fv(size.w * scale.x, size.h * scale.y);
+    return cxSize2fv(size.w * this->Scale.x, size.h * this->Scale.y);
 }
 
 cxBox4f cxViewGetBox(cxAny pview)
@@ -567,12 +566,12 @@ cxVec2f cxViewSetAnchor(cxAny pview,cxVec2f anchor)
     return opos;
 }
 
-void cxViewSetFixScale(cxAny pview,cxVec2f scale)
+void cxViewSetFixScale(cxAny pview,cxVec2f fixscale)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxVec2f vfixScale = cxViewGetFixScale(this);
-    CX_RETURN(cxVec2fEqu(vfixScale, scale));
-    this->FixScale = scale;
+    CX_RETURN(cxVec2fEqu(vfixScale, fixscale));
+    this->FixScale = fixscale;
     this->Dirty |= cxViewDirtyFixScale;
 }
 

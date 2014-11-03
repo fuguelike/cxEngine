@@ -32,7 +32,7 @@ void cxTextureTXTMakeTexture(cxTextureTXT texture,cxAny buffer,cxInt width,cxInt
     cxOpenGLBindTexture(texture->cxTexture.textureId, 0);
     cxOpenGLSetTexParameters(texture->cxTexture.texParam);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, width, height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, buffer);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
     glPixelStorei(GL_UNPACK_ALIGNMENT, unpack);
     cxOpenGLBindTexture(0, 0);
     texture->cxTexture.hasAlpha = true;

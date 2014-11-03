@@ -30,8 +30,8 @@ CX_TERM(cxIconvItem, cxObject)
 cxIconvItem cxIconvItemCreate(cxConstChars from,cxConstChars to)
 {
     cxIconvItem this = CX_CREATE(cxIconvItem);
-    this->from = cxStringAllocChars(from);
-    this->to = cxStringAllocChars(to);
+    CX_RETAIN_SET(this->from, cxStringConstChars(from));
+    CX_RETAIN_SET(this->to, cxStringConstChars(to));
     this->iconvptr = iconv_open(to,from);
     if(this->iconvptr == NULL){
         CX_ERROR("iconv open error form(%s) -> to(%s)",from, to);
