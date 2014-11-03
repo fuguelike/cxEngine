@@ -86,8 +86,6 @@ CX_INIT(cxLabelTTF, cxSprite)
     this->attr.align = cxTextAlignTopLeft;
     this->attr.color = cxColor4fv(1, 1, 1, 1);
     cxSpriteSetShader(this, cxShaderTTFKey);
-    
-    cxLabelTTfSetStroke(this, cxColor4fv(0, 0, 0, 1), 5);
 }
 CX_FREE(cxLabelTTF, cxSprite)
 {
