@@ -12,6 +12,7 @@
 		831ABCBC19249044001A86F1 /* cxParticle.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCBB19249044001A86F1 /* cxParticle.json */; };
 		831ABCC319249D23001A86F1 /* cxView.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCC219249D23001A86F1 /* cxView.json */; };
 		831ABCC61924C69F001A86F1 /* cxSprite.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCC51924C69F001A86F1 /* cxSprite.json */; };
+		831CF8721A08649400322ACB /* strings in Resources */ = {isa = PBXBuildFile; fileRef = 831CF8711A08649400322ACB /* strings */; };
 		8321071219CC746900B1AA1E /* candy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8321071019CC746900B1AA1E /* candy.json */; };
 		8321071319CC746900B1AA1E /* candy.png in Resources */ = {isa = PBXBuildFile; fileRef = 8321071119CC746900B1AA1E /* candy.png */; };
 		83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6018D9C5D00093FF54 /* libevent.a */; };
@@ -81,6 +82,7 @@
 		831ABCBB19249044001A86F1 /* cxParticle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxParticle.json; path = res/cxParticle.json; sourceTree = SOURCE_ROOT; };
 		831ABCC219249D23001A86F1 /* cxView.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxView.json; path = res/cxView.json; sourceTree = SOURCE_ROOT; };
 		831ABCC51924C69F001A86F1 /* cxSprite.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxSprite.json; path = res/cxSprite.json; sourceTree = SOURCE_ROOT; };
+		831CF8711A08649400322ACB /* strings */ = {isa = PBXFileReference; lastKnownFileType = folder; name = strings; path = res/strings; sourceTree = SOURCE_ROOT; };
 		8321071019CC746900B1AA1E /* candy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = candy.json; path = res/candy.json; sourceTree = SOURCE_ROOT; };
 		8321071119CC746900B1AA1E /* candy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = candy.png; path = res/candy.png; sourceTree = SOURCE_ROOT; };
 		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				831CF8711A08649400322ACB /* strings */,
 				8321071019CC746900B1AA1E /* candy.json */,
 				8321071119CC746900B1AA1E /* candy.png */,
 				83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */,
@@ -341,6 +344,7 @@
 				835DB19919C44C650037DA5B /* spineboy.atlas in Resources */,
 				836D8DA7191B8C02000F0230 /* cxScroll.json in Resources */,
 				835DB1C619C4A0F80037DA5B /* goblins.png in Resources */,
+				831CF8721A08649400322ACB /* strings in Resources */,
 				83DAD707191A26BF000A7D1F /* pvr.json in Resources */,
 				835DB19C19C44C650037DA5B /* t.pkm in Resources */,
 				830EEB4A19C55A6500C81EA5 /* cxSpine.json in Resources */,

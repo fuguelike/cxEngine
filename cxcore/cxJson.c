@@ -15,10 +15,16 @@
 static cxString jsonKey = NULL;
 static json_t *global = NULL;
 static cxJsonReaderFunc cxJsonReader = NULL;
+static cxLocalizedFunc cxLocalizeder = NULL;
 
 void cxJsonSetReader(cxJsonReaderFunc func)
 {
     cxJsonReader = func;
+}
+
+void cxJsonSetLocalized(cxLocalizedFunc func)
+{
+    cxLocalizeder = func;
 }
 
 cxJson cxJsonRead(cxConstChars src)
@@ -104,15 +110,11 @@ static json_t *jsonParseRegisterValue(json_t *v)
         return v;
     }
     cxConstChars key = json_string_value(v);
-    if(key[0] != '$'){
-        return v;
+    if(key[0] == '$'){
+        v = jsonGetJson(global, key + 1);
+    }else if(key[0] == '#' && cxLocalizeder != NULL){
+        v = cxLocalizeder(key + 1);
     }
-    cxConstChars gkey = key + 1;
-    if(!cxConstCharsOK(gkey)){
-        return v;
-    }
-    v = jsonGetJson(global, gkey);
-    CX_ASSERT(v != NULL, "globale key(%s) not regster",gkey);
     return v;
 }
 
@@ -715,14 +717,18 @@ cxBool cxJsonIsObject(cxJson json)
     return json_is_object(CX_JSON_PTR(this));
 }
 
+cxJson cxJsonNullString()
+{
+    cxJson this = CX_CREATE(cxJson);
+    this->json = json_string("");
+    return this;
+}
+
 cxJson cxJsonCreate(cxString json)
 {
     CX_ASSERT(json != NULL, "args error");
     cxJson this = CX_CREATE(cxJson);
     json_error_t error = {0};
-    if(cxStringLength(json) <= 0){
-        return NULL;
-    }
     this->json = json_loadb(cxStringBody(json), cxStringLength(json), JSON_DECODE_ANY, &error);
     if(this->json == NULL){
         CX_ERROR("cxJson load error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);

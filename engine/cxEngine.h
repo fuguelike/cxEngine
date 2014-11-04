@@ -29,9 +29,11 @@ CX_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxSize2f DesSize);     //design size
     CX_FIELD_DEF(cxVec2f Scale);        //dessize / winsize
     CX_FIELD_DEF(cxBool IsShowBorder);  //show debug border
-    CX_FIELD_DEF(cxFloat FrameDelta);   // time per frame
-    CX_FIELD_DEF(cxString Lang);
-    CX_FIELD_DEF(cxFloat Interval);
+    CX_FIELD_DEF(cxFloat FrameDelta);   //time per frame
+    CX_FIELD_DEF(cxString Lang);        //zh en
+    CX_FIELD_DEF(cxString Country);     //CN TW
+    CX_FIELD_DEF(cxString Localized);   //current lang file path
+    CX_FIELD_DEF(cxFloat Interval);     //
     CX_FIELD_DEF(cxWindow Window);      //main window
     cxBool isInit;
     cxBool isTouch;
@@ -104,6 +106,21 @@ CX_INLINE void cxEngineSetInterval(cxFloat interval)
     engineInstance->Interval = interval;
 }
 
+CX_INLINE cxString cxEngineGetLocalized()
+{
+    return engineInstance->Localized;
+}
+
+CX_INLINE cxString cxEngineGetCountry()
+{
+    return engineInstance->Country;
+}
+
+CX_INLINE void cxEngineSetCountry(cxString country)
+{
+    CX_RETAIN_SWAP(engineInstance->Country, country);
+}
+
 CX_INLINE cxString cxEngineGetLang()
 {
     return engineInstance->Lang;
@@ -163,6 +180,10 @@ CX_EXTERN void cxEngineMain(cxEngine engine);
 
 //engine free
 CX_EXTERN void cxEngineFree(cxEngine engine);
+
+json_t *cxEngineLocalizeder(cxConstChars key);
+
+cxString cxLocalizedString(cxConstChars key);
 
 cxJson cxEngineJsonReader(cxConstChars src);
 

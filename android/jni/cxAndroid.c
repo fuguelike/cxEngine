@@ -18,6 +18,7 @@ JniMethodInfo createTextBitmap  = {.isGet=false};
 JniMethodInfo engineTerminate   = {.isGet=false};
 JniMethodInfo documentPath      = {.isGet=false};
 JniMethodInfo engineLocalized   = {.isGet=false};
+JniMethodInfo engineCountry   = {.isGet=false};
 JniMethodInfo assertManager     = {.isGet=false};
 JniMethodInfo engineRecvJson    = {.isGet=false};
 JniMethodInfo engineUUID        = {.isGet=false};
@@ -114,6 +115,19 @@ cxString cxDocumentPath(cxConstChars file)
         (*javaENV)->DeleteLocalRef(javaENV,path);
     }
     return rv;
+}
+
+//java:String cxEngineCountry()
+cxString cxLocalizedCountry()
+{
+    CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
+    CX_GET_METHOD(engineCountry,"cxEngineCountry","()Ljava/lang/String;");
+    cxString country = NULL;
+    jstring scountry = (*javaENV)->CallStaticObjectMethod(M(engineCountry));
+    CX_ASSERT(scountry != NULL, "get country failed");
+    country = jstringTocxString(scountry);
+    (*javaENV)->DeleteLocalRef(javaENV,scountry);
+    return country;
 }
 
 //java:String cxEngineLocalized()

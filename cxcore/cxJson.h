@@ -49,8 +49,11 @@ if((_j_) != NULL){                                                  \
 }
 
 typedef cxJson (*cxJsonReaderFunc)(cxConstChars src);
+typedef json_t *(*cxLocalizedFunc)(cxConstChars key);
 
 void cxJsonSetReader(cxJsonReaderFunc func);
+
+void cxJsonSetLocalized(cxLocalizedFunc func);
 
 cxJson cxJsonRead(cxConstChars src);
 

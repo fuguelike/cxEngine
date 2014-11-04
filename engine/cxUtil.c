@@ -51,8 +51,7 @@ cxBool cxDocumentExists(cxConstChars file)
 {
     cxString path = cxDocumentPath(file);
     CX_ASSERT(path != NULL, "get file %s path failed",file);
-    struct stat stat={0};
-    return lstat(cxStringBody(path), &stat) == 0;
+    return cxFileExists(cxStringBody(path));
 }
 
 cxBool cxFileExists(cxConstChars file)
@@ -71,6 +70,7 @@ cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
     if(!cxStreamOpen(dst)){
         return false;
     }
+    cxBool ret = true;
     cxChar buffer[4096];
     cxProgress p = {0};
     p.current = 0;
@@ -81,14 +81,16 @@ cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
             break;
         }
         p.current += rbytes;
-        cxInt wbytes = cxStreamWrite(dst, buffer, rbytes);
-        CX_ASSERT(wbytes == rbytes, "rw error");
+        if(cxStreamWrite(dst, buffer, rbytes) != rbytes){
+            CX_ERROR("write file error");
+            ret = false;
+            break;
+        }
         if(func != NULL){
             func(file,&p,udata);
         }
-        CX_UNUSED_PARAM(wbytes);
     }
-    return true;
+    return ret;
 }
 
 cxUInt cxBinaryToUInt(cxConstChars bs)

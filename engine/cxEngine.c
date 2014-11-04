@@ -191,9 +191,13 @@ void cxEngineStartup()
     cxEngineTypes();
     //set localized lang
     cxEngineSetLang(cxLocalizedLang());
+    CX_LOGGER("system lang:%s",cxStringBody(cxEngineGetLang()));
+    cxEngineSetCountry(cxLocalizedCountry());
+    CX_LOGGER("system country:%s",cxStringBody(cxEngineGetCountry()));
     //init engine
     //set cxjsonReader
     cxJsonSetReader(cxEngineJsonReader);
+    cxJsonSetLocalized(cxEngineLocalizeder);
     //init model
     engineInstance->Window      = CX_ALLOC(cxWindow);
     engineInstance->curve       = CX_ALLOC(cxCurve);
@@ -341,6 +345,8 @@ CX_FREE(cxEngine, cxObject)
     CX_RELEASE(this->files);
     CX_RELEASE(this->assets);
     CX_RELEASE(this->Lang);
+    CX_RELEASE(this->Localized);
+    CX_RELEASE(this->Country);
     CX_RELEASE(this->Window);
     CX_SIGNAL_RELEASE(this->onRecvJson);
     CX_SIGNAL_RELEASE(this->onUpdate);
@@ -441,6 +447,70 @@ cxVec2f cxEngineWindowToTouch(cxVec2f pos)
     rv.x = this->WinSize.w / 2.0f - pos.x;
     rv.y = pos.y - this->WinSize.h / 2.0f;
     return rv;
+}
+
+static cxBool cxEngineSetLocalized(cxEngine this,cxConstChars key)
+{
+    CX_RETURN(cxStringOK(this->Localized),true);
+    cxConstChars country = "";
+    if(cxStringOK(this->Country)){
+        country = cxStringBody(this->Country);
+    }
+    cxConstChars lang = "";
+    if(cxStringOK(this->Lang)){
+        lang = cxStringBody(this->Lang);
+    }
+    cxPath path = cxPathParse(key);
+    cxChar file[1024]={0};
+    //1 zh-CN
+    file[snprintf(file, 1024, "strings/%s-%s/%s",lang,country,path->path)] = '\0';
+    if(cxAssetsExists(file)){
+        CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/%s-%s",lang,country));
+        return true;
+    }
+    //2 zh
+    file[snprintf(file, 1024, "strings/%s/%s",lang,path->path)] = '\0';
+    if(cxAssetsExists(file)){
+        CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/%s",lang));
+        return true;
+    }
+    //3 en
+    file[snprintf(file, 1024, "strings/en/%s",path->path)] = '\0';
+    if(cxAssetsExists(file)){
+        CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/en"));
+        return true;
+    }
+    return false;
+}
+
+json_t *cxEngineLocalizeder(cxConstChars key)
+{
+    cxEngine this = cxEngineInstance();
+    CX_ASSERT(cxConstCharsOK(key) && this != NULL, "args error or enstance null");
+    if(!cxEngineSetLocalized(this,key)){
+        return json_string(key);
+    }
+    cxChar url[1024]={0};
+    snprintf(url, 1024, "%s/%s",cxStringBody(this->Localized),key);
+    cxPath path = cxPathParse(url);
+    if(path->count != 2){
+        return json_string(key);
+    }
+    cxJson json = cxEngineLoadJson(path->path);
+    if(json == NULL){
+        return json_string(key);
+    }
+    json_t *value = json_object_get(CX_JSON_PTR(json), path->key);
+    if(value == NULL || !json_is_string(value)){
+        return json_string(key);
+    }
+    return value;
+}
+//file.json?key
+cxString cxLocalizedString(cxConstChars key)
+{
+    json_t *json = cxEngineLocalizeder(key);
+    return cxStringConstChars(json_string_value(json));
 }
 
 void cxEngineEnableTouch(cxBool enable)

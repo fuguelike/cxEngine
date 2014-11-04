@@ -21,20 +21,6 @@ void cxEngineTerminate()
     exit(0);
 }
 
-cxArray cxFontNames()
-{
-    cxArray list = CX_CREATE(cxArray);
-    NSArray* familys = [UIFont familyNames];
-    for (NSString *family  in familys) {
-        NSArray* fonts = [UIFont fontNamesForFamilyName:family];
-        for (NSString *font in fonts) {
-            cxString item = cxStringConstChars([font UTF8String]);
-            cxArrayAppend(list, item);
-        }
-    }
-    return list;
-}
-
 cxString cxUUID()
 {
     uuid_t uuid;
@@ -241,13 +227,28 @@ cxString cxDocumentPath(cxConstChars file)
     }
 }
 
+
+cxString cxLocalizedCountry()
+{
+    NSLocale *locale = [NSLocale currentLocale];
+    return cxStringConstChars([[locale objectForKey:NSLocaleCountryCode] UTF8String]);
+}
+
 cxString cxLocalizedLang()
 {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
-    NSString *current = [languages objectAtIndex:0];
-    NSDictionary* temp = [NSLocale componentsFromLocaleIdentifier:current];
-    NSString * lngcode = [temp objectForKey:NSLocaleLanguageCode];
-    CX_LOGGER("current localized lang:%s",[lngcode UTF8String]);
-    return cxStringCreate("%s",[lngcode UTF8String]);
+    NSLocale *locale = [NSLocale currentLocale];
+    return cxStringConstChars([[locale objectForKey:NSLocaleLanguageCode] UTF8String]);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -19,7 +19,7 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxLoader loader = cxLoaderCreate("cxParticle.json");
+    cxLoader loader = cxLoaderCreate("cxLabelTTF.json");
     cxWindowPushView(loader->Root);
 }
 

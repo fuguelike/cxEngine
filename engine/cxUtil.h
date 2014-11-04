@@ -23,8 +23,6 @@ typedef void (*cxCopyFileFunc)(cxConstChars file,cxProgress *progress,cxAny udat
 
 cxString cxUUID();
 
-cxArray cxFontNames();
-
 cxUInt cxHexToUInt(cxConstChars bs);
 
 cxUInt cxBinaryToUInt(cxConstChars bs);
@@ -54,6 +52,8 @@ cxBool cxDocumentExists(cxConstChars file);
 cxBool cxFileExists(cxConstChars file);
 
 cxString cxLocalizedLang();
+
+cxString cxLocalizedCountry();
 
 cxString cxDocumentPath(cxConstChars file);
 
