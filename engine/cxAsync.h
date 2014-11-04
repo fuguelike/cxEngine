@@ -21,6 +21,7 @@ typedef enum {
 }cxAsyncState;
 
 CX_DEF(cxAsync, cxObject)
+    CX_FIELD_DEF(cxLong Tag);
     CX_FIELD_DEF(cxAsyncState State);
     CX_METHOD_DEF(void, Running,cxAny item);
     CX_FIELD_DEF(cxInt Count);
@@ -29,6 +30,7 @@ CX_DEF(cxAsync, cxObject)
     CX_METHOD_DEF(void, Init, cxAny);
 CX_END(cxAsync, cxObject)
 
+CX_FIELD_IMP(cxAsync, cxLong, Tag);
 CX_FIELD_GET(cxAsync, cxInt, Count);
 CX_FIELD_GET(cxAsync, cxFloat, Time);
 CX_FIELD_IMP(cxAsync, cxAny, View);

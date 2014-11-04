@@ -26,6 +26,9 @@ CX_TERM(cxAsync, cxObject)
 cxAsyncState cxAsyncDrive(cxAny pview, cxAny pitem)
 {
     CX_ASSERT_THIS(pitem, cxAsync);
+    if(this->State == cxAsyncStateSuccess || this->State == cxAsyncStateFailed){
+        return this->State;
+    }
     cxAsyncSetView(this, pview);
     if(this->State == cxAsyncStateInit){
         this->State = cxAsyncStateWait;

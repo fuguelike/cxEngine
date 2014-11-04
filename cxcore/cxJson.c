@@ -48,6 +48,9 @@ void cxJsonSetLocalized(cxLocalizedFunc func)
 
 cxJson cxJsonRead(cxConstChars src)
 {
+    if(!cxConstCharsOK(src)){
+        return NULL;
+    }
     if(src[0] == '#'){
         json_t *json = cxLocalizeder(src + 1);
         if(json != NULL)src = json_string_value((json));
