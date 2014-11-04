@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <textures/cxTextureFactory.h>
+#include <textures/cxTextureCache.h>
 #include <engine/cxEngine.h>
 #include "cxAtlas.h"
 

@@ -174,7 +174,7 @@
 		831E662C19EFA9D200FCFD85 /* cxFileStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65EE19EFA9D200FCFD85 /* cxFileStream.c */; };
 		831E662D19EFA9D200FCFD85 /* cxMemStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65F019EFA9D200FCFD85 /* cxMemStream.c */; };
 		831E662E19EFA9D200FCFD85 /* cxMMapStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65F219EFA9D200FCFD85 /* cxMMapStream.c */; };
-		831E662F19EFA9D200FCFD85 /* cxTextureFactory.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65F519EFA9D200FCFD85 /* cxTextureFactory.c */; };
+		831E662F19EFA9D200FCFD85 /* cxTextureCache.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65F519EFA9D200FCFD85 /* cxTextureCache.c */; };
 		831E663019EFA9D200FCFD85 /* cxTextureJPG.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65F719EFA9D200FCFD85 /* cxTextureJPG.c */; };
 		831E663119EFA9D200FCFD85 /* cxTextureJSON.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65F919EFA9D200FCFD85 /* cxTextureJSON.c */; };
 		831E663219EFA9D200FCFD85 /* cxTexturePKM.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E65FB19EFA9D200FCFD85 /* cxTexturePKM.c */; };
@@ -540,8 +540,8 @@
 		831E65F119EFA9D200FCFD85 /* cxMemStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMemStream.h; sourceTree = "<group>"; };
 		831E65F219EFA9D200FCFD85 /* cxMMapStream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMMapStream.c; sourceTree = "<group>"; };
 		831E65F319EFA9D200FCFD85 /* cxMMapStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMMapStream.h; sourceTree = "<group>"; };
-		831E65F519EFA9D200FCFD85 /* cxTextureFactory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureFactory.c; sourceTree = "<group>"; };
-		831E65F619EFA9D200FCFD85 /* cxTextureFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTextureFactory.h; sourceTree = "<group>"; };
+		831E65F519EFA9D200FCFD85 /* cxTextureCache.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureCache.c; sourceTree = "<group>"; };
+		831E65F619EFA9D200FCFD85 /* cxTextureCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTextureCache.h; sourceTree = "<group>"; };
 		831E65F719EFA9D200FCFD85 /* cxTextureJPG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureJPG.c; sourceTree = "<group>"; };
 		831E65F819EFA9D200FCFD85 /* cxTextureJPG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTextureJPG.h; sourceTree = "<group>"; };
 		831E65F919EFA9D200FCFD85 /* cxTextureJSON.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTextureJSON.c; sourceTree = "<group>"; };
@@ -1088,8 +1088,8 @@
 		831E65F419EFA9D200FCFD85 /* textures */ = {
 			isa = PBXGroup;
 			children = (
-				831E65F519EFA9D200FCFD85 /* cxTextureFactory.c */,
-				831E65F619EFA9D200FCFD85 /* cxTextureFactory.h */,
+				831E65F519EFA9D200FCFD85 /* cxTextureCache.c */,
+				831E65F619EFA9D200FCFD85 /* cxTextureCache.h */,
 				831E65F719EFA9D200FCFD85 /* cxTextureJPG.c */,
 				831E65F819EFA9D200FCFD85 /* cxTextureJPG.h */,
 				831E65F919EFA9D200FCFD85 /* cxTextureJSON.c */,
@@ -1308,7 +1308,7 @@
 				831046F619F21B3E0086D91A /* SkinnedMeshAttachment.c in Sources */,
 				831E654F19EFA9B000FCFD85 /* cxMultiple.c in Sources */,
 				831E663D19EFA9D200FCFD85 /* cxPolygon.c in Sources */,
-				831E662F19EFA9D200FCFD85 /* cxTextureFactory.c in Sources */,
+				831E662F19EFA9D200FCFD85 /* cxTextureCache.c in Sources */,
 				831E663C19EFA9D200FCFD85 /* cxLoading.c in Sources */,
 				831E65A619EFA9B000FCFD85 /* cxUtil.m in Sources */,
 				831E662C19EFA9D200FCFD85 /* cxFileStream.c in Sources */,

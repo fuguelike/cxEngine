@@ -9,7 +9,7 @@
 #include "cxEngine.h"
 #include "cxValue.h"
 
-#include <textures/cxTextureFactory.h>
+#include <textures/cxTextureCache.h>
 #include <textures/cxTextureJPG.h>
 #include <textures/cxTexturePKM.h>
 #include <textures/cxTexturePNG.h>
@@ -126,6 +126,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxMMapStream);
     
     //register textures
+    CX_TYPE_REG(cxTextureCache);
     CX_TYPE_REG(cxTextureJPG);
     CX_TYPE_REG(cxTexturePKM);
     CX_TYPE_REG(cxTexturePNG);
@@ -177,6 +178,65 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxHttp);
 }
 
+static cxBool cxEngineSetLocalized(cxEngine this,cxConstChars key)
+{
+    CX_RETURN(cxStringOK(this->Localized),true);
+    cxConstChars country = "";
+    if(cxStringOK(this->Country)){
+        country = cxStringBody(this->Country);
+    }
+    cxConstChars lang = "";
+    if(cxStringOK(this->Lang)){
+        lang = cxStringBody(this->Lang);
+    }
+    cxPath path = cxPathParse(key);
+    cxChar file[1024]={0};
+    //1 zh-CN
+    file[snprintf(file, 1024, "strings/%s-%s/%s",lang,country,path->path)] = '\0';
+    if(cxAssetsExists(file)){
+        CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/%s-%s",lang,country));
+        return true;
+    }
+    //2 zh
+    file[snprintf(file, 1024, "strings/%s/%s",lang,path->path)] = '\0';
+    if(cxAssetsExists(file)){
+        CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/%s",lang));
+        return true;
+    }
+    //3 en
+    file[snprintf(file, 1024, "strings/en/%s",path->path)] = '\0';
+    if(cxAssetsExists(file)){
+        CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/en"));
+        return true;
+    }
+    return false;
+}
+
+static json_t *cxEngineLocalizeder(cxConstChars key)
+{
+    cxEngine this = cxEngineInstance();
+    CX_ASSERT(cxConstCharsOK(key) && this != NULL, "args error or enstance null");
+    if(!cxEngineSetLocalized(this,key)){
+        return json_string(key);
+    }
+    cxChar url[1024]={0};
+    snprintf(url, 1024, "%s/%s",cxStringBody(this->Localized),key);
+    cxPath path = cxPathParse(url);
+    if(path->count < 2){
+        return json_string(key);
+    }
+    cxJson json = cxEngineLoadJson(path->path);
+    if(json == NULL){
+        return json_string(key);
+    }
+    json_t *value = json_object_get(CX_JSON_PTR(json), path->key);
+    if(value == NULL || !json_is_string(value)){
+        return json_string(key);
+    }
+    //auto release value
+    return CX_JSON_PTR(cxJsonAttach(value));
+}
+
 void cxEngineStartup()
 {
 #if !defined(NDEBUG)
@@ -204,7 +264,7 @@ void cxEngineStartup()
     engineInstance->opengl      = CX_ALLOC(cxOpenGL);
     engineInstance->iconv       = CX_ALLOC(cxIconv);
     engineInstance->player      = CX_ALLOC(cxPlayer);
-    engineInstance->textures    = CX_ALLOC(cxTextureFactory);
+    engineInstance->textures    = CX_ALLOC(cxTextureCache);
     engineInstance->looper      = CX_ALLOC(cxLooper);
     //registe other type
     cxEngineType(engineInstance);
@@ -216,7 +276,7 @@ void cxEngineClear()
 {
     CX_RETURN(engineInstance == NULL);
     cxEngine engine = cxEngineInstance();
-    cxTextureFactoryClear();
+    cxTextureCacheClear();
     cxHashClear(engine->files);
     cxHashClear(engine->assets);
 }
@@ -401,12 +461,14 @@ cxJson cxEngineLoadJson(cxConstChars file)
     cxHashKey key = cxHashStrKey(file);
     cxEngine this = cxEngineInstance();
     cxJson json = cxHashGet(this->files, key);
-    if(json == NULL){
-        cxString data = cxAssetsData(file);
-        CX_ASSERT(data != NULL, "load json file %s failed");
-        json = cxJsonCreate(data);
-        cxHashSet(this->files, key, json);
+    if(json != NULL){
+        return json;
     }
+    cxString data = cxAssetsData(file);
+    data = CX_METHOD_GET(data, this->JsonFilter, data);
+    CX_ASSERT(data != NULL, "load json file %s failed");
+    json = cxJsonCreate(data);
+    cxHashSet(this->files, key, json);
     return json;
 }
 
@@ -449,63 +511,6 @@ cxVec2f cxEngineWindowToTouch(cxVec2f pos)
     return rv;
 }
 
-static cxBool cxEngineSetLocalized(cxEngine this,cxConstChars key)
-{
-    CX_RETURN(cxStringOK(this->Localized),true);
-    cxConstChars country = "";
-    if(cxStringOK(this->Country)){
-        country = cxStringBody(this->Country);
-    }
-    cxConstChars lang = "";
-    if(cxStringOK(this->Lang)){
-        lang = cxStringBody(this->Lang);
-    }
-    cxPath path = cxPathParse(key);
-    cxChar file[1024]={0};
-    //1 zh-CN
-    file[snprintf(file, 1024, "strings/%s-%s/%s",lang,country,path->path)] = '\0';
-    if(cxAssetsExists(file)){
-        CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/%s-%s",lang,country));
-        return true;
-    }
-    //2 zh
-    file[snprintf(file, 1024, "strings/%s/%s",lang,path->path)] = '\0';
-    if(cxAssetsExists(file)){
-        CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/%s",lang));
-        return true;
-    }
-    //3 en
-    file[snprintf(file, 1024, "strings/en/%s",path->path)] = '\0';
-    if(cxAssetsExists(file)){
-        CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/en"));
-        return true;
-    }
-    return false;
-}
-
-json_t *cxEngineLocalizeder(cxConstChars key)
-{
-    cxEngine this = cxEngineInstance();
-    CX_ASSERT(cxConstCharsOK(key) && this != NULL, "args error or enstance null");
-    if(!cxEngineSetLocalized(this,key)){
-        return json_string(key);
-    }
-    cxChar url[1024]={0};
-    snprintf(url, 1024, "%s/%s",cxStringBody(this->Localized),key);
-    cxPath path = cxPathParse(url);
-    if(path->count != 2){
-        return json_string(key);
-    }
-    cxJson json = cxEngineLoadJson(path->path);
-    if(json == NULL){
-        return json_string(key);
-    }
-    json_t *value = json_object_get(CX_JSON_PTR(json), path->key);
-    if(value == NULL || !json_is_string(value)){
-        return json_string(key);
-    }
-    return value;
-}
 //file.json?key
 cxString cxLocalizedString(cxConstChars key)
 {

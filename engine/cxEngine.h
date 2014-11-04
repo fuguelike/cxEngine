@@ -11,7 +11,7 @@
 #include <actions/cxCurve.h>
 #include <actions/cxTimer.h>
 #include <cxcore/cxBase.h>
-#include <textures/cxTextureFactory.h>
+#include <textures/cxTextureCache.h>
 #include <socket/cxLooper.h>
 #include "cxInput.h"
 #include "cxUtil.h"
@@ -35,6 +35,7 @@ CX_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxString Localized);   //current lang file path
     CX_FIELD_DEF(cxFloat Interval);     //
     CX_FIELD_DEF(cxWindow Window);      //main window
+    CX_METHOD_DEF(cxString, JsonFilter, cxString);
     cxBool isInit;
     cxBool isTouch;
     cxBool isPause;
@@ -55,7 +56,7 @@ CX_DEF(cxEngine, cxObject)
     cxOpenGL opengl;            //cxOpenGL instance
     cxIconv iconv;              //cxIconv instance
     cxPlayer player;            //cxPlayer instance
-    cxTextureFactory textures;  //cxTextureFactory instance
+    cxTextureCache textures;    //cxTextureCache instance
     cxLooper looper;            //socket looper
 CX_END(cxEngine, cxObject)
 
@@ -66,7 +67,7 @@ CX_INLINE cxEngine cxEngineInstance()
     return engineInstance;
 }
 
-CX_INLINE cxTextureFactory cxTextureFactoryInstance()
+CX_INLINE cxTextureCache cxTextureCacheInstance()
 {
     return engineInstance->textures;
 }
@@ -180,8 +181,6 @@ CX_EXTERN void cxEngineMain(cxEngine engine);
 
 //engine free
 CX_EXTERN void cxEngineFree(cxEngine engine);
-
-json_t *cxEngineLocalizeder(cxConstChars key);
 
 cxString cxLocalizedString(cxConstChars key);
 

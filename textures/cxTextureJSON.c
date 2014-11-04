@@ -8,7 +8,7 @@
 
 #include <streams/cxAssetsStream.h>
 #include "cxTextureJSON.h"
-#include "cxTextureFactory.h"
+#include "cxTextureCache.h"
 
 static cxBool cxTextureJSONLoad(cxAny ptex,cxStream stream)
 {
@@ -32,11 +32,11 @@ static cxBool cxTextureJSONLoad(cxAny ptex,cxStream stream)
     }
     cxConstChars alphaPath = cxJsonConstChars(meta, "alpha");
     if(alphaPath != NULL){
-        CX_RETAIN_SET(this->alphaTexture, cxTextureFactoryLoadFile(alphaPath));
+        CX_RETAIN_SET(this->alphaTexture, cxTextureCacheLoadFile(alphaPath));
     }
     cxConstChars simagePath = cxJsonConstChars(meta, "image");
     CX_ASSERT(cxConstCharsOK(simagePath), "image miss");
-    CX_RETAIN_SET(this->innerTexture, cxTextureFactoryLoadFile(simagePath));
+    CX_RETAIN_SET(this->innerTexture, cxTextureCacheLoadFile(simagePath));
     CX_ASSERT(this->innerTexture != NULL, "get innerTexture error");
     ret = true;
     //for jpg pkm atlas texture

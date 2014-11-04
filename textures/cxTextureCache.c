@@ -1,5 +1,5 @@
 //
-//  cxTextureFactory.c
+//  cxTextureCache.c
 //  cxEngine
 //
 //  Created by xuhua on 10/12/13.
@@ -10,20 +10,20 @@
 #include <engine/cxRegex.h>
 #include <streams/cxAssetsStream.h>
 #include <streams/cxMemStream.h>
-#include "cxTextureFactory.h"
+#include "cxTextureCache.h"
 
 #define CX_DEFAULT_GROUP "__cxTexturesGroupName__"
 
-static void cxTextureFactoryMemory(cxTextureFactory this)
+static void cxTextureCacheMemory(cxTextureCache this)
 {
     cxHashClear(this->caches);
 }
 
-CX_TYPE(cxTextureFactory, cxObject)
+CX_TYPE(cxTextureCache, cxObject)
 {
     
 }
-CX_INIT(cxTextureFactory, cxObject)
+CX_INIT(cxTextureCache, cxObject)
 {
     cxEngine engine = cxEngineInstance();
     this->caches = CX_ALLOC(cxHash);
@@ -31,21 +31,21 @@ CX_INIT(cxTextureFactory, cxObject)
     cxHash group = CX_CREATE(cxHash);
     cxHashSet(this->caches, cxHashStrKey(CX_DEFAULT_GROUP), group);
     
-    CX_CON(cxEngine, engine, onMemory, this, cxTextureFactoryMemory);
+    CX_CON(cxEngine, engine, onMemory, this, cxTextureCacheMemory);
 }
-CX_FREE(cxTextureFactory, cxObject)
+CX_FREE(cxTextureCache, cxObject)
 {
     CX_SLOT_RELEASE(this->onMemory);
     CX_RELEASE(this->caches);
 }
-CX_TERM(cxTextureFactory, cxObject)
+CX_TERM(cxTextureCache, cxObject)
 
 //@GroupName:candy.xml?green.png
-static cxHash cxTextureFactoryGroup(cxConstChars file,cxChars files)
+static cxHash cxTextureCacheGroup(cxConstChars file,cxChars files)
 {
     CX_ASSERT(file != NULL && files != NULL, "args error");
     cxChar group[PATH_MAX] = {0};
-    cxTextureFactory this = cxTextureFactoryInstance();
+    cxTextureCache this = cxTextureCacheInstance();
     cxInt len = (cxInt)strlen(file);
     if(file[0] == '@'){
         cxConstChars gs = strrchr(file, ':');
@@ -66,31 +66,31 @@ static cxHash cxTextureFactoryGroup(cxConstChars file,cxChars files)
     return groups;
 }
 
-void cxTextureFactoryClear()
+void cxTextureCacheClear()
 {
-    cxTextureFactory this = cxTextureFactoryInstance();
+    cxTextureCache this = cxTextureCacheInstance();
     CX_HASH_FOREACH(this->caches, ele, tmp){
         cxHashClear(ele->any);
     }
 }
 
-void cxTextureFactoryClearGroup(cxConstChars group)
+void cxTextureCacheClearGroup(cxConstChars group)
 {
-    cxTextureFactory this = cxTextureFactoryInstance();
+    cxTextureCache this = cxTextureCacheInstance();
     cxHash groups = cxHashGet(this->caches, cxHashStrKey(group));
     if(groups != NULL){
         cxHashClear(groups);
     }
 }
 
-void cxTextureFactoryUnloadFile(cxConstChars file)
+void cxTextureCacheUnloadFile(cxConstChars file)
 {
     cxChar files[PATH_MAX]={0};
-    cxHash groups = cxTextureFactoryGroup(file,files);
+    cxHash groups = cxTextureCacheGroup(file,files);
     cxHashDel(groups, cxHashStrKey(files));
 }
 
-cxTexture cxTextureFactoryLoadText(cxString txt,cxString font,cxTextAttr attr)
+cxTexture cxTextureCreateText(cxString txt,cxString font,cxTextAttr attr)
 {
     cxTextureTXT texture = CX_CREATE(cxTextureTXT);
     texture->attr = attr;
@@ -131,16 +131,16 @@ cxTexture cxTextureCreate(cxConstChars file)
 }
 
 //use global cached
-cxTexture cxTextureFactoryLoadFile(cxConstChars file)
+cxTexture cxTextureCacheLoadFile(cxConstChars file)
 {
-    cxChar files[PATH_MAX]={0};
-    cxHash groups = cxTextureFactoryGroup(file,files);
-    cxTexture texture = cxHashGet(groups, cxHashStrKey(files));
+    cxChar path[PATH_MAX]={0};
+    cxHash groups = cxTextureCacheGroup(file,path);
+    cxTexture texture = cxHashGet(groups, cxHashStrKey(path));
     if(texture != NULL){
         return texture;
     }
-    if((texture = cxTextureCreate(files)) != NULL){
-        cxHashSet(groups, cxHashStrKey(files), texture);
+    if((texture = cxTextureCreate(path)) != NULL){
+        cxHashSet(groups, cxHashStrKey(path), texture);
     }
     return texture;
 }

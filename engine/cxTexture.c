@@ -6,9 +6,10 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <textures/cxTextureFactory.h>
+#include <textures/cxTextureCache.h>
 #include "cxShader.h"
 #include "cxTexture.h"
+#include "cxEngine.h"
 
 CX_TYPE(cxTexCoord, cxObject)
 {}
@@ -140,6 +141,25 @@ void cxTextureSetParam(cxAny ptex,GLuint type,GLuint value)
     }
 }
 
-
+cxTextureLoaderInfo cxTextureLoader(cxConstChars url)
+{
+    cxTextureLoaderInfo info = {0};
+    CX_RETURN(!cxConstCharsOK(url), info);
+    if(url[0] == '#'){
+        cxString lfile = cxLocalizedString(url + 1);
+        if(cxStringOK(lfile))url = cxStringBody(lfile);
+    }
+    cxPath path = cxPathParse(url);
+    CX_RETURN(path == NULL,info);
+    info.texture = cxTextureCacheLoadFile(path->path);
+    if(info.texture == NULL){
+        return info;
+    }
+    if(path->count >= 2){
+        info.hasCoord = true;
+        info.coord = cxTextureBox(info.texture, path->key);
+    }
+    return info;
+}
 
 

@@ -7,7 +7,7 @@
 //
 #include <engine/cxEngine.h>
 #include <engine/cxOpenGL.h>
-#include <textures/cxTextureFactory.h>
+#include <textures/cxTextureCache.h>
 #include "cxSprite.h"
 
 void cxSpriteSetBlendFactor(cxAny pview,GLenum sfactor, GLenum dfactor)
@@ -92,21 +92,17 @@ void cxSpriteSetImage(cxAny pview,cxConstChars url)
 
 void cxSpriteSetTextureURL(cxAny pview,cxConstChars url)
 {
-    CX_RETURN(url == NULL);
     CX_ASSERT_THIS(pview, cxSprite);
-    cxPath path = cxPathParse(url);
-    CX_RETURN(path == NULL);
-    cxTexture texture = cxTextureFactoryLoadFile(path->path);
-    if(texture == NULL){
-        CX_ERROR("set texture null");
-        return;
+    cxTextureLoaderInfo info = cxTextureLoader(url);
+    CX_RETURN(info.texture == NULL);
+    if(info.texture != NULL){
+        cxSpriteSetTexture(this, info.texture);
     }
-    cxSpriteSetTexture(this, texture);
-    if(path->count >= 2){
-        this->tbox = this->texCoord = cxTextureBox(this->Texture, path->key);
+    if(info.hasCoord){
+        this->tbox = this->texCoord = info.coord;
     }
-    if(texture->shader != NULL){
-        CX_RETAIN_SWAP(this->Shader, texture->shader);
+    if(info.texture != NULL && info.texture->shader != NULL){
+        CX_RETAIN_SWAP(this->Shader, info.texture->shader);
     }
 }
 
@@ -184,8 +180,8 @@ void cxSpriteSetTextureKey(cxAny pview,cxConstChars key)
 {
     CX_ASSERT_THIS(pview, cxSprite);
     if(this->Texture == NULL){
-        cxTexture texture = cxTextureFactoryLoadFile(key);
-        cxSpriteSetTexture(pview, texture);
+        cxTextureLoaderInfo info = cxTextureLoader(key);
+        cxSpriteSetTexture(pview, info.texture);
     }else{
         this->tbox = this->texCoord = cxTextureBox(this->Texture, key);
     }

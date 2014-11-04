@@ -7,7 +7,7 @@
 //
 
 #include <views/cxSprite.h>
-#include <textures/cxTextureFactory.h>
+#include <textures/cxTextureCache.h>
 #include <engine/cxTexture.h>
 #include <engine/cxUtil.h>
 #include "cxAnimate.h"
@@ -26,7 +26,7 @@ CX_SETTER_DEF(cxAnimateItem, texture)
 {
     cxConstChars file = cxJsonToConstChars(value);
     CX_ASSERT(file != NULL, "cxAnimateItem must set texture");
-    cxAny texture = cxTextureFactoryLoadFile(file);
+    cxAny texture = cxTextureCacheLoadFile(file);
     CX_RETURN(texture == NULL);
     CX_RETAIN_SET(this->texture, texture);
 }

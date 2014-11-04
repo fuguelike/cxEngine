@@ -7,7 +7,7 @@
 //
 
 #include <engine/cxEngine.h>
-#include <textures/cxTextureFactory.h>
+#include <textures/cxTextureCache.h>
 #include "cxBMPFont.h"
 
 CX_TYPE(cxBMPElement, cxObject)
@@ -106,7 +106,7 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
     cxInt id = cxJsonInt(item, "id", 0);
     cxConstChars file = cxJsonConstChars(item, "file");
     CX_ASSERT(file != NULL, "file null string");
-    cxTexture texture = cxTextureFactoryLoadFile(file);
+    cxTexture texture = cxTextureCacheLoadFile(file);
     CX_ASSERT(texture != NULL, "create bmp texture failed %s",file);
     cxHashSet(this->textures, cxHashIntKey(id), texture);
     CX_JSON_ARRAY_EACH_END(pages, item)

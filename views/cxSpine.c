@@ -6,19 +6,19 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
-#include <textures/cxTextureFactory.h>
+#include <textures/cxTextureCache.h>
 #include <engine/cxEngine.h>
 #include "cxSpine.h"
 
 //for spine
 void _spAtlasPage_createTexture (spAtlasPage* self, const char* path)
 {
-    cxTexture texture = cxTextureFactoryLoadFile(path);
-    CX_ASSERT(texture != NULL, "create texture failed %s",path);
-    CX_RETAIN(texture);
-    self->rendererObject = texture;
-    self->width = texture->size.w;
-    self->height = texture->size.h;
+    cxTextureLoaderInfo info = cxTextureLoader(path);
+    CX_ASSERT(info.texture != NULL, "create texture failed %s",path);
+    CX_RETAIN(info.texture);
+    self->rendererObject = info.texture;
+    self->width = info.texture->size.w;
+    self->height = info.texture->size.h;
 }
 void _spAtlasPage_disposeTexture (spAtlasPage* self)
 {

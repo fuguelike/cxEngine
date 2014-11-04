@@ -7,6 +7,8 @@
 //
 #include <engine/cxEngine.h>
 
+#include <views/cxSprite.h>
+
 void cxEngineType(cxEngine engine)
 {
     
@@ -19,7 +21,8 @@ void cxEngineInit(cxEngine engine)
 
 void cxEngineMain(cxEngine engine)
 {
-    cxLoader loader = cxLoaderCreate("cxLabelTTF.json");
+    cxLoader loader = cxLoaderCreate("#cxSprite.json");
+    cxSpriteSetTextureURL(loader->Root, "#ui.json?texture");
     cxWindowPushView(loader->Root);
 }
 

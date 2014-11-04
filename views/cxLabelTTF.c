@@ -7,7 +7,7 @@
 //
 #include <engine/cxEngine.h>
 #include <engine/cxUtil.h>
-#include <textures/cxTextureFactory.h>
+#include <textures/cxTextureCache.h>
 #include "cxLabelTTF.h"
 
 static void cxLabelTTFUpdate(cxAny sender)
@@ -105,7 +105,7 @@ cxLabelTTF cxLabelTTFCreate(cxString txt,cxString font,cxFloat fontsize)
 void cxLabelTTFUpdateText(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxLabelTTF);
-    cxTexture texture = cxTextureFactoryLoadText(this->text, this->font, this->attr);
+    cxTexture texture = cxTextureCreateText(this->text, this->font, this->attr);
     CX_RETURN(texture == NULL);
     cxSpriteSetTexture(this, texture);
     cxViewSetSize(this, texture->size);

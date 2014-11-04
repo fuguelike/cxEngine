@@ -2,6 +2,7 @@
   "cxType": "cxAnimate",
   "time": 0,
   "repeat": -1,
+  "name":"run",
   "frames": [
     {
       "cxType": "cxAnimateItem",

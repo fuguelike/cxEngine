@@ -12,10 +12,29 @@
 #include "cxHash.h"
 #include "cxType.h"
 
-static cxString jsonKey = NULL;
+static cxString jsonAESKey = NULL;
+
 static json_t *global = NULL;
-static cxJsonReaderFunc cxJsonReader = NULL;
-static cxLocalizedFunc cxLocalizeder = NULL;
+
+static cxJson cxJsonDefaultReader(cxConstChars src)
+{
+    cxJson this = CX_CREATE(cxJson);
+    json_error_t error = {0};
+    this->json = json_load_file(src, JSON_DECODE_ANY, &error);
+    if(this->json == NULL){
+        CX_ERROR("cxJson load file error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
+        return NULL;
+    }
+    return this;
+}
+static cxJsonReaderFunc cxJsonReader = cxJsonDefaultReader;
+
+static json_t *cxjsonDefaultLocalized(cxConstChars key)
+{
+    return NULL;
+}
+static cxLocalizedFunc cxLocalizeder = cxjsonDefaultLocalized;
+
 
 void cxJsonSetReader(cxJsonReaderFunc func)
 {
@@ -29,7 +48,10 @@ void cxJsonSetLocalized(cxLocalizedFunc func)
 
 cxJson cxJsonRead(cxConstChars src)
 {
-    CX_ASSERT(cxJsonReader , "not set cxJsonReader");
+    if(src[0] == '#'){
+        json_t *json = cxLocalizeder(src + 1);
+        if(json != NULL)src = json_string_value((json));
+    }
     return cxJsonReader(src);
 }
 
@@ -1013,22 +1035,22 @@ cxAny cxJsonDecode(cxJson json)
 
 void cxJsonSetAESKey(cxString v)
 {
-    CX_RETAIN_SWAP(jsonKey, v);
+    CX_RETAIN_SWAP(jsonAESKey, v);
 }
 
 cxString cxJsonAESEncode(cxJson json)
 {
-    return cxJsonAESEncodeWithKey(json, jsonKey);
+    return cxJsonAESEncodeWithKey(json, jsonAESKey);
 }
 
 cxJson cxJsonAESDecode(cxString data)
 {
-    return cxJsonAESDecodeWithKey(data, jsonKey);
+    return cxJsonAESDecodeWithKey(data, jsonAESKey);
 }
 
 cxString cxJsonAESEncodeWithKey(cxJson json,cxString key)
 {
-    CX_ASSERT(key != NULL, "cxJson not set key");
+    CX_ASSERT(key != NULL, "cxJson not set jsonAESKey");
     cxString data = cxJsonDump(json);
     if(data == NULL){
         CX_ERROR("json dump error");

@@ -76,3 +76,19 @@ CX_ASSERT_TYPE(obj,type);//断言一个对象的类型
 CX_ASSERT_THIS(obj,type);//断言一个对象的类型,并生成本地 this变量
 //
 ```
+
+```
+$ 从全局环境中获取数据
+例如:
+$WinSize.w 返回窗口宽度
+
+# 从语言文件中获取数据
+例如:
+#ui.json?title 从语言文件strings/zh-CN/ui.json中获取key=title的字符串
+
+@ 对纹理缓存进行分组处理
+例如:
+@group:texture.png(?xxx) 将会把texture.png纹理缓存到group中
+```
+
+

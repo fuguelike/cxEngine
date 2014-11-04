@@ -37,6 +37,14 @@ CX_DEF(cxTexture, cxObject)
     cxShader shader;
 CX_END(cxTexture, cxObject)
 
+typedef struct {
+    cxTexture texture;
+    cxBoxTex2f coord;
+    cxBool hasCoord;
+}cxTextureLoaderInfo;
+
+cxTextureLoaderInfo cxTextureLoader(cxConstChars url);
+
 void cxDrawClippingTexture(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars tkey);
 
 void cxTextureDraw(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars tkey,cxConstChars skey);

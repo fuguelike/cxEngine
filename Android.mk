@@ -128,7 +128,7 @@ LOCAL_SRC_FILES += \
     streams/cxFileStream.c
 
 LOCAL_SRC_FILES += \
-    textures/cxTextureFactory.c \
+    textures/cxTextureCache.c \
     textures/cxTexturePKM.c \
     textures/cxTexturePNG.c \
     textures/cxTextureTXT.c \
