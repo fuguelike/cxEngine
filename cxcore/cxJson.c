@@ -234,7 +234,7 @@ static cxString jsonToString(json_t *v)
 {
     CX_RETURN(v == NULL, NULL);
     cxConstChars str = jsonToConstChars(v);
-    return (str != NULL && strlen(str) > 0)?cxStringConstChars(str) : NULL;
+    return cxConstCharsOK(str)?cxStringConstChars(str) : NULL;
 }
 
 static cxDouble jsonToDouble(json_t *v,cxDouble dv)
