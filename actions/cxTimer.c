@@ -35,8 +35,8 @@ CX_SETTER_DEF(cxTimer, begin)
 
 CX_TYPE(cxTimer, cxAction)
 {
-    CX_PROPERTY_SETTER(cxTimer, repeat);
-    CX_PROPERTY_SETTER(cxTimer, begin);
+    CX_SETTER(cxTimer, repeat);
+    CX_SETTER(cxTimer, begin);
 }
 CX_INIT(cxTimer, cxAction)
 {

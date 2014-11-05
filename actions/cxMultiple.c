@@ -96,8 +96,8 @@ CX_SETTER_DEF(cxMultiple, actions)
 
 CX_TYPE(cxMultiple, cxAction)
 {
-    CX_PROPERTY_SETTER(cxMultiple, settype);
-    CX_PROPERTY_SETTER(cxMultiple, actions);
+    CX_SETTER(cxMultiple, settype);
+    CX_SETTER(cxMultiple, actions);
 }
 CX_INIT(cxMultiple, cxAction)
 {

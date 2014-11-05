@@ -9,7 +9,8 @@
 #ifndef cxCore_cxMessage_h
 #define cxCore_cxMessage_h
 
-#include "cxBase.h"
+#include "cxCore.h"
+#include "cxHash.h"
 
 CX_C_BEGIN
 

@@ -49,8 +49,8 @@ CX_SETTER_DEF(cxParabola, gravity)
 
 CX_TYPE(cxParabola, cxAction)
 {
-    CX_PROPERTY_SETTER(cxParabola, speed);
-    CX_PROPERTY_SETTER(cxParabola, gravity);
+    CX_SETTER(cxParabola, speed);
+    CX_SETTER(cxParabola, gravity);
 }
 CX_INIT(cxParabola, cxAction)
 {

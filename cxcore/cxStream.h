@@ -9,7 +9,8 @@
 #ifndef cxEngine_cxStream_h
 #define cxEngine_cxStream_h
 
-#include <cxcore/cxBase.h>
+#include "cxCore.h"
+#include "cxString.h"
 
 CX_C_BEGIN
 

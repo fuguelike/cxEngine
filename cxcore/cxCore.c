@@ -10,6 +10,8 @@
 #include "cxCore.h"
 #include "cxType.h"
 #include "cxMemPool.h"
+#include "cxStack.h"
+#include "cxMessage.h"
 
 #if CX_TARGET_PLATFORM == CX_PLATFORM_IOS
 #include <libkern/OSAtomic.h>

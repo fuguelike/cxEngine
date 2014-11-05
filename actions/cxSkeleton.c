@@ -155,7 +155,7 @@ CX_SETTER_DEF(cxSkeleton, tracks)
 
 CX_TYPE(cxSkeleton, cxAction)
 {
-    CX_PROPERTY_SETTER(cxSkeleton, tracks);
+    CX_SETTER(cxSkeleton, tracks);
 }
 CX_INIT(cxSkeleton, cxAction)
 {

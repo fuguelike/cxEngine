@@ -43,7 +43,7 @@ CX_SETTER_DEF(cxMove, to)
 
 CX_TYPE(cxMove, cxAction)
 {
-    CX_PROPERTY_SETTER(cxMove, to);
+    CX_SETTER(cxMove, to);
 }
 CX_INIT(cxMove, cxAction)
 {

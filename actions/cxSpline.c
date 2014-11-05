@@ -96,7 +96,7 @@ CX_SETTER_DEF(cxSpline, points)
 
 CX_TYPE(cxSpline, cxAction)
 {
-    CX_PROPERTY_SETTER(cxSpline, points);
+    CX_SETTER(cxSpline, points);
 }
 CX_INIT(cxSpline, cxAction)
 {

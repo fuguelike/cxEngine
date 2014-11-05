@@ -45,12 +45,12 @@ CX_SETTER_DEF(cxAnimateItem, flipy)
 
 CX_TYPE(cxAnimateItem, cxAction)
 {
-    CX_PROPERTY_SETTER(cxAnimateItem, id);
-    CX_PROPERTY_SETTER(cxAnimateItem, key);
-    CX_PROPERTY_SETTER(cxAnimateItem, texture);
-    CX_PROPERTY_SETTER(cxAnimateItem, time);
-    CX_PROPERTY_SETTER(cxAnimateItem, flipx);
-    CX_PROPERTY_SETTER(cxAnimateItem, flipy);
+    CX_SETTER(cxAnimateItem, id);
+    CX_SETTER(cxAnimateItem, key);
+    CX_SETTER(cxAnimateItem, texture);
+    CX_SETTER(cxAnimateItem, time);
+    CX_SETTER(cxAnimateItem, flipx);
+    CX_SETTER(cxAnimateItem, flipy);
 }
 CX_INIT(cxAnimateItem, cxObject)
 {
@@ -237,11 +237,11 @@ cxArray cxAnimateGetGroup(cxAny pav,cxString name)
 
 CX_TYPE(cxAnimate, cxAction)
 {
-    CX_PROPERTY_SETTER(cxAnimate, repeat);
-    CX_PROPERTY_SETTER(cxAnimate, time);
-    CX_PROPERTY_SETTER(cxAnimate, name);
-    CX_PROPERTY_SETTER(cxAnimate, frames);
-    CX_PROPERTY_SETTER(cxAnimate, groups);
+    CX_SETTER(cxAnimate, repeat);
+    CX_SETTER(cxAnimate, time);
+    CX_SETTER(cxAnimate, name);
+    CX_SETTER(cxAnimate, frames);
+    CX_SETTER(cxAnimate, groups);
 }
 CX_INIT(cxAnimate, cxAction)
 {

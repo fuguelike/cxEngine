@@ -125,8 +125,8 @@ CX_SETTER_DEF(cxAtlas, scale9)
 
 CX_TYPE(cxAtlas, cxSprite)
 {
-    CX_PROPERTY_SETTER(cxAtlas, blend);
-    CX_PROPERTY_SETTER(cxAtlas, scale9);
+    CX_SETTER(cxAtlas, blend);
+    CX_SETTER(cxAtlas, scale9);
 }
 CX_INIT(cxAtlas, cxSprite)
 {

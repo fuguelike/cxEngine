@@ -164,24 +164,24 @@ CX_SETTER_DEF(cxView, bordercolor)
 
 CX_TYPE(cxView, cxObject)
 {
-    CX_PROPERTY_SETTER(cxView, size);
-    CX_PROPERTY_SETTER(cxView, position);
-    CX_PROPERTY_SETTER(cxView, anchor);
-    CX_PROPERTY_SETTER(cxView, border);
-    CX_PROPERTY_SETTER(cxView, color);
-    CX_PROPERTY_SETTER(cxView, raxis);
-    CX_PROPERTY_SETTER(cxView, scale);
-    CX_PROPERTY_SETTER(cxView, fixscale);
-    CX_PROPERTY_SETTER(cxView, visible);
-    CX_PROPERTY_SETTER(cxView, degrees);
-    CX_PROPERTY_SETTER(cxView, sleeptop);
-    CX_PROPERTY_SETTER(cxView, cropping);
-    CX_PROPERTY_SETTER(cxView, autobox);
-    CX_PROPERTY_SETTER(cxView, resizing);
-    CX_PROPERTY_SETTER(cxView, subviews);
-    CX_PROPERTY_SETTER(cxView, actions);
-    CX_PROPERTY_SETTER(cxView, tag);
-    CX_PROPERTY_SETTER(cxView, bordercolor);
+    CX_SETTER(cxView, size);
+    CX_SETTER(cxView, position);
+    CX_SETTER(cxView, anchor);
+    CX_SETTER(cxView, border);
+    CX_SETTER(cxView, color);
+    CX_SETTER(cxView, raxis);
+    CX_SETTER(cxView, scale);
+    CX_SETTER(cxView, fixscale);
+    CX_SETTER(cxView, visible);
+    CX_SETTER(cxView, degrees);
+    CX_SETTER(cxView, sleeptop);
+    CX_SETTER(cxView, cropping);
+    CX_SETTER(cxView, autobox);
+    CX_SETTER(cxView, resizing);
+    CX_SETTER(cxView, subviews);
+    CX_SETTER(cxView, actions);
+    CX_SETTER(cxView, tag);
+    CX_SETTER(cxView, bordercolor);
 }
 CX_INIT(cxView, cxObject)
 {
@@ -319,17 +319,18 @@ void cxViewRemove(cxAny pview)
 void cxViewBringFront(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    this->isFront = true;
+    cxView parent = this->ParentView;
+    CX_RETURN(parent == NULL);
+    parent->frontView = pview;
 }
 
 void cxViewCheckFront(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    CX_RETURN(!this->isFront);
-    this->isFront = false;
-    cxView parent = this->ParentView;
-    CX_RETURN(parent == NULL);
-    cxListMoveToTail(parent->SubViews, this->subElement);
+    CX_RETURN(this->frontView == NULL);
+    CX_ASSERT(this->frontView->Element != NULL, "bring view error");
+    cxListMoveToTail(this->SubViews, this->frontView->Element);
+    this->frontView = NULL;
 }
 
 cxBool cxViewZeroSize(cxAny pview)
@@ -887,8 +888,8 @@ CX_INLINE void cxViewClearRemoves(cxView this)
         if(view->isRunning){
             cxViewExit(view);
         }
-        cxListRemove(this->SubViews, view->subElement);
-        view->subElement = NULL;
+        cxListRemove(this->SubViews, view->Element);
+        view->Element = NULL;
         view->ParentView = NULL;
     }
     cxArrayClear(this->removes);
@@ -900,15 +901,15 @@ CX_INLINE void cxViewClearAppends(cxAny pview)
     CX_ARRAY_FOREACH(this->appends, ele){
         cxView nview = cxArrayObject(ele);
         CX_ASSERT(nview->ParentView != NULL, "append set");
-        if(nview->subElement != NULL){
+        if(nview->Element != NULL){
             continue;
         }
         if(nview->isPrepend){
             //append head
-            nview->subElement = cxListPrepend(this->SubViews, nview);
+            nview->Element = cxListPrepend(this->SubViews, nview);
         }else{
             //append tail
-            nview->subElement = cxListAppend(this->SubViews, nview);
+            nview->Element = cxListAppend(this->SubViews, nview);
         }
         if(this->isRunning){
             cxViewEnter(nview);

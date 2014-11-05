@@ -35,11 +35,13 @@ CX_SETTER_DEF(cxString, number)
 
 CX_TYPE(cxString, cxObject)
 {
-    CX_PROPERTY_SETTER(cxString, string);
-    CX_PROPERTY_SETTER(cxString, number);
+    CX_SETTER(cxString, string);
+    CX_SETTER(cxString, number);
 }
 CX_INIT(cxString, cxObject)
-{}
+{
+
+}
 CX_FREE(cxString, cxObject)
 {
     if(!this->nocopy){

@@ -31,7 +31,7 @@ CX_SETTER_DEF(cxHash, items)
 
 CX_TYPE(cxHash, cxObject)
 {
-    CX_PROPERTY_SETTER(cxHash, items);
+    CX_SETTER(cxHash, items);
 }
 CX_INIT(cxHash, cxObject)
 {

@@ -57,7 +57,7 @@ CX_SETTER_DEF(cxTimeLine, times)
 
 CX_TYPE(cxTimeLine, cxAction)
 {
-    CX_PROPERTY_SETTER(cxTimeLine, times);
+    CX_SETTER(cxTimeLine, times);
 }
 CX_INIT(cxTimeLine, cxAction)
 {

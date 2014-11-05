@@ -128,11 +128,11 @@ CX_SETTER_DEF(cxHttp, release)
 }
 CX_TYPE(cxHttp, cxObject)
 {
-    CX_PROPERTY_SETTER(cxHttp, url);
-    CX_PROPERTY_SETTER(cxHttp, method);
-    CX_PROPERTY_SETTER(cxHttp, data);
-    CX_PROPERTY_SETTER(cxHttp, chunked);
-    CX_PROPERTY_SETTER(cxHttp, release);
+    CX_SETTER(cxHttp, url);
+    CX_SETTER(cxHttp, method);
+    CX_SETTER(cxHttp, data);
+    CX_SETTER(cxHttp, chunked);
+    CX_SETTER(cxHttp, release);
 }
 CX_INIT(cxHttp, cxObject)
 {

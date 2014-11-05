@@ -55,13 +55,13 @@ CX_SETTER_DEF(cxAction, tag)
 
 CX_TYPE(cxAction, cxObject)
 {
-    CX_PROPERTY_SETTER(cxAction, time);
-    CX_PROPERTY_SETTER(cxAction, delay);
-    CX_PROPERTY_SETTER(cxAction, scale);
-    CX_PROPERTY_SETTER(cxAction, curve);
-    CX_PROPERTY_SETTER(cxAction, id);
-    CX_PROPERTY_SETTER(cxAction, group);
-    CX_PROPERTY_SETTER(cxAction, tag);
+    CX_SETTER(cxAction, time);
+    CX_SETTER(cxAction, delay);
+    CX_SETTER(cxAction, scale);
+    CX_SETTER(cxAction, curve);
+    CX_SETTER(cxAction, id);
+    CX_SETTER(cxAction, group);
+    CX_SETTER(cxAction, tag);
 }
 CX_INIT(cxAction, cxObject)
 {

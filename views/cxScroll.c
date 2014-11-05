@@ -254,14 +254,14 @@ CX_SETTER_DEF(cxScroll, layout)
 
 CX_TYPE(cxScroll, cxView)
 {
-    CX_PROPERTY_SETTER(cxScroll, scaling);
-    CX_PROPERTY_SETTER(cxScroll, range);
-    CX_PROPERTY_SETTER(cxScroll, movetime);
-    CX_PROPERTY_SETTER(cxScroll, scaletime);
-    CX_PROPERTY_SETTER(cxScroll, scalable);
-    CX_PROPERTY_SETTER(cxScroll, scaleinc);
-    CX_PROPERTY_SETTER(cxScroll, body);
-    CX_PROPERTY_SETTER(cxScroll, layout);
+    CX_SETTER(cxScroll, scaling);
+    CX_SETTER(cxScroll, range);
+    CX_SETTER(cxScroll, movetime);
+    CX_SETTER(cxScroll, scaletime);
+    CX_SETTER(cxScroll, scalable);
+    CX_SETTER(cxScroll, scaleinc);
+    CX_SETTER(cxScroll, body);
+    CX_SETTER(cxScroll, layout);
 }
 CX_INIT(cxScroll, cxView)
 {

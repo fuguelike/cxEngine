@@ -131,9 +131,9 @@ CX_SETTER_DEF(cxSprite, blend)
 }
 CX_TYPE(cxSprite, cxView)
 {
-    CX_PROPERTY_SETTER(cxSprite, blend);
-    CX_PROPERTY_SETTER(cxSprite, texture);
-    CX_PROPERTY_SETTER(cxSprite, shader);
+    CX_SETTER(cxSprite, blend);
+    CX_SETTER(cxSprite, texture);
+    CX_SETTER(cxSprite, shader);
 }
 CX_INIT(cxSprite, cxView)
 {

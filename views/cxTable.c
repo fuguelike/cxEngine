@@ -108,7 +108,7 @@ CX_SETTER_DEF(cxTable, grid)
 
 CX_TYPE(cxTable, cxView)
 {
-    CX_PROPERTY_SETTER(cxTable, grid);
+    CX_SETTER(cxTable, grid);
 }
 CX_INIT(cxTable, cxView)
 {

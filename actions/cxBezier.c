@@ -47,9 +47,9 @@ CX_SETTER_DEF(cxBezier, pos2)
 
 CX_TYPE(cxBezier, cxAction)
 {
-    CX_PROPERTY_SETTER(cxBezier, epos);
-    CX_PROPERTY_SETTER(cxBezier, pos1);
-    CX_PROPERTY_SETTER(cxBezier, pos2);
+    CX_SETTER(cxBezier, epos);
+    CX_SETTER(cxBezier, pos1);
+    CX_SETTER(cxBezier, pos2);
 }
 CX_INIT(cxBezier, cxAction)
 {

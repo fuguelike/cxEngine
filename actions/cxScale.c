@@ -34,7 +34,7 @@ CX_SETTER_DEF(cxScale, scale)
 
 CX_TYPE(cxScale, cxAction)
 {
-    CX_PROPERTY_SETTER(cxScale, scale);
+    CX_SETTER(cxScale, scale);
 }
 CX_INIT(cxScale, cxAction)
 {

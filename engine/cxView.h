@@ -59,23 +59,23 @@ typedef enum {
 CX_DEF(cxView, cxObject)
     cxArray removes;
     cxArray appends;
-    cxListElement *subElement;
     cxBool isPrepend;
-    cxBool isFront;    //
     cxBool isRunning;
-    cxBool isShowBorder;    //if draw border
-    cxBool isSort;
-    cxBool isRemoved;   //if remove
+    cxBool isShowBorder;        //if draw border
+    cxBool isSort;              //if do sort view
+    cxBool isRemoved;           //if remove
     cxRect4f scissor;
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
+    cxView frontView;           //brind front view flags
+    CX_FIELD_DEF(cxList SubViews);
+    CX_FIELD_DEF(cxListElement *Element);
     CX_FIELD_DEF(cxHash Bindes);
     CX_FIELD_DEF(cxHash Binded);
     CX_FIELD_DEF(cxLong Tag);
     CX_FIELD_DEF(cxViewAutoResizeMask AutoMask);
     CX_FIELD_DEF(cxBox4f  AutoBox);
     CX_FIELD_DEF(cxViewDirty Dirty);
-    CX_FIELD_DEF(cxList SubViews);
     CX_FIELD_DEF(cxBool SleepTop);
     CX_FIELD_DEF(cxViewTouchFlags TouchFlags);
     CX_FIELD_DEF(cxSize2f Size);
@@ -106,6 +106,8 @@ CX_DEF(cxView, cxObject)
     CX_EVENT_ALLOC(onLayout);
     CX_EVENT_ALLOC(onDirty);
 CX_END(cxView, cxObject)
+
+CX_FIELD_GET(cxView, cxListElement *, Element);
 
 CX_INLINE const cxMatrix4f *cxViewGetNormalMatrix(cxAny pthis)
 {

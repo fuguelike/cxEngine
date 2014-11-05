@@ -41,9 +41,9 @@ CX_SETTER_DEF(cxRotate, degrees)
 
 CX_TYPE(cxRotate, cxAction)
 {
-    CX_PROPERTY_SETTER(cxRotate, raxis);
-    CX_PROPERTY_SETTER(cxRotate, angle);
-    CX_PROPERTY_SETTER(cxRotate, degrees);
+    CX_SETTER(cxRotate, raxis);
+    CX_SETTER(cxRotate, angle);
+    CX_SETTER(cxRotate, degrees);
 }
 CX_INIT(cxRotate, cxAction)
 {

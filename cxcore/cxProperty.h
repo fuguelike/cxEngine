@@ -9,7 +9,7 @@
 #ifndef cxCore_cxProperty_h
 #define cxCore_cxProperty_h
 
-#include "cxBase.h"
+#include "cxCore.h"
 
 CX_C_BEGIN
 
@@ -17,24 +17,20 @@ typedef void (*cxPropertySetter)(cxAny,cxAny);
 
 typedef cxAny (*cxPropertyGetter)(cxAny);
 
-#define CX_SETTER(_t_,_p_)          __##_t_##_p_##Setter
+#define CX_SETTER_DEF(_t_,_p_)     static void __##_t_##_p_##Setter(_t_ this,cxAny value)
 
-#define CX_SETTER_DEF(_t_,_p_)     static void CX_SETTER(_t_,_p_)(_t_ this,cxAny value)
+#define CX_GETTER_DEF(_t_,_p_)     static cxAny __##_t_##_p_##Getter(_t_ this)
 
-#define CX_GETTER(_t_,_p_)          __##_t_##_p_##Getter
-
-#define CX_GETTER_DEF(_t_,_p_)     static cxAny CX_GETTER(_t_,_p_)(_t_ this)
-
-#define CX_PROPERTY_SETTER(_t_,_p_)                     \
+#define CX_SETTER(_t_,_p_)                     \
 do{                                                     \
     cxProperty p = cxTypeSetProperty(this,#_p_);        \
-    p->setter = (cxPropertySetter)CX_SETTER(_t_,_p_);   \
+    p->setter = (cxPropertySetter)__##_t_##_p_##Setter; \
 }while(0)
 
-#define CX_PROPERTY_GETTER(_t_,_p_)                     \
+#define CX_GETTER(_t_,_p_)                     \
 do{                                                     \
     cxProperty p = cxTypeSetProperty(this,#_p_);        \
-    p->getter = (cxPropertyGetter)CX_GETTER(_t_,_p_);   \
+    p->getter = (cxPropertyGetter)__##_t_##_p_##Getter; \
 }while(0)
 
 CX_DEF(cxProperty, cxObject)

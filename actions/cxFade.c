@@ -32,7 +32,7 @@ CX_SETTER_DEF(cxFade, alpha)
 
 CX_TYPE(cxFade, cxAction)
 {
-    CX_PROPERTY_SETTER(cxFade, alpha);
+    CX_SETTER(cxFade, alpha);
 }
 CX_INIT(cxFade, cxAction)
 {

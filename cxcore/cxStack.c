@@ -27,7 +27,7 @@ CX_SETTER_DEF(cxStack, items)
 
 CX_TYPE(cxStack, cxObject)
 {
-    CX_PROPERTY_SETTER(cxStack, items);
+    CX_SETTER(cxStack, items);
 }
 CX_INIT(cxStack, cxObject)
 {

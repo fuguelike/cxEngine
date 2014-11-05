@@ -45,9 +45,9 @@ CX_SETTER_DEF(cxJump, jumps)
 
 CX_TYPE(cxJump, cxAction)
 {
-    CX_PROPERTY_SETTER(cxJump, position);
-    CX_PROPERTY_SETTER(cxJump, height);
-    CX_PROPERTY_SETTER(cxJump, jumps);
+    CX_SETTER(cxJump, position);
+    CX_SETTER(cxJump, height);
+    CX_SETTER(cxJump, jumps);
 }
 CX_INIT(cxJump, cxAction)
 {

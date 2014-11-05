@@ -16,7 +16,7 @@ CX_SETTER_DEF(cxGroup, scale)
 }
 CX_TYPE(cxGroup, cxObject)
 {
-    CX_PROPERTY_SETTER(cxGroup, scale);
+    CX_SETTER(cxGroup, scale);
 }
 CX_INIT(cxGroup, cxObject)
 {

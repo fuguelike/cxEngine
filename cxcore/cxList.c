@@ -27,7 +27,7 @@ CX_SETTER_DEF(cxList, items)
 
 CX_TYPE(cxList, cxObject)
 {
-    CX_PROPERTY_SETTER(cxList, items);
+    CX_SETTER(cxList, items);
 }
 CX_INIT(cxList, cxObject)
 {

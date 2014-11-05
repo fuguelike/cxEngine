@@ -27,7 +27,7 @@ CX_SETTER_DEF(cxArray, items)
 
 CX_TYPE(cxArray, cxObject)
 {
-    CX_PROPERTY_SETTER(cxArray, items);
+    CX_SETTER(cxArray, items);
 }
 CX_INIT(cxArray, cxObject)
 {

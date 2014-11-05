@@ -58,8 +58,8 @@ CX_SETTER_DEF(cxButton, enable)
 }
 CX_TYPE(cxButton, cxSprite)
 {
-    CX_PROPERTY_SETTER(cxButton, movement);
-    CX_PROPERTY_SETTER(cxButton, enable);
+    CX_SETTER(cxButton, movement);
+    CX_SETTER(cxButton, enable);
 }
 CX_INIT(cxButton, cxSprite)
 {

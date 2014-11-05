@@ -9,7 +9,7 @@
 #ifndef cxCore_cxMemory_h
 #define cxCore_cxMemory_h
 
-#include "cxBase.h"
+#include "cxCore.h"
 
 CX_C_BEGIN
 

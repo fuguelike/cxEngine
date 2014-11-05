@@ -74,10 +74,10 @@ CX_SETTER_DEF(cxLabelTTF, stroke)
 
 CX_TYPE(cxLabelTTF, cxSprite)
 {
-    CX_PROPERTY_SETTER(cxLabelTTF, stroke);
-    CX_PROPERTY_SETTER(cxLabelTTF, align);
-    CX_PROPERTY_SETTER(cxLabelTTF, font);
-    CX_PROPERTY_SETTER(cxLabelTTF, text);
+    CX_SETTER(cxLabelTTF, stroke);
+    CX_SETTER(cxLabelTTF, align);
+    CX_SETTER(cxLabelTTF, font);
+    CX_SETTER(cxLabelTTF, text);
 }
 CX_INIT(cxLabelTTF, cxSprite)
 {

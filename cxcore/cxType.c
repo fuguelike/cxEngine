@@ -15,15 +15,16 @@ void cxTypesInit()
 {
     types = CX_ALLOC(cxHash);
     CX_TYPE_REG(cxObject);
-    CX_TYPE_REG(cxType);
+    CX_TYPE_REG(cxString);
     CX_TYPE_REG(cxProperty);
+    CX_TYPE_REG(cxMethod);
     CX_TYPE_REG(cxMemPool);
     CX_TYPE_REG(cxHash);
     CX_TYPE_REG(cxArray);
     CX_TYPE_REG(cxList);
     CX_TYPE_REG(cxStack);
     CX_TYPE_REG(cxNumber);
-    CX_TYPE_REG(cxString);
+    CX_TYPE_REG(cxType);
     CX_TYPE_REG(cxMessage);
     CX_TYPE_REG(cxLoader);
     CX_TYPE_REG(cxPath);
@@ -53,6 +54,18 @@ cxProperty cxTypeSetProperty(cxType this,cxConstChars key)
     return p;
 }
 
+cxMethod cxTypeSetMethod(cxType this,cxConstChars key)
+{
+    cxHashKey ikey = cxHashStrKey(key);
+    cxMethod p = cxHashGet(this->methods, ikey);
+    if(p == NULL){
+        p = CX_ALLOC(cxMethod);
+        cxHashSet(this->methods, ikey, p);
+        CX_RELEASE(p);
+    }
+    return p;
+}
+
 cxProperty cxTypeProperty(cxType this,cxConstChars key)
 {
     cxProperty p = NULL;
@@ -60,6 +73,21 @@ cxProperty cxTypeProperty(cxType this,cxConstChars key)
     cxHashKey ikey = cxHashStrKey(key);
     while (curr != NULL) {
         p = cxHashGet(curr->properties, ikey);
+        if(p != NULL){
+            break;
+        }
+        curr = curr->superType;
+    }
+    return p;
+}
+
+cxMethod cxTypeMethod(cxType this,cxConstChars key)
+{
+    cxMethod p = NULL;
+    cxType curr = this;
+    cxHashKey ikey = cxHashStrKey(key);
+    while (curr != NULL) {
+        p = cxHashGet(curr->methods, ikey);
         if(p != NULL){
             break;
         }
@@ -195,9 +223,11 @@ CX_INIT(cxType, cxObject)
 {
     this->properties = CX_ALLOC(cxHash);
     this->signature = CX_ALLOC(cxString);
+    this->methods = CX_ALLOC(cxHash);
 }
 CX_FREE(cxType, cxObject)
 {
+    CX_RELEASE(this->methods);
     CX_RELEASE(this->signature);
     CX_RELEASE(this->properties);
     CX_RELEASE(this->superType);

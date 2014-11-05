@@ -319,27 +319,27 @@ CX_SETTER_DEF(cxParticle, rotatepers)
 
 CX_TYPE(cxParticle, cxAtlas)
 {
-    CX_PROPERTY_SETTER(cxParticle, number);
-    CX_PROPERTY_SETTER(cxParticle, emitter);
-    CX_PROPERTY_SETTER(cxParticle, time);
-    CX_PROPERTY_SETTER(cxParticle, life);
-    CX_PROPERTY_SETTER(cxParticle, position);
-    CX_PROPERTY_SETTER(cxParticle, rate);
-    CX_PROPERTY_SETTER(cxParticle, angle);
-    CX_PROPERTY_SETTER(cxParticle, ssize);      //start size
-    CX_PROPERTY_SETTER(cxParticle, esize);      //end size
-    CX_PROPERTY_SETTER(cxParticle, scolor);     //start color
-    CX_PROPERTY_SETTER(cxParticle, ecolor);     //end color
-    CX_PROPERTY_SETTER(cxParticle, sspin);      //start spin
-    CX_PROPERTY_SETTER(cxParticle, espin);      //end spin
-    CX_PROPERTY_SETTER(cxParticle, gravity);
-    CX_PROPERTY_SETTER(cxParticle, todir);
-    CX_PROPERTY_SETTER(cxParticle, tanaccel);
-    CX_PROPERTY_SETTER(cxParticle, radaccel);
-    CX_PROPERTY_SETTER(cxParticle, speed);
-    CX_PROPERTY_SETTER(cxParticle, sradius);    //start radius
-    CX_PROPERTY_SETTER(cxParticle, eradius);    //end radius
-    CX_PROPERTY_SETTER(cxParticle, rotatepers);
+    CX_SETTER(cxParticle, number);
+    CX_SETTER(cxParticle, emitter);
+    CX_SETTER(cxParticle, time);
+    CX_SETTER(cxParticle, life);
+    CX_SETTER(cxParticle, position);
+    CX_SETTER(cxParticle, rate);
+    CX_SETTER(cxParticle, angle);
+    CX_SETTER(cxParticle, ssize);      //start size
+    CX_SETTER(cxParticle, esize);      //end size
+    CX_SETTER(cxParticle, scolor);     //start color
+    CX_SETTER(cxParticle, ecolor);     //end color
+    CX_SETTER(cxParticle, sspin);      //start spin
+    CX_SETTER(cxParticle, espin);      //end spin
+    CX_SETTER(cxParticle, gravity);
+    CX_SETTER(cxParticle, todir);
+    CX_SETTER(cxParticle, tanaccel);
+    CX_SETTER(cxParticle, radaccel);
+    CX_SETTER(cxParticle, speed);
+    CX_SETTER(cxParticle, sradius);    //start radius
+    CX_SETTER(cxParticle, eradius);    //end radius
+    CX_SETTER(cxParticle, rotatepers);
 }
 CX_INIT(cxParticle, cxAtlas)
 {

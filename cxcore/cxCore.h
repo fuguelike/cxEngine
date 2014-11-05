@@ -218,7 +218,7 @@ do{                                                             \
 
 #define CX_TYPE_REG(_t_)                __##_t_##RegisterFunc()
 
-#define CX_OBJECT_BEG(_t_,_b_)                                  \
+#define CX_BEG(_t_,_b_)                                         \
 CX_ATTR_UNUSED static cxConstType _t_##TypeName = #_t_;         \
 typedef struct _t_ *_t_;                                        \
 void __##_t_##AutoInit(_t_ this);                               \
@@ -226,7 +226,7 @@ void __##_t_##AutoFree(_t_ this);                               \
 void __##_t_##AutoType(cxAny this);                             \
 struct _t_ {
 
-#define CX_END(_t_,_b_) };                               \
+#define CX_END(_t_,_b_) };                                      \
 CX_ATTR_UNUSED static cxAny __##_t_##CreateFunc()               \
 {                                                               \
     return CX_CREATE(_t_);                                      \
@@ -243,7 +243,7 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
     __##_t_##AutoType);                                         \
 }
 
-#define CX_DEF(_t_,_b_)             CX_OBJECT_BEG(_t_,_b_) struct _b_ _b_;
+#define CX_DEF(_t_,_b_)             CX_BEG(_t_,_b_) struct _b_ _b_;
 
 //type imp cxAny = cxType
 #define CX_TYPE(_t_,_b_)            void __##_t_##AutoType(cxAny this){
@@ -487,7 +487,7 @@ void cxUtilAssert(cxConstChars file, cxInt line, cxConstChars format, ...);
 cxDouble cxTimestamp();
 
 //base type define
-CX_OBJECT_BEG(cxObject,cxObject)
+CX_BEG(cxObject,cxObject)
     cxConstType cxType;
     cxInt cxRefcount;
     cxObjectFunc cxFree;

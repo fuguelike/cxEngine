@@ -97,7 +97,8 @@ LOCAL_SRC_FILES += \
     cxcore/cxLoader.c \
     cxcore/cxPath.c \
     cxcore/cxStream.c \
-    cxcore/cxThread.c
+    cxcore/cxThread.c \
+    cxcore/cxMethod.c
 
 LOCAL_SRC_FILES += \
     kazmath/aabb.c \

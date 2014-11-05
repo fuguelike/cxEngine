@@ -138,7 +138,7 @@ CX_SETTER_DEF(cxSpine, spine)
 
 CX_TYPE(cxSpine, cxAtlas)
 {
-    CX_PROPERTY_SETTER(cxSpine, spine);
+    CX_SETTER(cxSpine, spine);
 }
 CX_INIT(cxSpine, cxAtlas)
 {

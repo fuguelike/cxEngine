@@ -13,6 +13,7 @@
 #include "cxJson.h"
 #include "cxProperty.h"
 #include "cxString.h"
+#include "cxMethod.h"
 
 CX_C_BEGIN
 
@@ -20,9 +21,10 @@ CX_DEF(cxType, cxObject)
     cxAny (*Create)();
     cxAny (*Alloc)();
     cxConstType typeName;
-    cxString signature;    //a.b.c
+    cxString signature;   //a.b.c
     cxType superType;
     cxHash properties;
+    cxHash methods;
 CX_END(cxType, cxObject)
 
 typedef cxJson (*cxObjectCreateReaderFunc)(cxConstChars src);
@@ -30,6 +32,10 @@ typedef cxJson (*cxObjectCreateReaderFunc)(cxConstChars src);
 cxType cxTypesGet(cxConstType type);
 
 cxAny cxJsonTocxObject(cxJson v);
+
+cxMethod cxTypeMethod(cxType this,cxConstChars key);
+
+cxMethod cxTypeSetMethod(cxType this,cxConstChars key);
 
 cxProperty cxTypeSetProperty(cxType this,cxConstChars key);
 

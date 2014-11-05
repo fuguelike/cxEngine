@@ -39,7 +39,7 @@ CX_SETTER_DEF(cxTint, color)
 
 CX_TYPE(cxTint, cxAction)
 {
-    CX_PROPERTY_SETTER(cxTint, color);
+    CX_SETTER(cxTint, color);
 }
 CX_INIT(cxTint, cxAction)
 {
