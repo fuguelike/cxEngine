@@ -174,7 +174,7 @@ cxBool cxScrollTouch(cxAny pview,const cxTouchItems *points)
         }
         return true;
     }
-    if(item->type == cxTouchTypeUp && item->movement > 0){
+    if(item->type == cxTouchTypeUp && item->movement > 15){
         this->isEnable = false;
         cxVec2f npos = cxViewGetPosition(body);
         if(this->type & cxScrollMoveTypeVertical){

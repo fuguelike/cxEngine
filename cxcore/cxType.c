@@ -144,7 +144,7 @@ cxAny cxJsonTocxObject(cxJson v)
 
 cxAny cxObjectCreateUseType(cxConstType type)
 {
-    CX_ASSERT(type != NULL, "type null");
+    CX_ASSERT(cxConstCharsOK(type), "type null");
     cxType ptype = cxTypesGet(type);
     CX_ASSERT(ptype != NULL, "type(%s) not register",type);
     return ptype->Create();

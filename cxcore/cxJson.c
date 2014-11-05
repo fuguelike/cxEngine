@@ -122,7 +122,7 @@ static json_t *jsonGetJson(json_t *json,cxConstChars key)
     return rv;
 }
 //auto relase json_t
-json_t *cxJsonCreateString(cxConstChars str)
+json_t *jsonCreateString(cxConstChars str)
 {
     CX_ASSERT(str != NULL, "str error");
     cxJson this = CX_CREATE(cxJson);
@@ -1117,19 +1117,19 @@ void cxJsonSetString(cxJson json,cxConstChars key,cxString v)
 void cxJsonSetInt(cxJson json,cxConstChars key,cxLong v)
 {
     CX_ASSERT(json != NULL && cxJsonIsObject(json), "json error");
-    json_object_set(CX_JSON_PTR(json), key, json_integer(v));
+    json_object_set_new(CX_JSON_PTR(json), key, json_integer(v));
 }
 
 void cxJsonSetDouble(cxJson json,cxConstChars key,cxDouble v)
 {
     CX_ASSERT(json != NULL && cxJsonIsObject(json), "json error");
-    json_object_set(CX_JSON_PTR(json), key, json_real(v));
+    json_object_set_new(CX_JSON_PTR(json), key, json_real(v));
 }
 
 void cxJsonSetBool(cxJson json,cxConstChars key,cxBool v)
 {
     CX_ASSERT(json != NULL && cxJsonIsObject(json), "json error");
-    json_object_set(CX_JSON_PTR(json), key, json_boolean(v));
+    json_object_set_new(CX_JSON_PTR(json), key, json_boolean(v));
 }
 
 cxJson cxJsonCreateArray()
