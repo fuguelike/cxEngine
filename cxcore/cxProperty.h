@@ -38,9 +38,9 @@ CX_DEF(cxProperty, cxObject)
     cxPropertyGetter getter;
 CX_END(cxProperty, cxObject)
 
-void cxObjectSetter(cxAny object,cxConstChars key,cxAny value);
+void cxRunPropertySetter(cxAny object,cxConstChars key,cxAny value);
 
-cxBool cxObjectGetter(cxAny object,cxConstChars key,cxAny *value);
+cxBool cxRunPropertyGetter(cxAny object,cxConstChars key,cxAny *value);
 CX_C_END
 
 #endif

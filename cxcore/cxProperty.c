@@ -17,7 +17,7 @@ CX_FREE(cxProperty, cxObject)
 {}
 CX_TERM(cxProperty, cxObject)
 
-void cxObjectSetter(cxAny object,cxConstChars key,cxAny value)
+void cxRunPropertySetter(cxAny object,cxConstChars key,cxAny value)
 {
     CX_ASSERT(key != NULL && object != NULL && value != NULL, "args error");
     cxProperty p = cxObjectProperty(object, key);
@@ -26,7 +26,7 @@ void cxObjectSetter(cxAny object,cxConstChars key,cxAny value)
     }
 }
 
-cxBool cxObjectGetter(cxAny object,cxConstChars key,cxAny *value)
+cxBool cxRunPropertyGetter(cxAny object,cxConstChars key,cxAny *value)
 {
     CX_ASSERT(key != NULL && object != NULL, "args error");
     cxProperty p = cxObjectProperty(object, key);
