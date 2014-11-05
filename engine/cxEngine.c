@@ -217,21 +217,21 @@ static json_t *cxEngineLocalizeder(cxConstChars key)
     cxEngine this = cxEngineInstance();
     CX_ASSERT(cxConstCharsOK(key) && this != NULL, "args error or enstance null");
     if(!cxEngineSetLocalized(this,key)){
-        return json_string(key);
+        return cxJsonCreateString(key);
     }
     cxChar url[1024]={0};
     snprintf(url, 1024, "%s/%s",cxStringBody(this->Localized),key);
     cxPath path = cxPathParse(url);
     if(path->count < 2){
-        return json_string(key);
+        return cxJsonCreateString(key);
     }
     cxJson json = cxEngineLoadJson(path->path);
     if(json == NULL){
-        return json_string(key);
+        return cxJsonCreateString(key);
     }
     json_t *value = json_object_get(CX_JSON_PTR(json), path->key);
     if(value == NULL || !json_is_string(value)){
-        return json_string(key);
+        return cxJsonCreateString(key);
     }
     //auto release value
     return CX_JSON_PTR(cxJsonAttach(value));

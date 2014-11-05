@@ -121,6 +121,14 @@ static json_t *jsonGetJson(json_t *json,cxConstChars key)
     allocator->free(ckey);
     return rv;
 }
+//auto relase json_t
+json_t *cxJsonCreateString(cxConstChars str)
+{
+    CX_ASSERT(str != NULL, "str error");
+    cxJson this = CX_CREATE(cxJson);
+    this->json = json_string(str);
+    return CX_JSON_PTR(this);
+}
 //
 static json_t *cxJsonGetJson(cxJson json,cxConstChars key)
 {
@@ -740,13 +748,6 @@ cxBool cxJsonIsObject(cxJson json)
 {
     CX_ASSERT_THIS(json, cxJson);
     return json_is_object(CX_JSON_PTR(this));
-}
-
-cxJson cxJsonNullString()
-{
-    cxJson this = CX_CREATE(cxJson);
-    this->json = json_string("");
-    return this;
 }
 
 cxJson cxJsonCreate(cxString json)
