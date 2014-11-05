@@ -207,8 +207,6 @@ void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny 
     cxTypeSignature(type,superType);
     type->Alloc = alloc;
     type->Create = create;
-    cxTypeCopyProperty(type, superType);
-    cxTypeCopyMethod(type, superType);
     autoType(type);
     CX_RELEASE(type);
 }
