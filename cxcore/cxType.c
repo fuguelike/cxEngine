@@ -96,6 +96,24 @@ cxMethod cxTypeMethod(cxType this,cxConstChars key)
     return p;
 }
 
+void cxTypeCopyProperty(cxType this,cxType super)
+{
+    CX_ASSERT(this != NULL, "args error");
+    CX_RETURN(super == NULL);
+    CX_HASH_FOREACH(super->properties, ele, tmp){
+        cxHashSet(this->properties, cxHashStrKey(ele->key), ele->any);
+    }
+}
+
+void cxTypeCopyMethod(cxType this,cxType super)
+{
+    CX_ASSERT(this != NULL, "args error");
+    CX_RETURN(super == NULL);
+    CX_HASH_FOREACH(super->methods, ele, tmp){
+        cxHashSet(this->methods, cxHashStrKey(ele->key), ele->any);
+    }
+}
+
 void cxTypesSet(cxConstType typeName,cxType type)
 {
     CX_ASSERT(typeName != NULL && type != NULL, "args error");

@@ -33,6 +33,10 @@ cxType cxTypesGet(cxConstType type);
 
 cxAny cxJsonTocxObject(cxJson v);
 
+void cxTypeCopyProperty(cxType this,cxType super);
+
+void cxTypeCopyMethod(cxType this,cxType super);
+
 cxMethod cxTypeMethod(cxType this,cxConstChars key);
 
 cxMethod cxTypeSetMethod(cxType this,cxConstChars key);
