@@ -173,15 +173,15 @@ cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
     UInt32 thePropertySize = sizeof(UInt64);
     AudioFileID afid = NULL;
     cxAny theData = NULL;
-    if(AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, &afid)){
+    if(AudioFileOpenURL(fileURL, kAudioFileReadPermission, 0, &afid) != noErr){
         CX_ERROR("open url %s error",file);
         goto completed;
     }
-    if(AudioFileGetProperty(afid, kAudioFilePropertyDataFormat, &formatsize, &fileformat)){
+    if(AudioFileGetProperty(afid, kAudioFilePropertyDataFormat, &formatsize, &fileformat) != noErr){
         CX_ERROR("get format error");
         goto completed;
     }
-    if(!AudioFileGetProperty(afid, kAudioFilePropertyAudioDataByteCount, &thePropertySize, &fileDataSize)){
+    if(AudioFileGetProperty(afid, kAudioFilePropertyAudioDataByteCount, &thePropertySize, &fileDataSize) != noErr){
         theData = allocator->malloc((cxInt)fileDataSize);
         AudioFileReadBytes(afid, false, 0, (UInt32 *)&fileDataSize, theData);
         *freq = (ALsizei)fileformat.mSampleRate;
@@ -193,9 +193,7 @@ cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
     }
 completed:
     AudioFileClose(afid);
-    if(theData == NULL){
-        return NULL;
-    }
+    CX_RETURN(theData == NULL,NULL);
     return cxStringAttachMem(theData, (UInt32)fileDataSize);
 }
 

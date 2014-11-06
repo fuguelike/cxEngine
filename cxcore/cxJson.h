@@ -272,7 +272,7 @@ void cxJsonAppendJson(cxJson json,cxJson v);
 
 //
 
-cxAny cxJsonDecode(cxJson json);
+cxAny cxJsonDecode(cxJson this);
 
 void cxJsonSetAESKey(cxString v);
 

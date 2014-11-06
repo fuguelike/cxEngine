@@ -358,7 +358,7 @@ cxBox4f cxViewGetBox(cxAny pview)
 cxBool cxViewContainsGLBox(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxSize2f wsize = cxEngineWinSize();
+    cxSize2f wsize = cxEngineGetWinSize();
     cxRect4f vr = cxViewGLRect(this);
     cxRect4f gr = cxRect4fv(0, 0, wsize.w, wsize.h);
     return cxRect4fContainsRect4f(gr,vr);
@@ -385,7 +385,7 @@ void cxViewSetShowBorder(cxAny pview,cxBool isShowBorder)
 
 cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint)
 {
-    cxSize2f wsize = cxEngineWinSize();
+    cxSize2f wsize = cxEngineGetWinSize();
     cxFloat x = wPoint.x + wsize.w/2.0f;
     cxFloat y = wPoint.y + wsize.h/2.0f;
     return cxVec2fv(x, y);
@@ -393,7 +393,7 @@ cxVec2f cxWindowPointToGLPoint(cxVec2f wPoint)
 
 cxVec2f cxGLPointToWindowPoint(cxVec2f glPoint)
 {
-    cxSize2f wsize = cxEngineWinSize();
+    cxSize2f wsize = cxEngineGetWinSize();
     cxFloat x = glPoint.x - wsize.w/2.0f;
     cxFloat y = glPoint.y - wsize.h/2.0f;
     return cxVec2fv(x, y);
@@ -454,7 +454,7 @@ cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint)
 void cxViewSetSize(cxAny pview,cxSize2f size)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxSize2f wsize = cxEngineWinSize();
+    cxSize2f wsize = cxEngineGetWinSize();
     if(size.w > 0 && size.w < 1.0f){
         size.w = wsize.w * size.w;
     }

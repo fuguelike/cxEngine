@@ -33,7 +33,7 @@ static void cxShowActionOnStop(cxAny pav)
 
 static void cxAlertOnShow(cxAny pview)
 {
-    cxSize2f wsize = cxEngineWinSize();
+    cxSize2f wsize = cxEngineGetWinSize();
     cxSize2f size = cxViewGetSize(pview);
     cxVec2f pos = cxViewGetPosition(pview);
     pos.y = -wsize.h/2.0f - size.h / 2.0f;
@@ -53,7 +53,7 @@ static void cxHideActionOnStop(cxAny pav)
 
 static void cxAlertOnHide(cxAny pview)
 {
-    cxSize2f wsize = cxEngineWinSize();
+    cxSize2f wsize = cxEngineGetWinSize();
     cxSize2f size = cxViewGetSize(pview);
     cxVec2f pos = cxViewGetPosition(pview);
     pos.y = -wsize.h/2.0f - size.h / 2.0f;

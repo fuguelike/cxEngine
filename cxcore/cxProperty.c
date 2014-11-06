@@ -10,28 +10,36 @@
 #include "cxProperty.h"
 
 CX_TYPE(cxProperty, cxObject)
-{}
+{
+    
+}
 CX_INIT(cxProperty, cxObject)
-{}
+{
+    
+}
 CX_FREE(cxProperty, cxObject)
-{}
+{
+    
+}
 CX_TERM(cxProperty, cxObject)
 
-void cxRunPropertySetter(cxAny object,cxConstChars key,cxAny value)
+cxBool cxPropertyRunSetter(cxAny object,cxConstChars key,cxAny value)
 {
     CX_ASSERT(key != NULL && object != NULL && value != NULL, "args error");
     cxProperty p = cxObjectProperty(object, key);
     if(p != NULL && p->setter != NULL){
-        p->setter(object,value);
+        ((cxPropertySetter)p->setter)(object,value);
+        return true;
     }
+    return false;
 }
 
-cxBool cxRunPropertyGetter(cxAny object,cxConstChars key,cxAny *value)
+cxBool cxPropertyRunGetter(cxAny object,cxConstChars key,cxAny *value)
 {
     CX_ASSERT(key != NULL && object != NULL, "args error");
     cxProperty p = cxObjectProperty(object, key);
     if(p != NULL && p->getter != NULL){
-        *value = p->getter(object);
+        *value = ((cxPropertyGetter)p->getter)(object);
         return true;
     }
     return false;

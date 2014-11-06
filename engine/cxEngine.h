@@ -163,7 +163,7 @@ CX_INLINE void cxEngineSetDesSize(cxSize2f size)
     engineInstance->DesSize = size;
 }
 
-CX_INLINE cxSize2f cxEngineWinSize()
+CX_INLINE cxSize2f cxEngineGetWinSize()
 {
     return engineInstance->WinSize;
 }

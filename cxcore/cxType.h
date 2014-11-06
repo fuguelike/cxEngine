@@ -29,6 +29,10 @@ CX_END(cxType, cxObject)
 
 typedef cxJson (*cxObjectCreateReaderFunc)(cxConstChars src);
 
+void cxTypeCopyMethods(cxType this,cxType super);
+
+void cxTypeCopyPropertys(cxType this,cxType super);
+
 cxType cxTypesGet(cxConstType type);
 
 cxAny cxJsonTocxObject(cxJson v);

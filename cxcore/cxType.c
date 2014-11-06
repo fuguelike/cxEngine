@@ -45,24 +45,18 @@ cxType cxTypesGet(cxConstType typeName)
 cxProperty cxTypeSetProperty(cxType this,cxConstChars key)
 {
     cxHashKey ikey = cxHashStrKey(key);
-    cxProperty p = cxHashGet(this->properties, ikey);
-    if(p == NULL){
-        p = CX_ALLOC(cxProperty);
-        cxHashSet(this->properties, ikey, p);
-        CX_RELEASE(p);
-    }
+    cxProperty p = CX_ALLOC(cxProperty);
+    cxHashSet(this->properties, ikey, p);
+    CX_RELEASE(p);
     return p;
 }
 
 cxMethod cxTypeSetMethod(cxType this,cxConstChars key)
 {
     cxHashKey ikey = cxHashStrKey(key);
-    cxMethod p = cxHashGet(this->methods, ikey);
-    if(p == NULL){
-        p = CX_ALLOC(cxMethod);
-        cxHashSet(this->methods, ikey, p);
-        CX_RELEASE(p);
-    }
+    cxMethod p = CX_ALLOC(cxMethod);
+    cxHashSet(this->methods, ikey, p);
+    CX_RELEASE(p);
     return p;
 }
 
@@ -132,11 +126,27 @@ cxBool cxObjectInstanceOf(cxAny object,cxConstType type)
     return cxStringHasConstChars(ptype->signature, type);
 }
 
+void cxTypeCopyPropertys(cxType this,cxType super)
+{
+    CX_RETURN(super == NULL);
+    CX_HASH_FOREACH(super->properties, ele, tmp){
+        cxHashSet(this->properties, cxHashStrKey(ele->key), ele->any);
+    }
+}
+
+void cxTypeCopyMethods(cxType this,cxType super)
+{
+    CX_RETURN(super == NULL);
+    CX_HASH_FOREACH(super->methods, ele, tmp){
+        cxHashSet(this->methods, cxHashStrKey(ele->key), ele->any);
+    }
+}
+
 void cxTypeRunObjectSetter(cxObject object,cxJson json)
 {
     CX_ASSERT(object != NULL, "object args error");
     CX_JSON_OBJECT_EACH_BEG(json, item)
-    cxRunPropertySetter(object, itemKey, item);
+    cxPropertyRunSetter(object, itemKey, item);
     CX_JSON_OBJECT_EACH_END(json, item)
 }
 
