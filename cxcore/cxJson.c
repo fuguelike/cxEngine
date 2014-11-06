@@ -1055,7 +1055,7 @@ cxString cxJsonAESEncodeWithKey(cxJson json,cxString key)
         CX_ERROR("json dump error");
         return NULL;
     }
-    data = cxLzmaCompress(data);
+    data = cxLzmaCompressed(data);
     if(data == NULL){
         CX_ERROR("compress json failed");
         return NULL;
@@ -1076,7 +1076,7 @@ cxJson cxJsonAESDecodeWithKey(cxString data,cxString key)
         CX_ERROR("aes decode error");
         return NULL;
     }
-    json = cxLzmaUncompress(json);
+    json = cxLzmaDecompress(json);
     if(json == NULL){
         CX_ERROR("json uncompress failed");
         return NULL;

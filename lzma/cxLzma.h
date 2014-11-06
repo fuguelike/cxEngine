@@ -15,9 +15,9 @@ CX_C_BEGIN
 
 void cxLzmaSetFlags(cxString flags);
 
-cxString cxLzmaCompress(cxString data);
+cxString cxLzmaCompressed(cxString data);
 
-cxString cxLzmaUncompress(cxString data);
+cxString cxLzmaDecompress(cxString data);
 
 CX_C_END
 

@@ -43,9 +43,9 @@ cxInt cxRand(cxInt min,cxInt max);
 void cxSetRandSeed();
 
 //user zlib
-cxString cxCompressed(cxString data);
+cxString cxZCompressed(cxString data);
 
-cxString cxDecompress(cxString data);
+cxString cxZDecompress(cxString data);
 
 //use aes cbc
 cxString cxAESDecode(cxString data,cxString key);

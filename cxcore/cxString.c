@@ -50,7 +50,7 @@ CX_FREE(cxString, cxObject)
 }
 CX_TERM(cxString, cxObject)
 
-cxString cxCompressed(cxString data)
+cxString cxZCompressed(cxString data)
 {
     CX_ASSERT(data != NULL, "args error");
     cxInt datasiz = cxStringLength(data);
@@ -63,7 +63,7 @@ cxString cxCompressed(cxString data)
     return NULL;
 }
 
-cxString cxDecompress(cxString data)
+cxString cxZDecompress(cxString data)
 {
     CX_ASSERT(data != NULL, "args error");
     cxInt datasiz = cxStringLength(data);

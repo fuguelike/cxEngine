@@ -38,9 +38,11 @@ cxBool cxTcpWrite(cxAny ptcp,cxString data)
     }
     cxConstChars buf = cxStringBody(data);
     cxInt32 len = cxStringLength(data);
+    //write package length
     if(bufferevent_write(this->bufferEvent, &len, sizeof(cxInt32)) != 0){
         return false;
     }
+    //write package body data
     if(bufferevent_write(this->bufferEvent, buf, len) != 0){
         return false;
     }

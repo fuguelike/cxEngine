@@ -7,11 +7,11 @@
 //
 
 #include "lzma.h"
-
+//16bytes
 typedef struct{
-    int32_t dataLen;                //not include head
-    unsigned char props[LZMA_PROPS_SIZE]; //props
-    char flags[7];                  //
+    int32_t dataLen;                //not include head  4bytes
+    unsigned char props[LZMA_PROPS_SIZE]; //props   5 bytes
+    char flags[7];                  //  7bytes
 }LzmaDataHead;
 
 static char lzmaFlags[7]={0};

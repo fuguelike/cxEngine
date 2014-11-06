@@ -15,7 +15,7 @@ void cxLzmaSetFlags(cxString data)
     LzmaSetFlags((char *)cxStringBody(data));
 }
 
-cxString cxLzmaCompress(cxString data)
+cxString cxLzmaCompressed(cxString data)
 {
     CX_ASSERT(cxStringOK(data), "data error");
     int len = LzmaGetCompressLen(cxStringLength(data));
@@ -27,7 +27,7 @@ cxString cxLzmaCompress(cxString data)
     return cxStringAttachMem(ret, len);
 }
 
-cxString cxLzmaUncompress(cxString data)
+cxString cxLzmaDecompress(cxString data)
 {
     CX_ASSERT(cxStringOK(data), "data error");
     int len = LzmaGetUncompressLen((cxAny)cxStringBody(data));
