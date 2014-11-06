@@ -23,6 +23,8 @@ typedef void (*cxCopyFileFunc)(cxConstChars file,cxProgress *progress,cxAny udat
 
 cxString cxUUID();
 
+cxString cxDefaultLocalized();
+
 cxUInt cxHexToUInt(cxConstChars bs);
 
 cxUInt cxBinaryToUInt(cxConstChars bs);

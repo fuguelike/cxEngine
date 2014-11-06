@@ -1,6 +1,7 @@
 
 package com.cxengine;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashMap;
@@ -18,7 +19,6 @@ import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.graphics.Paint.FontMetricsInt;
 import android.opengl.GLSurfaceView;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -140,8 +140,13 @@ public class EngineGLView extends GLSurfaceView {
     		}
     	});	
     }
+    //get country
+    public static String cxEngineCountry(){
+    	return Locale.getDefault().getCountry();
+    }
     //get localized lang
     public static String cxEngineLocalized(){
+    	
     	return Locale.getDefault().getLanguage();
     }
     //json invoke method
@@ -162,6 +167,19 @@ public class EngineGLView extends GLSurfaceView {
     			cxEngineSendJsonImp(json);
     		}
     	});
+    }
+    //get default Localized dir
+    public static String cxEngineDefaultLocalized(){
+    	String ret = null;
+    	try {
+			String[] files = glActivity.getAssets().list("strings");
+			if(files.length >= 1){
+				ret = "strings/"+files[0];
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return ret;
     }
     //assert mehtod
     public static AssetManager cxEngineAssertManager(){

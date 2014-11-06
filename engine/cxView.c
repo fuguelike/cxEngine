@@ -311,6 +311,7 @@ void cxViewClear(cxAny pview)
     CX_ASSERT_THIS(pview, cxView);
     CX_VIEW_FOREACH_SUBVIEWS(this, e){
         cxViewClear(e->any);
+        cxViewRemove(e->any);
     }
 }
 

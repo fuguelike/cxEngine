@@ -28,6 +28,23 @@ cxString cxUUID()
     return cxMD5(cxStringBinary(uuid, sizeof(uuid_t)));
 }
 
+//get strings/firstdir
+cxString cxDefaultLocalized()
+{
+    NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/strings"];
+    if(path == nil){
+        return NULL;
+    }
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSError *error = nil;
+    NSArray *files = [fm contentsOfDirectoryAtPath:path error:&error];
+    if(error != nil || files.count == 0){
+        return NULL;
+    }
+    path = [files objectAtIndex:0];
+    return cxStringCreate("strings/%s",[path UTF8String]);
+}
+
 static CGSize cxCalculateStringSize(NSString *str, id font, CGSize constrainSize, NSMutableDictionary *attrs)
 {
     NSArray *listItems = [str componentsSeparatedByString: @"\n"];

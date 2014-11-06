@@ -37,6 +37,7 @@ CX_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxWindow Window);      //main window
     CX_METHOD_DEF(cxString, JsonFilter, cxString);
     CX_FIELD_DEF(cxJson Config);
+    CX_FIELD_DEF(cxUInt Version);       //version number
     cxBool isInit;
     cxBool isTouch;
     cxBool isPause;
@@ -71,6 +72,11 @@ CX_INLINE cxEngine cxEngineInstance()
 CX_INLINE cxJson cxEngineGetConfig()
 {
     return engineInstance->Config;
+}
+
+CX_INLINE cxUInt cxEngineVersion()
+{
+    return engineInstance->Version;
 }
 
 CX_INLINE cxTextureCache cxTextureCacheInstance()

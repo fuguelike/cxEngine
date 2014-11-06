@@ -199,10 +199,10 @@ static cxBool cxEngineSetLocalized(cxEngine this,cxConstChars key)
         CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/%s",lang));
         return true;
     }
-    //3 en
-    file[snprintf(file, 1024, "strings/en/%s",path->path)] = '\0';
-    if(cxAssetsExists(file)){
-        CX_RETAIN_SWAP(this->Localized, cxStringCreate("strings/en"));
+    //3 default dir
+    cxString dpath = cxDefaultLocalized();
+    if(dpath != NULL){
+        CX_RETAIN_SWAP(this->Localized,dpath);
         return true;
     }
     return false;
@@ -226,11 +226,10 @@ static json_t *cxEngineLocalizeder(cxConstChars key)
         return jsonCreateString(key);
     }
     json_t *value = json_object_get(CX_JSON_PTR(json), path->key);
-    if(value == NULL || !json_is_string(value)){
+    if(value == NULL){
         return jsonCreateString(key);
     }
-    //auto release value
-    return CX_JSON_PTR(cxJsonAttach(value));
+    return value;
 }
 
 //showBorder show element border if cxBool
@@ -238,11 +237,13 @@ static json_t *cxEngineLocalizeder(cxConstChars key)
 static void cxEngineLoadConfig(cxEngine engine)
 {
     //showBorder
-    cxBool showBorder = cxJsonBool(engine->Config, "showBorder", false);
+    cxBool showBorder = cxJsonBool(engine->Config, "cxShowBorder", false);
     cxEngineSetIsShowBorder(showBorder);
     //desSize
-    cxSize2f desSize = cxJsonSize2f(engine->Config, "showSize", cxSize2fv(0, 0));
+    cxSize2f desSize = cxJsonSize2f(engine->Config, "cxDesignSize", cxSize2fv(0, 0));
     cxEngineSetDesSize(desSize);
+    //version
+    engine->Version = cxJsonInt(engine->Config, "cxVersion", 1);
 }
 
 void cxEngineStartup()

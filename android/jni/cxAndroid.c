@@ -18,11 +18,25 @@ JniMethodInfo createTextBitmap  = {.isGet=false};
 JniMethodInfo engineTerminate   = {.isGet=false};
 JniMethodInfo documentPath      = {.isGet=false};
 JniMethodInfo engineLocalized   = {.isGet=false};
-JniMethodInfo engineCountry   = {.isGet=false};
+JniMethodInfo engineCountry     = {.isGet=false};
 JniMethodInfo assertManager     = {.isGet=false};
 JniMethodInfo engineRecvJson    = {.isGet=false};
 JniMethodInfo engineUUID        = {.isGet=false};
+JniMethodInfo defaultLocalized  = {.isGet=false};
 
+//get default localized dir
+cxString cxDefaultLocalized()
+{
+    CX_ASSERT(javaENV != NULL && javaClass != NULL, "env and class error");
+    CX_GET_METHOD(defaultLocalized,"cxEngineDefaultLocalized","()Ljava/lang/String;");
+    jstring dir = (*javaENV)->CallStaticObjectMethod(M(defaultLocalized));
+    if(dir == NULL){
+        return NULL;
+    }
+    cxString str = jstringTocxString(dir);
+    (*javaENV)->DeleteLocalRef(javaENV,dir);
+    return str;
+}
 //cxEngineUUID
 cxString cxUUID()
 {

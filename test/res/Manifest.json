@@ -1,7 +1,8 @@
 {
-  "showBorder": true,
-  "showSize": {
+  "cxShowBorder": true,
+  "cxDesignSize": {
     "w": 2048,
     "h": 1536
-  }
+  },
+  "cxVersion":1
 }
