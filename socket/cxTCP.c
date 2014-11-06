@@ -111,7 +111,7 @@ cxInt cxTcpConnect(cxAny ptcp)
     }
     bufferevent_setcb(this->bufferEvent, cxTcpBufferRead, NULL, cxTcpBufferEvent, this);
     bufferevent_enable(this->bufferEvent, EV_READ|EV_WRITE);
-    return bufferevent_socket_connect_hostname(this->bufferEvent, NULL, AF_INET, host , this->port);
+    return  bufferevent_socket_connect_hostname(this->bufferEvent, NULL, AF_INET, host , this->port);
 }
 
 cxTCP cxTCPCreate(cxConstChars host,cxInt port)

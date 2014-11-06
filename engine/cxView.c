@@ -305,6 +305,15 @@ void cxViewAppend(cxAny pview,cxAny newview)
     nview->ParentView = pview;
 }
 
+//remove all subview
+void cxViewClear(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    CX_VIEW_FOREACH_SUBVIEWS(this, e){
+        cxViewClear(e->any);
+    }
+}
+
 void cxViewRemove(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
@@ -887,6 +896,9 @@ CX_INLINE void cxViewClearRemoves(cxView this)
         CX_ASSERT_TYPE(view, cxView);
         if(view->isRunning){
             cxViewExit(view);
+        }
+        if(this->frontView == view){
+            this->frontView = NULL;
         }
         cxListRemove(this->SubViews, view->Element);
         view->Element = NULL;

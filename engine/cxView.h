@@ -275,6 +275,8 @@ void cxViewEnter(cxAny pview);
 
 void cxViewExit(cxAny pview);
 
+void cxViewClear(cxAny pview);
+
 void cxViewRemove(cxAny pview);
 
 CX_C_END

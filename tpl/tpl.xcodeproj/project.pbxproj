@@ -24,6 +24,8 @@
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
 		839B897019EFAB92009C6B5C /* libcxEngineStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B896D19EFAAD6009C6B5C /* libcxEngineStatic.a */; };
 		83CA51EF19F3CBC6002119B0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83CA51EE19F3CBC6002119B0 /* LaunchScreen.xib */; };
+		83E407E41A0B2E12005BF3E1 /* Manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 83E407E31A0B2E12005BF3E1 /* Manifest.json */; };
+		83E407E81A0B2E19005BF3E1 /* strings in Resources */ = {isa = PBXBuildFile; fileRef = 83E407E71A0B2E19005BF3E1 /* strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,8 @@
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		839B896719EFAAD5009C6B5C /* cxEngineStatic.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineStatic.xcodeproj; path = ../cxEngineStatic.xcodeproj; sourceTree = "<group>"; };
 		83CA51EE19F3CBC6002119B0 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = SOURCE_ROOT; };
+		83E407E31A0B2E12005BF3E1 /* Manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Manifest.json; path = res/Manifest.json; sourceTree = SOURCE_ROOT; };
+		83E407E71A0B2E19005BF3E1 /* strings */ = {isa = PBXFileReference; lastKnownFileType = folder; name = strings; path = res/strings; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +147,8 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				83E407E71A0B2E19005BF3E1 /* strings */,
+				83E407E31A0B2E12005BF3E1 /* Manifest.json */,
 				83CA51EE19F3CBC6002119B0 /* LaunchScreen.xib */,
 			);
 			name = "Supporting Files";
@@ -230,6 +236,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83E407E81A0B2E19005BF3E1 /* strings in Resources */,
+				83E407E41A0B2E12005BF3E1 /* Manifest.json in Resources */,
 				83CA51EF19F3CBC6002119B0 /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -35,7 +35,7 @@ CX_TERM(cxWindow, cxView)
 void cxWindowClear()
 {
     cxEngine engine = cxEngineInstance();
-    cxListClear(engine->Window->cxView.SubViews);
+    cxViewClear(engine->Window);
     cxStackClear(engine->Window->views);
 }
 

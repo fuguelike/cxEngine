@@ -36,6 +36,7 @@ CX_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxFloat Interval);     //
     CX_FIELD_DEF(cxWindow Window);      //main window
     CX_METHOD_DEF(cxString, JsonFilter, cxString);
+    CX_FIELD_DEF(cxJson Config);
     cxBool isInit;
     cxBool isTouch;
     cxBool isPause;
@@ -65,6 +66,11 @@ extern cxEngine engineInstance;
 CX_INLINE cxEngine cxEngineInstance()
 {
     return engineInstance;
+}
+
+CX_INLINE cxJson cxEngineGetConfig()
+{
+    return engineInstance->Config;
 }
 
 CX_INLINE cxTextureCache cxTextureCacheInstance()
@@ -154,7 +160,11 @@ CX_INLINE cxBool cxEngineGetIsShowBorder()
 
 CX_INLINE void cxEngineSetIsShowBorder(cxBool v)
 {
+#ifdef NDEBUG
+    engineInstance->IsShowBorder = false;
+#else
     engineInstance->IsShowBorder = v;
+#endif
 }
 
 //use init method

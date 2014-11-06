@@ -181,14 +181,10 @@ static void cxEngineTypes()
 static cxBool cxEngineSetLocalized(cxEngine this,cxConstChars key)
 {
     CX_RETURN(cxStringOK(this->Localized),true);
-    cxConstChars country = "";
-    if(cxStringOK(this->Country)){
-        country = cxStringBody(this->Country);
-    }
-    cxConstChars lang = "";
-    if(cxStringOK(this->Lang)){
-        lang = cxStringBody(this->Lang);
-    }
+    CX_ASSERT(cxStringOK(this->Country), "not set Country");
+    CX_ASSERT(cxStringOK(this->Lang), "not set Lang");
+    cxConstChars country = cxStringBody(this->Country);
+    cxConstChars lang = cxStringBody(this->Lang);
     cxPath path = cxPathParse(key);
     cxChar file[1024]={0};
     //1 zh-CN
@@ -237,6 +233,18 @@ static json_t *cxEngineLocalizeder(cxConstChars key)
     return CX_JSON_PTR(cxJsonAttach(value));
 }
 
+//showBorder show element border if cxBool
+//showSize,engine show size .cxSize2f
+static void cxEngineLoadConfig(cxEngine engine)
+{
+    //showBorder
+    cxBool showBorder = cxJsonBool(engine->Config, "showBorder", false);
+    cxEngineSetIsShowBorder(showBorder);
+    //desSize
+    cxSize2f desSize = cxJsonSize2f(engine->Config, "showSize", cxSize2fv(0, 0));
+    cxEngineSetDesSize(desSize);
+}
+
 void cxEngineStartup()
 {
 #if !defined(NDEBUG)
@@ -268,6 +276,11 @@ void cxEngineStartup()
     engineInstance->looper      = CX_ALLOC(cxLooper);
     //registe other type
     cxEngineType(engineInstance);
+    //read Manifest.json config file
+    CX_RETAIN_SET(engineInstance->Config, cxEngineLoadJson("Manifest.json"));
+    if(engineInstance->Config != NULL){
+        cxEngineLoadConfig(engineInstance);
+    }
     //use init engine
     cxEngineInit(engineInstance);
 }

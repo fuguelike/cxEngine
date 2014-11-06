@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8309E4601A0B2F3E0048C971 /* Manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 8309E45F1A0B2F3E0048C971 /* Manifest.json */; };
 		830EEB4A19C55A6500C81EA5 /* cxSpine.json in Resources */ = {isa = PBXBuildFile; fileRef = 830EEB4919C55A6500C81EA5 /* cxSpine.json */; };
 		830EEBB819C5CB4500C81EA5 /* cxLabelBMP.json in Resources */ = {isa = PBXBuildFile; fileRef = 830EEBB719C5CB4500C81EA5 /* cxLabelBMP.json */; };
 		831ABCBC19249044001A86F1 /* cxParticle.json in Resources */ = {isa = PBXBuildFile; fileRef = 831ABCBB19249044001A86F1 /* cxParticle.json */; };
@@ -77,6 +78,7 @@
 
 /* Begin PBXFileReference section */
 		8300651F18232BE000AF680D /* test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8309E45F1A0B2F3E0048C971 /* Manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Manifest.json; path = res/Manifest.json; sourceTree = SOURCE_ROOT; };
 		830EEB4919C55A6500C81EA5 /* cxSpine.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxSpine.json; path = res/cxSpine.json; sourceTree = SOURCE_ROOT; };
 		830EEBB719C5CB4500C81EA5 /* cxLabelBMP.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxLabelBMP.json; path = res/cxLabelBMP.json; sourceTree = SOURCE_ROOT; };
 		831ABCBB19249044001A86F1 /* cxParticle.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxParticle.json; path = res/cxParticle.json; sourceTree = SOURCE_ROOT; };
@@ -209,6 +211,7 @@
 		839E7A5417F1BC7600B0F5EC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8309E45F1A0B2F3E0048C971 /* Manifest.json */,
 				831CF8711A08649400322ACB /* strings */,
 				8321071019CC746900B1AA1E /* candy.json */,
 				8321071119CC746900B1AA1E /* candy.png */,
@@ -357,6 +360,7 @@
 				83D9FFA119CB32B400F0EAB2 /* odus_cutout.pkm.alpha in Resources */,
 				835DB1C419C4A0F80037DA5B /* goblins.atlas in Resources */,
 				830EEBB819C5CB4500C81EA5 /* cxLabelBMP.json in Resources */,
+				8309E4601A0B2F3E0048C971 /* Manifest.json in Resources */,
 				835DB1C519C4A0F80037DA5B /* goblins.json in Resources */,
 				834327B619B8011900B4927F /* cxTable.json in Resources */,
 			);
