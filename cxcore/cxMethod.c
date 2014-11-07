@@ -33,6 +33,16 @@ cxAny cxMethodGet(cxAny object,cxConstChars key)
     return m->method;
 }
 
+cxBool cxMethodHas(cxAny object,cxConstChars key)
+{
+    CX_RETURN(object == NULL, false);
+    cxType type = cxObjectType(object);
+    CX_RETURN(type == NULL, false);
+    cxMethod m = cxTypeGetMethod(type, key);
+    CX_RETURN(m == NULL, false);
+    return m->method != NULL;
+}
+
 cxAny cxMethodSuper(cxAny object,cxConstChars key)
 {
     CX_RETURN(object == NULL, NULL);

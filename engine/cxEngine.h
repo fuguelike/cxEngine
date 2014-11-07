@@ -202,6 +202,8 @@ cxString cxLocalizedString(cxConstChars key);
 
 cxJson cxEngineJsonReader(cxConstChars src);
 
+cxJson cxEngineJsonMethod(cxAny pobj, cxConstChars key, cxJson args);
+
 cxAny cxEngineCreateObject(cxConstChars src);
 
 cxString cxEngineAssetsData(cxConstChars file);

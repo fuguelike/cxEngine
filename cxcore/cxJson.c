@@ -14,8 +14,6 @@
 
 static cxString jsonAESKey = NULL;
 
-static json_t *global = NULL;
-
 static cxJson cxJsonDefaultReader(cxConstChars src)
 {
     cxJson this = CX_CREATE(cxJson);
@@ -35,6 +33,16 @@ static json_t *cxjsonDefaultLocalized(cxConstChars key)
 }
 static cxLocalizedFunc cxLocalizeder = cxjsonDefaultLocalized;
 
+static cxJson cxJsonMethodDefault(cxAny pobj,cxConstChars key,cxJson args)
+{
+    return NULL;
+}
+static cxJsonMethodFunc cxMethodCall = cxJsonMethodDefault;
+
+void cxJsonSetMethod(cxJsonMethodFunc func)
+{
+    cxMethodCall = func;
+}
 
 void cxJsonSetReader(cxJsonReaderFunc func)
 {
@@ -137,16 +145,32 @@ static json_t *cxJsonGetJson(cxJson json,cxConstChars key)
     return jsonGetJson(CX_JSON_PTR(this), key);
 }
 
-static json_t *jsonParseRegisterValue(json_t *v)
+static json_t *jsonParseRegisterValue(json_t *v,cxAny data)
 {
-    if(!json_is_string(v)){
-        return v;
-    }
-    cxConstChars key = json_string_value(v);
-    if(key[0] == '$'){
-        v = jsonGetJson(global, key + 1);
-    }else if(key[0] == '#' && cxLocalizeder != NULL){
-        v = cxLocalizeder(key + 1);
+    if(json_is_string(v)){                          //$ui.json?title
+        cxConstChars key = json_string_value(v);
+        if(!cxConstCharsOK(key)){
+            return v;
+        }
+        if(key[0] == '$' && cxLocalizeder != NULL){
+            return cxLocalizeder(key + 1);
+        }
+    }else if(json_is_object(v)){                    //{"cxMethod":"methodname","cxArgs":"json"}
+        json_t *call = json_object_get(v, "cxMethod");
+        if(!json_is_string(call)){
+            return v;
+        }
+        cxConstChars name = json_string_value(call);
+        if(!cxConstCharsOK(name)){
+            return v;
+        }
+        cxJson args = NULL;
+        json_t *a = json_object_get(v, "cxArgs");
+        if(a != NULL){
+            args = cxJsonAttachCreate(a);
+        }
+        cxJson ret = cxMethodCall(data,name,args);
+        return ret != NULL ? CX_JSON_PTR(ret) : v;
     }
     return v;
 }
@@ -154,17 +178,9 @@ static json_t *jsonParseRegisterValue(json_t *v)
 static cxJson cxJsonParseRegisterValue(cxJson json)
 {
     CX_ASSERT_THIS(json, cxJson);
-    json_t *v = jsonParseRegisterValue(CX_JSON_PTR(this));
+    json_t *v = jsonParseRegisterValue(CX_JSON_PTR(this),cxJsonGetUserData(json));
     CX_ASSERT(v != NULL, "v null");
     return cxJsonAttachCreate(v);
-}
-
-void cxDumpGlobalJson()
-{
-    CX_ASSERT(global != NULL, "global json not init");
-    cxChars jsonText = json_dumps(global, JSON_ENCODE_ANY);
-    CX_LOGGER("GLOBAL JSON:%s",jsonText);
-    allocator->free(jsonText);
 }
 
 cxString cxJsonDump(cxJson json)
@@ -177,98 +193,98 @@ cxString cxJsonDump(cxJson json)
 void cxJsonInit()
 {
     json_set_alloc_funcs((json_malloc_t)allocator->malloc, (json_free_t)allocator->free);
-    global = json_object();
 }
 
 void cxJsonFree()
 {
-    CX_RETURN(global == NULL);
-    json_decref(global);
-    global = NULL;
+
 }
 
-static cxJson jsonToArray(json_t *v)
+static cxJson jsonToArray(json_t *v,cxAny data)
 {
     CX_RETURN(v == NULL,NULL);
     if(!json_is_array(v)){
         return NULL;
     }
     cxJson rv = CX_CREATE(cxJson);
+    cxJsonSetUserData(rv, data);
     rv->json = json_incref(v);
     return rv;
 }
 
-static cxJson jsonToAny(json_t *v)
+static cxJson jsonToAny(json_t *v,cxAny data)
 {
     CX_RETURN(v == NULL,NULL);
     cxJson rv = CX_CREATE(cxJson);
+    cxJsonSetUserData(rv, data);
     rv->json = json_incref(v);
     return rv;
 }
 
-static cxJson jsonToObject(json_t *v)
+static cxJson jsonToObject(json_t *v,cxAny data)
 {
     CX_RETURN(v == NULL,NULL);
     if(!json_is_object(v)){
         return NULL;
     }
     cxJson rv = CX_CREATE(cxJson);
+    cxJsonSetUserData(rv, data);
     rv->json = json_incref(v);
     return rv;
 }
 
-static cxInt jsonToInt(json_t *v,cxInt dv)
+static cxInt jsonToInt(json_t *v,cxInt dv,cxAny data)
 {
     CX_RETURN(v == NULL,dv);
-    v = jsonParseRegisterValue(v);
+    v = jsonParseRegisterValue(v,data);
     if(json_is_string(v)){
         return atoi(json_string_value(v));
     }
     return (cxInt)json_integer_value(v);
 }
 
-static cxConstChars jsonToConstChars(json_t *v)
+static cxConstChars jsonToConstChars(json_t *v,cxAny data)
 {
     CX_RETURN(v == NULL, NULL);
     cxConstChars str = NULL;
-    v = jsonParseRegisterValue(v);
+    v = jsonParseRegisterValue(v,data);
     if(json_is_string(v)){
         str = json_string_value(v);
     }
     return str;
 }
 
-static cxString jsonToString(json_t *v)
+static cxString jsonToString(json_t *v,cxAny data)
 {
     CX_RETURN(v == NULL, NULL);
-    cxConstChars str = jsonToConstChars(v);
+    cxConstChars str = jsonToConstChars(v,data);
     return cxConstCharsOK(str)?cxStringConstChars(str) : NULL;
 }
 
-static cxDouble jsonToDouble(json_t *v,cxDouble dv)
+static cxDouble jsonToDouble(json_t *v,cxDouble dv,cxAny data)
 {
     CX_RETURN(v == NULL,dv);
-    v = jsonParseRegisterValue(v);
+    v = jsonParseRegisterValue(v,data);
     if(json_is_string(v)){
         return atof(json_string_value(v));
     }
     return json_number_value(v);
 }
 
-static cxLong jsonToLong(json_t *v,cxLong dv)
+static cxLong jsonToLong(json_t *v,cxLong dv,cxAny data)
 {
     CX_RETURN(v == NULL,dv);
-    v = jsonParseRegisterValue(v);
+    v = jsonParseRegisterValue(v,data);
     if(json_is_string(v)){
         return atol(json_string_value(v));
     }
     return (cxLong)json_integer_value(v);
 }
 
-static cxBool jsonToBool(json_t *v,cxBool dv)
+static cxBool jsonToBool(json_t *v,cxBool dv,cxAny data)
 {
     CX_RETURN(v == NULL,dv);
-    v = jsonParseRegisterValue(v);
+    v = jsonParseRegisterValue(v,data);
     if(json_is_string(v)){
         return strcasecmp(json_string_value(v), "true") == 0;
     }
@@ -276,146 +292,6 @@ static cxBool jsonToBool(json_t *v,cxBool dv)
         return json_integer_value(v) != 0;
     }
     return json_is_true(v);
-}
-
-//global use $name format
-
-void cxJsonRegisterConstChars(cxConstChars key,cxConstChars value)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    CX_ASSERT(cxConstCharsOK(value), "value error");
-    json_object_set_new(global, key, json_string(value));
-}
-
-cxString cxJsonEnvString(cxConstChars key)
-{
-    cxConstChars str = cxJsonEnvConstChars(key);
-    if(str != NULL){
-        return NULL;
-    }
-    return cxStringConstChars(str);
-}
-
-void cxJsonRegisterString(cxConstChars key,cxString value)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    CX_ASSERT(cxStringOK(value), "value error");
-    json_object_set_new(global, key, json_string(cxStringBody(value)));
-}
-
-cxConstChars cxJsonEnvConstChars(cxConstChars key)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *v = jsonGetJson(global, key);
-    CX_RETURN(v == NULL, NULL);
-    return jsonToConstChars(v);
-}
-
-void cxJsonRegisterDouble(cxConstChars key,cxDouble value)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_object_set_new(global, key, json_real(value));
-}
-
-cxDouble cxJsonEnvDouble(cxConstChars key,cxDouble dv)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *v = jsonGetJson(global, key);
-    CX_RETURN(v == NULL, dv);
-    return jsonToDouble(v, dv);
-}
-
-void cxJsonRegisterInt(cxConstChars key,cxInt value)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_object_set_new(global, key, json_integer(value));
-}
-
-cxInt cxJsonEnvInt(cxConstChars key,cxInt dv)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *v = jsonGetJson(global, key);
-    CX_RETURN(v == NULL, dv);
-    return jsonToInt(v, dv);
-}
-
-void cxJsonRegisterLong(cxConstChars key,cxLong value)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_object_set_new(global, key, json_integer(value));
-}
-
-cxLong cxJsonEnvLong(cxConstChars key,cxLong dv)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *v = jsonGetJson(global, key);
-    CX_RETURN(v == NULL, dv);
-    return jsonToLong(v, dv);
-}
-
-cxBool cxJsonEnvBool(cxConstChars key,cxBool dv)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *v = jsonGetJson(global, key);
-    CX_RETURN(v == NULL, dv);
-    return jsonToBool(v, dv);
-}
-
-void cxJsonRegisterBool(cxConstChars key,cxBool value)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_object_set_new(global, key, json_boolean(value));
-}
-
-void cxJsonRegisterVec2f(cxConstChars key,cxVec2f value)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *json = json_object();
-    json_object_set_new(json, "x", json_real(value.x));
-    json_object_set_new(json, "y", json_real(value.y));
-    json_object_set_new(global, key, json);
-}
-
-cxVec2f cxJsonEnvVec2f(cxConstChars key,cxVec2f dv)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *v = jsonGetJson(global, key);
-    CX_RETURN(v == NULL, dv);
-    return cxJsonToVec2f(cxJsonAttachCreate(v), dv);
-}
-
-void cxJsonRegisterRange2f(cxConstChars key,cxRange2f range)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *json = json_object();
-    json_object_set_new(json, "min", json_real(range.min));
-    json_object_set_new(json, "max", json_real(range.max));
-    json_object_set_new(global, key, json);
-}
-
-cxRange2f cxJsonEnvRange2f(cxConstChars key,cxRange2f dv)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *v = jsonGetJson(global, key);
-    CX_RETURN(v == NULL, dv);
-    return cxJsonToRange2f(cxJsonAttachCreate(v), dv);
-}
-
-void cxJsonRegisterSize2f(cxConstChars key,cxSize2f value)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *json = json_object();
-    json_object_set_new(json, "w", json_real(value.w));
-    json_object_set_new(json, "h", json_real(value.h));
-    json_object_set_new(global, key, json);
-}
-
-cxSize2f cxJsonEnvSize2f(cxConstChars key,cxSize2f dv)
-{
-    CX_ASSERT(cxConstCharsOK(key), "key error");
-    json_t *v = jsonGetJson(global, key);
-    CX_RETURN(v == NULL, dv);
-    return cxJsonToSize2f(cxJsonAttachCreate(v), dv);
 }
 
 CX_TYPE(cxJson, cxObject)
@@ -446,6 +322,15 @@ cxVec2fRange cxJsonToVec2fRangle(cxJson json,cxVec2fRange dv)
     dv.r.y = cxJsonDouble(this, "ry", dv.r.y);
     return dv;
 }
+cxJson cxJsonVec2fRangleToJson(cxVec2fRange dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "vx", dv.v.x);
+    cxJsonSetDouble(json, "vy", dv.v.y);
+    cxJsonSetDouble(json, "rx", dv.r.x);
+    cxJsonSetDouble(json, "ry", dv.r.y);
+    return json;
+}
 
 //{"v":0,"r":0}
 cxFloatRange cxJsonToFloatRangle(cxJson json,cxFloatRange dv)
@@ -455,6 +340,13 @@ cxFloatRange cxJsonToFloatRangle(cxJson json,cxFloatRange dv)
     dv.v = cxJsonDouble(this, "v", dv.v);
     dv.r = cxJsonDouble(this, "r", dv.r);
     return dv;
+}
+cxJson cxJsonFloatRangeToJson(cxFloatRange dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "v", dv.v);
+    cxJsonSetDouble(json, "r", dv.r);
+    return json;
 }
 
 //{"w":0,"h":0}
@@ -466,6 +358,13 @@ cxSize2f cxJsonToSize2f(cxJson json,cxSize2f dv)
     dv.h = cxJsonDouble(this, "h", dv.h);
     return dv;
 }
+cxJson cxJsonSize2fToJson(cxSize2f dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "w", dv.w);
+    cxJsonSetDouble(json, "h", dv.h);
+    return json;
+}
 
 //{"w":0,"h":0}
 cxSize2i cxJsonToSize2i(cxJson json,cxSize2i dv)
@@ -475,6 +374,13 @@ cxSize2i cxJsonToSize2i(cxJson json,cxSize2i dv)
     dv.w = cxJsonInt(this, "w", dv.w);
     dv.h = cxJsonInt(this, "h", dv.h);
     return dv;
+}
+cxJson cxJsonSizeifToJson(cxSize2i dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetInt(json, "w", dv.w);
+    cxJsonSetInt(json, "h", dv.h);
+    return json;
 }
 
 //{"x":0,"y":0,"z":0}
@@ -487,6 +393,14 @@ cxVec3f cxJsonToVec3f(cxJson json,cxVec3f dv)
     dv.z = cxJsonDouble(this, "z", dv.z);
     return dv;
 }
+cxJson cxJsonVec3fToJson(cxVec3f dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "x", dv.x);
+    cxJsonSetDouble(json, "y", dv.y);
+    cxJsonSetDouble(json, "z", dv.z);
+    return json;
+}
 
 //{"x":0,"y":0}
 cxVec2i cxJsonToVec2i(cxJson json,cxVec2i dv)
@@ -496,6 +410,13 @@ cxVec2i cxJsonToVec2i(cxJson json,cxVec2i dv)
     dv.x = cxJsonInt(this, "x", dv.x);
     dv.y = cxJsonInt(this, "y", dv.y);
     return dv;
+}
+cxJson cxJsonVec2iToJson(cxVec2i dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetInt(json, "x", dv.x);
+    cxJsonSetInt(json, "y", dv.y);
+    return json;
 }
 
 //{"min":0,"max":0}
@@ -507,6 +428,13 @@ cxRange2f cxJsonToRange2f(cxJson json,cxRange2f dv)
     dv.max = cxJsonDouble(this, "max", dv.max);
     return dv;
 }
+cxJson cxJsonRange2fToJson(cxRange2f dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "min", dv.min);
+    cxJsonSetDouble(json, "max", dv.max);
+    return json;
+}
 
 //{"x":0,"y":0}
 cxVec2f cxJsonToVec2f(cxJson json,cxVec2f dv)
@@ -517,6 +445,14 @@ cxVec2f cxJsonToVec2f(cxJson json,cxVec2f dv)
     dv.y = cxJsonDouble(this, "y", dv.y);
     return dv;
 }
+cxJson cxJsonVec2fToJson(cxVec2f dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "x", dv.x);
+    cxJsonSetDouble(json, "y", dv.y);
+    return json;
+}
+
 
 //{"vr":0,"vg":0,"vb":0,"va":0,"rr":0,"rg":0,"rb":0,"ra":0}
 cxColor4fRange cxJsonToColor4fRangle(cxJson json,cxColor4fRange dv)
@@ -533,6 +469,19 @@ cxColor4fRange cxJsonToColor4fRangle(cxJson json,cxColor4fRange dv)
     dv.r.a = cxJsonDouble(this, "ra", dv.r.a);
     return dv;
 }
+cxJson cxJsonColor4fRangeToJson(cxColor4fRange dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "vr", dv.v.r);
+    cxJsonSetDouble(json, "vg", dv.v.g);
+    cxJsonSetDouble(json, "vb", dv.v.b);
+    cxJsonSetDouble(json, "va", dv.v.a);
+    cxJsonSetDouble(json, "rr", dv.r.r);
+    cxJsonSetDouble(json, "rg", dv.r.g);
+    cxJsonSetDouble(json, "rb", dv.r.b);
+    cxJsonSetDouble(json, "ra", dv.r.a);
+    return json;
+}
 
 //{"r":0,"g":0,"b":0,"a":0}
 cxColor4f cxJsonToColor4f(cxJson json,cxColor4f dv)
@@ -545,6 +494,15 @@ cxColor4f cxJsonToColor4f(cxJson json,cxColor4f dv)
     dv.a = cxJsonDouble(this, "a", dv.a);
     return dv;
 }
+cxJson cxJsonColor4fToJson(cxColor4f dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "r", dv.r);
+    cxJsonSetDouble(json, "g", dv.g);
+    cxJsonSetDouble(json, "b", dv.b);
+    cxJsonSetDouble(json, "a", dv.a);
+    return json;
+}
 
 //{"r":0,"g":0,"b":0,"a":1.0}
 cxColor3f cxJsonToColor3f(cxJson json,cxColor3f dv)
@@ -555,6 +513,14 @@ cxColor3f cxJsonToColor3f(cxJson json,cxColor3f dv)
     dv.g = cxJsonDouble(this, "g", dv.g);
     dv.b = cxJsonDouble(this, "b", dv.b);
     return dv;
+}
+cxJson cxJsonColor3fTojson(cxColor3f dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "r", dv.r);
+    cxJsonSetDouble(json, "g", dv.g);
+    cxJsonSetDouble(json, "b", dv.b);
+    return json;
 }
 
 //{"l":0,"r":0,"t":0,"b":0}
@@ -568,6 +534,15 @@ cxBox4f cxJsonToBox4f(cxJson json,cxBox4f dv)
     dv.b = cxJsonDouble(this, "b", dv.b);
     return dv;
 }
+cxJson cxJsonBox4fTojson(cxBox4f dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "l", dv.l);
+    cxJsonSetDouble(json, "r", dv.r);
+    cxJsonSetDouble(json, "t", dv.t);
+    cxJsonSetDouble(json, "b", dv.b);
+    return json;
+}
 
 //{"u":0,"v":0}
 cxTex2f cxJsonToTex2f(cxJson json,cxTex2f dv)
@@ -577,6 +552,13 @@ cxTex2f cxJsonToTex2f(cxJson json,cxTex2f dv)
     dv.u = cxJsonDouble(this, "u", dv.u);
     dv.v = cxJsonDouble(this, "v", dv.v);
     return dv;
+}
+cxJson cxJsonTex2fToJson(cxTex2f dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetDouble(json, "u", dv.u);
+    cxJsonSetDouble(json, "v", dv.v);
+    return json;
 }
 
 //{"lb":{"u":0,"v":0},"rb":{"u":0,"v":0},"lt":{"u":0,"v":0},"rt":{"u":0,"v":0}}
@@ -589,6 +571,15 @@ cxBoxTex2f cxJsonToBoxTex2f(cxJson json,cxBoxTex2f dv)
     dv.lt = cxJsonTex2f(this, "lt", dv.lt);
     dv.rt = cxJsonTex2f(this, "rt", dv.rt);
     return dv;
+}
+cxJson cxJsonBoxTex2fToJson(cxBoxTex2f dv)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetJson(json, "lb", cxJsonTex2fToJson(dv.lb));
+    cxJsonSetJson(json, "rb", cxJsonTex2fToJson(dv.rb));
+    cxJsonSetJson(json, "lt", cxJsonTex2fToJson(dv.lt));
+    cxJsonSetJson(json, "rt", cxJsonTex2fToJson(dv.rt));
+    return json;
 }
 
 /////////////////////////////////////////////
@@ -795,105 +786,105 @@ cxJson cxJsonToArray(cxJson json)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = CX_JSON_PTR(this);
-    return jsonToArray(v);
+    return jsonToArray(v,cxJsonGetUserData(json));
 }
 
 cxJson cxJsonToObject(cxJson json)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = CX_JSON_PTR(this);
-    return jsonToObject(v);
+    return jsonToObject(v,cxJsonGetUserData(json));
 }
 
 cxInt cxJsonToInt(cxJson json,cxInt dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = CX_JSON_PTR(this);
-    return jsonToInt(v, dv);
+    return jsonToInt(v, dv,cxJsonGetUserData(json));
 }
 
 cxConstChars cxJsonToConstChars(cxJson json)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = CX_JSON_PTR(this);
-    return jsonToConstChars(v);
+    return jsonToConstChars(v,cxJsonGetUserData(json));
 }
 
 cxString cxJsonToString(cxJson json)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = CX_JSON_PTR(this);
-    return jsonToString(v);
+    return jsonToString(v,cxJsonGetUserData(json));
 }
 
 cxDouble cxJsonToDouble(cxJson json,cxDouble dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = CX_JSON_PTR(this);
-    return jsonToDouble(v, dv);
+    return jsonToDouble(v, dv,cxJsonGetUserData(json));
 }
 
 cxLong cxJsonToLong(cxJson json,cxLong dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = CX_JSON_PTR(this);
-    return jsonToLong(v, dv);
+    return jsonToLong(v, dv,cxJsonGetUserData(json));
 }
 
 cxBool cxJsonToBool(cxJson json,cxBool dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = CX_JSON_PTR(this);
-    return jsonToBool(v, dv);
+    return jsonToBool(v, dv,cxJsonGetUserData(json));
 }
 
 cxInt cxJsonIntAt(cxJson json,cxInt idx,cxInt dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = json_array_get(CX_JSON_PTR(this), idx);
-    return jsonToInt(v, dv);
+    return jsonToInt(v, dv,cxJsonGetUserData(json));
 }
 
 cxConstChars cxJsonConstCharsAt(cxJson json,cxInt idx)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = json_array_get(CX_JSON_PTR(this), idx);
-    return jsonToConstChars(v);
+    return jsonToConstChars(v,cxJsonGetUserData(json));
 }
 
 cxString cxJsonStringAt(cxJson json,cxInt idx)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = json_array_get(CX_JSON_PTR(this), idx);
-    return jsonToString(v);
+    return jsonToString(v,cxJsonGetUserData(json));
 }
 
 cxBool cxJsonBoolAt(cxJson json,cxInt idx,cxBool dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = json_array_get(CX_JSON_PTR(this), idx);
-    return jsonToBool(v, dv);
+    return jsonToBool(v, dv,cxJsonGetUserData(json));
 }
 
 cxDouble cxJsonDoubleAt(cxJson json,cxInt idx,cxDouble dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = json_array_get(CX_JSON_PTR(this), idx);
-    return jsonToDouble(v, dv);
+    return jsonToDouble(v, dv,cxJsonGetUserData(json));
 }
 
 cxLong cxJsonLongAt(cxJson json,cxInt idx,cxLong dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = json_array_get(CX_JSON_PTR(this), idx);
-    return jsonToLong(v, dv);
+    return jsonToLong(v, dv,cxJsonGetUserData(json));
 }
 
 cxJson cxJsonArrayAt(cxJson json,cxInt idx)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = json_array_get(CX_JSON_PTR(this), idx);
-    return jsonToArray(v);
+    return jsonToArray(v,cxJsonGetUserData(json));
 }
 
 cxInt cxJsonObjectLength(cxJson json)
@@ -912,49 +903,49 @@ cxJson cxJsonAnyAt(cxJson json,cxInt idx)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = json_array_get(CX_JSON_PTR(this), idx);
-    return jsonToAny(v);
+    return jsonToAny(v,cxJsonGetUserData(json));
 }
 
 cxJson cxJsonObjectAt(cxJson json,cxInt idx)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = json_array_get(CX_JSON_PTR(this), idx);
-    return jsonToObject(v);
+    return jsonToObject(v,cxJsonGetUserData(json));
 }
 
 cxJson cxJsonArray(cxJson json,cxConstChars key)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = cxJsonGetJson(this, key);
-    return jsonToArray(v);
+    return jsonToArray(v,cxJsonGetUserData(json));
 }
 
 cxJson cxJsonObject(cxJson json,cxConstChars key)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = cxJsonGetJson(this, key);
-    return jsonToObject(v);
+    return jsonToObject(v,cxJsonGetUserData(json));
 }
 
 cxBool cxJsonBool(cxJson json,cxConstChars key,cxBool dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = cxJsonGetJson(this, key);
-    return jsonToBool(v, dv);
+    return jsonToBool(v, dv,cxJsonGetUserData(json));
 }
 
 cxConstChars cxJsonConstChars(cxJson json,cxConstChars key)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = cxJsonGetJson(this, key);
-    return jsonToConstChars(v);
+    return jsonToConstChars(v,cxJsonGetUserData(json));
 }
 
 cxString cxJsonString(cxJson json,cxConstChars key)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = cxJsonGetJson(this, key);
-    return jsonToString(v);
+    return jsonToString(v,cxJsonGetUserData(json));
 }
 
 cxFloat cxJsonFloat(cxJson json,cxConstChars key,cxFloat dv)
@@ -966,21 +957,21 @@ cxDouble cxJsonDouble(cxJson json,cxConstChars key,cxDouble dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = cxJsonGetJson(this, key);
-    return jsonToDouble(v, dv);
+    return jsonToDouble(v, dv,cxJsonGetUserData(json));
 }
 
 cxLong cxJsonLong(cxJson json,cxConstChars key,cxLong dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = cxJsonGetJson(this, key);
-    return jsonToLong(v, dv);
+    return jsonToLong(v, dv,cxJsonGetUserData(json));
 }
 
 cxInt cxJsonInt(cxJson json,cxConstChars key,cxInt dv)
 {
     CX_ASSERT_THIS(json, cxJson);
     json_t *v = cxJsonGetJson(this, key);
-    return jsonToInt(v, dv);
+    return jsonToInt(v, dv,cxJsonGetUserData(json));
 }
 
 static void cxJsonDecodeToArray(cxArray array,cxJson json)

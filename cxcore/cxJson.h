@@ -17,8 +17,11 @@
 CX_C_BEGIN
 
 CX_DEF(cxJson, cxObject)
+    CX_FIELD_DEF(cxAny UserData);
     json_t *json;
 CX_END(cxJson, cxObject)
+
+CX_FIELD_IMP(cxJson, cxAny, UserData);
 
 #define CX_JSON_PTR(_j_)  ((_j_)->json)
 
@@ -50,55 +53,20 @@ if((_j_) != NULL){                                                  \
 
 typedef cxJson (*cxJsonReaderFunc)(cxConstChars src);
 typedef json_t *(*cxLocalizedFunc)(cxConstChars key);
+typedef cxJson (*cxJsonMethodFunc)(cxAny pobj,cxConstChars key,cxJson args);
 
 //return value will autorelease
 json_t *jsonCreateString(cxConstChars str);
 
 void cxJsonSetReader(cxJsonReaderFunc func);
 
+void cxJsonSetMethod(cxJsonMethodFunc func);
+
 void cxJsonSetLocalized(cxLocalizedFunc func);
 
 cxJson cxJsonRead(cxConstChars src);
 
-cxString cxJsonEnvString(cxConstChars key);
-
-cxConstChars cxJsonEnvConstChars(cxConstChars key);
-
-void cxJsonRegisterConstChars(cxConstChars key,cxConstChars value);
-
-void cxJsonRegisterString(cxConstChars key,cxString value);
-
-cxDouble cxJsonEnvDouble(cxConstChars key,cxDouble dv);
-
-void cxJsonRegisterDouble(cxConstChars key,cxDouble value);
-
-cxBool cxJsonEnvBool(cxConstChars key,cxBool dv);
-
-void cxJsonRegisterBool(cxConstChars key,cxBool value);
-
-cxSize2f cxJsonEnvSize2f(cxConstChars key,cxSize2f dv);
-
-void cxJsonRegisterRange2f(cxConstChars key,cxRange2f range);
-
-cxRange2f cxJsonEnvRange2f(cxConstChars key,cxRange2f dv);
-
-void cxJsonRegisterSize2f(cxConstChars key,cxSize2f size);
-
-cxVec2f cxJsonEnvVec2f(cxConstChars key,cxVec2f dv);
-
-void cxJsonRegisterVec2f(cxConstChars key,cxVec2f size);
-
-cxInt cxJsonEnvInt(cxConstChars key,cxInt dv);
-
-void cxJsonRegisterInt(cxConstChars key,cxInt value);
-
-cxLong cxJsonEnvLong(cxConstChars key,cxLong dv);
-
-void cxJsonRegisterLong(cxConstChars key,cxLong value);
-
 cxString cxJsonDump(cxJson json);
-
-void cxDumpGlobalJson();
 
 void cxJsonInit();
 
@@ -185,37 +153,51 @@ cxInt cxJsonArrayLength(cxJson json);
 cxInt cxJsonObjectLength(cxJson json);
 //
 
+cxJson cxJsonVec2fToJson(cxVec2f dv);
 cxVec2f cxJsonToVec2f(cxJson json,cxVec2f dv);
 
+cxJson cxJsonRange2fToJson(cxRange2f dv);
 cxRange2f cxJsonToRange2f(cxJson json,cxRange2f dv);
 
+cxJson cxJsonVec2iToJson(cxVec2i dv);
 cxVec2i cxJsonToVec2i(cxJson json,cxVec2i dv);
 
+cxJson cxJsonVec3fToJson(cxVec3f dv);
 cxVec3f cxJsonToVec3f(cxJson json,cxVec3f dv);
 
+cxJson cxJsonSize2fToJson(cxSize2f dv);
 cxSize2f cxJsonToSize2f(cxJson json,cxSize2f dv);
 
 cxSize2i cxJsonToSize2i(cxJson json,cxSize2i dv);
+cxJson cxJsonSizeifToJson(cxSize2i dv);
 
+cxJson cxJsonColor4fToJson(cxColor4f dv);
 cxColor4f cxJsonToColor4f(cxJson json,cxColor4f dv);
 
 cxColor3f cxJsonToColor3f(cxJson json,cxColor3f dv);
+cxJson cxJsonColor3fTojson(cxColor3f dv);
 
 cxBox4f cxJsonToBox4f(cxJson json,cxBox4f dv);
+cxJson cxJsonBox4fTojson(cxBox4f dv);
 
 cxBoxTex2f cxJsonToBoxTex2f(cxJson json,cxBoxTex2f dv);
+cxJson cxJsonBoxTex2fToJson(cxBoxTex2f dv);
 
 cxTex2f cxJsonToTex2f(cxJson json,cxTex2f dv);
-
-cxVec2fRange cxJsonToVec2fRangle(cxJson json,cxVec2fRange dv);
-
-cxFloatRange cxJsonToFloatRangle(cxJson json,cxFloatRange dv);
-
-cxColor4fRange cxJsonToColor4fRangle(cxJson json,cxColor4fRange dv);
-
-//
+cxJson cxJsonTex2fToJson(cxTex2f dv);
 
 cxVec2fRange cxJsonVec2fRangle(cxJson json,cxConstChars key,cxVec2fRange dv);
+cxVec2fRange cxJsonToVec2fRangle(cxJson json,cxVec2fRange dv);
+
+cxJson cxJsonFloatRangeToJson(cxFloatRange dv);
+cxFloatRange cxJsonToFloatRangle(cxJson json,cxFloatRange dv);
+
+cxJson cxJsonColor4fRangeToJson(cxColor4fRange dv);
+cxColor4fRange cxJsonToColor4fRangle(cxJson json,cxColor4fRange dv);
+
+
+//
+cxJson cxJsonVec2fRangleToJson(cxVec2fRange v);
 
 cxFloatRange cxJsonFloatRangle(cxJson json,cxConstChars key,cxFloatRange dv);
 

@@ -143,7 +143,7 @@ void cxLabelBMPSetFontName(cxAny pview,cxString font)
 {
     CX_ASSERT_THIS(pview, cxLabelBMP);
     cxBMPFont bmpfont = cxEngineLoadBMPFont(cxStringBody(font));
-    CX_ASSERT(bmpfont != NULL, "%s font not load",font);
+    CX_ASSERT(bmpfont != NULL, "BMPFont %s,load failed",font);
     CX_RETURN(bmpfont == this->font);
     CX_RETAIN_SWAP(this->font, bmpfont);
     this->isDirty = true;

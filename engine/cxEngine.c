@@ -264,9 +264,12 @@ void cxEngineStartup()
     cxEngineSetCountry(cxLocalizedCountry());
     CX_LOGGER("system country:%s",cxStringBody(cxEngineGetCountry()));
     //init engine
-    //set cxjsonReader
+    //设置json数据读取
     cxJsonSetReader(cxEngineJsonReader);
+    //设置本地化字符串读取
     cxJsonSetLocalized(cxEngineLocalizeder);
+    //设置方法调用
+    cxJsonSetMethod(cxEngineJsonMethod);
     //init model
     engineInstance->Window      = CX_ALLOC(cxWindow);
     engineInstance->curve       = CX_ALLOC(cxCurve);
@@ -347,19 +350,14 @@ void cxEngineLayout(cxInt width,cxInt height)
     CX_LOGGER("openGL layout width=%d height=%d",width,height);
     cxEngine engine = cxEngineInstance();
     engine->WinSize = cxSize2fv(width, height);
-    //$WinSize.w $WinSize.h
-    cxJsonRegisterSize2f("WinSize", engine->WinSize);
-    cxJsonRegisterSize2f("DesSize", engine->DesSize);
     cxViewSetSize(engine->Window, engine->WinSize);
     //
     if(!cxSize2fZero(engine->DesSize)){
         engine->Scale.x = engine->WinSize.w/engine->DesSize.w;
         engine->Scale.y = engine->WinSize.h/engine->DesSize.h;
-        cxJsonRegisterVec2f("Scale", engine->Scale);
     }else{
         engine->Scale.x = 1.0f;
         engine->Scale.y = 1.0f;
-        cxJsonRegisterVec2f("Scale", engine->Scale);
     }
     //
     cxFloat zeye = engine->WinSize.h / 1.1566f;
@@ -384,9 +382,6 @@ void cxEngineLayout(cxInt width,cxInt height)
         cxViewEnter(engine->Window);
     }
     cxViewLayout(engine->Window);
-    if(!engine->isInit){
-        cxDumpGlobalJson();
-    }
     engine->isInit = true;
 }
 
@@ -396,9 +391,21 @@ cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)
     return cxViewAppendTimer(engine->Window, freq, repeat);
 }
 
+CX_MDEF(cxEngine, WinSize, cxJson, cxJson args)
+{
+    cxSize2f size = cxEngineGetWinSize();
+    return cxJsonSize2fToJson(size);
+}
+CX_MDEF(cxEngine, WinScale, cxJson, cxJson args)
+{
+    cxVec2f scale = cxEngineGetScale();
+    return cxJsonVec2fToJson(scale);
+}
+
 CX_TYPE(cxEngine, cxObject)
 {
-    
+    CX_MSET(cxEngine, WinSize);
+    CX_MSET(cxEngine, WinScale);
 }
 CX_INIT(cxEngine, cxObject)
 {
@@ -436,6 +443,22 @@ CX_FREE(cxEngine, cxObject)
     kmGLFreeAll();
 }
 CX_TERM(cxEngine, cxObject)
+
+cxJson cxEngineJsonMethod(cxAny pobj,cxConstChars key,cxJson args)
+{
+    cxEngine engine = cxEngineInstance();
+    cxAny method = NULL;
+    if(pobj != NULL){
+        method = cxMethodGet(pobj, key);
+    }
+    if(method == NULL){
+        method = cxMethodGet(engine, key);
+    }
+    if(method != NULL){
+        return (CX_MT(cxJson,cxJson)method)(pobj,args);
+    }
+    return NULL;
+}
 
 //a.json?key
 cxJson cxEngineJsonReader(cxConstChars src)

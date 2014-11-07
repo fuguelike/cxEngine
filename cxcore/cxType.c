@@ -146,6 +146,7 @@ void cxTypeRunObjectSetter(cxObject object,cxJson json)
 {
     CX_ASSERT(object != NULL, "object args error");
     CX_JSON_OBJECT_EACH_BEG(json, item)
+    cxJsonSetUserData(item, object);
     cxPropertyRunSetter(object, itemKey, item);
     CX_JSON_OBJECT_EACH_END(json, item)
 }
