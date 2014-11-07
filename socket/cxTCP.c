@@ -95,7 +95,7 @@ static void cxTcpBufferEvent(struct bufferevent *bev, short what, void *ctx)
     }
 }
 
-cxInt cxTcpConnect(cxAny ptcp)
+cxBool cxTcpConnect(cxAny ptcp)
 {
     CX_ASSERT_THIS(ptcp, cxTCP);
     CX_ASSERT(cxStringOK(this->host) || this->port == 0, "tcp host or port not set");
@@ -104,16 +104,16 @@ cxInt cxTcpConnect(cxAny ptcp)
     this->socket = cxCreateSocket(true,SOCK_STREAM);
     if(this->socket == -1){
         CX_ERROR("create tcp socket error %s:%d",host,this->port);
-        return -1;
+        return false;
     }
     this->bufferEvent = bufferevent_socket_new(looper->looper, this->socket, BEV_OPT_CLOSE_ON_FREE);
     if(this->bufferEvent == NULL){
         CX_ERROR("create buffer event socket failed");
-        return -1;
+        return false;
     }
     bufferevent_setcb(this->bufferEvent, cxTcpBufferRead, NULL, cxTcpBufferEvent, this);
     bufferevent_enable(this->bufferEvent, EV_READ|EV_WRITE);
-    return  bufferevent_socket_connect_hostname(this->bufferEvent, NULL, AF_INET, host , this->port);
+    return  bufferevent_socket_connect_hostname(this->bufferEvent, NULL, AF_INET, host , this->port) == 0;
 }
 
 cxTCP cxTCPCreate(cxConstChars host,cxInt port)

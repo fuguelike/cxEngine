@@ -51,7 +51,7 @@ CX_INLINE cxInt cxTcpGetBytes(cxAny ptcp)
 cxBool cxTcpWrite(cxAny ptcp,cxString data);
 
 //create new socket connect host
-cxInt cxTcpConnect(cxAny ptcp);
+cxBool cxTcpConnect(cxAny ptcp);
 
 void cxTcpClose(cxAny ptcp);
 

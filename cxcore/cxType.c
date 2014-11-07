@@ -44,50 +44,32 @@ cxType cxTypesGet(cxConstType typeName)
 //replace property if same name
 cxProperty cxTypeSetProperty(cxType this,cxConstChars key)
 {
-    cxHashKey ikey = cxHashStrKey(key);
-    cxProperty p = CX_ALLOC(cxProperty);
-    cxHashSet(this->properties, ikey, p);
-    CX_RELEASE(p);
-    return p;
+    CX_ASSERT_TYPE(this, cxType);
+    cxProperty px = CX_ALLOC(cxProperty);
+    cxHashSet(this->properties, cxHashStrKey(key), px);
+    CX_RELEASE(px);
+    return px;
 }
 
 cxMethod cxTypeSetMethod(cxType this,cxConstChars key)
 {
-    cxHashKey ikey = cxHashStrKey(key);
-    cxMethod p = CX_ALLOC(cxMethod);
-    cxHashSet(this->methods, ikey, p);
-    CX_RELEASE(p);
-    return p;
+    CX_ASSERT_TYPE(this, cxType);
+    cxMethod px = CX_ALLOC(cxMethod);
+    cxHashSet(this->methods, cxHashStrKey(key), px);
+    CX_RELEASE(px);
+    return px;
 }
 
 cxProperty cxTypeGetProperty(cxType this,cxConstChars key)
 {
-    cxProperty p = NULL;
-    cxType curr = this;
-    cxHashKey ikey = cxHashStrKey(key);
-    while (curr != NULL) {
-        p = cxHashGet(curr->properties, ikey);
-        if(p != NULL){
-            break;
-        }
-        curr = curr->superType;
-    }
-    return p;
+    CX_ASSERT_TYPE(this, cxType);
+    return cxHashGet(this->properties, cxHashStrKey(key));
 }
 
 cxMethod cxTypeGetMethod(cxType this,cxConstChars key)
 {
-    cxMethod p = NULL;
-    cxType curr = this;
-    cxHashKey ikey = cxHashStrKey(key);
-    while (curr != NULL) {
-        p = cxHashGet(curr->methods, ikey);
-        if(p != NULL){
-            break;
-        }
-        curr = curr->superType;
-    }
-    return p;
+    CX_ASSERT_TYPE(this, cxType);
+    return cxHashGet(this->methods, cxHashStrKey(key));
 }
 
 void cxTypesSet(cxConstType typeName,cxType type)
@@ -98,27 +80,27 @@ void cxTypesSet(cxConstType typeName,cxType type)
 }
 
 //a.b.c
-void cxTypeSignature(cxType type,cxType super)
+void cxTypeSignature(cxType this,cxType super)
 {
-    CX_ASSERT(type != NULL, "args error");
+    CX_ASSERT_TYPE(this, cxType);
     if(super == NULL){
-        cxStringFormat(type->signature, "%s",cxObjectTypeName);
+        cxStringFormat(this->signature, "%s",cxObjectTypeName);
     }else{
-        cxStringFormat(type->signature, "%s.%s",type->typeName,cxStringBody(super->signature));
+        cxStringFormat(this->signature, "%s.%s",this->typeName,cxStringBody(super->signature));
     }
 }
 
-void cxTypeSetSuper(cxType type,cxType super)
+void cxTypeSetSuper(cxType this,cxType super)
 {
-    CX_ASSERT(type != NULL, "type arsg error");
-    CX_RETAIN_SWAP(type->superType, super);
+    CX_ASSERT_TYPE(this, cxType);
+    CX_RETAIN_SWAP(this->superType, super);
 }
 
-cxBool cxObjectInstanceOf(cxAny object,cxConstType type)
+cxBool cxObjectInstanceOf(cxAny pobj,cxConstType type)
 {
-    cxObject this = object;
-    CX_RETURN(object == NULL && type == NULL,true);
-    CX_RETURN(object == NULL || type == NULL, false);
+    cxObject this = pobj;
+    CX_RETURN(this == NULL && type == NULL,true);
+    CX_RETURN(this == NULL || type == NULL, false);
     CX_RETURN(this->cxType == type, true);
     CX_RETURN(type == cxObjectTypeName,true);
     cxType ptype = cxTypesGet(this->cxType);
@@ -142,12 +124,12 @@ void cxTypeCopyMethods(cxType this,cxType super)
     }
 }
 
-void cxTypeRunObjectSetter(cxObject object,cxJson json)
+void cxTypeRunObjectSetter(cxObject pobj,cxJson json)
 {
-    CX_ASSERT(object != NULL, "object args error");
+    CX_ASSERT_THIS(pobj, cxObject);
     CX_JSON_OBJECT_EACH_BEG(json, item)
-    cxJsonSetUserData(item, object);
-    cxPropertyRunSetter(object, itemKey, item);
+    cxJsonSetUserData(item, this);
+    cxPropertyRunSetter(this, itemKey, item);
     CX_JSON_OBJECT_EACH_END(json, item)
 }
 

@@ -29,7 +29,7 @@ cxAny cxMethodGet(cxAny object,cxConstChars key)
     cxType type = cxObjectType(object);
     CX_RETURN(type == NULL, NULL);
     cxMethod m = cxTypeGetMethod(type, key);
-    CX_RETURN(m == NULL, NULL);
+    CX_ASSERT(m != NULL && m->method != NULL, "%s method %d not exists",CX_NAME_OF(object),key);
     return m->method;
 }
 
@@ -39,8 +39,7 @@ cxBool cxMethodHas(cxAny object,cxConstChars key)
     cxType type = cxObjectType(object);
     CX_RETURN(type == NULL, false);
     cxMethod m = cxTypeGetMethod(type, key);
-    CX_RETURN(m == NULL, false);
-    return m->method != NULL;
+    return m != NULL && m->method != NULL;
 }
 
 cxAny cxMethodSuper(cxAny object,cxConstChars key)
@@ -49,6 +48,6 @@ cxAny cxMethodSuper(cxAny object,cxConstChars key)
     cxType type = cxObjectType(object);
     CX_RETURN(type == NULL, NULL);
     cxMethod m = cxTypeGetMethod(type->superType, key);
-    CX_RETURN(m == NULL, NULL);
+    CX_ASSERT(m != NULL && m->method != NULL, "%s method %d not exists",CX_NAME_OF(object),key);
     return m->method;
 }

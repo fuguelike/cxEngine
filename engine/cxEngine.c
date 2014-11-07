@@ -170,6 +170,7 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxTimeLine);
     CX_TYPE_REG(cxBezier);
     CX_TYPE_REG(cxSkeleton);
+    CX_TYPE_REG(cxDriver);
     //scoket
     CX_TYPE_REG(cxUDP);
     CX_TYPE_REG(cxTCP);
@@ -391,12 +392,12 @@ cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)
     return cxViewAppendTimer(engine->Window, freq, repeat);
 }
 
-CX_MDEF(cxEngine, WinSize, cxJson, cxJson args)
+static cxJson CX_METHOD(cxEngine, WinSize, cxJson args)
 {
     cxSize2f size = cxEngineGetWinSize();
     return cxJsonSize2fToJson(size);
 }
-CX_MDEF(cxEngine, WinScale, cxJson, cxJson args)
+static cxJson CX_METHOD(cxEngine, WinScale, cxJson args)
 {
     cxVec2f scale = cxEngineGetScale();
     return cxJsonVec2fToJson(scale);

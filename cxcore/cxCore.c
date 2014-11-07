@@ -7,6 +7,7 @@
 //
 
 #include <sys/time.h>
+#include <utlist.h>
 #include "cxCore.h"
 #include "cxType.h"
 #include "cxMemPool.h"
@@ -221,6 +222,20 @@ cxDouble cxTimestamp()
     struct timeval val = {0};
     gettimeofday(&val, NULL);
     return val.tv_sec + (cxDouble)val.tv_usec/(cxDouble)1000000.0;
+}
+
+void cxEventAppend(cxEvent **event,cxEventFunc func)
+{
+    cxEvent *newPtr = allocator->malloc(sizeof(cxEvent));
+    newPtr->func = func;
+    DL_APPEND(*event, newPtr);
+}
+
+void cxEventPrepend(cxEvent **event,cxEventFunc func)
+{
+    cxEvent *newPtr = allocator->malloc(sizeof(cxEvent));
+    newPtr->func = func;
+    DL_PREPEND(*event, newPtr);
 }
 
 static cxStack coreStack = NULL;

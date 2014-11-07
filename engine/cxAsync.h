@@ -10,6 +10,7 @@
 #define cxEngine_cxAsync_h
 
 #include <cxcore/cxBase.h>
+#include "cxAction.h"
 
 CX_C_BEGIN
 
@@ -49,6 +50,18 @@ CX_INLINE void cxAsyncReset(cxAny pthis)
     this->Count = 0;
     this->Time = 0;
 }
+
+typedef void (*cxDriverFailedFunc)(cxAny pview,cxAny async);
+
+//async驱动器
+CX_DEF(cxDriver, cxAction)
+    CX_FIELD_DEF(cxAny Async);
+    cxDriverFailedFunc onFailed;
+CX_END(cxDriver, cxAction)
+
+CX_FIELD_GET(cxDriver, cxAny, Async);
+
+cxDriver cxDriverCreate(cxAny async);
 
 CX_C_END
 

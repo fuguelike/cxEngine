@@ -377,6 +377,10 @@ typedef struct cxEvent cxEvent;
 typedef void (*cxEventFunc)(cxAny sender);
 struct cxEvent{cxEvent *prev,*next;cxEventFunc func;};
 
+void cxEventAppend(cxEvent **event,cxEventFunc func);
+
+void cxEventPrepend(cxEvent **event,cxEventFunc func);
+
 #define CX_EVENT_ALLOC(_n_) cxEvent *_n_
 
 #define CX_EVENT_APPEND(_event_,_func_)                         \
@@ -398,7 +402,7 @@ if(_event_ != NULL){                                            \
     cxEvent *_tmp_ = NULL;                                      \
     cxEvent *_ele_ = NULL;                                      \
     DL_FOREACH_SAFE(_event_, _ele_, _tmp_){                     \
-        CX_CONTINUE(_ele_->func != _func_);                     \
+        if(_ele_->func != _func_)continue;                      \
         DL_DELETE(_event_, _ele_);                              \
         allocator->free(_ele_);                                 \
     }                                                           \

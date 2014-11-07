@@ -20,10 +20,10 @@ CX_C_BEGIN
 #define CX_MCALL(_o_,_n_,_mt_,...)  (_mt_(cxMethodGet(_o_,#_n_)))(_o_,##__VA_ARGS__)
 
 //调用基类的方法
-#define CX_MBASE(_o_,_n_,_mt_,...)  (_mt_(cxMethodSuper(_o_,#_n_)))(_o_,##__VA_ARGS__)
+#define CX_SCALL(_o_,_n_,_mt_,...)  (_mt_(cxMethodSuper(_o_,#_n_)))(_o_,##__VA_ARGS__)
 
 //定义一个方法,_t_对象类型，_rt_返回值类型,_n_方法名称,其他为方法参数
-#define CX_MDEF(_t_,_n_,_rt_,...)   static _rt_ _t_##_n_(_t_ this,##__VA_ARGS__)
+#define CX_METHOD(_t_,_n_,...)      _t_##_n_(_t_ this,##__VA_ARGS__)
 
 //设置注册一个方法
 #define CX_MSET(_t_,_n_)            cxTypeSetMethod(this,#_n_)->method = (cxAny)_t_##_n_
