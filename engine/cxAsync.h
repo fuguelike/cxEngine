@@ -1,7 +1,7 @@
 //
 //  cxAsync.h
 //  cxEngineStatic
-//
+//  异步操作
 //  Created by xuhua on 11/1/14.
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
@@ -14,10 +14,14 @@
 CX_C_BEGIN
 
 typedef enum {
+    //初始化状态
     cxAsyncStateInit,
+    //操作失败状态
     cxAsyncStateFailed,
+    //操作成功状态
     cxAsyncStateSuccess,
-    cxAsyncStateWait
+    //正在执行状态
+    cxAsyncStateRunning
 }cxAsyncState;
 
 CX_DEF(cxAsync, cxObject)
@@ -27,7 +31,7 @@ CX_DEF(cxAsync, cxObject)
     CX_FIELD_DEF(cxInt Count);
     CX_FIELD_DEF(cxFloat Time);
     CX_FIELD_DEF(cxAny View);
-    CX_METHOD_DEF(void, Init, cxAny);
+    CX_METHOD_DEF(cxBool, Init, cxAny);
 CX_END(cxAsync, cxObject)
 
 CX_FIELD_IMP(cxAsync, cxLong, Tag);

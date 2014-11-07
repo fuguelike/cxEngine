@@ -21,7 +21,7 @@ CX_DEF(cxType, cxObject)
     cxAny (*Create)();
     cxAny (*Alloc)();
     cxConstType typeName;
-    cxString signature;   //a.b.c
+    cxString signature;   //类型签名 类似:a.b.c
     cxType superType;
     cxHash properties;
     cxHash methods;
@@ -37,13 +37,13 @@ cxType cxTypesGet(cxConstType type);
 
 cxAny cxJsonTocxObject(cxJson v);
 
-cxMethod cxTypeMethod(cxType this,cxConstChars key);
+cxMethod cxTypeGetMethod(cxType this,cxConstChars key);
 
 cxMethod cxTypeSetMethod(cxType this,cxConstChars key);
 
 cxProperty cxTypeSetProperty(cxType this,cxConstChars key);
 
-cxProperty cxTypeProperty(cxType this,cxConstChars key);
+cxProperty cxTypeGetProperty(cxType this,cxConstChars key);
 
 void cxTypeSignature(cxType type,cxType super);
 

@@ -26,13 +26,12 @@ CX_TERM(cxAsync, cxObject)
 cxAsyncState cxAsyncDrive(cxAny pview, cxAny pitem)
 {
     CX_ASSERT_THIS(pitem, cxAsync);
+    cxAsyncSetView(this, pview);
     if(this->State == cxAsyncStateSuccess || this->State == cxAsyncStateFailed){
         return this->State;
-    }
-    cxAsyncSetView(this, pview);
-    if(this->State == cxAsyncStateInit){
-        this->State = cxAsyncStateWait;
-        CX_METHOD_RUN(this->Init,this);
+    }else if(this->State == cxAsyncStateInit){
+        cxBool ret = CX_METHOD_GET(false, this->Init, this);
+        this->State = ret ? cxAsyncStateRunning : cxAsyncStateFailed;
     }else{
         this->Count ++;
         this->Time += cxEngineGetFrameDelta();

@@ -10,9 +10,6 @@
 
 void cxGlobalInit()
 {
-    //free prev data
-    cxGlobalFree();
-    //reset init
     cxCoreInit();
     cxJsonInit();
 }

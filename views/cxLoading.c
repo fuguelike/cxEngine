@@ -37,7 +37,7 @@ static void cxLoadingTimerArrive(cxAny sender)
     cxAsync item =  cxLoadingCurrentItem(this);
     cxAsyncState state = cxAsyncDrive(this, item);
     //wait
-    CX_RETURN(state == cxAsyncStateWait);
+    CX_RETURN(state == cxAsyncStateRunning);
     //success
     if(state == cxAsyncStateSuccess){
         this->Index ++;

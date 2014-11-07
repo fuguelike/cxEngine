@@ -30,7 +30,7 @@ CX_TERM(cxThread, cxObject)
 
 static cxAny cxThreadRunImp(cxAny pthis)
 {
-    cxThread this = pthis;
+    CX_ASSERT_THIS(pthis, cxThread);
     cxMemPoolBegin();
     CX_METHOD_RUN(this->Run,this);
     cxMemPoolClear();

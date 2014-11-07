@@ -190,7 +190,7 @@ do{                                                             \
 
 #define CX_ASSERT_FALSE(format,...)     CX_ASSERT(false,format,##__VA_ARGS__)
 
-#define CX_ASSERT_TYPE(_o_,_t_)         CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type (%s) error,should is "#_t_,CX_TYPE_NAME(_o_))
+#define CX_ASSERT_TYPE(_o_,_t_)         CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type (%s) error,should is "#_t_,CX_NAME_OF(_o_))
 
 #else
 
@@ -272,7 +272,7 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 
 #define CX_INSTANCE_OF(_o_,_t_)     cxObjectInstanceOf(_o_,_t_##TypeName)
 
-#define CX_TYPE_NAME(_o_)           ((cxObject)_o_)->cxType
+#define CX_NAME_OF(_o_)             ((cxObject)_o_)->cxType
 
 #define CX_TYPE_OF(_t_,_o_)         ((_t_)(_o_))
 
@@ -465,13 +465,13 @@ cxAny __cxObjectAlloc(cxConstType type,cxInt size,cxObjectFunc initFunc,cxObject
 
 cxAny __cxObjectCreate(cxConstType type, cxInt size,cxObjectFunc initFunc,cxObjectFunc freeFunc);
 
-void __cxObjectRetain(cxAny ptr);
+void  __cxObjectRetain(cxAny ptr);
 
-void __cxObjectRelease(cxAny ptr);
+void  __cxObjectRelease(cxAny ptr);
 
 cxAny __cxObjectAutoRelease(cxAny ptr);
 
-void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxAny));
+void  __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxAny));
 
 //must completed cxUtilPrint function with platform
 void cxUtilPrint(cxConstChars type,cxConstChars file,cxInt line,cxConstChars format,va_list ap);
@@ -499,16 +499,11 @@ cxAny cxObjectProperty(cxAny object,cxConstChars key);
 
 cxBool cxObjectInstanceOf(cxAny object,cxConstType type);
 
-typedef enum {
-    cxCoreStackTypeLoader = 1,
-    cxCoreStackTypeUser = 10000
-}cxCoreStackType;
+void cxCorePush(cxAny object);
 
-void cxCorePush(cxCoreStackType type,cxAny object);
+void cxCorePop();
 
-void cxCorePop(cxCoreStackType type);
-
-cxAny cxCoreTop(cxCoreStackType type);
+cxAny cxCoreTop();
 
 void cxCoreInit();
 

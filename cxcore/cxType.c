@@ -60,7 +60,7 @@ cxMethod cxTypeSetMethod(cxType this,cxConstChars key)
     return p;
 }
 
-cxProperty cxTypeProperty(cxType this,cxConstChars key)
+cxProperty cxTypeGetProperty(cxType this,cxConstChars key)
 {
     cxProperty p = NULL;
     cxType curr = this;
@@ -75,7 +75,7 @@ cxProperty cxTypeProperty(cxType this,cxConstChars key)
     return p;
 }
 
-cxMethod cxTypeMethod(cxType this,cxConstChars key)
+cxMethod cxTypeGetMethod(cxType this,cxConstChars key)
 {
     cxMethod p = NULL;
     cxType curr = this;
@@ -154,7 +154,7 @@ static void cxObjectSave(cxAny object,cxJson json)
 {
     cxConstChars cxId = cxJsonConstChars(json, "cxId");
     CX_RETURN(cxId == NULL);
-    cxLoader curr = cxCoreTop(cxCoreStackTypeLoader);
+    cxLoader curr = cxCoreTop();
     if(curr != NULL){
         CX_ASSERT_TYPE(curr, cxLoader);
         cxHashSet(curr->objects, cxHashStrKey(cxId), object);

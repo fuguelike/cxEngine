@@ -126,7 +126,7 @@ cxAny cxObjectProperty(cxAny object,cxConstChars key)
 {
     CX_RETURN(object == NULL, NULL);
     cxType type = cxObjectType(object);
-    return cxTypeProperty(type, key);
+    return cxTypeGetProperty(type, key);
 }
 
 static void __cxObjectDestroy(cxAny ptr)
@@ -205,9 +205,12 @@ void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny 
     cxTypesSet(tt,type);
     cxTypeSetSuper(type,superType);
     cxTypeSignature(type,superType);
+    //set create and alloc method
     type->Alloc = alloc;
     type->Create = create;
+    //copy methods from base type
     cxTypeCopyMethods(type, superType);
+    //copy propertys from base type
     cxTypeCopyPropertys(type, superType);
     autoType(type);
     CX_RELEASE(type);
@@ -220,53 +223,38 @@ cxDouble cxTimestamp()
     return val.tv_sec + (cxDouble)val.tv_usec/(cxDouble)1000000.0;
 }
 
-static cxHash groups = NULL;
+static cxStack coreStack = NULL;
 
-void cxCorePush(cxCoreStackType type,cxAny object)
+void cxCorePush(cxAny object)
 {
-    CX_ASSERT(groups != NULL, "global stack null");
-    cxHashKey key = cxHashIntKey(type);
-    cxAny stack = cxHashGet(groups, key);
-    if(stack == NULL){
-        stack = CX_ALLOC(cxStack);
-        cxHashSet(groups, key, stack);
-        CX_RELEASE(stack);
-    }
-    cxStackPush(stack, object);
+    cxStackPush(coreStack, object);
 }
 
-cxAny cxCoreTop(cxCoreStackType type)
+cxAny cxCoreTop()
 {
-    CX_ASSERT(groups != NULL, "global stack null");
-    cxAny stack = cxHashGet(groups, cxHashIntKey(type));
-    return stack != NULL ? cxStackTop(stack) : NULL;
+    return cxStackTop(coreStack);
 }
 
-void cxCorePop(cxCoreStackType type)
+void cxCorePop()
 {
-    CX_ASSERT(groups != NULL, "global stack null");
-    cxAny stack = cxHashGet(groups, cxHashIntKey(type));
-    if(stack != NULL){
-        cxStackPop(stack);
-    }
+    cxStackPop(coreStack);
 }
 
 void cxCoreInit()
 {
     cxAllocatorInit();
     cxTypesInit();
-    groups = CX_ALLOC(cxHash);
+    coreStack = CX_ALLOC(cxStack);
     cxMessageInstance();
 }
 
 void cxCoreFree()
 {
-    CX_RETURN(groups == NULL);
     cxMessageDestroy();
-    CX_RELEASE(groups);
+    CX_RELEASE(coreStack);
     cxTypesFree();
     cxAllocatorFree();
-    groups = NULL;
+    coreStack = NULL;
 }
 
 

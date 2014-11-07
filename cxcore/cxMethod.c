@@ -28,7 +28,7 @@ cxAny cxMethodGet(cxAny object,cxConstChars key)
     CX_RETURN(object == NULL, NULL);
     cxType type = cxObjectType(object);
     CX_RETURN(type == NULL, NULL);
-    cxMethod m = cxTypeMethod(type, key);
+    cxMethod m = cxTypeGetMethod(type, key);
     CX_RETURN(m == NULL, NULL);
     return m->method;
 }
@@ -38,7 +38,7 @@ cxAny cxMethodSuper(cxAny object,cxConstChars key)
     CX_RETURN(object == NULL, NULL);
     cxType type = cxObjectType(object);
     CX_RETURN(type == NULL, NULL);
-    cxMethod m = cxTypeMethod(type->superType, key);
+    cxMethod m = cxTypeGetMethod(type->superType, key);
     CX_RETURN(m == NULL, NULL);
     return m->method;
 }
