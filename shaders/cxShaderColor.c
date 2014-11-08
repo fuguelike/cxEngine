@@ -8,14 +8,13 @@
 
 #include "cxShaderColor.h"
 
-static void cxShaderColorInit(cxAny this)
+static void CX_METHOD(cxShaderColor,Init)
 {
-    cxShaderColor shader = this;
-    glBindAttribLocation(shader->cxShader.program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
-    glBindAttribLocation(shader->cxShader.program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
+    glBindAttribLocation(this->cxShader.program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
+    glBindAttribLocation(this->cxShader.program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
 }
 
-static cxString cxShaderColorVertex(cxAny this)
+static cxString CX_METHOD(cxShaderColor,Vertex)
 {
     static cxConstChars vertex =
     GLSL(
@@ -30,7 +29,7 @@ static cxString cxShaderColorVertex(cxAny this)
     return cxStringConstChars(vertex);
 }
 
-static cxString cxShaderColorFragment(cxAny this)
+static cxString CX_METHOD(cxShaderColor,Fragment)
 {
     static cxConstChars fragment =
     GLSL(
@@ -44,13 +43,13 @@ static cxString cxShaderColorFragment(cxAny this)
 
 CX_TYPE(cxShaderColor, cxShader)
 {
-    
+    CX_MSET(cxShaderColor, Fragment);
+    CX_MSET(cxShaderColor, Vertex);
+    CX_MSET(cxShaderColor, Init);
 }
 CX_INIT(cxShaderColor, cxShader)
 {
-    CX_SET(cxShader, this, Init, cxShaderColorInit);
-    CX_SET(cxShader, this, Vertex, cxShaderColorVertex);
-    CX_SET(cxShader, this, Fragment, cxShaderColorFragment);
+
 }
 CX_FREE(cxShaderColor, cxShader)
 {

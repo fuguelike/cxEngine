@@ -9,9 +9,8 @@
 #include <engine/cxUtil.h>
 #include "cxTextureTXT.h"
 
-static cxBool cxTextureTXTLoad(cxAny texture,cxStream stream)
+static cxBool CX_METHOD(cxTextureTXT,Load,cxStream stream)
 {
-    cxTextureTXT this = texture;
     cxConstChars font = this->font == NULL ? NULL : cxStringBody(this->font);
     cxConstChars text = cxStringBody(this->string);
     cxString data = cxCreateTXTTextureData(text, font,&this->attr);
@@ -39,20 +38,13 @@ void cxTextureTXTMakeTexture(cxTextureTXT texture,cxAny buffer,cxInt width,cxInt
     texture->cxTexture.size = cxSize2fv(width, height);
 }
 
-static void cxTextureTXTBind(cxAny this)
-{
-    cxTextureTXT txt = this;
-    cxOpenGLBindTexture(txt->cxTexture.textureId, 0);
-}
-
 CX_TYPE(cxTextureTXT, cxTexture)
 {
-    
+    CX_MSET(cxTextureTXT, Load);
 }
 CX_INIT(cxTextureTXT, cxTexture)
 {
-    CX_SET(cxTexture, this, Bind, cxTextureTXTBind);
-    CX_SET(cxTexture, this, Load, cxTextureTXTLoad);
+    
 }
 CX_FREE(cxTextureTXT, cxTexture)
 {

@@ -8,12 +8,11 @@
 
 #include "cxTexturePNG.h"
 
-static cxBool cxTexturePNGLoad(cxAny ptex,cxStream stream)
+static cxBool CX_METHOD(cxTexturePNG,Load,cxStream stream)
 {
     cxBool ret = false;
-    CX_ASSERT_THIS(ptex, cxTexturePNG);
     CX_ASSERT(stream != NULL, "pvr stream not set");
-    cxString data = cxStreamAllBytes(stream);
+    cxString data = CX_CALL(stream, AllBytes, CX_MT(cxString));
     if(data == NULL){
         return false;
     }
@@ -41,20 +40,13 @@ static cxBool cxTexturePNGLoad(cxAny ptex,cxStream stream)
     return ret;
 }
 
-static void cxTexturePNGBind(cxAny this)
-{
-    cxTexturePNG png = this;
-    cxOpenGLBindTexture(png->cxTexture.textureId, 0);
-}
-
 CX_TYPE(cxTexturePNG, cxTexture)
 {
-    
+    CX_MSET(cxTexturePNG, Load);
 }
 CX_INIT(cxTexturePNG, cxTexture)
 {
-    CX_SET(cxTexture, this, Bind, cxTexturePNGBind);
-    CX_SET(cxTexture, this, Load, cxTexturePNGLoad);
+    
 }
 CX_FREE(cxTexturePNG, cxTexture)
 {
@@ -65,7 +57,7 @@ CX_TERM(cxTexturePNG, cxTexture)
 cxTexture cxTexturePNGLoadStream(cxStream stream)
 {
     cxTexture png = CX_CREATE(cxTexturePNG);
-    cxTextureLoad(png,stream);
+    CX_CALL(png, Load, CX_MT(cxBool,cxStream),stream);
     return png;
 }
 

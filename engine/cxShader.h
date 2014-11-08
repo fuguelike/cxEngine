@@ -45,16 +45,9 @@ CX_DEF(cxShader, cxObject)
     GLuint vertexShader;
     GLuint fragmentShader;
     GLint uniformModelViewProject;
-    CX_METHOD_DEF(void,Init,cxAny);
-    CX_METHOD_DEF(void,Update,cxAny);
-    CX_METHOD_DEF(void,Uniform,cxAny);
-    CX_METHOD_DEF(cxString, Vertex, cxAny);
-    CX_METHOD_DEF(cxString, Fragment, cxAny);
 CX_END(cxShader, cxObject)
 
-void cxShaderInitPosColorTex(cxAny pshader);
-
-bool cxShaderInit(cxAny pshader);
+bool cxShaderFireInit(cxAny pshader);
 
 void cxShaderUsing(cxAny pshader);
 

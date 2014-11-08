@@ -10,16 +10,15 @@
 #include <engine/cxEngine.h>
 #include "cxAtlas.h"
 
-void cxAtlasDraw(cxAny pview)
+static void CX_METHOD(cxAtlas,Draw)
 {
-    CX_ASSERT_THIS(pview, cxAtlas);
     CX_RETURN(this->number == 0 || this->cxSprite.Texture == NULL);
     cxOpenGLSetBlendFactor(this->cxSprite.sfactor, this->cxSprite.dfactor);
     cxShaderUsing(this->cxSprite.Shader);
-    cxTextureBind(this->cxSprite.Texture);
+    cxTextureFireBind(this->cxSprite.Texture);
     if(!this->isInit){
         this->isInit = true;
-        cxAtlasDrawInit(pview);
+        cxAtlasDrawInit(this);
     }
     if(cxOpenGLInstance()->support_GL_OES_vertex_array_object){
         cxOpenGLVAODraw(this->vaoid, this->vboid, this->number, this->boxes, &this->isDirty);
@@ -127,13 +126,14 @@ CX_TYPE(cxAtlas, cxSprite)
 {
     CX_SETTER(cxAtlas, blend);
     CX_SETTER(cxAtlas, scale9);
+    
+    CX_MSET(cxAtlas, Draw);
 }
 CX_INIT(cxAtlas, cxSprite)
 {
     this->isDirty = true;
     glGenVertexArrays(1, &this->vaoid);
     glGenBuffers(2, this->vboid);
-    CX_SET(cxView, this, DrawView, cxAtlasDraw);
     CX_ADD(cxView, this, onDirty, cxAtlasDirty);
     this->items = CX_ALLOC(cxHash);
 }

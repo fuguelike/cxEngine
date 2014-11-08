@@ -19,7 +19,7 @@
 #define CX_OPENGL_LOAD_SHADER(t)                                    \
 do{                                                                 \
     cxShader shader = CX_ALLOC(t);                                  \
-    if(cxShaderInit(shader)){                                       \
+    if(cxShaderFireInit(shader)){                                   \
         cxHashSet(this->shaders, cxHashStrKey(#t"Key"), shader);    \
     }else{                                                          \
         CX_ERROR("shader "#t" init failed");                        \

@@ -8,12 +8,8 @@
 
 #include <sys/time.h>
 #include <utlist.h>
-#include "cxCore.h"
-#include "cxType.h"
-#include "cxMemPool.h"
-#include "cxStack.h"
-#include "cxMessage.h"
-
+#include "cxBase.h"
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #if CX_TARGET_PLATFORM == CX_PLATFORM_IOS
 #include <libkern/OSAtomic.h>
 cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x)
@@ -36,7 +32,7 @@ cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x)
     return __sync_fetch_and_sub(p,x);
 }
 #endif
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 static cxAny cxMalloc(cxSize size)
 {
     return calloc(1,size);
@@ -74,16 +70,7 @@ const cxAllocator *allocator = &(cxAllocator){
     .strdup         = cxStrdup,
 };
 
-void cxAllocatorInit()
-{
-    cxMemPoolInit();
-}
-
-void cxAllocatorFree()
-{
-    cxMemPoolFree();
-}
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void cxUtilInfo(cxConstChars file,cxInt line,cxConstChars format, ...)
 {
     va_list ap;
@@ -115,27 +102,248 @@ void cxUtilAssert(cxConstChars file,cxInt line,cxConstChars format, ...)
     cxUtilPrint("ASSERT", file, line, format, ap);
     va_end(ap);
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#define CX_TYPE_NAME_LEN(s) cxInt nameLen = (cxInt)strlen(s)
 
-cxAny cxObjectType(cxAny object)
+static cxType types = NULL;
+
+static void cxSignatureClear(cxSignature signatures)
 {
-    CX_RETURN(object == NULL, NULL);
+    cxSignature ele,tmp;
+    HASH_ITER(hh, signatures, ele, tmp){
+        allocator->free(ele);
+    }
+    HASH_CLEAR(hh, signatures);
+}
+static void cxSignatureCloneToType(cxType ptype,cxConstChars name)
+{
+    cxSignatureNew(ptype, name);
+}
+cxSignature cxSignatureNew(cxType ptype,cxConstChars name)
+{
+    CX_TYPE_NAME_LEN(name);
+    cxSignature out = NULL;
+    HASH_FIND(hh, ptype->signatures, name, nameLen, out);
+    CX_RETURN(out != NULL,out);
+    cxSignature this = allocator->malloc(sizeof(struct cxSignature));
+    strcpy(this->name, name);
+    HASH_ADD(hh, ptype->signatures, name, nameLen, this);
+    return this;
+}
+cxBool cxSignatureHas(cxSignature this,cxConstChars name)
+{
+    CX_RETURN(this == NULL,false);
+    cxSignature out = NULL;
+    CX_TYPE_NAME_LEN(name);
+    HASH_FIND(hh, this, name, nameLen, out);
+    return out != NULL;
+}
+static void cxPropertyClear(cxProperty propertys)
+{
+    cxProperty ele,tmp;
+    HASH_ITER(hh, propertys, ele, tmp){
+        allocator->free(ele);
+    }
+    HASH_CLEAR(hh, propertys);
+}
+cxProperty cxObjectGetProperty(cxAny object,cxConstChars name)
+{
     cxObject this = object;
-    return cxTypesGet(this->cxType);
+    return cxTypeGetProperty(this->cxType, name);
 }
-
-cxAny cxObjectProperty(cxAny object,cxConstChars key)
+cxBool cxPropertyRunSetter(cxAny object,cxConstChars key,cxAny value)
 {
-    CX_RETURN(object == NULL, NULL);
-    cxType type = cxObjectType(object);
-    return cxTypeGetProperty(type, key);
+    CX_ASSERT(key != NULL && object != NULL && value != NULL, "args error");
+    cxProperty p = cxObjectGetProperty(object, key);
+    if(p != NULL && p->cxSetter != NULL){
+        ((void(*)(cxAny,cxAny))p->cxSetter)(object,value);
+        return true;
+    }
+    return false;
 }
-
-static void __cxObjectDestroy(cxAny ptr)
+cxBool cxPropertyRunGetter(cxAny object,cxConstChars key,cxAny *value)
 {
-    CX_ASSERT(ptr != NULL, "point null");
-    cxObject object = (cxObject)ptr;
-    object->cxFree(object);
-    allocator->free(ptr);
+    CX_ASSERT(key != NULL && object != NULL, "args error");
+    cxProperty p = cxObjectGetProperty(object, key);
+    if(p != NULL && p->cxGetter != NULL){
+        *value = ((cxAny(*)(cxAny))p->cxGetter)(object);
+        return true;
+    }
+    return false;
+}
+static void cxPropertyCloneToType(cxType ptype,cxProperty pold)
+{
+    cxProperty pnew = cxPropertyNew(ptype, pold->name);
+    pnew->cxGetter = pold->cxGetter;
+    pnew->cxSetter = pold->cxSetter;
+}
+cxProperty cxPropertyNew(cxType ptype,cxConstChars name)
+{
+    CX_TYPE_NAME_LEN(name);
+    cxProperty out = NULL;
+    HASH_FIND(hh, ptype->propertys, name, nameLen, out);
+    CX_RETURN(out != NULL,out);
+    cxProperty this = allocator->malloc(sizeof(struct cxProperty));
+    strcpy(this->name, name);
+    HASH_ADD(hh, ptype->propertys, name, nameLen, this);
+    return this;
+}
+static void MethodClear(cxMethod methods)
+{
+    cxMethod ele,tmp;
+    HASH_ITER(hh, methods, ele, tmp){
+        allocator->free(ele);
+    }
+    HASH_CLEAR(hh, methods);
+}
+//clone method to ptype
+static void cxMethodCloneToType(cxType ptype,cxMethod pold)
+{
+    cxMethod pnew = cxMethodNew(ptype, pold->name);
+    pnew->cxMethodFunc = pold->cxMethodFunc;
+}
+cxMethod cxMethodNew(cxType ptype,cxConstChars name)
+{
+    CX_TYPE_NAME_LEN(name);
+    cxMethod out = NULL;
+    HASH_FIND(hh, ptype->methods, name, nameLen, out);
+    CX_RETURN(out != NULL,out);
+    cxMethod this = allocator->malloc(sizeof(struct cxMethod));
+    strcpy(this->name, name);
+    HASH_ADD(hh, ptype->methods, name, nameLen, this);
+    return this;
+}
+void cxTypesInit()
+{
+    types = NULL;
+    CX_TYPE_REG(cxObject);
+    CX_TYPE_REG(cxString);
+    CX_TYPE_REG(cxMemPool);
+    CX_TYPE_REG(cxHash);
+    CX_TYPE_REG(cxArray);
+    CX_TYPE_REG(cxList);
+    CX_TYPE_REG(cxStack);
+    CX_TYPE_REG(cxNumber);
+    CX_TYPE_REG(cxMessage);
+    CX_TYPE_REG(cxLoader);
+    CX_TYPE_REG(cxPath);
+    CX_TYPE_REG(cxStream);
+    CX_TYPE_REG(cxAnyArray);
+}
+void cxTypesFree()
+{
+    cxType ele,tmp;
+    HASH_ITER(hh, types, ele, tmp){
+        cxSignatureClear(ele->signatures);
+        cxPropertyClear(ele->propertys);
+        MethodClear(ele->methods);
+        allocator->free(ele);
+    }
+    HASH_CLEAR(hh, types);
+}
+cxProperty cxTypeGetProperty(cxType this,cxConstChars name)
+{
+    CX_ASSERT(this != NULL, "args error");
+    cxProperty out = NULL;
+    CX_TYPE_NAME_LEN(name);
+    HASH_FIND(hh, this->propertys, name, nameLen, out);
+    return out;
+}
+cxMethod cxTypeGetMethod(cxType this,cxConstChars name)
+{
+    CX_ASSERT(this != NULL, "args error");
+    cxMethod out = NULL;
+    CX_TYPE_NAME_LEN(name);
+    HASH_FIND(hh, this->methods, name, nameLen, out);
+    return out;
+}
+cxAny cxTypesCreateObject(cxConstType name)
+{
+    cxType this = cxTypesGetType(name);
+    return this != NULL ? this->Create() : NULL;
+}
+cxAny cxTypesAllocObject(cxConstType name)
+{
+    cxType this = cxTypesGetType(name);
+    return this != NULL ? this->Alloc() : NULL;
+}
+cxType cxTypesGetType(cxConstType name)
+{
+    cxType out = NULL;
+    CX_TYPE_NAME_LEN(name);
+    HASH_FIND(hh, types, name, nameLen, out);
+    return out;
+}
+static void cxTypeCopyFromSuper(cxType this,cxType super)
+{
+    CX_RETURN(super == NULL);
+    //copy signatures
+    cxSignature sele,stmp;
+    HASH_ITER(hh, super->signatures, sele, stmp){
+        cxSignatureCloneToType(this, sele->name);
+    }
+    //copy methods
+    cxMethod mele,mtmp;
+    HASH_ITER(hh, super->methods, mele, mtmp){
+        cxMethodCloneToType(this, mele);
+    }
+    //copy propertys
+    cxProperty pele,ptmp;
+    HASH_ITER(hh, super->propertys, pele, ptmp){
+        cxPropertyCloneToType(this, pele);
+    }
+}
+cxType cxTypeNew(cxConstType ct,cxConstType sb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxType))
+{
+    cxType this = allocator->malloc(sizeof(struct cxType));
+    this->typeName = ct;
+    cxType super = cxTypesGetType(sb);
+    CX_TYPE_NAME_LEN(ct);
+    strcpy(this->name, ct);
+    this->Alloc = alloc;
+    this->Create = create;
+    this->superType = super;
+    HASH_ADD(hh, types, name, nameLen, this);
+    cxTypeCopyFromSuper(this, super);
+    cxSignatureNew(this, ct);
+    autoType(this);
+    return this;
+}
+cxBool cxMethodHas(cxAny object,cxConstChars name)
+{
+    cxObject this = object;
+    cxMethod pmethod = cxTypeGetMethod(this->cxType, name);
+    return pmethod != NULL;
+}
+cxAny cxMethodGet(cxAny pobj,cxConstChars name)
+{
+    cxObject this = pobj;
+    CX_ASSERT(this->cxType != NULL, "object type null ");
+    cxMethod pmethod = cxTypeGetMethod(this->cxType, name);
+    CX_ASSERT(pmethod != NULL, "%s method get failed",name);
+    return pmethod->cxMethodFunc;
+}
+cxAny cxMethodSuper(cxAny pobj,cxConstType type,cxConstChars name)
+{
+    CX_ASSERT(cxObjectInstanceOf(pobj, type), "object not has, %s base type",type);
+    cxType ptype = cxTypesGetType(type);
+    CX_ASSERT(ptype != NULL, "%s type get failed",type);
+    cxMethod pmethod = cxTypeGetMethod(ptype, name);
+    CX_ASSERT(pmethod != NULL, "%s method get failed",name);
+    return pmethod->cxMethodFunc;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+cxBool cxObjectInstanceOf(cxAny pobj,cxConstType type)
+{
+    cxObject this = pobj;
+    CX_ASSERT(this->cxType != NULL, "object type null,must is object %s",type);
+    CX_RETURN(this == NULL && type == NULL,true);
+    CX_RETURN(this == NULL || type == NULL, false);
+    CX_RETURN(this->cxType->typeName == type, true);
+    cxType ptype = cxTypesGetType(type);
+    CX_ASSERT(ptype != NULL, "type %s not register",type);
+    return cxSignatureHas(this->cxType->signatures, type);
 }
 
 void __cxObjectRetain(cxAny ptr)
@@ -146,17 +354,17 @@ void __cxObjectRetain(cxAny ptr)
     cxAtomicAddInt32(&object->cxRefcount, 1);
 }
 
-void __cxObjectAutoType(cxAny this)
+void CX_METHOD(cxObject,AutoInit)
 {
-    
+//    CX_LOGGER("%s Init",this->cxType->TypeName);
 }
 
-void __cxObjectAutoInit(cxObject this)
+void CX_METHOD(cxObject,AutoFree)
 {
-
+//    CX_LOGGER("%s Free",this->cxType->TypeName);
 }
 
-void __cxObjectAutoFree(cxObject this)
+void cxObjectAutoType(cxType this)
 {
     
 }
@@ -168,7 +376,8 @@ void __cxObjectRelease(cxAny ptr)
     CX_ASSERT(object->cxRefcount > 0, "error,retain count must > 0");
     cxAtomicSubInt32(&object->cxRefcount, 1);
     if(object->cxRefcount == 0) {
-        __cxObjectDestroy(ptr);
+        object->cxAutoFree(object);
+        allocator->free(object);
     }
 }
 
@@ -177,65 +386,11 @@ cxAny __cxObjectAutoRelease(cxAny ptr)
     return cxMemPoolAppend(ptr);
 }
 
-cxAny __cxObjectCreate(cxConstType type, int size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
-{
-    cxAny any = __cxObjectAlloc(type, size, initFunc, freeFunc);
-    return __cxObjectAutoRelease(any);
-}
-
-cxAny __cxObjectAlloc(cxConstType type,cxInt size,cxObjectFunc initFunc,cxObjectFunc freeFunc)
-{
-    CX_ASSERT(initFunc != NULL, "init func null");
-    cxAny ptr = allocator->malloc(size);
-    CX_ASSERT(ptr != NULL, "alloc memory error size=%d",size);
-    cxObject object = (cxObject)ptr;
-    object->cxRefcount = 1;
-    object->cxType = type;
-    object->cxFree = freeFunc;
-    initFunc(object);
-    return ptr;
-}
-
-void __cxTypeRegisterType(cxConstType tt,cxConstType bb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxAny))
-{
-    CX_ASSERT(autoType != NULL, "auto type func error");
-    cxType type = CX_ALLOC(cxType);
-    cxType superType = cxTypesGet(bb);
-    //cxObject have not super type
-    CX_ASSERT(superType != NULL || tt == cxObjectTypeName,"type %s not register",bb);
-    cxTypesSet(tt,type);
-    cxTypeSetSuper(type,superType);
-    cxTypeSignature(type,superType);
-    //set create and alloc method
-    type->Alloc = alloc;
-    type->Create = create;
-    //copy methods from base type
-    cxTypeCopyMethods(type, superType);
-    //copy propertys from base type
-    cxTypeCopyPropertys(type, superType);
-    autoType(type);
-    CX_RELEASE(type);
-}
-
 cxDouble cxTimestamp()
 {
     struct timeval val = {0};
     gettimeofday(&val, NULL);
     return val.tv_sec + (cxDouble)val.tv_usec/(cxDouble)1000000.0;
-}
-
-void cxEventAppend(cxEvent **event,cxEventFunc func)
-{
-    cxEvent *newPtr = allocator->malloc(sizeof(cxEvent));
-    newPtr->func = func;
-    DL_APPEND(*event, newPtr);
-}
-
-void cxEventPrepend(cxEvent **event,cxEventFunc func)
-{
-    cxEvent *newPtr = allocator->malloc(sizeof(cxEvent));
-    newPtr->func = func;
-    DL_PREPEND(*event, newPtr);
 }
 
 static cxStack coreStack = NULL;
@@ -257,8 +412,8 @@ void cxCorePop()
 
 void cxCoreInit()
 {
-    cxAllocatorInit();
     cxTypesInit();
+    cxMemPoolInit();
     coreStack = CX_ALLOC(cxStack);
     cxMessageInstance();
 }
@@ -267,9 +422,8 @@ void cxCoreFree()
 {
     cxMessageDestroy();
     CX_RELEASE(coreStack);
+    cxMemPoolFree();
     cxTypesFree();
-    cxAllocatorFree();
-    coreStack = NULL;
 }
 
 

@@ -10,7 +10,6 @@
 #include "cxNumber.h"
 #include "cxJson.h"
 #include "cxHash.h"
-#include "cxType.h"
 
 static cxString jsonAESKey = NULL;
 
@@ -33,15 +32,15 @@ static json_t *cxjsonDefaultLocalized(cxConstChars key)
 }
 static cxLocalizedFunc cxLocalizeder = cxjsonDefaultLocalized;
 
-static cxJson cxJsonMethodDefault(cxAny pobj,cxConstChars key,cxJson args)
+static json_t *cxJsonPropertyGetterDefault(cxConstChars key)
 {
     return NULL;
 }
-static cxJsonMethodFunc cxMethodCall = cxJsonMethodDefault;
+static cxJsonPropertyGetterFunc cxJsonPropertyGetter = cxJsonPropertyGetterDefault;
 
-void cxJsonSetMethod(cxJsonMethodFunc func)
+void cxJsonSetPropertyGetter(cxJsonPropertyGetterFunc func)
 {
-    cxMethodCall = func;
+    cxJsonPropertyGetter = func;
 }
 
 void cxJsonSetReader(cxJsonReaderFunc func)
@@ -147,30 +146,25 @@ static json_t *cxJsonGetJson(cxJson json,cxConstChars key)
 
 static json_t *jsonParseRegisterValue(json_t *v,cxAny data)
 {
-    if(json_is_string(v)){                          //$ui.json?title
-        cxConstChars key = json_string_value(v);
-        if(!cxConstCharsOK(key)){
-            return v;
+    if(!json_is_string(v)){                          //$ui.json?title
+        return v;
+    }
+    cxConstChars key = json_string_value(v);
+    if(!cxConstCharsOK(key)){
+        return v;
+    }
+    if(key[0] == '$' && key[1] == '.'){
+        cxJson value = NULL;
+        if(cxPropertyRunGetter(data, key + 2, (cxAny *)&value)){
+            return value != NULL ? CX_JSON_PTR(value):NULL;
         }
-        if(key[0] == '$' && cxLocalizeder != NULL){
-            return cxLocalizeder(key + 1);
+        if(cxJsonPropertyGetter != NULL){
+            return cxJsonPropertyGetter(key + 2);
         }
-    }else if(json_is_object(v)){                    //{"cxMethod":"methodname","cxArgs":"json"}
-        json_t *call = json_object_get(v, "cxMethod");
-        if(!json_is_string(call)){
-            return v;
-        }
-        cxConstChars name = json_string_value(call);
-        if(!cxConstCharsOK(name)){
-            return v;
-        }
-        cxJson args = NULL;
-        json_t *a = json_object_get(v, "cxArgs");
-        if(a != NULL){
-            args = cxJsonAttachCreate(a);
-        }
-        cxJson ret = cxMethodCall(data,name,args);
-        return ret != NULL ? CX_JSON_PTR(ret) : v;
+        return v;
+    }
+    if(key[0] == '$' && cxLocalizeder != NULL){
+        return cxLocalizeder?cxLocalizeder(key + 1):NULL;
     }
     return v;
 }
@@ -1161,8 +1155,81 @@ void cxJsonAppendJson(cxJson json,cxJson v)
     json_array_append(CX_JSON_PTR(json), CX_JSON_PTR(v));
 }
 
+static void cxTypeRunObjectSetter(cxObject pobj,cxJson json)
+{
+    CX_ASSERT_THIS(pobj, cxObject);
+    CX_JSON_OBJECT_EACH_BEG(json, item)
+    cxJsonSetUserData(item, this);
+    cxPropertyRunSetter(this, itemKey, item);
+    CX_JSON_OBJECT_EACH_END(json, item)
+}
 
+static void cxObjectSave(cxAny object,cxJson json)
+{
+    cxConstChars cxId = cxJsonConstChars(json, "cxId");
+    CX_RETURN(cxId == NULL);
+    cxLoader curr = cxCoreTop();
+    if(curr != NULL){
+        CX_ASSERT_TYPE(curr, cxLoader);
+        cxHashSet(curr->objects, cxHashStrKey(cxId), object);
+    }
+}
 
+cxAny cxJsonMakeObject(cxJson json)
+{
+    CX_ASSERT_TYPE(json, cxJson);
+    cxAny object = NULL;
+    cxJson ojson = json;
+    cxJson njson = NULL;
+    cxConstChars src = NULL;
+    cxConstChars type = NULL;
+    if(cxJsonIsString(json)){
+        src = cxJsonToConstChars(json);
+    }else if(cxJsonIsObject(json)){
+        src = cxJsonConstChars(json, "cxSrc");
+    }
+    //from src get json
+    if(src != NULL){
+        njson = cxJsonRead(src);
+        CX_ASSERT(njson != NULL, "read json failed from %s",src);
+        type = cxJsonConstChars(njson, "cxType");
+    }else{
+        type = cxJsonConstChars(ojson, "cxType");
+    }
+    CX_ASSERT(type != NULL, "json cxType property null");
+    object = cxTypesCreateObject(type);
+    CX_ASSERT(object != NULL,"create object %s failed", type);
+    //read new json property
+    if(njson != NULL){
+        cxTypeRunObjectSetter(object, njson);
+        cxObjectSave(object, njson);
+    }
+    //read old json property
+    if(cxJsonIsObject(ojson)){
+        cxTypeRunObjectSetter(object, ojson);
+        cxObjectSave(object, ojson);
+    }
+    return object;
+}
+
+cxAny cxJsonTocxObject(cxJson v)
+{
+    cxAny any = NULL;
+    if(cxJsonIsInt(v)){
+        any = cxNumberInt(cxJsonToInt(v, 0));
+    }else if(cxJsonIsBool(v)){
+        any = cxNumberBool(cxJsonToBool(v, false));
+    }else if(cxJsonIsDouble(v)){
+        any = cxNumberDouble(cxJsonToDouble(v, 0));
+    }else if(cxJsonIsString(v)){
+        any = cxStringCreate("%s",cxJsonToConstChars(v));
+    }else if(cxJsonIsObject(v)){
+        any = cxJsonMakeObject(v);
+    }else {
+        any = v;
+    }
+    return any;
+}
 
 
 

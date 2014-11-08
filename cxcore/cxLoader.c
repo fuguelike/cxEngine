@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
+#include "cxJson.h"
 #include "cxLoader.h"
 
 CX_TYPE(cxLoader, cxObject)
@@ -35,7 +36,7 @@ cxLoader cxLoaderCreate(cxConstChars path)
     CX_ASSERT(json != NULL, "json file %s read error",path);
     cxLoader this = CX_CREATE(cxLoader);
     cxCorePush(this);
-    CX_RETAIN_SWAP(this->Root, cxObjectCreateUseJson(json));
+    CX_RETAIN_SWAP(this->Root, cxJsonMakeObject(json));
     cxCorePop();
     return this;
 }

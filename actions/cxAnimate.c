@@ -104,9 +104,8 @@ static cxAnimateItem cxAnimateItemGet(cxAnimate this,cxArray items, cxAny any, c
 }
 
 /* 1 dt 2 dt 3 dt 4 dt 5 dt 6 dt 7 dt 8*/
-static void cxAnimateInit(cxAny pav)
+static void CX_METHOD(cxAnimate,Init)
 {
-    CX_ASSERT_THIS(pav, cxAnimate);
     this->index = 0;
     cxFloat time = cxActionGetTime(this);
     cxArray items = cxAnimateGetGroup(this,this->name);
@@ -125,9 +124,8 @@ static void cxAnimateInit(cxAny pav)
     cxActionSetTime(this, time);
 }
 
-static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
+static void CX_METHOD(cxAnimate,Step,cxFloat dt,cxFloat time)
 {
-    CX_ASSERT_THIS(pav, cxAnimate);
     CX_ASSERT_VALUE(cxActionGetView(this), cxSprite, view);
     cxArray items = cxAnimateGetGroup(this,this->name);
     CX_ASSERT(items != NULL, "group name not found ");
@@ -151,21 +149,20 @@ static void cxAnimateStep(cxAny pav,cxFloat dt,cxFloat time)
     }
 }
 
-static void cxAnimateReset(cxAny pav)
+static void CX_METHOD(cxAnimate,Reset)
 {
-    cxAnimate this = pav;
     this->index = 0;
     cxActionSetTime(this, this->time);
+    CX_SUPER(cxAction, this, Reset, CX_MT(void));
 }
 
-static cxBool cxAnimateExit(cxAny pav)
+static cxBool CX_METHOD(cxAnimate,Exit)
 {
-    cxAnimate this = pav;
     this->Repeat --;
     if(this->Repeat == 0){
         return true;
     }
-    cxActionReset(pav);
+    CX_CALL(this, Reset, CX_MT(void));
     return false;
 }
 
@@ -178,7 +175,7 @@ CX_SETTER_DEF(cxAnimate, frames)
 {
     cxJson frames = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(frames, item)
-    cxAnimateItem frame = cxObjectCreateUseJson(item);
+    cxAnimateItem frame = cxJsonMakeObject(item);
     CX_ASSERT_TYPE(frame, cxAnimateItem);
     cxHashKey key = cxAnimateItemKey(frame);
     cxHashSet(this->frames, key, frame);
@@ -198,7 +195,7 @@ CX_SETTER_DEF(cxAnimate, groups)
     cxJson frames = cxJsonToArray(item);
     CX_JSON_ARRAY_EACH_BEG(frames, ats)
     if(cxJsonIsObject(ats)){
-        cxAnimateItem frame = cxObjectCreateUseJson(ats);
+        cxAnimateItem frame = cxJsonMakeObject(ats);
         CX_ASSERT_TYPE(frame, cxAnimateItem);
         cxArrayAppend(items, frame);
         continue;
@@ -242,14 +239,15 @@ CX_TYPE(cxAnimate, cxAction)
     CX_SETTER(cxAnimate, name);
     CX_SETTER(cxAnimate, frames);
     CX_SETTER(cxAnimate, groups);
+    
+    CX_MSET(cxAnimate, Init);
+    CX_MSET(cxAnimate, Step);
+    CX_MSET(cxAnimate, Exit);
+    CX_MSET(cxAnimate, Reset);
 }
 CX_INIT(cxAnimate, cxAction)
 {
     this->Repeat = CX_FOREVER;
-    CX_SET(cxAction, this, Init, cxAnimateInit);
-    CX_SET(cxAction, this, Step, cxAnimateStep);
-    CX_SET(cxAction, this, Exit, cxAnimateExit);
-    CX_SET(cxAction, this, Reset, cxAnimateReset);
     this->groups = CX_ALLOC(cxHash);
     this->frames = CX_ALLOC(cxHash);
 }
@@ -268,7 +266,7 @@ void cxAnimateRunGroup(cxAny pav,cxConstChars name)
     CX_RETURN(!cxConstCharsOK(name));
     //group name not exists return
     CX_RETURN(!cxHashHas(this->groups, cxHashStrKey(name)));
-    cxActionReset(this);
+    CX_CALL(this, Reset, CX_MT(void));
     CX_RETAIN_SWAP(this->name, cxStringConstChars(name));
 }
 

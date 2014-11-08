@@ -9,18 +9,6 @@
 #include <engine/cxEngine.h>
 #include "cxPolygon.h"
 
-static void cxPolygonDraw(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxPolygon);
-    CX_RETURN(this->number < 3);
-    cxSpriteBindTexture(pview);
-    cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
-    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxVec3f), this->points);
-    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2, sizeof(cxTex2f), this->texs);
-    cxOpenGLVertexAttribPointer(cxVertexAttribColor,    4, sizeof(cxColor4f), this->colors);
-    cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, this->number);
-}
-
 static void cxPolygonMalloc(cxPolygon this)
 {
     this->points = allocator->realloc(this->points,sizeof(cxVec3f) * this->capacity);
@@ -43,13 +31,24 @@ CX_SETTER_DEF(cxPolygon, points)
     CX_JSON_ARRAY_EACH_END(points, point);
 }
 
+static void CX_METHOD(cxPolygon,Draw)
+{
+    CX_RETURN(this->number < 3);
+    cxSpriteBindTexture(this);
+    cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
+    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxVec3f), this->points);
+    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2, sizeof(cxTex2f), this->texs);
+    cxOpenGLVertexAttribPointer(cxVertexAttribColor,    4, sizeof(cxColor4f), this->colors);
+    cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, this->number);
+}
+
 CX_TYPE(cxPolygon, cxSprite)
 {
     CX_SETTER(cxPolygon, points);
+    CX_MSET(cxPolygon, Draw);
 }
 CX_INIT(cxPolygon, cxSprite)
 {
-    CX_SET(cxView, this, DrawView, cxPolygonDraw);
     this->capacity = 8;
     cxPolygonMalloc(this);
 }

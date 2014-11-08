@@ -10,7 +10,7 @@
 #include <algorithm/aes.h>
 #include "cxMD5.h"
 #include "cxString.h"
-#include "cxType.h"
+#include "cxJson.h"
 
 
 CX_SETTER_DEF(cxString, string)

@@ -8,6 +8,8 @@
 
 #include "cxEngine.h"
 #include "cxValue.h"
+#include "cxSpatial.h"
+#include "cxPlayer.h"
 
 #include <textures/cxTextureCache.h>
 #include <textures/cxTextureJPG.h>
@@ -96,20 +98,27 @@ void cxEnginePause()
     }
 }
 
-static void cxEngineTypes()
+static void cxRegisterEngineTypes()
 {
     //register core
+    CX_TYPE_REG(cxIconv);
+    CX_TYPE_REG(cxOpenGL);
+    CX_TYPE_REG(cxTexCoord);
     CX_TYPE_REG(cxTexture);
     CX_TYPE_REG(cxView);
     CX_TYPE_REG(cxAction);
-    CX_TYPE_REG(cxEngine);
     CX_TYPE_REG(cxJson);
+    CX_TYPE_REG(cxTrack);
+    CX_TYPE_REG(cxBuffer);
     CX_TYPE_REG(cxPlayer);
     CX_TYPE_REG(cxTouchItem);
     CX_TYPE_REG(cxAStar);
     CX_TYPE_REG(cxGroup);
     CX_TYPE_REG(cxShader);
     CX_TYPE_REG(cxValue);
+    CX_TYPE_REG(cxSpatial);
+    CX_TYPE_REG(cxCurveItem);
+    CX_TYPE_REG(cxCurve);
     
     //register shader
     CX_TYPE_REG(cxShaderAlpha);
@@ -177,6 +186,8 @@ static void cxEngineTypes()
     CX_TYPE_REG(cxLooper);
     CX_TYPE_REG(cxHttpConn);
     CX_TYPE_REG(cxHttp);
+    //
+    CX_TYPE_REG(cxEngine);
 }
 
 static cxBool cxEngineSetLocalized(cxEngine this,cxConstChars key)
@@ -247,6 +258,16 @@ static void cxEngineLoadConfig(cxEngine engine)
     engine->Version = cxJsonInt(engine->Config, "cxVersion", 1);
 }
 
+static json_t *cxEngineJsonRunGetter(cxConstChars key)
+{
+    cxEngine engine = cxEngineInstance();
+    cxJson value = NULL;
+    if(cxPropertyRunGetter(engine, key, (cxAny *)&value)){
+        return value != NULL ? CX_JSON_PTR(value):NULL;
+    }
+    return NULL;
+}
+
 void cxEngineStartup()
 {
 #if !defined(NDEBUG)
@@ -256,9 +277,9 @@ void cxEngineStartup()
 #endif
     CX_ASSERT(engineInstance == NULL, "repeat init engine");
     cxGlobalInit();
+    //registe all types
+    cxRegisterEngineTypes();
     engineInstance = CX_ALLOC(cxEngine);
-    //registe all type
-    cxEngineTypes();
     //set localized lang
     cxEngineSetLang(cxLocalizedLang());
     CX_LOGGER("system lang:%s",cxStringBody(cxEngineGetLang()));
@@ -270,17 +291,7 @@ void cxEngineStartup()
     //设置本地化字符串读取
     cxJsonSetLocalized(cxEngineLocalizeder);
     //设置方法调用
-    cxJsonSetMethod(cxEngineJsonMethod);
-    //init model
-    engineInstance->Window      = CX_ALLOC(cxWindow);
-    engineInstance->curve       = CX_ALLOC(cxCurve);
-    engineInstance->opengl      = CX_ALLOC(cxOpenGL);
-    engineInstance->iconv       = CX_ALLOC(cxIconv);
-    engineInstance->player      = CX_ALLOC(cxPlayer);
-    engineInstance->textures    = CX_ALLOC(cxTextureCache);
-    engineInstance->looper      = CX_ALLOC(cxLooper);
-    //registe other type
-    cxEngineType(engineInstance);
+    cxJsonSetPropertyGetter(cxEngineJsonRunGetter);
     //read Manifest.json config file
     CX_RETAIN_SET(engineInstance->Config, cxEngineLoadJson("Manifest.json"));
     if(engineInstance->Config != NULL){
@@ -329,7 +340,7 @@ void cxEngineDraw(cxFloat dt)
     cxLooperUpdate(engine->looper);
     CX_SIGNAL_FIRE(engine->onUpdate, CX_SIGNAL_TYPE(cxFloat),engine->FrameDelta);
     kmGLPushMatrix();
-    cxViewDraw(engine->Window);
+    cxViewDrawView(engine->Window);
     kmGLPopMatrix();
     cxMemPoolClear();
 }
@@ -392,12 +403,12 @@ cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)
     return cxViewAppendTimer(engine->Window, freq, repeat);
 }
 
-static cxJson CX_METHOD(cxEngine, WinSize, cxJson args)
+CX_GETTER_DEF(cxEngine, WinSize)
 {
     cxSize2f size = cxEngineGetWinSize();
     return cxJsonSize2fToJson(size);
 }
-static cxJson CX_METHOD(cxEngine, WinScale, cxJson args)
+CX_GETTER_DEF(cxEngine, WinScale)
 {
     cxVec2f scale = cxEngineGetScale();
     return cxJsonVec2fToJson(scale);
@@ -405,20 +416,29 @@ static cxJson CX_METHOD(cxEngine, WinScale, cxJson args)
 
 CX_TYPE(cxEngine, cxObject)
 {
-    CX_MSET(cxEngine, WinSize);
-    CX_MSET(cxEngine, WinScale);
+    CX_GETTER(cxEngine, WinSize);
+    CX_GETTER(cxEngine, WinScale);
+    cxEngineType(this);
 }
 CX_INIT(cxEngine, cxObject)
 {
-    this->Interval = 1.0f/60.0f;
-    this->FrameDelta = 1.0f/60.0f;
-    this->IsShowBorder = false;
-    this->isTouch = true;
-    this->Scale = cxVec2fv(1.0f, 1.0f);
-    this->files = CX_ALLOC(cxHash);
-    this->items = CX_ALLOC(cxHash);
-    this->groups = CX_ALLOC(cxHash);
-    this->assets = CX_ALLOC(cxHash);
+    this->Interval      = 1.0f/60.0f;
+    this->FrameDelta    = 1.0f/60.0f;
+    this->IsShowBorder  = false;
+    this->isTouch       = true;
+    this->Scale         = cxVec2fv(1.0f, 1.0f);
+    this->files         = CX_ALLOC(cxHash);
+    this->items         = CX_ALLOC(cxHash);
+    this->groups        = CX_ALLOC(cxHash);
+    this->assets        = CX_ALLOC(cxHash);
+    //init model
+    this->Window        = CX_ALLOC(cxWindow);
+    this->curve         = CX_ALLOC(cxCurve);
+    this->opengl        = CX_ALLOC(cxOpenGL);
+    this->iconv         = CX_ALLOC(cxIconv);
+    this->player        = CX_ALLOC(cxPlayer);
+    this->textures      = CX_ALLOC(cxTextureCache);
+    this->looper        = CX_ALLOC(cxLooper);
 }
 CX_FREE(cxEngine, cxObject)
 {
@@ -445,22 +465,6 @@ CX_FREE(cxEngine, cxObject)
 }
 CX_TERM(cxEngine, cxObject)
 
-cxJson cxEngineJsonMethod(cxAny pobj,cxConstChars key,cxJson args)
-{
-    cxEngine engine = cxEngineInstance();
-    cxAny method = NULL;
-    if(pobj != NULL){
-        method = cxMethodGet(pobj, key);
-    }
-    if(method == NULL){
-        method = cxMethodGet(engine, key);
-    }
-    if(method != NULL){
-        return (CX_MT(cxJson,cxJson)method)(pobj,args);
-    }
-    return NULL;
-}
-
 //a.json?key
 cxJson cxEngineJsonReader(cxConstChars src)
 {
@@ -478,7 +482,7 @@ cxAny cxEngineCreateObject(cxConstChars src)
 {
     cxJson json = cxEngineJsonReader(src);
     CX_ASSERT(json != NULL, "read json error");
-    return cxObjectCreateUseJson(json);
+    return cxJsonMakeObject(json);
 }
 
 cxString cxEngineAssetsData(cxConstChars file)
@@ -503,7 +507,6 @@ cxJson cxEngineLoadJson(cxConstChars file)
         return json;
     }
     cxString data = cxAssetsData(file);
-    data = CX_METHOD_GET(data, this->JsonFilter, data);
     CX_ASSERT(data != NULL, "load json file %s failed");
     json = cxJsonCreate(data);
     cxHashSet(this->files, key, json);
@@ -567,7 +570,7 @@ cxBool cxEngineFireKey(cxKeyType type,cxInt code)
     cxEngine this = cxEngineInstance();
     this->key.type = type;
     this->key.code = code;
-    return cxViewKey(this->Window, &this->key);
+    return cxViewFireKey(this->Window, &this->key);
 }
 
 static void cxEngineComputeItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
@@ -650,7 +653,7 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
     CX_HASH_FOREACH(this->items, ele, tmp){
         cxTouchItemsAppend(this->points, ele->any);
     }
-    cxBool ret = cxViewTouch(this->Window, &this->points);
+    cxBool ret = cxViewFireTouch(this->Window, &this->points);
     //remove up cancel point
     for(cxInt i=0; i < delItems.number; i++){
         item = delItems.items[i];

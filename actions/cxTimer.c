@@ -8,16 +8,13 @@
 
 #include "cxTimer.h"
 
-static void cxTimerInit(cxAny pav)
+static void CX_METHOD(cxTimer,Init)
 {
-    CX_ASSERT_THIS(pav, cxTimer);
     CX_RETURN(!this->IsBegin);
     CX_EVENT_FIRE(this, onArrive);
 }
-
-static cxBool cxTimerExit(cxAny pav)
+static cxBool CX_METHOD(cxTimer,Exit)
 {
-    CX_ASSERT_THIS(pav, cxTimer);
     this->Repeat --;
     CX_RETURN(this->Repeat == 0 && this->IsBegin, true);
     CX_EVENT_FIRE(this, onArrive);
@@ -37,12 +34,14 @@ CX_TYPE(cxTimer, cxAction)
 {
     CX_SETTER(cxTimer, repeat);
     CX_SETTER(cxTimer, begin);
+    
+    CX_MSET(cxTimer, Init);
+    CX_MSET(cxTimer, Exit);
 }
+
 CX_INIT(cxTimer, cxAction)
 {
     this->IsBegin = false;
-    CX_SET(cxAction, this, Init, cxTimerInit);
-    CX_SET(cxAction, this, Exit, cxTimerExit);
 }
 CX_FREE(cxTimer, cxAction)
 {

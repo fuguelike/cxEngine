@@ -53,8 +53,39 @@ CX_SETTER_DEF(cxAction, tag)
     cxActionSetTag(this, tag);
 }
 
+static void CX_METHOD(cxAction, Init)
+{
+    this->DelayElapsed = 0;
+    this->TimeElapsed = this->InitTime;
+    CX_EVENT_FIRE(this, onInit);
+}
+CX_INLINE void cxActionResetElapsed(cxAction this)
+{
+    this->TimeElapsed = 0;
+    this->DelayElapsed = 0;
+}
+static void CX_METHOD(cxAction, Reset)
+{
+    this->isFirst = false;
+    this->isExit = false;
+    cxActionResetElapsed(this);
+}
+static cxBool CX_METHOD(cxAction, Exit)
+{
+    return true;
+}
+static void CX_METHOD(cxAction, Step,cxFloat dt, cxFloat time)
+{
+    
+}
+
 CX_TYPE(cxAction, cxObject)
 {
+    CX_MSET(cxAction, Init);
+    CX_MSET(cxAction, Reset);
+    CX_MSET(cxAction, Exit);
+    CX_MSET(cxAction, Step);
+    
     CX_SETTER(cxAction, time);
     CX_SETTER(cxAction, delay);
     CX_SETTER(cxAction, scale);
@@ -84,12 +115,6 @@ cxBool cxActionForever(cxAny pav)
     return false;
 }
 
-void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve)
-{
-    CX_ASSERT_THIS(pav, cxAction);
-    CX_SET(cxAction, this, Curve, curve);
-}
-
 void cxActionSetGroup(cxAny pav,cxConstChars name)
 {
     CX_ASSERT_THIS(pav, cxAction);
@@ -98,26 +123,10 @@ void cxActionSetGroup(cxAny pav,cxConstChars name)
     CX_RETAIN_SWAP(this->Group, mgr);
 }
 
-static void cxActionInit(cxAny pav)
-{
-    CX_ASSERT_THIS(pav, cxAction);
-    CX_ASSERT_TYPE(cxActionGetView(this), cxView);
-    this->DelayElapsed = 0;
-    this->TimeElapsed = this->InitTime;
-    CX_METHOD_RUN(this->Init, this);
-    CX_EVENT_FIRE(this, onInit);
-}
-
-static void cxActionExit(cxAny pav)
+CX_INLINE void cxActionFireExit(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxAction);
     CX_EVENT_FIRE(this, onExit);
-}
-
-CX_INLINE void cxActionResetElapsed(cxAction this)
-{
-    this->TimeElapsed = 0;
-    this->DelayElapsed = 0;
 }
 
 cxBool cxActionUpdate(cxAny pav,cxFloat dt)
@@ -141,23 +150,23 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //init event
     if(!this->isFirst){
         this->isFirst = true;
-        cxActionInit(pav);
+        CX_CALL(this, Init, CX_MT(void));
     }
     if(this->isExit){
         goto finished;
     }
     this->TimeElapsed += dt;
     cxFloat time = kmClamp(this->TimeElapsed/this->Time, 0.0f, 1.0f);
-    time = CX_METHOD_GET(time, this->Curve, this, time);
+    time = this->Curve ? this->Curve(this, time) : time;
     if(this->Time < 0){
-        CX_METHOD_RUN(this->Step,this,dt,time);
+        CX_CALL(this, Step, CX_MT(void,cxFloat,cxFloat),dt,time);
     }else if(cxFloatEqu(this->Time, 0.0f)){
-        isExit = CX_METHOD_GET(true, this->Exit, this);
+        isExit = CX_CALL(this, Exit, CX_MT(cxBool));
     }else if(this->TimeElapsed < this->Time){
-        CX_METHOD_RUN(this->Step,this,dt,time);
+        CX_CALL(this, Step, CX_MT(void,cxFloat,cxFloat),dt,time);
     }else{
-        CX_METHOD_RUN(this->Step,this,dt,1.0f);
-        isExit = CX_METHOD_GET(true, this->Exit,this);
+        CX_CALL(this, Step, CX_MT(void,cxFloat,cxFloat),dt,1.0f);
+        isExit = CX_CALL(this, Exit, CX_MT(cxBool));
         cxActionResetElapsed(this);
     }
 finished:
@@ -165,7 +174,7 @@ finished:
     CX_EVENT_FIRE(this, onUpdate);
     //force exit or auto exit
     if(this->isExit || isExit){
-        cxActionExit(this);
+        cxActionFireExit(this);
     }
     return (this->isExit || isExit);
 }
@@ -174,15 +183,6 @@ void cxActionPause(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxAction);
     this->isPause = true;
-}
-
-void cxActionReset(cxAny pav)
-{
-    CX_ASSERT_THIS(pav, cxAction);
-    this->isFirst = false;
-    this->isExit = false;
-    cxActionResetElapsed(this);
-    CX_METHOD_RUN(this->Reset, this);
 }
 
 void cxActionResume(cxAny pav)

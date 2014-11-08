@@ -34,16 +34,13 @@ CX_DEF(cxAction, cxObject)
     CX_FIELD_DEF(cxLong Tag);
     CX_FIELD_DEF(cxAny View);
     CX_FIELD_DEF(cxGroup Group);
-    CX_METHOD_DEF(cxFloat, Curve, cxAny, cxFloat);
-    CX_METHOD_DEF(void, Init, cxAny);
-    CX_METHOD_DEF(void, Reset, cxAny);
-    CX_METHOD_DEF(void, Step,cxAny, cxFloat, cxFloat);
-    CX_METHOD_DEF(cxBool, Exit, cxAny);
+    CX_FIELD_DEF(cxActionCurveFunc Curve);
     CX_EVENT_ALLOC(onInit);
     CX_EVENT_ALLOC(onExit);
     CX_EVENT_ALLOC(onUpdate);
 CX_END(cxAction, cxObject)
 
+CX_FIELD_SET(cxAction, cxActionCurveFunc, Curve);
 CX_FIELD_SET(cxAction, cxFloat, InitTime);
 
 CX_FIELD_GET(cxAction, cxFloat, Time);
@@ -74,11 +71,7 @@ void cxActionSetGroup(cxAny pav,cxConstChars name);
 
 cxBool cxActionForever(cxAny pav);
 
-void cxActionSetCurve(cxAny pav,cxActionCurveFunc curve);
-
 cxBool cxActionUpdate(cxAny pav,cxFloat dt);
-
-void cxActionReset(cxAny pav);
 
 void cxActionStop(cxAny pav);
 

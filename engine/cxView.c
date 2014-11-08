@@ -57,17 +57,23 @@ CX_SETTER_DEF(cxView, scale)
 }
 CX_SETTER_DEF(cxView, fixscale)
 {
-    cxConstChars autofix = cxJsonToConstChars(value);
     cxVec2f fixScale = this->FixScale;
     cxVec2f scale = cxEngineGetScale();
+    if(cxJsonIsObject(value)){
+        fixScale = cxJsonToVec2f(value,fixScale);
+        cxViewSetFixScale(this, fixScale);
+        return;
+    }
+    if(!cxJsonIsString(value)){
+        return;
+    }
+    cxConstChars autofix = cxJsonToConstChars(value);
     if(cxConstCharsEqu(autofix, "width")){
         fixScale.x = scale.x;
         fixScale.y = scale.x;
     }else if(cxConstCharsEqu(autofix, "height")){
         fixScale.x = scale.y;
         fixScale.y = scale.y;
-    }else{
-        fixScale = cxJsonToVec2f(value,fixScale);
     }
     cxViewSetFixScale(this, fixScale);
 }
@@ -134,7 +140,7 @@ CX_SETTER_DEF(cxView, subviews)
     cxJson subviews = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(subviews, item)
     {
-        cxAny object = cxObjectCreateUseJson(item);
+        cxAny object = cxJsonMakeObject(item);
         CX_ASSERT_TYPE(object, cxView);
         cxViewAppend(this, object);
     }
@@ -145,7 +151,7 @@ CX_SETTER_DEF(cxView, actions)
     cxJson actions = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(actions, item)
     {
-        cxAny object = cxObjectCreateUseJson(item);
+        cxAny object = cxJsonMakeObject(item);
         CX_ASSERT_TYPE(object, cxAction);
         cxViewAppendAction(this, object);
     }
@@ -160,6 +166,77 @@ CX_SETTER_DEF(cxView, bordercolor)
 {
     cxColor3f borderColor = cxJsonToColor3f(value, this->BorderColor);
     cxViewSetBorderColor(this, borderColor);
+}
+
+void cxViewDrawView(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxView);
+    cxViewClearAppends(this);
+    if(this->isRemoved || this->IsSleep){
+        goto finished;
+    }
+    //update in not visible
+    CX_EVENT_FIRE(this, onUpdate);
+    if(!this->IsVisible){
+        goto finished;
+    }
+    cxViewUpdateActions(this);
+    cxViewTransform(this);
+    //
+    cxViewCheckSort(this);
+    cxViewCheckFront(this);
+    if(!this->IsDraw || !this->IsVisible || this->IsSleep || this->isRemoved){
+        goto finished;
+    }
+    cxBool isCropping = cxViewGetIsCropping(this);
+    kmGLPushMatrix();
+    kmGLMultMatrix(&this->normalMatrix);
+    kmGLMultMatrix(&this->anchorMatrix);
+    if(isCropping){
+        cxOpenGLEnableScissor(this->scissor);
+    }
+    CX_CALL(this, DrawBefore, CX_MT(void));
+    CX_CALL(this, Draw, CX_MT(void));
+    CX_VIEW_FOREACH_SUBVIEWS(this, ele){
+        cxView view = ele->any;
+        cxViewDrawView(view);
+    }
+    CX_CALL(this, DrawAfter, CX_MT(void));
+    if(isCropping){
+        cxOpenGLDisableScissor();
+    }
+    if(cxEngineGetIsShowBorder() || this->isShowBorder){
+        cxViewDrawBorder(this);
+    }
+    kmGLPopMatrix();
+finished:
+    //process remove view
+    cxViewClearRemoves(this);
+}
+
+static void CX_METHOD(cxView,Draw)
+{
+    
+}
+
+static void CX_METHOD(cxView,DrawBefore)
+{
+    
+}
+
+static void CX_METHOD(cxView,DrawAfter)
+{
+    
+}
+
+static cxBool CX_METHOD(cxView,OnTouch,const cxTouchItems *points)
+{
+    return false;
+}
+
+static cxBool CX_METHOD(cxView,OnKey,const cxKey *key)
+{
+    return false;
 }
 
 CX_TYPE(cxView, cxObject)
@@ -182,6 +259,12 @@ CX_TYPE(cxView, cxObject)
     CX_SETTER(cxView, actions);
     CX_SETTER(cxView, tag);
     CX_SETTER(cxView, bordercolor);
+    
+    CX_MSET(cxView, Draw);
+    CX_MSET(cxView, DrawBefore);
+    CX_MSET(cxView, DrawAfter);
+    CX_MSET(cxView, OnTouch);
+    CX_MSET(cxView, OnKey);
 }
 CX_INIT(cxView, cxObject)
 {
@@ -289,7 +372,7 @@ void cxViewPrepend(cxAny pview,cxAny newview)
 
 cxAny cxViewAppendTypeImp(cxAny pview,cxConstType type)
 {
-    cxAny nview = cxObjectCreateUseType(type);
+    cxAny nview = cxTypesCreateObject(type);
     CX_ASSERT_TYPE(nview, cxView);
     cxViewAppend(pview, nview);
     return nview;
@@ -619,7 +702,7 @@ cxInt cxViewSubviewCount(cxAny pview)
     return cxListLength(this->SubViews);
 }
 
-CX_INLINE void cxViewTransform(cxAny pview)
+void cxViewTransform(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     if(!cxViewIsDirty(this)){
@@ -651,7 +734,7 @@ CX_INLINE void cxViewTransform(cxAny pview)
     cxViewClearDirty(this);
 }
 
-CX_INLINE void cxViewDrawBorder(cxAny pview)
+void cxViewDrawBorder(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxBox4f b = cxViewGetBox(this);
@@ -768,7 +851,7 @@ cxHitInfo cxViewHitTest(cxAny pview,cxVec2f wPoint)
     return ret;
 }
 
-cxBool cxViewTouch(cxAny pview,cxTouchItems *points)
+cxBool cxViewFireTouch(cxAny pview,cxTouchItems *points)
 {
     CX_ASSERT_THIS(pview, cxView);
     if(!this->IsVisible || this->IsSleep){
@@ -789,14 +872,14 @@ cxBool cxViewTouch(cxAny pview,cxTouchItems *points)
         goto completed;
     }
     for(cxListElement *ele = tail;ele != NULL;ele = ele->prev){
-        if(cxViewTouch(ele->any,points))return true;
+        if(cxViewFireTouch(ele->any,points))return true;
         if(ele == head)break;
     }
 completed:
-    return CX_METHOD_GET(false, this->Touch, this, points);
+    return CX_CALL(this, OnTouch, CX_MT(cxBool,const cxTouchItems *),points);
 }
 
-cxBool cxViewKey(cxAny pview,cxKey *key)
+cxBool cxViewFireKey(cxAny pview,cxKey *key)
 {
     CX_ASSERT_THIS(pview, cxView);
     if(!this->IsVisible || this->IsSleep){
@@ -817,11 +900,11 @@ cxBool cxViewKey(cxAny pview,cxKey *key)
         goto completed;
     }
     for(cxListElement *ele = tail;ele != NULL;ele = ele->prev){
-        if(cxViewKey(ele->any, key))return true;
+        if(cxViewFireKey(ele->any, key))return true;
         if(ele == head)break;
     }
 completed:
-    return CX_METHOD_GET(false, this->Key,this , key);
+    return CX_CALL(this, OnKey, CX_MT(cxBool,const cxKey *),key);
 }
 
 void cxViewClearActions(cxAny pview)
@@ -877,7 +960,7 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
     return actionId;
 }
 
-CX_INLINE void cxViewUpdateActions(cxView pview)
+void cxViewUpdateActions(cxView pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     cxFloat dt = cxEngineGetFrameDelta();
@@ -890,7 +973,7 @@ CX_INLINE void cxViewUpdateActions(cxView pview)
     }
 }
 
-CX_INLINE void cxViewClearRemoves(cxView this)
+void cxViewClearRemoves(cxView this)
 {
     CX_ARRAY_FOREACH(this->removes, ele){
         cxView view = cxArrayObject(ele);
@@ -908,7 +991,7 @@ CX_INLINE void cxViewClearRemoves(cxView this)
     cxArrayClear(this->removes);
 }
 
-CX_INLINE void cxViewClearAppends(cxAny pview)
+void cxViewClearAppends(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxView);
     CX_ARRAY_FOREACH(this->appends, ele){
@@ -932,52 +1015,6 @@ CX_INLINE void cxViewClearAppends(cxAny pview)
     cxArrayClear(this->appends);
 }
 
-void cxViewDraw(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxView);
-    //process append view
-    cxViewClearAppends(this);
-    if(this->isRemoved || this->IsSleep){
-        goto finished;
-    }
-    //update in not visible
-    CX_EVENT_FIRE(this, onUpdate);
-    if(!this->IsVisible){
-        goto finished;
-    }
-    cxViewUpdateActions(this);
-    cxViewTransform(this);
-    //
-    cxViewCheckSort(this);
-    cxViewCheckFront(this);
-    if(!this->IsDraw || !this->IsVisible || this->IsSleep || this->isRemoved){
-        goto finished;
-    }
-    cxBool isCropping = cxViewGetIsCropping(this);
-    kmGLPushMatrix();
-    kmGLMultMatrix(&this->normalMatrix);
-    kmGLMultMatrix(&this->anchorMatrix);
-    if(isCropping){
-        cxOpenGLEnableScissor(this->scissor);
-    }
-    CX_METHOD_RUN(this->DrawBefore, this);
-    CX_METHOD_RUN(this->DrawView, this);
-    CX_VIEW_FOREACH_SUBVIEWS(this, ele){
-        cxView view = ele->any;
-        cxViewDraw(view);
-    }
-    CX_METHOD_RUN(this->DrawAfter,this);
-    if(isCropping){
-        cxOpenGLDisableScissor();
-    }
-    if(cxEngineGetIsShowBorder() || this->isShowBorder){
-        cxViewDrawBorder(this);
-    }
-    kmGLPopMatrix();
-finished:
-    //process remove view
-    cxViewClearRemoves(this);
-}
 
 
 

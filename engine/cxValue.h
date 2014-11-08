@@ -20,19 +20,10 @@ CX_DEF(cxValue, cxObject)
     cxInt size;
     cxByte oldVar[CX_VALUE_MAX_SIZE];
     cxByte newVar[CX_VALUE_MAX_SIZE];
-    CX_METHOD_DEF(cxBool, ValueEqu, cxAny);
     CX_EVENT_ALLOC(onChanged);
     CX_SLOT_ALLOC(onUpdate);
     CX_FIELD_DEF(cxAny Data);
 CX_END(cxValue, cxObject)
-
-cxBool cxValueBinaryEqu(cxAny pobj);
-
-cxBool cxValueFloatEqu(cxAny pobj);
-
-cxBool cxValueVec2fEqu(cxAny pobj);
-
-cxBool cxValueSize2fEqu(cxAny pobj);
 
 CX_FIELD_IMP(cxValue, cxAny, Data);
 

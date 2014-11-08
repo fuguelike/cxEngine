@@ -11,9 +11,8 @@
 #include <engine/cxUtil.h>
 #include "cxFileStream.h"
 
-static cxBool cxFileStreamOpen(cxAny ps)
+static cxBool CX_METHOD(cxFileStream,Open)
 {
-    CX_ASSERT_THIS(ps, cxFileStream);
     CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
     cxConstChars path = cxStringBody(this->cxStream.path);
     if(this->rdonly){
@@ -34,85 +33,79 @@ static cxBool cxFileStreamOpen(cxAny ps)
     return true;
 }
 
-static cxInt cxFileStreamRead(cxAny ps,cxAny buffer,cxInt size)
+static cxInt CX_METHOD(cxFileStream,Read,cxAny buffer,cxInt size)
 {
-    CX_ASSERT_THIS(ps, cxFileStream);
     if(!this->cxStream.canRead){
         return 0;
     }
     return (cxInt)fread(buffer, 1, size, this->fd);
 }
 
-static cxInt cxFileStreamWrite(cxAny ps,cxAny buffer,cxInt size)
+static cxInt CX_METHOD(cxFileStream,Write,cxAny buffer,cxInt size)
 {
-    CX_ASSERT_THIS(ps, cxFileStream);
     if(!this->cxStream.canWrite){
         return 0;
     }
     return (cxInt)fwrite(buffer, 1, size, this->fd);
 }
 
-static cxOff cxFileStreamPosition(cxAny ps)
+static cxOff CX_METHOD(cxFileStream,Position)
 {
-    CX_ASSERT_THIS(ps, cxFileStream);
     if(!this->cxStream.canRead){
         return 0;
     }
     return (cxOff)ftell(this->fd);
 }
 
-static cxInt cxFileStreamSeek(cxAny ps,cxOff off,cxInt flags)
+static cxInt CX_METHOD(cxFileStream,Seek,cxOff off,cxInt flags)
 {
-    CX_ASSERT_THIS(ps, cxFileStream);
     if(!this->cxStream.canSeek){
         return false;
     }
     return fseek(this->fd, off, flags) > 0;
 }
 
-static cxString cxFileStreamAllBytes(cxAny ps)
+static cxString CX_METHOD(cxFileStream,AllBytes)
 {
-    CX_ASSERT_THIS(ps, cxStream);
-    if(!this->canRead){
-        cxStreamOpen(this);
+    if(!this->cxStream.canRead){
+        CX_CALL(this, Open, CX_MT(cxBool));
     }
-    if(!this->canRead){
+    if(!this->cxStream.canRead){
         return NULL;
     }
-    cxStreamSeek(this,0,SEEK_END);
-    this->Length = cxStreamPosition(this);
-    cxStreamSeek(this,0,SEEK_SET);
-    cxChars bytes = allocator->malloc(this->Length + 1);
-    cxStreamRead(this,bytes,this->Length);
-    bytes[this->Length] = '\0';
-    cxString data = cxStringAttachMem(bytes, this->Length);
-    cxStreamClose(this);
+    CX_CALL(this, Seek, CX_MT(cxInt,cxOff,cxInt),0,SEEK_END);
+    this->cxStream.Length = CX_CALL(this, Position, CX_MT(cxInt));
+    CX_CALL(this, Seek, CX_MT(cxInt,cxOff,cxInt),0,SEEK_SET);
+    cxChars bytes = allocator->malloc(this->cxStream.Length + 1);
+    CX_CALL(this, Read, CX_MT(cxInt,cxAny,cxInt),bytes,this->cxStream.Length);
+    bytes[this->cxStream.Length] = '\0';
+    cxString data = cxStringAttachMem(bytes, this->cxStream.Length);
+    CX_CALL(this, Close, CX_MT(void));
     return data;
 }
 
-static void cxFileStreamClose(cxAny this)
+static void CX_METHOD(cxFileStream,Close)
 {
-    cxFileStream file = this;
-    if(file->fd != NULL){
-        fclose(file->fd);
-        file->fd = NULL;
+    if(this->fd != NULL){
+        fclose(this->fd);
+        this->fd = NULL;
     }
-    cxStreamBaseClose(this);
+    CX_SUPER(cxStream, this, Close, CX_MT(void));
 }
 
 CX_TYPE(cxFileStream, cxStream)
 {
-    
+    CX_MSET(cxFileStream, Open);
+    CX_MSET(cxFileStream, Read);
+    CX_MSET(cxFileStream, Write);
+    CX_MSET(cxFileStream, Seek);
+    CX_MSET(cxFileStream, Position);
+    CX_MSET(cxFileStream, Close);
+    CX_MSET(cxFileStream, AllBytes);
 }
 CX_INIT(cxFileStream, cxStream)
 {
-    CX_SET(cxStream, this, Read, cxFileStreamRead);
-    CX_SET(cxStream, this, Open, cxFileStreamOpen);
-    CX_SET(cxStream, this, Write, cxFileStreamWrite);
-    CX_SET(cxStream, this, Seek, cxFileStreamSeek);
-    CX_SET(cxStream, this, Close, cxFileStreamClose);
-    CX_SET(cxStream, this, Position, cxFileStreamPosition);
-    CX_SET(cxStream, this, AllBytes, cxFileStreamAllBytes);
+    
     
 }
 CX_FREE(cxFileStream, cxStream)
@@ -124,7 +117,7 @@ CX_TERM(cxFileStream, cxStream)
 cxString cxDocumentData(cxConstChars file)
 {
     cxStream stream = cxFileStreamCreate(file, true);
-    return cxStreamAllBytes(stream);
+    return CX_CALL(stream, AllBytes, CX_MT(cxString));
 }
 
 cxStream cxFileStreamCreate(cxConstChars file,cxBool rdonly)

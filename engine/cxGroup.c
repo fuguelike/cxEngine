@@ -14,9 +14,15 @@ CX_SETTER_DEF(cxGroup, scale)
 {
     this->Scale = cxJsonToDouble(value, this->Scale);
 }
+static void CX_METHOD(cxGroup, Update,cxAny pav)
+{
+    
+}
+
 CX_TYPE(cxGroup, cxObject)
 {
     CX_SETTER(cxGroup, scale);
+    CX_MSET(cxGroup, Update);
 }
 CX_INIT(cxGroup, cxObject)
 {
@@ -31,7 +37,7 @@ CX_TERM(cxGroup, cxObject)
 cxFloat cxGroupGetScale(cxAny group,cxAny pav)
 {
     CX_ASSERT_THIS(group, cxGroup);
-    CX_METHOD_RUN(this->onUpdate, this, pav);
+    CX_CALL(this, Update, CX_MT(void,cxAny), pav);
     return this->Scale;
 }
 

@@ -8,9 +8,8 @@
 
 #include "cxTint.h"
 
-static void cxTintInit(cxAny pav)
+static void CX_METHOD(cxTint,Init)
 {
-    CX_ASSERT_THIS(pav, cxTint);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->start = cxViewGetColor(view);
     this->delta.r = this->color.r - this->start.r;
@@ -19,9 +18,8 @@ static void cxTintInit(cxAny pav)
     this->delta.a = this->color.a - this->start.a;
 }
 
-static void cxTintStep(cxAny pav,cxFloat dt,cxFloat time)
+static void CX_METHOD(cxTint,Step,cxFloat dt,cxFloat time)
 {
-    CX_ASSERT_THIS(pav, cxTint);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxColor3f color;
     color.r = this->start.r + this->delta.r * time;
@@ -40,11 +38,11 @@ CX_SETTER_DEF(cxTint, color)
 CX_TYPE(cxTint, cxAction)
 {
     CX_SETTER(cxTint, color);
+    CX_MSET(cxTint, Init);
+    CX_MSET(cxTint, Step);
 }
 CX_INIT(cxTint, cxAction)
 {
-    CX_SET(cxAction, this, Init, cxTintInit);
-    CX_SET(cxAction, this, Step, cxTintStep);
 }
 CX_FREE(cxTint, cxAction)
 {

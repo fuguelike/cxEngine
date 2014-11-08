@@ -8,9 +8,8 @@
 
 #include "cxMove.h"
 
-static void cxMoveInit(cxAny pav)
+static void CX_METHOD(cxMove,Init)
 {
-    CX_ASSERT_THIS(pav, cxMove);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->prev = this->from = cxViewGetPosition(view);
     this->posDelta = cxVec2fSub(this->to, this->from);
@@ -22,9 +21,8 @@ void cxMoveSetPos(cxAny pav,cxVec2f pos)
     this->to = pos;
 }
 
-static void cxMoveStep(cxAny pav,cxFloat dt,cxFloat time)
+static void CX_METHOD(cxMove,Step,cxFloat dt,cxFloat time)
 {
-    CX_ASSERT_THIS(pav, cxMove);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxVec2f npos;
     cxVec2f vpos = cxViewGetPosition(view);
@@ -44,11 +42,13 @@ CX_SETTER_DEF(cxMove, to)
 CX_TYPE(cxMove, cxAction)
 {
     CX_SETTER(cxMove, to);
+    
+    CX_MSET(cxMove, Init);
+    CX_MSET(cxMove, Step);
 }
 CX_INIT(cxMove, cxAction)
 {
-    CX_SET(cxAction, this, Init, cxMoveInit);
-    CX_SET(cxAction, this, Step, cxMoveStep);
+    
 }
 CX_FREE(cxMove, cxAction)
 {

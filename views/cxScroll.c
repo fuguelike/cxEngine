@@ -135,12 +135,11 @@ void cxScrollUpdateBox(cxAny pview)
     this->box.t =  mh + anchor.y * msize.h;
 }
 
-cxBool cxScrollTouch(cxAny pview,const cxTouchItems *points)
+static cxBool CX_METHOD(cxScroll,OnTouch,const cxTouchItems *points)
 {
-    CX_ASSERT_THIS(pview, cxScroll);
     CX_RETURN(this->Body == NULL,false);
     if(this->scalable && points->number == 2){
-        return cxScrollScale(pview, points);
+        return cxScrollScale(this, points);
     }
     if(points->number != 1){
         return false;
@@ -169,7 +168,7 @@ cxBool cxScrollTouch(cxAny pview,const cxTouchItems *points)
             setPos = true;
         }
         if(setPos){
-            cxScrollCheckPos(pview, &vpos);
+            cxScrollCheckPos(this, &vpos);
             cxViewSetPosition(body, vpos);
         }
         return true;
@@ -232,7 +231,7 @@ CX_SETTER_DEF(cxScroll, scaleinc)
 }
 CX_SETTER_DEF(cxScroll, body)
 {
-    cxAny object = cxObjectCreateUseJson(value);
+    cxAny object = cxJsonMakeObject(value);
     CX_ASSERT_TYPE(object, cxView);
     cxScrollSetBody(this, object);
 }
@@ -262,6 +261,8 @@ CX_TYPE(cxScroll, cxView)
     CX_SETTER(cxScroll, scaleinc);
     CX_SETTER(cxScroll, body);
     CX_SETTER(cxScroll, layout);
+    
+    CX_MSET(cxScroll, OnTouch);
 }
 CX_INIT(cxScroll, cxView)
 {
@@ -272,7 +273,6 @@ CX_INIT(cxScroll, cxView)
     this->moveTime = 1.0f;
     this->scaleTime = 0.5f;
     this->scalable = true;
-    CX_SET(cxView, this, Touch, cxScrollTouch);
     this->type = cxScrollMoveTypeVertical|cxScrollMoveTypeHorizontal;
 }
 CX_FREE(cxScroll, cxView)

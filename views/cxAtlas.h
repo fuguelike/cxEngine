@@ -40,8 +40,6 @@ CX_INLINE cxBoxPoint *cxAtlasBoxPoint(cxAny pthis,cxInt idx)
 
 void cxAtlasSetNumber(cxAny pview,cxInt number);
 
-void cxAtlasDraw(cxAny pview);
-
 void cxAtlasSetDirty(cxAny pview,cxBool v);
 
 void cxAtlasDrawInit(cxAny pview);

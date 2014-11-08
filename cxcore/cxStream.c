@@ -8,9 +8,48 @@
 
 #include "cxStream.h"
 
+static cxBool CX_METHOD(cxStream,Open)
+{
+    return false;
+}
+static cxInt CX_METHOD(cxStream, Read, cxAny buff, cxInt bytes)
+{
+    return 0;
+}
+static cxInt CX_METHOD(cxStream, Write, cxAny buff, cxInt bytes)
+{
+    return 0;
+}
+static cxInt CX_METHOD(cxStream, Seek, cxOff seek, cxInt where)
+{
+    return 0;
+}
+static cxOff CX_METHOD(cxStream, Position)
+{
+    return 0;
+}
+static void CX_METHOD(cxStream, Close)
+{
+    this->Length = 0;
+    this->canRead = false;
+    this->canWrite = false;
+    this->canSeek = false;
+    this->isOpen = false;
+}
+static cxString CX_METHOD(cxStream, AllBytes)
+{
+    return NULL;
+}
+
 CX_TYPE(cxStream, cxObject)
 {
-    
+    CX_MSET(cxStream, Open);
+    CX_MSET(cxStream, Read);
+    CX_MSET(cxStream, Write);
+    CX_MSET(cxStream, Seek);
+    CX_MSET(cxStream, Position);
+    CX_MSET(cxStream, Close);
+    CX_MSET(cxStream, AllBytes);
 }
 CX_INIT(cxStream, cxObject)
 {
@@ -18,64 +57,11 @@ CX_INIT(cxStream, cxObject)
 }
 CX_FREE(cxStream, cxObject)
 {
-    if(this->isOpen){
-        cxStreamClose(this);
-    }
+    CX_CALL(this, Close, CX_MT(void));
     CX_RELEASE(this->path);
 }
 CX_TERM(cxStream, cxObject)
 
-cxBool cxStreamOpen(cxAny pstream)
-{
-    CX_ASSERT_THIS(pstream, cxStream);
-    return CX_METHOD_GET(false, this->Open, this);
-}
-
-cxInt cxStreamRead(cxAny pstream,cxAny buffer,cxInt size)
-{
-    CX_ASSERT_THIS(pstream, cxStream);
-    return CX_METHOD_GET(0, this->Read,this,buffer,size);
-}
-
-cxInt cxStreamWrite(cxAny pstream,cxAny buffer,cxInt size)
-{
-    CX_ASSERT_THIS(pstream, cxStream);
-    return CX_METHOD_GET(0, this->Write,this,buffer,size);
-}
-
-cxInt cxStreamSeek(cxAny pstream,cxOff off,cxInt flags)
-{
-    CX_ASSERT_THIS(pstream, cxStream);
-    return CX_METHOD_GET(0, this->Seek,this,off,flags);
-}
-
-cxOff cxStreamPosition(cxAny pstream)
-{
-    CX_ASSERT_THIS(pstream, cxStream);
-    return CX_METHOD_GET(0, this->Position, this);
-}
-
-void cxStreamClose(cxAny pstream)
-{
-    CX_ASSERT_THIS(pstream, cxStream);
-    CX_METHOD_RUN(this->Close,this);
-}
-
-cxString cxStreamAllBytes(cxAny pstream)
-{
-    CX_ASSERT_THIS(pstream, cxStream);
-    return CX_METHOD_GET(NULL, this->AllBytes,this);
-}
-
-void cxStreamBaseClose(cxAny pstream)
-{
-    CX_ASSERT_THIS(pstream, cxStream);
-    this->Length = 0;
-    this->canRead = false;
-    this->canWrite = false;
-    this->canSeek = false;
-    this->isOpen = false;
-}
 
 
 

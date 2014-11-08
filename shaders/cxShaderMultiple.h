@@ -18,10 +18,6 @@ CX_DEF(cxShaderMultiple, cxShader)
     GLint texture2;
 CX_END(cxShaderMultiple, cxShader)
 
-cxString cxShaderMultipleVertex(cxAny ps);
-
-cxString cxShaderMultipleFragment(cxAny ps);
-
 CX_C_END
 
 #endif

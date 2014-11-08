@@ -15,7 +15,6 @@ CX_C_BEGIN
 
 CX_DEF(cxGroup, cxObject)
     CX_FIELD_DEF(cxFloat Scale);
-    CX_METHOD_DEF(void, onUpdate,cxAny group,cxAny pav);
 CX_END(cxGroup, cxObject)
 
 CX_FIELD_SET(cxGroup, cxFloat, Scale);

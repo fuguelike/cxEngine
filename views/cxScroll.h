@@ -42,8 +42,6 @@ void cxScrollSetBody(cxAny pview,cxAny body);
 
 void cxScrollUpdateBox(cxAny pview);
 
-cxBool cxScrollTouch(cxAny pview,const cxTouchItems *points);
-
 cxBool cxScrollCheckPos(cxAny pview,cxVec2f *pos);
 
 void cxScrollLocationTo(cxAny pview,cxVec2f pos,cxBool animate);

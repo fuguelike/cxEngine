@@ -10,12 +10,11 @@
 #include "cxTextureJSON.h"
 #include "cxTextureCache.h"
 
-static cxBool cxTextureJSONLoad(cxAny ptex,cxStream stream)
+static cxBool CX_METHOD(cxTextureJSON,Load,cxStream stream)
 {
     cxBool ret = false;
-    CX_ASSERT_THIS(ptex, cxTextureJSON);
     CX_ASSERT(stream != NULL, "stream not set");
-    cxString data = cxStreamAllBytes(stream);
+    cxString data = CX_CALL(stream, AllBytes, CX_MT(cxString));
     if(data == NULL){
         CX_ERROR("read data failed from stream");
         return ret;
@@ -62,7 +61,7 @@ static cxBool cxTextureJSONLoad(cxAny ptex,cxStream stream)
     return ret;
 }
 
-static void cxTextureJSONBind(cxAny this)
+static void CX_METHOD(cxTextureJSON,Bind)
 {
     cxTextureJSON json = this;
     if(json->alphaTexture != NULL){
@@ -75,12 +74,12 @@ static void cxTextureJSONBind(cxAny this)
 
 CX_TYPE(cxTextureJSON, cxTexture)
 {
-    
+    CX_MSET(cxTextureJSON, Bind);
+    CX_MSET(cxTextureJSON, Load);
 }
 CX_INIT(cxTextureJSON, cxTexture)
 {
-    CX_SET(cxTexture, this, Bind, cxTextureJSONBind);
-    CX_SET(cxTexture, this, Load, cxTextureJSONLoad);
+    
 }
 CX_FREE(cxTextureJSON, cxTexture)
 {
@@ -92,7 +91,7 @@ CX_TERM(cxTextureJSON, cxTexture)
 cxTexture cxTextureJSONLoadStream(cxStream stream)
 {
     cxTexture json = CX_CREATE(cxTextureJSON);
-    cxTextureLoad(json,stream);
+    CX_CALL(json, Load, CX_MT(cxBool,cxStream),stream);
     return json;
 }
 

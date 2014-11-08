@@ -32,8 +32,6 @@ CX_DEF(cxTexture, cxObject)
     cxBool hasAlpha;
     cxBool hasMipmap;
     cxSize2f size;
-    CX_METHOD_DEF(cxBool, Load, cxAny, cxStream);
-    CX_METHOD_DEF(void, Bind, cxAny);
     cxShader shader;
 CX_END(cxTexture, cxObject)
 
@@ -56,9 +54,9 @@ cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat pixel,cxBool fl
 
 cxSize2f cxTextureSize(cxAny ptex,cxConstChars key);
 
-void cxTextureLoad(cxAny ptex,cxStream stream);
+void cxTextureFireLoad(cxAny ptex,cxStream stream);
 
-void cxTextureBind(cxAny ptex);
+void cxTextureFireBind(cxAny ptex);
 
 void cxTextureSetParam(cxAny ptex,GLuint type,GLuint value);
 

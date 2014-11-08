@@ -87,18 +87,14 @@ LOCAL_SRC_FILES += \
 	cxcore/cxHash.c \
 	cxcore/cxList.c \
 	cxcore/cxMemPool.c \
-	cxcore/cxProperty.c \
 	cxcore/cxStack.c \
-	cxcore/cxType.c \
 	cxcore/cxMemory.c \
     cxcore/cxAnyArray.c \
     cxcore/cxJson.c \
     cxcore/cxMath.c \
     cxcore/cxLoader.c \
     cxcore/cxPath.c \
-    cxcore/cxStream.c \
-    cxcore/cxThread.c \
-    cxcore/cxMethod.c
+    cxcore/cxStream.c
 
 LOCAL_SRC_FILES += \
     kazmath/aabb.c \

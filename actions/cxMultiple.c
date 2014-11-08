@@ -42,9 +42,8 @@ static void cxMultipleRunAll(cxAny pav)
     }
 }
 
-static void cxMultipleInit(cxAny pav)
+static void CX_METHOD(cxMultiple,Init)
 {
-    CX_ASSERT_THIS(pav, cxMultiple);
     CX_ASSERT_TYPE(cxActionGetView(this), cxView);
     if(this->type == cxMultipleTypeSequence){
         this->index = 0;
@@ -55,20 +54,13 @@ static void cxMultipleInit(cxAny pav)
     }
 }
 
-static cxBool cxMultipleExit(cxAny pav)
+static cxBool CX_METHOD(cxMultiple,Exit)
 {
-    CX_ASSERT_THIS(pav, cxMultiple);
     if(this->index >= cxArrayLength(this->items)){
         cxArrayClear(this->items);
         return true;
     }
     return false;
-}
-
-static void cxMultipleStep(cxAny pav,cxFloat dt,cxFloat time)
-{
-    //    cxActionRoot this = pav;
-    //    CX_LOGGER("%f %f",this->time,time);
 }
 
 CX_SETTER_DEF(cxMultiple, settype)
@@ -87,7 +79,7 @@ CX_SETTER_DEF(cxMultiple, actions)
     cxJson actions = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(actions, item)
     {
-        cxAny object = cxObjectCreateUseJson(item);
+        cxAny object = cxJsonMakeObject(item);
         CX_ASSERT_TYPE(object, cxAction);
         cxMultipleAppend(this, object);
     }
@@ -98,12 +90,12 @@ CX_TYPE(cxMultiple, cxAction)
 {
     CX_SETTER(cxMultiple, settype);
     CX_SETTER(cxMultiple, actions);
+    
+    CX_MSET(cxMultiple, Init);
+    CX_MSET(cxMultiple, Exit);
 }
 CX_INIT(cxMultiple, cxAction)
 {
-    CX_SET(cxAction, this, Init, cxMultipleInit);
-    CX_SET(cxAction, this, Step, cxMultipleStep);
-    CX_SET(cxAction, this, Exit, cxMultipleExit);
     this->items = CX_ALLOC(cxArray);
 }
 CX_FREE(cxMultiple, cxAction)

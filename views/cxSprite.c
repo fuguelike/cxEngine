@@ -22,19 +22,7 @@ void cxSpriteBindTexture(cxAny pview)
     CX_ASSERT_THIS(pview, cxSprite);
     cxOpenGLSetBlendFactor(this->sfactor, this->dfactor);
     cxShaderUsing(this->Shader);
-    cxTextureBind(this->Texture);
-}
-
-void cxSpriteDraw(cxAny pview)
-{
-    CX_ASSERT_THIS(pview, cxSprite);
-    CX_RETURN(this->Texture == NULL);
-    cxSpriteBindTexture(pview);
-    cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
-    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxVec3f), &this->vbox);
-    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2, sizeof(cxTex2f), &this->tbox);
-    cxOpenGLVertexAttribPointer(cxVertexAttribColor,    4, sizeof(cxColor4f), &this->cbox);
-    cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    cxTextureFireBind(this->Texture);
 }
 
 static void cxSpriteOnDirty(cxAny sender)
@@ -129,18 +117,30 @@ CX_SETTER_DEF(cxSprite, blend)
         CX_ASSERT_FALSE("not support mode %s",blend);
     }
 }
+
+static void CX_METHOD(cxSprite,Draw)
+{
+    CX_RETURN(this->Texture == NULL);
+    cxSpriteBindTexture(this);
+    cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
+    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxVec3f), &this->vbox);
+    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2, sizeof(cxTex2f), &this->tbox);
+    cxOpenGLVertexAttribPointer(cxVertexAttribColor,    4, sizeof(cxColor4f), &this->cbox);
+    cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
 CX_TYPE(cxSprite, cxView)
 {
     CX_SETTER(cxSprite, blend);
     CX_SETTER(cxSprite, texture);
     CX_SETTER(cxSprite, shader);
+    CX_MSET(cxSprite, Draw);
 }
 CX_INIT(cxSprite, cxView)
 {
     this->tbox = this->texCoord = cxBoxTex2fDefault();
     cxSpriteSetBlendFactor(this, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     CX_ADD(cxView, this, onDirty, cxSpriteOnDirty);
-    CX_SET(cxView, this, DrawView, cxSpriteDraw);
     cxSpriteSetShader(this, cxShaderDefaultKey);
 }
 CX_FREE(cxSprite, cxView)

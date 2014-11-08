@@ -34,13 +34,13 @@ static cxBool cxTexturePKMLoad(cxAny ptex,cxStream stream)
         CX_ERROR("platform not support etc1 texture");
         return ret;
     }
-    if(!cxStreamOpen(stream)){
+    if(!CX_CALL(stream, Open, CX_MT(cxBool))){
         CX_ERROR("open pkm stream failed");
         return ret;
     }
     //read pkm head
     cxPKMHeader header;
-    cxInt size = cxStreamRead(stream,&header,sizeof(cxPKMHeader));
+    cxInt size = CX_CALL(stream, Read, CX_MT(cxInt,cxAny,cxInt),&header,sizeof(cxPKMHeader));
     if(size != sizeof(cxPKMHeader) || header.pkmTag != CX_PKM_TAG){
         CX_ERROR("read pkm header failed");
         goto completed;
@@ -59,7 +59,7 @@ static cxBool cxTexturePKMLoad(cxAny ptex,cxStream stream)
     cxOpenGLSetTexParameters(this->cxTexture.texParam);
     cxInt bufsiz = stream->Length - sizeof(cxPKMHeader);
     cxAny buffer = allocator->malloc(bufsiz);
-    cxInt readbytes = cxStreamRead(stream, buffer, bufsiz);
+    cxInt readbytes = CX_CALL(stream, Read, CX_MT(cxInt,cxAny,cxInt), buffer,bufsiz);
     CX_ASSERT(readbytes == bufsiz, "read pkm data error");
     CX_UNUSED_PARAM(readbytes);
 #if defined(GL_OES_compressed_ETC1_RGB8_texture)
@@ -72,7 +72,7 @@ static cxBool cxTexturePKMLoad(cxAny ptex,cxStream stream)
     allocator->free(buffer);
     cxOpenGLBindTexture(0, 0);
 completed:
-    cxStreamClose(stream);
+    CX_CALL(stream, Close, CX_MT(void));
     return ret;
 }
 
@@ -84,12 +84,12 @@ static void cxTexturePKMBind(cxAny this)
 
 CX_TYPE(cxTexturePKM, cxTexture)
 {
-    
+    CX_MSET(cxTexturePKM, Bind);
+    CX_MSET(cxTexturePKM, Load);
 }
 CX_INIT(cxTexturePKM, cxTexture)
 {
-    CX_SET(cxTexture, this, Bind, cxTexturePKMBind);
-    CX_SET(cxTexture, this, Load, cxTexturePKMLoad);
+    
 }
 CX_FREE(cxTexturePKM, cxTexture)
 {
@@ -100,6 +100,6 @@ CX_TERM(cxTexturePKM, cxTexture)
 cxTexture cxTexturePKMLoadStream(cxStream stream)
 {
     cxTexturePKM pkm = CX_CREATE(cxTexturePKM);
-    cxTextureLoad((cxTexture)pkm,stream);
+    CX_CALL(pkm, Load, CX_MT(cxBool,cxStream),stream);
     return (cxTexture)pkm;
 }

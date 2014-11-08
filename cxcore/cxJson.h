@@ -53,14 +53,14 @@ if((_j_) != NULL){                                                  \
 
 typedef cxJson (*cxJsonReaderFunc)(cxConstChars src);
 typedef json_t *(*cxLocalizedFunc)(cxConstChars key);
-typedef cxJson (*cxJsonMethodFunc)(cxAny pobj,cxConstChars key,cxJson args);
+typedef json_t *(*cxJsonPropertyGetterFunc)(cxConstChars key);
 
 //return value will autorelease
 json_t *jsonCreateString(cxConstChars str);
 
 void cxJsonSetReader(cxJsonReaderFunc func);
 
-void cxJsonSetMethod(cxJsonMethodFunc func);
+void cxJsonSetPropertyGetter(cxJsonPropertyGetterFunc func);
 
 void cxJsonSetLocalized(cxLocalizedFunc func);
 
@@ -265,6 +265,10 @@ cxJson cxJsonAESDecode(cxString data);
 cxString cxJsonAESEncodeWithKey(cxJson json,cxString key);
 
 cxJson cxJsonAESDecodeWithKey(cxString data,cxString key);
+
+cxAny cxJsonTocxObject(cxJson v);
+
+cxAny cxJsonMakeObject(cxJson json);
 
 CX_C_END
 

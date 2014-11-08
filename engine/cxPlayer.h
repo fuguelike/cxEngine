@@ -26,17 +26,41 @@ typedef enum {
     cxAudioFileTypeWAV,
 }cxAudioFileType;
 
-CX_DEF(cxPlayer, cxObject)
 #if (CX_TARGET_PLATFORM == CX_PLATFORM_IOS)
+CX_DEF(cxBuffer, cxObject)
+    ALuint buffer;
+    ALenum format;
+    ALsizei freq;
+CX_END(cxBuffer, cxObject)
+
+CX_DEF(cxTrack, cxObject)
+    ALsizei freq;
+    ALuint format;
+    ALuint source;
+CX_END(cxTrack, cxObject)
+
+CX_DEF(cxPlayer, cxObject)
     cxArray tracks;
     cxHash caches;
     ALCdevice *device;
     ALCcontext *context;
-    CX_SLOT_ALLOC(onMemory);
-#elif CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID
-    cxHash tracks;
-#endif
 CX_END(cxPlayer, cxObject)
+#elif CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID
+
+CX_DEF(cxTrack, cxObject)
+    cxInt soundId;
+    cxString file;
+CX_END(cxTrack, cxObject)
+
+CX_DEF(cxBuffer, cxObject)
+
+CX_END(cxBuffer, cxObject)
+
+CX_DEF(cxPlayer, cxObject)
+    cxHash tracks;
+CX_END(cxPlayer, cxObject)
+
+#endif
 
 void cxPauseEffect(cxAny this);
 

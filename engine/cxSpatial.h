@@ -28,8 +28,6 @@ typedef struct {
 
 CX_DEF(cxSpatial, cxObject)
     cxAny index;
-    CX_METHOD_DEF(cxUInt, HashValue, cxAny);
-    CX_METHOD_DEF(cpBB, IndexBB,cxAny);
 CX_END(cxSpatial, cxObject)
 
 cxSpatial cxSpatialAlloc(cpBB (*func)(cxAny));

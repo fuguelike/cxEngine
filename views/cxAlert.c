@@ -11,18 +11,18 @@
 #include "cxWindow.h"
 #include "cxAlert.h"
 
-static cxBool cxAlertKey(cxAny pview,const cxKey *key)
+static cxBool CX_METHOD(cxAlert,OnTouch,const cxTouchItems *points)
+{
+    return true;
+}
+
+static cxBool CX_METHOD(cxAlert,OnKey,const cxKey *key)
 {
     if(key->type == cxKeyTypeUp && key->code == CX_KEYCODE_BACK){
-        cxAlertHide(pview);
+        cxAlertFireHide(this);
         return true;
     }
     return false;
-}
-
-static cxBool cxAlertTouch(cxAny pview,const cxTouchItems *points)
-{
-    return true;
 }
 
 static void cxShowActionOnStop(cxAny pav)
@@ -31,18 +31,6 @@ static void cxShowActionOnStop(cxAny pav)
     CX_EVENT_FIRE(this, OnShow);
 }
 
-static void cxAlertOnShow(cxAny pview)
-{
-    cxSize2f wsize = cxEngineGetWinSize();
-    cxSize2f size = cxViewGetSize(pview);
-    cxVec2f pos = cxViewGetPosition(pview);
-    pos.y = -wsize.h/2.0f - size.h / 2.0f;
-    cxViewSetPosition(pview, pos);
-    cxMove m = cxMoveCreate(0.3f, cxVec2fv(pos.x, 0));
-    CX_ADD(cxAction, m, onExit, cxShowActionOnStop);
-    cxActionSetCurve(m, cxCurveBackOut);
-    cxViewAppendAction(pview, m);
-}
 
 static void cxHideActionOnStop(cxAny pav)
 {
@@ -51,29 +39,41 @@ static void cxHideActionOnStop(cxAny pav)
     cxWindowPopView();
 }
 
-static void cxAlertOnHide(cxAny pview)
+
+static void CX_METHOD(cxAlert, Show)
 {
     cxSize2f wsize = cxEngineGetWinSize();
-    cxSize2f size = cxViewGetSize(pview);
-    cxVec2f pos = cxViewGetPosition(pview);
+    cxSize2f size = cxViewGetSize(this);
+    cxVec2f pos = cxViewGetPosition(this);
+    pos.y = -wsize.h/2.0f - size.h / 2.0f;
+    cxViewSetPosition(this, pos);
+    cxMove m = cxMoveCreate(0.3f, cxVec2fv(pos.x, 0));
+    CX_ADD(cxAction, m, onExit, cxShowActionOnStop);
+    cxActionSetCurve(m, cxCurveBackOut);
+    cxViewAppendAction(this, m);
+}
+static void CX_METHOD(cxAlert, Hide)
+{
+    cxSize2f wsize = cxEngineGetWinSize();
+    cxSize2f size = cxViewGetSize(this);
+    cxVec2f pos = cxViewGetPosition(this);
     pos.y = -wsize.h/2.0f - size.h / 2.0f;
     cxMove m = cxMoveCreate(0.3f, pos);
     CX_ADD(cxAction, m, onExit, cxHideActionOnStop);
     cxActionSetCurve(m, cxCurveBackIn);
-    cxViewAppendAction(pview, m);
+    cxViewAppendAction(this, m);
 }
 
 CX_TYPE(cxAlert, cxAtlas)
 {
-    
+    CX_MSET(cxAlert, OnTouch);
+    CX_MSET(cxAlert, OnKey);
+    CX_MSET(cxAlert, Show);
+    CX_MSET(cxAlert, Hide);
 }
 CX_INIT(cxAlert, cxAtlas)
 {
     cxViewSetSleepTop(this, false);
-    CX_SET(cxView, this, Key, cxAlertKey);
-    CX_SET(cxView, this, Touch, cxAlertTouch);
-    CX_SET(cxAlert, this, Hide, cxAlertOnHide);
-    CX_SET(cxAlert, this, Show, cxAlertOnShow);
 }
 CX_FREE(cxAlert, cxAtlas)
 {
@@ -82,17 +82,17 @@ CX_FREE(cxAlert, cxAtlas)
 }
 CX_TERM(cxAlert, cxAtlas)
 
-void cxAlertShow(cxAny pview)
+void cxAlertFireShow(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxAlert);
     cxWindowPushView(this);
-    CX_METHOD_RUN(this->Show,this);
+    CX_CALL(this, Show, CX_MT(void));
 }
 
-void cxAlertHide(cxAny pview)
+void cxAlertFireHide(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxAlert);
-    CX_METHOD_RUN(this->Hide,this);
+    CX_CALL(this, Hide, CX_MT(void));
 }
 
 

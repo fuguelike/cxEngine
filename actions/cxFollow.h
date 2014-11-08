@@ -19,17 +19,11 @@ CX_DEF(cxFollow, cxAction)
     cxFloat angle;
     cxFloat speed;  //current speed
     cxFloat init;   //init speed
-    CX_METHOD_DEF(cxFloat, Speed,cxAny,cxFloat);
-    CX_METHOD_DEF(cxBool, IsExit,cxAny);
 CX_END(cxFollow, cxAction)
-
-void cxFollowInit(cxAny pav);
 
 cxAny cxFollowTarget(cxAny pav);
 
 void cxFollowSetInit(cxAny pav,cxFloat init);
-
-cxBool cxFollowDefaultExit(cxAny pav);
 
 void cxFollowSetTarget(cxAny pav,cxAny target);
 

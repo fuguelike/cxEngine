@@ -9,15 +9,23 @@
 #include <engine/cxEngine.h>
 #include "cxButton.h"
 
-cxBool cxButtonTouch(cxAny pview,const cxTouchItems *points)
+CX_SETTER_DEF(cxButton, movement)
+{
+    this->movement = cxJsonToDouble(value, this->movement);
+}
+CX_SETTER_DEF(cxButton, enable)
+{
+    this->isEnable = cxJsonToBool(value, this->isEnable);
+}
+
+static cxBool CX_METHOD(cxButton,OnTouch,const cxTouchItems *points)
 {
     CX_RETURN(points->number != 1,false);
     cxTouchItem item = points->items[0];
-    CX_ASSERT_THIS(pview, cxButton);
     if(!this->isEnable){
         return false;
     }
-    cxHitInfo hit = cxViewHitTest(pview, item->position);
+    cxHitInfo hit = cxViewHitTest(this, item->position);
     if(item->type != cxTouchTypeDown && this->isSelected && !hit.hited){
         CX_EVENT_FIRE(this, onLeave);
         this->isSelected = false;
@@ -48,24 +56,17 @@ cxBool cxButtonTouch(cxAny pview,const cxTouchItems *points)
     return true;
 }
 
-CX_SETTER_DEF(cxButton, movement)
-{
-    this->movement = cxJsonToDouble(value, this->movement);
-}
-CX_SETTER_DEF(cxButton, enable)
-{
-    this->isEnable = cxJsonToBool(value, this->isEnable);
-}
 CX_TYPE(cxButton, cxSprite)
 {
     CX_SETTER(cxButton, movement);
     CX_SETTER(cxButton, enable);
+    
+    CX_MSET(cxButton, OnTouch);
 }
 CX_INIT(cxButton, cxSprite)
 {
     this->movement = 30;
     this->isEnable = true;
-    CX_SET(cxView, this, Touch, cxButtonTouch);
 }
 CX_FREE(cxButton, cxSprite)
 {

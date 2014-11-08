@@ -20,7 +20,6 @@ CX_C_BEGIN
 
 CX_DEF(cxTextureCache, cxObject)
     cxHash caches;
-    CX_SLOT_ALLOC(onMemory);
 CX_END(cxTextureCache, cxObject)
 
 cxTexture cxTextureCacheLoadFile(cxConstChars file);

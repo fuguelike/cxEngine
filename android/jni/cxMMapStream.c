@@ -16,9 +16,8 @@
 //int AAsset_openFileDescriptor(AAsset* asset, off_t* outStart, off_t* outLength);
 //int AAsset_isAllocated(AAsset* asset);
 //const void* AAsset_getBuffer(AAsset* asset);
-static cxBool cxMMapStreamOpen(cxAny ps)
+static cxBool CX_METHOD(cxMMapStream,Open)
 {
-    CX_ASSERT_THIS(ps, cxMMapStream);
     CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
     cxConstChars path = cxStringBody(this->cxStream.path);
     this->asset = AAssetManager_open(cxEngineGetAssetManager(), path, AASSET_MODE_UNKNOWN);
@@ -40,9 +39,8 @@ static cxBool cxMMapStreamOpen(cxAny ps)
     return true;
 }
 
-static cxInt cxMMapStreamRead(cxAny ps,cxAny buffer,cxInt size)
+static cxInt CX_METHOD(cxMMapStream,Read,cxAny buffer,cxInt size)
 {
-    CX_ASSERT_THIS(ps, cxMMapStream);
     if(!this->cxStream.canRead){
         return 0;
     }
@@ -58,9 +56,8 @@ static cxInt cxMMapStreamRead(cxAny ps,cxAny buffer,cxInt size)
     return bytes;
 }
 
-static cxInt cxMMapStreamWrite(cxAny ps,cxAny buffer,cxInt size)
+static cxInt CX_METHOD(cxMMapStream,Write,cxAny buffer,cxInt size)
 {
-    CX_ASSERT_THIS(ps, cxMMapStream);
     if(!this->cxStream.canWrite){
         return 0;
     }
@@ -74,15 +71,13 @@ static cxInt cxMMapStreamWrite(cxAny ps,cxAny buffer,cxInt size)
     return size;
 }
 
-static cxOff cxMMapStreamPosition(cxAny ps)
+static cxOff CX_METHOD(cxMMapStream,Position)
 {
-    CX_ASSERT_THIS(ps, cxMMapStream);
     return this->position;
 }
 
-static cxInt cxMMapStreamSeek(cxAny ps,cxOff off,cxInt flags)
+static cxInt CX_METHOD(cxMMapStream,Seek,cxOff off,cxInt flags)
 {
-    CX_ASSERT_THIS(ps, cxMMapStream);
     if(!this->cxStream.canSeek){
         return 0;
     }
@@ -103,23 +98,21 @@ static cxInt cxMMapStreamSeek(cxAny ps,cxOff off,cxInt flags)
     return 0;
 }
 
-static cxString cxMMapStreamAllBytes(cxAny ps)
+static cxString CX_METHOD(cxMMapStream,AllBytes)
 {
-    CX_ASSERT_THIS(ps, cxMMapStream);
     if(!this->cxStream.canRead){
-        cxStreamOpen(this);
+        CX_CALL(this, Open, CX_MT(void));
     }
     if(!this->cxStream.canRead){
         CX_ERROR("file %s stream can't open",cxStringBody(this->cxStream.path));
         return NULL;
     }
-    cxStreamSeek(this,0,SEEK_SET);
+    CX_CALL(this, Seek, CX_MT(cxInt,cxOff,cxInt),0,SEEK_SET);
     return cxStringNoCopy(this->map, this->cxStream.Length);
 }
 
-static void cxMMapStreamClose(cxAny ps)
+static void CX_METHOD(cxMMapStream,Close)
 {
-    CX_ASSERT_THIS(ps, cxMMapStream);
     if(this->map != NULL){
         this->map = NULL;
     }
@@ -127,24 +120,23 @@ static void cxMMapStreamClose(cxAny ps)
         AAsset_close(this->asset);
         this->asset = NULL;
     }
-    cxStreamBaseClose(this);
+    CX_SUPER(cxStream, this, Close, CX_MT(void));
 }
 
 CX_TYPE(cxMMapStream, cxStream)
 {
-    
+    CX_MSET(cxMMapStream, Open);
+    CX_MSET(cxMMapStream, Read);
+    CX_MSET(cxMMapStream, Write);
+    CX_MSET(cxMMapStream, Seek);
+    CX_MSET(cxMMapStream, Position);
+    CX_MSET(cxMMapStream, Close);
+    CX_MSET(cxMMapStream, AllBytes);
 }
 CX_INIT(cxMMapStream, cxStream)
 {
     this->fd = -1;
     this->flags = CX_MMAP_READ;
-    CX_SET(cxStream, this, Read, cxMMapStreamRead);
-    CX_SET(cxStream, this, Open, cxMMapStreamOpen);
-    CX_SET(cxStream, this, Write, cxMMapStreamWrite);
-    CX_SET(cxStream, this, Seek, cxMMapStreamSeek);
-    CX_SET(cxStream, this, Close, cxMMapStreamClose);
-    CX_SET(cxStream, this, Position, cxMMapStreamPosition);
-    CX_SET(cxStream, this, AllBytes, cxMMapStreamAllBytes);
 }
 CX_FREE(cxMMapStream, cxStream)
 {

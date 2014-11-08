@@ -36,7 +36,6 @@
 		831046F919F21B3E0086D91A /* spEvent.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046DD19F21B3D0086D91A /* spEvent.c */; };
 		831046FC19F21B970086D91A /* cxSkeleton.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046FA19F21B970086D91A /* cxSkeleton.c */; };
 		831046FF19F21BA40086D91A /* cxSpine.c in Sources */ = {isa = PBXBuildFile; fileRef = 831046FD19F21BA40086D91A /* cxSpine.c */; };
-		8315B69319FF3119007FCDFE /* cxThread.c in Sources */ = {isa = PBXBuildFile; fileRef = 8315B69119FF3119007FCDFE /* cxThread.c */; };
 		831E654819EFA9B000FCFD85 /* cxAnimate.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E633919EFA9AF00FCFD85 /* cxAnimate.c */; };
 		831E654919EFA9B000FCFD85 /* cxBezier.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E633B19EFA9AF00FCFD85 /* cxBezier.c */; };
 		831E654A19EFA9B000FCFD85 /* cxCurve.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E633D19EFA9AF00FCFD85 /* cxCurve.c */; };
@@ -105,11 +104,9 @@
 		831E658A19EFA9B000FCFD85 /* cxMessage.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63BA19EFA9AF00FCFD85 /* cxMessage.c */; };
 		831E658B19EFA9B000FCFD85 /* cxNumber.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63BC19EFA9AF00FCFD85 /* cxNumber.c */; };
 		831E658C19EFA9B000FCFD85 /* cxPath.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63BE19EFA9AF00FCFD85 /* cxPath.c */; };
-		831E658D19EFA9B000FCFD85 /* cxProperty.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63C019EFA9AF00FCFD85 /* cxProperty.c */; };
 		831E658E19EFA9B000FCFD85 /* cxStack.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63C219EFA9AF00FCFD85 /* cxStack.c */; };
 		831E658F19EFA9B000FCFD85 /* cxStream.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63C419EFA9AF00FCFD85 /* cxStream.c */; };
 		831E659019EFA9B000FCFD85 /* cxString.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63C619EFA9AF00FCFD85 /* cxString.c */; };
-		831E659119EFA9B000FCFD85 /* cxType.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63C819EFA9AF00FCFD85 /* cxType.c */; };
 		831E659219EFA9B000FCFD85 /* cxAction.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63CB19EFA9AF00FCFD85 /* cxAction.c */; };
 		831E659319EFA9B000FCFD85 /* cxBMPFont.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63CD19EFA9AF00FCFD85 /* cxBMPFont.c */; };
 		831E659419EFA9B000FCFD85 /* cxEngine.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63CF19EFA9AF00FCFD85 /* cxEngine.c */; };
@@ -117,7 +114,6 @@
 		831E659619EFA9B000FCFD85 /* cxGroup.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63D319EFA9AF00FCFD85 /* cxGroup.c */; };
 		831E659719EFA9B000FCFD85 /* cxIconv.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63D519EFA9AF00FCFD85 /* cxIconv.c */; };
 		831E659819EFA9B000FCFD85 /* cxInput.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63D719EFA9AF00FCFD85 /* cxInput.c */; };
-		831E659919EFA9B000FCFD85 /* cxOpenGL.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63D919EFA9AF00FCFD85 /* cxOpenGL.c */; };
 		831E659A19EFA9B000FCFD85 /* cxPlayer.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63DB19EFA9AF00FCFD85 /* cxPlayer.c */; };
 		831E659B19EFA9B000FCFD85 /* cxRegex.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63DD19EFA9AF00FCFD85 /* cxRegex.c */; };
 		831E659C19EFA9B000FCFD85 /* cxShader.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E63DF19EFA9AF00FCFD85 /* cxShader.c */; };
@@ -193,10 +189,10 @@
 		831E663F19EFA9D200FCFD85 /* cxSprite.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661619EFA9D200FCFD85 /* cxSprite.c */; };
 		831E664119EFA9D200FCFD85 /* cxTable.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661A19EFA9D200FCFD85 /* cxTable.c */; };
 		831E664219EFA9D200FCFD85 /* cxWindow.c in Sources */ = {isa = PBXBuildFile; fileRef = 831E661C19EFA9D200FCFD85 /* cxWindow.c */; };
-		832453D31A0A2A1700F57ECE /* cxMethod.c in Sources */ = {isa = PBXBuildFile; fileRef = 832453D11A0A2A1700F57ECE /* cxMethod.c */; };
 		8353037F1A07613A00235B79 /* cxParticle.c in Sources */ = {isa = PBXBuildFile; fileRef = 8353037D1A07613A00235B79 /* cxParticle.c */; };
 		83B1EAD51A01DE520089B374 /* lzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B1EAD31A01DE520089B374 /* lzma.c */; };
 		83B1EAD81A01FE3F0089B374 /* cxLzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B1EAD61A01FE3F0089B374 /* cxLzma.c */; };
+		83C274F41A0E62E100A8BC26 /* cxOpenGL.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C274F31A0E62E100A8BC26 /* cxOpenGL.c */; };
 		83CA51A919F3A6DD002119B0 /* cxShaderTTF.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */; };
 		83E21E971A04C9AF000DCD15 /* cxAsync.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E21E951A04C9AF000DCD15 /* cxAsync.c */; };
 /* End PBXBuildFile section */
@@ -273,8 +269,6 @@
 		831046FB19F21B970086D91A /* cxSkeleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxSkeleton.h; sourceTree = "<group>"; };
 		831046FD19F21BA40086D91A /* cxSpine.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxSpine.c; sourceTree = "<group>"; };
 		831046FE19F21BA40086D91A /* cxSpine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxSpine.h; sourceTree = "<group>"; };
-		8315B69119FF3119007FCDFE /* cxThread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxThread.c; sourceTree = "<group>"; };
-		8315B69219FF3119007FCDFE /* cxThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxThread.h; sourceTree = "<group>"; };
 		831E632119EFA97A00FCFD85 /* libcxEngineStatic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcxEngineStatic.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		831E633919EFA9AF00FCFD85 /* cxAnimate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAnimate.c; sourceTree = "<group>"; };
 		831E633A19EFA9AF00FCFD85 /* cxAnimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAnimate.h; sourceTree = "<group>"; };
@@ -405,16 +399,12 @@
 		831E63BD19EFA9AF00FCFD85 /* cxNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxNumber.h; sourceTree = "<group>"; };
 		831E63BE19EFA9AF00FCFD85 /* cxPath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxPath.c; sourceTree = "<group>"; };
 		831E63BF19EFA9AF00FCFD85 /* cxPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxPath.h; sourceTree = "<group>"; };
-		831E63C019EFA9AF00FCFD85 /* cxProperty.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxProperty.c; sourceTree = "<group>"; };
-		831E63C119EFA9AF00FCFD85 /* cxProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxProperty.h; sourceTree = "<group>"; };
 		831E63C219EFA9AF00FCFD85 /* cxStack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxStack.c; sourceTree = "<group>"; };
 		831E63C319EFA9AF00FCFD85 /* cxStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxStack.h; sourceTree = "<group>"; };
 		831E63C419EFA9AF00FCFD85 /* cxStream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxStream.c; sourceTree = "<group>"; };
 		831E63C519EFA9AF00FCFD85 /* cxStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxStream.h; sourceTree = "<group>"; };
 		831E63C619EFA9AF00FCFD85 /* cxString.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxString.c; sourceTree = "<group>"; };
 		831E63C719EFA9AF00FCFD85 /* cxString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxString.h; sourceTree = "<group>"; };
-		831E63C819EFA9AF00FCFD85 /* cxType.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxType.c; sourceTree = "<group>"; };
-		831E63C919EFA9AF00FCFD85 /* cxType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxType.h; sourceTree = "<group>"; };
 		831E63CB19EFA9AF00FCFD85 /* cxAction.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAction.c; sourceTree = "<group>"; };
 		831E63CC19EFA9AF00FCFD85 /* cxAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxAction.h; sourceTree = "<group>"; };
 		831E63CD19EFA9AF00FCFD85 /* cxBMPFont.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxBMPFont.c; sourceTree = "<group>"; };
@@ -429,7 +419,6 @@
 		831E63D619EFA9AF00FCFD85 /* cxIconv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxIconv.h; sourceTree = "<group>"; };
 		831E63D719EFA9AF00FCFD85 /* cxInput.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxInput.c; sourceTree = "<group>"; };
 		831E63D819EFA9AF00FCFD85 /* cxInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxInput.h; sourceTree = "<group>"; };
-		831E63D919EFA9AF00FCFD85 /* cxOpenGL.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxOpenGL.c; sourceTree = "<group>"; };
 		831E63DA19EFA9AF00FCFD85 /* cxOpenGL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxOpenGL.h; sourceTree = "<group>"; };
 		831E63DB19EFA9AF00FCFD85 /* cxPlayer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxPlayer.c; sourceTree = "<group>"; };
 		831E63DC19EFA9AF00FCFD85 /* cxPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxPlayer.h; sourceTree = "<group>"; };
@@ -578,14 +567,13 @@
 		831E661B19EFA9D200FCFD85 /* cxTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTable.h; sourceTree = "<group>"; };
 		831E661C19EFA9D200FCFD85 /* cxWindow.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxWindow.c; sourceTree = "<group>"; };
 		831E661D19EFA9D200FCFD85 /* cxWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxWindow.h; sourceTree = "<group>"; };
-		832453D11A0A2A1700F57ECE /* cxMethod.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxMethod.c; sourceTree = "<group>"; };
-		832453D21A0A2A1700F57ECE /* cxMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxMethod.h; sourceTree = "<group>"; };
 		8353037D1A07613A00235B79 /* cxParticle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxParticle.c; sourceTree = "<group>"; };
 		8353037E1A07613A00235B79 /* cxParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxParticle.h; sourceTree = "<group>"; };
 		83B1EAD31A01DE520089B374 /* lzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lzma.c; sourceTree = "<group>"; };
 		83B1EAD41A01DE520089B374 /* lzma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzma.h; sourceTree = "<group>"; };
 		83B1EAD61A01FE3F0089B374 /* cxLzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLzma.c; sourceTree = "<group>"; };
 		83B1EAD71A01FE3F0089B374 /* cxLzma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLzma.h; sourceTree = "<group>"; };
+		83C274F31A0E62E100A8BC26 /* cxOpenGL.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxOpenGL.c; sourceTree = "<group>"; };
 		83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderTTF.c; sourceTree = "<group>"; };
 		83CA51A819F3A6DD002119B0 /* cxShaderTTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderTTF.h; sourceTree = "<group>"; };
 		83E21E951A04C9AF000DCD15 /* cxAsync.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxAsync.c; sourceTree = "<group>"; };
@@ -864,20 +852,12 @@
 				831E63BD19EFA9AF00FCFD85 /* cxNumber.h */,
 				831E63BE19EFA9AF00FCFD85 /* cxPath.c */,
 				831E63BF19EFA9AF00FCFD85 /* cxPath.h */,
-				831E63C019EFA9AF00FCFD85 /* cxProperty.c */,
-				831E63C119EFA9AF00FCFD85 /* cxProperty.h */,
-				832453D11A0A2A1700F57ECE /* cxMethod.c */,
-				832453D21A0A2A1700F57ECE /* cxMethod.h */,
 				831E63C219EFA9AF00FCFD85 /* cxStack.c */,
 				831E63C319EFA9AF00FCFD85 /* cxStack.h */,
 				831E63C419EFA9AF00FCFD85 /* cxStream.c */,
 				831E63C519EFA9AF00FCFD85 /* cxStream.h */,
 				831E63C619EFA9AF00FCFD85 /* cxString.c */,
 				831E63C719EFA9AF00FCFD85 /* cxString.h */,
-				831E63C819EFA9AF00FCFD85 /* cxType.c */,
-				831E63C919EFA9AF00FCFD85 /* cxType.h */,
-				8315B69119FF3119007FCDFE /* cxThread.c */,
-				8315B69219FF3119007FCDFE /* cxThread.h */,
 			);
 			path = cxcore;
 			sourceTree = SOURCE_ROOT;
@@ -899,8 +879,8 @@
 				831E63D619EFA9AF00FCFD85 /* cxIconv.h */,
 				831E63D719EFA9AF00FCFD85 /* cxInput.c */,
 				831E63D819EFA9AF00FCFD85 /* cxInput.h */,
-				831E63D919EFA9AF00FCFD85 /* cxOpenGL.c */,
 				831E63DA19EFA9AF00FCFD85 /* cxOpenGL.h */,
+				83C274F31A0E62E100A8BC26 /* cxOpenGL.c */,
 				831E63DB19EFA9AF00FCFD85 /* cxPlayer.c */,
 				831E63DC19EFA9AF00FCFD85 /* cxPlayer.h */,
 				831E63DD19EFA9AF00FCFD85 /* cxRegex.c */,
@@ -1298,7 +1278,6 @@
 				831E659019EFA9B000FCFD85 /* cxString.c in Sources */,
 				831E655419EFA9B000FCFD85 /* cxScale.c in Sources */,
 				831E657619EFA9B000FCFD85 /* cpShape.c in Sources */,
-				831E659919EFA9B000FCFD85 /* cxOpenGL.c in Sources */,
 				831E663E19EFA9D200FCFD85 /* cxScroll.c in Sources */,
 				831E657A19EFA9B000FCFD85 /* cpSpaceQuery.c in Sources */,
 				831E658A19EFA9B000FCFD85 /* cxMessage.c in Sources */,
@@ -1327,7 +1306,6 @@
 				831E65BA19EFA9B000FCFD85 /* quaternion.c in Sources */,
 				831046F319F21B3E0086D91A /* SkeletonData.c in Sources */,
 				831E658C19EFA9B000FCFD85 /* cxPath.c in Sources */,
-				831E659119EFA9B000FCFD85 /* cxType.c in Sources */,
 				831E656D19EFA9B000FCFD85 /* cpSlideJoint.c in Sources */,
 				831E656F19EFA9B000FCFD85 /* cpArray.c in Sources */,
 				831E657E19EFA9B000FCFD85 /* cpVect.c in Sources */,
@@ -1344,14 +1322,12 @@
 				831E657F19EFA9B000FCFD85 /* cxAnyArray.c in Sources */,
 				831E655219EFA9B000FCFD85 /* cxRotate.c in Sources */,
 				831E65A219EFA9B000FCFD85 /* cxAppDelegate.m in Sources */,
-				832453D31A0A2A1700F57ECE /* cxMethod.c in Sources */,
 				831E657219EFA9B000FCFD85 /* cpBody.c in Sources */,
 				831E65A719EFA9B000FCFD85 /* main.m in Sources */,
 				831E656319EFA9B000FCFD85 /* cpConstraint.c in Sources */,
 				831E655519EFA9B000FCFD85 /* cxSpline.c in Sources */,
 				831E658E19EFA9B000FCFD85 /* cxStack.c in Sources */,
 				831E65AB19EFA9B000FCFD85 /* hashtable_seed.c in Sources */,
-				831E658D19EFA9B000FCFD85 /* cxProperty.c in Sources */,
 				831046F019F21B3E0086D91A /* RegionAttachment.c in Sources */,
 				831046E819F21B3E0086D91A /* BoneData.c in Sources */,
 				831E656A19EFA9B000FCFD85 /* cpRatchetJoint.c in Sources */,
@@ -1372,10 +1348,10 @@
 				831E658719EFA9B000FCFD85 /* cxMD5.c in Sources */,
 				831E65A019EFA9B000FCFD85 /* cxValue.c in Sources */,
 				831E655D19EFA9B000FCFD85 /* aes_ecb.c in Sources */,
+				83C274F41A0E62E100A8BC26 /* cxOpenGL.c in Sources */,
 				831E662619EFA9D200FCFD85 /* cxShaderColor.c in Sources */,
 				83CA51A919F3A6DD002119B0 /* cxShaderTTF.c in Sources */,
 				831E657519EFA9B000FCFD85 /* cpPolyShape.c in Sources */,
-				8315B69319FF3119007FCDFE /* cxThread.c in Sources */,
 				831E659419EFA9B000FCFD85 /* cxEngine.c in Sources */,
 				831E657D19EFA9B000FCFD85 /* cpSweep1D.c in Sources */,
 				831E654919EFA9B000FCFD85 /* cxBezier.c in Sources */,

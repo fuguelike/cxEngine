@@ -28,11 +28,9 @@ typedef enum {
 CX_DEF(cxAsync, cxObject)
     CX_FIELD_DEF(cxLong Tag);
     CX_FIELD_DEF(cxAsyncState State);
-    CX_METHOD_DEF(void, Running,cxAny item);
     CX_FIELD_DEF(cxInt Count);
     CX_FIELD_DEF(cxFloat Time);
     CX_FIELD_DEF(cxAny View);
-    CX_METHOD_DEF(cxBool, Init, cxAny);
 CX_END(cxAsync, cxObject)
 
 CX_FIELD_IMP(cxAsync, cxLong, Tag);
@@ -51,12 +49,9 @@ CX_INLINE void cxAsyncReset(cxAny pthis)
     this->Time = 0;
 }
 
-typedef void (*cxDriverFailedFunc)(cxAny pview,cxAny async);
-
 //async驱动器
 CX_DEF(cxDriver, cxAction)
     CX_FIELD_DEF(cxAny Async);
-    cxDriverFailedFunc onFailed;
 CX_END(cxDriver, cxAction)
 
 CX_FIELD_GET(cxDriver, cxAny, Async);

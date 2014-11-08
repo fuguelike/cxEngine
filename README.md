@@ -79,11 +79,12 @@ CX_ASSERT_THIS(obj,type);//断言一个对象的类型,并生成本地 this变�
 
 ```
 
-{"cxMethod":"WinScale","cxArgs":"x"} 调用一个方法 返回cxJson 参数cxJson
-
 $从语言文件中获取数据
 例如:
 $ui.json?title 从语言文件strings/zh-CN/ui.json中获取key=title的数据
+
+$.获取当前对象json属性，当前对象不存在从全局获取
+$.WinSize
 
 @对纹理缓存进行分组处理
 例如:

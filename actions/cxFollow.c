@@ -8,23 +8,21 @@
 
 #include "cxFollow.h"
 
-void cxFollowInit(cxAny pav)
+static void CX_METHOD(cxFollow,Init)
 {
-    CX_ASSERT_THIS(pav, cxFollow);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     CX_ASSERT_VALUE(this->target, cxView, target);
     CX_ASSERT(view != this->target, "target error,can't action'view");
     cxVec2f tpos = cxViewGetPosition(target);
     cxVec2f cpos = cxViewGetPosition(view);
     this->angle = cxVec2fRadiansBetween(tpos, cpos);
-    if(CX_METHOD_GET(false, this->IsExit,pav)){
-        cxActionStop(pav);
+    if(CX_CALL(this, IsExit, CX_MT(cxBool))){
+        cxActionStop(this);
     }
 }
 
-static cxBool cxFollowIsExit(cxAny pav)
+static cxBool CX_METHOD(cxFollow,IsExit)
 {
-    CX_ASSERT_THIS(pav, cxFollow);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     CX_ASSERT_VALUE(this->target, cxView, target);
     cxVec2f tpos = cxViewGetPosition(target);
@@ -33,20 +31,19 @@ static cxBool cxFollowIsExit(cxAny pav)
     return dis < 10;
 }
 
-static void cxFollowStep(cxAny pav,cxFloat dt,cxFloat time)
+static void CX_METHOD(cxFollow, Step,cxFloat dt, cxFloat time)
 {
-    CX_ASSERT_THIS(pav, cxFollow);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     CX_ASSERT_VALUE(this->target, cxView, target);
     cxVec2f tpos = cxViewGetPosition(target);
     cxVec2f cpos = cxViewGetPosition(view);
     this->angle = cxVec2fRadiansBetween(tpos, cpos);
-    this->speed = CX_METHOD_GET(this->init, this->Speed,pav,cxActionGetTimeElapsed(this));
+    this->speed = this->init;
     cxFloat s = dt * this->speed;
     cxVec2f delta = cxVec2fv(s*cosf(this->angle), s*sinf(this->angle));
     cpos = cxVec2fAdd(cpos, delta);
-    if(CX_METHOD_GET(false, this->IsExit,pav)){
-        cxActionStop(pav);
+    if(CX_CALL(this, IsExit, CX_MT(cxBool))){
+        cxActionStop(this);
     }
     cxViewSetPosition(view, cpos);
 }
@@ -59,14 +56,13 @@ cxAny cxFollowTarget(cxAny pav)
 
 CX_TYPE(cxFollow, cxAction)
 {
-    
+    CX_MSET(cxFollow, Init);
+    CX_MSET(cxFollow, Step);
+    CX_MSET(cxFollow, IsExit);
 }
 CX_INIT(cxFollow, cxAction)
 {
     this->cxAction.Time = -1;
-    CX_SET(cxAction, this, Init, cxFollowInit);
-    CX_SET(cxAction, this, Step, cxFollowStep);
-    CX_SET(cxFollow, this, IsExit, cxFollowIsExit);
 }
 CX_FREE(cxFollow, cxAction)
 {

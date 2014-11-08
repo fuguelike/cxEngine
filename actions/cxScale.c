@@ -8,18 +8,16 @@
 
 #include "cxScale.h"
 
-static void cxScaleInit(cxAny pav)
+static void CX_METHOD(cxScale,Init)
 {
-    CX_ASSERT_THIS(pav, cxScale);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->oldScale = cxViewGetScale(view);
     this->delta.x = this->newScale.x - this->oldScale.x;
     this->delta.y = this->newScale.y - this->oldScale.y;
 }
 
-static void cxScaleStep(cxAny pav,cxFloat dt,cxFloat time)
+static void CX_METHOD(cxScale,Step,cxFloat dt,cxFloat time)
 {
-    CX_ASSERT_THIS(pav, cxScale);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxVec2f nscale;
     nscale.x = this->oldScale.x + this->delta.x * time;
@@ -35,11 +33,13 @@ CX_SETTER_DEF(cxScale, scale)
 CX_TYPE(cxScale, cxAction)
 {
     CX_SETTER(cxScale, scale);
+    
+    CX_MSET(cxScale, Init);
+    CX_MSET(cxScale, Step);
 }
 CX_INIT(cxScale, cxAction)
 {
-    CX_SET(cxAction, this, Init, cxScaleInit);
-    CX_SET(cxAction, this, Step, cxScaleStep);
+
 }
 CX_FREE(cxScale, cxAction)
 {

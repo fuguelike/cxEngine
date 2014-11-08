@@ -9,36 +9,6 @@
 #include "cxEngine.h"
 #include "cxValue.h"
 
-cxBool cxValueFloatEqu(cxAny pobj)
-{
-    CX_ASSERT_THIS(pobj, cxValue);
-    cxFloat v1 = *(cxFloat *)this->oldVar;
-    cxFloat v2 = *(cxFloat *)this->newVar;
-    return cxFloatEqu(v1, v2);
-}
-
-cxBool cxValueVec2fEqu(cxAny pobj)
-{
-    CX_ASSERT_THIS(pobj, cxValue);
-    cxVec2f v1 = *(cxVec2f *)this->oldVar;
-    cxVec2f v2 = *(cxVec2f *)this->newVar;
-    return cxVec2fEqu(v1, v2);
-}
-
-cxBool cxValueSize2fEqu(cxAny pobj)
-{
-    CX_ASSERT_THIS(pobj, cxValue);
-    cxSize2f v1 = *(cxSize2f *)this->oldVar;
-    cxSize2f v2 = *(cxSize2f *)this->newVar;
-    return cxSize2fEqu(v1, v2);
-}
-
-cxBool cxValueBinaryEqu(cxAny pobj)
-{
-    CX_ASSERT_THIS(pobj, cxValue);
-    return memcmp(this->newVar, this->oldVar, this->size) == 0;
-}
-
 static void cxValueUpdate(cxAny pobj,cxFloat dt)
 {
     CX_ASSERT_THIS(pobj, cxValue);
@@ -52,18 +22,22 @@ void cxValueSet(cxAny pthis,cxAny v)
 {
     CX_ASSERT_THIS(pthis, cxValue);
     memcpy(this->newVar,v,this->size);
-    this->isChanged = CX_METHOD_GET(false, this->ValueEqu, this);
+    this->isChanged = CX_CALL(this, Equ, CX_MT(cxBool));
+}
+
+static cxBool CX_METHOD(cxValue, Equ)
+{
+    return memcmp(this->newVar, this->oldVar, this->size) == 0;
 }
 
 CX_TYPE(cxValue, cxObject)
 {
-    
+    CX_MSET(cxValue, Equ);
 }
 CX_INIT(cxValue, cxObject)
 {
     cxEngine engine = cxEngineInstance();
     CX_CON(cxEngine, engine, onUpdate, this, cxValueUpdate);
-    CX_SET(cxValue, this, ValueEqu, cxValueBinaryEqu);
 }
 CX_FREE(cxValue, cxObject)
 {

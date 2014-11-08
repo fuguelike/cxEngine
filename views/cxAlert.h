@@ -16,13 +16,11 @@ CX_C_BEGIN
 CX_DEF(cxAlert, cxAtlas)
     CX_EVENT_ALLOC(OnShow);
     CX_EVENT_ALLOC(OnHide);
-    CX_METHOD_DEF(void, Show,cxAny);
-    CX_METHOD_DEF(void, Hide,cxAny);
 CX_END(cxAlert, cxAtlas)
 
-void cxAlertShow(cxAny pview);
+void cxAlertFireShow(cxAny pview);
 
-void cxAlertHide(cxAny pview);
+void cxAlertFireHide(cxAny pview);
 
 CX_C_END
 

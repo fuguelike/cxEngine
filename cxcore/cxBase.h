@@ -16,9 +16,6 @@
 #include "cxHash.h"
 #include "cxList.h"
 #include "cxStack.h"
-#include "cxType.h"
-#include "cxProperty.h"
-#include "cxMethod.h"
 #include "cxString.h"
 #include "cxMessage.h"
 #include "cxMemory.h"
@@ -28,6 +25,5 @@
 #include "cxLoader.h"
 #include "cxPath.h"
 #include "cxStream.h"
-#include "cxThread.h"
 
 #endif

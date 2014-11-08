@@ -8,16 +8,8 @@
 
 #include "cxJump.h"
 
-static void cxJumpInit(cxAny pav)
+static void CX_METHOD(cxJump, Step,cxFloat dt, cxFloat time)
 {
-    CX_ASSERT_THIS(pav, cxJump);
-    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
-    this->prevPos = this->startPos = cxViewGetPosition(view);
-}
-
-static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
-{
-    CX_ASSERT_THIS(pav, cxJump);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat frac = fmodf( time * this->jumps, 1.0f );
     cxFloat y = this->height * 4 * frac * (1 - frac) + this->position.y * time;
@@ -28,6 +20,11 @@ static void cxJumpStep(cxAny pav,cxFloat dt,cxFloat time)
     cxVec2f nPos = cxVec2fAdd(this->startPos, cxVec2fv(x, y));
     cxViewSetPosition(view, nPos);
     this->prevPos = nPos;
+}
+static void CX_METHOD(cxJump,Init)
+{
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
+    this->prevPos = this->startPos = cxViewGetPosition(view);
 }
 
 CX_SETTER_DEF(cxJump, position)
@@ -48,11 +45,13 @@ CX_TYPE(cxJump, cxAction)
     CX_SETTER(cxJump, position);
     CX_SETTER(cxJump, height);
     CX_SETTER(cxJump, jumps);
+    
+    CX_MSET(cxJump, Init);
+    CX_MSET(cxJump, Step);
 }
 CX_INIT(cxJump, cxAction)
 {
-    CX_SET(cxAction, this, Init, cxJumpInit);
-    CX_SET(cxAction, this, Step, cxJumpStep);
+
 }
 CX_FREE(cxJump, cxAction)
 {

@@ -95,11 +95,6 @@ CX_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxBool IsSleep);
     CX_FIELD_DEF(cxBool IsDraw);
     CX_FIELD_DEF(cxInt Assist);
-    CX_METHOD_DEF(cxBool, Touch, cxAny, const cxTouchItems *);
-    CX_METHOD_DEF(cxBool, Key, cxAny, const cxKey *);
-    CX_METHOD_DEF(void, DrawView, cxAny);
-    CX_METHOD_DEF(void, DrawAfter, cxAny);
-    CX_METHOD_DEF(void, DrawBefore, cxAny);
     CX_EVENT_ALLOC(onEnter);    //when view appended
     CX_EVENT_ALLOC(onExit);     //when view removed
     CX_EVENT_ALLOC(onUpdate);
@@ -215,10 +210,10 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav);
 
 void cxViewSetOrder(cxAny pview,cxInt order);
 
-cxBool cxViewKey(cxAny pview,cxKey *key);
+cxBool cxViewFireKey(cxAny pview,cxKey *key);
 
 //touch count,current touches
-cxBool cxViewTouch(cxAny pview,cxTouchItems *points);
+cxBool cxViewFireTouch(cxAny pview,cxTouchItems *points);
 
 cxAny cxViewAppendTypeImp(cxAny pview,cxConstType type);
 
@@ -269,7 +264,7 @@ void cxViewSetAngle(cxAny pview,cxFloat angle);
 
 void cxViewSetDegrees(cxAny pview,cxFloat degrees);
 
-void cxViewDraw(cxAny pview);
+void cxViewDrawView(cxAny pview);
 
 void cxViewEnter(cxAny pview);
 
@@ -278,6 +273,16 @@ void cxViewExit(cxAny pview);
 void cxViewClear(cxAny pview);
 
 void cxViewRemove(cxAny pview);
+
+void cxViewTransform(cxAny pview);
+
+void cxViewClearAppends(cxAny pview);
+
+void cxViewClearRemoves(cxView this);
+
+void cxViewUpdateActions(cxView pview);
+
+void cxViewDrawBorder(cxAny pview);
 
 CX_C_END
 

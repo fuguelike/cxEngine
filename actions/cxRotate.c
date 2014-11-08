@@ -8,18 +8,16 @@
 
 #include "cxRotate.h"
 
-static void cxRotateInit(cxAny pav)
+static void CX_METHOD(cxRotate,Init)
 {
-    CX_ASSERT_THIS(pav, cxRotate);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->oldAngle = cxViewGetAngle(view);
     this->delta = this->newAngle - this->oldAngle;
     cxViewSetRaxis(view, this->raxis);
 }
 
-static void cxRotateStep(cxAny pav,cxFloat dt,cxFloat time)
+static void CX_METHOD(cxRotate,Step,cxFloat dt,cxFloat time)
 {
-    CX_ASSERT_THIS(pav, cxRotate);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat angle = this->oldAngle + this->delta * time;
     cxViewSetAngle(view, angle);
@@ -44,12 +42,13 @@ CX_TYPE(cxRotate, cxAction)
     CX_SETTER(cxRotate, raxis);
     CX_SETTER(cxRotate, angle);
     CX_SETTER(cxRotate, degrees);
+    
+    CX_MSET(cxRotate, Init);
+    CX_MSET(cxRotate, Step);
 }
 CX_INIT(cxRotate, cxAction)
 {
     this->raxis = cxVec3fZ;
-    CX_SET(cxAction, this, Init, cxRotateInit);
-    CX_SET(cxAction, this, Step, cxRotateStep);
 }
 CX_FREE(cxRotate, cxAction)
 {

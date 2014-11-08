@@ -54,8 +54,6 @@ void cxSpriteSetFlipY(cxAny pview,cxBool flipy);
 
 void cxSpriteBindTexture(cxAny pview);
 
-void cxSpriteDraw(cxAny pview);
-
 void cxSpriteSetShader(cxAny pview,cxConstChars key);
 
 void cxSpriteSetImage(cxAny pview,cxConstChars url);

@@ -11,7 +11,6 @@
 
 #include "cxHash.h"
 #include "cxString.h"
-#include "cxType.h"
 
 CX_C_BEGIN
 

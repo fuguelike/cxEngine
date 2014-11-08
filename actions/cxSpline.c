@@ -16,13 +16,12 @@ cxVec2f cxSplinePointAt(cxAny pav,cxInt idx)
     return *cxAnyArrayAt(this->points, idx, cxVec2f);
 }
 
-static void cxSplineInit(cxAny pav)
+static void CX_METHOD(cxSpline,Init)
 {
-    CX_ASSERT_THIS(pav, cxSpline);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxInt num = cxAnyArrayLength(this->points);
     if(num < 2){
-        cxActionStop(pav);
+        cxActionStop(this);
         return;
     }
     this->delta = 1.0f/((cxFloat)num - 1.0f);
@@ -38,10 +37,9 @@ static void cxSplineInit(cxAny pav)
     }
 }
 
-static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
+static void CX_METHOD(cxSpline,Step,cxFloat dt,cxFloat time)
 {
     cxInt index = 0;
-    CX_ASSERT_THIS(pav, cxSpline);
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat lt = 0;
     if (time >= 1.0f){
@@ -75,12 +73,12 @@ static void cxSplineStep(cxAny pav,cxFloat dt,cxFloat time)
     this->prev = newpos;
 }
 
-static void cxSplineReset(cxAny pav)
+static void CX_METHOD(cxSpline,Reset)
 {
-    CX_ASSERT_THIS(pav, cxSpline);
     this->index = -1;
     this->angle = INT32_MAX;
     cxAnyArrayClear(this->points);
+    CX_SUPER(cxAction, this, Reset, CX_MT(void));
 }
 
 CX_SETTER_DEF(cxSpline, points)
@@ -97,14 +95,15 @@ CX_SETTER_DEF(cxSpline, points)
 CX_TYPE(cxSpline, cxAction)
 {
     CX_SETTER(cxSpline, points);
+    
+    CX_MSET(cxSpline, Reset);
+    CX_MSET(cxSpline, Init);
+    CX_MSET(cxSpline, Step);
 }
 CX_INIT(cxSpline, cxAction)
 {
     this->index = -1;
     this->angle = INT32_MAX;
-    CX_SET(cxAction, this, Init, cxSplineInit);
-    CX_SET(cxAction, this, Step, cxSplineStep);
-    CX_SET(cxAction, this, Reset, cxSplineReset);
     this->points = cxAnyArrayAlloc(cxVec2f);
 }
 CX_FREE(cxSpline, cxAction)

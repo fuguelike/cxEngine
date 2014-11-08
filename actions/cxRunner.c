@@ -8,31 +8,22 @@
 
 #include "cxRunner.h"
 
-static void cxRunnerInit(cxAny pav)
-{
-    CX_ASSERT_THIS(pav, cxRunner);
-    CX_METHOD_RUN(this->Init, this);
-}
 
-static cxBool cxRunnerExit(cxAny pav)
+static cxBool CX_METHOD(cxRunner,Exit)
 {
-    CX_ASSERT_THIS(pav, cxRunner);
     if(this->count == 0){
         this->step ++;
-        CX_METHOD_RUN(this->Exit, this);
     }
     return this->count == 0;
 }
 
-
 CX_TYPE(cxRunner, cxAction)
 {
-    
+    CX_MSET(cxRunner, Exit);
 }
 CX_INIT(cxRunner, cxAction)
 {
-    CX_SET(cxAction, this, Init, cxRunnerInit);
-    CX_SET(cxAction, this, Exit, cxRunnerExit);
+    
 }
 CX_FREE(cxRunner, cxAction)
 {

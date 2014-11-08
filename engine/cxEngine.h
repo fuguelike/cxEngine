@@ -35,7 +35,6 @@ CX_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxString Localized);   //current lang file path
     CX_FIELD_DEF(cxFloat Interval);     //
     CX_FIELD_DEF(cxWindow Window);      //main window
-    CX_METHOD_DEF(cxString, JsonFilter, cxString);
     CX_FIELD_DEF(cxJson Config);
     CX_FIELD_DEF(cxUInt Version);       //version number
     cxBool isInit;
@@ -43,6 +42,7 @@ CX_DEF(cxEngine, cxObject)
     cxBool isPause;
     cxHash files;
     cxHash assets;
+    //
     CX_SIGNAL_ALLOC(onPause);
     CX_SIGNAL_ALLOC(onResume);
     CX_SIGNAL_ALLOC(onMemory);
@@ -53,7 +53,6 @@ CX_DEF(cxEngine, cxObject)
     cxKey key;
     cxHash groups;          //action groups
     //
-
     cxCurve curve;              //cxCurve instance
     cxOpenGL opengl;            //cxOpenGL instance
     cxIconv iconv;              //cxIconv instance
@@ -187,7 +186,7 @@ CX_INLINE cxSize2f cxEngineGetWinSize()
 void cxEngineClear();
 
 //type init
-CX_EXTERN void cxEngineType(cxEngine engine);
+CX_EXTERN void cxEngineType(cxType this);
 
 //engine init
 CX_EXTERN void cxEngineInit(cxEngine engine);
@@ -201,8 +200,6 @@ CX_EXTERN void cxEngineFree(cxEngine engine);
 cxString cxLocalizedString(cxConstChars key);
 
 cxJson cxEngineJsonReader(cxConstChars src);
-
-cxJson cxEngineJsonMethod(cxAny pobj, cxConstChars key, cxJson args);
 
 cxAny cxEngineCreateObject(cxConstChars src);
 

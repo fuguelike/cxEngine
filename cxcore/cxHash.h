@@ -41,6 +41,7 @@ typedef struct {
 
 typedef cxInt (*cxHashCmpFunc)(cxHashElement *lp,cxHashElement *rp);
 
+
 #define cxHashIntKey(_v_)       (cxHashKey){.length=sizeof(cxInt),.data=(cxChars)&(cxInt){_v_}}
 
 #define cxHashLongKey(_v_)      (cxHashKey){.length=sizeof(cxLong),.data=(cxChars)&(cxLong){_v_}}

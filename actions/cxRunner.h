@@ -17,8 +17,6 @@ CX_DEF(cxRunner, cxAction)
     cxAny data;
     cxInt count;
     cxInt step;
-    CX_METHOD_DEF(void, Init, cxAny);
-    CX_METHOD_DEF(void, Exit, cxAny);
 CX_END(cxRunner, cxAction)
 
 void cxRunnerAppend(cxAny runner,cxAny pav, cxAny pview);

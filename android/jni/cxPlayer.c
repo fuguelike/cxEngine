@@ -11,10 +11,16 @@
 #include <cxcore/cxBase.h>
 #include "cxAndroid.h"
 
-CX_DEF(cxTrack, cxObject)
-    cxInt soundId;
-    cxString file;
-CX_END(cxTrack, cxObject)
+CX_TYPE(cxBuffer, cxObject)
+{
+}
+CX_INIT(cxBuffer, cxObject)
+{
+}
+CX_FREE(cxBuffer, cxObject)
+{
+}
+CX_TERM(cxBuffer, cxObject)
 
 CX_TYPE(cxTrack, cxObject)
 {

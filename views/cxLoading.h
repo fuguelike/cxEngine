@@ -20,9 +20,6 @@ CX_DEF(cxLoading, cxView)
     cxTimer stepTimer;
     CX_FIELD_DEF(cxInt Index);
     CX_FIELD_DEF(cxInt Step);
-    CX_METHOD_DEF(void, onExit, cxAny);
-    CX_METHOD_DEF(void, onStep, cxAny);
-    CX_METHOD_DEF(void, onStart, cxAny);
     cxArray asyncs;
 CX_END(cxLoading, cxView)
 
@@ -44,11 +41,11 @@ void cxLoadingAppend(cxAny pview,cxAny pitem);
 
 #define cxLoadingAppendType(_o_,_t_)  cxLoadingAppend(_o_,CX_CREATE(_t_))
 
-void cxLoadingStop(cxAny pview);
+void cxLoadingFireStop(cxAny pview);
 
-void cxLoadingStart(cxAny pview);
+void cxLoadingFireStart(cxAny pview);
 
-void cxLoaingFinished(cxAny pview);
+void cxLoaingFireFinished(cxAny pview);
 
 CX_C_END
 

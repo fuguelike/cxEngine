@@ -14,12 +14,6 @@
 
 cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
 
-CX_DEF(cxBuffer, cxObject)
-    ALuint buffer;
-    ALenum format;
-    ALsizei freq;
-CX_END(cxBuffer, cxObject)
-
 CX_TYPE(cxBuffer, cxObject)
 {
     
@@ -42,12 +36,6 @@ static cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
     alBufferData(this->buffer, format, cxStringBody(data), cxStringLength(data), freq);
     return this;
 }
-
-CX_DEF(cxTrack, cxObject)
-    ALsizei freq;
-    ALuint format;
-    ALuint source;
-CX_END(cxTrack, cxObject)
 
 CX_TYPE(cxTrack, cxObject)
 {
@@ -147,21 +135,12 @@ cxAny cxPlayEffect(cxConstChars file,cxBool loop)
     return cxPlayBuffer(buffer,loop);
 }
 
-static void cxPlayerOnMemory(cxAny player)
-{
-    cxPlayer this = player;
-    cxHashClear(this->caches);
-}
-
 CX_TYPE(cxPlayer, cxObject)
 {
     
 }
 CX_INIT(cxPlayer, cxObject)
 {
-    cxEngine engine = cxEngineInstance();
-    CX_CON(cxEngine, engine, onMemory, this, cxPlayerOnMemory);
-    
     this->device = alcOpenDevice(NULL);
     CX_ASSERT(this->device != NULL, "alc open device failed");
     
@@ -184,6 +163,5 @@ CX_FREE(cxPlayer, cxObject)
     alcMakeContextCurrent(NULL);
     alcDestroyContext(this->context);
     alcCloseDevice(this->device);
-    CX_SLOT_RELEASE(this->onMemory);
 }
 CX_TERM(cxPlayer, cxObject)

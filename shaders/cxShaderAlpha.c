@@ -9,7 +9,7 @@
 #include "cxShaderDefault.h"
 #include "cxShaderAlpha.h"
 
-cxString cxShaderAlphaFragment(cxAny ps)
+static cxString CX_METHOD(cxShaderAlpha,Fragment)
 {
     static cxConstChars fragment =
     GLSL(
@@ -26,12 +26,11 @@ cxString cxShaderAlphaFragment(cxAny ps)
 
 CX_TYPE(cxShaderAlpha, cxShader)
 {
-    
+    CX_MSET(cxShaderAlpha, Fragment);
 }
 CX_INIT(cxShaderAlpha, cxShader)
 {
-    CX_SET(cxShader, this, Vertex, cxShaderDefaultVertex);
-    CX_SET(cxShader, this, Fragment, cxShaderAlphaFragment);
+    
 }
 CX_FREE(cxShaderAlpha, cxShader)
 {

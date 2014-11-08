@@ -19,8 +19,20 @@ CX_FREE(cxTexCoord, cxObject)
 {}
 CX_TERM(cxTexCoord, cxObject)
 
+static cxBool CX_METHOD(cxTexture, Load,cxStream stream)
+{
+    return false;
+}
+static void CX_METHOD(cxTexture, Bind)
+{
+    cxOpenGLBindTexture(this->textureId,0);
+}
+
 CX_TYPE(cxTexture, cxObject)
-{}
+{
+    CX_MSET(cxTexture, Load);
+    CX_MSET(cxTexture, Bind);
+}
 CX_INIT(cxTexture, cxObject)
 {
     this->texParam = cxtpv(GL_LINEAR,GL_LINEAR,GL_CLAMP_TO_EDGE,GL_CLAMP_TO_EDGE);
@@ -35,11 +47,11 @@ CX_FREE(cxTexture, cxObject)
 }
 CX_TERM(cxTexture, cxObject)
 
-void cxTextureLoad(cxAny ptex,cxStream stream)
+void cxTextureFireLoad(cxAny ptex,cxStream stream)
 {
     CX_ASSERT_THIS(ptex, cxTexture);
     CX_RETURN(this->isLoad);
-    this->isLoad = CX_METHOD_GET(false, this->Load,this,stream);
+    this->isLoad = CX_CALL(this, Load, CX_MT(cxBool,cxStream),stream);
 }
 
 cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat pixel,cxBool flipx,cxBool flipy)
@@ -110,10 +122,10 @@ void cxTextureDraw(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars
     cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
-void cxTextureBind(cxAny ptex)
+void cxTextureFireBind(cxAny ptex)
 {
     CX_ASSERT_THIS(ptex, cxTexture);
-    CX_METHOD_RUN(this->Bind,this);
+    CX_CALL(this, Bind, CX_MT(void));
     if(!this->isSetParam){
         cxOpenGLSetTexParameters(this->texParam);
         this->isSetParam = true;

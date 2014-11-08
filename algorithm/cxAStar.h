@@ -43,20 +43,20 @@ typedef enum {
 #define CX_ASTAR_POINTS_FOREACH(_p_, _i_)    CX_ANY_ARRAY_REVERSE(_p_, _i_, cxVec2i)
 
 CX_DEF(cxAStar, cxObject)
-    cxAStarType type;
-    CX_METHOD_DEF(void, Neighbors, cxAny, cxAny list, cxVec2i *node);
-    CX_METHOD_DEF(cxFloat, Heuristic, cxAny, cxVec2i *from,cxVec2i *to);
-    CX_METHOD_DEF(cxInt, EarlyExit, cxAny, cxInt vcount, cxVec2i *curr,cxVec2i *target);
-    CX_METHOD_DEF(cxInt, Comparator, cxAny, cxVec2i *lv,cxVec2i *rv);
-    CX_METHOD_DEF(cxBool, IsAppend, cxAny, cxVec2i *node);
-    cxAny data;
+    CX_FIELD_DEF(cxAStarType Type);
+    CX_FIELD_DEF(cxAny UserData);
     cxAnyArray points;
     cxAnyArray visits;
 CX_END(cxAStar, cxObject)
 
-void cxAStarSetType(cxAny pobj,cxAStarType type);
+CX_FIELD_IMP(cxAStar, cxAny, UserData);
 
-void cxAStarNeighbors(cxAny pbj, cxAny list, cxVec2i *node);
+CX_INLINE void cxAStarSetType(cxAny pthis,const cxAStarType type)
+{
+    CX_ASSERT_THIS(pthis, cxAStar);
+    cxAnyArrayClear(this->points);
+    this->Type = type;
+}
 
 //use at Neighbors
 void cxAStarAppendNeighbors(cxAny list,cxVec2i point,cxFloat edgeCost);

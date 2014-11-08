@@ -108,7 +108,6 @@ void cxEngineTerminate()
     (*javaENV)->DeleteGlobalRef(javaENV,javaClass);
     javaENV = NULL;
     javaClass = NULL;
-    cxGlobalFree();
 }
 
 //java:String cxEngineDocumentPath()

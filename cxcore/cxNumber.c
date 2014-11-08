@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxType.h"
+#include "cxJson.h"
 #include "cxNumber.h"
 
 cxBool cxNumberIsType(cxAny this,cxNumberType type)

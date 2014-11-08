@@ -108,10 +108,17 @@ static void cxSkeletonStateListener(spAnimationState* state, int trackIndex, spE
     CX_EVENT_FIRE(this, onEvent);
 }
 
-static void cxSkeletonInit(cxAny pav)
+static void CX_METHOD(cxSkeleton, Step,cxFloat dt, cxFloat time)
 {
-    CX_ASSERT_THIS(pav, cxSkeleton);
-    CX_ASSERT_VALUE(cxActionGetView(pav), cxSpine, spine);
+    CX_ASSERT(this->state != NULL, "animation state null");
+    CX_ASSERT_VALUE(cxActionGetView(this), cxSpine, spine);
+    CX_ASSERT(spine != NULL && spine->skeleton != NULL, "target spine view not init");
+    spAnimationState_update(this->state, dt);
+    spAnimationState_apply(this->state, spine->skeleton);
+}
+static void CX_METHOD(cxSkeleton,Init)
+{
+    CX_ASSERT_VALUE(cxActionGetView(this), cxSpine, spine);
     cxSkeletionFree(this);
     this->state = spAnimationState_create(spine->stateData);
     if(this->state == NULL){
@@ -132,22 +139,6 @@ static void cxSkeletonInit(cxAny pav)
         return;
     }
 }
-
-static void cxSkeletonStep(cxAny pav,cxFloat dt,cxFloat time)
-{
-    CX_ASSERT_THIS(pav, cxSkeleton);
-    CX_ASSERT(this->state != NULL, "animation state null");
-    CX_ASSERT_VALUE(cxActionGetView(pav), cxSpine, spine);
-    CX_ASSERT(spine != NULL && spine->skeleton != NULL, "target spine view not init");
-	spAnimationState_update(this->state, dt);
-	spAnimationState_apply(this->state, spine->skeleton);
-}
-
-static cxBool cxSkeletonExit(cxAny pav)
-{
-    return false;
-}
-
 CX_SETTER_DEF(cxSkeleton, tracks)
 {
     CX_RETAIN_SWAP(this->tracks, value);
@@ -156,13 +147,13 @@ CX_SETTER_DEF(cxSkeleton, tracks)
 CX_TYPE(cxSkeleton, cxAction)
 {
     CX_SETTER(cxSkeleton, tracks);
+    
+    CX_MSET(cxSkeleton, Init);
+    CX_MSET(cxSkeleton, Step);
 }
 CX_INIT(cxSkeleton, cxAction)
 {
     this->cxAction.Time = -1;
-    CX_SET(cxAction, this, Init, cxSkeletonInit);
-    CX_SET(cxAction, this, Step, cxSkeletonStep);
-    CX_SET(cxAction, this, Exit, cxSkeletonExit);
 }
 CX_FREE(cxSkeleton, cxAction)
 {
