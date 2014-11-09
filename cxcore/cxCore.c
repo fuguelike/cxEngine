@@ -229,6 +229,7 @@ void cxTypesInit()
     CX_TYPE_REG(cxPath);
     CX_TYPE_REG(cxStream);
     CX_TYPE_REG(cxAnyArray);
+    CX_TYPE_REG(cxLua);
 }
 void cxTypesFree()
 {
