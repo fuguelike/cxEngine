@@ -192,6 +192,7 @@
 		8353037F1A07613A00235B79 /* cxParticle.c in Sources */ = {isa = PBXBuildFile; fileRef = 8353037D1A07613A00235B79 /* cxParticle.c */; };
 		83B1EAD51A01DE520089B374 /* lzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B1EAD31A01DE520089B374 /* lzma.c */; };
 		83B1EAD81A01FE3F0089B374 /* cxLzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 83B1EAD61A01FE3F0089B374 /* cxLzma.c */; };
+		83C0B95A1A0F5FB800B1C6E2 /* cxLua.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C0B9581A0F5FB800B1C6E2 /* cxLua.c */; };
 		83C274F41A0E62E100A8BC26 /* cxOpenGL.c in Sources */ = {isa = PBXBuildFile; fileRef = 83C274F31A0E62E100A8BC26 /* cxOpenGL.c */; };
 		83CA51A919F3A6DD002119B0 /* cxShaderTTF.c in Sources */ = {isa = PBXBuildFile; fileRef = 83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */; };
 		83E21E971A04C9AF000DCD15 /* cxAsync.c in Sources */ = {isa = PBXBuildFile; fileRef = 83E21E951A04C9AF000DCD15 /* cxAsync.c */; };
@@ -573,6 +574,8 @@
 		83B1EAD41A01DE520089B374 /* lzma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzma.h; sourceTree = "<group>"; };
 		83B1EAD61A01FE3F0089B374 /* cxLzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLzma.c; sourceTree = "<group>"; };
 		83B1EAD71A01FE3F0089B374 /* cxLzma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLzma.h; sourceTree = "<group>"; };
+		83C0B9581A0F5FB800B1C6E2 /* cxLua.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLua.c; sourceTree = "<group>"; };
+		83C0B9591A0F5FB800B1C6E2 /* cxLua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLua.h; sourceTree = "<group>"; };
 		83C274F31A0E62E100A8BC26 /* cxOpenGL.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxOpenGL.c; sourceTree = "<group>"; };
 		83CA51A719F3A6DD002119B0 /* cxShaderTTF.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxShaderTTF.c; sourceTree = "<group>"; };
 		83CA51A819F3A6DD002119B0 /* cxShaderTTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxShaderTTF.h; sourceTree = "<group>"; };
@@ -858,6 +861,8 @@
 				831E63C519EFA9AF00FCFD85 /* cxStream.h */,
 				831E63C619EFA9AF00FCFD85 /* cxString.c */,
 				831E63C719EFA9AF00FCFD85 /* cxString.h */,
+				83C0B9581A0F5FB800B1C6E2 /* cxLua.c */,
+				83C0B9591A0F5FB800B1C6E2 /* cxLua.h */,
 			);
 			path = cxcore;
 			sourceTree = SOURCE_ROOT;
@@ -1257,6 +1262,7 @@
 				831E663C19EFA9D200FCFD85 /* cxLoading.c in Sources */,
 				831E65A619EFA9B000FCFD85 /* cxUtil.m in Sources */,
 				831E662C19EFA9D200FCFD85 /* cxFileStream.c in Sources */,
+				83C0B95A1A0F5FB800B1C6E2 /* cxLua.c in Sources */,
 				831046EF19F21B3E0086D91A /* MeshAttachment.c in Sources */,
 				831046F519F21B3E0086D91A /* Skin.c in Sources */,
 				831E657819EFA9B000FCFD85 /* cpSpaceComponent.c in Sources */,

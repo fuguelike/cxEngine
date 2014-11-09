@@ -69,11 +69,11 @@
 
 #include <algorithm/cxAStar.h>
 
-cxEngine engineInstance = NULL;
+cxEngine engine = NULL;
 
 void cxEngineRecvJson(cxString json)
 {
-    CX_RETURN(engineInstance == NULL);
+    CX_RETURN(engine == NULL);
     cxEngine engine = cxEngineInstance();
     CX_SIGNAL_FIRE(engine->onRecvJson, CX_SIGNAL_TYPE(cxString),json);
     CX_LOGGER("cxengine recv:%s",cxStringBody(json));
@@ -81,7 +81,7 @@ void cxEngineRecvJson(cxString json)
 
 void cxEngineExit()
 {
-    CX_RETURN(engineInstance == NULL);
+    CX_RETURN(engine == NULL);
     cxEnginePause();
     cxEngineDestroy();
     cxEngineTerminate();
@@ -89,7 +89,7 @@ void cxEngineExit()
 
 void cxEnginePause()
 {
-    CX_RETURN(engineInstance == NULL);
+    CX_RETURN(engine == NULL);
     cxEngine engine = cxEngineInstance();
     engine->isPause = true;
     CX_SIGNAL_FIRE(engine->onPause, CX_SIGNAL_TYPE());
@@ -275,11 +275,11 @@ void cxEngineStartup()
 #else
     CX_LOGGER("cxEngine Version: %d,Run Mode:RELEASE",CX_ENGINE_VERSION);
 #endif
-    CX_ASSERT(engineInstance == NULL, "repeat init engine");
+    CX_ASSERT(engine == NULL, "repeat init engine");
     cxGlobalInit();
     //registe all types
     cxRegisterEngineTypes();
-    engineInstance = CX_ALLOC(cxEngine);
+    engine = CX_ALLOC(cxEngine);
     //set localized lang
     cxEngineSetLang(cxLocalizedLang());
     CX_LOGGER("system lang:%s",cxStringBody(cxEngineGetLang()));
@@ -293,17 +293,17 @@ void cxEngineStartup()
     //设置方法调用
     cxJsonSetPropertyGetter(cxEngineJsonRunGetter);
     //read Manifest.json config file
-    CX_RETAIN_SET(engineInstance->Config, cxEngineLoadJson("Manifest.json"));
-    if(engineInstance->Config != NULL){
-        cxEngineLoadConfig(engineInstance);
+    CX_RETAIN_SET(engine->Config, cxEngineLoadJson("Manifest.json"));
+    if(engine->Config != NULL){
+        cxEngineLoadConfig(engine);
     }
     //use init engine
-    cxEngineInit(engineInstance);
+    cxEngineInit(engine);
 }
 
 void cxEngineClear()
 {
-    CX_RETURN(engineInstance == NULL);
+    CX_RETURN(engine == NULL);
     cxEngine engine = cxEngineInstance();
     cxTextureCacheClear();
     cxHashClear(engine->files);
@@ -312,7 +312,7 @@ void cxEngineClear()
 
 void cxEngineResume()
 {
-    CX_RETURN(engineInstance == NULL);
+    CX_RETURN(engine == NULL);
     cxEngine engine = cxEngineInstance();
     engine->isPause = false;
     CX_SIGNAL_FIRE(engine->onResume, CX_SIGNAL_TYPE());
@@ -323,14 +323,14 @@ void cxEngineResume()
 
 void cxEngineMemory()
 {
-    CX_RETURN(engineInstance == NULL);
+    CX_RETURN(engine == NULL);
     cxEngine engine = cxEngineInstance();
     CX_SIGNAL_FIRE(engine->onMemory, CX_SIGNAL_TYPE());
 }
 
 void cxEngineDraw(cxFloat dt)
 {
-    CX_RETURN(engineInstance == NULL);
+    CX_RETURN(engine == NULL);
     cxEngine engine = cxEngineInstance();
     if(!engine->isInit || engine->isPause){
         return;
@@ -397,7 +397,7 @@ void cxEngineLayout(cxInt width,cxInt height)
     engine->isInit = true;
 }
 
-cxTimer cxEngineTimer(cxFloat freq,cxInt repeat)
+cxAny cxEngineTimer(cxFloat freq,cxInt repeat)
 {
     cxEngine engine = cxEngineInstance();
     return cxViewAppendTimer(engine->Window, freq, repeat);
@@ -413,10 +413,15 @@ CX_GETTER_DEF(cxEngine, WinScale)
     cxVec2f scale = cxEngineGetScale();
     return cxJsonVec2fToJson(scale);
 }
-
+CX_GETTER_DEF(cxEngine, DesSize)
+{
+    cxSize2f size = cxEngineGetDesSize();
+    return cxJsonSize2fToJson(size);
+}
 CX_TYPE(cxEngine, cxObject)
 {
     CX_GETTER(cxEngine, WinSize);
+    CX_GETTER(cxEngine, DesSize);
     CX_GETTER(cxEngine, WinScale);
     cxEngineType(this);
 }
@@ -528,9 +533,9 @@ cxBMPFont cxEngineLoadBMPFont(cxConstChars file)
 
 void cxEngineDestroy()
 {
-    cxEngineFree(engineInstance);
-    CX_RELEASE(engineInstance);
-    engineInstance = NULL;
+    cxEngineFree(engine);
+    CX_RELEASE(engine);
+    engine = NULL;
     cxGlobalFree();
 }
 

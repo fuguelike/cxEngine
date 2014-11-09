@@ -31,3 +31,8 @@ LOCAL_MODULE := png
 LOCAL_SRC_FILES := libpng.a
 include $(PREBUILT_STATIC_LIBRARY)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE := luajit
+LOCAL_SRC_FILES := libluajit.a
+include $(PREBUILT_STATIC_LIBRARY)
+

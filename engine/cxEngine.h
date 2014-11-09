@@ -8,8 +8,6 @@
 #define cxEngine_cxEngine_h
 
 #include <views/cxWindow.h>
-#include <actions/cxCurve.h>
-#include <actions/cxTimer.h>
 #include <cxcore/cxBase.h>
 #include <textures/cxTextureCache.h>
 #include <socket/cxLooper.h>
@@ -61,126 +59,130 @@ CX_DEF(cxEngine, cxObject)
     cxLooper looper;            //socket looper
 CX_END(cxEngine, cxObject)
 
-extern cxEngine engineInstance;
+extern cxEngine engine;
 
 CX_INLINE cxEngine cxEngineInstance()
 {
-    return engineInstance;
+    return engine;
 }
 
 CX_INLINE cxJson cxEngineGetConfig()
 {
-    return engineInstance->Config;
+    return engine->Config;
 }
 
 CX_INLINE cxUInt cxEngineVersion()
 {
-    return engineInstance->Version;
+    return engine->Version;
 }
 
 CX_INLINE cxTextureCache cxTextureCacheInstance()
 {
-    return engineInstance->textures;
+    return engine->textures;
 }
 
 CX_INLINE cxLooper cxLooperInstance()
 {
-    return engineInstance->looper;
+    return engine->looper;
 }
 
 CX_INLINE cxPlayer cxPlayerInstance()
 {
-    return engineInstance->player;
+    return engine->player;
 }
 
 CX_INLINE cxIconv cxIconvInstance()
 {
-    return engineInstance->iconv;
+    return engine->iconv;
 }
 
 CX_INLINE cxWindow cxEngineGetWindow()
 {
-    return engineInstance->Window;
+    return engine->Window;
 }
 
 CX_INLINE cxOpenGL cxOpenGLInstance()
 {
-    return engineInstance->opengl;
+    return engine->opengl;
 }
 
 CX_INLINE cxCurve cxCurveInstance()
 {
-    return engineInstance->curve;
+    return engine->curve;
 }
 
 CX_INLINE void cxEngineSetInterval(cxFloat interval)
 {
-    engineInstance->Interval = interval;
+    engine->Interval = interval;
 }
 
 CX_INLINE cxString cxEngineGetLocalized()
 {
-    return engineInstance->Localized;
+    return engine->Localized;
 }
 
 CX_INLINE cxString cxEngineGetCountry()
 {
-    return engineInstance->Country;
+    return engine->Country;
 }
 
 CX_INLINE void cxEngineSetCountry(cxString country)
 {
-    CX_RETAIN_SWAP(engineInstance->Country, country);
+    CX_RETAIN_SWAP(engine->Country, country);
 }
 
 CX_INLINE cxString cxEngineGetLang()
 {
-    return engineInstance->Lang;
+    return engine->Lang;
 }
 
 CX_INLINE void cxEngineSetLang(cxString lng)
 {
-    CX_RETAIN_SWAP(engineInstance->Lang, lng);
+    CX_RETAIN_SWAP(engine->Lang, lng);
 }
 
 CX_INLINE cxFloat cxEngineGetFrameDelta()
 {
-    return engineInstance->FrameDelta;
+    return engine->FrameDelta;
 }
 
 CX_INLINE void cxEngineSetScale(cxVec2f v)
 {
-    engineInstance->Scale = v;
+    engine->Scale = v;
 }
 
 CX_INLINE cxVec2f cxEngineGetScale()
 {
-    return engineInstance->Scale;
+    return engine->Scale;
 }
 
 CX_INLINE cxBool cxEngineGetIsShowBorder()
 {
-    return engineInstance->IsShowBorder;
+    return engine->IsShowBorder;
 }
 
 CX_INLINE void cxEngineSetIsShowBorder(cxBool v)
 {
 #ifdef NDEBUG
-    engineInstance->IsShowBorder = false;
+    engine->IsShowBorder = false;
 #else
-    engineInstance->IsShowBorder = v;
+    engine->IsShowBorder = v;
 #endif
 }
 
 //use init method
 CX_INLINE void cxEngineSetDesSize(cxSize2f size)
 {
-    engineInstance->DesSize = size;
+    engine->DesSize = size;
+}
+CX_INLINE cxSize2f cxEngineGetDesSize()
+{
+    return engine->DesSize;
 }
 
 CX_INLINE cxSize2f cxEngineGetWinSize()
 {
-    return engineInstance->WinSize;
+    return engine->WinSize;
 }
 
 void cxEngineClear();
@@ -211,7 +213,7 @@ cxJson cxEngineLoadJson(cxConstChars file);
 
 cxBMPFont cxEngineLoadBMPFont(cxConstChars file);
 
-cxTimer cxEngineTimer(cxFloat freq,cxInt repeat);
+cxAny cxEngineTimer(cxFloat freq,cxInt repeat);
 
 cxVec2f cxEngineTouchToWindow(cxVec2f pos);
 
