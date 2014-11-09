@@ -21,11 +21,12 @@ CX_DEF(cxValue, cxObject)
     cxByte oldVar[CX_VALUE_MAX_SIZE];
     cxByte newVar[CX_VALUE_MAX_SIZE];
     CX_EVENT_ALLOC(onChanged);
-    CX_SLOT_ALLOC(onUpdate);
     CX_FIELD_DEF(cxAny Data);
 CX_END(cxValue, cxObject)
 
 CX_FIELD_IMP(cxValue, cxAny, Data);
+
+void cxValueUpdate(cxAny pobj);
 
 cxValue cxValueAllocImp(cxInt size);
 

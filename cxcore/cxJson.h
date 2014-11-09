@@ -48,18 +48,8 @@ if((_j_) != NULL){                                                  \
     }                                                               \
 }
 
-typedef cxJson (*cxJsonReaderFunc)(cxConstChars src);
-typedef json_t *(*cxLocalizedFunc)(cxConstChars key);
-typedef json_t *(*cxJsonPropertyGetterFunc)(cxConstChars key);
-
 //return value will autorelease
 json_t *jsonCreateString(cxConstChars str);
-
-void cxJsonSetReader(cxJsonReaderFunc func);
-
-void cxJsonSetPropertyGetter(cxJsonPropertyGetterFunc func);
-
-void cxJsonSetLocalized(cxLocalizedFunc func);
 
 cxJson cxJsonRead(cxConstChars src);
 

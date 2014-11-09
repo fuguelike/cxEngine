@@ -28,7 +28,7 @@ cxTexture cxTextureCreateText(cxString txt,cxString font,cxTextAttr attr);
 
 void cxTextureCacheUnloadFile(cxConstChars file);
 
-void cxTextureCacheClear();
+void cxTextureCacheClear(cxTextureCache this);
 
 cxTexture cxTextureCreate(cxConstChars file);
 

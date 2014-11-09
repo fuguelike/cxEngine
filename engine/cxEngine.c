@@ -74,9 +74,7 @@ cxEngine engine = NULL;
 void cxEngineRecvJson(cxString json)
 {
     CX_RETURN(engine == NULL);
-    cxEngine engine = cxEngineInstance();
-    CX_SIGNAL_FIRE(engine->onRecvJson, CX_SIGNAL_TYPE(cxString),json);
-    CX_LOGGER("cxengine recv:%s",cxStringBody(json));
+    cxMessagePost(cxEngineNoticRecvJson, json);
 }
 
 void cxEngineExit()
@@ -92,7 +90,7 @@ void cxEnginePause()
     CX_RETURN(engine == NULL);
     cxEngine engine = cxEngineInstance();
     engine->isPause = true;
-    CX_SIGNAL_FIRE(engine->onPause, CX_SIGNAL_TYPE());
+    cxMessagePost(cxEngineNoticPause, engine);
     if(engine->isInit){
         cxPauseMusic();
     }
@@ -101,93 +99,93 @@ void cxEnginePause()
 static void cxRegisterEngineTypes()
 {
     //register core
-    CX_TYPE_REG(cxIconv);
-    CX_TYPE_REG(cxOpenGL);
-    CX_TYPE_REG(cxTexCoord);
-    CX_TYPE_REG(cxTexture);
-    CX_TYPE_REG(cxView);
-    CX_TYPE_REG(cxAction);
-    CX_TYPE_REG(cxJson);
-    CX_TYPE_REG(cxTrack);
-    CX_TYPE_REG(cxBuffer);
-    CX_TYPE_REG(cxPlayer);
-    CX_TYPE_REG(cxTouchItem);
-    CX_TYPE_REG(cxAStar);
-    CX_TYPE_REG(cxGroup);
-    CX_TYPE_REG(cxShader);
-    CX_TYPE_REG(cxValue);
-    CX_TYPE_REG(cxSpatial);
-    CX_TYPE_REG(cxCurveItem);
-    CX_TYPE_REG(cxCurve);
+    CX_SET_TYPE(cxIconv);
+    CX_SET_TYPE(cxOpenGL);
+    CX_SET_TYPE(cxTexCoord);
+    CX_SET_TYPE(cxTexture);
+    CX_SET_TYPE(cxView);
+    CX_SET_TYPE(cxAction);
+    CX_SET_TYPE(cxJson);
+    CX_SET_TYPE(cxTrack);
+    CX_SET_TYPE(cxBuffer);
+    CX_SET_TYPE(cxPlayer);
+    CX_SET_TYPE(cxTouchItem);
+    CX_SET_TYPE(cxAStar);
+    CX_SET_TYPE(cxGroup);
+    CX_SET_TYPE(cxShader);
+    CX_SET_TYPE(cxValue);
+    CX_SET_TYPE(cxSpatial);
+    CX_SET_TYPE(cxCurveItem);
+    CX_SET_TYPE(cxCurve);
     
     //register shader
-    CX_TYPE_REG(cxShaderAlpha);
-    CX_TYPE_REG(cxShaderClipping);
-    CX_TYPE_REG(cxShaderDefault);
-    CX_TYPE_REG(cxShaderColor);
-    CX_TYPE_REG(cxShaderMultiple);
-    CX_TYPE_REG(cxShaderTTF);
+    CX_SET_TYPE(cxShaderAlpha);
+    CX_SET_TYPE(cxShaderClipping);
+    CX_SET_TYPE(cxShaderDefault);
+    CX_SET_TYPE(cxShaderColor);
+    CX_SET_TYPE(cxShaderMultiple);
+    CX_SET_TYPE(cxShaderTTF);
     
     //register streams
-    CX_TYPE_REG(cxAssetsStream);
-    CX_TYPE_REG(cxFileStream);
-    CX_TYPE_REG(cxMemStream);
-    CX_TYPE_REG(cxMMapStream);
+    CX_SET_TYPE(cxAssetsStream);
+    CX_SET_TYPE(cxFileStream);
+    CX_SET_TYPE(cxMemStream);
+    CX_SET_TYPE(cxMMapStream);
     
     //register textures
-    CX_TYPE_REG(cxTextureCache);
-    CX_TYPE_REG(cxTextureJPG);
-    CX_TYPE_REG(cxTexturePKM);
-    CX_TYPE_REG(cxTexturePNG);
-    CX_TYPE_REG(cxTextureTXT);
-    CX_TYPE_REG(cxTexturePVR);
-    CX_TYPE_REG(cxTextureJSON);
+    CX_SET_TYPE(cxTextureCache);
+    CX_SET_TYPE(cxTextureJPG);
+    CX_SET_TYPE(cxTexturePKM);
+    CX_SET_TYPE(cxTexturePNG);
+    CX_SET_TYPE(cxTextureTXT);
+    CX_SET_TYPE(cxTexturePVR);
+    CX_SET_TYPE(cxTextureJSON);
     
     //register views
-    CX_TYPE_REG(cxWindow);
-    CX_TYPE_REG(cxSprite);
-    CX_TYPE_REG(cxScroll);
-    CX_TYPE_REG(cxTable);
-    CX_TYPE_REG(cxWindow);
-    CX_TYPE_REG(cxClipping);
-    CX_TYPE_REG(cxLoading);
-    CX_TYPE_REG(cxAsync);
-    CX_TYPE_REG(cxPolygon);
-    CX_TYPE_REG(cxAtlas);
-    CX_TYPE_REG(cxButton);
-    CX_TYPE_REG(cxLabelTTF);
-    CX_TYPE_REG(cxLabelBMP);
-    CX_TYPE_REG(cxAlert);
-    CX_TYPE_REG(cxSpine);
+    CX_SET_TYPE(cxWindow);
+    CX_SET_TYPE(cxSprite);
+    CX_SET_TYPE(cxScroll);
+    CX_SET_TYPE(cxTable);
+    CX_SET_TYPE(cxWindow);
+    CX_SET_TYPE(cxClipping);
+    CX_SET_TYPE(cxLoading);
+    CX_SET_TYPE(cxAsync);
+    CX_SET_TYPE(cxPolygon);
+    CX_SET_TYPE(cxAtlas);
+    CX_SET_TYPE(cxButton);
+    CX_SET_TYPE(cxLabelTTF);
+    CX_SET_TYPE(cxLabelBMP);
+    CX_SET_TYPE(cxAlert);
+    CX_SET_TYPE(cxSpine);
     
     //register actions
-    CX_TYPE_REG(cxMultiple);
-    CX_TYPE_REG(cxAnimateItem);
-    CX_TYPE_REG(cxAnimate);
-    CX_TYPE_REG(cxFade);
-    CX_TYPE_REG(cxFollow);
-    CX_TYPE_REG(cxJump);
-    CX_TYPE_REG(cxMove);
-    CX_TYPE_REG(cxParabola);
-    CX_TYPE_REG(cxParticle);
-    CX_TYPE_REG(cxRotate);
-    CX_TYPE_REG(cxRunner);
-    CX_TYPE_REG(cxScale);
-    CX_TYPE_REG(cxSpline);
-    CX_TYPE_REG(cxTimer);
-    CX_TYPE_REG(cxTint);
-    CX_TYPE_REG(cxTimeLine);
-    CX_TYPE_REG(cxBezier);
-    CX_TYPE_REG(cxSkeleton);
-    CX_TYPE_REG(cxDriver);
+    CX_SET_TYPE(cxMultiple);
+    CX_SET_TYPE(cxAnimateItem);
+    CX_SET_TYPE(cxAnimate);
+    CX_SET_TYPE(cxFade);
+    CX_SET_TYPE(cxFollow);
+    CX_SET_TYPE(cxJump);
+    CX_SET_TYPE(cxMove);
+    CX_SET_TYPE(cxParabola);
+    CX_SET_TYPE(cxParticle);
+    CX_SET_TYPE(cxRotate);
+    CX_SET_TYPE(cxRunner);
+    CX_SET_TYPE(cxScale);
+    CX_SET_TYPE(cxSpline);
+    CX_SET_TYPE(cxTimer);
+    CX_SET_TYPE(cxTint);
+    CX_SET_TYPE(cxTimeLine);
+    CX_SET_TYPE(cxBezier);
+    CX_SET_TYPE(cxSkeleton);
+    CX_SET_TYPE(cxDriver);
     //scoket
-    CX_TYPE_REG(cxUDP);
-    CX_TYPE_REG(cxTCP);
-    CX_TYPE_REG(cxLooper);
-    CX_TYPE_REG(cxHttpConn);
-    CX_TYPE_REG(cxHttp);
+    CX_SET_TYPE(cxUDP);
+    CX_SET_TYPE(cxTCP);
+    CX_SET_TYPE(cxLooper);
+    CX_SET_TYPE(cxHttpConn);
+    CX_SET_TYPE(cxHttp);
     //
-    CX_TYPE_REG(cxEngine);
+    CX_SET_TYPE(cxEngine);
 }
 
 static cxBool cxEngineSetLocalized(cxEngine this,cxConstChars key)
@@ -250,7 +248,7 @@ static void cxEngineLoadConfig(cxEngine engine)
 {
     //showBorder
     cxBool showBorder = cxJsonBool(engine->Config, "cxShowBorder", false);
-    cxEngineSetIsShowBorder(showBorder);
+    cxEngineSetIsDebug(showBorder);
     //desSize
     cxSize2f desSize = cxJsonSize2f(engine->Config, "cxDesignSize", cxSize2fv(0, 0));
     cxEngineSetDesSize(desSize);
@@ -285,13 +283,6 @@ void cxEngineStartup()
     CX_LOGGER("system lang:%s",cxStringBody(cxEngineGetLang()));
     cxEngineSetCountry(cxLocalizedCountry());
     CX_LOGGER("system country:%s",cxStringBody(cxEngineGetCountry()));
-    //init engine
-    //设置json数据读取
-    cxJsonSetReader(cxEngineJsonReader);
-    //设置本地化字符串读取
-    cxJsonSetLocalized(cxEngineLocalizeder);
-    //设置方法调用
-    cxJsonSetPropertyGetter(cxEngineJsonRunGetter);
     //read Manifest.json config file
     CX_RETAIN_SET(engine->Config, cxEngineLoadJson("Manifest.json"));
     if(engine->Config != NULL){
@@ -305,7 +296,7 @@ void cxEngineClear()
 {
     CX_RETURN(engine == NULL);
     cxEngine engine = cxEngineInstance();
-    cxTextureCacheClear();
+    cxTextureCacheClear(engine->textures);
     cxHashClear(engine->files);
     cxHashClear(engine->assets);
 }
@@ -315,7 +306,7 @@ void cxEngineResume()
     CX_RETURN(engine == NULL);
     cxEngine engine = cxEngineInstance();
     engine->isPause = false;
-    CX_SIGNAL_FIRE(engine->onResume, CX_SIGNAL_TYPE());
+    cxMessagePost(cxEngineNoticResume, engine);
     if(engine->isInit){
         cxResumeMusic();
     }
@@ -325,7 +316,7 @@ void cxEngineMemory()
 {
     CX_RETURN(engine == NULL);
     cxEngine engine = cxEngineInstance();
-    CX_SIGNAL_FIRE(engine->onMemory, CX_SIGNAL_TYPE());
+    cxMessagePost(cxEngineNoticMemory, engine);
 }
 
 void cxEngineDraw(cxFloat dt)
@@ -338,7 +329,6 @@ void cxEngineDraw(cxFloat dt)
     cxMemPoolBegin();
     cxOpenGLClear();
     cxLooperUpdate(engine->looper);
-    CX_SIGNAL_FIRE(engine->onUpdate, CX_SIGNAL_TYPE(cxFloat),engine->FrameDelta);
     kmGLPushMatrix();
     cxViewDrawView(engine->Window);
     kmGLPopMatrix();
@@ -402,7 +392,27 @@ cxAny cxEngineTimer(cxFloat freq,cxInt repeat)
     cxEngine engine = cxEngineInstance();
     return cxViewAppendTimer(engine->Window, freq, repeat);
 }
-
+//for cxcore
+cxAny cxJsonLoader(cxConstChars src)
+{
+    CX_ASSERT(engine != NULL, "engine not init");
+    return CX_CALL(engine, JsonLoader, CX_M(cxAny,cxConstChars), src);
+}
+cxAny cxJsonLocalized(cxConstChars key)
+{
+    CX_ASSERT(engine != NULL, "engine not init");
+    return CX_CALL(engine, JsonLocalized, CX_M(cxAny,cxConstChars), key);
+}
+cxAny cxJsonProperty(cxConstChars key)
+{
+    CX_ASSERT(engine != NULL, "engine not init");
+    return CX_CALL(engine, JsonProperty, CX_M(cxAny,cxConstChars), key);
+}
+//for cxcore end
+void cxTypeFinished(cxType this)
+{
+    
+}
 CX_GETTER_DEF(cxEngine, WinSize)
 {
     cxSize2f size = cxEngineGetWinSize();
@@ -418,8 +428,24 @@ CX_GETTER_DEF(cxEngine, DesSize)
     cxSize2f size = cxEngineGetDesSize();
     return cxJsonSize2fToJson(size);
 }
+CX_METHOD_DEF(cxEngine, JsonLoader, cxAny, cxConstChars src)
+{
+    return cxEngineJsonReader(src);
+}
+CX_METHOD_DEF(cxEngine, JsonLocalized, cxAny, cxConstChars key)
+{
+    return cxEngineLocalizeder(key);
+}
+CX_METHOD_DEF(cxEngine, JsonProperty, cxAny, cxConstChars key)
+{
+    return cxEngineJsonRunGetter(key);
+}
 CX_TYPE(cxEngine, cxObject)
 {
+    CX_METHOD(cxEngine, JsonLoader);
+    CX_METHOD(cxEngine, JsonLocalized);
+    CX_METHOD(cxEngine, JsonProperty);
+    
     CX_GETTER(cxEngine, WinSize);
     CX_GETTER(cxEngine, DesSize);
     CX_GETTER(cxEngine, WinScale);
@@ -427,23 +453,22 @@ CX_TYPE(cxEngine, cxObject)
 }
 CX_INIT(cxEngine, cxObject)
 {
-    this->Interval      = 1.0f/60.0f;
-    this->FrameDelta    = 1.0f/60.0f;
-    this->IsShowBorder  = false;
-    this->isTouch       = true;
-    this->Scale         = cxVec2fv(1.0f, 1.0f);
-    this->files         = CX_ALLOC(cxHash);
-    this->items         = CX_ALLOC(cxHash);
-    this->groups        = CX_ALLOC(cxHash);
-    this->assets        = CX_ALLOC(cxHash);
-    //init model
-    this->Window        = CX_ALLOC(cxWindow);
-    this->curve         = CX_ALLOC(cxCurve);
-    this->opengl        = CX_ALLOC(cxOpenGL);
-    this->iconv         = CX_ALLOC(cxIconv);
-    this->player        = CX_ALLOC(cxPlayer);
-    this->textures      = CX_ALLOC(cxTextureCache);
-    this->looper        = CX_ALLOC(cxLooper);
+    this->Interval  = 1.0f/60.0f;
+    this->Delta     = 1.0f/60.0f;
+    this->IsDebug   = false;
+    this->isTouch   = true;
+    this->Scale     = cxVec2fv(1.0f, 1.0f);
+    this->files     = CX_ALLOC(cxHash);
+    this->items     = CX_ALLOC(cxHash);
+    this->groups    = CX_ALLOC(cxHash);
+    this->assets    = CX_ALLOC(cxHash);
+    this->Window    = CX_ALLOC(cxWindow);
+    this->curve     = CX_ALLOC(cxCurve);
+    this->opengl    = CX_ALLOC(cxOpenGL);
+    this->iconv     = CX_ALLOC(cxIconv);
+    this->player    = CX_ALLOC(cxPlayer);
+    this->textures  = CX_ALLOC(cxTextureCache);
+    this->looper    = CX_ALLOC(cxLooper);
 }
 CX_FREE(cxEngine, cxObject)
 {
@@ -455,11 +480,6 @@ CX_FREE(cxEngine, cxObject)
     CX_RELEASE(this->Localized);
     CX_RELEASE(this->Country);
     CX_RELEASE(this->Window);
-    CX_SIGNAL_RELEASE(this->onRecvJson);
-    CX_SIGNAL_RELEASE(this->onUpdate);
-    CX_SIGNAL_RELEASE(this->onPause);
-    CX_SIGNAL_RELEASE(this->onResume);
-    CX_SIGNAL_RELEASE(this->onMemory);
     CX_RELEASE(this->curve);
     CX_RELEASE(this->opengl);
     CX_RELEASE(this->iconv);

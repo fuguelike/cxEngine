@@ -205,7 +205,7 @@ void cxViewDrawView(cxAny pview)
     if(isCropping){
         cxOpenGLDisableScissor();
     }
-    if(cxEngineGetIsShowBorder() || this->isShowBorder){
+    if(cxEngineGetIsDebug() || this->isShowBorder){
         cxViewDrawBorder(this);
     }
     kmGLPopMatrix();
@@ -597,7 +597,9 @@ void cxViewSetColor(cxAny pview,cxColor3f color)
         this->Color.b = color.b;
         dirty = true;
     }
-    this->Dirty |= cxViewDirtyColor;
+    if(dirty){
+        this->Dirty |= cxViewDirtyColor;
+    }
 }
 
 void cxViewSetAlpha(cxAny pview,cxFloat alpha)
@@ -959,7 +961,7 @@ cxUInt cxViewAppendAction(cxAny pview,cxAny pav)
 void cxViewUpdateActions(cxView pview)
 {
     CX_ASSERT_THIS(pview, cxView);
-    cxFloat dt = cxEngineGetFrameDelta();
+    cxFloat dt = cxEngineGetDelta();
     CX_HASH_FOREACH(this->Actions, ele, tmp){
         CX_ASSERT_VALUE(ele->any, cxAction, action);
         if(!cxActionUpdate(action, dt)){

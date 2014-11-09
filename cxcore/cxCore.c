@@ -216,20 +216,20 @@ cxMethod cxMethodNew(cxType ptype,cxConstChars name)
 void cxTypesInit()
 {
     types = NULL;
-    CX_TYPE_REG(cxObject);
-    CX_TYPE_REG(cxString);
-    CX_TYPE_REG(cxMemPool);
-    CX_TYPE_REG(cxHash);
-    CX_TYPE_REG(cxArray);
-    CX_TYPE_REG(cxList);
-    CX_TYPE_REG(cxStack);
-    CX_TYPE_REG(cxNumber);
-    CX_TYPE_REG(cxMessage);
-    CX_TYPE_REG(cxLoader);
-    CX_TYPE_REG(cxPath);
-    CX_TYPE_REG(cxStream);
-    CX_TYPE_REG(cxAnyArray);
-    CX_TYPE_REG(cxLua);
+    CX_SET_TYPE(cxObject);
+    CX_SET_TYPE(cxString);
+    CX_SET_TYPE(cxMemPool);
+    CX_SET_TYPE(cxHash);
+    CX_SET_TYPE(cxArray);
+    CX_SET_TYPE(cxList);
+    CX_SET_TYPE(cxStack);
+    CX_SET_TYPE(cxNumber);
+    CX_SET_TYPE(cxMessage);
+    CX_SET_TYPE(cxLoader);
+    CX_SET_TYPE(cxPath);
+    CX_SET_TYPE(cxStream);
+    CX_SET_TYPE(cxAnyArray);
+    CX_SET_TYPE(cxLua);
 }
 void cxTypesFree()
 {
@@ -299,15 +299,16 @@ cxType cxTypeNew(cxConstType ct,cxConstType sb,cxAny (*create)(),cxAny (*alloc)(
     cxType this = allocator->malloc(sizeof(struct cxType));
     this->typeName = ct;
     cxType super = cxTypesGetType(sb);
-    CX_TYPE_NAME_LEN(ct);
     strcpy(this->name, ct);
     this->Alloc = alloc;
     this->Create = create;
     this->superType = super;
+    CX_TYPE_NAME_LEN(ct);
     HASH_ADD(hh, types, name, nameLen, this);
     cxTypeCopyFromSuper(this, super);
     cxSignatureNew(this, ct);
     autoType(this);
+    cxTypeFinished(this);
     return this;
 }
 cxBool cxMethodExists(cxConstType type,cxConstChars name)

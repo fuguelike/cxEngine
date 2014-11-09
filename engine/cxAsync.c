@@ -43,7 +43,7 @@ cxAsyncState cxAsyncDrive(cxAny pview, cxAny pitem)
         this->State = ret ? cxAsyncStateRunning : cxAsyncStateFailed;
     }else{
         this->Count ++;
-        this->Time += cxEngineGetFrameDelta();
+        this->Time += cxEngineGetDelta();
         CX_CALL(this, Running, CX_M(void));
     }
     return this->State;

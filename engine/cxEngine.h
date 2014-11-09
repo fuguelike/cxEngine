@@ -22,12 +22,17 @@ CX_C_BEGIN
 
 #define GL_ASSERT() CX_ASSERT(glGetError() == GL_NO_ERROR,"OpenGL error")
 
+CX_STRING_KEY_DEF(cxEngineNoticPause);
+CX_STRING_KEY_DEF(cxEngineNoticResume);
+CX_STRING_KEY_DEF(cxEngineNoticMemory);
+CX_STRING_KEY_DEF(cxEngineNoticRecvJson);
+
 CX_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxSize2f WinSize);     //screen size
     CX_FIELD_DEF(cxSize2f DesSize);     //design size
     CX_FIELD_DEF(cxVec2f Scale);        //dessize / winsize
-    CX_FIELD_DEF(cxBool IsShowBorder);  //show debug border
-    CX_FIELD_DEF(cxFloat FrameDelta);   //time per frame
+    CX_FIELD_DEF(cxBool IsDebug);       //debug border
+    CX_FIELD_DEF(cxFloat Delta);        //time per frame
     CX_FIELD_DEF(cxString Lang);        //zh en
     CX_FIELD_DEF(cxString Country);     //CN TW
     CX_FIELD_DEF(cxString Localized);   //current lang file path
@@ -40,17 +45,10 @@ CX_DEF(cxEngine, cxObject)
     cxBool isPause;
     cxHash files;
     cxHash assets;
-    //
-    CX_SIGNAL_ALLOC(onPause);
-    CX_SIGNAL_ALLOC(onResume);
-    CX_SIGNAL_ALLOC(onMemory);
-    CX_SIGNAL_ALLOC(onUpdate);
-    CX_SIGNAL_ALLOC(onRecvJson);
     cxHash items;           //touch items
     cxTouchItems points;    //all touch points
     cxKey key;
     cxHash groups;          //action groups
-    //
     cxCurve curve;              //cxCurve instance
     cxOpenGL opengl;            //cxOpenGL instance
     cxIconv iconv;              //cxIconv instance
@@ -141,9 +139,9 @@ CX_INLINE void cxEngineSetLang(cxString lng)
     CX_RETAIN_SWAP(engine->Lang, lng);
 }
 
-CX_INLINE cxFloat cxEngineGetFrameDelta()
+CX_INLINE cxFloat cxEngineGetDelta()
 {
-    return engine->FrameDelta;
+    return engine->Delta;
 }
 
 CX_INLINE void cxEngineSetScale(cxVec2f v)
@@ -156,17 +154,17 @@ CX_INLINE cxVec2f cxEngineGetScale()
     return engine->Scale;
 }
 
-CX_INLINE cxBool cxEngineGetIsShowBorder()
+CX_INLINE cxBool cxEngineGetIsDebug()
 {
-    return engine->IsShowBorder;
+    return engine->IsDebug;
 }
 
-CX_INLINE void cxEngineSetIsShowBorder(cxBool v)
+CX_INLINE void cxEngineSetIsDebug(cxBool v)
 {
 #ifdef NDEBUG
-    engine->IsShowBorder = false;
+    engine->IsDebug = false;
 #else
-    engine->IsShowBorder = v;
+    engine->IsDebug = v;
 #endif
 }
 
@@ -187,7 +185,7 @@ CX_INLINE cxSize2f cxEngineGetWinSize()
 
 void cxEngineClear();
 
-//type init
+//type init this = cxEngine type
 CX_EXTERN void cxEngineType(cxType this);
 
 //engine init

@@ -70,7 +70,7 @@ void cxSpineUpdateBox(cxSpine this,spRegionAttachment *self,spSlot *slot)
 static void cxSpineUpdate(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxSpine);
-    spSkeleton_update(this->skeleton, cxEngineGetFrameDelta());
+    spSkeleton_update(this->skeleton, cxEngineGetDelta());
 	spSkeleton_updateWorldTransform(this->skeleton);
 }
 

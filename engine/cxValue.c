@@ -6,10 +6,11 @@
 //  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
+#include <actions/cxTimer.h>
 #include "cxEngine.h"
 #include "cxValue.h"
 
-static void cxValueUpdate(cxAny pobj,cxFloat dt)
+void cxValueUpdate(cxAny pobj)
 {
     CX_ASSERT_THIS(pobj, cxValue);
     CX_RETURN(!this->isChanged);
@@ -35,12 +36,10 @@ CX_TYPE(cxValue, cxObject)
 }
 CX_INIT(cxValue, cxObject)
 {
-    cxEngine engine = cxEngineInstance();
-    CX_SET(cxEngine, engine, onUpdate, this, cxValueUpdate);
+    
 }
 CX_FREE(cxValue, cxObject)
 {
-    CX_SLOT_RELEASE(this->onUpdate);
     CX_EVENT_RELEASE(this->onChanged);
 }
 CX_TERM(cxValue, cxObject)

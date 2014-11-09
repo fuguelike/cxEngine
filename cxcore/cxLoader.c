@@ -75,13 +75,20 @@ cxAny cxLoaderGet(cxAny loader,cxConstChars id)
     return cxHashGet(this->objects, cxHashStrKey(id));
 }
 
-cxLoader cxLoaderCreate(cxConstChars path)
+cxAny cxLoaderFire(cxAny loader,cxConstChars path)
 {
+    CX_ASSERT_THIS(loader, cxLoader);
     cxJson json = cxJsonRead(path);
     CX_ASSERT(json != NULL, "json file %s read error",path);
-    cxLoader this = CX_CREATE(cxLoader);
     cxLoaderPush(this);
     CX_RETAIN_SWAP(this->Root, cxJsonMakeObject(json));
     cxLoaderPop();
+    return this->Root;
+}
+
+cxLoader cxLoaderCreate(cxConstChars path)
+{
+    cxLoader this = CX_CREATE(cxLoader);
+    cxLoaderFire(this, path);
     return this;
 }

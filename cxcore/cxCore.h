@@ -216,7 +216,7 @@ do{                                                             \
 
 //type define
 
-#define CX_TYPE_REG(_t_)                __##_t_##RegisterFunc()
+#define CX_SET_TYPE(_t_)                __##_t_##SetFunc()
 
 #define CX_BEG(_t_,_b_)                                         \
 CX_ATTR_UNUSED static cxConstType _t_##TypeName = #_t_;         \
@@ -241,7 +241,7 @@ CX_ATTR_UNUSED static cxAny __##_t_##CreateFunc()               \
 {                                                               \
     return CX_AUTO_RELEASE(__##_t_##AllocFunc());               \
 }                                                               \
-CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
+CX_ATTR_UNUSED static void __##_t_##SetFunc()                   \
 {                                                               \
     cxTypeNew(_t_##TypeName,_b_##TypeName,                      \
     __##_t_##CreateFunc,                                        \
@@ -582,6 +582,26 @@ void cxCoreInit();
 
 void cxCoreFree();
 
-void test();
+//reand json from src
+CX_EXTERN cxAny cxJsonLoader(cxConstChars src);
+//get json from localize key
+//return json_t *
+CX_EXTERN cxAny cxJsonLocalized(cxConstChars key);
+//get json from from poperty
+//return json_t *
+CX_EXTERN cxAny cxJsonProperty(cxConstChars key);
+//type register completed
+CX_EXTERN void cxTypeFinished(cxType this);
 
 #endif
+
+
+
+
+
+
+
+
+
+
+

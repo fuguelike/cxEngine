@@ -13,46 +13,6 @@
 
 static cxString jsonAESKey = NULL;
 
-static cxJson cxJsonDefaultReader(cxConstChars src)
-{
-    cxJson this = CX_CREATE(cxJson);
-    json_error_t error = {0};
-    this->json = json_load_file(src, JSON_DECODE_ANY, &error);
-    if(this->json == NULL){
-        CX_ERROR("cxJson load file error (%d:%d) %s:%s",error.line,error.column,error.source,error.text);
-        return NULL;
-    }
-    return this;
-}
-static cxJsonReaderFunc cxJsonReader = cxJsonDefaultReader;
-
-static json_t *cxjsonDefaultLocalized(cxConstChars key)
-{
-    return jsonCreateString(key);
-}
-static cxLocalizedFunc cxLocalizeder = cxjsonDefaultLocalized;
-
-static json_t *cxJsonPropertyGetterDefault(cxConstChars key)
-{
-    return jsonCreateString(key);;
-}
-static cxJsonPropertyGetterFunc cxJsonPropertyGetter = cxJsonPropertyGetterDefault;
-
-void cxJsonSetPropertyGetter(cxJsonPropertyGetterFunc func)
-{
-    cxJsonPropertyGetter = func;
-}
-
-void cxJsonSetReader(cxJsonReaderFunc func)
-{
-    cxJsonReader = func;
-}
-
-void cxJsonSetLocalized(cxLocalizedFunc func)
-{
-    cxLocalizeder = func;
-}
-
 cxJson cxJsonRead(cxConstChars src)
 {
     cxChar path[512]={0};
@@ -62,10 +22,10 @@ cxJson cxJsonRead(cxConstChars src)
     }
     src = path;
     if(type == 2){
-        json_t *json = cxLocalizeder(path);
+        json_t *json = cxJsonLocalized(path);
         if(json != NULL && json_is_string(json))src = json_string_value((json));
     }
-    return cxJsonReader(src);
+    return cxJsonLoader(src);
 }
 
 //if field is array
@@ -158,7 +118,7 @@ static json_t *jsonParseRegisterValue(json_t *v)
         return v;
     }
     if(type == 2){
-        return cxLocalizeder(key);
+        return cxJsonLocalized(key);
     }
     json_t *pv = NULL;
     cxLoader loader = cxLoaderTop();
@@ -168,7 +128,7 @@ static json_t *jsonParseRegisterValue(json_t *v)
     if(pv != NULL){
         return pv;
     }
-    pv = cxJsonPropertyGetter(key);
+    pv = cxJsonProperty(key);
     if(pv != NULL){
         return pv;
     }

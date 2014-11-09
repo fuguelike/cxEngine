@@ -14,6 +14,10 @@
 
 #define CX_DEFAULT_GROUP "__cxTexturesGroupName__"
 
+static void cxTextureCacheMemory(cxTextureCache this,cxEngine engine)
+{
+    cxTextureCacheClear(this);
+}
 
 CX_TYPE(cxTextureCache, cxObject)
 {
@@ -22,12 +26,13 @@ CX_TYPE(cxTextureCache, cxObject)
 CX_INIT(cxTextureCache, cxObject)
 {
     this->caches = CX_ALLOC(cxHash);
-    
     cxHash group = CX_CREATE(cxHash);
     cxHashSet(this->caches, cxHashStrKey(CX_DEFAULT_GROUP), group);
+    cxMessageAppend(this, cxTextureCacheMemory, cxEngineNoticMemory);
 }
 CX_FREE(cxTextureCache, cxObject)
 {
+    cxMessageRemove(this);
     CX_RELEASE(this->caches);
 }
 CX_TERM(cxTextureCache, cxObject)
@@ -58,9 +63,8 @@ static cxHash cxTextureCacheGroup(cxConstChars file,cxChars files)
     return groups;
 }
 
-void cxTextureCacheClear()
+void cxTextureCacheClear(cxTextureCache this)
 {
-    cxTextureCache this = cxTextureCacheInstance();
     CX_HASH_FOREACH(this->caches, ele, tmp){
         cxHashClear(ele->any);
     }

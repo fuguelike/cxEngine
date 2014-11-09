@@ -135,6 +135,11 @@ cxAny cxPlayEffect(cxConstChars file,cxBool loop)
     return cxPlayBuffer(buffer,loop);
 }
 
+static void cxPlayerMemory(cxPlayer this,cxAny engine)
+{
+    cxHashClear(this->caches);
+}
+
 CX_TYPE(cxPlayer, cxObject)
 {
     
@@ -143,10 +148,8 @@ CX_INIT(cxPlayer, cxObject)
 {
     this->device = alcOpenDevice(NULL);
     CX_ASSERT(this->device != NULL, "alc open device failed");
-    
     this->context = alcCreateContext(this->device, NULL);
     CX_ASSERT(this->context != NULL, "alc create context failed");
-    
     alcMakeContextCurrent(this->context);    
     this->tracks = CX_ALLOC(cxArray);
     this->caches = CX_ALLOC(cxHash);
@@ -155,9 +158,11 @@ CX_INIT(cxPlayer, cxObject)
         cxArrayAppend(this->tracks, track);
         CX_RELEASE(track);
     }
+    cxMessageAppend(this, cxPlayerMemory, cxEngineNoticMemory);
 }
 CX_FREE(cxPlayer, cxObject)
 {
+    cxMessageRemove(this);
     CX_RELEASE(this->caches);
     CX_RELEASE(this->tracks);
     alcMakeContextCurrent(NULL);

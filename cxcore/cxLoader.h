@@ -19,13 +19,15 @@ CX_DEF(cxLoader, cxObject)
     cxHash objects;
 CX_END(cxLoader, cxObject)
 
+CX_FIELD_GET(cxLoader, cxAny, Root);
+
 cxAny cxLoaderGet(cxAny loader,cxConstChars id);
 
 #define CX_LOADER_DEF(_o_,_t_,_n_)  _t_ _n_ = cxLoaderGet(_o_,#_n_);CX_ASSERT_TYPE(_n_,_t_)
 
 cxLoader cxLoaderCreate(cxConstChars path);
 
-CX_FIELD_GET(cxLoader, cxAny, Root);
+cxAny cxLoaderFire(cxAny loader,cxConstChars path);
 
 void cxLoaderPush(cxAny object);
 

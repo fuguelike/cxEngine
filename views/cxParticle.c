@@ -146,7 +146,7 @@ static void cxParticleUpdate(cxAny pview)
     if(this->number == 0){
         return;
     }
-    cxFloat dt = cxEngineGetFrameDelta();
+    cxFloat dt = cxEngineGetDelta();
     this->TimeElapsed += dt;
     if(this->isActive){
         cxFloat rate = 1.0f / this->rate;
