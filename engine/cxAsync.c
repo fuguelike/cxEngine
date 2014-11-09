@@ -9,19 +9,18 @@
 #include "cxEngine.h"
 #include "cxAsync.h"
 
-static void CX_METHOD(cxAsync, Running)
+CX_METHOD_DEF(cxAsync, Running,void)
 {
     
 }
-static cxBool CX_METHOD(cxAsync, Init)
+CX_METHOD_DEF(cxAsync, Init, cxBool)
 {
     return false;
 }
-
 CX_TYPE(cxAsync, cxObject)
 {
-    CX_MSET(cxAsync, Running);
-    CX_MSET(cxAsync, Init);
+    CX_METHOD(cxAsync, Running);
+    CX_METHOD(cxAsync, Init);
 }
 CX_INIT(cxAsync, cxObject)
 {
@@ -40,17 +39,17 @@ cxAsyncState cxAsyncDrive(cxAny pview, cxAny pitem)
     if(this->State == cxAsyncStateSuccess || this->State == cxAsyncStateFailed){
         return this->State;
     }else if(this->State == cxAsyncStateInit){
-        cxBool ret = CX_CALL(this, Init, CX_MT(cxBool));
+        cxBool ret = CX_CALL(this, Init, CX_M(cxBool));
         this->State = ret ? cxAsyncStateRunning : cxAsyncStateFailed;
     }else{
         this->Count ++;
         this->Time += cxEngineGetFrameDelta();
-        CX_CALL(this, Running, CX_MT(void));
+        CX_CALL(this, Running, CX_M(void));
     }
     return this->State;
 }
 
-static void CX_METHOD(cxDriver,Step,cxFloat dt,cxFloat time)
+CX_METHOD_DEF(cxDriver,Step,void,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_TYPE(this->Async, cxAsync);
     cxAsyncState state = cxAsyncDrive(cxActionGetView(this), this->Async);
@@ -58,25 +57,22 @@ static void CX_METHOD(cxDriver,Step,cxFloat dt,cxFloat time)
         cxActionStop(this);
     }
 }
-
-static cxBool CX_METHOD(cxDriver,Exit)
+CX_METHOD_DEF(cxDriver,Exit,cxBool)
 {
     if(cxAsyncGetState(this->Async) != cxAsyncStateSuccess){
-        CX_CALL(this, Failed, CX_MT(void,cxAny,cxAny),cxActionGetView(this),this->Async);
+        CX_CALL(this, Failed, CX_M(void,cxAny,cxAny),cxActionGetView(this),this->Async);
     }
     return true;
 }
-
-static void CX_METHOD(cxDriver,Failed,cxAny pview,cxAny async)
+CX_METHOD_DEF(cxDriver,Failed,void,cxAny pview,cxAny async)
 {
     
 }
-
 CX_TYPE(cxDriver, cxAction)
 {
-    CX_MSET(cxDriver, Step);
-    CX_MSET(cxDriver, Exit);
-    CX_MSET(cxDriver, Failed);
+    CX_METHOD(cxDriver, Step);
+    CX_METHOD(cxDriver, Exit);
+    CX_METHOD(cxDriver, Failed);
 }
 CX_INIT(cxDriver, cxAction)
 {

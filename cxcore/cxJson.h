@@ -17,11 +17,8 @@
 CX_C_BEGIN
 
 CX_DEF(cxJson, cxObject)
-    CX_FIELD_DEF(cxAny UserData);
     json_t *json;
 CX_END(cxJson, cxObject)
-
-CX_FIELD_SET(cxJson, cxAny, UserData);
 
 #define CX_JSON_PTR(_j_)  ((_j_)->json)
 

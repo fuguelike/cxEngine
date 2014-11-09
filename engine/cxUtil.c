@@ -64,10 +64,10 @@ cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
 {
     cxStream src = cxAssetsStreamCreate(file);
     cxStream dst = cxFileStreamCreate(file, false);
-    if(!CX_CALL(src, Open, CX_MT(cxBool))){
+    if(!CX_CALL(src, Open, CX_M(cxBool))){
         return false;
     }
-    if(!CX_CALL(dst, Open, CX_MT(cxBool))){
+    if(!CX_CALL(dst, Open, CX_M(cxBool))){
         return false;
     }
     cxBool ret = true;
@@ -76,12 +76,12 @@ cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
     p.current = 0;
     p.total = src->Length;
     while (true) {
-        cxInt rbytes = CX_CALL(src, Read, CX_MT(cxInt,cxAny,cxInt),buffer,4096);
+        cxInt rbytes = CX_CALL(src, Read, CX_M(cxInt,cxAny,cxInt),buffer,4096);
         if(rbytes <= 0){
             break;
         }
         p.current += rbytes;
-        if(CX_CALL(dst, Write, CX_MT(cxInt,cxAny,cxInt),buffer,rbytes) != rbytes){
+        if(CX_CALL(dst, Write, CX_M(cxInt,cxAny,cxInt),buffer,rbytes) != rbytes){
             CX_ERROR("write file error");
             ret = false;
             break;

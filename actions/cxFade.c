@@ -8,30 +8,28 @@
 
 #include "cxFade.h"
 
-static void CX_METHOD(cxFade, Step,cxFloat dt, cxFloat time)
+CX_METHOD_DEF(cxFade,Step,void,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat alpha = this->start + time * this->delta;
     cxViewSetAlpha(view, alpha);
 }
-static void CX_METHOD(cxFade,Init)
+CX_METHOD_DEF(cxFade,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxColor4f color = cxViewGetColor(view);
     this->start = color.a;
     this->delta = this->alpha - this->start;
 }
-
 CX_SETTER_DEF(cxFade, alpha)
 {
     this->alpha = cxJsonToDouble(value, this->alpha);
 }
-
 CX_TYPE(cxFade, cxAction)
 {
     CX_SETTER(cxFade, alpha);
-    CX_MSET(cxFade, Init);
-    CX_MSET(cxFade, Step);
+    CX_METHOD(cxFade, Init);
+    CX_METHOD(cxFade, Step);
 }
 CX_INIT(cxFade, cxAction)
 {

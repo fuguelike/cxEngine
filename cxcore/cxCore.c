@@ -309,6 +309,13 @@ cxType cxTypeNew(cxConstType ct,cxConstType sb,cxAny (*create)(),cxAny (*alloc)(
     autoType(this);
     return this;
 }
+cxBool cxMethodExists(cxConstType type,cxConstChars name)
+{
+    cxType ptype = cxTypesGetType(type);
+    CX_ASSERT(ptype != NULL, "type %s not regsiter",type);
+    cxMethod pmethod = cxTypeGetMethod(ptype, name);
+    return pmethod != NULL;
+}
 cxBool cxMethodHas(cxAny object,cxConstChars name)
 {
     cxObject this = object;
@@ -341,9 +348,20 @@ cxBool cxObjectInstanceOf(cxAny pobj,cxConstType type)
     CX_RETURN(this == NULL && type == NULL,true);
     CX_RETURN(this == NULL || type == NULL, false);
     CX_RETURN(this->cxType->typeName == type, true);
-    cxType ptype = cxTypesGetType(type);
-    CX_ASSERT(ptype != NULL, "type %s not register",type);
     return cxSignatureHas(this->cxType->signatures, type);
+}
+
+void cxObjectAutoInit(cxObject this)
+{
+    //CX_LOGGER("%s Init",this->cxType->TypeName);
+}
+void cxObjectAutoFree(cxObject this)
+{
+    //CX_LOGGER("%s Free",this->cxType->TypeName);
+}
+void cxObjectAutoType(cxType this)
+{
+    
 }
 
 void __cxObjectRetain(cxAny ptr)
@@ -353,22 +371,6 @@ void __cxObjectRetain(cxAny ptr)
     CX_ASSERT(object->cxRefcount > 0, "retain count must > 0");
     cxAtomicAddInt32(&object->cxRefcount, 1);
 }
-
-void CX_METHOD(cxObject,AutoInit)
-{
-//    CX_LOGGER("%s Init",this->cxType->TypeName);
-}
-
-void CX_METHOD(cxObject,AutoFree)
-{
-//    CX_LOGGER("%s Free",this->cxType->TypeName);
-}
-
-void cxObjectAutoType(cxType this)
-{
-    
-}
-
 void __cxObjectRelease(cxAny ptr)
 {
     CX_RETURN(ptr == NULL);
@@ -380,7 +382,6 @@ void __cxObjectRelease(cxAny ptr)
         allocator->free(object);
     }
 }
-
 cxAny __cxObjectAutoRelease(cxAny ptr)
 {
     return cxMemPoolAppend(ptr);
@@ -393,35 +394,19 @@ cxDouble cxTimestamp()
     return val.tv_sec + (cxDouble)val.tv_usec/(cxDouble)1000000.0;
 }
 
-static cxStack coreStack = NULL;
-
-void cxCorePush(cxAny object)
-{
-    cxStackPush(coreStack, object);
-}
-
-cxAny cxCoreTop()
-{
-    return cxStackTop(coreStack);
-}
-
-void cxCorePop()
-{
-    cxStackPop(coreStack);
-}
-
 void cxCoreInit()
 {
+    cxSetRandSeed();
     cxTypesInit();
     cxMemPoolInit();
-    coreStack = CX_ALLOC(cxStack);
+    cxLoaderInit();
     cxMessageInstance();
 }
 
 void cxCoreFree()
 {
     cxMessageDestroy();
-    CX_RELEASE(coreStack);
+    cxLoaderFree();
     cxMemPoolFree();
     cxTypesFree();
 }

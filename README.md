@@ -53,7 +53,7 @@ CX_RETAIN(object1); //引用计数＋1
 
 CX_RELEASE(object2); //引用计数-1,当引用计数＝0时对象降被释放
 
-CX_AUTO(object2);//加入自动释放池
+CX_AUTO_RELEASE(object2);//加入自动释放池
 
 CX_TYPE_NAME(obj);//获取对象的字符串类型
 
@@ -79,12 +79,12 @@ CX_ASSERT_THIS(obj,type);//断言一个对象的类型,并生成本地 this变�
 
 ```
 
-$从语言文件中获取数据
+$()从语言文件中获取数据
 例如:
-$ui.json?title 从语言文件strings/zh-CN/ui.json中获取key=title的数据
+$(ui.json?title) 从语言文件strings/zh-CN/ui.json中获取key=title的数据
 
-$.获取当前对象json属性，当前对象不存在从全局获取
-$.WinSize
+${}获取当前对象json属性，当前对象属性不存在从全局cxEngine对象获取
+${WinSize}
 
 @对纹理缓存进行分组处理
 例如:

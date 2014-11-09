@@ -49,6 +49,239 @@ CX_FREE(cxString, cxObject)
 }
 CX_TERM(cxString, cxObject)
 
+cxAny cxStringBody(cxString string)
+{
+    CX_RETURN(string == NULL,NULL);
+    return utstring_body(&string->strptr);
+}
+
+void cxStringConcat(cxString string,cxString str)
+{
+    CX_ASSERT(string != NULL && str != NULL, "args error");
+    utstring_concat(&string->strptr, &str->strptr);
+}
+
+cxInt cxStringLength(cxString string)
+{
+    CX_RETURN(string == NULL, 0);
+    return utstring_len(&string->strptr);
+}
+
+void cxStringAppend(cxString string,cxConstChars d,cxInt l)
+{
+    CX_ASSERT(l > 0 && d != NULL, "args error");
+    utstring_bincpy(&string->strptr, d, l);
+}
+
+cxString cxStringBinary(cxAny d,cxInt l)
+{
+    CX_ASSERT(d != NULL && l > 0, "args error");
+    cxString rv = CX_CREATE(cxString);
+    cxStringAppend(rv, d, l);
+    return rv;
+}
+
+cxBool cxConstCharsIsNumber(cxConstChars s)
+{
+    CX_RETURN(s == NULL, false);
+    for(cxInt i = 0; i < strlen(s); i++){
+        if(!isdigit(s[i])){
+            return false;
+        }
+    }
+    return true;
+}
+
+//path[512]={0};
+cxInt cxConstCharsTypePath(cxConstChars s,cxChars path)
+{
+    cxInt ret = 0;
+    if(s == NULL){
+        return ret;
+    }
+    cxInt len = cxConstCharsLength(s);
+    if(len < 4 || s[0] != '$'){
+        memcpy(path, s, len);
+        return 1;
+    }
+    if(s[1] == '(' && s[len - 1] == ')'){
+        ret = 2;
+        memcpy(path, s + 2, len - 3);
+    }else if(s[1] == '{' && s[len - 1] == '}'){
+        ret = 3;
+        memcpy(path, s + 2, len - 3);
+    }else{
+        ret = 1;
+        memcpy(path, s, len);
+    }
+    return ret;
+}
+
+cxString cxStringNoCopy(cxAny d,cxInt l)
+{
+    CX_ASSERT(d != NULL && l > 0, "args error");
+    cxString rv = CX_CREATE(cxString);
+    rv->strptr.d = d;
+    rv->strptr.i = l;
+    rv->strptr.n = l;
+    rv->nocopy = true;
+    return rv;
+}
+
+cxString cxStringAttachMem(cxChars d,cxInt l)
+{
+    CX_ASSERT(d != NULL && l > 0, "args error");
+    cxString rv = CX_CREATE(cxString);
+    rv->strptr.d = d;
+    rv->strptr.i = l;
+    rv->strptr.n = l;
+    return rv;
+}
+
+cxString cxStringCreate(cxConstChars format,...)
+{
+    CX_ASSERT(format != NULL, "args error");
+    cxString rv = CX_CREATE(cxString);
+    va_list ap;
+    va_start(ap, format);
+    utstring_printf_va(&rv->strptr, format, ap);
+    va_end(ap);
+    return rv;
+}
+
+void cxStringFormat(cxString string,cxConstChars format,...)
+{
+    CX_ASSERT(string != NULL && format != NULL, "args error");
+    va_list ap;
+    va_start(ap, format);
+    utstring_printf_va(&string->strptr, format, ap);
+    va_end(ap);
+}
+
+void cxStringAppendByte(cxString str,cxByte b)
+{
+    CX_ASSERT(str != NULL, "args error");
+    utstring_bincpy(&str->strptr, &b, 1);
+}
+
+cxInt cxRand(cxInt min,cxInt max)
+{
+    cxInt x = rand();
+    return (min + x % (max + 1 - min));
+}
+
+void cxSetRandSeed()
+{
+    srand((unsigned)time(NULL));
+}
+
+cxBool cxStringToBool(cxString str,cxBool dv)
+{
+    CX_RETURN(!cxStringOK(str), dv);
+    return strcmp(str->strptr.d, "true") == 0;
+}
+
+cxInt cxStringToInt(cxString str,cxInt dv)
+{
+    CX_RETURN(!cxStringOK(str), dv);
+    return atoi(str->strptr.d);
+}
+
+cxDouble cxStringToDouble(cxString str,cxDouble dv)
+{
+    CX_RETURN(!cxStringOK(str), dv);
+    return atof(str->strptr.d);
+}
+
+cxLong cxStringToLong(cxString str,cxLong dv)
+{
+    CX_RETURN(!cxStringOK(str), dv);
+    return atol(str->strptr.d);
+}
+
+void cxStringClear(cxString string)
+{
+    if(cxStringLength(string) > 0){
+        utstring_clear(&string->strptr);
+    }
+}
+
+void cxStringErase(cxString str,cxInt c)
+{
+    cxInt l = cxStringLength(str);
+    CX_RETURN(c == 0 || l < abs(c));
+    cxInt r = l - abs(c);
+    if(r == 0){
+        cxStringClear(str);
+        return;
+    }
+    if(c > 0){
+        memmove(str->strptr.d, str->strptr.d + c, r);
+    }
+    str->strptr.i = r;
+    str->strptr.d[r] = '\0';
+}
+
+cxBool cxStringHasConstChars(cxString str,cxConstChars cs)
+{
+    CX_ASSERT_THIS(str, cxString);
+    if(!cxStringOK(this) || !cxConstCharsOK(cs)){
+        return false;
+    }
+    cxConstChars body = cxStringBody(this);
+    return cxConstCharsHas(body, cs);
+}
+
+cxBool cxStringEqu(cxString s1,cxString s2)
+{
+    if(s1 == NULL && s2 == NULL){
+        return true;
+    }
+    if(s1 == NULL || s2 == NULL){
+        return false;
+    }
+    if(s1->strptr.i != s2->strptr.i){
+        return false;
+    }
+    return memcmp(s1->strptr.d, s2->strptr.d,s1->strptr.i) == 0;
+}
+
+cxString cxStringAttachChars(cxChars str)
+{
+    CX_ASSERT(str != NULL, "str null");
+    return cxStringAttachMem(str, (cxInt)strlen(str));
+}
+
+cxString cxStringConstChars(cxConstChars str)
+{
+    CX_ASSERT(str != NULL, "str null");
+    cxString rv = CX_CREATE(cxString);
+    cxStringAppend(rv, (void *)str, (cxInt)strlen(str));
+    return rv;
+}
+
+void cxStringReplace(cxString string,cxChar find,cxChar rep)
+{
+    cxChars ptr = (cxChars)cxStringBody(string);
+    cxInt len = cxStringLength(string);
+    for(cxInt i=0; i < len; i++){
+        if(ptr[i] == find){
+            ptr[i] = rep;
+        }
+    }
+}
+
+cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c)
+{
+    for(cxInt i=0; i < strlen(sp);i++){
+        if(sp[i] == c){
+            return true;
+        }
+    }
+    return  false;
+}
+
+
 cxString cxZCompressed(cxString data)
 {
     CX_ASSERT(data != NULL, "args error");
@@ -80,8 +313,6 @@ cxString cxZDecompress(cxString data)
     allocator->free(cv);
     return NULL;
 }
-
-
 
 cxString cxAESDecode(cxString data,cxString key)
 {

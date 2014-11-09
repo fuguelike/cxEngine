@@ -49,7 +49,7 @@ static void cxHttpRequestCompleted(struct evhttp_request *req,void *xhttp)
     cxHttpReadData(this);
     CX_EVENT_FIRE(this, onCompleted);
     if(this->release){
-        CX_AUTO(this);
+        CX_AUTO_RELEASE(this);
     }
 }
 

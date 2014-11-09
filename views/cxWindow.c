@@ -9,7 +9,7 @@
 #include <engine/cxEngine.h>
 #include "cxWindow.h"
 
-static cxBool CX_METHOD(cxWindow,OnKey,const cxKey *key)
+CX_METHOD_DEF(cxWindow,OnKey,cxBool,const cxKey *key)
 {
     if(key->code == CX_KEYCODE_BACK && key->type == cxKeyTypeUp){
         cxEngineExit();
@@ -19,7 +19,7 @@ static cxBool CX_METHOD(cxWindow,OnKey,const cxKey *key)
 
 CX_TYPE(cxWindow, cxView)
 {
-    CX_MSET(cxWindow, OnKey);
+    CX_METHOD(cxWindow, OnKey);
 }
 CX_INIT(cxWindow, cxView)
 {

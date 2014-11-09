@@ -8,13 +8,12 @@
 
 #include "cxShaderColor.h"
 
-static void CX_METHOD(cxShaderColor,Init)
+CX_METHOD_DEF(cxShaderColor,Init,void)
 {
     glBindAttribLocation(this->cxShader.program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
     glBindAttribLocation(this->cxShader.program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
 }
-
-static cxString CX_METHOD(cxShaderColor,Vertex)
+CX_METHOD_DEF(cxShaderColor,Vertex,cxString)
 {
     static cxConstChars vertex =
     GLSL(
@@ -28,8 +27,7 @@ static cxString CX_METHOD(cxShaderColor,Vertex)
     );
     return cxStringConstChars(vertex);
 }
-
-static cxString CX_METHOD(cxShaderColor,Fragment)
+CX_METHOD_DEF(cxShaderColor,Fragment,cxString)
 {
     static cxConstChars fragment =
     GLSL(
@@ -43,9 +41,9 @@ static cxString CX_METHOD(cxShaderColor,Fragment)
 
 CX_TYPE(cxShaderColor, cxShader)
 {
-    CX_MSET(cxShaderColor, Fragment);
-    CX_MSET(cxShaderColor, Vertex);
-    CX_MSET(cxShaderColor, Init);
+    CX_METHOD(cxShaderColor, Fragment);
+    CX_METHOD(cxShaderColor, Vertex);
+    CX_METHOD(cxShaderColor, Init);
 }
 CX_INIT(cxShaderColor, cxShader)
 {

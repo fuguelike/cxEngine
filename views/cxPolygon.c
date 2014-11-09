@@ -31,7 +31,7 @@ CX_SETTER_DEF(cxPolygon, points)
     CX_JSON_ARRAY_EACH_END(points, point);
 }
 
-static void CX_METHOD(cxPolygon,Draw)
+CX_METHOD_DEF(cxPolygon,Draw,void)
 {
     CX_RETURN(this->number < 3);
     cxSpriteBindTexture(this);
@@ -45,7 +45,7 @@ static void CX_METHOD(cxPolygon,Draw)
 CX_TYPE(cxPolygon, cxSprite)
 {
     CX_SETTER(cxPolygon, points);
-    CX_MSET(cxPolygon, Draw);
+    CX_METHOD(cxPolygon, Draw);
 }
 CX_INIT(cxPolygon, cxSprite)
 {

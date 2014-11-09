@@ -88,7 +88,7 @@ cxTexture cxTextureCreateText(cxString txt,cxString font,cxTextAttr attr)
     texture->attr = attr;
     CX_RETAIN_SWAP(texture->string, txt);
     CX_RETAIN_SWAP(texture->font, font);
-    CX_CALL(texture, Load, CX_MT(cxBool,cxStream),NULL);
+    CX_CALL(texture, Load, CX_M(cxBool,cxStream),NULL);
     return (cxTexture)texture;
 }
 

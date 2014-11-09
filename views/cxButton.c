@@ -17,8 +17,7 @@ CX_SETTER_DEF(cxButton, enable)
 {
     this->isEnable = cxJsonToBool(value, this->isEnable);
 }
-
-static cxBool CX_METHOD(cxButton,OnTouch,const cxTouchItems *points)
+CX_METHOD_DEF(cxButton,OnTouch,cxBool,const cxTouchItems *points)
 {
     CX_RETURN(points->number != 1,false);
     cxTouchItem item = points->items[0];
@@ -61,7 +60,7 @@ CX_TYPE(cxButton, cxSprite)
     CX_SETTER(cxButton, movement);
     CX_SETTER(cxButton, enable);
     
-    CX_MSET(cxButton, OnTouch);
+    CX_METHOD(cxButton, OnTouch);
 }
 CX_INIT(cxButton, cxSprite)
 {

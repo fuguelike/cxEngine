@@ -195,13 +195,13 @@ void cxViewDrawView(cxAny pview)
     if(isCropping){
         cxOpenGLEnableScissor(this->scissor);
     }
-    CX_CALL(this, DrawBefore, CX_MT(void));
-    CX_CALL(this, Draw, CX_MT(void));
+    CX_CALL(this, DrawBefore, CX_M(void));
+    CX_CALL(this, Draw, CX_M(void));
     CX_VIEW_FOREACH_SUBVIEWS(this, ele){
         cxView view = ele->any;
         cxViewDrawView(view);
     }
-    CX_CALL(this, DrawAfter, CX_MT(void));
+    CX_CALL(this, DrawAfter, CX_M(void));
     if(isCropping){
         cxOpenGLDisableScissor();
     }
@@ -214,27 +214,23 @@ finished:
     cxViewClearRemoves(this);
 }
 
-static void CX_METHOD(cxView,Draw)
+CX_METHOD_DEF(cxView,Draw,void)
 {
     
 }
-
-static void CX_METHOD(cxView,DrawBefore)
+CX_METHOD_DEF(cxView,DrawBefore,void)
 {
     
 }
-
-static void CX_METHOD(cxView,DrawAfter)
+CX_METHOD_DEF(cxView,DrawAfter,void)
 {
     
 }
-
-static cxBool CX_METHOD(cxView,OnTouch,const cxTouchItems *points)
+CX_METHOD_DEF(cxView,OnTouch,cxBool,const cxTouchItems *points)
 {
     return false;
 }
-
-static cxBool CX_METHOD(cxView,OnKey,const cxKey *key)
+CX_METHOD_DEF(cxView,OnKey,cxBool,const cxKey *key)
 {
     return false;
 }
@@ -260,11 +256,11 @@ CX_TYPE(cxView, cxObject)
     CX_SETTER(cxView, tag);
     CX_SETTER(cxView, bordercolor);
     
-    CX_MSET(cxView, Draw);
-    CX_MSET(cxView, DrawBefore);
-    CX_MSET(cxView, DrawAfter);
-    CX_MSET(cxView, OnTouch);
-    CX_MSET(cxView, OnKey);
+    CX_METHOD(cxView, Draw);
+    CX_METHOD(cxView, DrawBefore);
+    CX_METHOD(cxView, DrawAfter);
+    CX_METHOD(cxView, OnTouch);
+    CX_METHOD(cxView, OnKey);
 }
 CX_INIT(cxView, cxObject)
 {
@@ -876,7 +872,7 @@ cxBool cxViewFireTouch(cxAny pview,cxTouchItems *points)
         if(ele == head)break;
     }
 completed:
-    return CX_CALL(this, OnTouch, CX_MT(cxBool,const cxTouchItems *),points);
+    return CX_CALL(this, OnTouch, CX_M(cxBool,const cxTouchItems *),points);
 }
 
 cxBool cxViewFireKey(cxAny pview,cxKey *key)
@@ -904,7 +900,7 @@ cxBool cxViewFireKey(cxAny pview,cxKey *key)
         if(ele == head)break;
     }
 completed:
-    return CX_CALL(this, OnKey, CX_MT(cxBool,const cxKey *),key);
+    return CX_CALL(this, OnKey, CX_M(cxBool,const cxKey *),key);
 }
 
 void cxViewClearActions(cxAny pview)

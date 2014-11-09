@@ -31,7 +31,7 @@ static void cxStencilRefFree(cxInt index)
     refs[index] = false;
 }
 
-static void CX_METHOD(cxClipping,DrawBefore)
+CX_METHOD_DEF(cxClipping,DrawBefore,void)
 {
     glEnable(GL_STENCIL_TEST);
     glStencilFunc(GL_ALWAYS, this->useRef, CX_STENCIL_MASK);
@@ -49,15 +49,15 @@ void cxClippingSetInverse(cxAny pview,cxBool inverse)
     this->inverse = inverse;
 }
 
-static void CX_METHOD(cxClipping,DrawAfter)
+CX_METHOD_DEF(cxClipping,DrawAfter,void)
 {
     glDisable(GL_STENCIL_TEST);
 }
 
 CX_TYPE(cxClipping, cxView)
 {
-    CX_MSET(cxClipping, DrawBefore);
-    CX_MSET(cxClipping, DrawAfter);
+    CX_METHOD(cxClipping, DrawBefore);
+    CX_METHOD(cxClipping, DrawAfter);
 }
 CX_INIT(cxClipping, cxView)
 {

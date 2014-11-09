@@ -22,22 +22,21 @@ void cxValueSet(cxAny pthis,cxAny v)
 {
     CX_ASSERT_THIS(pthis, cxValue);
     memcpy(this->newVar,v,this->size);
-    this->isChanged = CX_CALL(this, Equ, CX_MT(cxBool));
+    this->isChanged = CX_CALL(this, Equ, CX_M(cxBool));
 }
 
-static cxBool CX_METHOD(cxValue, Equ)
+CX_METHOD_DEF(cxValue, Equ,cxBool)
 {
     return memcmp(this->newVar, this->oldVar, this->size) == 0;
 }
-
 CX_TYPE(cxValue, cxObject)
 {
-    CX_MSET(cxValue, Equ);
+    CX_METHOD(cxValue, Equ);
 }
 CX_INIT(cxValue, cxObject)
 {
     cxEngine engine = cxEngineInstance();
-    CX_CON(cxEngine, engine, onUpdate, this, cxValueUpdate);
+    CX_SET(cxEngine, engine, onUpdate, this, cxValueUpdate);
 }
 CX_FREE(cxValue, cxObject)
 {
@@ -56,5 +55,5 @@ cxValue cxValueAllocImp(cxInt size)
 
 cxValue cxValueCreateImp(cxInt size)
 {
-    return CX_AUTO(cxValueAllocImp(size));
+    return CX_AUTO_RELEASE(cxValueAllocImp(size));
 }

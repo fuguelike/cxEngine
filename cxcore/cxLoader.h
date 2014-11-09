@@ -27,6 +27,16 @@ cxLoader cxLoaderCreate(cxConstChars path);
 
 CX_FIELD_GET(cxLoader, cxAny, Root);
 
+void cxLoaderPush(cxAny object);
+
+void cxLoaderPop();
+
+cxAny cxLoaderTop();
+
+void cxLoaderInit();
+
+void cxLoaderFree();
+
 CX_C_END
 
 #endif

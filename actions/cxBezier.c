@@ -8,13 +8,12 @@
 
 #include "cxBezier.h"
 
-static void CX_METHOD(cxBezier,Init)
+CX_METHOD_DEF(cxBezier,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->from = this->prev = cxViewGetPosition(view);
 }
-
-static void CX_METHOD(cxBezier,Step,cxFloat dt,cxFloat time)
+CX_METHOD_DEF(cxBezier,Step,void,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxVec2f xy;
@@ -49,8 +48,8 @@ CX_TYPE(cxBezier, cxAction)
     CX_SETTER(cxBezier, pos1);
     CX_SETTER(cxBezier, pos2);
     
-    CX_MSET(cxBezier, Init);
-    CX_MSET(cxBezier, Step);
+    CX_METHOD(cxBezier, Init);
+    CX_METHOD(cxBezier, Step);
 }
 CX_INIT(cxBezier, cxAction)
 {

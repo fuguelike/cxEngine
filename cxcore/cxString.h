@@ -33,211 +33,68 @@ CX_END(cxString, cxObject)
 
 #define cxConstCharsOK(s)           ((s) != NULL && strlen(s) > 0)
 
+#define cxConstCharsLength(s)       ((cxInt)strlen(s))
+
 #define cxStringOK(s)               ((s) != NULL && cxStringLength(s) > 0)
 
 #define cxConstString(f,...)        cxStringBody(cxStringCreate(f,##__VA_ARGS__))
 
+#define cxConstBinary(d,l)          cxStringBody(cxStringBinary(d,l))
+
 #define UTF8(f,...)                 cxStringCreate(f,##__VA_ARGS__)
 
-CX_INLINE cxAny cxStringBody(cxString string)
-{
-    CX_RETURN(string == NULL,NULL);
-    return utstring_body(&string->strptr);
-}
+cxAny cxStringBody(cxString string);
 
-CX_INLINE void cxStringConcat(cxString string,cxString str)
-{
-    utstring_concat(&string->strptr, &str->strptr);
-}
+void cxStringConcat(cxString string,cxString str);
 
-CX_INLINE cxInt cxStringLength(cxString string)
-{
-    CX_RETURN(string == NULL, 0);
-    return utstring_len(&string->strptr);
-}
+cxInt cxStringLength(cxString string);
 
-CX_INLINE void cxStringAppend(cxString string,cxConstChars d,cxInt l)
-{
-    CX_ASSERT(l > 0 && d != NULL, "args error");
-    utstring_bincpy(&string->strptr, d, l);
-}
+void cxStringAppend(cxString string,cxConstChars d,cxInt l);
 
-CX_INLINE cxString cxStringBinary(cxAny d,cxInt l)
-{
-    cxString rv = CX_CREATE(cxString);
-    cxStringAppend(rv, d, l);
-    return rv;
-}
+cxString cxStringBinary(cxAny d,cxInt l);
 
-CX_INLINE cxBool cxConstCharsIsNumber(cxConstChars s)
-{
-    CX_RETURN(s == NULL, false);
-    for(cxInt i = 0; i < strlen(s); i++){
-        if(!isdigit(s[i])){
-            return false;
-        }
-    }
-    return true;
-}
+cxBool cxConstCharsIsNumber(cxConstChars s);
 
-CX_INLINE cxString cxStringNoCopy(cxAny d,cxInt l)
-{
-    cxString rv = CX_CREATE(cxString);
-    rv->strptr.d = d;
-    rv->strptr.i = l;
-    rv->strptr.n = l;
-    rv->nocopy = true;
-    return rv;
-}
+cxString cxStringNoCopy(cxAny d,cxInt l);
 
-CX_INLINE cxString cxStringAttachMem(cxChars d,cxInt l)
-{
-    cxString rv = CX_CREATE(cxString);
-    rv->strptr.d = d;
-    rv->strptr.i = l;
-    rv->strptr.n = l;
-    return rv;
-}
+cxString cxStringAttachMem(cxChars d,cxInt l);
 
-CX_INLINE cxString cxStringCreate(cxConstChars format,...)
-{
-    cxString rv = CX_CREATE(cxString);
-    va_list ap;
-    va_start(ap, format);
-    utstring_printf_va(&rv->strptr, format, ap);
-    va_end(ap);
-    return rv;
-}
+cxString cxStringCreate(cxConstChars format,...);
 
-CX_INLINE void cxStringFormat(cxString string,cxConstChars format,...)
-{
-    va_list ap;
-    va_start(ap, format);
-    utstring_printf_va(&string->strptr, format, ap);
-    va_end(ap);
-}
+void cxStringFormat(cxString string,cxConstChars format,...);
 
-CX_INLINE void cxStringAppendByte(cxString str,cxByte b)
-{
-    utstring_bincpy(&str->strptr, &b, 1);
-}
+void cxStringAppendByte(cxString str,cxByte b);
 
-CX_INLINE cxInt cxRand(cxInt min,cxInt max)
-{
-    cxInt x = rand();
-    return (min + x % (max + 1 - min));
-}
+cxInt cxRand(cxInt min,cxInt max);
 
-CX_INLINE void cxSetRandSeed()
-{
-    srand((unsigned)time(NULL));
-}
+void cxSetRandSeed();
 
-CX_INLINE cxBool cxStringToBool(cxString str,cxBool dv)
-{
-    CX_RETURN(!cxStringOK(str), dv);
-    return strcmp(str->strptr.d, "true") == 0;
-}
+cxBool cxStringToBool(cxString str,cxBool dv);
 
-CX_INLINE cxInt cxStringToInt(cxString str,cxInt dv)
-{
-    CX_RETURN(!cxStringOK(str), dv);
-    return atoi(str->strptr.d);
-}
+cxInt cxStringToInt(cxString str,cxInt dv);
 
-CX_INLINE cxDouble cxStringToDouble(cxString str,cxDouble dv)
-{
-    CX_RETURN(!cxStringOK(str), dv);
-    return atof(str->strptr.d);
-}
+cxDouble cxStringToDouble(cxString str,cxDouble dv);
 
-CX_INLINE cxLong cxStringToLong(cxString str,cxLong dv)
-{
-    CX_RETURN(!cxStringOK(str), dv);
-    return atol(str->strptr.d);
-}
+cxLong cxStringToLong(cxString str,cxLong dv);
 
-CX_INLINE void cxStringClear(cxString string)
-{
-    if(cxStringLength(string) > 0){
-        utstring_clear(&string->strptr);
-    }
-}
+void cxStringClear(cxString string);
 
-CX_INLINE void cxStringErase(cxString str,cxInt c)
-{
-    cxInt l = cxStringLength(str);
-    CX_RETURN(c == 0 || l < abs(c));
-    cxInt r = l - abs(c);
-    if(r == 0){
-        cxStringClear(str);
-        return;
-    }
-    if(c > 0){
-        memmove(str->strptr.d, str->strptr.d + c, r);
-    }
-    str->strptr.i = r;
-    str->strptr.d[r] = '\0';
-}
+void cxStringErase(cxString str,cxInt c);
 
-CX_INLINE cxBool cxStringHasConstChars(cxString str,cxConstChars cs)
-{
-    CX_ASSERT_THIS(str, cxString);
-    if(!cxStringOK(this) || !cxConstCharsOK(cs)){
-        return false;
-    }
-    cxConstChars body = cxStringBody(this);
-    return cxConstCharsHas(body, cs);
-}
+//1 from localized,2 from property
+cxInt cxConstCharsTypePath(cxConstChars s,cxChars path);
 
-CX_INLINE cxBool cxStringEqu(cxString s1,cxString s2)
-{
-    if(s1 == NULL && s2 == NULL){
-        return true;
-    }
-    if(s1 == NULL || s2 == NULL){
-        return false;
-    }
-    if(s1->strptr.i != s2->strptr.i){
-        return false;
-    }
-    return memcmp(s1->strptr.d, s2->strptr.d,s1->strptr.i) == 0;
-}
+cxBool cxStringHasConstChars(cxString str,cxConstChars cs);
 
-CX_INLINE cxString cxStringAttachChars(cxChars str)
-{
-    CX_ASSERT(str != NULL, "str null");
-    return cxStringAttachMem(str, (cxInt)strlen(str));
-}
+cxBool cxStringEqu(cxString s1,cxString s2);
 
-CX_INLINE cxString cxStringConstChars(cxConstChars str)
-{
-    CX_ASSERT(str != NULL, "str null");
-    cxString rv = CX_CREATE(cxString);
-    cxStringAppend(rv, (void *)str, (cxInt)strlen(str));
-    return rv;
-}
+cxString cxStringAttachChars(cxChars str);
 
-CX_INLINE void cxStringReplace(cxString string,cxChar find,cxChar rep)
-{
-    cxChars ptr = (cxChars)cxStringBody(string);
-    cxInt len = cxStringLength(string);
-    for(cxInt i=0; i < len; i++){
-        if(ptr[i] == find){
-            ptr[i] = rep;
-        }
-    }
-}
+cxString cxStringConstChars(cxConstChars str);
 
-CX_INLINE cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c)
-{
-    for(cxInt i=0; i < strlen(sp);i++){
-        if(sp[i] == c){
-            return true;
-        }
-    }
-    return  false;
-}
+void cxStringReplace(cxString string,cxChar find,cxChar rep);
+
+cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c);
 
 //user zlib
 cxString cxZCompressed(cxString data);

@@ -73,11 +73,6 @@ void cxSpriteSetFlipY(cxAny pview,cxBool flipy)
     cxViewSetDirty(pview, cxViewDirtyTexture);
 }
 
-void cxSpriteSetImage(cxAny pview,cxConstChars url)
-{
-    cxSpriteSetTextureURL(pview, url);
-}
-
 void cxSpriteSetTextureURL(cxAny pview,cxConstChars url)
 {
     CX_ASSERT_THIS(pview, cxSprite);
@@ -117,8 +112,7 @@ CX_SETTER_DEF(cxSprite, blend)
         CX_ASSERT_FALSE("not support mode %s",blend);
     }
 }
-
-static void CX_METHOD(cxSprite,Draw)
+CX_METHOD_DEF(cxSprite,Draw,void)
 {
     CX_RETURN(this->Texture == NULL);
     cxSpriteBindTexture(this);
@@ -128,13 +122,12 @@ static void CX_METHOD(cxSprite,Draw)
     cxOpenGLVertexAttribPointer(cxVertexAttribColor,    4, sizeof(cxColor4f), &this->cbox);
     cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
-
 CX_TYPE(cxSprite, cxView)
 {
     CX_SETTER(cxSprite, blend);
     CX_SETTER(cxSprite, texture);
     CX_SETTER(cxSprite, shader);
-    CX_MSET(cxSprite, Draw);
+    CX_METHOD(cxSprite, Draw);
 }
 CX_INIT(cxSprite, cxView)
 {

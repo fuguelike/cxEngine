@@ -27,12 +27,10 @@ typedef struct {
 } cxSpatialNearestInfo;
 
 CX_DEF(cxSpatial, cxObject)
-    cxAny index;
+    CX_FIELD_DEF(cxAny Index);
 CX_END(cxSpatial, cxObject)
 
-cxSpatial cxSpatialAlloc(cpBB (*func)(cxAny));
-
-cxSpatial cxSpatialCreate(cpBB (*func)(cxAny));
+CX_FIELD_GET(cxSpatial, cxAny, Index);
 
 void cxSpatialEach(cxAny ps,cxSpatialEachFunc func,cxAny data);
 

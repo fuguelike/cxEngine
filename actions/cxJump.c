@@ -8,7 +8,7 @@
 
 #include "cxJump.h"
 
-static void CX_METHOD(cxJump, Step,cxFloat dt, cxFloat time)
+CX_METHOD_DEF(cxJump,Step,void,cxFloat dt, cxFloat time)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat frac = fmodf( time * this->jumps, 1.0f );
@@ -21,12 +21,11 @@ static void CX_METHOD(cxJump, Step,cxFloat dt, cxFloat time)
     cxViewSetPosition(view, nPos);
     this->prevPos = nPos;
 }
-static void CX_METHOD(cxJump,Init)
+CX_METHOD_DEF(cxJump,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->prevPos = this->startPos = cxViewGetPosition(view);
 }
-
 CX_SETTER_DEF(cxJump, position)
 {
     this->position = cxJsonToVec2f(value, this->position);
@@ -39,15 +38,14 @@ CX_SETTER_DEF(cxJump, jumps)
 {
     this->jumps = cxJsonToInt(value, this->jumps);
 }
-
 CX_TYPE(cxJump, cxAction)
 {
     CX_SETTER(cxJump, position);
     CX_SETTER(cxJump, height);
     CX_SETTER(cxJump, jumps);
     
-    CX_MSET(cxJump, Init);
-    CX_MSET(cxJump, Step);
+    CX_METHOD(cxJump, Init);
+    CX_METHOD(cxJump, Step);
 }
 CX_INIT(cxJump, cxAction)
 {

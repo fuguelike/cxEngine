@@ -11,12 +11,11 @@
 #include "cxWindow.h"
 #include "cxAlert.h"
 
-static cxBool CX_METHOD(cxAlert,OnTouch,const cxTouchItems *points)
+CX_METHOD_DEF(cxAlert,OnTouch,cxBool,const cxTouchItems *points)
 {
     return true;
 }
-
-static cxBool CX_METHOD(cxAlert,OnKey,const cxKey *key)
+CX_METHOD_DEF(cxAlert,OnKey,cxBool,const cxKey *key)
 {
     if(key->type == cxKeyTypeUp && key->code == CX_KEYCODE_BACK){
         cxAlertFireHide(this);
@@ -39,8 +38,7 @@ static void cxHideActionOnStop(cxAny pav)
     cxWindowPopView();
 }
 
-
-static void CX_METHOD(cxAlert, Show)
+CX_METHOD_DEF(cxAlert, Show,void)
 {
     cxSize2f wsize = cxEngineGetWinSize();
     cxSize2f size = cxViewGetSize(this);
@@ -52,7 +50,7 @@ static void CX_METHOD(cxAlert, Show)
     cxActionSetCurve(m, cxCurveBackOut);
     cxViewAppendAction(this, m);
 }
-static void CX_METHOD(cxAlert, Hide)
+CX_METHOD_DEF(cxAlert, Hide,void)
 {
     cxSize2f wsize = cxEngineGetWinSize();
     cxSize2f size = cxViewGetSize(this);
@@ -66,10 +64,10 @@ static void CX_METHOD(cxAlert, Hide)
 
 CX_TYPE(cxAlert, cxAtlas)
 {
-    CX_MSET(cxAlert, OnTouch);
-    CX_MSET(cxAlert, OnKey);
-    CX_MSET(cxAlert, Show);
-    CX_MSET(cxAlert, Hide);
+    CX_METHOD(cxAlert, OnTouch);
+    CX_METHOD(cxAlert, OnKey);
+    CX_METHOD(cxAlert, Show);
+    CX_METHOD(cxAlert, Hide);
 }
 CX_INIT(cxAlert, cxAtlas)
 {
@@ -86,13 +84,13 @@ void cxAlertFireShow(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxAlert);
     cxWindowPushView(this);
-    CX_CALL(this, Show, CX_MT(void));
+    CX_CALL(this, Show, CX_M(void));
 }
 
 void cxAlertFireHide(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxAlert);
-    CX_CALL(this, Hide, CX_MT(void));
+    CX_CALL(this, Hide, CX_M(void));
 }
 
 

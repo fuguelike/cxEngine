@@ -8,7 +8,7 @@
 
 #include "cxTint.h"
 
-static void CX_METHOD(cxTint,Init)
+CX_METHOD_DEF(cxTint,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->start = cxViewGetColor(view);
@@ -17,8 +17,7 @@ static void CX_METHOD(cxTint,Init)
     this->delta.b = this->color.b - this->start.b;
     this->delta.a = this->color.a - this->start.a;
 }
-
-static void CX_METHOD(cxTint,Step,cxFloat dt,cxFloat time)
+CX_METHOD_DEF(cxTint,Step,void,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxColor3f color;
@@ -29,7 +28,6 @@ static void CX_METHOD(cxTint,Step,cxFloat dt,cxFloat time)
     cxViewSetColor(view, color);
     cxViewSetAlpha(view, alpha);
 }
-
 CX_SETTER_DEF(cxTint, color)
 {
     this->color = cxJsonToColor4f(value, this->color);
@@ -38,8 +36,8 @@ CX_SETTER_DEF(cxTint, color)
 CX_TYPE(cxTint, cxAction)
 {
     CX_SETTER(cxTint, color);
-    CX_MSET(cxTint, Init);
-    CX_MSET(cxTint, Step);
+    CX_METHOD(cxTint, Init);
+    CX_METHOD(cxTint, Step);
 }
 CX_INIT(cxTint, cxAction)
 {

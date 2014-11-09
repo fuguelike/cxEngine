@@ -10,16 +10,6 @@
 #include <actions/cxTimer.h>
 #include "cxLoading.h"
 
-static cxBool CX_METHOD(cxLoading,OnTouch,const cxTouchItems *points)
-{
-    return true;
-}
-
-static cxBool CX_METHOD(cxLoading,OnKey,const cxKey *key)
-{
-    return true;
-}
-
 cxAsync cxLoadingCurrentItem(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxLoading);
@@ -41,7 +31,7 @@ static void cxLoadingTimerArrive(cxAny sender)
     //success
     if(state == cxAsyncStateSuccess){
         this->Index ++;
-        CX_CALL(this, Step, CX_MT(void));
+        CX_CALL(this, Step, CX_M(void));
     }
     //break init
     if(state == cxAsyncStateFailed){
@@ -56,7 +46,7 @@ static void cxLoadingTimerArrive(cxAny sender)
 static void cxLoadingTimerExit(cxAny sender)
 {
     CX_ASSERT_VALUE(cxActionGetView(sender), cxLoading, this);
-    CX_CALL(this, Exit, CX_MT(void));
+    CX_CALL(this, Exit, CX_M(void));
     cxViewRemove(this);
 }
 
@@ -74,26 +64,33 @@ void cxLoaingFireFinished(cxAny pview)
     cxActionStop(this->stepTimer);
 }
 
-static void CX_METHOD(cxLoading, Exit)
+CX_METHOD_DEF(cxLoading,Exit,void)
 {
     
 }
-static void CX_METHOD(cxLoading, Step)
+CX_METHOD_DEF(cxLoading,Step,void)
 {
     
 }
-static void CX_METHOD(cxLoading, Start)
+CX_METHOD_DEF(cxLoading,Start,void)
 {
     
 }
-
+CX_METHOD_DEF(cxLoading,OnTouch, cxBool, const cxTouchItems *points)
+{
+    return true;
+}
+CX_METHOD_DEF(cxLoading, OnKey, cxBool, const cxKey *key)
+{
+    return true;
+}
 CX_TYPE(cxLoading, cxView)
 {
-    CX_MSET(cxLoading, OnTouch);
-    CX_MSET(cxLoading, OnKey);
-    CX_MSET(cxLoading, Exit);
-    CX_MSET(cxLoading, Step);
-    CX_MSET(cxLoading, Start);
+    CX_METHOD(cxLoading, OnTouch);
+    CX_METHOD(cxLoading, OnKey);
+    CX_METHOD(cxLoading, Exit);
+    CX_METHOD(cxLoading, Step);
+    CX_METHOD(cxLoading, Start);
 }
 CX_INIT(cxLoading, cxView)
 {
@@ -119,12 +116,12 @@ void cxLoadingFireStart(cxAny pview)
     CX_ASSERT_THIS(pview, cxLoading);
     cxEngine engine = cxEngineInstance();
     if(cxArrayLength(this->asyncs) == 0){
-        CX_CALL(this, Exit, CX_MT(void));
+        CX_CALL(this, Exit, CX_M(void));
         return;
     }
     //run start and step 1
-    CX_CALL(this, Start, CX_MT(void));
-    CX_CALL(this, Step, CX_MT(void));
+    CX_CALL(this, Start, CX_M(void));
+    CX_CALL(this, Step, CX_M(void));
     //begin timer
     this->stepTimer = cxViewAppendTimer(this, 1.0f/30.0f, CX_FOREVER);
     CX_ADD(cxTimer, this->stepTimer, onArrive, cxLoadingTimerArrive);

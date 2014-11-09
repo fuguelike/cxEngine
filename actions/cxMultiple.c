@@ -42,7 +42,7 @@ static void cxMultipleRunAll(cxAny pav)
     }
 }
 
-static void CX_METHOD(cxMultiple,Init)
+CX_METHOD_DEF(cxMultiple,Init,void)
 {
     CX_ASSERT_TYPE(cxActionGetView(this), cxView);
     if(this->type == cxMultipleTypeSequence){
@@ -53,8 +53,7 @@ static void CX_METHOD(cxMultiple,Init)
         cxMultipleRunAll(this);
     }
 }
-
-static cxBool CX_METHOD(cxMultiple,Exit)
+CX_METHOD_DEF(cxMultiple,Exit,cxBool)
 {
     if(this->index >= cxArrayLength(this->items)){
         cxArrayClear(this->items);
@@ -62,7 +61,6 @@ static cxBool CX_METHOD(cxMultiple,Exit)
     }
     return false;
 }
-
 CX_SETTER_DEF(cxMultiple, settype)
 {
     cxConstChars setType = cxJsonToConstChars(value);
@@ -91,8 +89,8 @@ CX_TYPE(cxMultiple, cxAction)
     CX_SETTER(cxMultiple, settype);
     CX_SETTER(cxMultiple, actions);
     
-    CX_MSET(cxMultiple, Init);
-    CX_MSET(cxMultiple, Exit);
+    CX_METHOD(cxMultiple, Init);
+    CX_METHOD(cxMultiple, Exit);
 }
 CX_INIT(cxMultiple, cxAction)
 {

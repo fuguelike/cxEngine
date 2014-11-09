@@ -104,7 +104,7 @@ static cxAnimateItem cxAnimateItemGet(cxAnimate this,cxArray items, cxAny any, c
 }
 
 /* 1 dt 2 dt 3 dt 4 dt 5 dt 6 dt 7 dt 8*/
-static void CX_METHOD(cxAnimate,Init)
+CX_METHOD_DEF(cxAnimate,Init,void)
 {
     this->index = 0;
     cxFloat time = cxActionGetTime(this);
@@ -123,8 +123,7 @@ static void CX_METHOD(cxAnimate,Init)
     }
     cxActionSetTime(this, time);
 }
-
-static void CX_METHOD(cxAnimate,Step,cxFloat dt,cxFloat time)
+CX_METHOD_DEF(cxAnimate,Step,void,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxSprite, view);
     cxArray items = cxAnimateGetGroup(this,this->name);
@@ -148,24 +147,22 @@ static void CX_METHOD(cxAnimate,Step,cxFloat dt,cxFloat time)
         this->index = i + 1;
     }
 }
-
-static void CX_METHOD(cxAnimate,Reset)
+CX_METHOD_DEF(cxAnimate,Reset,void)
 {
     this->index = 0;
     cxActionSetTime(this, this->time);
-    CX_SUPER(cxAction, this, Reset, CX_MT(void));
+    CX_SUPER(cxAction, this, Reset, CX_M(void));
 }
 
-static cxBool CX_METHOD(cxAnimate,Exit)
+CX_METHOD_DEF(cxAnimate,Exit,cxBool)
 {
     this->Repeat --;
     if(this->Repeat == 0){
         return true;
     }
-    CX_CALL(this, Reset, CX_MT(void));
+    CX_CALL(this, Reset, CX_M(void));
     return false;
 }
-
 CX_SETTER_DEF(cxAnimate, time)
 {
     this->time = cxJsonToDouble(value, this->time);
@@ -240,10 +237,10 @@ CX_TYPE(cxAnimate, cxAction)
     CX_SETTER(cxAnimate, frames);
     CX_SETTER(cxAnimate, groups);
     
-    CX_MSET(cxAnimate, Init);
-    CX_MSET(cxAnimate, Step);
-    CX_MSET(cxAnimate, Exit);
-    CX_MSET(cxAnimate, Reset);
+    CX_METHOD(cxAnimate, Init);
+    CX_METHOD(cxAnimate, Step);
+    CX_METHOD(cxAnimate, Exit);
+    CX_METHOD(cxAnimate, Reset);
 }
 CX_INIT(cxAnimate, cxAction)
 {
@@ -266,7 +263,7 @@ void cxAnimateRunGroup(cxAny pav,cxConstChars name)
     CX_RETURN(!cxConstCharsOK(name));
     //group name not exists return
     CX_RETURN(!cxHashHas(this->groups, cxHashStrKey(name)));
-    CX_CALL(this, Reset, CX_MT(void));
+    CX_CALL(this, Reset, CX_M(void));
     CX_RETAIN_SWAP(this->name, cxStringConstChars(name));
 }
 

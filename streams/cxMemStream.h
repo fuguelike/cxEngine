@@ -14,7 +14,7 @@
 CX_C_BEGIN
 
 CX_DEF(cxMemStream, cxStream)
-    cxOff position;
+    cxInt position;
     char *data;
     cxUInt allocSize;
 CX_END(cxMemStream, cxStream)

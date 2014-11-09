@@ -19,19 +19,18 @@ CX_FREE(cxTexCoord, cxObject)
 {}
 CX_TERM(cxTexCoord, cxObject)
 
-static cxBool CX_METHOD(cxTexture, Load,cxStream stream)
+CX_METHOD_DEF(cxTexture, Load,cxBool,cxStream stream)
 {
     return false;
 }
-static void CX_METHOD(cxTexture, Bind)
+CX_METHOD_DEF(cxTexture, Bind, void)
 {
     cxOpenGLBindTexture(this->textureId,0);
 }
-
 CX_TYPE(cxTexture, cxObject)
 {
-    CX_MSET(cxTexture, Load);
-    CX_MSET(cxTexture, Bind);
+    CX_METHOD(cxTexture, Load);
+    CX_METHOD(cxTexture, Bind);
 }
 CX_INIT(cxTexture, cxObject)
 {
@@ -51,7 +50,7 @@ void cxTextureFireLoad(cxAny ptex,cxStream stream)
 {
     CX_ASSERT_THIS(ptex, cxTexture);
     CX_RETURN(this->isLoad);
-    this->isLoad = CX_CALL(this, Load, CX_MT(cxBool,cxStream),stream);
+    this->isLoad = CX_CALL(this, Load, CX_M(cxBool,cxStream),stream);
 }
 
 cxBoxTex2f cxTextureBoxPixel(cxAny ptex,cxConstChars key,cxFloat pixel,cxBool flipx,cxBool flipy)
@@ -125,7 +124,7 @@ void cxTextureDraw(cxAny ptex,const cxVec2f pos,const cxSize2f size,cxConstChars
 void cxTextureFireBind(cxAny ptex)
 {
     CX_ASSERT_THIS(ptex, cxTexture);
-    CX_CALL(this, Bind, CX_MT(void));
+    CX_CALL(this, Bind, CX_M(void));
     if(!this->isSetParam){
         cxOpenGLSetTexParameters(this->texParam);
         this->isSetParam = true;
@@ -156,20 +155,25 @@ void cxTextureSetParam(cxAny ptex,GLuint type,GLuint value)
 cxTextureLoaderInfo cxTextureLoader(cxConstChars url)
 {
     cxTextureLoaderInfo info = {0};
-    CX_RETURN(!cxConstCharsOK(url), info);
-    if(url[0] == '#'){
-        cxString lfile = cxLocalizedString(url + 1);
-        if(cxStringOK(lfile))url = cxStringBody(lfile);
+    cxChar path[512]={0};
+    cxInt type = cxConstCharsTypePath(url, path);
+    if(type == 0){
+        return info;
     }
-    cxPath path = cxPathParse(url);
-    CX_RETURN(path == NULL,info);
-    info.texture = cxTextureCacheLoadFile(path->path);
+    url = path;
+    if(type == 2){
+        json_t *json = cxEngineLocalizeder(path);
+        if(json != NULL && json_is_string(json))url = json_string_value(json);
+    }
+    cxPath ppath = cxPathParse(url);
+    CX_RETURN(ppath == NULL,info);
+    info.texture = cxTextureCacheLoadFile(ppath->path);
     if(info.texture == NULL){
         return info;
     }
-    if(path->count >= 2){
+    if(ppath->count >= 2){
         info.hasCoord = true;
-        info.coord = cxTextureBox(info.texture, path->key);
+        info.coord = cxTextureBox(info.texture, ppath->key);
     }
     return info;
 }

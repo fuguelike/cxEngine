@@ -220,7 +220,7 @@ static cxBool cxEngineSetLocalized(cxEngine this,cxConstChars key)
     return false;
 }
 
-static json_t *cxEngineLocalizeder(cxConstChars key)
+json_t *cxEngineLocalizeder(cxConstChars key)
 {
     cxEngine this = cxEngineInstance();
     CX_ASSERT(cxConstCharsOK(key) && this != NULL, "args error or enstance null");

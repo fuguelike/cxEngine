@@ -108,7 +108,7 @@ static void cxSkeletonStateListener(spAnimationState* state, int trackIndex, spE
     CX_EVENT_FIRE(this, onEvent);
 }
 
-static void CX_METHOD(cxSkeleton, Step,cxFloat dt, cxFloat time)
+CX_METHOD_DEF(cxSkeleton, Step, void, cxFloat dt, cxFloat time)
 {
     CX_ASSERT(this->state != NULL, "animation state null");
     CX_ASSERT_VALUE(cxActionGetView(this), cxSpine, spine);
@@ -116,7 +116,7 @@ static void CX_METHOD(cxSkeleton, Step,cxFloat dt, cxFloat time)
     spAnimationState_update(this->state, dt);
     spAnimationState_apply(this->state, spine->skeleton);
 }
-static void CX_METHOD(cxSkeleton,Init)
+CX_METHOD_DEF(cxSkeleton,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxSpine, spine);
     cxSkeletionFree(this);
@@ -148,8 +148,8 @@ CX_TYPE(cxSkeleton, cxAction)
 {
     CX_SETTER(cxSkeleton, tracks);
     
-    CX_MSET(cxSkeleton, Init);
-    CX_MSET(cxSkeleton, Step);
+    CX_METHOD(cxSkeleton, Init);
+    CX_METHOD(cxSkeleton, Step);
 }
 CX_INIT(cxSkeleton, cxAction)
 {

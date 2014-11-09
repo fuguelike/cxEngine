@@ -8,7 +8,7 @@
 
 #include "cxParabola.h"
 
-static void CX_METHOD(cxParabola, Step,cxFloat dt, cxFloat time)
+CX_METHOD_DEF(cxParabola,Step,void,cxFloat dt, cxFloat time)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxVec2f tmp;
@@ -21,18 +21,17 @@ static void CX_METHOD(cxParabola, Step,cxFloat dt, cxFloat time)
     cxViewSetPosition(view, tmp);
     this->time += dt;
 }
-static void CX_METHOD(cxParabola,Init)
+CX_METHOD_DEF(cxParabola,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->time = 0;
     this->pos = cxViewGetPosition(view);
 }
-static cxBool CX_METHOD(cxParabola,Exit)
+CX_METHOD_DEF(cxParabola,Exit,cxBool)
 {
     cxFloat time = cxActionGetTime(this);
     return time != -1 && this->time >= time;
 }
-
 CX_SETTER_DEF(cxParabola, speed)
 {
     this->speed = cxJsonToVec2f(value, this->speed);
@@ -41,15 +40,14 @@ CX_SETTER_DEF(cxParabola, gravity)
 {
     this->gravity = cxJsonToVec2f(value, this->gravity);
 }
-
 CX_TYPE(cxParabola, cxAction)
 {
     CX_SETTER(cxParabola, speed);
     CX_SETTER(cxParabola, gravity);
     
-    CX_MSET(cxParabola, Init);
-    CX_MSET(cxParabola, Step);
-    CX_MSET(cxParabola, Exit);
+    CX_METHOD(cxParabola, Init);
+    CX_METHOD(cxParabola, Step);
+    CX_METHOD(cxParabola, Exit);
 }
 CX_INIT(cxParabola, cxAction)
 {

@@ -14,58 +14,40 @@ static void cxSpatialIndexIterator(void *obj, void *data)
 {
     CX_ASSERT_THIS(data, cxSpatial);
     CX_ASSERT_VALUE(obj, cxView, view);
-    cpHashValue hv = (cpHashValue)CX_CALL(this, HashValue, CX_MT(cxUInt,cxAny), view);
-    cpSpatialIndexRemove(this->index, view, hv);
+    cpHashValue hv = CX_CALL(this, HashValue, CX_M(cpHashValue,cxAny), view);
+    cpSpatialIndexRemove(this->Index, view, hv);
     CX_RELEASE(view);
 }
 
-static cxUInt CX_METHOD(cxSpatial, HashValue,cxAny pview)
+CX_METHOD_DEF(cxSpatial, HashValue,cpHashValue,cxAny pview)
 {
-    return (cxUInt)pview;
+    return (cpHashValue)pview;
 }
-
-static cpBB CX_METHOD(cxSpatial, IndexBB)
+CX_METHOD_DEF(cxView,IndexBB,cpBB)
 {
     cxBox4f box = cxViewGetBox(this);
     cxVec2f pos = cxViewGetPosition(this);
     return cpBBNew(box.l + pos.x, box.b + pos.y, box.r + pos.x, box.t + pos.y);
 }
-
 CX_TYPE(cxSpatial, cxObject)
 {
-    CX_MSET(cxSpatial, HashValue);
-    CX_MSET(cxSpatial, IndexBB);
+    CX_METHOD(cxSpatial, HashValue);
+    CX_METHOD(cxView, IndexBB);
 }
 CX_INIT(cxSpatial, cxObject)
 {
-    cpSpatialIndexBBFunc bbFunc = CX_MGET(this, IndexBB);
-    this->index = cpBBTreeNew(bbFunc, NULL);
+    cpSpatialIndexBBFunc bbFunc = CX_METHOD_GET(this, IndexBB);
+    CX_ASSERT(bbFunc != NULL, "not define bbFunc method");
+    this->Index = cpBBTreeNew(bbFunc, NULL);
 }
 CX_FREE(cxSpatial, cxObject)
 {
-    if(this->index != NULL){
+    if(this->Index != NULL){
         cxSpatialClear(this);
-        cpSpatialIndexDestroy(this->index);
+        cpSpatialIndexDestroy(this->Index);
     }
 }
 CX_TERM(cxSpatial, cxObject)
-
-cxSpatial cxSpatialAlloc(cpBB (*func)(cxAny))
-{
-    cxSpatial this = CX_ALLOC(cxSpatial);
-    if(this->index != NULL){
-        cxSpatialClear(this);
-        cpSpatialIndexDestroy(this->index);
-    }
-    this->index = cpBBTreeNew(func, NULL);
-    return this;
-}
-
-cxSpatial cxSpatialCreate(cpBB (*func)(cxAny))
-{
-    cxSpatial this = cxSpatialAlloc(func);
-    return CX_AUTO(this);
-}
 
 typedef struct {
     cxAny ps;
@@ -88,7 +70,7 @@ void cxSpatialEach(cxAny ps,cxSpatialEachFunc func,cxAny data)
     info.data = data;
     info.ps = ps;
     info.func = func;
-    cpSpatialIndexEach(this->index, cxSpatialEachIterator, &info);
+    cpSpatialIndexEach(this->Index, cxSpatialEachIterator, &info);
 }
 
 static cpCollisionID cxSpatialIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionID id, void *data)
@@ -117,22 +99,22 @@ cxSpatialNearestInfo cxSpatialNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNe
     ret.m = max;
     ret.filter = filter;
     cpBB bb = cpBBNewForCircle(p, cpfmax(max, 0.0f));
-    cpSpatialIndexQuery(this->index, this, bb, cxSpatialIndexQueryFunc, &ret);
+    cpSpatialIndexQuery(this->Index, this, bb, cxSpatialIndexQueryFunc, &ret);
     return ret;
 }
 
 void cxSpatialClear(cxAny ps)
 {
     CX_ASSERT_THIS(ps, cxSpatial);
-    cpSpatialIndexEach(this->index, cxSpatialIndexIterator, this);
+    cpSpatialIndexEach(this->Index, cxSpatialIndexIterator, this);
 }
 
 void cxSpatialInsert(cxAny ps,cxAny view)
 {
     CX_ASSERT_THIS(ps, cxSpatial);
     CX_ASSERT_TYPE(view, cxView);
-    cpHashValue hv = (cpHashValue)CX_CALL(this, HashValue, CX_MT(cxUInt,cxAny), view);
-    cpSpatialIndexInsert(this->index, view, hv);
+    cpHashValue hv = CX_CALL(this, HashValue, CX_M(cpHashValue,cxAny), view);
+    cpSpatialIndexInsert(this->Index, view, hv);
     CX_RETAIN(view);
 }
 
@@ -143,8 +125,8 @@ void cxSpatialRemove(cxAny ps,cxAny view)
     if(!cxSpatialContains(ps, view)){
         return;
     }
-    cpHashValue hv = (cpHashValue)CX_CALL(this, HashValue, CX_MT(cxUInt,cxAny), view);
-    cpSpatialIndexRemove(this->index, view, hv);
+    cpHashValue hv = CX_CALL(this, HashValue, CX_M(cpHashValue,cxAny), view);
+    cpSpatialIndexRemove(this->Index, view, hv);
     CX_RELEASE(view);
 }
 
@@ -152,28 +134,28 @@ cxBool cxSpatialContains(cxAny ps,cxAny view)
 {
     CX_ASSERT_THIS(ps, cxSpatial);
     CX_ASSERT_TYPE(view, cxView);
-    cpHashValue hv = (cpHashValue)CX_CALL(this, HashValue, CX_MT(cxUInt,cxAny), view);
-    return cpSpatialIndexContains(this->index, view, hv);
+    cpHashValue hv = CX_CALL(this, HashValue, CX_M(cpHashValue,cxAny), view);
+    return cpSpatialIndexContains(this->Index, view, hv);
 }
 
 void cxSpatialReindex(cxAny ps)
 {
     CX_ASSERT_THIS(ps, cxSpatial);
-    cpSpatialIndexReindex(this->index);
+    cpSpatialIndexReindex(this->Index);
 }
 
 void cxSpatialReindexView(cxAny ps,cxAny view)
 {
     CX_ASSERT_THIS(ps, cxSpatial);
     CX_ASSERT_TYPE(view, cxView);
-    cpHashValue hv = (cpHashValue)CX_CALL(this, HashValue, CX_MT(cxUInt,cxAny), view);
-    cpSpatialIndexReindexObject(this->index, view, hv);
+    cpHashValue hv = CX_CALL(this, HashValue, CX_M(cpHashValue,cxAny), view);
+    cpSpatialIndexReindexObject(this->Index, view, hv);
 }
 
 cxInt cxSpatialCount(cxAny ps)
 {
     CX_ASSERT_THIS(ps, cxSpatial);
-    return cpSpatialIndexCount(this->index);
+    return cpSpatialIndexCount(this->Index);
 }
 
 

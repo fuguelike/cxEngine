@@ -90,21 +90,21 @@ static bool cxShaderCompile(cxAny pshader,GLuint *shader, GLenum type, cxString 
     }
     return (status == GL_TRUE);
 }
-static void CX_METHOD(cxShader,Init)
+CX_METHOD_DEF(cxShader,Init,void)
 {
     glBindAttribLocation(this->program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
     glBindAttribLocation(this->program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
     glBindAttribLocation(this->program, cxVertexAttribTexcoord, CX_ATTRIBUTE_NAME_TEXCOORD);
 }
-static void CX_METHOD(cxShader,Update)
+CX_METHOD_DEF(cxShader,Update,void)
 {
     
 }
-static void CX_METHOD(cxShader,Uniform)
+CX_METHOD_DEF(cxShader,Uniform,void)
 {
     
 }
-static cxString CX_METHOD(cxShader, Vertex)
+CX_METHOD_DEF(cxShader, Vertex,cxString)
 {
     static cxConstChars vertex =
     GLSL(
@@ -120,7 +120,7 @@ static cxString CX_METHOD(cxShader, Vertex)
          });
     return cxStringConstChars(vertex);
 }
-static cxString CX_METHOD(cxShader, Fragment)
+CX_METHOD_DEF(cxShader, Fragment,cxString)
 {
     static cxConstChars fragment =
     GLSL(
@@ -134,11 +134,11 @@ static cxString CX_METHOD(cxShader, Fragment)
 }
 CX_TYPE(cxShader, cxObject)
 {
-    CX_MSET(cxShader, Init);
-    CX_MSET(cxShader, Update);
-    CX_MSET(cxShader, Uniform);
-    CX_MSET(cxShader, Vertex);
-    CX_MSET(cxShader, Fragment);
+    CX_METHOD(cxShader, Init);
+    CX_METHOD(cxShader, Update);
+    CX_METHOD(cxShader, Uniform);
+    CX_METHOD(cxShader, Vertex);
+    CX_METHOD(cxShader, Fragment);
 }
 CX_INIT(cxShader, cxObject)
 {
@@ -168,16 +168,16 @@ void cxShaderUsing(cxAny pshader)
     kmGLGetMatrix(KM_GL_MODELVIEW,  &this->kxMatrixModelView);
     kmMat4Multiply(&this->kxMatrix, &this->kxMatrixProject, &this->kxMatrixModelView);
     glUniformMatrix4fv(this->uniformModelViewProject, 1, GL_FALSE, this->kxMatrix.mat);
-    CX_CALL(this, Update, CX_MT(void));
+    CX_CALL(this, Update, CX_M(void));
 }
 
 bool cxShaderFireInit(cxAny pshader)
 {
     CX_ASSERT_THIS(pshader, cxShader);
     GLint status = 0;
-    cxString vbytes = CX_CALL(this, Vertex, CX_MT(cxString));
+    cxString vbytes = CX_CALL(this, Vertex, CX_M(cxString));
     CX_ASSERT(vbytes != NULL, "get vertex shader source failed");
-    cxString fbytes = CX_CALL(this, Fragment, CX_MT(cxString));
+    cxString fbytes = CX_CALL(this, Fragment, CX_M(cxString));
     CX_ASSERT(vbytes != NULL, "get fragment shader source failed");
     if(!cxShaderCompile(this, &this->vertexShader, GL_VERTEX_SHADER, vbytes)){
         return false;
@@ -192,7 +192,7 @@ bool cxShaderFireInit(cxAny pshader)
     if(this->fragmentShader){
         glAttachShader(this->program, this->fragmentShader);
     }
-    CX_CALL(this, Init, CX_MT(void));
+    CX_CALL(this, Init, CX_M(void));
     glLinkProgram(this->program);
     glGetProgramiv(this->program, GL_LINK_STATUS, &status);
     if(status == GL_FALSE){
@@ -202,7 +202,7 @@ bool cxShaderFireInit(cxAny pshader)
     }
     cxOpenGLUseProgram(this->program);
     this->uniformModelViewProject = glGetUniformLocation(this->program, CX_UNIFORM_MATRIX_MODELVIEW_PROJECT);
-    CX_CALL(this, Uniform, CX_MT(void));
+    CX_CALL(this, Uniform, CX_M(void));
     return true;
 }
 

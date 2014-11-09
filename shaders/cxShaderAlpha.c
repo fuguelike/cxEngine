@@ -9,7 +9,7 @@
 #include "cxShaderDefault.h"
 #include "cxShaderAlpha.h"
 
-static cxString CX_METHOD(cxShaderAlpha,Fragment)
+CX_METHOD_DEF(cxShaderAlpha,Fragment,cxString)
 {
     static cxConstChars fragment =
     GLSL(
@@ -26,7 +26,7 @@ static cxString CX_METHOD(cxShaderAlpha,Fragment)
 
 CX_TYPE(cxShaderAlpha, cxShader)
 {
-    CX_MSET(cxShaderAlpha, Fragment);
+    CX_METHOD(cxShaderAlpha, Fragment);
 }
 CX_INIT(cxShaderAlpha, cxShader)
 {

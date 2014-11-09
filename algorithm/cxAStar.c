@@ -53,26 +53,26 @@ cxBool ASPathCreate(const ASPathNodeSource *nodeSource, void *context, void *sta
 static void AStarPathNodeNeighbors(ASNeighborList neighbors, void *node, void *context)
 {
     CX_ASSERT_THIS(context, cxAStar);
-    CX_CALL(this, Neighbors, CX_MT(void,cxAny,cxVec2i *),neighbors,node);
+    CX_CALL(this, Neighbors, CX_M(void,cxAny,cxVec2i *),neighbors,node);
 }
 
 static float AStarPathNodeHeuristic(void *fromNode, void *toNode, void *context)
 {
     CX_ASSERT_THIS(context, cxAStar);
-    return CX_CALL(this, Heuristic, CX_MT(cxFloat,cxVec2i *,cxVec2i *),fromNode,toNode);
+    return CX_CALL(this, Heuristic, CX_M(cxFloat,cxVec2i *,cxVec2i *),fromNode,toNode);
 }
 
 static int AStarEarlyExit(size_t visitedCount, void *visitingNode, void *goalNode, void *context)
 {
     CX_ASSERT_THIS(context, cxAStar);
     cxAnyArrayAppend(this->visits, visitingNode);
-    return CX_CALL(this, EarlyExit, CX_MT(cxInt,cxInt,cxVec2i *,cxVec2i *),(cxInt)visitedCount,visitingNode,goalNode);
+    return CX_CALL(this, EarlyExit, CX_M(cxInt,cxInt,cxVec2i *,cxVec2i *),(cxInt)visitedCount,visitingNode,goalNode);
 }
 
 static int AStarNodeComparator(void *node1, void *node2, void *context)
 {
     CX_ASSERT_THIS(context, cxAStar);
-    return CX_CALL(this, Comparator, CX_MT(cxInt,cxVec2i *,cxVec2i *),node1,node2);
+    return CX_CALL(this, Comparator, CX_M(cxInt,cxVec2i *,cxVec2i *),node1,node2);
 }
 
 static const ASPathNodeSource cxAStarSource =
@@ -89,68 +89,67 @@ void cxAStarAppendNeighbors(cxAny list,cxVec2i point,cxFloat edgeCost)
     ASNeighborListAdd(list, &point, edgeCost);
 }
 
-static void CX_METHOD(cxAStar, Neighbors, cxAny list, cxVec2i *node)
+CX_METHOD_DEF(cxAStar, Neighbors, void, cxAny list, cxVec2i *node)
 {
     cxVec2i right = cxVec2iv(node->x + 1, node->y);
-    if(CX_CALL(this, IsAppend, CX_MT(cxBool,cxVec2i *),&right)){
+    if(CX_CALL(this, IsAppend, CX_M(cxBool,cxVec2i *),&right)){
         cxAStarAppendNeighbors(list, right, 1);
     }
     cxVec2i left = cxVec2iv(node->x - 1, node->y);
-    if(CX_CALL(this, IsAppend, CX_MT(cxBool,cxVec2i *),&left)){
+    if(CX_CALL(this, IsAppend, CX_M(cxBool,cxVec2i *),&left)){
         cxAStarAppendNeighbors(list, left, 1);
     }
     cxVec2i up = cxVec2iv(node->x, node->y + 1);
-    if(CX_CALL(this, IsAppend, CX_MT(cxBool,cxVec2i *),&up)){
+    if(CX_CALL(this, IsAppend, CX_M(cxBool,cxVec2i *),&up)){
         cxAStarAppendNeighbors(list, up, 1);
     }
     cxVec2i down = cxVec2iv(node->x, node->y - 1);
-    if(CX_CALL(this, IsAppend, CX_MT(cxBool,cxVec2i *),&down)){
+    if(CX_CALL(this, IsAppend, CX_M(cxBool,cxVec2i *),&down)){
         cxAStarAppendNeighbors(list, down, 1);
     }
     if(this->Type == cxAStarTypeA4){
         return;
     }
     cxVec2i leftUp = cxVec2iv(node->x - 1, node->y + 1);
-    if(CX_CALL(this, IsAppend, CX_MT(cxBool,cxVec2i *),&leftUp)){
+    if(CX_CALL(this, IsAppend, CX_M(cxBool,cxVec2i *),&leftUp)){
         cxAStarAppendNeighbors(list, leftUp, 1);
     }
     cxVec2i leftDown = cxVec2iv(node->x - 1, node->y - 1);
-    if(CX_CALL(this, IsAppend, CX_MT(cxBool,cxVec2i *),&leftDown)){
+    if(CX_CALL(this, IsAppend, CX_M(cxBool,cxVec2i *),&leftDown)){
         cxAStarAppendNeighbors(list, leftDown, 1);
     }
     cxVec2i rightUp = cxVec2iv(node->x + 1, node->y + 1);
-    if(CX_CALL(this, IsAppend, CX_MT(cxBool,cxVec2i *),&rightUp)){
+    if(CX_CALL(this, IsAppend, CX_M(cxBool,cxVec2i *),&rightUp)){
         cxAStarAppendNeighbors(list, rightUp, 1);
     }
     cxVec2i rightDown = cxVec2iv(node->x + 1, node->y - 1);
-    if(CX_CALL(this, IsAppend, CX_MT(cxBool,cxVec2i *),&rightDown)){
+    if(CX_CALL(this, IsAppend, CX_M(cxBool,cxVec2i *),&rightDown)){
         cxAStarAppendNeighbors(list, rightDown, 1);
     }
 }
-static cxFloat CX_METHOD(cxAStar, Heuristic, cxVec2i *from,cxVec2i *to)
+CX_METHOD_DEF(cxAStar, Heuristic, cxFloat, cxVec2i *from,cxVec2i *to)
 {
     return (fabs(from->x - to->x) + fabs(from->y - to->y));
 }
-static cxInt CX_METHOD(cxAStar, EarlyExit, cxInt vcount, cxVec2i *curr,cxVec2i *target)
+CX_METHOD_DEF(cxAStar, EarlyExit, cxInt, cxInt vcount, cxVec2i *curr,cxVec2i *target)
 {
     return 0;
 }
-static cxInt CX_METHOD(cxAStar, Comparator, cxVec2i *lv,cxVec2i *rv)
+CX_METHOD_DEF(cxAStar, Comparator, cxInt, cxVec2i *lv,cxVec2i *rv)
 {
     return memcmp(lv, rv, sizeof(cxVec2i));
 }
-static cxBool CX_METHOD(cxAStar, IsAppend, cxVec2i *node)
+CX_METHOD_DEF(cxAStar, IsAppend, cxBool, cxVec2i *node)
 {
     return false;
 }
-
 CX_TYPE(cxAStar, cxObject)
 {
-    CX_MSET(cxAStar, IsAppend);
-    CX_MSET(cxAStar, Comparator);
-    CX_MSET(cxAStar, EarlyExit);
-    CX_MSET(cxAStar, Heuristic);
-    CX_MSET(cxAStar, Neighbors);
+    CX_METHOD(cxAStar, IsAppend);
+    CX_METHOD(cxAStar, Comparator);
+    CX_METHOD(cxAStar, EarlyExit);
+    CX_METHOD(cxAStar, Heuristic);
+    CX_METHOD(cxAStar, Neighbors);
 }
 CX_INIT(cxAStar, cxObject)
 {

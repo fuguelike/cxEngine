@@ -9,7 +9,7 @@
 #include "cxShaderMultiple.h"
 #include "cxShaderDefault.h"
 
-static cxString CX_METHOD(cxShaderMultiple,Fragment)
+CX_METHOD_DEF(cxShaderMultiple,Fragment,cxString)
 {
     static cxConstChars fragment =
     GLSL(
@@ -24,8 +24,7 @@ static cxString CX_METHOD(cxShaderMultiple,Fragment)
     );
     return cxStringConstChars(fragment);
 }
-
-static void CX_METHOD(cxShaderMultiple,Uniform)
+CX_METHOD_DEF(cxShaderMultiple,Uniform,void)
 {
     this->texture1 = glGetUniformLocation(this->cxShader.program, "uTexture1");
     CX_ASSERT(this->texture1 > 0, "uTexture1 not define");
@@ -34,11 +33,10 @@ static void CX_METHOD(cxShaderMultiple,Uniform)
     CX_ASSERT(this->texture2 > 0, "uTexture2 not define");
     glUniform1i(this->texture2, 2);
 }
-
 CX_TYPE(cxShaderMultiple, cxShader)
 {
-    CX_MSET(cxShaderMultiple, Fragment);
-    CX_MSET(cxShaderMultiple, Uniform);
+    CX_METHOD(cxShaderMultiple, Fragment);
+    CX_METHOD(cxShaderMultiple, Uniform);
 }
 CX_INIT(cxShaderMultiple, cxShader)
 {

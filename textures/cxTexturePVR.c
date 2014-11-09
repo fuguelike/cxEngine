@@ -41,7 +41,7 @@ enum{
 
 #pragma pack()
 
-static cxBool CX_METHOD(cxTexturePVR,Load,cxStream stream)
+CX_METHOD_DEF(cxTexturePVR,Load,cxBool,cxStream stream)
 {
     cxBool ret = false;
     CX_ASSERT(stream != NULL, "pvr stream not set");
@@ -49,13 +49,13 @@ static cxBool CX_METHOD(cxTexturePVR,Load,cxStream stream)
         CX_ERROR("platform not support pvr texture");
         return ret;
     }
-    if(!CX_CALL(stream, Open, CX_MT(cxBool))){
+    if(!CX_CALL(stream, Open, CX_M(cxBool))){
         CX_ERROR("open prv stream failed");
         return ret;
     }
     //read pvr head
     cxPVRHeader header;
-    cxInt size = CX_CALL(stream, Read, CX_MT(cxInt,cxAny,cxInt),&header,sizeof(cxPVRHeader));
+    cxInt size = CX_CALL(stream, Read, CX_M(cxInt,cxAny,cxInt),&header,sizeof(cxPVRHeader));
     if(size != sizeof(cxPVRHeader) ||
        header.headerLength != sizeof(cxPVRHeader) ||
        header.pvrTag != CX_PVR_TAG){
@@ -114,7 +114,7 @@ static cxBool CX_METHOD(cxTexturePVR,Load,cxStream stream)
             CX_ASSERT(buffer != NULL, "realloc mem failed");
             bufBytes = bufSize;
         }
-        cxInt size = CX_CALL(stream, Read, CX_MT(cxInt,cxAny,cxInt),buffer,bufSize);
+        cxInt size = CX_CALL(stream, Read, CX_M(cxInt,cxAny,cxInt),buffer,bufSize);
         if(size == bufSize){
             glCompressedTexImage2D(GL_TEXTURE_2D, i, this->glFormat, width, height, 0, bufSize, buffer);
         }else{
@@ -133,13 +133,12 @@ static cxBool CX_METHOD(cxTexturePVR,Load,cxStream stream)
     cxOpenGLBindTexture(0,0);
     ret = true;
 completed:
-    CX_CALL(stream, Close, CX_MT(void));
+    CX_CALL(stream, Close, CX_M(void));
     return ret;
 }
-
 CX_TYPE(cxTexturePVR, cxTexture)
 {
-    CX_MSET(cxTexturePVR, Load);
+    CX_METHOD(cxTexturePVR, Load);
 }
 CX_INIT(cxTexturePVR, cxTexture)
 {
@@ -154,7 +153,7 @@ CX_TERM(cxTexturePVR, cxTexture)
 cxTexture cxTexturePVRLoadStream(cxStream stream)
 {
     cxTexture pvr = CX_CREATE(cxTexturePVR);
-    CX_CALL(pvr, Load, CX_MT(cxBool,cxStream),stream);
+    CX_CALL(pvr, Load, CX_M(cxBool,cxStream),stream);
     return pvr;
 }
 

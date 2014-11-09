@@ -8,11 +8,11 @@
 
 #include "cxTexturePNG.h"
 
-static cxBool CX_METHOD(cxTexturePNG,Load,cxStream stream)
+CX_METHOD_DEF(cxTexturePNG,Load,cxBool,cxStream stream)
 {
     cxBool ret = false;
     CX_ASSERT(stream != NULL, "pvr stream not set");
-    cxString data = CX_CALL(stream, AllBytes, CX_MT(cxString));
+    cxString data = CX_CALL(stream, AllBytes, CX_M(cxString));
     if(data == NULL){
         return false;
     }
@@ -39,10 +39,9 @@ static cxBool CX_METHOD(cxTexturePNG,Load,cxStream stream)
     png_image_free(&image);
     return ret;
 }
-
 CX_TYPE(cxTexturePNG, cxTexture)
 {
-    CX_MSET(cxTexturePNG, Load);
+    CX_METHOD(cxTexturePNG, Load);
 }
 CX_INIT(cxTexturePNG, cxTexture)
 {
@@ -57,7 +56,7 @@ CX_TERM(cxTexturePNG, cxTexture)
 cxTexture cxTexturePNGLoadStream(cxStream stream)
 {
     cxTexture png = CX_CREATE(cxTexturePNG);
-    CX_CALL(png, Load, CX_MT(cxBool,cxStream),stream);
+    CX_CALL(png, Load, CX_M(cxBool,cxStream),stream);
     return png;
 }
 

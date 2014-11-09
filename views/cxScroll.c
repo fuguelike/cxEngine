@@ -135,7 +135,7 @@ void cxScrollUpdateBox(cxAny pview)
     this->box.t =  mh + anchor.y * msize.h;
 }
 
-static cxBool CX_METHOD(cxScroll,OnTouch,const cxTouchItems *points)
+CX_METHOD_DEF(cxScroll,OnTouch,cxBool,const cxTouchItems *points)
 {
     CX_RETURN(this->Body == NULL,false);
     if(this->scalable && points->number == 2){
@@ -262,7 +262,7 @@ CX_TYPE(cxScroll, cxView)
     CX_SETTER(cxScroll, body);
     CX_SETTER(cxScroll, layout);
     
-    CX_MSET(cxScroll, OnTouch);
+    CX_METHOD(cxScroll, OnTouch);
 }
 CX_INIT(cxScroll, cxView)
 {

@@ -52,39 +52,37 @@ CX_SETTER_DEF(cxAction, tag)
     cxLong tag = cxJsonToLong(value, this->Tag);
     cxActionSetTag(this, tag);
 }
-
-static void CX_METHOD(cxAction, Init)
-{
-    this->DelayElapsed = 0;
-    this->TimeElapsed = this->InitTime;
-    CX_EVENT_FIRE(this, onInit);
-}
 CX_INLINE void cxActionResetElapsed(cxAction this)
 {
     this->TimeElapsed = 0;
     this->DelayElapsed = 0;
 }
-static void CX_METHOD(cxAction, Reset)
+CX_METHOD_DEF(cxAction, Init,void)
+{
+    this->DelayElapsed = 0;
+    this->TimeElapsed = this->InitTime;
+    CX_EVENT_FIRE(this, onInit);
+}
+CX_METHOD_DEF(cxAction, Reset,void)
 {
     this->isFirst = false;
     this->isExit = false;
     cxActionResetElapsed(this);
 }
-static cxBool CX_METHOD(cxAction, Exit)
+CX_METHOD_DEF(cxAction, Exit,cxBool)
 {
     return true;
 }
-static void CX_METHOD(cxAction, Step,cxFloat dt, cxFloat time)
+CX_METHOD_DEF(cxAction,Step,void,cxFloat dt, cxFloat time)
 {
     
 }
-
 CX_TYPE(cxAction, cxObject)
 {
-    CX_MSET(cxAction, Init);
-    CX_MSET(cxAction, Reset);
-    CX_MSET(cxAction, Exit);
-    CX_MSET(cxAction, Step);
+    CX_METHOD(cxAction, Init);
+    CX_METHOD(cxAction, Reset);
+    CX_METHOD(cxAction, Exit);
+    CX_METHOD(cxAction, Step);
     
     CX_SETTER(cxAction, time);
     CX_SETTER(cxAction, delay);
@@ -150,7 +148,7 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     //init event
     if(!this->isFirst){
         this->isFirst = true;
-        CX_CALL(this, Init, CX_MT(void));
+        CX_CALL(this, Init, CX_M(void));
     }
     if(this->isExit){
         goto finished;
@@ -159,14 +157,14 @@ cxBool cxActionUpdate(cxAny pav,cxFloat dt)
     cxFloat time = kmClamp(this->TimeElapsed/this->Time, 0.0f, 1.0f);
     time = this->Curve ? this->Curve(this, time) : time;
     if(this->Time < 0){
-        CX_CALL(this, Step, CX_MT(void,cxFloat,cxFloat),dt,time);
+        CX_CALL(this, Step, CX_M(void,cxFloat,cxFloat),dt,time);
     }else if(cxFloatEqu(this->Time, 0.0f)){
-        isExit = CX_CALL(this, Exit, CX_MT(cxBool));
+        isExit = CX_CALL(this, Exit, CX_M(cxBool));
     }else if(this->TimeElapsed < this->Time){
-        CX_CALL(this, Step, CX_MT(void,cxFloat,cxFloat),dt,time);
+        CX_CALL(this, Step, CX_M(void,cxFloat,cxFloat),dt,time);
     }else{
-        CX_CALL(this, Step, CX_MT(void,cxFloat,cxFloat),dt,1.0f);
-        isExit = CX_CALL(this, Exit, CX_MT(cxBool));
+        CX_CALL(this, Step, CX_M(void,cxFloat,cxFloat),dt,1.0f);
+        isExit = CX_CALL(this, Exit, CX_M(cxBool));
         cxActionResetElapsed(this);
     }
 finished:

@@ -9,17 +9,16 @@
 #include "cxRunner.h"
 
 
-static cxBool CX_METHOD(cxRunner,Exit)
+CX_METHOD_DEF(cxRunner,Exit,cxBool)
 {
     if(this->count == 0){
         this->step ++;
     }
     return this->count == 0;
 }
-
 CX_TYPE(cxRunner, cxAction)
 {
-    CX_MSET(cxRunner, Exit);
+    CX_METHOD(cxRunner, Exit);
 }
 CX_INIT(cxRunner, cxAction)
 {

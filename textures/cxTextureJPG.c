@@ -20,7 +20,7 @@ static void cxJPGErrorExit(j_common_ptr cinfo)
     error->error = true;
 }
 
-static cxBool CX_METHOD(cxTextureJPG,Load,cxStream stream)
+CX_METHOD_DEF(cxTextureJPG,Load,cxBool,cxStream stream)
 {
     cxBool ret = false;
     struct jpeg_decompress_struct cinfo;
@@ -33,7 +33,7 @@ static cxBool CX_METHOD(cxTextureJPG,Load,cxStream stream)
         CX_ERROR("jpg create decompress failed");
         goto finished;
     }
-    cxString bytes = CX_CALL(stream, AllBytes, CX_MT(cxString));
+    cxString bytes = CX_CALL(stream, AllBytes, CX_M(cxString));
     if(bytes == NULL){
         CX_ERROR("jpg read stream data error");
         goto finished;
@@ -76,16 +76,14 @@ finished:
     jpeg_destroy_decompress(&cinfo);
     return ret;
 }
-
-static void CX_METHOD(cxTextureJPG,Bind)
+CX_METHOD_DEF(cxTextureJPG,Bind,void)
 {
     cxOpenGLBindTexture(this->cxTexture.textureId, 0);
 }
-
 CX_TYPE(cxTextureJPG, cxTexture)
 {
-    CX_MSET(cxTextureJPG, Load);
-    CX_MSET(cxTextureJPG, Bind);
+    CX_METHOD(cxTextureJPG, Load);
+    CX_METHOD(cxTextureJPG, Bind);
 }
 CX_INIT(cxTextureJPG, cxTexture)
 {
@@ -100,7 +98,7 @@ CX_TERM(cxTextureJPG, cxTexture)
 cxTexture cxTextureJPGLoadStream(cxStream stream)
 {
     cxTexture jpg = CX_CREATE(cxTextureJPG);
-    CX_CALL(jpg, Load, CX_MT(cxBool,cxStream),stream);
+    CX_CALL(jpg, Load, CX_M(cxBool,cxStream),stream);
     return jpg;
 }
 

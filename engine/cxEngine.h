@@ -197,6 +197,8 @@ CX_EXTERN void cxEngineMain(cxEngine engine);
 //engine free
 CX_EXTERN void cxEngineFree(cxEngine engine);
 
+json_t *cxEngineLocalizeder(cxConstChars key);
+
 cxString cxLocalizedString(cxConstChars key);
 
 cxJson cxEngineJsonReader(cxConstChars src);

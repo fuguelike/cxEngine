@@ -63,5 +63,5 @@ cxAnyArray cxAnyArrayClone(cxAnyArray arr)
 cxAnyArray cxAnyArrayCreateImp(cxInt size)
 {
     cxAnyArray this = cxAnyArrayAllocImp(size);
-    return CX_AUTO(this);
+    return CX_AUTO_RELEASE(this);
 }

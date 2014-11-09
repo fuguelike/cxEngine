@@ -74,7 +74,7 @@ static void cxSpineUpdate(cxAny pview)
 	spSkeleton_updateWorldTransform(this->skeleton);
 }
 
-static void CX_METHOD(cxSpine,Draw)
+CX_METHOD_DEF(cxSpine,Draw,void)
 {
     cxInt additive = 0;
 	for (cxInt i = 0; i < this->skeleton->slotsCount; i++) {
@@ -88,7 +88,7 @@ static void CX_METHOD(cxSpine,Draw)
             continue;
         }
         if(slot->data->additiveBlending != additive){
-            CX_CALL(this, Draw, CX_MT(void));
+            CX_CALL(this, Draw, CX_M(void));
             cxAtlasClear(this);
             additive = !additive;
             GLenum dfactor = additive ? GL_ONE : this->cxAtlas.cxSprite.dfactor;
@@ -96,12 +96,12 @@ static void CX_METHOD(cxSpine,Draw)
             cxSpriteSetBlendFactor(this, sfactor, dfactor);
         }else if(cxSpriteGetTexture(this) != texture){
             cxSpriteSetTexture(this, texture);
-            CX_CALL(this, Draw, CX_MT(void));
+            CX_CALL(this, Draw, CX_M(void));
             cxAtlasClear(this);
         }
         cxSpineUpdateBox(this, attachment, slot);
 	}
-    CX_CALL(this, Draw, CX_MT(void));
+    CX_CALL(this, Draw, CX_M(void));
     cxAtlasClear(this);
 }
 /*
@@ -138,7 +138,7 @@ CX_SETTER_DEF(cxSpine, spine)
 CX_TYPE(cxSpine, cxAtlas)
 {
     CX_SETTER(cxSpine, spine);
-    CX_MSET(cxSpine, Draw);
+    CX_METHOD(cxSpine, Draw);
 }
 CX_INIT(cxSpine, cxAtlas)
 {

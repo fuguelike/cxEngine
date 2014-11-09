@@ -121,7 +121,6 @@
 #include <stddef.h>
 #include <uthash.h>
 
-typedef int             cxOff;
 typedef char            cxChar;
 typedef int             cxInt;
 typedef long            cxLong;
@@ -240,7 +239,7 @@ CX_ATTR_UNUSED static cxAny __##_t_##AllocFunc()                \
 }                                                               \
 CX_ATTR_UNUSED static cxAny __##_t_##CreateFunc()               \
 {                                                               \
-    return CX_AUTO(__##_t_##AllocFunc());                       \
+    return CX_AUTO_RELEASE(__##_t_##AllocFunc());               \
 }                                                               \
 CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 {                                                               \
@@ -253,6 +252,7 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 #define CX_DEF(_t_,_b_)             CX_BEG(_t_,_b_) struct _b_ _b_;
 
 //type imp cxAny = cxType
+
 #define CX_TYPE(_t_,_b_)            void _t_##AutoType(cxType this){
 
 #define CX_INIT(_t_,_b_)            };void _t_##AutoInit(_t_ this){_b_##AutoInit((_b_)this);
@@ -271,11 +271,13 @@ CX_ATTR_UNUSED static void __##_t_##RegisterFunc()              \
 
 #define CX_RELEASE(_o_)             __cxObjectRelease(_o_)
 
-#define CX_AUTO(_o_)                __cxObjectAutoRelease(_o_)
+#define CX_AUTO_RELEASE(_o_)        __cxObjectAutoRelease(_o_)
 
 #define CX_RETAIN_SWAP(_s_,_d_)     do{CX_RELEASE(_s_);(_s_)=(cxAny)(_d_);CX_RETAIN(_s_);}while(0)
 
 #define CX_RETAIN_SET(_f_,_v_)      do{_f_ = (_v_);CX_RETAIN(_f_);}while(0)
+
+//type
 
 #define CX_INSTANCE_OF(_o_,_t_)     cxObjectInstanceOf(_o_,_t_##TypeName)
 
@@ -359,7 +361,8 @@ do{                                                             \
     DL_APPEND(_signal_,_new_);                                  \
 }while(0)
 
-#define CX_CON(_t_,_src_,_n_,_dst_,_f_)                         \
+//set slot connect signal
+#define CX_SET(_t_,_src_,_n_,_dst_,_f_)                         \
 CX_ASSERT_TYPE(_src_, _t_);                                     \
 CX_SLOT_CONNECT(CX_TYPE_OF(_t_, _src_)->_n_, _dst_, _n_, _f_)
 
@@ -466,55 +469,75 @@ void cxUtilAssert(cxConstChars file, cxInt line, cxConstChars format, ...);
 //////////////////////////////////////////////////////////
 #define CX_NAME_MAX_SIZE  64
 typedef struct cxType *cxType;
+
 typedef struct cxMethod *cxMethod;
+
 typedef struct cxSignature *cxSignature;
+
 typedef struct cxProperty *cxProperty;
 // propertys
-#define CX_SETTER_DEF(_t_,_p_)  static void __##_t_##_p_##Setter(_t_ this,cxAny value)
+#define CX_SETTER_DEF(_t_,_p_)          static void __##_t_##_p_##Setter(_t_ this,cxAny value)
 
-#define CX_GETTER_DEF(_t_,_p_)  static cxAny __##_t_##_p_##Getter(_t_ this)
+#define CX_GETTER_DEF(_t_,_p_)          static cxAny __##_t_##_p_##Getter(_t_ this)
 
-#define CX_SETTER(_t_,_p_)      cxPropertyNew(this,#_p_)->cxSetter=__##_t_##_p_##Setter
+#define CX_SETTER(_t_,_p_)              do{cxPropertyNew(this,#_p_)->cxSetter=__##_t_##_p_##Setter;}while(0)
 
-#define CX_GETTER(_t_,_p_)      cxPropertyNew(this,#_p_)->cxGetter=__##_t_##_p_##Getter
+#define CX_GETTER(_t_,_p_)              do{cxPropertyNew(this,#_p_)->cxGetter=__##_t_##_p_##Getter;}while(0)
+
 struct cxProperty {
     cxAny cxSetter;
     cxAny cxGetter;
     cxChar name[CX_NAME_MAX_SIZE];
     UT_hash_handle hh;
 };
+
 cxBool cxPropertyRunSetter(cxAny object,cxConstChars key,cxAny value);
+
 cxBool cxPropertyRunGetter(cxAny object,cxConstChars key,cxAny *value);
+
 cxProperty cxPropertyNew(cxType ptype,cxConstChars name);
 //methods
-#define CX_MT(_rt_,...)                 (_rt_ (*)(cxAny,##__VA_ARGS__))
+#define CX_M(_rv_,...)                 (_rv_ (*)(cxAny,##__VA_ARGS__))
 
-#define CX_CALL(_o_,_n_,_mt_,...)       (_mt_(cxMethodGet(_o_,#_n_)))(_o_,##__VA_ARGS__)
+#define CX_CALL(_o_,_n_,_m_,...)       (_m_(cxMethodGet(_o_,#_n_)))(_o_,##__VA_ARGS__)
 
-#define CX_SUPER(_b_,_o_,_n_,_mt_,...)  (_mt_(cxMethodSuper(_o_,_b_##TypeName,#_n_)))(_o_,##__VA_ARGS__)
+#define CX_SUPER(_b_,_o_,_n_,_m_,...)  (_m_(cxMethodSuper(_o_,_b_##TypeName,#_n_)))(_o_,##__VA_ARGS__)
 
-#define CX_METHOD(_t_,_n_,...)          _t_##_n_(_t_ this,##__VA_ARGS__)
+#define CX_METHOD_DEF(_t_,_n_,_rv_,...) static _rv_ _t_##_n_(_t_ this,##__VA_ARGS__)
 
-#define CX_MGET(_o_,_n_)                cxMethodGet(_o_,#_n_)
+#define CX_METHOD_GET(_o_,_n_)          cxMethodGet(_o_,#_n_)
 
-#define CX_MSET(_t_,_n_)                cxMethodNew(this,#_n_)->cxMethodFunc = (cxAny)_t_##_n_
+#define CX_METHOD(_t_,_n_)              do{cxMethodNew(this,#_n_)->cxMethodFunc = (cxAny)_t_##_n_;}while(0)
 
-#define CX_MHAS(_o_,_n_)                cxMethodHas(_o_,#_n_)
+#define CX_METHOD_HAS(_o_,_n_)          cxMethodHas(_o_,#_n_)
 
-#define CX_MRUN(_o_,_n_,_mt_,...)       if(CX_MHAS(_o_,_n_))CX_CALL(_o_,_n_,_mt_,##__VA_ARGS__)
+#define CX_METHOD_EXISTS(_t_,_n_)       cxMethodExists(_t_##TypeName,#_n_)
+
+#define CX_METHOD_RUN(_o_,_n_,_m_,...)  if(CX_METHOD_HAS(_o_,_n_))CX_CALL(_o_,_n_,_m_,##__VA_ARGS__)
 
 struct cxMethod {
     cxAny cxMethodFunc;
     cxChar name[CX_NAME_MAX_SIZE];
     UT_hash_handle hh;
 };
+
 cxMethod cxMethodNew(cxType ptype,cxConstChars name);
+
+cxBool cxMethodExists(cxConstType type,cxConstChars name);
+
+cxBool cxMethodHas(cxAny object,cxConstChars key);
+
+cxAny cxMethodGet(cxAny pobj,cxConstChars name);
+
+cxAny cxMethodSuper(cxAny pobj,cxConstType type,cxConstChars name);
 //signature
 struct cxSignature{
     cxChar name[CX_NAME_MAX_SIZE];
     UT_hash_handle hh;
 };
+
 cxSignature cxSignatureNew(cxType ptype,cxConstChars name);
+
 cxBool cxSignatureHas(cxSignature this,cxConstChars name);
 //types
 struct cxType {
@@ -528,15 +551,19 @@ struct cxType {
     cxChar name[CX_NAME_MAX_SIZE];
     UT_hash_handle hh;
 };
+
 cxType cxTypeNew(cxConstType ct,cxConstType sb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxType));
+
 cxType cxTypesGetType(cxConstType name);
+
 cxAny cxTypesCreateObject(cxConstType name);
+
 cxAny cxTypesAllocObject(cxConstType name);
+
 cxProperty cxTypeGetProperty(cxType this,cxConstChars name);
+
 cxMethod cxTypeGetMethod(cxType this,cxConstChars name);
-cxBool cxMethodHas(cxAny object,cxConstChars key);
-cxAny cxMethodGet(cxAny pobj,cxConstChars name);
-cxAny cxMethodSuper(cxAny pobj,cxConstType type,cxConstChars name);
+
 cxBool cxObjectInstanceOf(cxAny pobj,cxConstType type);
 //////////////////////////////////////////////////////////
 
@@ -550,12 +577,6 @@ CX_BEG(cxObject,cxObject)
 CX_END(cxObject,cxObject)
 
 cxBool cxObjectInstanceOf(cxAny object,cxConstType type);
-
-void cxCorePush(cxAny object);
-
-void cxCorePop();
-
-cxAny cxCoreTop();
 
 void cxCoreInit();
 

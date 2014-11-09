@@ -11,7 +11,7 @@
 
 // 0.1 0.3 0.6 1.0 2.0
 
-static void CX_METHOD(cxTimeLine,Init)
+CX_METHOD_DEF(cxTimeLine,Init,void)
 {
     cxFloat *time = cxAnyArrayLast(this->times, cxFloat);
     if(time == NULL){
@@ -22,7 +22,7 @@ static void CX_METHOD(cxTimeLine,Init)
     this->index = -1;
 }
 
-static void CX_METHOD(cxTimeLine,Step,cxFloat dt,cxFloat time)
+CX_METHOD_DEF(cxTimeLine,Step,void,cxFloat dt,cxFloat time)
 {
     cxInt count = cxAnyArrayLength(this->times);
     cxFloat elapsed = cxActionGetTimeElapsed(this);
@@ -57,8 +57,8 @@ CX_TYPE(cxTimeLine, cxAction)
 {
     CX_SETTER(cxTimeLine, times);
     
-    CX_MSET(cxTimeLine, Init);
-    CX_MSET(cxTimeLine, Step);
+    CX_METHOD(cxTimeLine, Init);
+    CX_METHOD(cxTimeLine, Step);
 }
 CX_INIT(cxTimeLine, cxAction)
 {

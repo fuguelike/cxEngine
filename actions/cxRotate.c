@@ -8,21 +8,19 @@
 
 #include "cxRotate.h"
 
-static void CX_METHOD(cxRotate,Init)
+CX_METHOD_DEF(cxRotate,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->oldAngle = cxViewGetAngle(view);
     this->delta = this->newAngle - this->oldAngle;
     cxViewSetRaxis(view, this->raxis);
 }
-
-static void CX_METHOD(cxRotate,Step,cxFloat dt,cxFloat time)
+CX_METHOD_DEF(cxRotate,Step,void,cxFloat dt,cxFloat time)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat angle = this->oldAngle + this->delta * time;
     cxViewSetAngle(view, angle);
 }
-
 CX_SETTER_DEF(cxRotate, raxis)
 {
     this->raxis = cxJsonToVec3f(value, this->raxis);
@@ -36,15 +34,14 @@ CX_SETTER_DEF(cxRotate, degrees)
     cxFloat oldDegrees = kmRadiansToDegrees(this->newAngle);
     this->newAngle = kmDegreesToRadians(cxJsonToDouble(value, oldDegrees));
 }
-
 CX_TYPE(cxRotate, cxAction)
 {
     CX_SETTER(cxRotate, raxis);
     CX_SETTER(cxRotate, angle);
     CX_SETTER(cxRotate, degrees);
     
-    CX_MSET(cxRotate, Init);
-    CX_MSET(cxRotate, Step);
+    CX_METHOD(cxRotate, Init);
+    CX_METHOD(cxRotate, Step);
 }
 CX_INIT(cxRotate, cxAction)
 {

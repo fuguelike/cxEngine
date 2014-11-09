@@ -8,27 +8,27 @@
 
 #include "cxStream.h"
 
-static cxBool CX_METHOD(cxStream,Open)
+CX_METHOD_DEF(cxStream,Open,cxBool)
 {
     return false;
 }
-static cxInt CX_METHOD(cxStream, Read, cxAny buff, cxInt bytes)
+CX_METHOD_DEF(cxStream, Read, cxInt, cxAny buff, cxInt bytes)
 {
     return 0;
 }
-static cxInt CX_METHOD(cxStream, Write, cxAny buff, cxInt bytes)
+CX_METHOD_DEF(cxStream, Write, cxInt, cxAny buff, cxInt bytes)
 {
     return 0;
 }
-static cxInt CX_METHOD(cxStream, Seek, cxOff seek, cxInt where)
+CX_METHOD_DEF(cxStream, Seek, cxInt, cxInt seek, cxInt where)
 {
     return 0;
 }
-static cxOff CX_METHOD(cxStream, Position)
+CX_METHOD_DEF(cxStream, Position, cxInt)
 {
     return 0;
 }
-static void CX_METHOD(cxStream, Close)
+CX_METHOD_DEF(cxStream, Close,void)
 {
     this->Length = 0;
     this->canRead = false;
@@ -36,20 +36,19 @@ static void CX_METHOD(cxStream, Close)
     this->canSeek = false;
     this->isOpen = false;
 }
-static cxString CX_METHOD(cxStream, AllBytes)
+CX_METHOD_DEF(cxStream, AllBytes,cxString)
 {
     return NULL;
 }
-
 CX_TYPE(cxStream, cxObject)
 {
-    CX_MSET(cxStream, Open);
-    CX_MSET(cxStream, Read);
-    CX_MSET(cxStream, Write);
-    CX_MSET(cxStream, Seek);
-    CX_MSET(cxStream, Position);
-    CX_MSET(cxStream, Close);
-    CX_MSET(cxStream, AllBytes);
+    CX_METHOD(cxStream, Open);
+    CX_METHOD(cxStream, Read);
+    CX_METHOD(cxStream, Write);
+    CX_METHOD(cxStream, Seek);
+    CX_METHOD(cxStream, Position);
+    CX_METHOD(cxStream, Close);
+    CX_METHOD(cxStream, AllBytes);
 }
 CX_INIT(cxStream, cxObject)
 {
@@ -57,7 +56,7 @@ CX_INIT(cxStream, cxObject)
 }
 CX_FREE(cxStream, cxObject)
 {
-    CX_CALL(this, Close, CX_MT(void));
+    CX_CALL(this, Close, CX_M(void));
     CX_RELEASE(this->path);
 }
 CX_TERM(cxStream, cxObject)

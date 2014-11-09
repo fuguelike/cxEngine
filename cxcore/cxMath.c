@@ -8,6 +8,85 @@
 
 #include "cxMath.h"
 
+ cxVec2f cxVec2fSub(cxVec2f pV1, cxVec2f pV2)
+{
+    return cxVec2fv(pV1.x - pV2.x, pV1.y - pV2.y);
+}
+
+ cxVec2f cxVec2fAdd(cxVec2f pV1, cxVec2f pV2)
+{
+    return cxVec2fv(pV1.x + pV2.x, pV1.y + pV2.y);
+}
+
+cxVec2f cxVec2fScale(cxVec2f pIn, cxFloat s)
+{
+    return cxVec2fv(pIn.x * s, pIn.y * s);
+}
+
+cxVec2f cxVec2fMidPoint(cxVec2f v1, cxVec2f v2)
+{
+    cxVec2f sum = cxVec2fAdd(v1, v2);
+    return cxVec2fv(sum.x / 2.0f, sum.y / 2.0f);
+}
+
+cxFloat cxRound(cxFloat v)
+{
+    if(v > 0){
+        return v + kmEpsilon;
+    }else if(v < 0){
+        return v - kmEpsilon;
+    }else{
+        return v;
+    }
+}
+
+cxVec2f cxRoundVec2f(cxVec2f v)
+{
+    return cxVec2fv(cxRound(v.x), cxRound(v.y));
+}
+
+cxFloat cxBezier2(cxFloat a, cxFloat b, cxFloat c, cxFloat t)
+{
+    return powf(1.0f-t,2.0f)*a+2.0f*t*(1.0f-t)*b+powf(t,2.0f)*c;
+}
+
+cxFloat cxBezier3(cxFloat a, cxFloat b, cxFloat c, cxFloat d, cxFloat t)
+{
+    return powf(1.0f-t,3.0f)*a+3.0f*t*(powf(1.0f-t,2.0f))*b+3.0f*powf(t,2.0f)*(1.0f-t)*c+powf(t,3.0f)*d;
+}
+
+cxBool cxBox4fIntersects(const cxBox4f a, const cxBox4f b)
+{
+    return (a.l <= b.r && b.l <= a.r && a.b <= b.t && b.b <= a.t);
+}
+
+cxBool cxBox4fContainsBox4f(const cxBox4f bb, const cxBox4f other)
+{
+    return (bb.l <= other.l && bb.r >= other.r && bb.b <= other.b && bb.t >= other.t);
+}
+
+cxBool cxBox4fContainPoint(cxBox4f box,cxVec2f pos)
+{
+    return (pos.x >= box.l && pos.x <= box.r && pos.y >= box.b && pos.y <= box.t);
+}
+
+//if r1 contains r2 return true
+cxBool cxRect4fContainsRect4f(cxRect4f r1,cxRect4f r2)
+{
+    cxFloat x1 = r1.x;
+    cxFloat y1 = r1.y;
+    cxFloat x2 = r1.x + r1.w;
+    cxFloat y2 = r1.y + r1.h;
+    cxFloat x3 = r2.x;
+    cxFloat y3 = r2.y;
+    cxFloat x4 = r2.x + r2.w;
+    cxFloat y4 = r2.y + r2.h;
+    bool c1 = (x1 >=x3 && x1 < x4) || (x3 >= x1 && x3 <= x2);
+    bool c2 = (y1 >=y3 && y1 < y4) || (y3 >= y1 && y3 <= y2);
+    return (c1 && c2) ? true : false;
+}
+
+
 cxFloat cxVec2fRadiansBetween(cxVec2f v1, cxVec2f v2)
 {
     if(cxVec2fEqu(v1, v2)){

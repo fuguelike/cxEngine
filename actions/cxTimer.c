@@ -8,19 +8,18 @@
 
 #include "cxTimer.h"
 
-static void CX_METHOD(cxTimer,Init)
+CX_METHOD_DEF(cxTimer,Init,void)
 {
     CX_RETURN(!this->IsBegin);
     CX_EVENT_FIRE(this, onArrive);
 }
-static cxBool CX_METHOD(cxTimer,Exit)
+CX_METHOD_DEF(cxTimer,Exit,cxBool)
 {
     this->Repeat --;
     CX_RETURN(this->Repeat == 0 && this->IsBegin, true);
     CX_EVENT_FIRE(this, onArrive);
     return this->Repeat == 0;
 }
-
 CX_SETTER_DEF(cxTimer, repeat)
 {
     this->IsBegin = cxJsonToInt(value, this->Repeat);
@@ -29,16 +28,14 @@ CX_SETTER_DEF(cxTimer, begin)
 {
     this->IsBegin = cxJsonToBool(value, this->IsBegin);
 }
-
 CX_TYPE(cxTimer, cxAction)
 {
     CX_SETTER(cxTimer, repeat);
     CX_SETTER(cxTimer, begin);
     
-    CX_MSET(cxTimer, Init);
-    CX_MSET(cxTimer, Exit);
+    CX_METHOD(cxTimer, Init);
+    CX_METHOD(cxTimer, Exit);
 }
-
 CX_INIT(cxTimer, cxAction)
 {
     this->IsBegin = false;

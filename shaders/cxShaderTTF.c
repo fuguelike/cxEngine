@@ -11,7 +11,7 @@
 #include "cxShaderDefault.h"
 #include "cxShaderTTF.h"
 
-static cxString CX_METHOD(cxShaderTTF,Fragment)
+CX_METHOD_DEF(cxShaderTTF,Fragment,cxString)
 {
     static cxConstChars fragment =
     GLSL(
@@ -28,7 +28,7 @@ static cxString CX_METHOD(cxShaderTTF,Fragment)
 
 CX_TYPE(cxShaderTTF, cxShader)
 {
-    CX_MSET(cxShaderTTF, Fragment);
+    CX_METHOD(cxShaderTTF, Fragment);
 }
 CX_INIT(cxShaderTTF, cxShader)
 {

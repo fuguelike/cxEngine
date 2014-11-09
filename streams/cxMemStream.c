@@ -8,7 +8,7 @@
 
 #include "cxMemStream.h"
 
-static cxBool CX_METHOD(cxMemStream,Open)
+CX_METHOD_DEF(cxMemStream,Open,cxBool)
 {
     CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
     this->allocSize = 128;
@@ -19,8 +19,7 @@ static cxBool CX_METHOD(cxMemStream,Open)
     this->cxStream.isOpen = true;
     return true;
 }
-
-static cxInt CX_METHOD(cxMemStream,Read,cxAny buffer,cxInt size)
+CX_METHOD_DEF(cxMemStream,Read,cxInt,cxAny buffer,cxInt size)
 {
     if(!this->cxStream.canRead){
         return 0;
@@ -36,8 +35,7 @@ static cxInt CX_METHOD(cxMemStream,Read,cxAny buffer,cxInt size)
     this->position += bytes;
     return bytes;
 }
-
-static cxInt CX_METHOD(cxMemStream,Write,cxAny buffer,cxInt size)
+CX_METHOD_DEF(cxMemStream,Write,cxInt,cxAny buffer,cxInt size)
 {
     if(!this->cxStream.canWrite){
         return 0;
@@ -53,13 +51,11 @@ static cxInt CX_METHOD(cxMemStream,Write,cxAny buffer,cxInt size)
     this->cxStream.Length += size;
     return size;
 }
-
-static cxOff CX_METHOD(cxMemStream,Position)
+CX_METHOD_DEF(cxMemStream,Position,cxInt)
 {
     return this->position;
 }
-
-static cxInt CX_METHOD(cxMemStream,Seek,cxOff off,cxInt flags)
+CX_METHOD_DEF(cxMemStream,Seek,cxInt,cxInt off,cxInt flags)
 {
     if(!this->cxStream.canSeek){
         return 0;
@@ -80,15 +76,13 @@ static cxInt CX_METHOD(cxMemStream,Seek,cxOff off,cxInt flags)
     }
     return 0;
 }
-
-static cxString CX_METHOD(cxMemStream,AllBytes)
+CX_METHOD_DEF(cxMemStream,AllBytes,cxString)
 {
     cxString rv = CX_CREATE(cxString);
     cxStringAppend(rv, this->data, this->cxStream.Length);
     return rv;
 }
-
-static void CX_METHOD(cxMemStream,Close)
+CX_METHOD_DEF(cxMemStream,Close,void)
 {
     this->allocSize = 0;
     if(this->data != NULL){
@@ -96,18 +90,17 @@ static void CX_METHOD(cxMemStream,Close)
         this->data = NULL;
     }
     this->position = 0;
-    CX_SUPER(cxStream, this, Close, CX_MT(void));
+    CX_SUPER(cxStream, this, Close, CX_M(void));
 }
-
 CX_TYPE(cxMemStream, cxStream)
 {
-    CX_MSET(cxMemStream, Open);
-    CX_MSET(cxMemStream, Read);
-    CX_MSET(cxMemStream, Write);
-    CX_MSET(cxMemStream, Seek);
-    CX_MSET(cxMemStream, Position);
-    CX_MSET(cxMemStream, Close);
-    CX_MSET(cxMemStream, AllBytes);
+    CX_METHOD(cxMemStream, Open);
+    CX_METHOD(cxMemStream, Read);
+    CX_METHOD(cxMemStream, Write);
+    CX_METHOD(cxMemStream, Seek);
+    CX_METHOD(cxMemStream, Position);
+    CX_METHOD(cxMemStream, Close);
+    CX_METHOD(cxMemStream, AllBytes);
 }
 CX_INIT(cxMemStream, cxStream)
 {
@@ -122,11 +115,11 @@ CX_TERM(cxMemStream, cxStream)
 cxStream cxMemStreamCreateWithText(cxString txt)
 {
     cxStream stream = CX_CREATE(cxMemStream);
-    if(!CX_CALL(stream, Open, CX_MT(cxBool))){
+    if(!CX_CALL(stream, Open, CX_M(cxBool))){
         return NULL;
     }
     if(txt != NULL){
-        CX_CALL(stream, Write, CX_MT(cxInt,cxAny,cxInt),cxStringBody(txt),cxStringLength(txt));
+        CX_CALL(stream, Write, CX_M(cxInt,cxAny,cxInt),cxStringBody(txt),cxStringLength(txt));
     }
     return stream;
 }

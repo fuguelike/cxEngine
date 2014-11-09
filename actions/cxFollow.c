@@ -8,7 +8,7 @@
 
 #include "cxFollow.h"
 
-static void CX_METHOD(cxFollow,Init)
+CX_METHOD_DEF(cxFollow,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     CX_ASSERT_VALUE(this->target, cxView, target);
@@ -16,12 +16,11 @@ static void CX_METHOD(cxFollow,Init)
     cxVec2f tpos = cxViewGetPosition(target);
     cxVec2f cpos = cxViewGetPosition(view);
     this->angle = cxVec2fRadiansBetween(tpos, cpos);
-    if(CX_CALL(this, IsExit, CX_MT(cxBool))){
+    if(CX_CALL(this, IsExit, CX_M(cxBool))){
         cxActionStop(this);
     }
 }
-
-static cxBool CX_METHOD(cxFollow,IsExit)
+CX_METHOD_DEF(cxFollow,IsExit,cxBool)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     CX_ASSERT_VALUE(this->target, cxView, target);
@@ -30,8 +29,7 @@ static cxBool CX_METHOD(cxFollow,IsExit)
     cxFloat dis = kmVec2DistanceBetween(&tpos, &cpos);
     return dis < 10;
 }
-
-static void CX_METHOD(cxFollow, Step,cxFloat dt, cxFloat time)
+CX_METHOD_DEF(cxFollow,Step,void,cxFloat dt, cxFloat time)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     CX_ASSERT_VALUE(this->target, cxView, target);
@@ -42,7 +40,7 @@ static void CX_METHOD(cxFollow, Step,cxFloat dt, cxFloat time)
     cxFloat s = dt * this->speed;
     cxVec2f delta = cxVec2fv(s*cosf(this->angle), s*sinf(this->angle));
     cpos = cxVec2fAdd(cpos, delta);
-    if(CX_CALL(this, IsExit, CX_MT(cxBool))){
+    if(CX_CALL(this, IsExit, CX_M(cxBool))){
         cxActionStop(this);
     }
     cxViewSetPosition(view, cpos);
@@ -56,9 +54,9 @@ cxAny cxFollowTarget(cxAny pav)
 
 CX_TYPE(cxFollow, cxAction)
 {
-    CX_MSET(cxFollow, Init);
-    CX_MSET(cxFollow, Step);
-    CX_MSET(cxFollow, IsExit);
+    CX_METHOD(cxFollow, Init);
+    CX_METHOD(cxFollow, Step);
+    CX_METHOD(cxFollow, IsExit);
 }
 CX_INIT(cxFollow, cxAction)
 {

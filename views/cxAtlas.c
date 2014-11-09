@@ -10,7 +10,7 @@
 #include <engine/cxEngine.h>
 #include "cxAtlas.h"
 
-static void CX_METHOD(cxAtlas,Draw)
+CX_METHOD_DEF(cxAtlas,Draw,void)
 {
     CX_RETURN(this->number == 0 || this->cxSprite.Texture == NULL);
     cxOpenGLSetBlendFactor(this->cxSprite.sfactor, this->cxSprite.dfactor);
@@ -127,7 +127,7 @@ CX_TYPE(cxAtlas, cxSprite)
     CX_SETTER(cxAtlas, blend);
     CX_SETTER(cxAtlas, scale9);
     
-    CX_MSET(cxAtlas, Draw);
+    CX_METHOD(cxAtlas, Draw);
 }
 CX_INIT(cxAtlas, cxSprite)
 {
