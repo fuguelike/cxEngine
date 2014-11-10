@@ -5,6 +5,7 @@
     "w": 1400,
     "h": 1200
   },
+  "cropping":true,
   "scalable": true,
   "layout": "horizontal|vertical",
   "body": {

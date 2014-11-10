@@ -57,26 +57,23 @@ CX_METHOD_DEF(cxDriver,Step,void,cxFloat dt,cxFloat time)
         cxActionStop(this);
     }
 }
-CX_METHOD_DEF(cxDriver,Exit,cxBool)
+static void cxDriverOnExit(cxAny pav)
 {
-    if(cxAsyncGetState(this->Async) != cxAsyncStateSuccess){
-        CX_CALL(this, Failed, CX_M(void,cxAny,cxAny),cxActionGetView(this),this->Async);
+    CX_ASSERT_THIS(pav, cxDriver);
+    cxAsyncState state = cxAsyncGetState(this->Async);
+    cxView view = cxActionGetView(this);
+    CX_ASSERT_TYPE(view, cxView);
+    if(state != cxAsyncStateSuccess && CX_METHOD_HAS(view, AsyncError)){
+        CX_CALL(view, AsyncError, CX_M(void,cxAsync),this->Async);
     }
-    return true;
-}
-CX_METHOD_DEF(cxDriver,Failed,void,cxAny pview,cxAny async)
-{
-    
 }
 CX_TYPE(cxDriver, cxAction)
 {
     CX_METHOD(cxDriver, Step);
-    CX_METHOD(cxDriver, Exit);
-    CX_METHOD(cxDriver, Failed);
 }
 CX_INIT(cxDriver, cxAction)
 {
-    
+    CX_ADD(cxAction, this, onExit, cxDriverOnExit);
 }
 CX_FREE(cxDriver, cxAction)
 {
@@ -84,7 +81,7 @@ CX_FREE(cxDriver, cxAction)
 }
 CX_TERM(cxDriver, cxAction)
 
-cxDriver cxDriverCreate(cxAny async)
+cxDriver cxDriverCreateImp(cxAny async)
 {
     CX_ASSERT_TYPE(async, cxAsync);
     cxDriver this = CX_CREATE(cxDriver);

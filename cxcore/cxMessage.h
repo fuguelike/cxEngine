@@ -18,6 +18,11 @@ CX_C_BEGIN
 
 typedef void (*cxMessageFunc)(cxAny dst,cxAny src);
 
+CX_DEF(cxMessageItem, cxObject)
+    cxMessageFunc func;
+    cxAny dst;
+CX_END(cxMessageItem, cxObject)
+
 CX_DEF(cxMessage, cxObject)
     cxHash keys;
 CX_END(cxMessage, cxObject)

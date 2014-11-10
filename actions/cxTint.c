@@ -16,6 +16,7 @@ CX_METHOD_DEF(cxTint,Init,void)
     this->delta.g = this->color.g - this->start.g;
     this->delta.b = this->color.b - this->start.b;
     this->delta.a = this->color.a - this->start.a;
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_METHOD_DEF(cxTint,Step,void,cxFloat dt,cxFloat time)
 {

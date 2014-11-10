@@ -25,6 +25,7 @@ CX_METHOD_DEF(cxJump,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->prevPos = this->startPos = cxViewGetPosition(view);
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_SETTER_DEF(cxJump, position)
 {

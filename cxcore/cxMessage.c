@@ -10,11 +10,6 @@
 
 static cxMessage instance = NULL;
 
-CX_DEF(cxMessageItem, cxObject)
-    cxMessageFunc func;
-    cxAny dst;
-CX_END(cxMessageItem, cxObject)
-
 CX_TYPE(cxMessageItem, cxObject)
 {}
 CX_INIT(cxMessageItem, cxObject)

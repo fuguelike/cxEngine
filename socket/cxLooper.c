@@ -15,7 +15,7 @@ evutil_socket_t cxCreateSocket(cxBool reuse,int type)
 {
     int on = 1;
     int serrno;
-    evutil_socket_t fd = socket(AF_INET, type, 0);
+    evutil_socket_t fd = socket(AF_INET, type, IPPROTO_IP);
     if (fd == -1) {
         CX_ERROR("socket create error");
         return (-1);

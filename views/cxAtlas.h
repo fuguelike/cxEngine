@@ -44,8 +44,6 @@ void cxAtlasSetDirty(cxAny pview,cxBool v);
 
 void cxAtlasDrawInit(cxAny pview);
 
-void cxAtlasResize(cxAny sender);
-
 void cxAtlasAppendEmpty(cxAny pview);
 
 void cxAtlasAppendBoxPoint(cxAny pview,cxVec2f pos,cxSize2f size,cxBoxTex2f tex,cxColor4f color);

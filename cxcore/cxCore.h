@@ -183,9 +183,10 @@ typedef cxUChar *       cxUChars;
 
 #define CX_ASSERT(cond,format,...)                              \
 do{                                                             \
-    if(!(cond))                                                 \
+    bool _ret_= (cond);                                         \
+    if(!_ret_)                                                  \
     cxUtilAssert(__FILE__,__LINE__,format, ##__VA_ARGS__);      \
-    assert(cond);                                               \
+    assert(_ret_);                                              \
 }while(0)
 
 #define CX_ASSERT_FALSE(format,...)     CX_ASSERT(false,format,##__VA_ARGS__)
@@ -216,7 +217,7 @@ do{                                                             \
 
 //type define
 
-#define CX_SET_TYPE(_t_)                __##_t_##SetFunc()
+#define CX_SET_TYPE(_t_)                __##_t_##TypeSetFunc()
 
 #define CX_BEG(_t_,_b_)                                         \
 CX_ATTR_UNUSED static cxConstType _t_##TypeName = #_t_;         \
@@ -233,7 +234,7 @@ CX_ATTR_UNUSED static cxAny __##_t_##AllocFunc()                \
     CX_ASSERT(this != NULL, "memory alloc error");              \
     this->cxRefcount = 1;                                       \
     this->cxType = cxTypesGetType(_t_##TypeName);               \
-    this->cxAutoFree = (void(*)(cxAny))_b_##AutoFree;           \
+    this->cxAutoFree = (void(*)(cxAny))_t_##AutoFree;           \
     _t_##AutoInit((_t_)this);                                   \
     return this;                                                \
 }                                                               \
@@ -241,7 +242,7 @@ CX_ATTR_UNUSED static cxAny __##_t_##CreateFunc()               \
 {                                                               \
     return CX_AUTO_RELEASE(__##_t_##AllocFunc());               \
 }                                                               \
-CX_ATTR_UNUSED static void __##_t_##SetFunc()                   \
+CX_ATTR_UNUSED static void __##_t_##TypeSetFunc()               \
 {                                                               \
     cxTypeNew(_t_##TypeName,_b_##TypeName,                      \
     __##_t_##CreateFunc,                                        \
@@ -301,6 +302,14 @@ CX_INLINE void _t_##Set##_n_(cxAny pthis,const _vt_ value)      \
 {                                                               \
     CX_ASSERT_THIS(pthis,_t_);                                  \
     this->_n_ = value;                                          \
+}
+
+#define CX_FIELD_IMO(_t_,_vt_, _n_)                             \
+CX_FIELD_GET(_t_,_vt_, _n_)                                     \
+CX_INLINE void _t_##Set##_n_(cxAny pthis,const _vt_ value)      \
+{                                                               \
+    CX_ASSERT_THIS(pthis,_t_);                                  \
+    CX_RETAIN_SWAP(this->_n_,value);                            \
 }
 
 #define CX_FIELD_IMP(_t_,_vt_, _n_)                             \
@@ -485,6 +494,7 @@ typedef struct cxProperty *cxProperty;
 #define CX_GETTER(_t_,_p_)              do{cxPropertyNew(this,#_p_)->cxGetter=__##_t_##_p_##Getter;}while(0)
 
 struct cxProperty {
+    cxAny data;
     cxAny cxSetter;
     cxAny cxGetter;
     cxChar name[CX_NAME_MAX_SIZE];
@@ -516,6 +526,7 @@ cxProperty cxPropertyNew(cxType ptype,cxConstChars name);
 #define CX_METHOD_RUN(_o_,_n_,_m_,...)  if(CX_METHOD_HAS(_o_,_n_))CX_CALL(_o_,_n_,_m_,##__VA_ARGS__)
 
 struct cxMethod {
+    cxAny data;
     cxAny cxMethodFunc;
     cxChar name[CX_NAME_MAX_SIZE];
     UT_hash_handle hh;

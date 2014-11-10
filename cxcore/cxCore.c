@@ -224,12 +224,12 @@ void cxTypesInit()
     CX_SET_TYPE(cxList);
     CX_SET_TYPE(cxStack);
     CX_SET_TYPE(cxNumber);
+    CX_SET_TYPE(cxMessageItem);
     CX_SET_TYPE(cxMessage);
     CX_SET_TYPE(cxLoader);
     CX_SET_TYPE(cxPath);
     CX_SET_TYPE(cxStream);
     CX_SET_TYPE(cxAnyArray);
-    CX_SET_TYPE(cxLua);
 }
 void cxTypesFree()
 {
@@ -361,9 +361,19 @@ void cxObjectAutoFree(cxObject this)
 {
     //CX_LOGGER("%s Free",this->cxType->TypeName);
 }
-void cxObjectAutoType(cxType this)
+CX_METHOD_DEF(cxObject, cxRetain, void)
 {
     
+}
+CX_METHOD_DEF(cxObject, cxRelease, void)
+{
+    this->cxAutoFree(this);
+    allocator->free(this);
+}
+void cxObjectAutoType(cxType this)
+{
+    CX_METHOD(cxObject, cxRelease);
+    CX_METHOD(cxObject, cxRetain);
 }
 
 void __cxObjectRetain(cxAny ptr)
@@ -372,6 +382,7 @@ void __cxObjectRetain(cxAny ptr)
     cxObject object = (cxObject)ptr;
     CX_ASSERT(object->cxRefcount > 0, "retain count must > 0");
     cxAtomicAddInt32(&object->cxRefcount, 1);
+    CX_CALL(object, cxRetain, CX_M(void));
 }
 void __cxObjectRelease(cxAny ptr)
 {
@@ -379,10 +390,8 @@ void __cxObjectRelease(cxAny ptr)
     cxObject object = (cxObject)ptr;
     CX_ASSERT(object->cxRefcount > 0, "error,retain count must > 0");
     cxAtomicSubInt32(&object->cxRefcount, 1);
-    if(object->cxRefcount == 0) {
-        object->cxAutoFree(object);
-        allocator->free(object);
-    }
+    CX_RETURN(object->cxRefcount > 0);
+    CX_CALL(object, cxRelease, CX_M(void));
 }
 cxAny __cxObjectAutoRelease(cxAny ptr)
 {

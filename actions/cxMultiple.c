@@ -52,6 +52,7 @@ CX_METHOD_DEF(cxMultiple,Init,void)
         this->index = 0;
         cxMultipleRunAll(this);
     }
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_METHOD_DEF(cxMultiple,Exit,cxBool)
 {

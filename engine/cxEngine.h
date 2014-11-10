@@ -10,13 +10,13 @@
 #include <views/cxWindow.h>
 #include <cxcore/cxBase.h>
 #include <textures/cxTextureCache.h>
-#include <socket/cxLooper.h>
 #include "cxInput.h"
 #include "cxUtil.h"
 #include "cxBMPFont.h"
 #include "cxGroup.h"
 #include "cxIconv.h"
 #include "cxPlayer.h"
+#include <net/cxLooper.h>
 
 CX_C_BEGIN
 
@@ -54,7 +54,7 @@ CX_DEF(cxEngine, cxObject)
     cxIconv iconv;              //cxIconv instance
     cxPlayer player;            //cxPlayer instance
     cxTextureCache textures;    //cxTextureCache instance
-    cxLooper looper;            //socket looper
+    cxLooper looper;
 CX_END(cxEngine, cxObject)
 
 extern cxEngine engine;
@@ -62,6 +62,11 @@ extern cxEngine engine;
 CX_INLINE cxEngine cxEngineInstance()
 {
     return engine;
+}
+
+CX_INLINE cxLooper cxEngineLooper()
+{
+    return engine->looper;
 }
 
 CX_INLINE cxJson cxEngineGetConfig()
@@ -77,11 +82,6 @@ CX_INLINE cxUInt cxEngineVersion()
 CX_INLINE cxTextureCache cxTextureCacheInstance()
 {
     return engine->textures;
-}
-
-CX_INLINE cxLooper cxLooperInstance()
-{
-    return engine->looper;
 }
 
 CX_INLINE cxPlayer cxPlayerInstance()

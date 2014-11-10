@@ -1,7 +1,7 @@
 {
   "cxId": "v0",
   "cxType": "cxAtlas",
-  "texture": "texture.json",
+  "texture": "yellow.png",
   "size": {
     "w": 200,
     "h": 200
@@ -9,28 +9,13 @@
   "position": {
     "x": 100
   },
-  "layers": [
-    {
-      "pos": {
-        "x": 0,
-        "y": 100
-      },
-      "size": {
-        "w": 100,
-        "h": 100
-      },
-      "key": "artichoke.png"
-    },
-    {
-      "pos": {
-        "x": 0,
-        "y": 200
-      },
-      "size": {
-        "w": 100,
-        "h": 100
-      },
-      "key": "carrot.png"
+  "scale9": {
+    "enable": true,
+    "box": {
+      "l": 10,
+      "r": 10,
+      "t": 10,
+      "b": 10
     }
-  ]
+  }
 }

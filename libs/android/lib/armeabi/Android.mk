@@ -36,3 +36,8 @@ LOCAL_MODULE := luajit
 LOCAL_SRC_FILES := libluajit.a
 include $(PREBUILT_STATIC_LIBRARY)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE := uv
+LOCAL_SRC_FILES := libuv.a
+include $(PREBUILT_STATIC_LIBRARY)
+

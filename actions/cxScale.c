@@ -14,6 +14,7 @@ CX_METHOD_DEF(cxScale,Init,void)
     this->oldScale = cxViewGetScale(view);
     this->delta.x = this->newScale.x - this->oldScale.x;
     this->delta.y = this->newScale.y - this->oldScale.y;
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_METHOD_DEF(cxScale,Step,void,cxFloat dt,cxFloat time)
 {

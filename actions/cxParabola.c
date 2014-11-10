@@ -26,6 +26,7 @@ CX_METHOD_DEF(cxParabola,Init,void)
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->time = 0;
     this->pos = cxViewGetPosition(view);
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_METHOD_DEF(cxParabola,Exit,cxBool)
 {

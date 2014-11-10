@@ -13,8 +13,8 @@ CX_METHOD_DEF(cxMove,Init,void)
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->prev = this->from = cxViewGetPosition(view);
     this->posDelta = cxVec2fSub(this->to, this->from);
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
-
 void cxMoveSetPos(cxAny pav,cxVec2f pos)
 {
     CX_ASSERT_THIS(pav, cxMove);

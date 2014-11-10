@@ -11,6 +11,7 @@
 CX_METHOD_DEF(cxTimer,Init,void)
 {
     CX_RETURN(!this->IsBegin);
+    CX_SUPER(cxAction, this, Init, CX_M(void));
     CX_EVENT_FIRE(this, onArrive);
 }
 CX_METHOD_DEF(cxTimer,Exit,cxBool)

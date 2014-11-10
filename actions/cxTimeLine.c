@@ -20,6 +20,7 @@ CX_METHOD_DEF(cxTimeLine,Init,void)
     }
     cxActionSetTime(this, *time + 0.5f);
     this->index = -1;
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 
 CX_METHOD_DEF(cxTimeLine,Step,void,cxFloat dt,cxFloat time)

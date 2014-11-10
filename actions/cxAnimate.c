@@ -122,6 +122,7 @@ CX_METHOD_DEF(cxAnimate,Init,void)
         value += dt + item->time;
     }
     cxActionSetTime(this, time);
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_METHOD_DEF(cxAnimate,Step,void,cxFloat dt,cxFloat time)
 {

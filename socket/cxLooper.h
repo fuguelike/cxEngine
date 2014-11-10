@@ -10,13 +10,10 @@
 #define cxEngine_cxLooper_h
 
 #include <event.h>
+#include <netinet/in.h>
 #include <cxCore/cxBase.h>
 
 CX_C_BEGIN
-
-#ifndef CX_EVLOOP_FREQ
-#define CX_EVLOOP_FREQ    0.01f
-#endif
 
 CX_DEF(cxLooper, cxObject)
     cxHash conns;   //host:port key

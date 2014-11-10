@@ -56,7 +56,9 @@ CX_END(cxDriver, cxAction)
 
 CX_FIELD_GET(cxDriver, cxAny, Async);
 
-cxDriver cxDriverCreate(cxAny async);
+cxDriver cxDriverCreateImp(cxAny async);
+
+#define cxDriverCreate(_t_) cxDriverCreateImp(CX_CREATE(_t_))
 
 CX_C_END
 

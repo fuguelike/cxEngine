@@ -14,6 +14,7 @@ CX_METHOD_DEF(cxRotate,Init,void)
     this->oldAngle = cxViewGetAngle(view);
     this->delta = this->newAngle - this->oldAngle;
     cxViewSetRaxis(view, this->raxis);
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_METHOD_DEF(cxRotate,Step,void,cxFloat dt,cxFloat time)
 {

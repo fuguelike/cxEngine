@@ -38,8 +38,7 @@ void cxAtlasSetScale9(cxAny pview,cxBox4f box)
 void cxAtlasUpdateScale9(cxAny pview)
 {
     CX_ASSERT_THIS(pview, cxAtlas);
-    CX_RETURN(!this->scale9.enable);
-    CX_ASSERT(!cxViewZeroSize(pview) && this->cxSprite.Texture != NULL, "must set texture and size");
+    CX_RETURN(!this->scale9.enable || this->cxSprite.Texture == NULL || cxViewZeroSize(pview));
     cxAtlasClear(pview);
     cxSize2f size = cxViewGetSize(this);
     cxRect4f tr = cxBoxTex2fToRect4f(this->cxSprite.texCoord);
@@ -89,15 +88,11 @@ void cxAtlasUpdateScale9(cxAny pview)
     }
 }
 
-void cxAtlasResize(cxAny pview)
-{
-    cxAtlasUpdateScale9(pview);
-}
-
 static void cxAtlasDirty(cxAny pview)
 {
-    if(cxViewGetDirty(pview) & cxViewDirtySize){
-        cxAtlasResize(pview);
+    cxViewDirty dirty = cxViewGetDirty(pview);
+    if((dirty & cxViewDirtySize) || (dirty & cxViewDirtyTexture)){
+        cxAtlasUpdateScale9(pview);
     }
 }
 

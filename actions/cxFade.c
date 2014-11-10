@@ -20,6 +20,7 @@ CX_METHOD_DEF(cxFade,Init,void)
     cxColor4f color = cxViewGetColor(view);
     this->start = color.a;
     this->delta = this->alpha - this->start;
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_SETTER_DEF(cxFade, alpha)
 {

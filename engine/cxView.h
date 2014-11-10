@@ -206,6 +206,8 @@ cxAny cxViewGetAction(cxAny pview,cxUInt actionId);
 
 cxAny cxViewAppendTimer(cxAny pview,cxFloat freq,cxInt repeat);
 
+#define cxViewAppendAsync(_o_,_t_)  cxViewAppendAction(_o_,cxDriverCreate(_t_))
+
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav);
 
 void cxViewSetOrder(cxAny pview,cxInt order);

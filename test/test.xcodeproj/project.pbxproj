@@ -16,7 +16,6 @@
 		831CF8721A08649400322ACB /* strings in Resources */ = {isa = PBXBuildFile; fileRef = 831CF8711A08649400322ACB /* strings */; };
 		8321071219CC746900B1AA1E /* candy.json in Resources */ = {isa = PBXBuildFile; fileRef = 8321071019CC746900B1AA1E /* candy.json */; };
 		8321071319CC746900B1AA1E /* candy.png in Resources */ = {isa = PBXBuildFile; fileRef = 8321071119CC746900B1AA1E /* candy.png */; };
-		83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6018D9C5D00093FF54 /* libevent.a */; };
 		83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6418D9C5D00093FF54 /* libjpeg.a */; };
 		83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6618D9C5D00093FF54 /* libpcre.a */; };
 		83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6718D9C5D00093FF54 /* libpng.a */; };
@@ -49,7 +48,7 @@
 		83732B4219B9BF740049D09A /* cxAnimate.json in Resources */ = {isa = PBXBuildFile; fileRef = 83732B4119B9BF740049D09A /* cxAnimate.json */; };
 		839722AE19161746006D0F89 /* font.json in Resources */ = {isa = PBXBuildFile; fileRef = 839722AC19161746006D0F89 /* font.json */; };
 		839722AF19161746006D0F89 /* font.png in Resources */ = {isa = PBXBuildFile; fileRef = 839722AD19161746006D0F89 /* font.png */; };
-		83CF7C5319F0CD04002EDE02 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83CF7C5219F0CD04002EDE02 /* CoreText.framework */; };
+		83D425CF1A105CB400FE8B69 /* libuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F279C31A0FB61A006727D1 /* libuv.a */; };
 		83D9FFA019CB32B400F0EAB2 /* odus_cutout.pkm in Resources */ = {isa = PBXBuildFile; fileRef = 83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */; };
 		83D9FFA119CB32B400F0EAB2 /* odus_cutout.pkm.alpha in Resources */ = {isa = PBXBuildFile; fileRef = 83D9FF9F19CB32B400F0EAB2 /* odus_cutout.pkm.alpha */; };
 		83DAD700191A14A6000A7D1F /* ui.json in Resources */ = {isa = PBXBuildFile; fileRef = 83DAD6FF191A14A6000A7D1F /* ui.json */; };
@@ -67,13 +66,6 @@
 			remoteGlobalIDString = 831E632119EFA97A00FCFD85;
 			remoteInfo = cxEngineStatic;
 		};
-		834ABCBC19EFABB300F7EE91 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 834ABCB519EFABB300F7EE91 /* cxEngineStatic.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 831E632C19EFA97A00FCFD85;
-			remoteInfo = cxEngineStaticTests;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -87,7 +79,6 @@
 		831CF8711A08649400322ACB /* strings */ = {isa = PBXFileReference; lastKnownFileType = folder; name = strings; path = res/strings; sourceTree = SOURCE_ROOT; };
 		8321071019CC746900B1AA1E /* candy.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = candy.json; path = res/candy.json; sourceTree = SOURCE_ROOT; };
 		8321071119CC746900B1AA1E /* candy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = candy.png; path = res/candy.png; sourceTree = SOURCE_ROOT; };
-		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
 		83314F6418D9C5D00093FF54 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../libs/ios/lib/libjpeg.a; sourceTree = "<group>"; };
 		83314F6618D9C5D00093FF54 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = ../libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
 		83314F6718D9C5D00093FF54 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../libs/ios/lib/libpng.a; sourceTree = "<group>"; };
@@ -120,13 +111,13 @@
 		83732B4119B9BF740049D09A /* cxAnimate.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxAnimate.json; path = res/cxAnimate.json; sourceTree = SOURCE_ROOT; };
 		839722AC19161746006D0F89 /* font.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = font.json; path = res/font.json; sourceTree = SOURCE_ROOT; };
 		839722AD19161746006D0F89 /* font.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = font.png; path = res/font.png; sourceTree = SOURCE_ROOT; };
-		83CF7C5219F0CD04002EDE02 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		83D9FF9E19CB32B400F0EAB2 /* odus_cutout.pkm */ = {isa = PBXFileReference; lastKnownFileType = file; name = odus_cutout.pkm; path = res/odus_cutout.pkm; sourceTree = SOURCE_ROOT; };
 		83D9FF9F19CB32B400F0EAB2 /* odus_cutout.pkm.alpha */ = {isa = PBXFileReference; lastKnownFileType = file; name = odus_cutout.pkm.alpha; path = res/odus_cutout.pkm.alpha; sourceTree = SOURCE_ROOT; };
 		83DAD6FF191A14A6000A7D1F /* ui.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = ui.json; path = res/ui.json; sourceTree = SOURCE_ROOT; };
 		83DAD705191A26BF000A7D1F /* pvr.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = pvr.json; path = res/pvr.json; sourceTree = SOURCE_ROOT; };
 		83DAD706191A26BF000A7D1F /* texture.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; name = texture.pvr; path = res/texture.pvr; sourceTree = SOURCE_ROOT; };
 		83DAD709191A386C000A7D1F /* cxLabelTTF.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxLabelTTF.json; path = res/cxLabelTTF.json; sourceTree = SOURCE_ROOT; };
+		83F279C31A0FB61A006727D1 /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = ../libs/ios/lib/libuv.a; sourceTree = "<group>"; };
 		83F3CCCF191B674D00D6BCFB /* cxAtlas.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = cxAtlas.json; path = res/cxAtlas.json; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -135,9 +126,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83CF7C5319F0CD04002EDE02 /* CoreText.framework in Frameworks */,
 				834ABCBE19EFABD900F7EE91 /* libcxEngineStatic.a in Frameworks */,
-				83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */,
+				83D425CF1A105CB400FE8B69 /* libuv.a in Frameworks */,
 				83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */,
 				83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */,
 				83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */,
@@ -161,7 +151,6 @@
 			isa = PBXGroup;
 			children = (
 				834ABCBB19EFABB300F7EE91 /* libcxEngineStatic.a */,
-				834ABCBD19EFABB300F7EE91 /* cxEngineStaticTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -180,8 +169,7 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				83CF7C5219F0CD04002EDE02 /* CoreText.framework */,
-				83314F6018D9C5D00093FF54 /* libevent.a */,
+				83F279C31A0FB61A006727D1 /* libuv.a */,
 				83314F6418D9C5D00093FF54 /* libjpeg.a */,
 				83314F6618D9C5D00093FF54 /* libpcre.a */,
 				83314F6718D9C5D00093FF54 /* libpng.a */,
@@ -314,13 +302,6 @@
 			fileType = archive.ar;
 			path = libcxEngineStatic.a;
 			remoteRef = 834ABCBA19EFABB300F7EE91 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		834ABCBD19EFABB300F7EE91 /* cxEngineStaticTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = cxEngineStaticTests.xctest;
-			remoteRef = 834ABCBC19EFABB300F7EE91 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

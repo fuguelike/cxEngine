@@ -61,19 +61,16 @@
 #include <actions/cxBezier.h>
 #include <actions/cxSkeleton.h>
 
-#include <socket/cxUDP.h>
-#include <socket/cxTCP.h>
-#include <socket/cxHttp.h>
-#include <socket/cxHttpConn.h>
-#include <socket/cxLooper.h>
-
 #include <algorithm/cxAStar.h>
+
+#include <net/cxLooper.h>
+#include <net/cxTCP.h>
 
 cxEngine engine = NULL;
 
 void cxEngineRecvJson(cxString json)
 {
-    CX_RETURN(engine == NULL);
+    CX_RETURN(engine == NULL || !engine->isInit);
     cxMessagePost(cxEngineNoticRecvJson, json);
 }
 
@@ -87,13 +84,11 @@ void cxEngineExit()
 
 void cxEnginePause()
 {
-    CX_RETURN(engine == NULL);
+    CX_RETURN(engine == NULL || !engine->isInit);
     cxEngine engine = cxEngineInstance();
     engine->isPause = true;
     cxMessagePost(cxEngineNoticPause, engine);
-    if(engine->isInit){
-        cxPauseMusic();
-    }
+    cxPauseMusic();
 }
 
 static void cxRegisterEngineTypes()
@@ -178,12 +173,9 @@ static void cxRegisterEngineTypes()
     CX_SET_TYPE(cxBezier);
     CX_SET_TYPE(cxSkeleton);
     CX_SET_TYPE(cxDriver);
-    //scoket
-    CX_SET_TYPE(cxUDP);
-    CX_SET_TYPE(cxTCP);
+    //
     CX_SET_TYPE(cxLooper);
-    CX_SET_TYPE(cxHttpConn);
-    CX_SET_TYPE(cxHttp);
+    CX_SET_TYPE(cxTCP);
     //
     CX_SET_TYPE(cxEngine);
 }
@@ -275,7 +267,6 @@ void cxEngineStartup()
 #endif
     CX_ASSERT(engine == NULL, "repeat init engine");
     cxGlobalInit();
-    //registe all types
     cxRegisterEngineTypes();
     engine = CX_ALLOC(cxEngine);
     //set localized lang
@@ -303,32 +294,28 @@ void cxEngineClear()
 
 void cxEngineResume()
 {
-    CX_RETURN(engine == NULL);
+    CX_RETURN(engine == NULL || !engine->isInit);
     cxEngine engine = cxEngineInstance();
     engine->isPause = false;
     cxMessagePost(cxEngineNoticResume, engine);
-    if(engine->isInit){
-        cxResumeMusic();
-    }
+    cxResumeMusic();
 }
 
 void cxEngineMemory()
 {
-    CX_RETURN(engine == NULL);
+    CX_RETURN(engine == NULL || !engine->isInit);
     cxEngine engine = cxEngineInstance();
     cxMessagePost(cxEngineNoticMemory, engine);
 }
 
 void cxEngineDraw(cxFloat dt)
 {
-    CX_RETURN(engine == NULL);
+    CX_RETURN(engine == NULL || !engine->isInit || engine->isPause);
     cxEngine engine = cxEngineInstance();
-    if(!engine->isInit || engine->isPause){
-        return;
-    }
     cxMemPoolBegin();
     cxOpenGLClear();
     cxLooperUpdate(engine->looper);
+    CX_CALL(engine, Update, CX_M(void));
     kmGLPushMatrix();
     cxViewDrawView(engine->Window);
     kmGLPopMatrix();
@@ -353,7 +340,6 @@ void cxEngineLayout(cxInt width,cxInt height)
     cxEngine engine = cxEngineInstance();
     engine->WinSize = cxSize2fv(width, height);
     cxViewSetSize(engine->Window, engine->WinSize);
-    //
     if(!cxSize2fZero(engine->DesSize)){
         engine->Scale.x = engine->WinSize.w/engine->DesSize.w;
         engine->Scale.y = engine->WinSize.h/engine->DesSize.h;
@@ -361,23 +347,19 @@ void cxEngineLayout(cxInt width,cxInt height)
         engine->Scale.x = 1.0f;
         engine->Scale.y = 1.0f;
     }
-    //
     cxFloat zeye = engine->WinSize.h / 1.1566f;
     kmMat4 perspective;
     kmGLMatrixMode(KM_GL_PROJECTION);
     kmGLLoadIdentity();
     kmMat4PerspectiveProjection(&perspective, 60.0f, engine->WinSize.w / engine->WinSize.h, 0.0f, zeye * 2);
     kmGLMultMatrix(&perspective);
-    //
     kmGLMatrixMode(KM_GL_MODELVIEW);
     kmGLLoadIdentity();
     cxMatrix4f matrix;
     cxEngineLookAt(&matrix,zeye,cxVec2fv(0, 0));
     kmGLMultMatrix(&matrix);
-    //
     cxOpenGLSetDepthTest(false);
     cxOpenGLViewport(cxBox4fv(0, engine->WinSize.w, 0, engine->WinSize.h));
-    //
     if(!engine->isInit){
         cxOpenGLCheckFeature();
         cxEngineMain(engine);
@@ -440,8 +422,13 @@ CX_METHOD_DEF(cxEngine, JsonProperty, cxAny, cxConstChars key)
 {
     return cxEngineJsonRunGetter(key);
 }
+CX_METHOD_DEF(cxEngine, Update, void)
+{
+    
+}
 CX_TYPE(cxEngine, cxObject)
 {
+    CX_METHOD(cxEngine, Update);
     CX_METHOD(cxEngine, JsonLoader);
     CX_METHOD(cxEngine, JsonLocalized);
     CX_METHOD(cxEngine, JsonProperty);
@@ -449,6 +436,7 @@ CX_TYPE(cxEngine, cxObject)
     CX_GETTER(cxEngine, WinSize);
     CX_GETTER(cxEngine, DesSize);
     CX_GETTER(cxEngine, WinScale);
+    
     cxEngineType(this);
 }
 CX_INIT(cxEngine, cxObject)
@@ -472,6 +460,7 @@ CX_INIT(cxEngine, cxObject)
 }
 CX_FREE(cxEngine, cxObject)
 {
+    CX_RELEASE(this->looper);
     CX_RELEASE(this->groups);
     CX_RELEASE(this->items);
     CX_RELEASE(this->files);
@@ -485,7 +474,6 @@ CX_FREE(cxEngine, cxObject)
     CX_RELEASE(this->iconv);
     CX_RELEASE(this->player);
     CX_RELEASE(this->textures);
-    CX_RELEASE(this->looper);
     kmGLFreeAll();
 }
 CX_TERM(cxEngine, cxObject)
@@ -592,6 +580,7 @@ void cxEngineEnableTouch(cxBool enable)
 
 cxBool cxEngineFireKey(cxKeyType type,cxInt code)
 {
+    CX_RETURN(engine == NULL || engine->isPause || !engine->isInit, false);
     cxEngine this = cxEngineInstance();
     this->key.type = type;
     this->key.code = code;
@@ -627,6 +616,7 @@ static void cxEngineInitItem(cxDouble now,cxTouchItem item,cxVec2f cpos)
 
 cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points)
 {
+    CX_RETURN(engine == NULL || engine->isPause || !engine->isInit, false);
     cxEngine this = cxEngineInstance();
     //current fires point
     cxDouble now = cxTimestamp();

@@ -53,7 +53,19 @@
 
 -(void)layoutSubviews
 {
-    [self resizeFromLayer:(CAEAGLLayer*)self.layer];
+    CAEAGLLayer *layer = (CAEAGLLayer*)self.layer;
+    GLint cWidth,cHeight;
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    [eaglCTX renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &cWidth);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &cHeight);
+    CX_RETURN(cWidth == width && cHeight == height);
+    width = cWidth;height = cHeight;
+    glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
     cxEngineLayout(width, height);
 }
 
@@ -97,19 +109,6 @@
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
     [displayLink retain];
     return self;
-}
-
--(void)resizeFromLayer:(CAEAGLLayer *)layer
-{
-    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-    [eaglCTX renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
-    glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
 }
 
 - (void) dealloc

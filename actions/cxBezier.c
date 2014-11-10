@@ -12,6 +12,7 @@ CX_METHOD_DEF(cxBezier,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     this->from = this->prev = cxViewGetPosition(view);
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_METHOD_DEF(cxBezier,Step,void,cxFloat dt,cxFloat time)
 {

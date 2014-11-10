@@ -138,6 +138,7 @@ CX_METHOD_DEF(cxSkeleton,Init,void)
         cxActionStop(this);
         return;
     }
+    CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_SETTER_DEF(cxSkeleton, tracks)
 {
