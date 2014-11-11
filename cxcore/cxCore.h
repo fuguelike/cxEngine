@@ -119,7 +119,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <stddef.h>
-#include <uthash.h>
+#include "uthash.h"
 
 typedef char            cxChar;
 typedef int             cxInt;

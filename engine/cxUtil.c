@@ -6,7 +6,6 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include <evhttp.h>
 #include <ctype.h>
 #include <sys/stat.h>
 #include <unistd.h>

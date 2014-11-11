@@ -9,7 +9,7 @@
 #ifndef cxCore_cxString_h
 #define cxCore_cxString_h
 
-#include <utstring.h>
+#include "utstring.h"
 #include <ctype.h>
 #include "cxCore.h"
 #include "cxArray.h"

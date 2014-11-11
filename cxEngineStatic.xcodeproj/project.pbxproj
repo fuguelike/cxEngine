@@ -560,6 +560,10 @@
 		838647131A108EC5007B9B34 /* cxLooper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxLooper.h; sourceTree = "<group>"; };
 		838647151A108ECC007B9B34 /* cxTCP.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxTCP.c; sourceTree = "<group>"; };
 		838647161A108ECC007B9B34 /* cxTCP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cxTCP.h; sourceTree = "<group>"; };
+		839D25871A11C775008573FD /* utarray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utarray.h; sourceTree = "<group>"; };
+		839D25881A11C775008573FD /* uthash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uthash.h; sourceTree = "<group>"; };
+		839D25891A11C775008573FD /* utlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utlist.h; sourceTree = "<group>"; };
+		839D258A1A11C775008573FD /* utstring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utstring.h; sourceTree = "<group>"; };
 		83B1EAD31A01DE520089B374 /* lzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lzma.c; sourceTree = "<group>"; };
 		83B1EAD41A01DE520089B374 /* lzma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lzma.h; sourceTree = "<group>"; };
 		83B1EAD61A01FE3F0089B374 /* cxLzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cxLzma.c; sourceTree = "<group>"; };
@@ -814,6 +818,10 @@
 		831E63A219EFA9AF00FCFD85 /* cxcore */ = {
 			isa = PBXGroup;
 			children = (
+				839D25871A11C775008573FD /* utarray.h */,
+				839D25881A11C775008573FD /* uthash.h */,
+				839D25891A11C775008573FD /* utlist.h */,
+				839D258A1A11C775008573FD /* utstring.h */,
 				831E63A319EFA9AF00FCFD85 /* cxAnyArray.c */,
 				831E63A419EFA9AF00FCFD85 /* cxAnyArray.h */,
 				831E63A519EFA9AF00FCFD85 /* cxArray.c */,

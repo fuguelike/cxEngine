@@ -169,11 +169,8 @@ LOCAL_SRC_FILES += \
     views/cxParticle.c
 
 LOCAL_SRC_FILES += \
-    socket/cxLooper.c \
-    socket/cxHttp.c \
-    socket/cxHttpConn.c \
-    socket/cxUDP.c \
-    socket/cxTCP.c
+    net/cxLooper.c \
+    net/cxTCP.c
 
 LOCAL_SRC_FILES += \
     engine/cxAction.c \

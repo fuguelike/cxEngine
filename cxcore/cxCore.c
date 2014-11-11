@@ -7,7 +7,7 @@
 //
 
 #include <sys/time.h>
-#include <utlist.h>
+#include "utlist.h"
 #include "cxBase.h"
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #if CX_TARGET_PLATFORM == CX_PLATFORM_IOS
@@ -305,6 +305,9 @@ cxType cxTypeNew(cxConstType ct,cxConstType sb,cxAny (*create)(),cxAny (*alloc)(
     this->superType = super;
     CX_TYPE_NAME_LEN(ct);
     HASH_ADD(hh, types, name, nameLen, this);
+    if(types != NULL){
+        CX_LOGGER("num bul:%d %d",types->hh.tbl->num_buckets,types->hh.tbl->num_items);
+    }
     cxTypeCopyFromSuper(this, super);
     cxSignatureNew(this, ct);
     autoType(this);
@@ -365,6 +368,27 @@ void cxObjectAutoType(cxType this)
 {
 
 }
+cxDouble cxTimestamp()
+{
+    struct timeval val = {0};
+    gettimeofday(&val, NULL);
+    return val.tv_sec + (cxDouble)val.tv_usec/(cxDouble)1000000.0;
+}
+void cxCoreInit()
+{
+    cxSetRandSeed();
+    cxTypesInit();
+    cxMemPoolInit();
+    cxLoaderInit();
+    cxMessageInstance();
+}
+void cxCoreFree()
+{
+    cxMessageDestroy();
+    cxLoaderFree();
+    cxMemPoolFree();
+    cxTypesFree();
+}
 
 void __cxObjectRetain(cxAny ptr)
 {
@@ -387,32 +411,6 @@ cxAny __cxObjectAutoRelease(cxAny ptr)
 {
     return cxMemPoolAppend(ptr);
 }
-
-cxDouble cxTimestamp()
-{
-    struct timeval val = {0};
-    gettimeofday(&val, NULL);
-    return val.tv_sec + (cxDouble)val.tv_usec/(cxDouble)1000000.0;
-}
-
-void cxCoreInit()
-{
-    cxSetRandSeed();
-    cxTypesInit();
-    cxMemPoolInit();
-    cxLoaderInit();
-    cxMessageInstance();
-}
-
-void cxCoreFree()
-{
-    cxMessageDestroy();
-    cxLoaderFree();
-    cxMemPoolFree();
-    cxTypesFree();
-}
-
-
 
 
 

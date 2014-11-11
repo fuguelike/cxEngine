@@ -22,10 +22,6 @@ void cxEngineType(cxType this)
 void cxEngineInit(cxEngine engine)
 {
     cxEngineSetDesSize(cxSize2fv(2048, 1536));
-    cxTCP tcp = CX_CREATE(cxTCP);
-//    cxTCPClose(tcp);
-    CX_RETAIN(tcp);
-    cxTCPConnect(tcp,UTF8("192.168.10.144"), 8082);
 }
 
 void cxEngineMain(cxEngine engine)

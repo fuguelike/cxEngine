@@ -10,7 +10,6 @@
 #define cxCore_cxHash_h
 
 #include "cxCore.h"
-#include <uthash.h>
 
 CX_C_BEGIN
 

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6018D9C5D00093FF54 /* libevent.a */; };
 		83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6418D9C5D00093FF54 /* libjpeg.a */; };
 		83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6618D9C5D00093FF54 /* libpcre.a */; };
 		83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6718D9C5D00093FF54 /* libpng.a */; };
@@ -21,6 +20,7 @@
 		8344F0B018D3F4960003E410 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0AF18D3F4960003E410 /* CoreGraphics.framework */; };
 		8344F0B218D3F4A50003E410 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B118D3F4A50003E410 /* OpenAL.framework */; };
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
+		8353FFBE1A11BAA000C825D5 /* libuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8353FFBD1A11BAA000C825D5 /* libuv.a */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
 		839B897019EFAB92009C6B5C /* libcxEngineStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B896D19EFAAD6009C6B5C /* libcxEngineStatic.a */; };
 		83CA51EF19F3CBC6002119B0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83CA51EE19F3CBC6002119B0 /* LaunchScreen.xib */; };
@@ -35,13 +35,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 831E632119EFA97A00FCFD85;
 			remoteInfo = cxEngineStatic;
-		};
-		839B896E19EFAAD6009C6B5C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 839B896719EFAAD5009C6B5C /* cxEngineStatic.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 831E632C19EFA97A00FCFD85;
-			remoteInfo = cxEngineStaticTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -61,6 +54,7 @@
 		8344F0AF18D3F4960003E410 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		8344F0B118D3F4A50003E410 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8344F0B318D3F4A90003E410 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		8353FFBD1A11BAA000C825D5 /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = ../libs/ios/lib/libuv.a; sourceTree = "<group>"; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		839B896719EFAAD5009C6B5C /* cxEngineStatic.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineStatic.xcodeproj; path = ../cxEngineStatic.xcodeproj; sourceTree = "<group>"; };
 		83CA51EE19F3CBC6002119B0 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = SOURCE_ROOT; };
@@ -74,7 +68,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				839B897019EFAB92009C6B5C /* libcxEngineStatic.a in Frameworks */,
-				83314F6918D9C5D00093FF54 /* libevent.a in Frameworks */,
+				8353FFBE1A11BAA000C825D5 /* libuv.a in Frameworks */,
 				83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */,
 				83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */,
 				83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */,
@@ -98,7 +92,6 @@
 			isa = PBXGroup;
 			children = (
 				839B896D19EFAAD6009C6B5C /* libcxEngineStatic.a */,
-				839B896F19EFAAD6009C6B5C /* cxEngineStaticTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,6 +110,7 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8353FFBD1A11BAA000C825D5 /* libuv.a */,
 				83314F6018D9C5D00093FF54 /* libevent.a */,
 				83314F6418D9C5D00093FF54 /* libjpeg.a */,
 				83314F6618D9C5D00093FF54 /* libpcre.a */,
@@ -220,13 +214,6 @@
 			fileType = archive.ar;
 			path = libcxEngineStatic.a;
 			remoteRef = 839B896C19EFAAD6009C6B5C /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		839B896F19EFAAD6009C6B5C /* cxEngineStaticTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = cxEngineStaticTests.xctest;
-			remoteRef = 839B896E19EFAAD6009C6B5C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */

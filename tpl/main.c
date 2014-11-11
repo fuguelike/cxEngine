@@ -7,7 +7,7 @@
 //
 #include <engine/cxEngine.h>
 
-void cxEngineType(cxEngine engine)
+void cxEngineType(cxType this)
 {
     
 }

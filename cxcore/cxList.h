@@ -9,7 +9,7 @@
 #ifndef cxCore_cxList_h
 #define cxCore_cxList_h
 
-#include <utlist.h>
+#include "utlist.h"
 #include "cxCore.h"
 
 CX_C_BEGIN

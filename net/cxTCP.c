@@ -64,6 +64,7 @@ static void close_cb(uv_handle_t* handle)
     CX_ASSERT_THIS(handle->data, cxTCP);
     this->IsConnected = false;
     CX_CALL(this, OnClose, CX_M(void));
+    //release this at close
     CX_RELEASE(this);
 }
 
