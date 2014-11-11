@@ -316,65 +316,6 @@ CX_INLINE void _t_##Set##_n_(cxAny pthis,const _vt_ value)      \
 CX_FIELD_GET(_t_,_vt_, _n_)                                     \
 CX_FIELD_SET(_t_,_vt_, _n_)
 
-//signal and slot
-
-typedef struct cxSignal cxSignal;
-typedef struct cxSlot cxSlot;
-struct cxSignal {cxSignal *prev,*next;cxSlot *slot;cxAny func;cxAny object;};
-struct cxSlot{cxSignal **signal;cxSignal *slot;};
-
-#define CX_SIGNAL_ALLOC(_name_) cxSignal *_name_
-
-#define CX_SIGNAL_RELEASE(_signal_)                             \
-do{                                                             \
-    cxSignal *_tmp_ = NULL;                                     \
-    cxSignal *_ele_ = NULL;                                     \
-    DL_FOREACH_SAFE(_signal_, _ele_, _tmp_){                    \
-        DL_DELETE(_signal_, _ele_);                             \
-        _ele_->slot->slot = NULL;                               \
-        _ele_->slot->signal = NULL;                             \
-        allocator->free(_ele_);                                 \
-    }                                                           \
-}while(0)
-
-//only use at CX_SIGNAL_FIRE micro
-#define CX_SIGNAL_TYPE(...) (void (*)(cxAny,##__VA_ARGS__))
-
-#define CX_SIGNAL_FIRE(_signal_,_ft_,...)                       \
-do{                                                             \
-    cxSignal *_ele_ = NULL;                                     \
-    DL_FOREACH(_signal_, _ele_){                                \
-        (_ft_(_ele_->func))(_ele_->object,##__VA_ARGS__);       \
-    }                                                           \
-}while(0)
-
-#define CX_SLOT_ALLOC(name)      cxSlot name
-
-#define CX_SLOT_RELEASE(_slot_)                                 \
-if(_slot_.slot != NULL && _slot_.signal != NULL){               \
-    DL_DELETE(*_slot_.signal,_slot_.slot);                      \
-    allocator->free(_slot_.slot);                               \
-    _slot_.signal = NULL;                                       \
-    _slot_.slot = NULL;                                         \
-}
-
-#define CX_SLOT_CONNECT(_signal_,_object_,_slot_,_func_)        \
-do{                                                             \
-    CX_SLOT_RELEASE(_object_->_slot_);                          \
-    cxSignal *_new_ = allocator->malloc(sizeof(cxSignal));      \
-    _new_->func = _func_;                                       \
-    _new_->object = _object_;                                   \
-    _new_->slot = &_object_->_slot_;                            \
-    _object_->_slot_.slot = _new_;                              \
-    _object_->_slot_.signal = &_signal_;                        \
-    DL_APPEND(_signal_,_new_);                                  \
-}while(0)
-
-//set slot connect signal
-#define CX_SET(_t_,_src_,_n_,_dst_,_f_)                         \
-CX_ASSERT_TYPE(_src_, _t_);                                     \
-CX_SLOT_CONNECT(CX_TYPE_OF(_t_, _src_)->_n_, _dst_, _n_, _f_)
-
 //event
 
 typedef struct cxEvent cxEvent;

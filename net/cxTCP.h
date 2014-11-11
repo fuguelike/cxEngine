@@ -24,11 +24,15 @@ CX_DEF(cxTCP, cxObject)
     struct addrinfo hints;
     cxAny buffer;
     cxInt bufsiz;
+    CX_FIELD_DEF(cxInt Error);
 CX_END(cxTCP, cxObject)
-
+CX_FIELD_GET(cxTCP, cxInt, Error);
 CX_FIELD_GET(cxTCP, cxBool, IsConnected);
 CX_FIELD_IMP(cxTCP, cxInt, Port);
 CX_FIELD_IMO(cxTCP, cxString, Host);
+
+//release in close
+void cxTCPClose(cxAny ptcp,cxInt error);
 
 cxBool cxTCPWrite(cxAny ptcp,const cxString data);
 

@@ -361,19 +361,9 @@ void cxObjectAutoFree(cxObject this)
 {
     //CX_LOGGER("%s Free",this->cxType->TypeName);
 }
-CX_METHOD_DEF(cxObject, cxRetain, void)
-{
-    
-}
-CX_METHOD_DEF(cxObject, cxRelease, void)
-{
-    this->cxAutoFree(this);
-    allocator->free(this);
-}
 void cxObjectAutoType(cxType this)
 {
-    CX_METHOD(cxObject, cxRelease);
-    CX_METHOD(cxObject, cxRetain);
+
 }
 
 void __cxObjectRetain(cxAny ptr)
@@ -382,16 +372,16 @@ void __cxObjectRetain(cxAny ptr)
     cxObject object = (cxObject)ptr;
     CX_ASSERT(object->cxRefcount > 0, "retain count must > 0");
     cxAtomicAddInt32(&object->cxRefcount, 1);
-    CX_CALL(object, cxRetain, CX_M(void));
 }
 void __cxObjectRelease(cxAny ptr)
 {
     CX_RETURN(ptr == NULL);
-    cxObject object = (cxObject)ptr;
-    CX_ASSERT(object->cxRefcount > 0, "error,retain count must > 0");
-    cxAtomicSubInt32(&object->cxRefcount, 1);
-    CX_RETURN(object->cxRefcount > 0);
-    CX_CALL(object, cxRelease, CX_M(void));
+    cxObject this = (cxObject)ptr;
+    CX_ASSERT(this->cxRefcount > 0, "error,retain count must > 0");
+    cxAtomicSubInt32(&this->cxRefcount, 1);
+    CX_RETURN(this->cxRefcount > 0);
+    this->cxAutoFree(this);
+    allocator->free(this);
 }
 cxAny __cxObjectAutoRelease(cxAny ptr)
 {
