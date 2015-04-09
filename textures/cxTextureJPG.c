@@ -33,12 +33,12 @@ CX_METHOD_DEF(cxTextureJPG,Load,cxBool,cxStream stream)
         CX_ERROR("jpg create decompress failed");
         goto finished;
     }
-    cxString bytes = CX_CALL(stream, AllBytes, CX_M(cxString));
+    cxStr bytes = cxStreamAllBytes(stream);
     if(bytes == NULL){
         CX_ERROR("jpg read stream data error");
         goto finished;
     }
-    jpeg_mem_src(&cinfo, (cxUChar *)cxStringBody(bytes), cxStringLength(bytes));
+    jpeg_mem_src(&cinfo, (cxUChar *)cxStrBody(bytes), cxStrLength(bytes));
     jpeg_read_header(&cinfo, true);
     if(error.error){
         CX_ERROR("jpg read head failed");

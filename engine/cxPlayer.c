@@ -12,7 +12,21 @@
 #include "cxPlayer.h"
 #include "cxEngine.h"
 
-cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
+static cxInt effectChannels = 1;
+
+static cxInt effectSamples = 8000;
+
+void cxPlayerSetEffectChannels(cxInt channels)
+{
+    effectChannels = channels;
+}
+
+void cxPlayerSetEffectSamples(cxInt samples)
+{
+    effectSamples = samples;
+}
+
+cxStr cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq);
 
 CX_TYPE(cxBuffer, cxObject)
 {
@@ -28,12 +42,12 @@ CX_FREE(cxBuffer, cxObject)
 }
 CX_TERM(cxBuffer, cxObject)
 
-static cxAny cxBufferCreate(cxString data,cxInt format,cxInt freq)
+static cxAny cxBufferCreate(cxStr data,cxInt format,cxInt freq)
 {
     cxBuffer this = CX_CREATE(cxBuffer);
     this->format = format;
     this->freq = freq;
-    alBufferData(this->buffer, format, cxStringBody(data), cxStringLength(data), freq);
+    alBufferData(this->buffer, format, cxStrBody(data), cxStrLength(data), freq);
     return this;
 }
 
@@ -93,23 +107,24 @@ static cxTrack cxPlayerQueryTrack()
     return track;
 }
 
-static cxAny cxPlayBuffer(cxAny buffer,cxBool loop)
+static cxAny cxPlayBuffer(cxAny buffer,cxFloat volume,cxBool loop)
 {
     cxBuffer cb = buffer;
     cxTrack track = cxPlayerQueryTrack();
     CX_RETURN(track == NULL || cb == NULL, NULL);
     alSourcei(track->source, AL_LOOPING, loop);
     alSourcei(track->source, AL_BUFFER, cb->buffer);
+    alSourcef(track->source, AL_GAIN, volume);
     alSourcePlay(track->source);
     return track;
 }
 
-cxAny cxPlayEffect(cxConstChars file,cxBool loop)
+cxAny cxPlayEffect(cxConstChars file,cxFloat volume,cxBool loop)
 {
     cxPlayer this = cxPlayerInstance();
     cxBuffer buffer = cxHashGet(this->caches, cxHashStrKey(file));
     if(buffer != NULL){
-        return cxPlayBuffer(buffer,loop);
+        return cxPlayBuffer(buffer,volume,loop);
     }
     cxAudioFileType type = cxAudioGetType(file);
     if(type == cxAudioFileTypeNone){
@@ -118,8 +133,13 @@ cxAny cxPlayEffect(cxConstChars file,cxBool loop)
     }
     cxUInt format = 0;
     cxUInt freq = 0;
-    cxString bytes = NULL;
-    if(type == cxAudioFileTypeWAV){
+    cxStr bytes = NULL;
+    if(type == cxAudioFileTypePCM){
+        if(effectChannels == 2)format = AL_FORMAT_STEREO16;
+        else format = AL_FORMAT_MONO16;
+        freq = effectSamples;
+        bytes = cxAssetsData(file);
+    }else if(type == cxAudioFileTypeWAV){
         bytes = cxWAVSamplesWithFile(file,&format,&freq);
     }
     if(bytes == NULL){
@@ -132,12 +152,39 @@ cxAny cxPlayEffect(cxConstChars file,cxBool loop)
         return NULL;
     }
     cxHashSet(this->caches, cxHashStrKey(file), buffer);
-    return cxPlayBuffer(buffer,loop);
+    return cxPlayBuffer(buffer,volume,loop);
 }
 
-static void cxPlayerMemory(cxPlayer this,cxAny engine)
+void cxPlayerClear(cxAny pthis)
 {
+    CX_ASSERT_THIS(pthis, cxPlayer);
+    CX_ARRAY_FOREACH(this->tracks, e){
+        cxTrack track = cxArrayObject(e);
+        cxStopEffect(track);
+    }
     cxHashClear(this->caches);
+}
+
+static cxBool cxPlayerMemory(cxAny pthis,cxAny engine)
+{
+    CX_ASSERT_THIS(pthis, cxPlayer);
+    cxPlayerClear(this);
+    return false;
+}
+
+void cxPlayerInit(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxPlayer);
+    this->device = alcOpenDevice(NULL);
+    CX_ASSERT(this->device != NULL, "alc open device failed");
+    this->context = alcCreateContext(this->device, NULL);
+    CX_ASSERT(this->context != NULL, "alc create context failed");
+    alcMakeContextCurrent(this->context);
+    for(int i=0; i < INIT_TRACK; i++){
+        cxTrack track = CX_ALLOC(cxTrack);
+        cxArrayAppend(this->tracks, track);
+        CX_RELEASE(track);
+    }
 }
 
 CX_TYPE(cxPlayer, cxObject)
@@ -146,23 +193,13 @@ CX_TYPE(cxPlayer, cxObject)
 }
 CX_INIT(cxPlayer, cxObject)
 {
-    this->device = alcOpenDevice(NULL);
-    CX_ASSERT(this->device != NULL, "alc open device failed");
-    this->context = alcCreateContext(this->device, NULL);
-    CX_ASSERT(this->context != NULL, "alc create context failed");
-    alcMakeContextCurrent(this->context);    
     this->tracks = CX_ALLOC(cxArray);
     this->caches = CX_ALLOC(cxHash);
-    for(int i=0; i < INIT_TRACK; i++){
-        cxTrack track = CX_ALLOC(cxTrack);
-        cxArrayAppend(this->tracks, track);
-        CX_RELEASE(track);
-    }
     cxMessageAppend(this, cxPlayerMemory, cxEngineNoticMemory);
+    cxPlayerInit(this);
 }
 CX_FREE(cxPlayer, cxObject)
 {
-    cxMessageRemove(this);
     CX_RELEASE(this->caches);
     CX_RELEASE(this->tracks);
     alcMakeContextCurrent(NULL);

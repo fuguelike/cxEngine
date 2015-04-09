@@ -14,17 +14,25 @@
 CX_C_BEGIN
 
 CX_DEF(cxTable, cxView)
-    cxVec2f space;
-    cxBool isArray;
-    cxBool arrayHide;
-    cxVec2i grid;
+    CX_FIELD_DEF(cxVec2i Grid);
 CX_END(cxTable, cxView)
 
-void cxTableArrayHide(cxAny pview,cxBool arrayHide);
+CX_FIELD_GET(cxTable, cxVec2i, Grid);
+CX_INLINE void cxTableSetGrid(cxAny pthis,const cxVec2i value)
+{
+    CX_ASSERT_THIS(pthis, cxTable);
+    CX_RETURN(cxVec2iEqu(this->Grid, value));
+    this->Grid = value;
+    cxViewSetDirty(this, cxViewDirtyForce);
+}
 
 void cxTableArraySubviews(cxAny pview);
 
-void cxTableSetSpace(cxAny pview,cxVec2f space);
+CX_INLINE void cxTableForceArray(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxTable);
+    cxTableArraySubviews(this);
+}
 
 cxTable cxTableCreate(cxVec2i grid);
 

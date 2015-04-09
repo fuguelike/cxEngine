@@ -14,20 +14,20 @@
 CX_C_BEGIN
 
 CX_DEF(cxFollow, cxAction)
+    CX_FIELD_DEF(cxFloat Angle);
     cxAny target;
     cxVec2f opos;
-    cxFloat angle;
-    cxFloat speed;  //current speed
-    cxFloat init;   //init speed
+    cxFloat speed;
 CX_END(cxFollow, cxAction)
+
+CX_FIELD_GET(cxFollow, cxFloat, Angle);
 
 cxAny cxFollowTarget(cxAny pav);
 
-void cxFollowSetInit(cxAny pav,cxFloat init);
+void cxFollowInit(cxAny pav,cxAny pview,cxFloat speed,cxAny target);
 
-void cxFollowSetTarget(cxAny pav,cxAny target);
-
-cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target);
+//action view must bind target
+cxFollow cxFollowCreate(cxFloat speed,cxAny pview, cxAny target);
 
 CX_C_END
 

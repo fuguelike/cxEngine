@@ -14,9 +14,8 @@
 #include "cxUtil.h"
 #include "cxBMPFont.h"
 #include "cxGroup.h"
-#include "cxIconv.h"
 #include "cxPlayer.h"
-#include <net/cxLooper.h>
+#include "cxLooper.h"
 
 CX_C_BEGIN
 
@@ -25,37 +24,46 @@ CX_C_BEGIN
 CX_STRING_KEY_DEF(cxEngineNoticPause);
 CX_STRING_KEY_DEF(cxEngineNoticResume);
 CX_STRING_KEY_DEF(cxEngineNoticMemory);
-CX_STRING_KEY_DEF(cxEngineNoticRecvJson);
+CX_STRING_KEY_DEF(cxEngineNoticUpdate);     //update opt
+CX_STRING_KEY_DEF(cxEngineNoticRecvJson);   //recv json
 
 CX_DEF(cxEngine, cxObject)
     CX_FIELD_DEF(cxSize2f WinSize);     //screen size
     CX_FIELD_DEF(cxSize2f DesSize);     //design size
     CX_FIELD_DEF(cxVec2f Scale);        //dessize / winsize
     CX_FIELD_DEF(cxBool IsDebug);       //debug border
-    CX_FIELD_DEF(cxFloat Delta);        //time per frame
-    CX_FIELD_DEF(cxString Lang);        //zh en
-    CX_FIELD_DEF(cxString Country);     //CN TW
-    CX_FIELD_DEF(cxString Localized);   //current lang file path
-    CX_FIELD_DEF(cxFloat Interval);     //
+    CX_FIELD_DEF(cxFloat FixDelta);     //time per frame fix time = 1.0f/60.0f
+    CX_FIELD_DEF(cxFloat TimeDelta);    //real pre frame time
+    CX_FIELD_DEF(cxStr Lang);        //zh en
+    CX_FIELD_DEF(cxStr Country);     //CN TW
+    CX_FIELD_DEF(cxStr Localized);   //current lang file path
+    CX_FIELD_DEF(cxFloat Interval);     //default 1.0f/60.0f
     CX_FIELD_DEF(cxWindow Window);      //main window
-    CX_FIELD_DEF(cxJson Config);
+    CX_FIELD_DEF(cxJson Manifest);      //Manifest.json
     CX_FIELD_DEF(cxUInt Version);       //version number
-    cxBool isInit;
-    cxBool isTouch;
-    cxBool isPause;
+    CX_FIELD_DEF(cxFloat ScaleFactor);  //ios screen content ScaleFactor
+    CX_FIELD_DEF(cxUInt64 TotalFrames); //total frames
+    CX_FIELD_DEF(cxBool IsInit);
+    CX_FIELD_DEF(cxBool IsTouch);
+    CX_FIELD_DEF(cxBool IsPause);
+    CX_FIELD_DEF(cxInt Accel);           //update step default:1
+    cxDouble prevTime;
     cxHash files;
     cxHash assets;
-    cxHash items;           //touch items
-    cxTouchItems points;    //all touch points
+    cxHash items;                       //touch items
+    cxTouchItems points;                //all touch points
     cxKey key;
-    cxHash groups;          //action groups
-    cxCurve curve;              //cxCurve instance
-    cxOpenGL opengl;            //cxOpenGL instance
-    cxIconv iconv;              //cxIconv instance
-    cxPlayer player;            //cxPlayer instance
-    cxTextureCache textures;    //cxTextureCache instance
+    cxHash groups;                      //action groups
+    cxCurve curve;                      //cxCurve instance
+    cxOpenGL opengl;                    //cxOpenGL instance
+    cxPlayer player;                    //cxPlayer instance
+    cxTextureCache textures;            //cxTextureCache instance
     cxLooper looper;
 CX_END(cxEngine, cxObject)
+
+CX_FIELD_IMP(cxEngine, cxBool, IsInit);
+CX_FIELD_IMP(cxEngine, cxBool, IsTouch);
+CX_FIELD_IMP(cxEngine, cxBool, IsPause);
 
 extern cxEngine engine;
 
@@ -64,101 +72,112 @@ CX_INLINE cxEngine cxEngineInstance()
     return engine;
 }
 
+CX_INLINE void cxEngineSetAccel(cxInt accel)
+{
+    engine->Accel = accel;
+}
+
+CX_INLINE void cxEngineSetAccelTime(cxFloat time)
+{
+    cxInt accel = time / engine->FixDelta;
+    accel = CX_MAX(accel, 1);
+    cxEngineSetAccel(accel);
+}
+
+CX_INLINE cxInt64 cxEngineTotalFrames()
+{
+    return engine->TotalFrames;
+}
+
+CX_INLINE cxFloat cxEngineTime()
+{
+    return engine->TotalFrames * engine->Interval;
+}
+
+CX_INLINE cxFloat cxEngineScaleFactor()
+{
+    return engine->ScaleFactor;
+}
+
 CX_INLINE cxLooper cxEngineLooper()
 {
     return engine->looper;
 }
 
-CX_INLINE cxJson cxEngineGetConfig()
-{
-    return engine->Config;
-}
+#define cxAppManifest  cxEngineGetManifest()
 
+CX_INLINE cxJson cxEngineGetManifest()
+{
+    return engine->Manifest;
+}
 CX_INLINE cxUInt cxEngineVersion()
 {
     return engine->Version;
 }
-
 CX_INLINE cxTextureCache cxTextureCacheInstance()
 {
     return engine->textures;
 }
-
 CX_INLINE cxPlayer cxPlayerInstance()
 {
     return engine->player;
 }
-
-CX_INLINE cxIconv cxIconvInstance()
-{
-    return engine->iconv;
-}
-
 CX_INLINE cxWindow cxEngineGetWindow()
 {
     return engine->Window;
 }
-
 CX_INLINE cxOpenGL cxOpenGLInstance()
 {
     return engine->opengl;
 }
-
 CX_INLINE cxCurve cxCurveInstance()
 {
     return engine->curve;
 }
-
 CX_INLINE void cxEngineSetInterval(cxFloat interval)
 {
     engine->Interval = interval;
 }
-
-CX_INLINE cxString cxEngineGetLocalized()
+CX_INLINE cxStr cxEngineGetLocalized()
 {
     return engine->Localized;
 }
-
-CX_INLINE cxString cxEngineGetCountry()
+CX_INLINE cxStr cxEngineGetCountry()
 {
     return engine->Country;
 }
-
-CX_INLINE void cxEngineSetCountry(cxString country)
+CX_INLINE void cxEngineSetCountry(cxStr country)
 {
     CX_RETAIN_SWAP(engine->Country, country);
 }
-
-CX_INLINE cxString cxEngineGetLang()
+CX_INLINE cxStr cxEngineGetLang()
 {
     return engine->Lang;
 }
-
-CX_INLINE void cxEngineSetLang(cxString lng)
+CX_INLINE void cxEngineSetLang(cxStr lng)
 {
     CX_RETAIN_SWAP(engine->Lang, lng);
 }
-
-CX_INLINE cxFloat cxEngineGetDelta()
+CX_INLINE cxFloat cxEngineGetFixDelta()
 {
-    return engine->Delta;
+    return engine->FixDelta;
 }
-
+CX_INLINE cxFloat cxEngineGetTimeDelta()
+{
+    return engine->TimeDelta;
+}
 CX_INLINE void cxEngineSetScale(cxVec2f v)
 {
     engine->Scale = v;
 }
-
 CX_INLINE cxVec2f cxEngineGetScale()
 {
     return engine->Scale;
 }
-
 CX_INLINE cxBool cxEngineGetIsDebug()
 {
     return engine->IsDebug;
 }
-
 CX_INLINE void cxEngineSetIsDebug(cxBool v)
 {
 #ifdef NDEBUG
@@ -183,6 +202,11 @@ CX_INLINE cxSize2f cxEngineGetWinSize()
     return engine->WinSize;
 }
 
+CX_INLINE cxFloat cxEngineTimeFrame(cxInt frame)
+{
+    return engine->FixDelta * frame;
+}
+
 void cxEngineClear();
 
 //type init this = cxEngine type
@@ -199,13 +223,21 @@ CX_EXTERN void cxEngineFree(cxEngine engine);
 
 json_t *cxEngineLocalizeder(cxConstChars key);
 
-cxString cxLocalizedString(cxConstChars key);
+//format string
+cxStr cxLocalizedFormat(cxConstChars key,...);
+
+//format key
+cxStr cxLocalizedStr(cxConstChars key,...);
+//
+cxConstChars cxLocalizedConstChars(cxConstChars key,...);
+
+cxConstChars cxLocalizedConstCharsVA(cxConstChars key,va_list ap);
 
 cxJson cxEngineJsonReader(cxConstChars src);
 
 cxAny cxEngineCreateObject(cxConstChars src);
 
-cxString cxEngineAssetsData(cxConstChars file);
+cxStr cxEngineAssetsData(cxConstChars file);
 
 cxJson cxEngineLoadJson(cxConstChars file);
 
@@ -223,12 +255,12 @@ cxBool cxEngineFireTouch(cxTouchType type,cxInt num,cxTouchPoint *points);
 
 cxBool cxEngineFireKey(cxKeyType type,cxInt code);
 
-void cxEngineSendJson(cxString json);
+void cxEngineSendJson(cxStr txt);
 
-void cxEngineRecvJson(cxString json);
+void cxEngineRecvJson(cxStr txt);
 
 //初始化数据
-void cxEngineStartup();
+void cxEngineStartup(cxBool layout);
 
 void cxEngineTerminate();
 
@@ -240,7 +272,13 @@ void cxEngineResume();
 
 void cxEngineMemory();
 
+void cxEngineSet2DProjection(cxVec3f offset);
+
+void cxEngineSet3DProjection(cxVec3f offset);
+
 void cxEngineDraw(cxFloat dt);
+
+void cxEngineLookAt(cxMatrix4f *matrix,cxFloat zeye,const cxVec3f point);
 
 void cxEngineLayout(cxInt width,cxInt height);
 

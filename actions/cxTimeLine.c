@@ -13,64 +13,62 @@
 
 CX_METHOD_DEF(cxTimeLine,Init,void)
 {
-    cxFloat *time = cxAnyArrayLast(this->times, cxFloat);
-    if(time == NULL){
-        cxActionStop(this);
-        return;
-    }
-    cxActionSetTime(this, *time + 0.5f);
-    this->index = -1;
+    this->Index = -1;
     CX_SUPER(cxAction, this, Init, CX_M(void));
 }
-
 CX_METHOD_DEF(cxTimeLine,Step,void,cxFloat dt,cxFloat time)
 {
     cxInt count = cxAnyArrayLength(this->times);
     cxFloat elapsed = cxActionGetTimeElapsed(this);
-    for(cxInt i = this->index + 1; i < count; i++){
-        cxFloat *time = cxAnyArrayAt(this->times, i, cxFloat);
-        if(*time < elapsed){
+    for(cxInt i = this->Index + 1; i < count; i++){
+        cxFloat time = cxTimeLineGetTime(this, i);
+        if(time > elapsed){
             break;
         }
-        this->index = i;
-        CX_EVENT_FIRE(this, onTime);
-    }
-    if(this->index == (count - 1)){
-        cxActionStop(this);
+        this->Index = i;
+        CX_CALL(this, OnTime, CX_M(void));
     }
 }
-
 CX_SETTER_DEF(cxTimeLine, times)
 {
     cxJson times = cxJsonToArray(value);
     CX_JSON_ARRAY_EACH_BEG(times, item)
-    {
-        cxFloat time = cxJsonToDouble(item, -1);
-        if(time < 0){
-            continue;
-        }
-        cxTimeLineSet(this, time);
+    cxFloat time = cxJsonToDouble(item, -1);
+    if(time < 0){
+        continue;
     }
+    cxTimeLineSet(this, time);
     CX_JSON_ARRAY_EACH_END(times, item)
 }
-
+CX_METHOD_DEF(cxTimeLine, OnTime, void)
+{
+    
+}
 CX_TYPE(cxTimeLine, cxAction)
 {
     CX_SETTER(cxTimeLine, times);
     
+    CX_METHOD(cxTimeLine, OnTime);
     CX_METHOD(cxTimeLine, Init);
     CX_METHOD(cxTimeLine, Step);
 }
 CX_INIT(cxTimeLine, cxAction)
 {
     this->times = cxAnyArrayAlloc(cxFloat);
+    cxActionSetTime(this, CX_FOREVER);
 }
 CX_FREE(cxTimeLine, cxAction)
 {
-    CX_EVENT_RELEASE(this->onTime);
     CX_RELEASE(this->times);
 }
 CX_TERM(cxTimeLine, cxAction)
+
+cxFloat cxTimeLineGetTime(cxAny pav,cxInt idx)
+{
+    CX_ASSERT_THIS(pav, cxTimeLine);
+    CX_ASSERT(idx >= 0 && idx < cxAnyArrayLength(this->times),"idx out");
+    return *cxAnyArrayAt(this->times, idx, cxFloat);
+}
 
 void cxTimeLineSet(cxAny pav,cxFloat time)
 {

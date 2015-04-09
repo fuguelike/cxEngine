@@ -9,18 +9,17 @@
 #include "cxShaderDefault.h"
 #include "cxShaderClipping.h"
 
-CX_METHOD_DEF(cxShaderClipping,Fragment,cxString)
+CX_METHOD_DEF(cxShaderClipping,Fragment,cxStr)
 {
-    static cxConstChars fragment =
-    GLSL(varying mediump vec4 vFragmentColor;
-         varying highp vec2 vTexCoord;
-         uniform sampler2D uTexture0;
-         void main() {
-             vec4 texColor = texture2D(uTexture0, vTexCoord);
-             if(texColor.a <= 0.0)discard;
-             gl_FragColor = vFragmentColor * texColor;
-        });
-    return cxStringConstChars(fragment);
+    static cxConstChars fragment =GLSL(
+        varying mediump vec4 vFragmentColor;
+        varying mediump vec2 vTexCoord;
+        uniform sampler2D uTexture0;
+        void main() {
+            vec4 texColor = texture2D(uTexture0, vTexCoord);
+            if(texColor.a < 0.5)discard;
+    });
+    return cxStrConstChars(fragment);
 }
 CX_TYPE(cxShaderClipping, cxShader)
 {

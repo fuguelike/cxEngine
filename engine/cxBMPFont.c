@@ -83,11 +83,11 @@ cxBool cxBMPFontLoad(cxBMPFont this,cxConstChars file)
     }
     //base attr
     cxJson info = cxJsonObject(json, "info");
-    CX_RETAIN_SET(this->face, cxJsonString(info, "face"));
+    CX_RETAIN_SET(this->face, cxJsonStr(info, "face"));
     this->size          = cxJsonInt(info, "size", 0);
     this->bold          = cxJsonInt(info, "bold", 0);
     this->italic        = cxJsonInt(info, "italic", 0);
-    CX_RETAIN_SET(this->chasrset, cxJsonString(info, "chasrset"));
+    CX_RETAIN_SET(this->chasrset, cxJsonStr(info, "chasrset"));
     this->unicode       = cxJsonInt(info, "unicode", 0);
     this->stretchH      = cxJsonInt(info, "stretchH", 0);
     this->smooth        = cxJsonInt(info, "smooth", 0);

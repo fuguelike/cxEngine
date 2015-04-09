@@ -43,6 +43,8 @@ cxAny cxListTail(cxAny plist);
 
 cxAny cxListHead(cxAny plist);
 
+cxAny cxListAt(cxAny plist,cxInt idx);
+
 cxListElement *cxListAppend(cxAny plist,cxAny any);
 
 cxListElement *cxListPrepend(cxAny plist,cxAny any);

@@ -16,13 +16,13 @@
 #include <sys/stat.h>
 #include "cxUtil.h"
 
-cxBool cxWriteFile(cxString file,cxString data)
+cxBool cxWriteFile(cxStr file,cxStr data)
 {
-    FILE *fd = fopen(cxStringBody(file), "wb");
+    FILE *fd = fopen(cxStrBody(file), "wb");
     CX_RETURN(fd == NULL, false);
-    cxInt bytes = (cxInt)fwrite(cxStringBody(data), 1, cxStringLength(data), fd);
+    cxInt bytes = (cxInt)fwrite(cxStrBody(data), 1, cxStrLength(data), fd);
     fclose(fd);
-    return bytes == cxStringLength(data);
+    return bytes == cxStrLength(data);
 }
 
 cxInt cxFileFD(cxConstChars file,cxInt *off,cxInt *length)
@@ -41,16 +41,16 @@ cxInt cxFileFD(cxConstChars file,cxInt *off,cxInt *length)
 cxInt cxDocumentFD(cxConstChars file,cxInt *off,cxInt *length)
 {
     CX_ASSERT(off != NULL && length != NULL && file != NULL, "args error");
-    cxString path = cxDocumentPath(file);
+    cxStr path = cxDocumentPath(file);
     CX_ASSERT(path != NULL, "get file %s path failed",file);
-    return cxFileFD(cxStringBody(path), off, length);
+    return cxFileFD(cxStrBody(path), off, length);
 }
 
 cxBool cxDocumentExists(cxConstChars file)
 {
-    cxString path = cxDocumentPath(file);
+    cxStr path = cxDocumentPath(file);
     CX_ASSERT(path != NULL, "get file %s path failed",file);
-    return cxFileExists(cxStringBody(path));
+    return cxFileExists(cxStrBody(path));
 }
 
 cxBool cxFileExists(cxConstChars file)
@@ -71,7 +71,7 @@ cxBool cxCopyFile(cxConstChars file,cxCopyFileFunc func,cxAny udata)
     }
     cxBool ret = true;
     cxChar buffer[4096];
-    cxProgress p = {0};
+    cxProgressInfo p = {0};
     p.current = 0;
     p.total = src->Length;
     while (true) {
@@ -131,6 +131,9 @@ cxAudioFileType cxAudioGetType(cxConstChars file)
 {
     cxConstChars ext = strrchr(file, '.');
     CX_RETURN(ext == NULL,cxAudioFileTypeNone);
+    if(cxConstCharsEqu(ext, ".pcm")){
+        return cxAudioFileTypePCM;
+    }
     if(cxConstCharsEqu(ext, ".mp3")){
         return cxAudioFileTypeMP3;
     }

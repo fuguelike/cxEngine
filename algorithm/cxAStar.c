@@ -131,6 +131,7 @@ CX_METHOD_DEF(cxAStar, Heuristic, cxFloat, cxVec2i *from,cxVec2i *to)
 {
     return (fabs(from->x - to->x) + fabs(from->y - to->y));
 }
+//返回值:>0成功到达,=0继续,<0失败退出
 CX_METHOD_DEF(cxAStar, EarlyExit, cxInt, cxInt vcount, cxVec2i *curr,cxVec2i *target)
 {
     return 0;
@@ -139,7 +140,7 @@ CX_METHOD_DEF(cxAStar, Comparator, cxInt, cxVec2i *lv,cxVec2i *rv)
 {
     return memcmp(lv, rv, sizeof(cxVec2i));
 }
-CX_METHOD_DEF(cxAStar, IsAppend, cxBool, cxVec2i *node)
+CX_METHOD_DEF(cxAStar, IsAppend, cxBool, cxVec2i *curr)
 {
     return false;
 }
@@ -155,7 +156,7 @@ CX_INIT(cxAStar, cxObject)
 {
     this->points = cxAnyArrayAlloc(cxVec2i);
     this->visits = cxAnyArrayAlloc(cxVec2i);
-    this->Type = cxAStarTypeA4;
+    this->Type = cxAStarTypeA8;
 }
 CX_FREE(cxAStar, cxObject)
 {
@@ -184,7 +185,7 @@ void cxAStarClearPath(cxAny pobj)
 cxBool cxAStarRun(cxAny pobj,cxVec2i from,cxVec2i to,cxAny data)
 {
     CX_ASSERT_THIS(pobj, cxAStar);
-    cxAStarSetUserData(this, data);
+    cxObjectSetUserData(this, data);
     cxAStarClearPath(this);
     return ASPathCreate(&cxAStarSource, pobj, &from, &to, this->points);
 }
@@ -584,6 +585,7 @@ cxBool ASPathCreate(const ASPathNodeSource *source, void *context, void *startNo
             const int shouldExit = source->earlyExit(visitedNodes->nodeRecordsCount, GetNodeKey(current), goalNodeKey, context);
             //成功
             if (shouldExit > 0) {
+                //成功到达
                 SetNodeIsGoal(current);
                 break;
             } else if (shouldExit < 0) {
@@ -591,29 +593,22 @@ cxBool ASPathCreate(const ASPathNodeSource *source, void *context, void *startNo
                 break;
             }
         }
-        
         RemoveNodeFromOpenSet(current);
         AddNodeToClosedSet(current);
-        
         neighborList->count = 0;
         source->nodeNeighbors(neighborList, GetNodeKey(current), context);
-
         for (size_t n=0; n<neighborList->count; n++) {
             const float cost = GetNodeCost(current) + NeighborListGetEdgeCost(neighborList, n);
             Node neighbor = GetNode(visitedNodes, NeighborListGetNodeKey(neighborList, n));
-            
             if (!NodeHasEstimatedCost(neighbor)) {
                 SetNodeEstimatedCost(neighbor, GetPathCostHeuristic(neighbor, goalNode));
             }
-            
             if (NodeIsInOpenSet(neighbor) && cost < GetNodeCost(neighbor)) {
                 RemoveNodeFromOpenSet(neighbor);
             }
-            
             if (NodeIsInClosedSet(neighbor) && cost < GetNodeCost(neighbor)) {
                 RemoveNodeFromClosedSet(neighbor);
             }
-            
             if (!NodeIsInOpenSet(neighbor) && !NodeIsInClosedSet(neighbor)) {
                 AddNodeToOpenSet(neighbor, cost, current);
             }

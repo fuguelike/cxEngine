@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
-#include "cxString.h"
+#include "cxStr.h"
 #include "cxPath.h"
 
 CX_TYPE(cxPath, cxObject)

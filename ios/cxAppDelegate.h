@@ -14,12 +14,19 @@
 @interface cxAppDelegate : UIResponder <UIApplicationDelegate,AVAudioPlayerDelegate>
 {
     AVAudioPlayer *currPlayer;
-    cxString currFile;
+    cxStr currFile;
 }
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) cxGLViewController *rootViewController;
--(void)cxPlayMusic:(cxConstChars)file loop:(cxBool)loop;
+-(void)cxPlayMusic:(cxConstChars)file volume:(cxFloat)volume loop:(cxBool)loop;
 -(void)cxStopMusic;
 -(void)cxPauseMusic;
 -(void)cxResumeMusic;
+-(void)cxSetMusicVolume:(float)volume;
 @end
+
+//
+void cxSendJson(cxStr txt);
+
+//must imp
+void cxRecvJson(cxStr txt);

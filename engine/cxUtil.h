@@ -17,13 +17,15 @@ CX_C_BEGIN
 typedef struct {
     cxInt total;
     cxInt current;
-}cxProgress;
+}cxProgressInfo;
 
-typedef void (*cxCopyFileFunc)(cxConstChars file,cxProgress *progress,cxAny udata);
+void cxSetRecvjsonFunc(cxAny func);
 
-cxString cxUUID();
+typedef void (*cxCopyFileFunc)(cxConstChars file,cxProgressInfo *progress,cxAny udata);
 
-cxString cxDefaultLocalized();
+cxStr cxUUID();
+
+cxStr cxDefaultLocalized(cxConstChars country,cxConstChars lang);
 
 cxUInt cxHexToUInt(cxConstChars bs);
 
@@ -35,7 +37,7 @@ cxAudioFileType cxAudioGetType(cxConstChars file);
 
 cxBool cxConstCharsHasChar(cxConstChars sp,cxChar c);
 
-cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxTextAttr *attr);
+cxStr cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxTextAttr *attr);
 
 cxHash cxParseKeyValue(cxChars query);
 
@@ -45,7 +47,7 @@ cxInt cxDocumentFD(cxConstChars file,cxInt *off,cxInt *length);
 
 cxInt cxAssertsFD(cxConstChars file,cxInt *off,cxInt *length);
 
-cxString cxAssetsPath(cxConstChars file);
+cxStr cxAssetsPath(cxConstChars file);
 
 cxBool cxAssetsExists(cxConstChars file);
 
@@ -53,13 +55,13 @@ cxBool cxDocumentExists(cxConstChars file);
 
 cxBool cxFileExists(cxConstChars file);
 
-cxString cxLocalizedLang();
+cxStr cxLocalizedLang();
 
-cxString cxLocalizedCountry();
+cxStr cxLocalizedCountry();
 
-cxString cxDocumentPath(cxConstChars file);
+cxStr cxDocumentPath(cxConstChars file);
 
-cxBool cxWriteFile(cxString file,cxString data);
+cxBool cxWriteFile(cxStr file,cxStr data);
 
 CX_C_END
 

@@ -27,7 +27,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define UTILITY_H_INCLUDED
 
 #include <math.h>
-#include <string.h>
 
 #ifndef kmScalar
 #ifdef USE_DOUBLE_PRECISION
@@ -69,11 +68,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define kmPI 3.14159265358979323846f
 #define kmPIOver180  (kmPI / 180.0f)
 #define kmPIUnder180 (180.0 / kmPI)
-#define kmEpsilon 0.0001f
+#define kmEpsilon 0.00015f
 
-#define KM_CONTAINS_NONE 0
-#define KM_CONTAINS_PARTIAL 1
-#define KM_CONTAINS_ALL 2
+#define KM_CONTAINS_NONE (kmEnum)0
+#define KM_CONTAINS_PARTIAL (kmEnum)1
+#define KM_CONTAINS_ALL (kmEnum)2
 
 #ifdef __cplusplus
 extern "C" {

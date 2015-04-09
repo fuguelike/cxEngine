@@ -7,26 +7,28 @@
 //
 
 #include "cxTexturePNG.h"
+#include <engine/cxUtil.h>
 
 CX_METHOD_DEF(cxTexturePNG,Load,cxBool,cxStream stream)
 {
     cxBool ret = false;
     CX_ASSERT(stream != NULL, "pvr stream not set");
-    cxString data = CX_CALL(stream, AllBytes, CX_M(cxString));
+    cxStr data = cxStreamAllBytes(stream);
     if(data == NULL){
         return false;
     }
     png_image image;
     memset(&image, 0, sizeof(png_image));
     image.version = PNG_IMAGE_VERSION;
-    if(!png_image_begin_read_from_memory(&image, cxStringBody(data), cxStringLength(data))){
+    if(!png_image_begin_read_from_memory(&image, cxStrBody(data), cxStrLength(data))){
         CX_ERROR("read png data failed");
         return false;
     }
     image.format = PNG_FORMAT_RGBA;
     this->cxTexture.size = cxSize2fv(image.width, image.height);
     this->cxTexture.hasAlpha = true;
-    cxAny buffer = allocator->malloc(PNG_IMAGE_SIZE(image));
+    cxInt bufsiz = PNG_IMAGE_SIZE(image);
+    cxAny buffer = allocator->malloc(bufsiz);
     if(png_image_finish_read(&image, NULL, buffer, 0, NULL)){
         cxOpenGLGenTextures(1, &this->cxTexture.textureId);
         cxOpenGLBindTexture(this->cxTexture.textureId, 0);

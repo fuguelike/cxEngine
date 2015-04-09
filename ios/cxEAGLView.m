@@ -37,12 +37,12 @@
 
 -(void)initMainLoop
 {
-    cxEngineStartup();
+    cxEngineStartup(false);
 }
 
 -(void)freeMainLoop
 {
-    cxEngineDestroy();
+    cxEngineExit();
 }
 
 -(void)drawFrame
@@ -55,26 +55,45 @@
 {
     CAEAGLLayer *layer = (CAEAGLLayer*)self.layer;
     GLint cWidth,cHeight;
+    
     glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
     [eaglCTX renderbufferStorage:GL_RENDERBUFFER fromDrawable:layer];
+    
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &cWidth);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &cHeight);
     CX_RETURN(cWidth == width && cHeight == height);
-    width = cWidth;height = cHeight;
+    
+    width = cWidth;
+    height = cHeight;
+
+    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
+    
     glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, width, height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
+
     glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE){
+        CX_ERROR("frame buff bind error");
+    }
     cxEngineLayout(width, height);
 }
 
 -(void)startMainLoop
 {
     cxEngine engine = cxEngineInstance();
+    engine->ScaleFactor = self.contentScaleFactor;
     [displayLink setFrameInterval:engine->Interval * 60.0f];
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
 }
+
+-(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    return NO;
+}
+
 -(id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -82,6 +101,7 @@
         CX_ERROR("init gl frame error");
         return nil;
     }
+    [self initMainLoop];
     CX_ASSERT(self != nil, "init view frame failed");
     CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;
     eaglLayer.opaque = YES;
@@ -102,10 +122,6 @@
     CX_ASSERT(renderBuffer > 0,"gl render buffer create failed");
     glGenRenderbuffers(1, &depthBuffer);
     CX_ASSERT(depthBuffer > 0,"gl depth buffer create failed");
-    glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-    glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
-    [self initMainLoop];
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(drawFrame)];
     [displayLink retain];
     return self;

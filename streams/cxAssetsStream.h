@@ -19,7 +19,7 @@ CX_END(cxAssetsStream, cxStream)
 
 cxStream cxAssetsStreamCreate(cxConstChars file);
 
-cxString cxAssetsData(cxConstChars file);
+cxStr cxAssetsData(cxConstChars file);
 
 CX_C_END
 

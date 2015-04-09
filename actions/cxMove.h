@@ -14,12 +14,13 @@
 CX_C_BEGIN
 
 CX_DEF(cxMove, cxAction)
-    cxVec2f to;
-    cxVec2f prev;
-    cxVec2f curr;
-    cxVec2f from;
+    cxVec2f startPos;
+    cxVec2f position;
     cxVec2f posDelta;
+    CX_FIELD_DEF(cxFloat Angle);
 CX_END(cxMove, cxAction)
+
+CX_FIELD_GET(cxMove, cxFloat, Angle);
 
 void cxMoveSetPos(cxAny pav,cxVec2f pos);
 

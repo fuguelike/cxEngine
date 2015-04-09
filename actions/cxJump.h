@@ -15,10 +15,10 @@ CX_C_BEGIN
 
 CX_DEF(cxJump, cxAction)
     cxVec2f startPos;
+    cxVec2f prevPos;
     cxVec2f position;
     cxFloat height;
     cxInt  jumps;
-    cxVec2f prevPos;
 CX_END(cxJump, cxAction)
 
 cxJump cxJumpCreate(cxFloat time,cxVec2f position,cxFloat height,cxInt jumps);

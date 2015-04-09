@@ -14,6 +14,12 @@ void cxGlobalInit()
     cxJsonInit();
 }
 
+void cxGlobalClear()
+{
+    cxJsonClear();
+    cxCoreClear();
+}
+
 void cxGlobalFree()
 {
     cxJsonFree();

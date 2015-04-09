@@ -17,8 +17,14 @@ CX_METHOD_DEF(cxAsync, Init, cxBool)
 {
     return false;
 }
+//get async title
+CX_METHOD_DEF(cxAsync, Title, cxStr)
+{
+    return cxStrCreate(CX_NAME_OF(this));
+}
 CX_TYPE(cxAsync, cxObject)
 {
+    CX_METHOD(cxAsync, Title);
     CX_METHOD(cxAsync, Running);
     CX_METHOD(cxAsync, Init);
 }
@@ -43,7 +49,7 @@ cxAsyncState cxAsyncDrive(cxAny pview, cxAny pitem)
         this->State = ret ? cxAsyncStateRunning : cxAsyncStateFailed;
     }else{
         this->Count ++;
-        this->Time += cxEngineGetDelta();
+        this->Time += cxEngineGetFixDelta();
         CX_CALL(this, Running, CX_M(void));
     }
     return this->State;
@@ -64,7 +70,7 @@ static void cxDriverOnExit(cxAny pav)
     cxView view = cxActionGetView(this);
     CX_ASSERT_TYPE(view, cxView);
     if(state != cxAsyncStateSuccess && CX_METHOD_HAS(view, AsyncError)){
-        CX_CALL(view, AsyncError, CX_M(void,cxAsync),this->Async);
+        CX_CALL(view, AsyncError, CX_M(void,cxAsync,cxStr), this->Async, cxStrCreate("timeout"));
     }
 }
 CX_TYPE(cxDriver, cxAction)
@@ -86,7 +92,7 @@ cxDriver cxDriverCreateImp(cxAny async)
     CX_ASSERT_TYPE(async, cxAsync);
     cxDriver this = CX_CREATE(cxDriver);
     CX_RETAIN_SWAP(this->Async, async);
-    cxActionSetTime(this, 15);
+    cxActionSetTime(this, -1);
     return this;
 }
 

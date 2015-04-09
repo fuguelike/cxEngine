@@ -38,21 +38,26 @@ typedef unsigned int kmGLEnum;
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
+/* Added by Tobias Lensing for icedcoffee-framework.org*/
+void kmGLSetCurrentContext(void *contextRef);
+void *kmGLGetCurrentContext();
+void kmGLClearCurrentContext();
+void kmGLClearAllContexts();
 
-void  kmGLFreeAll(void);
-void  kmGLPushMatrix(void);
-void  kmGLPopMatrix(void);
-void  kmGLMatrixMode(kmGLEnum mode);
-void  kmGLLoadIdentity(void);
-void  kmGLLoadMatrix(const kmMat4* pIn);
-void  kmGLMultMatrix(const kmMat4* pIn);
-void  kmGLTranslatef(float x, float y, float z);
-void  kmGLRotatef(float angle, float x, float y, float z);
-void  kmGLScalef(float x, float y, float z);
-void  kmGLGetMatrix(kmGLEnum mode, kmMat4* pOut);
+void kmGLPushMatrix(void);
+void kmGLPopMatrix(void);
+void kmGLMatrixMode(kmGLEnum mode);
+void kmGLLoadIdentity(void);
+void kmGLLoadMatrix(const kmMat4* pIn);
+void kmGLMultMatrix(const kmMat4* pIn);
+void kmGLTranslatef(float x, float y, float z);
+void kmGLRotatef(float angle, float x, float y, float z);
+void kmGLScalef(float x, float y, float z);
+void kmGLGetMatrix(kmGLEnum mode, kmMat4* pOut);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // MATRIX_H_INCLUDED
+#endif /* MATRIX_H_INCLUDED */

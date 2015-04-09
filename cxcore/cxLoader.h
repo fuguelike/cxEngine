@@ -10,9 +10,13 @@
 #define cxCore_cxLoader_h
 
 #include "cxHash.h"
-#include "cxString.h"
+#include "cxStack.h"
+#include "cxStr.h"
+#include "cxMessage.h"
 
 CX_C_BEGIN
+
+CX_STRING_KEY_DEF(cxJsonAttrKey);
 
 CX_DEF(cxLoader, cxObject)
     CX_FIELD_DEF(cxAny Root);
@@ -27,6 +31,10 @@ cxAny cxLoaderGet(cxAny loader,cxConstChars id);
 
 cxLoader cxLoaderCreate(cxConstChars path);
 
+cxLoader cxLoaderJson(cxJson json);
+
+cxAny cxLoaderRoot(cxConstChars path);
+
 cxAny cxLoaderFire(cxAny loader,cxConstChars path);
 
 void cxLoaderPush(cxAny object);
@@ -34,6 +42,8 @@ void cxLoaderPush(cxAny object);
 void cxLoaderPop();
 
 cxAny cxLoaderTop();
+
+void cxLoaderClear();
 
 void cxLoaderInit();
 

@@ -24,10 +24,19 @@ CX_SETTER_DEF(cxList, items)
     }
     CX_JSON_ARRAY_EACH_END(items, v)
 }
-
+CX_METHOD_DEF(cxList, Serialize, cxJson)
+{
+    cxJson json = cxJsonCreateArray();
+    CX_LIST_FOREACH(this, ele){
+        cxJsonAppendJson(json,cxObjectSerialize(ele->any));
+    }
+    return json;
+}
 CX_TYPE(cxList, cxObject)
 {
     CX_SETTER(cxList, items);
+    
+    CX_METHOD(cxList, Serialize);
 }
 CX_INIT(cxList, cxObject)
 {
@@ -42,6 +51,7 @@ CX_TERM(cxList, cxObject)
 cxListElement *cxListAppend(cxAny plist,cxAny any)
 {
     CX_ASSERT_THIS(plist, cxList);
+    CX_ASSERT(any != NULL && plist != any, "any error");
     cxListElement *element = allocator->malloc(sizeof(cxListElement));
     CX_RETAIN_SET(element->any, any);
     element->any = any;
@@ -59,6 +69,7 @@ cxBool cxListEmpty(cxAny plist)
 cxListElement *cxListPrepend(cxAny plist,cxAny any)
 {
     CX_ASSERT_THIS(plist, cxList);
+    CX_ASSERT(any != NULL && plist != any, "any error");
     cxListElement *element = allocator->malloc(sizeof(cxListElement));
     CX_RETAIN_SET(element->any, any);
     DL_PREPEND(this->listptr, element);
@@ -106,6 +117,19 @@ cxAny cxListHead(cxAny plist)
 {
     cxListElement *element = cxListFirst(plist);
     return element != NULL ? element->any : NULL;
+}
+
+cxAny cxListAt(cxAny plist,cxInt idx)
+{
+    CX_ASSERT_THIS(plist, cxList);
+    CX_ASSERT(idx >= 0 && idx < cxListLength(this), "idx out");
+    CX_LIST_FOREACH(this, ele){
+        if(idx == 0){
+            return ele->any;
+        }
+        idx --;
+    }
+    return NULL;
 }
 
 cxListElement *cxListLast(cxAny plist)

@@ -16,6 +16,8 @@ CX_C_BEGIN
 
 #define CX_STRING_KEY_DEF(_k_) static cxConstChars _k_=#_k_
 
+typedef cxBool (*cxMessageFunc)(cxAny,cxAny);
+
 CX_DEF(cxMessageItem, cxObject)
     CX_FIELD_DEF(cxLong Tag);
     cxAny func;
@@ -30,15 +32,15 @@ CX_END(cxMessage, cxObject)
 
 cxMessage cxMessageInstance();
 
-void cxMessageDestroy();
+void cxMessageClear();
 
-void cxMessageRemove(cxAny dst);
+void cxMessageDestroy();
 
 void cxMessageRemoveKey(cxAny dst,cxConstChars key);
 
 void cxMessagePost(cxConstChars key,cxAny info);
 
-cxMessageItem cxMessageAppend(cxAny dst,cxAny func,cxConstChars key);
+cxMessageItem cxMessageAppend(cxAny dst,cxMessageFunc func,cxConstChars key);
 
 CX_C_END
 

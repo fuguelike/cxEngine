@@ -28,10 +28,19 @@ CX_SETTER_DEF(cxHash, items)
     }
     CX_JSON_OBJECT_EACH_END(items, v)
 }
-
+CX_METHOD_DEF(cxHash, Serialize, cxJson)
+{
+    cxJson json = cxJsonCreateObject();
+    CX_HASH_FOREACH(this, ele, tmp){
+        cxJsonSetJson(json, ele->key, cxObjectSerialize(ele->any));
+    }
+    return json;
+}
 CX_TYPE(cxHash, cxObject)
 {
     CX_SETTER(cxHash, items);
+    
+    CX_METHOD(cxHash, Serialize);
 }
 CX_INIT(cxHash, cxObject)
 {
@@ -96,6 +105,17 @@ cxAny cxHashFirst(cxAny phash)
     return (this->hptr == NULL) ? NULL : this->hptr->any;
 }
 
+cxAny cxHashGetFmt(cxAny phash,cxConstChars format,...)
+{
+    CX_ASSERT_THIS(phash, cxHash);
+    cxChar skey[CX_HASH_MAX_KEY];
+    va_list ap;
+    va_start(ap, format);
+    vsnprintf(skey, CX_HASH_MAX_KEY, format, ap);
+    va_end(ap);
+    return cxHashGet(this, cxHashStrKey(skey));
+}
+
 cxAny cxHashGet(cxAny phash,cxHashKey key)
 {
     CX_ASSERT_THIS(phash, cxHash);
@@ -125,6 +145,7 @@ static void cxHashSetUnsafe(cxAny phash,cxHashKey key,cxAny any)
 cxBool cxHashSet(cxAny phash,cxHashKey key,cxAny any)
 {
     CX_ASSERT_THIS(phash, cxHash);
+    CX_ASSERT(phash != any, "self set self,error");
     cxHashElement *element = cxHashGetElement(this, key);
     if(element == NULL){
         cxHashSetUnsafe(this, key, any);

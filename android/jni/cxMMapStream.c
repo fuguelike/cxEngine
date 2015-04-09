@@ -13,13 +13,10 @@
 #include <streams/cxMMapStream.h>
 #include "cxAndroid.h"
 
-//int AAsset_openFileDescriptor(AAsset* asset, off_t* outStart, off_t* outLength);
-//int AAsset_isAllocated(AAsset* asset);
-//const void* AAsset_getBuffer(AAsset* asset);
 CX_METHOD_DEF(cxMMapStream,Open,cxBool)
 {
     CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
-    cxConstChars path = cxStringBody(this->cxStream.path);
+    cxConstChars path = cxStrBody(this->cxStream.path);
     this->asset = AAssetManager_open(cxEngineGetAssetManager(), path, AASSET_MODE_UNKNOWN);
     if(this->asset == NULL){
         CX_ERROR("open asset file %s failed",path);
@@ -93,17 +90,17 @@ CX_METHOD_DEF(cxMMapStream,Seek,cxInt,cxInt off,cxInt flags)
     }
     return 0;
 }
-CX_METHOD_DEF(cxMMapStream,AllBytes,cxString)
+CX_METHOD_DEF(cxMMapStream,AllBytes,cxStr)
 {
     if(!this->cxStream.canRead){
         CX_CALL(this, Open, CX_M(void));
     }
     if(!this->cxStream.canRead){
-        CX_ERROR("file %s stream can't open",cxStringBody(this->cxStream.path));
+        CX_ERROR("file %s stream can't open",cxStrBody(this->cxStream.path));
         return NULL;
     }
     CX_CALL(this, Seek, CX_M(cxInt,cxInt,cxInt),0,SEEK_SET);
-    return cxStringNoCopy(this->map, this->cxStream.Length);
+    return cxStrNoCopy(this->map, this->cxStream.Length);
 }
 CX_METHOD_DEF(cxMMapStream,Close,void)
 {
@@ -140,7 +137,7 @@ CX_TERM(cxMMapStream, cxStream)
 cxStream cxMMapStreamCreate(cxConstChars file)
 {
     cxMMapStream this = CX_CREATE(cxMMapStream);
-    CX_RETAIN_SWAP(this->cxStream.path, cxStringConstChars(file));
+    CX_RETAIN_SWAP(this->cxStream.path, cxStrConstChars(file));
     return (cxStream)this;
 }
 

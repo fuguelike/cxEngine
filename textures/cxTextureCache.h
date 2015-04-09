@@ -15,6 +15,8 @@
 #include "cxTextureTXT.h"
 #include "cxTexturePKM.h"
 #include "cxTextureJPG.h"
+#include "cxTextureXTF.h"
+#include "cxTextureMTF.h"
 
 CX_C_BEGIN
 
@@ -22,15 +24,22 @@ CX_DEF(cxTextureCache, cxObject)
     cxHash caches;
 CX_END(cxTextureCache, cxObject)
 
-cxTexture cxTextureCacheLoadFile(cxConstChars file);
+//load with cache key
+cxTexture cxTextureCacheLoadFileWithKey(cxConstChars file,cxConstChars key);
 
-cxTexture cxTextureCreateText(cxString txt,cxString font,cxTextAttr attr);
+cxTexture cxTextureCacheLoadFile(cxConstChars format,...);
+
+cxTexture cxTextureCreateText(cxStr txt,cxStr font,cxTextAttr attr);
+
+void cxTextureCacheUnloadFileWithKey(cxConstChars file,cxConstChars key);
 
 void cxTextureCacheUnloadFile(cxConstChars file);
 
 void cxTextureCacheClear(cxTextureCache this);
 
 cxTexture cxTextureCreate(cxConstChars file);
+
+cxTexture cxTextureCreateWithEXT(cxConstChars file,cxConstChars ext);
 
 void cxTextureCacheClearGroup(cxConstChars group);
 

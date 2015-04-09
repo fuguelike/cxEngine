@@ -63,6 +63,12 @@ cxInt cxStackLength(cxAny pstack)
     return cxArrayLength(this->array);
 }
 
+void cxStackRemove(cxAny pstack,cxAny pobj)
+{
+    CX_ASSERT_THIS(pstack, cxStack);
+    cxArrayRemove(this->array, pobj);
+}
+
 void cxStackReplaceTop(cxAny pstack,cxAny any)
 {
     CX_ASSERT_THIS(pstack, cxStack);

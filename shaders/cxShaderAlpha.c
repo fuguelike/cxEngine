@@ -9,19 +9,17 @@
 #include "cxShaderDefault.h"
 #include "cxShaderAlpha.h"
 
-CX_METHOD_DEF(cxShaderAlpha,Fragment,cxString)
+CX_METHOD_DEF(cxShaderAlpha,Fragment,cxStr)
 {
-    static cxConstChars fragment =
-    GLSL(
+    static cxConstChars fragment = GLSL(
         varying mediump vec4 vFragmentColor;
-        varying highp vec2 vTexCoord;
+        varying mediump vec2 vTexCoord;
         uniform sampler2D uTexture0;
         void main() {
             vec4 texColor = texture2D(uTexture0, vTexCoord);
             gl_FragColor = vec4(vFragmentColor.rgb,vFragmentColor.a * texColor.a);
-        }
-    );
-    return cxStringConstChars(fragment);
+        });
+    return cxStrConstChars(fragment);
 }
 
 CX_TYPE(cxShaderAlpha, cxShader)

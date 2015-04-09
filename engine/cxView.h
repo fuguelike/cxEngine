@@ -11,10 +11,43 @@
 
 #include <libgen.h>
 #include <cxcore/cxBase.h>
+#include <engine/cxShader.h>
 #include "cxInput.h"
-#include "cxGlobal.h"
 
 CX_C_BEGIN
+
+//map json value
+CX_DEF(cxUIMap, cxObject)
+    cxStr select;
+    cxStr property;
+    cxStr jsonkey;
+CX_END(cxUIMap, cxObject)
+
+#define cxUIMapS(_p_) cxStrBody((_p_)->select)
+
+#define cxUIMapP(_p_) cxStrBody((_p_)->property)
+
+#define cxUIMapK(_p_) cxStrBody((_p_)->jsonkey)
+
+cxUIMap cxUIMapCreate(cxStr s,cxStr p,cxStr k);
+
+void cxViewUpdateValues(cxAny pview,cxAny values);
+
+void cxViewFireUILoaded(cxAny pview,cxAny values);
+
+cxAny cxViewLoaderFile(cxConstChars path,cxAny values);
+
+#define cxViewCreateFile(p) cxViewLoaderFile(p,NULL)
+
+cxAny cxViewLoaderWithType(cxConstType type,cxAny values);
+
+//with bind value load ui
+#define cxViewLoaderUI(_t_,_v_)     cxViewLoaderWithType(_t_##TypeName, _v_)
+
+//without bind value create ui
+#define cxViewCreateUI(_t_)         cxViewLoaderWithType(_t_##TypeName, NULL)
+
+cxAny cxViewLoaderJson(cxJson json,cxAny values);
 
 typedef enum {
     cxViewAutoResizeNone        = 0,
@@ -29,7 +62,11 @@ typedef enum {
     cxViewAutoResizeRightTop    = cxViewAutoResizeTop | cxViewAutoResizeRight,
     cxViewAutoResizeRightBottom = cxViewAutoResizeBottom | cxViewAutoResizeRight,
     cxViewAutoResizeFill        = cxViewAutoResizeWidth | cxViewAutoResizeHeight,
-    cxViewAutoOutside           = 1 << 16
+    cxViewAutoResizeTopSide     = 1 << 16,
+    cxViewAutoResizeBottomSide  = 1 << 17,
+    cxViewAutoResizeLeftSide    = 1 << 18,
+    cxViewAutoResizeRightSide   = 1 << 19,
+    cxViewAutoResizeAllSide     = cxViewAutoResizeTopSide|cxViewAutoResizeBottomSide|cxViewAutoResizeLeftSide|cxViewAutoResizeRightSide,
 }cxViewAutoResizeMask;
 
 typedef struct {
@@ -38,28 +75,23 @@ typedef struct {
 }cxHitInfo;
 
 typedef enum {
-    cxViewTouchFlagsNone = 0,
-    cxViewTouchFlagsSelf = 1 << 0,
-    cxViewTouchFlagsSubviews = 1 << 1
-}cxViewTouchFlags;
-
-typedef enum {
-    cxViewDirtyNone     = 0,
-    cxViewDirtySize     = 1 << 0,   //size changed
-    cxViewDirtyScale    = 1 << 1,   //scale changed
-    cxViewDirtyPosition = 1 << 2,   //position changed
-    cxViewDirtyColor    = 1 << 3,   //color changed
-    cxViewDirtyAnchor   = 1 << 4,   //anchor changed
-    cxViewDirtyFixScale = 1 << 5,   //fix scale changed
-    cxViewDirtyRaxis    = 1 << 6,   //rorate raxis changed
-    cxViewDirtyAngle    = 1 << 7,   //angle change
-    cxViewDirtyTexture  = 1 << 8,   //texture or texture coord change
+    cxViewDirtyNone         = 0,
+    cxViewDirtySize         = 1 << 0,   //size changed
+    cxViewDirtyScale        = 1 << 1,   //scale changed
+    cxViewDirtyPosition     = 1 << 2,   //position changed
+    cxViewDirtyColor        = 1 << 3,   //color changed
+    cxViewDirtyAnchor       = 1 << 4,   //anchor changed
+    cxViewDirtyFixScale     = 1 << 5,   //fix scale changed
+    cxViewDirtyRaxis        = 1 << 6,   //rorate raxis changed
+    cxViewDirtyAngle        = 1 << 7,   //angle change
+    cxViewDirtyTexture      = 1 << 8,   //texture or texture coord change
+    cxViewDirtyForce        = 1 << 9,   //force dirty
+    cxViewDirtyNormal       = cxViewDirtyPosition|cxViewDirtyAngle|cxViewDirtyRaxis|cxViewDirtyScale|cxViewDirtyFixScale,
 }cxViewDirty;
 
 CX_DEF(cxView, cxObject)
-    cxArray removes;
-    cxArray appends;
-    cxBool isPrepend;
+    //cxView info
+    cxArray removes;            //use delay remove view
     cxBool isRunning;
     cxBool isShowBorder;        //if draw border
     cxBool isSort;              //if do sort view
@@ -67,17 +99,19 @@ CX_DEF(cxView, cxObject)
     cxRect4f scissor;
     cxMatrix4f normalMatrix;
     cxMatrix4f anchorMatrix;
-    cxView frontView;           //brind front view flags
+    cxArray frontViews;                 //brind front views flags
+    cxBool isTestBound;                 //run none cxViewSetIsVisible(view, cxViewContainsGLBox(view));
+    CX_FIELD_DEF(cxInt Index);          //draw index
+    CX_FIELD_DEF(cxFloat Z);            //Z value
     CX_FIELD_DEF(cxList SubViews);
     CX_FIELD_DEF(cxListElement *Element);
     CX_FIELD_DEF(cxHash Bindes);
     CX_FIELD_DEF(cxHash Binded);
-    CX_FIELD_DEF(cxLong Tag);
+    CX_FIELD_DEF(cxUInt Tag);
     CX_FIELD_DEF(cxViewAutoResizeMask AutoMask);
     CX_FIELD_DEF(cxBox4f  AutoBox);
     CX_FIELD_DEF(cxViewDirty Dirty);
     CX_FIELD_DEF(cxBool SleepTop);
-    CX_FIELD_DEF(cxViewTouchFlags TouchFlags);
     CX_FIELD_DEF(cxSize2f Size);
     CX_FIELD_DEF(cxVec2f Position);
     CX_FIELD_DEF(cxVec2f Scale);
@@ -95,30 +129,42 @@ CX_DEF(cxView, cxObject)
     CX_FIELD_DEF(cxBool IsSleep);
     CX_FIELD_DEF(cxBool IsDraw);
     CX_FIELD_DEF(cxInt Assist);
-    CX_EVENT_ALLOC(onEnter);    //when view appended
-    CX_EVENT_ALLOC(onExit);     //when view removed
-    CX_EVENT_ALLOC(onUpdate);
-    CX_EVENT_ALLOC(onLayout);
-    CX_EVENT_ALLOC(onDirty);
+    CX_FIELD_DEF(cxVec2f Offset);       //postion offset
+    //shader
+    CX_FIELD_DEF(cxAny Shader);
+    //ui info
+    CX_FIELD_DEF(cxHash UIViews);       //subviews save to hash
+    CX_FIELD_DEF(cxChars UIKey);        //hashkey
+    CX_FIELD_DEF(cxJson UIValues);      //bind values
+    CX_FIELD_DEF(cxArray UIMaps);       //ui maps
 CX_END(cxView, cxObject)
 
-CX_FIELD_GET(cxView, cxListElement *, Element);
+CX_FIELD_IMP(cxView, cxFloat, Z);
+CX_FIELD_IMP(cxView, cxInt, Index);
+CX_FIELD_GET(cxView, cxVec2f, Offset);
+CX_FIELD_IMO(cxView, cxAny, Shader);
+void cxViewSetShaders(cxAny pview,cxShader shader);//set all subviews
 
+CX_FIELD_GET(cxView, cxArray, UIMaps);
+CX_FIELD_GET(cxView, cxJson, UIValues);
+void cxViewSetUIValues(cxAny pthis,const cxJson values);
+CX_FIELD_GET(cxView, cxChars, UIKey);
+CX_FIELD_GET(cxView, cxHash, UIViews);
+
+CX_FIELD_GET(cxView, cxListElement *, Element);
 CX_INLINE const cxMatrix4f *cxViewGetNormalMatrix(cxAny pthis)
 {
     CX_ASSERT_THIS(pthis, cxView);
     return &this->normalMatrix;
 }
-
 CX_INLINE const cxMatrix4f *cxViewGetAnchorMatrix(cxAny pthis)
 {
     CX_ASSERT_THIS(pthis, cxView);
     return &this->anchorMatrix;
 }
-
 #define CX_VIEW_FOREACH_SUBVIEWS(_v_,_e_)           \
-cxList subViews = cxViewGetSubViews(_v_);           \
-CX_LIST_FOREACH(subViews, _e_)
+cxList _e_##subViews = cxViewGetSubViews(_v_);      \
+CX_LIST_FOREACH(_e_##subViews, _e_)
 
 CX_FIELD_IMP(cxView, cxInt, Assist);
 CX_FIELD_IMP(cxView, cxBool, IsDraw);
@@ -128,15 +174,19 @@ CX_FIELD_GET(cxView, cxView, ParentView);
 CX_FIELD_GET(cxView, cxList, SubViews);
 CX_FIELD_IMP(cxView, cxBox4f, AutoBox);
 CX_FIELD_IMP(cxView, cxViewAutoResizeMask, AutoMask);
-CX_FIELD_IMP(cxView, cxLong, Tag);
+CX_FIELD_IMP(cxView, cxUInt, Tag);
 CX_FIELD_GET(cxView, cxHash, Bindes);
 CX_FIELD_GET(cxView, cxHash, Binded);
 CX_FIELD_IMP(cxView, cxBool, SleepTop);
-CX_FIELD_IMP(cxView, cxViewTouchFlags, TouchFlags);
 CX_FIELD_GET(cxView, cxSize2f, Size);
 CX_FIELD_GET(cxView, cxVec2f, Position);
 CX_FIELD_GET(cxView, cxVec2f, Scale);
 CX_FIELD_GET(cxView, cxVec2f, FixScale);
+CX_INLINE cxVec2f cxViewTransformScale(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxView);
+    return cxVec2fv(this->Scale.x * this->FixScale.x, this->Scale.y * this->FixScale.y);
+}
 CX_FIELD_GET(cxView, cxVec2f, Anchor);
 CX_FIELD_GET(cxView, cxVec3f, Raxis);
 CX_FIELD_GET(cxView, cxFloat, Angle);
@@ -160,6 +210,8 @@ CX_INLINE cxBool cxViewIsDirty(cxAny pview)
     CX_ASSERT_THIS(pview, cxView);
     return this->Dirty != cxViewDirtyNone;
 }
+
+void cxViewReset(cxAny pview);
 
 void cxViewUnBindAll(cxAny pview);
 
@@ -206,6 +258,8 @@ cxAny cxViewGetAction(cxAny pview,cxUInt actionId);
 
 cxAny cxViewAppendTimer(cxAny pview,cxFloat freq,cxInt repeat);
 
+void cxViewRunAsync(cxAny pview,cxAny async);
+
 #define cxViewAppendAsync(_o_,_t_)  cxViewAppendAction(_o_,cxDriverCreate(_t_))
 
 cxUInt cxViewAppendAction(cxAny pview,cxAny pav);
@@ -215,17 +269,21 @@ void cxViewSetOrder(cxAny pview,cxInt order);
 cxBool cxViewFireKey(cxAny pview,cxKey *key);
 
 //touch count,current touches
-cxBool cxViewFireTouch(cxAny pview,cxTouchItems *points);
+cxBool cxViewFireTouch(cxAny pview,const cxTouchItems *points);
 
 cxAny cxViewAppendTypeImp(cxAny pview,cxConstType type);
 
 #define cxViewAppendType(_p_,_t_)   cxViewAppendTypeImp(_p_,_t_##TypeName)
+
+void cxViewAppendUIView(cxAny pview,cxAny pnview,cxConstChars uikey);
 
 void cxViewAppend(cxAny pview,cxAny newview);
 
 void cxViewPrepend(cxAny pview,cxAny newview);
 
 void cxViewLayout(cxAny pview);
+
+void cxViewParentLayout(cxAny pview);
 
 void cxViewAutoResizing(cxAny pview);
 
@@ -243,6 +301,8 @@ cxVec2f cxGLPointToViewPoint(cxAny pview,cxVec2f pos);
 
 cxVec2f cxViewPointToWindowPoint(cxAny pview,cxVec2f vPoint);
 
+cxVec2f cxViewPointToParent(cxAny pview,cxVec2f vPoint);
+
 cxVec2f cxWindowPointToViewPoint(cxAny pview,cxVec2f wPoint);
 
 void cxViewSetSize(cxAny pview,cxSize2f size);
@@ -250,6 +310,18 @@ void cxViewSetSize(cxAny pview,cxSize2f size);
 void cxViewCheckSort(cxAny pview);
 
 void cxViewSetPosition(cxAny pview,cxVec2f pos);
+
+void cxViewSetOffset(cxAny pview,cxVec2f off);
+
+cxAny cxViewSelect(cxAny pview,cxConstChars key);
+
+#define CX_VIEW_SELECT(_o_,_t_,_n_,_s_) CX_ASSERT_VALUE(cxViewSelect(_o_, _s_), _t_, _n_)
+
+void cxViewSelectUpdate(cxAny pview,cxConstChars select,cxConstChars property,cxJson value);
+
+cxStr cxViewSelectPath(cxAny pview);
+
+void cxViewDelayRun(cxAny pview,cxFloat time,cxAny func);
 
 // -0.5 <-> +0.5
 // -width/2 <-> width/2
@@ -266,6 +338,8 @@ void cxViewSetAngle(cxAny pview,cxFloat angle);
 
 void cxViewSetDegrees(cxAny pview,cxFloat degrees);
 
+void cxViewUpdateView(cxAny pview);
+
 void cxViewDrawView(cxAny pview);
 
 void cxViewEnter(cxAny pview);
@@ -276,15 +350,6 @@ void cxViewClear(cxAny pview);
 
 void cxViewRemove(cxAny pview);
 
-void cxViewTransform(cxAny pview);
-
-void cxViewClearAppends(cxAny pview);
-
-void cxViewClearRemoves(cxView this);
-
-void cxViewUpdateActions(cxView pview);
-
-void cxViewDrawBorder(cxAny pview);
 
 CX_C_END
 

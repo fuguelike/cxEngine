@@ -20,7 +20,6 @@ cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x)
 {
     return OSAtomicAdd32(-((int32_t)x), (int32_t *)p);
 }
-//ANDROID atomic support
 #elif CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID
 #include <sys/atomics.h>
 cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x)
@@ -30,6 +29,17 @@ cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x)
 cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x)
 {
     return __sync_fetch_and_sub(p,x);
+}
+//mac
+#elif CX_TARGET_PLATFORM == CX_PLATFORM_MAC
+#include <libkern/OSAtomic.h>
+cxUInt32 cxAtomicAddInt32(cxInt32 *p, cxInt32 x)
+{
+    return OSAtomicAdd32((int32_t)x, (int32_t *)p);
+}
+cxUInt32 cxAtomicSubInt32(cxInt32 *p, cxInt32 x)
+{
+    return OSAtomicAdd32(-((int32_t)x), (int32_t *)p);
 }
 #endif
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +112,9 @@ void cxUtilAssert(cxConstChars file,cxInt line,cxConstChars format, ...)
     cxUtilPrint("ASSERT", file, line, format, ap);
     va_end(ap);
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #define CX_TYPE_NAME_LEN(s) cxInt nameLen = (cxInt)strlen(s)
 
 static cxType types = NULL;
@@ -153,10 +165,11 @@ cxProperty cxObjectGetProperty(cxAny object,cxConstChars name)
 }
 cxBool cxPropertyRunSetter(cxAny object,cxConstChars key,cxAny value)
 {
-    CX_ASSERT(key != NULL && object != NULL && value != NULL, "args error");
+    CX_ASSERT(key != NULL && object != NULL, "args error");
     cxProperty p = cxObjectGetProperty(object, key);
-    if(p != NULL && p->cxSetter != NULL){
-        ((void(*)(cxAny,cxAny))p->cxSetter)(object,value);
+    if(p != NULL){
+        CX_ASSERT(p->cxSetter != NULL, "setter null");
+        ((void(*)(cxAny,cxConstChars,cxAny))p->cxSetter)(object,key,value);
         return true;
     }
     return false;
@@ -165,8 +178,9 @@ cxBool cxPropertyRunGetter(cxAny object,cxConstChars key,cxAny *value)
 {
     CX_ASSERT(key != NULL && object != NULL, "args error");
     cxProperty p = cxObjectGetProperty(object, key);
-    if(p != NULL && p->cxGetter != NULL){
-        *value = ((cxAny(*)(cxAny))p->cxGetter)(object);
+    if(p != NULL){
+        CX_ASSERT(p->cxGetter != NULL, "getter null");
+        *value = ((cxAny(*)(cxAny,cxConstChars))p->cxGetter)(object,key);
         return true;
     }
     return false;
@@ -217,7 +231,7 @@ void cxTypesInit()
 {
     types = NULL;
     CX_SET_TYPE(cxObject);
-    CX_SET_TYPE(cxString);
+    CX_SET_TYPE(cxStr);
     CX_SET_TYPE(cxMemPool);
     CX_SET_TYPE(cxHash);
     CX_SET_TYPE(cxArray);
@@ -230,6 +244,9 @@ void cxTypesInit()
     CX_SET_TYPE(cxPath);
     CX_SET_TYPE(cxStream);
     CX_SET_TYPE(cxAnyArray);
+    CX_SET_TYPE(cxRegex);
+    CX_SET_TYPE(cxConvert);
+    CX_SET_TYPE(cxJson);
 }
 void cxTypesFree()
 {
@@ -238,6 +255,7 @@ void cxTypesFree()
         cxSignatureClear(ele->signatures);
         cxPropertyClear(ele->propertys);
         MethodClear(ele->methods);
+        allocator->free(ele->UI);
         allocator->free(ele);
     }
     HASH_CLEAR(hh, types);
@@ -294,20 +312,25 @@ static void cxTypeCopyFromSuper(cxType this,cxType super)
         cxPropertyCloneToType(this, pele);
     }
 }
-cxType cxTypeNew(cxConstType ct,cxConstType sb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxType))
+void cxTypeBindUI(cxType this,cxConstChars path)
+{
+    CX_ASSERT(this->UI == NULL, "repeat bind type UI");
+    CX_ASSERT(cxConstCharsOK(path), "path error");
+    this->UI = allocator->strdup(path);
+}
+cxType cxTypeNew(cxConstType ct,cxConstType sb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxType),cxInt typeSizeof)
 {
     cxType this = allocator->malloc(sizeof(struct cxType));
     this->typeName = ct;
+    this->typeSizeof = typeSizeof;
     cxType super = cxTypesGetType(sb);
+    CX_ASSERT(cxConstCharsEqu(ct, cxObjectTypeName) || super != NULL, "super type %s not register",sb);
     strcpy(this->name, ct);
     this->Alloc = alloc;
     this->Create = create;
     this->superType = super;
     CX_TYPE_NAME_LEN(ct);
     HASH_ADD(hh, types, name, nameLen, this);
-    if(types != NULL){
-        CX_LOGGER("num bul:%d %d",types->hh.tbl->num_buckets,types->hh.tbl->num_items);
-    }
     cxTypeCopyFromSuper(this, super);
     cxSignatureNew(this, ct);
     autoType(this);
@@ -316,6 +339,7 @@ cxType cxTypeNew(cxConstType ct,cxConstType sb,cxAny (*create)(),cxAny (*alloc)(
 }
 cxBool cxMethodExists(cxConstType type,cxConstChars name)
 {
+    CX_RETURN(type == NULL,false);
     cxType ptype = cxTypesGetType(type);
     CX_ASSERT(ptype != NULL, "type %s not regsiter",type);
     cxMethod pmethod = cxTypeGetMethod(ptype, name);
@@ -323,6 +347,7 @@ cxBool cxMethodExists(cxConstType type,cxConstChars name)
 }
 cxBool cxMethodHas(cxAny object,cxConstChars name)
 {
+    CX_RETURN(object == NULL,false);
     cxObject this = object;
     cxMethod pmethod = cxTypeGetMethod(this->cxType, name);
     return pmethod != NULL;
@@ -332,41 +357,89 @@ cxAny cxMethodGet(cxAny pobj,cxConstChars name)
     cxObject this = pobj;
     CX_ASSERT(this->cxType != NULL, "object type null ");
     cxMethod pmethod = cxTypeGetMethod(this->cxType, name);
-    CX_ASSERT(pmethod != NULL, "%s method get failed",name);
+    CX_ASSERT(pmethod != NULL, "%s.%s method get failed",CX_NAME_OF(this),name);
     return pmethod->cxMethodFunc;
 }
 cxAny cxMethodSuper(cxAny pobj,cxConstType type,cxConstChars name)
 {
-    CX_ASSERT(cxObjectInstanceOf(pobj, type), "object not has, %s base type",type);
+    CX_ASSERT(cxInstanceOf(pobj, type), "object not has, %s base type",type);
     cxType ptype = cxTypesGetType(type);
     CX_ASSERT(ptype != NULL, "%s type get failed",type);
     cxMethod pmethod = cxTypeGetMethod(ptype, name);
-    CX_ASSERT(pmethod != NULL, "%s method get failed",name);
+    CX_ASSERT(pmethod != NULL, "%s.%s method get failed",type,name);
     return pmethod->cxMethodFunc;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-cxBool cxObjectInstanceOf(cxAny pobj,cxConstType type)
+cxBool cxValidPointer(cxAny pobj,cxAny pointer)
+{
+    CX_ASSERT_THIS(pobj, cxObject);
+    return pointer >= pobj && pointer < (pobj + this->cxType->typeSizeof);
+}
+
+cxBool cxInstanceOf(cxAny pobj,cxConstType type)
 {
     cxObject this = pobj;
-    CX_ASSERT(this->cxType != NULL, "object type null,must is object %s",type);
     CX_RETURN(this == NULL && type == NULL,true);
     CX_RETURN(this == NULL || type == NULL, false);
+    CX_ASSERT(this->cxType != NULL, "object type null,must is object %s",type);
     CX_RETURN(this->cxType->typeName == type, true);
     return cxSignatureHas(this->cxType->signatures, type);
 }
 
-void cxObjectAutoInit(cxObject this)
+//auto remove append message
+static void cxMessageRemove(cxAny dst)
 {
-    //CX_LOGGER("%s Init",this->cxType->TypeName);
+    cxMessage this = cxMessageInstance();
+    CX_HASH_FOREACH(this->keys, keye, keyt){
+        cxHash list = keye->any;
+        CX_HASH_FOREACH(list, vale, valt){
+            cxMessageItem item = vale->any;
+            if(item->dst != dst){
+                continue;
+            }
+            cxHashDelElement(list, vale);
+        }
+    }
 }
-void cxObjectAutoFree(cxObject this)
-{
-    //CX_LOGGER("%s Free",this->cxType->TypeName);
-}
-void cxObjectAutoType(cxType this)
-{
 
+void __cxObjectAutoInit(cxObject this)
+{
+    
+}
+void __cxObjectAutoFree(cxObject this)
+{
+    if(this->Attr & cxObjectAttrMessage){
+        cxMessageRemove(this);
+    }
+}
+//when object create and init finished
+CX_METHOD_DEF(cxObject, cxInit, void)
+{
+    
+}
+//when object free finished
+CX_METHOD_DEF(cxObject, cxFree, void)
+{
+    
+}
+//Serialize to json
+CX_METHOD_DEF(cxObject, Serialize, cxJson)
+{
+    cxJson json = cxJsonCreateObject();
+    cxJsonSetConstChars(json, "cxType", CX_NAME_OF(this));
+    return json;
+}
+void __cxObjectAutoType(cxType this)
+{
+    CX_METHOD(cxObject, Serialize);
+    CX_METHOD(cxObject, cxInit);
+    CX_METHOD(cxObject, cxFree);
+}
+cxAny cxObjectSerialize(cxAny pobj)
+{
+    CX_ASSERT_THIS(pobj, cxObject);
+    return CX_CALL(this, Serialize, CX_M(cxJson));
 }
 cxDouble cxTimestamp()
 {
@@ -382,6 +455,14 @@ void cxCoreInit()
     cxLoaderInit();
     cxMessageInstance();
 }
+
+void cxCoreClear()
+{
+    cxMessageClear();
+    cxLoaderClear();
+    cxMemPoolClear();
+}
+
 void cxCoreFree()
 {
     cxMessageDestroy();
@@ -405,6 +486,7 @@ void __cxObjectRelease(cxAny ptr)
     cxAtomicSubInt32(&this->cxRefcount, 1);
     CX_RETURN(this->cxRefcount > 0);
     this->cxAutoFree(this);
+    CX_CALL(this, cxFree, CX_M(void));
     allocator->free(this);
 }
 cxAny __cxObjectAutoRelease(cxAny ptr)

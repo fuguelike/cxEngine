@@ -24,6 +24,12 @@ void cxMessageDestroy()
     instance = NULL;
 }
 
+void cxMessageClear()
+{
+    CX_ASSERT(instance != NULL, "message not init");
+    cxHashClear(instance->keys);
+}
+
 cxMessage cxMessageInstance()
 {
     if(instance == NULL){
@@ -46,28 +52,10 @@ CX_FREE(cxMessage, cxObject)
 }
 CX_TERM(cxMessage, cxObject)
 
-void cxMessageRemove(cxAny dst)
-{
-    cxMessage this = cxMessageInstance();
-    CX_HASH_FOREACH(this->keys, keye, keyt){
-        cxHash list = keye->any;
-        CX_HASH_FOREACH(list, vale, valt){
-            cxMessageItem item = vale->any;
-            if(item->dst != dst){
-                continue;
-            }
-            cxHashDelElement(list, vale);
-        }
-        if(cxHashLength(list) == 0){
-            cxHashDelElement(this->keys, keye);
-        }
-    }
-}
-
 void cxMessageRemoveKey(cxAny dst,cxConstChars key)
 {
     cxMessage this = cxMessageInstance();
-    cxHash list = cxHashGet(this->keys, cxHashAnyKey(key));
+    cxHash list = cxHashGet(this->keys, cxHashStrKey(key));
     CX_RETURN(list == NULL);
     cxHashDel(list, cxHashAnyKey(dst));
 }
@@ -75,24 +63,21 @@ void cxMessageRemoveKey(cxAny dst,cxConstChars key)
 void cxMessagePost(cxConstChars key,cxAny info)
 {
     cxMessage this = cxMessageInstance();
-    cxHash list = cxHashGet(this->keys, cxHashAnyKey(key));
+    cxHash list = cxHashGet(this->keys, cxHashStrKey(key));
     CX_RETURN(list == NULL);
     CX_HASH_FOREACH(list, ele, tmp){
         cxMessageItem item = ele->any;
-        cxBool run = true;
-        if(CX_METHOD_HAS(item->dst, cxMessageFilter)){
-            run = CX_CALL(item->dst,cxMessageFilter,CX_M(cxBool,cxMessageItem,cxAny),item,info);
+        cxMessageFunc func = (cxMessageFunc)item->func;
+        if(func(item->dst,info)){
+            break;
         }
-        if(!run){
-            continue;
-        }
-        ((void (*)(cxAny,cxAny))item->func)(item->dst,info);
     }
 }
 
-cxMessageItem cxMessageAppend(cxAny dst,cxAny func,cxConstChars key)
+cxMessageItem cxMessageAppend(cxAny dst,cxMessageFunc func,cxConstChars key)
 {
-    cxHashKey skey = cxHashAnyKey(key);
+    cxObjectSetAttr(dst, cxObjectAttrMessage);
+    cxHashKey skey = cxHashStrKey(key);
     cxMessage this = cxMessageInstance();
     cxHash list = cxHashGet(this->keys, skey);
     if(list == NULL){

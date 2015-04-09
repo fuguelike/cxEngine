@@ -24,10 +24,19 @@ CX_SETTER_DEF(cxArray, items)
     }
     CX_JSON_ARRAY_EACH_END(items, v)
 }
-
+CX_METHOD_DEF(cxArray, Serialize, cxJson)
+{
+    cxJson json = cxJsonCreateArray();
+    CX_ARRAY_FOREACH(this, e){
+        cxJsonAppendJson(json,cxObjectSerialize(cxArrayObject(e)));
+    }
+    return json;
+}
 CX_TYPE(cxArray, cxObject)
 {
     CX_SETTER(cxArray, items);
+    
+    CX_METHOD(cxArray, Serialize);
 }
 CX_INIT(cxArray, cxObject)
 {
@@ -79,13 +88,22 @@ void cxArrayAppends(cxAny array, cxArray data)
 void cxArrayInsert(cxAny array,cxAny any,cxInt index)
 {
     CX_ASSERT_THIS(array, cxArray);
+    CX_ASSERT(any != NULL && array != any, "any error");
     utarray_insert(this->utArray, &any, index);
     CX_RETAIN(any);
+}
+
+void cxArrayPrepend(cxAny array, cxAny any)
+{
+    CX_ASSERT_THIS(array, cxArray);
+    CX_ASSERT(any != NULL && array != any, "any error");
+    cxArrayInsert(this, any, 0);
 }
 
 void cxArrayAppend(cxAny array, cxAny any)
 {
     CX_ASSERT_THIS(array, cxArray);
+    CX_ASSERT(any != NULL && array != any, "any error");
     utarray_push_back(this->utArray, &any);
     CX_RETAIN(any);
 }

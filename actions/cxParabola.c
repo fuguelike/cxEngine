@@ -14,8 +14,8 @@ CX_METHOD_DEF(cxParabola,Step,void,cxFloat dt, cxFloat time)
     cxVec2f tmp;
     cxVec2f gv;
     cxFloat tv = this->time * this->time / 2.0f;
-    tmp = cxVec2fScale(this->speed, this->time);
-    gv = cxVec2fScale(this->gravity, tv);
+    tmp = cxVec2fScale1f(this->speed, this->time);
+    gv = cxVec2fScale1f(this->gravity, tv);
     tmp = cxVec2fAdd(tmp, gv);
     tmp = cxVec2fAdd(tmp, this->pos);
     cxViewSetPosition(view, tmp);
@@ -28,7 +28,7 @@ CX_METHOD_DEF(cxParabola,Init,void)
     this->pos = cxViewGetPosition(view);
     CX_SUPER(cxAction, this, Init, CX_M(void));
 }
-CX_METHOD_DEF(cxParabola,Exit,cxBool)
+CX_METHOD_DEF(cxParabola,IsExit,cxBool)
 {
     cxFloat time = cxActionGetTime(this);
     return time != -1 && this->time >= time;
@@ -48,7 +48,7 @@ CX_TYPE(cxParabola, cxAction)
     
     CX_METHOD(cxParabola, Init);
     CX_METHOD(cxParabola, Step);
-    CX_METHOD(cxParabola, Exit);
+    CX_METHOD(cxParabola, IsExit);
 }
 CX_INIT(cxParabola, cxAction)
 {

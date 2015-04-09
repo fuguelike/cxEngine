@@ -41,32 +41,38 @@ static void cxDisableDocumentBackup()
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
-    CX_LOGGER("%s play finished",cxStringBody(currFile));
+    CX_LOGGER("%s play finished",cxStrBody(currFile));
 }
 
 - (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error
 {
-    CX_ERROR("pay music file %s decode error",cxStringBody(currFile));
+    CX_ERROR("pay music file %s decode error",cxStrBody(currFile));
 }
 
--(void)cxPlayMusic:(cxConstChars)file loop:(cxBool)loop
+-(void)cxPlayMusic:(cxConstChars)file volume:(cxFloat)volume loop:(cxBool)loop
 {
     //save curr file path
     [currPlayer stop];
     [currPlayer release];
-    CX_RETAIN_SWAP(currFile, cxStringConstChars(file));
+    CX_RETAIN_SWAP(currFile, cxStrConstChars(file));
     
-    cxString path = cxAssetsPath(file);
+    cxStr path = cxAssetsPath(file);
     CX_ASSERT(path != NULL, "path error");
     
-    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:cxStringBody(path)]];
+    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithUTF8String:cxStrBody(path)]];
     NSError *error = nil;
     currPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     currPlayer.delegate = self;
+    currPlayer.volume = volume;
     CX_ASSERT(error == nil, "init audio player error %s,file=%s",[[error localizedDescription] UTF8String],file);
     [currPlayer setNumberOfLoops:loop ? -1 : 1];
     [currPlayer play];
     [url release];
+}
+
+-(void)cxSetMusicVolume:(float)volume
+{
+    if(currPlayer != nil)currPlayer.volume = volume;
 }
 
 -(void)cxStopMusic

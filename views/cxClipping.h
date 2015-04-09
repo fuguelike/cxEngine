@@ -16,8 +16,9 @@ CX_C_BEGIN
 CX_DEF(cxClipping, cxView)
     cxUInt useRef;
     cxBool inverse;
-    CX_EVENT_ALLOC(onClipping);
 CX_END(cxClipping, cxView)
+
+cxTexture cxClippingTexture(cxAny pview);
 
 void cxClippingSetInverse(cxAny pview,cxBool inverse);
 

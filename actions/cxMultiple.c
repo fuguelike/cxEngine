@@ -17,7 +17,7 @@ static void cxActionItemStop(cxAny sender)
     cxAny parent = cxActionGetParent(sender);
     CX_ASSERT_THIS(parent, cxMultiple);
     this->index ++;
-    if(this->type == cxMultipleTypeSequence){
+    if(this->Type == cxMultipleTypeSequence){
         cxMultipleRunNext(this);
     }
 }
@@ -28,7 +28,7 @@ static void cxMultipleRunNext(cxAny pav)
     if(this->index >= 0 && this->index < cxArrayLength(this->items)){
         cxAction action = cxArrayAtIndex(this->items, this->index);
         CX_ADD(cxAction, action, onExit, cxActionItemStop);
-        cxViewAppendAction(cxActionGetView(action), action);
+        cxViewAppendAction(cxActionGetView(this), action);
     }
 }
 
@@ -38,23 +38,23 @@ static void cxMultipleRunAll(cxAny pav)
     CX_ARRAY_FOREACH(this->items, ele){
         cxAction action = cxArrayObject(ele);
         CX_ADD(cxAction, action, onExit, cxActionItemStop);
-        cxViewAppendAction(cxActionGetView(action), action);
+        cxViewAppendAction(cxActionGetView(this), action);
     }
 }
 
 CX_METHOD_DEF(cxMultiple,Init,void)
 {
     CX_ASSERT_TYPE(cxActionGetView(this), cxView);
-    if(this->type == cxMultipleTypeSequence){
+    if(this->Type == cxMultipleTypeSequence){
         this->index = 0;
         cxMultipleRunNext(this);
-    }else if(this->type == cxMultipleTypeConcurrent){
+    }else if(this->Type == cxMultipleTypeConcurrent){
         this->index = 0;
         cxMultipleRunAll(this);
     }
     CX_SUPER(cxAction, this, Init, CX_M(void));
 }
-CX_METHOD_DEF(cxMultiple,Exit,cxBool)
+CX_METHOD_DEF(cxMultiple,IsExit,cxBool)
 {
     if(this->index >= cxArrayLength(this->items)){
         cxArrayClear(this->items);
@@ -66,11 +66,11 @@ CX_SETTER_DEF(cxMultiple, settype)
 {
     cxConstChars setType = cxJsonToConstChars(value);
     if(cxConstCharsEqu(setType, "concurrent")){
-        this->type = cxMultipleTypeConcurrent;
+        this->Type = cxMultipleTypeConcurrent;
     }else if(cxConstCharsEqu(setType, "sequence")){
-        this->type = cxMultipleTypeSequence;
+        this->Type = cxMultipleTypeSequence;
     }else{
-        this->type = cxMultipleTypeConcurrent;
+        this->Type = cxMultipleTypeConcurrent;
     }
 }
 CX_SETTER_DEF(cxMultiple, actions)
@@ -91,11 +91,12 @@ CX_TYPE(cxMultiple, cxAction)
     CX_SETTER(cxMultiple, actions);
     
     CX_METHOD(cxMultiple, Init);
-    CX_METHOD(cxMultiple, Exit);
+    CX_METHOD(cxMultiple, IsExit);
 }
 CX_INIT(cxMultiple, cxAction)
 {
     this->items = CX_ALLOC(cxArray);
+    this->Type = cxMultipleTypeConcurrent;
 }
 CX_FREE(cxMultiple, cxAction)
 {
@@ -103,15 +104,24 @@ CX_FREE(cxMultiple, cxAction)
 }
 CX_TERM(cxMultiple, cxAction)
 
-void cxMultipleSetType(cxAny pav,cxMultipleType type)
+cxMultiple cxMultipleCreate(cxMultipleType type,...)
 {
-    CX_ASSERT_THIS(pav, cxMultiple);
-    this->type = type;
+    cxMultiple this = CX_CREATE(cxMultiple);
+    cxMultipleSetType(this, type);
+    va_list ap;
+    va_start(ap, type);
+    cxAny pav = NULL;
+    while((pav = va_arg(ap, cxAny)) != NULL) {
+        cxMultipleAppend(this, pav);
+    }
+    va_end(ap);
+    return this;
 }
 
 void cxMultipleAppend(cxAny pav,cxAny action)
 {
     CX_ASSERT_THIS(pav, cxMultiple);
+    CX_ASSERT_TYPE(action, cxAction);
     cxArrayAppend(this->items, action);
     cxActionSetParent(action, pav);
 }

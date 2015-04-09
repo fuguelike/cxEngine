@@ -17,9 +17,13 @@ CX_DEF(cxMemStream, cxStream)
     cxInt position;
     char *data;
     cxUInt allocSize;
+    cxStr datas;
 CX_END(cxMemStream, cxStream)
 
-cxStream cxMemStreamCreateWithText(cxString txt);
+//not copy data
+cxStream cxMemStreamCreateRefStr(cxStr data);
+
+cxStream cxMemStreamCreateWithStr(cxStr txt);
 
 CX_C_END
 

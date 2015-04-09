@@ -17,10 +17,6 @@ CX_DEF(cxShaderDefault, cxShader)
     
 CX_END(cxShaderDefault, cxShader)
 
-cxString cxShaderDefaultVertex(cxAny ps);
-
-cxString cxShaderDefaultFragment(cxAny ps);
-
 CX_C_END
 
 #endif

@@ -14,6 +14,8 @@
 
 CX_C_BEGIN
 
+#define CX_PATH_DEF(_n_,_f_,...)    cxChar _n_[PATH_MAX];_n_[snprintf(_n_, PATH_MAX, _f_,__VA_ARGS__)]='\0';
+
 //path?key=value
 CX_DEF(cxPath, cxObject)
     cxChar path[CX_HASH_MAX_KEY];

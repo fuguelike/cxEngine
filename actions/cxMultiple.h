@@ -20,14 +20,20 @@ typedef enum {
 }cxMultipleType;
 
 CX_DEF(cxMultiple, cxAction)
-    cxMultipleType type;
+    CX_FIELD_DEF(cxMultipleType Type);
     cxArray items;
     cxInt index;
 CX_END(cxMultiple, cxAction)
 
+CX_FIELD_SET(cxMultiple, cxMultipleType, Type);
+
 void cxMultipleSetType(cxAny pav,cxMultipleType type);
 
 void cxMultipleAppend(cxAny pav,cxAny action);
+
+//last must is NULL
+//cxMultipleCreate(cxMultipleTypeConcurrent,p1,p2,p3,NULL)
+cxMultiple cxMultipleCreate(cxMultipleType type,...);
 
 CX_C_END
 

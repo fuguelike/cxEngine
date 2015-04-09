@@ -16,6 +16,8 @@ CX_C_BEGIN
 
 void cxGlobalInit();
 
+void cxGlobalClear();
+
 void cxGlobalFree();
 
 CX_C_END

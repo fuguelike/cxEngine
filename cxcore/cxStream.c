@@ -36,7 +36,7 @@ CX_METHOD_DEF(cxStream, Close,void)
     this->canSeek = false;
     this->isOpen = false;
 }
-CX_METHOD_DEF(cxStream, AllBytes,cxString)
+CX_METHOD_DEF(cxStream, AllBytes,cxStr)
 {
     return NULL;
 }
@@ -56,7 +56,7 @@ CX_INIT(cxStream, cxObject)
 }
 CX_FREE(cxStream, cxObject)
 {
-    CX_CALL(this, Close, CX_M(void));
+    cxStreamClose(this);
     CX_RELEASE(this->path);
 }
 CX_TERM(cxStream, cxObject)

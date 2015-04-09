@@ -9,27 +9,21 @@
 #ifndef cxEngine_cxButton_h
 #define cxEngine_cxButton_h
 
-#include "cxSprite.h"
+#include <views/cxSprite.h>
 
 CX_C_BEGIN
 
 CX_DEF(cxButton, cxSprite)
-    cxVec2f touchPos;
-    cxFloat movement;
-    cxBool isPass;
-    cxBool isEnable;
     cxBool isSelected;
-    CX_EVENT_ALLOC(onPress);
-    CX_EVENT_ALLOC(onRelease);
-    CX_EVENT_ALLOC(onEnter);
-    CX_EVENT_ALLOC(onLeave);
+    CX_FIELD_DEF(cxBool IsEnable);
+    CX_FIELD_DEF(cxBool IsPass);
+    CX_EVENT_ALLOC(onTap);
 CX_END(cxButton, cxSprite)
 
-void cxButtonEnable(cxAny pview,cxBool enable);
+CX_FIELD_IMP(cxButton, cxBool, IsEnable);
+CX_FIELD_IMP(cxButton, cxBool, IsPass);
 
 void cxButtonPass(cxAny pview,cxBool pass);
-
-cxButton cxButtonCreate(cxConstChars url);
 
 CX_C_END
 

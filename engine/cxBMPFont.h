@@ -36,7 +36,7 @@ CX_END(cxBMPKerning, cxObject)
 #define cxBMPKerningKey(f,s)    cxHashIntKey(((f) << 16) | ((s) & 0xffff))
 
 CX_DEF(cxBMPFont, cxObject)
-    cxString face;
+    cxStr face;
     cxInt bold;
     cxInt stretchH;
     cxInt smooth;
@@ -44,7 +44,7 @@ CX_DEF(cxBMPFont, cxObject)
     cxBox4i padding;
     cxVec2i spacing;
     cxInt italic;
-    cxString chasrset;
+    cxStr chasrset;
     cxInt size;
     cxInt unicode;
     cxInt lineHeight;

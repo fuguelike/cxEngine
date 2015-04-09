@@ -31,6 +31,8 @@ typedef struct {
 
 #define cxHashKeyToInt(_e_)      (*(cxInt *)((_e_)->key))
 
+#define cxHashKeyToUInt(_e_)     (*(cxUInt *)((_e_)->key))
+
 #define cxHashKeyToStr(_e_)      (_e_)->key
 
 typedef struct {
@@ -38,14 +40,15 @@ typedef struct {
     cxChars data;
 }cxHashKey;
 
-typedef cxInt (*cxHashCmpFunc)(cxHashElement *lp,cxHashElement *rp);
-
+typedef cxInt (*cxHashCmpFunc)(cxHashElement *lv,cxHashElement *rv);
 
 #define cxHashIntKey(_v_)       (cxHashKey){.length=sizeof(cxInt),.data=(cxChars)&(cxInt){_v_}}
 
+#define cxHashUIntKey(_v_)      (cxHashKey){.length=sizeof(cxUInt),.data=(cxChars)&(cxUInt){_v_}}
+
 #define cxHashLongKey(_v_)      (cxHashKey){.length=sizeof(cxLong),.data=(cxChars)&(cxLong){_v_}}
 
-#define cxHashAnyKey(_p_)       (cxHashKey){.length=sizeof(cxAny),.data=(cxChars)&(cxLong){(cxLong)(_p_)}}
+#define cxHashAnyKey(_p_)       (cxHashKey){.length=sizeof(cxAny),.data=(cxChars)&(cxAny){(cxAny)(_p_)}}
 
 #define cxHashStrKey(_s_)       (cxHashKey){.length=(cxInt)strlen(_s_),.data=(cxChars)(_s_)}
 
@@ -70,6 +73,8 @@ cxBool cxHashDel(cxAny phash,cxHashKey key);
 cxBool cxHashSet(cxAny phash,cxHashKey key,cxAny any);
 
 cxAny cxHashGet(cxAny phash,cxHashKey key);
+
+cxAny cxHashGetFmt(cxAny phash,cxConstChars format,...);
 
 cxAny cxHashFirst(cxAny phash);
 

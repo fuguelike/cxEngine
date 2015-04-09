@@ -31,45 +31,49 @@ static void cxStencilRefFree(cxInt index)
     refs[index] = false;
 }
 
-CX_METHOD_DEF(cxClipping,DrawBefore,void)
-{
-    glEnable(GL_STENCIL_TEST);
-    glStencilFunc(GL_ALWAYS, this->useRef, CX_STENCIL_MASK);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-    
-    CX_EVENT_FIRE(this, onClipping);
-    
-    glStencilFunc(this->inverse ? GL_NOTEQUAL : GL_EQUAL, this->useRef, CX_STENCIL_MASK);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-}
-
 void cxClippingSetInverse(cxAny pview,cxBool inverse)
 {
     CX_ASSERT_THIS(pview, cxClipping);
     this->inverse = inverse;
 }
 
-CX_METHOD_DEF(cxClipping,DrawAfter,void)
+CX_METHOD_DEF(cxClipping,OnBefore,void)
+{
+    glEnable(GL_STENCIL_TEST);
+    glStencilFunc(GL_ALWAYS, this->useRef, CX_STENCIL_MASK);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    CX_CALL(this, OnClipping, CX_M(void));
+    glStencilFunc(this->inverse ? GL_NOTEQUAL : GL_EQUAL, this->useRef, CX_STENCIL_MASK);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+}
+CX_METHOD_DEF(cxClipping,OnAfter,void)
 {
     glDisable(GL_STENCIL_TEST);
 }
-
+CX_METHOD_DEF(cxClipping,OnClipping,void)
+{
+    
+}
 CX_TYPE(cxClipping, cxView)
 {
-    CX_METHOD(cxClipping, DrawBefore);
-    CX_METHOD(cxClipping, DrawAfter);
+    CX_METHOD(cxClipping, OnClipping);
+    CX_METHOD(cxClipping, OnBefore);
+    CX_METHOD(cxClipping, OnAfter);
 }
 CX_INIT(cxClipping, cxView)
 {
     this->useRef = cxStencilRefAlloc();
+    this->inverse = false;
 }
 CX_FREE(cxClipping, cxView)
 {
     cxStencilRefFree(this->useRef);
-    CX_EVENT_RELEASE(this->onClipping);
 }
 CX_TERM(cxClipping, cxView)
 
-
+cxTexture cxClippingTexture(cxAny pview)
+{
+    return cxOpenGLShader(cxShaderClippingKey);
+}
 
 

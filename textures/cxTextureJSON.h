@@ -18,7 +18,6 @@ CX_C_BEGIN
 
 CX_DEF(cxTextureJSON, cxTexture)
     cxTexture innerTexture;
-    cxTexture alphaTexture;
 CX_END(cxTextureJSON, cxTexture)
 
 cxTexture cxTextureJSONLoadStream(cxStream stream);

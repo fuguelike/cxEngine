@@ -14,15 +14,11 @@
 CX_C_BEGIN
 
 CX_DEF(cxSpline, cxAction)
-    cxVec2f diff;
-    cxVec2f prev;
     cxAnyArray points;
     cxFloat tension;
     cxFloat delta;
     cxInt index;
     cxFloat angle;
-    CX_EVENT_ALLOC(onIndex);
-    CX_EVENT_ALLOC(onAngle);
 CX_END(cxSpline, cxAction)
 
 cxVec2f cxSplinePointAt(cxAny pav,cxInt idx);

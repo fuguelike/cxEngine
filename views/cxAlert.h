@@ -14,13 +14,12 @@
 CX_C_BEGIN
 
 CX_DEF(cxAlert, cxAtlas)
-    CX_EVENT_ALLOC(OnShow);
-    CX_EVENT_ALLOC(OnHide);
+    
 CX_END(cxAlert, cxAtlas)
 
-void cxAlertFireShow(cxAny pview);
+void cxAlertShow(cxAny pview);
 
-void cxAlertFireHide(cxAny pview);
+void cxAlertHide(cxAny pview);
 
 CX_C_END
 

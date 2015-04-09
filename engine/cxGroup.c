@@ -14,14 +14,14 @@ CX_SETTER_DEF(cxGroup, scale)
 {
     this->Scale = cxJsonToDouble(value, this->Scale);
 }
-CX_METHOD_DEF(cxGroup,Update,void, cxAny pav)
+CX_SETTER_DEF(cxGroup, pause)
 {
-    
+    this->IsPause = cxJsonToBool(value, this->IsPause);
 }
 CX_TYPE(cxGroup, cxObject)
 {
+    CX_SETTER(cxGroup, pause);
     CX_SETTER(cxGroup, scale);
-    CX_METHOD(cxGroup, Update);
 }
 CX_INIT(cxGroup, cxObject)
 {
@@ -33,11 +33,10 @@ CX_FREE(cxGroup, cxObject)
 }
 CX_TERM(cxGroup, cxObject)
 
-cxFloat cxGroupGetScale(cxAny group,cxAny pav)
+void cxGroupFireUpdate(cxAny pg)
 {
-    CX_ASSERT_THIS(group, cxGroup);
-    CX_CALL(this, Update, CX_M(void,cxAny), pav);
-    return this->Scale;
+    CX_ASSERT_THIS(pg, cxGroup);
+    CX_CALL(this, Update, CX_M(void));
 }
 
 cxGroup cxGroupGet(cxConstChars name)
@@ -46,16 +45,24 @@ cxGroup cxGroupGet(cxConstChars name)
     return cxHashGet(this->groups, cxHashStrKey(name));
 }
 
-void cxGroupSetTimeScale(cxConstChars name,cxFloat scale)
+void cxGroupSetScale(cxConstChars name,cxFloat scale)
 {
     cxGroup group = cxGroupGet(name);
-    cxGroupSetScale(group, scale);
+    CX_ASSERT(group != NULL, "%s action group not exists",name);
+    group->Scale = scale;
+}
+
+void cxGroupSetPause(cxConstChars name,cxBool pause)
+{
+    cxGroup group = cxGroupGet(name);
+    CX_ASSERT(group != NULL, "%s action group not exists",name);
+    group->IsPause = pause;
 }
 
 cxGroup cxGroupAppend(cxConstChars name, cxFloat scale)
 {
     cxGroup group = CX_CREATE(cxGroup);
-    cxGroupSetScale(group, scale);
+    group->Scale = scale;
     cxGroupSet(name, group);
     return group;
 }

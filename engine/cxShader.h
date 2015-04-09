@@ -30,13 +30,6 @@ enum {
 //Uniform names
 #define CX_UNIFORM_MATRIX_MODELVIEW_PROJECT         "cxMatrixModelViewProject"
 
-enum {
-    cxVertexAttribFlagPosition    = 1 << 0,
-    cxVertexAttribFlagColor       = 1 << 1,
-    cxVertexAttribFlagTexcoord    = 1 << 2,
-    cxVertexAttribFlagPosColorTex = cxVertexAttribFlagPosition|cxVertexAttribFlagColor|cxVertexAttribFlagTexcoord,
-};
-
 CX_DEF(cxShader, cxObject)
     cxMatrix4f kxMatrixProject;
     cxMatrix4f kxMatrixModelView;
@@ -47,9 +40,17 @@ CX_DEF(cxShader, cxObject)
     GLint uniformModelViewProject;
 CX_END(cxShader, cxObject)
 
-bool cxShaderFireInit(cxAny pshader);
+CX_INLINE GLint cxShaderGetUniform(cxAny pthis,cxConstChars name)
+{
+    CX_ASSERT_THIS(pthis, cxShader);
+    GLint idx = glGetUniformLocation(this->program, name);
+    CX_ASSERT(idx >= 0, "get uniform location %s failed",name);
+    return idx;
+}
 
-void cxShaderUsing(cxAny pshader);
+bool cxShaderInit(cxAny pshader);
+
+void cxShaderUsing(cxAny pshader,cxAny pview);
 
 CX_C_END
 

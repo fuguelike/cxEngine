@@ -15,8 +15,8 @@
 CX_C_BEGIN
 
 CX_DEF(cxTextureTXT, cxTexture)
-    cxString font;
-    cxString string;
+    cxStr font;
+    cxStr string;
     cxTextAttr attr;
 CX_END(cxTextureTXT, cxTexture)
 

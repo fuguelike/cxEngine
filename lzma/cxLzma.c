@@ -9,32 +9,32 @@
 #include "lzma.h"
 #include "cxLzma.h"
 
-void cxLzmaSetFlags(cxString data)
+void cxLzmaSetFlags(cxStr data)
 {
-    CX_ASSERT(cxStringLength(data) >= 7, "must > 7 bytes");
-    LzmaSetFlags((char *)cxStringBody(data));
+    CX_ASSERT(cxStrLength(data) >= 7, "must > 7 bytes");
+    LzmaSetFlags((char *)cxStrBody(data));
 }
 
-cxString cxLzmaCompressed(cxString data)
+cxStr cxLzmaCompressed(cxStr data)
 {
-    CX_ASSERT(cxStringOK(data), "data error");
-    int len = LzmaGetCompressLen(cxStringLength(data));
+    CX_ASSERT(cxStrOK(data), "data error");
+    int len = LzmaGetCompressLen(cxStrLength(data));
     char *ret = allocator->malloc(len);
-    if(LzmaCompressImp(cxStringBody(data), cxStringLength(data), ret, &len) == NULL){
+    if(LzmaCompressImp(cxStrBody(data), cxStrLength(data), ret, &len) == NULL){
         allocator->free(ret);
         return NULL;
     }
-    return cxStringAttachMem(ret, len);
+    return cxStrAttachMem(ret, len);
 }
 
-cxString cxLzmaDecompress(cxString data)
+cxStr cxLzmaDecompress(cxStr data)
 {
-    CX_ASSERT(cxStringOK(data), "data error");
-    int len = LzmaGetUncompressLen((cxAny)cxStringBody(data));
+    CX_ASSERT(cxStrOK(data), "data error");
+    int len = LzmaGetUncompressLen((cxAny)cxStrBody(data));
     char *ret = allocator->malloc(len);
-    if(LzmaUncompressImp(cxStringBody(data), cxStringLength(data), ret,&len) == NULL){
+    if(LzmaUncompressImp(cxStrBody(data), cxStrLength(data), ret,&len) == NULL){
         allocator->free(ret);
         return NULL;
     }
-    return cxStringAttachMem(ret, len);
+    return cxStrAttachMem(ret, len);
 }

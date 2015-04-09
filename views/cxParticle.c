@@ -9,20 +9,26 @@
 #include <engine/cxEngine.h>
 #include "cxParticle.h"
 
-void cxParticleInitUnit(cxAny pivew,cxParticleUnit *particle,cxInt index)
+void cxParticleFireInitUnit(cxAny pivew,cxParticleUnit *particle,cxInt index)
 {
     CX_ASSERT_THIS(pivew, cxParticle);
-    cxFloat speed = cxFloatValue(this->speed);
-    cxFloat angle = kmDegreesToRadians(cxFloatValue(this->angle));
-    particle->position = cxVec2fValue(this->position);
-    particle->life = cxFloatValue(this->life);
+    cxParticleUnitFixInfo info={0};
+    info.speed = cxFloatRandValue(this->speed);
+    info.angle = kmDegreesToRadians(cxFloatRandValue(this->angle));
+    info.position = cxVec2fRandValue(this->position);
+    info.life = cxFloatRandValue(this->life);
+    info.unit = particle;
     
-    cxColor4f scolor = cxColor4fValue(this->startcolor);
-    cxColor4f ecolor = cxColor4fValue(this->endcolor);
-    cxFloat ssize = cxFloatValue(this->startsize);
-    cxFloat esize = cxFloatValue(this->endsize);
-    cxFloat sspin = cxFloatValue(this->startspin);
-    cxFloat espin = cxFloatValue(this->endspin);
+    CX_CALL(this, FixUnit, CX_M(void,cxParticleUnitFixInfo *),&info);
+    
+    particle->position = info.position;
+    particle->life = info.life;
+    cxColor4f scolor = cxColor4fRandValue(this->startcolor);
+    cxColor4f ecolor = cxColor4fRandValue(this->endcolor);
+    cxFloat ssize = cxFloatRandValue(this->startsize);
+    cxFloat esize = cxFloatRandValue(this->endsize);
+    cxFloat sspin = cxFloatRandValue(this->startspin);
+    cxFloat espin = cxFloatRandValue(this->endspin);
     
     particle->color = scolor;
     particle->deltacolor.r = (ecolor.r - scolor.r) / particle->life;
@@ -35,24 +41,24 @@ void cxParticleInitUnit(cxAny pivew,cxParticleUnit *particle,cxInt index)
     particle->deltarotation = (espin - sspin) / particle->life;
     
     if(this->type == cxParticleEmitterGravity){
-        cxVec2f v = cxVec2fv(cosf(angle), sinf(angle));
-        particle->dir = cxVec2fScale(v, speed);
-        particle->radaccel = cxFloatValue(this->radaccel);
-        particle->tanaccel = cxFloatValue(this->tanaccel);
+        cxVec2f v = cxVec2fv(cosf(info.angle), sinf(info.angle));
+        particle->dir = cxVec2fScale(v, info.speed);
+        particle->radaccel = cxFloatRandValue(this->radaccel);
+        particle->tanaccel = cxFloatRandValue(this->tanaccel);
         if(this->todir){
             particle->rotation = -kmRadiansToDegrees(cxVec2fAngle(particle->dir));
         }
     }else{
-        cxFloat startradius = cxFloatValue(this->startradius);
-        cxFloat endradius = cxFloatValue(this->endradius);
+        cxFloat startradius = cxFloatRandValue(this->startradius);
+        cxFloat endradius = cxFloatRandValue(this->endradius);
         particle->radius = startradius;
         if(endradius == -1){
             particle->deltaradius = 0;
         }else{
             particle->deltaradius = (endradius - startradius) / particle->life;
         }
-        particle->angle = angle;
-        particle->degreespers = kmDegreesToRadians(cxFloatValue(this->rotatepers));
+        particle->angle = info.angle;
+        particle->degreespers = kmDegreesToRadians(cxFloatRandValue(this->rotatepers));
     }
 }
 
@@ -62,7 +68,7 @@ static cxBool cxParticleAdd(cxParticle this)
         return false;
     }
     cxParticleUnit *unit = &this->units[this->count];
-    cxParticleInitUnit(this, unit, this->count);
+    cxParticleFireInitUnit(this, unit, this->count);
     this->count ++;
     return true;
 }
@@ -80,19 +86,25 @@ static void cxParticleUnitToBoxVec3f(cxParticleUnit *particle,cxBoxVec3f *vq)
         cxFloat sr = sinf(r);
         vq->lb.x = x1 * cr - y1 * sr + particle->position.x;
         vq->lb.y = x1 * sr + y1 * cr + particle->position.y;
+        
         vq->rb.x = x2 * cr - y1 * sr + particle->position.x;
         vq->rb.y = x2 * sr + y1 * cr + particle->position.y;
+        
         vq->rt.x = x2 * cr - y2 * sr + particle->position.x;
         vq->rt.y = x2 * sr + y2 * cr + particle->position.y;
+        
         vq->lt.x = x1 * cr - y2 * sr + particle->position.x;
         vq->lt.y = x1 * sr + y2 * cr + particle->position.y;
     }else{
         vq->lb.x = particle->position.x - sizeh;
         vq->lb.y = particle->position.y - sizeh;
+        
         vq->rb.x = particle->position.x + sizeh;
         vq->rb.y = particle->position.y - sizeh;
+        
         vq->lt.x = particle->position.x - sizeh;
         vq->lt.y = particle->position.y + sizeh;
+        
         vq->rt.x = particle->position.x + sizeh;
         vq->rt.y = particle->position.y + sizeh;
     }
@@ -118,6 +130,7 @@ static void cxParticleSetBox(cxAny pav,cxParticleUnit *particle)
     box->rb.vertices = vq.rb;
     box->lt.vertices = vq.lt;
     box->rt.vertices = vq.rt;
+    CX_CALL(this, UpdateUnit, CX_M(void,cxParticleUnit *),particle);
 }
 
 void cxParticlePlay(cxAny pview)
@@ -138,6 +151,7 @@ void cxParticleStop(cxAny pview)
     CX_ASSERT_THIS(pview, cxParticle);
     this->isActive = false;
     this->emitcounter = 0;
+    this->isInit = false;
 }
 
 static void cxParticleUpdate(cxAny pview)
@@ -145,6 +159,10 @@ static void cxParticleUpdate(cxAny pview)
     CX_ASSERT_THIS(pview, cxParticle);
     if(this->number == 0){
         return;
+    }
+    if(!this->isInit){
+        this->isInit = true;
+        CX_CALL(this, Init, CX_M(void));
     }
     cxFloat dt = cxEngineGetDelta();
     this->TimeElapsed += dt;
@@ -317,6 +335,23 @@ CX_SETTER_DEF(cxParticle, rotatepers)
     this->rotatepers = cxJsonToFloatRangle(value,this->rotatepers);
 }
 
+CX_METHOD_DEF(cxParticle, FixUnit, void, cxParticleUnitFixInfo *info)
+{
+    cxAny v = cxViewBindesFirst(this);
+    CX_RETURN(v == NULL);
+    info->angle = cxViewGetMoveAngle(v) + M_PI;
+    info->position = cxViewGetPosition(v);
+}
+CX_METHOD_DEF(cxParticle, UpdateUnit, void,cxParticleUnit *unit)
+{
+    
+}
+CX_METHOD_DEF(cxParticle, Init, void)
+{
+    if(this->rate < 0){
+        this->rate = (this->life.v + this->life.r) * this->number;
+    }
+}
 CX_TYPE(cxParticle, cxAtlas)
 {
     CX_SETTER(cxParticle, number);
@@ -337,15 +372,19 @@ CX_TYPE(cxParticle, cxAtlas)
     CX_SETTER(cxParticle, tanaccel);
     CX_SETTER(cxParticle, radaccel);
     CX_SETTER(cxParticle, speed);
-    CX_SETTER(cxParticle, sradius);    //start radius
-    CX_SETTER(cxParticle, eradius);    //end radius
-    CX_SETTER(cxParticle, rotatepers);
+    CX_SETTER(cxParticle, sradius);     //start radius
+    CX_SETTER(cxParticle, eradius);     //end radius
+    CX_SETTER(cxParticle, rotatepers);  // rotate/s
+    
+    CX_METHOD(cxParticle, UpdateUnit);
+    CX_METHOD(cxParticle, FixUnit);
+    CX_METHOD(cxParticle, Init);
 }
 CX_INIT(cxParticle, cxAtlas)
 {
     cxSetRandSeed();
-    this->rate = -1;
-    this->time = -1;
+    this->rate = CX_FOREVER;
+    this->time = CX_FOREVER;
     this->isActive = true;
     this->type = cxParticleEmitterGravity;
     CX_ADD(cxView, this, onUpdate, cxParticleUpdate);
@@ -371,7 +410,6 @@ cxParticle cxParticleCreate(cxFloat time,cxConstChars url,cxInt number)
     this->time = time;
     cxParticleInitNumber(this,number);
     cxSpriteSetTextureURL(this, url);
-    cxSetRandSeed();
     return this;
 }
 

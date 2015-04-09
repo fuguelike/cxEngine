@@ -13,30 +13,26 @@ CX_METHOD_DEF(cxShaderColor,Init,void)
     glBindAttribLocation(this->cxShader.program, cxVertexAttribPosition, CX_ATTRIBUTE_NAME_POSITION);
     glBindAttribLocation(this->cxShader.program, cxVertexAttribColor, CX_ATTRIBUTE_NAME_COLOR);
 }
-CX_METHOD_DEF(cxShaderColor,Vertex,cxString)
+CX_METHOD_DEF(cxShaderColor,Vertex,cxStr)
 {
-    static cxConstChars vertex =
-    GLSL(
-        attribute highp vec4 aPosition;
+    static cxConstChars vertex = GLSL(
+        attribute highp vec3 aPosition;
         attribute mediump vec4 aColor;
         varying mediump vec4 vColor;
         void main() {
-            gl_Position = cxMatrixModelViewProject * aPosition;
+            gl_Position = cxMatrixModelViewProject * vec4(aPosition,1.0);
             vColor = aColor;
-        }
-    );
-    return cxStringConstChars(vertex);
+        });
+    return cxStrConstChars(vertex);
 }
-CX_METHOD_DEF(cxShaderColor,Fragment,cxString)
+CX_METHOD_DEF(cxShaderColor,Fragment,cxStr)
 {
-    static cxConstChars fragment =
-    GLSL(
+    static cxConstChars fragment = GLSL(
         varying mediump vec4 vColor;
         void main() {
             gl_FragColor = vColor;
-        }
-    );
-    return cxStringConstChars(fragment);
+        });
+    return cxStrConstChars(fragment);
 }
 
 CX_TYPE(cxShaderColor, cxShader)

@@ -17,6 +17,8 @@ CX_DEF(cxStack, cxObject)
     cxArray array;
 CX_END(cxStack, cxObject)
 
+#define CX_STACK_FOREACH(_s_,_e_) CX_ARRAY_FOREACH(((cxStack)_s_)->array,_e_)
+
 void cxStackClear(cxAny pstack);
 
 void cxStackPush(cxAny pstack,cxAny any);
@@ -30,6 +32,8 @@ void cxStackReplaceTop(cxAny pstack,cxAny any);
 void cxStackPop(cxAny pstack);
 
 cxAny cxStackObject(cxAny pstack,cxInt index);
+
+void cxStackRemove(cxAny pstack,cxAny pobj);
 
 CX_C_END
 

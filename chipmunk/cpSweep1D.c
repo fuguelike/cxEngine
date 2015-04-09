@@ -1,4 +1,4 @@
-/* Copyright (c) 2010 Scott Lembcke
+/* Copyright (c) 2013 Scott Lembcke and Howling Moon Software
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -216,7 +216,7 @@ cpSweep1DReindexQuery(cpSweep1D *sweep, cpSpatialIndexQueryFunc func, void *data
 	
 	// Update bounds and sort
 	for(int i=0; i<count; i++) table[i] = MakeTableCell(sweep, table[i].obj);
-	qsort(table, count, sizeof(TableCell), (int (*)(const void *, const void *))TableSort); // TODO use insertion sort instead
+	qsort(table, count, sizeof(TableCell), (int (*)(const void *, const void *))TableSort); // TODO: use insertion sort instead
 	
 	for(int i=0; i<count; i++){
 		TableCell cell = table[i];

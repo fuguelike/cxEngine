@@ -16,7 +16,7 @@
 #include "cxHash.h"
 #include "cxList.h"
 #include "cxStack.h"
-#include "cxString.h"
+#include "cxStr.h"
 #include "cxMessage.h"
 #include "cxMemory.h"
 #include "cxNumber.h"
@@ -25,5 +25,6 @@
 #include "cxLoader.h"
 #include "cxPath.h"
 #include "cxStream.h"
+#include "cxRegex.h"
 
 #endif

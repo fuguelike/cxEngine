@@ -20,7 +20,7 @@ CX_DEF(cxFileStream, cxStream)
     cxBool rdonly;
 CX_END(cxFileStream, cxStream)
 
-cxString cxDocumentData(cxConstChars file);
+cxStr cxDocumentData(cxConstChars file);
 
 cxStream cxFileStreamCreate(cxConstChars file,cxBool rdonly);
 

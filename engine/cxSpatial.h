@@ -48,6 +48,10 @@ void cxSpatialReindexView(cxAny ps,cxAny view);
 
 cxInt cxSpatialCount(cxAny ps);
 
+void cxSpatialIndexSegmentQuery(cxAny ps,cxAny obj, cpVect a, cpVect b, cpFloat t_exit, cpSpatialIndexSegmentQueryFunc func, cxAny data);
+
+void cxSpatialIndexQuery(cxAny ps,cxAny obj, cpBB bb, cpSpatialIndexQueryFunc func, cxAny data);
+
 cxSpatialNearestInfo cxSpatialNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNearestFilter filter);
 
 CX_C_END

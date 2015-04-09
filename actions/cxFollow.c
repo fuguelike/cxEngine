@@ -11,76 +11,90 @@
 CX_METHOD_DEF(cxFollow,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
-    CX_ASSERT_VALUE(this->target, cxView, target);
-    CX_ASSERT(view != this->target, "target error,can't action'view");
-    cxVec2f tpos = cxViewGetPosition(target);
-    cxVec2f cpos = cxViewGetPosition(view);
-    this->angle = cxVec2fRadiansBetween(tpos, cpos);
-    if(CX_CALL(this, IsExit, CX_M(cxBool))){
+    cxAny target = cxFollowTarget(this);
+    if(target == NULL || !CX_METHOD_HAS(target, FollowPos)){
         cxActionStop(this);
+        return;
     }
+    this->opos = cxViewGetPosition(view);
     CX_SUPER(cxAction, this, Init, CX_M(void));
 }
-CX_METHOD_DEF(cxFollow,IsExit,cxBool)
+CX_METHOD_DEF(cxFollow, OnAngle, void)
 {
-    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
-    CX_ASSERT_VALUE(this->target, cxView, target);
-    cxVec2f tpos = cxViewGetPosition(target);
-    cxVec2f cpos = cxViewGetPosition(view);
-    cxFloat dis = kmVec2DistanceBetween(&tpos, &cpos);
-    return dis < 10;
+    
 }
 CX_METHOD_DEF(cxFollow,Step,void,cxFloat dt, cxFloat time)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
-    CX_ASSERT_VALUE(this->target, cxView, target);
-    cxVec2f tpos = cxViewGetPosition(target);
-    cxVec2f cpos = cxViewGetPosition(view);
-    this->angle = cxVec2fRadiansBetween(tpos, cpos);
-    this->speed = this->init;
-    cxFloat s = dt * this->speed;
-    cxVec2f delta = cxVec2fv(s*cosf(this->angle), s*sinf(this->angle));
-    cpos = cxVec2fAdd(cpos, delta);
-    if(CX_CALL(this, IsExit, CX_M(cxBool))){
+    cxAny target = cxFollowTarget(this);
+    if(target == NULL){
         cxActionStop(this);
+        return;
     }
+    cxFloat s = dt * this->speed;
+    cxVec2f tpos = CX_CALL(target, FollowPos, CX_M(cxVec2f));
+    cxVec2f cpos = cxViewGetPosition(view);
+    cxFloat dis = cxVec2fDistanceBetween(tpos, cpos);
+    if(cxFloatEqu(dis, s) || dis < s){
+        cxViewSetPosition(view, tpos);
+        cxActionStop(this);
+        return;
+    }
+    cxFloat angle = cxVec2fRadiansBetween(tpos, cpos);
+    if(!cxFloatEqu(this->Angle, angle)){
+        this->Angle = angle;
+        CX_CALL(this, OnAngle, CX_M(void));
+    }
+    cxVec2f delta = cxVec2fv(s*cosf(this->Angle), s*sinf(this->Angle));
+    cpos = cxVec2fAdd(cpos, delta);
     cxViewSetPosition(view, cpos);
 }
 
 cxAny cxFollowTarget(cxAny pav)
 {
     CX_ASSERT_THIS(pav, cxFollow);
-    return this->target;
+    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
+    cxHash bindes = cxViewGetBindes(view);
+    CX_HASH_FOREACH(bindes, ele, tmp){
+        cxAny pv = cxHashKeyToAny(ele);
+        if(pv == this->target){
+            return pv;
+        }
+    }
+    return NULL;
 }
 
 CX_TYPE(cxFollow, cxAction)
 {
+    CX_METHOD(cxFollow, OnAngle);
     CX_METHOD(cxFollow, Init);
     CX_METHOD(cxFollow, Step);
-    CX_METHOD(cxFollow, IsExit);
 }
 CX_INIT(cxFollow, cxAction)
 {
-    this->cxAction.Time = -1;
+    this->Angle = INFINITY;
+    cxActionSetTime(this, CX_FOREVER);
 }
 CX_FREE(cxFollow, cxAction)
 {
-    CX_RELEASE(this->target);
+    
 }
 CX_TERM(cxFollow, cxAction)
 
-void cxFollowSetInit(cxAny pav,cxFloat init)
+void cxFollowInit(cxAny pav,cxAny pview,cxFloat speed,cxAny target)
 {
     CX_ASSERT_THIS(pav, cxFollow);
-    this->init = init;
+    CX_ASSERT_TYPE(target, cxView);
+    this->speed = speed;
+    this->target = target;
+    cxViewBind(pview, target, NULL);
 }
 
-cxFollow cxFollowCreate(cxFloat initSpeed,cxAny target)
+cxFollow cxFollowCreate(cxFloat speed,cxAny pview, cxAny target)
 {
     CX_ASSERT_TYPE(target, cxView);
     cxFollow this = CX_CREATE(cxFollow);
-    this->init = initSpeed;
-    CX_RETAIN_SWAP(this->target, target);
+    cxFollowInit(this, pview, speed, target);
     return this;
 }
 

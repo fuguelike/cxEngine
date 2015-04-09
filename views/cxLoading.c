@@ -30,8 +30,8 @@ static void cxLoadingTimerArrive(cxAny sender)
     CX_RETURN(state == cxAsyncStateRunning);
     //success
     if(state == cxAsyncStateSuccess){
-        this->Index ++;
         CX_CALL(this, Step, CX_M(void));
+        this->Index ++;
     }
     //break init
     if(state == cxAsyncStateFailed){
@@ -74,7 +74,7 @@ CX_METHOD_DEF(cxLoading,Step,void)
 }
 CX_METHOD_DEF(cxLoading,Start,void)
 {
-    
+
 }
 CX_METHOD_DEF(cxLoading,OnTouch, cxBool, const cxTouchItems *points)
 {

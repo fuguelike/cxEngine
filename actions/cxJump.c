@@ -12,19 +12,20 @@ CX_METHOD_DEF(cxJump,Step,void,cxFloat dt, cxFloat time)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxFloat frac = fmodf( time * this->jumps, 1.0f );
-    cxFloat y = this->height * 4 * frac * (1 - frac) + this->position.y * time;
-    cxFloat x = this->position.x * time;
+    cxVec2f npos = cxVec2fv(0, 0);
+    npos.y = this->height * 4 * frac * (1 - frac) + this->position.y * time;
+    npos.x = this->position.x * time;
     cxVec2f currPos = cxViewGetPosition(view);
     cxVec2f diff = cxVec2fSub(currPos, this->prevPos);
     this->startPos = cxVec2fAdd(this->startPos, diff);
-    cxVec2f nPos = cxVec2fAdd(this->startPos, cxVec2fv(x, y));
-    cxViewSetPosition(view, nPos);
-    this->prevPos = nPos;
+    npos = cxVec2fAdd(this->startPos, npos);
+    cxViewSetPosition(view, npos);
+    this->prevPos = npos;
 }
 CX_METHOD_DEF(cxJump,Init,void)
 {
     CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
-    this->prevPos = this->startPos = cxViewGetPosition(view);
+    this->startPos = this->prevPos = cxViewGetPosition(view);
     CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_SETTER_DEF(cxJump, position)
@@ -54,7 +55,7 @@ CX_INIT(cxJump, cxAction)
 }
 CX_FREE(cxJump, cxAction)
 {
-    //
+    
 }
 CX_TERM(cxJump, cxAction)
 

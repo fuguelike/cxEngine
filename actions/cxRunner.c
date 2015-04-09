@@ -9,7 +9,7 @@
 #include "cxRunner.h"
 
 
-CX_METHOD_DEF(cxRunner,Exit,cxBool)
+CX_METHOD_DEF(cxRunner,IsExit,cxBool)
 {
     if(this->count == 0){
         this->step ++;
@@ -18,7 +18,7 @@ CX_METHOD_DEF(cxRunner,Exit,cxBool)
 }
 CX_TYPE(cxRunner, cxAction)
 {
-    CX_METHOD(cxRunner, Exit);
+    CX_METHOD(cxRunner, IsExit);
 }
 CX_INIT(cxRunner, cxAction)
 {

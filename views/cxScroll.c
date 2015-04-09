@@ -11,14 +11,6 @@
 #include <actions/cxScale.h>
 #include "cxScroll.h"
 
-void cxScrollSetBody(cxAny pview,cxAny body)
-{
-    CX_ASSERT_THIS(pview, cxScroll);
-    CX_ASSERT(this->Body == NULL, "container already set");
-    cxViewPrepend(this, body);
-    this->Body = body;
-}
-
 static cxFloat cxScrollMoveCurve(cxAny pav,cxFloat time)
 {
     time = time - 1.0f;
@@ -58,6 +50,7 @@ static cxBool cxScrollScale(cxAny pview,const cxTouchItems *points)
     cxHitInfo h2 = cxViewHitTest(body, item2->position);
     if(h1.hited && h2.hited && (item1->type == cxTouchTypeDown || item2->type == cxTouchTypeDown)){
         //disable move
+        cxViewStopAction(body, (cxUInt)body);
         this->isEnable = false;
         this->startDis = kmVec2DistanceBetween(&item1->position, &item2->position);
         return true;
@@ -68,6 +61,9 @@ static cxBool cxScrollScale(cxAny pview,const cxTouchItems *points)
         return false;
     }
     if(this->startDis == 0){
+        return false;
+    }
+    if(!h1.hited || !h2.hited){
         return false;
     }
     if(item1->type == cxTouchTypeMove || item2->type == cxTouchTypeMove){
@@ -101,21 +97,25 @@ cxBool cxScrollCheckPos(cxAny pview,cxVec2f *pos)
 {
     CX_ASSERT_THIS(pview, cxScroll);
     cxBool fix = false;
-    if(pos->y < this->box.b){
-        pos->y = this->box.b;
-        fix = true;
+    if(this->type & cxScrollMoveTypeVertical){
+        if(pos->y<this->box.b){
+            pos->y=this->box.b;
+            fix=true;
+        }
+        if(pos->y>this->box.t){
+            pos->y=this->box.t;
+            fix=true;
+        }
     }
-    if(pos->y > this->box.t){
-        pos->y = this->box.t;
-        fix = true;
-    }
-    if(pos->x < this->box.l){
-        pos->x = this->box.l;
-        fix = true;
-    }
-    if(pos->x > this->box.r){
-        pos->x = this->box.r;
-        fix = true;
+    if(this->type & cxScrollMoveTypeHorizontal){
+        if(pos->x<this->box.l){
+            pos->x=this->box.l;
+            fix=true;
+        }
+        if(pos->x>this->box.r){
+            pos->x=this->box.r;
+            fix=true;
+        }
     }
     return fix;
 }
@@ -137,14 +137,14 @@ void cxScrollUpdateBox(cxAny pview)
 
 CX_METHOD_DEF(cxScroll,OnTouch,cxBool,const cxTouchItems *points)
 {
-    CX_RETURN(this->Body == NULL,false);
+    cxView body = cxScrollGetBody(this);
+    CX_RETURN(body == NULL,false);
     if(this->scalable && points->number == 2){
         return cxScrollScale(this, points);
     }
     if(points->number != 1){
         return false;
     }
-    cxView body = cxScrollGetBody(this);
     cxTouchItem item = points->items[0];
     cxHitInfo hit = cxViewHitTest(this, item->position);
     if(item->type == cxTouchTypeDown){
@@ -191,24 +191,36 @@ CX_METHOD_DEF(cxScroll,OnTouch,cxBool,const cxTouchItems *points)
     return false;
 }
 
+//pos body
 void cxScrollLocationTo(cxAny pview,cxVec2f pos,cxBool animate)
 {
     CX_ASSERT_THIS(pview, cxScroll);
-    CX_RETURN(this->Body == NULL);
-    cxScrollUpdateBox(this);
-    pos = cxVec2fv(-pos.x, -pos.y);
+    this->location = pos;
     cxView body = cxScrollGetBody(this);
-    cxScrollCheckPos(this, &pos);
+    CX_ASSERT(body != NULL, "body error");
+    cxScrollUpdateBox(this);
+    cxHitInfo hit = cxViewHitTest(body, cxVec2fv(0, 0));
+    if(!hit.hited){
+        return;
+    }
+    cxVec2f xpos = cxVec2fSub(hit.position, this->location);
+    cxVec2f scale = cxViewTransformScale(body);
+    cxVec2f cpos = cxViewGetPosition(body);
+    cpos = cxVec2fAdd(cpos, cxVec2fScale2f(xpos, scale));
+    cxScrollCheckPos(this, &cpos);
     if(animate){
-        cxMove m = cxMoveCreate(this->moveTime, pos);
+        cxMove m = cxMoveCreate(this->moveTime, cpos);
         cxActionSetId(m, (cxUInt)body);
         cxActionSetCurve(m, cxScrollMoveCurve);
         cxViewAppendAction(body, m);
     }else{
-        cxViewSetPosition(body, pos);
+        cxViewSetPosition(body, cpos);
     }
 }
-
+CX_SETTER_DEF(cxScroll, index)
+{
+    cxScrollSetBodyIdx(this, cxJsonToInt(value, this->BodyIdx));
+}
 CX_SETTER_DEF(cxScroll, range)
 {
     this->range = cxJsonToRange2f(value, this->range);
@@ -229,12 +241,6 @@ CX_SETTER_DEF(cxScroll, scaleinc)
 {
     this->scaleinc = cxJsonToDouble(value, this->scaleinc);
 }
-CX_SETTER_DEF(cxScroll, body)
-{
-    cxAny object = cxJsonMakeObject(value);
-    CX_ASSERT_TYPE(object, cxView);
-    cxScrollSetBody(this, object);
-}
 CX_SETTER_DEF(cxScroll, scalable)
 {
     this->scalable = cxJsonToBool(value, this->scalable);
@@ -249,8 +255,24 @@ CX_SETTER_DEF(cxScroll, layout)
     if(cxConstCharsHas(type, "vertical")){
         this->type |= cxScrollMoveTypeVertical;
     }
+    //init body position
+    if(cxConstCharsHas(type, "left")){
+        this->type |= cxScrollMoveTypeLeft;
+    }
+    if(cxConstCharsHas(type, "right")){
+        this->type |= cxScrollMoveTypeRight;
+    }
+    if(cxConstCharsHas(type, "top")){
+        this->type |= cxScrollMoveTypeTop;
+    }
+    if(cxConstCharsHas(type, "bottom")){
+        this->type |= cxScrollMoveTypeBottom;
+    }
 }
-
+CX_METHOD_DEF(cxScroll, OnEnter, void)
+{
+    cxScrollUpdate(this);
+}
 CX_TYPE(cxScroll, cxView)
 {
     CX_SETTER(cxScroll, scaling);
@@ -259,16 +281,17 @@ CX_TYPE(cxScroll, cxView)
     CX_SETTER(cxScroll, scaletime);
     CX_SETTER(cxScroll, scalable);
     CX_SETTER(cxScroll, scaleinc);
-    CX_SETTER(cxScroll, body);
     CX_SETTER(cxScroll, layout);
+    CX_SETTER(cxScroll, index);
     
     CX_METHOD(cxScroll, OnTouch);
+    CX_METHOD(cxScroll, OnEnter);
 }
 CX_INIT(cxScroll, cxView)
 {
     this->scaleinc = 0.5f;
     this->speed = 0.1f;
-    this->scaling = 0.06f;
+    this->scaling = 0.05f;
     this->range = cxRange2fv(0.5f, 1.5f);
     this->moveTime = 1.0f;
     this->scaleTime = 0.5f;
@@ -281,8 +304,27 @@ CX_FREE(cxScroll, cxView)
 }
 CX_TERM(cxScroll, cxView)
 
-
-
+void cxScrollUpdate(cxAny pview)
+{
+    CX_ASSERT_THIS(pview, cxScroll);
+    cxScrollUpdateBox(this);
+    cxView body = cxScrollGetBody(this);
+    CX_ASSERT(body != NULL, "cxScroll not set body view");
+    cxVec2f pos = cxViewGetPosition(body);
+    if(this->type & cxScrollMoveTypeRight){
+        pos.x = this->box.r;
+    }
+    if(this->type & cxScrollMoveTypeLeft){
+        pos.x = this->box.l;
+    }
+    if(this->type & cxScrollMoveTypeTop){
+        pos.y = this->box.t;
+    }
+    if(this->type & cxScrollMoveTypeBottom){
+        pos.y = this->box.b;
+    }
+    cxViewSetPosition(body, pos);
+}
 
 
 

@@ -15,21 +15,23 @@
 #import <AudioToolbox/ExtendedAudioFile.h>
 #include <engine/cxEngine.h>
 #import <ios/cxAppDelegate.h>
+#import <CoreText/CoreText.h>
 
 void cxEngineTerminate()
 {
+    cxEngineExit();
     exit(0);
 }
 
-cxString cxUUID()
+cxStr cxUUID()
 {
     uuid_t uuid;
     uuid_generate(uuid);
-    return cxMD5(cxStringBinary(uuid, sizeof(uuid_t)));
+    return cxMD5(cxStrBinary(uuid, sizeof(uuid_t)));
 }
 
 //get strings/firstdir
-cxString cxDefaultLocalized()
+cxStr cxDefaultLocalized(cxConstChars country,cxConstChars lang)
 {
     NSString *path = [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/strings"];
     if(path == nil){
@@ -41,150 +43,202 @@ cxString cxDefaultLocalized()
     if(error != nil || files.count == 0){
         return NULL;
     }
-    path = [files objectAtIndex:0];
-    return cxStringCreate("strings/%s",[path UTF8String]);
-}
-
-static CGSize cxCalculateStringSize(NSString *str, id font, CGSize constrainSize, NSMutableDictionary *attrs)
-{
-    NSArray *listItems = [str componentsSeparatedByString: @"\n"];
-    CGSize dim = CGSizeZero;
-    CGSize textRect = CGSizeZero;
-    textRect.width = constrainSize.width > 0 ? constrainSize.width : -1;
-    textRect.height = constrainSize.height > 0 ? constrainSize.height : -1;
-    for (NSString *s in listItems){
-        CGRect rect =  [s boundingRectWithSize:textRect options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:attrs context:nil];
-        CGSize tmp = rect.size;
-        if (tmp.width > dim.width){
-            dim.width = tmp.width;
+    NSString *slang = [NSString stringWithUTF8String:lang];
+    for (NSString *dir in files) {
+        if(![dir hasPrefix:slang]){
+            continue;
         }
-        dim.height += tmp.height;
+        return cxStrCreate("strings/%s",[dir UTF8String]);
     }
-    dim.width = ceilf(dim.width);
-    dim.height = ceilf(dim.height);
-    return dim;
+    path = [files objectAtIndex:0];
+    return cxStrCreate("strings/%s",[path UTF8String]);
 }
-
-#define ALIGN_TOP    1
-#define ALIGN_BOTTOM 2
-#define ALIGN_CENTER 3
 
 #define cxColor4fToUIColor(c) [UIColor colorWithRed:(c).r green:(c).g blue:(c).b alpha:(c).a]
 
-cxString cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxTextAttr *attr)
+CTFrameRef frameRefFromSize(NSString *str, CGRect rect,UIFont *font,cxTextAlign align,UIColor *color)
+{
+    // Set up font.
+    CTFontRef fontRef = (__bridge CTFontRef)font;
+    NSTextAlignment textAlign = NSTextAlignmentLeft;
+    if(align == cxTextAlignCenter){
+        textAlign = NSTextAlignmentCenter;
+    }else if(align == cxTextAlignLeft){
+        textAlign = NSTextAlignmentLeft;
+    }else{
+        textAlign = NSTextAlignmentRight;
+    }
+    CTTextAlignment alignment = NSTextAlignmentToCTTextAlignment(textAlign);
+    CTLineBreakMode lineBreakMode = kCTLineBreakByClipping;
+    CTParagraphStyleSetting paragraphStyleSettings[] = {
+        {kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment), &alignment},
+        {kCTParagraphStyleSpecifierLineBreakMode, sizeof(CTLineBreakMode), &lineBreakMode}
+    };
+    CTParagraphStyleRef paragraphStyleRef = CTParagraphStyleCreate(paragraphStyleSettings, 2);
+    
+    // Set up attributed string.
+    CFStringRef keys[] = {kCTFontAttributeName, kCTParagraphStyleAttributeName, kCTForegroundColorAttributeName};
+    CFTypeRef values[] = {fontRef, paragraphStyleRef, color.CGColor};
+    CFDictionaryRef attributes = CFDictionaryCreate(kCFAllocatorDefault, (const void **)&keys, (const void **)&values, sizeof(keys) / sizeof(keys[0]), &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+
+    CFRelease(paragraphStyleRef);
+    
+    CFStringRef stringRef = (__bridge CFStringRef)str;
+    CFAttributedStringRef attributedStringRef = CFAttributedStringCreate(kCFAllocatorDefault, stringRef, attributes);
+    CFRelease(attributes);
+    
+    // Set up frame.
+    CTFramesetterRef framesetterRef = CTFramesetterCreateWithAttributedString(attributedStringRef);
+    CFRelease(attributedStringRef);
+
+    CGMutablePathRef pathRef = CGPathCreateMutable();
+    CGPathAddRect(pathRef, NULL, rect);
+    
+    CTFrameRef frameRef = CTFramesetterCreateFrame(framesetterRef, CFRangeMake(0, str.length), pathRef, NULL);
+    CFRelease(framesetterRef);
+    CGPathRelease(pathRef);
+    return frameRef;
+}
+
+CGImageRef strokeImageWithRect(CGRect rect,CTFrameRef frameRef,CGFloat strokeSize,UIColor *strokeColor)
+{
+    // Create context.
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSetTextDrawingMode(context, kCGTextStroke);
+    
+    // Draw clipping mask.
+    CGContextSetLineWidth(context, strokeSize);
+    CGContextSetLineJoin(context, kCGLineJoinRound);
+    [[UIColor whiteColor] setStroke];
+    CTFrameDraw(frameRef, context);
+    
+    // Save clipping mask.
+    CGImageRef clippingMask = CGBitmapContextCreateImage(context);
+    
+    // Clear the content.
+    CGContextClearRect(context, rect);
+    
+    // Draw stroke.
+    CGContextClipToMask(context, rect, clippingMask);
+    CGContextTranslateCTM(context, 0.0, CGRectGetHeight(rect));
+    CGContextScaleCTM(context, 1.0, -1.0);
+    [strokeColor setFill];
+    UIRectFill(rect);
+    
+    // Clean up and return image.
+    CGImageRelease(clippingMask);
+    CGImageRef image = CGBitmapContextCreateImage(context);
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+cxStr cxCreateTXTTextureData(cxConstChars txt,cxConstChars fontName,const cxTextAttr *attr)
 {
     CX_RETURN(txt == NULL, NULL);
     NSString *str = [NSString stringWithUTF8String:txt];
     NSString *fntName = nil;
-    CGSize dim = CGSizeMake(0, 0);
-    CGSize csize = CGSizeMake(attr->viewSize.w, attr->viewSize.h);
     if(fontName != NULL){
         fntName = [NSString stringWithUTF8String:fontName];
         fntName = [[fntName lastPathComponent] stringByDeletingPathExtension];
     }
     UIFont *font = nil;
     if(fntName != nil){
-        font = [UIFont systemFontOfSize:attr->size];
-    }else{
+        if(attr->boldFont)fntName = [fntName stringByAppendingString:@"-Bold"];
         font = [UIFont fontWithName:fntName size:attr->size];
     }
     if(font == nil){
-        font = [UIFont fontWithName:fntName size:attr->size];
+        if(attr->boldFont)font = [UIFont boldSystemFontOfSize:attr->size];
+        else font = [UIFont systemFontOfSize:attr->size];
     }
     NSMutableDictionary *attrs = [[NSMutableDictionary alloc] init];
-    //font and color
     [attrs setObject:font forKey:NSFontAttributeName];
-    [attrs setObject:cxColor4fToUIColor(attr->color) forKey:NSForegroundColorAttributeName];
-    dim = cxCalculateStringSize(str, font, csize, attrs);
-    // compute start point
-    int startH = 0;
-    int startW = 0;
-    if (csize.height > dim.height){
-        unsigned int vAlignment = ((int)attr->align >> 4) & 0x0F;
-        if (vAlignment == ALIGN_TOP){
-            startH = 0;
-        }else if (vAlignment == ALIGN_CENTER){
-            startH = (csize.height - dim.height) / 2;
-        }else{
-            startH = csize.height - dim.height;
-        }
-    }
-    // adjust text rect
-    if (csize.width > 0 && csize.width > dim.width){
-        dim.width = csize.width;
-    }
-    if (csize.height > 0 && csize.height > dim.height){
-        dim.height = csize.height;
-    }
+    CGSize dim = [str sizeWithAttributes:attrs];
+    [attrs release];
+    dim.width  = (int)ceilf(dim.width) + attr->strokeWidth;
+    dim.height = (int)ceilf(dim.height)+ attr->strokeWidth;
     cxInt bufsiz = sizeof(cxChar) * (int)(dim.width * dim.height * 4) + sizeof(cxSize2i);
     cxChar *buffer = allocator->malloc(bufsiz);
-    memset(buffer, 0, bufsiz);
-    // draw text
     CGBitmapInfo bitMapInfo = kCGImageAlphaPremultipliedLast|kCGBitmapByteOrderDefault;
     CGColorSpaceRef colorSpace  = CGColorSpaceCreateDeviceRGB();
     CGContextRef context = CGBitmapContextCreate(buffer,dim.width,dim.height,8,(int)(dim.width * 4),colorSpace,bitMapInfo);
+    CGColorSpaceRelease(colorSpace);
+    CX_ASSERT(context != NULL, "CGBitmapContextCreate create error");
+    CGRect rect = CGRectMake(0, 0, dim.width, dim.height);
     CGContextTranslateCTM(context, 0.0f, dim.height);
     CGContextScaleCTM(context, 1.0f, -1.0f);
     UIGraphicsPushContext(context);
-    cxUInt uHoriFlag = (int)attr->align & 0x0f;
-    CGRect rect = CGRectMake(startW, startH, dim.width, dim.height);
-    CGContextSetShouldSmoothFonts(context, true);
-    CGContextSetShouldAntialias(context, true);
-    CGContextSetShouldSubpixelQuantizeFonts(context, false);
-    CGContextBeginTransparencyLayerWithRect(context, rect, NULL);
-    //parastyle
-    NSMutableParagraphStyle *parastyle = [[NSMutableParagraphStyle alloc] init];
-    parastyle.alignment = (2 == uHoriFlag) ? NSTextAlignmentRight : (3 == uHoriFlag) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
-    parastyle.lineBreakMode = NSLineBreakByClipping;
-    [attrs setObject:parastyle forKey:NSParagraphStyleAttributeName];
-    [parastyle release];
-    if(attr->strokeWidth > 0){
-        [attrs setObject:cxColor4fToUIColor(attr->strokeColor) forKey:NSStrokeColorAttributeName];
-        [attrs setObject:[NSNumber numberWithFloat:attr->strokeWidth] forKey:NSStrokeWidthAttributeName];
-        [str drawInRect:rect withAttributes:attrs];
-        [attrs removeObjectForKey:NSStrokeColorAttributeName];
-        [attrs removeObjectForKey:NSStrokeWidthAttributeName];
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0.0);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CTFrameRef frameRef = frameRefFromSize(str, rect, font, attr->align, cxColor4fToUIColor(attr->color));
+    CGContextTranslateCTM(ctx, 0.0, CGRectGetHeight(rect));
+    CGContextScaleCTM(ctx, 1.0, -1.0);
+    if([str length] > 0){
+        CGContextSaveGState(ctx);
+        CGContextSetTextDrawingMode(ctx, kCGTextFill);
+        CTFrameDraw(frameRef, ctx);
+        CGContextRestoreGState(ctx);
     }
-    [str drawInRect:rect withAttributes:attrs];
-    CGContextEndTransparencyLayer(context);
+    if(attr->strokeWidth > 0){
+        CGRect srect = rect;
+        srect.origin.x += attr->strokeOffset.x;
+        srect.origin.y += attr->strokeOffset.y;
+        CGContextSaveGState(ctx);
+        CGContextSetTextDrawingMode(ctx, kCGTextStroke);
+        CGImageRef image = CGBitmapContextCreateImage(ctx);
+        CGImageRef strokeImage = strokeImageWithRect(srect,frameRef,attr->strokeWidth * 2,cxColor4fToUIColor(attr->strokeColor));
+        CGContextDrawImage(ctx, srect, strokeImage);
+        CGContextDrawImage(ctx, srect, image);
+        CGImageRelease(strokeImage);
+        CGImageRelease(image);
+        CGContextRestoreGState(ctx);
+    }
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [image drawInRect:rect];
+    CFRelease(frameRef);
     UIGraphicsPopContext();
-    CGColorSpaceRelease(colorSpace);
     CGContextRelease(context);
-    [attrs release];
-    //last 8bytes save widht and height
     cxSize2i *psize = (cxSize2i *)(buffer + bufsiz - sizeof(cxSize2i));
     psize->w = dim.width;
     psize->h = dim.height;
-    return cxStringAttachMem(buffer, bufsiz);
+    return cxStrAttachMem(buffer, bufsiz);
 }
 
 cxBool cxAssetsExists(cxConstChars file)
 {
-    cxString path = cxAssetsPath(file);
+    cxStr path = cxAssetsPath(file);
     CX_RETURN(path == NULL, false);
     struct stat stat={0};
-    return lstat(cxStringBody(path), &stat) == 0;
+    return lstat(cxStrBody(path), &stat) == 0;
 }
 
 cxInt cxAssertsFD(cxConstChars file,cxInt *off,cxInt *length)
 {
     CX_ASSERT(off != NULL && length != NULL && file != NULL, "args error");
-    cxString path = cxAssetsPath(file);
+    cxStr path = cxAssetsPath(file);
     CX_ASSERT(path != NULL, "get file %s path failed",file);
-    return cxFileFD(cxStringBody(path), off, length);
+    return cxFileFD(cxStrBody(path), off, length);
 }
 
-void cxEngineSendJson(cxString json)
+void cxSendJson(cxStr txt)
 {
-    cxEngineRecvJson(json);
+     cxEngineRecvJson(txt);
 }
 
-cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
+//ios 收到gl json请求
+void cxEngineSendJson(cxStr txt)
 {
-    cxString cxPath = cxAssetsPath(file);
+    cxRecvJson(txt);
+}
+
+cxStr cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
+{
+    cxStr cxPath = cxAssetsPath(file);
     AudioStreamBasicDescription fileformat;
     UInt32 formatsize = sizeof(fileformat);
-    NSString *path = [NSString stringWithUTF8String:cxStringBody(cxPath)];
+    NSString *path = [NSString stringWithUTF8String:cxStrBody(cxPath)];
     CFURLRef fileURL = (__bridge CFURLRef)[NSURL fileURLWithPath:path];
     UInt64 fileDataSize = 0;
     UInt32 thePropertySize = sizeof(UInt64);
@@ -198,7 +252,7 @@ cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
         CX_ERROR("get format error");
         goto completed;
     }
-    if(AudioFileGetProperty(afid, kAudioFilePropertyAudioDataByteCount, &thePropertySize, &fileDataSize) != noErr){
+    if(AudioFileGetProperty(afid, kAudioFilePropertyAudioDataByteCount, &thePropertySize, &fileDataSize) == noErr){
         theData = allocator->malloc((cxInt)fileDataSize);
         AudioFileReadBytes(afid, false, 0, (UInt32 *)&fileDataSize, theData);
         *freq = (ALsizei)fileformat.mSampleRate;
@@ -211,7 +265,7 @@ cxString cxWAVSamplesWithFile(cxConstChars file,cxUInt *format,cxUInt *freq)
 completed:
     AudioFileClose(afid);
     CX_RETURN(theData == NULL,NULL);
-    return cxStringAttachMem(theData, (UInt32)fileDataSize);
+    return cxStrAttachMem(theData, (UInt32)fileDataSize);
 }
 
 void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars format,va_list ap)
@@ -221,38 +275,37 @@ void cxUtilPrint(cxConstChars type,cxConstChars file,int line,cxConstChars forma
     NSLog(@"[%s:%d] %s:%s\n",file,line,type,buffer);
 }
 
-cxString cxAssetsPath(cxConstChars file)
+cxStr cxAssetsPath(cxConstChars file)
 {
     NSString *path = [[NSBundle mainBundle] resourcePath];
     if(file != NULL){
-        return cxStringCreate("%s/%s",[path UTF8String],file);
+        return cxStrCreate("%s/%s",[path UTF8String],file);
     }else{
-        return cxStringCreate("%s",[path UTF8String]);
+        return cxStrCreate("%s",[path UTF8String]);
     }
 }
 
-cxString cxDocumentPath(cxConstChars file)
+cxStr cxDocumentPath(cxConstChars file)
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [paths objectAtIndex:0];
     if(file != NULL){
-        return cxStringCreate("%s/%s",[path UTF8String],file);
+        return cxStrCreate("%s/%s",[path UTF8String],file);
     }else{
-        return cxStringConstChars([path UTF8String]);
+        return cxStrConstChars([path UTF8String]);
     }
 }
 
-
-cxString cxLocalizedCountry()
+cxStr cxLocalizedCountry()
 {
     NSLocale *locale = [NSLocale currentLocale];
-    return cxStringConstChars([[locale objectForKey:NSLocaleCountryCode] UTF8String]);
+    return cxStrConstChars([[locale objectForKey:NSLocaleCountryCode] UTF8String]);
 }
 
-cxString cxLocalizedLang()
+cxStr cxLocalizedLang()
 {
     NSLocale *locale = [NSLocale currentLocale];
-    return cxStringConstChars([[locale objectForKey:NSLocaleLanguageCode] UTF8String]);
+    return cxStrConstChars([[locale objectForKey:NSLocaleLanguageCode] UTF8String]);
 }
 
 

@@ -49,13 +49,13 @@ CX_METHOD_DEF(cxTexturePVR,Load,cxBool,cxStream stream)
         CX_ERROR("platform not support pvr texture");
         return ret;
     }
-    if(!CX_CALL(stream, Open, CX_M(cxBool))){
+    if(!cxStreamOpen(stream)){
         CX_ERROR("open prv stream failed");
         return ret;
     }
     //read pvr head
-    cxPVRHeader header;
-    cxInt size = CX_CALL(stream, Read, CX_M(cxInt,cxAny,cxInt),&header,sizeof(cxPVRHeader));
+    cxPVRHeader header={0};
+    cxInt size = cxStreamRead(stream, &header, sizeof(cxPVRHeader));
     if(size != sizeof(cxPVRHeader) ||
        header.headerLength != sizeof(cxPVRHeader) ||
        header.pvrTag != CX_PVR_TAG){
@@ -114,7 +114,7 @@ CX_METHOD_DEF(cxTexturePVR,Load,cxBool,cxStream stream)
             CX_ASSERT(buffer != NULL, "realloc mem failed");
             bufBytes = bufSize;
         }
-        cxInt size = CX_CALL(stream, Read, CX_M(cxInt,cxAny,cxInt),buffer,bufSize);
+        cxInt size = cxStreamRead(stream, buffer, bufSize);
         if(size == bufSize){
             glCompressedTexImage2D(GL_TEXTURE_2D, i, this->glFormat, width, height, 0, bufSize, buffer);
         }else{
@@ -133,7 +133,7 @@ CX_METHOD_DEF(cxTexturePVR,Load,cxBool,cxStream stream)
     cxOpenGLBindTexture(0,0);
     ret = true;
 completed:
-    CX_CALL(stream, Close, CX_M(void));
+    cxStreamClose(stream);
     return ret;
 }
 CX_TYPE(cxTexturePVR, cxTexture)

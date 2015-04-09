@@ -37,7 +37,6 @@ CX_TYPE(cxSpatial, cxObject)
 CX_INIT(cxSpatial, cxObject)
 {
     cpSpatialIndexBBFunc bbFunc = CX_METHOD_GET(this, IndexBB);
-    CX_ASSERT(bbFunc != NULL, "not define bbFunc method");
     this->Index = cpBBTreeNew(bbFunc, NULL);
 }
 CX_FREE(cxSpatial, cxObject)
@@ -89,6 +88,18 @@ static cpCollisionID cxSpatialIndexQueryFunc(cxAny ps, cxAny pview, cpCollisionI
     return id;
 }
 
+void cxSpatialIndexSegmentQuery(cxAny ps,cxAny obj, cpVect a, cpVect b, cpFloat t_exit, cpSpatialIndexSegmentQueryFunc func, cxAny data)
+{
+    CX_ASSERT_THIS(ps, cxSpatial);
+    cpSpatialIndexSegmentQuery(this->Index, obj, a, b, t_exit, func, data);
+}
+
+void cxSpatialIndexQuery(cxAny ps,cxAny obj, cpBB bb, cpSpatialIndexQueryFunc func, cxAny data)
+{
+    CX_ASSERT_THIS(ps, cxSpatial);
+    cpSpatialIndexQuery(this->Index, obj, bb, func, data);
+}
+
 cxSpatialNearestInfo cxSpatialNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNearestFilter filter)
 {
     CX_ASSERT_THIS(ps, cxSpatial);
@@ -98,7 +109,7 @@ cxSpatialNearestInfo cxSpatialNearest(cxAny ps,cxVec2f p,cxFloat max,cxSpatialNe
     ret.view = NULL;
     ret.m = max;
     ret.filter = filter;
-    cpBB bb = cpBBNewForCircle(p, cpfmax(max, 0.0f));
+    cpBB bb = cpBBNewForCircle(cpv(p.x, p.y), cpfmax(max, 0.0f));
     cpSpatialIndexQuery(this->Index, this, bb, cxSpatialIndexQueryFunc, &ret);
     return ret;
 }

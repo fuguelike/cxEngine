@@ -9,10 +9,16 @@
 #import "cxAppDelegate.h"
 #include <engine/cxEngine.h>
 
-void cxPlayMusic(cxConstChars file,cxBool loop)
+void cxPlayMusic(cxConstChars file,cxFloat volume,cxBool loop)
 {
     cxAppDelegate *app = (cxAppDelegate *)[[UIApplication sharedApplication] delegate];
-    [app cxPlayMusic:file loop:loop];
+    [app cxPlayMusic:file volume:volume loop:loop];
+}
+
+void cxSetMusicVolume(cxFloat volume)
+{
+    cxAppDelegate *app = (cxAppDelegate *)[[UIApplication sharedApplication] delegate];
+    [app cxSetMusicVolume:volume];
 }
 
 void cxStopMusic()

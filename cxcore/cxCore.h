@@ -9,6 +9,8 @@
 #ifndef cxCore_cxCore_h
 #define cxCore_cxCore_h
 
+//#define NDEBUG 1
+
 #define CX_PLATFORM_UNKNOWN            0
 #define CX_PLATFORM_IOS                1
 #define CX_PLATFORM_ANDROID            2
@@ -105,7 +107,7 @@
 #endif
 
 #ifndef CX_SWAP16
-#define CX_SWAP16(i)  ((i & 0x00ff) << 8 | (i &0xff00) >> 8)
+#define CX_SWAP16(i)  ((i & 0x00ff) << 8 | (i & 0xff00) >> 8)
 #endif
 
 #include <stdlib.h>
@@ -119,6 +121,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <stddef.h>
+#include <ctype.h>
 #include "uthash.h"
 
 typedef char            cxChar;
@@ -171,16 +174,12 @@ typedef cxUChar *       cxUChars;
 
 #define CX_INLINE                       static inline
 
-//#define NDEBUG 1
-
-#if !defined(NDEBUG)
-
-#define CX_LOGGER(format,...)           cxUtilInfo(__FILE__,__LINE__,format, ##__VA_ARGS__)
-
 #define CX_ERROR(format,...)            cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
 #define CX_WARN(format,...)             cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
 
+#if !defined(NDEBUG)
+#define CX_LOGGER(format,...)           cxUtilInfo(__FILE__,__LINE__,format, ##__VA_ARGS__)
 #define CX_ASSERT(cond,format,...)                              \
 do{                                                             \
     bool _ret_= (cond);                                         \
@@ -188,25 +187,15 @@ do{                                                             \
     cxUtilAssert(__FILE__,__LINE__,format, ##__VA_ARGS__);      \
     assert(_ret_);                                              \
 }while(0)
-
 #define CX_ASSERT_FALSE(format,...)     CX_ASSERT(false,format,##__VA_ARGS__)
-
 #define CX_ASSERT_TYPE(_o_,_t_)         CX_ASSERT(CX_INSTANCE_OF(_o_,_t_),"object type (%s) error,should is "#_t_,CX_NAME_OF(_o_))
-
+#define CX_ASSERT_POINTER(_o_,_p_)      CX_ASSERT(CX_VALID_PTR(_o_,_p_),"pointer not valid");
 #else
-
 #define CX_LOGGER(format,...)
-
 #define CX_ASSERT(cond,...)
-
 #define CX_ASSERT_TYPE(_o_,_t_)
-
 #define CX_ASSERT_FALSE(format,...)
-
-#define CX_ERROR(format,...)            cxUtilError(__FILE__,__LINE__,format, ##__VA_ARGS__)
-
-#define CX_WARN(format,...)             cxUtilWarn(__FILE__,__LINE__,format, ##__VA_ARGS__)
-
+#define CX_ASSERT_POINTER(_o_,_p_)
 #endif
 
 #define CX_ASSERT_VALUE(_o_,_t_,_n_)    _t_ _n_ = (_t_)(_o_);CX_ASSERT_TYPE(_n_,_t_)
@@ -221,10 +210,11 @@ do{                                                             \
 
 #define CX_BEG(_t_,_b_)                                         \
 CX_ATTR_UNUSED static cxConstType _t_##TypeName = #_t_;         \
+CX_ATTR_UNUSED static cxType _t_##TypePointer = NULL;           \
 typedef struct _t_ *_t_;                                        \
-void _t_##AutoInit(_t_ this);                                   \
-void _t_##AutoFree(_t_ this);                                   \
-void _t_##AutoType(cxType this);                                \
+void __##_t_##AutoInit(_t_ this);                               \
+void __##_t_##AutoFree(_t_ this);                               \
+void __##_t_##AutoType(cxType this);                            \
 struct _t_ {
 
 #define CX_END(_t_,_b_) };                                      \
@@ -234,8 +224,9 @@ CX_ATTR_UNUSED static cxAny __##_t_##AllocFunc()                \
     CX_ASSERT(this != NULL, "memory alloc error");              \
     this->cxRefcount = 1;                                       \
     this->cxType = cxTypesGetType(_t_##TypeName);               \
-    this->cxAutoFree = (void(*)(cxAny))_t_##AutoFree;           \
-    _t_##AutoInit((_t_)this);                                   \
+    this->cxAutoFree = (void(*)(cxAny))__##_t_##AutoFree;       \
+    __##_t_##AutoInit((_t_)this);                               \
+    CX_CALL(this, cxInit, CX_M(void));                          \
     return this;                                                \
 }                                                               \
 CX_ATTR_UNUSED static cxAny __##_t_##CreateFunc()               \
@@ -244,23 +235,22 @@ CX_ATTR_UNUSED static cxAny __##_t_##CreateFunc()               \
 }                                                               \
 CX_ATTR_UNUSED static void __##_t_##TypeSetFunc()               \
 {                                                               \
-    cxTypeNew(_t_##TypeName,_b_##TypeName,                      \
-    __##_t_##CreateFunc,                                        \
-    __##_t_##AllocFunc,                                         \
-    _t_##AutoType);                                             \
+    _t_##TypePointer = cxTypeNew(_t_##TypeName,_b_##TypeName,   \
+    __##_t_##CreateFunc,__##_t_##AllocFunc,                     \
+    __##_t_##AutoType,sizeof(struct _t_));                      \
 }
 
 #define CX_DEF(_t_,_b_)             CX_BEG(_t_,_b_) struct _b_ _b_;
 
 //type imp cxAny = cxType
 
-#define CX_TYPE(_t_,_b_)            void _t_##AutoType(cxType this){
+#define CX_TYPE(_t_,_b_)            void __##_t_##AutoType(cxType this){
 
-#define CX_INIT(_t_,_b_)            };void _t_##AutoInit(_t_ this){_b_##AutoInit((_b_)this);
+#define CX_INIT(_t_,_b_)            };void __##_t_##AutoInit(_t_ this){__##_b_##AutoInit((_b_)this);
 
-#define CX_FREE(_t_,_b_)            };void _t_##AutoFree(_t_ this){
+#define CX_FREE(_t_,_b_)            };void __##_t_##AutoFree(_t_ this){
 
-#define CX_TERM(_t_,_b_)            _b_##AutoFree((_b_)this);}
+#define CX_TERM(_t_,_b_)            __##_b_##AutoFree((_b_)this);}
 
 //object mem manage
 
@@ -280,7 +270,9 @@ CX_ATTR_UNUSED static void __##_t_##TypeSetFunc()               \
 
 //type
 
-#define CX_INSTANCE_OF(_o_,_t_)     cxObjectInstanceOf(_o_,_t_##TypeName)
+#define CX_INSTANCE_OF(_o_,_t_)     cxInstanceOf(_o_,_t_##TypeName)
+
+#define CX_VALID_PTR(_o_,_p_)       cxValidPointer(_o_,_p_)
 
 #define CX_NAME_OF(_o_)             ((cxType)((cxObject)_o_)->cxType)->typeName
 
@@ -304,13 +296,16 @@ CX_INLINE void _t_##Set##_n_(cxAny pthis,const _vt_ value)      \
     this->_n_ = value;                                          \
 }
 
-#define CX_FIELD_IMO(_t_,_vt_, _n_)                             \
-CX_FIELD_GET(_t_,_vt_, _n_)                                     \
+#define CX_FIELD_REF(_t_,_vt_, _n_)                             \
 CX_INLINE void _t_##Set##_n_(cxAny pthis,const _vt_ value)      \
 {                                                               \
     CX_ASSERT_THIS(pthis,_t_);                                  \
     CX_RETAIN_SWAP(this->_n_,value);                            \
 }
+
+#define CX_FIELD_IMO(_t_,_vt_, _n_)                             \
+CX_FIELD_GET(_t_,_vt_, _n_)                                     \
+CX_FIELD_REF(_t_,_vt_, _n_)
 
 #define CX_FIELD_IMP(_t_,_vt_, _n_)                             \
 CX_FIELD_GET(_t_,_vt_, _n_)                                     \
@@ -426,9 +421,9 @@ typedef struct cxSignature *cxSignature;
 
 typedef struct cxProperty *cxProperty;
 // propertys
-#define CX_SETTER_DEF(_t_,_p_)          static void __##_t_##_p_##Setter(_t_ this,cxAny value)
+#define CX_SETTER_DEF(_t_,_p_)          static void __##_t_##_p_##Setter(_t_ this, cxConstChars pkey, cxAny value)
 
-#define CX_GETTER_DEF(_t_,_p_)          static cxAny __##_t_##_p_##Getter(_t_ this)
+#define CX_GETTER_DEF(_t_,_p_)          static cxAny __##_t_##_p_##Getter(_t_ this, cxConstChars pkey)
 
 #define CX_SETTER(_t_,_p_)              do{cxPropertyNew(this,#_p_)->cxSetter=__##_t_##_p_##Setter;}while(0)
 
@@ -447,24 +442,34 @@ cxBool cxPropertyRunSetter(cxAny object,cxConstChars key,cxAny value);
 cxBool cxPropertyRunGetter(cxAny object,cxConstChars key,cxAny *value);
 
 cxProperty cxPropertyNew(cxType ptype,cxConstChars name);
-//methods
-#define CX_M(_rv_,...)                 (_rv_ (*)(cxAny,##__VA_ARGS__))
 
-#define CX_CALL(_o_,_n_,_m_,...)       (_m_(cxMethodGet(_o_,#_n_)))(_o_,##__VA_ARGS__)
+//methods def
+#define CX_M(_rv_,...)                  (_rv_ (*)(cxAny,##__VA_ARGS__))
 
-#define CX_SUPER(_b_,_o_,_n_,_m_,...)  (_m_(cxMethodSuper(_o_,_b_##TypeName,#_n_)))(_o_,##__VA_ARGS__)
+#define CX_CALL(_o_,_n_,_m_,...)        (_m_(cxMethodGet(_o_,#_n_)))(_o_,##__VA_ARGS__)
 
-#define CX_METHOD_DEF(_t_,_n_,_rv_,...) static _rv_ _t_##_n_(_t_ this,##__VA_ARGS__)
+#define CX_SUPER(_b_,_o_,_n_,_m_,...)   (_m_(cxMethodSuper(_o_,_b_##TypeName,#_n_)))(_o_,##__VA_ARGS__)
+
+#define CX_METHOD_DEF(_t_,_n_,_rv_,...) static _rv_ __##_t_##_##_n_(_t_ this,##__VA_ARGS__)
 
 #define CX_METHOD_GET(_o_,_n_)          cxMethodGet(_o_,#_n_)
 
-#define CX_METHOD(_t_,_n_)              do{cxMethodNew(this,#_n_)->cxMethodFunc = (cxAny)_t_##_n_;}while(0)
+#define CX_METHOD(_t_,_n_)              do{cxMethodNew(this,#_n_)->cxMethodFunc = (cxAny)__##_t_##_##_n_;}while(0)
 
 #define CX_METHOD_HAS(_o_,_n_)          cxMethodHas(_o_,#_n_)
 
 #define CX_METHOD_EXISTS(_t_,_n_)       cxMethodExists(_t_##TypeName,#_n_)
 
 #define CX_METHOD_RUN(_o_,_n_,_m_,...)  if(CX_METHOD_HAS(_o_,_n_))CX_CALL(_o_,_n_,_m_,##__VA_ARGS__)
+
+//delegate def
+#define CX_DELEGATE_DEF(_t_,_s_,_n_,_rv_,...)   static _rv_ __##_t_##_##_s_##_##_n_(_t_ this,##__VA_ARGS__)
+
+#define CX_DELEGATE(_t_,_s_,_n_)                do{cxMethodNew(this,#_s_"_"#_n_)->cxMethodFunc = (cxAny)__##_t_##_##_s_##_##_n_;}while(0)
+
+#define CX_DELEGATE_CALL(_o_,_s_,_n_,_m_,...)   CX_CALL(_o_,_s_##_##_n_,_m_,##__VA_ARGS__)
+
+#define CX_DELEGATE_RUN(_o_,_s_,_n_,_m_,...)    if(CX_METHOD_HAS(_o_,_s_##_##_n_))CX_CALL(_o_,_s_##_##_n_,_m_,##__VA_ARGS__)
 
 struct cxMethod {
     cxAny data;
@@ -494,6 +499,7 @@ cxBool cxSignatureHas(cxSignature this,cxConstChars name);
 //types
 struct cxType {
     cxConstType typeName;
+    cxInt typeSizeof;
     cxAny (*Create)();
     cxAny (*Alloc)();
     cxType superType;
@@ -501,10 +507,11 @@ struct cxType {
     cxMethod methods;
     cxSignature signatures;
     cxChar name[CX_NAME_MAX_SIZE];
+    cxChars UI;                     //bind ui json file
     UT_hash_handle hh;
 };
 
-cxType cxTypeNew(cxConstType ct,cxConstType sb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxType));
+cxType cxTypeNew(cxConstType ct,cxConstType sb,cxAny (*create)(),cxAny (*alloc)(),void (*autoType)(cxType),cxInt typeSizeof);
 
 cxType cxTypesGetType(cxConstType name);
 
@@ -512,28 +519,50 @@ cxAny cxTypesCreateObject(cxConstType name);
 
 cxAny cxTypesAllocObject(cxConstType name);
 
+void cxTypeBindUI(cxType this,cxConstChars path);
+
+#define CX_BIND_UI(_f_) cxTypeBindUI(this,_f_)
+
 cxProperty cxTypeGetProperty(cxType this,cxConstChars name);
 
 cxMethod cxTypeGetMethod(cxType this,cxConstChars name);
 
-cxBool cxObjectInstanceOf(cxAny pobj,cxConstType type);
+//check pointer within pobi memory
+cxBool cxValidPointer(cxAny pobj,cxAny pointer);
+
+cxBool cxInstanceOf(cxAny pobj,cxConstType type);
 //////////////////////////////////////////////////////////
 
 cxDouble cxTimestamp();
+
+typedef enum {
+    cxObjectAttrNone    = 0,
+    cxObjectAttrMessage = 1 << 0,//need remove message
+}cxObjectAttr;
 
 //base type define
 CX_BEG(cxObject,cxObject)
     cxType cxType;
     cxInt cxRefcount;
     void(*cxAutoFree)(cxAny);
+    CX_FIELD_DEF(cxAny UserData);
+    CX_FIELD_DEF(cxObjectAttr Attr);
 CX_END(cxObject,cxObject)
 
-cxBool cxObjectInstanceOf(cxAny object,cxConstType type);
+CX_INLINE void cxObjectSetAttr(cxAny pthis,const cxObjectAttr value)
+{
+    CX_ASSERT_THIS(pthis, cxObject);
+    this->Attr |= value;
+}
+CX_FIELD_IMP(cxObject, cxAny, UserData);
+
+cxAny cxObjectSerialize(cxAny pobj);
 
 void cxCoreInit();
 
-void cxCoreFree();
+void cxCoreClear();
 
+void cxCoreFree();
 //reand json from src
 CX_EXTERN cxAny cxJsonLoader(cxConstChars src);
 //get json from localize key

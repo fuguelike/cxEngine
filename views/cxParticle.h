@@ -38,7 +38,16 @@ typedef struct {
     cxFloat deltaradius;
 }cxParticleUnit;
 
+typedef struct {
+    cxFloat angle;
+    cxVec2f position;
+    cxFloat life;
+    cxFloat speed;
+    cxParticleUnit *unit;
+}cxParticleUnitFixInfo;
+
 CX_DEF(cxParticle, cxAtlas)
+    cxBool isInit;
     cxFloat time;
     cxFloat TimeElapsed;
     cxParticleEmitterType type;
@@ -70,7 +79,7 @@ CX_DEF(cxParticle, cxAtlas)
     cxFloatRange rotatepers;
 CX_END(cxParticle, cxAtlas)
 
-void cxParticleInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index);
+void cxParticleFireInitUnit(cxAny pav,cxParticleUnit *particle,cxInt index);
 
 void cxParticleStop(cxAny pav);
 

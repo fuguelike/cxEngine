@@ -10,36 +10,49 @@
 
 CX_METHOD_DEF(cxTimer,Init,void)
 {
-    CX_RETURN(!this->IsBegin);
+    this->time = 0;
+    cxTimerSetRepeat(this, this->repeat);
+    cxActionSetTime(this, this->freq * this->repeat);
     CX_SUPER(cxAction, this, Init, CX_M(void));
-    CX_EVENT_FIRE(this, onArrive);
 }
-CX_METHOD_DEF(cxTimer,Exit,cxBool)
+CX_METHOD_DEF(cxTimer,Step,void,cxFloat dt,cxFloat time)
 {
-    this->Repeat --;
-    CX_RETURN(this->Repeat == 0 && this->IsBegin, true);
-    CX_EVENT_FIRE(this, onArrive);
-    return this->Repeat == 0;
+    this->time += dt;
+    if(this->time >= this->freq){
+        this->Repeat --;
+        CX_CALL(this, OnArrive, CX_M(void));
+        this->time -= this->freq;
+    }
+    if(this->Repeat == 0){
+        cxActionStop(this);
+    }
 }
 CX_SETTER_DEF(cxTimer, repeat)
 {
-    this->IsBegin = cxJsonToInt(value, this->Repeat);
+    this->Repeat = cxJsonToInt(value, this->Repeat);
+    this->repeat = this->Repeat;
 }
-CX_SETTER_DEF(cxTimer, begin)
+CX_SETTER_DEF(cxTimer, freq)
 {
-    this->IsBegin = cxJsonToBool(value, this->IsBegin);
+    this->freq = cxJsonToDouble(value, 0.0f);
+}
+CX_METHOD_DEF(cxTimer, OnArrive, void)
+{
+    CX_EVENT_FIRE(this, onArrive);
 }
 CX_TYPE(cxTimer, cxAction)
 {
     CX_SETTER(cxTimer, repeat);
-    CX_SETTER(cxTimer, begin);
+    CX_SETTER(cxTimer, freq);
+    
+    CX_METHOD(cxTimer, OnArrive);
     
     CX_METHOD(cxTimer, Init);
-    CX_METHOD(cxTimer, Exit);
+    CX_METHOD(cxTimer, Step);
 }
 CX_INIT(cxTimer, cxAction)
 {
-    this->IsBegin = false;
+    
 }
 CX_FREE(cxTimer, cxAction)
 {
@@ -50,8 +63,9 @@ CX_TERM(cxTimer, cxAction)
 cxTimer cxTimerCreate(cxFloat freq,cxInt repeat)
 {
     cxTimer this = CX_CREATE(cxTimer);
-    this->cxAction.Time  = freq;
     cxTimerSetRepeat(this, repeat);
+    this->repeat = repeat;
+    this->freq = freq;
     return this;
 }
 

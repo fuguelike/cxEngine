@@ -42,8 +42,6 @@ CX_TERM(typeName, baseType)
 ------
 ```
 CX_ADD (append event)添加一个事件
-CX_SET (method set)重写一个方法
-CX_CON (link signal)连接到信号
 
 cxAny object1 = CX_CREATE(typeName); //对象将放入自动释放池
 
@@ -59,7 +57,7 @@ CX_TYPE_NAME(obj);//获取对象的字符串类型
 
 CX_TYPE_OF(type,obj);强制转换对象类型，这里不检测类型
 
-CX_TYPE_REG(type);//注册一个类型到系统中，如果没有注册系统将不承认这个类型
+CX_SET_TYPE(type);//注册一个类型到系统中，如果没有注册系统将不承认这个类型
 
 CX_RETAIN_SWAP(old,new);//释放旧的变量值，设置新的变量并retain对象
 
@@ -80,10 +78,10 @@ CX_ASSERT_THIS(obj,type);//断言一个对象的类型,并生成本地 this变�
 ```
 
 $()从语言文件中获取数据
-例如:
+例如:(如果当前系统语言为zh-CN)
 $(ui.json?title) 从语言文件strings/zh-CN/ui.json中获取key=title的数据
 
-${}获取当前对象json属性，当前对象属性不存在从全局cxEngine对象获取
+${}获取cxLoader对象json属性，当前对象属性不存在从全局cxEngine对象获取
 ${WinSize}
 
 @对纹理缓存进行分组处理

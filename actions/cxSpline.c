@@ -18,22 +18,18 @@ cxVec2f cxSplinePointAt(cxAny pav,cxInt idx)
 
 CX_METHOD_DEF(cxSpline,Init,void)
 {
-    CX_ASSERT_VALUE(cxActionGetView(this), cxView, view);
     cxInt num = cxAnyArrayLength(this->points);
     if(num < 2){
         cxActionStop(this);
         return;
     }
     this->delta = 1.0f/((cxFloat)num - 1.0f);
-    this->diff = cxVec2fv(0, 0);
-    this->prev =cxViewGetPosition(view);
-    
     cxVec2f p0 = cxSplinePointAt(this, 0);
     cxVec2f p1 = cxSplinePointAt(this, num - 1);
     cxFloat angle = cxVec2fRadiansBetween(p1, p0);
     if(!cxFloatEqu(angle, this->angle)){
         this->angle = angle;
-        CX_EVENT_FIRE(this, onAngle);
+        CX_CALL(this, OnAngle, CX_M(void,cxFloat),angle);
     }
     CX_SUPER(cxAction, this, Init, CX_M(void));
 }
@@ -51,26 +47,23 @@ CX_METHOD_DEF(cxSpline,Step,void,cxFloat dt,cxFloat time)
     }
     if(index != this->index){
         this->index = index;
-        CX_EVENT_FIRE(this, onIndex);
+        CX_CALL(this, OnIndex, CX_M(void,cxInt),index);
     }
     cxVec2f p0 = cxSplinePointAt(this, index - 1);
     cxVec2f p1 = cxSplinePointAt(this, index + 0);
     cxVec2f p2 = cxSplinePointAt(this, index + 1);
     cxVec2f p3 = cxSplinePointAt(this, index + 2);
+    
     cxVec2f newpos = cxCardinalSplineAt(p0, p1, p2, p3, this->tension, lt);
-    cxVec2f vpos = cxViewGetPosition(view);
-    cxVec2f diff = cxVec2fSub(vpos, this->prev);
-    if(diff.x != 0 || diff.y != 0){
-        this->diff = cxVec2fAdd(this->diff, diff);
-        newpos = cxVec2fAdd(newpos, this->diff);
-    }
-    cxFloat angle = cxVec2fRadiansBetween(newpos, this->prev);
+    cxVec2f curr = cxViewGetPosition(view);
+    
+    cxFloat angle = cxVec2fRadiansBetween(newpos, curr);
     if(!cxFloatEqu(angle, this->angle)){
         this->angle = angle;
-        CX_EVENT_FIRE(this, onAngle);
+        CX_CALL(this, OnAngle, CX_M(void,cxFloat),angle);
     }
+    
     cxViewSetPosition(view, newpos);
-    this->prev = newpos;
 }
 CX_METHOD_DEF(cxSpline,Reset,void)
 {
@@ -90,11 +83,20 @@ CX_SETTER_DEF(cxSpline, points)
     }
     CX_JSON_ARRAY_EACH_END(points, item)
 }
-
+CX_METHOD_DEF(cxSpline, OnAngle, void,cxFloat angle)
+{
+    
+}
+CX_METHOD_DEF(cxSpline, OnIndex, void,cxInt index)
+{
+    
+}
 CX_TYPE(cxSpline, cxAction)
 {
     CX_SETTER(cxSpline, points);
     
+    CX_METHOD(cxSpline, OnAngle);
+    CX_METHOD(cxSpline, OnIndex);
     CX_METHOD(cxSpline, Reset);
     CX_METHOD(cxSpline, Init);
     CX_METHOD(cxSpline, Step);
@@ -107,8 +109,6 @@ CX_INIT(cxSpline, cxAction)
 }
 CX_FREE(cxSpline, cxAction)
 {
-    CX_EVENT_RELEASE(this->onAngle);
-    CX_EVENT_RELEASE(this->onIndex);
     CX_RELEASE(this->points);
 }
 CX_TERM(cxSpline, cxAction)

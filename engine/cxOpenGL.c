@@ -11,15 +11,14 @@
 #include <shaders/cxShaderDefault.h>
 #include <shaders/cxShaderAlpha.h>
 #include <shaders/cxShaderClipping.h>
-#include <shaders/cxShaderMultiple.h>
-#include <shaders/cxShaderTTF.h>
+#include <shaders/cxShaderGray.h>
 #include "cxUtil.h"
 #include "cxOpenGL.h"
 
 #define CX_OPENGL_LOAD_SHADER(t)                                    \
 do{                                                                 \
     cxShader shader = CX_ALLOC(t);                                  \
-    if(cxShaderFireInit(shader)){                                   \
+    if(cxShaderInit(shader)){                                       \
         cxHashSet(this->shaders, cxHashStrKey(#t"Key"), shader);    \
     }else{                                                          \
         CX_ERROR("shader "#t" init failed");                        \
@@ -34,8 +33,7 @@ static void cxOpenGLLoadDefaultShaders()
     CX_OPENGL_LOAD_SHADER(cxShaderColor);
     CX_OPENGL_LOAD_SHADER(cxShaderAlpha);
     CX_OPENGL_LOAD_SHADER(cxShaderClipping);
-    CX_OPENGL_LOAD_SHADER(cxShaderMultiple);
-    CX_OPENGL_LOAD_SHADER(cxShaderTTF);
+    CX_OPENGL_LOAD_SHADER(cxShaderGray);
 }
 
 void cxOpenGLUsingShader(cxConstChars key)
@@ -43,7 +41,7 @@ void cxOpenGLUsingShader(cxConstChars key)
     cxOpenGL this = cxOpenGLInstance();
     cxShader shader = cxHashGet(this->shaders, cxHashStrKey(key));
     CX_ASSERT(shader != NULL, "shader %s not exists",key);
-    cxShaderUsing(shader);
+    cxShaderUsing(shader,NULL);
 }
 
 void cxDrawLineBox(const cxBoxVec2f *box,const cxColor3f color)
@@ -59,10 +57,26 @@ void cxDrawLineLoop(const cxVec2f *vertices,int num,const cxColor3f color)
     }
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     cxOpenGLUsingShader(cxShaderColorKey);
-    cxOpenGLActiveAttribs(cxVertexAttribFlagPosition|cxVertexAttribFlagColor);
-    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 2, 0, vertices);
-    cxOpenGLVertexAttribPointer(cxVertexAttribColor, 3, 0, colors);
-    cxOpenGLDrawArrays(GL_LINE_LOOP, 0, num);
+    glEnableVertexAttribArray(cxVertexAttribPosition);
+    glVertexAttribPointer(cxVertexAttribPosition, 2, GL_FLOAT, GL_FALSE, sizeof(cxVec2f), vertices);
+    glEnableVertexAttribArray(cxVertexAttribColor);
+    glVertexAttribPointer(cxVertexAttribColor, 3, GL_FLOAT, GL_FALSE, sizeof(cxColor3f), colors);
+    glDrawArrays(GL_LINE_LOOP, 0, num);
+}
+
+void cxDrawLines(const cxVec2f *vertices,int num,const cxColor3f color)
+{
+    cxColor3f colors[num];
+    for(int i=0; i < num;i++){
+        colors[i] = color;
+    }
+    cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    cxOpenGLUsingShader(cxShaderColorKey);
+    glEnableVertexAttribArray(cxVertexAttribPosition);
+    glVertexAttribPointer(cxVertexAttribPosition, 2, GL_FLOAT, GL_FALSE, sizeof(cxVec2f), vertices);
+    glEnableVertexAttribArray(cxVertexAttribColor);
+    glVertexAttribPointer(cxVertexAttribColor, 3, GL_FLOAT, GL_FALSE, sizeof(cxColor3f), colors);
+    glDrawArrays(GL_LINES, 0, num);
 }
 
 void cxDrawClippingRect(const cxVec2f pos,cxSize2f size)
@@ -70,12 +84,22 @@ void cxDrawClippingRect(const cxVec2f pos,cxSize2f size)
     cxDrawSolidRect(cxRect4fv(pos.x, pos.y, size.w, size.h), cxColor4fv(0, 0, 0, 0), cxShaderDefaultKey);
 }
 
+void cxDrawBox(const cxBox4f vbox,cxColor3f color)
+{
+    cxBoxVec3f box;
+    box.lb = cxVec3fv(vbox.l, vbox.b, 0);
+    box.lt = cxVec3fv(vbox.l, vbox.t, 0);
+    box.rb = cxVec3fv(vbox.r, vbox.b, 0);
+    box.rt = cxVec3fv(vbox.r, vbox.t, 0);
+    cxDrawSolidBox(&box, cxColor3fToColor4f(color), cxShaderColorKey);
+}
+
 void cxDrawPoint(const cxVec2f pos,cxColor3f color,cxFloat w)
 {
     GLint lw;
     glGetIntegerv(GL_LINE_WIDTH, &lw);
     glLineWidth(w);
-    cxRect4f rect = cxRect4fv(pos.x - w/2, pos.y - w/2, w, w);
+    cxRect4f rect = cxRect4fv(pos.x, pos.y, w, w);
     cxDrawSolidRect(rect, cxColor4fv(color.r, color.g, color.b, 1.0f), cxShaderColorKey);
     glLineWidth(lw);
 }
@@ -97,71 +121,11 @@ void cxDrawSolidBox(const cxBoxVec3f *box,const cxColor4f color,cxConstChars ske
     cxColor4f colors[4] = {color,color,color,color};
     cxOpenGLSetBlendFactor(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     cxOpenGLUsingShader(skey);
-    cxOpenGLActiveAttribs(cxVertexAttribFlagPosition | cxVertexAttribFlagColor);
-    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxVec3f), box);
-    cxOpenGLVertexAttribPointer(cxVertexAttribColor, 4, sizeof(cxColor4f), colors);
-    cxOpenGLDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-}
-
-void cxOpenGLVAODraw(GLuint vaoId,GLuint vboId[2],cxInt number,cxAny vbuffer,cxBool *dirty)
-{
-    if (*dirty){
-        glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(cxBoxPoint) * number, vbuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        *dirty = false;
-    }
-    glBindVertexArray(vaoId);
-    glDrawElements(GL_TRIANGLES, number*6, GL_UNSIGNED_SHORT, NULL);
-    glBindVertexArray(0);
-}
-
-void cxOpenGLVBODraw(GLuint vboId[2],cxInt number,cxAny vbuffer,cxBool *dirty)
-{
-    glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
-    if (*dirty){
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(cxBoxPoint) * number, vbuffer);
-        *dirty = false;
-    }
-    cxOpenGLActiveAttribs(cxVertexAttribFlagPosColorTex);
-    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3, sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, vertices));
-    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2, sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, texcoords));
-    cxOpenGLVertexAttribPointer(cxVertexAttribColor, 4, sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, colors));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId[1]);
-    glDrawElements(GL_TRIANGLES, (GLsizei)number*6, GL_UNSIGNED_SHORT, (GLvoid*)NULL);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-void cxOpenGLInitVAO(GLuint vaoId,GLuint vboId[2],cxInt number,cxAny vbuffer,cxAny ibuffer)
-{
-    glBindVertexArray(vaoId);
-    glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cxBoxPoint) * number, vbuffer, GL_DYNAMIC_DRAW);
-    //vertices
-    cxOpenGLEnableVertexAttribArray(cxVertexAttribPosition,true);
-    cxOpenGLVertexAttribPointer(cxVertexAttribPosition, 3,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, vertices));
-    //colors
-    cxOpenGLEnableVertexAttribArray(cxVertexAttribColor,true);
-    cxOpenGLVertexAttribPointer(cxVertexAttribColor, 4,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, colors));
-    //tex coords
-    cxOpenGLEnableVertexAttribArray(cxVertexAttribTexcoord,true);
-    cxOpenGLVertexAttribPointer(cxVertexAttribTexcoord, 2,sizeof(cxPoint), (GLvoid*)offsetof(cxPoint, texcoords));
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices)*number, ibuffer, GL_STATIC_DRAW);
-    glBindVertexArray(0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void cxOpenGLInitVBO(GLuint vboId[2],cxInt number,cxAny vbuffer,cxAny ibuffer)
-{
-    glBindBuffer(GL_ARRAY_BUFFER, vboId[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cxBoxPoint) * number, vbuffer, GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cxIndices) * number, ibuffer, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glEnableVertexAttribArray(cxVertexAttribPosition);
+    glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), box);
+    glEnableVertexAttribArray(cxVertexAttribColor);
+    glVertexAttribPointer(cxVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), colors);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 CX_TYPE(cxOpenGL, cxObject)
@@ -170,20 +134,26 @@ CX_TYPE(cxOpenGL, cxObject)
 }
 CX_INIT(cxOpenGL, cxObject)
 {
-    this->clearColor = cxColor4fv(0, 0, 0, 1);
-    this->blendSrc = -1;
-    this->blendDst = -1;
-    this->currentProgram = -1;
     this->shaders = CX_ALLOC(cxHash);
-    for(cxInt i=0; i < MAX_ACTIVE_TEXTURE;i++){
-        this->activeTextures[i] = -1;
-    }
+    cxOpenGLClear(this);
 }
 CX_FREE(cxOpenGL, cxObject)
 {
     CX_RELEASE(this->shaders);
 }
 CX_TERM(cxOpenGL, cxObject)
+
+void cxOpenGLClear(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxOpenGL);
+    this->blendSrc = -1;
+    this->blendDst = -1;
+    this->currentProgram = -1;
+    for(cxInt i=0; i < MAX_ACTIVE_TEXTURE;i++){
+        this->activeTextures[i] = -1;
+    }
+    cxHashClear(this->shaders);
+}
 
 cxAny cxOpenGLShader(cxConstChars key)
 {
@@ -194,9 +164,6 @@ cxAny cxOpenGLShader(cxConstChars key)
 
 cxAny cxOpenGLShaderByName(cxConstChars name)
 {
-    if(cxConstCharsEqu(name, "default")){
-        return cxOpenGLShader(cxShaderDefaultKey);
-    }
     if(cxConstCharsEqu(name, "color")){
         return cxOpenGLShader(cxShaderColorKey);
     }
@@ -206,8 +173,8 @@ cxAny cxOpenGLShaderByName(cxConstChars name)
     if(cxConstCharsEqu(name, "alpha")){
         return cxOpenGLShader(cxShaderAlphaKey);
     }
-    if(cxConstCharsEqu(name, "multiple")){
-        return cxOpenGLShader(cxShaderMultipleKey);
+    if(cxConstCharsEqu(name, "gray")){
+        return cxOpenGLShader(cxShaderGrayKey);
     }
     return cxOpenGLShader(cxShaderDefaultKey);
 }
@@ -228,14 +195,28 @@ void cxOpenGLCheckFeature()
     cxConstChars extensions = (cxConstChars)glGetString(GL_EXTENSIONS);
     CX_ASSERT(extensions != NULL, "gl extensions get error");
     
+    //GL_OES_mapbuffer
     CX_GL_SUPPORT(GL_IMG_texture_npot);
     CX_GL_SUPPORT(GL_IMG_texture_compression_pvrtc);
     CX_GL_SUPPORT(GL_OES_compressed_ETC1_RGB8_texture);
     CX_GL_SUPPORT(GL_OES_vertex_array_object);
     CX_GL_SUPPORT(GL_EXT_discard_framebuffer);
+    CX_GL_SUPPORT(GL_OES_mapbuffer);
+    CX_GL_SUPPORT(GL_OES_packed_depth_stencil);
     
+    //android use vbo
 #if (CX_TARGET_PLATFORM == CX_PLATFORM_ANDROID)
+    //support GL_OES_vertex_array_object
+    glGenVertexArrays = (PFNGLGENVERTEXARRAYSOESPROC)eglGetProcAddress("glGenVertexArraysOES");
+    glBindVertexArray = (PFNGLBINDVERTEXARRAYOESPROC)eglGetProcAddress("glBindVertexArrayOES");
+    glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSOESPROC)eglGetProcAddress("glDeleteVertexArraysOES" );
+    glIsVertexArray = (PFNGLISVERTEXARRAYOESPROC)eglGetProcAddress ("glIsVertexArrayOES");
     this->support_GL_OES_vertex_array_object = false;
+    //support GL_OES_mapbuffer
+    glMapBuffer = (PFNGLMAPBUFFEROESPROC)eglGetProcAddress("glMapBufferOES");
+    glUnmapBuffer = (PFNGLUNMAPBUFFEROESPROC)eglGetProcAddress("glUnmapBufferOES");
+    glGetBufferPointerv = (PFNGLGETBUFFERPOINTERVOESPROC)eglGetProcAddress("glGetBufferPointervOES");
+    this->support_GL_OES_mapbuffer = false;
 #endif
     
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &this->max_texture_size);
@@ -250,6 +231,30 @@ void cxOpenGLCheckFeature()
     cxOpenGLLoadDefaultShaders();
 }
 
+void OpenGLDrawTriangle(cxInt mode,cxInt num,const cxVec3f *vs,const cxColor4f *cs,const cxTex2f *ts)
+{
+    CX_RETURN(num < 3);
+    if(vs != NULL){
+        glEnableVertexAttribArray(cxVertexAttribPosition);
+        glVertexAttribPointer(cxVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(cxVec3f), vs);
+    }else{
+        glDisableVertexAttribArray(cxVertexAttribPosition);
+    }
+    if(cs != NULL){
+        glEnableVertexAttribArray(cxVertexAttribColor);
+        glVertexAttribPointer(cxVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(cxColor4f), cs);
+    }else{
+        glDisableVertexAttribArray(cxVertexAttribColor);
+    }
+    if(ts != NULL){
+        glEnableVertexAttribArray(cxVertexAttribTexcoord);
+        glVertexAttribPointer(cxVertexAttribTexcoord, 2, GL_FLOAT, GL_FALSE, sizeof(cxTex2f), ts);
+    }else{
+        glDisableVertexAttribArray(cxVertexAttribTexcoord);
+    }
+    glDrawArrays(mode, 0, num);
+}
+
 void cxOpenGLSetBlendFactor(GLenum sfactor, GLenum dfactor)
 {
     cxOpenGL this = cxOpenGLInstance();
@@ -258,19 +263,19 @@ void cxOpenGLSetBlendFactor(GLenum sfactor, GLenum dfactor)
     }
     if(sfactor == GL_ONE && dfactor == GL_ZERO){
         glDisable(GL_BLEND);
-    }else{
-        glEnable(GL_BLEND);
-        glBlendFunc(sfactor, dfactor);
-        this->blendSrc = sfactor;
-        this->blendDst = dfactor;
+        return;
     }
+    glEnable(GL_BLEND);
+    glBlendFunc(sfactor, dfactor);
+    this->blendSrc = sfactor;
+    this->blendDst = dfactor;
 }
 
 void cxOpenGLSetDepthTest(cxBool on)
 {
     if (on){
         glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
+        glDepthFunc(GL_GEQUAL);
     }else{
         glDisable(GL_DEPTH_TEST);
     }
@@ -294,10 +299,10 @@ void cxOpenGLSetTexParameter(GLuint type,GLuint value)
 
 void cxOpenGLSetTexParameters(const cxTextureParams params)
 {
-    cxOpenGLSetTexParameter(GL_TEXTURE_MIN_FILTER, params.minFilter);
-    cxOpenGLSetTexParameter(GL_TEXTURE_MAG_FILTER, params.magFilter);
-    cxOpenGLSetTexParameter(GL_TEXTURE_WRAP_S, params.wrapS);
-    cxOpenGLSetTexParameter(GL_TEXTURE_WRAP_T, params.wrapT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, params.minFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, params.magFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, params.wrapS);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, params.wrapT);
 }
 
 void cxOpenGLGenTextures(GLsizei n,GLuint *textures)
@@ -329,45 +334,6 @@ void cxOpenGLDisableScissor()
     glDisable(GL_SCISSOR_TEST);
 }
 
-void cxOpenGLDrawArrays(GLenum mode, GLint first, GLsizei count)
-{
-    glDrawArrays(mode, first, count);
-}
-
-void cxOpenGLVertexAttribPointer(GLuint indx, GLint size, GLsizei stride, const GLvoid* ptr)
-{
-    glVertexAttribPointer(indx, size, GL_FLOAT, GL_FALSE, stride, ptr);
-}
-
-void cxOpenGLEnableVertexAttribArray (GLuint index,GLboolean enable)
-{
-    if(enable){
-        glEnableVertexAttribArray(index);
-    }else{
-        glDisableVertexAttribArray(index);
-    }
-}
-
-void cxOpenGLActiveAttribs(cxUInt flags)
-{
-    cxOpenGL this = cxOpenGLInstance();
-    cxBool eposition = (flags & cxVertexAttribFlagPosition) != 0;
-    if(eposition != this->enableAttribPosition){
-        cxOpenGLEnableVertexAttribArray(cxVertexAttribPosition,eposition);
-        this->enableAttribPosition = eposition;
-    }
-    cxBool ecolor = (flags & cxVertexAttribFlagColor) != 0;
-    if(ecolor != this->enableAttribColor){
-        cxOpenGLEnableVertexAttribArray(cxVertexAttribColor,ecolor);
-        this->enableAttribColor = ecolor;
-    }
-    cxBool etexcoords = (flags & cxVertexAttribFlagTexcoord);
-    if(etexcoords != this->enableAttribTexcoords){
-        cxOpenGLEnableVertexAttribArray(cxVertexAttribTexcoord,etexcoords);
-        this->enableAttribTexcoords = etexcoords;
-    }
-}
-
 void cxOpenGLUseProgram(GLuint program)
 {
     cxOpenGL this = cxOpenGLInstance();
@@ -390,7 +356,7 @@ void cxOpenGLSetClearColor(cxColor4f color)
     this->clearColor = color;
 }
 
-void cxOpenGLClear()
+void cxOpenGLClearColorBuffer()
 {
     cxOpenGL this = cxOpenGLInstance();
     glClearColor(this->clearColor.r, this->clearColor.g, this->clearColor.b, this->clearColor.a);

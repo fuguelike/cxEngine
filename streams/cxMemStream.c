@@ -10,7 +10,9 @@
 
 CX_METHOD_DEF(cxMemStream,Open,cxBool)
 {
-    CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
+    if(this->cxStream.isOpen){
+        return true;
+    }
     this->allocSize = 128;
     this->data = allocator->malloc(this->allocSize);
     this->cxStream.canRead = true;
@@ -76,18 +78,18 @@ CX_METHOD_DEF(cxMemStream,Seek,cxInt,cxInt off,cxInt flags)
     }
     return 0;
 }
-CX_METHOD_DEF(cxMemStream,AllBytes,cxString)
+CX_METHOD_DEF(cxMemStream,AllBytes,cxStr)
 {
-    cxString rv = CX_CREATE(cxString);
-    cxStringAppend(rv, this->data, this->cxStream.Length);
+    cxStr rv = CX_CREATE(cxStr);
+    cxStrAppend(rv, this->data, this->cxStream.Length);
     return rv;
 }
 CX_METHOD_DEF(cxMemStream,Close,void)
 {
-    this->allocSize = 0;
-    if(this->data != NULL){
+    if(this->data != NULL && this->allocSize > 0){
         allocator->free(this->data);
         this->data = NULL;
+        this->allocSize = 0;
     }
     this->position = 0;
     CX_SUPER(cxStream, this, Close, CX_M(void));
@@ -108,19 +110,36 @@ CX_INIT(cxMemStream, cxStream)
 }
 CX_FREE(cxMemStream, cxStream)
 {
-    
+    CX_RELEASE(this->datas);
 }
 CX_TERM(cxMemStream, cxStream)
 
-cxStream cxMemStreamCreateWithText(cxString txt)
+cxStream cxMemStreamCreateRefStr(cxStr data)
 {
+    CX_ASSERT(cxStrOK(data), "data args error");
+    cxMemStream stream = CX_CREATE(cxMemStream);
+    CX_RETAIN_SWAP(stream->datas, data);
+    stream->allocSize = 0;
+    stream->data = cxStrBody(data);
+    stream->cxStream.Length = cxStrLength(data);
+    stream->cxStream.isOpen = true;
+    stream->cxStream.canWrite = false;
+    stream->cxStream.canRead = true;
+    stream->cxStream.canSeek = true;
+    cxStreamSeek(stream, 0, SEEK_SET);
+    return (cxStream)stream;
+}
+
+cxStream cxMemStreamCreateWithStr(cxStr str)
+{
+    CX_ASSERT(cxStrOK(str), "txt args error");
     cxStream stream = CX_CREATE(cxMemStream);
-    if(!CX_CALL(stream, Open, CX_M(cxBool))){
+    if(!cxStreamOpen(stream)){
         return NULL;
     }
-    if(txt != NULL){
-        CX_CALL(stream, Write, CX_M(cxInt,cxAny,cxInt),cxStringBody(txt),cxStringLength(txt));
-    }
+    stream->Length = cxStrLength(str);
+    cxStreamWrite(stream, cxStrBody(str),cxStrLength(str));
+    cxStreamSeek(stream, 0, SEEK_SET);
     return stream;
 }
 

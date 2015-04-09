@@ -14,10 +14,27 @@
 CX_C_BEGIN
 
 CX_DEF(cxTimeLine, cxAction)
-    cxInt index;
+    CX_FIELD_DEF(cxInt Index);
     cxAnyArray times;
-    CX_EVENT_ALLOC(onTime);
 CX_END(cxTimeLine, cxAction)
+
+CX_FIELD_GET(cxTimeLine, cxInt, Index);
+
+//get time count
+CX_INLINE cxInt cxTimeLineRemain(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxTimeLine);
+    return cxAnyArrayLength(this->times) - this->Index - 1;
+}
+
+CX_INLINE cxInt cxTimeLineNumber(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxTimeLine);
+    return cxAnyArrayLength(this->times);
+}
+
+//get time
+cxFloat cxTimeLineGetTime(cxAny pav,cxInt idx);
 
 //set time event point
 void cxTimeLineSet(cxAny pav,cxFloat time);

@@ -41,6 +41,12 @@ CX_FIELD_IMP(cxAsync, cxAsyncState, State);
 
 cxAsyncState cxAsyncDrive(cxAny pview, cxAny pitem);
 
+CX_INLINE cxStr cxAsyncTitle(cxAny pthis)
+{
+    CX_ASSERT_THIS(pthis, cxAsync);
+    return CX_CALL(this, Title, CX_M(cxStr));
+}
+
 CX_INLINE void cxAsyncReset(cxAny pthis)
 {
     CX_ASSERT_THIS(pthis, cxAsync);

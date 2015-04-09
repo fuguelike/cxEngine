@@ -15,12 +15,13 @@ CX_C_BEGIN
 
 CX_DEF(cxTimer, cxAction)
     CX_FIELD_DEF(cxInt Repeat);
-    CX_FIELD_DEF(cxBool IsBegin);
     CX_EVENT_ALLOC(onArrive);
+    cxInt repeat;
+    cxFloat time;
+    cxFloat freq;
 CX_END(cxTimer, cxAction)
 
 CX_FIELD_IMP(cxTimer, cxInt, Repeat);
-CX_FIELD_IMP(cxTimer, cxBool, IsBegin);
 
 cxTimer cxTimerCreate(cxFloat freq,cxInt repeat);
 

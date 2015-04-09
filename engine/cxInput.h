@@ -28,8 +28,9 @@ typedef struct {
     cxVec2f xy;
 }cxTouchPoint;
 
-#define TAP_TIME        0.15f
-#define TAP_MOVEMENT    25.0f
+#define CX_TAP_TIME             0.3f
+#define CX_TAP_MOVEMENT         30.0f
+#define CX_TAP_LONGER           0.5f
 
 CX_DEF(cxTouchItem, cxObject)
     cxLong  key;        //item key
@@ -41,7 +42,7 @@ CX_DEF(cxTouchItem, cxObject)
     cxVec2f startpos;   //start position
     cxVec2f position;   //current position
     cxTouchType type;
-    cxBool isTap;
+    cxBool IsTap;
 CX_END(cxTouchItem, cxObject)
 
 typedef struct {

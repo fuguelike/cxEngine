@@ -14,7 +14,7 @@
 CX_METHOD_DEF(cxFileStream,Open,cxBool)
 {
     CX_ASSERT(this->cxStream.isOpen == false,"stream repeat open");
-    cxConstChars path = cxStringBody(this->cxStream.path);
+    cxConstChars path = cxStrBody(this->cxStream.path);
     if(this->rdonly){
         this->fd = fopen(path, "rb");
     }else{
@@ -60,7 +60,7 @@ CX_METHOD_DEF(cxFileStream,Seek,cxInt,cxInt off,cxInt flags)
     }
     return fseek(this->fd, off, flags) > 0;
 }
-CX_METHOD_DEF(cxFileStream,AllBytes,cxString)
+CX_METHOD_DEF(cxFileStream,AllBytes,cxStr)
 {
     if(!this->cxStream.canRead){
         CX_CALL(this, Open, CX_M(cxBool));
@@ -74,7 +74,7 @@ CX_METHOD_DEF(cxFileStream,AllBytes,cxString)
     cxChars bytes = allocator->malloc(this->cxStream.Length + 1);
     CX_CALL(this, Read, CX_M(cxInt,cxAny,cxInt),bytes,this->cxStream.Length);
     bytes[this->cxStream.Length] = '\0';
-    cxString data = cxStringAttachMem(bytes, this->cxStream.Length);
+    cxStr data = cxStrAttachMem(bytes, this->cxStream.Length);
     CX_CALL(this, Close, CX_M(void));
     return data;
 }
@@ -108,15 +108,15 @@ CX_FREE(cxFileStream, cxStream)
 }
 CX_TERM(cxFileStream, cxStream)
 
-cxString cxDocumentData(cxConstChars file)
+cxStr cxDocumentData(cxConstChars file)
 {
     cxStream stream = cxFileStreamCreate(file, true);
-    return CX_CALL(stream, AllBytes, CX_M(cxString));
+    return CX_CALL(stream, AllBytes, CX_M(cxStr));
 }
 
 cxStream cxFileStreamCreate(cxConstChars file,cxBool rdonly)
 {
-    cxString path = cxDocumentPath(file);
+    cxStr path = cxDocumentPath(file);
     cxFileStream rv = CX_CREATE(cxFileStream);
     rv->rdonly = rdonly;
     CX_RETAIN_SWAP(rv->cxStream.path, path);

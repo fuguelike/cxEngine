@@ -6,11 +6,12 @@
 //  Copyright (c) 2013 xuhua. All rights reserved.
 //
 
+#include <uv/uv.h>
 #include <pthread.h>
 #include "cxMemPool.h"
 #include "cxStack.h"
 
-static pthread_key_t autoPoolKey;
+static uv_key_t poolKey;
 
 CX_TYPE(cxMemPool, cxObject)
 {}
@@ -26,23 +27,23 @@ CX_TERM(cxMemPool, cxObject)
 
 static cxStack cxMemPoolStack()
 {
-    cxAny pool = pthread_getspecific(autoPoolKey);
+    cxAny pool = uv_key_get(&poolKey);
     if(pool == NULL){
         pool = CX_ALLOC(cxStack);
-        pthread_setspecific(autoPoolKey, pool);
+        uv_key_set(&poolKey, pool);
     }
     return pool;
 }
 
 void cxMemPoolInit()
 {
-    pthread_key_create(&autoPoolKey, __cxObjectRelease);
+    uv_key_create(&poolKey);
 }
 
 void cxMemPoolFree()
 {
     cxMemPoolClear();
-    pthread_key_delete(autoPoolKey);
+    uv_key_delete(&poolKey);
 }
 
 CX_INLINE cxMemPool cxMemPoolInstance()

@@ -44,12 +44,9 @@ typedef enum {
 
 CX_DEF(cxAStar, cxObject)
     CX_FIELD_DEF(cxAStarType Type);
-    CX_FIELD_DEF(cxAny UserData);
     cxAnyArray points;
     cxAnyArray visits;
 CX_END(cxAStar, cxObject)
-
-CX_FIELD_IMP(cxAStar, cxAny, UserData);
 
 CX_INLINE void cxAStarSetType(cxAny pthis,const cxAStarType type)
 {

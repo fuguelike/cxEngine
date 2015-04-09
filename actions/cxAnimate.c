@@ -1,280 +1,171 @@
 //
 //  cxAnimate.c
-//  cxEngine
-//
-//  Created by xuhua on 11/26/13.
-//  Copyright (c) 2013 xuhua. All rights reserved.
+//  home
+//  Node帧动画
+//  Created by xuhua on 12/27/14.
+//  Copyright (c) 2014 xuhua. All rights reserved.
 //
 
-#include <views/cxSprite.h>
 #include <textures/cxTextureCache.h>
-#include <engine/cxTexture.h>
-#include <engine/cxUtil.h>
+#include <views/cxAtlas.h>
+#include <engine/cxEngine.h>
 #include "cxAnimate.h"
 
-CX_SETTER_DEF(cxAnimateItem, id)
+static cxInt cxAnimateGetNumber(cxAnimate this,cxInt frameNum)
 {
-    cxString id = cxJsonToString(value);
-    CX_RETAIN_SET(this->id, id);
-}
-CX_SETTER_DEF(cxAnimateItem, key)
-{
-    cxString key = cxJsonToString(value);
-    CX_RETAIN_SET(this->key, key);
-}
-CX_SETTER_DEF(cxAnimateItem, texture)
-{
-    cxConstChars file = cxJsonToConstChars(value);
-    CX_ASSERT(file != NULL, "cxAnimateItem must set texture");
-    cxAny texture = cxTextureCacheLoadFile(file);
-    CX_RETURN(texture == NULL);
-    CX_RETAIN_SET(this->texture, texture);
-}
-CX_SETTER_DEF(cxAnimateItem, time)
-{
-    this->time = cxJsonToDouble(value, this->time);
-}
-CX_SETTER_DEF(cxAnimateItem, flipx)
-{
-    this->flipx = cxJsonToBool(value, this->flipx);
-}
-CX_SETTER_DEF(cxAnimateItem, flipy)
-{
-    this->flipy = cxJsonToBool(value, this->flipy);
-}
-
-CX_TYPE(cxAnimateItem, cxAction)
-{
-    CX_SETTER(cxAnimateItem, id);
-    CX_SETTER(cxAnimateItem, key);
-    CX_SETTER(cxAnimateItem, texture);
-    CX_SETTER(cxAnimateItem, time);
-    CX_SETTER(cxAnimateItem, flipx);
-    CX_SETTER(cxAnimateItem, flipy);
-}
-CX_INIT(cxAnimateItem, cxObject)
-{
-    this->time = 0;
-    this->value = 0;
-    this->flipx = false;
-    this->flipy = false;
-}
-CX_FREE(cxAnimateItem, cxObject)
-{
-    CX_RELEASE(this->id);
-    CX_RELEASE(this->key);
-    CX_RELEASE(this->texture);
-}
-CX_TERM(cxAnimateItem, cxObject)
-
-CX_INLINE cxAnimateItem cxAnimateItemClone(cxAnimateItem this)
-{
-    cxAnimateItem cp = CX_CREATE(cxAnimateItem);
-    CX_RETAIN_SET(cp->id, this->id);
-    CX_RETAIN_SET(cp->key, this->key);
-    CX_RETAIN_SET(cp->texture, this->texture);
-    cp->time = this->time;
-    return cp;
-}
-
-CX_INLINE cxHashKey cxAnimateItemKey(cxAnimateItem this)
-{
-    CX_ASSERT(this->key != NULL, "must set cxAnimateItem key");
-    cxConstChars key = this->id != NULL ? cxStringBody(this->id) : cxStringBody(this->key);
-    return cxHashStrKey(key);
-}
-
-static cxAnimateItem cxAnimateItemGet(cxAnimate this,cxArray items, cxAny any, cxInt index)
-{
-    if(CX_NAME_OF(any) == cxAnimateItemTypeName){
-        return any;
+    CX_ASSERT_VALUE(this->Frames, cxFrames, fs);
+    this->from = ((this->from % frameNum) + frameNum) % frameNum;
+    this->to = ((this->to % frameNum) + frameNum) % frameNum;
+    cxInt count = abs(this->to - this->from) + 1;
+    this->isReverse = this->from > this->to;
+    if(this->IsCircle && count > (frameNum/2)){
+        count = frameNum - count;
+        this->isReverse = !this->isReverse;
     }
-    if(CX_NAME_OF(any) != cxStringTypeName){
-        return NULL;
-    }
-    cxConstChars key = cxStringBody(any);
-    cxAnimateItem frame = cxHashGet(this->frames, cxHashStrKey(key));
-    if(frame == NULL){
-        return NULL;
-    }
-    //update frame at array index
-    frame = cxAnimateItemClone(frame);
-    cxArrayUpdate(items, frame, index);
-    return frame;
+    return count;
 }
 
-/* 1 dt 2 dt 3 dt 4 dt 5 dt 6 dt 7 dt 8*/
 CX_METHOD_DEF(cxAnimate,Init,void)
 {
-    this->index = 0;
-    cxFloat time = cxActionGetTime(this);
-    cxArray items = cxAnimateGetGroup(this,this->name);
-    CX_ASSERT(items != NULL, "group name not found");
-    cxInt num = cxArrayLength(items);
-    cxFloat dt = this->time / (cxFloat)num;
-    cxFloat value = 0;
-    for (cxInt i = 0; i < num; i++) {
-        cxAny any = cxArrayAtIndex(items, i);
-        cxAnimateItem item = cxAnimateItemGet(this, items, any, i);
-        CX_ASSERT_TYPE(item, cxAnimateItem);
-        item->value = value;
-        time += item->time;
-        value += dt + item->time;
+    CX_ASSERT_VALUE(cxActionGetView(this), cxAtlas, view);
+    CX_ASSERT_VALUE(this->Frames, cxFrames, fs);
+    if(cxFramesInit(this->Frames,view,this->Offset) < 0){
+        CX_WARN("init cxAnimate  frames error");
+        cxActionStop(this);
+        return;
     }
-    cxActionSetTime(this, time);
+    if(fs->table.num > 0){
+        this->table = fs->table;
+    }
+    cxInt frameNum = cxArrayLength(fs->Frames);
+    if(frameNum == 0){
+        CX_WARN("cxAnimate frame number == 0");
+        cxActionStop(this);
+        return;
+    }
+    this->prevIdx = -1;
+    this->from = 0;
+    this->to = frameNum - 1;
+    //如果设置了range
+    if(this->Range.max != INT32_MAX && this->Range.min != INT32_MIN){
+        this->from = this->Range.min;
+        this->to = this->Range.max;
+    }
+    this->number = cxAnimateGetNumber(this,frameNum);
+    if(this->number == 0){
+        CX_WARN("cxAnimate play frame == 0");
+        cxActionStop(this);
+        return;
+    }
+    //如果设置帧时间
+    if(!cxFloatEqu(this->FrameTime, 0.0f)){
+        this->Time = this->FrameTime * (cxFloat)this->number;
+    }
+    //如果时间为0或播放帧=1
+    if(cxFloatEqu(this->Time, 0.0f) || this->number == 1){
+        this->Index = cxAtlasSetFrames(view, this->Frames, this->from, &this->table, this->Start);
+        cxActionStop(this);
+        return;
+    }
+    this->delta = this->Time/(cxFloat)this->number;
+    cxActionSetTime(this, this->Time);
     CX_SUPER(cxAction, this, Init, CX_M(void));
 }
 CX_METHOD_DEF(cxAnimate,Step,void,cxFloat dt,cxFloat time)
 {
-    CX_ASSERT_VALUE(cxActionGetView(this), cxSprite, view);
-    cxArray items = cxAnimateGetGroup(this,this->name);
-    CX_ASSERT(items != NULL, "group name not found ");
+    CX_ASSERT_VALUE(cxActionGetView(this), cxAtlas, view);
     cxFloat elapsed = cxActionGetTimeElapsed(this);
-    for (cxInt i = this->index; i < cxArrayLength(items); i++) {
-        cxAnimateItem item = cxArrayAtIndex(items,i);
-        CX_ASSERT_TYPE(item, cxAnimateItem);
-        if(elapsed < item->value){
-            break;
-        }
-        if(item->texture != NULL){
-            cxSpriteSetTexture(view, item->texture);
-        }
-        if(item->key != NULL){
-            cxSpriteSetTextureKey(view, cxStringBody(item->key));
-        }
-        cxSpriteSetFlip(view, item->flipx, item->flipy);
-        CX_EVENT_FIRE(this, onFrame);
-        //set to next frame
-        this->index = i + 1;
+    cxInt idx = elapsed / this->delta;
+    if(idx >= this->number){
+        idx = this->number - 1;
     }
-}
-CX_METHOD_DEF(cxAnimate,Reset,void)
-{
-    this->index = 0;
-    cxActionSetTime(this, this->time);
-    CX_SUPER(cxAction, this, Reset, CX_M(void));
-}
-
-CX_METHOD_DEF(cxAnimate,Exit,cxBool)
-{
-    this->Repeat --;
-    if(this->Repeat == 0){
-        return true;
+    if(this->prevIdx == idx){
+        return;
     }
-    CX_CALL(this, Reset, CX_M(void));
-    return false;
+    this->prevIdx = idx;
+    cxInt fidx = this->from + ((this->isReverse)?-idx:+idx);
+    this->Index = cxAtlasSetFrames(view, this->Frames, fidx, &this->table, this->Start);
+    CX_CALL(this, OnFrame, CX_M(void));
 }
-CX_SETTER_DEF(cxAnimate, time)
+CX_METHOD_DEF(cxAnimate,IsExit,cxBool)
 {
-    this->time = cxJsonToDouble(value, this->time);
-    cxActionSetTime(this, this->time);
+    CX_CALL(this, OnLoop, CX_M(void));
+    this->prevIdx = -1;
+    return !this->IsLoop;
 }
 CX_SETTER_DEF(cxAnimate, frames)
 {
-    cxJson frames = cxJsonToArray(value);
-    CX_JSON_ARRAY_EACH_BEG(frames, item)
-    cxAnimateItem frame = cxJsonMakeObject(item);
-    CX_ASSERT_TYPE(frame, cxAnimateItem);
-    cxHashKey key = cxAnimateItemKey(frame);
-    cxHashSet(this->frames, key, frame);
-    CX_JSON_ARRAY_EACH_END(frames, item)
+    cxFrames frames = cxJsonMakeObject(value);
+    CX_ASSERT_TYPE(frames, cxFrames);
+    CX_RETAIN_SWAP(this->Frames, frames);
 }
-CX_SETTER_DEF(cxAnimate, repeat)
+CX_SETTER_DEF(cxAnimate, offset)
 {
-    this->Repeat = cxJsonToInt(value, this->Repeat);
+    this->Offset = cxJsonToVec2f(value, this->Offset);
 }
-CX_SETTER_DEF(cxAnimate, groups)
+CX_SETTER_DEF(cxAnimate, range)
 {
-    cxJson groups = value;
-    CX_JSON_OBJECT_EACH_BEG(groups, item)
-    CX_ASSERT(cxJsonIsArray(item), "must is array");
-    cxString key = cxStringConstChars(itemKey);
-    cxArray items = cxAnimateGetGroup(this,key);
-    cxJson frames = cxJsonToArray(item);
-    CX_JSON_ARRAY_EACH_BEG(frames, ats)
-    if(cxJsonIsObject(ats)){
-        cxAnimateItem frame = cxJsonMakeObject(ats);
-        CX_ASSERT_TYPE(frame, cxAnimateItem);
-        cxArrayAppend(items, frame);
-        continue;
-    }
-    if(cxJsonIsString(ats)){
-        cxConstChars ik = cxJsonToConstChars(ats);
-        cxString frameKey = cxStringConstChars(ik);
-        cxArrayAppend(items, frameKey);
-        continue;
-    }
-    CX_JSON_ARRAY_EACH_END(frames, ats)
-    CX_JSON_OBJECT_EACH_END(groups, item)
+    this->Range = cxJsonToRange2i(value, this->Range);
 }
-CX_SETTER_DEF(cxAnimate, name)
+//当一帧播放完毕
+CX_METHOD_DEF(cxAnimate, OnFrame, void)
 {
-    cxConstChars name = cxJsonToConstChars(value);
-    if(name != NULL){
-        cxAnimateRunGroup(this, name);
-    }
+//    CX_LOGGER("%d",this->Index);
 }
-
-cxArray cxAnimateGetGroup(cxAny pav,cxString name)
+//当播放一轮
+CX_METHOD_DEF(cxAnimate, OnLoop, void)
 {
-    CX_ASSERT_THIS(pav, cxAnimate);
-    CX_ASSERT(name != NULL, "must set group name");
-    CX_RETURN(name == NULL, NULL);
-    cxConstChars cname = cxStringBody(name);
-    cxArray items = cxHashGet(this->groups, cxHashStrKey(cname));
-    if(items == NULL){
-        items = CX_ALLOC(cxArray);
-        cxHashSet(this->groups, cxHashStrKey(cname), items);
-        CX_RELEASE(items);
-    }
-    return items;
+//    CX_LOGGER("loop");
 }
-
 CX_TYPE(cxAnimate, cxAction)
 {
-    CX_SETTER(cxAnimate, repeat);
-    CX_SETTER(cxAnimate, time);
-    CX_SETTER(cxAnimate, name);
     CX_SETTER(cxAnimate, frames);
-    CX_SETTER(cxAnimate, groups);
+    CX_SETTER(cxAnimate, range);
+    CX_SETTER(cxAnimate, offset);
     
+    CX_METHOD(cxAnimate, OnFrame);
+    CX_METHOD(cxAnimate, OnLoop);
     CX_METHOD(cxAnimate, Init);
     CX_METHOD(cxAnimate, Step);
-    CX_METHOD(cxAnimate, Exit);
-    CX_METHOD(cxAnimate, Reset);
+    CX_METHOD(cxAnimate, IsExit);
 }
 CX_INIT(cxAnimate, cxAction)
 {
-    this->Repeat = CX_FOREVER;
-    this->groups = CX_ALLOC(cxHash);
-    this->frames = CX_ALLOC(cxHash);
+    this->Range = cxRange2iv(INT32_MIN, INT32_MAX);
+    this->IsLoop = false;
+    this->IsCircle = false;
 }
 CX_FREE(cxAnimate, cxAction)
 {
-    CX_RELEASE(this->frames);
-    CX_RELEASE(this->groups);
-    CX_RELEASE(this->name);
-    CX_EVENT_RELEASE(this->onFrame);
+    CX_RELEASE(this->Frames);
 }
 CX_TERM(cxAnimate, cxAction)
 
-void cxAnimateRunGroup(cxAny pav,cxConstChars name)
+cxAnimate cxAnimateCreate(cxAny fs,cxFloat time)
 {
-    CX_ASSERT_THIS(pav, cxAnimate);
-    CX_RETURN(!cxConstCharsOK(name));
-    //group name not exists return
-    CX_RETURN(!cxHashHas(this->groups, cxHashStrKey(name)));
-    CX_CALL(this, Reset, CX_M(void));
-    CX_RETAIN_SWAP(this->name, cxStringConstChars(name));
+    CX_ASSERT_VALUE(fs, cxFrames, frames);
+    cxAnimate this = CX_CREATE(cxAnimate);
+    cxAnimateSetFrames(this, frames);
+    cxAnimateSetTime(this, time);
+    return this;
 }
 
+void cxAnimateSetFrameTable(cxAny pav,const cxFrameTable *ft)
+{
+    CX_ASSERT_THIS(pav, cxAnimate);
+    this->table = *ft;
+    cxActionReset(this);
+}
 
+void cxAnimateFrameTableSet(cxAny pav,cxInt atlasidx,cxInt layeridx)
+{
+    CX_ASSERT_THIS(pav, cxAnimate);
+    cxFrameTableSet(&this->table, atlasidx, layeridx);
+}
 
-
-
-
-
-
-
-
+void cxAnimateFrameTableClear(cxAny pav)
+{
+    CX_ASSERT_THIS(pav, cxAnimate);
+    cxFrameTableClear(&this->table);
+}
 

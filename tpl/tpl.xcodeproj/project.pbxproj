@@ -7,22 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6418D9C5D00093FF54 /* libjpeg.a */; };
-		83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6618D9C5D00093FF54 /* libpcre.a */; };
-		83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83314F6718D9C5D00093FF54 /* libpng.a */; };
 		83314F7318D9C6530093FF54 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 83314F7218D9C6530093FF54 /* main.c */; };
 		8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69C182280C20045A66F /* AudioToolbox.framework */; };
 		8341C69F182280E20045A66F /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C69E182280E20045A66F /* libz.dylib */; };
-		8341C6A3182280ED0045A66F /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8341C6A2182280ED0045A66F /* libiconv.dylib */; };
 		8344F0AB18D3F46C0003E410 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0AA18D3F46C0003E410 /* OpenGLES.framework */; };
 		8344F0AC18D3F47A0003E410 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0A818D3F4380003E410 /* UIKit.framework */; };
 		8344F0AE18D3F4830003E410 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0AD18D3F4830003E410 /* QuartzCore.framework */; };
 		8344F0B018D3F4960003E410 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0AF18D3F4960003E410 /* CoreGraphics.framework */; };
 		8344F0B218D3F4A50003E410 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B118D3F4A50003E410 /* OpenAL.framework */; };
 		8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8344F0B318D3F4A90003E410 /* Foundation.framework */; };
-		8353FFBE1A11BAA000C825D5 /* libuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8353FFBD1A11BAA000C825D5 /* libuv.a */; };
 		83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83583427185EB87E0057E40B /* AVFoundation.framework */; };
 		839B897019EFAB92009C6B5C /* libcxEngineStatic.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 839B896D19EFAAD6009C6B5C /* libcxEngineStatic.a */; };
+		83C418EA1AB6C59F008EE810 /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C418E51AB6C59F008EE810 /* libjansson.a */; };
+		83C418EB1AB6C59F008EE810 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C418E61AB6C59F008EE810 /* libjpeg.a */; };
+		83C418EC1AB6C59F008EE810 /* libpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C418E71AB6C59F008EE810 /* libpcre.a */; };
+		83C418ED1AB6C59F008EE810 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C418E81AB6C59F008EE810 /* libpng.a */; };
+		83C418EE1AB6C59F008EE810 /* libuv.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83C418E91AB6C59F008EE810 /* libuv.a */; };
 		83CA51EF19F3CBC6002119B0 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 83CA51EE19F3CBC6002119B0 /* LaunchScreen.xib */; };
 		83E407E41A0B2E12005BF3E1 /* Manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 83E407E31A0B2E12005BF3E1 /* Manifest.json */; };
 		83E407E81A0B2E19005BF3E1 /* strings in Resources */ = {isa = PBXBuildFile; fileRef = 83E407E71A0B2E19005BF3E1 /* strings */; };
@@ -40,23 +40,22 @@
 
 /* Begin PBXFileReference section */
 		8300651F18232BE000AF680D /* tpl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tpl.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		83314F6018D9C5D00093FF54 /* libevent.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libevent.a; path = ../libs/ios/lib/libevent.a; sourceTree = "<group>"; };
-		83314F6418D9C5D00093FF54 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../libs/ios/lib/libjpeg.a; sourceTree = "<group>"; };
-		83314F6618D9C5D00093FF54 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = ../libs/ios/lib/libpcre.a; sourceTree = "<group>"; };
-		83314F6718D9C5D00093FF54 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../libs/ios/lib/libpng.a; sourceTree = "<group>"; };
 		83314F7218D9C6530093FF54 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = SOURCE_ROOT; };
 		8341C69C182280C20045A66F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		8341C69E182280E20045A66F /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
-		8341C6A2182280ED0045A66F /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		8344F0A818D3F4380003E410 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		8344F0AA18D3F46C0003E410 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		8344F0AD18D3F4830003E410 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		8344F0AF18D3F4960003E410 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		8344F0B118D3F4A50003E410 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		8344F0B318D3F4A90003E410 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		8353FFBD1A11BAA000C825D5 /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = ../libs/ios/lib/libuv.a; sourceTree = "<group>"; };
 		83583427185EB87E0057E40B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		839B896719EFAAD5009C6B5C /* cxEngineStatic.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cxEngineStatic.xcodeproj; path = ../cxEngineStatic.xcodeproj; sourceTree = "<group>"; };
+		83C418E51AB6C59F008EE810 /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = ../libs/osx/lib/libjansson.a; sourceTree = "<group>"; };
+		83C418E61AB6C59F008EE810 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = ../libs/osx/lib/libjpeg.a; sourceTree = "<group>"; };
+		83C418E71AB6C59F008EE810 /* libpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpcre.a; path = ../libs/osx/lib/libpcre.a; sourceTree = "<group>"; };
+		83C418E81AB6C59F008EE810 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../libs/osx/lib/libpng.a; sourceTree = "<group>"; };
+		83C418E91AB6C59F008EE810 /* libuv.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libuv.a; path = ../libs/osx/lib/libuv.a; sourceTree = "<group>"; };
 		83CA51EE19F3CBC6002119B0 /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = SOURCE_ROOT; };
 		83E407E31A0B2E12005BF3E1 /* Manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = Manifest.json; path = res/Manifest.json; sourceTree = SOURCE_ROOT; };
 		83E407E71A0B2E19005BF3E1 /* strings */ = {isa = PBXFileReference; lastKnownFileType = folder; name = strings; path = res/strings; sourceTree = SOURCE_ROOT; };
@@ -67,11 +66,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83C418EA1AB6C59F008EE810 /* libjansson.a in Frameworks */,
+				83C418EB1AB6C59F008EE810 /* libjpeg.a in Frameworks */,
+				83C418EC1AB6C59F008EE810 /* libpcre.a in Frameworks */,
+				83C418ED1AB6C59F008EE810 /* libpng.a in Frameworks */,
+				83C418EE1AB6C59F008EE810 /* libuv.a in Frameworks */,
 				839B897019EFAB92009C6B5C /* libcxEngineStatic.a in Frameworks */,
-				8353FFBE1A11BAA000C825D5 /* libuv.a in Frameworks */,
-				83314F6D18D9C5D00093FF54 /* libjpeg.a in Frameworks */,
-				83314F6F18D9C5D00093FF54 /* libpcre.a in Frameworks */,
-				83314F7018D9C5D00093FF54 /* libpng.a in Frameworks */,
 				8344F0B418D3F4A90003E410 /* Foundation.framework in Frameworks */,
 				8344F0B218D3F4A50003E410 /* OpenAL.framework in Frameworks */,
 				8344F0B018D3F4960003E410 /* CoreGraphics.framework in Frameworks */,
@@ -80,7 +80,6 @@
 				8344F0AB18D3F46C0003E410 /* OpenGLES.framework in Frameworks */,
 				83583428185EB87E0057E40B /* AVFoundation.framework in Frameworks */,
 				8341C69D182280C20045A66F /* AudioToolbox.framework in Frameworks */,
-				8341C6A3182280ED0045A66F /* libiconv.dylib in Frameworks */,
 				8341C69F182280E20045A66F /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -110,11 +109,11 @@
 		839E7A4817F1BC7600B0F5EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8353FFBD1A11BAA000C825D5 /* libuv.a */,
-				83314F6018D9C5D00093FF54 /* libevent.a */,
-				83314F6418D9C5D00093FF54 /* libjpeg.a */,
-				83314F6618D9C5D00093FF54 /* libpcre.a */,
-				83314F6718D9C5D00093FF54 /* libpng.a */,
+				83C418E51AB6C59F008EE810 /* libjansson.a */,
+				83C418E61AB6C59F008EE810 /* libjpeg.a */,
+				83C418E71AB6C59F008EE810 /* libpcre.a */,
+				83C418E81AB6C59F008EE810 /* libpng.a */,
+				83C418E91AB6C59F008EE810 /* libuv.a */,
 				8344F0B318D3F4A90003E410 /* Foundation.framework */,
 				8344F0B118D3F4A50003E410 /* OpenAL.framework */,
 				8344F0AF18D3F4960003E410 /* CoreGraphics.framework */,
@@ -122,7 +121,6 @@
 				8344F0AA18D3F46C0003E410 /* OpenGLES.framework */,
 				8344F0A818D3F4380003E410 /* UIKit.framework */,
 				83583427185EB87E0057E40B /* AVFoundation.framework */,
-				8341C6A2182280ED0045A66F /* libiconv.dylib */,
 				8341C69E182280E20045A66F /* libz.dylib */,
 				8341C69C182280C20045A66F /* AudioToolbox.framework */,
 			);
@@ -332,11 +330,14 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(SRCROOT)/../",
-					"$(SRCROOT)/../libs/ios/include",
+					"$(SRCROOT)/../libs/osx/include",
 				);
 				INFOPLIST_FILE = "tpl-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../libs/ios/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../libs/osx/lib",
+					/Users/xuhua/cxEngine/libs/osx/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -363,11 +364,14 @@
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)",
 					"$(SRCROOT)/../",
-					"$(SRCROOT)/../libs/ios/include",
+					"$(SRCROOT)/../libs/osx/include",
 				);
 				INFOPLIST_FILE = "tpl-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../libs/ios/lib";
+				LIBRARY_SEARCH_PATHS = (
+					"$(SRCROOT)/../libs/osx/lib",
+					/Users/xuhua/cxEngine/libs/osx/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
